@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <title wicket:id="pageTitle">[Page Title]</title>
+  </head>
+  <body class="login">
+    <div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+      <div class="logo"><span class="navbar-logo"></span></div>
+
+      <div wicket:id="alerts" id="alerts"></div>
+
+      <div class="box-login">
+        <h3>Login</h3>
+        <p>
+          Please enter your name and password to log in.
+        </p>
+
+        <form wicket:id="loginForm" class="form-login">
+
+          <fieldset>
+            <div class="form-group">
+              <span class="input-icon">
+                <input wicket:id="username" type="text" class="form-control" name="username" placeholder="Username">
+                <i class="fa fa-user"></i>
+              </span>
+            </div>
+            <div class="form-group form-actions">
+              <span class="input-icon">
+                <input wicket:id="password" type="password" class="form-control password" name="password" placeholder="Password">
+                <i class="fa fa-lock"></i>
+                <a class="forgot" href="#">I forgot my password</a>
+              </span>
+            </div>
+            <div class="form-actions">
+              <button wicket:id="loginButton" type="submit" class="btn btn-primary pull-right">
+                Login <i class="fa fa-arrow-circle-right"></i>
+              </button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="box-forgot">
+        <h3>Forget Password?</h3>
+        <p>
+          Enter your e-mail address below to reset your password.
+        </p>
+
+        <form wicket:id="forgotForm" class="form-forgot">
+
+          <fieldset>
+            <div class="form-group">
+              <span class="input-icon">
+                <input type="email" class="form-control" name="email" placeholder="Email">
+                <i class="fa fa-envelope"></i>
+              </span>
+            </div>
+            <div class="form-actions">
+              <a class="btn btn-light-grey go-back"><i class="fa fa-circle-arrow-left"></i> Back</a>
+              <button wicket:id="submitButton" type="submit" class="btn btn-bricky pull-right">
+                Submit <i class="fa fa-arrow-circle-right"></i>
+              </button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

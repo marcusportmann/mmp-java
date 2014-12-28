@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: mmp-application-reporting-wicket
+Implementation-Vendor: Marcus Portmann
+Implementation-Vendor-Id: guru.mmp
+Implementation-Version: 1.0.0
+
+
+
+
+

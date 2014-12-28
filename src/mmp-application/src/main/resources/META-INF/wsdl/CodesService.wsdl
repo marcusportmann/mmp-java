@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<wsdl:definitions name="CodesService" targetNamespace="http://ws.codes.services.mmp.guru"
+                  xmlns:interface="http://ws.codes.services.mmp.guru"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <!-- ========================================================================================= -->
+  <!-- Service(s) Types                                                                          -->
+  <!-- ========================================================================================= -->
+  <wsdl:types>
+
+    <xs:schema elementFormDefault="qualified"
+               targetNamespace="http://ws.codes.services.mmp.guru"
+               xmlns:interface="http://ws.codes.services.mmp.guru"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+      <!-- ===================================================================================== -->
+      <!-- Service(s) Faults                                                                     -->
+      <!-- ===================================================================================== -->
+      <xs:complexType name="CodesServiceFaultInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Detail" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="CodesServiceFaultInfo" nillable="true"
+                  type="interface:CodesServiceFaultInfo"/>
+
+      <!-- ===================================================================================== -->
+      <!-- Service(s) Enumerations                                                               -->
+      <!-- ===================================================================================== -->
+      <xs:simpleType name="CodeDataType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Standard"/>
+          <xs:enumeration value="Custom"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <!-- ===================================================================================== -->
+      <!-- Service(s) Custom Types                                                               -->
+      <!-- ===================================================================================== -->
+      <xs:complexType name="Code">
+        <xs:annotation>
+          <xs:documentation>
+            The Code type holds the information for a code.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Id" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The ID used to uniquely identify the code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Name" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The name of the code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Description" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The description for the code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Value" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The value for the code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="CodeCategory">
+        <xs:annotation>
+          <xs:documentation>
+            The CodeCategory type holds the information for a code category.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Id" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The Universally Unique Identifier (UUID) used to uniquely identify the code category.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Name" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The name of the code category.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Description" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The description for the code category.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="CodeDataType" type="interface:CodeDataType">
+            <xs:annotation>
+              <xs:documentation>The type of code data for the code category e.g. Standard, Custom, etc.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="LastUpdated" type="xs:dateTime">
+            <xs:annotation>
+              <xs:documentation>The date and time the code category was last updated.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:sequence>
+            <xs:element name="Codes" maxOccurs="unbounded" type="interface:Code">
+              <xs:annotation>
+                <xs:documentation>The codes for the code category if the code data type is "Standard".
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="true" name="CodeData" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The custom code data for the category if the code data type is "Custom".
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="Parameter">
+        <xs:annotation>
+          <xs:documentation>
+            The Parameter type holds the information for a parameter.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Name" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The name of the parameter.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Value" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The value for the parameter.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+
+      <!-- ===================================================================================== -->
+      <!-- Service(s) Operation Types                                                            -->
+      <!-- ===================================================================================== -->
+      <xs:element name="GetCodeCategory">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="id" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>The Universally Unique Identifier (UUID) uniquely identifying the code category to
+                  retrieve.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="lastRetrieved" type="xs:dateTime">
+              <xs:annotation>
+                <xs:documentation>The date and time the code category was last retrieved.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="returnCodesIfCurrent" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>Should the codes and/or code data for the code category be returned if the code
+                  category is current?
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetCodeCategoryResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="out" nillable="true" type="interface:CodeCategory"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetCodeCategoryWithParameters">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="id" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>The Universally Unique Identifier (UUID) uniquely identifying the code category to
+                  retrieve.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:sequence>
+              <xs:element name="parameters" maxOccurs="unbounded" type="interface:Parameter">
+                <xs:annotation>
+                  <xs:documentation>The parameters.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+            <xs:element name="lastRetrieved" type="xs:dateTime">
+              <xs:annotation>
+                <xs:documentation>The date and time the code category was last retrieved.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="returnCodesIfCurrent" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>Should the codes and/or code data for the code category be returned if the code
+                  category is current?
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetCodeCategoryWithParametersResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="out" nillable="true" type="interface:CodeCategory"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetVersion">
+        <xs:complexType>
+          <xs:sequence/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetVersionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="out" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+    </xs:schema>
+
+  </wsdl:types>
+
+  <!-- ========================================================================================= -->
+  <!-- Service(s) Fault Messages                                                                 -->
+  <!-- ========================================================================================= -->
+  <wsdl:message name="CodesServiceFault">
+    <wsdl:part element="interface:CodesServiceFaultInfo" name="fault"/>
+  </wsdl:message>
+
+  <!-- ========================================================================================= -->
+  <!-- Service(s) Operation Messages                                                             -->
+  <!-- ========================================================================================= -->
+  <wsdl:message name="GetCodeCategoryInputMessage">
+    <wsdl:part name="parameters" element="interface:GetCodeCategory"/>
+  </wsdl:message>
+  <wsdl:message name="GetCodeCategoryOutputMessage">
+    <wsdl:part name="parameters" element="interface:GetCodeCategoryResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="GetCodeCategoryWithParametersInputMessage">
+    <wsdl:part name="parameters" element="interface:GetCodeCategoryWithParameters"/>
+  </wsdl:message>
+  <wsdl:message name="GetCodeCategoryWithParametersOutputMessage">
+    <wsdl:part name="parameters" element="interface:GetCodeCategoryWithParametersResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="GetVersionInputMessage">
+    <wsdl:part name="parameters" element="interface:GetVersion"/>
+  </wsdl:message>
+  <wsdl:message name="GetVersionOutputMessage">
+    <wsdl:part name="parameters" element="interface:GetVersionResponse"/>
+  </wsdl:message>
+
+  <!-- ========================================================================================= -->
+  <!-- Service(s) Port(s)                                                                        -->
+  <!-- ========================================================================================= -->
+  <wsdl:portType name="ICodesService">
+
+    <wsdl:documentation>The Codes service.</wsdl:documentation>
+
+    <wsdl:operation name="GetCodeCategory">
+      <wsdl:input message="interface:GetCodeCategoryInputMessage"/>
+      <wsdl:output message="interface:GetCodeCategoryOutputMessage"/>
+      <wsdl:fault name="CodesServiceFault" message="interface:CodesServiceFault"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="GetCodeCategoryWithParameters">
+      <wsdl:input message="interface:GetCodeCategoryWithParametersInputMessage"/>
+      <wsdl:output message="interface:GetCodeCategoryWithParametersOutputMessage"/>
+      <wsdl:fault name="CodesServiceFault" message="interface:CodesServiceFault"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="GetVersion">
+      <wsdl:input message="interface:GetVersionInputMessage"/>
+      <wsdl:output message="interface:GetVersionOutputMessage"/>
+      <wsdl:fault name="CodesServiceFault" message="interface:CodesServiceFault"/>
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <!-- ========================================================================================= -->
+  <!-- Service(s) Binding(s)                                                                     -->
+  <!-- ========================================================================================= -->
+  <wsdl:binding name="CodesService" type="interface:ICodesService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <wsdl:operation name="GetCodeCategory">
+      <soap:operation soapAction="http://ws.codes.services.mmp.guru/ICodesService/GetCodeCategory"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="CodesServiceFault">
+        <soap:fault name="CodesServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+
+    <wsdl:operation name="GetCodeCategoryWithParameters">
+      <soap:operation soapAction="http://ws.codes.services.mmp.guru/ICodesService/GetCodeCategoryWithParameters"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="CodesServiceFault">
+        <soap:fault name="CodesServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+
+    <wsdl:operation name="GetVersion">
+      <soap:operation soapAction="http://ws.codes.services.mmp.guru/ICodesService/GetVersion"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="CodesServiceFault">
+        <soap:fault name="CodesServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+  <!-- ========================================================================================= -->
+  <!-- Service(s)                                                                                -->
+  <!-- ========================================================================================= -->
+  <wsdl:service name="CodesService">
+    <wsdl:port name="CodesService" binding="interface:CodesService">
+      <soap:address location="http://localhost:8080/mforms/services/CodesService"/>
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>

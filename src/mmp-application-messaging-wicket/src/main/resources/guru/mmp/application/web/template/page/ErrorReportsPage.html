@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/theme/mmp/template.css" rel="StyleSheet" type="text/css" />
+  </head>
+  <body>
+    <div id="childContentHolderSpacer"></div>
+    <div id="childContentHolder">
+      <wicket:extend>
+  
+        <table class="actionTable">
+          <tr>
+            <th>ID</th>
+            <th>Application</th>
+            <th>Created</th>
+            <th>Who</th>            
+          </tr>
+          <tr wicket:id="errorReportSummary">
+            <td><a wicket:id="viewErrorReportLink" href="#" title="View Error Report"><span wicket:id="id">[ID]</span></a></td>
+            <td><span wicket:id="application">[Application]</span></td>
+            <td><span wicket:id="created">[Created]</span></td>
+            <td><span wicket:id="who">[Who]</span></td>
+          </tr>
+        </table>
+  
+      </wicket:extend>
+    </div>      
+  </body>
+</html>

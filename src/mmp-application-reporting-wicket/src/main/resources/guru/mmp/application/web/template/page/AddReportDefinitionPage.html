@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/theme/mmp/template.css"
+          rel="StyleSheet" type="text/css"/>
+</head>
+<body>
+<div id="childContentHolderSpacer"></div>
+<div id="childContentHolder">
+    <wicket:extend>
+
+        <div wicket:id="feedback"></div>
+
+        <form wicket:id="addReportDefinitionForm">
+
+            <div class="form-intro">Please enter the details for the new report definition and click <b>Add</b>.</div>
+
+            <div class="formField">
+                <label for="id">ID</label>
+                <input wicket:id="id" type="text" name="id" class="addReportDefinitionFormId"></input>
+
+                <div class="hidden" wicket:id="idFeedback"></div>
+            </div>
+
+            <div class="formField">
+                <label for="name">Name</label>
+                <input wicket:id="name" type="text" name="name" class="addReportDefinitionFormName"></input>
+
+                <div class="hidden" wicket:id="nameFeedback"></div>
+            </div>
+
+            <div class="formField">
+                <label for="fileUpload">Template</label>
+                <input wicket:id="fileUpload" type="file" name="fileUpload"></input>
+
+                <div class="hidden" wicket:id="fileUploadFeedback"></div>
+            </div>
+
+            <div class="formButtons">
+                <button wicket:id="addButton" type="submit">Add</button>
+                <button wicket:id="cancelButton" type="submit">Cancel</button>
+            </div>
+
+        </form>
+
+    </wicket:extend>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="stylesheet" type="text/css" href="../../resource/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../resource/perfectscrollbar/css/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../resource/css/template-fontawesome-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../resource/css/template-clip-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../resource/css/template.css"/>
+    <link rel="stylesheet" type="text/css" href="../resource/css/template-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../resource/css/template-light-theme.css"/>
+    <title>[Page Title]</title>
+  </head>
+  <body class="layout-boxed">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="main-container">
+      <div class="navbar-content"></div>
+      <div class="main-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="page-header">
+                <h1>[Page Heading]</h1>
+              </div>
+            </div>
+          </div>
+          <wicket:extend>
+
+            <form wicket:id="addUserToGroupForm">
+              <div class="form-intro">Please select the group you wish to add the user to and click <b>Add</b>.</div>
+
+              <div class="form-group form-actions">
+                <div class="col-xs-5">
+                  <select wicket:id="groupName" class="form-control pull-left" type="text" name="groupName">
+                    <option>Organisation Administrators</option>
+                  </select>
+                </div>
+                <div class="col-xs-push-1">
+                  <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-plus"></i> Add</button>
+                </div>
+              </div>
+            </form>
+
+            <div wicket:id="tableContainer" class="table-container">
+
+              <div class="table-header">
+                <div wicket:id="navigator">[DataView Navigator]</div>
+                <div class="table-header-spacer"></div>
+              </div>
+
+              <table class="table table-bordered table-hover table-actions">
+                <thead>
+                  <tr>
+                    <th>Group Name</th>
+                    <th class="stretch-column">Group Description</th>
+                    <th class="center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr wicket:id="group">
+                    <td><span wicket:id="name">[Group Name]</span></td>
+                    <td><span wicket:id="description">[Group Description]</span></td>
+                    <td class="one-action">
+                      <a wicket:id="removeLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User From Group" title="Remove User From Group"><i class="fa fa-times fa fa-white"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </wicket:extend>
+        </div>
+      </div>
+    </div>
+    <div class="footer clearfix">
+      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
+      <div class="footer-items"><span class="go-top"><i class="clip-chevron-up"></i></span></div>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/theme/mmp/template.css"
+          rel="StyleSheet" type="text/css"/>
+</head>
+<body>
+<div id="childContentHolderSpacer"></div>
+<div id="childContentHolder">
+    <wicket:extend>
+
+        <div wicket:id="feedback"></div>
+
+        <form wicket:id="confirmRemoveReportDefinitionForm">
+
+            <div class="form-intro">Are you sure you wish to remove the report definition <b><span wicket:id="name">[Name]</span></b>?
+            </div>
+
+            <div class="formButtons">
+                <button wicket:id="yesButton" type="submit">Yes</button>
+                <button wicket:id="noButton" type="submit">No</button>
+            </div>
+
+        </form>
+
+    </wicket:extend>
+</div>
+</body>
+</html>
+
+

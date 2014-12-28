@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/theme/mmp/template.css"
+          rel="StyleSheet" type="text/css"/>
+</head>
+<body>
+<div id="childContentHolderSpacer"></div>
+<div id="childContentHolder">
+    <wicket:extend>
+
+        <a wicket:id="addLink" class="addLink" href="#">Add New Report Definition</a>
+
+        <table class="actionTable">
+            <tr>
+                <th class="stretchColumn">Report Definition Name</th>
+                <th>Last Updated</th>
+                <th>Last Updated By</th>
+                <th class="actions" width="44px">Actions</th>
+            </tr>
+            <tr wicket:id="reportDefinition">
+                <td><span wicket:id="name">[Report Definition Name]</span></td>
+                <td><span wicket:id="lastUpdated">[Report Definition Last Updated]</span></td>
+                <td><span wicket:id="lastUpdatedBy">[Report Definition Last Updated By]</span></td>
+                <td class="actions">
+                    <div style="width: 44px;">
+                        <a wicket:id="updateLink" href="#" class="updateLink" title="Update Report Definition"></a>
+                        <a wicket:id="removeLink" href="#" class="removeLink" title="Remove Report Definition"></a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </wicket:extend>
+</div>
+</body>
+</html>

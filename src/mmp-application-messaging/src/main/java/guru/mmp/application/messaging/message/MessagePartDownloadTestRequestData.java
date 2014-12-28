@@ -1,0 +1,147 @@
+/*
+ * Copyright 2014 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package guru.mmp.application.messaging.message;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.messaging.Message;
+import guru.mmp.application.messaging.MessagingException;
+import guru.mmp.application.messaging.WbxmlMessageData;
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.wbxml.Document;
+import guru.mmp.common.wbxml.Element;
+import guru.mmp.common.wbxml.Encoder;
+
+/**
+ * The <code>MessagePartDownloadTestRequestData</code> class manages the data for a
+ * "Message Part Download Test Request" message.
+ * <p/>
+ * This is an asynchronous message.
+ *
+ * @author Marcus Portmann
+ */
+public class MessagePartDownloadTestRequestData extends WbxmlMessageData
+{
+  /**
+   * The UUID for the "Message Part Download Test Request" message.
+   */
+  public static final String MESSAGE_TYPE = "def49acc-426f-4e6a-ad31-78732e24c0c2";
+
+  /**
+   * The test value.
+   */
+  private String testValue;
+
+  /**
+   * Constructs a new <code>MessagePartDownloadTestRequestData</code>.
+   */
+  public MessagePartDownloadTestRequestData()
+  {
+    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+  }
+
+  /**
+   * Constructs a new <code>MessagePartDownloadTestRequestData</code>.
+   *
+   * @param testValue the test value
+   */
+  public MessagePartDownloadTestRequestData(String testValue)
+  {
+    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+
+    this.testValue = testValue;
+  }
+
+  /**
+   * Extract the message data from the WBXML data for a message.
+   *
+   * @param messageType        the UUID identifying the type of message the message data is
+   *                           associated with
+   * @param messageTypeVersion the version of the message type the message data is associated with
+   * @param messageData        the WBXML data for the message
+   *
+   * @return <code>true</code> if the message data was extracted successfully from the
+   *         WBXML data or <code>false</code> otherwise
+   *
+   * @throws MessagingException
+   */
+  public boolean fromMessageData(String messageType, int messageTypeVersion, byte[] messageData)
+    throws MessagingException
+  {
+    Document document = parseWBXML(messageData);
+
+    Element rootElement = document.getRootElement();
+
+    if (!rootElement.getName().equals("MessagePartDownloadTestRequest"))
+    {
+      return false;
+
+    }
+
+    if (!rootElement.hasChild("TestValue"))
+    {
+      return false;
+    }
+
+    this.testValue = rootElement.getChildText("TestValue");
+
+    return true;
+  }
+
+  /**
+   * Returns the test value.
+   *
+   * @return the test value
+   */
+  public String getTestValue()
+  {
+    return testValue;
+  }
+
+  /**
+   * Set the test value.
+   *
+   * @param testValue the test value
+   */
+  public void setTestValue(String testValue)
+  {
+    this.testValue = testValue;
+  }
+
+  /**
+   * Returns the WBXML data representation of the message data that will be sent as part of a
+   * message.
+   *
+   * @return the WBXML data representation of the message data that will be sent as part of a
+   *         message
+   *
+   * @throws MessagingException
+   */
+  public byte[] toMessageData()
+    throws MessagingException
+  {
+    Element rootElement = new Element("MessagePartDownloadTestRequest");
+
+    rootElement.addContent(new Element("TestValue", StringUtil.notNull(testValue)));
+
+    Document document = new Document(rootElement);
+
+    Encoder encoder = new Encoder(document);
+
+    return encoder.getData();
+  }
+}
