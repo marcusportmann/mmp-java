@@ -20,10 +20,9 @@ package guru.mmp.common.util;
 
 import java.io.ByteArrayOutputStream;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.text.SimpleDateFormat;
+
+import java.util.*;
 
 /**
  * The <code>StringUtil</code> class is a utility class which provides methods for manipulating
@@ -89,6 +88,15 @@ public class StringUtil
   };
   private static final String ESCAPED_QUOTE = "\"\"";
   private static final String QUOTE = "\"";
+  private static ThreadLocal<SimpleDateFormat> threadLocalSimpleDateFormat =
+    new ThreadLocal<SimpleDateFormat>()
+  {
+    @Override
+    protected SimpleDateFormat initialValue()
+    {
+      return new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+    }
+  };
 
   /**
    * Private default constructor to enforce utility pattern.
@@ -168,6 +176,18 @@ public class StringUtil
     }
 
     return ret;
+  }
+
+  /**
+   * Convert a date to the standard <code>String</code> representation <b>yyyy-MM-dd hh:mm a</b>.
+   *
+   * @param date the date to convert
+   *
+   * @return the date in the standard <code>String</code> representation
+   */
+  public static String convertDateToString(Date date)
+  {
+    return threadLocalSimpleDateFormat.get().format(date);
   }
 
   /**

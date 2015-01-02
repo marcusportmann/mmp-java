@@ -21,6 +21,7 @@ package guru.mmp.application.web.template.page;
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -28,6 +29,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeCategoryDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -39,12 +41,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>CodeCategoryAdministrationPage</code> class implements the
@@ -74,106 +77,114 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
         + " | Code Category Administration");
 
-    WebSession session = getWebApplicationSession();
-
-    /*
-     * The table container, which allows the table and its associated navigator to be updated
-     * using AJAX.
-     */
-    final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
-    tableContainer.setOutputMarkupId(true);
-    add(tableContainer);
-
-    // The dialog used to confirm the removal of a code category
-    final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
-    add(removeDialog);
-
-    // The "addLink" used to add a new code category
-    Link<Void> addLink = new Link<Void>("addLink")
+    try
     {
-      private static final long serialVersionUID = 1000000;
+      WebSession session = getWebApplicationSession();
 
-      @Override
-      public void onClick()
+      /*
+       * The table container, which allows the table and its associated navigator to be updated
+       * using AJAX.
+       */
+      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      tableContainer.setOutputMarkupId(true);
+      add(tableContainer);
+
+      // The dialog used to confirm the removal of a code category
+      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      add(removeDialog);
+
+      // The "addLink" used to add a new code category
+      Link<Void> addLink = new Link<Void>("addLink")
       {
-        setResponsePage(new AddCodeCategoryPage(getPageReference()));
-      }
-    };
-    add(addLink);
+        private static final long serialVersionUID = 1000000;
 
-    // The code category data view
-    CodeCategoryDataProvider dataProvider = new CodeCategoryDataProvider(session.getOrganisation(),
-      false);
+        @Override
+        public void onClick()
+        {
+          setResponsePage(new AddCodeCategoryPage(getPageReference()));
+        }
+      };
+      add(addLink);
 
-    DataView<CodeCategory> dataView = new DataView<CodeCategory>("codeCategory", dataProvider)
+      // The code category data view
+      CodeCategoryDataProvider dataProvider =
+        new CodeCategoryDataProvider(session.getOrganisation(), false);
+
+      DataView<CodeCategory> dataView = new DataView<CodeCategory>("codeCategory", dataProvider)
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        protected void populateItem(Item<CodeCategory> item)
+        {
+          final IModel<CodeCategory> codeCategoryModel = item.getModel();
+
+          item.add(new Label("name", new PropertyModel<String>(codeCategoryModel, "name")));
+          item.add(new Label("categoryType",
+              new PropertyModel<String>(codeCategoryModel, "categoryType.name")));
+
+          // The "updateLink" link
+          Link<Void> updateLink = new Link<Void>("updateLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick()
+            {
+              UpdateCodeCategoryPage page = new UpdateCodeCategoryPage(getPageReference(),
+                new Model<>(codeCategoryModel.getObject()));
+
+              setResponsePage(page);
+            }
+          };
+          item.add(updateLink);
+
+          // The "removeLink" link
+          AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              removeDialog.show(target, codeCategoryModel);
+            }
+          };
+          item.add(removeLink);
+
+          // The "codeAdministrationLink" link
+          Link<Void> codeAdministrationLink = new Link<Void>("codeAdministrationLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick()
+            {
+              CodeCategory codeCategory = codeCategoryModel.getObject();
+
+              String codeCategoryId = codeCategory.getId();
+              String codeCategoryName = codeCategory.getName();
+
+              setResponsePage(new CodeAdministrationPage(getPageReference(), codeCategoryId,
+                  codeCategoryName));
+            }
+          };
+          codeAdministrationLink.setVisible(codeCategoryModel.getObject().getCategoryType()
+              == CodeCategoryType.LOCAL_STANDARD);
+          item.add(codeAdministrationLink);
+        }
+      };
+      dataView.setItemsPerPage(10);
+      dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+      tableContainer.add(dataView);
+
+      tableContainer.add(new PagingNavigator("navigator", dataView));
+    }
+    catch (Throwable e)
     {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      protected void populateItem(Item<CodeCategory> item)
-      {
-        final IModel<CodeCategory> codeCategoryModel = item.getModel();
-
-        item.add(new Label("name", new PropertyModel<String>(codeCategoryModel, "name")));
-        item.add(new Label("categoryType",
-            new PropertyModel<String>(codeCategoryModel, "categoryType.name")));
-
-        // The "updateLink" link
-        Link<Void> updateLink = new Link<Void>("updateLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick()
-          {
-            UpdateCodeCategoryPage page = new UpdateCodeCategoryPage(getPageReference(),
-              new Model<>(codeCategoryModel.getObject()));
-
-            setResponsePage(page);
-          }
-        };
-        item.add(updateLink);
-
-        // The "removeLink" link
-        AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick(AjaxRequestTarget target)
-          {
-            removeDialog.show(target, codeCategoryModel);
-          }
-        };
-        item.add(removeLink);
-
-        // The "codeAdministrationLink" link
-        Link<Void> codeAdministrationLink = new Link<Void>("codeAdministrationLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick()
-          {
-            CodeCategory codeCategory = codeCategoryModel.getObject();
-
-            String codeCategoryId = codeCategory.getId();
-            String codeCategoryName = codeCategory.getName();
-
-            setResponsePage(new CodeAdministrationPage(getPageReference(), codeCategoryId,
-                codeCategoryName));
-          }
-        };
-        codeAdministrationLink.setVisible(codeCategoryModel.getObject().getCategoryType()
-            == CodeCategoryType.LOCAL_STANDARD);
-        item.add(codeAdministrationLink);
-      }
-    };
-    dataView.setItemsPerPage(10);
-    dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
-    tableContainer.add(dataView);
-
-    tableContainer.add(new PagingNavigator("navigator", dataView));
+      throw new WebApplicationException("Failed to initialise the CodeCategoryAdministrationPage",
+          e);
+    }
   }
 
   /**

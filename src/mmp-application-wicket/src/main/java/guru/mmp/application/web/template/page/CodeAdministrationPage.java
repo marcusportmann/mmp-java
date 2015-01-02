@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
@@ -27,6 +28,7 @@ import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeDataProvider;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -38,12 +40,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>CodeAdministrationPage</code> class implements the
@@ -78,88 +81,96 @@ public class CodeAdministrationPage extends TemplateWebPage
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
         + " | Code Administration");
 
-    /*
-     * The table container, which allows the table and its associated navigator to be updated
-     * using AJAX.
-     */
-    final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
-    tableContainer.setOutputMarkupId(true);
-    add(tableContainer);
-
-    // The dialog used to confirm the removal of a code
-    final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
-    add(removeDialog);
-
-    // The "addLink" link
-    Link<Void> addLink = new Link<Void>("addLink")
+    try
     {
-      private static final long serialVersionUID = 1000000;
+      /*
+       * The table container, which allows the table and its associated navigator to be updated
+       * using AJAX.
+       */
+      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      tableContainer.setOutputMarkupId(true);
+      add(tableContainer);
 
-      @Override
-      public void onClick()
+      // The dialog used to confirm the removal of a code
+      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      add(removeDialog);
+
+      // The "addLink" link
+      Link<Void> addLink = new Link<Void>("addLink")
       {
-        AddCodePage page = new AddCodePage(getPageReference(), codeCategoryId);
+        private static final long serialVersionUID = 1000000;
 
-        setResponsePage(page);
-      }
-    };
-    add(addLink);
+        @Override
+        public void onClick()
+        {
+          AddCodePage page = new AddCodePage(getPageReference(), codeCategoryId);
 
-    // The code data view
-    CodeDataProvider dataProvider = new CodeDataProvider(codeCategoryId);
+          setResponsePage(page);
+        }
+      };
+      add(addLink);
 
-    DataView<Code> dataView = new DataView<Code>("code", dataProvider)
+      // The code data view
+      CodeDataProvider dataProvider = new CodeDataProvider(codeCategoryId);
+
+      DataView<Code> dataView = new DataView<Code>("code", dataProvider)
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        protected void populateItem(Item<Code> item)
+        {
+          final IModel<Code> codeModel = item.getModel();
+
+          Code code = codeModel.getObject();
+
+          String name = StringUtil.truncate(code.getName(), 25);
+          String value = StringUtil.truncate(code.getValue(), 30);
+
+          item.add(new Label("name", Model.of(name)));
+          item.add(new Label("value", Model.of(value)));
+
+          // The "updateLink" link
+          Link<Void> updateLink = new Link<Void>("updateLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick()
+            {
+              UpdateCodePage page = new UpdateCodePage(getPageReference(),
+                new Model<>(codeModel.getObject()));
+
+              setResponsePage(page);
+            }
+          };
+          item.add(updateLink);
+
+          // The "removeLink" link
+          AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              removeDialog.show(target, codeModel);
+            }
+          };
+          item.add(removeLink);
+        }
+      };
+      dataView.setItemsPerPage(10);
+      dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+      tableContainer.add(dataView);
+
+      tableContainer.add(new PagingNavigator("navigator", dataView));
+
+    }
+    catch (Throwable e)
     {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      protected void populateItem(Item<Code> item)
-      {
-        final IModel<Code> codeModel = item.getModel();
-
-        Code code = codeModel.getObject();
-
-        String name = StringUtil.truncate(code.getName(), 25);
-        String value = StringUtil.truncate(code.getValue(), 30);
-
-        item.add(new Label("name", Model.of(name)));
-        item.add(new Label("value", Model.of(value)));
-
-        // The "updateLink" link
-        Link<Void> updateLink = new Link<Void>("updateLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick()
-          {
-            UpdateCodePage page = new UpdateCodePage(getPageReference(),
-              new Model<>(codeModel.getObject()));
-
-            setResponsePage(page);
-          }
-        };
-        item.add(updateLink);
-
-        // The "removeLink" link
-        AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick(AjaxRequestTarget target)
-          {
-            removeDialog.show(target, codeModel);
-          }
-        };
-        item.add(removeLink);
-      }
-    };
-    dataView.setItemsPerPage(10);
-    dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
-    tableContainer.add(dataView);
-
-    tableContainer.add(new PagingNavigator("navigator", dataView));
+      throw new WebApplicationException("Failed to initialise the CodeAdministrationPage", e);
+    }
   }
 
   /**

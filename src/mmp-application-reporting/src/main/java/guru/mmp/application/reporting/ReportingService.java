@@ -21,26 +21,36 @@ package guru.mmp.application.reporting;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
+
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
+
 import java.sql.Connection;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
+
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>ReportService</code> class provides the Reporting Service implementation.
@@ -241,22 +251,22 @@ public class ReportingService
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinition the report definition to delete
-   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           report definition
    *
    * @throws ReportingServiceException
    */
-  public void deleteReportDefinition(ReportDefinition reportDefinition)
+  public void deleteReportDefinition(String id)
     throws ReportingServiceException
   {
     try
     {
-      reportingDAO.deleteReportDefinition(reportDefinition.getId());
+      reportingDAO.deleteReportDefinition(id);
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to delete the report definition with ID ("
-          + reportDefinition.getId() + ")", e);
+      throw new ReportingServiceException("Failed to delete the report definition with ID (" + id
+          + ")", e);
     }
   }
 

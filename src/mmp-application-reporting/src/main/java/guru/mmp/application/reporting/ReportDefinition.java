@@ -16,9 +16,14 @@
 
 package guru.mmp.application.reporting;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.util.StringUtil;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -203,6 +208,18 @@ public class ReportDefinition
   public Date getUpdated()
   {
     return updated;
+  }
+
+  /**
+   * Returns the date and time the report definition was updated as a <code>String</code>.
+   *
+   * @return the date and time the report definition was updated as a <code>String</code>
+   */
+  public String getUpdatedAsString()
+  {
+    return (updated == null)
+        ? "N/A"
+        : StringUtil.convertDateToString(updated);
   }
 
   /**

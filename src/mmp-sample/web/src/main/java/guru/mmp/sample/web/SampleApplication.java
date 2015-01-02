@@ -96,6 +96,8 @@ public class SampleApplication extends TemplateWebApplication
         UserAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Codes", "clip-list-2",
         CodeCategoryAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("Report Definitions", "clip-note",
+      ReportDefinitionAdministrationPage.class));
 
     root.addItem(administrationGroup);
   }

@@ -25,6 +25,7 @@ import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -36,13 +37,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>OrganisationAdministrationPage</code> class implements the
@@ -72,96 +75,104 @@ public class OrganisationAdministrationPage extends TemplateWebPage
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
         + " | Organisation Administration");
 
-    /*
-     * The table container, which allows the table and its associated navigator to be updated
-     * using AJAX.
-     */
-    final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
-    tableContainer.setOutputMarkupId(true);
-    add(tableContainer);
-
-    // The dialog used to confirm the removal of an organisation
-    final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
-    add(removeDialog);
-
-    // The "addLink" used to add a new organisation
-    Link<Void> addLink = new Link<Void>("addLink")
+    try
     {
-      private static final long serialVersionUID = 1000000;
+      /*
+       * The table container, which allows the table and its associated navigator to be updated
+       * using AJAX.
+       */
+      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      tableContainer.setOutputMarkupId(true);
+      add(tableContainer);
 
-      @Override
-      public void onClick()
+      // The dialog used to confirm the removal of an organisation
+      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      add(removeDialog);
+
+      // The "addLink" used to add a new organisation
+      Link<Void> addLink = new Link<Void>("addLink")
       {
-        setResponsePage(new AddOrganisationPage(getPageReference()));
-      }
-    };
+        private static final long serialVersionUID = 1000000;
 
-    add(addLink);
-
-    // The organisation list view
-    LoadableDetachableModel<List<Organisation>> ldm =
-      new LoadableDetachableModel<List<Organisation>>()
-    {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      protected List<Organisation> load()
-      {
-        try
+        @Override
+        public void onClick()
         {
-          return securityService.getOrganisations(getRemoteAddress());
+          setResponsePage(new AddOrganisationPage(getPageReference()));
         }
-        catch (Throwable e)
-        {
-          throw new WebApplicationException(
-              "Failed to retrieve a complete list of organisations from the Security Service", e);
-        }
-      }
-    };
+      };
 
-    ListView<Organisation> listView = new ListView<Organisation>("organisation", ldm)
-    {
-      private static final long serialVersionUID = 1000000;
+      add(addLink);
 
-      @Override
-      protected void populateItem(ListItem<Organisation> item)
+      // The organisation list view
+      LoadableDetachableModel<List<Organisation>> ldm =
+        new LoadableDetachableModel<List<Organisation>>()
       {
-        final IModel<Organisation> organisationModel = item.getModel();
+        private static final long serialVersionUID = 1000000;
 
-        item.add(new Label("code", new PropertyModel<String>(organisationModel, "code")));
-        item.add(new Label("name", new PropertyModel<String>(organisationModel, "name")));
-
-        // The "updateLink" link
-        final Link<Void> updateLink = new Link<Void>("updateLink")
+        @Override
+        protected List<Organisation> load()
         {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick()
+          try
           {
-            UpdateOrganisationPage page = new UpdateOrganisationPage(getPageReference(),
-              new Model<>(organisationModel.getObject()));
-
-            setResponsePage(page);
+            return securityService.getOrganisations(getRemoteAddress());
           }
-        };
-        item.add(updateLink);
+          catch (Throwable e)
+          {
+            throw new WebApplicationException(
+                "Failed to retrieve a complete list of organisations from the Security Service", e);
+          }
+        }
+      };
 
-        // The "removeLink" link
-        final AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+      ListView<Organisation> listView = new ListView<Organisation>("organisation", ldm)
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        protected void populateItem(ListItem<Organisation> item)
         {
-          private static final long serialVersionUID = 1000000;
+          final IModel<Organisation> organisationModel = item.getModel();
 
-          @Override
-          public void onClick(AjaxRequestTarget target)
+          item.add(new Label("code", new PropertyModel<String>(organisationModel, "code")));
+          item.add(new Label("name", new PropertyModel<String>(organisationModel, "name")));
+
+          // The "updateLink" link
+          final Link<Void> updateLink = new Link<Void>("updateLink")
           {
-            removeDialog.show(target, organisationModel);
-          }
-        };
-        item.add(removeLink);
-      }
-    };
-    tableContainer.add(listView);
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick()
+            {
+              UpdateOrganisationPage page = new UpdateOrganisationPage(getPageReference(),
+                new Model<>(organisationModel.getObject()));
+
+              setResponsePage(page);
+            }
+          };
+          item.add(updateLink);
+
+          // The "removeLink" link
+          final AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              removeDialog.show(target, organisationModel);
+            }
+          };
+          item.add(removeLink);
+        }
+      };
+      tableContainer.add(listView);
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the OrganisationAdministrationPage",
+          e);
+    }
   }
 
   /**

@@ -20,11 +20,12 @@ package guru.mmp.application.reporting;
 
 import org.w3c.dom.Document;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
+
 import java.util.List;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IReportingService</code> interface defines the functionality that must be provided by
@@ -88,11 +89,12 @@ public interface IReportingService
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinition the report definition to delete
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           report definition
    *
    * @throws ReportingServiceException
    */
-  public void deleteReportDefinition(ReportDefinition reportDefinition)
+  public void deleteReportDefinition(String id)
     throws ReportingServiceException;
 
   /**

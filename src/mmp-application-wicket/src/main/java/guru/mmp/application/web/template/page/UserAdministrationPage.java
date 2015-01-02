@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -27,6 +28,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.UserDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,12 +43,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>UserAdministrationPage</code> class implements the
@@ -75,153 +78,159 @@ public class UserAdministrationPage extends TemplateWebPage
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
         + " | User Administration");
 
-    WebSession session = getWebApplicationSession();
-
-    /*
-     * The table container, which allows the table and its associated navigator to be updated
-     * using AJAX.
-     */
-    final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
-    tableContainer.setOutputMarkupId(true);
-    add(tableContainer);
-
-    // The dialog used to confirm the removal of a code category
-    final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
-    add(removeDialog);
-
-    // The "addLink" used to add a new code category
-    Link<Void> addLink = new Link<Void>("addLink")
+    try
     {
-      private static final long serialVersionUID = 1000000;
+      WebSession session = getWebApplicationSession();
 
-      @Override
-      public void onClick()
+      /*
+       * The table container, which allows the table and its associated navigator to be updated
+       * using AJAX.
+       */
+      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      tableContainer.setOutputMarkupId(true);
+      add(tableContainer);
+
+      // The dialog used to confirm the removal of a code category
+      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      add(removeDialog);
+
+      // The "addLink" used to add a new code category
+      Link<Void> addLink = new Link<Void>("addLink")
       {
-        AddUserPage page = new AddUserPage(getPageReference());
+        private static final long serialVersionUID = 1000000;
 
-        setResponsePage(page);
-      }
-    };
-    add(addLink);
-
-    UserDataProvider dataProvider = new UserDataProvider(session.getOrganisation());
-
-    // The "filterForm" form
-    Form<Void> filterForm = new Form<>("filterForm");
-    filterForm.setMarkupId("filterForm");
-    filterForm.setOutputMarkupId(true);
-
-    // The "filter" field
-    final TextField<String> filterField = new TextField<>("filter",
-      new PropertyModel<>(dataProvider, "filter"));
-    filterForm.add(filterField);
-
-    // The "filterButton" button
-    Button filterButton = new Button("filterButton")
-    {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      public void onSubmit() {}
-    };
-    filterButton.setDefaultFormProcessing(true);
-    filterForm.add(filterButton);
-    tableContainer.add(filterForm);
-
-    // The user data view
-    final DataView<User> dataView = new DataView<User>("user", dataProvider)
-    {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      protected void populateItem(Item<User> item)
-      {
-        final IModel<User> userModel = item.getModel();
-
-        item.add(new Label("username", new PropertyModel<String>(userModel, "username")));
-        item.add(new Label("firstNames", new PropertyModel<String>(userModel, "firstNames")));
-        item.add(new Label("lastName", new PropertyModel<String>(userModel, "lastName")));
-
-        // The "userGroupsLink" link
-        Link<Void> userGroupsLink = new Link<Void>("userGroupsLink")
+        @Override
+        public void onClick()
         {
-          private static final long serialVersionUID = 1000000;
+          AddUserPage page = new AddUserPage(getPageReference());
 
-          @Override
-          public void onClick()
+          setResponsePage(page);
+        }
+      };
+      add(addLink);
+
+      UserDataProvider dataProvider = new UserDataProvider(session.getOrganisation());
+
+      // The "filterForm" form
+      Form<Void> filterForm = new Form<>("filterForm");
+      filterForm.setMarkupId("filterForm");
+      filterForm.setOutputMarkupId(true);
+
+      // The "filter" field
+      final TextField<String> filterField = new TextField<>("filter",
+        new PropertyModel<>(dataProvider, "filter"));
+      filterForm.add(filterField);
+
+      // The "filterButton" button
+      Button filterButton = new Button("filterButton")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onSubmit() {}
+      };
+      filterButton.setDefaultFormProcessing(true);
+      filterForm.add(filterButton);
+      tableContainer.add(filterForm);
+
+      // The user data view
+      final DataView<User> dataView = new DataView<User>("user", dataProvider)
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        protected void populateItem(Item<User> item)
+        {
+          final IModel<User> userModel = item.getModel();
+
+          item.add(new Label("username", new PropertyModel<String>(userModel, "username")));
+          item.add(new Label("firstNames", new PropertyModel<String>(userModel, "firstNames")));
+          item.add(new Label("lastName", new PropertyModel<String>(userModel, "lastName")));
+
+          // The "userGroupsLink" link
+          Link<Void> userGroupsLink = new Link<Void>("userGroupsLink")
           {
-            User user = userModel.getObject();
+            private static final long serialVersionUID = 1000000;
 
-            if (!user.getUsername().equalsIgnoreCase("Administrator"))
+            @Override
+            public void onClick()
             {
-              UserGroupsPage page = new UserGroupsPage(getPageReference(),
-                user.getUsername());
+              User user = userModel.getObject();
 
-              setResponsePage(page);
+              if (!user.getUsername().equalsIgnoreCase("Administrator"))
+              {
+                UserGroupsPage page = new UserGroupsPage(getPageReference(), user.getUsername());
+
+                setResponsePage(page);
+              }
             }
-          }
-        };
-        item.add(userGroupsLink);
+          };
+          item.add(userGroupsLink);
 
-        // The "updateLink" link
-        Link<Void> updateLink = new Link<Void>("updateLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick()
+          // The "updateLink" link
+          Link<Void> updateLink = new Link<Void>("updateLink")
           {
-            User user = userModel.getObject();
+            private static final long serialVersionUID = 1000000;
 
-            if (!user.getUsername().equalsIgnoreCase("Administrator"))
+            @Override
+            public void onClick()
             {
-              UpdateUserPage page = new UpdateUserPage(getPageReference(),
+              User user = userModel.getObject();
+
+              if (!user.getUsername().equalsIgnoreCase("Administrator"))
+              {
+                UpdateUserPage page = new UpdateUserPage(getPageReference(),
+                  new Model<>(userModel.getObject()));
+
+                setResponsePage(page);
+              }
+            }
+          };
+          item.add(updateLink);
+
+          // The "resetPassword" link
+          Link<Void> resetPasswordLink = new Link<Void>("resetPasswordLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick()
+            {
+              ResetUserPasswordPage page = new ResetUserPasswordPage(getPageReference(),
                 new Model<>(userModel.getObject()));
 
               setResponsePage(page);
             }
-          }
-        };
-        item.add(updateLink);
+          };
+          item.add(resetPasswordLink);
 
-        // The "resetPassword" link
-        Link<Void> resetPasswordLink = new Link<Void>("resetPasswordLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick()
+          // The "removeLink" link
+          AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
           {
-            ResetUserPasswordPage page = new ResetUserPasswordPage(getPageReference(),
-              new Model<>(userModel.getObject()));
+            private static final long serialVersionUID = 1000000;
 
-            setResponsePage(page);
-          }
-        };
-        item.add(resetPasswordLink);
-
-        // The "removeLink" link
-        AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
-        {
-          private static final long serialVersionUID = 1000000;
-
-          @Override
-          public void onClick(AjaxRequestTarget target)
-          {
-            if (!userModel.getObject().getUsername().equalsIgnoreCase("Administrator"))
+            @Override
+            public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, userModel);
+              if (!userModel.getObject().getUsername().equalsIgnoreCase("Administrator"))
+              {
+                removeDialog.show(target, userModel);
+              }
             }
-          }
-        };
-        item.add(removeLink);
-      }
-    };
-    dataView.setItemsPerPage(10);
-    dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
-    tableContainer.add(dataView);
+          };
+          item.add(removeLink);
+        }
+      };
+      dataView.setItemsPerPage(10);
+      dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+      tableContainer.add(dataView);
 
-    tableContainer.add(new PagingNavigator("navigator", dataView));
+      tableContainer.add(new PagingNavigator("navigator", dataView));
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the UserAdministrationPage", e);
+    }
   }
 
   /**
