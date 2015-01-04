@@ -188,8 +188,10 @@ public class WebApplicationListener
 
         default:
 
-          throw new WebApplicationException("Unknown database type ("
+          logger.info("The default database tables will not be populated for the database type ("
               + metaData.getDatabaseProductName() + ")");
+
+          return;
       }
 
       // Create and populate the database tables if required
