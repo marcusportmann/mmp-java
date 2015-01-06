@@ -98,7 +98,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
         public void onClick()
         {
           AddReportDefinitionPage page =
-            new AddReportDefinitionPage(ReportDefinitionAdministrationPage.this);
+            new AddReportDefinitionPage(getPageReference());
 
           setResponsePage(page);
         }
@@ -149,11 +149,11 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-//            UpdateReportDefinitionPage page =
-//              new UpdateReportDefinitionPage(ReportDefinitionAdministrationPage.this,
-//                item.getModelObject());
-//
-//            setResponsePage(page);
+              UpdateReportDefinitionPage page =
+                new UpdateReportDefinitionPage(getPageReference(),
+                  new Model<>(reportDefinitionModel.getObject()));
+
+              setResponsePage(page);
             }
           };
 

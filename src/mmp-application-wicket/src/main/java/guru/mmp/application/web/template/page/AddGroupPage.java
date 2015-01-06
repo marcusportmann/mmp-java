@@ -71,8 +71,7 @@ public class AddGroupPage extends TemplateWebPage
 
     try
     {
-      Form<Group> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(groupModel));
+      Form<Group> addForm = new Form<>("addForm", new CompoundPropertyModel<>(groupModel));
 
       addForm.add(new GroupInputPanel("group", groupModel, false));
 

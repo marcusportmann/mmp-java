@@ -98,13 +98,11 @@ public class SelectOrganisationPage extends WebPage
     add(form);
 
     // The "organisation" field
-    ChoiceRenderer<StringSelectOption> choiceRenderer =
-      new ChoiceRenderer<>("name", "value");
+    ChoiceRenderer<StringSelectOption> choiceRenderer = new ChoiceRenderer<>("name", "value");
 
     DropDownChoice<StringSelectOption> organisationField =
-      new DropDownChoiceWithFeedback<>("organisation",
-        new PropertyModel<>(this, "organisation"), getOrganisationOptions(),
-        choiceRenderer);
+      new DropDownChoiceWithFeedback<>("organisation", new PropertyModel<>(this, "organisation"),
+        getOrganisationOptions(), choiceRenderer);
     organisationField.setRequired(true);
     form.add(organisationField);
 

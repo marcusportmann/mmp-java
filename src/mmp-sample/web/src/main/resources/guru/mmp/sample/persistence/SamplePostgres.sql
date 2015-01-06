@@ -8,7 +8,7 @@
 --
 --  Execute the following command to create the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql93/bin/createdb  --template=template0 --encoding=UNICODE sampledb'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql93/bin/createdb  --template=template0 --encoding=UTF8 sampledb'
 --
 --  Execute the following command to initialise the database:
 --

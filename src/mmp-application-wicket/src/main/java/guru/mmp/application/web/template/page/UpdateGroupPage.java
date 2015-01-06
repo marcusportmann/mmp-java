@@ -68,8 +68,7 @@ public class UpdateGroupPage extends TemplateWebPage
 
     try
     {
-      Form<Group> updateForm = new Form<>("updateForm",
-        new CompoundPropertyModel<>(groupModel));
+      Form<Group> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(groupModel));
 
       updateForm.add(new GroupInputPanel("group", groupModel, true));
 

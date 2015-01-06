@@ -28,12 +28,17 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 
+import guru.mmp.application.web.template.component.ReportDefinitionInputPanel;
 import org.apache.wicket.Page;
+import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import org.slf4j.Logger;
@@ -75,48 +80,23 @@ public class AddReportDefinitionPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddReportDefinitionPage(final Page previousPage)
+  public AddReportDefinitionPage(final PageReference previousPage)
   {
     super("Add Report Definition", "Add Report Definition");
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
         + " | Add Report Definition");
 
+    final IModel<ReportDefinition> reportDefinitionModel = new Model<>(new ReportDefinition());
+
     try
     {
-      reportDefinition = new ReportDefinition();
-      reportDefinition.setId(UUID.randomUUID().toString());
+      reportDefinitionModel.getObject().setId(UUID.randomUUID().toString());
 
-      add(new FeedbackList("feedback"));
+      Form<ReportDefinition> addForm = new Form<>("addForm", new CompoundPropertyModel<>(reportDefinitionModel));
 
-      Form<Void> form = new Form<>("addReportDefinitionForm");
+      addForm.add(new ReportDefinitionInputPanel("reportDefinition", reportDefinitionModel, false));
 
-      form.setMarkupId("addReportDefinitionForm");
-      form.setOutputMarkupId(true);
-      add(form);
-
-      // The "id" field
-      final TextField<String> idField = new TextField<>("id",
-        new PropertyModel<>(reportDefinition, "id"));
-
-      idField.setRequired(true);
-      form.add(idField);
-      form.add(new FeedbackLabel("idFeedback", idField));
-
-      // The "name" field
-      final TextField<String> nameField = new TextField<>("name",
-        new PropertyModel<>(reportDefinition, "name"));
-
-      nameField.setRequired(true);
-      form.add(nameField);
-      form.add(new FeedbackLabel("nameFeedback", nameField));
-
-      // The "fileUpload" field
-      final FileUploadField fileUploadField = new FileUploadField("fileUpload");
-
-      fileUploadField.setRequired(true);
-      form.add(fileUploadField);
-      form.add(new FeedbackLabel("fileUploadFeedback", fileUploadField));
-
+      // The "addButton" button
       Button addButton = new Button("addButton")
       {
         private static final long serialVersionUID = 1000000;

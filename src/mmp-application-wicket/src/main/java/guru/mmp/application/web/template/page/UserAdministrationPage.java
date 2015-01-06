@@ -28,7 +28,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.UserDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -43,13 +42,12 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserAdministrationPage</code> class implements the
@@ -179,8 +177,7 @@ public class UserAdministrationPage extends TemplateWebPage
 
               if (!user.getUsername().equalsIgnoreCase("Administrator"))
               {
-                UpdateUserPage page = new UpdateUserPage(getPageReference(),
-                  new Model<>(userModel.getObject()));
+                UpdateUserPage page = new UpdateUserPage(getPageReference(), userModel);
 
                 setResponsePage(page);
               }

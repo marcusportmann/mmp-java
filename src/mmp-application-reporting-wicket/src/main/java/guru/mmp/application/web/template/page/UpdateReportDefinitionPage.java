@@ -18,6 +18,7 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -29,11 +30,13 @@ import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import org.slf4j.Logger;
@@ -68,11 +71,11 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
   /**
    * Constructs a new <code>UpdateReportDefinitionPage</code>.
    *
-   * @param previousPage     the previous page
-   * @param reportDefinition the report definition being updated
+   * @param previousPage          the previous page
+   * @param reportDefinitionModel the model for the report definition
    */
-  public UpdateReportDefinitionPage(final Page previousPage,
-      final ReportDefinition reportDefinition)
+  public UpdateReportDefinitionPage(final PageReference previousPage,
+    final IModel<ReportDefinition> reportDefinitionModel)
   {
     super("Update Report Definition", "Update Report Definition");
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName()

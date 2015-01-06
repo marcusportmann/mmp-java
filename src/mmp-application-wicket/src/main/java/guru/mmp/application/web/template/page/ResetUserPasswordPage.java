@@ -85,8 +85,7 @@ public class ResetUserPasswordPage extends TemplateWebPage
 
     try
     {
-      Form<User> resetForm = new Form<>("resetForm",
-        new CompoundPropertyModel<>(userModel));
+      Form<User> resetForm = new Form<>("resetForm", new CompoundPropertyModel<>(userModel));
 
       // The "username" field
       TextField<String> usernameField = new TextFieldWithFeedback<>("username");

@@ -71,8 +71,7 @@ public class UpdateUserPage extends TemplateWebPage
 
     try
     {
-      Form<User> updateForm = new Form<>("updateForm",
-        new CompoundPropertyModel<>(userModel));
+      Form<User> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(userModel));
 
       // The "username" field
       TextField<String> usernameField = new TextFieldWithFeedback<>("username");

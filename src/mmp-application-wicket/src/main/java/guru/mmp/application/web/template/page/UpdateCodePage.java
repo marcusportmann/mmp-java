@@ -69,8 +69,7 @@ public class UpdateCodePage extends TemplateWebPage
 
     try
     {
-      Form<Code> updateForm = new Form<>("updateForm",
-        new CompoundPropertyModel<>(codeModel));
+      Form<Code> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(codeModel));
 
       updateForm.add(new CodeInputPanel("code", codeModel, true));
 

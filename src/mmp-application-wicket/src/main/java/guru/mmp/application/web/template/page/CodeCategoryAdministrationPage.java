@@ -29,7 +29,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeCategoryDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,13 +40,12 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryAdministrationPage</code> class implements the
@@ -132,7 +130,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
             public void onClick()
             {
               UpdateCodeCategoryPage page = new UpdateCodeCategoryPage(getPageReference(),
-                new Model<>(codeCategoryModel.getObject()));
+                codeCategoryModel);
 
               setResponsePage(page);
             }
