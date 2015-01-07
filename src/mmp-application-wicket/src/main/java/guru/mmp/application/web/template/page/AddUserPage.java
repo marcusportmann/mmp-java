@@ -159,19 +159,19 @@ public class AddUserPage extends TemplateWebPage
 
       // The "expiredPassword" field
       CheckBox expiredPasswordCheckbox = new CheckBox("expiredPassword",
-        new PropertyModel<>(this, "expiredPassword"));
+        new PropertyModel<Boolean>(this, "expiredPassword"));
       expiredPasswordCheckbox.setRequired(false);
       addForm.add(expiredPasswordCheckbox);
 
       // The "userLocked" field
       CheckBox userLockedCheckbox = new CheckBox("userLocked",
-        new PropertyModel<>(this, "userLocked"));
+        new PropertyModel<Boolean>(this, "userLocked"));
       userLockedCheckbox.setRequired(false);
       addForm.add(userLockedCheckbox);
 
       // The "groupName" field
       DropDownChoice<String> groupNameField = new DropDownChoiceWithFeedback<>("groupName",
-        new PropertyModel<>(this, "groupName"), getGroupOptions());
+        new PropertyModel<String>(this, "groupName"), getGroupOptions());
       groupNameField.setRequired(false);
       addForm.add(groupNameField);
 

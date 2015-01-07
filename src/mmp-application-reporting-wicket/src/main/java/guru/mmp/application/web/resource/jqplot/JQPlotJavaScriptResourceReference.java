@@ -19,16 +19,15 @@ package guru.mmp.application.web.resource.jqplot;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JQPlotJavaScriptResourceReference</code> class implements the resource reference for

@@ -22,37 +22,27 @@ import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
-import guru.mmp.application.web.component.FeedbackLabel;
-import guru.mmp.application.web.component.FeedbackList;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
-
 import guru.mmp.application.web.template.component.ReportDefinitionInputPanel;
-import org.apache.wicket.Page;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AddReportDefinitionPage</code> class implements the "Add Report Definition"
@@ -67,9 +57,6 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddReportDefinitionPage.class);
-
-  /* The report definition being added. */
-  private ReportDefinition reportDefinition;
 
   /* Reporting Service */
   @Inject
@@ -92,9 +79,13 @@ public class AddReportDefinitionPage extends TemplateWebPage
     {
       reportDefinitionModel.getObject().setId(UUID.randomUUID().toString());
 
-      Form<ReportDefinition> addForm = new Form<>("addForm", new CompoundPropertyModel<>(reportDefinitionModel));
+      Form<ReportDefinition> addForm = new Form<>("addForm",
+        new CompoundPropertyModel<>(reportDefinitionModel));
 
-      addForm.add(new ReportDefinitionInputPanel("reportDefinition", reportDefinitionModel, false));
+      final ReportDefinitionInputPanel reportDefinitionInputPanel =
+        new ReportDefinitionInputPanel("reportDefinition", reportDefinitionModel, false);
+
+      addForm.add(reportDefinitionInputPanel);
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -108,11 +99,13 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
           try
           {
+            ReportDefinition reportDefinition = reportDefinitionModel.getObject();
+
             WebSession session = getWebApplicationSession();
 
             reportDefinition.setOrganisation(session.getOrganisation());
 
-            fileUpload = fileUploadField.getFileUpload();
+            fileUpload = reportDefinitionInputPanel.getFileUploadField().getFileUpload();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int numberOfBytesRead;
@@ -128,7 +121,7 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
             reportingService.saveReportDefinition(reportDefinition, session.getUsername());
 
-            setResponsePage(previousPage);
+            setResponsePage(previousPage.getPage());
           }
           catch (Throwable e)
           {
@@ -156,7 +149,7 @@ public class AddReportDefinitionPage extends TemplateWebPage
       };
 
       addButton.setDefaultFormProcessing(true);
-      form.add(addButton);
+      addForm.add(addButton);
 
       Button cancelButton = new Button("cancelButton")
       {
@@ -165,12 +158,12 @@ public class AddReportDefinitionPage extends TemplateWebPage
         @Override
         public void onSubmit()
         {
-          setResponsePage(previousPage);
+          setResponsePage(previousPage.getPage());
         }
       };
 
       cancelButton.setDefaultFormProcessing(false);
-      form.add(cancelButton);
+      addForm.add(cancelButton);
     }
     catch (Throwable e)
     {

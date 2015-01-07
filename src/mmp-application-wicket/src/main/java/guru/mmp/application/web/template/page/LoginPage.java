@@ -100,14 +100,14 @@ public class LoginPage extends WebPage
 
     // The "username" field
     TextField<String> usernameField = new TextFieldWithFeedback<>("username",
-      new PropertyModel<>(this, "username"));
+      new PropertyModel<String>(this, "username"));
     usernameField.setRequired(true);
     usernameField.add(new DefaultFocusBehavior());
     loginForm.add(usernameField);
 
     // The "password" field
     PasswordTextField passwordField = new PasswordTextFieldWithFeedback("password",
-      new PropertyModel<>(this, "password"));
+      new PropertyModel<String>(this, "password"));
     passwordField.setRequired(true);
     loginForm.add(passwordField);
 

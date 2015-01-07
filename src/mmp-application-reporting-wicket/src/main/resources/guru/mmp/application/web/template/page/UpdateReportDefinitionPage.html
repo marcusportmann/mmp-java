@@ -1,54 +1,66 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/theme/mmp/template.css"
-          rel="StyleSheet" type="text/css"/>
-</head>
-<body>
-<div id="childContentHolderSpacer"></div>
-<div id="childContentHolder">
-    <wicket:extend>
-
-        <div wicket:id="feedback"></div>
-
-        <form wicket:id="updateReportDefinitionForm">
-
-            <div class="form-intro">Please enter the updated details for the report definition and click <b>Update</b>.
+<!DOCTYPE html>
+<html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/perfectscrollbar/css/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-fontawesome-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-clip-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-light-theme.css"/>
+    <title>[Page Title]</title>
+  </head>
+  <body class="layout-boxed">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="main-container">
+      <div class="navbar-content"></div>
+      <div class="main-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="page-header">
+                <h1>[Page Heading]</h1>
+              </div>
             </div>
+          </div>
+          <wicket:extend>
 
-            <div class="formField">
-                <label for="id">ID</label>
-                <input wicket:id="id" type="text" name="id" class="updateReportDefinitionFormId"
-                       readonly="readonly"></input>
+            <div class="form-intro">Please update the details for the report definition and click <b>Update</b>.</div>
 
-                <div class="hidden" wicket:id="idFeedback"></div>
-            </div>
+            <form wicket:id="updateForm" id="updateForm" class="form-horizontal">
 
-            <div class="formField">
-                <label for="name">Name</label>
-                <input wicket:id="name" type="text" name="name" class="updateReportDefinitionFormName"></input>
+              <div wicket:id="reportDefinition"></div>
 
-                <div class="hidden" wicket:id="nameFeedback"></div>
-            </div>
+              <div class="form-group">
+                <div class="col-xs-7">
+                  <button wicket:id="updateButton" type="submit" class="btn btn-primary pull-right btn-margin-left">Update</button>
+                  <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right btn-margin-right">Cancel</button>
+                </div>
+              </div>
 
-            <div class="formField">
-                <label for="fileUpload">Template</label>
-                <input wicket:id="fileUpload" type="file" name="fileUpload"></input>
+            </form>
 
-                <div class="hidden" wicket:id="fileUploadFeedback"></div>
-            </div>
-
-            <div class="formButtons">
-                <button wicket:id="updateButton" type="submit">Update</button>
-                <button wicket:id="cancelButton" type="submit">Cancel</button>
-            </div>
-
-        </form>
-
-    </wicket:extend>
-</div>
-</body>
+          </wicket:extend>
+        </div>
+      </div>
+    </div>
+    <div class="footer clearfix">
+      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
+      <div class="footer-items"><span class="go-top"><i class="clip-chevron-up"></i></span></div>
+    </div>
+  </body>
 </html>
+
 

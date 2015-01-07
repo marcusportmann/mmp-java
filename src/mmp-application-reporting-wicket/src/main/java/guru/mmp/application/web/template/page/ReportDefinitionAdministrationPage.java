@@ -26,7 +26,6 @@ import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,15 +37,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -97,8 +94,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          AddReportDefinitionPage page =
-            new AddReportDefinitionPage(getPageReference());
+          AddReportDefinitionPage page = new AddReportDefinitionPage(getPageReference());
 
           setResponsePage(page);
         }
@@ -149,9 +145,8 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateReportDefinitionPage page =
-                new UpdateReportDefinitionPage(getPageReference(),
-                  new Model<>(reportDefinitionModel.getObject()));
+              UpdateReportDefinitionPage page = new UpdateReportDefinitionPage(getPageReference(),
+                new Model<>(reportDefinitionModel.getObject()));
 
               setResponsePage(page);
             }

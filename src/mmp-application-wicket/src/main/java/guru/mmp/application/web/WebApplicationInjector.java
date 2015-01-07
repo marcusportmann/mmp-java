@@ -62,7 +62,7 @@ public class WebApplicationInjector
    */
   public WebApplicationInjector()
   {
-    this.nonInjectableClasses = Collections.synchronizedList(new ArrayList<>());
+    this.nonInjectableClasses = Collections.synchronizedList(new ArrayList<Class<?>>());
     this.injectableClasses = new ConcurrentHashMap<>();
   }
 

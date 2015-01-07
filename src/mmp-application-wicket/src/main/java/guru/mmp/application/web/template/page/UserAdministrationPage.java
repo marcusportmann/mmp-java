@@ -116,7 +116,7 @@ public class UserAdministrationPage extends TemplateWebPage
 
       // The "filter" field
       final TextField<String> filterField = new TextField<>("filter",
-        new PropertyModel<>(dataProvider, "filter"));
+        new PropertyModel<String>(dataProvider, "filter"));
       filterForm.add(filterField);
 
       // The "filterButton" button

@@ -18,41 +18,33 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
-import guru.mmp.application.web.component.FeedbackLabel;
-import guru.mmp.application.web.component.FeedbackList;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
-
-import org.apache.wicket.Page;
+import guru.mmp.application.web.template.component.ReportDefinitionInputPanel;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>UpdateReportDefinitionPage</code> class implements the "Update Report Definition"
- * page for the Web Application Template.
+ * The <code>UpdateReportDefinitionPage</code> class implements the
+ * "Update ReportDefinition" page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
@@ -75,45 +67,23 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
    * @param reportDefinitionModel the model for the report definition
    */
   public UpdateReportDefinitionPage(final PageReference previousPage,
-    final IModel<ReportDefinition> reportDefinitionModel)
+      final IModel<ReportDefinition> reportDefinitionModel)
   {
-    super("Update Report Definition", "Update Report Definition");
+    super("Update ReportDefinition", "Update ReportDefinition");
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Update Report Definition");
+        + " | Update ReportDefinition");
 
     try
     {
-      add(new FeedbackList("feedback"));
+      Form<ReportDefinition> updateForm = new Form<>("updateForm",
+        new CompoundPropertyModel<>(reportDefinitionModel));
 
-      Form<Void> form = new Form<>("updateReportDefinitionForm");
+      final ReportDefinitionInputPanel reportDefinitionInputPanel =
+        new ReportDefinitionInputPanel("reportDefinition", reportDefinitionModel, true);
 
-      form.setMarkupId("updateReportDefinitionForm");
-      form.setOutputMarkupId(true);
-      add(form);
+      updateForm.add(reportDefinitionInputPanel);
 
-      // The "id" field
-      final TextField<String> idField = new TextField<>("id",
-        new PropertyModel<>(reportDefinition, "id"));
-
-      idField.setRequired(true);
-      form.add(idField);
-      form.add(new FeedbackLabel("idFeedback", idField));
-
-      // The "name" field
-      final TextField<String> nameField = new TextField<>("name",
-        new PropertyModel<>(reportDefinition, "name"));
-
-      nameField.setRequired(true);
-      form.add(nameField);
-      form.add(new FeedbackLabel("nameFeedback", nameField));
-
-      // The "fileUpload" field
-      final FileUploadField fileUploadField = new FileUploadField("fileUpload");
-
-      fileUploadField.setRequired(true);
-      form.add(fileUploadField);
-      form.add(new FeedbackLabel("fileUploadFeedback", fileUploadField));
-
+      // The "updateButton" button
       Button updateButton = new Button("updateButton")
       {
         private static final long serialVersionUID = 1000000;
@@ -125,9 +95,13 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
 
           try
           {
+            ReportDefinition reportDefinition = reportDefinitionModel.getObject();
+
             WebSession session = getWebApplicationSession();
 
-            fileUpload = fileUploadField.getFileUpload();
+            reportDefinition.setOrganisation(session.getOrganisation());
+
+            fileUpload = reportDefinitionInputPanel.getFileUploadField().getFileUpload();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int numberOfBytesRead;
@@ -143,7 +117,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
 
             reportingService.saveReportDefinition(reportDefinition, session.getUsername());
 
-            setResponsePage(previousPage);
+            setResponsePage(previousPage.getPage());
           }
           catch (Throwable e)
           {
@@ -171,7 +145,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
       };
 
       updateButton.setDefaultFormProcessing(true);
-      form.add(updateButton);
+      updateForm.add(updateButton);
 
       Button cancelButton = new Button("cancelButton")
       {
@@ -180,12 +154,12 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
         @Override
         public void onSubmit()
         {
-          setResponsePage(previousPage);
+          setResponsePage(previousPage.getPage());
         }
       };
 
       cancelButton.setDefaultFormProcessing(false);
-      form.add(cancelButton);
+      updateForm.add(cancelButton);
     }
     catch (Throwable e)
     {
@@ -194,9 +168,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
   }
 
   /**
-   * Constructs a new <code>UpdateReportDefinitionPage</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
+   * Hidden <code>UpdateReportDefinitionPage</code> constructor.
    */
   protected UpdateReportDefinitionPage() {}
 }

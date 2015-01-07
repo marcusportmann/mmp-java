@@ -129,13 +129,13 @@ public class ResetUserPasswordPage extends TemplateWebPage
 
       // The "expiredPassword" field
       CheckBox expiredPasswordCheckbox = new CheckBox("expiredPassword",
-        new PropertyModel<>(this, "expiredPassword"));
+        new PropertyModel<Boolean>(this, "expiredPassword"));
       expiredPasswordCheckbox.setRequired(false);
       resetForm.add(expiredPasswordCheckbox);
 
       // The "userLocked" field
       CheckBox userLockedCheckbox = new CheckBox("userLocked",
-        new PropertyModel<>(this, "userLocked"));
+        new PropertyModel<Boolean>(this, "userLocked"));
       userLockedCheckbox.setRequired(false);
       resetForm.add(userLockedCheckbox);
 
