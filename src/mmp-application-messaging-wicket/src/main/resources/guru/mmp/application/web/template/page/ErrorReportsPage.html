@@ -1,31 +1,73 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
   <head>
-    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/theme/mmp/template.css" rel="StyleSheet" type="text/css" />
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/perfectscrollbar/css/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-fontawesome-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-clip-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-light-theme.css"/>
+    <title>[Page Title]</title>
   </head>
-  <body>
-    <div id="childContentHolderSpacer"></div>
-    <div id="childContentHolder">
-      <wicket:extend>
-  
-        <table class="actionTable">
-          <tr>
-            <th>ID</th>
-            <th>Application</th>
-            <th>Created</th>
-            <th>Who</th>            
-          </tr>
-          <tr wicket:id="errorReportSummary">
-            <td><a wicket:id="viewErrorReportLink" href="#" title="View Error Report"><span wicket:id="id">[ID]</span></a></td>
-            <td><span wicket:id="application">[Application]</span></td>
-            <td><span wicket:id="created">[Created]</span></td>
-            <td><span wicket:id="who">[Who]</span></td>
-          </tr>
-        </table>
-  
-      </wicket:extend>
-    </div>      
+  <body class="layout-boxed">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="main-container">
+      <div class="navbar-content"></div>
+      <div class="main-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="page-header">
+                <h1>[Page Heading]</h1>
+              </div>
+            </div>
+          </div>
+          <wicket:extend>
+
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Application</th>
+                  <th>Created</th>
+                  <th>Who</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr wicket:id="errorReportSummary">
+                  <td>
+                    <a wicket:id="viewErrorReportLink" href="#" title="View Error Report"><span wicket:id="id">[ID]</span></a>
+                  </td>
+                  <td><span wicket:id="application">[Application]</span></td>
+                  <td><span wicket:id="created">[Created]</span></td>
+                  <td><span wicket:id="who">[Who]</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </wicket:extend>
+        </div>
+      </div>
+    </div>
+    <div class="footer clearfix">
+      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
+      <div class="footer-items"><span class="go-top"><i class="clip-chevron-up"></i></span></div>
+    </div>
   </body>
 </html>
+
+
+

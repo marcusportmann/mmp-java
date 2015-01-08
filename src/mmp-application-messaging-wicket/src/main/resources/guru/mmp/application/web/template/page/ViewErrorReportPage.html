@@ -1,107 +1,125 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
   <head>
-    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/theme/mmp/template.css" rel="StyleSheet" type="text/css" />
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/perfectscrollbar/css/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-fontawesome-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-clip-font.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-light-theme.css"/>
+    <title>[Page Title]</title>
   </head>
-  <body>
-    <div id="childContentHolderSpacer"></div>
-    <div id="childContentHolder">
-    <wicket:extend>
-        
-      <div class="contentTopLeft">  
-        <form wicket:id="backForm">  
-          <button wicket:id="backButton" type="submit">Back</button>
-        </form>
+  <body class="layout-boxed">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
+        </div>
       </div>
-      <div class="contentVerticalSpacer"></div>
-                
-      <form wicket:id="viewErrorReportForm">
-      
-        <table class="errorReportTable">
-          <tr>
-            <td nowrap="nowrap">
-              <div class="formField">
-                <label for="id">ID</label>
-                <span wicket:id="id">3fddea86-9bda-11e2-89a2-705681c23e9f</span>
+    </div>
+    <div class="main-container">
+      <div class="navbar-content"></div>
+      <div class="main-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="page-header">
+                <h1>[Page Heading]</h1>
               </div>
-            </td>
-            <td nowrap="nowrap">
-              <div class="formField">
-                <label for="applicationId">Application ID</label>
-                <span wicket:id="applicationId">0566fff8-862a-4549-b474-1e3e12635913</span>
-              </div>
-            </td>
-            <td nowrap="nowrap">
-              <div class="formField">
-                <label for="applicationVersion">Application Version</label>
-                <span wicket:id="applicationVersion">1</span>
-              </div>
-            </td>
-            <td width="100%">&nbsp;</td>
-           </tr>
-           <tr>
-            <td nowrap="nowrap">
-              <div class="formField">
-                <label for="device">Device</label>
-                <span wicket:id="device">68-30-30-15-12-87</span>
-              </div>
-            </td>
-            <td nowrap="nowrap">
-              <div class="formField">
-                <label for="created">Created</label>
-                <span wicket:id="created">2013-04-02 11:00:00</span>
-              </div>
-            </td>
-            <td colspan="2" nowrap="nowrap">
-              <div class="formField">
-                <label for="who">Who</label>
-                <span wicket:id="who">WWWWWWWWWWWWWWWWWWWW@WWWWWWWWWWWWWWWWWWWW.COM</span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4">
-              <div class="formField">
-                <label for="description">Description</label>
-                <span wicket:id="description">This is the description.</span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4">
-              <div class="formField">
-                <label for="feedback">Feedback</label>
-                <span wicket:id="feedback">This is the feedback.</span>
-              </div>
-            </td>
-          </tr>
-        </table>
-        <table>
-          <tr>
-            <td style="padding-left: 12px;"><b>Detail</b></td>
-          </tr>
-          <tr>
-            <td style="padding-left: 15px;">
-              <pre style="font: 10px Lucida Console, Monaco5, monospace;"><span wicket:id="detail">This is the detail.</span></pre>
-            </td>
-          </tr>
-        </table>
-        <table>
-          <tr>
-            <td style="padding-left: 12px;"><b>Data</b></td>
-          </tr>
-          <tr>
-            <td style="padding-left: 15px;">
-              <pre style="font: 10px Lucida Console, Monaco5, monospace;"><span wicket:id="data">This is the data.</span></pre>
-            </td>
-          </tr>
-        </table>
-      </form>
+            </div>
+          </div>
+          <wicket:extend>
 
-    </wicket:extend>
-    </div>      
+            <form wicket:id="viewErrorReportForm" class="form-horizontal">
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">ID</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="id">0566fff8-862a-4549-b474-1e3e12635913</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Application ID</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="applicationId">0566fff8-862a-4549-b474-1e3e12635913</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Application Version</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="applicationVersion">1</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Device</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="device">68-30-30-15-12-87</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Created</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="device">2013-04-02 11:00:00</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Who</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="device">WWWWWWWWWWWWWWWWWWWW@WWWWWWWWWWWWWWWWWWWW.COM</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Description</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="description">This is the description.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Feedback</label>
+                <div class="col-xs-7">
+                  <p class="form-control-static" wicket:id="feedback">This is the feedback.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Detail</label>
+                <div class="col-xs-7">
+                  <pre class="form-control-static" wicket:id="detail">This is the detail.</pre>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-xs-3">Data</label>
+                <div class="col-xs-8">
+                  <pre class="form-control-static" wicket:id="detail">This is the data.</pre>
+                </div>
+              </div>
+
+            </form>
+
+          </wicket:extend>
+        </div>
+      </div>
+    </div>
+    <div class="footer clearfix">
+      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
+      <div class="footer-items"><span class="go-top"><i class="clip-chevron-up"></i></span></div>
+    </div>
   </body>
 </html>
+
 

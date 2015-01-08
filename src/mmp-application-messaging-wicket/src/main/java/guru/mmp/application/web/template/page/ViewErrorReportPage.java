@@ -25,9 +25,8 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateMessagingSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 
-import org.apache.wicket.Page;
+import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 
 import org.slf4j.Logger;
@@ -64,33 +63,14 @@ public class ViewErrorReportPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param id           the ID uniquely identifying the error report
    */
-  public ViewErrorReportPage(final Page previousPage, final String id)
+  public ViewErrorReportPage(final PageReference previousPage, final String id)
   {
-    super("View Error Report", "View Error Report");
+    super("View Error Report", "View Error Report", id, previousPage);
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | View Error Report");
 
     try
     {
-      // The "backForm" form
-      Form<Void> backForm = new Form<>("backForm");
-
-      add(backForm);
-
-      // The "backButton" button
-      Button backButton = new Button("backButton")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onSubmit()
-        {
-          setResponsePage(previousPage);
-        }
-      };
-
-      backForm.add(backButton);
-
-      final ErrorReport errorReport = messagingService.getErrorReport(id);
+      ErrorReport errorReport = messagingService.getErrorReport(id);
 
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
