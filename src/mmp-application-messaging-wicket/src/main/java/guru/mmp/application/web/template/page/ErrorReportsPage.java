@@ -111,7 +111,7 @@ public class ErrorReportsPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              ViewErrorReportPage page = new ViewErrorReportPage(ErrorReportsPage.this, id);
+              ViewErrorReportPage page = new ViewErrorReportPage(getPageReference(), id);
 
               setResponsePage(page);
             }
