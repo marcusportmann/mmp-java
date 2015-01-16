@@ -101,7 +101,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
 
             reportDefinition.setOrganisation(session.getOrganisation());
 
-            fileUpload = reportDefinitionInputPanel.getFileUploadField().getFileUpload();
+            fileUpload = reportDefinitionInputPanel.getFileUpload();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int numberOfBytesRead;

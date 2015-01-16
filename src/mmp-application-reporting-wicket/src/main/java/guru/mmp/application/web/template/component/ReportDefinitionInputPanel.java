@@ -40,7 +40,6 @@ import java.util.List;
 public class ReportDefinitionInputPanel extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
-  private FileUploadField fileUploadField;
   @SuppressWarnings("unused")
   private List<FileUpload> fileUploads;
 
@@ -69,19 +68,24 @@ public class ReportDefinitionInputPanel extends InputPanel
     add(nameField);
 
     // The "fileUpload" field
-    fileUploadField = new FileUploadField("fileUpload",
-        new PropertyModel<List<FileUpload>>(this, "fileUpload"));
+    FileUploadField fileUploadField = new FileUploadField("fileUpload",
+      new PropertyModel<List<FileUpload>>(this, "fileUploads"));
     fileUploadField.setRequired(true);
     add(fileUploadField);
   }
 
   /**
-   * Returns the file upload field
+   * Returns the file upload
    *
-   * @return the file upload field
+   * @return the file upload
    */
-  public FileUploadField getFileUploadField()
+  public FileUpload getFileUpload()
   {
-    return fileUploadField;
+    if ((fileUploads != null) && (fileUploads.get(0) != null))
+    {
+      return fileUploads.get(0);
+    }
+
+    return null;
   }
 }

@@ -114,6 +114,18 @@
     <url-pattern>/servlet/UnitTestServlet</url-pattern>
   </servlet-mapping>
 
+  <!-- ========================================================================================= -->
+  <!--                                    View Report Servlet                                    -->
+  <!-- ========================================================================================= -->
+  <servlet>
+    <servlet-name>ViewReportServlet</servlet-name>
+    <servlet-class>guru.mmp.application.web.servlet.ViewReportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewReportServlet</servlet-name>
+    <url-pattern>/servlet/ViewReportServlet</url-pattern>
+  </servlet-mapping>
+
   <display-name>mmp-sample-web</display-name>
 
   <welcome-file-list>
