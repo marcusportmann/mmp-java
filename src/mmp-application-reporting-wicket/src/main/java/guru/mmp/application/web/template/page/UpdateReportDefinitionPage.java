@@ -160,6 +160,8 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
 
       cancelButton.setDefaultFormProcessing(false);
       updateForm.add(cancelButton);
+
+      add(updateForm);
     }
     catch (Throwable e)
     {

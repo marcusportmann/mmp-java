@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="id.Required">Please enter an ID for the report definition.</entry>
-  <entry key="name.Required">Please enter a name for the report definition.</entry>
-  <entry key="fileUpload.Required">Please select the file containing the compiled Jasper report for the report definition.
-  </entry>
+  <entry key="id.Required">An ID is required.</entry>
+  <entry key="name.Required">A name is required.</entry>
+  <entry key="fileUpload.Required">The compiled Jasper report is required.</entry>
 </properties>

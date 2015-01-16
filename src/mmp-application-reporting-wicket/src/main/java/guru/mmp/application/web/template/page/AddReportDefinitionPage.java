@@ -164,6 +164,8 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
       cancelButton.setDefaultFormProcessing(false);
       addForm.add(cancelButton);
+
+      add(addForm);
     }
     catch (Throwable e)
     {

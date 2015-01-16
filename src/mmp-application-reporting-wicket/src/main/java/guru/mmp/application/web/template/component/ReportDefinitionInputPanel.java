@@ -20,9 +20,16 @@ package guru.mmp.application.web.template.component;
 
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
+
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>ReportDefinitionInputPanel</code> class provides a Wicket component that can
@@ -34,6 +41,8 @@ public class ReportDefinitionInputPanel extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
   private FileUploadField fileUploadField;
+  @SuppressWarnings("unused")
+  private List<FileUpload> fileUploads;
 
   /**
    * Constructs a new <code>ReportDefinitionInputPanel</code>.
@@ -60,13 +69,14 @@ public class ReportDefinitionInputPanel extends InputPanel
     add(nameField);
 
     // The "fileUpload" field
-    fileUploadField = new FileUploadField("fileUpload");
+    fileUploadField = new FileUploadField("fileUpload",
+        new PropertyModel<List<FileUpload>>(this, "fileUpload"));
     fileUploadField.setRequired(true);
     add(fileUploadField);
   }
 
   /**
-   * Returns the file upload field.
+   * Returns the file upload field
    *
    * @return the file upload field
    */
