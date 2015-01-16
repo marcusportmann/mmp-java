@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
@@ -40,6 +41,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+
 import javax.naming.InitialContext;
 
 import javax.servlet.ServletContext;
@@ -89,141 +91,6 @@ public class SampleApplicationListener
     initSampleData();
   }
 
-  /**
-   * Initialise the sample data.
-   */
-  private void initSampleData()
-  {
-    try
-    {
-      byte[] sampleReportDefinitionData = getClasspathResource("guru/mmp/sample/report/SampleReport.jasper");
-
-      ReportDefinition sampleReportDefinition = new ReportDefinition("2a4b74e8-7f03-416f-b058-b35bb06944ef", "MMP", "Sample Report", sampleReportDefinitionData, new Date(), "Administrator", null, null);
-
-      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
-      {
-        reportingService.saveReportDefinition(sampleReportDefinition, "Administrator");
-        logger.info("Saved the \"Sample Report\" report definition");
-      }
-
-
-
-
-
-    }
-    catch (Throwable e)
-    {
-      throw new WebApplicationException("Failed to initialise the sample data", e);
-    }
-  }
-
-  /**
-   * Initialise the sample database tables if required.
-   */
-  private void initSampleDatabaseTables()
-  {
-    DataSource dataSource;
-
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable e)
-    {
-      throw new WebApplicationException("Failed to initialise the sample database tables:"
-        + "Failed to retrieve the application data source using the JNDI lookup"
-        + " (java:app/jdbc/ApplicationDataSource)", e);
-    }
-
-    if (dataSource == null)
-    {
-      throw new WebApplicationException("Failed to initialise the sample database tables:"
-        + "Failed to retrieve the application data source using the JNDI lookup"
-        + " (java:app/jdbc/ApplicationDataSource)");
-    }
-
-    Connection connection = null;
-
-    try
-    {
-      connection = dataSource.getConnection();
-
-      DatabaseMetaData metaData = connection.getMetaData();
-
-      logger.info("Connected to the " + metaData.getDatabaseProductName()
-        + " application database with version " + metaData.getDatabaseProductVersion());
-
-      // Determine the suffix for the SQL files containing the database DDL
-      String databaseFileSuffix;
-
-      switch (metaData.getDatabaseProductName())
-      {
-        case "H2":
-
-          databaseFileSuffix = "H2";
-
-          break;
-
-        default:
-
-          logger.info("The sample database tables will not be populated for the database type ("
-            + metaData.getDatabaseProductName() + ")");
-
-          return;
-      }
-
-      // Create and populate the database tables if required
-      if (!DAOUtil.tableExists(connection, null, "SAMPLE", "DATA"))
-      {
-        logger.info("Creating and populating the sample database tables");
-
-        String resourcePath = "/guru/mmp/sample/persistence/Sample" + databaseFileSuffix
-          + ".sql";
-        int numberOfStatementsExecuted = 0;
-        int numberOfFailedStatements = 0;
-        List<String> sqlStatements;
-
-        try
-        {
-          sqlStatements = DAOUtil.loadSQL(resourcePath);
-        }
-        catch (Throwable e)
-        {
-          throw new WebApplicationException(
-            "Failed to load the SQL statements from the resource file (" + resourcePath + ")", e);
-        }
-
-        for (String sqlStatement : sqlStatements)
-        {
-          try
-          {
-            DAOUtil.executeStatement(connection, sqlStatement);
-            numberOfStatementsExecuted++;
-          }
-          catch (Throwable e)
-          {
-            logger.error("Failed to execute the SQL statement: " + sqlStatement, e);
-            numberOfFailedStatements++;
-          }
-        }
-
-        if (numberOfStatementsExecuted != sqlStatements.size())
-        {
-          throw new WebApplicationException("Failed to execute " + numberOfFailedStatements
-            + " SQL statement(s) in the resource file (" + resourcePath + ")");
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new WebApplicationException("Failed to initialise the sample database tables", e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
-    }
-  }
-
   private byte[] getClasspathResource(String path)
   {
     InputStream is = null;
@@ -259,9 +126,142 @@ public class SampleApplicationListener
       }
       catch (Throwable e)
       {
-        logger.error("Failed to close the input stream for the classpath resource (" + path
-          + ")", e);
+        logger.error("Failed to close the input stream for the classpath resource (" + path + ")",
+            e);
       }
+    }
+  }
+
+  /**
+   * Initialise the sample data.
+   */
+  private void initSampleData()
+  {
+    try
+    {
+      byte[] sampleReportDefinitionData =
+        getClasspathResource("guru/mmp/sample/report/SampleReport.jasper");
+
+      ReportDefinition sampleReportDefinition =
+        new ReportDefinition("2a4b74e8-7f03-416f-b058-b35bb06944ef", "MMP", "Sample Report",
+          sampleReportDefinitionData, new Date(), "Administrator", null, null);
+
+      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
+      {
+        reportingService.saveReportDefinition(sampleReportDefinition, "Administrator");
+        logger.info("Saved the \"Sample Report\" report definition");
+      }
+
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the sample data", e);
+    }
+  }
+
+  /**
+   * Initialise the sample database tables if required.
+   */
+  private void initSampleDatabaseTables()
+  {
+    DataSource dataSource;
+
+    try
+    {
+      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the sample database tables:"
+          + "Failed to retrieve the application data source using the JNDI lookup"
+          + " (java:app/jdbc/ApplicationDataSource)", e);
+    }
+
+    if (dataSource == null)
+    {
+      throw new WebApplicationException("Failed to initialise the sample database tables:"
+          + "Failed to retrieve the application data source using the JNDI lookup"
+          + " (java:app/jdbc/ApplicationDataSource)");
+    }
+
+    Connection connection = null;
+
+    try
+    {
+      connection = dataSource.getConnection();
+
+      DatabaseMetaData metaData = connection.getMetaData();
+
+      logger.info("Connected to the " + metaData.getDatabaseProductName()
+          + " application database with version " + metaData.getDatabaseProductVersion());
+
+      // Determine the suffix for the SQL files containing the database DDL
+      String databaseFileSuffix;
+
+      switch (metaData.getDatabaseProductName())
+      {
+        case "H2":
+
+          databaseFileSuffix = "H2";
+
+          break;
+
+        default:
+
+          logger.info("The sample database tables will not be populated for the database type ("
+              + metaData.getDatabaseProductName() + ")");
+
+          return;
+      }
+
+      // Create and populate the database tables if required
+      if (!DAOUtil.tableExists(connection, null, "SAMPLE", "DATA"))
+      {
+        logger.info("Creating and populating the sample database tables");
+
+        String resourcePath = "/guru/mmp/sample/persistence/Sample" + databaseFileSuffix + ".sql";
+        int numberOfStatementsExecuted = 0;
+        int numberOfFailedStatements = 0;
+        List<String> sqlStatements;
+
+        try
+        {
+          sqlStatements = DAOUtil.loadSQL(resourcePath);
+        }
+        catch (Throwable e)
+        {
+          throw new WebApplicationException(
+              "Failed to load the SQL statements from the resource file (" + resourcePath + ")", e);
+        }
+
+        for (String sqlStatement : sqlStatements)
+        {
+          try
+          {
+            DAOUtil.executeStatement(connection, sqlStatement);
+            numberOfStatementsExecuted++;
+          }
+          catch (Throwable e)
+          {
+            logger.error("Failed to execute the SQL statement: " + sqlStatement, e);
+            numberOfFailedStatements++;
+          }
+        }
+
+        if (numberOfStatementsExecuted != sqlStatements.size())
+        {
+          throw new WebApplicationException("Failed to execute " + numberOfFailedStatements
+              + " SQL statement(s) in the resource file (" + resourcePath + ")");
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the sample database tables", e);
+    }
+    finally
+    {
+      DAOUtil.close(connection);
     }
   }
 }

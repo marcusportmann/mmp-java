@@ -26,29 +26,37 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
+
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.*;
+
+import java.sql.Connection;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
+
 import javax.naming.InitialContext;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-import java.io.*;
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>ViewExcelReportServlet</code> class implements the servlet used to view Excel reports.
@@ -162,15 +170,15 @@ public class ViewExcelReportServlet extends HttpServlet
             if (webSession.hasAcccessToFunction(
                 TemplateReportingSecurity.FUNCTION_CODE_VIEW_REPORT))
             {
-              // Check for a report logo and if one is not present then setup the default
-              if (!viewReportParameters.getReportParameters().containsKey("reportLogo"))
-              {
-                byte[] defaultReportLogo = getClasspathResource(
-                    "guru/mmp/application/web/template/resource/theme/mmp/reportLogo.png");
-
-                viewReportParameters.getReportParameters().put("reportLogo",
-                    new ByteArrayInputStream(defaultReportLogo));
-              }
+//            // Check for a report logo and if one is not present then setup the default
+//            if (!viewReportParameters.getReportParameters().containsKey("reportLogo"))
+//            {
+//              byte[] defaultReportLogo = getClasspathResource(
+//                  "guru/mmp/application/web/template/resource/theme/mmp/reportLogo.png");
+//
+//              viewReportParameters.getReportParameters().put("reportLogo",
+//                  new ByteArrayInputStream(defaultReportLogo));
+//            }
 
               // Local Report
               if (viewReportParameters.getReportType() == ReportType.LOCAL)
