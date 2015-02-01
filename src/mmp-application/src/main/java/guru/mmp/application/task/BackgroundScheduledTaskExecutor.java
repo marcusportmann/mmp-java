@@ -50,7 +50,7 @@ public class BackgroundScheduledTaskExecutor
    * Execute all the tasks scheduled for execution.
    *
    * @return <code>true</code> if the scheduled tasks were executed successfully or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   @Asynchronous
   public Future<Boolean> execute()

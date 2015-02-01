@@ -72,6 +72,7 @@ public abstract class SimpleDataAccessObject
    * Returns a database connection from the data source associated with this DAO.
    *
    * @return a database connection from the data source associated with this DAO
+   *
    * @throws DAOException
    */
   public Connection getConnection()
@@ -97,6 +98,7 @@ public abstract class SimpleDataAccessObject
    * Returns the data source associated with this DAO.
    *
    * @return the data source associated with this DAO
+   *
    * @throws DAOException
    */
   public DataSource getDataSource()

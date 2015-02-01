@@ -417,7 +417,9 @@ public interface ISecurityService
    * @param filter       the filter to apply to the users
    * @param origin       the origin of the request e.g. the IP address, subnetwork or
    *                     workstation name for the remote client
+   *
    * @return the filtered list of the users associated with the specified organisation
+   *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */

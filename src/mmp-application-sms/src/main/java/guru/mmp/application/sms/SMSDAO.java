@@ -649,7 +649,7 @@ public class SMSDAO
    * This method must be implemented by all classes derived from <code>DataAccessObject</code> and
    * should contain the code to generate the SQL statements for the DAO.
    *
-   * @param schemaPrefix    the schema prefix to append to database objects reference by the DAO
+   * @param schemaPrefix the schema prefix to append to database objects reference by the DAO
    *
    * @throws SQLException if a database error occurs
    */

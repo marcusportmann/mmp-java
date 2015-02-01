@@ -149,7 +149,7 @@ public class User
    * the user
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
-   * the user
+   *         the user
    */
   public Integer getPasswordAttempts()
   {
@@ -181,8 +181,9 @@ public class User
    * user property does not exist.
    *
    * @param name the name of the user property
+   *
    * @return the value of the user property with the specified name or <code>null</code> if the
-   * user property does not exist
+   *         user property does not exist
    */
   public String getProperty(String name)
   {
@@ -219,8 +220,9 @@ public class User
    * <code>false</code> otherwise.
    *
    * @param name the name of the user property
+   *
    * @return <code>true</code> if the user has a property with the specified name or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean hasProperty(String name)
   {

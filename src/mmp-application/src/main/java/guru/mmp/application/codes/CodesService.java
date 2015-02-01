@@ -85,7 +85,9 @@ public class CodesService
    * Check whether the cached code category with the specified ID exists.
    *
    * @param id the ID uniquely identifying the cached code category
+   *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
+   *
    * @throws CodesServiceException
    */
   public boolean cachedCodeCategoryExists(String id)
@@ -106,7 +108,9 @@ public class CodesService
    * Check whether the code category with the specified ID exists.
    *
    * @param id the ID uniquely identifying the code category
+   *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
+   *
    * @throws CodesServiceException
    */
   public boolean codeCategoryExists(String id)
@@ -127,6 +131,7 @@ public class CodesService
    * Create the new cached code.
    *
    * @param code the <code>Code</code> instance containing the information for the new cached code
+   *
    * @throws CodesServiceException
    */
   public void createCachedCode(Code code)
@@ -168,6 +173,7 @@ public class CodesService
    * Create the new code.
    *
    * @param code the <code>Code</code> instance containing the information for the new code
+   *
    * @throws CodesServiceException
    */
   public void createCode(Code code)
@@ -189,6 +195,7 @@ public class CodesService
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
    *                     new code category
+   *
    * @throws CodesServiceException
    */
   public void createCodeCategory(CodeCategory codeCategory)
@@ -209,6 +216,7 @@ public class CodesService
    * Delete the cached code category.
    *
    * @param id the ID uniquely identifying the cached code category
+   *
    * @throws CodesServiceException
    */
   public void deleteCachedCodeCategory(String id)
@@ -228,6 +236,7 @@ public class CodesService
    * Delete the code.
    *
    * @param id the ID uniquely identifying the code
+   *
    * @throws CodesServiceException
    */
   public void deleteCode(String id)
@@ -247,6 +256,7 @@ public class CodesService
    * Delete the code category.
    *
    * @param id the ID uniquely identifying the code category
+   *
    * @throws CodesServiceException
    */
   public void deleteCodeCategory(String id)
@@ -267,8 +277,10 @@ public class CodesService
    *
    * @param id            the ID uniquely identifying the cached code category
    * @param retrieveCodes retrieve the codes and/or code data for the cached code category
+   *
    * @return the cached code category with the specified ID or <code>null</code> if the cached code
-   * category could not be found
+   *         category could not be found
+   *
    * @throws CodesServiceException
    */
   public CachedCodeCategory getCachedCodeCategory(String id, boolean retrieveCodes)
@@ -298,7 +310,9 @@ public class CodesService
    * Returns all the cached codes for the cached code category with the specified ID.
    *
    * @param cachedCodeCategoryId the ID uniquely identifying the cached code category
+   *
    * @return all the cached codes for the cached code category with the specified ID
+   *
    * @throws CodesServiceException
    */
   public List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
@@ -319,7 +333,9 @@ public class CodesService
    * Retrieve the code with the specified ID.
    *
    * @param id the ID uniquely identifying the code
+   *
    * @return the code with the specified ID or <code>null</code> if the code could not be found
+   *
    * @throws CodesServiceException
    */
   public Code getCode(String id)
@@ -341,8 +357,10 @@ public class CodesService
    *
    * @param organisation  the organisation code identifying the organisation
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
+   *
    * @return all the code categories associated with the organisation identified by the
-   * specified organisation code
+   *         specified organisation code
+   *
    * @throws CodesServiceException
    */
   public List<CodeCategory> getCodeCategoriesForOrganisation(String organisation,
@@ -365,8 +383,10 @@ public class CodesService
    *
    * @param id            the ID uniquely identifying the code category
    * @param retrieveCodes retrieve the codes and/or code data for the code category
+   *
    * @return the code category with the specified ID or <code>null</code> if the code category
-   * could not be found
+   *         could not be found
+   *
    * @throws CodesServiceException
    */
   public CodeCategory getCodeCategory(String id, boolean retrieveCodes)
@@ -401,8 +421,10 @@ public class CodesService
    * @param id            the ID uniquely identifying the code category
    * @param parameters    the parameters
    * @param retrieveCodes retrieve the codes and/or code data for the code category
+   *
    * @return the code category with the specified ID or <code>null</code> if the code category
-   * could not be found
+   *         could not be found
+   *
    * @throws CodesServiceException
    */
   public CodeCategory getCodeCategoryWithParameters(String id, Map<String, String> parameters,
@@ -442,8 +464,10 @@ public class CodesService
    *                             data be retrieved even if the code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter
+   *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *
    * @throws CodesServiceException
    */
   public CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
@@ -484,8 +508,10 @@ public class CodesService
    *                             data be retrieved even if the code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter
+   *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *
    * @throws CodesServiceException
    */
   public CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory,
@@ -519,7 +545,9 @@ public class CodesService
    * Returns all the codes for the code category with the specified ID.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return all the codes for the code category with the specified ID
+   *
    * @throws CodesServiceException
    */
   public List<Code> getCodesForCodeCategory(String codeCategoryId)
@@ -541,8 +569,10 @@ public class CodesService
    * specified organisation code.
    *
    * @param organisation the organisation code identifying the organisation
+   *
    * @return the number of code categories associated with the organisation identified by the
-   * specified organisation code
+   *         specified organisation code
+   *
    * @throws CodesServiceException
    */
   public int getNumberOfCodeCategoriesForOrganisation(String organisation)
@@ -564,7 +594,9 @@ public class CodesService
    * Returns the number of codes for the code category with the specified ID.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the number of codes for the code category with the specified ID
+   *
    * @throws CodesServiceException
    */
   public int getNumberOfCodesForCodeCategory(String codeCategoryId)
@@ -592,8 +624,10 @@ public class CodesService
    *                             data be retrieved even if the remote code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter
+   *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
-   * code data
+   *         code data
+   *
    * @throws CodesServiceException
    */
   public CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
@@ -669,8 +703,10 @@ public class CodesService
    *                             data be retrieved even if the remote code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter
+   *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
-   * code data
+   *         code data
+   *
    * @throws CodesServiceException
    */
   public CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory,
@@ -735,8 +771,10 @@ public class CodesService
    * Is the cached code category current?
    *
    * @param id the ID uniquely identifying the cached code category
+   *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
-   * otherwise
+   *         otherwise
+   *
    * @throws CodesServiceException
    */
   public boolean isCachedCodeCategoryCurrent(String id)
@@ -760,7 +798,9 @@ public class CodesService
    *                           information for the cached code category
    * @param updatedBy          the username identifying the user that updated the cached code
    *                           category
+   *
    * @return the updated cached code category
+   *
    * @throws CodesServiceException
    */
   public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory,
@@ -783,7 +823,9 @@ public class CodesService
    *
    * @param code      the <code>Code</code> instance containing the updated information for the code
    * @param updatedBy the username identifying the user that updated the code
+   *
    * @return the updated code
+   *
    * @throws CodesServiceException
    */
   public Code updateCode(Code code, String updatedBy)
@@ -805,7 +847,9 @@ public class CodesService
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
    *                     for the code category
    * @param updatedBy    the username identifying the user that updated the code category
+   *
    * @return the updated code category
+   *
    * @throws CodesServiceException
    */
   public CodeCategory updateCodeCategory(CodeCategory codeCategory, String updatedBy)
@@ -833,6 +877,7 @@ public class CodesService
    * code data.
    *
    * @param codeCategory the remote code category
+   *
    * @throws CodesServiceException
    */
   private synchronized void cacheRemoteCodeCategory(CodeCategory codeCategory)

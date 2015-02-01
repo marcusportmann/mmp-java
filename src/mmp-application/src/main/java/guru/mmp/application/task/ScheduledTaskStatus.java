@@ -39,6 +39,7 @@ public enum ScheduledTaskStatus
    * Returns the status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the status
+   *
    * @return the status given by the specified numeric code value
    */
   public static ScheduledTaskStatus fromCode(int code)

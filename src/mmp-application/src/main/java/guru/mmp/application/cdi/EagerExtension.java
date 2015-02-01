@@ -61,7 +61,7 @@ public class EagerExtension
   {
     for (Bean<?> bean : eagerBeansList)
     {
-      // note: toString() is important to instantiate the bean
+      // Note: toString() is important to instantiate the bean
       beanManager.getReference(bean, bean.getBeanClass(),
           beanManager.createCreationalContext(bean)).toString();
     }

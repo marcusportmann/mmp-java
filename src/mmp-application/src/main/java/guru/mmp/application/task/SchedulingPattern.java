@@ -209,6 +209,7 @@ public class SchedulingPattern
    * Builds a SchedulingPattern by parsing it from a string.
    *
    * @param pattern the pattern as a crontab-like string
+   *
    * @throws InvalidSchedulingPatternException
    */
   public SchedulingPattern(String pattern)
@@ -291,8 +292,9 @@ public class SchedulingPattern
    * Validates a string as a scheduling pattern.
    *
    * @param schedulingPattern the pattern to validate
+   *
    * @return <code>true</code> if the given string represents a valid scheduling pattern or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public static boolean validate(String schedulingPattern)
   {
@@ -313,8 +315,9 @@ public class SchedulingPattern
    * according to the system default time zone.
    *
    * @param timestamp the EPOCH timestamp in milliseconds
+   *
    * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
-   * otherwise
+   *         otherwise
    */
   public boolean match(long timestamp)
   {
@@ -327,8 +330,9 @@ public class SchedulingPattern
    *
    * @param timezone  the time zone
    * @param timestamp the EPOCH timestamp in milliseconds
+   *
    * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
-   * otherwise
+   *         otherwise
    */
   public boolean match(TimeZone timezone, long timestamp)
   {
@@ -383,7 +387,9 @@ public class SchedulingPattern
    * @param value   the value
    * @param aliases the aliases list
    * @param offset  the offset applied to the aliases list indices
-   * @return the parsed value.
+   *
+   * @return the parsed value
+   *
    * @throws Exception
    */
   private static int parseAlias(String value, String[] aliases, int offset)
@@ -405,7 +411,9 @@ public class SchedulingPattern
    *
    * @param str    the pattern part for the <code>ValueMatcher</code> creation
    * @param parser the parser used to parse the values
+   *
    * @return the requested <code>ValueMatcher</code>
+   *
    * @throws Exception
    */
   private ValueMatcher buildValueMatcher(String str, ValueParser parser)
@@ -463,7 +471,9 @@ public class SchedulingPattern
    *
    * @param str    the element string
    * @param parser the parser used to parse the values
+   *
    * @return a list of integers representing the allowed values
+   *
    * @throws Exception
    */
   private List<Integer> parseListElement(String str, ValueParser parser)
@@ -527,7 +537,9 @@ public class SchedulingPattern
    *
    * @param str    the range string.
    * @param parser the parser used to parse the values
+   *
    * @return a list of integers representing the allowed values
+   *
    * @throws Exception
    */
   private List<Integer> parseRange(String str, ValueParser parser)
@@ -631,22 +643,24 @@ public class SchedulingPattern
     /**
      * Returns the maximum value accepted by the parser.
      *
-     * @return The maximum value accepted by the parser.
+     * @return the maximum value accepted by the parser
      */
     public int getMaxValue();
 
     /**
      * Returns the minimum value accepted by the parser.
      *
-     * @return The minimum value accepted by the parser.
+     * @return the minimum value accepted by the parser
      */
     public int getMinValue();
 
     /**
      * Attempts to parse a value.
      *
-     * @param value The value.
-     * @return The parsed value.
+     * @param value the value
+     *
+     * @return the parsed value
+     *
      * @throws Exception If the value can't be parsed.
      */
     public int parse(String value)
@@ -671,7 +685,9 @@ public class SchedulingPattern
      * Added to support last-day-of-month.
      *
      * @param value the value to be parsed
+     *
      * @return the integer day of the month or 32 for last day of the month
+     *
      * @throws Exception
      */
     public int parse(String value)
@@ -714,7 +730,9 @@ public class SchedulingPattern
      * Parse the value.
      *
      * @param value the value to parse
+     *
      * @return the parsed value
+     *
      * @throws Exception
      */
     public int parse(String value)
@@ -789,7 +807,9 @@ public class SchedulingPattern
      * Parse the value.
      *
      * @param value the value to parse
+     *
      * @return the parsed value
+     *
      * @throws Exception
      */
     public int parse(String value)
@@ -861,7 +881,9 @@ public class SchedulingPattern
      * Parse the value
      *
      * @param value the value to parse
+     *
      * @return the parsed value
+     *
      * @throws Exception
      */
     public int parse(String value)

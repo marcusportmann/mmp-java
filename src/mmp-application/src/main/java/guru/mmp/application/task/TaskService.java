@@ -78,6 +78,7 @@ public class TaskService
    * Execute the scheduled task.
    *
    * @param scheduledTask the scheduled task
+   *
    * @throws TaskServiceException
    */
   public void executeScheduledTask(ScheduledTask scheduledTask)
@@ -168,7 +169,8 @@ public class TaskService
    * The scheduled task will be locked to prevent duplicate processing.
    *
    * @return the next task that is scheduled for execution or <code>null</code> if no tasks are
-   * currently scheduled for execution
+   *         currently scheduled for execution
+   *
    * @throws TaskServiceException
    */
   public ScheduledTask getNextTaskScheduledForExecution()
@@ -190,7 +192,9 @@ public class TaskService
    * Retrieve the parameters for the scheduled task with the specified ID.
    *
    * @param id the ID uniquely identifying the scheduled task
+   *
    * @return the parameters for the scheduled task
+   *
    * @throws TaskServiceException
    */
   public List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
@@ -211,6 +215,7 @@ public class TaskService
    * Increment the execution attempts for the scheduled task with the specified ID.
    *
    * @param id the ID uniquely identifying the scheduled task
+   *
    * @throws TaskServiceException
    */
   public void incrementScheduledTaskExecutionAttempts(String id)
@@ -252,6 +257,7 @@ public class TaskService
    * @param id                the ID uniquely identifying the scheduled task
    * @param schedulingPattern the cron-style scheduling pattern for the scheduled task used to
    *                          determine the next execution time
+   *
    * @throws TaskServiceException
    */
   public void rescheduleTask(String id, String schedulingPattern)
@@ -272,7 +278,9 @@ public class TaskService
    *
    * @param status    the current status of the scheduled tasks that have been locked
    * @param newStatus the new status for the scheduled tasks that have been unlocked
+   *
    * @return the number of scheduled task locks reset
+   *
    * @throws TaskServiceException
    */
   public int resetScheduledTaskLocks(ScheduledTaskStatus status, ScheduledTaskStatus newStatus)
@@ -295,6 +303,7 @@ public class TaskService
    *
    * @return <code>true</code> if there are more unscheduled tasks to schedule or
    *         <code>false</code> if there are no more unscheduled tasks to schedule
+   *
    * @throws TaskServiceException
    */
   public boolean scheduleNextUnscheduledTaskForExecution()
@@ -316,6 +325,7 @@ public class TaskService
    *
    * @param id     the ID uniquely identifying the scheduled task
    * @param status the new status for the unlocked scheduled task
+   *
    * @throws TaskServiceException
    */
   public void unlockScheduledTask(String id, ScheduledTaskStatus status)

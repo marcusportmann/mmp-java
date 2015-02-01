@@ -127,8 +127,10 @@ public class Attribute
    * @param list the list of <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
+   *
    * @return the binary value for the <code>Attribute</code> instance with the specified name in
-   * the specified list
+   *         the specified list
+   *
    * @throws AttributeException
    */
   public static byte[] getBinaryValue(List<Attribute> list, String name)
@@ -160,8 +162,10 @@ public class Attribute
    * @param list the list of <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list
+   *         specified name in the specified list
+   *
    * @throws AttributeException
    */
   public static BigDecimal getDecimalValue(List<Attribute> list, String name)
@@ -209,8 +213,10 @@ public class Attribute
    * @param list the list of <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>double</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list
+   *         specified name in the specified list
+   *
    * @throws AttributeException
    */
   public static double getDoubleValue(List<Attribute> list, String name)
@@ -258,8 +264,10 @@ public class Attribute
    * @param list the list of <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
-   * name in the specified list
+   *         name in the specified list
+   *
    * @throws AttributeException
    */
   public static long getLongValue(List<Attribute> list, String name)
@@ -307,8 +315,10 @@ public class Attribute
    * @param list the list of <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>String</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list
+   *         specified name in the specified list
+   *
    * @throws AttributeException
    */
   public static String getStringValue(List<Attribute> list, String name)
@@ -353,6 +363,7 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
+   *
    * @throws AttributeException
    */
   public static void setBinaryValue(List<Attribute> list, String name, BinaryBuffer value)
@@ -369,6 +380,7 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
+   *
    * @throws AttributeException
    */
   public static void setBinaryValue(List<Attribute> list, String name, byte[] value)
@@ -396,6 +408,7 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
+   *
    * @throws AttributeException
    */
   public static void setDecimalValue(List<Attribute> list, String name, BigDecimal value)
@@ -424,6 +437,7 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>double</code> value for the attribute
+   *
    * @throws AttributeException
    */
   public static void setDoubleValue(List<Attribute> list, String name, double value)
@@ -452,6 +466,7 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>long</code> value for the attribute
+   *
    * @throws AttributeException
    */
   public static void setLongValue(List<Attribute> list, String name, long value)
@@ -480,6 +495,7 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>String</code> value for the attribute
+   *
    * @throws AttributeException
    */
   public static void setStringValue(List<Attribute> list, String name, String value)
@@ -504,6 +520,7 @@ public class Attribute
    * Returns the binary value for the <code>Attribute</code> instance.
    *
    * @return the binary value for the <code>Attribute</code> instance
+   *
    * @throws AttributeException
    */
   public byte[] getBinaryValue()
@@ -522,6 +539,7 @@ public class Attribute
    * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
+   *
    * @throws AttributeException
    */
   public BigDecimal getDecimalValue()
@@ -556,6 +574,7 @@ public class Attribute
    * Returns the <code>double</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>double</code> value for the <code>Attribute</code> instance
+   *
    * @throws AttributeException
    */
   public double getDoubleValue()
@@ -590,6 +609,7 @@ public class Attribute
    * Returns the <code>long</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance
+   *
    * @throws AttributeException
    */
   public long getLongValue()
@@ -634,6 +654,7 @@ public class Attribute
    * Returns the <code>String</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>String</code> value for the <code>Attribute</code> instance
+   *
    * @throws AttributeException
    */
   public String getStringValue()

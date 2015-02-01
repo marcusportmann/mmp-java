@@ -61,7 +61,7 @@ public class WebServiceSecurityContext
    * service operation.
    *
    * @return the X509 certificate identifying the web service client that executed the secure web
-   * service operation
+   *         service operation
    */
   public X509Certificate getClientCertificate()
   {

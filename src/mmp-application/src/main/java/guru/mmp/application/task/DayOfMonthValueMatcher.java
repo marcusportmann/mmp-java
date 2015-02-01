@@ -56,8 +56,9 @@ class DayOfMonthValueMatcher extends IntArrayValueMatcher
    * @param value      the value
    * @param month      the month
    * @param isLeapYear <code>true</code> if this is a leap year <code>false</code> otherwise
+   *
    * @return <code>true</code> if the given value matches the rules of the
-   * <code>ValueMatcher</code>, <code>false</code> otherwise
+   *         <code>ValueMatcher</code>, <code>false</code> otherwise
    */
   public boolean match(int value, int month, boolean isLeapYear)
   {

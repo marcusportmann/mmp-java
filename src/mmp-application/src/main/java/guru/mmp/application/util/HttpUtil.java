@@ -40,6 +40,7 @@ public class HttpUtil
    * Sort the names of the parameters in the request.
    *
    * @param request the servlet request
+   *
    * @return the sorted array containing the names of the request parameters
    */
   public static String[] sortParameterNames(ServletRequest request)

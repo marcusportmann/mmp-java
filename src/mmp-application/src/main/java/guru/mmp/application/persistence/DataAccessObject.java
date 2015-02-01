@@ -205,6 +205,7 @@ public abstract class DataAccessObject
    *                        database schema and a database object located in the schema
    * @param schemaPrefix    the schema prefix to append to database objects reference by the DAO
    * @param idQuote         the string used quote SQL identifiers
+   *
    * @throws SQLException if a database error occurs
    */
   protected abstract void buildStatements(String schema, String schemaSeparator,
@@ -236,7 +237,7 @@ public abstract class DataAccessObject
    * the DAO.
    *
    * @return the name of the database schema that contains the database objects referenced by
-   * the DAO
+   *         the DAO
    */
   protected String getSchema()
   {

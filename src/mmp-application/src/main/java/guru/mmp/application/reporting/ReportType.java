@@ -42,6 +42,7 @@ public enum ReportType
    * Returns the report type given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the report type
+   *
    * @return the report type given by the specified numeric code value
    */
   public static ReportType fromCode(int code)

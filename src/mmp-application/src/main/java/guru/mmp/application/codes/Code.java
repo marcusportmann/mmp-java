@@ -85,7 +85,7 @@ public class Code
    * code is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the category the
-   * code is associated with
+   *         code is associated with
    */
   public String getCategoryId()
   {

@@ -134,7 +134,9 @@ public class WebServiceCrypto
    * Get a byte array given an array of X509 certificates.
    *
    * @param certs the certificates to convert
+   *
    * @return the byte array for the certificates
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -163,6 +165,7 @@ public class WebServiceCrypto
    * Returns the <code>CertificateFactory</code> instance for the <code>Crypto</code> instance.
    *
    * @return the <code>CertificateFactory</code> instance for the <code>Crypto</code> instance
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -222,7 +225,9 @@ public class WebServiceCrypto
    * Construct an array of X509Certificate's from the byte array.
    *
    * @param data the <code>byte</code> array containing the X509 data
+   *
    * @return an array of X509 certificates
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -265,6 +270,7 @@ public class WebServiceCrypto
    * implementation specific, e.g. it could be the KeyStore alias.
    *
    * @return the identifier name of the default certificate
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -291,7 +297,9 @@ public class WebServiceCrypto
    *
    * @param identifier the implementation-specific identifier corresponding to the key
    * @param password   the password needed to get the key
+   *
    * @return the private key corresponding to the identifier
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -365,7 +373,9 @@ public class WebServiceCrypto
    *
    * @param certificate     the X509Certificate corresponding to the private key
    * @param callbackHandler the callbackHandler needed to get the password
+   *
    * @return the private key corresponding to the certificate
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -412,7 +422,9 @@ public class WebServiceCrypto
    * throw a WSSecurityException.
    *
    * @param cert the certificate to read SKI
+   *
    * @return the <code>byte</code> array containing the binary SKI data
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -473,7 +485,9 @@ public class WebServiceCrypto
    * means an alias of the keystore or truststore.
    *
    * @param cryptoType the crypto type
+   *
    * @return the <code>X509Certificate<code> or <code>null</code> if not found
+   *
    * @throws WSSecurityException
    */
   public X509Certificate[] getX509Certificates(CryptoType cryptoType)
@@ -534,7 +548,9 @@ public class WebServiceCrypto
    * In this case, the identifier corresponds to a <code>KeyStore</code> alias.
    *
    * @param certificate the X509 certificate for which to search for an identifier
+   *
    * @return the implementation-specific identifier for the certificate
+   *
    * @throws WSSecurityException
    */
   public String getX509Identifier(X509Certificate certificate)
@@ -554,7 +570,9 @@ public class WebServiceCrypto
    * Load an X509Certificate from the input stream.
    *
    * @param in the <code>InputStream</code> containing the X509 data
+   *
    * @return the X509 certificate
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -624,7 +642,9 @@ public class WebServiceCrypto
    * Evaluate whether a given public key should be trusted.
    *
    * @param publicKey the public key to be evaluated
+   *
    * @return <code>true</code> if the public key is trusted or <code>false</code> otherwise
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -647,7 +667,9 @@ public class WebServiceCrypto
    * Uses the CertPath API to validate a given certificate chain.
    *
    * @param certificateChain the certificate chain to validate
+   *
    * @return <code>true</code> if the certificate chain is valid, <code>false</code> otherwise
+   *
    * @throws WSSecurityException
    */
   @Deprecated
@@ -665,7 +687,9 @@ public class WebServiceCrypto
    *
    * @param certificateChain the certificate chain to validate
    * @param enableRevocation whether to enable CRL verification or not
+   *
    * @return <code>true</code> if the certificate chain is valid, <code>false</code> otherwise
+   *
    * @throws WSSecurityException
    */
   @Override
@@ -802,7 +826,9 @@ public class WebServiceCrypto
    * @param subjectRDN the <code>X500Principal</code> or a BouncyCastle <code>X509Name</code>
    *                   instance
    * @param store      the key store
+   *
    * @return the X509 certificate (chain)
+   *
    * @throws WSSecurityException
    */
   private Certificate[] getCertificates(Object subjectRDN, KeyStore store)
@@ -919,7 +945,9 @@ public class WebServiceCrypto
    * @param issuerRDN    either an X500Principal or a BouncyCastle X509Name instance
    * @param serialNumber the certificate's serial number
    * @param store        the key store
+   *
    * @return the X509 certificate (chain) corresponding to the found certificate(s)
+   *
    * @throws WSSecurityException
    */
   private Certificate[] getCertificates(Object issuerRDN, BigInteger serialNumber, KeyStore store)
@@ -981,6 +1009,7 @@ public class WebServiceCrypto
    *
    * @param cert  the X509 certificate corresponding to the returned identifier
    * @param store the key store to search
+   *
    * @return the implementation-specific identifier that corresponds to the X509 ertificate
    */
   private String getIdentifier(X509Certificate cert, KeyStore store)
@@ -1034,7 +1063,9 @@ public class WebServiceCrypto
    *
    * @param identifier the identifier to give to the Callback
    * @param cb         the <code>CallbackHandler</code>
+   *
    * @return the password retrieved from the <code>CallbackHandler</code>
+   *
    * @throws WSSecurityException
    */
   private String getPassword(String identifier, CallbackHandler cb)
@@ -1062,7 +1093,9 @@ public class WebServiceCrypto
    * Get an X509 certificate (chain) according to a given Thumbprint.
    *
    * @param thumbprint the SHA1 thumbprint info bytes
+   *
    * @return the X509 certificate (chain) corresponding to the found certificate(s)
+   *
    * @throws WSSecurityException
    */
   private X509Certificate[] getX509Certificates(byte[] thumbprint)
@@ -1107,6 +1140,7 @@ public class WebServiceCrypto
    * For this implementation, the identifier corresponds to the KeyStore alias.
    *
    * @param identifier the identifier that corresponds to the returned certificate (chain)
+   *
    * @return the X509 certificate (chain) corresponding to the found certificate(s)
    */
   private X509Certificate[] getX509Certificates(String identifier)
@@ -1158,7 +1192,9 @@ public class WebServiceCrypto
    *
    * @param issuer       the issuer string
    * @param serialNumber the serial number of the certificate
+   *
    * @return the X509 certificate (chain) corresponding to the found certificate(s)
+   *
    * @throws WSSecurityException
    */
   private X509Certificate[] getX509Certificates(String issuer, BigInteger serialNumber)
@@ -1211,6 +1247,7 @@ public class WebServiceCrypto
    * Get an X509 certificate (chain) according to a given SubjectKeyIdentifier.
    *
    * @param skiBytes the SKI bytes
+   *
    * @return the X509 certificate (chain) corresponding to the found certificate(s)
    */
   private X509Certificate[] getX509CertificatesSKI(byte[] skiBytes)
@@ -1242,7 +1279,9 @@ public class WebServiceCrypto
    * Get an X509 certificate (chain) according to a given DN of the subject of the certificate
    *
    * @param subjectDN The DN of subject to look for
+   *
    * @return the X509 certificate (chain) corresponding to the found certificate(s)
+   *
    * @throws WSSecurityException
    */
   private X509Certificate[] getX509CertificatesSubjectDN(String subjectDN)
@@ -1296,8 +1335,9 @@ public class WebServiceCrypto
    *
    * @param publicKey        the public key to search for
    * @param keyStoreToSearch the key store to search
+   *
    * @return <code>true</code> if the public key is found in the key store or <code>false</code>
-   * otherwise
+   *         otherwise
    */
   private boolean isPublicKeyInKeyStore(PublicKey publicKey, KeyStore keyStoreToSearch)
   {

@@ -63,7 +63,7 @@ public class ViewErrorReportPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param id           the ID uniquely identifying the error report
    */
-  public ViewErrorReportPage(final PageReference previousPage, final String id)
+  public ViewErrorReportPage(final PageReference previousPage, String id)
   {
     super("View Error Report", "View Error Report", id, previousPage);
     setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | View Error Report");

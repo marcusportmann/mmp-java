@@ -45,8 +45,9 @@ public class UserPrincipal
    * The equals method checks if the specified object is the same principal as this object.
    *
    * @param another the principal to compare with
+   *
    * @return true if the object passed in matches the principal represented by the implementation
-   * of the <code>Principal</code> interface
+   *         of the <code>Principal</code> interface
    */
   @Override
   public boolean equals(Object another)

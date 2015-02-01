@@ -35,7 +35,9 @@ public interface ICodesDAO
    * Check whether the cached code category with the specified ID exists.
    *
    * @param id the ID uniquely identifying the cached code category
+   *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
+   *
    * @throws DAOException
    */
   public boolean cachedCodeCategoryExists(String id)
@@ -45,7 +47,9 @@ public interface ICodesDAO
    * Check whether the code category with the specified ID exists.
    *
    * @param id the ID uniquely identifying the code category
+   *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
+   *
    * @throws DAOException
    */
   public boolean codeCategoryExists(String id)
@@ -55,6 +59,7 @@ public interface ICodesDAO
    * Create the new cached code.
    *
    * @param code the <code>Code</code> instance containing the information for the new cached code
+   *
    * @throws DAOException
    */
   public void createCachedCode(Code code)
@@ -74,6 +79,7 @@ public interface ICodesDAO
    * Create the new code.
    *
    * @param code the <code>Code</code> instance containing the information for the new code
+   *
    * @throws DAOException
    */
   public void createCode(Code code)
@@ -93,6 +99,7 @@ public interface ICodesDAO
    * Delete the cached code category.
    *
    * @param id the ID uniquely identifying the cached code category
+   *
    * @throws DAOException
    */
   public void deleteCachedCodeCategory(String id)
@@ -102,6 +109,7 @@ public interface ICodesDAO
    * Delete the code.
    *
    * @param id the ID uniquely identifying the code
+   *
    * @throws DAOException
    */
   public void deleteCode(String id)
@@ -111,6 +119,7 @@ public interface ICodesDAO
    * Delete the code category.
    *
    * @param id the ID uniquely identifying the code category
+   *
    * @throws DAOException
    */
   public void deleteCodeCategory(String id)
@@ -120,8 +129,10 @@ public interface ICodesDAO
    * Retrieve the cached code category with the specified ID.
    *
    * @param id the ID uniquely identifying the cached code category
+   *
    * @return the cached code category with the specified ID or <code>null</code> if the cached code
-   * category could not be found
+   *         category could not be found
+   *
    * @throws DAOException
    */
   public CachedCodeCategory getCachedCodeCategory(String id)
@@ -131,7 +142,9 @@ public interface ICodesDAO
    * Returns all the cached codes for the cached code category with the specified ID.
    *
    * @param cachedCodeCategoryId the ID uniquely identifying the cached code category
+   *
    * @return all the cached codes for the cached code category with the specified ID
+   *
    * @throws DAOException
    */
   public List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
@@ -141,7 +154,9 @@ public interface ICodesDAO
    * Retrieve the code with the specified ID.
    *
    * @param id the ID uniquely identifying the code
+   *
    * @return the code with the specified ID or <code>null</code> if the code could not be found
+   *
    * @throws DAOException
    */
   public Code getCode(String id)
@@ -153,8 +168,10 @@ public interface ICodesDAO
    *
    * @param organisation  the organisation code identifying the organisation
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
+   *
    * @return all the code categories associated with the organisation identified by the
-   * specified organisation code
+   *         specified organisation code
+   *
    * @throws DAOException
    */
   public List<CodeCategory> getCodeCategoriesForOrganisation(String organisation,
@@ -165,8 +182,10 @@ public interface ICodesDAO
    * Retrieve the code category with the specified ID.
    *
    * @param id the ID uniquely identifying the code category
+   *
    * @return the code category with the specified ID or <code>null</code> if the code category
-   * could not be found
+   *         could not be found
+   *
    * @throws DAOException
    */
   public CodeCategory getCodeCategory(String id)
@@ -176,7 +195,9 @@ public interface ICodesDAO
    * Returns all the codes for the code category with the specified ID.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return all the codes for the code category with the specified ID
+   *
    * @throws DAOException
    */
   public List<Code> getCodesForCodeCategory(String codeCategoryId)
@@ -187,8 +208,10 @@ public interface ICodesDAO
    * specified organisation code.
    *
    * @param organisation the organisation code identifying the organisation
+   *
    * @return the number of code categories associated with the organisation identified by the
-   * specified organisation code
+   *         specified organisation code
+   *
    * @throws DAOException
    */
   public int getNumberOfCodeCategoriesForOrganisation(String organisation)
@@ -198,7 +221,9 @@ public interface ICodesDAO
    * Returns the number of codes for the code category with the specified ID.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the number of codes for the code category with the specified ID
+   *
    * @throws DAOException
    */
   public int getNumberOfCodesForCodeCategory(String codeCategoryId)
@@ -208,8 +233,10 @@ public interface ICodesDAO
    * Is the cached code category current?
    *
    * @param id the ID uniquely identifying the cached code category
+   *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
-   * otherwise
+   *         otherwise
+   *
    * @throws DAOException
    */
   public boolean isCachedCodeCategoryCurrent(String id)
@@ -222,7 +249,9 @@ public interface ICodesDAO
    *                           information for the cached code category
    * @param updatedBy          the username identifying the user that updated the cached code
    *                           category
+   *
    * @return the updated cached code category
+   *
    * @throws DAOException
    */
   public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory,
@@ -234,7 +263,9 @@ public interface ICodesDAO
    *
    * @param code      the <code>Code</code> instance containing the updated information for the code
    * @param updatedBy the username identifying the user that updated the code
+   *
    * @return the updated code
+   *
    * @throws DAOException
    */
   public Code updateCode(Code code, String updatedBy)
@@ -246,7 +277,9 @@ public interface ICodesDAO
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
    *                     for the code category
    * @param updatedBy    the username identifying the user that updated the code category
+   *
    * @return the updated code category
+   *
    * @throws DAOException
    */
   public CodeCategory updateCodeCategory(CodeCategory codeCategory, String updatedBy)

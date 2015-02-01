@@ -2307,6 +2307,7 @@ public class SecurityService
    *
    * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
    *               for the remote client
+   *
    * @return the list of authorised function templates
    *
    * @throws SecurityException

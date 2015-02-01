@@ -28,7 +28,7 @@ public class Debug
    * <code>null</code> if the root directory cannot be determined.
    *
    * @return the root directory for the JEE application server the application is running under or
-   * <code>null</code> if the root directory cannot be determined
+   *         <code>null</code> if the root directory cannot be determined
    */
   public static String getApplicationServerRootDirectory()
   {
@@ -75,7 +75,7 @@ public class Debug
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the application infrastructure is running in debug mode or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public static boolean inDebugMode()
   {

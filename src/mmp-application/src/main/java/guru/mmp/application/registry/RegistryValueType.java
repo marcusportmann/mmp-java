@@ -39,6 +39,7 @@ public enum RegistryValueType
    * Returns the registry value type given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the registry value type
+   *
    * @return the registry value type given by the specified numeric code value
    */
   public static RegistryValueType fromCode(int code)

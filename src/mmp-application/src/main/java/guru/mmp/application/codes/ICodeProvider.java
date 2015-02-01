@@ -38,8 +38,10 @@ public interface ICodeProvider
    *                             data be retrieved even if the code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter
+   *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *
    * @throws CodeProviderException
    */
   public CodeCategory getCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
@@ -56,8 +58,10 @@ public interface ICodeProvider
    *                             data be retrieved even if the code category has not been
    *                             updated after the date and time specified by the
    *                             <code>lastRetrieved</code> parameter
+   *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   *
    * @throws CodeProviderException
    */
   public CodeCategory getCodeCategoryWithParameters(CodeCategory codeCategory,

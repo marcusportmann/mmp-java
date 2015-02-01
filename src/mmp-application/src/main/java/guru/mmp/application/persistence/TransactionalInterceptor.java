@@ -71,7 +71,9 @@ public class TransactionalInterceptor
    * new transaction or marked for rollback if it is an existing transaction.
    *
    * @param context the current invocation-context
+   *
    * @return the result of the intercepted method
+   *
    * @throws Exception
    */
   @AroundInvoke

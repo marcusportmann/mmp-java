@@ -74,6 +74,7 @@ public class Predictor
    * Constructs a new <code>SchedulingPattern</code>.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
+   *
    * @throws InvalidSchedulingPatternException
    */
   public Predictor(String schedulingPattern)
@@ -109,7 +110,8 @@ public class Predictor
    * It builds a predictor with the given scheduling pattern and start time.
    *
    * @param schedulingPattern the pattern on which the prediction will be based
-   * @param start             the start time of the prediction.
+   * @param start             the start time of the prediction
+   *
    * @throws InvalidSchedulingPatternException
    */
   public Predictor(String schedulingPattern, Date start)
@@ -123,6 +125,7 @@ public class Predictor
    *
    * @param schedulingPattern the pattern on which the prediction will be based
    * @param start             the start time of the prediction
+   *
    * @throws InvalidSchedulingPatternException
    */
   public Predictor(String schedulingPattern, long start)

@@ -114,7 +114,7 @@ public class CachedCodeCategory
    * category.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the cached code
-   * category
+   *         category
    */
   public String getId()
   {

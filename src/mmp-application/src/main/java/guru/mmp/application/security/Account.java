@@ -64,8 +64,9 @@ public class Account
    * be found.
    *
    * @param name the name of the attribute
+   *
    * @return the attribute with the specified name or <code>null</code> if the attribute could not
-   * be found
+   *         be found
    */
   public Attribute getAttribute(String name)
   {

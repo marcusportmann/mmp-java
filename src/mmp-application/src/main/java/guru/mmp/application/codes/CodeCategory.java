@@ -206,7 +206,7 @@ public class CodeCategory
    * expire.
    *
    * @return the the time in seconds after which the cached code data for the remote code category
-   * will expire
+   *         will expire
    */
   public Integer getCacheExpiry()
   {
@@ -297,7 +297,7 @@ public class CodeCategory
    * Returns whether the code data retrieved for the remote code category is cacheable.
    *
    * @return <code>true</code> if the code data retrieved for the remote code category is cacheable
-   * or <code>false</code> otherwise
+   *         or <code>false</code> otherwise
    */
   public boolean getIsCacheable()
   {
@@ -309,7 +309,7 @@ public class CodeCategory
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the endpoint for the remote code category is secure or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean getIsEndPointSecure()
   {
@@ -331,7 +331,7 @@ public class CodeCategory
    * with.
    *
    * @return the organisation code identifying the organisation the code category is associated
-   * with
+   *         with
    */
   public String getOrganisation()
   {

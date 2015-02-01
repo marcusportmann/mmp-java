@@ -48,12 +48,14 @@ public class SecureWebServiceListener
 
   /**
    * @param event the context event
+   *
    * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
    */
   public void contextDestroyed(ServletContextEvent event) {}
 
   /**
    * @param event the context event
+   *
    * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
    */
   public void contextInitialized(ServletContextEvent event)

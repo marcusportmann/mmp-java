@@ -42,8 +42,9 @@ public class PasswordCredential
    * The equals method checks if the specified object is the same credential as this object.
    *
    * @param another the credential to compare with
+   *
    * @return true if the object passed in matches the credential represented by the implementation
-   * of the <code>Credential</code> interface
+   *         of the <code>Credential</code> interface
    */
   @Override
   public boolean equals(Object another)

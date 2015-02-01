@@ -58,6 +58,7 @@ public class WBXMLServlet extends HttpServlet
    * Initialise the servlet.
    *
    * @param config the servlet configuration
+   *
    * @throws ServletException
    */
   @Override
@@ -117,7 +118,9 @@ public class WBXMLServlet extends HttpServlet
    * Read the WBXML request document from the HTTP servlet request.
    *
    * @param request the HTTP servlet request to read the WBXML request document from
+   *
    * @return the WBXML request document
+   *
    * @throws ServletException
    */
   private Document readRequestDocument(HttpServletRequest request)

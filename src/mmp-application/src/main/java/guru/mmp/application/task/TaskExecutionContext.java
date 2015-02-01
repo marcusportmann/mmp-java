@@ -61,8 +61,9 @@ public class TaskExecutionContext
    * Returns the parameter with the specified name for the task.
    *
    * @param name the name of the parameter
+   *
    * @return the value of the parameter with the specified name or <code>null</code> if the
-   * parameter cannot be found
+   *         parameter cannot be found
    */
   public String getParameter(String name)
   {

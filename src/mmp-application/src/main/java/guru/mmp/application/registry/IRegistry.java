@@ -37,7 +37,9 @@ public interface IRegistry
    *
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
+   *
    * @return true if the binary value exists or false otherwise
+   *
    * @throws RegistryException
    */
   public boolean binaryValueExists(String path, String name)
@@ -48,7 +50,9 @@ public interface IRegistry
    *
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
+   *
    * @return true if the decimal value exists or false otherwise
+   *
    * @throws RegistryException
    */
   public boolean decimalValueExists(String path, String name)
@@ -60,7 +64,9 @@ public interface IRegistry
    * @param path         the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name         the name of the registry value
    * @param defaultValue the default value to use if the specified binary value cannot be found
+   *
    * @return the binary value or the default value if the value could not be found
+   *
    * @throws RegistryException
    */
   public byte[] getBinaryValue(String path, String name, byte[] defaultValue)
@@ -74,7 +80,9 @@ public interface IRegistry
    * @param defaultValue  the default value to use if the specified binary value cannot be found
    * @param encryptionKey the encryption key to use to decrypt the value
    * @param encryptionIV  the encryption initialisation vector
+   *
    * @return the binary value or the default value if the value could not be found
+   *
    * @throws RegistryException
    */
   public byte[] getBinaryValue(String path, String name, byte[] defaultValue, byte[] encryptionKey,
@@ -94,7 +102,9 @@ public interface IRegistry
    * @param path         the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name         the name of the registry value
    * @param defaultValue the default value to use if the specified decimal value cannot be found
+   *
    * @return the decimal value or the default value if the value could not be found
+   *
    * @throws RegistryException
    */
   public BigDecimal getDecimalValue(String path, String name, BigDecimal defaultValue)
@@ -106,7 +116,9 @@ public interface IRegistry
    * @param path         the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name         the name of the registry value
    * @param defaultValue the default value to use if the specified integer value cannot be found
+   *
    * @return the integer value or the default value if the value could not be found
+   *
    * @throws RegistryException
    */
   public int getIntegerValue(String path, String name, int defaultValue)
@@ -118,7 +130,9 @@ public interface IRegistry
    * @param path         the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name         the name of the registry value
    * @param defaultValue the default value to use if the specified string value cannot be found
+   *
    * @return the string value or the default value if the value could not be found
+   *
    * @throws RegistryException
    */
   public String getStringValue(String path, String name, String defaultValue)
@@ -132,7 +146,9 @@ public interface IRegistry
    * @param defaultValue  the default value to use if the specified string value cannot be found
    * @param encryptionKey the encryption key to use to decrypt the value
    * @param encryptionIV  the encryption initialisation vector
+   *
    * @return the string value or the default value if the value could not be found
+   *
    * @throws RegistryException
    */
   public String getStringValue(String path, String name, String defaultValue, byte[] encryptionKey,
@@ -144,7 +160,9 @@ public interface IRegistry
    *
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
+   *
    * @return true if the integer value exists or false otherwise
+   *
    * @throws RegistryException
    */
   public boolean integerValueExists(String path, String name)
@@ -155,8 +173,10 @@ public interface IRegistry
    *
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the value
+   *
    * @return <code>true</code> if the value with the specified name was found and removed or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
+   *
    * @throws RegistryException
    */
   public boolean removeValue(String path, String name)
@@ -171,6 +191,7 @@ public interface IRegistry
    * @param path  the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name  the name of the registry value
    * @param value the new binary value
+   *
    * @throws RegistryException
    */
   public void setBinaryValue(String path, String name, byte[] value)
@@ -187,6 +208,7 @@ public interface IRegistry
    * @param value         the new binary value
    * @param encryptionKey the encryption key to use to encrypt the value
    * @param encryptionIV  the encryption initialisation vector
+   *
    * @throws RegistryException
    */
   public void setBinaryValue(String path, String name, byte[] value, byte[] encryptionKey,
@@ -202,6 +224,7 @@ public interface IRegistry
    * @param path  the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name  the name of the registry value
    * @param value the new decimal value
+   *
    * @throws RegistryException
    */
   public void setDecimalValue(String path, String name, BigDecimal value)
@@ -216,6 +239,7 @@ public interface IRegistry
    * @param path  the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name  the name of the registry value
    * @param value the new integer value
+   *
    * @throws RegistryException
    */
   public void setIntegerValue(String path, String name, int value)
@@ -230,6 +254,7 @@ public interface IRegistry
    * @param path  the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name  the name of the registry value
    * @param value the new string value
+   *
    * @throws RegistryException
    */
   public void setStringValue(String path, String name, String value)
@@ -246,6 +271,7 @@ public interface IRegistry
    * @param value         the new string value
    * @param encryptionKey the encryption key to use to decrypt the value
    * @param encryptionIV  the encryption initialisation vector
+   *
    * @throws RegistryException
    */
   public void setStringValue(String path, String name, String value, byte[] encryptionKey,
@@ -257,7 +283,9 @@ public interface IRegistry
    *
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
+   *
    * @return true if the string value exists or false otherwise
+   *
    * @throws RegistryException
    */
   public boolean stringValueExists(String path, String name)

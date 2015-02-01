@@ -136,8 +136,8 @@ public interface ISMSService
   /**
    * Set the status for the SMS.
    *
-   * @param id        the ID uniquely identifying the SMS
-   * @param status    the new status for the SMS
+   * @param id     the ID uniquely identifying the SMS
+   * @param status the new status for the SMS
    *
    * @throws SMSServiceException
    */

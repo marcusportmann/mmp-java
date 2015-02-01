@@ -40,6 +40,7 @@ public enum CodeCategoryType
    * Returns the code category type given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the code category type
+   *
    * @return the code category type given by the specified numeric code value
    */
   public static CodeCategoryType fromCode(int code)
@@ -91,7 +92,7 @@ public enum CodeCategoryType
    * enumeration value.
    *
    * @return the string representation of the <code>CodeCategoryType</code>
-   * enumeration value
+   *         enumeration value
    */
   public String toString()
   {

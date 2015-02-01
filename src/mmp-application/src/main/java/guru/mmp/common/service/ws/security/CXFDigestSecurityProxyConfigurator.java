@@ -50,6 +50,7 @@ public class CXFDigestSecurityProxyConfigurator
    * @param proxy    the CXF web service proxy to configure
    * @param username the username to use when authenticating using digest authentication
    * @param password the password to use when authenticating using digest authentication
+   *
    * @throws Exception
    */
   public static void configureProxy(Object proxy, String username, String password)

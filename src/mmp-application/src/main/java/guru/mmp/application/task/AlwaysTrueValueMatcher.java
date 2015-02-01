@@ -30,8 +30,9 @@ class AlwaysTrueValueMatcher
    * Validate the given integer value against a set of rules.
    *
    * @param value the value
+   *
    * @return <code>true</code> if the given value matches the rules of the
-   * <code>ValueMatcher</code>, <code>false</code> otherwise
+   *         <code>ValueMatcher</code>, <code>false</code> otherwise
    */
   public boolean match(int value)
   {

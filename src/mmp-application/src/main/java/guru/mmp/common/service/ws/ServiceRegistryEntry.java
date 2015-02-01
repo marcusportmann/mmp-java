@@ -197,7 +197,7 @@ public class ServiceRegistryEntry
    * enabled.
    *
    * @return the password to use when accessing a web service with username-password security
-   * enabled
+   *         enabled
    */
   public String getPassword()
   {
@@ -209,7 +209,7 @@ public class ServiceRegistryEntry
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the web service requires a user security token or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean getRequiresSecurityToken()
   {
@@ -221,7 +221,7 @@ public class ServiceRegistryEntry
    * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password.
    *
    * @return the type of security model implemented by the web service i.e. 0 = None,
-   * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password
+   *         1 = WS-Security, 2 = Client SSL, 3 = Username-Password
    */
   public int getSecurityType()
   {
@@ -243,7 +243,7 @@ public class ServiceRegistryEntry
    * otherwise.
    *
    * @return <code>true</code> if the web service supports compression or <code>false</code>
-   * otherwise
+   *         otherwise
    */
   public boolean getSupportsCompression()
   {
@@ -255,7 +255,7 @@ public class ServiceRegistryEntry
    * enabled.
    *
    * @return the username to use when accessing a web service with username-password security
-   * enabled
+   *         enabled
    */
   public String getUsername()
   {

@@ -94,7 +94,7 @@ public class ScheduledTaskParameter
    * the scheduled task parameter is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the scheduled task
-   * the scheduled task parameter is associated with
+   *         the scheduled task parameter is associated with
    */
   public String getScheduledTaskId()
   {

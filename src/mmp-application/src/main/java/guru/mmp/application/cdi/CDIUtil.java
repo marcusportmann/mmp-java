@@ -65,6 +65,7 @@ public class CDIUtil
    * Perform container-based dependency injection on the target.
    *
    * @param target the object to inject
+   *
    * @throws CDIException
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -179,6 +180,7 @@ public class CDIUtil
    * Returns <code>true</code> if the object is injectable or <code>false</code> otherwise.
    *
    * @param object the object to check
+   *
    * @return <code>true</code> if the object is injectable or <code>false</code> otherwise
    */
   public static boolean isInjectable(Object object)
