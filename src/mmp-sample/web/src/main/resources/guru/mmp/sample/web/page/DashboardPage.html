@@ -1,20 +1,43 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html class="no-js" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
   <head>
-    <link href="../../../../../../../../../MLADF/Source/MLApplication/src/biz/mlogic/application/web/template/resource/theme/mlogic/template.css" rel="StyleSheet" type="text/css" />
+    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-combined.css" rel="StyleSheet" type="text/css" />
     <link href="../resource/css/application.css" rel="StyleSheet" type="text/css" />
   </head>
-  <body>
-    <div id="childContentHolderSpacer"></div>
-    <div id="childContentHolder">
-      <wicket:extend>
+  <body class="layout-boxed">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="main-container">
+      <div class="navbar-content"></div>
+      <div class="main-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <ol class="breadcrumb"><li class="active">[Page Breadcrumbs]</li></ol>
+              <div class="page-header">
+                <h1>[Page Heading]</h1>
+              </div>
+            </div>
+          </div>
+          <wicket:extend>
 
-        <a wicket:id="sampleReportLink" href="#" target="_blank">Sample Report</a>
+            <a wicket:id="sampleReportLink" href="#" target="_blank">Sample Report</a>
 
-      </wicket:extend>
+          </wicket:extend>
+        </div>
+      </div>
+    </div>
+    <div class="footer clearfix">
+      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
+      <div class="footer-items"><span class="go-top"><i class="clip-chevron-up"></i></span></div>
     </div>
   </body>
 </html>
-
