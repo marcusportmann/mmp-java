@@ -5,22 +5,27 @@
 --  Execute the following command to start the database server if it is not running:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/pg_ctl -D /opt/local/var/db/postgresql94/defaultdb -l /opt/local/var/db/postgresql94/postgres.log start'
+--    CentOS (as root): service postgresql-9.4 start 
 --
 --  Execute the following command to create the database:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/createdb  --template=template0 --encoding=UTF8 dbname'
+--    CentOS (as root): sudo su postgres -c 'createdb --template=template0 --encoding=UTF8 dbname'
 --
 --  Execute the following command to initialise the database:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/psql -d dbname -f ApplicationPostgres.sql'
+--    CentOS (as root): su postgres -c 'psql -d dbname -f ApplicationPostgres.sql'
 --
 --  Execute the following command to delete the database:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/dropdb dbname'
+--    CentOS (as root): su postgres -c 'dropdb sampledb'
 --
 --  Execute the following command to clean-up unreferenced large objects on the database:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/vacuumlo dbname'
+--    CentOS (as root): su postgres -c 'vacuumlo sampledb'
 --
 -- -------------------------------------------------------------------------------------------------
 set client_min_messages='warning';
@@ -84,6 +89,7 @@ DROP ROLE IF EXISTS dbuser;
 -- CREATE ROLES
 -- -------------------------------------------------------------------------------------------------
 CREATE ROLE dbuser WITH LOGIN PASSWORD 'Password1';
+ALTER ROLE dbuser WITH LOGIN;
 
 
 
