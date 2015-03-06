@@ -19,8 +19,11 @@ package guru.mmp.application.web.template.component;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.WebApplication;
+import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationState;
+
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.ComponentTag;
@@ -31,9 +34,9 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import javax.servlet.http.HttpServletRequest;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * The <code>TopNavigationMenu</code> class provides a Wicket component that renders the top
@@ -44,6 +47,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TopNavigationMenu extends Component
 {
   private static final long serialVersionUID = 1000000;
+  private boolean isMultipleOrganisationSupportEnabled;
 
   /**
    * @see org.apache.wicket.Component#Component(String)
@@ -53,6 +57,14 @@ public class TopNavigationMenu extends Component
   public TopNavigationMenu(final String id)
   {
     super(id);
+
+    Application application = getApplication();
+
+    if (application instanceof TemplateWebApplication)
+    {
+      isMultipleOrganisationSupportEnabled =
+        ((TemplateWebApplication) application).isMultipleOrganisationSupportEnabled();
+    }
   }
 
   /**
@@ -106,8 +118,13 @@ public class TopNavigationMenu extends Component
 
         buffer.append("<span class=\"username\">");
         buffer.append(webSession.getUsername());
-        buffer.append(" | ");
-        buffer.append(webSession.getOrganisation());
+
+        if (isMultipleOrganisationSupportEnabled)
+        {
+          buffer.append(" | ");
+          buffer.append(webSession.getOrganisation());
+        }
+
         buffer.append("</span>");
 
         buffer.append("<i class=\"clip-chevron-down\"></i>");

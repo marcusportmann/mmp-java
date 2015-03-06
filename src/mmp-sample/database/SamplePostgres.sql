@@ -84,6 +84,7 @@ DROP ROLE IF EXISTS sampledb;
 -- CREATE ROLES
 -- -------------------------------------------------------------------------------------------------
 CREATE ROLE sampledb WITH PASSWORD 'Password1';
+ALTER ROLE sampledb WITH LOGIN;
 
 
 
@@ -1618,6 +1619,8 @@ INSERT INTO MMP.MESSAGE_STATUSES (CODE, NAME) VALUES (10, 'Processed');
 -- -------------------------------------------------------------------------------------------------
 -- SET PERMISSIONS
 -- -------------------------------------------------------------------------------------------------
+GRANT ALL ON SCHEMA MMP to sampledb;
+
 GRANT ALL ON TABLE MMP.IDGENERATOR TO sampledb;
 GRANT ALL ON TABLE MMP.REGISTRY TO sampledb;
 GRANT ALL ON TABLE MMP.SERVICE_REGISTRY TO sampledb;

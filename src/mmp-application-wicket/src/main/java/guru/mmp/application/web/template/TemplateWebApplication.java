@@ -20,19 +20,23 @@ package guru.mmp.application.web.template;
 
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.resource.bootstrap.BootstrapCssResourceReference;
-import guru.mmp.application.web.resource.bootstrap.BootstrapHoverDropdownJavaScriptResourceReference;
+import guru.mmp.application.web.resource.bootstrap
+  .BootstrapHoverDropdownJavaScriptResourceReference;
 import guru.mmp.application.web.resource.bootstrap.BootstrapJavaScriptResourceReference;
 import guru.mmp.application.web.resource.jquery.JQueryCookieJavaScriptResourceReference;
 import guru.mmp.application.web.resource.jquery.JQueryJavaScriptResourceReference;
 import guru.mmp.application.web.resource.jquery.JQueryUIJavaScriptResourceReference;
 import guru.mmp.application.web.resource.less.LessJavaScriptResourceReference;
 import guru.mmp.application.web.resource.perfectscrollbar.PerfectScrollbarCssResourceReference;
-import guru.mmp.application.web.resource.perfectscrollbar.PerfectScrollbarJavaScriptResourceReference;
+import guru.mmp.application.web.resource.perfectscrollbar
+  .PerfectScrollbarJavaScriptResourceReference;
 import guru.mmp.application.web.resource.select2.Select2CssResourceReference;
 import guru.mmp.application.web.resource.select2.Select2JavaScriptResourceReference;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.page.LoginPage;
 import guru.mmp.application.web.template.resource.*;
+import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.Request;
@@ -50,6 +54,9 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
 {
   /* The user-friendly name that should be displayed for the application. */
   private String displayName;
+
+  /* Is multiple organisation support enabled for the application? */
+  private boolean isMultipleOrganisationSupportEnabled;
 
   /* The complete navigation hierarchy for the application. */
   private NavigationGroup navigationRoot;
@@ -137,6 +144,18 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   }
 
   /**
+   * Returns <code>true</code> if multiple organisation support is enabled or <code>false</code>
+   * otherwise.
+   *
+   * @return <code>true</code> if multiple organisation support is enabled or <code>false</code>
+   *         otherwise
+   */
+  public boolean isMultipleOrganisationSupportEnabled()
+  {
+    return isMultipleOrganisationSupportEnabled;
+  }
+
+  /**
    * Creates a new session.
    *
    * @param request  the request that will create this session
@@ -183,6 +202,24 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
         PerfectScrollbarJavaScriptResourceReference.get(),
         Select2JavaScriptResourceReference.get(), LessJavaScriptResourceReference.get(),
         TemplateJavaScriptResourceReference.get());
+
+    // Check it multiple organisation support is enabled
+    if (!StringUtil.isNullOrEmpty(
+        getServletContext().getInitParameter("multipleOrganisationSupportEnabled")))
+    {
+      try
+      {
+        isMultipleOrganisationSupportEnabled = Boolean.parseBoolean(
+          getServletContext().getInitParameter("multipleOrganisationSupportEnabled"));
+      }
+      catch (Throwable e)
+      {
+        throw new RuntimeException("Failed to parse the value ("
+            + getServletContext().getInitParameter("multipleOrganisationSupportEnabled")
+            + ") for the \"multipleOrganisationSupportEnabled\" parameter", e);
+      }
+    }
+
   }
 
   /**
