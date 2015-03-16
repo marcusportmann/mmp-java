@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * The <class>ScheduledTask</class> class holds the information for a scheduled task.
+ * The <code>ScheduledTask</code> class holds the information for a scheduled task.
  *
  * @author Marcus Portmann
  */

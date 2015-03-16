@@ -19,6 +19,7 @@ package guru.mmp.common.service.ws.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.security.context.ServiceSecurityContext;
+
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.WSSecurityException;
@@ -28,26 +29,32 @@ import org.apache.ws.security.handler.WSHandlerResult;
 import org.apache.ws.security.message.token.Timestamp;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.utils.XMLUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 
-import javax.security.auth.callback.CallbackHandler;
-import javax.xml.soap.*;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.soap.SOAPMessageContext;
-import javax.xml.ws.soap.SOAPFaultException;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.security.auth.callback.CallbackHandler;
+
+import javax.xml.soap.*;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
+import javax.xml.ws.soap.SOAPFaultException;
 
 /**
  * The <code>WebServiceSecurityHandler</code> class is a JAX-WS handler that implements the

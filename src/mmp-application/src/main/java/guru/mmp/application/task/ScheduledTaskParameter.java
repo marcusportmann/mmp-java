@@ -21,7 +21,7 @@ package guru.mmp.application.task;
 import java.io.Serializable;
 
 /**
- * The <class>ScheduledTaskParameter</class> class holds the information for a scheduled task
+ * The <code>ScheduledTaskParameter</code> class holds the information for a scheduled task
  * parameter.
  *
  * @author Marcus Portmann

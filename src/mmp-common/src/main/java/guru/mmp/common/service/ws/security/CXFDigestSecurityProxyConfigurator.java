@@ -30,7 +30,6 @@ import java.lang.reflect.Proxy;
  */
 public class CXFDigestSecurityProxyConfigurator
 {
-  private static Class<?> authSupplierClass;
   private static Method cxfAuthorizationPolicySetAuthorizationMethod;
   private static Method cxfAuthorizationPolicySetAuthorizationTypeMethod;
   private static Method cxfAuthorizationPolicySetPasswordMethod;
@@ -130,11 +129,10 @@ public class CXFDigestSecurityProxyConfigurator
     digestAuthSupplierClass =
       contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.DigestAuthSupplier");
 
-    authSupplierClass =
-      contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.HttpAuthSupplier");
+    Class<?> authSupplierClass = contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.HttpAuthSupplier");
 
     cxfHTTPConduitSetAuthSupplierMethod = httpConduit.getClass().getMethod("setAuthSupplier",
-        authSupplierClass);
+      authSupplierClass);
 
     cxfHTTPConduitGetClientMethod = httpConduit.getClass().getMethod("getClient");
 
@@ -142,5 +140,7 @@ public class CXFDigestSecurityProxyConfigurator
 
     cxfHTTPClientPolicySetAllowChunkingMethod =
       httpClientPolicy.getClass().getMethod("setAllowChunking", boolean.class);
+
+    initialised = true;
   }
 }

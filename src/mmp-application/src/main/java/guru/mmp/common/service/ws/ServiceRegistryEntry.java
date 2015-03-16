@@ -53,13 +53,13 @@ public class ServiceRegistryEntry
    * The constant indicating that the web service implements the WS-Security Username Token
    * security model.
    */
-  public static final int SECURITY_TYPE_WSS_SECURITY_USERNAME_TOKEN = 2;
+  public static final int SECURITY_TYPE_WS_SECURITY_USERNAME_TOKEN = 2;
 
   /**
    * The constant indicating that the web service implements the WS-Security X509 certificates
    * security model.
    */
-  public static final int SECURITY_TYPE_WSS_SECURITY_X509_CERTIFICATES = 1;
+  public static final int SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE = 1;
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -89,7 +89,7 @@ public class ServiceRegistryEntry
   private int securityType;
 
   /**
-   * The fully qualified name of the Java service class.
+   * The fully qualified name of the Java web service client class.
    */
   private String serviceClass;
 
@@ -124,7 +124,7 @@ public class ServiceRegistryEntry
    * @param supportsCompression <code>true</code> if the web service supports compression or
    *                            <code>false</code> otherwise
    * @param endpoint            the endpoint for the web service
-   * @param serviceClass        the fully qualified name of the Java service class
+   * @param serviceClass        the fully qualified name of the Java web service client class
    * @param wsdlLocation        the location of the WSDL defining the web service on the classpath
    */
   public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
@@ -150,7 +150,7 @@ public class ServiceRegistryEntry
    * @param supportsCompression <code>true</code> if the web service supports compression or
    *                            <code>false</code> otherwise
    * @param endpoint            the endpoint for the web service
-   * @param serviceClass        the fully qualified name of the Java service class
+   * @param serviceClass        the fully qualified name of the Java web service client class
    * @param wsdlLocation        the location of the WSDL defining the web service on the classpath
    * @param username            the username to use when accessing a web service with
    *                            username-password security enabled
@@ -229,9 +229,9 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Returns the fully qualified name of the Java service class.
+   * Returns the fully qualified name of the Java web service client class.
    *
-   * @return the fully qualified name of the Java service class
+   * @return the fully qualified name of the Java web service client class
    */
   public String getServiceClass()
   {
@@ -327,9 +327,9 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Set the fully qualified name of the Java service class.
+   * Set the fully qualified name of the Java web service client class.
    *
-   * @param serviceClass the fully qualified name of the Java service class
+   * @param serviceClass the fully qualified name of the Java web service client class
    */
   public void setServiceClass(String serviceClass)
   {

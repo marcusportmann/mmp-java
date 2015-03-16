@@ -219,7 +219,6 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
             + ") for the \"multipleOrganisationSupportEnabled\" parameter", e);
       }
     }
-
   }
 
   /**

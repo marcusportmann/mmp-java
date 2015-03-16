@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE serviceSecurity SYSTEM "ServiceSecurity.dtd">
+
+<serviceSecurity>
+  <keyStoreName>SampleService.jks</keyStoreName>
+  <keyStoreAlias>Sample Service</keyStoreAlias>
+  <keyStorePassword>Password1</keyStorePassword>
+</serviceSecurity>
+
+

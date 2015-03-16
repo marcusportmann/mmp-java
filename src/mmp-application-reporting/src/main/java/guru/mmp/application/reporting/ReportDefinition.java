@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * The <class>ReportDefinition</class> class holds the information for a report definition.
+ * The <code>ReportDefinition</code> class holds the information for a report definition.
  *
  * @author Marcus Portmann
  */

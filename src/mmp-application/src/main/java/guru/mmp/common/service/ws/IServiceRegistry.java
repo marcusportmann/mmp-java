@@ -39,15 +39,15 @@ public interface IServiceRegistry
   /**
    * Returns the web service proxy for the web service with the specified name.
    *
-   * @param name                     the name used to uniquely identify the web service
-   * @param serviceEndpointInterface the Java interface for the service endpoint
-   * @param <T>                      the Java type for the service endpoint interface
+   * @param name             the name used to uniquely identify the web service
+   * @param serviceInterface the Java interface for the web service
+   * @param <T>              the Java type for the web service interface
    *
    * @return the web service proxy for the web service with the specified name
    *
    * @throws ServiceRegistryException
    */
-  public <T> T getServiceProxy(String name, Class<T> serviceEndpointInterface)
+  public <T> T getServiceProxy(String name, Class<T> serviceInterface)
     throws ServiceRegistryException;
 
   /**

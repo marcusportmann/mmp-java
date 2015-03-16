@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * The <class>CodeCategory</class> class holds the information for a code category.
+ * The <code>CodeCategory</code> class holds the information for a code category.
  *
  * @author Marcus Portmann
  */

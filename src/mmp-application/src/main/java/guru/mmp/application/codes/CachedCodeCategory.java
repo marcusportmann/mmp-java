@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * The <class>CachedCodeCategory</class> class holds the information for a cached code category.
+ * The <code>CachedCodeCategory</code> class holds the information for a cached code category.
  *
  * @author Marcus Portmann
  */

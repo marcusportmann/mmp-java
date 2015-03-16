@@ -17,43 +17,43 @@
 package guru.mmp.common.service.ws.security;
 
 /**
- * The <code>WebServiceSecurityHandlerException</code> exception is thrown to indicate an error
- * when working with a JAX-WS handler that implements the custom Web Service Security Model.
+ * The <code>WebServiceClientSecurityException</code> exception is thrown to indicate a
+ * web service client security error.
  *
  * @author Marcus Portmann
  */
-public class WebServiceSecurityHandlerException extends RuntimeException
+public class WebServiceClientSecurityException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>WebServiceSecurityHandlerException</code> with <code>null</code> as its
+   * Constructs a new <code>WebServiceClientSecurityException</code> with <code>null</code> as its
    * message.
    */
-  public WebServiceSecurityHandlerException()
+  public WebServiceClientSecurityException()
   {
     super();
   }
 
   /**
-   * Constructs a new <code>WebServiceSecurityHandlerException</code> with the specified message.
+   * Constructs a new <code>WebServiceClientSecurityException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public WebServiceSecurityHandlerException(String message)
+  public WebServiceClientSecurityException(String message)
   {
     super(message);
   }
 
   /**
-   * Constructs a new <code>WebServiceSecurityHandlerException</code> with the specified message
+   * Constructs a new <code>WebServiceClientSecurityException</code> with the specified message
    * and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public WebServiceSecurityHandlerException(String message, Throwable cause)
+  public WebServiceClientSecurityException(String message, Throwable cause)
   {
     super(message, cause);
   }

@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * The <class>SMS</class> class holds the information for a SMS.
+ * The <code>SMS</code> class holds the information for a SMS.
  *
  * @author Marcus Portmann
  */

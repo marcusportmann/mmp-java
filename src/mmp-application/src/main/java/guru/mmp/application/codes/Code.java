@@ -21,7 +21,7 @@ package guru.mmp.application.codes;
 import java.io.Serializable;
 
 /**
- * The <class>Code</class> class holds the information for a code.
+ * The <code>Code</code> class holds the information for a code.
  *
  * @author Marcus Portmann
  */

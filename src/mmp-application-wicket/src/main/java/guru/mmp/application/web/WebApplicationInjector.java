@@ -172,7 +172,7 @@ public class WebApplicationInjector
   }
 
   /**
-   * The <class>InjectedField</class> holds the information for an injected field.
+   * The <code>InjectedField</code> holds the information for an injected field.
    */
   private class InjectedField
   {

@@ -19,27 +19,36 @@ package guru.mmp.common.service.ws.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.security.context.ServiceSecurityContext;
+
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.components.crypto.CryptoType;
 import org.apache.ws.security.components.crypto.DERDecoder;
 import org.apache.ws.security.components.crypto.X509SubjectPublicKeyInfo;
+import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.WSSecurityUtil;
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.x500.X500Principal;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+
 import java.lang.reflect.Constructor;
+
 import java.math.BigInteger;
+
 import java.security.*;
 import java.security.cert.*;
 import java.security.cert.Certificate;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.CredentialException;
+import javax.security.auth.x500.X500Principal;
 
 /**
  * The <code>WebServiceCrypto</code> class implements the WSS4J crypto operations for
@@ -93,42 +102,53 @@ public class WebServiceCrypto
 
   /**
    * Constructs a new <code>WebServiceCrypto</code>.
+   *
+   * @throws CredentialException
+   * @throws java.io.IOException
    */
   public WebServiceCrypto()
+    throws CredentialException, IOException
   {
+    this(new Properties());
+  }
+
+  /**
+   * Constructs a new <code>WebServiceCrypto</code>.
+   *
+   * @param properties the properties used to configure the <code>Crypto</code implementation
+   *
+   * @throws CredentialException
+   * @throws IOException
+   */
+  public WebServiceCrypto(Properties properties)
+    throws CredentialException, IOException
+  {
+    this(properties, Loader.getClassLoader(WebServiceCrypto.class));
+  }
+
+  /**
+   * Constructs a new <code>WebServiceCrypto</code>.
+   *
+   * @param properties the properties used to configure the <code>Crypto</code implementation
+   * @param loader     the Java class loader
+   *
+   * @throws CredentialException
+   * @throws IOException
+   */
+  public WebServiceCrypto(Properties properties, ClassLoader loader)
+    throws CredentialException, IOException
+  {
+    for (Object key : properties.keySet())
+    {
+      System.out.println("=========================> Found property (" + key + ") = (" + properties.get(key) + ")");
+    }
+
+
+
     ServiceSecurityContext serviceSecurityContext = ServiceSecurityContext.getContext();
 
     this.keyStore = serviceSecurityContext.getKeyStore();
   }
-
-///**
-// * Constructs a new <code>WebServiceCrypto</code>.
-// *
-// * @param properties the properties used to configure the <code>Crypto</code implementation
-// *
-// * @throws CredentialException
-// * @throws IOException
-// */
-//public WebServiceCrypto(Properties properties)
-//  throws CredentialException, IOException
-//{
-//  this(properties, Loader.getClassLoader(WebServiceCrypto.class));
-//}
-//
-///**
-// * Constructs a new <code>WebServiceCrypto</code>.
-// *
-// * @param properties the properties used to configure the <code>Crypto</code implementation
-// * @param loader     the Java class loader
-// *
-// * @throws CredentialException
-// * @throws IOException
-// */
-//public WebServiceCrypto(Properties properties, ClassLoader loader)
-//  throws CredentialException, IOException
-//
-//{
-//}
 
   /**
    * Get a byte array given an array of X509 certificates.
@@ -247,7 +267,7 @@ public class WebServiceCrypto
           null, e);
     }
 
-    return (X509Certificate[])path.getCertificates().toArray();
+    return (X509Certificate[]) path.getCertificates().toArray();
   }
 
   /**
