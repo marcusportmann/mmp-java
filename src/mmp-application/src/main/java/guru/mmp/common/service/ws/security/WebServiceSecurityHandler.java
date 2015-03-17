@@ -74,16 +74,25 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
   private boolean isInitialised;
 
   /**
+   * The name of the service this security handler is associated with.
+   */
+  private String serviceName;
+
+  /**
    * The service security context holding the security information for the secure web service.
    */
   private ServiceSecurityContext serviceSecurityContext = null;
 
   /**
    * Constructs a new <code>WebServiceSecurityHandler</code>.
+   *
+   * @param serviceName the name of the service
    */
-  public WebServiceSecurityHandler()
+  public WebServiceSecurityHandler(String serviceName)
   {
     super(false);
+
+    this.serviceName = serviceName;
   }
 
   /**
@@ -660,7 +669,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    */
   private ServiceSecurityContext getServiceSecurityContext()
   {
-    return ServiceSecurityContext.getContext();
+    return serviceSecurityContext;
   }
 
   /**
@@ -670,19 +679,11 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
   {
     if (!isInitialised)
     {
-      // Retrieve the service security context and confirm that it has been initialised.
-      serviceSecurityContext = ServiceSecurityContext.getContext();
-
-      if (!serviceSecurityContext.isInitialised())
-      {
-        throw new WebServiceSecurityHandlerException(
-            "Failed to initialise the web service security handler: "
-            + "The service security context has not been initialised");
-      }
-
       try
       {
-        setOption(WSHandlerConstants.USER, serviceSecurityContext.getKeyStoreAlias());
+        this.serviceSecurityContext = ServiceSecurityContext.getContext(serviceName);
+
+        setOption(WSHandlerConstants.USER, getServiceSecurityContext().getKeyStoreAlias());
         setOption(WSHandlerConstants.ACTION, WSHandlerConstants.SIGNATURE);
         setOption(WSHandlerConstants.SIG_ALGO, "http://www.w3.org/2000/09/xmldsig#rsa-sha1");
         setOption(WSHandlerConstants.SIGNATURE_PARTS, "Body");
@@ -692,7 +693,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
 
         cryptoProperties = new Properties();
         cryptoProperties.put("org.apache.ws.security.crypto.provider",
-            "guru.mmp.common.service.ws.security.WebServiceCrypto");
+            WebServiceCrypto.class.getName());
+        cryptoProperties.put(ServiceSecurityContext.class.getName(), getServiceSecurityContext());
         setOption(WSHandlerConstants.SIG_PROP_REF_ID, MESSAGE_CONTEXT_CRYPTO_PROPERTIES);
       }
       catch (WebServiceSecurityHandlerException e)

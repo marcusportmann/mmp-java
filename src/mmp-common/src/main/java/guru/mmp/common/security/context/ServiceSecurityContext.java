@@ -21,32 +21,42 @@ package guru.mmp.common.security.context;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.File;
 import java.io.InputStream;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
- * The <code>ServiceSecurityContext</code> class implements the singleton that holds the
- * security information for a service. This information includes the path to the
- * key store that holds the services's private/public key pair, the alias of the public/private
- * key pair in the key store and the password used to retrieve the public/private key.
+ * The <code>ServiceSecurityContext</code> class holds the security information for a service.
+ * <p/>
+ * This information includes the path to the key store that holds the service's private/public
+ * key pair, the alias of the public/private key pair in the key store and the password used to
+ * retrieve the public/private key pair.
  *
  * @author Marcus Portmann
  */
@@ -56,14 +66,10 @@ public class ServiceSecurityContext
   private static final Logger logger = LoggerFactory.getLogger(ServiceSecurityContext.class);
 
   /**
-   * The service security context singleton.
+   * The <code>ServiceSecurityContext</code> instances that have been initialised.
    */
-  private static ServiceSecurityContext singleton;
-
-  /**
-   * Has the service security context been initialised?
-   */
-  private boolean initialised;
+  private static ConcurrentMap<String, ServiceSecurityContext> serviceSecurityContexts =
+    new ConcurrentHashMap<>();
 
   /**
    * The key store containing the service's private/public key pair.
@@ -100,95 +106,206 @@ public class ServiceSecurityContext
    */
   private Key servicePrivateKey;
 
-  /**
-   * Singleton accessor.
-   *
-   * @return the service security context singleton
-   */
-  public static synchronized ServiceSecurityContext getContext()
+  private ServiceSecurityContext(String serviceName)
   {
-    if (singleton == null)
+    try
     {
-      singleton = new ServiceSecurityContext();
-    }
+      if (!exists(serviceName))
+      {
+        throw new ServiceSecurityContextException("Failed to find the configuration file ("
+            + serviceName + ".ServiceSecurity)");
+      }
 
-    return singleton;
+      boolean serviceSecurityConfigLoaded = false;
+
+      /*
+       * Retrieve the configuration file containing the security configuration for the service.
+       * This file contains the name of the key store for the service, the alias of the
+       * public/private key pair for the service in the key store and the password used to
+       * access the key store.
+       *
+       * The following locations are searched to find the configuration file:
+       *
+       * 1. The ${was.install.root}/certificates directory when running under WebSphere.
+       * 2. The ${jboss.home.dir}/certificates directory when running under JBoss.
+       * 3. The ${catalina.home}/certificates directory when running under Tomcat.
+       * 4. Under the "/" path in the CLASSPATH.
+       * 5. Under the "/META-INF" path in the CLASSPATH.
+       */
+      if (!serviceSecurityConfigLoaded)
+      {
+        String wasInstallRoot = System.getProperty("was.install.root");
+
+        if (wasInstallRoot != null)
+        {
+          String configurationFilePath = wasInstallRoot + File.separator + "certificates"
+            + File.separator + serviceName + ".ServiceSecurity";
+          File configurationFile = new File(configurationFilePath);
+
+          if (configurationFile.exists())
+          {
+            try
+            {
+              loadWebServicesSecurityConfig(serviceName, configurationFile.toURI().toURL());
+              serviceSecurityConfigLoaded = true;
+            }
+            catch (MalformedURLException e)
+            {
+              throw new ServiceSecurityContextException("Failed to load the security"
+                  + " configuration for the service (" + serviceName + ") from the file ("
+                  + configurationFilePath + ")", e);
+            }
+          }
+          else
+          {
+            if (logger.isDebugEnabled())
+            {
+              logger.debug("The service security configuration file (" + configurationFilePath
+                  + ") for the service (" + serviceName + ") does not exist");
+            }
+          }
+        }
+      }
+
+      if (!serviceSecurityConfigLoaded)
+      {
+        String jbossServerBaseDir = System.getProperty("jboss.home.dir");
+
+        if (jbossServerBaseDir != null)
+        {
+          String configurationFilePath = jbossServerBaseDir + File.separator + "certificates"
+            + File.separator + serviceName + ".ServiceSecurity";
+          File configurationFile = new File(configurationFilePath);
+
+          if (configurationFile.exists())
+          {
+            try
+            {
+              loadWebServicesSecurityConfig(serviceName, configurationFile.toURI().toURL());
+              serviceSecurityConfigLoaded = true;
+            }
+            catch (MalformedURLException e)
+            {
+              throw new ServiceSecurityContextException("Failed to load the security"
+                  + " configuration for the service (" + serviceName + ") from the file ("
+                  + configurationFilePath + ")", e);
+            }
+          }
+          else
+          {
+            if (logger.isDebugEnabled())
+            {
+              logger.debug("The service security configuration file (" + configurationFilePath
+                  + ") for the service (" + serviceName + ") does not exist");
+            }
+          }
+        }
+      }
+
+      if (!serviceSecurityConfigLoaded)
+      {
+        String catalinaHome = System.getProperty("catalina.home");
+
+        if (catalinaHome != null)
+        {
+          String configurationFilePath = catalinaHome + File.separator + "certificates"
+            + File.separator + serviceName + ".ServiceSecurity";
+          File configurationFile = new File(configurationFilePath);
+
+          if (configurationFile.exists())
+          {
+            try
+            {
+              loadWebServicesSecurityConfig(serviceName, configurationFile.toURI().toURL());
+              serviceSecurityConfigLoaded = true;
+            }
+            catch (MalformedURLException e)
+            {
+              throw new ServiceSecurityContextException("Failed to load the security"
+                  + " configuration for the service (" + serviceName + ") from the file ("
+                  + configurationFilePath + ")", e);
+            }
+          }
+          else
+          {
+            if (logger.isDebugEnabled())
+            {
+              logger.debug("The service security configuration file (" + configurationFilePath
+                  + ") for the service (" + serviceName + ") does not exist");
+            }
+          }
+        }
+      }
+
+      // Attempt to find the service security configuration file using the class loader
+      if (!serviceSecurityConfigLoaded)
+      {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL configurationFileUrl = classLoader.getResource(serviceName + ".ServiceSecurity");
+
+        if (configurationFileUrl == null)
+        {
+          configurationFileUrl = classLoader.getResource("META-INF/" + serviceName
+              + ".ServiceSecurity");
+        }
+
+        if (configurationFileUrl != null)
+        {
+          loadWebServicesSecurityConfig(serviceName, configurationFileUrl);
+          serviceSecurityConfigLoaded = true;
+        }
+      }
+
+      if (serviceSecurityConfigLoaded)
+      {
+        init(keyStoreName, keyStoreAlias, keyStorePassword);
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ServiceSecurityContextException(
+          "Failed to initialise the ServiceSecurityContext for the service (" + serviceName + ")");
+    }
   }
 
   /**
-   * Check whether the configuration information required to initialise the service security
-   * context exists.
+   * Returns the <code>ServiceSecurityContext</code> instance for the service with the specified
+   * name that holds the security information for the service.
+   * <p>
+   *   This information includes the path to the key store that holds the service's private/public
+   *   key pair, the alias of the public/private key pair in the key store and the password used to
+   *   retrieve the public/private key pair.
+   * </p>
+   * <p>
+   *   The following locations are searched to find the file <b>serviceName.ServiceSecurity</b>
+   *   in order:
+   *
+   *   <ol>
+   *     <li>The ${was.install.root}/certificates directory when running under WebSphere.</li>
+   *     <li>The ${jboss.home.dir}/certificates directory when running under JBoss.</li>
+   *     <li>The ${catalina.home}/certificates directory when running under Tomcat.</li>
+   *     <li>Under the "/" path in the CLASSPATH.</li>
+   *     <li>Under the "/META-INF" path in the CLASSPATH.</li>
+   *   </ol>
+   * </p>
    *
    * @param serviceName the name of the service used to derive the name of the security
    *                    configuration file
    *
-   * @return <code>true</code> if the configuration information exists or <code>false</code>
-   *         otherwise
+   * @return the service security context for the service with the specified name
    */
-  public boolean exists(String serviceName)
+  public static synchronized ServiceSecurityContext getContext(String serviceName)
   {
-    /*
-     * The following locations are searched to find the configuration file:
-     *
-     * 1. The ${was.install.root}/certificates directory when running under WebSphere.
-     * 2. The ${jboss.home.dir}/certificates directory when running under JBoss.
-     * 3. The ${catalina.home}/certificates directory when running under Tomcat.
-     * 4. Under the "/" path in the CLASSPATH.
-     * 5. Under the "/META-INF" path in the CLASSPATH.
-     */
-    String wasInstallRoot = System.getProperty("was.install.root");
+    ServiceSecurityContext serviceSecurityContext = serviceSecurityContexts.get(serviceName);
 
-    if (wasInstallRoot != null)
+    if (serviceSecurityContext == null)
     {
-      String configurationFilePath = wasInstallRoot + File.separator + "certificates"
-        + File.separator + serviceName + ".ServiceSecurity";
-      File configurationFile = new File(configurationFilePath);
+      serviceSecurityContext = new ServiceSecurityContext(serviceName);
 
-      if (configurationFile.exists())
-      {
-        return true;
-      }
+      serviceSecurityContexts.put(serviceName, serviceSecurityContext);
     }
 
-    String jbossServerBaseDir = System.getProperty("jboss.home.dir");
-
-    if (jbossServerBaseDir != null)
-    {
-      String configurationFilePath = jbossServerBaseDir + File.separator + "certificates"
-        + File.separator + serviceName + ".ServiceSecurity";
-      File configurationFile = new File(configurationFilePath);
-
-      if (configurationFile.exists())
-      {
-        return true;
-      }
-    }
-
-    String catalinaHome = System.getProperty("catalina.home");
-
-    if (catalinaHome != null)
-    {
-      String configurationFilePath = catalinaHome + File.separator + "certificates"
-        + File.separator + serviceName + ".ServiceSecurity";
-      File configurationFile = new File(configurationFilePath);
-
-      if (configurationFile.exists())
-      {
-        return true;
-      }
-    }
-
-    // Attempt to find the application security configuration file using the class loader
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-    URL configurationFileUrl = classLoader.getResource(serviceName + ".ServiceSecurity");
-
-    if (configurationFileUrl == null)
-    {
-      configurationFileUrl = classLoader.getResource("META-INF/" + serviceName
-          + ".ServiceSecurity");
-    }
-
-    return configurationFileUrl != null;
+    return serviceSecurityContext;
   }
 
   /**
@@ -276,24 +393,18 @@ public class ServiceSecurityContext
   }
 
   /**
-   * Initialise the service security context.
+   * Check whether the configuration information required to initialise the service security
+   * context exists.
    *
    * @param serviceName the name of the service used to derive the name of the security
-   *                        configuration file for the service
+   *                    configuration file
    *
-   * @throws ServiceSecurityContextException
+   * @return <code>true</code> if the configuration information exists or <code>false</code>
+   *         otherwise
    */
-  public void init(String serviceName)
-    throws ServiceSecurityContextException
+  private static boolean exists(String serviceName)
   {
-    boolean serviceSecurityConfigLoaded = false;
-
     /*
-     * Retrieve the configuration file containing the security configuration for the service.
-     * This file contains the name of the key store for the service, the alias of the
-     * public/private key pair for the service in the key store and the password used to
-     * access the key store.
-     *
      * The following locations are searched to find the configuration file:
      *
      * 1. The ${was.install.root}/certificates directory when running under WebSphere.
@@ -302,134 +413,59 @@ public class ServiceSecurityContext
      * 4. Under the "/" path in the CLASSPATH.
      * 5. Under the "/META-INF" path in the CLASSPATH.
      */
-    if (!serviceSecurityConfigLoaded)
+    String wasInstallRoot = System.getProperty("was.install.root");
+
+    if (wasInstallRoot != null)
     {
-      String wasInstallRoot = System.getProperty("was.install.root");
+      String configurationFilePath = wasInstallRoot + File.separator + "certificates"
+        + File.separator + serviceName + ".ServiceSecurity";
+      File configurationFile = new File(configurationFilePath);
 
-      if (wasInstallRoot != null)
+      if (configurationFile.exists())
       {
-        String configurationFilePath = wasInstallRoot + File.separator + "certificates"
-          + File.separator + serviceName + ".ServiceSecurity";
-        File configurationFile = new File(configurationFilePath);
-
-        if (configurationFile.exists())
-        {
-          try
-          {
-            loadWebServicesSecurityConfig(serviceName, configurationFile.toURI().toURL());
-            serviceSecurityConfigLoaded = true;
-          }
-          catch (MalformedURLException e)
-          {
-            throw new ServiceSecurityContextException("Failed to load the security"
-                + " configuration for the service (" + serviceName + ") from the file ("
-                + configurationFilePath + ")", e);
-          }
-        }
-        else
-        {
-          if (logger.isDebugEnabled())
-          {
-            logger.debug("The service security configuration file (" + configurationFilePath
-                + ") for the service (" + serviceName + ") does not exist");
-          }
-        }
+        return true;
       }
     }
 
-    if (!serviceSecurityConfigLoaded)
+    String jbossServerBaseDir = System.getProperty("jboss.home.dir");
+
+    if (jbossServerBaseDir != null)
     {
-      String jbossServerBaseDir = System.getProperty("jboss.home.dir");
+      String configurationFilePath = jbossServerBaseDir + File.separator + "certificates"
+        + File.separator + serviceName + ".ServiceSecurity";
+      File configurationFile = new File(configurationFilePath);
 
-      if (jbossServerBaseDir != null)
+      if (configurationFile.exists())
       {
-        String configurationFilePath = jbossServerBaseDir + File.separator + "certificates"
-          + File.separator + serviceName + ".ServiceSecurity";
-        File configurationFile = new File(configurationFilePath);
-
-        if (configurationFile.exists())
-        {
-          try
-          {
-            loadWebServicesSecurityConfig(serviceName, configurationFile.toURI().toURL());
-            serviceSecurityConfigLoaded = true;
-          }
-          catch (MalformedURLException e)
-          {
-            throw new ServiceSecurityContextException("Failed to load the security"
-                + " configuration for the service (" + serviceName + ") from the file ("
-                + configurationFilePath + ")", e);
-          }
-        }
-        else
-        {
-          if (logger.isDebugEnabled())
-          {
-            logger.debug("The service security configuration file (" + configurationFilePath
-                + ") for the service (" + serviceName + ") does not exist");
-          }
-        }
+        return true;
       }
     }
 
-    if (!serviceSecurityConfigLoaded)
+    String catalinaHome = System.getProperty("catalina.home");
+
+    if (catalinaHome != null)
     {
-      String catalinaHome = System.getProperty("catalina.home");
+      String configurationFilePath = catalinaHome + File.separator + "certificates"
+        + File.separator + serviceName + ".ServiceSecurity";
+      File configurationFile = new File(configurationFilePath);
 
-      if (catalinaHome != null)
+      if (configurationFile.exists())
       {
-        String configurationFilePath = catalinaHome + File.separator + "certificates"
-          + File.separator + serviceName + ".ServiceSecurity";
-        File configurationFile = new File(configurationFilePath);
-
-        if (configurationFile.exists())
-        {
-          try
-          {
-            loadWebServicesSecurityConfig(serviceName, configurationFile.toURI().toURL());
-            serviceSecurityConfigLoaded = true;
-          }
-          catch (MalformedURLException e)
-          {
-            throw new ServiceSecurityContextException("Failed to load the security"
-                + " configuration for the service (" + serviceName + ") from the file ("
-                + configurationFilePath + ")", e);
-          }
-        }
-        else
-        {
-          if (logger.isDebugEnabled())
-          {
-            logger.debug("The service security configuration file (" + configurationFilePath
-                + ") for the service (" + serviceName + ") does not exist");
-          }
-        }
+        return true;
       }
     }
 
-    // Attempt to find the service security configuration file using the class loader
-    if (!serviceSecurityConfigLoaded)
+    // Attempt to find the application security configuration file using the class loader
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    URL configurationFileUrl = classLoader.getResource(serviceName + ".ServiceSecurity");
+
+    if (configurationFileUrl == null)
     {
-      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-      URL configurationFileUrl = classLoader.getResource(serviceName + ".ServiceSecurity");
-
-      if (configurationFileUrl == null)
-      {
-        configurationFileUrl = classLoader.getResource("META-INF/" + serviceName
-            + ".ServiceSecurity");
-      }
-
-      if (configurationFileUrl != null)
-      {
-        loadWebServicesSecurityConfig(serviceName, configurationFileUrl);
-        serviceSecurityConfigLoaded = true;
-      }
+      configurationFileUrl = classLoader.getResource("META-INF/" + serviceName
+          + ".ServiceSecurity");
     }
 
-    if (serviceSecurityConfigLoaded)
-    {
-      init(keyStoreName, keyStoreAlias, keyStorePassword);
-    }
+    return configurationFileUrl != null;
   }
 
   /**
@@ -444,7 +480,7 @@ public class ServiceSecurityContext
    *
    * @throws ServiceSecurityContextException
    */
-  public void init(String keyStoreName, String keyStoreAlias, String keyStorePassword)
+  private void init(String keyStoreName, String keyStoreAlias, String keyStorePassword)
     throws ServiceSecurityContextException
   {
     boolean keyStoreLoaded = false;
@@ -624,55 +660,6 @@ public class ServiceSecurityContext
       logger.info("Successfully initialised the service security context using the key store ("
           + keyStoreName + ")");
     }
-
-    this.initialised = true;
-  }
-
-  /**
-   * Initialise the service security context.
-   *
-   * @param keyStoreName           the name of the key store file containing the service's
-   *                               private/public key pair
-   * @param keyStore               the key store containing the service's private/public key
-   *                               pair
-   * @param keyStorePassword       the password used to retrieve the service's private/public
-   *                               key pair from the key store
-   * @param keyStoreAlias          the alias that identifies the service's private/public key
-   *                               pair in the key store
-   * @param serviceCertificate certificate for the service retrieved from the service's
-   *                               key store
-   * @param servicePrivateKey  the private key for the service retrieved from the
-   *                               service's key store
-   * @param keyStoreCertificates   the certificates loaded from the service's key store.
-   *
-   * @throws ServiceSecurityContextException
-   */
-  public void init(String keyStoreName, KeyStore keyStore, String keyStorePassword,
-      String keyStoreAlias, X509Certificate serviceCertificate, Key servicePrivateKey,
-      Map<String, Certificate> keyStoreCertificates)
-    throws ServiceSecurityContextException
-  {
-    this.keyStoreName = keyStoreName;
-    this.keyStore = keyStore;
-    this.keyStorePassword = keyStorePassword;
-    this.keyStoreAlias = keyStoreAlias;
-    this.serviceCertificate = serviceCertificate;
-    this.servicePrivateKey = servicePrivateKey;
-    this.keyStoreCertificates = keyStoreCertificates;
-
-    initialised = true;
-  }
-
-  /**
-   * Returns <code>true</code> if the service security context has been initialised or
-   * <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if the service security context has been initialised or
-   *         <code>false</code> otherwise
-   */
-  public boolean isInitialised()
-  {
-    return initialised;
   }
 
   /**

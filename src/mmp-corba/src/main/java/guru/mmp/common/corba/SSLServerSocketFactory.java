@@ -146,7 +146,7 @@ public class SSLServerSocketFactory
 
     try
     {
-      ServiceSecurityContext serviceSecurityContext = ServiceSecurityContext.getContext();
+      ServiceSecurityContext serviceSecurityContext = ServiceSecurityContext.getContext("ORB");
 
       // Initialize the key manager factory
       KeyManagerFactory keyManagerFactory =
@@ -169,7 +169,6 @@ public class SSLServerSocketFactory
           null);
 
       // Retrieve the SSL server socket factory
-
       serverSocketFactory = sslContext.getServerSocketFactory();
 
       return serverSocketFactory;

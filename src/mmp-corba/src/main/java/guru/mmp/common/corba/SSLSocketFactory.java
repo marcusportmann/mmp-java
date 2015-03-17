@@ -177,7 +177,6 @@ public class SSLSocketFactory
           null);
 
       // Retrieve the SSL socket factory
-
       socketFactory = sslContext.getSocketFactory();
 
       return socketFactory;

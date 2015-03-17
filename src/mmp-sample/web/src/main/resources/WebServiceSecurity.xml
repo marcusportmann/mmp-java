@@ -5,11 +5,7 @@
   <handler-chain>
     <handler>
       <handler-name>SampleServiceSecurityHandler</handler-name>
-      <handler-class>guru.mmp.common.service.ws.security.WebServiceSecurityHandler</handler-class>
-      <init-param>
-        <param-name>TestParam</param-name>
-        <param-value>TestValue</param-value>
-      </init-param>
+      <handler-class>guru.mmp.service.sample.ws.SampleServiceSecurityHandler</handler-class>
     </handler>
   </handler-chain>
 </handler-chains>

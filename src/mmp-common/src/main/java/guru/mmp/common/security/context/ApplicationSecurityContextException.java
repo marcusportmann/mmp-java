@@ -22,7 +22,7 @@ package guru.mmp.common.security.context;
  *
  * @author Marcus Portmann
  */
-public class ApplicationSecurityContextException extends Exception
+public class ApplicationSecurityContextException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

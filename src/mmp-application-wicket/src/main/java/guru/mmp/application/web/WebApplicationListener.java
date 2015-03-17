@@ -21,7 +21,6 @@ package guru.mmp.application.web;
 import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.security.context.ApplicationSecurityContext;
-import guru.mmp.common.security.context.ServiceSecurityContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,23 +117,6 @@ public class WebApplicationListener
             "Failed to initialise the application security context using the"
             + " configuration file (META-INF/" + applicationName + ".ApplicationSecurity): "
             + e.getMessage(), e);
-      }
-    }
-
-    // Initialise the JAX-WS web services security configuration
-    if (ServiceSecurityContext.getContext().exists(applicationName))
-    {
-      logger.info("Initialising the web service security context using the configuration file ("
-          + applicationName + ".ServiceSecurity)");
-
-      try
-      {
-        ServiceSecurityContext.getContext().init(applicationName);
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to initialise the web service security context using the"
-            + " configuration file (META-INF/" + applicationName + ".ServiceSecurity)", e);
       }
     }
   }

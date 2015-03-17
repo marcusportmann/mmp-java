@@ -99,12 +99,13 @@ public class WebServiceCrypto
    */
   private String cryptoProvider = null;
   private KeyStore keyStore = null;
+  private String keyStoreAlias;
 
   /**
    * Constructs a new <code>WebServiceCrypto</code>.
    *
    * @throws CredentialException
-   * @throws java.io.IOException
+   * @throws IOException
    */
   public WebServiceCrypto()
     throws CredentialException, IOException
@@ -138,16 +139,17 @@ public class WebServiceCrypto
   public WebServiceCrypto(Properties properties, ClassLoader loader)
     throws CredentialException, IOException
   {
-    for (Object key : properties.keySet())
+    Object serviceSecurityContext = properties.get(ServiceSecurityContext.class.getName());
+
+    if ((serviceSecurityContext == null)
+        || (!(serviceSecurityContext instanceof ServiceSecurityContext)))
     {
-      System.out.println("=========================> Found property (" + key + ") = (" + properties.get(key) + ")");
+      throw new RuntimeException("Failed to initialise WebServiceCrypto instance:"
+          + " A valid ServiceSecurityContext instance could not be found");
     }
 
-
-
-    ServiceSecurityContext serviceSecurityContext = ServiceSecurityContext.getContext();
-
-    this.keyStore = serviceSecurityContext.getKeyStore();
+    this.keyStore = ((ServiceSecurityContext) serviceSecurityContext).getKeyStore();
+    this.keyStoreAlias = ((ServiceSecurityContext) serviceSecurityContext).getKeyStoreAlias();
   }
 
   /**
@@ -297,9 +299,7 @@ public class WebServiceCrypto
   public String getDefaultX509Identifier()
     throws WSSecurityException
   {
-    ServiceSecurityContext serviceSecurityContext = ServiceSecurityContext.getContext();
-
-    return serviceSecurityContext.getKeyStoreAlias();
+    return keyStoreAlias;
   }
 
   /**
