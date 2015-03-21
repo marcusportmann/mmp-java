@@ -18,6 +18,11 @@ target/
 .project
 .settings/
 
+# IntelliJ IDEA
+.idea
+/**/*.iml
+/**/*.ipr
+
 # Compiled source
 /**/*.com
 /**/*.class
