@@ -347,7 +347,7 @@
   <!-- ========================================================================================= -->
   <wsdl:service name="CodesService">
     <wsdl:port name="CodesService" binding="interface:CodesService">
-      <soap:address location="http://localhost:8080/mforms/services/CodesService"/>
+      <soap:address location="http://localhost:8080/mmp-guru/services/CodesService"/>
     </wsdl:port>
   </wsdl:service>
 
