@@ -281,9 +281,18 @@ public class ServiceRegistry
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to initialise the Service Registry:"
-          + " Failed to retrieve the data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)");
+      try
+      {
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored) {}
+    }
+
+    if (dataSource == null)
+    {
+      throw new DAOException("Failed to retrieve the application data source"
+        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+        + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     Connection connection = null;

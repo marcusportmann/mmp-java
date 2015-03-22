@@ -85,8 +85,18 @@ public abstract class DataAccessObject
 
     if (dataSource == null)
     {
+      try
+      {
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored) {}
+    }
+
+    if (dataSource == null)
+    {
       throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI lookup (java:app/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -95,11 +105,20 @@ public abstract class DataAccessObject
     }
     catch (Throwable ignored) {}
 
+    if (schema == null)
+    {
+      try
+      {
+        schema = InitialContext.doLookup("java:comp/env/ApplicationDatabaseSchema");
+      }
+      catch (Throwable ignored) {}
+    }
+
     if (StringUtil.isNullOrEmpty(schema))
     {
       logger.info("The application database schema was not set using the JNDI environment entry"
-          + " (java:app/env/ApplicationDatabaseSchema) using the default schema ("
-          + DEFAULT_APPLICATION_DATABASE_SCHEMA + ")");
+          + " (java:app/env/ApplicationDatabaseSchema) or (java:comp/env/ApplicationDatabaseSchema)"
+          + " using the default schema (" + DEFAULT_APPLICATION_DATABASE_SCHEMA + ")");
 
       schema = DEFAULT_APPLICATION_DATABASE_SCHEMA;
     }

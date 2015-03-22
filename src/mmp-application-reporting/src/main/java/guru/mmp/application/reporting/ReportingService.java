@@ -388,9 +388,18 @@ public class ReportingService
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to initialise the ReportingService instance:"
-          + " Failed to retrieve the data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)");
+      try
+      {
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored) {}
+    }
+
+    if (dataSource == null)
+    {
+      throw new DAOException("Failed to retrieve the application data source"
+        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+        + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
   }
 
@@ -490,8 +499,18 @@ public class ReportingService
 
       if (applicationName == null)
       {
-        logger.error("Failed to retrieve the application name from JNDI using the path ("
-            + "java:app/AppName) while constructing the reporting service instance name");
+        try
+        {
+          applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
+        }
+        catch (Throwable ignored) {}
+      }
+
+      if (applicationName == null)
+      {
+        logger.error("Failed to retrieve the application name from JNDI using the names ("
+            + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
+            + " the reporting service instance name");
 
         applicationName = "Unknown";
       }

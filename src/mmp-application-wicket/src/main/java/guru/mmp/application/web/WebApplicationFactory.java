@@ -49,21 +49,28 @@ public class WebApplicationFactory
    */
   public WebApplication createApplication(WicketFilter filter)
   {
-    String applicationClass;
+    String applicationClass = null;
+
     try
     {
       applicationClass = InitialContext.doLookup("java:app/env/ApplicationClass");
     }
-    catch (Throwable e)
+    catch (Throwable ignored) {}
+
+    if (applicationClass == null)
     {
-      throw new WebApplicationException("Failed to lookup the web application class using the"
-          + " JNDI environment entry (java:app/env/ApplicationClass)", e);
+      try
+      {
+        applicationClass = InitialContext.doLookup("java:comp/env/ApplicationClass");
+      }
+      catch (Throwable ignored) {}
     }
 
     if (applicationClass == null)
     {
       throw new WebApplicationException("Failed to retrieve the web application class using the"
-          + " JNDI environment entry (java:app/env/ApplicationClass)");
+          + " JNDI environment entries (java:app/env/ApplicationClass)"
+          + " and (java:comp/env/ApplicationClass)");
     }
 
     Object webApplicationObject;

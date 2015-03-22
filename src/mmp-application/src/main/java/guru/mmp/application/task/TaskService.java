@@ -359,8 +359,18 @@ public class TaskService
 
       if (applicationName == null)
       {
-        logger.error("Failed to retrieve the application name from JNDI using the path ("
-            + "java:app/AppName) while constructing the task service instance name");
+        try
+        {
+          applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
+        }
+        catch (Throwable ignored) {}
+      }
+
+      if (applicationName == null)
+      {
+        logger.error("Failed to retrieve the application name from JNDI using the names ("
+            + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
+            + " the task service instance name");
 
         applicationName = "Unknown";
       }

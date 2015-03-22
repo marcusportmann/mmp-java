@@ -732,9 +732,18 @@ public class Registry
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to initialise the Registry:"
-          + " Failed to retrieve the data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)");
+      try
+      {
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored) {}
+    }
+
+    if (dataSource == null)
+    {
+      throw new DAOException("Failed to retrieve the application data source"
+        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+        + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -742,6 +751,15 @@ public class Registry
       registryPathPrefix = InitialContext.doLookup("java:app/env/RegistryPathPrefix");
     }
     catch (Throwable ignored) {}
+
+    if (StringUtil.isNullOrEmpty(registryPathPrefix))
+    {
+      try
+      {
+        registryPathPrefix = InitialContext.doLookup("java:comp/env/RegistryPathPrefix");
+      }
+      catch (Throwable ignored) {}
+    }
 
     if (registryPathPrefix == null)
     {

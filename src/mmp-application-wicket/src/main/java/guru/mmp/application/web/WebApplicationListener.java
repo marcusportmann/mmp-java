@@ -22,6 +22,7 @@ import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 
+import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,9 @@ public class WebApplicationListener
       logger.info("Initialising the WebApplicationListener in DEVELOPMENT mode");
     }
 
+    // Initialise the default database tables if required
+    initDefaultDatabaseTables();
+
     String applicationName = null;
 
     try
@@ -91,32 +95,44 @@ public class WebApplicationListener
 
     if (applicationName == null)
     {
-      logger.error("Failed to retrieve the application name from JNDI using the path ("
-          + "java:app/AppName). The application security context and web service security context"
-          + " will not be initialised");
-
-      return;
-    }
-
-    // Initialise the default database tables if required
-    initDefaultDatabaseTables();
-
-    // Initialise the application's security context
-    if (ApplicationSecurityContext.getContext().exists(applicationName))
-    {
-      logger.info("Initialising the application security context using the configuration file ("
-          + applicationName + ".ApplicationSecurity)");
-
       try
       {
-        ApplicationSecurityContext.getContext().init(applicationName);
+        applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
       }
-      catch (Throwable e)
+      catch (Throwable ignored) {}
+    }
+
+    if (StringUtil.isNullOrEmpty(applicationName))
+    {
+      logger.warn("Failed to retrieve the application name from JNDI using the names ("
+        + "java:app/AppName) and (java:comp/env/ApplicationName)."
+        + " The application security context will not be initialised");
+    }
+    else
+    {
+      // Initialise the application's security context
+      if (ApplicationSecurityContext.getContext().exists(applicationName))
       {
-        throw new WebApplicationException(
+        logger.info("Initialising the application security context using the configuration file ("
+          + applicationName + ".ApplicationSecurity)");
+
+        try
+        {
+          ApplicationSecurityContext.getContext().init(applicationName);
+        }
+        catch (Throwable e)
+        {
+          throw new WebApplicationException(
             "Failed to initialise the application security context using the"
-            + " configuration file (META-INF/" + applicationName + ".ApplicationSecurity): "
-            + e.getMessage(), e);
+              + " configuration file (META-INF/" + applicationName + ".ApplicationSecurity): "
+              + e.getMessage(), e);
+        }
+      }
+      else
+      {
+        logger.info("The configuration file ("
+          + applicationName + ".ApplicationSecurity) could not found."
+          + " The application security context will not be initialised");
       }
     }
   }
@@ -126,24 +142,29 @@ public class WebApplicationListener
    */
   private void initDefaultDatabaseTables()
   {
-    DataSource dataSource;
+    DataSource dataSource = null;
 
     try
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable e)
+    catch (Throwable ignored) {}
+
+    if (dataSource == null)
     {
-      throw new WebApplicationException("Failed to initialise the default database tables:"
-          + "Failed to retrieve the application data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)", e);
+      try
+      {
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
       throw new WebApplicationException("Failed to initialise the default database tables:"
-          + "Failed to retrieve the application data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)");
+          + "Failed to retrieve the application data source using the JNDI names"
+          + " (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     Connection connection = null;
@@ -221,7 +242,7 @@ public class WebApplicationListener
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the default database tables", e);
+      logger.error("Failed to initialise the default database tables", e);
     }
     finally
     {

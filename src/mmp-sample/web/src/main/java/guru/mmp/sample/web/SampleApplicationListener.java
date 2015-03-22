@@ -164,24 +164,31 @@ public class SampleApplicationListener
    */
   private void initSampleDatabaseTables()
   {
-    DataSource dataSource;
+    DataSource dataSource = null;
 
     try
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable e)
+    catch (Throwable ignored) {}
+
+    if (dataSource == null)
     {
-      throw new WebApplicationException("Failed to initialise the sample database tables:"
-          + "Failed to retrieve the application data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)", e);
+      try
+      {
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (dataSource == null)
     {
       throw new WebApplicationException("Failed to initialise the sample database tables:"
-          + "Failed to retrieve the application data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)");
+          + "Failed to retrieve the application data source using the JNDI names"
+          + " (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     Connection connection = null;

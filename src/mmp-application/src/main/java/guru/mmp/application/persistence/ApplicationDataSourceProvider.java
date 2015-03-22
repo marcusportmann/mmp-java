@@ -21,8 +21,11 @@ package guru.mmp.application.persistence;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
+
 import javax.inject.Named;
+
 import javax.naming.InitialContext;
+
 import javax.sql.DataSource;
 
 /**
@@ -35,11 +38,6 @@ import javax.sql.DataSource;
 @Default
 public class ApplicationDataSourceProvider
 {
-  private static final String APPLICATION_DATABASE_SCHEMA_JNDI_NAME =
-    "java:app/env/ApplicationDatabaseSchema";
-  private static final String APPLICATION_DATA_SOURCE_JNDI_NAME =
-    "java:app/jdbc/ApplicationDataSource";
-
   /**
    * Returns the application data source.
    *
@@ -50,14 +48,32 @@ public class ApplicationDataSourceProvider
   @ApplicationDataSource
   public DataSource getApplicationDataSource()
   {
+    DataSource dataSource = null;
+
     try
     {
-      return (DataSource) InitialContext.doLookup(APPLICATION_DATA_SOURCE_JNDI_NAME);
+      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable e)
+    catch (Throwable ignored) {}
+
+    if (dataSource == null)
     {
-      throw new RuntimeException("Failed to lookup the application data source ("
-          + APPLICATION_DATA_SOURCE_JNDI_NAME + ")", e);
+      try
+      {
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored) {}
+    }
+
+    if (dataSource != null)
+    {
+      return dataSource;
+    }
+    else
+    {
+      throw new RuntimeException("Failed to lookup the application data source using the"
+          + " JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
   }
 
@@ -71,14 +87,32 @@ public class ApplicationDataSourceProvider
   @ApplicationDatabaseSchema
   public String getApplicationDatabaseSchema()
   {
+    String databaseSchema = null;
+
     try
     {
-      return (String) InitialContext.doLookup(APPLICATION_DATABASE_SCHEMA_JNDI_NAME);
+      databaseSchema = InitialContext.doLookup("java:app/env/ApplicationDatabaseSchema");
     }
-    catch (Throwable e)
+    catch (Throwable ignored) {}
+
+    if (databaseSchema == null)
     {
-      throw new RuntimeException("Failed to lookup the application database schema ("
-          + APPLICATION_DATABASE_SCHEMA_JNDI_NAME + ")", e);
+      try
+      {
+        databaseSchema = InitialContext.doLookup("java:comp/env/ApplicationDatabaseSchema");
+      }
+      catch (Throwable ignored) {}
+    }
+
+    if (databaseSchema != null)
+    {
+      return databaseSchema;
+    }
+    else
+    {
+      throw new RuntimeException("Failed to lookup the application database schema using the"
+          + " JNDI names (java:app/env/ApplicationDatabaseSchema) and"
+          + " (java:comp/env/ApplicationDatabaseSchema)");
     }
   }
 }
