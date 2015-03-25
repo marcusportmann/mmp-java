@@ -20,6 +20,7 @@ package guru.mmp.common.service.ws.security;
 
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import org.apache.ws.security.WSConstants;
+import org.apache.ws.security.WSSecurityEngine;
 import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.RequestData;
@@ -31,7 +32,6 @@ import org.apache.xml.security.utils.XMLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.xml.soap.*;
@@ -101,6 +101,8 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
       cryptoProperties.put("org.apache.ws.security.crypto.provider",
           "guru.mmp.common.service.ws.security.WebServiceClientCrypto");
       setOption(WSHandlerConstants.SIG_PROP_REF_ID, MESSAGE_CONTEXT_CRYPTO_PROPERTIES);
+
+      secEngine.getWssConfig().setValidator(WSSecurityEngine.SIGNATURE, new SignatureTrustValidator());
     }
     catch (WebServiceSecurityHandlerException e)
     {
@@ -131,18 +133,14 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
   @Override
   public Object getOption(String key)
   {
-    Object option = null;
-
     if ("pswd".equalsIgnoreCase(key))
     {
-      option = getApplicationSecurityContext().getKeyStorePassword();
+      return getApplicationSecurityContext().getKeyStorePassword();
     }
     else
     {
-      option = super.getOption(key);
+      return super.getOption(key);
     }
-
-    return option;
   }
 
   /**
@@ -213,16 +211,9 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
     try
     {
       // OUT
-      if (outboundProperty.booleanValue())
+      if (outboundProperty)
       {
-        if (doRequest(soapVersion, messageContext, requestData))
-        {
-          return true;
-        }
-        else
-        {
-          return false;
-        }
+        return doRequest(soapVersion, messageContext, requestData);
       }
 
       // IN
@@ -239,7 +230,6 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
     finally
     {
       requestData.clear();
-      requestData = null;
     }
   }
 
@@ -287,7 +277,7 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
     requestData.setNoSerialization(false);
 
     // Decode the action(s) being performed e.g. Sign, Encrypt, etc
-    List<Integer> actions = new ArrayList<Integer>();
+    List<Integer> actions = new ArrayList<>();
 
     String action = (String) getOption(WSHandlerConstants.ACTION);
 
@@ -391,7 +381,7 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
     securityContext.setServiceCertificate(null);
 
     // Decode the action(s) being performed e.g. Sign, Encrypt, etc
-    List<Integer> actions = new ArrayList<Integer>();
+    List<Integer> actions = new ArrayList<>();
 
     String action = (String) getOption(WSHandlerConstants.ACTION);
 
@@ -455,7 +445,7 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
     doReceiverAction(doAction, requestData);
 
     List<WSSecurityEngineResult> wsResults = secEngine.processSecurityHeader(doc, actor,
-      passwordCallbackHandler, requestData.getSigCrypto(), requestData.getDecCrypto());;
+      passwordCallbackHandler, requestData.getSigCrypto(), requestData.getDecCrypto());
 
     if (wsResults == null)
     {
@@ -496,7 +486,7 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
      * Please note: find all header elements that contain the same actor that was given to
      * processSecurityHeader(). Then check if there is a security header with this actor.
      */
-    SOAPHeader soapHeader = null;
+    SOAPHeader soapHeader;
 
     try
     {
@@ -508,7 +498,7 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
           + " Cannot get SOAP header after security processing", e);
     }
 
-    Iterator<?> headers = null;
+    Iterator<?> headers;
 
     if (actor != null)
     {
@@ -526,7 +516,7 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
       SOAPHeaderElement hE = (SOAPHeaderElement) headers.next();
 
       if (hE.getElementName().getLocalName().equals(WSConstants.WSSE_LN)
-          && ((Node) hE).getNamespaceURI().equals(WSConstants.WSSE_NS))
+          && hE.getNamespaceURI().equals(WSConstants.WSSE_NS))
       {
         securityHeaderElement = hE;
 
@@ -612,11 +602,11 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
      * All ok up to this point. Now construct and setup the security result structure. The service
      * may fetch this and check it.
      */
-    List<Object> results = null;
+    List<Object> results;
 
     if ((results = (List<Object>) messageContext.get(WSHandlerConstants.RECV_RESULTS)) == null)
     {
-      results = new ArrayList<Object>();
+      results = new ArrayList<>();
       messageContext.put(WSHandlerConstants.RECV_RESULTS, results);
     }
 
