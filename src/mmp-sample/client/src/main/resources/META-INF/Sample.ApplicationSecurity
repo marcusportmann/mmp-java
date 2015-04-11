@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE applicationSecurity SYSTEM " ApplicationSecurity.dtd">
+
+<applicationSecurity>
+  <keyStoreName>Sample.jks</keyStoreName>
+  <keyStoreAlias>Sample</keyStoreAlias>
+  <keyStorePassword>Password1</keyStorePassword>
+</applicationSecurity>
+
+

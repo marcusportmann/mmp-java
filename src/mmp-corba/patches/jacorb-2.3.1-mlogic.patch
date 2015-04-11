@@ -1,0 +1,185 @@
+diff -rupN JacORB-original/src/org/jacorb/config/JacORBConfiguration.java JacORB/src/org/jacorb/config/JacORBConfiguration.java
+--- JacORB-original/src/org/jacorb/config/JacORBConfiguration.java	2009-11-26 18:36:14.000000000 +0200
++++ JacORB/src/org/jacorb/config/JacORBConfiguration.java	2010-08-28 17:22:51.000000000 +0200
+@@ -60,6 +60,8 @@ public class JacORBConfiguration impleme
+ 
+     private LoggingInitializer li;
+ 
++		private static Configuration configuration;
++
+ 
+     /**
+      * Factory method
+@@ -69,6 +71,9 @@ public class JacORBConfiguration impleme
+                                                  boolean isApplet)
+         throws ConfigurationException
+     {
++    	if (configuration == null)
++    	{
++    
+         // determine the ORBId, if set, so we can locate the corresponding
+         // configuration
+         String orbID = "jacorb"; // default id
+@@ -105,8 +110,16 @@ public class JacORBConfiguration impleme
+             }
+             orbID = myOrbID;
+         }
+-
+-        return new JacORBConfiguration(orbID, props, orb, isApplet);
++			
++				configuration = new JacORBConfiguration(orbID, props, orb, isApplet);
++			}
++			
++			return configuration;
++      
++      
++        
++        
++        
+     }
+ 
+ 
+@@ -346,7 +359,7 @@ public class JacORBConfiguration impleme
+ 
+        if (!loaded)
+        {
+-           delayedLogging.add (new DelayedConfigOutput (Level.WARNING, "no properties found for configuration " + name));
++           delayedLogging.add (new DelayedConfigOutput (Level.INFO, "No properties found for configuration " + name));
+        }
+     }
+ 
+@@ -440,7 +453,7 @@ public class JacORBConfiguration impleme
+ 
+        if (!loaded)
+        {
+-           delayedLogging.add (new DelayedConfigOutput (Level.WARNING, "no properties found for configuration " + name));
++           delayedLogging.add (new DelayedConfigOutput (Level.INFO, "No properties found for configuration " + name));
+        }
+     }
+ 
+diff -rupN JacORB-original/src/org/jacorb/orb/ORB.java JacORB/src/org/jacorb/orb/ORB.java
+--- JacORB-original/src/org/jacorb/orb/ORB.java	2009-12-14 18:27:29.000000000 +0200
++++ JacORB/src/org/jacorb/orb/ORB.java	2010-08-28 17:41:27.000000000 +0200
+@@ -1651,9 +1651,9 @@ public final class ORB
+ 
+     private void initKnownReferencesMap()
+     {
+-        if (logger.isInfoEnabled())
++        if (logger.isDebugEnabled())
+         {
+-            logger.info("Property \"jacorb.hashtable_class\" is set to: " + hashTableClassName);
++            logger.debug("Property \"jacorb.hashtable_class\" is set to: " + hashTableClassName);
+         }
+ 
+         try
+diff -rupN JacORB-original/src/org/jacorb/orb/ORBSingleton.java JacORB/src/org/jacorb/orb/ORBSingleton.java
+--- JacORB-original/src/org/jacorb/orb/ORBSingleton.java	2010-04-20 17:46:16.000000000 +0200
++++ JacORB/src/org/jacorb/orb/ORBSingleton.java	2010-08-28 17:39:15.000000000 +0200
+@@ -79,17 +79,27 @@ public class ORBSingleton
+                 if (logger.isDebugEnabled())
+                 {
+                     logger.debug("jacorb.interop.strict_check_on_tc_creation set to " + doStrictCheckOnTypecodeCreation);
++
++		                logger.debug("created ORBSingleton");
+                 }
+ 
+-                logger.info("created ORBSingleton");
++
++
+ 
+                 ClassLoader omgcl  = org.omg.CORBA.ORB.class.getClassLoader ();
+                 ClassLoader thiscl = this.getClass().getClassLoader();
+ 
+-                if (omgcl != thiscl)
+-                {
+-                   logger.warn ("OMG.ORB classloader does not match JacORB ORBSingleton classloader. This may cause problems; see the ProgrammingGuide for further details");
+-                }
++								if (((configuration.getAttribute("org.omg.CORBA.ORBClass") != null) && (configuration.getAttribute("org.omg.CORBA.ORBSingletonClass") != null))
++								|| ((System.getProperty("org.omg.CORBA.ORBClass") != null) && (System.getProperty("org.omg.CORBA.ORBSingletonClass") != null)))
++								{
++ 								}
++ 								else
++ 								{
++ 									if (omgcl != thiscl)
++                	{
++                 	  logger.warn ("OMG.ORB classloader does not match JacORB ORBSingleton classloader. This may cause problems; see the ProgrammingGuide for further details");
++                	}
++               	}
+             }
+         }
+         catch (ConfigurationException e)
+@@ -122,6 +132,7 @@ public class ORBSingleton
+         {
+             throw new INITIALIZE ("Singleton ORB not a JacORB singleton");
+         }
++        
+         bufferManager = bufferManagerFactory.newBufferManager
+             (((ORBSingleton)single).getBufferManager(), configuration);
+ 
+diff -rupN JacORB-original/src/org/jacorb/orb/ParsedIOR.java JacORB/src/org/jacorb/orb/ParsedIOR.java
+--- JacORB-original/src/org/jacorb/orb/ParsedIOR.java	2009-12-14 18:27:29.000000000 +0200
++++ JacORB/src/org/jacorb/orb/ParsedIOR.java	2010-08-29 21:09:49.000000000 +0200
+@@ -121,8 +121,8 @@ public class ParsedIOR
+ 
+         return new IOR(repId, tps);
+     }
+-
+   public static IOR createObjectIOR(ORB orb, org.omg.ETF.Profile[] profiles)
++
+   {
+     String repId = "IDL:omg.org/CORBA/Object:1.0";
+     List taggedProfileList = new ArrayList();
+@@ -145,7 +145,7 @@ public class ParsedIOR
+       finally {
+ 	out.close();
+       }
+-
++      
+       TaggedProfileHolder tp = new TaggedProfileHolder();
+       TaggedComponentSeqHolder tcs = new TaggedComponentSeqHolder();
+       tcs.value = components.asArray();
+diff -rupN JacORB-original/src/org/jacorb/orb/giop/ClientConnectionManager.java JacORB/src/org/jacorb/orb/giop/ClientConnectionManager.java
+--- JacORB-original/src/org/jacorb/orb/giop/ClientConnectionManager.java	2009-11-18 18:34:23.000000000 +0200
++++ JacORB/src/org/jacorb/orb/giop/ClientConnectionManager.java	2010-08-29 21:20:16.000000000 +0200
+@@ -125,9 +125,9 @@ public class ClientConnectionManager
+             clientConnection = new ClientConnection( connection, orb, this,
+                                       profile, true );
+ 
+-            if( logger.isInfoEnabled())
++            if( logger.isDebugEnabled())
+             {
+-                logger.info("ClientConnectionManager: created new "
++                logger.debug("ClientConnectionManager: created new "
+                             + clientConnection.getGIOPConnection().toString() );
+             }
+ 
+diff -rupN JacORB-original/src/org/jacorb/orb/iiop/ClientIIOPConnection.java JacORB/src/org/jacorb/orb/iiop/ClientIIOPConnection.java
+--- JacORB-original/src/org/jacorb/orb/iiop/ClientIIOPConnection.java	2009-11-24 19:32:28.000000000 +0200
++++ JacORB/src/org/jacorb/orb/iiop/ClientIIOPConnection.java	2010-08-29 21:20:50.000000000 +0200
+@@ -159,9 +159,9 @@ public class ClientIIOPConnection
+                     out_stream =
+                         new BufferedOutputStream( socket.getOutputStream());
+ 
+-                    if (logger.isInfoEnabled())
++                    if (logger.isDebugEnabled())
+                     {
+-                        logger.info("Connected to " + connection_info +
++                        logger.debug("Connected to " + connection_info +
+                                     " from local port " +
+                                     socket.getLocalPort() +
+                                     ( this.isSSL() ? " via SSL" : "" ) +
+diff -rupN JacORB-original/src/org/jacorb/orb/portableInterceptor/InterceptorManager.java JacORB/src/org/jacorb/orb/portableInterceptor/InterceptorManager.java
+--- JacORB-original/src/org/jacorb/orb/portableInterceptor/InterceptorManager.java	2009-05-03 23:35:56.000000000 +0200
++++ JacORB/src/org/jacorb/orb/portableInterceptor/InterceptorManager.java	2010-08-29 21:19:19.000000000 +0200
+@@ -78,9 +78,9 @@ public class InterceptorManager
+         logger =
+             orb.getConfiguration().getLogger("jacorb.orb.interceptors");
+ 
+-        if (logger.isInfoEnabled())
++        if (logger.isDebugEnabled())
+         {
+-            logger.info("InterceptorManager started with " +
++            logger.debug("InterceptorManager started with " +
+                         server_interceptors.size() +" Server Interceptors, "
+                         + client_interceptors.size() + " Client Interceptors and " +
+                         ior_intercept.size() + " IOR Interceptors");

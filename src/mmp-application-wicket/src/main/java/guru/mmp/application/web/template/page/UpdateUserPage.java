@@ -1,0 +1,176 @@
+/*
+ * Copyright 2014 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package guru.mmp.application.web.template.page;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.User;
+import guru.mmp.application.web.WebApplicationException;
+import guru.mmp.application.web.component.DropDownChoiceWithFeedback;
+import guru.mmp.application.web.component.TextFieldWithFeedback;
+import guru.mmp.application.web.page.WebPageSecurity;
+import guru.mmp.application.web.template.TemplateSecurity;
+import guru.mmp.application.web.template.TemplateWebApplication;
+import org.apache.wicket.PageReference;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
+
+/**
+ * The <code>UpdateUserPage</code> class implements the
+ * "Update User" page for the Web Application Template.
+ *
+ * @author Marcus Portmann
+ */
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_USER)
+public class UpdateUserPage extends TemplateWebPage
+{
+  private static final long serialVersionUID = 1000000;
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(UpdateUserPage.class);
+
+  /* Security Service */
+  @Inject
+  private ISecurityService securityService;
+
+  /**
+   * Constructs a new <code>UpdateUserPage</code>.
+   *
+   * @param previousPage the previous page
+   * @param userModel    the model for the user
+   */
+  public UpdateUserPage(final PageReference previousPage, final IModel<User> userModel)
+  {
+    super("Update User", "Update User");
+    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Update User");
+
+    try
+    {
+      Form<User> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(userModel));
+
+      // The "username" field
+      TextField<String> usernameField = new TextFieldWithFeedback<>("username");
+      usernameField.setRequired(true);
+      usernameField.setEnabled(false);
+      updateForm.add(usernameField);
+
+      // The "title" field
+      DropDownChoice<String> titleField = new DropDownChoiceWithFeedback<>("title",
+        AddUserPage.getTitleOptions());
+      titleField.setRequired(true);
+      updateForm.add(titleField);
+
+      // The "firstNames" field
+      TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
+      firstNamesField.setRequired(true);
+      updateForm.add(firstNamesField);
+
+      // The "lastName" field
+      TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName");
+      lastNameField.setRequired(true);
+      updateForm.add(lastNameField);
+
+      // The "email" field
+      TextField<String> emailField = new TextFieldWithFeedback<>("email");
+      emailField.setRequired(true);
+      updateForm.add(emailField);
+
+      // The "phoneNumber" field
+      TextField<String> phoneNumberField = new TextFieldWithFeedback<>("phoneNumber");
+      phoneNumberField.setRequired(false);
+      updateForm.add(phoneNumberField);
+
+      // The "faxNumber" field
+      TextField<String> faxNumberField = new TextFieldWithFeedback<>("faxNumber");
+      faxNumberField.setRequired(false);
+      updateForm.add(faxNumberField);
+
+      // The "mobileNumber" field
+      TextField<String> mobileNumberField = new TextFieldWithFeedback<>("mobileNumber");
+      mobileNumberField.setRequired(false);
+      updateForm.add(mobileNumberField);
+
+      // The "description" field
+      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
+      descriptionField.setRequired(false);
+      updateForm.add(descriptionField);
+
+      // The "updateButton" button
+      Button updateButton = new Button("updateButton")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onSubmit()
+        {
+          try
+          {
+            User user = userModel.getObject();
+
+            securityService.updateUser(user, false, false, getRemoteAddress());
+
+            setResponsePage(previousPage.getPage());
+          }
+          catch (Throwable e)
+          {
+            logger.error("Failed to update the user: " + e.getMessage(), e);
+
+            UpdateUserPage.this.error("Failed to update the user");
+          }
+        }
+      };
+      updateButton.setDefaultFormProcessing(true);
+      updateForm.add(updateButton);
+
+      // The "cancelButton" button
+      Button cancelButton = new Button("cancelButton")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onSubmit()
+        {
+          setResponsePage(previousPage.getPage());
+        }
+      };
+      cancelButton.setDefaultFormProcessing(false);
+      updateForm.add(cancelButton);
+
+      add(updateForm);
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the UpdateUserPage", e);
+    }
+  }
+
+  /**
+   * Hidden <code>UpdateUserPage</code> constructor.
+   */
+  protected UpdateUserPage() {}
+}

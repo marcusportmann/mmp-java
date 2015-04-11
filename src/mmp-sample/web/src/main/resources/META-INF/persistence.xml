@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+  <persistence-unit name="Application" transaction-type="JTA">
+    <jta-data-source>java:jboss/datasources/SampleDS</jta-data-source>
+
+    <!-- Common Entities -->
+    <class>guru.mmp.application.persistence.VersionedId</class>
+    <class>guru.mmp.application.persistence.Location</class>
+
+    <!-- Sample -->
+    <!-- <class>guru.mmp.application.sample.SampleData</class> -->
+
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+      <property name="hibernate.show_sql" value="no" />
+      <property name="hibernate.ejb.use_class_enhancer" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>
+

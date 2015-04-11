@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket="http://wicket.apache.org">
+  <body>
+    <wicket:panel>
+
+      <div class="form-group">
+        <label for="id" class="control-label col-xs-3">ID</label>
+        <div class="col-xs-4">
+          <input wicket:id="id" id="id" class="form-control" type="text" name="id"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name" class="control-label col-xs-3">Name</label>
+        <div class="col-xs-4">
+          <input wicket:id="name" id="name" class="form-control" type="text" name="name"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="control-label col-xs-3">Description</label>
+        <div class="col-xs-4">
+          <input wicket:id="description" id="description" class="form-control" type="text" name="description"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="categoryType" class="control-label col-xs-3">Category Type</label>
+        <div class="col-xs-4">
+          <select wicket:id="categoryType" id="categoryType" class="form-control" name="categoryType"></select>
+        </div>
+      </div>
+
+      <div wicket:id="codeDataContainer">
+
+        <div class="form-group">
+          <label for="codeData" class="control-label col-xs-3">Code Data</label>
+          <div class="col-xs-4">
+            <textarea wicket:id="codeData" id="codeData" class="form-control form-control-code-data" type="text" name="codeData"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <div wicket:id="endPointContainer">
+
+        <div class="form-group">
+          <label for="endPoint" class="control-label col-xs-3">End Point</label>
+          <div class="col-xs-4">
+            <input wicket:id="endPoint" id="endPoint" class="form-control" type="text" name="endPoint"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="isEndPointSecure" class="control-label col-xs-3">Is Secure</label>
+          <div class="col-xs-4">
+            <input wicket:id="isEndPointSecure" id="isEndPointSecure" class="form-control" type="checkbox" name="isEndPointSecure"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="isCacheable" class="control-label col-xs-3">Is Cacheable</label>
+          <div class="col-xs-4">
+            <input wicket:id="isCacheable" id="isCacheable" class="form-control" type="checkbox" name="isCacheable"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cacheExpiry" class="control-label col-xs-3">Cache Expiry</label>
+          <div class="col-xs-4">
+            <input wicket:id="cacheExpiry" id="cacheExpiry" class="form-control" type="text" name="cacheExpiry"/>
+          </div>
+        </div>
+
+      </div>
+
+    </wicket:panel>
+  </body>
+ </html>

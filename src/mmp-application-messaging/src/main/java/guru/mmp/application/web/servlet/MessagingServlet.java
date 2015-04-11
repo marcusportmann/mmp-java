@@ -1,0 +1,847 @@
+/*
+ * Copyright 2014 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package guru.mmp.application.web.servlet;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.messaging.*;
+import guru.mmp.common.crypto.EncryptionScheme;
+import guru.mmp.common.wbxml.Document;
+import guru.mmp.common.wbxml.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
+
+/**
+ * The <code>MessageServlet</code> servlet acts as an endpoint that remote clients can use to send
+ * and receive WBXML messages.
+ *
+ * @author Marcus Portmann
+ */
+public class MessagingServlet extends HttpServlet
+{
+  /**
+   * The HTTP content-type used when receiving and sending WBXML.
+   */
+  public static final String WBXML_CONTENT_TYPE = "application/wbxml";
+  private static final long serialVersionUID = 1000000;
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(MessagingServlet.class);
+
+  /* Messaging Service */
+  @Inject
+  private IMessagingService messagingService;
+
+  /**
+   * Initialise the servlet.
+   *
+   * @param config the servlet configuration
+   *
+   * @throws ServletException
+   */
+  @Override
+  public void init(ServletConfig config)
+    throws ServletException
+  {
+    super.init(config);
+
+    /*
+     * Reset the locks for any messages that were locked for downloading by a remote user-device
+     * combination but which were not successfully downloaded.
+     */
+    try
+    {
+      logger.info("Resetting the message locks for the messages being downloaded");
+
+      messagingService.resetMessageLocks(Message.Status.DOWNLOADING,
+          Message.Status.QUEUED_FOR_DOWNLOAD);
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to reset the message locks for the messages being downloaded", e);
+    }
+
+    /*
+     * Reset the locks for the message parts that were locked for assembly but which were not
+     * successfully assembled.
+     */
+    try
+    {
+      logger.info("Resetting the message part locks for the message parts being assembled");
+
+      messagingService.resetMessagePartLocks(MessagePart.Status.ASSEMBLING,
+          MessagePart.Status.QUEUED_FOR_ASSEMBLY);
+    }
+    catch (Exception ex)
+    {
+      logger.error("Failed to reset the message part locks for the message parts being assembled",
+          ex);
+    }
+  }
+
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException
+  {
+    doPost(request, response);
+  }
+
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException
+  {
+    // Check the format of the request data
+    if ((request.getContentType() == null)
+        || (!request.getContentType().equals(WBXML_CONTENT_TYPE)))
+    {
+      response.sendError(500,
+          "Invalid content type (" + request.getContentType() + ") expecting ("
+          + WBXML_CONTENT_TYPE + ")");
+
+      return;
+    }
+
+    try
+    {
+      // Retrieve the WBXML document from the HTTP servlet request
+      Document document = readRequestDocument(request);
+
+      if (document == null)
+      {
+        return;
+      }
+
+      switch (document.getRootElement().getName())
+      {
+        // We are processing a Message...
+        case "Message":
+          processMessage(document, request, response);
+
+          break;
+
+        // We are processing a MessagePart...
+        case "MessagePart":
+          processMessagePart(document, response);
+
+          break;
+
+        // We are processing a request to download messages queued for a device
+        case "MessageDownloadRequest":
+          processMessageDownloadRequest(document, response);
+
+          break;
+
+        // We are processing an acknowledgement that a message has been downloaded successfully
+        case "MessageReceivedRequest":
+          processMessageReceivedRequest(document, response);
+
+          break;
+
+        // We are processing a request to download message parts queued for a device
+        case "MessagePartDownloadRequest":
+          processMessagePartDownloadRequest(document, response);
+
+          break;
+
+        // We are processing an acknowledgement that a message part has been downloaded successfully
+        case "MessagePartReceivedRequest":
+          processMessagePartReceivedRequest(document, response);
+
+          break;
+
+        default:
+          throw new ServletException("Failed to process the unrecognised WBXML document with the"
+              + " root element (" + document.getRootElement().getName()
+              + ") read from the HTTP servlet request");
+      }
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to process the HTTP request", e);
+
+      writeErrorResponse(e.getMessage(), e, response);
+    }
+  }
+
+  private boolean processMessage(Document document, HttpServletRequest request,
+      HttpServletResponse response)
+    throws MessagingException
+  {
+    // Is the WBXML document valid
+    if (!Message.isValidWBXML(document))
+    {
+      logger.warn("Failed to process the invalid message WBXML document: " + document.toString());
+
+      MessageResult result = new MessageResult(MessageResult.ERROR_INVALID_REQUEST,
+        "Failed to process the invalid WBXML document containing the message information");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+
+    // Create the message and initialise it using the WBXML document sent as part of the request
+    Message message = new Message(document);
+
+    // Check whether we can process the message
+    if (!messagingService.canProcessMessage(message))
+    {
+      logger.warn("Failed to process the unrecognised message (" + message.getId()
+          + ") from the user (" + message.getUser() + ") and the device (" + message.getDevice()
+          + ")");
+
+      MessageResult messageResult = new MessageResult(MessageResult.ERROR_UNRECOGNISED_TYPE,
+        "Failed to process the message (" + message.getId() + ") with the unrecognised type ("
+        + message.getType() + ") and version (" + message.getTypeVersion() + ")");
+
+      writeResponseDocument(messageResult.toWBXML(), response);
+
+      messagingService.logMessageAudit(message.getType(), message.getUser(),
+          message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+
+      return false;
+    }
+
+    if (logger.isDebugEnabled())
+    {
+      logger.debug("Processing the message (" + message.getId() + ") with type ("
+          + message.getType() + ") and version (" + message.getTypeVersion() + ") from user ("
+          + message.getUser() + ") and device (" + message.getDevice() + ")");
+
+      logger.debug(message.toString());
+    }
+
+    EncryptionScheme messageEncryptionScheme = message.getEncryptionScheme();
+
+    // Decrypt the message data
+    if (message.isEncrypted())
+    {
+      if (!messagingService.decryptMessage(message))
+      {
+        logger.warn("Failed to decrypt the message (" + message.getId() + ") from the user ("
+            + message.getUser() + ") and device (" + message.getDevice() + ")");
+
+        MessageResult messageResult = new MessageResult(MessageResult.ERROR_DECRYPTION_FAILED,
+          "Failed to decrypt and process the message (" + message.getId() + ")");
+
+        writeResponseDocument(messageResult.toWBXML(), response);
+
+        messagingService.logMessageAudit(message.getType(), message.getUser(),
+            message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+
+        return false;
+      }
+    }
+
+    // Work out whether we should process this message synchronously
+    boolean isSynchronous = messagingService.isSynchronousMessage(message);
+
+    /*
+     * Process the message synchronously if required, otherwise queue it for asynchronous
+     * processing.
+     */
+    if (isSynchronous)
+    {
+      try
+      {
+        // Attempt to archive the synchronous request message
+        messagingService.archiveMessage(message);
+
+        // Attempt to process the synchronous message
+        Message responseMessage = messagingService.processMessage(message);
+
+        // Attempt to archive the synchronous response message
+        messagingService.archiveMessage(responseMessage);
+
+        MessageResult messageResult;
+
+        if (responseMessage != null)
+        {
+          if (!responseMessage.isEncrypted())
+          {
+            if (!responseMessage.isEncryptionDisabled())
+            {
+              messagingService.encryptMessage(messageEncryptionScheme, responseMessage);
+            }
+          }
+
+          messageResult = new MessageResult(0,
+              "Successfully processed the message (" + message.getId() + ")", responseMessage);
+        }
+        else
+        {
+          messageResult = new MessageResult(0,
+              "Successfully processed the message (" + message.getId() + ")");
+        }
+
+        writeResponseDocument(messageResult.toWBXML(), response);
+
+        messagingService.logMessageAudit(message.getType(), message.getUser(),
+            message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), true);
+
+        return true;
+      }
+      catch (Throwable e)
+      {
+        // If the message can be queued for asynchronous processing do so now
+        if (messagingService.isAsynchronousMessage(message))
+        {
+          return queueMessageForAsynchronousProcessing(message, request, response);
+        }
+
+        logger.error("Failed to process the message (" + message.getId() + ") from the user ("
+            + message.getUser() + ") and device (" + message.getDevice() + ")", e);
+
+        MessageResult messageResult = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED,
+          "Failed to process the message (" + message.getId() + "): " + e.getMessage(), e);
+
+        writeResponseDocument(messageResult.toWBXML(), response);
+
+        messagingService.logMessageAudit(message.getType(), message.getUser(),
+            message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+
+        return false;
+      }
+    }
+    else if (messagingService.isAsynchronousMessage(message))
+    {
+      return queueMessageForAsynchronousProcessing(message, request, response);
+    }
+    else
+    {
+      MessageResult result = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED,
+        "Synchronous and asynchronous processing are not supported for the message ("
+        + message.getId() + ") with type (" + message.getType() + ")");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+  }
+
+  private boolean processMessageDownloadRequest(Document document, HttpServletResponse response)
+  {
+    // Is the WBXML document valid
+    if (!MessageDownloadRequest.isValidWBXML(document))
+    {
+      logger.warn("Failed to process the invalid message download request WBXML document: "
+          + document.toString());
+
+      MessageResult result = new MessageResult(MessageResult.ERROR_INVALID_REQUEST,
+        "Failed to process the invalid WBXML document containing the message download"
+        + " request information");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+
+    MessageDownloadRequest downloadRequest = new MessageDownloadRequest(document);
+
+    try
+    {
+      List<Message> messages;
+
+      if (downloadRequest.hasUserSpecified())
+      {
+        messages = messagingService.getMessagesQueuedForDownloadForUser(downloadRequest.getUser(),
+            downloadRequest.getDevice());
+      }
+      else
+      {
+        messages = messagingService.getMessagesQueuedForDownload(downloadRequest.getDevice());
+      }
+
+      if (logger.isDebugEnabled())
+      {
+        logger.debug("Found " + messages.size() + " messages queued for download for the device"
+            + "(" + downloadRequest.getDevice() + ")");
+      }
+
+      // Encrypt each message queued for download
+      if (downloadRequest.getMessageEncryptionScheme() != EncryptionScheme.NONE)
+      {
+        for (Message message : messages)
+        {
+          if (!message.isEncrypted())
+          {
+            messagingService.encryptMessage(downloadRequest.getMessageEncryptionScheme(), message);
+          }
+        }
+      }
+
+      MessageDownloadResponse downloadResponse = new MessageDownloadResponse(messages);
+
+      writeResponseDocument(downloadResponse.toWBXML(), response);
+
+      /*
+       * NOTE: The messages are NOT flagged as successfully downloaded until we receive a
+       *       notification from the device that this is the case. If the application is
+       *       restarted in the interim then the messages "locked" for download will be
+       *       "unlocked" and the messages will be downloaded again. It is the responsibility
+       *       of the device to ignore any duplicate messages.
+       *
+       *       See the MessageReceivedRequest section below.
+       */
+
+      return true;
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to retrieve the messages that have been queued for download for the"
+          + " device (" + downloadRequest.getDevice() + ")", e);
+
+      MessageDownloadResponse downloadResponse = new MessageDownloadResponse(-1,
+        "Failed to retrieve the messages that have been queued for download for  the device ("
+        + downloadRequest.getDevice() + ")", e);
+
+      writeResponseDocument(downloadResponse.toWBXML(), response);
+
+      return false;
+    }
+  }
+
+  private boolean processMessagePart(Document document, HttpServletResponse response)
+    throws MessagingException
+  {
+    // Is the WBXML document valid
+    if (!MessagePart.isValidWBXML(document))
+    {
+      logger.warn("Failed to process the invalid message part WBXML document: "
+          + document.toString());
+
+      MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_INVALID_REQUEST,
+        "Failed to process the invalid WBXML document containing the message part information");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+
+    /*
+     * Create the message part and initialise it using the WBXML document sent as part of the
+     * request
+     */
+    MessagePart messagePart = new MessagePart(document);
+
+    // Check whether we can process the message part
+    if (!messagingService.canQueueMessagePartForAssembly(messagePart))
+    {
+      logger.warn("Failed to queue the unrecognised message part (" + messagePart.getId()
+          + ") from the user (" + messagePart.getMessageUser() + ") and the device ("
+          + messagePart.getMessageDevice() + ") with message type (" + messagePart.getMessageType()
+          + ") and version (" + messagePart.getMessageTypeVersion() + ")");
+
+      MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_UNRECOGNISED_TYPE,
+        "Failed to queue the unrecognised message part (" + messagePart.getId()
+        + ") from the user (" + messagePart.getMessageUser() + ") and the device ("
+        + messagePart.getMessageDevice() + ") with message type (" + messagePart.getMessageType()
+        + ") and version (" + messagePart.getMessageTypeVersion() + ")");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+
+    logger.debug("Queuing the message part (" + messagePart.getPartNo() + "/"
+        + messagePart.getTotalParts() + ") for the message (" + messagePart.getMessageId()
+        + ") from the user (" + messagePart.getMessageUser() + ") and the device ("
+        + messagePart.getMessageDevice() + ") with message type (" + messagePart.getMessageType()
+        + ") and version (" + messagePart.getMessageTypeVersion() + ")");
+
+    logger.debug(messagePart.toString());
+
+    // Queue the message part for assembly
+    try
+    {
+      messagingService.queueMessagePartForAssembly(messagePart);
+
+      MessagePartResult result = new MessagePartResult(MessagePartResult.SUCCESS,
+        "Successfully queued the message part (" + messagePart.getId() + ")");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return true;
+    }
+    catch (Exception ex)
+    {
+      logger.error("Failed to queue the message part (" + messagePart.getId() + ") from the user ("
+          + messagePart.getMessageUser() + ") and the device (" + messagePart.getMessageDevice()
+          + ") with message type (" + messagePart.getMessageType() + ") and version ("
+          + messagePart.getMessageTypeVersion() + ")", ex);
+
+      MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_QUEUEING_FAILED,
+        "Failed to queue the message part (" + messagePart.getId() + ")", ex);
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+  }
+
+  private boolean processMessagePartDownloadRequest(Document document, HttpServletResponse response)
+  {
+    // Is the WBXML document valid
+    if (!MessagePartDownloadRequest.isValidWBXML(document))
+    {
+      logger.warn("Failed to process the invalid message part download request WBXML document: "
+          + document.toString());
+
+      MessageResult result = new MessageResult(MessageResult.ERROR_INVALID_REQUEST,
+        "Failed to process the invalid WBXML document containing the message part download"
+        + " request information");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+
+    MessagePartDownloadRequest downloadRequest = new MessagePartDownloadRequest(document);
+
+    try
+    {
+      List<MessagePart> messageParts =
+        messagingService.getMessagePartsQueuedForDownload(downloadRequest.getDevice());
+
+      if (logger.isDebugEnabled())
+      {
+        logger.debug("Found " + messageParts.size() + " message parts  queued for download for the"
+            + " device (" + downloadRequest.getDevice() + ")");
+      }
+
+      /*
+       * NOTE: The message parts are not encrypted. If the message data needs to be encrypted then
+       *       the original message needs to be encrypted BEFORE it is queued for download and
+       *       split up into a number of message parts.
+       */
+
+      MessagePartDownloadResponse downloadResponse = new MessagePartDownloadResponse(messageParts);
+
+      writeResponseDocument(downloadResponse.toWBXML(), response);
+
+      /*
+       * NOTE: The message parts are NOT flagged as successfully downloaded until we receive a
+       *       notification from the device that this is the case. If the application is
+       *       restarted in the interim then the message parts "locked" for download will be
+       *       "unlocked" and the message parts will be downloaded again. It is the responsibility
+       *       of the device to ignore any duplicate message parts.
+       *
+       *       See the MessagePartReceivedRequest section below.
+       */
+
+      return true;
+    }
+    catch (Throwable e)
+    {
+      logger.error(
+          "Failed to retrieve the message parts that have been queued for download for the"
+          + " device (" + downloadRequest.getDevice() + ")", e);
+
+      MessageDownloadResponse downloadResponse = new MessageDownloadResponse(-1,
+        "Failed to retrieve the message parts that have been queued for download for  the device ("
+        + downloadRequest.getDevice() + ")", e);
+
+      writeResponseDocument(downloadResponse.toWBXML(), response);
+
+      return false;
+    }
+  }
+
+  private boolean processMessagePartReceivedRequest(Document document, HttpServletResponse response)
+  {
+    if (!MessagePartReceivedRequest.isValidWBXML(document))
+    {
+      logger.warn("Failed to process the invalid message part received request WBXML document: "
+          + document.toString());
+
+      MessageReceivedResponse result =
+        new MessageReceivedResponse(MessageReceivedResponse.ERROR_INVALID_REQUEST,
+          "Failed to process the invalid WBXML document containing the message part received"
+          + " request information");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+
+    MessagePartReceivedRequest receivedRequest = new MessagePartReceivedRequest(document);
+
+    try
+    {
+      messagingService.deleteMessagePart(receivedRequest.getMessagePartId());
+
+      MessagePartReceivedResponse result =
+        new MessagePartReceivedResponse(MessageReceivedResponse.SUCCESS,
+          "Successfully acknowledged receipt of the message part ("
+          + receivedRequest.getMessagePartId() + ")");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return true;
+    }
+    catch (Exception ex)
+    {
+      logger.error("Failed to process the message part received request for the message part ("
+          + receivedRequest.getMessagePartId() + ") from the device ("
+          + receivedRequest.getDevice() + ")", ex);
+
+      MessagePartReceivedResponse result =
+        new MessagePartReceivedResponse(MessageReceivedResponse.ERROR_UNKNOWN,
+          "Failed to process the message part received request for the message part ("
+          + receivedRequest.getMessagePartId() + ") from the device ("
+          + receivedRequest.getDevice() + ")", ex);
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+  }
+
+  private boolean processMessageReceivedRequest(Document document, HttpServletResponse response)
+  {
+    if (!MessageReceivedRequest.isValidWBXML(document))
+    {
+      logger.warn("Failed to process the invalid message received request WBXML document: "
+          + document.toString());
+
+      MessageReceivedResponse result =
+        new MessageReceivedResponse(MessageReceivedResponse.ERROR_INVALID_REQUEST,
+          "Failed to process the invalid WBXML document containing the message received"
+          + " request information");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+
+    MessageReceivedRequest receivedRequest = new MessageReceivedRequest(document);
+
+    try
+    {
+      messagingService.deleteMessage(receivedRequest.getMessageId());
+
+      MessageReceivedResponse result = new MessageReceivedResponse(MessageReceivedResponse.SUCCESS,
+        "Successfully acknowledged receipt of the message (" + receivedRequest.getMessageId()
+        + ")");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return true;
+    }
+    catch (Exception ex)
+    {
+      logger.error("Failed to process the message received request for the message ("
+          + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDevice()
+          + ")", ex);
+
+      MessageReceivedResponse result =
+        new MessageReceivedResponse(MessageReceivedResponse.ERROR_UNKNOWN,
+          "Failed to process the message received request for the message ("
+          + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDevice()
+          + ")", ex);
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      return false;
+    }
+  }
+
+  private boolean queueMessageForAsynchronousProcessing(Message message,
+      HttpServletRequest request, HttpServletResponse response)
+    throws MessagingException
+  {
+    try
+    {
+      /*
+       * Check whether the message has already been queued for processing by examining the
+       * archive log. This will prevent duplicate message submissions from the device due
+       * to communication errors.
+       */
+      if (messagingService.isMessageArchived(message))
+      {
+        logger.debug("The message (" + message.getId() + ") has already been queued for processing"
+            + " and will be ignored");
+
+        return true;
+      }
+
+      messagingService.queueMessageForProcessing(message);
+
+      MessageResult result = new MessageResult(0,
+        "Successfully queued the message (" + message.getId() + ") for processing");
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      messagingService.logMessageAudit(message.getType(), message.getUser(),
+          message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), true);
+
+      return true;
+    }
+    catch (Exception ex)
+    {
+      logger.error("Failed to queue the message (" + message.getId() + ") from the user ("
+          + message.getUser() + ") and device (" + message.getDevice() + ") for processing", ex);
+
+      MessageResult result = new MessageResult(MessageResult.ERROR_QUEUEING_FAILED,
+        "Failed to queue the message (" + message.getId() + ") for processing", ex);
+
+      writeResponseDocument(result.toWBXML(), response);
+
+      messagingService.logMessageAudit(message.getType(), message.getUser(),
+          message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+
+      return false;
+    }
+  }
+
+  /**
+   * Read the WBXML request document from the HTTP servlet request.
+   *
+   * @param request the HTTP servlet request to read the WBXML request document from
+   *
+   * @return the WBXML request document
+   *
+   * @throws ServletException
+   */
+  private Document readRequestDocument(HttpServletRequest request)
+    throws ServletException
+  {
+    // Read the request data
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ServletInputStream in = null;
+
+    try
+    {
+      in = request.getInputStream();
+
+      byte[] readBuffer = new byte[2048];
+
+      int numberOfBytesRead;
+
+      while ((numberOfBytesRead = in.read(readBuffer)) != -1)
+      {
+        baos.write(readBuffer, 0, numberOfBytesRead);
+      }
+    }
+    catch (Throwable e)
+    {
+      // A network error means that the document could not be read so stop here
+      return null;
+    }
+    finally
+    {
+      try
+      {
+        if (in != null)
+        {
+          in.close();
+        }
+
+      }
+      catch (Throwable ignored) {}
+    }
+
+    try
+    {
+      Parser parser = new Parser();
+
+      return parser.parse(baos.toByteArray());
+    }
+    catch (Throwable e)
+    {
+      throw new ServletException("Failed to parse the WBXML request document from the HTTP"
+          + " servlet request", e);
+    }
+  }
+
+  /**
+   * Write the specified error information to the HTTP response.
+   *
+   * @param message   the error message
+   * @param exception the exception containing the error information which may be <code>null</code>
+   * @param response  the HTTP servlet response to write the error information to
+   */
+  private void writeErrorResponse(String message, Throwable exception, HttpServletResponse response)
+  {
+    try
+    {
+      response.sendError(500, message);
+
+      PrintWriter pw = response.getWriter();
+
+      pw.println("<html>");
+      pw.println("  <head>");
+      pw.println("    <style>");
+      pw.println("      body {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 8pt;}");
+      pw.println("      h1 {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 12pt;}");
+      pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
+          + " font-weight: bold; font-size: 9pt;}");
+      pw.println("      .className {color: 808080;}");
+      pw.println("    </style>");
+      pw.println("  </head>");
+      pw.println("  <body>");
+
+      pw.println("    <h1><font color=\"red\">ERROR</font></h1>");
+      pw.println("    " + exception.getMessage());
+
+      pw.println("  </body>");
+      pw.println("</html>");
+    }
+    catch (IOException ignored) {}
+  }
+
+  /**
+   * Write the binary data for the WBXML response document to the HTTP servlet response.
+   *
+   * @param data     the binary data for the WBXML response document
+   * @param response the HTTP servlet response to write the binary data for the WBXML response
+   *                 document to
+   */
+  private void writeResponseDocument(byte[] data, HttpServletResponse response)
+  {
+    try
+    {
+      ServletOutputStream out = response.getOutputStream();
+
+      response.setContentType(WBXML_CONTENT_TYPE);
+
+      out.write(data);
+
+      out.flush();
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to write the binary data for the WBXML response document to the HTTP"
+          + " servlet response", e);
+    }
+  }
+}

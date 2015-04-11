@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
+  <head>
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <title wicket:id="pageTitle">[Page Title]</title>
+  </head>
+  <body class="layout-boxed">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button"><span class="clip-list-2"></span></button>
+          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
+        </div>
+        <div class="navbar-tools">
+          <div wicket:id="topNavigationMenu"></div>
+        </div>
+      </div>
+    </div>
+    <div class="main-container">
+      <div class="navbar-content">
+        <div class="main-navigation navbar-collapse collapse">
+          <div class="navigation-toggler"><i class="clip-chevron-left"></i><i class="clip-chevron-right"></i></div>
+          <div wicket:id="mainNavigationMenu" id="mainNavigationMenu"></div>
+        </div>
+      </div>
+      <div class="main-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div wicket:id="breadcrumbs"></div>
+              <div class="page-header">
+                <h1>
+                  <span wicket:id="pageHeading">[Page Heading]</span>
+                  <small wicket:id="pageSubHeading">[Page Sub-Heading]</small>
+                </h1>
+                <a wicket:id="backLink" class="btn btn-med-grey btn-sm" href="#"><i class="fa fa-arrow-circle-left"></i> Back</a>
+              </div>
+            </div>
+          </div>
+
+          <div wicket:id="alerts" id="alerts"></div>
+
+          <wicket:child></wicket:child>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer clearfix">
+      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
+      <div class="footer-items">
+        <div wicket:id="debug"></div>
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
+
