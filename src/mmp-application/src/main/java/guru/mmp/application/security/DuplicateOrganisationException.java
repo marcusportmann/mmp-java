@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>DuplicateOrganisationException</code> is thrown to indicate that a security operation
- * failed as a result of duplicate organisations.
+ * failed as a result of a duplicate organisation.
  *
  * @author Marcus Portmann
  */

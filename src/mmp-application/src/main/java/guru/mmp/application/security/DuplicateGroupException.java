@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>DuplicateGroupException</code> is thrown to indicate that a security operation failed as
- * a result of duplicate groups.
+ * a result of a duplicate group.
  *
  * @author Marcus Portmann
  */

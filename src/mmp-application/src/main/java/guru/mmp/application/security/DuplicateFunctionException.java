@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>DuplicateFunctionException</code> is thrown to indicate that a security
- * operation failed as a result of duplicate authorised functions.
+ * operation failed as a result of a duplicate authorised function.
  *
  * @author Marcus Portmann
  */

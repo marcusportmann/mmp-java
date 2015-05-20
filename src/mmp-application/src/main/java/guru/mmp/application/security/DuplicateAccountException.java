@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>DuplicateAccountException</code> is thrown to indicate that a security operation failed
- * as a result of duplicate accounts.
+ * as a result of a duplicate account.
  *
  * @author Marcus Portmann
  */

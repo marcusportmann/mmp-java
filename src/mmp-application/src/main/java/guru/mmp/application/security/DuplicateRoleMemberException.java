@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>DuplicateRoleMemberException</code> is thrown to indicate that a security operation
- * failed as a result of duplicate role members.
+ * failed as a result of a duplicate role member.
  *
  * @author Marcus Portmann
  */

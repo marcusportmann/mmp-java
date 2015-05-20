@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>DuplicateFunctionTemplateException</code> is thrown to indicate that a
- * security operation failed as a result of duplicate authorised function templates.
+ * security operation failed as a result of a duplicate authorised function template.
  *
  * @author Marcus Portmann
  */

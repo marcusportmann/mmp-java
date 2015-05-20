@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>DuplicateUserException</code> is thrown to indicate that a security operation failed as
- * a result of duplicate users.
+ * a result of a duplicate user.
  *
  * @author Marcus Portmann
  */
