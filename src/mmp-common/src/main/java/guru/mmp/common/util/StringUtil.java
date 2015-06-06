@@ -94,15 +94,6 @@ public class StringUtil
     @Override
     protected SimpleDateFormat initialValue()
     {
-      return new SimpleDateFormat("yyyy-MM-dd");
-    }
-  };
-  private static ThreadLocal<SimpleDateFormat> threadLocalSimpleDateTimeFormat =
-    new ThreadLocal<SimpleDateFormat>()
-  {
-    @Override
-    protected SimpleDateFormat initialValue()
-    {
       return new SimpleDateFormat("yyyy-MM-dd hh:mm a");
     }
   };
@@ -188,20 +179,7 @@ public class StringUtil
   }
 
   /**
-   * Convert a date time to the standard <code>String</code> representation
-   * <b>yyyy-MM-dd hh:mm a</b>.
-   *
-   * @param date the date time to convert
-   *
-   * @return the date time in the standard <code>String</code> representation
-   */
-  public static String convertDateTimeToString(Date date)
-  {
-    return threadLocalSimpleDateTimeFormat.get().format(date);
-  }
-
-  /**
-   * Convert a date to the standard <code>String</code> representation <b>yyyy-MM-dd</b>.
+   * Convert a date to the standard <code>String</code> representation <b>yyyy-MM-dd hh:mm a</b>.
    *
    * @param date the date to convert
    *

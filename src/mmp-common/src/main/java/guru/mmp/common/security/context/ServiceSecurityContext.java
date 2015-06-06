@@ -264,7 +264,7 @@ public class ServiceSecurityContext
     catch (Throwable e)
     {
       throw new ServiceSecurityContextException(
-          "Failed to initialise the ServiceSecurityContext for the service (" + serviceName + ")", e);
+          "Failed to initialise the ServiceSecurityContext for the service (" + serviceName + ")");
     }
   }
 
