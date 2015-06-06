@@ -88,11 +88,11 @@ public class UserAdministrationPage extends TemplateWebPage
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
-      // The dialog used to confirm the removal of a code category
+      // The dialog used to confirm the removal of a user
       final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
-      // The "addLink" used to add a new code category
+      // The "addLink" used to add a new user
       Link<Void> addLink = new Link<Void>("addLink")
       {
         private static final long serialVersionUID = 1000000;
@@ -243,7 +243,7 @@ public class UserAdministrationPage extends TemplateWebPage
     /**
      * Constructs a new <code>RemoveDialog</code>.
      *
-     * @param tableContainer the table container, which allows the code category table and its
+     * @param tableContainer the table container, which allows the user table and its
      *                       associated navigator to be updated using AJAX
      */
     public RemoveDialog(final WebMarkupContainer tableContainer)
@@ -298,7 +298,7 @@ public class UserAdministrationPage extends TemplateWebPage
      * Show the dialog using Ajax.
      *
      * @param target    the AJAX request target
-     * @param userModel the model for the user category being removed
+     * @param userModel the model for the user being removed
      */
     public void show(AjaxRequestTarget target, IModel<User> userModel)
     {
