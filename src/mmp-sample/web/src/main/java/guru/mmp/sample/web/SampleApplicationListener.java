@@ -18,13 +18,10 @@ package guru.mmp.sample.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.security.context.ApplicationSecurityContext;
-import guru.mmp.common.security.context.ServiceSecurityContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,14 +34,12 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import javax.naming.InitialContext;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -144,7 +139,7 @@ public class SampleApplicationListener
 
       ReportDefinition sampleReportDefinition =
         new ReportDefinition("2a4b74e8-7f03-416f-b058-b35bb06944ef", "MMP", "Sample Report",
-          sampleReportDefinitionData, new Date(), "Administrator", null, null);
+          sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {

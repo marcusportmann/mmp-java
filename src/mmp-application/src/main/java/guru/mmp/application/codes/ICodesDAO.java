@@ -20,9 +20,9 @@ package guru.mmp.application.codes;
 
 import guru.mmp.application.persistence.DAOException;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>ICodesDAO</code> interface defines the codes-related persistence operations.
@@ -40,7 +40,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public boolean cachedCodeCategoryExists(String id)
+  boolean cachedCodeCategoryExists(String id)
     throws DAOException;
 
   /**
@@ -52,7 +52,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public boolean codeCategoryExists(String id)
+  boolean codeCategoryExists(String id)
     throws DAOException;
 
   /**
@@ -62,7 +62,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public void createCachedCode(Code code)
+  void createCachedCode(Code code)
     throws DAOException;
 
   /**
@@ -72,7 +72,7 @@ public interface ICodesDAO
    *                           information for the new code category
    * @throws DAOException
    */
-  public void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
+  void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws DAOException;
 
   /**
@@ -82,7 +82,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public void createCode(Code code)
+  void createCode(Code code)
     throws DAOException;
 
   /**
@@ -92,7 +92,7 @@ public interface ICodesDAO
    *                     new code category
    * @throws DAOException
    */
-  public void createCodeCategory(CodeCategory codeCategory)
+  void createCodeCategory(CodeCategory codeCategory)
     throws DAOException;
 
   /**
@@ -102,7 +102,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public void deleteCachedCodeCategory(String id)
+  void deleteCachedCodeCategory(String id)
     throws DAOException;
 
   /**
@@ -112,7 +112,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public void deleteCode(String id)
+  void deleteCode(String id)
     throws DAOException;
 
   /**
@@ -122,7 +122,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public void deleteCodeCategory(String id)
+  void deleteCodeCategory(String id)
     throws DAOException;
 
   /**
@@ -135,7 +135,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public CachedCodeCategory getCachedCodeCategory(String id)
+  CachedCodeCategory getCachedCodeCategory(String id)
     throws DAOException;
 
   /**
@@ -147,7 +147,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
+  List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
     throws DAOException;
 
   /**
@@ -159,7 +159,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public Code getCode(String id)
+  Code getCode(String id)
     throws DAOException;
 
   /**
@@ -174,8 +174,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public List<CodeCategory> getCodeCategoriesForOrganisation(String organisation,
-      boolean retrieveCodes)
+  List<CodeCategory> getCodeCategoriesForOrganisation(String organisation, boolean retrieveCodes)
     throws DAOException;
 
   /**
@@ -188,7 +187,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public CodeCategory getCodeCategory(String id)
+  CodeCategory getCodeCategory(String id)
     throws DAOException;
 
   /**
@@ -200,7 +199,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public List<Code> getCodesForCodeCategory(String codeCategoryId)
+  List<Code> getCodesForCodeCategory(String codeCategoryId)
     throws DAOException;
 
   /**
@@ -214,7 +213,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public int getNumberOfCodeCategoriesForOrganisation(String organisation)
+  int getNumberOfCodeCategoriesForOrganisation(String organisation)
     throws DAOException;
 
   /**
@@ -226,7 +225,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public int getNumberOfCodesForCodeCategory(String codeCategoryId)
+  int getNumberOfCodesForCodeCategory(String codeCategoryId)
     throws DAOException;
 
   /**
@@ -239,7 +238,7 @@ public interface ICodesDAO
    *
    * @throws DAOException
    */
-  public boolean isCachedCodeCategoryCurrent(String id)
+  boolean isCachedCodeCategoryCurrent(String id)
     throws DAOException;
 
   /**
@@ -247,28 +246,24 @@ public interface ICodesDAO
    *
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the updated
    *                           information for the cached code category
-   * @param updatedBy          the username identifying the user that updated the cached code
-   *                           category
    *
    * @return the updated cached code category
    *
    * @throws DAOException
    */
-  public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory,
-      String updatedBy)
+  CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws DAOException;
 
   /**
    * Update the existing code.
    *
-   * @param code      the <code>Code</code> instance containing the updated information for the code
-   * @param updatedBy the username identifying the user that updated the code
+   * @param code the <code>Code</code> instance containing the updated information for the code
    *
    * @return the updated code
    *
    * @throws DAOException
    */
-  public Code updateCode(Code code, String updatedBy)
+  Code updateCode(Code code)
     throws DAOException;
 
   /**
@@ -276,12 +271,11 @@ public interface ICodesDAO
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
    *                     for the code category
-   * @param updatedBy    the username identifying the user that updated the code category
    *
    * @return the updated code category
    *
    * @throws DAOException
    */
-  public CodeCategory updateCodeCategory(CodeCategory codeCategory, String updatedBy)
+  CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws DAOException;
 }

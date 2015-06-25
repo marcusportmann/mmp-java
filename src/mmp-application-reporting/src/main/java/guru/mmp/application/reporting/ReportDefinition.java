@@ -16,15 +16,10 @@
 
 package guru.mmp.application.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.common.util.StringUtil;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -36,16 +31,6 @@ public class ReportDefinition
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * The username identifying the user that created the report definition.
-   */
-  public String createdBy;
-
-  /**
-   * The date and time the report definition was created.
-   */
-  private Date created;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
@@ -68,16 +53,6 @@ public class ReportDefinition
   private byte[] template;
 
   /**
-   * The date and time the report definition was updated.
-   */
-  private Date updated;
-
-  /**
-   * The username identifying the user that updated the report definition.
-   */
-  private String updatedBy;
-
-  /**
    * Constructs a new <code>ReportDefinition</code>.
    */
   public ReportDefinition() {}
@@ -93,16 +68,13 @@ public class ReportDefinition
    *                     is associated with
    * @param name         the name of the report definition
    * @param template     the JasperReports template for the report definition
-   * @param createdBy    the user ID identifying the user that created the report definition
    */
-  public ReportDefinition(String organisation, String name, byte[] template, String createdBy)
+  public ReportDefinition(String organisation, String name, byte[] template)
   {
     this.id = UUID.randomUUID().toString();
     this.organisation = organisation;
     this.name = name;
     this.template = template;
-    this.created = new Date();
-    this.createdBy = createdBy;
   }
 
   /**
@@ -118,42 +90,13 @@ public class ReportDefinition
    *                     is associated with
    * @param name         the name of the report definition
    * @param template     the JasperReports template for the report definition
-   * @param created      the date and time the report definition was created
-   * @param createdBy    the user ID identifying the user that created the report definition
-   * @param updated      the date and time the report definition was updated
-   * @param updatedBy    the username identifying the user that updated the report definition
    */
-  public ReportDefinition(String id, String organisation, String name, byte[] template,
-      Date created, String createdBy, Date updated, String updatedBy)
+  public ReportDefinition(String id, String organisation, String name, byte[] template)
   {
     this.id = id;
     this.organisation = organisation;
     this.name = name;
     this.template = template;
-    this.created = created;
-    this.createdBy = createdBy;
-    this.updated = updated;
-    this.updatedBy = updatedBy;
-  }
-
-  /**
-   * Returns the date and time the report definition was created.
-   *
-   * @return the date and time the report definition was created
-   */
-  public Date getCreated()
-  {
-    return created;
-  }
-
-  /**
-   * Returns the username identifying the user that created the report definition.
-   *
-   * @return the username identifying the user that created the report definition
-   */
-  public String getCreatedBy()
-  {
-    return createdBy;
   }
 
   /**
@@ -201,58 +144,6 @@ public class ReportDefinition
   }
 
   /**
-   * Returns the date and time the report definition was updated.
-   *
-   * @return the date and time the report definition was updated
-   */
-  public Date getUpdated()
-  {
-    return updated;
-  }
-
-  /**
-   * Returns the date and time the report definition was updated as a <code>String</code>.
-   *
-   * @return the date and time the report definition was updated as a <code>String</code>
-   */
-  public String getUpdatedAsString()
-  {
-    return (updated == null)
-        ? "N/A"
-        : StringUtil.convertDateToString(updated);
-  }
-
-  /**
-   * Returns the username identifying the user that updated the report definition.
-   *
-   * @return the username identifying the user that updated the report definition
-   */
-  public String getUpdatedBy()
-  {
-    return updatedBy;
-  }
-
-  /**
-   * Set the date and time the report definition was created.
-   *
-   * @param created the date and time the report definition was created
-   */
-  public void setCreated(Date created)
-  {
-    this.created = created;
-  }
-
-  /**
-   * Set the username identifying the user that created the report definition.
-   *
-   * @param createdBy the username identifying the user that created the report definition
-   */
-  public void setCreatedBy(String createdBy)
-  {
-    this.createdBy = createdBy;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
@@ -296,26 +187,6 @@ public class ReportDefinition
   }
 
   /**
-   * Set the date and time the report definition was updated.
-   *
-   * @param updated the date and time the report definition was updated
-   */
-  public void setUpdated(Date updated)
-  {
-    this.updated = updated;
-  }
-
-  /**
-   * Set the username identifying the user that updated the report definition.
-   *
-   * @param updatedBy the username identifying the user that updated the report definition
-   */
-  public void setUpdatedBy(String updatedBy)
-  {
-    this.updatedBy = updatedBy;
-  }
-
-  /**
    * Returns a string representation of the object.
    *
    * @return a string representation of the object
@@ -324,11 +195,6 @@ public class ReportDefinition
   public String toString()
   {
     return "ReportDefinition {" + "id=\"" + getId() + "\", " + "organisation=\""
-        + getOrganisation() + "\", " + "name=\"" + getName() + "\", " + "created=\"" + getCreated()
-        + "\", " + "createdBy=\"" + getCreatedBy() + "\", " + "updated=\"" + ((getUpdated() == null)
-        ? ""
-        : getUpdated()) + "\"" + "updatedBy=\"" + ((getUpdatedBy() == null)
-        ? ""
-        : getUpdatedBy()) + "\"" + "}";
+        + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
   }
 }

@@ -134,8 +134,6 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
           final IModel<ReportDefinition> reportDefinitionModel = item.getModel();
 
           item.add(new Label("name", new PropertyModel<String>(reportDefinitionModel, "name")));
-          item.add(new Label("lastUpdated",
-              new PropertyModel<String>(reportDefinitionModel, "updatedAsString")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")

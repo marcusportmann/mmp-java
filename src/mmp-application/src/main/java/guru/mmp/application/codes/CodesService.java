@@ -809,7 +809,7 @@ public class CodesService
   {
     try
     {
-      return codesDAO.updateCachedCodeCategory(cachedCodeCategory, updatedBy);
+      return codesDAO.updateCachedCodeCategory(cachedCodeCategory);
     }
     catch (Throwable e)
     {
@@ -833,7 +833,7 @@ public class CodesService
   {
     try
     {
-      return codesDAO.updateCode(code, updatedBy);
+      return codesDAO.updateCode(code);
     }
     catch (Throwable e)
     {
@@ -863,7 +863,7 @@ public class CodesService
         deleteCachedCodeCategory(codeCategory.getId());
       }
 
-      return codesDAO.updateCodeCategory(codeCategory, updatedBy);
+      return codesDAO.updateCodeCategory(codeCategory);
     }
     catch (Throwable e)
     {
