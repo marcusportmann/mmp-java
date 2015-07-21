@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import guru.mmp.application.Debug;
 import guru.mmp.application.web.resource.bootstrap.BootstrapHoverDropdownJavaScriptResourceReference;
 import guru.mmp.application.web.resource.bootstrap.BootstrapJavaScriptResourceReference;
 import guru.mmp.application.web.resource.jquery.JQueryCookieJavaScriptResourceReference;
-import guru.mmp.application.web.resource.jquery.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.JQueryJavaScriptResourceReference;
 import guru.mmp.application.web.resource.jquery.JQueryUIJavaScriptResourceReference;
 import guru.mmp.application.web.resource.less.LessJavaScriptResourceReference;
 import guru.mmp.application.web.resource.perfectscrollbar.PerfectScrollbarJavaScriptResourceReference;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,19 +77,19 @@ public class UnitTestServlet extends HttpServlet
 
         if (result.getFailureCount() == 1)
         {
-          pw.println("<h1><font color=\"red\">Unit Test Failed</font></h1>");
+          pw.println("<h1><thirdparty color=\"red\">Unit Test Failed</thirdparty></h1>");
         }
         else if (result.getFailureCount() > 1)
         {
-          pw.println("<h1><font color=\"red\">Unit Tests Failed</font></h1>");
+          pw.println("<h1><thirdparty color=\"red\">Unit Tests Failed</thirdparty></h1>");
         }
         else if (result.getRunCount() > 1)
         {
-          pw.println("<h1><font color=\"green\">Unit Tests Succeeded</font></h1>");
+          pw.println("<h1><thirdparty color=\"green\">Unit Tests Succeeded</thirdparty></h1>");
         }
         else
         {
-          pw.println("<h1><font color=\"green\">Unit Test Succeeded</font></h1>");
+          pw.println("<h1><thirdparty color=\"green\">Unit Test Succeeded</thirdparty></h1>");
         }
 
         pw.println("<table cellpadding=\"2\" cellspacing=\"2\">");
@@ -184,12 +184,12 @@ public class UnitTestServlet extends HttpServlet
     pw.println("<html>");
     pw.println("  <head>");
     pw.println("    <style>");
-    pw.println("      body {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 9pt;}");
-    pw.println("      td {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 9pt;}");
-    pw.println("      h1 {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 12pt;}");
-    pw.println("      h2 {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 10pt;"
+    pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 9pt;}");
+    pw.println("      td {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 9pt;}");
+    pw.println("      h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
+    pw.println("      h2 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;"
         + " color: red;}");
-    pw.println("      pre {font-size: 8pt;}");
+    pw.println("      pre {thirdparty-size: 8pt;}");
     pw.println("    </style>");
     pw.println("  </head>");
     pw.println("  <body>");
@@ -212,7 +212,7 @@ public class UnitTestServlet extends HttpServlet
 
       printHeader(pw);
 
-      pw.println("    <h1><font color=\"red\">ERROR</font></h1>");
+      pw.println("    <h1><thirdparty color=\"red\">ERROR</thirdparty></h1>");
       pw.println("    " + exception.getMessage());
 
       printFooter(pw);

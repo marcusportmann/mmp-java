@@ -115,7 +115,7 @@
     
     $.jqplot.CanvasTextRenderer.prototype.fontWeight2Float = function(w) {
         // w = normal | bold | bolder | lighter | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
-        // return values adjusted for Hershey font.
+        // return values adjusted for Hershey thirdparty.
         if (Number(w)) {
             return w/400;
         }

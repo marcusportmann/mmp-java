@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class DumpNamespaceServlet extends HttpServlet
     }
     catch (Throwable e)
     {
-      pw.println("<span style=\"color: red; font-weight: bold; padding-left: 10px;"
+      pw.println("<span style=\"color: red; thirdparty-weight: bold; padding-left: 10px;"
           + " padding-top: 10px; padding-bottom: 10px;\">[" + e.getClass().getName() + "] "
           + e.getMessage() + "</span>");
       logger.error("Failed to dump the JNDI tree: " + e.getMessage(), e);
@@ -232,7 +232,7 @@ public class DumpNamespaceServlet extends HttpServlet
 
           if (processChildren)
           {
-            pw.println("<div style=\"font-weight: bold; padding-top: 2px; padding-bottom: 2px;"
+            pw.println("<div style=\"thirdparty-weight: bold; padding-top: 2px; padding-bottom: 2px;"
                 + " padding-left: " + ((depth * 20)) + "px;\">" + nameClassPair.getName()
                 + " <span class=\"className\">[" + nameClassPair.getClassName()
                 + "]</span></div><br>");
@@ -279,9 +279,9 @@ public class DumpNamespaceServlet extends HttpServlet
     pw.println("<html>");
     pw.println("  <head>");
     pw.println("    <style>");
-    pw.println("      body {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 10pt;}");
+    pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;}");
     pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
-        + " font-weight: bold; font-size: 9pt;}");
+        + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
     pw.println("      .className {color: 808080;}");
     pw.println("    </style>");
     pw.println("  </head>");

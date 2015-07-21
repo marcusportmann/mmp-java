@@ -520,7 +520,7 @@ if (!document.createElement('canvas').getContext) {
     try {
       style.font = styleString;
     } catch (ex) {
-      // Ignore failures to set to invalid font.
+      // Ignore failures to set to invalid thirdparty.
     }
 
     return fontStyleCache[styleString] = {
@@ -561,7 +561,7 @@ if (!document.createElement('canvas').getContext) {
     // trial and error to get the same size as non VML text.
     computedStyle.size *= 0.981;
 
-    // Fix for VML handling of bare font family names.  Add a '' around font family names.
+    // Fix for VML handling of bare thirdparty family names.  Add a '' around thirdparty family names.
     computedStyle.family =  "'" + computedStyle.family.replace(/(\'|\")/g,'').replace(/\s*,\s*/g, "', '") + "'";
 
     return computedStyle;
@@ -1306,7 +1306,7 @@ if (!document.createElement('canvas').getContext) {
                  '<g_vml_:textpath on="true" string="',
                  encodeHtmlAttribute(text),
                  '" style="v-text-align:', textAlign,
-                 ';font:', encodeHtmlAttribute(fontStyleString),
+                 ';thirdparty:', encodeHtmlAttribute(fontStyleString),
                  '" /></g_vml_:line>');
 
     this.element_.insertAdjacentHTML('beforeEnd', lineStr.join(''));

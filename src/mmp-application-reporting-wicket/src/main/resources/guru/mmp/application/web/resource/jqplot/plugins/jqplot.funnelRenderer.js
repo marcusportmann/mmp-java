@@ -556,8 +556,8 @@
             var ss = 'position:absolute;';
             ss += (this.background) ? 'background:'+this.background+';' : '';
             ss += (this.border) ? 'border:'+this.border+';' : '';
-            ss += (this.fontSize) ? 'font-size:'+this.fontSize+';' : '';
-            ss += (this.fontFamily) ? 'font-family:'+this.fontFamily+';' : '';
+            ss += (this.fontSize) ? 'thirdparty-size:'+this.fontSize+';' : '';
+            ss += (this.fontFamily) ? 'thirdparty-family:'+this.fontFamily+';' : '';
             ss += (this.textColor) ? 'color:'+this.textColor+';' : '';
             ss += (this.marginTop != null) ? 'margin-top:'+this.marginTop+';' : '';
             ss += (this.marginBottom != null) ? 'margin-bottom:'+this.marginBottom+';' : '';

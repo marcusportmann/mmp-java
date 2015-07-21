@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package guru.mmp.application.web;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.resource.jquery.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.JQueryJavaScriptResourceReference;
 
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;

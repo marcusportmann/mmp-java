@@ -34,13 +34,13 @@
      * Renderer to draw axis ticks with a canvas element to support advanced
      * featrues such as rotated text.  This renderer uses a separate rendering engine
      * to draw the text on the canvas.  Two modes of rendering the text are available.
-     * If the browser has native font support for canvas fonts (currently Mozila 3.5
+     * If the browser has native thirdparty support for canvas fonts (currently Mozila 3.5
      * and Safari 4), you can enable text rendering with the canvas fillText method.
      * You do so by setting the "enableFontSupport" option to true.
      *
-     * Browsers lacking native font support will have the text drawn on the canvas
-     * using the Hershey font metrics.  Even if the "enableFontSupport" option is true
-     * non-supporting browsers will still render with the Hershey font.
+     * Browsers lacking native thirdparty support will have the text drawn on the canvas
+     * using the Hershey thirdparty metrics.  Even if the "enableFontSupport" option is true
+     * non-supporting browsers will still render with the Hershey thirdparty.
      */
     $.jqplot.CanvasAxisTickRenderer = function (options) {
         // Group: Properties
@@ -90,33 +90,33 @@
         // Prefix is prepended to the formatted tick label.
         this.prefix = '';
         // prop: fontFamily
-        // css spec for the font-family css attribute.
+        // css spec for the thirdparty-family css attribute.
         this.fontFamily = '"Trebuchet MS", Arial, Helvetica, sans-serif';
         // prop: fontSize
-        // CSS spec for font size.
+        // CSS spec for thirdparty size.
         this.fontSize = '10pt';
         // prop: fontWeight
         // CSS spec for fontWeight
         this.fontWeight = 'normal';
         // prop: fontStretch
-        // Multiplier to condense or expand font width.  
-        // Applies only to browsers which don't support canvas native font rendering.
+        // Multiplier to condense or expand thirdparty width.
+        // Applies only to browsers which don't support canvas native thirdparty rendering.
         this.fontStretch = 1.0;
         // prop: textColor
         // css spec for the color attribute.
         this.textColor = '#666666';
         // prop: enableFontSupport
-        // true to turn on native canvas font support in Mozilla 3.5+ and Safari 4+.
+        // true to turn on native canvas thirdparty support in Mozilla 3.5+ and Safari 4+.
         // If true, tick label will be drawn with canvas tag native support for fonts.
-        // If false, tick label will be drawn with Hershey font metrics.
+        // If false, tick label will be drawn with Hershey thirdparty metrics.
         this.enableFontSupport = true;
         // prop: pt2px
         // Point to pixel scaling factor, used for computing height of bounding box
         // around a label.  The labels text renderer has a default setting of 1.4, which 
         // should be suitable for most fonts.  Leave as null to use default.  If tops of
         // letters appear clipped, increase this.  If bounding box seems too big, decrease.
-        // This is an issue only with the native font renderering capabilities of Mozilla
-        // 3.5 and Safari 4 since they do not provide a method to determine the font height.
+        // This is an issue only with the native thirdparty renderering capabilities of Mozilla
+        // 3.5 and Safari 4 since they do not provide a method to determine the thirdparty height.
         this.pt2px = null;
 
         this._elem;

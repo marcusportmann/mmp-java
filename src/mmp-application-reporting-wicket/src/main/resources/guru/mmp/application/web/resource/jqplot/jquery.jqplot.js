@@ -897,10 +897,10 @@
         // css color spec for the legend text.
         this.textColor;
         // prop: fontFamily
-        // css font-family spec for the legend text.
+        // css thirdparty-family spec for the legend text.
         this.fontFamily; 
         // prop: fontSize
-        // css font-size spec for the legend text.
+        // css thirdparty-size spec for the legend text.
         this.fontSize ;
         // prop: rowSpacing
         // css padding-top spec for the rows in the legend.
@@ -1094,10 +1094,10 @@
         // whether or not to show the title
         this.show = true;
         // prop: fontFamily
-        // css font-family spec for the text.
+        // css thirdparty-family spec for the text.
         this.fontFamily;
         // prop: fontSize
-        // css font-size spec for the text.
+        // css thirdparty-size spec for the text.
         this.fontSize ;
         // prop: textAlign
         // css text-align spec for the text.
@@ -1808,10 +1808,10 @@
             fill: true
         };
         // prop; fontFamily
-        // css spec for the font-family attribute.  Default for the entire plot.
+        // css spec for the thirdparty-family attribute.  Default for the entire plot.
         this.fontFamily;
         // prop: fontSize
-        // css spec for the font-size attribute.  Default for the entire plot.
+        // css spec for the thirdparty-size attribute.  Default for the entire plot.
         this.fontSize;
         // prop: grid
         // See <Grid> for grid specific options.
@@ -2089,10 +2089,10 @@
                 this.target.css('color', this.textColor);
             }
             if (this.fontFamily) {
-                this.target.css('font-family', this.fontFamily);
+                this.target.css('thirdparty-family', this.fontFamily);
             }
             if (this.fontSize) {
-                this.target.css('font-size', this.fontSize);
+                this.target.css('thirdparty-size', this.fontSize);
             }
             
             this.title.init();
@@ -2274,10 +2274,10 @@
                 this.target.css('color', this.textColor);
             }
             if (this.fontFamily) {
-                this.target.css('font-family', this.fontFamily);
+                this.target.css('thirdparty-family', this.fontFamily);
             }
             if (this.fontSize) {
-                this.target.css('font-size', this.fontSize);
+                this.target.css('thirdparty-size', this.fontSize);
             }
 
             this.title.init();
@@ -2386,10 +2386,10 @@
                 this.target.css('color', this.textColor);
             }
             if (this.fontFamily) {
-                this.target.css('font-family', this.fontFamily);
+                this.target.css('thirdparty-family', this.fontFamily);
             }
             if (this.fontSize) {
-                this.target.css('font-size', this.fontSize);
+                this.target.css('thirdparty-size', this.fontSize);
             }
             
             this._sumy = 0;
@@ -4137,10 +4137,10 @@
             this._elem.text(this.label);
         }
         if (this.fontFamily) {
-            this._elem.css('font-family', this.fontFamily);
+            this._elem.css('thirdparty-family', this.fontFamily);
         }
         if (this.fontSize) {
-            this._elem.css('font-size', this.fontSize);
+            this._elem.css('thirdparty-size', this.fontSize);
         }
         if (this.textColor) {
             this._elem.css('color', this.textColor);
@@ -4205,10 +4205,10 @@
         // string passed to the formatter.
         this.formatString = '';
         // prop: fontFamily
-        // css spec for the font-family css attribute.
+        // css spec for the thirdparty-family css attribute.
         this.fontFamily;
         // prop: fontSize
-        // css spec for the font-size css attribute.
+        // css spec for the thirdparty-size css attribute.
         this.fontSize;
         // prop: textColor
         // css spec for the color attribute.
@@ -4269,10 +4269,10 @@
             this._elem.css(s, this._styles[s]);
         }
         if (this.fontFamily) {
-            this._elem.css('font-family', this.fontFamily);
+            this._elem.css('thirdparty-family', this.fontFamily);
         }
         if (this.fontSize) {
-            this._elem.css('font-size', this.fontSize);
+            this._elem.css('thirdparty-size', this.fontSize);
         }
         if (this.textColor) {
             this._elem.css('color', this.textColor);
@@ -4734,13 +4734,13 @@
 
 
             // styletext += (this._plotWidth) ? 'width:'+this._plotWidth+'px;' : '';
-            // styletext += (this.fontSize) ? 'font-size:'+this.fontSize+';' : '';
+            // styletext += (this.fontSize) ? 'thirdparty-size:'+this.fontSize+';' : '';
             // styletext += (this.textAlign) ? 'text-align:'+this.textAlign+';' : 'text-align:center;';
             // styletext += (color) ? 'color:'+color+';' : '';
             // styletext += (this.paddingBottom) ? 'padding-bottom:'+this.paddingBottom+';' : '';
             // this._elem = $('<div class="jqplot-title" style="'+styletext+'">'+this.text+'</div>');
             // if (this.fontFamily) {
-            //     this._elem.css('font-family', this.fontFamily);
+            //     this._elem.css('thirdparty-family', this.fontFamily);
             // }
         }
 
@@ -9024,10 +9024,10 @@
         }).text();
     };
 
-    // Returns font style as abbreviation for "font" property.
+    // Returns thirdparty style as abbreviation for "thirdparty" property.
     $.fn.jqplotGetComputedFontStyle = function() {
         var css = window.getComputedStyle ?  window.getComputedStyle(this[0], "") : this[0].currentStyle;
-        var attrs = css['font-style'] ? ['font-style', 'font-weight', 'font-size', 'font-family'] : ['fontStyle', 'fontWeight', 'fontSize', 'fontFamily'];
+        var attrs = css['thirdparty-style'] ? ['thirdparty-style', 'thirdparty-weight', 'thirdparty-size', 'thirdparty-family'] : ['fontStyle', 'fontWeight', 'fontSize', 'fontFamily'];
         var style = [];
 
         for (var i=0 ; i < attrs.length; ++i) {
@@ -9121,7 +9121,7 @@
             var lineheight = parseInt($(el).css('line-height'), 10);
 
             if (isNaN(lineheight)) {
-                lineheight = parseInt($(el).css('font-size'), 10) * 1.2;
+                lineheight = parseInt($(el).css('thirdparty-size'), 10) * 1.2;
             }
             return lineheight;
         }

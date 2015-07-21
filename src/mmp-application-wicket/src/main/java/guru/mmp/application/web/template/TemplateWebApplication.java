@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import guru.mmp.application.web.resource.bootstrap
   .BootstrapHoverDropdownJavaScriptResourceReference;
 import guru.mmp.application.web.resource.bootstrap.BootstrapJavaScriptResourceReference;
 import guru.mmp.application.web.resource.jquery.JQueryCookieJavaScriptResourceReference;
-import guru.mmp.application.web.resource.jquery.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.JQueryJavaScriptResourceReference;
 import guru.mmp.application.web.resource.jquery.JQueryUIJavaScriptResourceReference;
 import guru.mmp.application.web.resource.less.LessJavaScriptResourceReference;
 import guru.mmp.application.web.resource.perfectscrollbar.PerfectScrollbarCssResourceReference;
@@ -35,6 +35,8 @@ import guru.mmp.application.web.resource.select2.Select2JavaScriptResourceRefere
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.page.LoginPage;
 import guru.mmp.application.web.template.resource.*;
+import guru.mmp.application.web.resource.thirdparty.ClipFontCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.FontAwesomeCssResourceReference;
 import guru.mmp.common.util.StringUtil;
 
 import org.apache.wicket.Session;
@@ -189,8 +191,8 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
         "css/template-web-application.css", BootstrapCssResourceReference.get(),
         PerfectScrollbarCssResourceReference.get(), Select2CssResourceReference.get(),
-        TemplateClipFontCssResourceReference.get(),
-        TemplateFontAwesomeFontCssResourceReference.get(), TemplateCssResourceReference.get(),
+        ClipFontCssResourceReference.get(),
+        FontAwesomeCssResourceReference.get(), TemplateCssResourceReference.get(),
         TemplateResponsiveCssResourceReference.get(), getThemeCssResourceReference());
 
     // Initialise the JavaScript resource bundle for the Web Application Template

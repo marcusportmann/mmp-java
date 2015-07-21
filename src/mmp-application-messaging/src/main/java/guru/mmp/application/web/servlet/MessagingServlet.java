@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -801,16 +801,16 @@ public class MessagingServlet extends HttpServlet
       pw.println("<html>");
       pw.println("  <head>");
       pw.println("    <style>");
-      pw.println("      body {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 8pt;}");
-      pw.println("      h1 {font-family: Tahoma, Verdana, Arial, Helvetica; font-size: 12pt;}");
+      pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
+      pw.println("      h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
       pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
-          + " font-weight: bold; font-size: 9pt;}");
+          + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
       pw.println("      .className {color: 808080;}");
       pw.println("    </style>");
       pw.println("  </head>");
       pw.println("  <body>");
 
-      pw.println("    <h1><font color=\"red\">ERROR</font></h1>");
+      pw.println("    <h1><thirdparty color=\"red\">ERROR</thirdparty></h1>");
       pw.println("    " + exception.getMessage());
 
       pw.println("  </body>");

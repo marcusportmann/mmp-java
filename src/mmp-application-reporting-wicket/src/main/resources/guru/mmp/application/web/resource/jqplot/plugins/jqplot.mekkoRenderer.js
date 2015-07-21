@@ -199,8 +199,8 @@
             var ss = 'position:absolute;';
             ss += (this.background) ? 'background:'+this.background+';' : '';
             ss += (this.border) ? 'border:'+this.border+';' : '';
-            ss += (this.fontSize) ? 'font-size:'+this.fontSize+';' : '';
-            ss += (this.fontFamily) ? 'font-family:'+this.fontFamily+';' : '';
+            ss += (this.fontSize) ? 'thirdparty-size:'+this.fontSize+';' : '';
+            ss += (this.fontFamily) ? 'thirdparty-family:'+this.fontFamily+';' : '';
             ss += (this.textColor) ? 'color:'+this.textColor+';' : '';
             this._elem = $('<table class="jqplot-table-legend" style="'+ss+'"></table>');
             // Mekko charts  legends don't go by number of series, but by number of data points
