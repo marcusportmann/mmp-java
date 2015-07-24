@@ -27,20 +27,23 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.CodeCategoryInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddCodeCategoryPage</code> class implements the
@@ -98,10 +101,7 @@ public class AddCodeCategoryPage extends TemplateWebPage
             CodeCategory codeCategory = codeCategoryModel.getObject();
 
             codeCategory.setOrganisation(session.getOrganisation());
-            codeCategory.setCreated(created);
-            codeCategory.setCreatedBy(session.getUsername());
             codeCategory.setUpdated(created);
-            codeCategory.setUpdatedBy(session.getUsername());
 
             if (codeCategory.getCategoryType() != CodeCategoryType.LOCAL_CUSTOM)
             {

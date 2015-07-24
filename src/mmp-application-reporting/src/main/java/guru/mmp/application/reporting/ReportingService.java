@@ -452,13 +452,6 @@ public class ReportingService
       }
       else
       {
-        Date created = new Date();
-
-        reportDefinition.setCreated(created);
-        reportDefinition.setCreatedBy(savedBy);
-        reportDefinition.setUpdated(created);
-        reportDefinition.setUpdatedBy(savedBy);
-
         reportingDAO.createReportDefinition(reportDefinition);
       }
 

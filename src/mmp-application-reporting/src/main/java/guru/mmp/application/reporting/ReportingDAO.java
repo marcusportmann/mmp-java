@@ -109,10 +109,7 @@ public class ReportingDAO
       {
         try
         {
-          if (ic != null)
-          {
-            ic.close();
-          }
+          ic.close();
         }
         catch (Throwable e)
         {
@@ -154,8 +151,6 @@ public class ReportingDAO
       statement.setString(2, reportDefinition.getOrganisation());
       statement.setString(3, reportDefinition.getName());
       statement.setBytes(4, reportDefinition.getTemplate());
-      statement.setTimestamp(5, new Timestamp(reportDefinition.getCreated().getTime()));
-      statement.setString(6, reportDefinition.getCreatedBy());
 
       if (statement.executeUpdate() != 1)
       {
@@ -412,8 +407,8 @@ public class ReportingDAO
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     Connection connection = null;
@@ -550,9 +545,7 @@ public class ReportingDAO
       statement.setString(1, reportDefinition.getOrganisation());
       statement.setString(2, reportDefinition.getName());
       statement.setBytes(3, reportDefinition.getTemplate());
-      statement.setTimestamp(4, new Timestamp(updated.getTime()));
-      statement.setString(5, updatedBy);
-      statement.setString(6, reportDefinition.getId());
+      statement.setString(4, reportDefinition.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -560,9 +553,6 @@ public class ReportingDAO
             + "No rows were affected as a result of executing the SQL statement ("
             + updateReportDefinitionSQL + ")");
       }
-
-      reportDefinition.setUpdated(updated);
-      reportDefinition.setUpdatedBy(updatedBy);
 
       return reportDefinition;
     }
@@ -591,39 +581,35 @@ public class ReportingDAO
   {
     // createReportDefinitionSQL
     createReportDefinitionSQL = "INSERT INTO " + schemaPrefix
-        + "REPORT_DEFINITIONS (ID, ORGANISATION, NAME, TEMPLATE, CREATED, CREATED_BY)"
-        + " VALUES (?, ?, ?, ?, ?, ?)";
+        + "REPORT_DEFINITIONS (ID, ORGANISATION, NAME, TEMPLATE) VALUES (?, ?, ?, ?)";
 
     // deleteReportDefinitionSQL
     deleteReportDefinitionSQL = "DELETE FROM " + schemaPrefix + "REPORT_DEFINITIONS WHERE ID=?";
 
     // getNumberOfReportDefinitionsForOrganisationSQL
     getNumberOfReportDefinitionsForOrganisationSQL = "SELECT COUNT(ID)" + " FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS" + " WHERE ORGANISATION=?";
+        + "REPORT_DEFINITIONS WHERE ORGANISATION=?";
 
     // getReportDefinitionByIdSQL
-    getReportDefinitionByIdSQL = "SELECT ID, ORGANISATION, NAME, TEMPLATE, CREATED, CREATED_BY,"
-        + " UPDATED, UPDATED_BY" + " FROM " + schemaPrefix + "REPORT_DEFINITIONS" + " WHERE ID=?";
+    getReportDefinitionByIdSQL = "SELECT ID, ORGANISATION, NAME, TEMPLATE FROM " + schemaPrefix
+        + "REPORT_DEFINITIONS WHERE ID=?";
 
     // getReportDefinitionsForOrganisationSQL
-    getReportDefinitionsForOrganisationSQL = "SELECT ID, ORGANISATION, NAME, TEMPLATE, CREATED,"
-        + " CREATED_BY, UPDATED, UPDATED_BY" + " FROM " + schemaPrefix + "REPORT_DEFINITIONS"
-        + " WHERE ORGANISATION=?";
+    getReportDefinitionsForOrganisationSQL = "SELECT ID, ORGANISATION, NAME, TEMPLATE FROM "
+        + schemaPrefix + "REPORT_DEFINITIONS WHERE ORGANISATION=?";
 
     // reportDefinitionExistsSQL
-    reportDefinitionExistsSQL = "SELECT COUNT(ID)" + " FROM " + schemaPrefix + "REPORT_DEFINITIONS"
-        + " WHERE ID=?";
+    reportDefinitionExistsSQL = "SELECT COUNT(ID) FROM " + schemaPrefix
+        + "REPORT_DEFINITIONS WHERE ID=?";
 
     // updateReportDefinitionSQL
     updateReportDefinitionSQL = "UPDATE " + schemaPrefix
-        + "REPORT_DEFINITIONS SET ORGANISATION=?, NAME=?, TEMPLATE=?, UPDATED=?, UPDATED_BY=?"
-        + " WHERE ID=?";
+        + "REPORT_DEFINITIONS SET ORGANISATION=?, NAME=?, TEMPLATE=? WHERE ID=?";
   }
 
   private ReportDefinition getReportDefinition(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinition(rs.getString(1), rs.getString(2), rs.getString(3), rs.getBytes(4),
-        rs.getTimestamp(5), rs.getString(6), rs.getTimestamp(7), rs.getString(8));
+    return new ReportDefinition(rs.getString(1), rs.getString(2), rs.getString(3), rs.getBytes(4));
   }
 }

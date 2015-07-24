@@ -19,6 +19,7 @@ package guru.mmp.application.codes;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
 import java.util.Date;
 import java.util.List;
 
@@ -56,16 +57,6 @@ public class CodeCategory
    * The codes for the code category.
    */
   private List<Code> codes;
-
-  /**
-   * The date and time the code category was created.
-   */
-  private Date created;
-
-  /**
-   * The username identifying the user that created the code category.
-   */
-  private String createdBy;
 
   /**
    * The description for the code category.
@@ -108,11 +99,6 @@ public class CodeCategory
   private Date updated;
 
   /**
-   * The username identifying the user that updated the code category.
-   */
-  private String updatedBy;
-
-  /**
    * Constructs a new <code>CodeCategory</code>.
    */
   public CodeCategory() {}
@@ -133,14 +119,11 @@ public class CodeCategory
    * @param isCacheable      is the code data retrieved for the remote code category cacheable
    * @param cacheExpiry      the time in seconds after which the cached code data for the remote
    *                         code category will expire
-   * @param created          the date and time the code category was created
-   * @param createdBy        the username identifying the user that created the code category
    * @param updated          the date and time the code category was updated
-   * @param updatedBy        the username identifying the user that updated the code category
    */
   public CodeCategory(String id, String organisation, CodeCategoryType categoryType, String name,
       String description, String endPoint, boolean isEndPointSecure, boolean isCacheable,
-      Integer cacheExpiry, Date created, String createdBy, Date updated, String updatedBy)
+      Integer cacheExpiry, Date updated)
   {
     this.id = id;
     this.organisation = organisation;
@@ -152,10 +135,7 @@ public class CodeCategory
     this.isEndPointSecure = isEndPointSecure;
     this.isCacheable = isCacheable;
     this.cacheExpiry = cacheExpiry;
-    this.created = created;
-    this.createdBy = createdBy;
     this.updated = updated;
-    this.updatedBy = updatedBy;
   }
 
   /**
@@ -175,15 +155,11 @@ public class CodeCategory
    * @param isCacheable      is the code data retrieved for the remote code category cacheable
    * @param cacheExpiry      the time in seconds after which the cached code data for the remote
    *                         code category will expire
-   * @param created          the date and time the code category was created
-   * @param createdBy        the username identifying the user that created the code category
    * @param updated          the date and time the code category was updated
-   * @param updatedBy        the username identifying the user that updated the code category
    */
   public CodeCategory(String id, String organisation, CodeCategoryType categoryType, String name,
       String description, String codeData, String endPoint, boolean isEndPointSecure,
-      boolean isCacheable, Integer cacheExpiry, Date created, String createdBy, Date updated,
-      String updatedBy)
+      boolean isCacheable, Integer cacheExpiry, Date updated)
   {
     this.id = id;
     this.organisation = organisation;
@@ -195,10 +171,7 @@ public class CodeCategory
     this.isEndPointSecure = isEndPointSecure;
     this.isCacheable = isCacheable;
     this.cacheExpiry = cacheExpiry;
-    this.created = created;
-    this.createdBy = createdBy;
     this.updated = updated;
-    this.updatedBy = updatedBy;
   }
 
   /**
@@ -241,26 +214,6 @@ public class CodeCategory
   public List<Code> getCodes()
   {
     return codes;
-  }
-
-  /**
-   * Returns the date and time the code category was created.
-   *
-   * @return the date and time the code category was created
-   */
-  public Date getCreated()
-  {
-    return created;
-  }
-
-  /**
-   * Returns the username identifying the user that created the code category.
-   *
-   * @return the username identifying the user that created the code category
-   */
-  public String getCreatedBy()
-  {
-    return createdBy;
   }
 
   /**
@@ -349,16 +302,6 @@ public class CodeCategory
   }
 
   /**
-   * Returns the username identifying the user that updated the code category.
-   *
-   * @return the username identifying the user that updated the code category
-   */
-  public String getUpdatedBy()
-  {
-    return updatedBy;
-  }
-
-  /**
    * Set the time in seconds after which the cached code data for the remote code category will
    * expire.
    *
@@ -399,26 +342,6 @@ public class CodeCategory
   public void setCodes(List<Code> codes)
   {
     this.codes = codes;
-  }
-
-  /**
-   * Set the date and time the code category was created.
-   *
-   * @param created the date and time the code category was created
-   */
-  public void setCreated(Date created)
-  {
-    this.created = created;
-  }
-
-  /**
-   * Set the username identifying the user that created the code category.
-   *
-   * @param createdBy the username identifying the user that created the code category
-   */
-  public void setCreatedBy(String createdBy)
-  {
-    this.createdBy = createdBy;
   }
 
   /**
@@ -501,15 +424,5 @@ public class CodeCategory
   public void setUpdated(Date updated)
   {
     this.updated = updated;
-  }
-
-  /**
-   * Set the username identifying the user that updated the code category.
-   *
-   * @param updatedBy the username identifying the user that updated the code category
-   */
-  public void setUpdatedBy(String updatedBy)
-  {
-    this.updatedBy = updatedBy;
   }
 }
