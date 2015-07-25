@@ -21,13 +21,13 @@ package guru.mmp.application.web.template.page;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.*;
+import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
@@ -110,7 +110,7 @@ public abstract class TemplateWebPage extends WebPage
     add(titleLabel);
 
     // Setup the top navigation menu
-    add(new TopNavigationMenu("topNavigationMenu"));
+    add(new UserMenu("userMenu"));
 
     // Setup the main navigation menu
     add(new MainNavigationMenu("mainNavigationMenu"));
@@ -226,7 +226,7 @@ public abstract class TemplateWebPage extends WebPage
     super.renderHead(response);
 
     // Add the Web Application Template theme CSS header item
-    response.render(TemplateWebApplication.getThemeCssHeaderItem());
+    response.render(TemplateCssResourceReference.getCssHeaderItem());
 
     // Add the application CSS header item
     response.render(getApplicationCssHeaderItem());
@@ -234,8 +234,18 @@ public abstract class TemplateWebPage extends WebPage
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    // Add the JavaScript script that should be executed when the DOM is ready
-    response.render(OnDomReadyHeaderItem.forScript("TemplateWebApplication.init();"));
+
+
+// TODO: DELETE THIS -- MARCUS
+//    // Add the Web Application Template theme CSS header item
+//    response.render(TemplateWebApplication.getThemeCssHeaderItem());
+//
+//
+//    // Add the Web Application Template JavaScript header item
+//    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
+//
+//    // Add the JavaScript script that should be executed when the DOM is ready
+//    response.render(OnDomReadyHeaderItem.forScript("TemplateWebApplication.init();"));
   }
 
   /**

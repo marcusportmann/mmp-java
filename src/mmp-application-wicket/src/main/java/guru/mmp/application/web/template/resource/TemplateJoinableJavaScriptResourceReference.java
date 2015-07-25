@@ -41,8 +41,8 @@ public class TemplateJoinableJavaScriptResourceReference extends JavaScriptResou
   private TemplateJoinableJavaScriptResourceReference()
   {
     super(TemplateJoinableJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "template-joinable.js"
-        : "template-joinable.js");
+        ? "js/template-joinable.js"
+        : "js/template-joinable.js");
   }
 
   /**

@@ -85,7 +85,7 @@ public class TemplateFormsCssResourceReference
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(TemplateFormsCssResourceReference.getCssHeaderItem());
+    dependencies.add(TemplateCoreCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

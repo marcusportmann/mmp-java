@@ -19,7 +19,7 @@ package guru.mmp.application.web.behavior;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.resource.jquery.JQueryUIJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.JQueryUIJavaScriptResourceReference;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;

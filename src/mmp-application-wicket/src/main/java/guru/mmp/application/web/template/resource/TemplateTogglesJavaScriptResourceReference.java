@@ -41,8 +41,8 @@ public class TemplateTogglesJavaScriptResourceReference extends JavaScriptResour
   private TemplateTogglesJavaScriptResourceReference()
   {
     super(TemplateTogglesJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "template-toggles.js"
-        : "template-toggles.js");
+        ? "js/template-toggles.js"
+        : "js/template-toggles.js");
   }
 
   /**

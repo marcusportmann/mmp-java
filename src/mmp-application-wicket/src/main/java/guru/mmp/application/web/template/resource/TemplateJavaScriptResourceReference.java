@@ -19,13 +19,8 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.bootstrap.BootstrapHoverDropdownJavaScriptResourceReference;
-import guru.mmp.application.web.resource.bootstrap.BootstrapJavaScriptResourceReference;
-import guru.mmp.application.web.resource.jquery.JQueryCookieJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.resource.jquery.JQueryUIJavaScriptResourceReference;
-import guru.mmp.application.web.resource.less.LessJavaScriptResourceReference;
-import guru.mmp.application.web.resource.perfectscrollbar.PerfectScrollbarJavaScriptResourceReference;
+
+import guru.mmp.application.web.resource.thirdparty.*;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -33,11 +28,10 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
- * The <code>TemplateJavaScriptResourceReference</code> class implements the JavaScript resource
- * reference for the Web Application Template.
+ * The <code>TemplateJavaScriptResourceReference</code> class implements the
+ * JavaScript resource reference for the template.js resource that forms part of the
+ * Web Application Template.
  *
  * @author Marcus Portmann
  */
@@ -52,16 +46,16 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
   private TemplateJavaScriptResourceReference()
   {
     super(TemplateJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "js/template.js"
-        : "js/template.js");
+      ? "js/template.js"
+      : "js/template.js");
   }
 
   /**
-   * Returns the single instance of the JavaScript resource reference for the Web Application
-   * Template.
+   * Returns the single instance of the JavaScript resource reference for the
+   * template.js resource that forms part of the Web Application Template.
    *
-   * @return the single instance of the JavaScript resource reference for the Web Application
-   *         Template
+   * @return the single instance of the JavaScript resource reference for the
+   *         template.js resource that forms part of the Web Application Template
    */
   public static TemplateJavaScriptResourceReference get()
   {
@@ -69,9 +63,9 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
   }
 
   /**
-   * Returns the JavaScript header item for the Web Application Template.
+   * Returns the JavaScript header item for the JavaScript resource reference.
    *
-   * @return the JavaScript header item for the Web Application Template
+   * @return the JavaScript header item for the JavaScript resource reference
    */
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
@@ -79,9 +73,9 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
   }
 
   /**
-   * Returns the dependencies for the JavaScript resource reference.
+   * Returns the dependencies for the CSS resource reference.
    *
-   * @return the dependencies for the JavaScript resource reference
+   * @return the dependencies for the CSS resource reference
    */
   @Override
   public Iterable<? extends HeaderItem> getDependencies()
@@ -90,13 +84,20 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
 
     dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(JQueryUIJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(JQueryCookieJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(BootstrapDatePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(BootstrapTimePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TweenMaxJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(MomentJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(JQuerySelectBoxItJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(DateRangePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    dependencies.add(BootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(BootstrapHoverDropdownJavaScriptResourceReference.getJavaScriptHeaderItem());
-
-    dependencies.add(PerfectScrollbarJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(LessJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateBootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateResizeableJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateJoinableJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateApiJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateTogglesJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateCustomJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     return dependencies;
   }

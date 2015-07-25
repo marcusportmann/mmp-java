@@ -19,28 +19,13 @@ package guru.mmp.application.web.template;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.resource.bootstrap.BootstrapCssResourceReference;
-import guru.mmp.application.web.resource.bootstrap
-  .BootstrapHoverDropdownJavaScriptResourceReference;
-import guru.mmp.application.web.resource.bootstrap.BootstrapJavaScriptResourceReference;
-import guru.mmp.application.web.resource.jquery.JQueryCookieJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.resource.jquery.JQueryUIJavaScriptResourceReference;
-import guru.mmp.application.web.resource.less.LessJavaScriptResourceReference;
-import guru.mmp.application.web.resource.perfectscrollbar.PerfectScrollbarCssResourceReference;
-import guru.mmp.application.web.resource.perfectscrollbar
-  .PerfectScrollbarJavaScriptResourceReference;
-import guru.mmp.application.web.resource.select2.Select2CssResourceReference;
-import guru.mmp.application.web.resource.select2.Select2JavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.*;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.page.LoginPage;
 import guru.mmp.application.web.template.resource.*;
-import guru.mmp.application.web.resource.thirdparty.ClipFontCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.FontAwesomeCssResourceReference;
 import guru.mmp.common.util.StringUtil;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -71,26 +56,6 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   public TemplateWebApplication(String displayName)
   {
     this.displayName = displayName;
-  }
-
-  /**
-   * Returns the CSS header item for the theme for the Web Application Template.
-   *
-   * @return the CSS header item for the theme for the Web Application Template
-   */
-  public static CssHeaderItem getThemeCssHeaderItem()
-  {
-    return TemplateLightThemeCssResourceReference.getCssHeaderItem();
-  }
-
-  /**
-   * Returns the CSS resource reference for the theme for the Web Application Template.
-   *
-   * @return the CSS resource reference for the theme for the Web Application Template
-   */
-  public static CssResourceReference getThemeCssResourceReference()
-  {
-    return TemplateLightThemeCssResourceReference.get();
   }
 
   /**
@@ -187,23 +152,56 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     navigationRoot = new NavigationGroup("");
     initNavigation(navigationRoot);
 
-    // Initialise the CSS resource bundle for the Web Application Template
+    // Initialise the template-web-application.css resource bundle for the Web Application Template
     getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
-        "css/template-web-application.css", BootstrapCssResourceReference.get(),
-        PerfectScrollbarCssResourceReference.get(), Select2CssResourceReference.get(),
-        ClipFontCssResourceReference.get(),
-        FontAwesomeCssResourceReference.get(), TemplateCssResourceReference.get(),
-        TemplateResponsiveCssResourceReference.get(), getThemeCssResourceReference());
+        "css/template-web-application.css",
+      // Template CSS
+      TemplateBootstrapCssResourceReference.get(),
+      TemplateCoreCssResourceReference.get(),
+      TemplateFormsCssResourceReference.get(),
+      TemplateComponentsCssResourceReference.get(),
+      TemplateCssResourceReference.get(),
+      // Thirdparty CSS
+      DateRangePickerCssResourceReference.get(),
+      Select2CssResourceReference.get(),
+      Select2BootstrapCssResourceReference.get());
 
+    // Initialise the template-web-application.js resource bundle for the Web Application Template
+    getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
+      "js/template-web-application.js",
+      TemplateBootstrapJavaScriptResourceReference.get(),
+      TemplateResizeableJavaScriptResourceReference.get(),
+      TemplateJoinableJavaScriptResourceReference.get(),
+      TemplateApiJavaScriptResourceReference.get(),
+      TemplateTogglesJavaScriptResourceReference.get(),
+      TemplateCustomJavaScriptResourceReference.get(),
+      TemplateJavaScriptResourceReference.get());
+
+
+
+    /*
     // Initialise the JavaScript resource bundle for the Web Application Template
     getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
-        "js/template-web-application.js", JQueryJavaScriptResourceReference.get(),
-        JQueryUIJavaScriptResourceReference.get(), JQueryCookieJavaScriptResourceReference.get(),
-        BootstrapJavaScriptResourceReference.get(),
-        BootstrapHoverDropdownJavaScriptResourceReference.get(),
-        PerfectScrollbarJavaScriptResourceReference.get(),
-        Select2JavaScriptResourceReference.get(), LessJavaScriptResourceReference.get(),
-        TemplateJavaScriptResourceReference.get());
+        "js/template-web-application.js",
+      // Thirdparty JavaScript
+      JQueryJavaScriptResourceReference.get(),
+      JQueryUIJavaScriptResourceReference.get(),
+      BootstrapDatePickerJavaScriptResourceReference.get(),
+      BootstrapTimePickerJavaScriptResourceReference.get(),
+      Select2JavaScriptResourceReference.get(),
+      TweenMaxJavaScriptResourceReference.get(),
+      MomentJavaScriptResourceReference.get(),
+      JQuerySelectBoxItJavaScriptResourceReference.get(),
+      DateRangePickerJavaScriptResourceReference.get(),
+      // Template JavaScript
+      TemplateBootstrapJavaScriptResourceReference.get(),
+      TemplateResizeableJavaScriptResourceReference.get(),
+      TemplateJoinableJavaScriptResourceReference.get(),
+      TemplateApiJavaScriptResourceReference.get(),
+      TemplateTogglesJavaScriptResourceReference.get(),
+      TemplateCustomJavaScriptResourceReference.get(),
+      TemplateJavaScriptResourceReference.get());
+    */
 
     // Check it multiple organisation support is enabled
     if (!StringUtil.isNullOrEmpty(

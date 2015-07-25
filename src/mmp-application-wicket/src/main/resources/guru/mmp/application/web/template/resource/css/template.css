@@ -1,0 +1,55 @@
+div.wicketDebugBar
+{
+  position: relative;
+  margin-top: 10px;
+  margin-right: 60px;
+}
+
+div.feedback-debug
+{
+  padding: 3px 0 0 3px;
+  color: #31708f;
+}
+
+div.feedback-info
+{
+  padding: 3px 0 0 3px;
+  color: #3c763d;
+}
+
+div.feedback-warning
+{
+  padding: 3px 0 0 3px;
+  color: #8a6d3b;
+}
+
+div.feedback-error
+{
+  padding: 3px 0 0 3px;
+  color: #a94442;
+}
+
+form#loginForm div.feedback-error
+{
+  color: #ff7479;
+}
+
+div.logo-image
+{
+  display: inline-block;
+  width: 81px;
+  height: 18px;
+  background-image: url('../images/logo@2x.png');
+  background-size: 100% 100%;
+}
+
+div.logo-collapsed-image
+{
+  display: inline-block;
+  width: 40px;
+  height: 18px;
+  background-image: url('../images/logo-collapsed@2x.png');
+  background-size: 100% 100%;
+}
+
+

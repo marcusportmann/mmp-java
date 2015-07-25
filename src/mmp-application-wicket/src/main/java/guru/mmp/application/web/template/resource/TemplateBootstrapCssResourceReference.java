@@ -19,24 +19,24 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TemplateBootstrapCssResourceReference</code> class implements the CSS resource
- * reference for the template-forms.css CSS file that forms part of the
+ * reference for the template-bootstrap.css CSS file that forms part of the
  * Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class TemplateBootstrapCssResourceReference
-  extends CssResourceReference
+public class TemplateBootstrapCssResourceReference extends CssResourceReference
 {
   private static final long serialVersionUID = 1000000;
   private static final TemplateBootstrapCssResourceReference INSTANCE =
@@ -47,15 +47,15 @@ public class TemplateBootstrapCssResourceReference
   private TemplateBootstrapCssResourceReference()
   {
     super(TemplateBootstrapCssResourceReference.class, Debug.inDebugMode()
-      ? "css/template-bootstrap.css"
-      : "css/template-bootstrap.css");
+        ? "css/template-bootstrap.css"
+        : "css/template-bootstrap.css");
   }
 
   /**
-   * Returns the single instance of the CSS resource reference for the template-forms.css
+   * Returns the single instance of the CSS resource reference for the template-bootstrap.css
    * CSS file that forms part of the Web Application Template.
    *
-   * @return the single instance of the CSS resource reference for the template-forms.css
+   * @return the single instance of the CSS resource reference for the template-bootstrap.css
    *         CSS file that forms part of the Web Application Template
    */
   public static TemplateBootstrapCssResourceReference get()
@@ -64,10 +64,10 @@ public class TemplateBootstrapCssResourceReference
   }
 
   /**
-   * Returns the CSS header item for the template-forms.css CSS file that forms part of the
+   * Returns the CSS header item for the template-bootstrap.css CSS file that forms part of the
    * Web Application Template.
    *
-   * @return the CSS header item for the template-forms.css CSS file that forms part of the
+   * @return the CSS header item for the template-bootstrap.css CSS file that forms part of the
    *         Web Application Template
    */
   public static CssHeaderItem getCssHeaderItem()
@@ -85,7 +85,7 @@ public class TemplateBootstrapCssResourceReference
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(TemplateBootstrapCssResourceReference.getCssHeaderItem());
+    //dependencies.add(TemplateBootstrapCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

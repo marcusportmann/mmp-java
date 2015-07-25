@@ -41,8 +41,8 @@ public class TemplateCustomJavaScriptResourceReference extends JavaScriptResourc
   private TemplateCustomJavaScriptResourceReference()
   {
     super(TemplateCustomJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "template-custom.js"
-        : "template-custom.js");
+        ? "js/template-custom.js"
+        : "js/template-custom.js");
   }
 
   /**

@@ -28,7 +28,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @author Marcus Portmann
  */
-public class TypeaheadJavaScriptResourceReference extends JavaScriptResourceReference
+public class  TypeaheadJavaScriptResourceReference extends JavaScriptResourceReference
 {
   private static final long serialVersionUID = 1000000;
   private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =

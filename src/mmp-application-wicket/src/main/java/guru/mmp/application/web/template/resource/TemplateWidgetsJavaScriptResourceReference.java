@@ -41,8 +41,8 @@ public class TemplateWidgetsJavaScriptResourceReference extends JavaScriptResour
   private TemplateWidgetsJavaScriptResourceReference()
   {
     super(TemplateWidgetsJavaScriptResourceReference.class, Debug.inDebugMode()
-      ? "template-widgets.js"
-      : "template-widgets.js");
+      ? "js/template-widgets.js"
+      : "js/template-widgets.js");
   }
 
   /**

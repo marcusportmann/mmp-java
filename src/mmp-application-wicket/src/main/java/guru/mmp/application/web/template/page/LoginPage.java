@@ -27,6 +27,7 @@ import guru.mmp.application.web.component.TextFieldWithFeedback;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.Alerts;
+import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -59,11 +60,6 @@ import java.util.List;
  */
 public class LoginPage extends WebPage
 {
-  private static final String LOGIN_ON_DOM_READY_JAVA_SCRIPT = "TemplateWebApplication.init(); "
-    + "$('.forgot').bind('click', function () {"
-    + "$('.box-login').hide(); $('.box-forgot').show(); $('.alerts').html(''); });"
-    + "$('.go-back').click(function () {"
-    + "$('.box-login').show(); $('.box-forgot').hide(); $('.alerts').html(''); });";
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
   private static final long serialVersionUID = 1000000;
 
@@ -224,25 +220,26 @@ public class LoginPage extends WebPage
       }
     });
 
-    // Setup the forgotForm
-    Form<Void> forgotForm = new Form<>("forgotForm");
-    forgotForm.setMarkupId("forgotForm");
-    forgotForm.setOutputMarkupId(true);
-    add(forgotForm);
-
-    // The "submitButton" button
-    forgotForm.add(new AjaxFallbackButton("submitButton", forgotForm)
-    {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-      {
-        warn("Forgotten password support is not available.");
-
-        target.add(alerts);
-      }
-    });
+// TODO: DELETE THIS -- MARCUS
+//    // Setup the forgotForm
+//    Form<Void> forgotForm = new Form<>("forgotForm");
+//    forgotForm.setMarkupId("forgotForm");
+//    forgotForm.setOutputMarkupId(true);
+//    add(forgotForm);
+//
+//    // The "submitButton" button
+//    forgotForm.add(new AjaxFallbackButton("submitButton", forgotForm)
+//    {
+//      private static final long serialVersionUID = 1000000;
+//
+//      @Override
+//      protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+//      {
+//        warn("Forgotten password support is not available.");
+//
+//        target.add(alerts);
+//      }
+//    });
   }
 
   /**
@@ -266,7 +263,7 @@ public class LoginPage extends WebPage
     super.renderHead(response);
 
     // Add the Web Application Template theme CSS header item
-    response.render(TemplateWebApplication.getThemeCssHeaderItem());
+    response.render(TemplateCssResourceReference.getCssHeaderItem());
 
     // Add the application CSS header item
     response.render(getApplicationCssHeaderItem());
@@ -274,8 +271,20 @@ public class LoginPage extends WebPage
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    // Add the JavaScript script that should be executed when the DOM is ready
-    response.render(OnDomReadyHeaderItem.forScript(LOGIN_ON_DOM_READY_JAVA_SCRIPT));
+
+    // TODO: DELETE THIS -- MARCUS
+//
+//    // Add the Web Application Template theme CSS header item
+//    response.render(TemplateWebApplication.getThemeCssHeaderItem());
+//
+//    // Add the application CSS header item
+//    response.render(getApplicationCssHeaderItem());
+//
+//    // Add the Web Application Template JavaScript header item
+//    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
+//
+//    // Add the JavaScript script that should be executed when the DOM is ready
+//    response.render(OnDomReadyHeaderItem.forScript(LOGIN_ON_DOM_READY_JAVA_SCRIPT));
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()

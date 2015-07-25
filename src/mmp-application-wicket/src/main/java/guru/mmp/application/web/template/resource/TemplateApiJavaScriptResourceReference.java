@@ -41,8 +41,8 @@ public class TemplateApiJavaScriptResourceReference extends JavaScriptResourceRe
   private TemplateApiJavaScriptResourceReference()
   {
     super(TemplateApiJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "template-api.js"
-        : "template-api.js");
+        ? "js/template-api.js"
+        : "js/template-api.js");
   }
 
   /**

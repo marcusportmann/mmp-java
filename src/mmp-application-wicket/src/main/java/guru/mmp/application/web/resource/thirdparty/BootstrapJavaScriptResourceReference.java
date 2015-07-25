@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class BootstrapJavaScriptResourceReference extends JavaScriptResourceRefe
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(BootstrapCssResourceReference.getCssHeaderItem());
+    dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     return dependencies;
   }

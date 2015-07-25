@@ -82,7 +82,9 @@ public class JQueryUIJavaScriptResourceReference extends JavaScriptResourceRefer
     List<HeaderItem> dependencies = new ArrayList<>();
 
     dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(JQueryUIStructureCssResourceReference.getCssHeaderItem());
+
+    //dependencies.add(JQueryUICssResourceReference.getCssHeaderItem());
+    //dependencies.add(JQueryUIStructureCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

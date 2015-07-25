@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,8 @@ public class JQueryJavaScriptResourceReference extends JavaScriptResourceReferen
   private JQueryJavaScriptResourceReference()
   {
     super(JQueryJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "jquery/jquery-1.11.3.js"
-        : "jquery/jquery-1.11.3.min.js");
+        ? "jquery/js/jquery-1.11.3.js"
+        : "jquery/js/jquery-1.11.3.min.js");
   }
 
   /**

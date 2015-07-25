@@ -82,8 +82,8 @@ public class Select2JavaScriptResourceReference extends JavaScriptResourceRefere
     List<HeaderItem> dependencies = new ArrayList<>();
 
     dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(Select2CssResourceReference.getCssHeaderItem());
-    dependencies.add(Select2BootstrapCssResourceReference.getCssHeaderItem());
+    //dependencies.add(Select2CssResourceReference.getCssHeaderItem());
+    //dependencies.add(Select2BootstrapCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

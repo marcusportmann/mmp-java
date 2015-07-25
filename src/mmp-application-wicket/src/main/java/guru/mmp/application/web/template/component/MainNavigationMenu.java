@@ -129,11 +129,11 @@ public class MainNavigationMenu extends Component
   {
     if (depth == 0)
     {
-      buffer.append("<ul class=\"main-navigation-menu\">");
+      // buffer.append("<ul class=\"main-navigation-menu\">");
     }
     else
     {
-      buffer.append("<ul class=\"sub-menu\">");
+      buffer.append("<ul>");
     }
 
     List<NavigationItem> navigationItems = navigationGroup.getItems();
@@ -163,7 +163,7 @@ public class MainNavigationMenu extends Component
         {
           if (depth == 0)
           {
-            buffer.append("<li class=\"active open\">");
+            buffer.append("<li class=\"active opened\">");
           }
           else
           {
@@ -183,7 +183,7 @@ public class MainNavigationMenu extends Component
         }
         else
         {
-          buffer.append("<i class=\"clip-folder\"></i>");
+          //buffer.append("<i class=\"clip-folder\"></i>");
         }
 
         if (depth > 0)
@@ -196,13 +196,13 @@ public class MainNavigationMenu extends Component
 
         if (((navigationItem == selectedNavigationItemForCurrentPage) && (depth == 0)))
         {
-          buffer.append("<i class=\"icon-arrow\"></i>");
-          buffer.append("<span class=\"selected\"></span>");
+         // buffer.append("<i class=\"icon-arrow\"></i>");
+         // buffer.append("<span class=\"selected\"></span>");
         }
         else
         {
-          buffer.append("<i class=\"icon-arrow\"></i>");
-          buffer.append("<span class=\"arrow \"></span>");
+          //buffer.append("<i class=\"icon-arrow\"></i>");
+          //buffer.append("<span class=\"arrow \"></span>");
         }
 
         buffer.append("</a>");
@@ -224,7 +224,7 @@ public class MainNavigationMenu extends Component
         {
           if (depth == 0)
           {
-            buffer.append("<li class=\"active open\">");
+            buffer.append("<li class=\"active opened\">");
           }
           else
           {
@@ -253,7 +253,7 @@ public class MainNavigationMenu extends Component
         }
         else
         {
-          buffer.append("<i class=\"clip-file-3\"></i>");
+          //buffer.append("<i class=\"clip-file-3\"></i>");
         }
 
         if (depth > 0)

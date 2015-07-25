@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,8 @@ public class FontAwesomeCssResourceReference extends CssResourceReference
   private FontAwesomeCssResourceReference()
   {
     super(FontAwesomeCssResourceReference.class, Debug.inDebugMode()
-        ? "fontawesome/css/fonts-awesome.css"
-        : "fontawesome/css/fonts-awesome.min.css");
+        ? "font-awesome/css/font-awesome.css"
+        : "font-awesome/css/font-awesome.min.css");
   }
 
   /**

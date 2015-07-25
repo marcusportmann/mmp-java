@@ -84,7 +84,6 @@ public class JQueryBootstrapWizardJavaScriptResourceReference extends JavaScript
 
     dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(BootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(BootstrapCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

@@ -28,9 +28,6 @@ var public_vars = public_vars || {};
 		public_vars.$userInfoMenuHor      = public_vars.$body.find('.navbar.horizontal-menu');
 		public_vars.$userInfoMenu         = public_vars.$body.find('nav.navbar.user-info-navbar');
 
-		public_vars.$settingsPane         = public_vars.$body.find('.settings-pane');
-		public_vars.$settingsPaneIn       = public_vars.$settingsPane.find('.settings-pane-inner');
-
 		public_vars.wheelPropagation      = true; // used in Main menu (sidebar)
 
 		public_vars.$pageLoadingOverlay   = public_vars.$body.find('.page-loading-overlay');
@@ -358,6 +355,7 @@ var public_vars = public_vars || {};
 	    // Datepicker
 		if ($.isFunction($.fn.datepicker)) {
 		    $(".datepicker").each(function (i, el) {
+
 		        var $this = $(el),
                         opts = {
                             format: attrDefault($this, 'format', 'mm/dd/yyyy'),
@@ -389,6 +387,73 @@ var public_vars = public_vars || {};
 		        }
 		    });
 		}
+
+	    // Date Range Picker
+		if ($.isFunction($.fn.daterangepicker)) {
+		    $(".daterange").each(function (i, el) {
+		        // Change the range as you desire
+		        var ranges = {
+		            'Today': [moment(), moment()],
+		            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+		            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+		            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+		            'This Month': [moment().startOf('month'), moment().endOf('month')],
+		            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+		        };
+
+		        var $this = $(el),
+					opts = {
+					    format: attrDefault($this, 'format', 'MM/DD/YYYY'),
+					    timePicker: attrDefault($this, 'timePicker', false),
+					    timePickerIncrement: attrDefault($this, 'timePickerIncrement', false),
+					    separator: attrDefault($this, 'separator', ' - '),
+					},
+					min_date = attrDefault($this, 'minDate', ''),
+					max_date = attrDefault($this, 'maxDate', ''),
+					start_date = attrDefault($this, 'startDate', ''),
+					end_date = attrDefault($this, 'endDate', '');
+
+		        if ($this.hasClass('add-ranges')) {
+		            opts['ranges'] = ranges;
+		        }
+
+		        if (min_date.length) {
+		            opts['minDate'] = min_date;
+		        }
+
+		        if (max_date.length) {
+		            opts['maxDate'] = max_date;
+		        }
+
+		        if (start_date.length) {
+		            opts['startDate'] = start_date;
+		        }
+
+		        if (end_date.length) {
+		            opts['endDate'] = end_date;
+		        }
+
+
+		        $this.daterangepicker(opts, function (start, end) {
+		            var drp = $this.data('daterangepicker');
+
+		            if ($this.is('[data-callback]')) {
+		                //daterange_callback(start, end);
+		                callback_test(start, end);
+		            }
+
+		            if ($this.hasClass('daterange-inline')) {
+		                $this.find('span').html(start.format(drp.format) + drp.separator + end.format(drp.format));
+		            }
+		        });
+
+		        if (typeof opts['ranges'] == 'object') {
+		            $this.data('daterangepicker').container.removeClass('show-calendar');
+		        }
+		    });
+		}
+
+
 
 	    // Timepicker
 		if ($.isFunction($.fn.timepicker)) {

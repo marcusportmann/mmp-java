@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Marcus Portmann
+ * Copyright 2015 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,8 +82,7 @@ public class BootstrapTimePickerJavaScriptResourceReference extends JavaScriptRe
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(BootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(BootstrapCssResourceReference.getCssHeaderItem());
+    // dependencies.add(BootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     return dependencies;
   }

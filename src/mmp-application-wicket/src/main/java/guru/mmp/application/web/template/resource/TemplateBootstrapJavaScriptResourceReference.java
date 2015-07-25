@@ -41,8 +41,8 @@ public class TemplateBootstrapJavaScriptResourceReference extends JavaScriptReso
   private TemplateBootstrapJavaScriptResourceReference()
   {
     super(TemplateBootstrapJavaScriptResourceReference.class, Debug.inDebugMode()
-      ? "template-bootstrap.js"
-      : "template-bootstrap.js");
+      ? "js/template-bootstrap.js"
+      : "js/template-bootstrap.js");
   }
 
   /**
