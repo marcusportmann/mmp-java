@@ -30,15 +30,16 @@ import java.net.URL;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLSocketFactory;
-
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
@@ -61,6 +62,13 @@ public class WebServiceClientSecurityHelper
    */
   public static final String JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY =
     "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
+  private static Method apacheCxfClientGetConduitMethod;
+  private static Class apacheCxfClientProxyClass;
+  private static Method apacheCxfClientProxyGetClientMethod;
+  private static Method apacheCxfHttpConduitSetTlsClientParametersMethod;
+  private static Class apacheCxfTlsClientParametersClass;
+  private static Method apacheCxfTlsParametersBaseSetKeyManagersMethod;
+  private static Method apacheCxfTlsParametersBaseSetTrustManagersMethod;
 
   /**
    * The socket factory used to connect to a web service securely using Client SSL
@@ -71,26 +79,6 @@ public class WebServiceClientSecurityHelper
   /* The web service client cache. */
   private static ConcurrentMap<String, WebServiceClient> webServiceClientCache =
     new ConcurrentHashMap<>();
-
-  private static Class apacheCxfClientProxyClass;
-
-  private static Class apacheCxfClientClass;
-
-  private static Class apacheCxfTlsParametersBaseClass;
-
-  private static Class apacheCxfTlsClientParametersClass;
-
-  private static Class apacheCxfHttpConduitClass;
-
-  private static Method apacheCxfGetClientMethod;
-
-  private static Method apacheCxfGetConduitMethod;
-  
-  private static Method apacheCxfTlsParametersBaseSetKeyManagersMethod;
-
-  private static Method apacheCxfTlsParametersBaseSetTrustManagersMethod;
-
-  private static Method apacheCxfHttpConduitSetTlsClientParametersMethod;
 
   /**
    * Returns the secure web service proxy for the web service that has been secured with
@@ -107,6 +95,7 @@ public class WebServiceClientSecurityHelper
    *
    * @throws WebServiceClientSecurityException
    */
+  @SuppressWarnings("unchecked")
   public static <T> T getClientSSLServiceProxy(Class<?> serviceClass, Class<T> serviceInterface,
       String wsdlResourcePath, String serviceEndpoint)
     throws WebServiceClientSecurityException
@@ -152,66 +141,85 @@ public class WebServiceClientSecurityHelper
       {
         try
         {
+          /*
+           * Initialise all of the classes and methods required to invoke the Apache CXF APIs
+           * using reflection.
+           */
           if (apacheCxfClientProxyClass == null)
           {
-            apacheCxfClientProxyClass = Thread.currentThread().getContextClassLoader()
-              .loadClass("org.apache.cxf.frontend.ClientProxy");
+            apacheCxfClientProxyClass = Thread.currentThread().getContextClassLoader().loadClass(
+              "org.apache.cxf.frontend.ClientProxy");
 
-            apacheCxfClientClass = Thread.currentThread().getContextClassLoader()
-              .loadClass("org.apache.cxf.endpoint.Client");
+            Class apacheCxfClientClass = Thread.currentThread().getContextClassLoader().loadClass(
+                "org.apache.cxf.endpoint.Client");
 
-            apacheCxfTlsParametersBaseClass = Thread.currentThread().getContextClassLoader()
-              .loadClass("org.apache.cxf.configuration.jsse.TLSParameterBase");
+            Class apacheCxfTlsParametersBaseClass =
+              Thread.currentThread().getContextClassLoader().loadClass(
+                "org.apache.cxf.configuration.jsse.TLSParameterBase");
 
-            apacheCxfTlsClientParametersClass = Thread.currentThread().getContextClassLoader()
-              .loadClass("org.apache.cxf.configuration.jsse.TLSClientParameters");
+            apacheCxfTlsClientParametersClass =
+              Thread.currentThread().getContextClassLoader().loadClass(
+                "org.apache.cxf.configuration.jsse.TLSClientParameters");
 
-            apacheCxfHttpConduitClass = Thread.currentThread().getContextClassLoader()
-              .loadClass("org.apache.cxf.transport.http.HTTPConduit");
+            Class apacheCxfHttpConduitClass =
+              Thread.currentThread().getContextClassLoader().loadClass(
+                "org.apache.cxf.transport.http.HTTPConduit");
 
-            apacheCxfGetClientMethod = apacheCxfClientProxyClass.getMethod("getClient", java.lang.Object.class);
+            apacheCxfClientProxyGetClientMethod = apacheCxfClientProxyClass.getMethod("getClient",
+                java.lang.Object.class);
 
-            if (apacheCxfGetClientMethod == null)
+            if (apacheCxfClientProxyGetClientMethod == null)
             {
-              throw new RuntimeException("Failed to retrieve the getClient method on the org.apache.cxf.frontend.ClientProxy class");
+              throw new RuntimeException("Failed to retrieve the getClient method on the"
+                  + " org.apache.cxf.frontend.ClientProxy class");
             }
 
-            apacheCxfGetConduitMethod = apacheCxfClientClass.getMethod("getConduit");
+            apacheCxfClientGetConduitMethod = apacheCxfClientClass.getMethod("getConduit");
 
-            if (apacheCxfGetConduitMethod == null)
+            if (apacheCxfClientGetConduitMethod == null)
             {
-              throw new RuntimeException("Failed to retrieve the getConduit method on the org.apache.cxf.endpoint.Client class");
+              throw new RuntimeException("Failed to retrieve the getConduit method on the"
+                  + " org.apache.cxf.endpoint.Client class");
             }
 
-            apacheCxfTlsParametersBaseSetKeyManagersMethod = apacheCxfTlsParametersBaseClass
-              .getMethod("setKeyManagers", new Class[]{javax.net.ssl.KeyManager[].class});
+            apacheCxfTlsParametersBaseSetKeyManagersMethod =
+              apacheCxfTlsParametersBaseClass.getMethod("setKeyManagers",
+                javax.net.ssl.KeyManager[].class);
 
             if (apacheCxfTlsParametersBaseSetKeyManagersMethod == null)
             {
-              throw new RuntimeException("Failed to retrieve the setKeyManagers method on the org.apache.cxf.configuration.jsse.TLSParameterBase class");
+              throw new RuntimeException("Failed to retrieve the setKeyManagers method on the"
+                  + " org.apache.cxf.configuration.jsse.TLSParameterBase class");
             }
 
-            apacheCxfTlsParametersBaseSetTrustManagersMethod = apacheCxfTlsParametersBaseClass
-              .getMethod("setTrustManagers", new Class[]{javax.net.ssl.TrustManager[].class});
+            apacheCxfTlsParametersBaseSetTrustManagersMethod =
+              apacheCxfTlsParametersBaseClass.getMethod("setTrustManagers", TrustManager[].class);
 
             if (apacheCxfTlsParametersBaseSetTrustManagersMethod == null)
             {
-              throw new RuntimeException("Failed to retrieve the setTrustManagers method on the org.apache.cxf.configuration.jsse.TLSParameterBase class");
+              throw new RuntimeException("Failed to retrieve the setTrustManagers method on the"
+                  + " org.apache.cxf.configuration.jsse.TLSParameterBase class");
             }
 
-            apacheCxfHttpConduitSetTlsClientParametersMethod = apacheCxfHttpConduitClass
-              .getMethod("setTlsClientParameters", apacheCxfTlsClientParametersClass);
+            apacheCxfHttpConduitSetTlsClientParametersMethod =
+              apacheCxfHttpConduitClass.getMethod("setTlsClientParameters",
+                apacheCxfTlsClientParametersClass);
 
             if (apacheCxfHttpConduitSetTlsClientParametersMethod == null)
             {
-              throw new RuntimeException("Failed to retrieve the setTlsClientParameters method on the org.apache.cxf.transport.http.HTTPConduit class");
+              throw new RuntimeException(
+                  "Failed to retrieve the setTlsClientParameters method on the"
+                  + " org.apache.cxf.transport.http.HTTPConduit class");
             }
           }
 
-          Object clientObject = apacheCxfGetClientMethod.invoke(null, proxy);
+          // Invoke the getClient method on the org.apache.cxf.frontend.ClientProxy class
+          Object clientObject = apacheCxfClientProxyGetClientMethod.invoke(null, proxy);
 
-          Object httpConduitObject = apacheCxfGetConduitMethod.invoke(clientObject);
+          // Invoke the getClient method on the org.apache.cxf.endpoint.Client class
+          Object httpConduitObject = apacheCxfClientGetConduitMethod.invoke(clientObject);
 
+          // Create a new org.apache.cxf.configuration.jsse.TLSClientParameters instance
           Object tlsClientParametersObject = apacheCxfTlsClientParametersClass.newInstance();
 
           // Setup the key manager for the client SSL socket factory
@@ -219,13 +227,17 @@ public class WebServiceClientSecurityHelper
             KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 
           keyManagerFactory.init(ApplicationSecurityContext.getContext().getKeyStore(),
-            ApplicationSecurityContext.getContext().getKeyStorePassword().toCharArray());
+              ApplicationSecurityContext.getContext().getKeyStorePassword().toCharArray());
 
-          apacheCxfTlsParametersBaseSetKeyManagersMethod
-            .invoke(tlsClientParametersObject, new Object[]{keyManagerFactory.getKeyManagers()});
+          /*
+           * Invoke the setKeyManagers method on the
+           * org.apache.cxf.configuration.jsse.TLSParameterBase class
+           */
+          apacheCxfTlsParametersBaseSetKeyManagersMethod.invoke(tlsClientParametersObject,
+              new Object[] { keyManagerFactory.getKeyManagers() });
 
           // Create a trust manager that does not validate certificate chains
-          TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager()
+          TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
           {
             public void checkClientTrusted(X509Certificate[] chain, String authType)
               throws CertificateException
@@ -236,27 +248,33 @@ public class WebServiceClientSecurityHelper
             public void checkServerTrusted(X509Certificate[] chain, String authType)
               throws CertificateException
             {
-              // Skip server verification step
+              /*
+               * TODO: Verify the server certificate using the keystore associated with the
+               *       application security context.
+               */
             }
 
             public X509Certificate[] getAcceptedIssuers()
             {
               return new X509Certificate[0];
             }
-          }
-          };
+          } };
 
-          TODO ADD COMMENTS FOR EACH METHOD CALL
+          /*
+           * Invoke the setTrustManagers method on the
+           * org.apache.cxf.configuration.jsse.TLSParameterBase class
+           */
+          apacheCxfTlsParametersBaseSetTrustManagersMethod.invoke(tlsClientParametersObject,
+              new Object[] { trustAllCerts });
 
-          apacheCxfTlsParametersBaseSetTrustManagersMethod.invoke(tlsClientParametersObject, new Object[]{trustAllCerts});
-
-          // Invoke the setTlsClientParameters
-          apacheCxfHttpConduitSetTlsClientParametersMethod.invoke(httpConduitObject, tlsClientParametersObject);
+          // Invoke the setTlsClientParameters on the org.apache.cxf.transport.http.HTTPConduit
+          apacheCxfHttpConduitSetTlsClientParametersMethod.invoke(httpConduitObject,
+              tlsClientParametersObject);
         }
         catch (Throwable e)
         {
           throw new WebServiceClientSecurityException(
-            "Failed to initialise the client SSL socket factory for the Apache CXF proxy", e);
+              "Failed to initialise the client SSL socket factory for the Apache CXF proxy", e);
         }
       }
 
@@ -721,26 +739,6 @@ public class WebServiceClientSecurityHelper
     public Service getService()
     {
       return service;
-    }
-
-    /**
-     * Set the QName for the port.
-     *
-     * @param portQName the QName for the port
-     */
-    public void setPortQName(QName portQName)
-    {
-      this.portQName = portQName;
-    }
-
-    /**
-     * Set the web service client.
-     *
-     * @param service the web service client
-     */
-    public void setService(Service service)
-    {
-      this.service = service;
     }
   }
 }
