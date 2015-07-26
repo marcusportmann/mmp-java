@@ -1386,10 +1386,10 @@ public class MessagingDAO
   public Message getNextMessageQueuedForProcessing(int processingRetryDelay, String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
+    // Connection connection = null;
+    // PreparedStatement statement = null;
+    // ResultSet rs = null;
+    // PreparedStatement updateStatement = null;
 
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
@@ -1406,67 +1406,68 @@ public class MessagingDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
+      Message message = null;
 
-      Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - processingRetryDelay);
-
-      statement = connection.prepareStatement(getNextMessageForProcessingSQL);
-      statement.setInt(1, Message.Status.QUEUED_FOR_PROCESSING.getCode());
-      statement.setTimestamp(2, processedBefore);
-
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getNextMessageForProcessingSQL))
       {
-        Timestamp updated = new Timestamp(System.currentTimeMillis());
+        System.out.println("[DEBUG][MessagingDAO][getNextMessageQueuedForProcessing] HERE!!!");
 
-        Message message = getMessage(rs);
+        Timestamp processedBefore = new Timestamp(System.currentTimeMillis()
+          - processingRetryDelay);
 
-        message.setStatus(Message.Status.PROCESSING);
-        message.setLockName(lockName);
-        message.setUpdated(updated);
+        ;
+        statement.setInt(1, Message.Status.QUEUED_FOR_PROCESSING.getCode());
+        statement.setTimestamp(2, processedBefore);
 
-        updateStatement = connection.prepareStatement(lockMessageSQL);
-        updateStatement.setInt(1, Message.Status.PROCESSING.getCode());
-        updateStatement.setString(2, lockName);
-        updateStatement.setTimestamp(3, updated);
-        updateStatement.setString(4, message.getId());
-
-        if (updateStatement.executeUpdate() != 1)
+        try (ResultSet rs = statement.executeQuery())
         {
-          throw new DAOException("Failed to lock the message (" + message.getId()
-              + ") for processing:"
-              + " No rows were affected as a result of executing the SQL statement" + " ("
-              + lockMessageSQL + ")");
+          if (rs.next())
+          {
+            Timestamp updated = new Timestamp(System.currentTimeMillis());
+
+            message = getMessage(rs);
+
+            message.setStatus(Message.Status.PROCESSING);
+            message.setLockName(lockName);
+            message.setUpdated(updated);
+
+            try (PreparedStatement updateStatement = connection.prepareStatement(lockMessageSQL))
+            {
+              updateStatement.setInt(1, Message.Status.PROCESSING.getCode());
+              updateStatement.setString(2, lockName);
+              updateStatement.setTimestamp(3, updated);
+              updateStatement.setString(4, message.getId());
+
+              if (updateStatement.executeUpdate() != 1)
+              {
+                throw new DAOException("Failed to lock the message (" + message.getId()
+                    + ") for processing:"
+                    + " No rows were affected as a result of executing the SQL statement" + " ("
+                    + lockMessageSQL + ")");
+              }
+            }
+          }
         }
 
-        transactionManager.commit();
-
-        return message;
-      }
-      else
-      {
-        transactionManager.commit();
-
-        return null;
-      }
-    }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the next message that has been queued for processing from the database", f);
+        // DAOUtil.close(updateStatement);
+        // DAOUtil.close(rs);
+        // DAOUtil.close(statement);
       }
 
-      throw e;
+      // DAOUtil.close(connection);
+
+      transactionManager.commit();
+
+      return message;
     }
     catch (Throwable e)
     {
+      // DAOUtil.close(updateStatement);
+      // DAOUtil.close(rs);
+      // DAOUtil.close(statement);
+      // DAOUtil.close(connection);
+
       try
       {
         transactionManager.rollback();
@@ -1477,16 +1478,18 @@ public class MessagingDAO
             + " the next message that has been queued for processing from the database", f);
       }
 
-      throw new DAOException("Failed to retrieve the next message that has been queued for"
-          + " processing from the database", e);
+      if (e instanceof DAOException)
+      {
+        throw((DAOException) e);
+      }
+      else
+      {
+        throw new DAOException("Failed to retrieve the next message that has been queued for"
+            + " processing from the database", e);
+      }
     }
     finally
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1625,8 +1628,8 @@ public class MessagingDAO
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     Connection connection = null;

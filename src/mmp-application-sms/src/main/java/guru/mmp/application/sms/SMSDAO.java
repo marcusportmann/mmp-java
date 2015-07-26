@@ -273,9 +273,11 @@ public class SMSDAO
 
       rs = statement.executeQuery();
 
+      SMS sms = null;
+
       if (rs.next())
       {
-        SMS sms = getSMS(rs);
+        sms = getSMS(rs);
 
         sms.setStatus(SMS.Status.SENDING);
         sms.setLockName(lockName);
@@ -288,57 +290,49 @@ public class SMSDAO
         if (updateStatement.executeUpdate() != 1)
         {
           throw new DAOException("Failed to lock the SMS (" + sms.getId() + ") for processing:"
-              + " No rows were affected as a result of executing the SQL statement" + " ("
-              + lockSMSSQL + ")");
+            + " No rows were affected as a result of executing the SQL statement" + " ("
+            + lockSMSSQL + ")");
         }
-
-        transactionManager.commit();
-
-        return sms;
-      }
-      else
-      {
-        transactionManager.commit();
-
-        return null;
-      }
-    }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the next SMS that has been queued for sending from the database", f);
       }
 
-      throw e;
+      DAOUtil.close(updateStatement);
+      DAOUtil.close(rs);
+      DAOUtil.close(statement);
+      DAOUtil.close(connection);
+
+      transactionManager.commit();
+
+      return sms;
     }
     catch (Throwable e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the next SMS that has been queued for sending from the database", f);
-      }
-
-      throw new DAOException("Failed to retrieve the next SMS that has been queued for sending"
-          + " from the database", e);
-    }
-    finally
     {
       DAOUtil.close(updateStatement);
       DAOUtil.close(rs);
       DAOUtil.close(statement);
       DAOUtil.close(connection);
 
+      try
+      {
+        transactionManager.rollback();
+      }
+      catch (Throwable f)
+      {
+        logger.error("Failed to rollback the transaction while retrieving"
+            + " the next SMS that has been queued for sending from the database", f);
+      }
+
+      if (e instanceof DAOException)
+      {
+        throw ((DAOException)e);
+      }
+      else
+      {
+        throw new DAOException("Failed to retrieve the next SMS that has been queued for sending"
+          + " from the database", e);
+      }
+    }
+    finally
+    {
       try
       {
         if (existingTransaction != null)

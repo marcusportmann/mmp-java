@@ -131,11 +131,13 @@ public class TaskDAO
 
       rs = statement.executeQuery();
 
+      ScheduledTask scheduledTask = null;
+
       if (rs.next())
       {
         Timestamp updated = new Timestamp(System.currentTimeMillis());
 
-        ScheduledTask scheduledTask = getScheduledTask(rs);
+        scheduledTask = getScheduledTask(rs);
 
         scheduledTask.setStatus(ScheduledTaskStatus.EXECUTING);
         scheduledTask.setLockName(lockName);
@@ -154,30 +156,24 @@ public class TaskDAO
               + " No rows were affected as a result of executing the SQL statement" + " ("
               + lockScheduledTaskSQL + ")");
         }
-
-        transactionManager.commit();
-
-        return scheduledTask;
       }
-      else
-      {
-        transactionManager.commit();
 
-        return null;
-      }
-    }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable ignored) {}
+      DAOUtil.close(updateStatement);
+      DAOUtil.close(rs);
+      DAOUtil.close(statement);
+      DAOUtil.close(connection);
 
-      throw e;
+      transactionManager.commit();
+
+      return scheduledTask;
     }
     catch (Throwable e)
     {
+      DAOUtil.close(updateStatement);
+      DAOUtil.close(rs);
+      DAOUtil.close(statement);
+      DAOUtil.close(connection);
+
       try
       {
         transactionManager.rollback();
@@ -188,16 +184,18 @@ public class TaskDAO
             + "the next task that has been scheduled for execution from the database", f);
       }
 
-      throw new DAOException("Failed to retrieve the next task that has been scheduled for "
+      if (e instanceof DAOException)
+      {
+        throw ((DAOException)e);
+      }
+      else
+      {
+        throw new DAOException("Failed to retrieve the next task that has been scheduled for "
           + "execution from the database", e);
+      }
     }
     finally
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -602,7 +600,7 @@ public class TaskDAO
       {
         ScheduledTask scheduledTask = getScheduledTask(rs);
 
-        Date nextExecution;
+        Date nextExecution = null;
 
         try
         {
@@ -614,21 +612,27 @@ public class TaskDAO
         catch (Throwable e)
         {
           logger.error("The next execution date could not be determined for the unscheduled task ("
-              + scheduledTask.getId() + ") with the scheduling pattern ("
-              + scheduledTask.getSchedulingPattern()
-              + "): The scheduled task will be marked as FAILED", e);
-
-          setScheduledTaskStatus(connection, scheduledTask.getId(), ScheduledTaskStatus.FAILED);
-
-          transactionManager.commit();
-
-          return true;
+            + scheduledTask.getId() + ") with the scheduling pattern ("
+            + scheduledTask.getSchedulingPattern()
+            + "): The scheduled task will be marked as FAILED", e);
         }
 
-        logger.info("Scheduling the unscheduled task (" + scheduledTask.getId()
+        if (nextExecution == null)
+        {
+          setScheduledTaskStatus(connection, scheduledTask.getId(), ScheduledTaskStatus.FAILED);
+        }
+        else
+        {
+          logger.info("Scheduling the unscheduled task (" + scheduledTask.getId()
             + ") for execution at (" + nextExecution + ")");
 
-        scheduleTask(connection, scheduledTask.getId(), nextExecution);
+          scheduleTask(connection, scheduledTask.getId(), nextExecution);
+        }
+
+        DAOUtil.close(updateStatement);
+        DAOUtil.close(rs);
+        DAOUtil.close(statement);
+        DAOUtil.close(connection);
 
         transactionManager.commit();
 
@@ -636,23 +640,23 @@ public class TaskDAO
       }
       else
       {
+        DAOUtil.close(updateStatement);
+        DAOUtil.close(rs);
+        DAOUtil.close(statement);
+        DAOUtil.close(connection);
+
         transactionManager.commit();
 
         return false;
       }
     }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable ignored) {}
-
-      throw e;
-    }
     catch (Throwable e)
     {
+      DAOUtil.close(updateStatement);
+      DAOUtil.close(rs);
+      DAOUtil.close(statement);
+      DAOUtil.close(connection);
+
       try
       {
         transactionManager.rollback();
@@ -663,15 +667,17 @@ public class TaskDAO
             + "the next unscheduled task for execution", e);
       }
 
-      throw new DAOException("Failed to schedule the next unscheduled task for execution", e);
+      if (e instanceof DAOException)
+      {
+        throw ((DAOException)e);
+      }
+      else
+      {
+        throw new DAOException("Failed to schedule the next unscheduled task for execution", e);
+      }
     }
     finally
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
