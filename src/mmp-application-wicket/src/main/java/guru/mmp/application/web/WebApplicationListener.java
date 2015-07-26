@@ -21,8 +21,8 @@ package guru.mmp.application.web;
 import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.security.context.ApplicationSecurityContext;
-
 import guru.mmp.common.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,8 +105,8 @@ public class WebApplicationListener
     if (StringUtil.isNullOrEmpty(applicationName))
     {
       logger.warn("Failed to retrieve the application name from JNDI using the names ("
-        + "java:app/AppName) and (java:comp/env/ApplicationName)."
-        + " The application security context will not be initialised");
+          + "java:app/AppName) and (java:comp/env/ApplicationName)."
+          + " The application security context will not be initialised");
     }
     else
     {
@@ -114,7 +114,7 @@ public class WebApplicationListener
       if (ApplicationSecurityContext.getContext().exists(applicationName))
       {
         logger.info("Initialising the application security context using the configuration file ("
-          + applicationName + ".ApplicationSecurity)");
+            + applicationName + ".ApplicationSecurity)");
 
         try
         {
@@ -123,16 +123,16 @@ public class WebApplicationListener
         catch (Throwable e)
         {
           throw new WebApplicationException(
-            "Failed to initialise the application security context using the"
+              "Failed to initialise the application security context using the"
               + " configuration file (META-INF/" + applicationName + ".ApplicationSecurity): "
               + e.getMessage(), e);
         }
       }
       else
       {
-        logger.info("The configuration file ("
-          + applicationName + ".ApplicationSecurity) could not found."
-          + " The application security context will not be initialised");
+        logger.info("The configuration file (" + applicationName
+            + ".ApplicationSecurity) could not found."
+            + " The application security context will not be initialised");
       }
     }
   }
@@ -167,12 +167,8 @@ public class WebApplicationListener
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
-    Connection connection = null;
-
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       DatabaseMetaData metaData = connection.getMetaData();
 
       logger.info("Connected to the " + metaData.getDatabaseProductName()
@@ -243,10 +239,6 @@ public class WebApplicationListener
     catch (Throwable e)
     {
       logger.error("Failed to initialise the default database tables", e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 }

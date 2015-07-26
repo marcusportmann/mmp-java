@@ -19,7 +19,6 @@ package guru.mmp.application.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.persistence.DAOException;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
 
 import net.sf.jasperreports.engine.JRParameter;
@@ -97,12 +96,8 @@ public class ReportingService
   public byte[] createReportPDF(String definitionId, Map<String, Object> parameters)
     throws ReportingServiceException
   {
-    Connection connection = null;
-
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       ReportDefinition reportDefinition = getReportDefinition(definitionId);
 
       if (reportDefinition == null)
@@ -133,10 +128,6 @@ public class ReportingService
     {
       throw new ReportingServiceException("Failed to create the PDF for the report using the"
           + " report definintion (" + definitionId + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -398,8 +389,8 @@ public class ReportingService
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
   }
 

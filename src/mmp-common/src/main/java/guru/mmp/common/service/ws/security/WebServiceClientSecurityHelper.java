@@ -28,12 +28,17 @@ import java.lang.reflect.Method;
 
 import java.net.URL;
 
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
@@ -66,6 +71,26 @@ public class WebServiceClientSecurityHelper
   /* The web service client cache. */
   private static ConcurrentMap<String, WebServiceClient> webServiceClientCache =
     new ConcurrentHashMap<>();
+
+  private static Class apacheCxfClientProxyClass;
+
+  private static Class apacheCxfClientClass;
+
+  private static Class apacheCxfTlsParametersBaseClass;
+
+  private static Class apacheCxfTlsClientParametersClass;
+
+  private static Class apacheCxfHttpConduitClass;
+
+  private static Method apacheCxfGetClientMethod;
+
+  private static Method apacheCxfGetConduitMethod;
+  
+  private static Method apacheCxfTlsParametersBaseSetKeyManagersMethod;
+
+  private static Method apacheCxfTlsParametersBaseSetTrustManagersMethod;
+
+  private static Method apacheCxfHttpConduitSetTlsClientParametersMethod;
 
   /**
    * Returns the secure web service proxy for the web service that has been secured with
@@ -121,6 +146,118 @@ public class WebServiceClientSecurityHelper
 
       bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
           serviceEndpoint);
+
+      // Check if we are running under JBoss
+      if (System.getProperty("jboss.home.dir") != null)
+      {
+        try
+        {
+          if (apacheCxfClientProxyClass == null)
+          {
+            apacheCxfClientProxyClass = Thread.currentThread().getContextClassLoader()
+              .loadClass("org.apache.cxf.frontend.ClientProxy");
+
+            apacheCxfClientClass = Thread.currentThread().getContextClassLoader()
+              .loadClass("org.apache.cxf.endpoint.Client");
+
+            apacheCxfTlsParametersBaseClass = Thread.currentThread().getContextClassLoader()
+              .loadClass("org.apache.cxf.configuration.jsse.TLSParameterBase");
+
+            apacheCxfTlsClientParametersClass = Thread.currentThread().getContextClassLoader()
+              .loadClass("org.apache.cxf.configuration.jsse.TLSClientParameters");
+
+            apacheCxfHttpConduitClass = Thread.currentThread().getContextClassLoader()
+              .loadClass("org.apache.cxf.transport.http.HTTPConduit");
+
+            apacheCxfGetClientMethod = apacheCxfClientProxyClass.getMethod("getClient", java.lang.Object.class);
+
+            if (apacheCxfGetClientMethod == null)
+            {
+              throw new RuntimeException("Failed to retrieve the getClient method on the org.apache.cxf.frontend.ClientProxy class");
+            }
+
+            apacheCxfGetConduitMethod = apacheCxfClientClass.getMethod("getConduit");
+
+            if (apacheCxfGetConduitMethod == null)
+            {
+              throw new RuntimeException("Failed to retrieve the getConduit method on the org.apache.cxf.endpoint.Client class");
+            }
+
+            apacheCxfTlsParametersBaseSetKeyManagersMethod = apacheCxfTlsParametersBaseClass
+              .getMethod("setKeyManagers", new Class[]{javax.net.ssl.KeyManager[].class});
+
+            if (apacheCxfTlsParametersBaseSetKeyManagersMethod == null)
+            {
+              throw new RuntimeException("Failed to retrieve the setKeyManagers method on the org.apache.cxf.configuration.jsse.TLSParameterBase class");
+            }
+
+            apacheCxfTlsParametersBaseSetTrustManagersMethod = apacheCxfTlsParametersBaseClass
+              .getMethod("setTrustManagers", new Class[]{javax.net.ssl.TrustManager[].class});
+
+            if (apacheCxfTlsParametersBaseSetTrustManagersMethod == null)
+            {
+              throw new RuntimeException("Failed to retrieve the setTrustManagers method on the org.apache.cxf.configuration.jsse.TLSParameterBase class");
+            }
+
+            apacheCxfHttpConduitSetTlsClientParametersMethod = apacheCxfHttpConduitClass
+              .getMethod("setTlsClientParameters", apacheCxfTlsClientParametersClass);
+
+            if (apacheCxfHttpConduitSetTlsClientParametersMethod == null)
+            {
+              throw new RuntimeException("Failed to retrieve the setTlsClientParameters method on the org.apache.cxf.transport.http.HTTPConduit class");
+            }
+          }
+
+          Object clientObject = apacheCxfGetClientMethod.invoke(null, proxy);
+
+          Object httpConduitObject = apacheCxfGetConduitMethod.invoke(clientObject);
+
+          Object tlsClientParametersObject = apacheCxfTlsClientParametersClass.newInstance();
+
+          // Setup the key manager for the client SSL socket factory
+          KeyManagerFactory keyManagerFactory =
+            KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+
+          keyManagerFactory.init(ApplicationSecurityContext.getContext().getKeyStore(),
+            ApplicationSecurityContext.getContext().getKeyStorePassword().toCharArray());
+
+          apacheCxfTlsParametersBaseSetKeyManagersMethod
+            .invoke(tlsClientParametersObject, new Object[]{keyManagerFactory.getKeyManagers()});
+
+          // Create a trust manager that does not validate certificate chains
+          TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager()
+          {
+            public void checkClientTrusted(X509Certificate[] chain, String authType)
+              throws CertificateException
+            {
+              // Skip client verification step
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain, String authType)
+              throws CertificateException
+            {
+              // Skip server verification step
+            }
+
+            public X509Certificate[] getAcceptedIssuers()
+            {
+              return new X509Certificate[0];
+            }
+          }
+          };
+
+
+          apacheCxfTlsParametersBaseSetTrustManagersMethod.invoke(tlsClientParametersObject, new Object[]{trustAllCerts});
+
+          // Invoke the setTlsClientParameters
+          apacheCxfHttpConduitSetTlsClientParametersMethod.invoke(httpConduitObject, tlsClientParametersObject);
+        }
+        catch (Throwable e)
+        {
+          throw new WebServiceClientSecurityException(
+            "Failed to initialise the client SSL socket factory for the Apache CXF proxy", e);
+        }
+      }
 
       return proxy;
     }

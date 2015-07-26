@@ -18,7 +18,6 @@ package guru.mmp.application.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
 
@@ -271,14 +270,11 @@ public abstract class DataAccessObject
     try
     {
       // Retrieve the database meta data
-      Connection connection = null;
-      String schemaSeparator = ".";
-      String idQuote = "\"";
+      String schemaSeparator;
+      String idQuote;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -296,10 +292,6 @@ public abstract class DataAccessObject
         {
           idQuote = "\"";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix

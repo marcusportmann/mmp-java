@@ -173,9 +173,7 @@ public class SampleApplicationListener
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
@@ -186,12 +184,8 @@ public class SampleApplicationListener
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
-    Connection connection = null;
-
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       DatabaseMetaData metaData = connection.getMetaData();
 
       logger.info("Connected to the " + metaData.getDatabaseProductName()
@@ -260,10 +254,6 @@ public class SampleApplicationListener
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to initialise the sample database tables", e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 }

@@ -20,7 +20,6 @@ package guru.mmp.application.codes;
 
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
 
@@ -110,20 +109,15 @@ public class CodesDAO
   public boolean cachedCodeCategoryExists(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(cachedCodeCategoryExistsSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(cachedCodeCategoryExistsSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      return rs.next();
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
     catch (DAOException e)
     {
@@ -133,12 +127,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to check whether the cached code category (" + id
           + ") exists in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -154,20 +142,15 @@ public class CodesDAO
   public boolean codeCategoryExists(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(codeCategoryExistsSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(codeCategoryExistsSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      return rs.next();
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
     catch (DAOException e)
     {
@@ -177,12 +160,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to check whether the code category (" + id
           + ") exists in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -196,15 +173,9 @@ public class CodesDAO
   public void createCachedCode(Code code)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createCachedCodeSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createCachedCodeSQL);
-
       if (StringUtil.isNullOrEmpty(code.getId()))
       {
         statement.setString(1, String.valueOf(idGenerator.next("Application.CodeId")));
@@ -236,11 +207,6 @@ public class CodesDAO
       throw new DAOException("Failed to add the cached code (" + code.getName()
           + ") for the cached code category (" + code.getCategoryId() + ") to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -253,15 +219,9 @@ public class CodesDAO
   public void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createCachedCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createCachedCodeCategorySQL);
-
       statement.setString(1, cachedCodeCategory.getId());
       statement.setBytes(2, (cachedCodeCategory.getCodeData() != null)
           ? cachedCodeCategory.getCodeData().getBytes("UTF-8")
@@ -286,11 +246,6 @@ public class CodesDAO
       throw new DAOException("Failed to add the cached code category ("
           + cachedCodeCategory.getId() + ") to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -303,15 +258,9 @@ public class CodesDAO
   public void createCode(Code code)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createCodeSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createCodeSQL);
-
       if (StringUtil.isNullOrEmpty(code.getId()))
       {
         statement.setString(1, String.valueOf(idGenerator.next("Application.CodeId")));
@@ -343,11 +292,6 @@ public class CodesDAO
       throw new DAOException("Failed to add the code (" + code.getName()
           + ") for the code category (" + code.getCategoryId() + ") to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -360,15 +304,9 @@ public class CodesDAO
   public void createCodeCategory(CodeCategory codeCategory)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createCodeCategorySQL);
-
       statement.setString(1, codeCategory.getId());
       statement.setString(2, codeCategory.getOrganisation());
       statement.setInt(3, codeCategory.getCategoryType().getCode());
@@ -409,11 +347,6 @@ public class CodesDAO
       throw new DAOException("Failed to add the code category (" + codeCategory.getId()
           + ") to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -426,15 +359,9 @@ public class CodesDAO
   public void deleteCachedCodeCategory(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteCachedCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteCachedCodeCategorySQL);
-
       statement.setString(1, id);
 
       if (statement.executeUpdate() != 1)
@@ -454,11 +381,6 @@ public class CodesDAO
       throw new DAOException("Failed to delete the cached code category (" + id
           + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -471,15 +393,9 @@ public class CodesDAO
   public void deleteCode(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteCodeSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteCodeSQL);
-
       statement.setString(1, id);
 
       if (statement.executeUpdate() != 1)
@@ -497,11 +413,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to delete the code (" + id + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -514,15 +425,9 @@ public class CodesDAO
   public void deleteCodeCategory(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteCodeCategorySQL);
-
       statement.setString(1, id);
 
       if (statement.executeUpdate() != 1)
@@ -540,11 +445,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to delete the code category (" + id + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -560,26 +460,21 @@ public class CodesDAO
   public CachedCodeCategory getCachedCodeCategory(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getCachedCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getCachedCodeCategorySQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getCachedCodeCategory(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getCachedCodeCategory(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -590,12 +485,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the cached code category (" + id
           + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -611,27 +500,23 @@ public class CodesDAO
   public List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getCachedCodesForCachedCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getCachedCodesForCachedCodeCategorySQL);
       statement.setString(1, cachedCodeCategoryId);
 
-      rs = statement.executeQuery();
-
-      List<Code> codes = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        codes.add(getCode(rs));
-      }
+        List<Code> codes = new ArrayList<>();
 
-      return codes;
+        while (rs.next())
+        {
+          codes.add(getCode(rs));
+        }
+
+        return codes;
+      }
     }
     catch (DAOException e)
     {
@@ -641,12 +526,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the cached codes for the cached code category ("
           + cachedCodeCategoryId + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -662,26 +541,21 @@ public class CodesDAO
   public Code getCode(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getCodeSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getCodeSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getCode(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getCode(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -691,12 +565,6 @@ public class CodesDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the code (" + id + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -716,42 +584,31 @@ public class CodesDAO
       boolean retrieveCodes)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(retrieveCodes
+          ? getCodeCategoriesForOrganisationSQL
+          : getCodeCategoriesNoDataForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
-      if (retrieveCodes)
-      {
-        statement = connection.prepareStatement(getCodeCategoriesForOrganisationSQL);
-      }
-      else
-      {
-        statement = connection.prepareStatement(getCodeCategoriesNoDataForOrganisationSQL);
-      }
-
       statement.setString(1, organisation);
 
-      rs = statement.executeQuery();
-
-      List<CodeCategory> codeCategories = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        if (retrieveCodes)
-        {
-          codeCategories.add(getCodeCategory(rs));
-        }
-        else
-        {
-          codeCategories.add(getCodeCategoryNoData(rs));
-        }
-      }
+        List<CodeCategory> codeCategories = new ArrayList<>();
 
-      return codeCategories;
+        while (rs.next())
+        {
+          if (retrieveCodes)
+          {
+            codeCategories.add(getCodeCategory(rs));
+          }
+          else
+          {
+            codeCategories.add(getCodeCategoryNoData(rs));
+          }
+        }
+
+        return codeCategories;
+      }
     }
     catch (DAOException e)
     {
@@ -761,12 +618,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the code categories for the organisation ("
           + organisation + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -783,26 +634,21 @@ public class CodesDAO
   public CodeCategory getCodeCategory(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getCodeCategorySQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getCodeCategory(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getCodeCategory(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -813,12 +659,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the code category (" + id + ") from the database",
           e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -834,27 +674,22 @@ public class CodesDAO
   public List<Code> getCodesForCodeCategory(String codeCategoryId)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getCodesForCodeCategorySQL);
       statement.setString(1, codeCategoryId);
 
-      rs = statement.executeQuery();
-
-      List<Code> codes = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        codes.add(getCode(rs));
-      }
+        List<Code> codes = new ArrayList<>();
 
-      return codes;
+        while (rs.next())
+        {
+          codes.add(getCode(rs));
+        }
+
+        return codes;
+      }
     }
     catch (DAOException e)
     {
@@ -864,12 +699,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the codes for the code category ("
           + codeCategoryId + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -887,29 +716,25 @@ public class CodesDAO
   public int getNumberOfCodeCategoriesForOrganisation(String organisation)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getNumberOfCodeCategoriesForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getNumberOfCodeCategoriesForOrganisationSQL);
       statement.setString(1, organisation);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        throw new DAOException("Failed to retrieve the number of code categories for the"
-            + " organisation (" + organisation + ") in the database:"
-            + " No results were returned as a result of executing the SQL statement ("
-            + getNumberOfCodeCategoriesForOrganisationSQL + ")");
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          throw new DAOException("Failed to retrieve the number of code categories for the"
+              + " organisation (" + organisation + ") in the database:"
+              + " No results were returned as a result of executing the SQL statement ("
+              + getNumberOfCodeCategoriesForOrganisationSQL + ")");
+        }
       }
     }
     catch (DAOException e)
@@ -920,12 +745,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the number of code categories for the"
           + " organisation (" + organisation + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -941,29 +760,24 @@ public class CodesDAO
   public int getNumberOfCodesForCodeCategory(String codeCategoryId)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getNumberOfCodesForCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getNumberOfCodesForCodeCategorySQL);
       statement.setString(1, codeCategoryId);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        throw new DAOException("Failed to retrieve the number of codes for the code category ("
-            + codeCategoryId + ") in the database:"
-            + " No results were returned as a result of executing the SQL statement ("
-            + getNumberOfCodesForCodeCategorySQL + ")");
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          throw new DAOException("Failed to retrieve the number of codes for the code category ("
+              + codeCategoryId + ") in the database:"
+              + " No results were returned as a result of executing the SQL statement ("
+              + getNumberOfCodesForCodeCategorySQL + ")");
+        }
       }
     }
     catch (DAOException e)
@@ -974,12 +788,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the number of codes for the code category ("
           + codeCategoryId + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1014,14 +822,11 @@ public class CodesDAO
     try
     {
       // Retrieve the database meta data
-      Connection connection = null;
-      String schemaSeparator = ".";
-      String idQuote = "\"";
+      String schemaSeparator;
+      String idQuote;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -1039,10 +844,6 @@ public class CodesDAO
         {
           idQuote = "\"";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix
@@ -1074,12 +875,8 @@ public class CodesDAO
   public boolean isCachedCodeCategoryCurrent(String id)
     throws DAOException
   {
-    Connection connection = null;
-
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       Integer cacheExpiry = getCodeCategoryCacheExpiry(connection, id);
 
       if (cacheExpiry == null)
@@ -1102,10 +899,6 @@ public class CodesDAO
       throw new DAOException("Failed to check whether the cached code category (" + id
           + ") in the database is current", e);
     }
-    finally
-    {
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1121,15 +914,9 @@ public class CodesDAO
   public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateCachedCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(updateCachedCodeCategorySQL);
-
       Date cached = new Date();
 
       statement.setBytes(1, (cachedCodeCategory.getCodeData() != null)
@@ -1160,11 +947,6 @@ public class CodesDAO
       throw new DAOException("Failed to update the cached code category ("
           + cachedCodeCategory.getId() + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1179,15 +961,9 @@ public class CodesDAO
   public Code updateCode(Code code)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateCodeSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(updateCodeSQL);
-
       statement.setString(1, code.getCategoryId());
       statement.setString(2, code.getName());
       statement.setString(3, code.getDescription());
@@ -1211,11 +987,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to update the code (" + code.getId() + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1231,15 +1002,9 @@ public class CodesDAO
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateCodeCategorySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(updateCodeCategorySQL);
-
       Date updated = new Date();
 
       statement.setString(1, codeCategory.getOrganisation());
@@ -1285,11 +1050,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to update the code category (" + codeCategory.getId()
           + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1414,23 +1174,20 @@ public class CodesDAO
   private Date getCachedCodeCategoryCached(Connection connection, String id)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getCachedCodeCategoryCachedSQL))
     {
-      statement = connection.prepareStatement(getCachedCodeCategoryCachedSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getTimestamp(1);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return rs.getTimestamp(1);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -1441,11 +1198,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the cached date and time for the cached code"
           + " category (" + id + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -1475,34 +1227,31 @@ public class CodesDAO
   private Integer getCodeCategoryCacheExpiry(Connection connection, String id)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getCodeCategoryCacheExpirySQL))
     {
-      statement = connection.prepareStatement(getCodeCategoryCacheExpirySQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        int cacheExpiry = rs.getInt(1);
-
-        boolean cacheExpiryIsNull = rs.wasNull();
-
-        if (cacheExpiryIsNull)
+        if (rs.next())
         {
-          return null;
+          int cacheExpiry = rs.getInt(1);
+
+          boolean cacheExpiryIsNull = rs.wasNull();
+
+          if (cacheExpiryIsNull)
+          {
+            return null;
+          }
+          else
+          {
+            return cacheExpiry;
+          }
         }
         else
         {
-          return cacheExpiry;
+          return null;
         }
-      }
-      else
-      {
-        return null;
       }
     }
     catch (DAOException e)
@@ -1513,11 +1262,6 @@ public class CodesDAO
     {
       throw new DAOException("Failed to retrieve the cache expiry for the code category (" + id
           + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 

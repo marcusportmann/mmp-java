@@ -19,13 +19,15 @@ package guru.mmp.common.persistence;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>IDGenerator</code> class provides unique IDs for the entity types in the database.
@@ -94,10 +96,6 @@ public class IDGenerator
    */
   public long next(String type)
   {
-    // Local variables
-    long id = 0;
-    Connection connection = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -113,32 +111,38 @@ public class IDGenerator
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-      id = getCurrentId(connection, type);
+      long id;
 
-      if (id == -1)
+      try (Connection connection = dataSource.getConnection())
       {
-        id = 1;
-        insertId(connection, type, id);
+        id = getCurrentId(connection, type);
 
-        // TODO: Handle a duplicate row exception caused by the INSERT/UPDATE race condition.
-        // This race condition occurs when there is no row for a particular type of entity
-        // in the IDGENERATOR table. Assuming we have two different threads that are both
-        // attempting to retrieve the next ID for this entity type. When the first thread
-        // executes the SELECT FOR UPDATE call, it will not able to lock a row and will then
-        // attempt to execute the INSERT. If another thread manages to execute the SELECT FOR
-        // UPDATE call before the first thread completes the INSERT then one of the threads
-        // will experience a duplicate row exception as they will both attempt to INSERT.
-        // The easiest way to prevent this from happening is to pre-populate the IDGENERATOR
-        // table with initial IDs.
-      }
-      else
-      {
-        id = id + 1;
-        updateId(connection, type, id);
+        if (id == -1)
+        {
+          id = 1;
+          insertId(connection, type, id);
+
+          // TODO: Handle a duplicate row exception caused by the INSERT/UPDATE race condition.
+          // This race condition occurs when there is no row for a particular type of entity
+          // in the IDGENERATOR table. Assuming we have two different threads that are both
+          // attempting to retrieve the next ID for this entity type. When the first thread
+          // executes the SELECT FOR UPDATE call, it will not able to lock a row and will then
+          // attempt to execute the INSERT. If another thread manages to execute the SELECT FOR
+          // UPDATE call before the first thread completes the INSERT then one of the threads
+          // will experience a duplicate row exception as they will both attempt to INSERT.
+          // The easiest way to prevent this from happening is to pre-populate the IDGENERATOR
+          // table with initial IDs.
+        }
+        else
+        {
+          id = id + 1;
+          updateId(connection, type, id);
+        }
       }
 
       transactionManager.commit();
+
+      return id;
     }
     catch (Exception e)
     {
@@ -157,8 +161,6 @@ public class IDGenerator
     }
     finally
     {
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -172,8 +174,6 @@ public class IDGenerator
             + " the new ID for the entity of type (" + type + ") from the IDGENERATOR table", e);
       }
     }
-
-    return id;
   }
 
   /**
@@ -201,28 +201,21 @@ public class IDGenerator
   private long getCurrentId(Connection connection, String type)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getCurrentIdSQL))
     {
-      statement = connection.prepareStatement(getCurrentIdSQL);
       statement.setString(1, type);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getLong(1);
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return -1;
+        }
       }
-      else
-      {
-        return -1;
-      }
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -263,7 +256,7 @@ public class IDGenerator
       }
       finally
       {
-        DAOUtil.close(connection);
+        DAOUtil.closex(connection);
       }
 
       // Determine the schema prefix
@@ -286,11 +279,8 @@ public class IDGenerator
   private void insertId(Connection connection, String type, long id)
     throws SQLException
   {
-    PreparedStatement statement = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(insertIdSQL))
     {
-      statement = connection.prepareStatement(insertIdSQL);
       statement.setLong(1, id);
       statement.setString(2, type);
 
@@ -300,20 +290,13 @@ public class IDGenerator
             + " row for the type (" + type + ")");
       }
     }
-    finally
-    {
-      DAOUtil.close(statement);
-    }
   }
 
   private void updateId(Connection connection, String type, long id)
     throws SQLException
   {
-    PreparedStatement statement = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(updateIdSQL))
     {
-      statement = connection.prepareStatement(updateIdSQL);
       statement.setLong(1, id);
       statement.setString(2, type);
 
@@ -322,10 +305,6 @@ public class IDGenerator
         throw new SQLException("No rows were affected while updating the IDGENERATOR table"
             + " row for the type (" + type + ")");
       }
-    }
-    finally
-    {
-      DAOUtil.close(statement);
     }
   }
 }

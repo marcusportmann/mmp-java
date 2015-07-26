@@ -21,7 +21,6 @@ package guru.mmp.application.security;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.registry.IRegistry;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
@@ -173,9 +172,6 @@ public class SecurityService
     throws DuplicateFunctionException, FunctionNotFoundException,
       FunctionTemplateNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(functionCode))
     {
@@ -192,10 +188,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(addFunctionToTemplateSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the function with the specified code
       long functionId;
 
@@ -227,7 +222,6 @@ public class SecurityService
       }
 
       // Add the function to the template
-      statement = connection.prepareStatement(addFunctionToTemplateSQL);
       statement.setLong(1, functionId);
       statement.setLong(2, templateId);
 
@@ -249,11 +243,6 @@ public class SecurityService
       throw new SecurityException("Failed to add the function (" + functionCode
           + ") to the function template (" + templateCode + "): " + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -274,9 +263,6 @@ public class SecurityService
     throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
       SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -298,10 +284,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(addUserToGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -335,7 +320,6 @@ public class SecurityService
       }
 
       // Add the user to the group
-      statement = connection.prepareStatement(addUserToGroupSQL);
       statement.setLong(1, userId);
       statement.setLong(2, groupId);
       statement.setLong(3, organisationId);
@@ -357,11 +341,6 @@ public class SecurityService
       throw new SecurityException("Failed to add the user (" + username + ") to the group ("
           + groupName + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -379,9 +358,6 @@ public class SecurityService
   public void addUserToOrganisation(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -398,10 +374,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(addUserToOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -427,7 +402,6 @@ public class SecurityService
       }
 
       // Add the user to the organisation
-      statement = connection.prepareStatement(addUserToOrganisationSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
 
@@ -447,11 +421,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to add the user (" + username + ") to the organisation ("
           + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -474,9 +443,6 @@ public class SecurityService
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason, String origin)
     throws UserNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -493,10 +459,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(changePasswordSQL))
     {
-      connection = dataSource.getConnection();
-
       User user = getUser(connection, username);
 
       if (user == null)
@@ -506,7 +471,6 @@ public class SecurityService
 
       String passwordHash = createPasswordHash(newPassword);
 
-      statement = connection.prepareStatement(changePasswordSQL);
       statement.setString(1, passwordHash);
 
       if (lockUser)
@@ -565,11 +529,6 @@ public class SecurityService
       throw new SecurityException("Failed to administratively change the password for the user ("
           + username + "): " + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -616,8 +575,6 @@ public class SecurityService
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -634,10 +591,8 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       User user = getUser(connection, username);
 
       if (user == null)
@@ -672,19 +627,8 @@ public class SecurityService
 
       return new HashMap<>();
     }
-    catch (AuthenticationFailedException e)
-    {
-      throw e;
-    }
-    catch (UserLockedException e)
-    {
-      throw e;
-    }
-    catch (ExpiredPasswordException e)
-    {
-      throw e;
-    }
-    catch (UserNotFoundException e)
+    catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
+        | ExpiredPasswordException e)
     {
       throw e;
     }
@@ -692,10 +636,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to authenticate the user (" + username + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -719,9 +659,6 @@ public class SecurityService
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, ExistingPasswordException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -743,10 +680,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(changePasswordSQL))
     {
-      connection = dataSource.getConnection();
-
       User user = getUser(connection, username);
 
       if (user == null)
@@ -788,7 +724,6 @@ public class SecurityService
             + ") has been used recently and is not valid");
       }
 
-      statement = connection.prepareStatement(changePasswordSQL);
       statement.setString(1, newPasswordHash);
 
       if (!isNullOrEmpty(user.getPasswordAttempts()))
@@ -824,23 +759,8 @@ public class SecurityService
 
       savePasswordHistory(connection, user.getId(), newPasswordHash);
     }
-    catch (AuthenticationFailedException e)
-    {
-      throw e;
-    }
-    catch (UserLockedException e)
-    {
-      throw e;
-    }
-    catch (ExpiredPasswordException e)
-    {
-      throw e;
-    }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (ExistingPasswordException e)
+    catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
+        | ExpiredPasswordException | UserLockedException e)
     {
       throw e;
     }
@@ -848,11 +768,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to change the password for the user (" + username + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -870,9 +785,6 @@ public class SecurityService
   public void createFunction(Function function, String origin)
     throws DuplicateFunctionException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(function.getCode()))
     {
@@ -889,10 +801,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createFunctionSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getFunctionId(connection, function.getCode()) != -1)
       {
         throw new DuplicateFunctionException("A function with the code (" + function.getCode()
@@ -901,7 +812,6 @@ public class SecurityService
 
       long functionId = nextId("Application.FunctionId");
 
-      statement = connection.prepareStatement(createFunctionSQL);
       statement.setLong(1, functionId);
       statement.setString(2, function.getCode());
       statement.setString(3, function.getName());
@@ -925,11 +835,6 @@ public class SecurityService
       throw new SecurityException("Failed to create the function (" + function.getCode() + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -946,9 +851,6 @@ public class SecurityService
   public void createFunctionTemplate(FunctionTemplate template, String origin)
     throws DuplicateFunctionTemplateException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(template.getCode()))
     {
@@ -965,10 +867,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createFunctionTemplateSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getFunctionTemplateId(connection, template.getCode()) != -1)
       {
         throw new DuplicateFunctionTemplateException("A function template with the code ("
@@ -977,7 +878,6 @@ public class SecurityService
 
       long templateId = nextId("Application.FunctionTemplateId");
 
-      statement = connection.prepareStatement(createFunctionTemplateSQL);
       statement.setLong(1, templateId);
       statement.setString(2, template.getCode());
       statement.setString(3, template.getName());
@@ -1001,11 +901,6 @@ public class SecurityService
       throw new SecurityException("Failed to create the function template (" + template.getCode()
           + "): " + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1021,9 +916,6 @@ public class SecurityService
   public void createGroup(Group group, String origin)
     throws DuplicateGroupException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(group.getGroupName()))
     {
@@ -1035,10 +927,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getGroupId(connection, group.getGroupName()) != -1)
       {
         throw new DuplicateGroupException("The group (" + group.getGroupName()
@@ -1047,7 +938,6 @@ public class SecurityService
 
       long groupId = nextId("Application.GroupId");
 
-      statement = connection.prepareStatement(createGroupSQL);
       statement.setLong(1, groupId);
       statement.setString(2, group.getGroupName());
       statement.setString(3, group.getDescription());
@@ -1070,11 +960,6 @@ public class SecurityService
       throw new SecurityException("Failed to create the group (" + group.getGroupName() + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1091,9 +976,6 @@ public class SecurityService
   public void createOrganisation(Organisation organisation, String origin)
     throws DuplicateOrganisationException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(organisation.getCode()))
     {
@@ -1110,10 +992,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getOrganisationId(connection, organisation.getCode()) != -1)
       {
         throw new DuplicateGroupException("The organisation (" + organisation.getCode()
@@ -1122,7 +1003,6 @@ public class SecurityService
 
       long organisationId = nextId("Application.OrganisationId");
 
-      statement = connection.prepareStatement(createOrganisationSQL);
       statement.setLong(1, organisationId);
       statement.setString(2, organisation.getCode());
       statement.setString(3, organisation.getName());
@@ -1146,11 +1026,6 @@ public class SecurityService
       throw new SecurityException("Failed to create the organisation (" + organisation.getCode()
           + "): " + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1166,12 +1041,10 @@ public class SecurityService
    * @throws DuplicateUserException
    * @throws SecurityException
    */
+  @SuppressWarnings("ConstantConditions")
   public void createUser(User user, boolean expiredPassword, boolean userLocked, String origin)
     throws DuplicateUserException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(user.getUsername()))
     {
@@ -1183,10 +1056,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createUserSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getUserId(connection, user.getUsername()) != -1)
       {
         throw new DuplicateUserException("The user (" + user.getUsername() + ") already exists");
@@ -1194,7 +1066,6 @@ public class SecurityService
 
       long userId = nextId("Application.UserId");
 
-      statement = connection.prepareStatement(createUserSQL);
       statement.setLong(1, userId);
       statement.setString(2, user.getUsername());
 
@@ -1277,11 +1148,6 @@ public class SecurityService
       throw new SecurityException("Failed to create the user (" + user.getUsername() + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1297,9 +1163,6 @@ public class SecurityService
   public void deleteFunction(String code, String origin)
     throws FunctionNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(code))
     {
@@ -1311,17 +1174,15 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteFunctionSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getFunctionId(connection, code) == -1)
       {
         throw new FunctionNotFoundException("A function with the code (" + code
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(deleteFunctionSQL);
       statement.setString(1, code);
 
       if (statement.executeUpdate() <= 0)
@@ -1340,11 +1201,6 @@ public class SecurityService
       throw new SecurityException("Failed to delete the function (" + code + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1360,9 +1216,6 @@ public class SecurityService
   public void deleteFunctionTemplate(String code, String origin)
     throws FunctionTemplateNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(code))
     {
@@ -1374,17 +1227,15 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteFunctionTemplateSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getFunctionTemplateId(connection, code) == -1)
       {
         throw new FunctionTemplateNotFoundException("A function template with the code (" + code
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(deleteFunctionTemplateSQL);
       statement.setString(1, code);
 
       if (statement.executeUpdate() <= 0)
@@ -1403,11 +1254,6 @@ public class SecurityService
       throw new SecurityException("Failed to delete the function template (" + code + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1424,9 +1270,6 @@ public class SecurityService
   public void deleteGroup(String groupName, String origin)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(groupName))
     {
@@ -1438,10 +1281,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       long groupId = getGroupId(connection, groupName);
 
       if (groupId == -1)
@@ -1458,7 +1300,6 @@ public class SecurityService
             + " user(s)");
       }
 
-      statement = connection.prepareStatement(deleteGroupSQL);
       statement.setString(1, groupName);
 
       if (statement.executeUpdate() <= 0)
@@ -1468,11 +1309,7 @@ public class SecurityService
             + deleteGroupSQL + ")");
       }
     }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (ExistingGroupMembersException e)
+    catch (GroupNotFoundException | ExistingGroupMembersException e)
     {
       throw e;
     }
@@ -1480,11 +1317,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to delete the group (" + groupName + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1501,9 +1333,6 @@ public class SecurityService
   public void deleteOrganisation(String code, String origin)
     throws OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(code))
     {
@@ -1515,17 +1344,15 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getOrganisationId(connection, code) == -1)
       {
         throw new OrganisationNotFoundException("The organisation (" + code
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(deleteOrganisationSQL);
       statement.setString(1, code);
 
       if (statement.executeUpdate() <= 0)
@@ -1544,11 +1371,6 @@ public class SecurityService
       throw new SecurityException("Failed to delete the organisation (" + code + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1564,9 +1386,6 @@ public class SecurityService
   public void deleteUser(String username, String origin)
     throws UserNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -1578,16 +1397,14 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteUserSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getUserId(connection, username) == -1)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      statement = connection.prepareStatement(deleteUserSQL);
       statement.setString(1, username);
 
       if (statement.executeUpdate() <= 0)
@@ -1606,11 +1423,6 @@ public class SecurityService
       throw new SecurityException("Failed to delete the user (" + username + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1628,10 +1440,6 @@ public class SecurityService
   public List<User> findUsers(List<Attribute> attributes, String origin)
     throws InvalidAttributeException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (attributes == null)
     {
@@ -1643,22 +1451,24 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-      statement = buildFindUsersStatement(connection, attributes);
-      rs = statement.executeQuery();
-
-      List<User> list = new ArrayList<>();
-
-      while (rs.next())
+      try (PreparedStatement statement = buildFindUsersStatement(connection, attributes))
       {
-        User user = buildUserFromResultSet(rs);
+        try (ResultSet rs = statement.executeQuery())
+        {
+          List<User> list = new ArrayList<>();
 
-        list.add(user);
+          while (rs.next())
+          {
+            User user = buildUserFromResultSet(rs);
+
+            list.add(user);
+          }
+
+          return list;
+        }
       }
-
-      return list;
     }
     catch (InvalidAttributeException e)
     {
@@ -1667,12 +1477,6 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityException("Failed to find the users: " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1727,10 +1531,6 @@ public class SecurityService
       String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -1747,10 +1547,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getAllFunctionCodesForUserSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -1768,16 +1567,17 @@ public class SecurityService
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(getAllFunctionCodesForUserSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
-      rs = statement.executeQuery();
 
       List<String> list = new ArrayList<>();
 
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        list.add(rs.getString(1));
+        while (rs.next())
+        {
+          list.add(rs.getString(1));
+        }
       }
 
       // Add the function codes assigned to the user directly
@@ -1785,11 +1585,7 @@ public class SecurityService
 
       return list;
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException e)
     {
       throw e;
     }
@@ -1797,12 +1593,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve all the function codes for the user ("
           + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1872,10 +1662,6 @@ public class SecurityService
       String origin)
     throws OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(organisation))
     {
@@ -1892,10 +1678,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFilteredUsersForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the organisation with the specified code
       long organisationId;
 
@@ -1910,25 +1695,24 @@ public class SecurityService
       filterBuffer.append(filter.toUpperCase());
       filterBuffer.append("%");
 
-      statement = connection.prepareStatement(getFilteredUsersForOrganisationSQL);
-
       statement.setLong(1, organisationId);
       statement.setString(2, filterBuffer.toString());
       statement.setString(3, filterBuffer.toString());
       statement.setString(4, filterBuffer.toString());
 
-      rs = statement.executeQuery();
-
-      List<User> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        User user = buildUserFromResultSet(rs);
+        List<User> list = new ArrayList<>();
 
-        list.add(user);
+        while (rs.next())
+        {
+          User user = buildUserFromResultSet(rs);
+
+          list.add(user);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (OrganisationNotFoundException e)
     {
@@ -1938,12 +1722,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the users for the organisation ("
           + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1962,10 +1740,6 @@ public class SecurityService
   public Function getFunction(String code, String origin)
     throws FunctionNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(code))
     {
@@ -1979,25 +1753,29 @@ public class SecurityService
 
     try
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getFunctionSQL);
-      statement.setString(1, code);
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getFunctionSQL))
       {
-        Function function = new Function(rs.getString(2));
+        statement.setString(1, code);
 
-        function.setId(rs.getInt(1));
-        function.setName(rs.getString(3));
-        function.setDescription(rs.getString(4));
+        try (ResultSet rs = statement.executeQuery())
+        {
+          if (rs.next())
+          {
+            Function function = new Function(rs.getString(2));
 
-        return function;
-      }
-      else
-      {
-        throw new FunctionNotFoundException("A function with the code (" + code
-            + ") could not be found");
+            function.setId(rs.getInt(1));
+            function.setName(rs.getString(3));
+            function.setDescription(rs.getString(4));
+
+            return function;
+          }
+          else
+          {
+            throw new FunctionNotFoundException("A function with the code (" + code
+                + ") could not be found");
+          }
+        }
       }
     }
     catch (FunctionNotFoundException e)
@@ -2008,12 +1786,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the function (" + code + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2032,10 +1804,6 @@ public class SecurityService
   public List<String> getFunctionCodesForGroup(String groupName, String origin)
     throws GroupNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(groupName))
     {
@@ -2049,28 +1817,31 @@ public class SecurityService
 
     try
     {
-      connection = dataSource.getConnection();
-
-      // Get the ID of the group with the specified group name
-      long groupId;
-
-      if ((groupId = getGroupId(connection, groupName)) == -1)
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getFunctionCodesForGroupSQL))
       {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+        // Get the ID of the group with the specified group name
+        long groupId;
+
+        if ((groupId = getGroupId(connection, groupName)) == -1)
+        {
+          throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+        }
+
+        statement.setLong(1, groupId);
+
+        try (ResultSet rs = statement.executeQuery())
+        {
+          List<String> list = new ArrayList<>();
+
+          while (rs.next())
+          {
+            list.add(rs.getString(1));
+          }
+
+          return list;
+        }
       }
-
-      statement = connection.prepareStatement(getFunctionCodesForGroupSQL);
-      statement.setLong(1, groupId);
-      rs = statement.executeQuery();
-
-      List<String> list = new ArrayList<>();
-
-      while (rs.next())
-      {
-        list.add(rs.getString(1));
-      }
-
-      return list;
     }
     catch (GroupNotFoundException e)
     {
@@ -2080,12 +1851,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the function codes for the group ("
           + groupName + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2106,10 +1871,6 @@ public class SecurityService
   public List<String> getFunctionCodesForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -2128,44 +1889,43 @@ public class SecurityService
 
     try
     {
-      connection = dataSource.getConnection();
-
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserSQL))
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        // Get the ID of the user with the specified username
+        long userId;
+
+        if ((userId = getUserId(connection, username)) == -1)
+        {
+          throw new UserNotFoundException("The user (" + username + ") could not be found");
+        }
+
+        // Get the ID of the organisation with the specified code
+        long organisationId;
+
+        if ((organisationId = getOrganisationId(connection, organisation)) == -1)
+        {
+          throw new OrganisationNotFoundException("The organisation (" + organisation
+              + ") could not be found");
+        }
+
+        statement.setLong(1, userId);
+        statement.setLong(2, organisationId);
+
+        try (ResultSet rs = statement.executeQuery())
+        {
+          List<String> list = new ArrayList<>();
+
+          while (rs.next())
+          {
+            list.add(rs.getString(1));
+          }
+
+          return list;
+        }
       }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      statement = connection.prepareStatement(getFunctionCodesForUserSQL);
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-      rs = statement.executeQuery();
-
-      List<String> list = new ArrayList<>();
-
-      while (rs.next())
-      {
-        list.add(rs.getString(1));
-      }
-
-      return list;
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException e)
     {
       throw e;
     }
@@ -2173,12 +1933,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the function codes for the user (" + username
           + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2198,32 +1952,25 @@ public class SecurityService
       long organisationId, List<String> functionCodes)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserSQL))
     {
-      statement = connection.prepareStatement(getFunctionCodesForUserSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
-      rs = statement.executeQuery();
 
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        String functionCode = rs.getString(1);
-
-        if (!functionCodes.contains(functionCode))
+        while (rs.next())
         {
-          functionCodes.add(functionCode);
-        }
-      }
+          String functionCode = rs.getString(1);
 
-      return functionCodes;
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+          if (!functionCodes.contains(functionCode))
+          {
+            functionCodes.add(functionCode);
+          }
+        }
+
+        return functionCodes;
+      }
     }
   }
 
@@ -2242,10 +1989,6 @@ public class SecurityService
   public FunctionTemplate getFunctionTemplate(String code, String origin)
     throws FunctionTemplateNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(code))
     {
@@ -2257,32 +2000,33 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFunctionTemplateSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getFunctionTemplateSQL);
       statement.setString(1, code);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        FunctionTemplate template = new FunctionTemplate(rs.getString(2));
+        if (rs.next())
+        {
+          FunctionTemplate template = new FunctionTemplate(rs.getString(2));
 
-        template.setId(rs.getInt(1));
-        template.setName(rs.getString(3));
-        template.setDescription(rs.getString(4));
+          template.setId(rs.getInt(1));
+          template.setName(rs.getString(3));
+          template.setDescription(rs.getString(4));
 
-        // Retrieve the functions for the template
-        List<Function> functions = getFunctionsForTemplate(template.getId());
+          // Retrieve the functions for the template
+          List<Function> functions = getFunctionsForTemplate(template.getId());
 
-        template.setFunctions(functions);
+          template.setFunctions(functions);
 
-        return template;
-      }
-      else
-      {
-        throw new FunctionTemplateNotFoundException("A function template with the code (" + code
-            + ") could not be found");
+          return template;
+        }
+        else
+        {
+          throw new FunctionTemplateNotFoundException("A function template with the code (" + code
+              + ") could not be found");
+        }
       }
     }
     catch (FunctionTemplateNotFoundException e)
@@ -2293,12 +2037,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the function template (" + code + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2315,50 +2053,40 @@ public class SecurityService
   public List<FunctionTemplate> getFunctionTemplates(String origin)
     throws SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(origin))
     {
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFunctionTemplatesSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getFunctionTemplatesSQL);
-      rs = statement.executeQuery();
-
-      List<FunctionTemplate> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        FunctionTemplate template = new FunctionTemplate(rs.getString(2));
+        List<FunctionTemplate> list = new ArrayList<>();
 
-        template.setId(rs.getInt(1));
-        template.setName(rs.getString(3));
-        template.setDescription(rs.getString(4));
+        while (rs.next())
+        {
+          FunctionTemplate template = new FunctionTemplate(rs.getString(2));
 
-        List<Function> functions = getFunctionsForTemplate(template.getId());
+          template.setId(rs.getInt(1));
+          template.setName(rs.getString(3));
+          template.setDescription(rs.getString(4));
 
-        template.setFunctions(functions);
-        list.add(template);
+          List<Function> functions = getFunctionsForTemplate(template.getId());
+
+          template.setFunctions(functions);
+          list.add(template);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the function templates: " + e.getMessage(),
           e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2375,45 +2103,35 @@ public class SecurityService
   public List<Function> getFunctions(String origin)
     throws SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(origin))
     {
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFunctionsSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getFunctionsSQL);
-      rs = statement.executeQuery();
-
-      List<Function> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Function function = new Function(rs.getString(2));
+        List<Function> list = new ArrayList<>();
 
-        function.setId(rs.getInt(1));
-        function.setName(rs.getString(3));
-        function.setDescription(rs.getString(4));
-        list.add(function);
+        while (rs.next())
+        {
+          Function function = new Function(rs.getString(2));
+
+          function.setId(rs.getInt(1));
+          function.setName(rs.getString(3));
+          function.setDescription(rs.getString(4));
+          list.add(function);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the functions: " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2432,10 +2150,6 @@ public class SecurityService
   public List<Function> getFunctionsForGroup(String groupName, String origin)
     throws GroupNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(groupName))
     {
@@ -2447,10 +2161,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFunctionsForGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the group with the specified group name
       long groupId;
 
@@ -2459,23 +2172,24 @@ public class SecurityService
         throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
       }
 
-      statement = connection.prepareStatement(getFunctionsForGroupSQL);
       statement.setLong(1, groupId);
-      rs = statement.executeQuery();
 
-      List<Function> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Function function = new Function(rs.getString(2));
+        List<Function> list = new ArrayList<>();
 
-        function.setId(rs.getInt(1));
-        function.setName(rs.getString(3));
-        function.setDescription(rs.getString(4));
-        list.add(function);
+        while (rs.next())
+        {
+          Function function = new Function(rs.getString(2));
+
+          function.setId(rs.getInt(1));
+          function.setName(rs.getString(3));
+          function.setDescription(rs.getString(4));
+          list.add(function);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (GroupNotFoundException e)
     {
@@ -2485,12 +2199,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the functions for the group (" + groupName
           + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2511,10 +2219,6 @@ public class SecurityService
   public List<Function> getFunctionsForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -2531,10 +2235,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFunctionsForUserSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -2552,30 +2255,27 @@ public class SecurityService
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(getFunctionsForUserSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
-      rs = statement.executeQuery();
 
-      List<Function> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Function function = new Function(rs.getString(2));
+        List<Function> list = new ArrayList<>();
 
-        function.setId(rs.getInt(1));
-        function.setName(rs.getString(3));
-        function.setDescription(rs.getString(4));
-        list.add(function);
+        while (rs.next())
+        {
+          Function function = new Function(rs.getString(2));
+
+          function.setId(rs.getInt(1));
+          function.setName(rs.getString(3));
+          function.setDescription(rs.getString(4));
+          list.add(function);
+        }
+
+        return list;
       }
-
-      return list;
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (GroupNotFoundException e)
+    catch (UserNotFoundException | GroupNotFoundException e)
     {
       throw e;
     }
@@ -2583,12 +2283,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the functions for the user (" + username
           + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2607,10 +2301,6 @@ public class SecurityService
   public Group getGroup(String groupName, String origin)
     throws GroupNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(groupName))
     {
@@ -2622,25 +2312,26 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getGroupSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getGroupSQL);
       statement.setString(1, groupName);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Group group = new Group(rs.getString(2));
+        if (rs.next())
+        {
+          Group group = new Group(rs.getString(2));
 
-        group.setId(rs.getLong(1));
-        group.setDescription(StringUtil.notNull(rs.getString(3)));
+          group.setId(rs.getLong(1));
+          group.setDescription(StringUtil.notNull(rs.getString(3)));
 
-        return group;
-      }
-      else
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+          return group;
+        }
+        else
+        {
+          throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+        }
       }
     }
     catch (GroupNotFoundException e)
@@ -2651,12 +2342,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the group (" + groupName + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2673,18 +2358,14 @@ public class SecurityService
   public long getGroupId(String groupName)
     throws GroupNotFoundException, SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(groupName))
     {
       throw new InvalidArgumentException("groupName");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       long groupId = getGroupId(connection, groupName);
 
       if (groupId == -1)
@@ -2702,10 +2383,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the ID for the group (" + groupName + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -2726,8 +2403,6 @@ public class SecurityService
   public List<String> getGroupNamesForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -2744,10 +2419,8 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -2767,11 +2440,7 @@ public class SecurityService
 
       return getGroupNamesForUser(connection, userId, organisationId);
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException e)
     {
       throw e;
     }
@@ -2779,10 +2448,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the group names for the user (" + username
           + ") and organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -2799,44 +2464,34 @@ public class SecurityService
   public List<Group> getGroups(String origin)
     throws SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(origin))
     {
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getGroupsSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getGroupsSQL);
-      rs = statement.executeQuery();
-
-      List<Group> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Group group = new Group(rs.getString(2));
+        List<Group> list = new ArrayList<>();
 
-        group.setId(rs.getLong(1));
-        group.setDescription(StringUtil.notNull(rs.getString(3)));
-        list.add(group);
+        while (rs.next())
+        {
+          Group group = new Group(rs.getString(2));
+
+          group.setId(rs.getLong(1));
+          group.setDescription(StringUtil.notNull(rs.getString(3)));
+          list.add(group);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the groups: " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2875,8 +2530,6 @@ public class SecurityService
   public List<Group> getGroupsForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -2893,10 +2546,8 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -2917,11 +2568,7 @@ public class SecurityService
       // Get the list of groups the user is associated with
       return getGroupsForUser(connection, userId, organisationId);
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException e)
     {
       throw e;
     }
@@ -2929,10 +2576,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the groups for the user (" + username
           + ") and organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -2953,10 +2596,6 @@ public class SecurityService
       String origin)
     throws OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(organisation))
     {
@@ -2973,10 +2612,10 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getNumberOfFilteredUsersForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the organisation with the specified code
       long organisationId;
 
@@ -2991,22 +2630,21 @@ public class SecurityService
       filterBuffer.append(filter.toUpperCase());
       filterBuffer.append("%");
 
-      statement = connection.prepareStatement(getNumberOfFilteredUsersForOrganisationSQL);
-
       statement.setLong(1, organisationId);
       statement.setString(2, filterBuffer.toString());
       statement.setString(3, filterBuffer.toString());
       statement.setString(4, filterBuffer.toString());
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        return 0;
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
       }
     }
     catch (OrganisationNotFoundException e)
@@ -3017,12 +2655,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the number of users for the organisation ("
           + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3039,30 +2671,24 @@ public class SecurityService
   public int getNumberOfGroups(String origin)
     throws SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     if (isNullOrEmpty(origin))
     {
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getNumberOfGroupsSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getNumberOfGroupsSQL);
-
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        return 0;
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
       }
     }
     catch (SecurityException e)
@@ -3072,12 +2698,6 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the number of groups" + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3096,10 +2716,6 @@ public class SecurityService
   public int getNumberOfUsersForOrganisation(String organisation, String origin)
     throws OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(organisation))
     {
@@ -3111,10 +2727,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the organisation with the specified code
       long organisationId;
 
@@ -3124,19 +2739,18 @@ public class SecurityService
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(getNumberOfUsersForOrganisationSQL);
-
       statement.setLong(1, organisationId);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        return 0;
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
       }
     }
     catch (OrganisationNotFoundException e)
@@ -3147,12 +2761,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the number of users for the organisation ("
           + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3171,10 +2779,6 @@ public class SecurityService
   public Organisation getOrganisation(String code, String origin)
     throws OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(code))
     {
@@ -3186,27 +2790,28 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getOrganisationSQL);
       statement.setString(1, code);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Organisation organisation = new Organisation(rs.getString(2));
+        if (rs.next())
+        {
+          Organisation organisation = new Organisation(rs.getString(2));
 
-        organisation.setId(rs.getLong(1));
-        organisation.setName(rs.getString(3));
-        organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+          organisation.setId(rs.getLong(1));
+          organisation.setName(rs.getString(3));
+          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
 
-        return organisation;
-      }
-      else
-      {
-        throw new OrganisationNotFoundException("The organisation (" + code
-            + ") could not be found");
+          return organisation;
+        }
+        else
+        {
+          throw new OrganisationNotFoundException("The organisation (" + code
+              + ") could not be found");
+        }
       }
     }
     catch (OrganisationNotFoundException e)
@@ -3217,12 +2822,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the organisation (" + code + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3239,46 +2838,36 @@ public class SecurityService
   public List<Organisation> getOrganisations(String origin)
     throws SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(origin))
     {
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getOrganisationsSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getOrganisationsSQL);
-      rs = statement.executeQuery();
-
-      List<Organisation> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Organisation organisation = new Organisation(rs.getString(2));
+        List<Organisation> list = new ArrayList<>();
 
-        organisation.setId(rs.getLong(1));
-        organisation.setName(rs.getString(3));
-        organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+        while (rs.next())
+        {
+          Organisation organisation = new Organisation(rs.getString(2));
 
-        list.add(organisation);
+          organisation.setId(rs.getLong(1));
+          organisation.setName(rs.getString(3));
+          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+
+          list.add(organisation);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the organisations: " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3297,10 +2886,6 @@ public class SecurityService
   public List<Organisation> getOrganisationsForUser(String username, String origin)
     throws UserNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -3312,10 +2897,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getOrganisationsForUserSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -3324,26 +2908,25 @@ public class SecurityService
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      statement = connection.prepareStatement(getOrganisationsForUserSQL);
-
       statement.setLong(1, userId);
 
-      rs = statement.executeQuery();
-
-      List<Organisation> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Organisation organisation = new Organisation(rs.getString(2));
+        List<Organisation> list = new ArrayList<>();
 
-        organisation.setId(rs.getLong(1));
-        organisation.setName(rs.getString(3));
-        organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+        while (rs.next())
+        {
+          Organisation organisation = new Organisation(rs.getString(2));
 
-        list.add(organisation);
+          organisation.setId(rs.getLong(1));
+          organisation.setName(rs.getString(3));
+          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+
+          list.add(organisation);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (UserNotFoundException e)
     {
@@ -3353,12 +2936,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the organisations for the user (" + username
           + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3387,8 +2964,6 @@ public class SecurityService
   public User getUser(String username, String origin)
     throws UserNotFoundException, SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -3400,10 +2975,8 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       User user = getUser(connection, username);
 
       if (user != null)
@@ -3424,10 +2997,6 @@ public class SecurityService
       throw new SecurityException("Failed to retrieve the user (" + username + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -3443,18 +3012,14 @@ public class SecurityService
   public long getUserId(String username)
     throws UserNotFoundException, SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
       throw new InvalidArgumentException("username");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       long userId = getUserId(connection, username);
 
       if (userId == -1)
@@ -3473,10 +3038,6 @@ public class SecurityService
       throw new SecurityException("Failed to retrieve the ID for the user (" + username + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -3492,42 +3053,32 @@ public class SecurityService
   public List<User> getUsers(String origin)
     throws SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(origin))
     {
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUsersSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getUsersSQL);
-      rs = statement.executeQuery();
-
-      List<User> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        User user = buildUserFromResultSet(rs);
+        List<User> list = new ArrayList<>();
 
-        list.add(user);
+        while (rs.next())
+        {
+          User user = buildUserFromResultSet(rs);
+
+          list.add(user);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the users: " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3584,10 +3135,6 @@ public class SecurityService
   public List<User> getUsersForOrganisation(String organisation, String origin)
     throws OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
     // Validate parameters
     if (isNullOrEmpty(organisation))
     {
@@ -3599,10 +3146,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUsersForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the organisation with the specified code
       long organisationId;
 
@@ -3612,22 +3158,21 @@ public class SecurityService
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(getUsersForOrganisationSQL);
-
       statement.setLong(1, organisationId);
 
-      rs = statement.executeQuery();
-
-      List<User> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        User user = buildUserFromResultSet(rs);
+        List<User> list = new ArrayList<>();
 
-        list.add(user);
+        while (rs.next())
+        {
+          User user = buildUserFromResultSet(rs);
+
+          list.add(user);
+        }
+
+        return list;
       }
-
-      return list;
     }
     catch (OrganisationNotFoundException e)
     {
@@ -3637,12 +3182,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the users for the organisation ("
           + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3661,9 +3200,6 @@ public class SecurityService
   public void grantFunctionToGroup(String groupName, String code, String origin)
     throws GroupNotFoundException, FunctionNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(groupName))
     {
@@ -3680,10 +3216,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(grantFunctionToGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the group with the specified group name
       long groupId;
 
@@ -3708,7 +3243,6 @@ public class SecurityService
       }
 
       // Grant the function to the user
-      statement = connection.prepareStatement(grantFunctionToGroupSQL);
       statement.setLong(1, groupId);
       statement.setLong(2, functionId);
 
@@ -3719,11 +3253,7 @@ public class SecurityService
             + grantFunctionToGroupSQL + ")");
       }
     }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (FunctionNotFoundException e)
+    catch (GroupNotFoundException | FunctionNotFoundException e)
     {
       throw e;
     }
@@ -3731,11 +3261,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to grant the function (" + code + ") to the group ("
           + groupName + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3757,9 +3282,6 @@ public class SecurityService
     throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
       SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -3781,10 +3303,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(grantFunctionToUserSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -3818,7 +3339,6 @@ public class SecurityService
       }
 
       // Grant the function to the user
-      statement = connection.prepareStatement(grantFunctionToUserSQL);
       statement.setLong(1, userId);
       statement.setLong(2, functionId);
       statement.setLong(3, organisationId);
@@ -3831,15 +3351,7 @@ public class SecurityService
             + grantFunctionToUserSQL + ")");
       }
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (FunctionNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException | FunctionNotFoundException e)
     {
       throw e;
     }
@@ -3847,11 +3359,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to grant the function (" + code + ") to the user ("
           + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -3879,20 +3386,17 @@ public class SecurityService
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
     {
       // Retrieve the database meta data
-      Connection connection = null;
-      String schemaSeparator = ".";
+      String schemaSeparator;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -3902,10 +3406,6 @@ public class SecurityService
         {
           schemaSeparator = ".";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix
@@ -3917,15 +3417,10 @@ public class SecurityService
       // Initialise the configuration
       initConfiguration();
     }
-    catch (Exception e)
-    {
-      throw new SecurityException("Failed to initialise the SecurityService instance: "
-          + e.getMessage(), e);
-    }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to initialise the SecurityService instance: "
-          + e.getMessage());
+          + e.getMessage(), e);
     }
   }
 
@@ -3949,8 +3444,6 @@ public class SecurityService
       String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -3967,10 +3460,8 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -3991,11 +3482,7 @@ public class SecurityService
       // Get the current list of groups for the user
       return isUserAssociatedWithOrganisation(connection, userId, organisationId);
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException e)
     {
       throw e;
     }
@@ -4003,10 +3490,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to check whether the user (" + username
           + ") is associated with the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -4031,8 +3514,6 @@ public class SecurityService
     throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
       SecurityException
   {
-    Connection connection = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -4054,10 +3535,8 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -4086,15 +3565,7 @@ public class SecurityService
       // Get the current list of groups for the user
       return isUserInGroup(connection, userId, groupId, organisationId);
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException | GroupNotFoundException e)
     {
       throw e;
     }
@@ -4103,10 +3574,6 @@ public class SecurityService
       throw new SecurityException("Failed to check whether the user (" + username
           + ") is in the group (" + groupName + ") for the organisation (" + organisation + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -4124,10 +3591,6 @@ public class SecurityService
   {
     // Local variables
     long result;
-    Connection connection = null;
-    PreparedStatement updateStatement = null;
-    PreparedStatement selectStatement = null;
-    ResultSet rs = null;
 
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
@@ -4144,45 +3607,47 @@ public class SecurityService
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-      updateStatement = connection.prepareStatement(updateIDGeneratorSQL);
-      updateStatement.setString(1, type);
-
-      // The following statment will block if another connection is currently
-      // executing a transaction that is updating the IDGENERATOR table.
-      if (updateStatement.executeUpdate() == 0)
+      try (Connection connection = dataSource.getConnection())
       {
-        // The row could not be found so INSERT one starting at id = 1
-        PreparedStatement insertStatement = null;
-
-        try
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateIDGeneratorSQL))
         {
-          insertStatement = connection.prepareStatement(insertIDGeneratorSQL);
-          insertStatement.setLong(1, 1);
-          insertStatement.setString(2, type);
-          insertStatement.executeUpdate();
+          updateStatement.setString(1, type);
+
+          // The following statment will block if another connection is currently
+          // executing a transaction that is updating the IDGENERATOR table.
+          if (updateStatement.executeUpdate() == 0)
+          {
+            // The row could not be found so INSERT one starting at id = 1
+            try (PreparedStatement insertStatement =
+                connection.prepareStatement(insertIDGeneratorSQL))
+            {
+              insertStatement.setLong(1, 1);
+              insertStatement.setString(2, type);
+              insertStatement.executeUpdate();
+            }
+          }
         }
-        finally
+
+        try (PreparedStatement selectStatement = connection.prepareStatement(selectIDGeneratorSQL))
         {
-          DAOUtil.close(insertStatement);
+          selectStatement.setString(1, type);
+
+          try (ResultSet rs = selectStatement.executeQuery())
+          {
+            if (rs.next())
+            {
+              result = rs.getLong(1);
+
+              transactionManager.commit();
+
+              return result;
+            }
+            else
+            {
+              throw new SQLException("No IDGenerator row found for type (" + type + ")");
+            }
+          }
         }
-      }
-
-      selectStatement = connection.prepareStatement(selectIDGeneratorSQL);
-      selectStatement.setString(1, type);
-      rs = selectStatement.executeQuery();
-
-      if (rs.next())
-      {
-        result = rs.getLong(1);
-
-        transactionManager.commit();
-
-        return result;
-      }
-      else
-      {
-        throw new SQLException("No IDGenerator row found for type (" + type + ")");
       }
     }
     catch (Throwable e)
@@ -4202,11 +3667,6 @@ public class SecurityService
     }
     finally
     {
-      DAOUtil.close(rs);
-      DAOUtil.close(selectStatement);
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(connection);
-
       try
       {
         transactionManager.resume(existingTransaction);
@@ -4235,9 +3695,6 @@ public class SecurityService
   public void removeFunctionFromTemplate(String functionCode, String templateCode, String origin)
     throws FunctionNotFoundException, FunctionTemplateNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(functionCode))
     {
@@ -4254,10 +3711,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(removeFunctionFromTemplateSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the function with the specified code
       long functionId;
 
@@ -4277,16 +3733,11 @@ public class SecurityService
       }
 
       // Remove the function from the template
-      statement = connection.prepareStatement(removeFunctionFromTemplateSQL);
       statement.setLong(1, functionId);
       statement.setLong(2, templateId);
       statement.executeUpdate();
     }
-    catch (FunctionNotFoundException e)
-    {
-      throw e;
-    }
-    catch (FunctionTemplateNotFoundException e)
+    catch (FunctionNotFoundException | FunctionTemplateNotFoundException e)
     {
       throw e;
     }
@@ -4294,11 +3745,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to remove the function (" + functionCode
           + ") from the function template (" + templateCode + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -4321,9 +3767,6 @@ public class SecurityService
     throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
       SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -4345,10 +3788,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(removeUserFromGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -4375,21 +3817,12 @@ public class SecurityService
       }
 
       // Remove the user from the group
-      statement = connection.prepareStatement(removeUserFromGroupSQL);
       statement.setLong(1, userId);
       statement.setLong(2, groupId);
       statement.setLong(3, organisationId);
       statement.executeUpdate();
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException | GroupNotFoundException e)
     {
       throw e;
     }
@@ -4397,11 +3830,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to remove the user (" + username + ") from the group ("
           + groupName + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -4420,9 +3848,6 @@ public class SecurityService
   public void removeUserFromOrganisation(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -4439,10 +3864,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(removeUserFromOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -4461,7 +3885,6 @@ public class SecurityService
       }
 
       // Remove the user from the organisation
-      statement = connection.prepareStatement(removeUserFromOrganisationSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
 
@@ -4473,11 +3896,7 @@ public class SecurityService
             + removeUserFromOrganisationSQL + ")");
       }
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException e)
     {
       throw e;
     }
@@ -4485,11 +3904,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to remove the user (" + username
           + ") from the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -4526,9 +3940,6 @@ public class SecurityService
   public void revokeFunctionForGroup(String groupName, String code, String origin)
     throws GroupNotFoundException, FunctionNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(groupName))
     {
@@ -4545,10 +3956,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(revokeFunctionForGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the group with the specified group name
       long groupId;
 
@@ -4566,16 +3976,11 @@ public class SecurityService
       }
 
       // Revoke the function for the group
-      statement = connection.prepareStatement(revokeFunctionForGroupSQL);
       statement.setLong(1, groupId);
       statement.setLong(2, functionId);
       statement.executeUpdate();
     }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (FunctionNotFoundException e)
+    catch (GroupNotFoundException | FunctionNotFoundException e)
     {
       throw e;
     }
@@ -4583,11 +3988,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to revoke the function (" + code + ") for the group ("
           + groupName + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -4610,9 +4010,6 @@ public class SecurityService
     throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
       SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(username))
     {
@@ -4634,10 +4031,9 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(revokeFunctionForUserSQL))
     {
-      connection = dataSource.getConnection();
-
       // Get the ID of the user with the specified username
       long userId;
 
@@ -4664,21 +4060,12 @@ public class SecurityService
       }
 
       // Revoke the function for the user
-      statement = connection.prepareStatement(revokeFunctionForUserSQL);
       statement.setLong(1, userId);
       statement.setLong(2, functionId);
       statement.setLong(3, organisationId);
       statement.executeUpdate();
     }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (OrganisationNotFoundException e)
+    catch (UserNotFoundException | OrganisationNotFoundException | GroupNotFoundException e)
     {
       throw e;
     }
@@ -4686,11 +4073,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to revoke the function (" + code + ") for the user ("
           + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -4728,9 +4110,6 @@ public class SecurityService
   public void updateFunction(Function function, String origin)
     throws FunctionNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(function.getCode()))
     {
@@ -4747,17 +4126,15 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateFunctionSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getFunctionId(connection, function.getCode()) == -1)
       {
         throw new FunctionNotFoundException("A function with the code (" + function.getCode()
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(updateFunctionSQL);
       statement.setString(1, function.getName());
       statement.setString(2, StringUtil.notNull(function.getDescription()));
       statement.setString(3, function.getCode());
@@ -4778,11 +4155,6 @@ public class SecurityService
       throw new SecurityException("Failed to update the function (" + function.getCode() + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -4799,9 +4171,6 @@ public class SecurityService
   public void updateFunctionTemplate(FunctionTemplate template, String origin)
     throws FunctionTemplateNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(template.getCode()))
     {
@@ -4818,17 +4187,15 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateFunctionTemplateSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getFunctionTemplateId(connection, template.getCode()) == -1)
       {
         throw new FunctionTemplateNotFoundException("A function template with the code ("
             + template.getCode() + ") could not be found");
       }
 
-      statement = connection.prepareStatement(updateFunctionTemplateSQL);
       statement.setString(1, template.getName());
       statement.setString(2, StringUtil.notNull(template.getDescription()));
       statement.setString(3, template.getCode());
@@ -4849,11 +4216,6 @@ public class SecurityService
       throw new SecurityException("Failed to update the function template (" + template.getCode()
           + "): " + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -4869,9 +4231,6 @@ public class SecurityService
   public void updateGroup(Group group, String origin)
     throws GroupNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(group.getGroupName()))
     {
@@ -4883,17 +4242,15 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateGroupSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getGroupId(connection, group.getGroupName()) == -1)
       {
         throw new GroupNotFoundException("The group (" + group.getGroupName()
             + ") could not be found");
       }
 
-      statement = connection.prepareStatement(updateGroupSQL);
       statement.setString(1, StringUtil.notNull(group.getDescription()));
       statement.setString(2, group.getGroupName());
 
@@ -4913,11 +4270,6 @@ public class SecurityService
       throw new SecurityException("Failed to update the group (" + group.getGroupName() + "): "
           + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -4934,9 +4286,6 @@ public class SecurityService
   public void updateOrganisation(Organisation organisation, String origin)
     throws OrganisationNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     if (isNullOrEmpty(organisation.getCode()))
     {
       throw new InvalidArgumentException("organisation.code");
@@ -4952,17 +4301,15 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
       if (getOrganisationId(connection, organisation.getCode()) == -1)
       {
         throw new FunctionNotFoundException("An organisation with the code ("
             + organisation.getCode() + ") could not be found");
       }
 
-      statement = connection.prepareStatement(updateOrganisationSQL);
       statement.setString(1, organisation.getName());
       statement.setString(2, StringUtil.notNull(organisation.getDescription()));
       statement.setString(3, organisation.getCode());
@@ -4983,11 +4330,6 @@ public class SecurityService
       throw new SecurityException("Failed to update the organisation (" + organisation.getCode()
           + "): " + e.getMessage(), e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -5003,12 +4345,10 @@ public class SecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
+  @SuppressWarnings("ConstantConditions")
   public void updateUser(User user, boolean expirePassword, boolean lockUser, String origin)
     throws UserNotFoundException, SecurityException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Validate parameters
     if (isNullOrEmpty(user.getUsername()))
     {
@@ -5020,10 +4360,8 @@ public class SecurityService
       throw new InvalidArgumentException("origin");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       if (getUserId(connection, user.getUsername()) == -1)
       {
         throw new UserNotFoundException("The user (" + user.getUsername() + ") could not be found");
@@ -5121,107 +4459,109 @@ public class SecurityService
 
       String updateUserSQL = buffer.toString();
 
-      statement = connection.prepareStatement(updateUserSQL);
-
-      int parameterIndex = 1;
-
-      if (user.getTitle() != null)
+      try (PreparedStatement statement = connection.prepareStatement(updateUserSQL))
       {
-        statement.setString(parameterIndex, user.getTitle());
-        parameterIndex++;
-      }
+        int parameterIndex = 1;
 
-      if (user.getFirstNames() != null)
-      {
-        statement.setString(parameterIndex, user.getFirstNames());
-        parameterIndex++;
-      }
-
-      if (user.getLastName() != null)
-      {
-        statement.setString(parameterIndex, user.getLastName());
-        parameterIndex++;
-      }
-
-      if (user.getEmail() != null)
-      {
-        statement.setString(parameterIndex, user.getEmail());
-        parameterIndex++;
-      }
-
-      if (user.getPhoneNumber() != null)
-      {
-        statement.setString(parameterIndex, user.getPhoneNumber());
-        parameterIndex++;
-      }
-
-      if (user.getFaxNumber() != null)
-      {
-        statement.setString(parameterIndex, user.getFaxNumber());
-        parameterIndex++;
-      }
-
-      if (user.getMobileNumber() != null)
-      {
-        statement.setString(parameterIndex, user.getMobileNumber());
-        parameterIndex++;
-      }
-
-      if (user.getDescription() != null)
-      {
-        statement.setString(parameterIndex, user.getDescription());
-        parameterIndex++;
-      }
-
-      if (user.getPassword() != null)
-      {
-        if (user.getPassword().length() > 0)
+        if (user.getTitle() != null)
         {
-          statement.setString(parameterIndex, createPasswordHash(user.getPassword()));
-        }
-        else
-        {
-          statement.setString(parameterIndex, "");
+          statement.setString(parameterIndex, user.getTitle());
+          parameterIndex++;
         }
 
-        parameterIndex++;
-      }
-
-      if (lockUser || (user.getPasswordAttempts() != null))
-      {
-        if (lockUser)
+        if (user.getFirstNames() != null)
         {
-          statement.setInt(parameterIndex, -1);
-        }
-        else
-        {
-          statement.setInt(parameterIndex, user.getPasswordAttempts());
+          statement.setString(parameterIndex, user.getFirstNames());
+          parameterIndex++;
         }
 
-        parameterIndex++;
-      }
-
-      if (expirePassword || (user.getPasswordExpiry() != null))
-      {
-        if (expirePassword)
+        if (user.getLastName() != null)
         {
-          statement.setTimestamp(parameterIndex, new Timestamp(System.currentTimeMillis()));
-        }
-        else
-        {
-          statement.setTimestamp(parameterIndex, new Timestamp(user.getPasswordExpiry().getTime()));
+          statement.setString(parameterIndex, user.getLastName());
+          parameterIndex++;
         }
 
-        parameterIndex++;
-      }
+        if (user.getEmail() != null)
+        {
+          statement.setString(parameterIndex, user.getEmail());
+          parameterIndex++;
+        }
 
-      statement.setString(parameterIndex, user.getUsername());
+        if (user.getPhoneNumber() != null)
+        {
+          statement.setString(parameterIndex, user.getPhoneNumber());
+          parameterIndex++;
+        }
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException("Failed to update the user (" + user.getUsername()
-            + "): No rows were affected as a result of executing the SQL statement ("
-            + updateUserSQL + ")");
+        if (user.getFaxNumber() != null)
+        {
+          statement.setString(parameterIndex, user.getFaxNumber());
+          parameterIndex++;
+        }
+
+        if (user.getMobileNumber() != null)
+        {
+          statement.setString(parameterIndex, user.getMobileNumber());
+          parameterIndex++;
+        }
+
+        if (user.getDescription() != null)
+        {
+          statement.setString(parameterIndex, user.getDescription());
+          parameterIndex++;
+        }
+
+        if (user.getPassword() != null)
+        {
+          if (user.getPassword().length() > 0)
+          {
+            statement.setString(parameterIndex, createPasswordHash(user.getPassword()));
+          }
+          else
+          {
+            statement.setString(parameterIndex, "");
+          }
+
+          parameterIndex++;
+        }
+
+        if (lockUser || (user.getPasswordAttempts() != null))
+        {
+          if (lockUser)
+          {
+            statement.setInt(parameterIndex, -1);
+          }
+          else
+          {
+            statement.setInt(parameterIndex, user.getPasswordAttempts());
+          }
+
+          parameterIndex++;
+        }
+
+        if (expirePassword || (user.getPasswordExpiry() != null))
+        {
+          if (expirePassword)
+          {
+            statement.setTimestamp(parameterIndex, new Timestamp(System.currentTimeMillis()));
+          }
+          else
+          {
+            statement.setTimestamp(parameterIndex,
+                new Timestamp(user.getPasswordExpiry().getTime()));
+          }
+
+          parameterIndex++;
+        }
+
+        statement.setString(parameterIndex, user.getUsername());
+
+        if (statement.executeUpdate() != 1)
+        {
+          throw new SecurityException("Failed to update the user (" + user.getUsername()
+              + "): No rows were affected as a result of executing the SQL statement ("
+              + updateUserSQL + ")");
+        }
       }
     }
     catch (UserNotFoundException e)
@@ -5232,11 +4572,6 @@ public class SecurityService
     {
       throw new SecurityException("Failed to update the user (" + user.getUsername() + "): "
           + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -5532,16 +4867,6 @@ public class SecurityService
   }
 
   /**
-   * Returns the database catalog separator used when accessing the database.
-   *
-   * @return the database catalog separator used when accessing the database
-   */
-  protected String getDatabaseCatalogSeparator()
-  {
-    return databaseCatalogSeparator;
-  }
-
-  /**
    * Returns the numeric ID for the group with the specified group name.
    *
    * @param connection the existing database connection to use
@@ -5555,33 +4880,26 @@ public class SecurityService
   protected synchronized long getGroupId(Connection connection, String groupName)
     throws SecurityException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
     {
-      statement = connection.prepareStatement(getGroupIdSQL);
       statement.setString(1, groupName);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getLong(1);
-      }
-      else
-      {
-        return -1;
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return -1;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the numeric ID for the group (" + groupName
           + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -5599,33 +4917,26 @@ public class SecurityService
   protected synchronized long getOrganisationId(Connection connection, String code)
     throws SecurityException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getOrganisationIdSQL))
     {
-      statement = connection.prepareStatement(getOrganisationIdSQL);
       statement.setString(1, code);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getLong(1);
-      }
-      else
-      {
-        return -1;
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return -1;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the numeric ID for the organisation (" + code
           + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -5643,33 +4954,26 @@ public class SecurityService
   protected synchronized long getUserId(Connection connection, String username)
     throws SecurityException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getUserIdSQL))
     {
-      statement = connection.prepareStatement(getUserIdSQL);
       statement.setString(1, username);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getLong(1);
-      }
-      else
-      {
-        return -1;
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return -1;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the numeric ID for the user (" + username
           + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -5900,28 +5204,21 @@ public class SecurityService
   private long getFunctionId(Connection connection, String code)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getFunctionIdSQL))
     {
-      statement = connection.prepareStatement(getFunctionIdSQL);
       statement.setString(1, code);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getLong(1);
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return -1;
+        }
       }
-      else
-      {
-        return -1;
-      }
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -5939,28 +5236,21 @@ public class SecurityService
   private long getFunctionTemplateId(Connection connection, String code)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getFunctionTemplateIdSQL))
     {
-      statement = connection.prepareStatement(getFunctionTemplateIdSQL);
       statement.setString(1, code);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getLong(1);
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return -1;
+        }
       }
-      else
-      {
-        return -1;
-      }
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -5977,36 +5267,27 @@ public class SecurityService
   private List<Function> getFunctionsForTemplate(long templateId)
     throws SQLException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFunctionsForTemplateSQL))
     {
-      connection = dataSource.getConnection();
-      statement = connection.prepareStatement(getFunctionsForTemplateSQL);
       statement.setLong(1, templateId);
-      rs = statement.executeQuery();
 
-      List<Function> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Function function = new Function(rs.getString(2));
+        List<Function> list = new ArrayList<>();
 
-        function.setId(rs.getInt(1));
-        function.setName(rs.getString(3));
-        function.setDescription(rs.getString(4));
-        list.add(function);
+        while (rs.next())
+        {
+          Function function = new Function(rs.getString(2));
+
+          function.setId(rs.getInt(1));
+          function.setName(rs.getString(3));
+          function.setDescription(rs.getString(4));
+          list.add(function);
+        }
+
+        return list;
       }
-
-      return list;
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -6025,29 +5306,22 @@ public class SecurityService
   private List<String> getGroupNamesForUser(Connection connection, long userId, long organisationId)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getGroupNamesForUserSQL))
     {
-      statement = connection.prepareStatement(getGroupNamesForUserSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
-      rs = statement.executeQuery();
 
-      List<String> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        list.add(rs.getString(1));
-      }
+        List<String> list = new ArrayList<>();
 
-      return list;
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+        while (rs.next())
+        {
+          list.add(rs.getString(1));
+        }
+
+        return list;
+      }
     }
   }
 
@@ -6066,33 +5340,26 @@ public class SecurityService
   private List<Group> getGroupsForUser(Connection connection, long userId, long organisationId)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getGroupsForUserSQL))
     {
-      statement = connection.prepareStatement(getGroupsForUserSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
-      rs = statement.executeQuery();
 
-      List<Group> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        Group group = new Group(rs.getString(2));
+        List<Group> list = new ArrayList<>();
 
-        group.setId(rs.getLong(1));
-        group.setDescription(rs.getString(3));
-        list.add(group);
+        while (rs.next())
+        {
+          Group group = new Group(rs.getString(2));
+
+          group.setId(rs.getLong(1));
+          group.setDescription(rs.getString(3));
+          list.add(group);
+        }
+
+        return list;
       }
-
-      return list;
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -6109,28 +5376,21 @@ public class SecurityService
   private User getUser(Connection connection, String username)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getUserSQL))
     {
-      statement = connection.prepareStatement(getUserSQL);
       statement.setString(1, username);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return buildUserFromResultSet(rs);
+        if (rs.next())
+        {
+          return buildUserFromResultSet(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
-      else
-      {
-        return null;
-      }
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 
@@ -6148,28 +5408,21 @@ public class SecurityService
   private List<Long> getUserIdsForGroup(Connection connection, long groupId)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getUserIdsForGroupSQL))
     {
-      statement = connection.prepareStatement(getUserIdsForGroupSQL);
       statement.setLong(1, groupId);
-      rs = statement.executeQuery();
 
-      List<Long> list = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        list.add(rs.getLong(1));
-      }
+        List<Long> list = new ArrayList<>();
 
-      return list;
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+        while (rs.next())
+        {
+          list.add(rs.getLong(1));
+        }
+
+        return list;
+      }
     }
   }
 
@@ -6230,22 +5483,15 @@ public class SecurityService
   private boolean isGroupGrantedFunction(Connection connection, long groupId, long functionId)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(isGroupGrantedFunctionSQL))
     {
-      statement = connection.prepareStatement(isGroupGrantedFunctionSQL);
       statement.setLong(1, groupId);
       statement.setLong(2, functionId);
-      rs = statement.executeQuery();
 
-      return rs.next();
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
   }
 
@@ -6291,27 +5537,21 @@ public class SecurityService
   private boolean isPasswordInHistory(Connection connection, long userId, String passwordHash)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(isPasswordInHistorySQL))
     {
       Calendar calendar = Calendar.getInstance();
 
       calendar.setTime(new Date());
       calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
-      statement = connection.prepareStatement(isPasswordInHistorySQL);
+
       statement.setLong(1, userId);
       statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
       statement.setString(3, passwordHash);
-      rs = statement.executeQuery();
 
-      return rs.next();
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
   }
 
@@ -6331,22 +5571,16 @@ public class SecurityService
       long organisationId)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement =
+        connection.prepareStatement(isUserAssociatedWithOrganisationSQL))
     {
-      statement = connection.prepareStatement(isUserAssociatedWithOrganisationSQL);
       statement.setLong(1, userId);
       statement.setLong(2, organisationId);
-      rs = statement.executeQuery();
 
-      return rs.next();
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
   }
 
@@ -6366,23 +5600,16 @@ public class SecurityService
       long organisationId)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(isUserGrantedFunctionSQL))
     {
-      statement = connection.prepareStatement(isUserGrantedFunctionSQL);
       statement.setLong(1, userId);
       statement.setLong(2, functionId);
       statement.setLong(3, organisationId);
-      rs = statement.executeQuery();
 
-      return rs.next();
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
   }
 
@@ -6402,45 +5629,31 @@ public class SecurityService
       long organisationId)
     throws SQLException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(isUserInGroupSQL))
     {
-      statement = connection.prepareStatement(isUserInGroupSQL);
       statement.setLong(1, userId);
       statement.setLong(2, groupId);
       statement.setLong(3, organisationId);
-      rs = statement.executeQuery();
 
-      return rs.next();
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
   }
 
   private void savePasswordHistory(Connection connection, long userId, String passwordHash)
     throws SQLException
   {
-    PreparedStatement statement = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(savePasswordHistorySQL))
     {
       long id = nextId("Application.UserPasswordHistoryId");
 
-      statement = connection.prepareStatement(savePasswordHistorySQL);
       statement.setLong(1, id);
       statement.setLong(2, userId);
       statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
       statement.setString(4, passwordHash);
       statement.execute();
-    }
-    finally
-    {
-      DAOUtil.close(statement);
     }
   }
 }

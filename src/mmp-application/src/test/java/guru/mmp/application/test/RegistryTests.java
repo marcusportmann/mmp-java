@@ -21,20 +21,22 @@ package guru.mmp.application.test;
 import guru.mmp.application.persistence.HsqldbDataSource;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.registry.RegistryException;
-import guru.mmp.common.persistence.DAOUtil;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import static org.junit.Assert.assertEquals;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.math.BigDecimal;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * The <code>RegistryTests</code> class contains the implementation of the JUnit tests for
@@ -221,23 +223,12 @@ public class RegistryTests extends HsqldbDatabaseTests
   {
     if (dataSource != null)
     {
-      Connection connection = null;
-      Statement statement = null;
-
-      try
+      try (Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement())
       {
-        connection = dataSource.getConnection();
-
-        statement = connection.createStatement();
-
         statement.execute("SHUTDOWN");
       }
       catch (Throwable ignored) {}
-      finally
-      {
-        DAOUtil.close(statement);
-        DAOUtil.close(connection);
-      }
 
       dataSource = null;
     }

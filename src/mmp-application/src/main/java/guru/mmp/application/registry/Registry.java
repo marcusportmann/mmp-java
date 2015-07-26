@@ -70,11 +70,6 @@ public class Registry
   public static final String PATH_SEPERATOR = "/";
 
   /**
-   * The key type.
-   */
-  public static final int TYPE_KEY = 0;
-
-  /**
    * Prefix used to identify encrypted and base64 encoded values.
    */
   private static final String ENCRYPTION_PREFIX = "{ENCRYPTED}";
@@ -151,14 +146,9 @@ public class Registry
     path = getActualPath(path);
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getBinaryValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -167,42 +157,37 @@ public class Registry
         return false;
       }
 
-      statement = connection.prepareStatement(getBinaryValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.BINARY.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to check if the binary value (" + name
-              + ") exists under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        return true;
-      }
-      else
-      {
-        return false;
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.BINARY.getCode()))
+          {
+            throw new RegistryException("Failed to check if the binary value (" + name
+                + ") exists under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to check if the binary value (" + name
           + ") exists under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -235,14 +220,9 @@ public class Registry
     path = getActualPath(path);
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getDecimalValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -251,42 +231,37 @@ public class Registry
         return false;
       }
 
-      statement = connection.prepareStatement(getDecimalValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.DECIMAL.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to check if the decimal value (" + name
-              + ") exists under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        return true;
-      }
-      else
-      {
-        return false;
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.DECIMAL.getCode()))
+          {
+            throw new RegistryException("Failed to check if the decimal value (" + name
+                + ") exists under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to check if the decimal value (" + name
           + ") exists under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -352,14 +327,9 @@ public class Registry
     path = getActualPath(path);
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getBinaryValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -368,49 +338,44 @@ public class Registry
         return defaultValue;
       }
 
-      statement = connection.prepareStatement(getBinaryValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.BINARY.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to get the binary value (" + name
-              + ") under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        if ((encryptionKey != null) && (encryptionIV != null))
-        {
-          return decryptBinaryValue(DAOUtil.readBlob(rs, 2), encryptionKey, encryptionIV);
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.BINARY.getCode()))
+          {
+            throw new RegistryException("Failed to get the binary value (" + name
+                + ") under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          if ((encryptionKey != null) && (encryptionIV != null))
+          {
+            return decryptBinaryValue(DAOUtil.readBlob(rs, 2), encryptionKey, encryptionIV);
+          }
+          else
+          {
+            return DAOUtil.readBlob(rs, 2);
+          }
         }
         else
         {
-          return DAOUtil.readBlob(rs, 2);
+          return defaultValue;
         }
-      }
-      else
-      {
-        return defaultValue;
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to get the binary value (" + name
           + ") under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -454,14 +419,9 @@ public class Registry
     path = getActualPath(path);
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getDecimalValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -470,42 +430,37 @@ public class Registry
         return defaultValue;
       }
 
-      statement = connection.prepareStatement(getDecimalValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.DECIMAL.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to get the decimal value (" + name
-              + ") under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        return rs.getBigDecimal(2);
-      }
-      else
-      {
-        return defaultValue;
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.DECIMAL.getCode()))
+          {
+            throw new RegistryException("Failed to get the decimal value (" + name
+                + ") under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          return rs.getBigDecimal(2);
+        }
+        else
+        {
+          return defaultValue;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to get the decimal value (" + name
           + ") under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -539,14 +494,9 @@ public class Registry
     path = getActualPath(path);
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getIntegerValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -555,42 +505,37 @@ public class Registry
         return defaultValue;
       }
 
-      statement = connection.prepareStatement(getIntegerValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.INTEGER.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to get the integer value (" + name
-              + ") under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        return rs.getInt(2);
-      }
-      else
-      {
-        return defaultValue;
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.INTEGER.getCode()))
+          {
+            throw new RegistryException("Failed to get the integer value (" + name
+                + ") under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          return rs.getInt(2);
+        }
+        else
+        {
+          return defaultValue;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to get the integer value (" + name
           + ") under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -656,14 +601,9 @@ public class Registry
     path = getActualPath(path);
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getStringValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -672,49 +612,44 @@ public class Registry
         return defaultValue;
       }
 
-      statement = connection.prepareStatement(getStringValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.STRING.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to get the string value (" + name
-              + ") under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        if ((encryptionKey != null) && (encryptionIV != null))
-        {
-          return decryptStringValue(rs.getString(2), encryptionKey, encryptionIV);
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.STRING.getCode()))
+          {
+            throw new RegistryException("Failed to get the string value (" + name
+                + ") under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          if ((encryptionKey != null) && (encryptionIV != null))
+          {
+            return decryptStringValue(rs.getString(2), encryptionKey, encryptionIV);
+          }
+          else
+          {
+            return rs.getString(2);
+          }
         }
         else
         {
-          return rs.getString(2);
+          return defaultValue;
         }
-      }
-      else
-      {
-        return defaultValue;
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to get the string value (" + name
           + ") under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -742,8 +677,8 @@ public class Registry
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -771,13 +706,10 @@ public class Registry
     try
     {
       // Retrieve the database meta data
-      Connection connection = null;
-      String schemaSeparator = ".";
+      String schemaSeparator;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -787,10 +719,6 @@ public class Registry
         {
           schemaSeparator = ".";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix
@@ -838,14 +766,9 @@ public class Registry
     path = getActualPath(path);
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getIntegerValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -854,42 +777,37 @@ public class Registry
         return false;
       }
 
-      statement = connection.prepareStatement(getIntegerValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.INTEGER.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to check if the integer value (" + name
-              + ") exists under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        return true;
-      }
-      else
-      {
-        return false;
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.INTEGER.getCode()))
+          {
+            throw new RegistryException("Failed to check if the integer value (" + name
+                + ") exists under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to check if the integer value (" + name
           + ") exists under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -922,9 +840,6 @@ public class Registry
 
     path = getActualPath(path);
 
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -940,22 +855,23 @@ public class Registry
         transactionManager.begin();
       }
 
-      connection = getConnection();
-
-      // Retrieve the ID of the Registry key with the specified path
-      String keyId = getKeyId(connection, path, false);
-
-      if (keyId == null)
+      try (Connection connection = getConnection();
+        PreparedStatement statement = connection.prepareStatement(removeValueSQL))
       {
-        return false;
+        // Retrieve the ID of the Registry key with the specified path
+        String keyId = getKeyId(connection, path, false);
+
+        if (keyId == null)
+        {
+          return false;
+        }
+
+        statement.setString(1, keyId);
+        statement.setString(2, name);
+        statement.execute();
+
+        return true;
       }
-
-      statement = connection.prepareStatement(removeValueSQL);
-      statement.setString(1, keyId);
-      statement.setString(2, name);
-      statement.execute();
-
-      return true;
     }
     catch (Throwable e)
     {
@@ -974,9 +890,6 @@ public class Registry
     }
     finally
     {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1060,9 +973,6 @@ public class Registry
       value = encryptBinaryValue(value, encryptionKey, encryptionIV);
     }
 
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -1078,43 +988,53 @@ public class Registry
         transactionManager.begin();
       }
 
-      connection = getConnection();
-
-      // Retrieve the ID of the Registry key with the specified path, creating the path if required
-      String keyId = getKeyId(connection, path, true);
-
-      // Retrieve the type of the existing value if one exists
-      int existingType = getValueType(connection, keyId, name);
-
-      if ((existingType != RegistryValueType.NONE.getCode())
-          && (existingType != RegistryValueType.BINARY.getCode()))
+      try (Connection connection = getConnection())
       {
-        throw new RegistryException("Failed to set the binary value (" + name
-            + ") under the Registry key (" + path
-            + "): A value with the specified name already exists with the incorrect type ("
-            + existingType + ")");
-      }
+        /*
+         * Retrieve the ID of the Registry key with the specified path, creating the path
+         * if required.
+         */
+        String keyId = getKeyId(connection, path, true);
 
-      if (existingType == RegistryValueType.NONE.getCode())
-      {
-        String id = UUID.randomUUID().toString();
+        // Retrieve the type of the existing value if one exists
+        int existingType = getValueType(connection, keyId, name);
 
-        statement = connection.prepareStatement(setBinaryValueInsertSQL);
-        statement.setString(1, id);
-        statement.setString(2, keyId);
-        statement.setInt(3, RegistryValueType.BINARY.getCode());
-        statement.setString(4, name);
-        statement.setBytes(5, value);
-      }
-      else
-      {
-        statement = connection.prepareStatement(setBinaryValueUpdateSQL);
-        statement.setBytes(1, value);
-        statement.setString(2, keyId);
-        statement.setString(3, name);
-      }
+        if ((existingType != RegistryValueType.NONE.getCode())
+            && (existingType != RegistryValueType.BINARY.getCode()))
+        {
+          throw new RegistryException("Failed to set the binary value (" + name
+              + ") under the Registry key (" + path
+              + "): A value with the specified name already exists with the incorrect type ("
+              + existingType + ")");
+        }
 
-      statement.execute();
+        if (existingType == RegistryValueType.NONE.getCode())
+        {
+          String id = UUID.randomUUID().toString();
+
+          try (PreparedStatement statement = connection.prepareStatement(setBinaryValueInsertSQL))
+          {
+            statement.setString(1, id);
+            statement.setString(2, keyId);
+            statement.setInt(3, RegistryValueType.BINARY.getCode());
+            statement.setString(4, name);
+            statement.setBytes(5, value);
+
+            statement.execute();
+          }
+        }
+        else
+        {
+          try (PreparedStatement statement = connection.prepareStatement(setBinaryValueUpdateSQL))
+          {
+            statement.setBytes(1, value);
+            statement.setString(2, keyId);
+            statement.setString(3, name);
+
+            statement.execute();
+          }
+        }
+      }
 
       transactionManager.commit();
     }
@@ -1135,9 +1055,6 @@ public class Registry
     }
     finally
     {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1193,10 +1110,6 @@ public class Registry
 
     path = getActualPath(path);
 
-    // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -1212,43 +1125,53 @@ public class Registry
         transactionManager.begin();
       }
 
-      connection = getConnection();
-
-      // Retrieve the ID of the Registry key with the specified path, creating the path if required
-      String keyId = getKeyId(connection, path, true);
-
-      // Retrieve the type of the existing value if one exists
-      int existingType = getValueType(connection, keyId, name);
-
-      if ((existingType != RegistryValueType.NONE.getCode())
-          && (existingType != RegistryValueType.DECIMAL.getCode()))
+      try (Connection connection = getConnection())
       {
-        throw new RegistryException("Failed to set the decimal value (" + name
-            + ") under the Registry key (" + path
-            + "): A value with the specified name already exists with the incorrect type ("
-            + existingType + ")");
-      }
+        /*
+         * Retrieve the ID of the Registry key with the specified path, creating the path
+         * if required.
+         */
+        String keyId = getKeyId(connection, path, true);
 
-      if (existingType == RegistryValueType.NONE.getCode())
-      {
-        String id = UUID.randomUUID().toString();
+        // Retrieve the type of the existing value if one exists
+        int existingType = getValueType(connection, keyId, name);
 
-        statement = connection.prepareStatement(setDecimalValueInsertSQL);
-        statement.setString(1, id);
-        statement.setString(2, keyId);
-        statement.setInt(3, RegistryValueType.DECIMAL.getCode());
-        statement.setString(4, name);
-        statement.setBigDecimal(5, value);
-      }
-      else
-      {
-        statement = connection.prepareStatement(setDecimalValueUpdateSQL);
-        statement.setBigDecimal(1, value);
-        statement.setString(2, keyId);
-        statement.setString(3, name);
-      }
+        if ((existingType != RegistryValueType.NONE.getCode())
+            && (existingType != RegistryValueType.DECIMAL.getCode()))
+        {
+          throw new RegistryException("Failed to set the decimal value (" + name
+              + ") under the Registry key (" + path
+              + "): A value with the specified name already exists with the incorrect type ("
+              + existingType + ")");
+        }
 
-      statement.execute();
+        if (existingType == RegistryValueType.NONE.getCode())
+        {
+          String id = UUID.randomUUID().toString();
+
+          try (PreparedStatement statement = connection.prepareStatement(setDecimalValueInsertSQL))
+          {
+            statement.setString(1, id);
+            statement.setString(2, keyId);
+            statement.setInt(3, RegistryValueType.DECIMAL.getCode());
+            statement.setString(4, name);
+            statement.setBigDecimal(5, value);
+
+            statement.execute();
+          }
+        }
+        else
+        {
+          try (PreparedStatement statement = connection.prepareStatement(setDecimalValueUpdateSQL))
+          {
+            statement.setBigDecimal(1, value);
+            statement.setString(2, keyId);
+            statement.setString(3, name);
+
+            statement.execute();
+          }
+        }
+      }
 
       transactionManager.commit();
     }
@@ -1269,9 +1192,6 @@ public class Registry
     }
     finally
     {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1317,10 +1237,6 @@ public class Registry
 
     path = getActualPath(path);
 
-    // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -1336,43 +1252,53 @@ public class Registry
         transactionManager.begin();
       }
 
-      connection = getConnection();
-
-      // Retrieve the ID of the Registry key with the specified path, creating the path if required
-      String keyId = getKeyId(connection, path, true);
-
-      // Retrieve the type of the existing value if one exists
-      int existingType = getValueType(connection, keyId, name);
-
-      if ((existingType != RegistryValueType.NONE.getCode())
-          && (existingType != RegistryValueType.INTEGER.getCode()))
+      try (Connection connection = getConnection())
       {
-        throw new RegistryException("Failed to set the integer value (" + name
-            + ") under the Registry key (" + path
-            + "): A value with the specified name already exists with the incorrect type ("
-            + existingType + ")");
-      }
+        /*
+         * Retrieve the ID of the Registry key with the specified path, creating the path
+         * if required.
+         */
+        String keyId = getKeyId(connection, path, true);
 
-      if (existingType == RegistryValueType.NONE.getCode())
-      {
-        String id = UUID.randomUUID().toString();
+        // Retrieve the type of the existing value if one exists
+        int existingType = getValueType(connection, keyId, name);
 
-        statement = connection.prepareStatement(setIntegerValueInsertSQL);
-        statement.setString(1, id);
-        statement.setString(2, keyId);
-        statement.setInt(3, RegistryValueType.INTEGER.getCode());
-        statement.setString(4, name);
-        statement.setInt(5, value);
-      }
-      else
-      {
-        statement = connection.prepareStatement(setIntegerValueUpdateSQL);
-        statement.setInt(1, value);
-        statement.setString(2, keyId);
-        statement.setString(3, name);
-      }
+        if ((existingType != RegistryValueType.NONE.getCode())
+            && (existingType != RegistryValueType.INTEGER.getCode()))
+        {
+          throw new RegistryException("Failed to set the integer value (" + name
+              + ") under the Registry key (" + path
+              + "): A value with the specified name already exists with the incorrect type ("
+              + existingType + ")");
+        }
 
-      statement.execute();
+        if (existingType == RegistryValueType.NONE.getCode())
+        {
+          String id = UUID.randomUUID().toString();
+
+          try (PreparedStatement statement = connection.prepareStatement(setIntegerValueInsertSQL))
+          {
+            statement.setString(1, id);
+            statement.setString(2, keyId);
+            statement.setInt(3, RegistryValueType.INTEGER.getCode());
+            statement.setString(4, name);
+            statement.setInt(5, value);
+
+            statement.execute();
+          }
+        }
+        else
+        {
+          try (PreparedStatement statement = connection.prepareStatement(setIntegerValueUpdateSQL))
+          {
+            statement.setInt(1, value);
+            statement.setString(2, keyId);
+            statement.setString(3, name);
+
+            statement.execute();
+          }
+        }
+      }
 
       transactionManager.commit();
     }
@@ -1393,9 +1319,6 @@ public class Registry
     }
     finally
     {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1479,10 +1402,6 @@ public class Registry
 
     path = getActualPath(path);
 
-    // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -1498,42 +1417,50 @@ public class Registry
         transactionManager.begin();
       }
 
-      connection = getConnection();
-
-      // Retrieve the ID of the Registry key with the specified path, creating the path if required
-      String keyId = getKeyId(connection, path, true);
-
-      // Retrieve the type of the existing value if one exists
-      int existingType = getValueType(connection, keyId, name);
-
-      if ((existingType != RegistryValueType.NONE.getCode())
-          && (existingType != RegistryValueType.STRING.getCode()))
+      try (Connection connection = getConnection())
       {
-        throw new RegistryException("Failed to set the string value (" + name
-            + ") under the Registry key (" + path + "): A value with the specified name (" + name
-            + ") already exists with the incorrect type (" + existingType + ")");
-      }
+        /*
+         * Retrieve the ID of the Registry key with the specified path, creating the path
+         * if required.
+         */
+        String keyId = getKeyId(connection, path, true);
 
-      if (existingType == RegistryValueType.NONE.getCode())
-      {
-        String id = UUID.randomUUID().toString();
+        // Retrieve the type of the existing value if one exists
+        int existingType = getValueType(connection, keyId, name);
 
-        statement = connection.prepareStatement(setStringValueInsertSQL);
-        statement.setString(1, id);
-        statement.setString(2, keyId);
-        statement.setInt(3, RegistryValueType.STRING.getCode());
-        statement.setString(4, name);
-        statement.setString(5, value);
-      }
-      else
-      {
-        statement = connection.prepareStatement(setStringValueUpdateSQL);
-        statement.setString(1, value);
-        statement.setString(2, keyId);
-        statement.setString(3, name);
-      }
+        if ((existingType != RegistryValueType.NONE.getCode())
+            && (existingType != RegistryValueType.STRING.getCode()))
+        {
+          throw new RegistryException("Failed to set the string value (" + name
+              + ") under the Registry key (" + path + "): A value with the specified name (" + name
+              + ") already exists with the incorrect type (" + existingType + ")");
+        }
 
-      statement.execute();
+        if (existingType == RegistryValueType.NONE.getCode())
+        {
+          String id = UUID.randomUUID().toString();
+
+          try (PreparedStatement statement = connection.prepareStatement(setStringValueInsertSQL))
+          {
+            statement.setString(1, id);
+            statement.setString(2, keyId);
+            statement.setInt(3, RegistryValueType.STRING.getCode());
+            statement.setString(4, name);
+            statement.setString(5, value);
+          }
+        }
+        else
+        {
+          try (PreparedStatement statement = connection.prepareStatement(setStringValueUpdateSQL))
+          {
+            statement.setString(1, value);
+            statement.setString(2, keyId);
+            statement.setString(3, name);
+
+            statement.execute();
+          }
+        }
+      }
 
       transactionManager.commit();
     }
@@ -1554,9 +1481,6 @@ public class Registry
     }
     finally
     {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1600,15 +1524,9 @@ public class Registry
 
     path = getActualPath(path);
 
-    // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getStringValueSQL))
     {
-      connection = getConnection();
-
       // Retrieve the ID of the Registry key with the specified path
       String keyId = getKeyId(connection, path, false);
 
@@ -1617,42 +1535,37 @@ public class Registry
         return false;
       }
 
-      statement = connection.prepareStatement(getStringValueSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        // Retrieve the type of the existing value if one exists
-        int existingType = rs.getInt(1);
-
-        if ((existingType != RegistryValueType.NONE.getCode())
-            && (existingType != RegistryValueType.STRING.getCode()))
+        if (rs.next())
         {
-          throw new RegistryException("Failed to check if the string value (" + name
-              + ") exists under the Registry key (" + path
-              + "): A value with the specified name exists with the incorrect type ("
-              + existingType + ")");
-        }
+          // Retrieve the type of the existing value if one exists
+          int existingType = rs.getInt(1);
 
-        return true;
-      }
-      else
-      {
-        return false;
+          if ((existingType != RegistryValueType.NONE.getCode())
+              && (existingType != RegistryValueType.STRING.getCode()))
+          {
+            throw new RegistryException("Failed to check if the string value (" + name
+                + ") exists under the Registry key (" + path
+                + "): A value with the specified name exists with the incorrect type ("
+                + existingType + ")");
+          }
+
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to check if the string value (" + name
           + ") exists under the Registry key (" + path + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1746,9 +1659,6 @@ public class Registry
     throws RegistryException
 
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
     if (name.length() == 0)
     {
       if (parentId != null)
@@ -1762,11 +1672,9 @@ public class Registry
       }
     }
 
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(createKeySQL))
     {
-      connection = getConnection();
-      statement = connection.prepareStatement(createKeySQL);
-
       String id = UUID.randomUUID().toString();
 
       statement.setString(1, id);
@@ -1783,11 +1691,6 @@ public class Registry
     catch (Throwable e)
     {
       throw new RegistryException("Failed to create the new key (" + name + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -2057,39 +1960,32 @@ public class Registry
 
     // Find the ID of the path component with the specified name under the path component with
     // the specified ID or the root path component if the key ID is NULL
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = (currentKeyId == null)
+          ? connection.prepareStatement(getKeyIdNoParentSQL)
+          : connection.prepareStatement(getKeyIdWithParentSQL))
     {
       if (currentKeyId == null)
       {
-        statement = connection.prepareStatement(getKeyIdNoParentSQL);
         statement.setString(1, name);
       }
       else
       {
-        statement = connection.prepareStatement(getKeyIdWithParentSQL);
         statement.setString(1, name);
         statement.setString(2, currentKeyId);
       }
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        keyId = rs.getString(1);
+        if (rs.next())
+        {
+          keyId = rs.getString(1);
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to retrieve the ID of the path component (" + name
           + ") of the Registry key path (" + path + ") at index (" + currentPathIndex + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
 
     // If we could not find the key with the specified name
@@ -2169,34 +2065,27 @@ public class Registry
   private int getValueType(Connection connection, String keyId, String name)
     throws RegistryException
   {
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(getValueTypeSQL))
     {
-      statement = connection.prepareStatement(getValueTypeSQL);
       statement.setString(1, keyId);
       statement.setString(2, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        return -1;
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return -1;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RegistryException("Failed to check whether the value (" + name
           + ") exists under the Registry key (" + keyId + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
     }
   }
 }

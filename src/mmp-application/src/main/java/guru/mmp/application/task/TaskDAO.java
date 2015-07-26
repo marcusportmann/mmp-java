@@ -20,7 +20,6 @@ package guru.mmp.application.task;
 
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.TransactionManager;
 
 import org.slf4j.Logger;
@@ -100,11 +99,6 @@ public class TaskDAO
   public ScheduledTask getNextTaskScheduledForExecution(int executionRetryDelay, String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -120,48 +114,49 @@ public class TaskDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-
-      Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - executionRetryDelay);
-
-      statement = connection.prepareStatement(getNextTaskScheduledForExecutionSQL);
-      statement.setInt(1, ScheduledTaskStatus.SCHEDULED.getCode());
-      statement.setTimestamp(2, processedBefore);
-      statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-
-      rs = statement.executeQuery();
-
       ScheduledTask scheduledTask = null;
 
-      if (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement =
+            connection.prepareStatement(getNextTaskScheduledForExecutionSQL))
       {
-        Timestamp updated = new Timestamp(System.currentTimeMillis());
+        Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - executionRetryDelay);
 
-        scheduledTask = getScheduledTask(rs);
+        statement.setInt(1, ScheduledTaskStatus.SCHEDULED.getCode());
+        statement.setTimestamp(2, processedBefore);
+        statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 
-        scheduledTask.setStatus(ScheduledTaskStatus.EXECUTING);
-        scheduledTask.setLockName(lockName);
-        scheduledTask.setUpdated(updated);
-
-        updateStatement = connection.prepareStatement(lockScheduledTaskSQL);
-        updateStatement.setInt(1, ScheduledTaskStatus.EXECUTING.getCode());
-        updateStatement.setString(2, lockName);
-        updateStatement.setTimestamp(3, updated);
-        updateStatement.setString(4, scheduledTask.getId());
-
-        if (updateStatement.executeUpdate() != 1)
+        try (ResultSet rs = statement.executeQuery())
         {
-          throw new DAOException("Failed to lock the scheduled task (" + scheduledTask.getId()
-              + ") for execution:"
-              + " No rows were affected as a result of executing the SQL statement" + " ("
-              + lockScheduledTaskSQL + ")");
+          if (rs.next())
+          {
+            Timestamp updated = new Timestamp(System.currentTimeMillis());
+
+            scheduledTask = getScheduledTask(rs);
+
+            scheduledTask.setStatus(ScheduledTaskStatus.EXECUTING);
+            scheduledTask.setLockName(lockName);
+            scheduledTask.setUpdated(updated);
+
+            try (PreparedStatement updateStatement =
+                connection.prepareStatement(lockScheduledTaskSQL))
+            {
+              updateStatement.setInt(1, ScheduledTaskStatus.EXECUTING.getCode());
+              updateStatement.setString(2, lockName);
+              updateStatement.setTimestamp(3, updated);
+              updateStatement.setString(4, scheduledTask.getId());
+
+              if (updateStatement.executeUpdate() != 1)
+              {
+                throw new DAOException("Failed to lock the scheduled task ("
+                    + scheduledTask.getId() + ") for execution:"
+                    + " No rows were affected as a result of executing the SQL statement" + " ("
+                    + lockScheduledTaskSQL + ")");
+              }
+            }
+          }
         }
       }
-
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
 
       transactionManager.commit();
 
@@ -169,11 +164,6 @@ public class TaskDAO
     }
     catch (Throwable e)
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         transactionManager.rollback();
@@ -186,12 +176,12 @@ public class TaskDAO
 
       if (e instanceof DAOException)
       {
-        throw ((DAOException)e);
+        throw((DAOException) e);
       }
       else
       {
         throw new DAOException("Failed to retrieve the next task that has been scheduled for "
-          + "execution from the database", e);
+            + "execution from the database", e);
       }
     }
     finally
@@ -223,25 +213,19 @@ public class TaskDAO
   public List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getScheduledTaskParametersSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getScheduledTaskParametersSQL);
-
       statement.setString(1, id);
-
-      rs = statement.executeQuery();
 
       List<ScheduledTaskParameter> scheduledTaskParameters = new ArrayList<>();
 
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        scheduledTaskParameters.add(getScheduledTaskParameter(rs));
+        while (rs.next())
+        {
+          scheduledTaskParameters.add(getScheduledTaskParameter(rs));
+        }
       }
 
       return scheduledTaskParameters;
@@ -255,13 +239,6 @@ public class TaskDAO
       throw new DAOException("Failed to retrieve the parameters for the scheduled task (" + id
           + ") from the database", e);
     }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
-
   }
 
   /**
@@ -274,23 +251,17 @@ public class TaskDAO
   public List<ScheduledTask> getUnscheduledTasks()
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUnscheduledTasksSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getUnscheduledTasksSQL);
-
-      rs = statement.executeQuery();
-
       List<ScheduledTask> unscheduledTasks = new ArrayList<>();
 
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        unscheduledTasks.add(getScheduledTask(rs));
+        while (rs.next())
+        {
+          unscheduledTasks.add(getScheduledTask(rs));
+        }
       }
 
       return unscheduledTasks;
@@ -302,12 +273,6 @@ public class TaskDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the unscheduled tasks from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -321,16 +286,12 @@ public class TaskDAO
   public void incrementScheduledTaskExecutionAttempts(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(incrementScheduledTaskExecutionAttemptsSQL))
     {
-      connection = dataSource.getConnection();
-
       Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 
-      statement = connection.prepareStatement(incrementScheduledTaskExecutionAttemptsSQL);
       statement.setTimestamp(1, currentTime);
       statement.setTimestamp(2, currentTime);
       statement.setString(3, id);
@@ -352,11 +313,6 @@ public class TaskDAO
     {
       throw new DAOException("Failed to increment the execution attempts for the scheduled task ("
           + id + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -384,21 +340,17 @@ public class TaskDAO
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
-
-    Connection connection = null;
 
     try
     {
       // Retrieve the database meta data
-      String schemaSeparator = ".";
+      String schemaSeparator;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -408,10 +360,6 @@ public class TaskDAO
         {
           schemaSeparator = ".";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix
@@ -439,14 +387,9 @@ public class TaskDAO
   public void lockScheduledTask(String id, ScheduledTaskStatus status, String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(lockScheduledTaskSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(lockScheduledTaskSQL);
       statement.setInt(1, status.getCode());
       statement.setString(2, lockName);
       statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -468,11 +411,6 @@ public class TaskDAO
       throw new DAOException("Failed to lock and set the status for the scheduled task (" + id
           + ") to (" + status + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -487,12 +425,8 @@ public class TaskDAO
   public void rescheduleTask(String id, String schedulingPattern)
     throws DAOException
   {
-    Connection connection = null;
-
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       Predictor predictor = new Predictor(schedulingPattern, System.currentTimeMillis());
 
       Date nextExecution = predictor.nextMatchingDate();
@@ -506,10 +440,6 @@ public class TaskDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to reschedule the task (" + id + ") for execution", e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -528,14 +458,9 @@ public class TaskDAO
       ScheduledTaskStatus newStatus)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(resetScheduledTaskLocksSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(resetScheduledTaskLocksSQL);
       statement.setInt(1, newStatus.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, lockName);
@@ -552,11 +477,6 @@ public class TaskDAO
       throw new DAOException("Failed to reset the locks for the scheduled tasks with status ("
           + status + ") that have been locked using the lock name (" + lockName + ")", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -570,11 +490,6 @@ public class TaskDAO
   public boolean scheduleNextUnscheduledTaskForExecution()
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -590,73 +505,62 @@ public class TaskDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
+      boolean hasMoreUnscheduledTasks;
 
-      statement = connection.prepareStatement(getNextUnscheduledTaskSQL);
-
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getNextUnscheduledTaskSQL))
       {
-        ScheduledTask scheduledTask = getScheduledTask(rs);
-
-        Date nextExecution = null;
-
-        try
+        try (ResultSet rs = statement.executeQuery())
         {
-          Predictor predictor = new Predictor(scheduledTask.getSchedulingPattern(),
-            System.currentTimeMillis());
+          if (rs.next())
+          {
+            ScheduledTask scheduledTask = getScheduledTask(rs);
 
-          nextExecution = predictor.nextMatchingDate();
+            Date nextExecution = null;
+
+            try
+            {
+              Predictor predictor = new Predictor(scheduledTask.getSchedulingPattern(),
+                System.currentTimeMillis());
+
+              nextExecution = predictor.nextMatchingDate();
+            }
+            catch (Throwable e)
+            {
+              logger.error(
+                  "The next execution date could not be determined for the unscheduled task ("
+                  + scheduledTask.getId() + ") with the scheduling pattern ("
+                  + scheduledTask.getSchedulingPattern()
+                  + "): The scheduled task will be marked as FAILED", e);
+            }
+
+            if (nextExecution == null)
+            {
+              setScheduledTaskStatus(connection, scheduledTask.getId(), ScheduledTaskStatus.FAILED);
+            }
+            else
+            {
+              logger.info("Scheduling the unscheduled task (" + scheduledTask.getId()
+                  + ") for execution at (" + nextExecution + ")");
+
+              scheduleTask(connection, scheduledTask.getId(), nextExecution);
+            }
+
+            hasMoreUnscheduledTasks = true;
+          }
+          else
+          {
+            hasMoreUnscheduledTasks = false;
+          }
         }
-        catch (Throwable e)
-        {
-          logger.error("The next execution date could not be determined for the unscheduled task ("
-            + scheduledTask.getId() + ") with the scheduling pattern ("
-            + scheduledTask.getSchedulingPattern()
-            + "): The scheduled task will be marked as FAILED", e);
-        }
-
-        if (nextExecution == null)
-        {
-          setScheduledTaskStatus(connection, scheduledTask.getId(), ScheduledTaskStatus.FAILED);
-        }
-        else
-        {
-          logger.info("Scheduling the unscheduled task (" + scheduledTask.getId()
-            + ") for execution at (" + nextExecution + ")");
-
-          scheduleTask(connection, scheduledTask.getId(), nextExecution);
-        }
-
-        DAOUtil.close(updateStatement);
-        DAOUtil.close(rs);
-        DAOUtil.close(statement);
-        DAOUtil.close(connection);
-
-        transactionManager.commit();
-
-        return true;
       }
-      else
-      {
-        DAOUtil.close(updateStatement);
-        DAOUtil.close(rs);
-        DAOUtil.close(statement);
-        DAOUtil.close(connection);
 
-        transactionManager.commit();
+      transactionManager.commit();
 
-        return false;
-      }
+      return hasMoreUnscheduledTasks;
     }
     catch (Throwable e)
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         transactionManager.rollback();
@@ -669,7 +573,7 @@ public class TaskDAO
 
       if (e instanceof DAOException)
       {
-        throw ((DAOException)e);
+        throw((DAOException) e);
       }
       else
       {
@@ -704,12 +608,8 @@ public class TaskDAO
   public void setScheduledTaskStatus(String id, ScheduledTaskStatus status)
     throws DAOException
   {
-    Connection connection = null;
-
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
       setScheduledTaskStatus(connection, id, status);
     }
     catch (DAOException e)
@@ -720,10 +620,6 @@ public class TaskDAO
     {
       throw new DAOException("Failed to set the status (" + status + ")  for the scheduled task ("
           + id + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(connection);
     }
   }
 
@@ -738,14 +634,9 @@ public class TaskDAO
   public void unlockScheduledTask(String id, ScheduledTaskStatus status)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(unlockScheduledTaskSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(unlockScheduledTaskSQL);
       statement.setInt(1, status.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, id);
@@ -765,11 +656,6 @@ public class TaskDAO
     {
       throw new DAOException("Failed to unlock and set the status for the scheduled task (" + id
           + ") to (" + status + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -864,12 +750,8 @@ public class TaskDAO
 
   private void scheduleTask(Connection connection, String id, Date nextExecution)
   {
-    PreparedStatement statement = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(scheduleTaskSQL))
     {
-      statement = connection.prepareStatement(scheduleTaskSQL);
-
       statement.setTimestamp(1, new Timestamp(nextExecution.getTime()));
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, id);
@@ -889,20 +771,12 @@ public class TaskDAO
     {
       throw new DAOException("Failed to schedule the task (" + id + ")", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-    }
   }
 
   private void setScheduledTaskStatus(Connection connection, String id, ScheduledTaskStatus status)
   {
-    PreparedStatement statement = null;
-
-    try
+    try (PreparedStatement statement = connection.prepareStatement(setScheduledTaskStatusSQL))
     {
-      statement = connection.prepareStatement(setScheduledTaskStatusSQL);
-
       statement.setInt(1, status.getCode());
       statement.setString(2, id);
 
@@ -921,10 +795,6 @@ public class TaskDAO
     {
       throw new DAOException("Failed to set the status (" + status + ")  for the scheduled task ("
           + id + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
     }
   }
 }

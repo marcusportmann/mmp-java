@@ -21,7 +21,6 @@ package guru.mmp.application.sms;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.sms.SMS.Status;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 
@@ -116,15 +115,9 @@ public class SMSDAO
       {
         try
         {
-          if (ic != null)
-          {
-            ic.close();
-          }
+          ic.close();
         }
-        catch (Throwable e)
-        {
-          // Do nothing
-        }
+        catch (Throwable ignored) {}
       }
     }
     catch (Throwable e)
@@ -147,16 +140,10 @@ public class SMSDAO
   public void createSMS(SMS sms)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createSMSSQL))
     {
-      connection = dataSource.getConnection();
-
       long id = idGenerator.next("Application.SMSId");
-
-      statement = connection.prepareStatement(createSMSSQL);
 
       statement.setLong(1, id);
       statement.setString(2, sms.getMobileNumber());
@@ -180,11 +167,6 @@ public class SMSDAO
     {
       throw new DAOException("Failed to add the SMS to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -199,14 +181,9 @@ public class SMSDAO
   public boolean deleteSMS(long id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteSMSSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteSMSSQL);
       statement.setLong(1, id);
 
       return (statement.executeUpdate() > 0);
@@ -218,11 +195,6 @@ public class SMSDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to delete the SMS (" + id + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -243,11 +215,6 @@ public class SMSDAO
   public SMS getNextSMSQueuedForSending(int sendRetryDelay, String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -263,42 +230,43 @@ public class SMSDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-
-      Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - sendRetryDelay);
-
-      statement = connection.prepareStatement(getNextSMSForProcessingSQL);
-      statement.setInt(1, SMS.Status.QUEUED_FOR_SENDING.getCode());
-      statement.setTimestamp(2, processedBefore);
-
-      rs = statement.executeQuery();
-
       SMS sms = null;
 
-      if (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getNextSMSForProcessingSQL))
       {
-        sms = getSMS(rs);
+        Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - sendRetryDelay);
 
-        sms.setStatus(SMS.Status.SENDING);
-        sms.setLockName(lockName);
+        statement.setInt(1, SMS.Status.QUEUED_FOR_SENDING.getCode());
+        statement.setTimestamp(2, processedBefore);
 
-        updateStatement = connection.prepareStatement(lockSMSSQL);
-        updateStatement.setInt(1, SMS.Status.SENDING.getCode());
-        updateStatement.setString(2, lockName);
-        updateStatement.setLong(3, sms.getId());
-
-        if (updateStatement.executeUpdate() != 1)
+        try (ResultSet rs = statement.executeQuery())
         {
-          throw new DAOException("Failed to lock the SMS (" + sms.getId() + ") for processing:"
-            + " No rows were affected as a result of executing the SQL statement" + " ("
-            + lockSMSSQL + ")");
-        }
-      }
+          if (rs.next())
+          {
+            sms = getSMS(rs);
 
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
+            sms.setStatus(SMS.Status.SENDING);
+            sms.setLockName(lockName);
+
+            try (PreparedStatement updateStatement = connection.prepareStatement(lockSMSSQL))
+            {
+              updateStatement.setInt(1, SMS.Status.SENDING.getCode());
+              updateStatement.setString(2, lockName);
+              updateStatement.setLong(3, sms.getId());
+
+              if (updateStatement.executeUpdate() != 1)
+              {
+                throw new DAOException("Failed to lock the SMS (" + sms.getId()
+                    + ") for processing:"
+                    + " No rows were affected as a result of executing the SQL statement" + " ("
+                    + lockSMSSQL + ")");
+              }
+            }
+          }
+        }
+
+      }
 
       transactionManager.commit();
 
@@ -306,11 +274,6 @@ public class SMSDAO
     }
     catch (Throwable e)
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         transactionManager.rollback();
@@ -323,12 +286,12 @@ public class SMSDAO
 
       if (e instanceof DAOException)
       {
-        throw ((DAOException)e);
+        throw((DAOException) e);
       }
       else
       {
         throw new DAOException("Failed to retrieve the next SMS that has been queued for sending"
-          + " from the database", e);
+            + " from the database", e);
       }
     }
     finally
@@ -360,26 +323,21 @@ public class SMSDAO
   public SMS getSMS(long id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getSMSByIdSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getSMSByIdSQL);
       statement.setLong(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getSMS(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getSMS(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -389,12 +347,6 @@ public class SMSDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the SMS (" + id + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -408,16 +360,11 @@ public class SMSDAO
   public void incrementSMSSendAttempts(SMS sms)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(incrementSMSSendAttemptsSQL))
     {
-      connection = dataSource.getConnection();
-
       Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 
-      statement = connection.prepareStatement(incrementSMSSendAttemptsSQL);
       statement.setTimestamp(1, currentTime);
       statement.setLong(2, sms.getId());
 
@@ -439,11 +386,6 @@ public class SMSDAO
     {
       throw new DAOException("Failed to increment the send attempts for the SMS (" + sms.getId()
           + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -471,21 +413,17 @@ public class SMSDAO
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
-
-    Connection connection = null;
 
     try
     {
       // Retrieve the database meta data
-      String schemaSeparator = ".";
+      String schemaSeparator;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -495,10 +433,6 @@ public class SMSDAO
         {
           schemaSeparator = ".";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix
@@ -528,14 +462,9 @@ public class SMSDAO
   public void resetSMSLocks(String lockName, SMS.Status status, SMS.Status newStatus)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(resetSMSLocksSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(resetSMSLocksSQL);
       statement.setInt(1, newStatus.getCode());
       statement.setString(2, lockName);
       statement.setInt(3, status.getCode());
@@ -551,11 +480,6 @@ public class SMSDAO
       throw new DAOException("Failed to reset the locks for the SMSs with the status (" + status
           + ") that have been locked using the lock name (" + lockName + ")", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -569,14 +493,9 @@ public class SMSDAO
   public void setSMSStatus(long id, SMS.Status status)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(setSMSStatusSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(setSMSStatusSQL);
       statement.setInt(1, status.getCode());
       statement.setLong(2, id);
 
@@ -596,11 +515,6 @@ public class SMSDAO
       throw new DAOException("Failed to set the status for the SMS (" + id + ") to ("
           + status.toString() + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -614,14 +528,9 @@ public class SMSDAO
   public void unlockSMS(long id, SMS.Status status)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(unlockSMSSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(unlockSMSSQL);
       statement.setInt(1, status.getCode());
       statement.setLong(2, id);
 
@@ -640,11 +549,6 @@ public class SMSDAO
     {
       throw new DAOException("Failed to unlock and set the status for the SMS (" + id + ") to ("
           + status.toString() + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 

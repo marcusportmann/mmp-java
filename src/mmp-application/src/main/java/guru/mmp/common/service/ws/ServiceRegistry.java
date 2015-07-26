@@ -20,7 +20,6 @@ package guru.mmp.common.service.ws;
 
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
 
 import org.slf4j.Logger;
@@ -90,38 +89,26 @@ public class ServiceRegistry
   public int getNumberOfServiceRegistryEntries()
     throws ServiceRegistryException
   {
-    // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getNumberOfServiceRegistryEntriesSQL))
     {
-      connection = getConnection();
-
-      statement = connection.prepareStatement(getNumberOfServiceRegistryEntriesSQL);
-
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        return 0;
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new ServiceRegistryException(
           "Failed to retrieve the number of Service Registry entries: " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -168,9 +155,9 @@ public class ServiceRegistry
       else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry.SECURITY_TYPE_DIGEST)
       {
         return WebServiceClientSecurityHelper.getDigestAuthenticationServiceProxy(serviceClass,
-          serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-          serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
-          serviceRegistryEntry.getPassword());
+            serviceInterface, serviceRegistryEntry.getWsdlLocation(),
+            serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
+            serviceRegistryEntry.getPassword());
       }
       else if (serviceRegistryEntry.getSecurityType()
           == ServiceRegistryEntry.SECURITY_TYPE_HTTP_AUTHENTICATION)
@@ -231,39 +218,29 @@ public class ServiceRegistry
     }
 
     // Store the value in the database
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = getConnection();
+      PreparedStatement statement = connection.prepareStatement(getServiceRegistryEntrySQL))
     {
-      connection = getConnection();
-
-      statement = connection.prepareStatement(getServiceRegistryEntrySQL);
       statement.setString(1, name);
-      rs = statement.executeQuery();
 
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return new ServiceRegistryEntry(rs.getString(1), rs.getInt(2),
-            rs.getString(3).equalsIgnoreCase("Y"), rs.getString(4).equalsIgnoreCase("Y"),
-            rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return new ServiceRegistryEntry(rs.getString(1), rs.getInt(2),
+              rs.getString(3).equalsIgnoreCase("Y"), rs.getString(4).equalsIgnoreCase("Y"),
+              rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (Throwable e)
     {
       throw new ServiceRegistryException("Failed to get the Service Registry entry (" + name
           + "): " + e.getMessage(), e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -291,22 +268,18 @@ public class ServiceRegistry
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
-
-    Connection connection = null;
 
     try
     {
       // Retrieve the database meta data
-      String schemaSeparator = ".";
-      String idQuote = "\"";
+      String schemaSeparator;
+      String idQuote;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -324,10 +297,6 @@ public class ServiceRegistry
         {
           idQuote = "\"";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix

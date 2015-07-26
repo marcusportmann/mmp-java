@@ -54,21 +54,10 @@ public class HsqldbDataSource extends BasicDataSource
   public synchronized void close()
     throws SQLException
   {
-    Connection connection = null;
-    Statement statement = null;
-
-    try
+    try (Connection connection = getConnection();
+      Statement statement = connection.createStatement())
     {
-      connection = getConnection();
-
-      statement = connection.createStatement();
-
       statement.executeUpdate("SHUTDOWN");
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
 
     super.close();

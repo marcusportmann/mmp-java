@@ -23,7 +23,6 @@ import guru.mmp.application.messaging.Message.Status;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.crypto.EncryptionScheme;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 
@@ -120,20 +119,15 @@ public class MessagingDAO
   public boolean allPartsQueuedForMessage(String messageId, int totalParts)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(allPartsQueuedForMessageSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(allPartsQueuedForMessageSQL);
       statement.setString(1, messageId);
 
-      rs = statement.executeQuery();
-
-      return rs.next() && (totalParts == rs.getInt(1));
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next() && (totalParts == rs.getInt(1));
+      }
     }
     catch (DAOException e)
     {
@@ -143,12 +137,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to check whether all the message parts for the message ("
           + messageId + ") have been queued for assembly in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -162,15 +150,9 @@ public class MessagingDAO
   public void archiveMessage(Message message)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(archiveMessageSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(archiveMessageSQL);
-
       statement.setString(1, message.getId());
       statement.setString(2, message.getUser());
       statement.setString(3, message.getOrganisation());
@@ -198,11 +180,6 @@ public class MessagingDAO
       throw new DAOException("Failed to archive the message (" + message.getId()
           + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -216,15 +193,9 @@ public class MessagingDAO
   public void createErrorReport(ErrorReport errorReport)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createErrorReportSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createErrorReportSQL);
-
       String description = errorReport.getDescription();
 
       if (description.length() > 2048)
@@ -274,11 +245,6 @@ public class MessagingDAO
       throw new DAOException("Failed to add the error report (" + errorReport.getId()
           + ") to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -291,15 +257,9 @@ public class MessagingDAO
   public void createMessage(Message message)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createMessageSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createMessageSQL);
-
       Date persisted = new Date();
 
       statement.setString(1, message.getId());
@@ -338,11 +298,6 @@ public class MessagingDAO
       throw new DAOException("Failed to add the message (" + message.getId() + ") to the database",
           e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -356,15 +311,9 @@ public class MessagingDAO
   public void createMessagePart(MessagePart messagePart)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createMessagePartSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createMessagePartSQL);
-
       Date persisted = new Date();
 
       statement.setString(1, messagePart.getId());
@@ -407,11 +356,6 @@ public class MessagingDAO
       throw new DAOException("Failed to add the message part (" + messagePart.getId()
           + ") to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -424,14 +368,9 @@ public class MessagingDAO
   public void deleteMessage(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteMessageSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteMessageSQL);
       statement.setString(1, id);
 
       statement.executeUpdate();
@@ -443,11 +382,6 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to delete the message (" + id + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -461,14 +395,9 @@ public class MessagingDAO
   public void deleteMessagePart(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteMessagePartSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteMessagePartSQL);
       statement.setString(1, id);
 
       statement.executeUpdate();
@@ -480,11 +409,6 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to delete the message part (" + id + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -498,14 +422,9 @@ public class MessagingDAO
   public void deleteMessagePartsForMessage(String messageId)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteMessagePartsForMessageSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteMessagePartsForMessageSQL);
       statement.setString(1, messageId);
 
       statement.executeUpdate();
@@ -518,11 +437,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to delete the message parts for the message (" + messageId
           + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -539,26 +453,21 @@ public class MessagingDAO
   public ErrorReport getErrorReport(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getErrorReportByIdSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getErrorReportByIdSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getErrorReport(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getErrorReport(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -569,12 +478,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to retrieve the error report (" + id + ") from the database",
           e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -591,26 +494,21 @@ public class MessagingDAO
   public ErrorReportSummary getErrorReportSummary(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getErrorReportSummaryByIdSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getErrorReportSummaryByIdSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getErrorReportSummary(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getErrorReportSummary(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -621,12 +519,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to retrieve the summary for the error report (" + id
           + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -643,26 +535,21 @@ public class MessagingDAO
   public Message getMessage(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getMessageByIdSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getMessageByIdSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getMessage(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getMessage(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -672,12 +559,6 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the message (" + id + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -696,11 +577,6 @@ public class MessagingDAO
   public List<MessagePart> getMessagePartsQueuedForAssembly(String messageId, String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -716,48 +592,47 @@ public class MessagingDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getMessagePartsQueuedForAssemblySQL);
-      statement.setInt(1, MessagePart.Status.QUEUED_FOR_ASSEMBLY.getCode());
-      statement.setString(2, messageId);
-
-      rs = statement.executeQuery();
-
       List<MessagePart> messageParts = new ArrayList<>();
 
-      while (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement =
+            connection.prepareStatement(getMessagePartsQueuedForAssemblySQL))
       {
-        messageParts.add(getMessagePart(rs));
-      }
+        statement.setInt(1, MessagePart.Status.QUEUED_FOR_ASSEMBLY.getCode());
+        statement.setString(2, messageId);
 
-      DAOUtil.close(rs);
-      rs = null;
-
-      for (MessagePart messagePart : messageParts)
-      {
-        Timestamp updated = new Timestamp(System.currentTimeMillis());
-
-        messagePart.setStatus(MessagePart.Status.ASSEMBLING);
-        messagePart.setLockName(lockName);
-        messagePart.setUpdated(updated);
-
-        updateStatement = connection.prepareStatement(lockMessagePartSQL);
-        updateStatement.setInt(1, MessagePart.Status.ASSEMBLING.getCode());
-        updateStatement.setString(2, lockName);
-        updateStatement.setTimestamp(3, updated);
-        updateStatement.setString(4, messagePart.getId());
-
-        if (updateStatement.executeUpdate() != 1)
+        try (ResultSet rs = statement.executeQuery())
         {
-          throw new DAOException("Failed to lock the message part (" + messagePart.getId()
-              + ") queued for"
-              + " assembly: No rows were affected as a result of executing the SQL"
-              + " statement (" + lockMessagePartSQL + ")");
+          while (rs.next())
+          {
+            messageParts.add(getMessagePart(rs));
+          }
         }
 
-        DAOUtil.close(updateStatement);
-        updateStatement = null;
+        for (MessagePart messagePart : messageParts)
+        {
+          Timestamp updated = new Timestamp(System.currentTimeMillis());
+
+          messagePart.setStatus(MessagePart.Status.ASSEMBLING);
+          messagePart.setLockName(lockName);
+          messagePart.setUpdated(updated);
+
+          try (PreparedStatement updateStatement = connection.prepareStatement(lockMessagePartSQL))
+          {
+            updateStatement.setInt(1, MessagePart.Status.ASSEMBLING.getCode());
+            updateStatement.setString(2, lockName);
+            updateStatement.setTimestamp(3, updated);
+            updateStatement.setString(4, messagePart.getId());
+
+            if (updateStatement.executeUpdate() != 1)
+            {
+              throw new DAOException("Failed to lock the message part (" + messagePart.getId()
+                  + ") queued for"
+                  + " assembly: No rows were affected as a result of executing the SQL"
+                  + " statement (" + lockMessagePartSQL + ")");
+            }
+          }
+        }
       }
 
       transactionManager.commit();
@@ -797,11 +672,6 @@ public class MessagingDAO
     }
     finally
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -833,11 +703,6 @@ public class MessagingDAO
   public List<MessagePart> getMessagePartsQueuedForDownload(String device, String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -853,74 +718,72 @@ public class MessagingDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-
-      /*
-       * First check if we already have message parts locked for downloading for this device, if
-       * so update the lock and return these message parts. This handles the situation where a
-       * device attempted to download message parts previously and failed leaving these message
-       * parts locked in a "Downloading" state.
-       */
-      statement = connection.prepareStatement(getMessagePartsQueuedForDownloadSQL);
-      statement.setInt(1, MessagePart.Status.DOWNLOADING.getCode());
-      statement.setString(2, device);
-
-      rs = statement.executeQuery();
-
       List<MessagePart> messageParts = new ArrayList<>();
 
-      while (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement =
+            connection.prepareStatement(getMessagePartsQueuedForDownloadSQL))
       {
-        messageParts.add(getMessagePart(rs));
-      }
-
-      DAOUtil.close(rs);
-      rs = null;
-
-      /*
-       * If we did not find message parts already locked for downloading then retrieve the message
-       * parts that are "QueuedForDownload" for the device.
-       */
-      if (messageParts.size() == 0)
-      {
-        statement.setInt(1, MessagePart.Status.QUEUED_FOR_DOWNLOAD.getCode());
+        /*
+         * First check if we already have message parts locked for downloading for this device, if
+         * so update the lock and return these message parts. This handles the situation where a
+         * device attempted to download message parts previously and failed leaving these message
+         * parts locked in a "Downloading" state.
+         */
+        statement.setInt(1, MessagePart.Status.DOWNLOADING.getCode());
         statement.setString(2, device);
 
-        rs = statement.executeQuery();
-
-        while (rs.next())
+        try (ResultSet rs = statement.executeQuery())
         {
-          messageParts.add(getMessagePart(rs));
+          while (rs.next())
+          {
+            messageParts.add(getMessagePart(rs));
+          }
         }
 
-        DAOUtil.close(rs);
-        rs = null;
-      }
-
-      for (MessagePart messagePart : messageParts)
-      {
-        Timestamp updated = new Timestamp(System.currentTimeMillis());
-
-        messagePart.setStatus(MessagePart.Status.DOWNLOADING);
-        messagePart.setLockName(lockName);
-        messagePart.setUpdated(updated);
-        messagePart.setDownloadAttempts(messagePart.getDownloadAttempts() + 1);
-
-        updateStatement = connection.prepareStatement(lockMessagePartForDownloadSQL);
-        updateStatement.setInt(1, MessagePart.Status.DOWNLOADING.getCode());
-        updateStatement.setString(2, lockName);
-        updateStatement.setTimestamp(3, updated);
-        updateStatement.setString(4, messagePart.getId());
-
-        if (updateStatement.executeUpdate() != 1)
+        /*
+         * If we did not find message parts already locked for downloading then retrieve the message
+         * parts that are "QueuedForDownload" for the device.
+         */
+        if (messageParts.size() == 0)
         {
-          throw new DAOException("Failed to lock the message part (" + messagePart.getId()
-              + ") queued for download: No rows were affected as a result of executing the SQL"
-              + " statement (" + lockMessagePartForDownloadSQL + ")");
+          statement.setInt(1, MessagePart.Status.QUEUED_FOR_DOWNLOAD.getCode());
+          statement.setString(2, device);
+
+          try (ResultSet rs = statement.executeQuery())
+          {
+            while (rs.next())
+            {
+              messageParts.add(getMessagePart(rs));
+            }
+          }
         }
 
-        DAOUtil.close(updateStatement);
-        updateStatement = null;
+        for (MessagePart messagePart : messageParts)
+        {
+          Timestamp updated = new Timestamp(System.currentTimeMillis());
+
+          messagePart.setStatus(MessagePart.Status.DOWNLOADING);
+          messagePart.setLockName(lockName);
+          messagePart.setUpdated(updated);
+          messagePart.setDownloadAttempts(messagePart.getDownloadAttempts() + 1);
+
+          try (PreparedStatement updateStatement =
+              connection.prepareStatement(lockMessagePartForDownloadSQL))
+          {
+            updateStatement.setInt(1, MessagePart.Status.DOWNLOADING.getCode());
+            updateStatement.setString(2, lockName);
+            updateStatement.setTimestamp(3, updated);
+            updateStatement.setString(4, messagePart.getId());
+
+            if (updateStatement.executeUpdate() != 1)
+            {
+              throw new DAOException("Failed to lock the message part (" + messagePart.getId()
+                  + ") queued for download: No rows were affected as a result of executing the SQL"
+                  + " statement (" + lockMessagePartForDownloadSQL + ")");
+            }
+          }
+        }
       }
 
       transactionManager.commit();
@@ -960,11 +823,6 @@ public class MessagingDAO
     }
     finally
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -996,11 +854,6 @@ public class MessagingDAO
   public List<Message> getMessagesQueuedForDownload(String device, String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -1016,74 +869,74 @@ public class MessagingDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-
-      /*
-       * First check if we already have messages locked for downloading for this device, if
-       * so update the lock and return these messages. This handles the situation where a
-       * device attempted to download messages previously and failed leaving these messages
-       * locked in a "Downloading" state.
-       */
-      statement = connection.prepareStatement(getMessagesQueuedForDownloadSQL);
-      statement.setInt(1, Message.Status.DOWNLOADING.getCode());
-      statement.setString(2, device);
-
-      rs = statement.executeQuery();
-
       List<Message> messages = new ArrayList<>();
 
-      while (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(getMessagesQueuedForDownloadSQL))
       {
-        messages.add(getMessage(rs));
-      }
-
-      DAOUtil.close(rs);
-      rs = null;
-
-      /*
-       * If we did not find messages already locked for downloading then retrieve the messages
-       * that are "QueuedForDownload" for the device.
-       */
-      if (messages.size() == 0)
-      {
-        statement.setInt(1, Message.Status.QUEUED_FOR_DOWNLOAD.getCode());
+        /*
+         * First check if we already have messages locked for downloading for this device, if
+         * so update the lock and return these messages. This handles the situation where a
+         * device attempted to download messages previously and failed leaving these messages
+         * locked in a "Downloading" state.
+         */
+        statement.setInt(1, Message.Status.DOWNLOADING.getCode());
         statement.setString(2, device);
 
-        rs = statement.executeQuery();
-
-        while (rs.next())
+        try (ResultSet rs = statement.executeQuery())
         {
-          messages.add(getMessage(rs));
+          while (rs.next())
+          {
+            messages.add(getMessage(rs));
+          }
         }
 
-        DAOUtil.close(rs);
-        rs = null;
-      }
-
-      for (Message message : messages)
-      {
-        Timestamp updated = new Timestamp(System.currentTimeMillis());
-
-        message.setStatus(Message.Status.DOWNLOADING);
-        message.setLockName(lockName);
-        message.setUpdated(updated);
-        message.setDownloadAttempts(message.getDownloadAttempts() + 1);
-
-        updateStatement = connection.prepareStatement(lockMessageForDownloadSQL);
-        updateStatement.setInt(1, Message.Status.DOWNLOADING.getCode());
-        updateStatement.setString(2, lockName);
-        updateStatement.setTimestamp(3, updated);
-        updateStatement.setString(4, message.getId());
-
-        if (updateStatement.executeUpdate() != 1)
+        /*
+         * If we did not find messages already locked for downloading then retrieve the messages
+         * that are "QueuedForDownload" for the device.
+         */
+        if (messages.size() == 0)
         {
-          throw new DAOException("Failed to lock the message (" + message.getId() + ") queued for"
-              + " download: No rows were affected as a result of executing the SQL"
-              + " statement (" + lockMessageForDownloadSQL + ")");
+          statement.setInt(1, Message.Status.QUEUED_FOR_DOWNLOAD.getCode());
+          statement.setString(2, device);
+
+          try (ResultSet rs = statement.executeQuery())
+          {
+            while (rs.next())
+            {
+              messages.add(getMessage(rs));
+            }
+
+          }
         }
 
-        DAOUtil.close(updateStatement);
-        updateStatement = null;
+        for (Message message : messages)
+        {
+          Timestamp updated = new Timestamp(System.currentTimeMillis());
+
+          message.setStatus(Message.Status.DOWNLOADING);
+          message.setLockName(lockName);
+          message.setUpdated(updated);
+          message.setDownloadAttempts(message.getDownloadAttempts() + 1);
+
+          try (PreparedStatement updateStatement =
+              connection.prepareStatement(lockMessageForDownloadSQL))
+          {
+            updateStatement.setInt(1, Message.Status.DOWNLOADING.getCode());
+            updateStatement.setString(2, lockName);
+            updateStatement.setTimestamp(3, updated);
+            updateStatement.setString(4, message.getId());
+
+            if (updateStatement.executeUpdate() != 1)
+            {
+              throw new DAOException("Failed to lock the message (" + message.getId()
+                  + ") queued for"
+                  + " download: No rows were affected as a result of executing the SQL"
+                  + " statement (" + lockMessageForDownloadSQL + ")");
+            }
+
+          }
+        }
       }
 
       transactionManager.commit();
@@ -1123,11 +976,6 @@ public class MessagingDAO
     }
     finally
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1162,11 +1010,6 @@ public class MessagingDAO
       String lockName)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-    PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -1182,76 +1025,76 @@ public class MessagingDAO
         transactionManager.begin();
       }
 
-      connection = dataSource.getConnection();
-
-      /*
-       * First check if we already have messages locked for downloading for the user-device
-       * combination, if so update the lock and return these messages. This handles the situation
-       * where a device attempted to download messages previously and failed leaving these messages
-       * locked in a "Downloading" state.
-       */
-      statement = connection.prepareStatement(getMessagesQueuedForDownloadForUserSQL);
-      statement.setInt(1, Message.Status.DOWNLOADING.getCode());
-      statement.setString(2, user);
-      statement.setString(3, device);
-
-      rs = statement.executeQuery();
-
       List<Message> messages = new ArrayList<>();
 
-      while (rs.next())
+      try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement =
+            connection.prepareStatement(getMessagesQueuedForDownloadForUserSQL))
       {
-        messages.add(getMessage(rs));
-      }
+        /*
+         * First check if we already have messages locked for downloading for the user-device
+         * combination, if so update the lock and return these messages. This handles the situation
+         * where a device attempted to download messages previously and failed leaving these
+         * messages locked in a "Downloading" state.
+         */
 
-      DAOUtil.close(rs);
-      rs = null;
-
-      /*
-       * If we did not find messages already locked for downloading then retrieve the messages
-       * that are "QueuedForDownload" for the user-device combination.
-       */
-      if (messages.size() == 0)
-      {
-        statement.setInt(1, Message.Status.QUEUED_FOR_DOWNLOAD.getCode());
+        statement.setInt(1, Message.Status.DOWNLOADING.getCode());
         statement.setString(2, user);
         statement.setString(3, device);
 
-        rs = statement.executeQuery();
-
-        while (rs.next())
+        try (ResultSet rs = statement.executeQuery())
         {
-          messages.add(getMessage(rs));
+          while (rs.next())
+          {
+            messages.add(getMessage(rs));
+          }
         }
 
-        DAOUtil.close(rs);
-        rs = null;
-      }
-
-      for (Message message : messages)
-      {
-        Timestamp updated = new Timestamp(System.currentTimeMillis());
-
-        message.setStatus(Message.Status.DOWNLOADING);
-        message.setLockName(lockName);
-        message.setUpdated(updated);
-        message.setDownloadAttempts(message.getDownloadAttempts() + 1);
-
-        updateStatement = connection.prepareStatement(lockMessageForDownloadSQL);
-        updateStatement.setInt(1, Message.Status.DOWNLOADING.getCode());
-        updateStatement.setString(2, lockName);
-        updateStatement.setTimestamp(3, updated);
-        updateStatement.setString(4, message.getId());
-
-        if (updateStatement.executeUpdate() != 1)
+        /*
+         * If we did not find messages already locked for downloading then retrieve the messages
+         * that are "QueuedForDownload" for the user-device combination.
+         */
+        if (messages.size() == 0)
         {
-          throw new DAOException("Failed to lock the message (" + message.getId() + ") queued for"
-              + " download: No rows were affected as a result of executing the SQL"
-              + " statement (" + lockMessageForDownloadSQL + ")");
+          statement.setInt(1, Message.Status.QUEUED_FOR_DOWNLOAD.getCode());
+          statement.setString(2, user);
+          statement.setString(3, device);
+
+          try (ResultSet rs = statement.executeQuery())
+          {
+            while (rs.next())
+            {
+              messages.add(getMessage(rs));
+            }
+          }
         }
 
-        DAOUtil.close(updateStatement);
-        updateStatement = null;
+        for (Message message : messages)
+        {
+          Timestamp updated = new Timestamp(System.currentTimeMillis());
+
+          message.setStatus(Message.Status.DOWNLOADING);
+          message.setLockName(lockName);
+          message.setUpdated(updated);
+          message.setDownloadAttempts(message.getDownloadAttempts() + 1);
+
+          try (PreparedStatement updateStatement =
+              connection.prepareStatement(lockMessageForDownloadSQL))
+          {
+            updateStatement.setInt(1, Message.Status.DOWNLOADING.getCode());
+            updateStatement.setString(2, lockName);
+            updateStatement.setTimestamp(3, updated);
+            updateStatement.setString(4, message.getId());
+
+            if (updateStatement.executeUpdate() != 1)
+            {
+              throw new DAOException("Failed to lock the message (" + message.getId()
+                  + ") queued for"
+                  + " download: No rows were affected as a result of executing the SQL"
+                  + " statement (" + lockMessageForDownloadSQL + ")");
+            }
+          }
+        }
       }
 
       transactionManager.commit();
@@ -1294,11 +1137,6 @@ public class MessagingDAO
     }
     finally
     {
-      DAOUtil.close(updateStatement);
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-
       try
       {
         if (existingTransaction != null)
@@ -1329,27 +1167,23 @@ public class MessagingDAO
   public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+          String.format(
+            "%s ORDER BY CREATED DESC FETCH FIRST %d ROWS ONLY",
+              getMostRecentErrorReportSummariesSQL, maximumNumberOfEntries)))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getMostRecentErrorReportSummariesSQL
-          + " ORDER BY CREATED DESC FETCH FIRST " + maximumNumberOfEntries + " ROWS ONLY");
-
-      rs = statement.executeQuery();
-
-      List<ErrorReportSummary> errorReportSummaries = new ArrayList<>();
-
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        errorReportSummaries.add(getErrorReportSummary(rs));
-      }
+        List<ErrorReportSummary> errorReportSummaries = new ArrayList<>();
 
-      return errorReportSummaries;
+        while (rs.next())
+        {
+          errorReportSummaries.add(getErrorReportSummary(rs));
+        }
+
+        return errorReportSummaries;
+      }
     }
     catch (DAOException e)
     {
@@ -1359,12 +1193,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to retrieve the summaries for the most recent error reports"
           + " from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1386,11 +1214,6 @@ public class MessagingDAO
   public Message getNextMessageQueuedForProcessing(int processingRetryDelay, String lockName)
     throws DAOException
   {
-    // Connection connection = null;
-    // PreparedStatement statement = null;
-    // ResultSet rs = null;
-    // PreparedStatement updateStatement = null;
-
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();
     javax.transaction.Transaction existingTransaction = null;
@@ -1411,12 +1234,9 @@ public class MessagingDAO
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(getNextMessageForProcessingSQL))
       {
-        System.out.println("[DEBUG][MessagingDAO][getNextMessageQueuedForProcessing] HERE!!!");
-
         Timestamp processedBefore = new Timestamp(System.currentTimeMillis()
           - processingRetryDelay);
 
-        ;
         statement.setInt(1, Message.Status.QUEUED_FOR_PROCESSING.getCode());
         statement.setTimestamp(2, processedBefore);
 
@@ -1449,13 +1269,7 @@ public class MessagingDAO
             }
           }
         }
-
-        // DAOUtil.close(updateStatement);
-        // DAOUtil.close(rs);
-        // DAOUtil.close(statement);
       }
-
-      // DAOUtil.close(connection);
 
       transactionManager.commit();
 
@@ -1463,11 +1277,6 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      // DAOUtil.close(updateStatement);
-      // DAOUtil.close(rs);
-      // DAOUtil.close(statement);
-      // DAOUtil.close(connection);
-
       try
       {
         transactionManager.rollback();
@@ -1515,25 +1324,19 @@ public class MessagingDAO
   public int getNumberOfErrorReports()
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getNumberOfErrorReportsSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getNumberOfErrorReportsSQL);
-
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        return 0;
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
       }
     }
     catch (DAOException e)
@@ -1544,12 +1347,6 @@ public class MessagingDAO
     {
       throw new DAOException(
           "Failed to retrieve the total number of error reports in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1563,16 +1360,12 @@ public class MessagingDAO
   public void incrementMessageProcessingAttempts(Message message)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(incrementMessageProcessingAttemptsSQL))
     {
-      connection = dataSource.getConnection();
-
       Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 
-      statement = connection.prepareStatement(incrementMessageProcessingAttemptsSQL);
       statement.setTimestamp(1, currentTime);
       statement.setTimestamp(2, currentTime);
       statement.setString(3, message.getId());
@@ -1596,11 +1389,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to increment the processing attempts for the message ("
           + message.getId() + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1632,17 +1420,13 @@ public class MessagingDAO
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
-    Connection connection = null;
-
     try
     {
       // Retrieve the database meta data
-      String schemaSeparator = ".";
+      String schemaSeparator;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -1652,10 +1436,6 @@ public class MessagingDAO
         {
           schemaSeparator = ".";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix
@@ -1686,20 +1466,15 @@ public class MessagingDAO
   public boolean isMessageArchived(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(isMessageArchivedSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(isMessageArchivedSQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      return rs.next();
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
     catch (DAOException e)
     {
@@ -1709,12 +1484,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to check whether the message (" + id
           + ") is archived in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1731,20 +1500,15 @@ public class MessagingDAO
   public boolean isMessagePartQueuedForAssembly(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(isMessagePartQueuedForAssemblySQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(isMessagePartQueuedForAssemblySQL);
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      return rs.next();
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
     }
     catch (DAOException e)
     {
@@ -1754,12 +1518,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to check whether the message part (" + id
           + ") is queued for assembly in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1781,15 +1539,9 @@ public class MessagingDAO
       String ip, boolean successful)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(logMessageAuditSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(logMessageAuditSQL);
-
       statement.setLong(1, idGenerator.next("Application.MessageAuditId"));
       statement.setString(2, type);
       statement.setString(3, user);
@@ -1816,11 +1568,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to log the message audit to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -1838,14 +1585,9 @@ public class MessagingDAO
       Message.Status newStatus)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(resetExpiredMessageLocksSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(resetExpiredMessageLocksSQL);
       statement.setInt(1, newStatus.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setInt(3, status.getCode());
@@ -1861,11 +1603,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to reset the expired locks for the messages with the status ("
           + status + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1884,14 +1621,9 @@ public class MessagingDAO
       MessagePart.Status newStatus)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(resetExpiredMessagePartLocksSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(resetExpiredMessagePartLocksSQL);
       statement.setInt(1, newStatus.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setInt(3, status.getCode());
@@ -1907,11 +1639,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to reset the expired locks for the message parts with the"
           + " status (" + status + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1929,14 +1656,9 @@ public class MessagingDAO
   public int resetMessageLocks(String lockName, Message.Status status, Message.Status newStatus)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(resetMessageLocksSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(resetMessageLocksSQL);
       statement.setInt(1, newStatus.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, lockName);
@@ -1952,11 +1674,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to reset the locks for the messages with the status ("
           + status + ") that have been locked using the lock name (" + lockName + ")", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -1975,14 +1692,9 @@ public class MessagingDAO
       MessagePart.Status newStatus)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(resetMessagePartLocksSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(resetMessagePartLocksSQL);
       statement.setInt(1, newStatus.getCode());
       statement.setString(2, lockName);
       statement.setInt(3, status.getCode());
@@ -1998,11 +1710,6 @@ public class MessagingDAO
       throw new DAOException("Failed to reset the locks for the message parts with the status ("
           + status + ") that have been locked using the lock name (" + lockName + ")", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -2016,14 +1723,9 @@ public class MessagingDAO
   public void setMessagePartStatus(String id, MessagePart.Status status)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(setMessagePartStatusSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(setMessagePartStatusSQL);
       statement.setInt(1, status.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, id);
@@ -2044,11 +1746,6 @@ public class MessagingDAO
       throw new DAOException("Failed to set the status for the message part (" + id + ") to ("
           + status.toString() + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -2062,14 +1759,9 @@ public class MessagingDAO
   public void setMessageStatus(String id, Message.Status status)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(setMessageStatusSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(setMessageStatusSQL);
       statement.setInt(1, status.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, id);
@@ -2090,11 +1782,6 @@ public class MessagingDAO
       throw new DAOException("Failed to set the status for the message (" + id + ") to ("
           + status.toString() + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -2108,14 +1795,9 @@ public class MessagingDAO
   public void unlockMessage(String id, Message.Status status)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(unlockMessageSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(unlockMessageSQL);
       statement.setInt(1, status.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, id);
@@ -2136,11 +1818,6 @@ public class MessagingDAO
       throw new DAOException("Failed to unlock and set the status for the message (" + id
           + ") to (" + status.toString() + ") in the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -2154,14 +1831,9 @@ public class MessagingDAO
   public void unlockMessagePart(String id, MessagePart.Status status)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(unlockMessagePartSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(unlockMessagePartSQL);
       statement.setInt(1, status.getCode());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, id);
@@ -2181,11 +1853,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to unlock and set the status for the message part (" + id
           + ") to (" + status.toString() + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 

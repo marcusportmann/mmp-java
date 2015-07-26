@@ -20,14 +20,12 @@ package guru.mmp.application.reporting;
 
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
-import guru.mmp.common.persistence.DAOUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.sql.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -138,15 +136,9 @@ public class ReportingDAO
   public void createReportDefinition(ReportDefinition reportDefinition)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createReportDefinitionSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(createReportDefinitionSQL);
-
       statement.setString(1, reportDefinition.getId());
       statement.setString(2, reportDefinition.getOrganisation());
       statement.setString(3, reportDefinition.getName());
@@ -164,11 +156,6 @@ public class ReportingDAO
       throw new DAOException("Failed to add the report definition (" + reportDefinition.getName()
           + ") with ID (" + reportDefinition.getId() + ") to the database", e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -181,15 +168,9 @@ public class ReportingDAO
   public void deleteReportDefinition(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteReportDefinitionSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(deleteReportDefinitionSQL);
-
       statement.setString(1, id);
 
       if (statement.executeUpdate() != 1)
@@ -209,11 +190,6 @@ public class ReportingDAO
       throw new DAOException("Failed to delete the report definition (" + id + ") in the database",
           e);
     }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
-    }
   }
 
   /**
@@ -230,31 +206,26 @@ public class ReportingDAO
   public int getNumberOfReportDefinitionsForOrganisation(String organisation)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getNumberOfReportDefinitionsForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getNumberOfReportDefinitionsForOrganisationSQL);
-
       statement.setString(1, organisation);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return rs.getInt(1);
-      }
-      else
-      {
-        throw new DAOException(
-            "Failed to retrieve the number of report definitions for the organisation ("
-            + organisation + ") in the database:"
-            + " No results were returned as a result of executing the SQL statement ("
-            + getNumberOfReportDefinitionsForOrganisationSQL + ")");
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          throw new DAOException(
+              "Failed to retrieve the number of report definitions for the organisation ("
+              + organisation + ") in the database:"
+              + " No results were returned as a result of executing the SQL statement ("
+              + getNumberOfReportDefinitionsForOrganisationSQL + ")");
+        }
       }
     }
     catch (DAOException e)
@@ -266,12 +237,6 @@ public class ReportingDAO
       throw new DAOException(
           "Failed to retrieve the number of report definitions for the organisation ("
           + organisation + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -289,27 +254,21 @@ public class ReportingDAO
   public ReportDefinition getReportDefinition(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getReportDefinitionByIdSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getReportDefinitionByIdSQL);
-
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return getReportDefinition(rs);
-      }
-      else
-      {
-        return null;
+        if (rs.next())
+        {
+          return getReportDefinition(rs);
+        }
+        else
+        {
+          return null;
+        }
       }
     }
     catch (DAOException e)
@@ -320,12 +279,6 @@ public class ReportingDAO
     {
       throw new DAOException("Failed to retrieve the report definition (" + id
           + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -343,25 +296,20 @@ public class ReportingDAO
   public List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getReportDefinitionsForOrganisationSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(getReportDefinitionsForOrganisationSQL);
-
       statement.setString(1, organisation);
-
-      rs = statement.executeQuery();
 
       List<ReportDefinition> reportDefinitions = new ArrayList<>();
 
-      while (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        reportDefinitions.add(getReportDefinition(rs));
+        while (rs.next())
+        {
+          reportDefinitions.add(getReportDefinition(rs));
+        }
       }
 
       return reportDefinitions;
@@ -374,12 +322,6 @@ public class ReportingDAO
     {
       throw new DAOException("Failed to retrieve the report definitions for the organisation ("
           + organisation + ") from the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -411,18 +353,14 @@ public class ReportingDAO
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
-    Connection connection = null;
-
     try
     {
       // Retrieve the database meta data
-      String schemaSeparator = ".";
-      String idQuote = "\"";
+      String schemaSeparator;
+      String idQuote;
 
-      try
+      try (Connection connection = dataSource.getConnection())
       {
-        connection = dataSource.getConnection();
-
         DatabaseMetaData metaData = connection.getMetaData();
 
         // Retrieve the schema separator for the database
@@ -440,10 +378,6 @@ public class ReportingDAO
         {
           idQuote = "\"";
         }
-      }
-      finally
-      {
-        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix
@@ -473,30 +407,24 @@ public class ReportingDAO
   public boolean reportDefinitionExists(String id)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(reportDefinitionExistsSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(reportDefinitionExistsSQL);
-
       statement.setString(1, id);
 
-      rs = statement.executeQuery();
-
-      if (rs.next())
+      try (ResultSet rs = statement.executeQuery())
       {
-        return (rs.getInt(1) > 0);
-      }
-      else
-      {
-        throw new DAOException("Failed to check whether the report definition (" + id
-            + ") exists in the database:"
-            + " No results were returned as a result of executing the SQL statement ("
-            + reportDefinitionExistsSQL + ")");
+        if (rs.next())
+        {
+          return (rs.getInt(1) > 0);
+        }
+        else
+        {
+          throw new DAOException("Failed to check whether the report definition (" + id
+              + ") exists in the database:"
+              + " No results were returned as a result of executing the SQL statement ("
+              + reportDefinitionExistsSQL + ")");
+        }
       }
     }
     catch (DAOException e)
@@ -507,12 +435,6 @@ public class ReportingDAO
     {
       throw new DAOException("Failed to check whether the report definition (" + id
           + ") exists in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(rs);
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 
@@ -531,17 +453,9 @@ public class ReportingDAO
       String updatedBy)
     throws DAOException
   {
-    Connection connection = null;
-    PreparedStatement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateReportDefinitionSQL))
     {
-      connection = dataSource.getConnection();
-
-      statement = connection.prepareStatement(updateReportDefinitionSQL);
-
-      Date updated = new Date();
-
       statement.setString(1, reportDefinition.getOrganisation());
       statement.setString(2, reportDefinition.getName());
       statement.setBytes(3, reportDefinition.getTemplate());
@@ -560,11 +474,6 @@ public class ReportingDAO
     {
       throw new DAOException("Failed to update the report definition (" + reportDefinition.getId()
           + ") in the database", e);
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
   }
 

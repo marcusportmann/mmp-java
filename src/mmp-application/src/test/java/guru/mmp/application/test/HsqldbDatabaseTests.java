@@ -19,20 +19,21 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.persistence.HsqldbDataSource;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.test.Tests;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>HsqldbDatabaseTests</code> class provides a base class for JUnit tests that wish to
@@ -76,9 +77,6 @@ public abstract class HsqldbDatabaseTests extends Tests
      * Initialise the in-memory database using the SQL statements contained in the file with the
      * specified resource path.
      */
-    Connection connection = null;
-    Statement statement = null;
-
     for (String resourcePath : resourcePaths)
     {
       try
@@ -87,50 +85,36 @@ public abstract class HsqldbDatabaseTests extends Tests
         List<String> sqlStatements = loadSQL(resourcePath);
 
         // Get a connection to the in-memory database
-        connection = dataSource.getConnection();
-
-        for (String sqlStatement : sqlStatements)
+        try (Connection connection = dataSource.getConnection())
         {
-          if (logSQL)
+          for (String sqlStatement : sqlStatements)
           {
-            getLogger().info("Executing SQL statement: " + sqlStatement);
-          }
+            if (logSQL)
+            {
+              getLogger().info("Executing SQL statement: " + sqlStatement);
+            }
 
-          statement = connection.createStatement();
-          statement.execute(sqlStatement);
-          DAOUtil.close(statement);
-          statement = null;
+            try (Statement statement = connection.createStatement())
+            {
+              statement.execute(sqlStatement);
+            }
+          }
         }
       }
       catch (SQLException e)
       {
-        if (connection != null)
+        try (Connection connection = dataSource.getConnection();
+          Statement shutdownStatement = connection.createStatement())
         {
-          Statement shutdownStatement = null;
-
-          try
-          {
-            shutdownStatement = connection.createStatement();
-
-            shutdownStatement.executeUpdate("SHUTDOWN");
-          }
-          catch (Throwable f)
-          {
-            System.err.println("[ERROR] " + f.getMessage());
-            f.printStackTrace(System.err);
-          }
-          finally
-          {
-            DAOUtil.close(shutdownStatement);
-          }
+          shutdownStatement.executeUpdate("SHUTDOWN");
+        }
+        catch (Throwable f)
+        {
+          System.err.println("[ERROR] " + f.getMessage());
+          f.printStackTrace(System.err);
         }
 
         throw e;
-      }
-      finally
-      {
-        DAOUtil.close(statement);
-        DAOUtil.close(connection);
       }
     }
 
@@ -171,16 +155,10 @@ public abstract class HsqldbDatabaseTests extends Tests
      * Initialise the in-memory database using the SQL statements contained in the file with the
      * specified resource path.
      */
-    Connection connection = null;
-    Statement statement = null;
-
-    try
+    try (Connection connection = dataSource.getConnection())
     {
       // Load the SQL statements used to initialise the registry database tables
       List<String> sqlStatements = loadSQL(resourcePath);
-
-      // Get a connection to the in-memory database
-      connection = dataSource.getConnection();
 
       for (String sqlStatement : sqlStatements)
       {
@@ -189,16 +167,11 @@ public abstract class HsqldbDatabaseTests extends Tests
           getLogger().info("Executing SQL statement: " + sqlStatement);
         }
 
-        statement = connection.createStatement();
-        statement.execute(sqlStatement);
-        DAOUtil.close(statement);
-        statement = null;
+        try (Statement statement = connection.createStatement())
+        {
+          statement.execute(sqlStatement);
+        }
       }
-    }
-    finally
-    {
-      DAOUtil.close(statement);
-      DAOUtil.close(connection);
     }
 
     return dataSource;

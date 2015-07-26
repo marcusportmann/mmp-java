@@ -24,7 +24,6 @@ import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportType;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
-import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.StringUtil;
 
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -120,8 +119,8 @@ public class ViewExcelReportServlet extends HttpServlet
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
   }
 
@@ -192,12 +191,8 @@ public class ViewExcelReportServlet extends HttpServlet
               // Local Report
               if (viewReportParameters.getReportType() == ReportType.LOCAL)
               {
-                Connection connection = null;
-
-                try
+                try (Connection connection = dataSource.getConnection())
                 {
-                  connection = dataSource.getConnection();
-
                   Map<String, Object> parameters = new HashMap<>();
 
                   parameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
@@ -248,10 +243,6 @@ public class ViewExcelReportServlet extends HttpServlet
 
                   return;
                 }
-                finally
-                {
-                  DAOUtil.close(connection);
-                }
               }
 
               // Database Report
@@ -262,13 +253,8 @@ public class ViewExcelReportServlet extends HttpServlet
 
                 if (reportDefinition != null)
                 {
-                  Connection connection = null;
-
-                  try
+                  try (Connection connection = dataSource.getConnection())
                   {
-                    // Retrieve a connection from the application data source
-                    connection = dataSource.getConnection();
-
                     // Setup the report parameters
                     Map<String, Object> parameters = new HashMap<>();
 
@@ -321,10 +307,6 @@ public class ViewExcelReportServlet extends HttpServlet
                     out.flush();
 
                     return;
-                  }
-                  finally
-                  {
-                    DAOUtil.close(connection);
                   }
                 }
                 else

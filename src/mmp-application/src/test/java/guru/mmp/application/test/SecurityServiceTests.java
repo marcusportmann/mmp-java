@@ -22,24 +22,26 @@ import guru.mmp.application.persistence.HsqldbDataSource;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.security.*;
 import guru.mmp.application.security.ISecurityService.PasswordChangeReason;
-import guru.mmp.common.persistence.DAOUtil;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * The <code>SecurityServiceTests</code> class contains the implementation of the JUnit
@@ -1188,23 +1190,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     if (dataSource != null)
     {
-      Connection connection = null;
-      Statement statement = null;
-
-      try
+      try (Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement())
       {
-        connection = dataSource.getConnection();
-
-        statement = connection.createStatement();
-
         statement.execute("SHUTDOWN");
       }
       catch (Throwable ignored) {}
-      finally
-      {
-        DAOUtil.close(statement);
-        DAOUtil.close(connection);
-      }
 
       dataSource = null;
     }
