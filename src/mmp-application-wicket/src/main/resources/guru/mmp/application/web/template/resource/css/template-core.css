@@ -476,7 +476,7 @@ html {
 
 .sidebar-menu .logo-env {
   border-bottom: 1px solid #313437;
-  padding: 30px 45px;
+  padding: 27px 45px;
 }
 
 .sidebar-menu .logo-env .logo { float: left; }
@@ -718,7 +718,7 @@ html {
     position: relative;
   }
 
-  .sidebar-menu.collapsed .logo-env { padding: 18px 0; }
+  .sidebar-menu.collapsed .logo-env { padding: 16px 0; }
 
   .sidebar-menu.collapsed .logo-env .logo-collapsed {
     display: block;
@@ -1531,7 +1531,7 @@ footer.main-footer {
   font-size: 12px;
   margin-left: -30px;
   margin-right: -30px;
-  margin-top: 10px;
+  margin-top: 0px;
   padding: 20px 30px;
 }
 

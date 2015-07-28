@@ -25,7 +25,6 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.OrganisationInputPanel;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
@@ -65,8 +64,7 @@ public class AddOrganisationPage extends TemplateWebPage
    */
   public AddOrganisationPage(final PageReference previousPage)
   {
-    super("Add Organisation", "Add Organisation");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Add Organisation");
+    super("Add Organisation");
 
     final IModel<Organisation> organisationModel = new Model<>(new Organisation());
 

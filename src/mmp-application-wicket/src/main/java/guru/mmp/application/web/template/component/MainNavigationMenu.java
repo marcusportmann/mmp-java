@@ -127,11 +127,7 @@ public class MainNavigationMenu extends Component
   private void renderNavigationGroup(String requestURI, NavigationGroup navigationGroup, int depth,
       StringBuilder buffer)
   {
-    if (depth == 0)
-    {
-      // buffer.append("<ul class=\"main-navigation-menu\">");
-    }
-    else
+    if (depth != 0)
     {
       buffer.append("<ul>");
     }
@@ -274,6 +270,9 @@ public class MainNavigationMenu extends Component
       }
     }
 
-    buffer.append("</ul>");
+    if (depth != 0)
+    {
+      buffer.append("</ul>");
+    }
   }
 }

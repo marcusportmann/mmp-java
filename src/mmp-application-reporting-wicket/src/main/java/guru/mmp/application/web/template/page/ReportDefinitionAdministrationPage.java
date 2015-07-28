@@ -25,7 +25,7 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -37,13 +37,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -68,9 +70,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
    */
   public ReportDefinitionAdministrationPage()
   {
-    super("Report Definition Administration", "Report Definition Administration");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Report Definition Administration");
+    super("Report Definition Administration");
 
     try
     {

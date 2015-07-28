@@ -23,6 +23,7 @@ import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -50,47 +51,43 @@ public abstract class TemplateWebPage extends WebPage
   /**
    * Constructs a new <code>TemplateWebPage</code>.
    *
-   * @param title   the page title
    * @param heading the page heading
    */
-  public TemplateWebPage(String title, String heading)
+  public TemplateWebPage(String heading)
   {
-    this(title, heading, null, null);
+    this(heading, null, null);
   }
 
   /**
    * Constructs a new <code>TemplateWebPage</code>.
    *
-   * @param title        the page title
    * @param heading      the page heading
    * @param previousPage the previous page or <code>null</code> if there is no previous page
    */
-  public TemplateWebPage(String title, String heading, PageReference previousPage)
+  public TemplateWebPage(String heading, PageReference previousPage)
   {
-    this(title, heading, null, previousPage);
+    this(heading, null, previousPage);
   }
 
   /**
    * Constructs a new <code>TemplateWebPage</code>.
    *
-   * @param title      the page title
    * @param heading    the page heading
    * @param subHeading the sub-heading for the page
    */
-  public TemplateWebPage(String title, String heading, String subHeading)
+  public TemplateWebPage(String heading, String subHeading)
   {
-    this(title, heading, subHeading, null);
+    this(heading, subHeading, null);
   }
 
   /**
    * Constructs a new <code>TemplateWebPage</code>.
    *
-   * @param title        the page title
    * @param heading      the page heading
    * @param subHeading   the sub-heading for the page
    * @param previousPage the previous page or <code>null</code> if there is no previous page
    */
-  public TemplateWebPage(final String title, final String heading, final String subHeading,
+  public TemplateWebPage(final String heading, final String subHeading,
       final PageReference previousPage)
   {
     if (getApplication().usesDevelopmentConfig())
@@ -103,7 +100,7 @@ public abstract class TemplateWebPage extends WebPage
     }
 
     // Setup the page title
-    this.title = title;
+    this.title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | " + heading;
 
     Label titleLabel = new Label("pageTitle", new PropertyModel<String>(this, "title"));
     titleLabel.setRenderBodyOnly(false);
@@ -121,16 +118,12 @@ public abstract class TemplateWebPage extends WebPage
     // Setup the page heading
     this.heading = heading;
 
-    Label headingLabel = new Label("pageHeading", new PropertyModel<String>(this, "heading"));
-    headingLabel.setRenderBodyOnly(true);
-    add(headingLabel);
+    add(new Label("pageHeading", new PropertyModel<String>(this, "heading")));
 
     // Setup the page sub-heading
     this.subHeading = subHeading;
 
-    Label subHeadingLabel = new Label("pageSubHeading",
-      new PropertyModel<String>(this, "subHeading"));
-    add(subHeadingLabel);
+    add(new Label("pageSubHeading", new PropertyModel<String>(this, "subHeading")));
 
     // Setup the "backLink" link if required
     if (previousPage == null)
@@ -234,18 +227,19 @@ public abstract class TemplateWebPage extends WebPage
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
+//  TODO: DELETE THIS -- MARCUS
+//     // Add the Web Application Template theme CSS header item
+//     response.render(TemplateWebApplication.getThemeCssHeaderItem());
+//
 
+//
 
-// TODO: DELETE THIS -- MARCUS
-//    // Add the Web Application Template theme CSS header item
-//    response.render(TemplateWebApplication.getThemeCssHeaderItem());
+//     // Add the Web Application Template JavaScript header item
+//     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 //
-//
-//    // Add the Web Application Template JavaScript header item
-//    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-//
-//    // Add the JavaScript script that should be executed when the DOM is ready
-//    response.render(OnDomReadyHeaderItem.forScript("TemplateWebApplication.init();"));
+
+//     // Add the JavaScript script that should be executed when the DOM is ready
+//     response.render(OnDomReadyHeaderItem.forScript("TemplateWebApplication.init();"));
   }
 
   /**

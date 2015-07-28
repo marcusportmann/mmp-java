@@ -29,7 +29,6 @@ import guru.mmp.application.web.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.PageReference;
@@ -86,8 +85,7 @@ public class AddUserPage extends TemplateWebPage
    */
   public AddUserPage(final PageReference previousPage)
   {
-    super("Add User", "Add User");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Add User");
+    super("Add User");
 
     final IModel<User> userModel = new Model<>(new User());
 

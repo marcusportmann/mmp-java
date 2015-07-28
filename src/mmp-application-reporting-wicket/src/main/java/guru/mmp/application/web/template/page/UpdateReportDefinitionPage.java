@@ -24,23 +24,25 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.ReportDefinitionInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UpdateReportDefinitionPage</code> class implements the
@@ -69,9 +71,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
   public UpdateReportDefinitionPage(final PageReference previousPage,
       final IModel<ReportDefinition> reportDefinitionModel)
   {
-    super("Update ReportDefinition", "Update ReportDefinition");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Update ReportDefinition");
+    super("Update Report Definition");
 
     try
     {

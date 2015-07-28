@@ -24,18 +24,20 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateMessagingSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.text.SimpleDateFormat;
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>ErrorReportsPage</code> class implements the
@@ -58,8 +60,7 @@ public class ErrorReportsPage extends TemplateWebPage
    */
   public ErrorReportsPage()
   {
-    super("Error Reports", "Error Reports");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Error Reports");
+    super("Error Reports");
 
     try
     {

@@ -116,7 +116,6 @@ function trigger_resizable()
 		resizable(public_vars.lastBreakpoint);
 	}
 
-
 	// Trigger Event (Repeated)
 	jQuery(window).trigger('xenon.resized');
 }

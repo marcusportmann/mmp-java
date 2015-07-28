@@ -1,8 +1,16 @@
-div.wicketDebugBar
+#wicketDebugBar
 {
   position: relative;
-  margin-top: 10px;
-  margin-right: 60px;
+  display: block;
+  margin-top: 0px;
+  height: 30px;
+  top: inherit;
+  right: inherit;
+  bottom: inherit;
+  left: inherit;
+  background-color: inherit;
+  padding: 3px 20px 0px 5px;
+  float: right;
 }
 
 div.feedback-debug
@@ -38,7 +46,7 @@ div.logo-image
 {
   display: inline-block;
   width: 81px;
-  /* height: 18px; */
+  height: 18px;
   background-image: url('../images/logo@2x.png');
   background-size: 100% 100%;
 }
@@ -47,8 +55,25 @@ div.logo-collapsed-image
 {
   display: inline-block;
   width: 40px;
+  height: 40px;
   background-image: url('../images/logo-collapsed@2x.png');
   background-size: 100% 100%;
 }
 
+nav.navbar.user-info-navbar
+{
+  min-height: 77px;
+}
+
+img.userpic-32
+{
+  box-sizing: border-box;
+  background: url('../images/user-profile.png') no-repeat;
+  background-size: 100% 100%;
+}
+
+.footer-inner span.copyright-name:before
+{
+  content: "Marcus Portmann";
+}
 

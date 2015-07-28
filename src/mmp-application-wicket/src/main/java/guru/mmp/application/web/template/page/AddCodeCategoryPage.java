@@ -25,7 +25,6 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.CodeCategoryInputPanel;
 
 import org.apache.wicket.PageReference;
@@ -70,8 +69,7 @@ public class AddCodeCategoryPage extends TemplateWebPage
    */
   public AddCodeCategoryPage(final PageReference previousPage)
   {
-    super("Add Code Category", "Add Code Category");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Add Code Category");
+    super("Add Code Category");
 
     final IModel<CodeCategory> codeCategoryModel = new Model<>(new CodeCategory());
 

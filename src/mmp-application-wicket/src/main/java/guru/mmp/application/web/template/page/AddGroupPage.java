@@ -24,7 +24,6 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.GroupInputPanel;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
@@ -64,8 +63,7 @@ public class AddGroupPage extends TemplateWebPage
    */
   public AddGroupPage(final PageReference previousPage)
   {
-    super("Add Group", "Add Group");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Add Group");
+    super("Add Group");
 
     final IModel<Group> groupModel = new Model<>(new Group());
 

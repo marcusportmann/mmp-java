@@ -23,7 +23,6 @@ import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.CodeInputPanel;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
@@ -65,8 +64,7 @@ public class AddCodePage extends TemplateWebPage
    */
   public AddCodePage(final PageReference previousPage, final String codeCategoryId)
   {
-    super("Add Code", "Add Code");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Add Code");
+    super("Add Code");
 
     final IModel<Code> codeModel = new Model<>(new Code());
 

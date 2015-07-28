@@ -37,6 +37,6 @@ public class HomePage extends TemplateWebPage
    */
   public HomePage()
   {
-    super("Sample | Home", "Home");
+    super("Home");
   }
 }

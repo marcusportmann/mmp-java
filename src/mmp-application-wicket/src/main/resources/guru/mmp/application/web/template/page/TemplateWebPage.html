@@ -50,7 +50,6 @@
           </ul>
 
         </div>
-
       </div>
 
       <div class="main-content">
@@ -311,14 +310,22 @@
 
           </ul>
 
-
           <!-- Right links for user info navbar -->
           <ul class="user-info-menu right-links list-inline list-unstyled">
-            <div wicket:id="userMenu"></div>
+            <li class="dropdown user-profile">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img class="img-circle img-inline userpic-32" width="28" height="28" />
+							  <span>
+								  John Smith
+								  <i class="fa-angle-down"></i>
+							  </span>
+              </a>
+
+              <div wicket:id="userMenu"></div>
+            </li>
           </ul>
 
         </nav>
-
 
         <div class="page-title">
           <div class="title-env">

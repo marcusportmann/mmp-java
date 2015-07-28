@@ -62,6 +62,8 @@
 		{
 			ev.preventDefault();
 
+			public_vars.$mainMenu.add(public_vars.$sidebarProfile).toggleClass('mobile-is-visible');
+
 			ps_destroy();
 		});
 

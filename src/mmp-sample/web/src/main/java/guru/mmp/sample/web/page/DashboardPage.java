@@ -49,7 +49,7 @@ public class DashboardPage extends TemplateWebPage
    */
   public DashboardPage()
   {
-    super("Sample | Dashboard", "Dashboard");
+    super("Dashboard");
 
     // The "sampleReportLink" link
     Link<Void> sampleReportLink = new Link<Void>("sampleReportLink")

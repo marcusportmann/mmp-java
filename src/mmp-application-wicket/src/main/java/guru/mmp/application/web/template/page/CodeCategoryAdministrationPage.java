@@ -26,7 +26,6 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeCategoryDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -71,9 +70,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
    */
   public CodeCategoryAdministrationPage()
   {
-    super("Code Category Administration", "Code Category Administration");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Code Category Administration");
+    super("Code Category Administration");
 
     try
     {

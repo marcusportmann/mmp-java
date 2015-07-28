@@ -24,7 +24,6 @@ import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
 import guru.mmp.common.util.StringUtil;
@@ -81,8 +80,7 @@ public class UserGroupsPage extends TemplateWebPage
    */
   public UserGroupsPage(final PageReference previousPage, final String username)
   {
-    super("User Groups", "User Groups", username, previousPage);
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | User Groups");
+    super("User Groups", "Administer the user groups for the user " + username, previousPage);
 
     /*
      * The table container, which allows the table and its associated navigator to be updated

@@ -23,7 +23,6 @@ import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateMessagingSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.basic.Label;
@@ -65,8 +64,7 @@ public class ViewErrorReportPage extends TemplateWebPage
    */
   public ViewErrorReportPage(final PageReference previousPage, String id)
   {
-    super("View Error Report", "View Error Report", id, previousPage);
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | View Error Report");
+    super("View Error Report", "Viewing the error report: " + id, previousPage);
 
     try
     {

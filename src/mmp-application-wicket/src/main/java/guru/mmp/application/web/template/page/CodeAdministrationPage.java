@@ -24,7 +24,6 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeDataProvider;
 import guru.mmp.common.util.StringUtil;
@@ -75,9 +74,7 @@ public class CodeAdministrationPage extends TemplateWebPage
   public CodeAdministrationPage(final PageReference previousPage, final String codeCategoryId,
       final String codeCategoryName)
   {
-    super("Code Administration", "Code Administration", codeCategoryName, previousPage);
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Code Administration");
+    super("Code Administration", "Codes for the code category: " + codeCategoryName, previousPage);
 
     try
     {
