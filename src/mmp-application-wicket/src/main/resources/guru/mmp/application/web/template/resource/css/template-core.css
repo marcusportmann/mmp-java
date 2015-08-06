@@ -476,13 +476,16 @@ html {
   background: #2c2e2f;
   display: table-cell;
   position: relative;
-  width: 300px;
+  width: 280px;
   z-index: 1;
 }
 
 .sidebar-menu .logo-env {
   border-bottom: 1px solid #313437;
-  padding: 27px 45px;
+  padding-top: 15px;
+  padding-right: 50px;
+  padding-left: 50px;
+  padding-bottom: 15px;
 }
 
 .sidebar-menu .logo-env .logo { float: left; }
@@ -1598,7 +1601,7 @@ footer.main-footer.footer-type-2 .go-up a:hover { background-color: rgba(255, 25
 
 footer.main-footer.fixed {
   bottom: 0;
-  left: 300px;
+  left: 280px;
   margin-left: 0;
   margin-right: 0;
   margin-top: 10px !important;
