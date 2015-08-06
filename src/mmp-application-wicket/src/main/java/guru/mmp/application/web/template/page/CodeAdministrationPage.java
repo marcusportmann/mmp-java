@@ -74,7 +74,7 @@ public class CodeAdministrationPage extends TemplateWebPage
   public CodeAdministrationPage(final PageReference previousPage, final String codeCategoryId,
       final String codeCategoryName)
   {
-    super("Code Administration", "Codes for the code category: " + codeCategoryName, previousPage);
+    super("Codes", codeCategoryName, previousPage);
 
     try
     {

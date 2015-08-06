@@ -15,7 +15,6 @@ var public_vars = public_vars || {};
 		// Main Vars
 		public_vars.$body                 = $("body");
 		public_vars.$pageContainer        = public_vars.$body.find(".page-container");
-		public_vars.$chat                 = public_vars.$pageContainer.find("#chat");
 		public_vars.$sidebarMenu          = public_vars.$pageContainer.find('.sidebar-menu');
 		public_vars.$mainMenu             = public_vars.$sidebarMenu.find('.main-menu');
 
@@ -87,13 +86,6 @@ var public_vars = public_vars || {};
 					wheelPropagation: false
 				});
 			});
-
-
-			// Chat Scrollbar
-			var $chat_inner = public_vars.$pageContainer.find('#chat .chat-inner');
-
-			if($chat_inner.parent().hasClass('fixed'))
-				$chat_inner.css({maxHeight: $(window).height()}).perfectScrollbar();
 
 
 			// User info opening dropdown trigger PS update

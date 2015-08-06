@@ -5,7 +5,7 @@
 
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-application-wicket</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <name>mmp-application-wicket</name>
 
   <packaging>jar</packaging>
@@ -18,22 +18,22 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application</artifactId>
-      <version>1.0.0</version>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-datetime</artifactId>
-      <version>7.0.0-M6</version>
+      <version>7.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-devutils</artifactId>
-      <version>7.0.0-M6</version>
+      <version>7.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-ioc</artifactId>
-      <version>7.0.0-M6</version>
+      <version>7.0.0</version>
       <exclusions>
         <exclusion>
           <groupId>javax.inject</groupId>

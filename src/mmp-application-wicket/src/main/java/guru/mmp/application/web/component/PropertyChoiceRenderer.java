@@ -18,8 +18,15 @@ package guru.mmp.application.web.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.web.WebApplicationException;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>PropertyChoiceRenderer</code> class implements a simple property-based ChoiceRenderer.
@@ -90,7 +97,7 @@ public class PropertyChoiceRenderer<T>
 
   /**
    * This method is called to get the id value of an object (used as the value attribute of a
-   * choice element) The id can be extracted from the object like a primary key, or if the list is
+   * choice element). The id can be extracted from the object like a primary key, or if the list is
    * stable you could just return a <code>toString</code> of the index.
    *
    * @param object the object for which the id should be generated
@@ -101,6 +108,31 @@ public class PropertyChoiceRenderer<T>
   public String getIdValue(T object, int index)
   {
     return getPropertyValue(object, idProperty).toString();
+  }
+
+  /**
+   * This method is called to get an object back from its id representation. The id may be used to
+   * find/load the object in a more efficient way than loading all choices and find the one with
+   * the same id in the list.
+   *
+   * @param id      the id representation of the object
+   * @param choices the list of all rendered choices
+   *
+   * @return a choice from the list that has this id
+   */
+  public T getObject(String id, IModel<? extends List<? extends T>> choices)
+  {
+    for (T choice : choices.getObject())
+    {
+      String choiceId = getPropertyValue(choice, idProperty).toString();
+
+      if (id.equals(choiceId))
+      {
+        return choice;
+      }
+    }
+
+    throw new WebApplicationException("Failed to find the choice with ID (" + id + ")");
   }
 
   private Object getPropertyValue(T object, String property)

@@ -19,16 +19,17 @@ package guru.mmp.application.web.resource.thirdparty;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.settings.IJavaScriptLibrarySettings;
+import org.apache.wicket.settings.JavaScriptLibrarySettings;
 
 /**
  * The <code>JQueryJavaScriptResourceReference</code> class implements the JavaScript resource
  * reference for the jQuery thirdparty resource bundled with the Web Application Template.
  * <p/>
  * To add a jQuery resource reference to a component, do not use this reference, but use
- * {@link IJavaScriptLibrarySettings#getJQueryReference()} to prevent version conflicts.
+ * {@link JavaScriptLibrarySettings#getJQueryReference()} to prevent version conflicts.
  *
  * @author Marcus Portmann
  */
@@ -52,7 +53,7 @@ public class JQueryJavaScriptResourceReference extends JavaScriptResourceReferen
    * thirdparty resource bundled with the Web Application Template
    * <p/>
    * NOTE: Normally you should not use this method, but use
-   * {@link IJavaScriptLibrarySettings#getJQueryReference()} to prevent version conflicts.
+   * {@link JavaScriptLibrarySettings#getJQueryReference()} to prevent version conflicts.
    *
    * @return the single instance of the JavaScript resource reference for the jQuery
    *         thirdparty resource bundled with the Web Application Template

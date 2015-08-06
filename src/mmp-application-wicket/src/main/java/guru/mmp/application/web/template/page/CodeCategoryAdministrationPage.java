@@ -70,7 +70,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
    */
   public CodeCategoryAdministrationPage()
   {
-    super("Code Category Administration");
+    super("Code Categories");
 
     try
     {

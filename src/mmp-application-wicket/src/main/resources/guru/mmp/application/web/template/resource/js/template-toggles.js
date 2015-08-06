@@ -12,26 +12,6 @@
 	$(document).ready(function()
 	{
 
-		// Chat Toggler
-		$('a[data-toggle="chat"]').each(function(i, el)
-		{
-			$(el).on('click', function(ev)
-			{
-				ev.preventDefault();
-
-				public_vars.$body.toggleClass('chat-open');
-
-				if($.isFunction($.fn.perfectScrollbar))
-				{
-					setTimeout(function()
-					{
-						public_vars.$chat.find('.chat_inner').perfectScrollbar('update');
-						$(window).trigger('xenon.resize');
-					}, 1);
-				}
-			});
-		});
-
 		// Sidebar Toggle
 		$('a[data-toggle="sidebar"]').each(function(i, el)
 		{

@@ -82,7 +82,7 @@ public class TemplateCssResourceReference
    * @return the dependencies for the CSS resource reference
    */
   @Override
-  public Iterable<? extends HeaderItem> getDependencies()
+  public List<HeaderItem> getDependencies()
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 

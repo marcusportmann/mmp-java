@@ -30,7 +30,8 @@ import org.apache.wicket.authorization.IAuthorizationStrategy;
 import org.apache.wicket.authorization.IUnauthorizedComponentInstantiationListener;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.request.component.IRequestableComponent;
-import org.apache.wicket.settings.ISecuritySettings;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.IResource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,8 +80,9 @@ public class WebAuthorizationStrategy
   /**
    * Checks whether an instance of the given component class may be created. If this method
    * returns false, the {@link IUnauthorizedComponentInstantiationListener} that is configured in
-   * the {@link ISecuritySettings security settings} will be called. The default implementation of
-   * that listener throws a {@link UnauthorizedInstantiationException}.
+   * the {@link org.apache.wicket.settings.SecuritySettings security settings} will be called.
+   * The default implementation of that listener throws a
+   * {@link UnauthorizedInstantiationException}.
    * <p>
    * If you wish to implement a strategy that authenticates users which cannot access a given Page
    * (or other Component), you can simply throw a
@@ -152,6 +154,21 @@ public class WebAuthorizationStrategy
       }
     }
 
+    return true;
+  }
+
+  /**
+   * Checks whether a request with some parameters is allowed to a resource.
+   *
+   * @param resource   the resource being requested
+   * @param parameters the request parameters
+   *
+   * @return <code>true</code>  if the request to this resource is allowed or <code>false</code>
+   *         otherwise
+   */
+  public boolean isResourceAuthorized(IResource resource, PageParameters parameters)
+  {
+    // TODO: Implement resource security -- MARCUS
     return true;
   }
 }

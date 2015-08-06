@@ -62,7 +62,8 @@ div.logo-collapsed-image
 
 nav.navbar.user-info-navbar
 {
-  min-height: 77px;
+  /* MARCUS HEIGHT */
+   min-height: 47px;
 }
 
 img.userpic-32
@@ -75,5 +76,10 @@ img.userpic-32
 .footer-inner span.copyright-name:before
 {
   content: "Marcus Portmann";
+}
+
+div.breadcrumb-env > ol > li.active
+{
+  font-weight: bold;
 }
 

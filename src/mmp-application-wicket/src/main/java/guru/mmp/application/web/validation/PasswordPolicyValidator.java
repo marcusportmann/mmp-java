@@ -23,9 +23,9 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import java.util.regex.Pattern;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.regex.Pattern;
 
 /**
  * The <code>PasswordPolicyValidator</code> class implements a Wicket validator that provides
@@ -57,24 +57,21 @@ public class PasswordPolicyValidator extends Behavior
 
     if (!NUMBER.matcher(password).find())
     {
-      ValidationError error =
-        new ValidationError().addMessageKey("PasswordPolicyValidator.no-digit");
+      ValidationError error = new ValidationError().addKey("PasswordPolicyValidator.no-digit");
 
       validatable.error(error);
     }
 
     if (!LOWER.matcher(password).find())
     {
-      ValidationError error =
-        new ValidationError().addMessageKey("PasswordPolicyValidator.no-lower");
+      ValidationError error = new ValidationError().addKey("PasswordPolicyValidator.no-lower");
 
       validatable.error(error);
     }
 
     if (!UPPER.matcher(password).find())
     {
-      ValidationError error =
-        new ValidationError().addMessageKey("PasswordPolicyValidator.no-upper");
+      ValidationError error = new ValidationError().addKey("PasswordPolicyValidator.no-upper");
 
       validatable.error(error);
     }

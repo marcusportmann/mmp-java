@@ -78,7 +78,7 @@ public class BootstrapTimePickerJavaScriptResourceReference extends JavaScriptRe
    * @return the dependencies for the JavaScript resource reference
    */
   @Override
-  public Iterable<? extends HeaderItem> getDependencies()
+  public List<HeaderItem> getDependencies()
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 

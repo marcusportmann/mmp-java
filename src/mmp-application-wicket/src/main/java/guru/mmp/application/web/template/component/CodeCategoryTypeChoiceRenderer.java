@@ -19,7 +19,14 @@ package guru.mmp.application.web.template.component;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.codes.CodeCategoryType;
+import guru.mmp.application.web.WebApplicationException;
+
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>CodeCategoryTypeChoiceRenderer</code> class implements a <code>ChoiceRenderer</code>
@@ -61,5 +68,32 @@ public class CodeCategoryTypeChoiceRenderer
   public String getIdValue(CodeCategoryType codeCategoryType, int index)
   {
     return String.valueOf(codeCategoryType.getCode());
+  }
+
+  /**
+   * This method is called to get an object back from its id representation. The id may be used to
+   * find/load the object in a more efficient way than loading all choices and find the one with
+   * the same id in the list.
+   *
+   * @param id      the id representation of the object
+   * @param choices the list of all rendered choices
+   *
+   * @return a choice from the list that has this id
+   */
+  public CodeCategoryType getObject(String id,
+      IModel<? extends List<? extends CodeCategoryType>> choices)
+  {
+    int code = Integer.valueOf(id);
+
+    for (CodeCategoryType choice : choices.getObject())
+    {
+      if (choice.getCode() == code)
+      {
+        return choice;
+      }
+    }
+
+    throw new WebApplicationException("Failed to find the code category choice with ID (" + id
+        + ")");
   }
 }

@@ -18,16 +18,21 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationState;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupElement;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * The <code>Breadcrumbs</code> class provides a Wicket component that renders the breadcrumbs
@@ -100,9 +105,29 @@ public class Breadcrumbs extends Component
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("<ol class=\"breadcrumb\">");
+        buffer.append("<ol class=\"breadcrumb bc-1\">");
 
-        renderBreadcrumbs(webSession.getNavigation(), buffer);
+        buffer.append("<li><a href=\"");
+
+        Class clazz = null;
+
+        if (webSession.isUserLoggedIn())
+        {
+          clazz = TemplateWebApplication.getTemplateWebApplication().getSecureHomePage();
+        }
+        else
+        {
+          clazz = TemplateWebApplication.getTemplateWebApplication().getHomePage();
+        }
+
+        buffer.append(RequestCycle.get().urlFor(clazz, new PageParameters()));
+
+        buffer.append("\"><i class=\"fa-home\"></i>Home</a></li>");
+
+        if (!clazz.isAssignableFrom(getPage().getPageClass()))
+        {
+          renderBreadcrumbs(webSession.getNavigation(), buffer);
+        }
 
         buffer.append("</ol>");
 
