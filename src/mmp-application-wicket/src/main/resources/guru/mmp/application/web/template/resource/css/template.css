@@ -62,7 +62,6 @@ div.logo-collapsed-image
 
 nav.navbar.user-info-navbar
 {
-  /* MARCUS HEIGHT */
    min-height: 46px;
 }
 
@@ -71,11 +70,6 @@ img.userpic-32
   box-sizing: border-box;
   background: url('../images/user-profile.png') no-repeat;
   background-size: 100% 100%;
-}
-
-.footer-inner span.copyright-name:before
-{
-  content: "Marcus Portmann";
 }
 
 div.breadcrumb-env > ol > li.active

@@ -1,14 +1,8 @@
-span.navbar-logo:after
-{
-    content: "Sample";
-}
-
-/*
 div.logo-image
 {
     display: inline-block;
-    width: 81px;
-    height: 18px;
+    width: 180px;
+    height: 40px;
     background-image: url('../images/logo@2x.png');
     background-size: 100% 100%;
 }
@@ -21,5 +15,8 @@ div.logo-collapsed-image
     background-image: url('../images/logo-collapsed@2x.png');
     background-size: 100% 100%;
 }
-*/
 
+.footer-inner span.copyright-name:before
+{
+    content: "Marcus Portmann";
+}
