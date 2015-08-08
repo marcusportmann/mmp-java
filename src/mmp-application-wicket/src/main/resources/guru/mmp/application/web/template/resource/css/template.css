@@ -42,28 +42,12 @@ form#loginForm div.feedback-error
   color: #ff7479;
 }
 
-div.logo-image
-{
-  display: inline-block;
-  width: 180px;
-  height: 40px;
-  background-image: url('../images/logo@2x.png');
-  background-size: 100% 100%;
-}
-
-div.logo-collapsed-image
-{
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background-image: url('../images/logo-collapsed@2x.png');
-  background-size: 100% 100%;
-}
-
+/*
 nav.navbar.user-info-navbar
 {
-   min-height: 46px;
+  min-height: 50px;
 }
+*/
 
 img.userpic-32
 {
@@ -77,3 +61,66 @@ div.breadcrumb-env > ol > li.active
   font-weight: bold;
 }
 
+/*
+.xpage-container > .main-content > nav
+{
+  border-bottom: 1px solid #ededed;
+}
+*/
+
+/*
+body > div.page-container > div.main-content > nav > ul.user-info-menu.left-links.list-inline.list-unstyled > li.dropdown.hover-line.ms-hover.open > a
+{
+  background: yellow;
+}
+*/
+
+body > div.page-container > div.main-content > nav > ul.user-info-menu.left-links.list-inline.list-unstyled
+{
+  position: relative;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+
+
+body > div.page-container > div.main-content > nav > ul.user-info-menu.left-links.list-inline.list-unstyled > li > a
+{
+  background: none;
+}
+
+/*
+body > div.page-container > div.main-content > nav > ul.user-info-menu.left-links.list-inline.list-unstyled > li.dropdown.hover-line.ms-hover.open
+{
+  background: yellow;
+  position: relative;
+  border-bottom: 2px solid red;
+  z-index: 15;
+}
+*/
+
+
+body > div.page-container > div.main-content > nav > ul.user-info-menu.left-links.list-inline.list-unstyled > li.dropdown.hover-line.ms-hover.open > ul
+{
+  position: absolute;
+}
+
+
+
+
+
+
+/*
+.dropdown-menu
+{
+  border: 1px solid red;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+}
+*/
+/*
+.user-info-navbar .user-info-menu > li > a
+{
+  border-bottom: 1px solid white;
+}
+*/
