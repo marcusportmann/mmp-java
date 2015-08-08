@@ -2371,6 +2371,8 @@ footer.main-footer.fixed
 
 .user-info-navbar .user-info-menu
 {
+  position: relative;
+  z-index: 15;
   margin: 0;
 }
 
@@ -2428,15 +2430,15 @@ footer.main-footer.fixed
   height: 50px;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
-  border-bottom: none;
+  border-bottom: transparent;
 }
 
 .user-info-navbar .user-info-menu > li.dropdown.open
 {
-  background-color: #fff;
+  position: relative;
+  background: #ffffff;
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
-  border-bottom: none;
 }
 
 .user-info-navbar .user-info-menu > li.dropdown.open > ul
@@ -2465,13 +2467,14 @@ footer.main-footer.fixed
   top: 1px;
   z-index: 5;
   font-size: 12px;
+  background-color: white;
 }
 
 .user-info-navbar .user-info-menu > li.open > a
 {
   position: relative;
   z-index: 5;
-  overflow-clip: none;
+  /*overflow-clip: none;*/
 }
 
 .user-info-navbar .user-info-menu > li > a i
@@ -8739,6 +8742,8 @@ pre
 
 .page-body .page-container .main-content .navbar
 {
+  position: relative;
+  z-index: 10;
   height: 50px;
   border-bottom: 1px solid #ddd;
 }
