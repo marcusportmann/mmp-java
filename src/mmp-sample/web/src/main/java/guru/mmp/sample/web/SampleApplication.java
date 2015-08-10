@@ -62,7 +62,7 @@ public class SampleApplication extends TemplateWebApplication
    */
   public Class<? extends Page> getHomePage()
   {
-    return LoginPage.class;
+    return HomePage.class;
   }
 
   /**
