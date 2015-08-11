@@ -1544,7 +1544,7 @@ html
     background: #fafafa;
     border-top: 1px solid #eee;
     color: #313232;
-    margin-top: -2px;
+    margin-top: 0;
   }
 
   .navbar.horizontal-menu .navbar-inner .navbar-nav ul > li.active > a:after
