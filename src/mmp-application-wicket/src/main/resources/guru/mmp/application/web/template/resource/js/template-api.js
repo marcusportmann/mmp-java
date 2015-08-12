@@ -1,10 +1,3 @@
-/**
- *	Xenon API Functions
- *
- *	Theme by: www.laborator.co
- **/
-
-
 function rtl() // checks whether the content is in RTL mode
 {
 	if(typeof window.isRTL == 'boolean')
@@ -14,8 +7,6 @@ function rtl() // checks whether the content is in RTL mode
 	
 	return window.isRTL;
 }
-
-
 
 // Page Loader
 function show_loading_bar(options)

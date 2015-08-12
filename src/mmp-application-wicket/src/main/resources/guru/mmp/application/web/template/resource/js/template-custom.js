@@ -1,9 +1,3 @@
-/**
- *	Xenon Main
- *
- *	Theme by: www.laborator.co
- **/
-
 var public_vars = public_vars || {};
 
 ;(function($, window, undefined){
@@ -1291,6 +1285,8 @@ function stickFooterToBottom()
 			main_content_height_only = main_content_height - footer_height,
 			extra_height			 = public_vars.$horizontalNavbar.outerHeight();
 
+
+		alert("win_height = " + win_height);
 
 		if(win_height > main_content_height - parseInt(public_vars.$mainFooter.css('marginTop'), 10))
 		{
