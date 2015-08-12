@@ -553,7 +553,7 @@ html
   border-collapse: collapse;
   border-spacing: 0;
   display: table;
-  height: 100%;
+  height: auto;
   table-layout: fixed;
   vertical-align: top;
   width: 100%;
@@ -588,7 +588,12 @@ html
   -o-transition: opacity 100ms ease-in-out;
   -webkit-transition: opacity 100ms ease-in-out;
   display: table-cell;
-  padding: 30px 30px 0;
+
+  /* MAIN CONTENT PADDING -- MARCUS */
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 0;
   position: relative;
   transition: opacity 100ms ease-in-out;
   vertical-align: top;
@@ -628,7 +633,12 @@ html
   -moz-box-shadow: 0 1px 0 rgba(0, 1, 1, .08), inset 0 1px 0 #ededed;
   -webkit-box-shadow: 0 1px 0 rgba(0, 1, 1, .08), inset 0 1px 0 #ededed;
   background: #f8f8f8;
-  margin: -30px -30px 30px;
+  /* MAIN CONTENT PADDING -- MARCUS */
+  margin-top: -20px;
+  margin-right: -20px;
+  margin-left: -20px;
+  /* MAIN CONTENT PADDING -- MARCUS */
+  margin-bottom: 20px;
   padding: 10px 0;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
@@ -650,7 +660,7 @@ html
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-  padding-left: 30px;
+  padding-left: 20px;
 }
 
 
@@ -669,7 +679,7 @@ html
 
 .page-container .main-content .page-title.full-width .title-env
 {
-  padding-right: 30px;
+  padding-right: 20px;
   width: 100%;
 }
 
@@ -2279,13 +2289,10 @@ footer.main-footer
   background-color: #eee;
   border-top: 1px solid #ddd;
   font-size: 12px;
-  margin-left: -30px;
-  margin-right: -30px;
-  margin-top: 0px;
-  padding-top: 10px;
-  padding-right: 30px;
-  padding-left: 30px;
-  padding-bottom: 0;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-top: 0;
+  padding: 10px 20px 0;
 }
 
 footer.main-footer:before, footer.main-footer:after
@@ -2385,8 +2392,12 @@ footer.main-footer.fixed
   z-index: 10;
   background-color: #fff;
   border: 0;
-  margin: -30px;
-  margin-bottom: 30px;
+  /* MAIN CONTENT PADDING -- MARCUS */
+  margin-top: -20px;
+  margin-right: -20px;
+  margin-left: -20px;
+  /* MAIN CONTENT PADDING -- MARCUS */
+  margin-bottom: 20px;
   min-height: 0;
   padding: 0;
   border-bottom: 1px solid #ddd;
@@ -2620,7 +2631,7 @@ footer.main-footer.fixed
 {
   color: #979898;
   display: block;
-  padding: 20px 30px;
+  padding: 20px 20px;
   position: relative;
 }
 
@@ -2666,9 +2677,9 @@ footer.main-footer.fixed
   content: '';
   display: block;
   height: 1px;
-  left: 30px;
+  left: 20px;
   position: absolute;
-  right: 30px;
+  right: 20px;
 }
 
 .user-info-navbar .user-info-menu > li .dropdown-menu .dropdown-menu-list li a:hover, .navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu .dropdown-menu-list li a:hover
@@ -2683,7 +2694,7 @@ footer.main-footer.fixed
 
 .user-info-navbar .user-info-menu > li .dropdown-menu > .top, .navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu > .top
 {
-  padding: 20px 30px;
+  padding: 20px 20px;
   padding-bottom: 0;
 }
 
@@ -2727,7 +2738,7 @@ footer.main-footer.fixed
   background-color: #f5f5f5;
   color: #979898;
   display: block;
-  padding: 20px 30px;
+  padding: 20px 20px;
 }
 
 .user-info-navbar .user-info-menu > li .dropdown-menu > .external a span, .navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu > .external a span
@@ -2764,7 +2775,7 @@ footer.main-footer.fixed
   height: 5px;
   margin-top: -2.5px;
   position: absolute;
-  right: 30px;
+  right: 20px;
   top: 50%;
   width: 5px;
 }
@@ -3172,8 +3183,8 @@ ul.user-info-menu.right-links.list-inline.list-unstyled > li > a
   .page-container .main-content .main-footer
   {
     left: 0;
-    margin-left: -30px;
-    margin-right: -30px;
+    margin-left: -20px;
+    margin-right: -20px;
     position: relative;
     right: auto;
   }
@@ -3192,8 +3203,8 @@ ul.user-info-menu.right-links.list-inline.list-unstyled > li > a
   background: #fff;
   border: 0;
   box-shadow: none;
-  margin-bottom: 30px;
-  padding: 20px 30px;
+  margin-bottom: 20px;
+  padding: 20px 20px;
   position: relative;
 }
 
@@ -3306,8 +3317,8 @@ ul.user-info-menu.right-links.list-inline.list-unstyled > li > a
 .panel .panel-body.no-padding
 {
   margin-bottom: -20px;
-  margin-left: -30px;
-  margin-right: -30px;
+  margin-left: -20px;
+  margin-right: -20px;
   margin-top: -2px;
   padding: 0;
 }
@@ -3315,7 +3326,7 @@ ul.user-info-menu.right-links.list-inline.list-unstyled > li > a
 .panel .panel-body.panel-border
 {
   border-top: 1px solid #f5f5f5;
-  padding-top: 30px;
+  padding-top: 20px;
 }
 
 .panel .panel-body p
@@ -3419,7 +3430,7 @@ ul.user-info-menu.right-links.list-inline.list-unstyled > li > a
 .panel.panel-tabs > .panel-body
 {
   background: #FFF;
-  padding: 20px 30px;
+  padding: 20px 20px;
 }
 
 .panel.panel-flat
@@ -3803,10 +3814,10 @@ ul.user-info-menu.right-links.list-inline.list-unstyled > li > a
 .panel.panel-color .panel-heading
 {
   border-bottom: 0;
-  margin-left: -30px;
-  margin-right: -30px;
+  margin-left: -20px;
+  margin-right: -20px;
   margin-top: -20px;
-  padding: 20px 30px;
+  padding: 20px 20px;
 }
 
 .panel.panel-color.collapsed > .panel-heading
@@ -5227,8 +5238,8 @@ label.cbr-inline + .cbr-inline
 .nav.nav-tabs + .tab-content
 {
   background: #FFF;
-  margin-bottom: 30px;
-  padding: 30px;
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
 .nav.nav-tabs + .tab-content > p:last-child, .nav.nav-tabs + .tab-content * > p:last-child
@@ -5308,7 +5319,7 @@ label.cbr-inline + .cbr-inline
 .tabs-vertical-env
 {
   display: table;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   width: 100%
 }
 
@@ -5345,7 +5356,7 @@ label.cbr-inline + .cbr-inline
 .tabs-vertical-env .tab-content
 {
   background: #FFF;
-  padding: 30px;
+  padding: 20px;
 }
 
 .tabs-vertical-env .tab-content * > p:last-child
@@ -5942,7 +5953,7 @@ blockquote small
 {
   background: #fff;
   border: 1px solid #ddd;
-  padding: 20px 30px;
+  padding: 20px 20px;
   position: relative;
 }
 
@@ -6084,7 +6095,7 @@ blockquote small
   -webkit-box-shadow: none;
   border-color: #f5f5f5;
   box-shadow: none;
-  padding: 30px;
+  padding: 20px;
 }
 
 .modal .modal-dialog .modal-content .modal-header
@@ -6416,7 +6427,7 @@ blockquote small
   border: 1px solid #e4e4e4;
   box-shadow: none;
   font-weight: 400;
-  height: 30px;
+  height: 20px;
   outline: 0;
   padding: 0 10px;
 }
@@ -6926,7 +6937,7 @@ nav.navbar.navbar-inverse .navbar-toggle i
 
   .main-content > .panel + .panel
   {
-    margin-top: 30px;
+    margin-top: 20px;
   }
 }
 
@@ -7027,7 +7038,7 @@ address
 .chart-item-bg
 {
   background: #fff;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   position: relative;
   width: 100%;
 }
@@ -7036,7 +7047,7 @@ address
 {
   font-size: 15px;
   left: 0;
-  padding: 30px;
+  padding: 20px;
   position: absolute;
   top: 0;
 }
@@ -7056,7 +7067,7 @@ address
 {
   font-size: 15px;
   left: auto;
-  padding: 30px;
+  padding: 20px;
   position: absolute;
   right: 0;
   top: 0;
@@ -7096,7 +7107,7 @@ address
   color: #979898;
   display: table-cell;
   font-size: 14px;
-  padding: 20px 30px;
+  padding: 20px 20px;
   vertical-align: middle;
 }
 
@@ -7109,7 +7120,7 @@ address
 {
   background: #fff;
   display: table;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   width: 100%;
 }
 
@@ -7125,7 +7136,7 @@ address
   color: #434444;
   font-size: 90px;
   padding-left: 40px;
-  padding-right: 30px;
+  padding-right: 20px;
   white-space: nowrap;
 }
 
@@ -7213,7 +7224,7 @@ address
 .vspacer.v3
 {
   display: block !important;
-  height: 30px;
+  height: 20px;
 }
 
 .vspacer.v4
@@ -7317,7 +7328,7 @@ img.img-cirlce
 
 .ckeditor + .cke
 {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   margin-top: 20px;
 }
 
@@ -7435,8 +7446,8 @@ div.scrollable
 .layout-variants
 {
   background: #fff;
-  margin-bottom: 30px;
-  padding: 30px;
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
 .layout-variants .row-clearer
@@ -7539,7 +7550,7 @@ div.scrollable
 {
   background: #FFF;
   border: 5px solid #ffba00;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   padding: 20px;
 }
 
@@ -7567,14 +7578,14 @@ div.scrollable
   -o-animation: loaderAnimate 1000ms linear infinite;
   -webkit-animation: loaderAnimate 1000ms linear infinite;
   animation: loaderAnimate 1000ms linear infinite;
-  clip: rect(0, 30px, 30px, 15px);
-  height: 30px;
+  clip: rect(0, 20px, 20px, 15px);
+  height: 20px;
   left: 50%;
   margin-left: -15px;
   margin-top: -15px;
   position: absolute;
   top: 50%;
-  width: 30px;
+  width: 20px;
 }
 
 @-webkit-keyframes loaderAnimate
@@ -7735,11 +7746,11 @@ lesshat-selector
   -webkit-animation: loaderAnimate2 1000ms ease-in-out infinite;
   animation: loaderAnimate2 1000ms ease-in-out infinite;
   border-radius: 50%;
-  clip: rect(0, 30px, 30px, 15px);
+  clip: rect(0, 20px, 20px, 15px);
   content: '';
-  height: 30px;
+  height: 20px;
   position: absolute;
-  width: 30px;
+  width: 20px;
 }
 
 @keyframes loaderAnimate2
@@ -7768,14 +7779,14 @@ lesshat-selector
   -o-animation: loaderAnimate2 1000ms linear infinite;
   -webkit-animation: loaderAnimate2 1000ms linear infinite;
   animation: loaderAnimate2 1000ms linear infinite;
-  clip: rect(0, 30px, 30px, 15px);
-  height: 30px;
+  clip: rect(0, 20px, 20px, 15px);
+  height: 20px;
   left: 50%;
   margin-left: -15px;
   margin-top: -15px;
   position: absolute;
   top: 50%;
-  width: 30px;
+  width: 20px;
 }
 
 @-webkit-keyframes loaderAnimate2
@@ -7929,11 +7940,11 @@ lesshat-selector
   -webkit-animation: loaderAnimate22 1000ms ease-in-out infinite;
   animation: loaderAnimate22 1000ms ease-in-out infinite;
   border-radius: 50%;
-  clip: rect(0, 30px, 30px, 15px);
+  clip: rect(0, 20px, 20px, 15px);
   content: '';
-  height: 30px;
+  height: 20px;
   position: absolute;
-  width: 30px;
+  width: 20px;
 }
 
 @keyframes loaderAnimate22
