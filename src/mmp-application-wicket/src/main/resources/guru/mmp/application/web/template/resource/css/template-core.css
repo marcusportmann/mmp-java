@@ -8740,3 +8740,8 @@ pre
   z-index: 3;
 }
 
+.maximum-height
+{
+  height: 100%;
+}
+
