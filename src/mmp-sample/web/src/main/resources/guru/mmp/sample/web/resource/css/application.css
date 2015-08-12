@@ -1,19 +1,36 @@
 .sidebar-menu .logo-env .logo .logo-expanded .logo-image
 {
-    display: inline-block;
-    width: 180px;
-    height: 40px;
-    background-image: url('../images/logo@2x.png');
-    background-size: 100% 100%;
+  display: inline-block;
+  width: 180px;
+  height: 40px;
+  background-image: url('../images/logo-black-background.png');
+  background-size: 100% 100%;
 }
 
 .sidebar-menu .logo-env .logo .logo-collapsed .logo-image
 {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background-image: url('../images/logo-collapsed@2x.png');
-    background-size: 100% 100%;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-image: url('../images/logo-collapsed-black-background.png');
+  background-size: 100% 100%;
+}
+
+.navbar.horizontal-menu .navbar-inner .navbar-brand .logo .logo-image
+{
+  display: block;
+  width: 180px;
+  height: 40px;
+  background-image: url('../images/logo-white-background.png');
+  background-size: 100% 100%;
+}
+
+@media screen and (max-width: 768px)
+{
+  .navbar.horizontal-menu .navbar-inner .navbar-brand .logo .logo-image
+  {
+    background-image: url('../images/logo-black-background.png');
+  }
 }
 
 .footer-inner span.copyright-name:before
