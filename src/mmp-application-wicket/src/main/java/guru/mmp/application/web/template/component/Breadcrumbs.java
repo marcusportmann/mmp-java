@@ -107,8 +107,6 @@ public class Breadcrumbs extends Component
 
         buffer.append("<ol class=\"breadcrumb bc-1\">");
 
-        buffer.append("<li><a href=\"");
-
         Class clazz = null;
 
         if (webSession.isUserLoggedIn())
@@ -120,12 +118,19 @@ public class Breadcrumbs extends Component
           clazz = TemplateWebApplication.getTemplateWebApplication().getHomePage();
         }
 
-        buffer.append(RequestCycle.get().urlFor(clazz, new PageParameters()));
-
-        buffer.append("\"><i class=\"fa-home\"></i>Home</a></li>");
-
-        if (!clazz.isAssignableFrom(getPage().getPageClass()))
+        if (clazz.isAssignableFrom(getPage().getPageClass()))
         {
+          buffer.append(
+              "<li class=\"active\"><a href=\"#\"><i class=\"fa-home\"></i>Home</a></li>");
+        }
+        else
+        {
+          buffer.append("<li><a href=\"");
+
+          buffer.append(RequestCycle.get().urlFor(clazz, new PageParameters()));
+
+          buffer.append("\"><i class=\"fa-home\"></i>Home</a></li>");
+
           renderBreadcrumbs(webSession.getNavigation(), buffer);
         }
 
