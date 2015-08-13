@@ -26,9 +26,8 @@ import guru.mmp.application.web.template.page.*;
 import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
 import guru.mmp.sample.web.page.forms.AdvancedElementsPage;
+import guru.mmp.sample.web.page.forms.NativeElementsPage;
 import guru.mmp.sample.web.page.ui.*;
-
-import guru.mmp.sample.web.page.ui.NativeElementsPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 

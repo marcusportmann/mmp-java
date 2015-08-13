@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page.ui;
+package guru.mmp.sample.web.page.forms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -38,7 +38,7 @@ public class NativeElementsPage extends TemplateWebPage
    */
   public NativeElementsPage()
   {
-    super("Native Elements", "Plain text boxes, select dropdowns and other basic form elements");
+    super("Native Elements", "The basic form elements");
   }
 
   /**

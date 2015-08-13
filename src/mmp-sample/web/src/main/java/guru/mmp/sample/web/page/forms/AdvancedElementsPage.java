@@ -39,7 +39,7 @@ public class AdvancedElementsPage extends TemplateWebPage
    */
   public AdvancedElementsPage()
   {
-    super("Advanced form elements using Bootstrap and jQuery plugins");
+    super("Advanced Form Elements", "The advanced Bootstrap and jQuery form elements");
   }
 
   /**
