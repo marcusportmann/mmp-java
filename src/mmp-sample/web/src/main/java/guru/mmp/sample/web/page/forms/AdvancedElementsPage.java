@@ -14,31 +14,32 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page.ui;
+package guru.mmp.sample.web.page.forms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-  import guru.mmp.application.web.page.AnonymousOnlyWebPage;
-  import guru.mmp.application.web.template.page.TemplateWebPage;
+import guru.mmp.application.web.page.AnonymousOnlyWebPage;
+import guru.mmp.application.web.resource.thirdparty.*;
+import guru.mmp.application.web.template.page.TemplateWebPage;
 
-  import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
- * The <code>AlertsPage</code> class implements the "Alerts"
+ * The <code>AdvancedElementsPage</code> class implements the "Advanced Elements"
  * page for the web application.
  *
  * @author Marcus Portmann
  */
-public class AlertsPage extends TemplateWebPage
+public class AdvancedElementsPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>AlertsPage</code>.
+   * Constructs a new <code>AdvancedElementsPage</code>.
    */
-  public AlertsPage()
+  public AdvancedElementsPage()
   {
-    super("Alerts", "Alert boxes and their variants");
+    super("Advanced form elements using Bootstrap and jQuery plugins");
   }
 
   /**
@@ -50,5 +51,11 @@ public class AlertsPage extends TemplateWebPage
   public void renderHead(IHeaderResponse response)
   {
     super.renderHead(response);
+
+    response.render(JQueryMultiSelectCssResourceReference.getCssHeaderItem());
+
+    response.render(BootstrapTagsInputJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(JQueryMultiSelectJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(TypeaheadJavaScriptResourceReference.getJavaScriptHeaderItem());
   }
 }

@@ -18,27 +18,27 @@ package guru.mmp.sample.web.page.ui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-  import guru.mmp.application.web.page.AnonymousOnlyWebPage;
-  import guru.mmp.application.web.template.page.TemplateWebPage;
+import guru.mmp.application.web.page.AnonymousOnlyWebPage;
+import guru.mmp.application.web.template.page.TemplateWebPage;
 
-  import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
- * The <code>AlertsPage</code> class implements the "Alerts"
+ * The <code>NativeElementsPage</code> class implements the "Native Elements"
  * page for the web application.
  *
  * @author Marcus Portmann
  */
-public class AlertsPage extends TemplateWebPage
+public class NativeElementsPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>AlertsPage</code>.
+   * Constructs a new <code>NativeElementsPage</code>.
    */
-  public AlertsPage()
+  public NativeElementsPage()
   {
-    super("Alerts", "Alert boxes and their variants");
+    super("Native Elements", "Plain text boxes, select dropdowns and other basic form elements");
   }
 
   /**

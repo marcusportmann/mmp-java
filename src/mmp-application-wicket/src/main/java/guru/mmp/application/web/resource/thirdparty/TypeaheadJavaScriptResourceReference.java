@@ -19,8 +19,15 @@ package guru.mmp.application.web.resource.thirdparty;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The <code>TypeaheadJavaScriptResourceReference</code> class implements the JavaScript resource
@@ -28,7 +35,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @author Marcus Portmann
  */
-public class  TypeaheadJavaScriptResourceReference extends JavaScriptResourceReference
+public class TypeaheadJavaScriptResourceReference extends JavaScriptResourceReference
 {
   private static final long serialVersionUID = 1000000;
   private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
@@ -63,5 +70,20 @@ public class  TypeaheadJavaScriptResourceReference extends JavaScriptResourceRef
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  /**
+   * Returns the dependencies for the JavaScript resource reference.
+   *
+   * @return the dependencies for the JavaScript resource reference
+   */
+  @Override
+  public List<HeaderItem> getDependencies()
+  {
+    List<HeaderItem> dependencies = new ArrayList<>();
+
+    dependencies.add(HandlebarsJavaScriptResourceReference.getJavaScriptHeaderItem());
+
+    return dependencies;
   }
 }

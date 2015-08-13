@@ -25,9 +25,10 @@ import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.page.*;
 import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
+import guru.mmp.sample.web.page.forms.AdvancedElementsPage;
 import guru.mmp.sample.web.page.ui.*;
 
-import javafx.scene.control.Alert;
+import guru.mmp.sample.web.page.ui.NativeElementsPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -119,5 +120,12 @@ public class SampleApplication extends TemplateWebApplication
     uiElementsGroup.addItem(new NavigationLink("Typography", TypographyPage.class));
 
     root.addItem(uiElementsGroup);
+
+    NavigationGroup formsGroup = new NavigationGroup("Forms", "linecons-params");
+
+    formsGroup.addItem(new NavigationLink("Advanced Elements", AdvancedElementsPage.class));
+    formsGroup.addItem(new NavigationLink("Native Elements", NativeElementsPage.class));
+
+    root.addItem(formsGroup);
   }
 }
