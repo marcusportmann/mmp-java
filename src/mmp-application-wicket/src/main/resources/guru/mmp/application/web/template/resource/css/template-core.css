@@ -5265,7 +5265,7 @@ label.cbr-inline + .cbr-inline
 
 .panel-group .panel .panel-heading a[data-toggle=collapse]:before, .panel-group .panel .panel-heading .accordion-toggle:before
 {
-  content: '–';
+  content: '-';
   display: block;
   float: right;
   font-size: 18px;
@@ -6093,9 +6093,10 @@ blockquote small
 {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
-  border-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
   box-shadow: none;
   padding: 20px;
+  background-clip: border-box;
 }
 
 .modal .modal-dialog .modal-content .modal-header

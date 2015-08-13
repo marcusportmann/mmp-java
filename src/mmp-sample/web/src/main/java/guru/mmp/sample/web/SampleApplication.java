@@ -25,6 +25,9 @@ import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.page.*;
 import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
+import guru.mmp.sample.web.page.ui.*;
+
+import javafx.scene.control.Alert;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -97,8 +100,24 @@ public class SampleApplication extends TemplateWebApplication
     administrationGroup.addItem(new NavigationLink("Codes", "clip-list-2",
         CodeCategoryAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Report Definitions", "clip-note",
-      ReportDefinitionAdministrationPage.class));
+        ReportDefinitionAdministrationPage.class));
 
     root.addItem(administrationGroup);
+
+    NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "linecons-note");
+
+    uiElementsGroup.addItem(new NavigationLink("Alerts", AlertsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Blockquotes", BlockquotesPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Breadcrumbs", BreadcrumbsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Buttons", ButtonsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Modals", ModalsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Other Elements", OtherElementsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Pagination", PaginationPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Panels", PanelsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Progress Bars", ProgressBarsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Tabs &amp; Accordions", TabsAndAccordionsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Typography", TypographyPage.class));
+
+    root.addItem(uiElementsGroup);
   }
 }

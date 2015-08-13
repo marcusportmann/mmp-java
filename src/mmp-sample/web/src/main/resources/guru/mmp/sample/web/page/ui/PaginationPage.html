@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="no-js" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
+  <head>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/linecons/css/linecons.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
+    <link href="../../resource/css/application.css" rel="StyleSheet" type="text/css"/>
+  </head>
+  <body class="page-body maximum-height">
+    <div class="page-container maximum-height">
+      <div class="sidebar-menu toggle-others fixed">
+        <div class="sidebar-menu-inner">
+          <header class="logo-env">
+            <div class="logo">
+              <a href="#" class="logo-expanded">
+                <div class="logo-image"></div>
+              </a>
+              <a href="#" class="logo-collapsed">
+                <div class="logo-image"></div>
+              </a>
+            </div>
+            <div class="mobile-menu-toggle visible-xs">
+              <a href="#" data-toggle="user-info-menu"><i class="fa-bell-o"></i></a>
+              <a href="#" data-toggle="mobile-menu"><i class="fa-bars"></i></a>
+            </div>
+          </header>
+          <ul id="main-menu" class="main-menu">
+            <li class="active opened active">
+              <a href="#"><i class="linecons-cloud"></i><span class="title">Container</span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="main-content maximum-height">
+        <nav class="navbar user-info-navbar" role="navigation">
+          <ul class="user-info-menu left-links list-inline list-unstyled">
+            <li class="hidden-xs"><a href="#" data-toggle="sidebar"><i class="fa-bars"></i></a></li>
+          </ul>
+        </nav>
+        <div class="page-title">
+          <div class="title-env">
+            <h1 class="title">Container</h1>
+          </div>
+          <div class="breadcrumb-env">
+            <ol class="breadcrumb bc-1">
+              <li class="active"><a href="#"><i class="fa-home"></i>Container</a></li>
+            </ol>
+          </div>
+        </div>
+        <wicket:child>
+          <wicket:extend>
+
+            <div class="row">
+              <div class="col-sm-6">
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">Pagination Types</div>
+
+                    <div class="panel-options">
+                      <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+                      <a href="#" data-rel="close" class="bg"><i class="entypo-cancel"></i></a>
+                    </div>
+                  </div>
+
+                  <div class="panel-body">
+
+                    <h5>Normal Pagination</h5>
+
+                    <ul class="pagination">
+                      <li><a href="#"><i class="fa-angle-left"></i></a></li>
+                      <li><a href="#">1</a></li>
+                      <li class="active"><a href="#">2</a></li>
+                      <li><a href="#">3</a></li>
+                      <li class="disabled"><a href="#">4</a></li>
+                      <li><a href="#">5</a></li>
+                      <li><a href="#">6</a></li>
+                      <li><a href="#"><i class="fa-angle-right"></i></a></li>
+                    </ul>
+
+                    <h5>Sizes</h5>
+
+                    <ul class="pagination pagination-sm">
+                      <li>
+                        <a href="#">
+                          <i class="fa-angle-left"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">1</a>
+                      </li>
+                      <li class="active">
+                        <a href="#">2</a>
+                      </li>
+                      <li>
+                        <a href="#">3</a>
+                      </li>
+                      <li class="disabled">
+                        <a href="#">4</a>
+                      </li>
+                      <li>
+                        <a href="#">5</a>
+                      </li>
+                      <li>
+                        <a href="#">6</a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="fa-angle-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+
+                    <div class="clear"></div>
+
+                    <ul class="pagination pagination-lg">
+                      <li>
+                        <a href="#">
+                          <i class="fa-angle-left"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">1</a>
+                      </li>
+                      <li class="active">
+                        <a href="#">2</a>
+                      </li>
+                      <li>
+                        <a href="#">3</a>
+                      </li>
+                      <li>
+                        <a href="#">4</a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="fa-angle-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-sm-6">
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">Pagers</div>
+
+                    <div class="panel-options">
+                      <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+                      <a href="#" data-rel="close" class="bg"><i class="entypo-cancel"></i></a>
+                    </div>
+                  </div>
+
+                  <div class="panel-body">
+                    <h5>Pager</h5>
+
+                    <ul class="pager">
+                      <li>
+                        <a href="#">
+                          <i class="fa-angle-double-left"></i>
+                          Previous
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          Next
+                          <i class="fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+
+                    <p><strong>Floated</strong></p>
+
+                    <ul class="pager">
+                      <li class="previous">
+                        <a href="#">
+                          <i class="fa-long-arrow-left"></i>
+                        </a>
+                      </li>
+                      <li class="next">
+                        <a href="#">
+                          <i class="fa-long-arrow-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+
+                    <p><strong>Disabled</strong></p>
+
+                    <ul class="pager">
+                      <li class="previous disabled"><a href="#"><i class="entypo-left-thin"></i> Previous</a></li>
+                      <li class="next"><a href="#">Next <i class="entypo-right-thin"></i></a></li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </wicket:extend>
+        </wicket:child>
+      </div>
+    </div>
+  </body>
+</html>

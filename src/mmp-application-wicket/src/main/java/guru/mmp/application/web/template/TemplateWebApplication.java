@@ -261,7 +261,14 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
         pathComponent.append("-");
       }
 
-      pathComponent.append(nameComponent.toLowerCase());
+      if (nameComponent.equals("&") || nameComponent.equals("&amp;"))
+      {
+        pathComponent.append("and");
+      }
+      else
+      {
+        pathComponent.append(nameComponent.toLowerCase());
+      }
     }
 
     return pathComponent.toString();
