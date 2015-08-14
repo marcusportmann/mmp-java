@@ -436,26 +436,6 @@ div.datepicker thead tr:first-child th.cw
   background-clip: padding-box;
 }
 
-/*
-.input-daterange .add-on
-{
-  display: inline-block;
-  width: auto;
-  min-width: 16px;
-  height: 1.42857143;
-  padding: 4px 5px;
-  font-weight: 400;
-  line-height: 1.42857143;
-  text-align: center;
-  text-shadow: 0 1px 0 #fff;
-  vertical-align: middle;
-  background-color: #eee;
-  border: 1px solid #ccc;
-  margin-left: -5px;
-  margin-right: -5px;
-}
-*/
-
 .datepicker-inline
 {
   border: 1px solid #e4e4e4;
@@ -497,13 +477,6 @@ div.datepicker thead tr:first-child th.cw
   border-radius: 0;
   background-clip: padding-box;
 }
-
-/*
-.dropdown-menu.daterangepicker:has(ranges) .calendar
-{
-  display: none;
-}
-*/
 
 .dropdown-menu.daterangepicker.opensright:before
 {
@@ -682,16 +655,6 @@ div.datepicker thead tr:first-child th.cw
 {
   color: #2c2e2f;
 }
-/*!
- * Timepicker Component for Twitter Bootstrap
- *
- * Copyright 2013 Joris de Wit
- *
- * Contributors https://github.com/jdewit/bootstrap-timepicker/graphs/contributors
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 .bootstrap-timepicker
 {
@@ -1109,8 +1072,8 @@ html .select2-drop .select2-search
 html .select2-drop .select2-search:after
 {
   position: absolute;
-  content: '\e801';
-  font-family: linecons;
+  content: '\e003';
+  font-family: 'Glyphicons Halflings';
   color: #979898;
   right: 0;
   top: 0;
@@ -1669,6 +1632,8 @@ span.twitter-typeahead .tt-suggestion > p:hover, span.twitter-typeahead .tt-sugg
   background-color: #68b828;
 }
 
+/*
+
 .icheck-list
 {
   width: 100%;
@@ -1771,6 +1736,8 @@ span.twitter-typeahead .tt-suggestion > p:hover, span.twitter-typeahead .tt-sugg
   -ms-transform: scale(1.15);
   transform: scale(1.15);
 }
+
+*/
 
 .form-wizard > .tabs
 {

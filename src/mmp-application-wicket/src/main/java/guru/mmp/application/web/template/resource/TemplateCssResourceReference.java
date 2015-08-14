@@ -86,12 +86,8 @@ public class TemplateCssResourceReference
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(LineconsCssResourceReference.getCssHeaderItem());
     dependencies.add(FontAwesomeCssResourceReference.getCssHeaderItem());
     dependencies.add(TemplateComponentsCssResourceReference.getCssHeaderItem());
-    dependencies.add(DateRangePickerCssResourceReference.getCssHeaderItem());
-    dependencies.add(Select2CssResourceReference.getCssHeaderItem());
-    dependencies.add(Select2BootstrapCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

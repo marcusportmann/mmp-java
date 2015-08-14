@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.web.resource.thirdparty;
+package guru.mmp.application.web.resource.thirdparty.select2;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -38,8 +38,8 @@ public class Select2CssResourceReference extends CssResourceReference
   private Select2CssResourceReference()
   {
     super(Select2CssResourceReference.class, Debug.inDebugMode()
-        ? "select2/select2.css"
-        : "select2/select2.css");
+        ? "select2.css"
+        : "select2.css");
   }
 
   /**

@@ -18,8 +18,8 @@ package guru.mmp.sample.web.page.forms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.page.AnonymousOnlyWebPage;
 import guru.mmp.application.web.resource.thirdparty.*;
+import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -52,8 +52,15 @@ public class AdvancedElementsPage extends TemplateWebPage
   {
     super.renderHead(response);
 
+    response.render(DateRangePickerCssResourceReference.getCssHeaderItem());
+    response.render(Select2CssResourceReference.getCssHeaderItem());
+    response.render(Select2BootstrapCssResourceReference.getCssHeaderItem());
     response.render(JQueryMultiSelectCssResourceReference.getCssHeaderItem());
 
+    response.render(BootstrapDatePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(BootstrapTimePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(DateRangePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(BootstrapTagsInputJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(JQueryMultiSelectJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(TypeaheadJavaScriptResourceReference.getJavaScriptHeaderItem());

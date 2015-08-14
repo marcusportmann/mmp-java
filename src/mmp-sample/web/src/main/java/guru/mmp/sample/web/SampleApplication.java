@@ -86,8 +86,8 @@ public class SampleApplication extends TemplateWebApplication
    */
   protected void initNavigation(NavigationGroup root)
   {
-    root.addItem(new NavigationLink("Home", "clip-home-3", HomePage.class));
-    root.addItem(new NavigationLink("Dashboard", "clip-home-3", DashboardPage.class));
+    root.addItem(new NavigationLink("Home", "fa fa-home", HomePage.class));
+    root.addItem(new NavigationLink("Dashboard", "fa fa-home", DashboardPage.class));
 
     NavigationGroup administrationGroup = new NavigationGroup("Administration", "fa fa-gear");
 
@@ -97,14 +97,14 @@ public class SampleApplication extends TemplateWebApplication
         GroupAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Users", "fa fa-user",
         UserAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Codes", "clip-list-2",
+    administrationGroup.addItem(new NavigationLink("Codes", "fa fa-list",
         CodeCategoryAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Report Definitions", "clip-note",
+    administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
         ReportDefinitionAdministrationPage.class));
 
     root.addItem(administrationGroup);
 
-    NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "linecons-note");
+    NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "fa fa-th");
 
     uiElementsGroup.addItem(new NavigationLink("Alerts", AlertsPage.class));
     uiElementsGroup.addItem(new NavigationLink("Blockquotes", BlockquotesPage.class));
@@ -120,7 +120,7 @@ public class SampleApplication extends TemplateWebApplication
 
     root.addItem(uiElementsGroup);
 
-    NavigationGroup formsGroup = new NavigationGroup("Forms", "linecons-params");
+    NavigationGroup formsGroup = new NavigationGroup("Forms", "fa fa-th-list");
 
     formsGroup.addItem(new NavigationLink("Advanced Elements", AdvancedElementsPage.class));
     formsGroup.addItem(new NavigationLink("Native Elements", NativeElementsPage.class));

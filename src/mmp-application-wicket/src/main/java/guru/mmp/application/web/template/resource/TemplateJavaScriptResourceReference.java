@@ -84,13 +84,9 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
 
     dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(JQueryUIJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(BootstrapDatePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(BootstrapTimePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TweenMaxJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(MomentJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(JQuerySelectBoxItJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(DateRangePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     dependencies.add(TemplateBootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TemplateResizeableJavaScriptResourceReference.getJavaScriptHeaderItem());
