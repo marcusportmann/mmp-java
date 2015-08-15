@@ -19,7 +19,7 @@ package guru.mmp.application.web;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.resource.thirdparty.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;

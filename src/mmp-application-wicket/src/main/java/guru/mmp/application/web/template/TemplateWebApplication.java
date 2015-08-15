@@ -182,7 +182,8 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
 
     // Thirdparty CSS
     DateRangePickerCssResourceReference.get(), Select2CssResourceReference.get(),
-        Select2BootstrapCssResourceReference.get());
+        Select2BootstrapCssResourceReference.get(),
+        RWDTableCssResourceReference.get());
     */
 
     // Initialise the template-web-application.js resource bundle for the Web Application Template
@@ -209,6 +210,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
      * MomentJavaScriptResourceReference.get(),
      * JQuerySelectBoxItJavaScriptResourceReference.get(),
      * DateRangePickerJavaScriptResourceReference.get(),
+     * RWDTableJavaScriptResourceReference.get(),
      * // Template JavaScript
      * TemplateBootstrapJavaScriptResourceReference.get(),
      * TemplateResizeableJavaScriptResourceReference.get(),

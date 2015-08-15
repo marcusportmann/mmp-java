@@ -34,11 +34,11 @@ function show_loading_bar(options)
 		defaults.pct = 0;
 	
 	var $ = jQuery,
-		$loading_bar = $(".xenon-loading-bar");
+		$loading_bar = $(".template-loading-bar");
 	
 	if($loading_bar.length == 0)
 	{
-		$loading_bar = $('<div class="xenon-loading-bar progress-is-hidden"><span data-pct="0"></span></div>');
+		$loading_bar = $('<div class="template-loading-bar progress-is-hidden"><span data-pct="0"></span></div>');
 		public_vars.$body.append( $loading_bar );
 	}
 	
@@ -74,7 +74,7 @@ function show_loading_bar(options)
 function hide_loading_bar()
 {
 	var $ = jQuery,
-		$loading_bar = $(".xenon-loading-bar"),
+		$loading_bar = $(".template-loading-bar"),
 		$pct = $loading_bar.find('span');
 	
 	$loading_bar.addClass('progress-is-hidden');

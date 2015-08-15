@@ -31,7 +31,7 @@
 					ps_destroy();
 				}
 
-				$(window).trigger('xenon.resize');
+				$(window).trigger('template.resize');
 			});
 		});
 

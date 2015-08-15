@@ -20,7 +20,12 @@ package guru.mmp.application.web.template.resource;
 
 import guru.mmp.application.Debug;
 
-import guru.mmp.application.web.resource.thirdparty.*;
+import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenMaxJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.selectboxit.JQuerySelectBoxItJavaScriptResourceReference;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -87,6 +92,7 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
     dependencies.add(TweenMaxJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(MomentJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(JQuerySelectBoxItJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(RWDTableJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     dependencies.add(TemplateBootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TemplateResizeableJavaScriptResourceReference.getJavaScriptHeaderItem());

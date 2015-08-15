@@ -19,7 +19,8 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.thirdparty.*;
+import guru.mmp.application.web.resource.thirdparty.fontawesome.FontAwesomeCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableCssResourceReference;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;

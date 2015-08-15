@@ -1410,7 +1410,7 @@
 
 .jvectormap-zoomout { top: 37px; }
 
-.xenon-loading-bar {
+.template-loading-bar {
   -moz-opacity: 1;
   -moz-transition: all 220ms ease-in-out;
   -ms-filter: alpha(Opacity=100);
@@ -1431,7 +1431,7 @@
   zoom: 1;
 }
 
-.xenon-loading-bar span {
+.template-loading-bar span {
   background: #68b828;
   bottom: 0;
   display: block;
@@ -1441,7 +1441,7 @@
   width: 0;
 }
 
-.xenon-loading-bar.progress-is-hidden {
+.template-loading-bar.progress-is-hidden {
   -moz-opacity: .5;
   -ms-filter: alpha(Opacity=50);
   -webkit-opacity: .5;

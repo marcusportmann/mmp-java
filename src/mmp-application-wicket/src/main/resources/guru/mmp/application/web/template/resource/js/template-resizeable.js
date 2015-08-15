@@ -55,7 +55,7 @@ function resizable(breakpoint)
 
 
 	// Trigger Event
-	jQuery(window).trigger('xenon.resize');
+	jQuery(window).trigger('template.resize');
 }
 
 
@@ -117,5 +117,5 @@ function trigger_resizable()
 	}
 
 	// Trigger Event (Repeated)
-	jQuery(window).trigger('xenon.resized');
+	jQuery(window).trigger('template.resized');
 }

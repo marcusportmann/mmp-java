@@ -18,8 +18,17 @@ package guru.mmp.sample.web.page.forms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.resource.thirdparty.*;
+import guru.mmp.application.web.resource.thirdparty.datepicker.BootstrapDatePickerJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.tagsinput.BootstrapTagsInputJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.timepicker.BootstrapTimePickerJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScriptResourceReference;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 
 import org.apache.wicket.markup.head.IHeaderResponse;

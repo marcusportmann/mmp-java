@@ -27,6 +27,8 @@ import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
 import guru.mmp.sample.web.page.forms.AdvancedElementsPage;
 import guru.mmp.sample.web.page.forms.NativeElementsPage;
+import guru.mmp.sample.web.page.tables.BasicTablesPage;
+import guru.mmp.sample.web.page.tables.ResponsiveTablePage;
 import guru.mmp.sample.web.page.ui.*;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -104,7 +106,7 @@ public class SampleApplication extends TemplateWebApplication
 
     root.addItem(administrationGroup);
 
-    NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "fa fa-th");
+    NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "fa fa-sliders");
 
     uiElementsGroup.addItem(new NavigationLink("Alerts", AlertsPage.class));
     uiElementsGroup.addItem(new NavigationLink("Blockquotes", BlockquotesPage.class));
@@ -120,11 +122,20 @@ public class SampleApplication extends TemplateWebApplication
 
     root.addItem(uiElementsGroup);
 
-    NavigationGroup formsGroup = new NavigationGroup("Forms", "fa fa-th-list");
+    NavigationGroup formsGroup = new NavigationGroup("Forms", "fa fa-pencil-square-o");
 
     formsGroup.addItem(new NavigationLink("Advanced Elements", AdvancedElementsPage.class));
     formsGroup.addItem(new NavigationLink("Native Elements", NativeElementsPage.class));
 
     root.addItem(formsGroup);
+
+
+    NavigationGroup tablesGroup = new NavigationGroup("Tables", "fa fa-table");
+
+    tablesGroup.addItem(new NavigationLink("Basic Tables", BasicTablesPage.class));
+    tablesGroup.addItem(new NavigationLink("Responsive Table", ResponsiveTablePage.class));
+
+    root.addItem(tablesGroup);
+
   }
 }
