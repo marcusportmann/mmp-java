@@ -2529,7 +2529,7 @@ footer.main-footer.fixed
   top: 1px;
   z-index: 5;
   font-size: 12px;
-  min-height: 51px;
+    min-height: 51px;
 }
 
 .user-info-navbar .user-info-menu > li.open > a
@@ -6269,7 +6269,11 @@ blockquote small
 
 .table.table-condensed > thead > tr > td, .table.table-condensed > tbody > tr > td, .table.table-condensed > tfoot > tr > td, .table.table-condensed > thead > tr > th, .table.table-condensed > tbody > tr > th, .table.table-condensed > tfoot > tr > th
 {
-  padding: 5px 8px;
+  padding-top: 4px;
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-bottom: 4px;
+  vertical-align: middle;
 }
 
 .table.table-model-2 > thead > tr
@@ -8690,6 +8694,14 @@ table.table-actions tbody > tr > td.four-actions
   white-space: nowrap;
 }
 
-
+.btn.btn-icon.btn-action
+{
+  padding-top: 0px;
+  padding-right: 3px;
+  padding-left: 3px;
+  padding-bottom: 0px;
+  font-size: 13px;
+  color: #646565;
+}
 
 
