@@ -7,7 +7,7 @@
   background-size: 100% 100%;
 }
 
-.sidebar-menu .logo-env .logo .logo-collapsed .logo-collapsed-image
+.sidebar-menu .logo-env .logo .logo-collapsed .logo-image
 {
   display: inline-block;
   width: 40px;
@@ -33,7 +33,7 @@
   }
 }
 
-.footer-inner span.copyright-name:before
+span.copyright-name:before
 {
     content: "Marcus Portmann";
 }

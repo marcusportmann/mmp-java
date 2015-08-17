@@ -55,7 +55,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
 public class UserAdministrationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

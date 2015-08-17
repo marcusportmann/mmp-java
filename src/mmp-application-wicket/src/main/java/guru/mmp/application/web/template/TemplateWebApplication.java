@@ -19,7 +19,6 @@ package guru.mmp.application.web.template;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.resource.thirdparty.*;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
@@ -151,9 +150,14 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   @Override
   public Session newSession(Request request, Response response)
   {
-    Session session = new TemplateWebSession(request);
+    TemplateWebSession session = new TemplateWebSession(request);
 
     session.bind();
+
+
+    session.setUserId(1);
+    session.setUsername("Administrator");
+    session.setOrganisation("MMP");
 
     return session;
   }
