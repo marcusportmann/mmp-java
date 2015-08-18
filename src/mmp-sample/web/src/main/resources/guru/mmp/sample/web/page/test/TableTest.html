@@ -507,157 +507,228 @@
           </div>
         </div>
 
+        <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+          <div class="modal-dialog">
+            <div class="modal-content">
 
-        <div wicket:id="tableContainer" class="panel panel-default">
+              <div class="modal-header">
+                <h4 class="modal-title">Remove User</h4>
+              </div>
 
-          <div class="table-header">
-            <div wicket:id="navigator" class="table-header-left">
-              <a wicket:id="addLink" class="btn btn-primary" href="#"><i class="fa fa-plus"></i> Add User</a>
+              <div class="modal-body">
+                <p>
+                  Are you sure you wish to remove the user
+                  <b><span wicket:id="name">[Name]</span></b>?
+                </p>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <a wicket:id="removeLink" class="btn btn-primary">Yes</a>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <div class="table-header-right">
-              <form wicket:id="filterForm">
-                <input wicket:id="filter" type="text" name="filter" style="float: left; width: 200px; margin-right: 4px;"/>
-                <button style="float: left;" wicket:id="filterButton" type="submit" class="btn btn-default btn-filter"><i class="fa fa-filter"> Filter</i></button>
+
+          <div wicket:id="tableContainer" class="panel panel-default">
+
+            <div class="table-header">
+              <div wicket:id="navigator" class="table-header-left">
+                <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User</a>
+              </div>
+
+              <form wicket:id="filterForm" class="filter-form">
+                <input wicket:id="filter" type="text" name="filter"/>
+                <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm btn-filter">
+                  <i class="fa fa-filter"></i> Filter
+                </button>
               </form>
             </div>
 
-            <div class="table-header-spacer"></div>
+            <table class="table table-bordered table-striped table-condensed table-actions">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>First Name(s)</th>
+                  <th>Last Name</th>
+                  <th class="center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr wicket:id="user">
+                  <td><span wicket:id="username">[Username]</span></td>
+                  <td><span wicket:id="firstNames">[First Name(s)]</span></td>
+                  <td><span wicket:id="lastName">[Surname]</span></td>
+                  <td class="four-actions">
+                    <a wicket:id="userGroupsLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a wicket:id="updateLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a wicket:id="resetPasswordLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a wicket:id="removeLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td><span>Username 2</span></td>
+                  <td><span>First Name(s) 2</span></td>
+                  <td><span>Surname 2</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td><span>Username 3</span></td>
+                  <td><span>First Name(s) 3</span></td>
+                  <td><span>Surname 3</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td><span>Username 4</span></td>
+                  <td><span>First Name(s) 4</span></td>
+                  <td><span>Surname 4</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><span>Username 5</span></td>
+                  <td><span>First Name(s) 5</span></td>
+                  <td><span>Surname 5</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><span>Username 6</span></td>
+                  <td><span>First Name(s) 6</span></td>
+                  <td><span>Surname 6</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><span>Username 7</span></td>
+                  <td><span>First Name(s) 7</span></td>
+                  <td><span>Surname 7</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><span>Username 8</span></td>
+                  <td><span>First Name(s) 8</span></td>
+                  <td><span>Surname 8</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><span>Username 9</span></td>
+                  <td><span>First Name(s) 9</span></td>
+                  <td><span>Surname 9</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td><span>Username 10</span></td>
+                  <td><span>First Name(s) 10</span></td>
+                  <td><span>Surname 10</span></td>
+                  <td class="four-actions">
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                    <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  </td>
+                </tr>
+
+
+              </tbody>
+            </table>
+
+            <ul class="pagination pagination-sm above-table">
+              <li>
+                <a href="#">
+                  <i class="fa-angle-left"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">1</a>
+              </li>
+              <li class="active">
+                <a href="#">2</a>
+              </li>
+              <li>
+                <a href="#">3</a>
+              </li>
+              <li class="disabled">
+                <a href="#">4</a>
+              </li>
+              <li>
+                <a href="#">5</a>
+              </li>
+              <li>
+                <a href="#">6</a>
+              </li>
+              <li>
+                <a href="#">7</a>
+              </li>
+              <li>
+                <a href="#">8</a>
+              </li>
+              <li>
+                <a href="#">9</a>
+              </li>
+              <li>
+                <a href="#">10</a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fa-angle-right"></i>
+                </a>
+              </li>
+            </ul>
+
           </div>
 
-          <table class="table table-bordered table-striped table-condensed table-actions">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>First Name(s)</th>
-                <th>Last Name</th>
-                <th class="center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr wicket:id="user">
-                <td><span>[Username]</span></td>
-                <td><span>[First Name(s)]</span></td>
-                <td><span>[Surname]</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 2</span></td>
-                <td><span>First Name(s) 2</span></td>
-                <td><span>Surname 2</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 3</span></td>
-                <td><span>First Name(s) 3</span></td>
-                <td><span>Surname 3</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 4</span></td>
-                <td><span>First Name(s) 4</span></td>
-                <td><span>Surname 4</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 5</span></td>
-                <td><span>First Name(s) 5</span></td>
-                <td><span>Surname 5</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 6</span></td>
-                <td><span>First Name(s) 6</span></td>
-                <td><span>Surname 6</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 7</span></td>
-                <td><span>First Name(s) 7</span></td>
-                <td><span>Surname 7</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 8</span></td>
-                <td><span>First Name(s) 8</span></td>
-                <td><span>Surname 8</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 9</span></td>
-                <td><span>First Name(s) 9</span></td>
-                <td><span>Surname 9</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td><span>Username 10</span></td>
-                <td><span>First Name(s) 10</span></td>
-                <td><span>Surname 10</span></td>
-                <td class="four-actions">
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a href="#" class="btn btn-icon btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
 
       </div>
     </div>
