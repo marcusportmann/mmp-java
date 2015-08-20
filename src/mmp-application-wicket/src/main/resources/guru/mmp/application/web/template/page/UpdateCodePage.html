@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
-    <link href="../../resource/css/application.css" rel="StyleSheet" type="text/css"/>
   </head>
   <body class="page-body maximum-height">
     <div class="page-container maximum-height">
@@ -55,11 +54,24 @@
         <wicket:child>
           <wicket:extend>
 
+            <div class="panel panel-default form-panel">
 
+              <div class="form-intro">Please update the details for the code and click <b>Update</b>.</div>
 
+              <form wicket:id="updateForm" id="updateForm" class="form-horizontal">
 
+                <div wicket:id="code"></div>
 
+                <div class="form-group">
+                  <div class="col-sm-12 form-buttons">
+                    <button wicket:id="cancelButton" type="submit" class="btn btn-default">Cancel</button>
+                    <button wicket:id="updateButton" type="submit" class="btn btn-primary">Update</button>
+                  </div>
+                </div>
 
+              </form>
+
+            </div>
 
           </wicket:extend>
         </wicket:child>
@@ -67,69 +79,3 @@
     </div>
   </body>
 </html>
-
-
-
-
-<!--
-
-TO CONVERT
-
-<!DOCTYPE html>
-<html class="no-js" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:wicket="http://wicket.apache.org/"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
-  <head>
-    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-combined.css" rel="StyleSheet" type="text/css" />
-  </head>
-  <body class="layout-boxed">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
-        </div>
-      </div>
-    </div>
-    <div class="main-container">
-      <div class="navbar-content"></div>
-      <div class="main-content">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
-              <ol class="breadcrumb"><li class="active">[Page Breadcrumbs]</li></ol>
-              <div class="page-header">
-                <h1>[Page Heading]</h1>
-              </div>
-            </div>
-          </div>
-          <wicket:extend>
-
-            <div class="form-intro">Please update the details for the code and click <b>Update</b>.</div>
-
-            <form wicket:id="updateForm" id="updateForm" class="form-horizontal">
-
-              <div wicket:id="code"></div>
-
-              <div class="form-group">
-                <div class="col-xs-7">
-                  <button wicket:id="updateButton" type="submit" class="btn btn-primary pull-right btn-margin-left">Update</button>
-                  <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right btn-margin-right">Cancel</button>
-                </div>
-              </div>
-
-            </form>
-
-          </wicket:extend>
-        </div>
-      </div>
-    </div>
-    <div class="footer clearfix">
-      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
-      <div class="footer-items"><span class="go-top"><i class="clip-chevron-up"></i></span></div>
-    </div>
-  </body>
-</html>
-
-
--->

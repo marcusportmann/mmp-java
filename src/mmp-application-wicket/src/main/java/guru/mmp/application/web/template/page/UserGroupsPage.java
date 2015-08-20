@@ -35,6 +35,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -58,7 +59,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_GROUPS)
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_GROUPS)
 public class UserGroupsPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
@@ -80,7 +81,7 @@ public class UserGroupsPage extends TemplateWebPage
    */
   public UserGroupsPage(final PageReference previousPage, final String username)
   {
-    super("User Groups", "Administer the user groups for the user " + username, previousPage);
+    super("User Groups", "Administer the user groups for the user " + username);
 
     /*
      * The table container, which allows the table and its associated navigator to be updated
@@ -89,6 +90,19 @@ public class UserGroupsPage extends TemplateWebPage
     final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
     tableContainer.setOutputMarkupId(true);
     add(tableContainer);
+
+    // The "backLink" link
+    Link<Void> backLink = new Link<Void>("backLink")
+    {
+      private static final long serialVersionUID = 1000000;
+
+      @Override
+      public void onClick()
+      {
+        setResponsePage(previousPage.getPage());
+      }
+    };
+    tableContainer.add(backLink);
 
     // The "addUserToGroupForm" form
     final DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
@@ -129,7 +143,7 @@ public class UserGroupsPage extends TemplateWebPage
 
     addUserToGroupForm.setMarkupId("addUserToGroupForm");
     addUserToGroupForm.setOutputMarkupId(true);
-    add(addUserToGroupForm);
+    tableContainer.add(addUserToGroupForm);
 
     addUserToGroupForm.add(groupNameField);
 

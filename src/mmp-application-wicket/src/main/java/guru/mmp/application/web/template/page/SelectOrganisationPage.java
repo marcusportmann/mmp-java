@@ -58,7 +58,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SecureAnonymousWebPage
+//@SecureAnonymousWebPage
 public class SelectOrganisationPage extends WebPage
 {
   private static final String SELECT_ORGANISATION_ON_DOM_READY_JAVA_SCRIPT =

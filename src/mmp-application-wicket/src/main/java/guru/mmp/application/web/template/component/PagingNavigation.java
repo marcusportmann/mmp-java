@@ -46,6 +46,7 @@ public class PagingNavigation extends Loop
    */
   public static final AttributeModifier ACTIVE_CSS_CLASS_MODIFIER =
     AttributeModifier.replace("class", "active");
+
   protected IPageable pageable;
 
   /**
@@ -154,10 +155,9 @@ public class PagingNavigation extends Loop
 
     if (pageable.getCurrentPage() == pageIndex)
     {
-      link.add(ACTIVE_CSS_CLASS_MODIFIER);
+      loopItem.add(ACTIVE_CSS_CLASS_MODIFIER);
     }
 
-    // link.add(new TitleAppender(pageIndex));
     loopItem.add(link);
 
     // Add a page number label to the list which is enclosed by the link

@@ -28,6 +28,7 @@ import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 
+import org.apache.wicket.markup.html.link.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,10 +65,23 @@ public class ViewErrorReportPage extends TemplateWebPage
    */
   public ViewErrorReportPage(final PageReference previousPage, String id)
   {
-    super("View Error Report", "Viewing the error report: " + id, previousPage);
+    super("View Error Report", "Viewing the error report: " + id);
 
     try
     {
+      // The "backLink" link
+      Link<Void> backLink = new Link<Void>("backLink")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onClick()
+        {
+          setResponsePage(previousPage.getPage());
+        }
+      };
+      add(backLink);
+
       ErrorReport errorReport = messagingService.getErrorReport(id);
 
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

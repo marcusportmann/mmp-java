@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
-    <link href="../../resource/css/application.css" rel="StyleSheet" type="text/css"/>
   </head>
   <body class="page-body maximum-height">
     <div class="page-container maximum-height">
@@ -55,56 +54,6 @@
         <wicket:child>
           <wicket:extend>
 
-
-
-
-
-
-
-          </wicket:extend>
-        </wicket:child>
-      </div>
-    </div>
-  </body>
-</html>
-
-
-
-
-<!--
-
-
-
-<!DOCTYPE html>
-<html class="no-js" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:wicket="http://wicket.apache.org/"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
-  <head>
-    <link href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-combined.css" rel="StyleSheet" type="text/css" />
-  </head>
-  <body class="layout-boxed">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#"><span class="navbar-logo"></span></a>
-        </div>
-      </div>
-    </div>
-    <div class="main-container">
-      <div class="navbar-content"></div>
-      <div class="main-content">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
-              <ol class="breadcrumb"><li class="active">[Page Breadcrumbs]</li></ol>
-              <div class="page-header">
-                <h1>[Page Heading]</h1>
-              </div>
-            </div>
-          </div>
-          <wicket:extend>
-
             <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -127,15 +76,14 @@
               </div>
             </div>
 
-            <a wicket:id="addLink" class="btn btn-primary" href="#"><i class="fa fa-plus"></i> Add Organisation</a>
-
-            <div wicket:id="tableContainer" class="table-container">
-
+            <div wicket:id="tableContainer" class="panel panel-default">
               <div class="table-header">
-                <div class="table-header-spacer"></div>
+                <div class="table-header-left">
+                  <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add Organisation</a>
+                </div>
               </div>
 
-              <table class="table table-bordered table-hover table-actions">
+              <table class="table table-bordered table-striped table-condensed table-actions">
                 <thead>
                   <tr>
                     <th>Code</th>
@@ -157,15 +105,8 @@
             </div>
 
           </wicket:extend>
-        </div>
+        </wicket:child>
       </div>
-    </div>
-    <div class="footer clearfix">
-      <div class="footer-inner">2014 &copy; <span class="copyright-name"></span></div>
-      <div class="footer-items"><span class="go-top"><i class="clip-chevron-up"></i></span></div>
     </div>
   </body>
 </html>
-
-
--->

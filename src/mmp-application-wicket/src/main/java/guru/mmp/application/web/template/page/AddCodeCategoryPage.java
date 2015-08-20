@@ -50,7 +50,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_CODE_CATEGORY)
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_CODE_CATEGORY)
 public class AddCodeCategoryPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

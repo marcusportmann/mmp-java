@@ -54,7 +54,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_USER)
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_USER)
 public class AddUserPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

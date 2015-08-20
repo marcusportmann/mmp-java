@@ -8703,7 +8703,7 @@ table.table-actions tbody > tr > td.four-actions
   color: #646565;
 }
 
-ul.pagination.above-table
+.paging-navigator ul.pagination
 {
   margin-top: 20px;
   margin-right: 0;
@@ -8737,4 +8737,33 @@ ul.pagination.above-table
   margin-right: 4px;
 }
 
+.form-intro
+{
+  width: 100%;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 15px
+}
 
+.form-buttons
+{
+  display: table-cell;
+  text-align: center;
+}
+
+.form-panel .btn
+{
+  margin-bottom: 0;
+}
+
+.btn-default
+{
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-default:hover
+{
+  background-color: #f2f2f2;
+}

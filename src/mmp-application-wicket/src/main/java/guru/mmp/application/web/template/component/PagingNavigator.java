@@ -18,7 +18,6 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -33,11 +32,6 @@ public class PagingNavigator extends Panel
 {
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The <code>AttributeModifier</code> used to apply the CSS class to a page navigator.
-   */
-  public static final AttributeModifier CSS_CLASS_MODIFIER = AttributeModifier.replace("class",
-    "table-header-left");
   private boolean isVisible;
   private final IPageable pageable;
 
@@ -52,8 +46,6 @@ public class PagingNavigator extends Panel
     super(id);
     this.pageable = pageable;
     setRenderBodyOnly(false);
-
-    // add(CSS_CLASS_MODIFIER);
   }
 
   /**

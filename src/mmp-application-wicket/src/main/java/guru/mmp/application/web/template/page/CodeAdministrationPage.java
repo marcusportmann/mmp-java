@@ -27,6 +27,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeDataProvider;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -38,12 +39,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>CodeAdministrationPage</code> class implements the
@@ -51,7 +53,8 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
+
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
 public class CodeAdministrationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
@@ -74,7 +77,7 @@ public class CodeAdministrationPage extends TemplateWebPage
   public CodeAdministrationPage(final PageReference previousPage, final String codeCategoryId,
       final String codeCategoryName)
   {
-    super("Codes", codeCategoryName, previousPage);
+    super("Codes", codeCategoryName);
 
     try
     {
@@ -103,7 +106,20 @@ public class CodeAdministrationPage extends TemplateWebPage
           setResponsePage(page);
         }
       };
-      add(addLink);
+      tableContainer.add(addLink);
+
+      // The "backLink" link
+      Link<Void> backLink = new Link<Void>("backLink")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onClick()
+        {
+          setResponsePage(previousPage.getPage());
+        }
+      };
+      tableContainer.add(backLink);
 
       // The code data view
       CodeDataProvider dataProvider = new CodeDataProvider(codeCategoryId);

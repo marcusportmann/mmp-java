@@ -24,13 +24,11 @@ import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 
-import org.apache.wicket.PageReference;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -55,29 +53,7 @@ public abstract class TemplateWebPage extends WebPage
    */
   public TemplateWebPage(String heading)
   {
-    this(heading, null, null);
-  }
-
-  /**
-   * Constructs a new <code>TemplateWebPage</code>.
-   *
-   * @param heading      the page heading
-   * @param previousPage the previous page or <code>null</code> if there is no previous page
-   */
-  public TemplateWebPage(String heading, PageReference previousPage)
-  {
-    this(heading, null, previousPage);
-  }
-
-  /**
-   * Constructs a new <code>TemplateWebPage</code>.
-   *
-   * @param heading    the page heading
-   * @param subHeading the sub-heading for the page
-   */
-  public TemplateWebPage(String heading, String subHeading)
-  {
-    this(heading, subHeading, null);
+    this(heading, null);
   }
 
   /**
@@ -85,10 +61,8 @@ public abstract class TemplateWebPage extends WebPage
    *
    * @param heading      the page heading
    * @param subHeading   the sub-heading for the page
-   * @param previousPage the previous page or <code>null</code> if there is no previous page
    */
-  public TemplateWebPage(final String heading, final String subHeading,
-      final PageReference previousPage)
+  public TemplateWebPage(final String heading, final String subHeading)
   {
     if (getApplication().usesDevelopmentConfig())
     {
@@ -124,29 +98,6 @@ public abstract class TemplateWebPage extends WebPage
     this.subHeading = subHeading;
 
     add(new Label("pageSubHeading", new PropertyModel<String>(this, "subHeading")));
-
-    // Setup the "backLink" link if required
-    if (previousPage == null)
-    {
-      BlankComponent blankComponent = new BlankComponent("backLink");
-
-      add(blankComponent);
-    }
-    else
-    {
-      Link<Void> backLink = new Link<Void>("backLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick()
-        {
-          setResponsePage(previousPage.getPage());
-        }
-      };
-
-      add(backLink);
-    }
 
     // Setup the alerts
     this.alerts = new Alerts("alerts");

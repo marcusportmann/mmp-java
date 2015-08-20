@@ -52,7 +52,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION)
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION)
 public class CodeCategoryAdministrationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
@@ -99,7 +99,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
           setResponsePage(new AddCodeCategoryPage(getPageReference()));
         }
       };
-      add(addLink);
+      tableContainer.add(addLink);
 
       // The code category data view
       CodeCategoryDataProvider dataProvider =

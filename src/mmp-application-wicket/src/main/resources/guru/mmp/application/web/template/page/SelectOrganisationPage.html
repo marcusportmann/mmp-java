@@ -1,68 +1,65 @@
 <!DOCTYPE html>
-<html class="no-js" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:wicket="http://wicket.apache.org/"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title wicket:id="pageTitle">Select Organisation</title>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/fontawesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
-    <link href="../../resource/css/application.css" rel="StyleSheet" type="text/css"/>
+
   </head>
-  <body class="page-body maximum-height">
-    <div class="page-container maximum-height">
-      <div class="sidebar-menu toggle-others fixed">
-        <div class="sidebar-menu-inner">
-          <header class="logo-env">
-            <div class="logo">
-              <a href="#" class="logo-expanded">
+  <body class="page-body login-page">
+    <div class="login-container">
+      <div class="row">
+        <div class="col-sm-6">
+          <script type="text/javascript">
+            jQuery(document).ready(function($)
+            {
+              // Reveal Login form
+              setTimeout(function(){ $(".fade-in-effect").addClass('in'); }, 1);
+            });
+          </script>
+
+          <div wicket:id="alerts" id="alerts"></div>
+
+          <form wicket:id="selectOrganisationForm" method="post" role="form" id="selectOrganisationForm" class="login-form fade-in-effect in">
+
+            <div class="login-header">
+              <a href="#" class="logo">
                 <div class="logo-image"></div>
+                <span>select organisation</span>
               </a>
-              <a href="#" class="logo-collapsed">
-                <div class="logo-image"></div>
-              </a>
+
+              <p>Please select the organisation you wish to work with.</p>
             </div>
-            <div class="mobile-menu-toggle visible-xs">
-              <a href="#" data-toggle="user-info-menu"><i class="fa-bell-o"></i></a>
-              <a href="#" data-toggle="mobile-menu"><i class="fa-bars"></i></a>
+
+            <div class="form-group">
+              <select id="organisation" wicket:id="organisation" type="text" name="organisation" class="form-control search-select">
+                <option value="">&nbsp;</option>
+              </select>
             </div>
-          </header>
-          <ul id="main-menu" class="main-menu">
-            <li class="active opened active">
-              <a href="#"><i class="fa fa-file-code-o"></i><span class="title">Container</span></a>
-            </li>
-          </ul>
+
+            <div class="form-group">
+              <button wicket:id="continueButton" type="submit" class="btn btn-primary pull-right">
+                Continue <i class="fa fa-arrow-circle-right"></i>
+              </button>
+            </div>
+
+          </form>
         </div>
-      </div>
-      <div class="main-content maximum-height">
-        <nav class="navbar user-info-navbar" role="navigation">
-          <ul class="user-info-menu left-links list-inline list-unstyled">
-            <li class="hidden-xs"><a href="#" data-toggle="sidebar"><i class="fa-bars"></i></a></li>
-          </ul>
-        </nav>
-        <div class="page-title">
-          <div class="title-env">
-            <h1 class="title">Container</h1>
-          </div>
-          <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-              <li class="active"><a href="#"><i class="fa-home"></i>Container</a></li>
-            </ol>
-          </div>
-        </div>
-        <wicket:child>
-          <wicket:extend>
-
-
-
-
-
-
-
-          </wicket:extend>
-        </wicket:child>
       </div>
     </div>
   </body>
@@ -72,9 +69,9 @@
 
 
 
-
-
 <!--
+
+
 
 
 
@@ -100,21 +97,6 @@
           Please select the organisation you wish to work with.
         </p>
 
-        <form wicket:id="selectOrganisationForm">
-          <fieldset>
-            <div class="form-group">
-              <select id="organisation" wicket:id="organisation" type="text" name="organisation" class="form-control search-select">
-                <option value="">&nbsp;</option>
-              </select>
-            </div>
-
-            <div class="form-actions">
-              <button wicket:id="continueButton" type="submit" class="btn btn-primary pull-right">
-                Continue <i class="fa fa-arrow-circle-right"></i>
-              </button>
-            </div>
-          </fieldset>
-        </form>
       </div>
 
     </div>

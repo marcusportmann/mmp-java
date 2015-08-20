@@ -105,7 +105,7 @@ public class UserAdministrationPage extends TemplateWebPage
           setResponsePage(page);
         }
       };
-      add(addLink);
+      tableContainer.add(addLink);
 
       UserDataProvider dataProvider = new UserDataProvider(session.getOrganisation());
 
