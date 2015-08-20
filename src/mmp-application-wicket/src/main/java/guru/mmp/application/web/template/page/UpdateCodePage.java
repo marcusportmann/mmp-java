@@ -44,7 +44,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE)
 public class UpdateCodePage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

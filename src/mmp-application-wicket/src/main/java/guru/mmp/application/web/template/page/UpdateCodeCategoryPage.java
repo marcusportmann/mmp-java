@@ -45,7 +45,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE_CATEGORY)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE_CATEGORY)
 public class UpdateCodeCategoryPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

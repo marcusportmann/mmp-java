@@ -20,10 +20,12 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
-import guru.mmp.application.web.template.component.*;
+import guru.mmp.application.web.template.component.Alerts;
+import guru.mmp.application.web.template.component.Breadcrumbs;
+import guru.mmp.application.web.template.component.MainNavigationMenu;
+import guru.mmp.application.web.template.component.UserMenu;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
-
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;

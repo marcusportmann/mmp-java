@@ -154,11 +154,6 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
 
     session.bind();
 
-
-    session.setUserId(1);
-    session.setUsername("Administrator");
-    session.setOrganisation("MMP");
-
     return session;
   }
 

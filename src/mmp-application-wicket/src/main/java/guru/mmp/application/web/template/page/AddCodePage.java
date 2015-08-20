@@ -44,7 +44,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_CODE)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_CODE)
 public class AddCodePage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

@@ -45,7 +45,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_ORGANISATION)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_ORGANISATION)
 public class AddOrganisationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

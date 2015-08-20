@@ -34,7 +34,6 @@ import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -58,7 +57,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-//@SecureAnonymousWebPage
+@SecureAnonymousWebPage
 public class SelectOrganisationPage extends WebPage
 {
   private static final String SELECT_ORGANISATION_ON_DOM_READY_JAVA_SCRIPT =
@@ -100,8 +99,9 @@ public class SelectOrganisationPage extends WebPage
     ChoiceRenderer<StringSelectOption> choiceRenderer = new ChoiceRenderer<>("name", "value");
 
     DropDownChoice<StringSelectOption> organisationField =
-      new DropDownChoiceWithFeedback<>("organisation", new PropertyModel<StringSelectOption>(this, "organisation"),
-        getOrganisationOptions(), choiceRenderer);
+      new DropDownChoiceWithFeedback<>("organisation",
+        new PropertyModel<StringSelectOption>(this, "organisation"), getOrganisationOptions(),
+        choiceRenderer);
     organisationField.setRequired(true);
     form.add(organisationField);
 
@@ -192,24 +192,24 @@ public class SelectOrganisationPage extends WebPage
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-// TODO: DELETE THIS -- MARCUS
-//    // Add the Web Application Template theme CSS header item
-//    response.render(TemplateWebApplication.getThemeCssHeaderItem());
+//  TODO: DELETE THIS -- MARCUS
+//     // Add the Web Application Template theme CSS header item
+//     response.render(TemplateWebApplication.getThemeCssHeaderItem());
 //
-//    // Add the Select2 CSS header item
-//    response.render(CssHeaderItem.forReference(Select2CssResourceReference.get()));
+//     // Add the Select2 CSS header item
+//     response.render(CssHeaderItem.forReference(Select2CssResourceReference.get()));
 //
-//    // Add the application CSS header item
-//    response.render(getApplicationCssHeaderItem());
+//     // Add the application CSS header item
+//     response.render(getApplicationCssHeaderItem());
 //
-//    // Add the Web Application Template JavaScript header item
-//    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
+//     // Add the Web Application Template JavaScript header item
+//     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 //
-//    // Add the Select2 JavaScript header item
-//    response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
+//     // Add the Select2 JavaScript header item
+//     response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
 //
-//    // Add the JavaScript script that should be executed when the DOM is ready
-//    response.render(OnDomReadyHeaderItem.forScript(SELECT_ORGANISATION_ON_DOM_READY_JAVA_SCRIPT));
+//     // Add the JavaScript script that should be executed when the DOM is ready
+//     response.render(OnDomReadyHeaderItem.forScript(SELECT_ORGANISATION_ON_DOM_READY_JAVA_SCRIPT));
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()

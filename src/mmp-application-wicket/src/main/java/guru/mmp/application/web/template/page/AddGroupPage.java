@@ -44,7 +44,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_GROUP)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_GROUP)
 public class AddGroupPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

@@ -51,7 +51,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_RESET_USER_PASSWORD)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_RESET_USER_PASSWORD)
 public class ResetUserPasswordPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

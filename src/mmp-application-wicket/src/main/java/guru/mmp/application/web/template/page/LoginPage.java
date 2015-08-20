@@ -30,12 +30,9 @@ import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -220,26 +217,26 @@ public class LoginPage extends WebPage
       }
     });
 
-// TODO: DELETE THIS -- MARCUS
-//    // Setup the forgotForm
-//    Form<Void> forgotForm = new Form<>("forgotForm");
-//    forgotForm.setMarkupId("forgotForm");
-//    forgotForm.setOutputMarkupId(true);
-//    add(forgotForm);
+//  TODO: DELETE THIS -- MARCUS
+//     // Setup the forgotForm
+//     Form<Void> forgotForm = new Form<>("forgotForm");
+//     forgotForm.setMarkupId("forgotForm");
+//     forgotForm.setOutputMarkupId(true);
+//     add(forgotForm);
 //
-//    // The "submitButton" button
-//    forgotForm.add(new AjaxFallbackButton("submitButton", forgotForm)
-//    {
-//      private static final long serialVersionUID = 1000000;
+//     // The "submitButton" button
+//     forgotForm.add(new AjaxFallbackButton("submitButton", forgotForm)
+//     {
+//       private static final long serialVersionUID = 1000000;
 //
-//      @Override
-//      protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-//      {
-//        warn("Forgotten password support is not available.");
+//       @Override
+//       protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+//       {
+//         warn("Forgotten password support is not available.");
 //
-//        target.add(alerts);
-//      }
-//    });
+//         target.add(alerts);
+//       }
+//     });
   }
 
   /**
@@ -271,20 +268,19 @@ public class LoginPage extends WebPage
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-
     // TODO: DELETE THIS -- MARCUS
 //
-//    // Add the Web Application Template theme CSS header item
-//    response.render(TemplateWebApplication.getThemeCssHeaderItem());
+//  // Add the Web Application Template theme CSS header item
+//  response.render(TemplateWebApplication.getThemeCssHeaderItem());
 //
-//    // Add the application CSS header item
-//    response.render(getApplicationCssHeaderItem());
+//  // Add the application CSS header item
+//  response.render(getApplicationCssHeaderItem());
 //
-//    // Add the Web Application Template JavaScript header item
-//    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
+//  // Add the Web Application Template JavaScript header item
+//  response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 //
-//    // Add the JavaScript script that should be executed when the DOM is ready
-//    response.render(OnDomReadyHeaderItem.forScript(LOGIN_ON_DOM_READY_JAVA_SCRIPT));
+//  // Add the JavaScript script that should be executed when the DOM is ready
+//  response.render(OnDomReadyHeaderItem.forScript(LOGIN_ON_DOM_READY_JAVA_SCRIPT));
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()
