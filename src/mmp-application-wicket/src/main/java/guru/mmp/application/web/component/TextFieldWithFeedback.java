@@ -21,6 +21,8 @@ package guru.mmp.application.web.component;
 import guru.mmp.application.web.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
@@ -83,9 +85,33 @@ public class TextFieldWithFeedback<T> extends TextField<T>
   protected void onConfigure()
   {
     super.onConfigure();
-
-    FeedbackUtil.applyFeedbackCssClassModifier(this);
   }
+
+  /**
+   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
+   */
+  @Override
+  public void renderHead(IHeaderResponse response)
+  {
+    super.renderHead(response);
+
+    IRequestHandler requestHandler = getRequestCycle().getActiveRequestHandler();
+
+    if (requestHandler instanceof AjaxRequestHandler)
+    {
+      AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
+
+      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this, false));
+
+    }
+    else
+    {
+      response.render(JavaScriptHeaderItem
+        .forScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this, true), null));
+    }
+  }
+
+
 
   /**
    * @see org.apache.wicket.markup.html.form.TextField#onRender()
@@ -96,6 +122,24 @@ public class TextFieldWithFeedback<T> extends TextField<T>
     super.onRender();
 
     IRequestHandler requestHandler = getRequestCycle().getActiveRequestHandler();
+
+    if (requestHandler instanceof AjaxRequestHandler)
+    {
+      AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
+
+      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this, false));
+    }
+    else
+    {
+      getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
+    }
+
+
+
+
+
+    /*
+       IRequestHandler requestHandler = getRequestCycle().getActiveRequestHandler();
 
     if (requestHandler instanceof AjaxRequestHandler)
     {
@@ -112,5 +156,6 @@ public class TextFieldWithFeedback<T> extends TextField<T>
     {
       getResponse().write(FeedbackUtil.generateFeedbackHtml(getFeedbackMarkupId(), this));
     }
+    */
   }
 }

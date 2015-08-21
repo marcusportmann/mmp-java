@@ -23,6 +23,7 @@ import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
 
@@ -83,6 +84,112 @@ public class FeedbackUtil
    */
   public static String generateFeedbackHtml(String id, Component component)
   {
+    return "";
+
+    /*
+    if (component.hasFeedbackMessage())
+    {
+      FeedbackMessages feedbackMessages = component.getFeedbackMessages();
+
+      FeedbackMessage feedbackMessage = feedbackMessages.first();
+
+      String feedbackHtml = generateFeedbackHtml(id, feedbackMessage);
+
+      // Clear the feedback messages for the component
+      for (FeedbackMessage componentFeedbackMessage : feedbackMessages)
+      {
+        componentFeedbackMessage.markRendered();
+      }
+    }
+
+    return buffer.toString();
+    */
+  }
+
+  /**
+   * Generate the Javascript to display the feedback for the specified component.
+   *
+   * @param id          the id of the component to provide the feedback for
+   * @param component   the component to generate the feedback JavaScript for
+   * @param useDOMReady use the DOM ready event to execute the JavaScript
+   *
+   * @return the HTML for the feedback message
+   */
+  public static String generateFeedbackJavaScript(String id, Component component,
+      boolean useDOMReady)
+  {
+    if (component.hasFeedbackMessage())
+    {
+      FeedbackMessages feedbackMessages = component.getFeedbackMessages();
+
+      FeedbackMessage feedbackMessage = feedbackMessages.first();
+
+      String feedbackId = id + "Feedback";
+
+      StringBuilder buffer = new StringBuilder();
+
+      if (useDOMReady)
+      {
+        buffer.append("$(function() {");
+      }
+
+      buffer.append("if ($('#").append(id).append("')");
+      buffer.append(" && $('#").append(id).append("').parent()");
+      buffer.append(" && $('#").append(id).append("').parent().parent()");
+      buffer.append(" && $('#").append(id).append("').parent().parent().hasClass('form-group')){");
+      buffer.append("$('#").append(id).append("').parent().parent().addClass('");
+
+      if (feedbackMessage.isError())
+      {
+        buffer.append("has-error");
+      }
+      else if (feedbackMessage.isFatal())
+      {
+        buffer.append("has-error");
+      }
+      else if (feedbackMessage.isWarning())
+      {
+        buffer.append("has-warning");
+      }
+      else if (feedbackMessage.isInfo())
+      {
+        buffer.append("has-info");
+      }
+      else if (feedbackMessage.isDebug())
+      {
+        buffer.append("has-success");
+      }
+
+      buffer.append("');");
+      buffer.append("$('#").append(feedbackId).append("').replaceWith('");
+
+      buffer.append(JavaScriptUtils.escapeQuotes(FeedbackUtil.generateFeedbackHtml(feedbackId,
+          feedbackMessage)));
+
+      buffer.append("');");
+      buffer.append("}");
+
+      if (useDOMReady)
+      {
+        buffer.append("});");
+      }
+
+      // Clear the feedback messages for the component
+      for (FeedbackMessage componentFeedbackMessage : feedbackMessages)
+      {
+        componentFeedbackMessage.markRendered();
+      }
+
+      return buffer.toString();
+    }
+    else
+    {
+      return "";
+    }
+  }
+
+  private static String generateFeedbackHtml(String id, FeedbackMessage feedbackMessage)
+  {
     StringBuilder buffer = new StringBuilder();
 
     if (StringUtil.isNullOrEmpty(id))
@@ -94,49 +201,9 @@ public class FeedbackUtil
       buffer.append("<div id=\"").append(id).append("\"");
     }
 
-    if (component.hasFeedbackMessage())
-    {
-      FeedbackMessages feedbackMessages = component.getFeedbackMessages();
-
-      buffer.append(" class=\"");
-
-      FeedbackMessage feedbackMessage = feedbackMessages.first();
-
-      if (feedbackMessage.isError())
-      {
-        buffer.append("feedback-error");
-      }
-      else if (feedbackMessage.isFatal())
-      {
-        buffer.append("feedback-error");
-      }
-      else if (feedbackMessage.isWarning())
-      {
-        buffer.append("feedback-warning");
-      }
-      else if (feedbackMessage.isInfo())
-      {
-        buffer.append("feedback-info");
-      }
-      else if (feedbackMessage.isDebug())
-      {
-        buffer.append("feedback-debug");
-      }
-
-      buffer.append("\">");
-      buffer.append(feedbackMessage.getMessage());
-      buffer.append("</div>");
-
-      // Clear the feedback messages for the component
-      for (FeedbackMessage componentFeedbackMessage : feedbackMessages)
-      {
-        componentFeedbackMessage.markRendered();
-      }
-    }
-    else
-    {
-      buffer.append(" class=\"hidden\"></div>");
-    }
+    buffer.append(" class=\"feedback\">");
+    buffer.append(feedbackMessage.getMessage());
+    buffer.append("</div>");
 
     return buffer.toString();
   }

@@ -50,7 +50,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
 public class OrganisationAdministrationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

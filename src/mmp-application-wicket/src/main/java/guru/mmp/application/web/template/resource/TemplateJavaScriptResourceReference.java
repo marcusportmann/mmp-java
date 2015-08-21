@@ -99,7 +99,7 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
     dependencies.add(TemplateJoinableJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TemplateApiJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TemplateTogglesJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TemplateCustomJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateCoreJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     return dependencies;
   }
