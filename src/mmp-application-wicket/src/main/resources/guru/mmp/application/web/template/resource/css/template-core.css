@@ -8503,14 +8503,6 @@ th.center, td.center
    position: relative;
  }
 
-
-
-
-
-@media screen and (min-width: 767px) and (max-width: 992px)
-{
-}
-
 @media screen and (min-width: 993px)
 {
   .navbar.horizontal-menu .navbar-inner > .nav > li.user-profile > a
@@ -8518,7 +8510,7 @@ th.center, td.center
     padding-left: 45px;
   }
 
-  .navbar.horizontal-menu .navbar-inner > .nav > li.user-profile > a .userpic-32
+  .navbar.horizontal-menu .navbar-inner > .nav > li.user-profile > a > .userpic-32
   {
     position: absolute;
     top: 14px;
