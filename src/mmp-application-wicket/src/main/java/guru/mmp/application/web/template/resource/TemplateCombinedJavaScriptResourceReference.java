@@ -24,35 +24,36 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
- * The <code>TemplateTogglesJavaScriptResourceReference</code> class implements the
- * JavaScript resource reference for the template-toggles.js resource that forms part of the
+ * The <code>TemplateCombinedJavaScriptResourceReference</code> class implements the
+ * JavaScript resource reference for the template-combined.js resource that forms part of the
  * Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class TemplateTogglesJavaScriptResourceReference extends JavaScriptResourceReference
+public class TemplateCombinedJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
   private static final long serialVersionUID = 1000000;
   private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new TemplateTogglesJavaScriptResourceReference());
-  private static final TemplateTogglesJavaScriptResourceReference INSTANCE =
-    new TemplateTogglesJavaScriptResourceReference();
+    JavaScriptHeaderItem.forReference(new TemplateCombinedJavaScriptResourceReference());
+  private static final TemplateCombinedJavaScriptResourceReference INSTANCE =
+    new TemplateCombinedJavaScriptResourceReference();
 
-  private TemplateTogglesJavaScriptResourceReference()
+  private TemplateCombinedJavaScriptResourceReference()
   {
-    super(TemplateTogglesJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "js/template-toggles.js"
-        : "js/template-toggles.js");
+    super(TemplateCombinedJavaScriptResourceReference.class, Debug.inDebugMode()
+        ? "js/template-combined.js"
+        : "js/template-combined.js");
   }
 
   /**
    * Returns the single instance of the JavaScript resource reference for the
-   * template-toggles.js resource that forms part of the Web Application Template.
+   * template-combined.js resource that forms part of the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the
-   *         template-toggles.js resource that forms part of the Web Application Template
+   *         template-combined.js resource that forms part of the Web Application Template
    */
-  public static TemplateTogglesJavaScriptResourceReference get()
+  public static TemplateCombinedJavaScriptResourceReference get()
   {
     return INSTANCE;
   }

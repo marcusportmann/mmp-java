@@ -11,9 +11,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
     <link href="../../resource/css/application.css" rel="StyleSheet" type="text/css"/>
   </head>
-  <body class="page-body maximum-height">
+  <body class="page-body maximum-height boxed-container">
     <div class="page-container maximum-height">
-      <div class="sidebar-menu toggle-others fixed">
+      <div class="sidebar-menu toggle-others">
         <div class="sidebar-menu-inner">
           <header class="logo-env">
             <div class="logo">
@@ -62,73 +62,71 @@
               <form wicket:id="updateForm" id="updateForm" class="form-horizontal">
 
                 <div class="form-group">
-                  <label for="username" class="control-label col-sm-3">Username</label>
-                  <div class="col-sm-9">
+                  <label for="username" class="control-label col-sm-2">Username</label>
+                  <div class="col-sm-10">
                     <input wicket:id="username" id="username" class="form-control" type="text" name="username"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="title" class="control-label col-sm-3">Title</label>
-                  <div class="col-sm-9">
+                  <label for="title" class="control-label col-sm-2">Title</label>
+                  <div class="col-sm-10">
                     <select wicket:id="title" id="title" class="form-control" type="text" name="title"></select>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="firstNames" class="control-label col-sm-3">First Name(s)</label>
-                  <div class="col-sm-9">
+                  <label for="firstNames" class="control-label col-sm-2">First Name(s)</label>
+                  <div class="col-sm-10">
                     <input wicket:id="firstNames" id="firstNames" class="form-control" type="text" name="firstNames"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="lastName" class="control-label col-sm-3">Last Name</label>
-                  <div class="col-sm-9">
+                  <label for="lastName" class="control-label col-sm-2">Last Name</label>
+                  <div class="col-sm-10">
                     <input wicket:id="lastName" id="lastName" class="form-control" type="text" name="lastName"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="email" class="control-label col-sm-3">E-Mail</label>
-                  <div class="col-sm-9">
+                  <label for="email" class="control-label col-sm-2">E-Mail</label>
+                  <div class="col-sm-10">
                     <input wicket:id="email" id="email" class="form-control" type="text" name="email"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="phoneNumber" class="control-label col-sm-3">Phone Number</label>
-                  <div class="col-sm-9">
+                  <label for="phoneNumber" class="control-label col-sm-2">Phone Number</label>
+                  <div class="col-sm-10">
                     <input wicket:id="phoneNumber" id="phoneNumber" class="form-control" type="text" name="phoneNumber"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="faxNumber" class="control-label col-sm-3">Fax Number</label>
-                  <div class="col-sm-9">
+                  <label for="faxNumber" class="control-label col-sm-2">Fax Number</label>
+                  <div class="col-sm-10">
                     <input wicket:id="faxNumber" id="faxNumber" class="form-control" type="text" name="faxNumber"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="mobileNumber" class="control-label col-sm-3">Mobile Number</label>
-                  <div class="col-sm-9">
+                  <label for="mobileNumber" class="control-label col-sm-2">Mobile Number</label>
+                  <div class="col-sm-10">
                     <input wicket:id="mobileNumber" id="mobileNumber" class="form-control" type="text" name="mobileNumber"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="description" class="control-label col-sm-3">Description</label>
-                  <div class="col-sm-9">
+                  <label for="description" class="control-label col-sm-2">Description</label>
+                  <div class="col-sm-10">
                     <input wicket:id="description" id="description" class="form-control" type="text" name="description"/>
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <div class="col-sm-12 form-buttons">
-                    <button wicket:id="cancelButton" type="submit" class="btn btn-default">Cancel</button>
-                    <button wicket:id="updateButton" type="submit" class="btn btn-primary">Update</button>
-                  </div>
+                <div class="form-buttons">
+                  <button wicket:id="updateButton" type="submit" class="btn btn-primary pull-right">Update</button>
+                  <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right">Cancel</button>
                 </div>
 
               </form>

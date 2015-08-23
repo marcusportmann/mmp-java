@@ -189,7 +189,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     /*getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
         "js/template-web-application.js", TemplateBootstrapJavaScriptResourceReference.get(),
         TemplateResizeableJavaScriptResourceReference.get(),
-        TemplateJoinableJavaScriptResourceReference.get(),
+        TemplateCombinedJavaScriptResourceReference.get(),
         TemplateApiJavaScriptResourceReference.get(),
         TemplateTogglesJavaScriptResourceReference.get(),
         TemplateCustomJavaScriptResourceReference.get(), TemplateJavaScriptResourceReference.get());
@@ -213,7 +213,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
      * // Template JavaScript
      * TemplateBootstrapJavaScriptResourceReference.get(),
      * TemplateResizeableJavaScriptResourceReference.get(),
-     * TemplateJoinableJavaScriptResourceReference.get(),
+     * TemplateCombinedJavaScriptResourceReference.get(),
      * TemplateApiJavaScriptResourceReference.get(),
      * TemplateTogglesJavaScriptResourceReference.get(),
      * TemplateCustomJavaScriptResourceReference.get(),

@@ -88,6 +88,7 @@ public class TemplateCssResourceReference
     List<HeaderItem> dependencies = new ArrayList<>();
 
     dependencies.add(FontAwesomeCssResourceReference.getCssHeaderItem());
+    dependencies.add(TemplateCoreCssResourceReference.getCssHeaderItem());
     dependencies.add(TemplateComponentsCssResourceReference.getCssHeaderItem());
 
     return dependencies;

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:wicket="http://wicket.apache.org/"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,12 +18,6 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/fontawesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/daterangepicker/daterangepicker-bs3.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/select2/select2.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/select2/select2-bootstrap.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
     <link rel="StyleSheet" type="text/css" href="../../resource/css/application.css"/>
 
     <!-- OPTIONAL RESOURCES -->
@@ -41,24 +34,13 @@
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/selectboxit/jquery.selectBoxIt.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/daterangepicker/daterangepicker.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-bootstrap.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-resizeable.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-joinable.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-api.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-toggles.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-custom.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template.js"></script>
-
-    <!-- OPTIONAL SCRIPTS -->
-    <!-- NOTE: Typeahead requires Handlebars -->
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/tagsinput/bootstrap-tagsinput.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/multiselect/js/jquery.multi-select.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/typeahead/typeahead.bundle.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/handlebars/handlebars.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-combined.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-core.js"></script>
 
   </head>
-  <body class="page-body">
+  <body class="page-body boxed-container">
     <div class="page-container">
-      <div class="sidebar-menu toggle-others fixed">
+      <div class="sidebar-menu toggle-others">
         <div class="sidebar-menu-inner">
 
           <header class="logo-env">
@@ -555,14 +537,14 @@
             </thead>
             <tbody>
               <tr wicket:id="user">
-                <td><span wicket:id="username">[Username]</span></td>
-                <td><span wicket:id="firstNames">[First Name(s)]</span></td>
-                <td><span wicket:id="lastName">[Surname]</span></td>
+                <td><span>[Username]</span></td>
+                <td><span>[First Name(s)]</span></td>
+                <td><span>[Surname]</span></td>
                 <td class="four-actions">
-                  <a wicket:id="userGroupsLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                  <a wicket:id="updateLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                  <a wicket:id="resetPasswordLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                  <a wicket:id="removeLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
+                  <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
+                  <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
+                  <a href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
                 </td>
               </tr>
               <tr>
@@ -723,6 +705,13 @@
           </div>
 
         </div>
+
+
+
+
+
+
+
 
       </div>
     </div>

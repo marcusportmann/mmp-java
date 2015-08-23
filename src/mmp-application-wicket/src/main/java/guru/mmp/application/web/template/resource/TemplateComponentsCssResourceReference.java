@@ -74,19 +74,4 @@ public class TemplateComponentsCssResourceReference
   {
     return CSS_HEADER_ITEM;
   }
-
-  /**
-   * Returns the dependencies for the CSS resource reference.
-   *
-   * @return the dependencies for the CSS resource reference
-   */
-  @Override
-  public List<HeaderItem> getDependencies()
-  {
-    List<HeaderItem> dependencies = new ArrayList<>();
-
-    dependencies.add(TemplateFormsCssResourceReference.getCssHeaderItem());
-
-    return dependencies;
-  }
 }

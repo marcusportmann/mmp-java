@@ -10,9 +10,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
   </head>
-  <body class="page-body maximum-height">
+  <body class="page-body maximum-height boxed-container">
     <div class="page-container maximum-height">
-      <div class="sidebar-menu toggle-others fixed">
+      <div class="sidebar-menu toggle-others">
         <div class="sidebar-menu-inner">
           <header class="logo-env">
             <div class="logo">
@@ -62,11 +62,9 @@
 
                 <div wicket:id="codeCategory"></div>
 
-                <div class="form-group">
-                  <div class="col-sm-12 form-buttons">
-                    <button wicket:id="cancelButton" type="submit" class="btn btn-default">Cancel</button>
-                    <button wicket:id="addButton" type="submit" class="btn btn-primary">Add</button>
-                  </div>
+                <div class="form-buttons">
+                  <button wicket:id="addButton" type="submit" class="btn btn-primary pull-right">Add</button>
+                  <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right">Cancel</button>
                 </div>
 
               </form>

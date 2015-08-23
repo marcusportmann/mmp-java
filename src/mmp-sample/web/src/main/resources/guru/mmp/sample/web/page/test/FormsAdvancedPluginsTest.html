@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:wicket="http://wicket.apache.org/"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,11 +17,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/fontawesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/daterangepicker/daterangepicker-bs3.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/select2/select2.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/select2/select2-bootstrap.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
     <link rel="StyleSheet" type="text/css" href="../../resource/css/application.css"/>
 
     <!-- OPTIONAL RESOURCES -->
@@ -39,9 +36,8 @@
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/selectboxit/jquery.selectBoxIt.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/daterangepicker/daterangepicker.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-bootstrap.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-toggles.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-combined.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-core.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template.js"></script>
 
     <!-- OPTIONAL SCRIPTS -->
     <!-- NOTE: Typeahead requires Handlebars -->
@@ -51,9 +47,9 @@
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/handlebars/handlebars.min.js"></script>
 
   </head>
-  <body class="page-body">
+  <body class="page-body boxed-container">
     <div class="page-container">
-      <div class="sidebar-menu toggle-others fixed">
+      <div class="sidebar-menu toggle-others">
         <div class="sidebar-menu-inner">
 
           <header class="logo-env">
@@ -322,7 +318,7 @@
                 </li>
 
                 <li class="external">
-                  <a href="mailbox-main.html">
+                  <a href="#">
                     <span>All Messages</span>
                     <i class="fa-link-ext"></i>
                   </a>
@@ -448,32 +444,32 @@
           <ul class="user-info-menu right-links list-inline list-unstyled">
             <li class="dropdown user-profile">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img class="img-circle img-inline userpic-32" width="22" height="22"/>
+                <div class="img-circle userpic-32"></div>
                 <span>Marcus Portmann <i class="fa-angle-down"></i></span>
               </a>
 
 
               <ul class="dropdown-menu user-profile-menu list-unstyled">
                 <li>
-                  <a href="#settings">
+                  <a href="#">
                     <i class="fa-wrench"></i>
                     Settings
                   </a>
                 </li>
                 <li>
-                  <a href="#profile">
+                  <a href="#">
                     <i class="fa-user"></i>
                     Profile
                   </a>
                 </li>
                 <li>
-                  <a href="#help">
+                  <a href="#">
                     <i class="fa-info"></i>
                     Help
                   </a>
                 </li>
                 <li class="last">
-                  <a href="extra-lockscreen.html">
+                  <a href="#">
                     <i class="fa-lock"></i>
                     Logout
                   </a>
@@ -489,9 +485,9 @@
 
         <div class="page-title">
           <div class="title-env">
-            <h1 wicket:id="pageHeading" class="title">Home</h1>
+            <h1 class="title">Home</h1>
 
-            <p wicket:id="pageSubHeading" class="description">This is a test description</p>
+            <p class="description">This is a test description</p>
           </div>
           <div class="breadcrumb-env">
             <ol class="breadcrumb bc-1">
@@ -529,12 +525,14 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         $("#s2example-1").select2({
                           placeholder: 'Select your country...',
                           allowClear: true,
                           dropdownAutoWidth: true,
-                        }).on('select2-open', function () {
+                        }).on('select2-open', function ()
+                        {
                           // Adding Custom Scrollbar
                           $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                         });
@@ -709,12 +707,14 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         $("#s2example-2").select2({
                           placeholder: 'Choose your favorite US Countries',
                           allowClear: true,
-                          dropdownAutoWidth: true,
-                        }).on('select2-open', function () {
+                          dropdownAutoWidth: true
+                        }).on('select2-open', function ()
+                        {
                           // Adding Custom Scrollbar
                           $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                         });
@@ -788,17 +788,20 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         $("#s2example-3").select2({
                           placeholder: 'Select country...',
                           allowClear: true,
                           dropdownAutoWidth: true,
                           minimumResultsForSearch: -1, // Hide the search bar
-                          formatResult: function (state) {
+                          formatResult: function (state)
+                          {
                             return '<div style="background:url(http://www.geonames.org/flags/x/' + state.id + '.gif) no-repeat center center;background-size:100%;display:inline-block;position:relative;width:20px;height:15px;margin-right: 10px;top:2px;"></div>'
                               + state.text;
                           }
-                        }).on('select2-open', function () {
+                        }).on('select2-open', function ()
+                        {
                           // Adding Custom Scrollbar
                           $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                         });
@@ -836,7 +839,8 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         $("#s2example-4").select2({
                           minimumInputLength: 1,
                           placeholder: 'Search',
@@ -844,20 +848,24 @@
                             url: "data/select2-remote-data.php",
                             dataType: 'json',
                             quietMillis: 100,
-                            data: function (term, page) {
+                            data: function (term, page)
+                            {
                               return {
                                 limit: -1,
                                 q: term
                               };
                             },
-                            results: function (data, page) {
+                            results: function (data, page)
+                            {
                               return {results: data}
                             }
                           },
-                          formatResult: function (student) {
+                          formatResult: function (student)
+                          {
                             return "<div class='select2-user-result'>" + student.name + "</div>";
                           },
-                          formatSelection: function (student) {
+                          formatSelection: function (student)
+                          {
                             return student.name;
                           }
 
@@ -904,8 +912,10 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
-                        $("#sboxit-1").selectBoxIt().on('open', function () {
+                      jQuery(document).ready(function ($)
+                      {
+                        $("#sboxit-1").selectBoxIt().on('open', function ()
+                        {
                           // Adding Custom Scrollbar
                           $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
                         });
@@ -943,10 +953,12 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         $("#sboxit-2").selectBoxIt({
                           showFirstOption: false
-                        }).on('open', function () {
+                        }).on('open', function ()
+                        {
                           // Adding Custom Scrollbar
                           $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
                         });
@@ -985,7 +997,8 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         $("#sboxit-3").selectBoxIt({
                           showFirstOption: false,
                           "native": true
@@ -1025,7 +1038,8 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         $("#sboxit-4").selectBoxIt({
                           showEffect: 'fadeIn',
                           hideEffect: 'fadeOut'
@@ -1100,14 +1114,16 @@
                     <script type="text/javascript">
                       /*<![CDATA[*/
 
-                      jQuery(document).ready(function ($) {
+                      jQuery(document).ready(function ($)
+                      {
                         var i = -1,
                           colors = ['primary', 'secondary', 'red', 'blue', 'warning', 'success', 'purple'];
 
                         colors = shuffleArray(colors);
 
                         $("#tagsinput-2").tagsinput({
-                          tagClass: function () {
+                          tagClass: function ()
+                          {
                             i++;
                             return "label label-" + colors[i % colors.length];
                           }
@@ -1115,8 +1131,10 @@
                       });
 
                       // Just for demo purpose
-                      function shuffleArray(array) {
-                        for (var i = array.length - 1; i > 0; i--) {
+                      function shuffleArray(array)
+                      {
+                        for (var i = array.length - 1; i > 0; i--)
+                        {
                           var j = Math.floor(Math.random() * (i + 1));
                           var temp = array[i];
                           array[i] = array[j];
@@ -1244,13 +1262,16 @@
                       <script type="text/javascript">
                         /*<![CDATA[*/
 
-                        jQuery(document).ready(function ($) {
+                        jQuery(document).ready(function ($)
+                        {
                           $("#multi-select").multiSelect({
-                            afterInit: function () {
+                            afterInit: function ()
+                            {
                               // Add alternative scrollbar to list
                               this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
                             },
-                            afterSelect: function () {
+                            afterSelect: function ()
+                            {
                               // Update scrollbar size
                               this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
                             }
@@ -1316,24 +1337,29 @@
                 <form role="form" class="form-horizontal">
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="tagsinput-1">Auto-suggest (local dataset)</label>
+                    <label class="col-sm-4 control-label" for="tagsinput-1">Auto-suggest (local dataset)</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <script type="text/javascript">
                         /*<![CDATA[*/
 
-                        jQuery(document).ready(function ($) {
+                        jQuery(document).ready(function ($)
+                        {
                           var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
 
-                          var substringMatcher = function (strs) {
-                            return function findMatches(q, cb) {
+                          var substringMatcher = function (strs)
+                          {
+                            return function findMatches(q, cb)
+                            {
                               var matches, substrRegex;
                               matches = [];
                               substrRegex = new RegExp(q, 'i');
 
-                              $.each(strs, function (i, str) {
-                                if (substrRegex.test(str)) {
+                              $.each(strs, function (i, str)
+                              {
+                                if (substrRegex.test(str))
+                                {
                                   matches.push({value: str});
                                 }
                               });
@@ -1352,10 +1378,12 @@
                               displayKey: 'value',
                               source: substringMatcher(states)
                             })
-                            .bind('typeahead:opened', function () {
+                            .bind('typeahead:opened', function ()
+                            {
                               $(this).data('ttTypeahead').dropdown.$menu.addClass('overflow-hidden').perfectScrollbar();
                             })
-                            .on('keyup', function () {
+                            .on('keyup', function ()
+                            {
                               $(this).data('ttTypeahead').dropdown.$menu.perfectScrollbar('update');
                             });
 
@@ -1377,22 +1405,25 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="tagsinput-2">Pre-fetched dataset</label>
+                    <label class="col-sm-4 control-label" for="tagsinput-2">Pre-fetched dataset</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <script type="text/javascript">
                         /*<![CDATA[*/
 
-                        jQuery(document).ready(function ($) {
+                        jQuery(document).ready(function ($)
+                        {
                           var names = new Bloodhound({
                             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                             queryTokenizer: Bloodhound.tokenizers.whitespace,
                             limit: 10,
                             prefetch: {
                               url: 'names.json',
-                              filter: function (list) {
-                                return $.map(list, function (name) {
+                              filter: function (list)
+                              {
+                                return $.map(list, function (name)
+                                {
                                   return {name: name};
                                 });
                               }
@@ -1424,14 +1455,15 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="tagsinput-2">Remote data suggestion</label>
+                    <label class="col-sm-4 control-label" for="tagsinput-2">Remote data suggestion</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <script type="text/javascript">
                         /*<![CDATA[*/
 
-                        jQuery(document).ready(function ($) {
+                        jQuery(document).ready(function ($)
+                        {
                           var name_randomizer = new Bloodhound({
                             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                             queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -1463,14 +1495,15 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="tagsinput-2">Templating suggestions</label>
+                    <label class="col-sm-4 control-label" for="tagsinput-2">Templating suggestions</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <script type="text/javascript">
                         /*<![CDATA[*/
 
-                        jQuery(document).ready(function ($) {
+                        jQuery(document).ready(function ($)
+                        {
                           var harry_potter_movies = new Bloodhound({
                             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                             queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -1492,10 +1525,12 @@
                               suggestion: Handlebars.compile('<p class="clearfix"><img src="data/{{cover}}" class="img-responsive pull-left" width="30" style="margin-right:10px;" /><strong>{{value}}</strong> &mdash; {{year}}<br /><span style="display:inline-block; height: 22px; overflow: hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 400px;">{{desc}}</span></p>')
                             }
                           })
-                            .bind('typeahead:opened', function () {
+                            .bind('typeahead:opened', function ()
+                            {
                               $(this).data('ttTypeahead').dropdown.$menu.addClass('overflow-hidden').perfectScrollbar();
                             })
-                            .on('keyup', function () {
+                            .on('keyup', function ()
+                            {
                               $(this).data('ttTypeahead').dropdown.$menu.perfectScrollbar('update');
                             });
                         });
@@ -1539,9 +1574,9 @@
                 <form role="form" class="form-horizontal">
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Date Picker (popup)</label>
+                    <label class="col-sm-4 control-label">Date Picker (popup)</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <div class="input-group">
                         <input type="text" class="form-control datepicker" data-format="D, dd MM yyyy">
 
@@ -1555,9 +1590,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Date Picker (start/end date)</label>
+                    <label class="col-sm-4 control-label">Date Picker (start/end date)</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <input type="text" class="form-control datepicker" data-start-date="-2d" data-end-date="+1w">
                     </div>
                   </div>
@@ -1565,9 +1600,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Date Picker (disabled days Mo, We)</label>
+                    <label class="col-sm-4 control-label">Date Picker (disabled days)</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <input type="text" class="form-control datepicker" data-disabled-days="1,3">
                     </div>
                   </div>
@@ -1575,9 +1610,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">2 Clicks Date Select</label>
+                    <label class="col-sm-4 control-label">2 Clicks Date Select</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <input type="text" class="form-control datepicker" data-start-view="1">
                     </div>
                   </div>
@@ -1585,9 +1620,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">3 Clicks Date Select</label>
+                    <label class="col-sm-4 control-label">3 Clicks Date Select</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                       <input type="text" class="form-control datepicker" data-start-view="2">
                     </div>
                   </div>
@@ -1623,9 +1658,9 @@
                 <form role="form" class="form-horizontal">
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Time Picker (input-group)</label>
+                    <label class="col-sm-4 control-label">Time Picker (input-group)</label>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="input-group input-group-minimal">
                         <input type="text" class="form-control timepicker" data-template="dropdown" data-show-seconds="true" data-default-time="11:25 AM" data-show-meridian="true" data-minute-step="5" data-second-step="5"/>
 
@@ -1639,9 +1674,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Time Picker (Dropdown)</label>
+                    <label class="col-sm-4 control-label">Time Picker (Dropdown)</label>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                       <input type="text" class="form-control timepicker" data-template="dropdown" data-show-seconds="true" data-default-time="11:25 AM" data-show-meridian="true" data-minute-step="5"/>
                     </div>
                   </div>
@@ -1649,10 +1684,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Date &amp; Time Picker</label>
+                    <label class="col-sm-4 control-label">Date &amp; Time Picker</label>
 
-                    <div class="col-sm-5">
-
+                    <div class="col-sm-8">
                       <div class="date-and-time">
                         <input type="text" class="form-control datepicker" data-format="D, dd MM yyyy">
                         <input type="text" class="form-control timepicker" data-template="dropdown" data-show-seconds="true" data-default-time="11:25 AM" data-show-meridian="true" data-minute-step="5" data-second-step="5"/>
@@ -1690,9 +1724,9 @@
                 <form role="form" class="form-horizontal">
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="field-1">Date Range Picker</label>
+                    <label class="col-sm-4 control-label" for="field-1">Date Range Picker</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <input type="text" id="field-1" class="form-control daterange"/>
 
@@ -1702,9 +1736,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="field-2">Selected Date Range</label>
+                    <label class="col-sm-4 control-label" for="field-2">Selected Date Range</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <input type="text" id="field-2" class="form-control daterange" data-format="YYYY-MM-DD" data-start-date="2013-08-02" data-end-date="2013-08-15" data-separator=","/>
 
@@ -1714,9 +1748,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="field-3">Disabled Date Range</label>
+                    <label class="col-sm-4 control-label" for="field-3">Disabled Date Range</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <input type="text" id="field-3" class="form-control daterange" data-min-date="12-01-2014" data-max-date="12-12-2014"/>
 
@@ -1726,9 +1760,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="field-4">Date Range Callback</label>
+                    <label class="col-sm-4 control-label" for="field-4">Date Range Callback</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <input type="text" id="field-4" class="form-control daterange" data-callback/>
 
@@ -1738,9 +1772,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="field-5">Date Range with Timepicker</label>
+                    <label class="col-sm-4 control-label" for="field-5">Date Range with Timepicker</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <input type="text" id="field-5" class="form-control daterange" data-time-picker="true" data-time-picker-increment="5" data-format="MM/DD/YYYY h:mm A"/>
 
@@ -1750,9 +1784,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Date Range Inline</label>
+                    <label class="col-sm-4 control-label">Date Range Inline</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <div class="daterange daterange-inline" data-format="MMMM D, YYYY" data-start-date="November 22, 2014" data-end-date="December 6, 2014">
                         <i class="fa-calendar"></i>
@@ -1765,9 +1799,9 @@
                   <div class="form-group-separator"></div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Date Range w/ Predefined Ranges</label>
+                    <label class="col-sm-4 control-label">Date Range w/ Ranges</label>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
 
                       <div class="daterange daterange-inline add-ranges" data-format="MMMM D, YYYY" data-start-date="November 24, 2014" data-end-date="December 20, 2014">
                         <i class="fa-calendar"></i>
@@ -1776,27 +1810,11 @@
 
                     </div>
                   </div>
-
                 </form>
-
               </div>
             </div>
-
           </div>
         </div>
-
-        <!--
-        <footer class="main-footer sticky footer-type-1">
-          <div class="footer-inner">
-            <div class="footer-text">
-              &copy; 2015 <strong><span class="copyright-name"></span></strong>
-            </div>
-            <div class="go-up">
-              <a href="#" rel="go-top"><i class="fa-angle-up"></i></a>
-            </div>
-          </div>
-        </footer>
-        -->
 
       </div>
     </div>

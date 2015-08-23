@@ -95,10 +95,7 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
     dependencies.add(RWDTableJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     dependencies.add(TemplateBootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TemplateResizeableJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TemplateJoinableJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TemplateApiJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TemplateTogglesJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TemplateCombinedJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TemplateCoreJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     return dependencies;
