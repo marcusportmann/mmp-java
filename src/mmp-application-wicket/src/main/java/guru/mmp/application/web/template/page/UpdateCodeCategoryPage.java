@@ -66,9 +66,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
   public UpdateCodeCategoryPage(final PageReference previousPage,
       final IModel<CodeCategory> codeCategoryModel)
   {
-    super("Update Code Category", "Update Code Category");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Update Code Category");
+    super("Update Code Category");
 
     try
     {

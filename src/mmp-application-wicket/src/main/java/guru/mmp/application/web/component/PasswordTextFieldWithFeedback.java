@@ -18,9 +18,12 @@ package guru.mmp.application.web.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 import guru.mmp.application.web.util.FeedbackUtil;
+
 import org.apache.wicket.ajax.AjaxRequestHandler;
-import org.apache.wicket.core.util.string.JavaScriptUtils;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
@@ -38,7 +41,6 @@ import org.apache.wicket.request.IRequestHandler;
 public class PasswordTextFieldWithFeedback extends PasswordTextField
 {
   private static final long serialVersionUID = 1000000;
-  private String feedbackMarkupId;
 
   /**
    * Constructs a new <code>PasswordTextFieldWithFeedback</code>.
@@ -48,8 +50,6 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
   public PasswordTextFieldWithFeedback(String id)
   {
     super(id);
-
-    feedbackMarkupId = id + "Feedback";
   }
 
   /**
@@ -61,18 +61,35 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
   public PasswordTextFieldWithFeedback(String id, IModel<String> model)
   {
     super(id, model);
-
-    feedbackMarkupId = id + "Feedback";
   }
 
   /**
-   * Returns the markup ID of the feedback for the form component.
+   * @see org.apache.wicket.markup.html.form.PasswordTextField#renderHead(IHeaderResponse)
    *
-   * @return the markup ID of the feedback for the form component
+   * @param response the Wicket header response
    */
-  public String getFeedbackMarkupId()
+  @Override
+  public void renderHead(IHeaderResponse response)
   {
-    return feedbackMarkupId;
+    super.renderHead(response);
+
+    response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
+
+    IRequestHandler requestHandler = getRequestCycle().getActiveRequestHandler();
+
+    if (requestHandler instanceof AjaxRequestHandler)
+    {
+      AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
+
+      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
+          false));
+    }
+    else
+    {
+      response.render(
+          JavaScriptHeaderItem.forScript(
+            FeedbackUtil.generateFeedbackJavaScript(getId(), this, true), null));
+    }
   }
 
   /**
@@ -100,16 +117,12 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      ajaxRequestHandler.appendJavaScript(
-          String.format(
-            "if (Wicket.$('%s')) { Wicket.DOM.replace(Wicket.$('%s'), '%s'); };",
-              getFeedbackMarkupId(), getFeedbackMarkupId(),
-                JavaScriptUtils.escapeQuotes(
-                  FeedbackUtil.generateFeedbackHtml(getFeedbackMarkupId(), this))));
+      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
+          false));
     }
     else
     {
-      getResponse().write(FeedbackUtil.generateFeedbackHtml(getFeedbackMarkupId(), this));
+      getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
     }
   }
 }

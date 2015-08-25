@@ -18,17 +18,20 @@ package guru.mmp.application.web.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 import guru.mmp.application.web.util.FeedbackUtil;
+
 import org.apache.wicket.ajax.AjaxRequestHandler;
-import org.apache.wicket.core.util.string.JavaScriptUtils;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>DropDownChoiceWithFeedback</code> class extends the Wicket <code>DropDownChoice</code>
@@ -44,7 +47,6 @@ import java.util.List;
 public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
 {
   private static final long serialVersionUID = 1000000;
-  private String feedbackMarkupId;
 
   /**
    * Constructs a new <code>DropDownChoiceWithFeedback</code>.
@@ -54,8 +56,6 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
   public DropDownChoiceWithFeedback(String id)
   {
     super(id);
-
-    feedbackMarkupId = id + "Feedback";
   }
 
   /**
@@ -67,8 +67,6 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
   public DropDownChoiceWithFeedback(java.lang.String id, List<? extends T> choices)
   {
     super(id, choices);
-
-    feedbackMarkupId = id + "Feedback";
   }
 
   /**
@@ -81,8 +79,6 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
   public DropDownChoiceWithFeedback(java.lang.String id, IModel<T> model, List<? extends T> choices)
   {
     super(id, model, choices);
-
-    feedbackMarkupId = id + "Feedback";
   }
 
   /**
@@ -96,8 +92,6 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
       IChoiceRenderer<? super T> renderer)
   {
     super(id, choices, renderer);
-
-    feedbackMarkupId = id + "Feedback";
   }
 
   /**
@@ -112,18 +106,35 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
       List<? extends T> choices, IChoiceRenderer<? super T> renderer)
   {
     super(id, model, choices, renderer);
-
-    feedbackMarkupId = id + "Feedback";
   }
 
   /**
-   * Returns the markup ID of the feedback for the form component.
+   * @see org.apache.wicket.markup.html.form.DropDownChoice#renderHead(IHeaderResponse)
    *
-   * @return the markup ID of the feedback for the form component
+   * @param response the Wicket header response
    */
-  public String getFeedbackMarkupId()
+  @Override
+  public void renderHead(IHeaderResponse response)
   {
-    return feedbackMarkupId;
+    super.renderHead(response);
+
+    response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
+
+    IRequestHandler requestHandler = getRequestCycle().getActiveRequestHandler();
+
+    if (requestHandler instanceof AjaxRequestHandler)
+    {
+      AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
+
+      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
+          false));
+    }
+    else
+    {
+      response.render(
+          JavaScriptHeaderItem.forScript(
+            FeedbackUtil.generateFeedbackJavaScript(getId(), this, true), null));
+    }
   }
 
   /**
@@ -151,16 +162,12 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      ajaxRequestHandler.appendJavaScript(
-          String.format(
-            "if (Wicket.$('%s')) { Wicket.DOM.replace(Wicket.$('%s'), '%s'); };",
-              getFeedbackMarkupId(), getFeedbackMarkupId(),
-                JavaScriptUtils.escapeQuotes(
-                  FeedbackUtil.generateFeedbackHtml(getFeedbackMarkupId(), this))));
+      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
+          false));
     }
     else
     {
-      getResponse().write(FeedbackUtil.generateFeedbackHtml(getFeedbackMarkupId(), this));
+      getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
     }
   }
 }

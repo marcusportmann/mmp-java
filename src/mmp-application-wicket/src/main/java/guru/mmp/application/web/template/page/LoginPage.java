@@ -30,6 +30,7 @@ import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -41,13 +42,15 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>LoginPage</code> class implements the "Login"
@@ -93,14 +96,14 @@ public class LoginPage extends WebPage
 
     // The "username" field
     TextField<String> usernameField = new TextFieldWithFeedback<>("username",
-      new PropertyModel<String>(this, "username"));
+      new PropertyModel<>(this, "username"));
     usernameField.setRequired(true);
     usernameField.add(new DefaultFocusBehavior());
     loginForm.add(usernameField);
 
     // The "password" field
     PasswordTextField passwordField = new PasswordTextFieldWithFeedback("password",
-      new PropertyModel<String>(this, "password"));
+      new PropertyModel<>(this, "password"));
     passwordField.setRequired(true);
     loginForm.add(passwordField);
 
@@ -216,27 +219,6 @@ public class LoginPage extends WebPage
         }
       }
     });
-
-//  TODO: DELETE THIS -- MARCUS
-//     // Setup the forgotForm
-//     Form<Void> forgotForm = new Form<>("forgotForm");
-//     forgotForm.setMarkupId("forgotForm");
-//     forgotForm.setOutputMarkupId(true);
-//     add(forgotForm);
-//
-//     // The "submitButton" button
-//     forgotForm.add(new AjaxFallbackButton("submitButton", forgotForm)
-//     {
-//       private static final long serialVersionUID = 1000000;
-//
-//       @Override
-//       protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-//       {
-//         warn("Forgotten password support is not available.");
-//
-//         target.add(alerts);
-//       }
-//     });
   }
 
   /**
@@ -267,20 +249,6 @@ public class LoginPage extends WebPage
 
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-
-    // TODO: DELETE THIS -- MARCUS
-//
-//  // Add the Web Application Template theme CSS header item
-//  response.render(TemplateWebApplication.getThemeCssHeaderItem());
-//
-//  // Add the application CSS header item
-//  response.render(getApplicationCssHeaderItem());
-//
-//  // Add the Web Application Template JavaScript header item
-//  response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-//
-//  // Add the JavaScript script that should be executed when the DOM is ready
-//  response.render(OnDomReadyHeaderItem.forScript(LOGIN_ON_DOM_READY_JAVA_SCRIPT));
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()

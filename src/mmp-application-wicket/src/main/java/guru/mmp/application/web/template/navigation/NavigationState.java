@@ -22,10 +22,11 @@ import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
-import java.io.Serializable;
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.util.List;
 
 /**
  * The <code>NavigationState</code> class stores the current navigation state.
@@ -36,6 +37,11 @@ public class NavigationState
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The cached user menu HTML.
+   */
+  private String cachedUserMenuHTML;
 
   /**
    * The cached breadcrumbs HTML for the last page that was accessed that was part of the
@@ -60,10 +66,14 @@ public class NavigationState
   private PageParameters lastPageAccessedInNavigationHierarchyParameters;
 
   /**
-   * The cached top navigation HTML for the last page that was accessed that was part of the
-   * navigation hierarchy.
+   * Returns the cached user menu HTML.
+   *
+   * @return the cached user menu HTML
    */
-  private String lastPageAccessedInNavigationHierarchyTopNavigationHTML;
+  public String getCachedUserMenuHTML()
+  {
+    return cachedUserMenuHTML;
+  }
 
   /**
    * Returns the cached breadcrumbs HTML for the last page that was accessed that was part of the
@@ -90,15 +100,15 @@ public class NavigationState
   }
 
   /**
-   * Returns the cached top navigation HTML for the last page that was accessed that was part of
-   * the navigation hierarchy.
-   *
-   * @return the cached top navigation HTML for the last page that was accessed that was part of
-   *         the navigation hierarchy
+   * Invalidate the navigation state.
    */
-  public String getLastPageAccessedInNavigationHierarchyTopNavigationHTML()
+  public void invalidate()
   {
-    return lastPageAccessedInNavigationHierarchyTopNavigationHTML;
+    cachedUserMenuHTML = null;
+    lastPageAccessedInNavigationHierarchyBreadcrumbsHTML = null;
+    lastPageAccessedInNavigationHierarchyClass = null;
+    lastPageAccessedInNavigationHierarchyMainNavigationHTML = null;
+    lastPageAccessedInNavigationHierarchyParameters = null;
   }
 
   /**
@@ -168,6 +178,16 @@ public class NavigationState
   }
 
   /**
+   * Set the cached user menu HTML.
+   *
+   * @param cachedUserMenuHTML the cached user menu HTML
+   */
+  public void setCachedUserMenuHTML(String cachedUserMenuHTML)
+  {
+    this.cachedUserMenuHTML = cachedUserMenuHTML;
+  }
+
+  /**
    * Set the last page that was accessed that was part of the navigation hierarchy.
    *
    * @param page the last page that was accessed that was part of the navigation hierarchy
@@ -201,17 +221,5 @@ public class NavigationState
   public void setLastPageAccessedInNavigationHierarchyMainNavigationHTML(String mainNavigationHTML)
   {
     this.lastPageAccessedInNavigationHierarchyMainNavigationHTML = mainNavigationHTML;
-  }
-
-  /**
-   * Set the cached top navigation HTML for the last page that was accessed that was part of the
-   * navigation hierarchy.
-   *
-   * @param topNavigationHTML the cached top navigation HTML for the last page that was accessed
-   *                          that was part of the navigation hierarchy
-   */
-  public void setLastPageAccessedInNavigationHierarchyTopNavigationHTML(String topNavigationHTML)
-  {
-    this.lastPageAccessedInNavigationHierarchyTopNavigationHTML = topNavigationHTML;
   }
 }

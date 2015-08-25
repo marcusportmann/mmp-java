@@ -64,9 +64,7 @@ public class UpdateOrganisationPage extends TemplateWebPage
   public UpdateOrganisationPage(final PageReference previousPage,
       final IModel<Organisation> organisationModel)
   {
-    super("Update Organisation", "Update Organisation");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Update Organisation");
+    super("Update Organisation");
 
     try
     {

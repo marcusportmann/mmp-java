@@ -68,9 +68,7 @@ public class GroupAdministrationPage extends TemplateWebPage
    */
   public GroupAdministrationPage()
   {
-    super("Groups", "Group Administration");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Group Administration");
+    super("Groups");
 
     try
     {

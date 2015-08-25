@@ -72,9 +72,7 @@ public class UserAdministrationPage extends TemplateWebPage
    */
   public UserAdministrationPage()
   {
-    super("User Administration", "User Administration");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | User Administration");
+    super("User Administration");
 
     try
     {

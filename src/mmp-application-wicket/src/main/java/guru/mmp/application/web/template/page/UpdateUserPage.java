@@ -66,8 +66,7 @@ public class UpdateUserPage extends TemplateWebPage
    */
   public UpdateUserPage(final PageReference previousPage, final IModel<User> userModel)
   {
-    super("Update User", "Update User");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Update User");
+    super("Update User");
 
     try
     {

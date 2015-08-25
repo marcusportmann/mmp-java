@@ -63,8 +63,7 @@ public class UpdateGroupPage extends TemplateWebPage
    */
   public UpdateGroupPage(final PageReference previousPage, final IModel<Group> groupModel)
   {
-    super("Update Group", "Update Group");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Update Group");
+    super("Update Group");
 
     try
     {

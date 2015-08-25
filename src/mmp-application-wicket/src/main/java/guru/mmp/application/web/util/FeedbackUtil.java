@@ -47,6 +47,24 @@ public class FeedbackUtil
     AttributeModifier.append("class", " has-error");
 
   /**
+   * The JavaScript used to display the feedback for a form component using the 'domready' event.
+   */
+  private static final String DOM_READ_FEEDBACK_JAVA_SCRIPT = "$(function(){if($('#%1$s')){"
+    + "if($('#%1$s').parent().hasClass('form-group')){" + "$('#%1$s').parent().addClass('%2$s');}"
+    + "if($('#%1$s').parent().parent().hasClass('form-group')){"
+    + "$('#%1$s').parent().parent().addClass('%2$s');}"
+    + "$('#%1$sFeedback').replaceWith('%3$s');}});";
+
+  /**
+   * The JavaScript used to display the feedback for a form component.
+   */
+  private static final String FEEDBACK_JAVA_SCRIPT = "if($('#%1$s')){"
+    + "if($('#%1$s').parent().hasClass('form-group')){" + "$('#%1$s').parent().addClass('%2$s');}"
+    + "if($('#%1$s').parent().parent().hasClass('form-group')){"
+    + "$('#%1$s').parent().parent().addClass('%2$s');}"
+    + "$('#%1$sFeedback').replaceWith('%3$s');}";
+
+  /**
    * Applies the appropriate CSS class to a component based on the type of feedback message
    * associated with the component using a Wicket <code>AttributeModifier</code>.
    *
@@ -74,39 +92,6 @@ public class FeedbackUtil
   }
 
   /**
-   * Generate the HTML for the feedback message associated with the specified component.
-   *
-   * @param id        the id for the HTML div that will be used to display the feedback message or
-   *                  <code>null</code> if no id
-   * @param component the component to generate the feedback message HTML for
-   *
-   * @return the HTML for the feedback message
-   */
-  public static String generateFeedbackHtml(String id, Component component)
-  {
-    return "";
-
-    /*
-    if (component.hasFeedbackMessage())
-    {
-      FeedbackMessages feedbackMessages = component.getFeedbackMessages();
-
-      FeedbackMessage feedbackMessage = feedbackMessages.first();
-
-      String feedbackHtml = generateFeedbackHtml(id, feedbackMessage);
-
-      // Clear the feedback messages for the component
-      for (FeedbackMessage componentFeedbackMessage : feedbackMessages)
-      {
-        componentFeedbackMessage.markRendered();
-      }
-    }
-
-    return buffer.toString();
-    */
-  }
-
-  /**
    * Generate the Javascript to display the feedback for the specified component.
    *
    * @param id          the id of the component to provide the feedback for
@@ -124,55 +109,36 @@ public class FeedbackUtil
 
       FeedbackMessage feedbackMessage = feedbackMessages.first();
 
-      String feedbackId = id + "Feedback";
-
-      StringBuilder buffer = new StringBuilder();
-
-      if (useDOMReady)
-      {
-        buffer.append("$(function() {");
-      }
-
-      buffer.append("if ($('#").append(id).append("')");
-      buffer.append(" && $('#").append(id).append("').parent()");
-      buffer.append(" && $('#").append(id).append("').parent().parent()");
-      buffer.append(" && $('#").append(id).append("').parent().parent().hasClass('form-group')){");
-      buffer.append("$('#").append(id).append("').parent().parent().addClass('");
+      String feedbackClass = null;
 
       if (feedbackMessage.isError())
       {
-        buffer.append("has-error");
+        feedbackClass = "has-error";
       }
       else if (feedbackMessage.isFatal())
       {
-        buffer.append("has-error");
+        feedbackClass = "has-error";
       }
       else if (feedbackMessage.isWarning())
       {
-        buffer.append("has-warning");
+        feedbackClass = "has-warning";
       }
       else if (feedbackMessage.isInfo())
       {
-        buffer.append("has-info");
+        feedbackClass = "has-info";
       }
       else if (feedbackMessage.isDebug())
       {
-        buffer.append("has-success");
+        feedbackClass = "has-success";
       }
 
-      buffer.append("');");
-      buffer.append("$('#").append(feedbackId).append("').replaceWith('");
+      String feedbackId = id + "Feedback";
 
-      buffer.append(JavaScriptUtils.escapeQuotes(FeedbackUtil.generateFeedbackHtml(feedbackId,
-          feedbackMessage)));
-
-      buffer.append("');");
-      buffer.append("}");
-
-      if (useDOMReady)
-      {
-        buffer.append("});");
-      }
+      String javaScript = String.format(useDOMReady
+          ? DOM_READ_FEEDBACK_JAVA_SCRIPT
+          : FEEDBACK_JAVA_SCRIPT, id, feedbackClass,
+            JavaScriptUtils.escapeQuotes(FeedbackUtil.generateFeedbackHtml(feedbackId,
+              feedbackMessage)));
 
       // Clear the feedback messages for the component
       for (FeedbackMessage componentFeedbackMessage : feedbackMessages)
@@ -180,7 +146,7 @@ public class FeedbackUtil
         componentFeedbackMessage.markRendered();
       }
 
-      return buffer.toString();
+      return javaScript;
     }
     else
     {

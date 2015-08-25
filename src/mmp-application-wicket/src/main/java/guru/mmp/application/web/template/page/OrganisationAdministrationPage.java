@@ -24,7 +24,6 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -50,7 +49,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
 public class OrganisationAdministrationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
@@ -68,9 +67,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
    */
   public OrganisationAdministrationPage()
   {
-    super("Organisation Administration", "Organisation Administration");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Organisation Administration");
+    super("Organisations");
 
     try
     {

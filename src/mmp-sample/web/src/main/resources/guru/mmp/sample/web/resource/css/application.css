@@ -1,3 +1,12 @@
+.login-header .logo .logo-image
+{
+  display: inline-block;
+  width: 180px;
+  height: 40px;
+  background-image: url('../images/logo-black-background.png');
+  background-size: 100% 100%;
+}
+
 .sidebar-menu .logo-env .logo .logo-expanded .logo-image
 {
   display: inline-block;

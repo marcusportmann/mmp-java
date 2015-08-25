@@ -85,84 +85,85 @@ public class UserMenu extends Component
       {
         TemplateWebSession webSession = ((TemplateWebSession) session);
 
-        if (!webSession.isUserLoggedIn())
-        {
-          response.write("");
-
-          return;
-        }
-
         NavigationState navigationState = webSession.getNavigationState();
 
-        if (navigationState.getLastPageAccessedInNavigationHierarchyTopNavigationHTML() != null)
+        if (navigationState.getCachedUserMenuHTML() != null)
         {
-          response.write(
-              navigationState.getLastPageAccessedInNavigationHierarchyTopNavigationHTML());
+          response.write(navigationState.getCachedUserMenuHTML());
 
           return;
         }
+
+        WebApplication webApplication = (WebApplication) getApplication();
 
         String requestURI =
           ((HttpServletRequest) (RequestCycle.get().getRequest()).getContainerRequest())
             .getRequestURI();
 
-        StringBuilder buffer = new StringBuilder();
-
-        /*
-        buffer.append("<ul class=\"nav navbar-right\">");
-
-        // User dropdown
-        buffer.append("<li class=\"dropdown current-user\">");
-        buffer.append("<a data-toggle=\"dropdown\" data-hover=\"dropdown\"");
-        buffer.append(" class=\"dropdown-toggle\" data-close-others=\"true\" href=\"#\">");
-        buffer.append("<i class=\"clip-user-3\"></i>&nbsp;");
-
-        buffer.append("<span class=\"username\">");
-        buffer.append(webSession.getUsername());
-
-        if (isMultipleOrganisationSupportEnabled)
+        if (!webSession.isUserLoggedIn())
         {
-          buffer.append(" | ");
-          buffer.append(webSession.getOrganisation());
-        }
+          StringBuilder buffer = new StringBuilder();
 
-        buffer.append("</span>");
+          String loginUrl = urlFor(webApplication.getLoginPage(), new PageParameters()).toString();
 
-        buffer.append("<i class=\"clip-chevron-down\"></i>");
-        buffer.append("</a>");
+          buffer.append("<li class=\"login\">");
+          buffer.append("<a href=\"");
 
-        buffer.append("<ul class=\"dropdown-menu\">");
+          if (loginUrl.startsWith("/"))
+          {
+            buffer.append(loginUrl);
+          }
+          else
+          {
+            buffer.append(RequestUtils.toAbsolutePath(requestURI, loginUrl));
+          }
 
-        WebApplication webApplication = (WebApplication) getApplication();
+          buffer.append("\"><i class=\"fa-sign-in\"></i><span class=\"\">Login</span></a></li>");
 
-        String url = urlFor(webApplication.getLogoutPage(), new PageParameters()).toString();
-
-        buffer.append("<li><a href=\"#\"><i class=\"clip-user-2\"></i>&nbsp;My Profile</a></li>");
-        buffer.append("<li class=\"divider\"></li>");
-
-        buffer.append("<li><a href=\"");
-
-        if (url.startsWith("/"))
-        {
-          buffer.append(url);
+          navigationState.setCachedUserMenuHTML(buffer.toString());
+          response.write(navigationState.getCachedUserMenuHTML());
         }
         else
         {
-          buffer.append(RequestUtils.toAbsolutePath(requestURI, url));
+          StringBuilder buffer = new StringBuilder();
+
+          buffer.append("<li class=\"dropdown user-profile\">");
+          buffer.append("<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">");
+          buffer.append("<div class=\"img-circle userpic-32\"></div><span>");
+          buffer.append(webSession.getUsername());
+
+          if (isMultipleOrganisationSupportEnabled)
+          {
+            buffer.append(" | ");
+            buffer.append(webSession.getOrganisation());
+          }
+
+          buffer.append(" <i class=\"fa-angle-down\"></i></span></a>");
+          buffer.append("<ul class=\"dropdown-menu user-profile-menu list-unstyled\">");
+
+          // buffer.append("<li><a href=\"#\"><i class=\"fa-wrench\"></i> Settings</a></li>");
+          // buffer.append("<li><a href=\"#\"><i class=\"fa-user\"></i> Profile</a></li>");
+          // buffer.append("<li><a href=\"#\"><i class=\"fa-info\"></i> Help</a></li>");
+
+          buffer.append("<li class=\"last\"><a href=\"");
+
+          String logoutUrl = urlFor(webApplication.getLogoutPage(),
+            new PageParameters()).toString();
+
+          if (logoutUrl.startsWith("/"))
+          {
+            buffer.append(logoutUrl);
+          }
+          else
+          {
+            buffer.append(RequestUtils.toAbsolutePath(requestURI, logoutUrl));
+          }
+
+          buffer.append("\"><i class=\"fa-sign-out\"></i> Logout</a></li></ul></li>");
+
+          navigationState.setCachedUserMenuHTML(buffer.toString());
+          response.write(navigationState.getCachedUserMenuHTML());
         }
-
-        buffer.append("\"><i class=\"clip-exit\"></i>&nbsp;Log Out</a></li>");
-
-        buffer.append("</ul>");
-
-        buffer.append("</li>");
-
-        buffer.append("</ul>");
-        */
-
-        navigationState.setLastPageAccessedInNavigationHierarchyTopNavigationHTML(
-            buffer.toString());
-        response.write(navigationState.getLastPageAccessedInNavigationHierarchyTopNavigationHTML());
       }
     }
   }

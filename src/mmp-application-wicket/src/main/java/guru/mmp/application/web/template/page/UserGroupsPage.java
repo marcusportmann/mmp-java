@@ -78,7 +78,7 @@ public class UserGroupsPage extends TemplateWebPage
    */
   public UserGroupsPage(final PageReference previousPage, final String username)
   {
-    super("User Groups", "Administer the user groups for the user " + username);
+    super("User Groups", username);
 
     /*
      * The table container, which allows the table and its associated navigator to be updated

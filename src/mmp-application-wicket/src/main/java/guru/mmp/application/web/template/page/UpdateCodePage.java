@@ -64,8 +64,7 @@ public class UpdateCodePage extends TemplateWebPage
    */
   public UpdateCodePage(final PageReference previousPage, final IModel<Code> codeModel)
   {
-    super("Update Code", "Update Code");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName() + " | Update Code");
+    super("Update Code");
 
     try
     {
