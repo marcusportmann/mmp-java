@@ -23,6 +23,7 @@ import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.page.LoginPage;
+import guru.mmp.application.web.template.page.LogoutPage;
 import guru.mmp.application.web.template.resource.*;
 import guru.mmp.common.util.StringUtil;
 
@@ -112,7 +113,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    */
   public Class<? extends WebPage> getLogoutPage()
   {
-    return LoginPage.class;
+    return LogoutPage.class;
   }
 
   /**

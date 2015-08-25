@@ -118,7 +118,7 @@ public class UserMenu extends Component
             buffer.append(RequestUtils.toAbsolutePath(requestURI, loginUrl));
           }
 
-          buffer.append("\"><i class=\"fa-sign-in\"></i><span class=\"\">Login</span></a></li>");
+          buffer.append("\"><i class=\"fa-sign-in\"></i><span class=\"\"> Login</span></a></li>");
 
           navigationState.setCachedUserMenuHTML(buffer.toString());
           response.write(navigationState.getCachedUserMenuHTML());
