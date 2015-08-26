@@ -20,7 +20,6 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationState;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

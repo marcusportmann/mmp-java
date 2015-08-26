@@ -19,24 +19,20 @@ package guru.mmp.application.web;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.cdi.CDIProxyTargetLocator;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.proxy.LazyInitProxyFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebApplicationInjector</code> class provides CDI-based injection for a Wicket
@@ -115,8 +111,8 @@ public class WebApplicationInjector
               injectedFields.add(new InjectedField(field, field.getType(),
                   annotations.toArray(new Annotation[annotations.size()])));
 
-//              logger.info("Found injected field (" + field.getName() + ") with type ("
-//                + field.getType().getName() + ") on class (" + object.getClass() + ")");
+//            logger.info("Found injected field (" + field.getName() + ") with type ("
+//              + field.getType().getName() + ") on class (" + object.getClass() + ")");
             }
           }
         }
@@ -142,8 +138,8 @@ public class WebApplicationInjector
     {
       try
       {
-//        logger.info("Injecting field (" + injectedField.field.getName() + ") with type ("
-//            + injectedField.type.getName() + ") on class (" + object.getClass() + ")");
+//      logger.info("Injecting field (" + injectedField.field.getName() + ") with type ("
+//          + injectedField.type.getName() + ") on class (" + object.getClass() + ")");
 
         // TODO: Check whether we can cache and re-use the proxies for singletons
         Object beanProxy = LazyInitProxyFactory.createProxy(injectedField.type,

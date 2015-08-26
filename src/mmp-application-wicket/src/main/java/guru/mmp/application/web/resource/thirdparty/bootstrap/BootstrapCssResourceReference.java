@@ -66,5 +66,3 @@ public class BootstrapCssResourceReference extends CssResourceReference
     return CSS_HEADER_ITEM;
   }
 }
-
-

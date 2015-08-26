@@ -23,9 +23,9 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.regex.Pattern;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordPolicyValidator</code> class implements a Wicket validator that provides

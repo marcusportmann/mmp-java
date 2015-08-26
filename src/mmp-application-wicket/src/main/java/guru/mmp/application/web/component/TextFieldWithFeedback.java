@@ -76,20 +76,11 @@ public class TextFieldWithFeedback<T> extends TextField<T>
 
     response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    IRequestHandler requestHandler = getRequestCycle().getActiveRequestHandler();
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
-    if (requestHandler instanceof AjaxRequestHandler)
+    if (feedbackJavaScript != null)
     {
-      AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
-
-      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
-          false));
-    }
-    else
-    {
-      response.render(
-          JavaScriptHeaderItem.forScript(
-            FeedbackUtil.generateFeedbackJavaScript(getId(), this, true), null));
+      response.render(JavaScriptHeaderItem.forScript(feedbackJavaScript, null));
     }
   }
 

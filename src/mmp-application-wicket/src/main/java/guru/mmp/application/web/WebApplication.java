@@ -20,24 +20,21 @@ package guru.mmp.application.web;
 
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.util.convert.converter.DateConverter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.Locale;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebApplication</code> class provides a base class for all "application specific"

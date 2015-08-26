@@ -64,7 +64,7 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.PasswordTextField#renderHead(IHeaderResponse)
+   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
    *
    * @param response the Wicket header response
    */
@@ -75,20 +75,11 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
 
     response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    IRequestHandler requestHandler = getRequestCycle().getActiveRequestHandler();
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
-    if (requestHandler instanceof AjaxRequestHandler)
+    if (feedbackJavaScript != null)
     {
-      AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
-
-      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
-          false));
-    }
-    else
-    {
-      response.render(
-          JavaScriptHeaderItem.forScript(
-            FeedbackUtil.generateFeedbackJavaScript(getId(), this, true), null));
+      response.render(JavaScriptHeaderItem.forScript(feedbackJavaScript, null));
     }
   }
 
@@ -118,7 +109,7 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
       ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
-          false));
+        false));
     }
     else
     {

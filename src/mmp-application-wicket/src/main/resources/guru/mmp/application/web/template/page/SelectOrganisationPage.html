@@ -17,8 +17,24 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/fontawesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/select2/select2.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/select2/select2-bootstrap.css"/>
+
+    <!-- MANDATORY SCRIPTS -->
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/jqueryui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/datepicker/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/timepicker/bootstrap-timepicker.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/select2/select2.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/greensockjs/TweenMax.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/moment/moment.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/selectboxit/jquery.selectBoxIt.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-bootstrap.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-combined.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template-core.js"></script>
+
 
   </head>
   <body class="page-body login-page">
@@ -47,13 +63,33 @@
             </div>
 
             <div class="form-group">
-              <select id="organisation" wicket:id="organisation" type="text" name="organisation" class="form-control search-select">
+              <select id="organisation" wicket:id="organisation" type="text" name="organisation" class="form-control">
                 <option value="">&nbsp;</option>
               </select>
             </div>
 
-            <div class="form-group">
-              <button wicket:id="continueButton" type="submit" class="btn btn-primary pull-right">
+            <script type="text/javascript">
+              /*<![CDATA[*/
+
+              jQuery(document).ready(function ($)
+              {
+                $("#organisation").select2({
+                  placeholder: 'Select an organisation...',
+                  allowClear: true,
+                  dropdownAutoWidth: true,
+                }).on('select2-open', function ()
+                {
+                  // Adding Custom Scrollbar
+                  $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                });
+
+              });
+
+              /*]]>*/
+            </script>
+
+            <div class="form-buttons">
+              <button wicket:id="loginButton" type="submit" class="btn btn-dark pull-right">
                 Continue <i class="fa fa-arrow-circle-right"></i>
               </button>
             </div>
@@ -64,47 +100,3 @@
     </div>
   </body>
 </html>
-
-
-
-
-
-<!--
-
-
-
-
-
-<!DOCTYPE html>
-<html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/" xml:lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
-  <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <title wicket:id="pageTitle">[Page Title]</title>
-  </head>
-  <body class="login">
-    <div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-      <div class="logo"><span class="navbar-logo"></span></div>
-
-      <div wicket:id="alerts" id="alerts"></div>
-
-      <div class="box-login">
-        <h3>Select Organisation</h3>
-        <p>
-          Please select the organisation you wish to work with.
-        </p>
-
-      </div>
-
-    </div>
-  </body>
-</html>
-
-
-
-
-
--->

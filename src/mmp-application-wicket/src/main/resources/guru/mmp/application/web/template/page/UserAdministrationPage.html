@@ -7,8 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/fontawesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-forms.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-components.css"/>
   </head>
   <body class="page-body maximum-height boxed-container">
     <div class="page-container maximum-height">
@@ -84,10 +82,11 @@
                 </div>
                 <div class="table-header-right">
                   <form wicket:id="filterForm" class="table-filter-form">
-                    <input wicket:id="filter" type="text" name="filter" style="float: left; width: 200px; margin-right: 4px;"/>
-                    <button style="float: left;" wicket:id="filterButton" type="submit" class="btn btn-default btn-filter btn-sm">
+                    <input wicket:id="filter" type="text" name="filter"/>
+                    <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm">
                       <i class="fa fa-filter"> Filter</i></button>
                   </form>
+
                 </div>
               </div>
 

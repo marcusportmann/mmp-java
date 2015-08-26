@@ -25,7 +25,6 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.UserDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;

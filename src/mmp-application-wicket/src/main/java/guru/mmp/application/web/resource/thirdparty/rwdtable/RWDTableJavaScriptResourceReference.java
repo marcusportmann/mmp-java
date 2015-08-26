@@ -20,15 +20,14 @@ package guru.mmp.application.web.resource.thirdparty.rwdtable;
 
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>RWDTableJavaScriptResourceReference</code> class implements the

@@ -46,8 +46,8 @@ public class DateRangePickerJavaScriptResourceReference extends JavaScriptResour
   private DateRangePickerJavaScriptResourceReference()
   {
     super(DateRangePickerJavaScriptResourceReference.class, Debug.inDebugMode()
-      ? "daterangepicker.js"
-      : "daterangepicker.js");
+        ? "daterangepicker.js"
+        : "daterangepicker.js");
   }
 
   /**
@@ -82,8 +82,8 @@ public class DateRangePickerJavaScriptResourceReference extends JavaScriptResour
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    //dependencies.add(BootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
-    //dependencies.add(BootstrapCssResourceReference.getCssHeaderItem());
+    // dependencies.add(BootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
+    // dependencies.add(BootstrapCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

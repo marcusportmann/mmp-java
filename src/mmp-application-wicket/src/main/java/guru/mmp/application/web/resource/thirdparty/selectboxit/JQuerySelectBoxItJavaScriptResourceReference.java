@@ -84,7 +84,8 @@ public class JQuerySelectBoxItJavaScriptResourceReference extends JavaScriptReso
     List<HeaderItem> dependencies = new ArrayList<>();
 
     dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
-    //dependencies.add(JQuerySelectBoxItCssResourceReference.getCssHeaderItem());
+
+    // dependencies.add(JQuerySelectBoxItCssResourceReference.getCssHeaderItem());
 
     return dependencies;
   }

@@ -62,7 +62,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   private String organisation;
 
   /** The unique user ID for the logged in user associated with the web session. */
-  private long userId;
+  private long userId  = -1;
 
   /** The user properties for the logged in user associated with the web session. */
   private Map<String, Serializable> userProperties;

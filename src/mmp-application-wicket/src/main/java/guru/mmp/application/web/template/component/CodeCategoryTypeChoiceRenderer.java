@@ -20,13 +20,12 @@ package guru.mmp.application.web.template.component;
 
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.web.WebApplicationException;
-
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryTypeChoiceRenderer</code> class implements a <code>ChoiceRenderer</code>

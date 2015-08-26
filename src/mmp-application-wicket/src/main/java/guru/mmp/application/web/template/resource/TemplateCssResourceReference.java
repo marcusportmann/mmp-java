@@ -20,7 +20,6 @@ package guru.mmp.application.web.template.resource;
 
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.resource.thirdparty.fontawesome.FontAwesomeCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableCssResourceReference;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -37,20 +36,18 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateCssResourceReference
-  extends CssResourceReference
+public class TemplateCssResourceReference extends CssResourceReference
 {
   private static final long serialVersionUID = 1000000;
-  private static final TemplateCssResourceReference INSTANCE =
-    new TemplateCssResourceReference();
+  private static final TemplateCssResourceReference INSTANCE = new TemplateCssResourceReference();
   private static final CssHeaderItem CSS_HEADER_ITEM =
     CssHeaderItem.forReference(new TemplateCssResourceReference());
 
   private TemplateCssResourceReference()
   {
     super(TemplateCssResourceReference.class, Debug.inDebugMode()
-      ? "css/template.css"
-      : "css/template.css");
+        ? "css/template.css"
+        : "css/template.css");
   }
 
   /**

@@ -31,15 +31,16 @@ import org.apache.wicket.request.resource.CssResourceReference;
 public class DateRangePickerCssResourceReference extends CssResourceReference
 {
   private static final long serialVersionUID = 1000000;
-  private static final DateRangePickerCssResourceReference INSTANCE = new DateRangePickerCssResourceReference();
+  private static final DateRangePickerCssResourceReference INSTANCE =
+    new DateRangePickerCssResourceReference();
   private static final CssHeaderItem CSS_HEADER_ITEM =
     CssHeaderItem.forReference(new DateRangePickerCssResourceReference());
 
   private DateRangePickerCssResourceReference()
   {
     super(DateRangePickerCssResourceReference.class, Debug.inDebugMode()
-      ? "daterangepicker-bs3.css"
-      : "daterangepicker-bs3.css");
+        ? "daterangepicker-bs3.css"
+        : "daterangepicker-bs3.css");
   }
 
   /**

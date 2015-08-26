@@ -35,8 +35,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateCoreCssResourceReference
-  extends CssResourceReference
+public class TemplateCoreCssResourceReference extends CssResourceReference
 {
   private static final long serialVersionUID = 1000000;
   private static final TemplateCoreCssResourceReference INSTANCE =
@@ -47,8 +46,8 @@ public class TemplateCoreCssResourceReference
   private TemplateCoreCssResourceReference()
   {
     super(TemplateCoreCssResourceReference.class, Debug.inDebugMode()
-      ? "css/template-core.css"
-      : "css/template-core.css");
+        ? "css/template-core.css"
+        : "css/template-core.css");
   }
 
   /**

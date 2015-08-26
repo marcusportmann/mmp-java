@@ -22,7 +22,6 @@ import guru.mmp.application.web.WebApplication;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationState;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -34,9 +33,9 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.servlet.http.HttpServletRequest;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserMenu</code> class provides a Wicket component that renders the user

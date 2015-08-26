@@ -23,12 +23,14 @@ import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.navigation.NavigationState;
+
 import org.apache.wicket.request.Request;
 
-import java.io.Serializable;
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.util.List;
 
 /**
  * The <code>TemplateWebSession</code> class stores the session information for a user accessing a

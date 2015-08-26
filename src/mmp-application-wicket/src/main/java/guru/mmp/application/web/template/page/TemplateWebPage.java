@@ -179,20 +179,6 @@ public abstract class TemplateWebPage extends WebPage
 
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-
-//  TODO: DELETE THIS -- MARCUS
-//     // Add the Web Application Template theme CSS header item
-//     response.render(TemplateWebApplication.getThemeCssHeaderItem());
-//
-
-//
-
-//     // Add the Web Application Template JavaScript header item
-//     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-//
-
-//     // Add the JavaScript script that should be executed when the DOM is ready
-//     response.render(OnDomReadyHeaderItem.forScript("TemplateWebApplication.init();"));
   }
 
   /**

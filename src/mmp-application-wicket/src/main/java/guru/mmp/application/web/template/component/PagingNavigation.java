@@ -46,7 +46,6 @@ public class PagingNavigation extends Loop
    */
   public static final AttributeModifier ACTIVE_CSS_CLASS_MODIFIER =
     AttributeModifier.replace("class", "active");
-
   protected IPageable pageable;
 
   /**

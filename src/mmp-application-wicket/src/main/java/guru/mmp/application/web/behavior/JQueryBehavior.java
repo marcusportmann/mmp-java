@@ -20,7 +20,6 @@ package guru.mmp.application.web.behavior;
 
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;

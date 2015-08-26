@@ -43,7 +43,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class  MainNavigationMenu extends Component
+public class MainNavigationMenu extends Component
 {
   private static final long serialVersionUID = 1000000;
 
@@ -179,7 +179,7 @@ public class  MainNavigationMenu extends Component
         }
         else
         {
-          //buffer.append("<i class=\"clip-folder\"></i>");
+          // buffer.append("<i class=\"clip-folder\"></i>");
         }
 
         if (depth > 0)
@@ -192,13 +192,13 @@ public class  MainNavigationMenu extends Component
 
         if (((navigationItem == selectedNavigationItemForCurrentPage) && (depth == 0)))
         {
-         // buffer.append("<i class=\"icon-arrow\"></i>");
-         // buffer.append("<span class=\"selected\"></span>");
+          // buffer.append("<i class=\"icon-arrow\"></i>");
+          // buffer.append("<span class=\"selected\"></span>");
         }
         else
         {
-          //buffer.append("<i class=\"icon-arrow\"></i>");
-          //buffer.append("<span class=\"arrow \"></span>");
+          // buffer.append("<i class=\"icon-arrow\"></i>");
+          // buffer.append("<span class=\"arrow \"></span>");
         }
 
         buffer.append("</a>");
@@ -249,7 +249,7 @@ public class  MainNavigationMenu extends Component
         }
         else
         {
-          //buffer.append("<i class=\"clip-file-3\"></i>");
+          // buffer.append("<i class=\"clip-file-3\"></i>");
         }
 
         if (depth > 0)

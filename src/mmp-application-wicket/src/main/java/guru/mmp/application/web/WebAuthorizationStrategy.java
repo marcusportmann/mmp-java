@@ -22,7 +22,6 @@ import guru.mmp.application.Debug;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.authorization.Action;
@@ -32,7 +31,6 @@ import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.request.component.IRequestableComponent;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -19,6 +19,9 @@ package guru.mmp.application.web.template;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.page.WebPage;
+import guru.mmp.application.web.resource.thirdparty.greensockjs
+  .TweenLiteJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
@@ -170,56 +173,21 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     navigationRoot = new NavigationGroup("");
     initNavigation(navigationRoot);
 
-    // Initialise the template-web-application.css resource bundle for the Web Application Template
     /*
+    // Initialise the template-web-application.css resource bundle for the Web Application Template
     getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
-        "css/template-web-application.css",
-
-    // Template CSS
-    TemplateBootstrapCssResourceReference.get(), TemplateCoreCssResourceReference.get(),
-        TemplateFormsCssResourceReference.get(), TemplateComponentsCssResourceReference.get(),
-        TemplateCssResourceReference.get(),
-
-    // Thirdparty CSS
-    DateRangePickerCssResourceReference.get(), Select2CssResourceReference.get(),
-        Select2BootstrapCssResourceReference.get(),
-        RWDTableCssResourceReference.get());
+        "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
+        TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
     */
 
     // Initialise the template-web-application.js resource bundle for the Web Application Template
-    /*getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
-        "js/template-web-application.js", TemplateBootstrapJavaScriptResourceReference.get(),
-        TemplateResizeableJavaScriptResourceReference.get(),
-        TemplateCombinedJavaScriptResourceReference.get(),
-        TemplateApiJavaScriptResourceReference.get(),
-        TemplateTogglesJavaScriptResourceReference.get(),
-        TemplateCustomJavaScriptResourceReference.get(), TemplateJavaScriptResourceReference.get());
-   */
 
-    /*
-     * // Initialise the JavaScript resource bundle for the Web Application Template
-     * getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
-     *   "js/template-web-application.js",
-     * // Thirdparty JavaScript
-     * JQueryJavaScriptResourceReference.get(),
-     * JQueryUIJavaScriptResourceReference.get(),
-     * BootstrapDatePickerJavaScriptResourceReference.get(),
-     * BootstrapTimePickerJavaScriptResourceReference.get(),
-     * Select2JavaScriptResourceReference.get(),
-     * TweenMaxJavaScriptResourceReference.get(),
-     * MomentJavaScriptResourceReference.get(),
-     * JQuerySelectBoxItJavaScriptResourceReference.get(),
-     * DateRangePickerJavaScriptResourceReference.get(),
-     * RWDTableJavaScriptResourceReference.get(),
-     * // Template JavaScript
-     * TemplateBootstrapJavaScriptResourceReference.get(),
-     * TemplateResizeableJavaScriptResourceReference.get(),
-     * TemplateCombinedJavaScriptResourceReference.get(),
-     * TemplateApiJavaScriptResourceReference.get(),
-     * TemplateTogglesJavaScriptResourceReference.get(),
-     * TemplateCustomJavaScriptResourceReference.get(),
-     * TemplateJavaScriptResourceReference.get());
-     */
+    getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
+        "js/template-web-application.js", MomentJavaScriptResourceReference.get(),
+        TweenLiteJavaScriptResourceReference.get(),
+        TemplateBootstrapJavaScriptResourceReference.get(),
+        TemplateCombinedJavaScriptResourceReference.get(),
+        TemplateCoreJavaScriptResourceReference.get(), TemplateJavaScriptResourceReference.get());
 
     // Check it multiple organisation support is enabled
     if (!StringUtil.isNullOrEmpty(
@@ -241,6 +209,8 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     // Mount the navigable pages
     mountPage("/home", getHomePage());
     mountPage("/secure-home", getSecureHomePage());
+    mountPage("/login", getLoginPage());
+    mountPage("/logout", getLogoutPage());
     mountNavigationPages(getNavigation(), "");
   }
 
@@ -300,7 +270,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
         else if (getSecureHomePage().isAssignableFrom(navigationLink.getPageClass()))
         {
           logger.debug("Ignoring secure home page navigation item \"" + navigationLink.getName()
-            + "\" under the path \"" + navigationItemPath + "\"");
+              + "\" under the path \"" + navigationItemPath + "\"");
         }
         else
         {

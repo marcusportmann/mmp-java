@@ -22,24 +22,19 @@ import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-
-import java.util.List;
-
 import javax.naming.InitialContext;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebApplicationListener</code> class initialises the context of a web application that

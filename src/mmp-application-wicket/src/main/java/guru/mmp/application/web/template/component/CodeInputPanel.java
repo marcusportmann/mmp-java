@@ -46,8 +46,7 @@ public class CodeInputPanel extends InputPanel
     super(id, codeModel);
 
     // The "id" field
-    TextField<String> idField = new TextFieldWithFeedback<
-      >("id");
+    TextField<String> idField = new TextFieldWithFeedback<>("id");
     idField.setRequired(true);
     idField.setEnabled(!isIdReadOnly);
     add(idField);

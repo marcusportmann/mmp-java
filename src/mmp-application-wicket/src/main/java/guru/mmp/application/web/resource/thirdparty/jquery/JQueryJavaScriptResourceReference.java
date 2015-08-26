@@ -19,7 +19,6 @@ package guru.mmp.application.web.resource.thirdparty.jquery;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.settings.JavaScriptLibrarySettings;

@@ -38,8 +38,8 @@ public class ToastrCssResourceReference extends CssResourceReference
   private ToastrCssResourceReference()
   {
     super(ToastrCssResourceReference.class, Debug.inDebugMode()
-      ? "toastr.css"
-      : "toastr.min.css");
+        ? "toastr.css"
+        : "toastr.min.css");
   }
 
   /**
@@ -66,5 +66,3 @@ public class ToastrCssResourceReference extends CssResourceReference
     return CSS_HEADER_ITEM;
   }
 }
-
-

@@ -25,7 +25,6 @@ import guru.mmp.application.web.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.TemplateWebApplication;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;

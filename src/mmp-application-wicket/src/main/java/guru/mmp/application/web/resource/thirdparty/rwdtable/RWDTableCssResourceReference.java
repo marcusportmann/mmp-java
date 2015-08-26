@@ -29,12 +29,10 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
-public class RWDTableCssResourceReference
-  extends CssResourceReference
+public class RWDTableCssResourceReference extends CssResourceReference
 {
   private static final long serialVersionUID = 1000000;
-  private static final RWDTableCssResourceReference INSTANCE =
-    new RWDTableCssResourceReference();
+  private static final RWDTableCssResourceReference INSTANCE = new RWDTableCssResourceReference();
   private static final CssHeaderItem CSS_HEADER_ITEM =
     CssHeaderItem.forReference(new RWDTableCssResourceReference());
 

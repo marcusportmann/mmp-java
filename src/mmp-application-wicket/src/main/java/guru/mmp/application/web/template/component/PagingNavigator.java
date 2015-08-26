@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 public class PagingNavigator extends Panel
 {
   private static final long serialVersionUID = 1000000;
-
   private boolean isVisible;
   private final IPageable pageable;
 

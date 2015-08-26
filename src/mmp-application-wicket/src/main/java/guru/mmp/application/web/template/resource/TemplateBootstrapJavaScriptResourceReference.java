@@ -19,7 +19,6 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
@@ -41,8 +40,8 @@ public class TemplateBootstrapJavaScriptResourceReference extends JavaScriptReso
   private TemplateBootstrapJavaScriptResourceReference()
   {
     super(TemplateBootstrapJavaScriptResourceReference.class, Debug.inDebugMode()
-      ? "js/template-bootstrap.js"
-      : "js/template-bootstrap.js");
+        ? "js/template-bootstrap.js"
+        : "js/template-bootstrap.js");
   }
 
   /**
