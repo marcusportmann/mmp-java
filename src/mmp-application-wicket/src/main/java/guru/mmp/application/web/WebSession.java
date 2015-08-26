@@ -20,13 +20,15 @@ package guru.mmp.application.web;
 
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.servlet.ViewReportParameters;
+
 import org.apache.wicket.request.Request;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebSession</code> class stores the session information for a user accessing a Wicket
@@ -239,7 +241,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
       return isUserLoggedIn();
     }
 
-    return functionCodes != null && functionCodes.containsKey(functionCode);
+    return (functionCodes != null) && functionCodes.containsKey(functionCode);
 
   }
 
@@ -254,7 +256,27 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    */
   public boolean hasUserProperty(String name)
   {
-    return userProperties != null && userProperties.containsKey(name);
+    return (userProperties != null) && userProperties.containsKey(name);
+  }
+
+  /**
+   * Invalidate the user's session immediately.
+   * <p/>
+   * Calling this method will remove all Wicket components from this session, which means that you
+   * will no longer be able to work with them.
+   */
+  @Override
+  public void invalidateNow()
+  {
+    super.invalidateNow();
+
+    activeViewReportParameters = new ConcurrentHashMap<>();
+    functionCodes = null;
+    groupNames = null;
+    organisation = null;
+    userId = -1;
+    userProperties = null;
+    username = null;
   }
 
   /**

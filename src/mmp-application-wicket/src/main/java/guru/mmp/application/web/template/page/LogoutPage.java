@@ -48,13 +48,11 @@ public class LogoutPage extends TemplateWebPage
   @Override
   protected void onBeforeRender()
   {
-    super.onBeforeRender();
-
     try
     {
       TemplateWebSession webSession = ((TemplateWebSession) getWebApplicationSession());
 
-      webSession.invalidate();
+      webSession.invalidateNow();
 
       NavigationState navigationState = webSession.getNavigationState();
 
@@ -64,5 +62,7 @@ public class LogoutPage extends TemplateWebPage
     {
       logger.error("Failed to invalidate the web session and navigation state", e);
     }
+
+    super.onBeforeRender();
   }
 }

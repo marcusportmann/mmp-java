@@ -43,7 +43,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class MainNavigationMenu extends Component
+public class  MainNavigationMenu extends Component
 {
   private static final long serialVersionUID = 1000000;
 
