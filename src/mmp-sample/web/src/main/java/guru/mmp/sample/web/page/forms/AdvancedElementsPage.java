@@ -71,7 +71,6 @@ public class AdvancedElementsPage extends TemplateWebPage
     response.render(JQueryMultiSelectCssResourceReference.getCssHeaderItem());
 
     response.render(JQuerySelectBoxItJavaScriptResourceReference.getJavaScriptHeaderItem());
-    response.render(RWDTableJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(BootstrapDatePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(BootstrapTimePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());

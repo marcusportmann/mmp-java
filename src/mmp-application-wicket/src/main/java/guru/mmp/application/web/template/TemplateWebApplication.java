@@ -22,6 +22,7 @@ import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.resource.thirdparty.greensockjs
   .TweenLiteJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
@@ -185,6 +186,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
         "js/template-web-application.js", MomentJavaScriptResourceReference.get(),
         TweenLiteJavaScriptResourceReference.get(),
+        RWDTableJavaScriptResourceReference.get(),
         TemplateBootstrapJavaScriptResourceReference.get(),
         TemplateCombinedJavaScriptResourceReference.get(),
         TemplateCoreJavaScriptResourceReference.get(), TemplateJavaScriptResourceReference.get());
