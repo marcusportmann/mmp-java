@@ -25,34 +25,26 @@ import guru.mmp.application.reporting.ReportType;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.common.util.StringUtil;
-
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.*;
-
-import java.sql.Connection;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.inject.Inject;
-
 import javax.naming.InitialContext;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.sql.DataSource;
+import java.io.*;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ViewReportServlet</code> class implements the servlet used to view reports.

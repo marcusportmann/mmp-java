@@ -83,7 +83,7 @@ public class SelectOrganisationPage extends WebPage
     throws SecurityException
   {
     // Setup the page title
-    String title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | Login";
+    String title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | Select Organisation";
 
     Label titleLabel = new Label("pageTitle", title);
     titleLabel.setRenderBodyOnly(false);

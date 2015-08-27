@@ -20,16 +20,15 @@ package guru.mmp.application.web.template.component;
 
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
-
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionInputPanel</code> class provides a Wicket component that can

@@ -153,8 +153,12 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      ajaxRequestHandler.appendJavaScript(FeedbackUtil.generateFeedbackJavaScript(getId(), this,
-        false));
+      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
+
+      if (feedbackJavaScript != null)
+      {
+        ajaxRequestHandler.appendJavaScript(feedbackJavaScript);
+      }
     }
     else
     {

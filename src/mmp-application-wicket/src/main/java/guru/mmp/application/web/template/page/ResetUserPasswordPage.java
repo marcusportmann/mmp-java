@@ -79,9 +79,7 @@ public class ResetUserPasswordPage extends TemplateWebPage
    */
   public ResetUserPasswordPage(final PageReference previousPage, final IModel<User> userModel)
   {
-    super("Reset User Password", "Reset User Password");
-    setTitle(((TemplateWebApplication) getApplication()).getDisplayName()
-        + " | Reset User Password");
+    super("Reset User Password");
 
     try
     {

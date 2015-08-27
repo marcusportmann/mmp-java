@@ -25,27 +25,25 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
-
+import guru.mmp.application.web.template.component.PagingNavigator;
+import guru.mmp.application.web.template.data.ReportDefinitionDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -74,6 +72,8 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
 
     try
     {
+      WebSession session = getWebApplicationSession();
+
       /*
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
@@ -99,37 +99,18 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
           setResponsePage(page);
         }
       };
-      add(addLink);
+      tableContainer.add(addLink);
 
-      LoadableDetachableModel<List<ReportDefinition>> ldm =
-        new LoadableDetachableModel<List<ReportDefinition>>()
+      ReportDefinitionDataProvider dataProvider =
+        new ReportDefinitionDataProvider(session.getOrganisation());
+
+      // The report definition data view
+      final DataView<ReportDefinition> dataView =
+        new DataView<ReportDefinition>("reportDefinition", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
-        @Override
-        protected List<ReportDefinition> load()
-        {
-          WebSession session = getWebApplicationSession();
-
-          try
-          {
-            return reportingService.getReportDefinitionsForOrganisation(session.getOrganisation());
-          }
-          catch (Throwable e)
-          {
-            throw new WebApplicationException(
-                "Failed to retrieve a complete list of report definitions for the organisation ("
-                + session.getOrganisation() + ") from the processing service", e);
-          }
-        }
-      };
-
-      ListView<ReportDefinition> listView = new ListView<ReportDefinition>("reportDefinition", ldm)
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        protected void populateItem(ListItem<ReportDefinition> item)
+        protected void populateItem(Item<ReportDefinition> item)
         {
           final IModel<ReportDefinition> reportDefinitionModel = item.getModel();
 
@@ -166,8 +147,11 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
           item.add(removeLink);
         }
       };
+      dataView.setItemsPerPage(10);
+      dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+      tableContainer.add(dataView);
 
-      tableContainer.add(listView);
+      tableContainer.add(new PagingNavigator("navigator", dataView));
     }
     catch (Throwable e)
     {
