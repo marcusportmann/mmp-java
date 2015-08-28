@@ -3682,10 +3682,6 @@ public class SecurityService
             if (rs.next())
             {
               result = rs.getLong(1);
-
-              transactionManager.commit();
-
-              return result;
             }
             else
             {
@@ -3694,6 +3690,10 @@ public class SecurityService
           }
         }
       }
+
+      transactionManager.commit();
+
+      return result;
     }
     catch (Throwable e)
     {

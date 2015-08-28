@@ -175,18 +175,17 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     initNavigation(navigationRoot);
 
     /*
-    // Initialise the template-web-application.css resource bundle for the Web Application Template
-    getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
-        "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
-        TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
-    */
+     * // Initialise the template-web-application.css resource bundle for the Web Application Template
+     * getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
+     *   "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
+     *   TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
+     */
 
     // Initialise the template-web-application.js resource bundle for the Web Application Template
 
     getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
         "js/template-web-application.js", MomentJavaScriptResourceReference.get(),
-        TweenLiteJavaScriptResourceReference.get(),
-        RWDTableJavaScriptResourceReference.get(),
+        TweenLiteJavaScriptResourceReference.get(), RWDTableJavaScriptResourceReference.get(),
         TemplateBootstrapJavaScriptResourceReference.get(),
         TemplateCombinedJavaScriptResourceReference.get(),
         TemplateCoreJavaScriptResourceReference.get(), TemplateJavaScriptResourceReference.get());

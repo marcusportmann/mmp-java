@@ -26,6 +26,18 @@ import guru.mmp.application.web.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.component.StringSelectOption;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
 import guru.mmp.application.web.page.WebPage;
+import guru.mmp.application.web.resource.thirdparty.datepicker.BootstrapDatePickerJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.selectboxit.JQuerySelectBoxItJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.tagsinput.BootstrapTagsInputJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.timepicker.BootstrapTimePickerJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScriptResourceReference;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
@@ -192,24 +204,10 @@ public class SelectOrganisationPage extends WebPage
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-//  TODO: DELETE THIS -- MARCUS
-//     // Add the Web Application Template theme CSS header item
-//     response.render(TemplateWebApplication.getThemeCssHeaderItem());
-//
-//     // Add the Select2 CSS header item
-//     response.render(CssHeaderItem.forReference(Select2CssResourceReference.get()));
-//
-//     // Add the application CSS header item
-//     response.render(getApplicationCssHeaderItem());
-//
-//     // Add the Web Application Template JavaScript header item
-//     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-//
-//     // Add the Select2 JavaScript header item
-//     response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
-//
-//     // Add the JavaScript script that should be executed when the DOM is ready
-//     response.render(OnDomReadyHeaderItem.forScript(SELECT_ORGANISATION_ON_DOM_READY_JAVA_SCRIPT));
+
+    response.render(Select2CssResourceReference.getCssHeaderItem());
+    response.render(Select2BootstrapCssResourceReference.getCssHeaderItem());
+    response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()

@@ -23,6 +23,7 @@ import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.navigation.NavigationState;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.ComponentTag;
@@ -32,10 +33,11 @@ import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import javax.servlet.http.HttpServletRequest;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * The <code>MainNavigationMenu</code> class provides a Wicket component that renders the main

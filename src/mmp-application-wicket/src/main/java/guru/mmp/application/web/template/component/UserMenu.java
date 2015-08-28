@@ -18,6 +18,7 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplication;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
@@ -33,6 +34,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -47,6 +49,12 @@ public class UserMenu extends Component
 {
   private static final long serialVersionUID = 1000000;
   private boolean isMultipleOrganisationSupportEnabled;
+  private boolean hasMultipleOrganisations;
+
+  /* Security Service */
+  @Inject
+  private ISecurityService securityService;
+
 
   /**
    * @see org.apache.wicket.Component#Component(String)
