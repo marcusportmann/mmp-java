@@ -24,24 +24,27 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
+import guru.mmp.application.web.template.component.PagingNavigator;
+import guru.mmp.application.web.template.data.OrganisationDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>OrganisationAdministrationPage</code> class implements the
@@ -96,33 +99,16 @@ public class OrganisationAdministrationPage extends TemplateWebPage
       };
       tableContainer.add(addLink);
 
-      // The organisation list view
-      LoadableDetachableModel<List<Organisation>> ldm =
-        new LoadableDetachableModel<List<Organisation>>()
+      OrganisationDataProvider dataProvider = new OrganisationDataProvider();
+
+      // The organisation data view
+      final DataView<Organisation> dataView = new DataView<Organisation>("organisation",
+        dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
         @Override
-        protected List<Organisation> load()
-        {
-          try
-          {
-            return securityService.getOrganisations(getRemoteAddress());
-          }
-          catch (Throwable e)
-          {
-            throw new WebApplicationException(
-                "Failed to retrieve a complete list of organisations from the Security Service", e);
-          }
-        }
-      };
-
-      ListView<Organisation> listView = new ListView<Organisation>("organisation", ldm)
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        protected void populateItem(ListItem<Organisation> item)
+        protected void populateItem(Item<Organisation> item)
         {
           final IModel<Organisation> organisationModel = item.getModel();
 
@@ -159,7 +145,11 @@ public class OrganisationAdministrationPage extends TemplateWebPage
           item.add(removeLink);
         }
       };
-      tableContainer.add(listView);
+      dataView.setItemsPerPage(10);
+      dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+      tableContainer.add(dataView);
+
+      tableContainer.add(new PagingNavigator("navigator", dataView));
     }
     catch (Throwable e)
     {

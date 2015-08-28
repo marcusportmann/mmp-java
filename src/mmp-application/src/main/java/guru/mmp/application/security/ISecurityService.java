@@ -668,6 +668,19 @@ public interface ISecurityService
     throws SecurityException;
 
   /**
+   * Returns the number of organisations
+   *
+   * @param origin the origin of the request e.g. the IP address, subnetwork or
+   *               workstation name for the remote client
+   *
+   * @return the number of organisations
+   *
+   * @throws SecurityException
+   */
+  public int getNumberOfOrganisations(String origin)
+    throws SecurityException;
+
+  /**
    * Returns the number of users associated with the specified organisation.
    *
    * @param organisation the code uniquely identifying the organisation
