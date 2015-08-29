@@ -25,18 +25,19 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.GroupInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>AddGroupPage</code> class implements the
@@ -61,17 +62,16 @@ public class AddGroupPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddGroupPage(final PageReference previousPage)
+  public AddGroupPage(PageReference previousPage)
   {
     super("Add Group");
 
-    final IModel<Group> groupModel = new Model<>(new Group());
-
     try
     {
-      Form<Group> addForm = new Form<>("addForm", new CompoundPropertyModel<>(groupModel));
+      Form<Group> addForm = new Form<>("addForm",
+        new CompoundPropertyModel<>(new Model<>(new Group())));
 
-      addForm.add(new GroupInputPanel("group", groupModel, false));
+      addForm.add(new GroupInputPanel("group", false));
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -83,7 +83,7 @@ public class AddGroupPage extends TemplateWebPage
         {
           try
           {
-            Group group = groupModel.getObject();
+            Group group = addForm.getModelObject();
 
             // Check if a group with the specified code already exists and if so return an error
             try
@@ -138,5 +138,6 @@ public class AddGroupPage extends TemplateWebPage
   /**
    * Hidden <code>AddGroupPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected AddGroupPage() {}
 }

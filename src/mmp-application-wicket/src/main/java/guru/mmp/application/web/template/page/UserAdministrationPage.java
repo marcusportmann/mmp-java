@@ -27,6 +27,7 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.UserDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,12 +42,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>UserAdministrationPage</code> class implements the
@@ -81,12 +83,12 @@ public class UserAdministrationPage extends TemplateWebPage
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
        */
-      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
       // The dialog used to confirm the removal of a user
-      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
       // The "addLink" used to add a new user
@@ -113,7 +115,7 @@ public class UserAdministrationPage extends TemplateWebPage
 
       // The "filter" field
       final TextField<String> filterField = new TextField<>("filter",
-        new PropertyModel<String>(dataProvider, "filter"));
+        new PropertyModel<>(dataProvider, "filter"));
       filterForm.add(filterField);
 
       // The "filterButton" button
@@ -136,11 +138,10 @@ public class UserAdministrationPage extends TemplateWebPage
         @Override
         protected void populateItem(Item<User> item)
         {
-          final IModel<User> userModel = item.getModel();
-
-          item.add(new Label("username", new PropertyModel<String>(userModel, "username")));
-          item.add(new Label("firstNames", new PropertyModel<String>(userModel, "firstNames")));
-          item.add(new Label("lastName", new PropertyModel<String>(userModel, "lastName")));
+          item.add(new Label("username", new PropertyModel<String>(item.getModel(), "username")));
+          item.add(new Label("firstNames",
+              new PropertyModel<String>(item.getModel(), "firstNames")));
+          item.add(new Label("lastName", new PropertyModel<String>(item.getModel(), "lastName")));
 
           // The "userGroupsLink" link
           Link<Void> userGroupsLink = new Link<Void>("userGroupsLink")
@@ -150,7 +151,7 @@ public class UserAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              User user = userModel.getObject();
+              User user = item.getModelObject();
 
               if (!user.getUsername().equalsIgnoreCase("Administrator"))
               {
@@ -170,11 +171,11 @@ public class UserAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              User user = userModel.getObject();
+              User user = item.getModelObject();
 
               if (!user.getUsername().equalsIgnoreCase("Administrator"))
               {
-                UpdateUserPage page = new UpdateUserPage(getPageReference(), userModel);
+                UpdateUserPage page = new UpdateUserPage(getPageReference(), item.getModel());
 
                 setResponsePage(page);
               }
@@ -191,7 +192,7 @@ public class UserAdministrationPage extends TemplateWebPage
             public void onClick()
             {
               ResetUserPasswordPage page = new ResetUserPasswordPage(getPageReference(),
-                new Model<>(userModel.getObject()));
+                new Model<>(item.getModelObject()));
 
               setResponsePage(page);
             }
@@ -206,9 +207,9 @@ public class UserAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              if (!userModel.getObject().getUsername().equalsIgnoreCase("Administrator"))
+              if (!item.getModelObject().getUsername().equalsIgnoreCase("Administrator"))
               {
-                removeDialog.show(target, userModel);
+                removeDialog.show(target, item.getModel());
               }
             }
           };

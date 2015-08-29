@@ -18,10 +18,9 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.Group;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
+
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
 
 /**
  * The <code>GroupInputPanel</code> class provides a Wicket component that can
@@ -37,13 +36,12 @@ public class GroupInputPanel extends InputPanel
    * Constructs a new <code>GroupInputPanel</code>.
    *
    * @param id                  the non-null id of this component
-   * @param groupModel          the <code>Group</code> model
    * @param isGroupNameReadOnly <code>true</code> if the ID for the <code>Group</code>
    *                            is readonly or <code>false</code> otherwise
    */
-  public GroupInputPanel(String id, IModel<Group> groupModel, boolean isGroupNameReadOnly)
+  public GroupInputPanel(String id, boolean isGroupNameReadOnly)
   {
-    super(id, groupModel);
+    super(id);
 
     // The "groupName" field
     TextField<String> groupNameField = new TextFieldWithFeedback<>("groupName");

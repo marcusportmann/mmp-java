@@ -27,6 +27,7 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.ReportDefinitionDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,12 +39,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -78,12 +80,12 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
        */
-      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
       // The dialog used to confirm the removal of a group
-      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
       // The "addLink" link
@@ -112,9 +114,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
 
         protected void populateItem(Item<ReportDefinition> item)
         {
-          final IModel<ReportDefinition> reportDefinitionModel = item.getModel();
-
-          item.add(new Label("name", new PropertyModel<String>(reportDefinitionModel, "name")));
+          item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -125,7 +125,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             public void onClick()
             {
               UpdateReportDefinitionPage page = new UpdateReportDefinitionPage(getPageReference(),
-                new Model<>(reportDefinitionModel.getObject()));
+                item.getModel());
 
               setResponsePage(page);
             }
@@ -141,7 +141,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, reportDefinitionModel);
+              removeDialog.show(target, item.getModel());
             }
           };
           item.add(removeLink);

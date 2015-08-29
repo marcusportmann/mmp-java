@@ -170,5 +170,6 @@ public class UpdateUserPage extends TemplateWebPage
   /**
    * Hidden <code>UpdateUserPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected UpdateUserPage() {}
 }

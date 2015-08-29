@@ -61,12 +61,6 @@ public class AddCodeCategoryPage extends TemplateWebPage
   @Inject
   private ICodesService codesService;
 
-  @Override
-  protected void onInitialize()
-  {
-    super.onInitialize();
-  }
-
   /**
    * Constructs a new <code>AddCodeCategoryPage</code>.
    *
@@ -163,5 +157,12 @@ public class AddCodeCategoryPage extends TemplateWebPage
   /**
    * Hidden <code>AddCodeCategoryPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected AddCodeCategoryPage() {}
+
+  @Override
+  protected void onInitialize()
+  {
+    super.onInitialize();
+  }
 }

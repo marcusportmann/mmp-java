@@ -25,17 +25,19 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.CodeInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>UpdateCodePage</code> class implements the
@@ -61,7 +63,7 @@ public class UpdateCodePage extends TemplateWebPage
    * @param previousPage the previous page
    * @param codeModel    the model for the code
    */
-  public UpdateCodePage(final PageReference previousPage, final IModel<Code> codeModel)
+  public UpdateCodePage(PageReference previousPage, IModel<Code> codeModel)
   {
     super("Update Code");
 
@@ -69,7 +71,7 @@ public class UpdateCodePage extends TemplateWebPage
     {
       Form<Code> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(codeModel));
 
-      updateForm.add(new CodeInputPanel("code", codeModel, true));
+      updateForm.add(new CodeInputPanel("code", true));
 
       // The "updateButton" button
       Button updateButton = new Button("updateButton")
@@ -83,7 +85,7 @@ public class UpdateCodePage extends TemplateWebPage
           {
             WebSession session = getWebApplicationSession();
 
-            Code code = codeModel.getObject();
+            Code code = updateForm.getModelObject();
 
             codesService.updateCode(code, session.getUsername());
 
@@ -124,5 +126,6 @@ public class UpdateCodePage extends TemplateWebPage
   /**
    * Hidden <code>UpdateCodePage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected UpdateCodePage() {}
 }

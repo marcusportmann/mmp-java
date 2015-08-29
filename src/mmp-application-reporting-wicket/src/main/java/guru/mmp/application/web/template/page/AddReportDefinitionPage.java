@@ -25,23 +25,26 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.component.ReportDefinitionInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddReportDefinitionPage</code> class implements the "Add Report Definition"
@@ -66,21 +69,19 @@ public class AddReportDefinitionPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddReportDefinitionPage(final PageReference previousPage)
+  public AddReportDefinitionPage(PageReference previousPage)
   {
     super("Add Report Definition");
 
-    final IModel<ReportDefinition> reportDefinitionModel = new Model<>(new ReportDefinition());
-
     try
     {
-      reportDefinitionModel.getObject().setId(UUID.randomUUID().toString());
-
       Form<ReportDefinition> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(reportDefinitionModel));
+        new CompoundPropertyModel<>(new Model<>(new ReportDefinition())));
 
-      final ReportDefinitionInputPanel reportDefinitionInputPanel =
-        new ReportDefinitionInputPanel("reportDefinition", reportDefinitionModel, false);
+      addForm.getModelObject().setId(UUID.randomUUID().toString());
+
+      ReportDefinitionInputPanel reportDefinitionInputPanel =
+        new ReportDefinitionInputPanel("reportDefinition", false);
 
       addForm.add(reportDefinitionInputPanel);
 
@@ -96,7 +97,7 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
           try
           {
-            ReportDefinition reportDefinition = reportDefinitionModel.getObject();
+            ReportDefinition reportDefinition = addForm.getModelObject();
 
             WebSession session = getWebApplicationSession();
 
@@ -175,5 +176,6 @@ public class AddReportDefinitionPage extends TemplateWebPage
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected AddReportDefinitionPage() {}
 }

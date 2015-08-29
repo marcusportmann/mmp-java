@@ -77,7 +77,7 @@ public class ResetUserPasswordPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param userModel    the model for the user
    */
-  public ResetUserPasswordPage(final PageReference previousPage, final IModel<User> userModel)
+  public ResetUserPasswordPage(PageReference previousPage, IModel<User> userModel)
   {
     super("Reset User Password");
 
@@ -189,5 +189,6 @@ public class ResetUserPasswordPage extends TemplateWebPage
   /**
    * Hidden <code>ResetPasswordPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected ResetUserPasswordPage() {}
 }

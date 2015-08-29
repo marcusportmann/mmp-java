@@ -18,10 +18,8 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
 
 /**
  * The <code>OrganisationInputPanel</code> class provides a Wicket component that can
@@ -37,14 +35,12 @@ public class OrganisationInputPanel extends InputPanel
    * Constructs a new <code>OrganisationInputPanel</code>.
    *
    * @param id                the non-null id of this component
-   * @param organisationModel the <code>Organisation</code> model
    * @param isCodeReadOnly    <code>true</code> if the code for the <code>Organisation</code>
    *                          is readonly or <code>false</code> otherwise
    */
-  public OrganisationInputPanel(String id, IModel<Organisation> organisationModel,
-      boolean isCodeReadOnly)
+  public OrganisationInputPanel(String id, boolean isCodeReadOnly)
   {
-    super(id, organisationModel);
+    super(id);
 
     // The "code" field
     TextField<String> codeField = new TextFieldWithFeedback<>("code");

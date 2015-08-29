@@ -24,17 +24,19 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.GroupInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>UpdateGroupPage</code> class implements the
@@ -60,7 +62,7 @@ public class UpdateGroupPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param groupModel   the model for the group
    */
-  public UpdateGroupPage(final PageReference previousPage, final IModel<Group> groupModel)
+  public UpdateGroupPage(PageReference previousPage, IModel<Group> groupModel)
   {
     super("Update Group");
 
@@ -68,7 +70,7 @@ public class UpdateGroupPage extends TemplateWebPage
     {
       Form<Group> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(groupModel));
 
-      updateForm.add(new GroupInputPanel("group", groupModel, true));
+      updateForm.add(new GroupInputPanel("group", true));
 
       // The "updateButton" button
       Button updateButton = new Button("updateButton")
@@ -80,7 +82,7 @@ public class UpdateGroupPage extends TemplateWebPage
         {
           try
           {
-            Group group = groupModel.getObject();
+            Group group = updateForm.getModelObject();
 
             securityService.updateGroup(group, getRemoteAddress());
 
@@ -121,5 +123,6 @@ public class UpdateGroupPage extends TemplateWebPage
   /**
    * Hidden <code>UpdateGroupPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected UpdateGroupPage() {}
 }

@@ -26,18 +26,19 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.OrganisationInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>AddOrganisationPage</code> class implements the
@@ -62,18 +63,16 @@ public class AddOrganisationPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddOrganisationPage(final PageReference previousPage)
+  public AddOrganisationPage(PageReference previousPage)
   {
     super("Add Organisation");
-
-    final IModel<Organisation> organisationModel = new Model<>(new Organisation());
 
     try
     {
       Form<Organisation> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(organisationModel));
+        new CompoundPropertyModel<>(new Model<>(new Organisation())));
 
-      addForm.add(new OrganisationInputPanel("organisation", organisationModel, false));
+      addForm.add(new OrganisationInputPanel("organisation", false));
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -87,7 +86,7 @@ public class AddOrganisationPage extends TemplateWebPage
           {
             WebSession session = getWebApplicationSession();
 
-            Organisation organisation = organisationModel.getObject();
+            Organisation organisation = addForm.getModelObject();
 
             /*
              * Check if an organisation with the specified code already exists and if so return an
@@ -153,5 +152,6 @@ public class AddOrganisationPage extends TemplateWebPage
   /**
    * Hidden <code>AddOrganisationPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected AddOrganisationPage() {}
 }

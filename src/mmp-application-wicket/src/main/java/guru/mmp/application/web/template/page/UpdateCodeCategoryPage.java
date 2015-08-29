@@ -64,8 +64,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
    * @param previousPage      the previous page
    * @param codeCategoryModel the model for the code category
    */
-  public UpdateCodeCategoryPage(final PageReference previousPage,
-      IModel<CodeCategory> codeCategoryModel)
+  public UpdateCodeCategoryPage(PageReference previousPage, IModel<CodeCategory> codeCategoryModel)
   {
     super("Update Code Category");
 
@@ -74,7 +73,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
       Form<CodeCategory> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(codeCategoryModel));
 
-      updateForm.add(new CodeCategoryInputPanel("codeCategory", true));
+      updateForm.add(new CodeCategoryInputPanel("codeCategory", false));
 
       // The "updateButton" button
       Button updateButton = new Button("updateButton")
@@ -88,7 +87,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
           {
             WebSession session = getWebApplicationSession();
 
-            CodeCategory codeCategory = codeCategoryModel.getObject();
+            CodeCategory codeCategory = updateForm.getModelObject();
 
             if (codeCategory.getCategoryType() != CodeCategoryType.LOCAL_CUSTOM)
             {
@@ -149,5 +148,6 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
   /**
    * Hidden <code>UpdateCodeCategoryPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected UpdateCodeCategoryPage() {}
 }

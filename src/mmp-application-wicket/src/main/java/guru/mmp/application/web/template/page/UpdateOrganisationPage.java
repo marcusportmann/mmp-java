@@ -60,8 +60,8 @@ public class UpdateOrganisationPage extends TemplateWebPage
    * @param previousPage      the previous page
    * @param organisationModel the model for the organisation
    */
-  public UpdateOrganisationPage(final PageReference previousPage,
-      final IModel<Organisation> organisationModel)
+  public UpdateOrganisationPage(PageReference previousPage,
+      IModel<Organisation> organisationModel)
   {
     super("Update Organisation");
 
@@ -70,7 +70,7 @@ public class UpdateOrganisationPage extends TemplateWebPage
       Form<Organisation> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(organisationModel));
 
-      updateForm.add(new OrganisationInputPanel("organisation", organisationModel, true));
+      updateForm.add(new OrganisationInputPanel("organisation", true));
 
       // The "updateButton" button
       Button updateButton = new Button("updateButton")
@@ -82,7 +82,7 @@ public class UpdateOrganisationPage extends TemplateWebPage
         {
           try
           {
-            Organisation organisation = organisationModel.getObject();
+            Organisation organisation = updateForm.getModelObject();
 
             securityService.updateOrganisation(organisation, getRemoteAddress());
 
@@ -124,5 +124,6 @@ public class UpdateOrganisationPage extends TemplateWebPage
   /**
    * Hidden <code>UpdateOrganisationPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected UpdateOrganisationPage() {}
 }

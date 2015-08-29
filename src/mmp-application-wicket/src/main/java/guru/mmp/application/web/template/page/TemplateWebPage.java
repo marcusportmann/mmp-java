@@ -26,6 +26,7 @@ import guru.mmp.application.web.template.component.MainNavigationMenu;
 import guru.mmp.application.web.template.component.UserMenu;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -64,7 +65,7 @@ public abstract class TemplateWebPage extends WebPage
    * @param heading      the page heading
    * @param subHeading   the sub-heading for the page
    */
-  public TemplateWebPage(final String heading, final String subHeading)
+  public TemplateWebPage(String heading, String subHeading)
   {
     if (getApplication().usesDevelopmentConfig())
     {
@@ -136,6 +137,7 @@ public abstract class TemplateWebPage extends WebPage
    *
    * @return the page sub-heading
    */
+  @SuppressWarnings("unused")
   public String getSubHeading()
   {
     return subHeading;
@@ -196,6 +198,7 @@ public abstract class TemplateWebPage extends WebPage
    *
    * @param subHeading the sub-heading to set
    */
+  @SuppressWarnings("unused")
   public void setSubHeading(String subHeading)
   {
     this.subHeading = subHeading;

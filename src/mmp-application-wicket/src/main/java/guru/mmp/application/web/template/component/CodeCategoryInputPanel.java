@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.util.string.Strings;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -89,7 +90,7 @@ public class CodeCategoryInputPanel extends InputPanel
     categoryTypeField = new DropDownChoiceWithFeedback<>("categoryType",
         getCodeCategoryTypeOptions(), codeCategoryTypeChoiceRenderer);
 
-    categoryTypeField.add(new AjaxFormComponentUpdatingBehavior("onchange")
+    categoryTypeField.add(new AjaxFormComponentUpdatingBehavior("change")
     {
       private static final long serialVersionUID = 1000000;
 
@@ -138,27 +139,14 @@ public class CodeCategoryInputPanel extends InputPanel
     // Reset the "codeDataContainer" if required
     codeDataField.setModelObject(null);
 
-    // codeDataField.clearInput();
-
     target.add(codeDataContainer);
 
     // Reset the "endPointContainer"
     endPointField.setModelObject(null);
 
-    // endPointField.clearInput();
-
     isEndPointSecureField.setModelObject(false);
-
-    // isEndPointSecureField.clearInput();
-
     isCacheableField.setModelObject(false);
-
-    // isCacheableField.clearInput();
-
     cacheExpiryField.setModelObject(null);
-
-    // cacheExpiryField.clearInput();
-    cacheExpiryField.setEnabled(false);
 
     target.add(endPointContainer);
   }
@@ -169,20 +157,13 @@ public class CodeCategoryInputPanel extends InputPanel
     {
       private static final long serialVersionUID = 1000000;
 
-      private boolean isVisible;
-
-      @Override
-      public boolean isVisible()
-      {
-        return isVisible;
-      }
-
       @Override
       protected void onConfigure()
       {
         super.onConfigure();
 
-        isVisible = (categoryTypeField.getDefaultModelObject() == CodeCategoryType.LOCAL_CUSTOM);
+        setVisible(
+            CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
       }
     };
 
@@ -191,8 +172,17 @@ public class CodeCategoryInputPanel extends InputPanel
     add(codeDataContainer);
 
     // The "codeData" field
-    codeDataField = new TextAreaWithFeedback<>("codeData");
-    codeDataField.setRequired(true);
+    codeDataField = new TextAreaWithFeedback<String>("codeData")
+    {
+      @Override
+      protected void onConfigure()
+      {
+        super.onConfigure();
+
+        setRequired(
+            CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
+      }
+    };
     codeDataContainer.add(codeDataField);
   }
 
@@ -202,22 +192,14 @@ public class CodeCategoryInputPanel extends InputPanel
     {
       private static final long serialVersionUID = 1000000;
 
-      private boolean isVisible;
-
-      @Override
-      public boolean isVisible()
-      {
-        return isVisible;
-      }
-
       @Override
       protected void onConfigure()
       {
         super.onConfigure();
 
-        isVisible = ((categoryTypeField.getDefaultModelObject()
-            == CodeCategoryType.REMOTE_HTTP_SERVICE) || (categoryTypeField.getDefaultModelObject()
-              == CodeCategoryType.REMOTE_WEB_SERVICE));
+        setVisible(CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString()
+          .equals(categoryTypeField.getValue()) || CodeCategoryType.REMOTE_WEB_SERVICE
+          .getCodeAsString().equals(categoryTypeField.getValue()));
       }
     };
 
@@ -226,8 +208,18 @@ public class CodeCategoryInputPanel extends InputPanel
     add(endPointContainer);
 
     // The "endPoint" field
-    endPointField = new TextFieldWithFeedback<>("endPoint");
-    endPointField.setRequired(true);
+    endPointField = new TextFieldWithFeedback<String>("endPoint")
+    {
+      @Override
+      protected void onConfigure()
+      {
+        super.onConfigure();
+
+        setRequired((CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString()
+          .equals(categoryTypeField.getValue()) || CodeCategoryType.REMOTE_WEB_SERVICE
+          .getCodeAsString().equals(categoryTypeField.getValue())));
+      }
+    };
     endPointContainer.add(endPointField);
 
     // The "isEndPointSecure" field
@@ -237,7 +229,7 @@ public class CodeCategoryInputPanel extends InputPanel
     // The "isCacheable" field
     isCacheableField = new CheckBox("isCacheable");
 
-    isCacheableField.add(new AjaxFormComponentUpdatingBehavior("onchange")
+    isCacheableField.add(new AjaxFormComponentUpdatingBehavior("change")
     {
       private static final long serialVersionUID = 1000000;
 
@@ -245,8 +237,6 @@ public class CodeCategoryInputPanel extends InputPanel
       protected void onUpdate(AjaxRequestTarget target)
       {
         cacheExpiryField.setModelObject(null);
-        cacheExpiryField.setEnabled(isCacheableField.getModelObject());
-        cacheExpiryField.setRequired(isCacheableField.getModelObject());
 
         target.add(cacheExpiryField);
       }
@@ -259,15 +249,12 @@ public class CodeCategoryInputPanel extends InputPanel
     cacheExpiryField = new TextFieldWithFeedback<Integer>("cacheExpiry")
     {
       @Override
-      public boolean isEnabled()
+      protected void onConfigure()
       {
-        return isCacheableField.getModelObject();
-      }
+        super.onConfigure();
 
-      @Override
-      public boolean isRequired()
-      {
-        return isCacheableField.getModelObject();
+        setRequired(Strings.isTrue(isCacheableField.getValue()));
+        setEnabled(Strings.isTrue(isCacheableField.getValue()));
       }
     };
 

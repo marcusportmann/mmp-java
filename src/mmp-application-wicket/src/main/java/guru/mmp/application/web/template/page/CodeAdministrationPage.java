@@ -27,6 +27,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeDataProvider;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -38,12 +39,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>CodeAdministrationPage</code> class implements the
@@ -71,8 +73,8 @@ public class CodeAdministrationPage extends TemplateWebPage
    *                       code category the codes are associated with
    * @param codeCategoryName the name of the code category
    */
-  public CodeAdministrationPage(final PageReference previousPage, final String codeCategoryId,
-      final String codeCategoryName)
+  public CodeAdministrationPage(PageReference previousPage, String codeCategoryId,
+      String codeCategoryName)
   {
     super("Codes", codeCategoryName);
 
@@ -82,12 +84,12 @@ public class CodeAdministrationPage extends TemplateWebPage
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
        */
-      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
       // The dialog used to confirm the removal of a code
-      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
       // The "addLink" link
@@ -128,9 +130,7 @@ public class CodeAdministrationPage extends TemplateWebPage
         @Override
         protected void populateItem(Item<Code> item)
         {
-          final IModel<Code> codeModel = item.getModel();
-
-          Code code = codeModel.getObject();
+          Code code = item.getModelObject();
 
           String name = StringUtil.truncate(code.getName(), 25);
           String value = StringUtil.truncate(code.getValue(), 30);
@@ -146,7 +146,7 @@ public class CodeAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateCodePage page = new UpdateCodePage(getPageReference(), codeModel);
+              UpdateCodePage page = new UpdateCodePage(getPageReference(), item.getModel());
 
               setResponsePage(page);
             }
@@ -161,7 +161,7 @@ public class CodeAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, codeModel);
+              removeDialog.show(target, item.getModel());
             }
           };
           item.add(removeLink);
@@ -183,6 +183,7 @@ public class CodeAdministrationPage extends TemplateWebPage
   /**
    * Constructs a new <code>CodeAdministrationPage</code>.
    */
+  @SuppressWarnings("unused")
   protected CodeAdministrationPage() {}
 
   /**

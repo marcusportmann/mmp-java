@@ -27,6 +27,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -38,17 +39,18 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserGroupsPage</code> class implements the
@@ -76,7 +78,7 @@ public class UserGroupsPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param username     the username identifying the user
    */
-  public UserGroupsPage(final PageReference previousPage, final String username)
+  public UserGroupsPage(PageReference previousPage, String username)
   {
     super("User Groups", username);
 
@@ -84,7 +86,7 @@ public class UserGroupsPage extends TemplateWebPage
      * The table container, which allows the table and its associated navigator to be updated
      * using AJAX.
      */
-    final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+    WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
     tableContainer.setOutputMarkupId(true);
     add(tableContainer);
 
@@ -103,7 +105,7 @@ public class UserGroupsPage extends TemplateWebPage
 
     // The "addUserToGroupForm" form
     final DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
-      new PropertyModel<String>(this, "groupName"), getGroupOptions(username));
+      new PropertyModel<>(this, "groupName"), getGroupOptions(username));
 
     groupNameField.setRequired(true);
 
@@ -155,9 +157,7 @@ public class UserGroupsPage extends TemplateWebPage
       @Override
       protected void populateItem(Item<Group> item)
       {
-        final IModel<Group> groupModel = item.getModel();
-
-        Group group = groupModel.getObject();
+        Group group = item.getModelObject();
 
         String name = StringUtil.truncate(group.getGroupName(), 25);
         String description = StringUtil.truncate(group.getDescription(), 30);
@@ -175,7 +175,7 @@ public class UserGroupsPage extends TemplateWebPage
           {
             WebSession session = getWebApplicationSession();
 
-            Group group = groupModel.getObject();
+            Group group = item.getModelObject();
 
             try
             {
@@ -217,6 +217,7 @@ public class UserGroupsPage extends TemplateWebPage
   /**
    * Hidden <code>UserGroupsPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected UserGroupsPage() {}
 
   private List<String> getGroupOptions(final String username)

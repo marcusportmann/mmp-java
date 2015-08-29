@@ -28,6 +28,7 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeCategoryDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -39,12 +40,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>CodeCategoryAdministrationPage</code> class implements the
@@ -80,12 +82,12 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
        */
-      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
       // The dialog used to confirm the removal of a code category
-      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
       // The "addLink" used to add a new code category
@@ -112,11 +114,9 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
         @Override
         protected void populateItem(Item<CodeCategory> item)
         {
-          final IModel<CodeCategory> codeCategoryModel = item.getModel();
-
-          item.add(new Label("name", new PropertyModel<String>(codeCategoryModel, "name")));
+          item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
           item.add(new Label("categoryType",
-              new PropertyModel<String>(codeCategoryModel, "categoryType.name")));
+              new PropertyModel<String>(item.getModel(), "categoryType.name")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -127,7 +127,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
             public void onClick()
             {
               UpdateCodeCategoryPage page = new UpdateCodeCategoryPage(getPageReference(),
-                codeCategoryModel);
+                item.getModel());
 
               setResponsePage(page);
             }
@@ -142,7 +142,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, codeCategoryModel);
+              removeDialog.show(target, item.getModel());
             }
           };
           item.add(removeLink);
@@ -155,7 +155,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              CodeCategory codeCategory = codeCategoryModel.getObject();
+              CodeCategory codeCategory = item.getModelObject();
 
               String codeCategoryId = codeCategory.getId();
               String codeCategoryName = codeCategory.getName();
@@ -163,9 +163,14 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
               setResponsePage(new CodeAdministrationPage(getPageReference(), codeCategoryId,
                   codeCategoryName));
             }
+
+            @Override
+            public boolean isVisible()
+            {
+              return item.getModelObject().getCategoryType() == CodeCategoryType.LOCAL_STANDARD;
+            }
           };
-          codeAdministrationLink.setVisible(codeCategoryModel.getObject().getCategoryType()
-              == CodeCategoryType.LOCAL_STANDARD);
+
           item.add(codeAdministrationLink);
         }
       };

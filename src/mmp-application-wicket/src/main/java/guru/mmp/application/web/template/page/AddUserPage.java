@@ -31,6 +31,7 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -38,14 +39,16 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddUserPage</code> class implements the
@@ -82,13 +85,14 @@ public class AddUserPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddUserPage(final PageReference previousPage)
+  public AddUserPage(PageReference previousPage)
   {
     super("Add User");
 
     try
     {
-      Form<User> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(new User())));
+      Form<User> addForm = new Form<>("addForm",
+        new CompoundPropertyModel<>(new Model<>(new User())));
 
       // The "username" field
       TextField<String> usernameField = new TextFieldWithFeedback<>("username");
@@ -244,6 +248,7 @@ public class AddUserPage extends TemplateWebPage
   /**
    * Hidden <code>AddUserPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected AddUserPage() {}
 
   /**

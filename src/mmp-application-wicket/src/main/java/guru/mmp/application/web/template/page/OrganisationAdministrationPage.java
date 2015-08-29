@@ -78,12 +78,12 @@ public class OrganisationAdministrationPage extends TemplateWebPage
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
        */
-      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
       // The dialog used to confirm the removal of an organisation
-      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
       // The "addLink" used to add a new organisation
@@ -110,10 +110,8 @@ public class OrganisationAdministrationPage extends TemplateWebPage
         @Override
         protected void populateItem(Item<Organisation> item)
         {
-          final IModel<Organisation> organisationModel = item.getModel();
-
-          item.add(new Label("code", new PropertyModel<String>(organisationModel, "code")));
-          item.add(new Label("name", new PropertyModel<String>(organisationModel, "name")));
+          item.add(new Label("code", new PropertyModel<String>(item.getModel(), "code")));
+          item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
 
           // The "updateLink" link
           final Link<Void> updateLink = new Link<Void>("updateLink")
@@ -124,7 +122,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
             public void onClick()
             {
               UpdateOrganisationPage page = new UpdateOrganisationPage(getPageReference(),
-                organisationModel);
+                item.getModel());
 
               setResponsePage(page);
             }
@@ -139,7 +137,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, organisationModel);
+              removeDialog.show(target, item.getModel());
             }
           };
           item.add(removeLink);

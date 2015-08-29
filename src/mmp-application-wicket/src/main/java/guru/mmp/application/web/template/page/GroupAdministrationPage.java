@@ -26,6 +26,7 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -37,12 +38,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>GroupAdministrationPage</code> class implements the
@@ -75,12 +77,12 @@ public class GroupAdministrationPage extends TemplateWebPage
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
        */
-      final WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
       // The dialog used to confirm the removal of a group
-      final RemoveDialog removeDialog = new RemoveDialog(tableContainer);
+      RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
       // The "addLink" link
@@ -108,10 +110,9 @@ public class GroupAdministrationPage extends TemplateWebPage
         @Override
         protected void populateItem(Item<Group> item)
         {
-          final IModel<Group> groupModel = item.getModel();
-
-          item.add(new Label("groupName", new PropertyModel<String>(groupModel, "groupName")));
-          item.add(new Label("description", new PropertyModel<String>(groupModel, "description")));
+          item.add(new Label("groupName", new PropertyModel<String>(item.getModel(), "groupName")));
+          item.add(new Label("description",
+              new PropertyModel<String>(item.getModel(), "description")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -121,7 +122,7 @@ public class GroupAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateGroupPage page = new UpdateGroupPage(getPageReference(), groupModel);
+              UpdateGroupPage page = new UpdateGroupPage(getPageReference(), item.getModel());
 
               setResponsePage(page);
             }
@@ -136,7 +137,7 @@ public class GroupAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, groupModel);
+              removeDialog.show(target, item.getModel());
             }
           };
           item.add(removeLink);

@@ -24,19 +24,21 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.CodeInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddCodePage</code> class implements the
@@ -62,20 +64,19 @@ public class AddCodePage extends TemplateWebPage
    * @param previousPage   the previous page
    * @param codeCategoryId the ID uniquely identifying the code category for the code
    */
-  public AddCodePage(final PageReference previousPage, final String codeCategoryId)
+  public AddCodePage(PageReference previousPage, String codeCategoryId)
   {
     super("Add Code");
 
-    final IModel<Code> codeModel = new Model<>(new Code());
-
     try
     {
-      codeModel.getObject().setId(UUID.randomUUID().toString());
-      codeModel.getObject().setCategoryId(codeCategoryId);
+      Form<Code> addForm = new Form<>("addForm",
+        new CompoundPropertyModel<>(new Model<>(new Code())));
 
-      Form<Code> addForm = new Form<>("addForm", new CompoundPropertyModel<>(codeModel));
+      addForm.getModelObject().setId(UUID.randomUUID().toString());
+      addForm.getModelObject().setCategoryId(codeCategoryId);
 
-      addForm.add(new CodeInputPanel("code", codeModel, false));
+      addForm.add(new CodeInputPanel("code", false));
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -87,9 +88,7 @@ public class AddCodePage extends TemplateWebPage
         {
           try
           {
-            Code code = codeModel.getObject();
-
-            codesService.createCode(code);
+            codesService.createCode(addForm.getModelObject());
 
             setResponsePage(previousPage.getPage());
           }
@@ -128,5 +127,6 @@ public class AddCodePage extends TemplateWebPage
   /**
    * Hidden <code>AddCodePage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected AddCodePage() {}
 }

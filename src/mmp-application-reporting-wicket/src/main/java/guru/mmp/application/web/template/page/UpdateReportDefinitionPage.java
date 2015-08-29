@@ -65,7 +65,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
    * @param previousPage          the previous page
    * @param reportDefinitionModel the model for the report definition
    */
-  public UpdateReportDefinitionPage(final PageReference previousPage,
+  public UpdateReportDefinitionPage(PageReference previousPage,
       final IModel<ReportDefinition> reportDefinitionModel)
   {
     super("Update Report Definition");
@@ -75,8 +75,8 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
       Form<ReportDefinition> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(reportDefinitionModel));
 
-      final ReportDefinitionInputPanel reportDefinitionInputPanel =
-        new ReportDefinitionInputPanel("reportDefinition", reportDefinitionModel, true);
+      ReportDefinitionInputPanel reportDefinitionInputPanel =
+        new ReportDefinitionInputPanel("reportDefinition", true);
 
       updateForm.add(reportDefinitionInputPanel);
 
@@ -169,5 +169,6 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
   /**
    * Hidden <code>UpdateReportDefinitionPage</code> constructor.
    */
+  @SuppressWarnings("unused")
   protected UpdateReportDefinitionPage() {}
 }

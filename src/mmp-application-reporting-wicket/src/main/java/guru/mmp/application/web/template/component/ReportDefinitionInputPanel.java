@@ -18,17 +18,16 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
+
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>ReportDefinitionInputPanel</code> class provides a Wicket component that can
@@ -45,15 +44,13 @@ public class ReportDefinitionInputPanel extends InputPanel
   /**
    * Constructs a new <code>ReportDefinitionInputPanel</code>.
    *
-   * @param id                    the non-null id of this component
-   * @param reportDefinitionModel the <code>ReportDefinition</code> model
-   * @param isIdReadOnly          <code>true</code> if the ID for the <code>Code</code>
-   *                              is readonly or <code>false</code> otherwise
+   * @param id           the non-null id of this component
+   * @param isIdReadOnly <code>true</code> if the ID for the <code>Code</code>
+   *                     is readonly or <code>false</code> otherwise
    */
-  public ReportDefinitionInputPanel(String id, IModel<ReportDefinition> reportDefinitionModel,
-      boolean isIdReadOnly)
+  public ReportDefinitionInputPanel(String id, boolean isIdReadOnly)
   {
-    super(id, reportDefinitionModel);
+    super(id);
 
     // The "id" field
     TextField<String> idField = new TextFieldWithFeedback<>("id");
@@ -68,7 +65,7 @@ public class ReportDefinitionInputPanel extends InputPanel
 
     // The "fileUpload" field
     FileUploadField fileUploadField = new FileUploadField("fileUpload",
-      new PropertyModel<List<FileUpload>>(this, "fileUploads"));
+      new PropertyModel<>(this, "fileUploads"));
     fileUploadField.setRequired(true);
     add(fileUploadField);
   }
