@@ -75,7 +75,7 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
 
     response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
 
     if (feedbackJavaScript != null)
     {
@@ -108,7 +108,7 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
+      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
       if (feedbackJavaScript != null)
       {

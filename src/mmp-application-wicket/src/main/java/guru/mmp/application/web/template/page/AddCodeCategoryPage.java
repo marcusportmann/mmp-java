@@ -26,20 +26,22 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.CodeCategoryInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddCodeCategoryPage</code> class implements the
@@ -59,25 +61,29 @@ public class AddCodeCategoryPage extends TemplateWebPage
   @Inject
   private ICodesService codesService;
 
+  @Override
+  protected void onInitialize()
+  {
+    super.onInitialize();
+  }
+
   /**
    * Constructs a new <code>AddCodeCategoryPage</code>.
    *
    * @param previousPage the previous page
    */
-  public AddCodeCategoryPage(final PageReference previousPage)
+  public AddCodeCategoryPage(PageReference previousPage)
   {
     super("Add Code Category");
 
-    final IModel<CodeCategory> codeCategoryModel = new Model<>(new CodeCategory());
-
     try
     {
-      codeCategoryModel.getObject().setId(UUID.randomUUID().toString());
-
       Form<CodeCategory> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(codeCategoryModel));
+        new CompoundPropertyModel<>(new Model<>(new CodeCategory())));
 
-      addForm.add(new CodeCategoryInputPanel("codeCategory", codeCategoryModel, false));
+      addForm.getModelObject().setId(UUID.randomUUID().toString());
+
+      addForm.add(new CodeCategoryInputPanel("codeCategory", false));
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -93,7 +99,7 @@ public class AddCodeCategoryPage extends TemplateWebPage
 
             Date created = new Date();
 
-            CodeCategory codeCategory = codeCategoryModel.getObject();
+            CodeCategory codeCategory = addForm.getModelObject();
 
             codeCategory.setOrganisation(session.getOrganisation());
             codeCategory.setUpdated(created);

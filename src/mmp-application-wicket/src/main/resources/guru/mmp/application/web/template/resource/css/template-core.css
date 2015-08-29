@@ -11346,7 +11346,10 @@ input[type=checkbox].iswitch-xlg:active:checked:before, input[type=checkbox].isw
   }
 }
 
-
+.radio label, .checkbox label
+{
+  padding-left: 0;
+}
 
 
 

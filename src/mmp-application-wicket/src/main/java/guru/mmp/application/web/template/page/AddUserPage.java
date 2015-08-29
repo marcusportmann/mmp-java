@@ -35,7 +35,6 @@ import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -87,11 +86,9 @@ public class AddUserPage extends TemplateWebPage
   {
     super("Add User");
 
-    final IModel<User> userModel = new Model<>(new User());
-
     try
     {
-      Form<User> addForm = new Form<>("addForm", new CompoundPropertyModel<>(userModel));
+      Form<User> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(new User())));
 
       // The "username" field
       TextField<String> usernameField = new TextFieldWithFeedback<>("username");
@@ -185,7 +182,7 @@ public class AddUserPage extends TemplateWebPage
           {
             WebSession session = getWebApplicationSession();
 
-            User user = userModel.getObject();
+            User user = addForm.getModelObject();
 
             // Check if a user with the specified username already exists and if so return an error
             try

@@ -26,17 +26,19 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.CodeCategoryInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>UpdateCodeCategoryPage</code> class implements the
@@ -63,7 +65,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
    * @param codeCategoryModel the model for the code category
    */
   public UpdateCodeCategoryPage(final PageReference previousPage,
-      final IModel<CodeCategory> codeCategoryModel)
+      IModel<CodeCategory> codeCategoryModel)
   {
     super("Update Code Category");
 
@@ -72,7 +74,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
       Form<CodeCategory> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(codeCategoryModel));
 
-      updateForm.add(new CodeCategoryInputPanel("codeCategory", codeCategoryModel, true));
+      updateForm.add(new CodeCategoryInputPanel("codeCategory", true));
 
       // The "updateButton" button
       Button updateButton = new Button("updateButton")

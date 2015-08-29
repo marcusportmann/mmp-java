@@ -52,16 +52,26 @@
         </div>
 
         <div class="form-group">
-          <label for="isEndPointSecure" class="control-label col-sm-3">Is Secure</label>
+          <label for="isEndPointSecure" class="control-label col-sm-3"></label>
           <div class="col-sm-9">
-            <input wicket:id="isEndPointSecure" id="isEndPointSecure" class="form-control" type="checkbox" name="isEndPointSecure"/>
+            <div class="checkbox">
+              <label>
+                <input wicket:id="isEndPointSecure" id="isEndPointSecure" class="cbr" type="checkbox" name="isEndPointSecure"/>
+                Is Secure?
+              </label>
+            </div>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="isCacheable" class="control-label col-sm-3">Is Cacheable</label>
+          <label for="isCacheable" class="control-label col-sm-3"></label>
           <div class="col-sm-9">
-            <input wicket:id="isCacheable" id="isCacheable" class="form-control" type="checkbox" name="isCacheable"/>
+            <div class="checkbox">
+              <label>
+                <input wicket:id="isCacheable" id="isCacheable" class="cbr" type="checkbox" name="isCacheable"/>
+                Is Cacheable?
+              </label>
+            </div>
           </div>
         </div>
 

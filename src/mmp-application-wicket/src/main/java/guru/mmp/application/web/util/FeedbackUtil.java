@@ -48,7 +48,7 @@ public class FeedbackUtil
   /**
    * The JavaScript used to display the feedback for a form component using the 'domready' event.
    */
-  private static final String DOM_READ_FEEDBACK_JAVA_SCRIPT = "$(function(){if($('#%1$s')){"
+  private static final String DOM_READY_FEEDBACK_JAVA_SCRIPT = "$(function(){if($('#%1$s')){"
     + "if($('#%1$s').parent().hasClass('form-group')){" + "$('#%1$s').parent().addClass('%2$s');}"
     + "if($('#%1$s').parent().parent().hasClass('form-group')){"
     + "$('#%1$s').parent().parent().addClass('%2$s');}"
@@ -62,6 +62,17 @@ public class FeedbackUtil
     + "if($('#%1$s').parent().parent().hasClass('form-group')){"
     + "$('#%1$s').parent().parent().addClass('%2$s');}"
     + "$('#%1$sFeedback').replaceWith('%3$s');}";
+
+  /**
+   * The JavaScript used to clear the feedback for a form component.
+   */
+  private static final String CLEAR_FEEDBACK_JAVA_SCRIPT = "if($('#%1$s')){"
+    + "if($('#%1$s').parent().hasClass('form-group')){" + "$('#%1$s').parent().removeClass('"
+    + "has-error has-warning has-info has-success"
+    + "');} if($('#%1$s').parent().parent().hasClass('form-group')){"
+    + "$('#%1$s').parent().parent().removeClass('"
+    + "has-error has-warning has-info has-success"
+    + "');}$('#%1$sFeedback').replaceWith('<div id=\"#%1$sFeedback\"></div>');}";
 
   /**
    * Applies the appropriate CSS class to a component based on the type of feedback message
@@ -93,15 +104,15 @@ public class FeedbackUtil
   /**
    * Generate the Javascript to display the feedback for the specified component.
    *
-   * @param id          the id of the component to provide the feedback for
-   * @param component   the component to generate the feedback JavaScript for
-   * @param useDOMReady use the DOM ready event to execute the JavaScript
+   * @param id            the id of the component to provide the feedback for
+   * @param component     the component to generate the feedback JavaScript for
+   * @param isAjaxRequest is feedback being generated as part of an Ajax request
    *
    * @return the JavaScript to display the feedback message or <code>null</code>
    *         if there is no feedback for the specified component
    */
   public static String generateFeedbackJavaScript(String id, Component component,
-      boolean useDOMReady)
+      boolean isAjaxRequest)
   {
     if (component.hasFeedbackMessage())
     {
@@ -134,9 +145,9 @@ public class FeedbackUtil
 
       String feedbackId = id + "Feedback";
 
-      String javaScript = String.format(useDOMReady
-          ? DOM_READ_FEEDBACK_JAVA_SCRIPT
-          : FEEDBACK_JAVA_SCRIPT, id, feedbackClass,
+      String javaScript = String.format(isAjaxRequest
+          ? FEEDBACK_JAVA_SCRIPT
+          : DOM_READY_FEEDBACK_JAVA_SCRIPT, id, feedbackClass,
             JavaScriptUtils.escapeQuotes(FeedbackUtil.generateFeedbackHtml(feedbackId,
               feedbackMessage)));
 
@@ -150,6 +161,11 @@ public class FeedbackUtil
     }
     else
     {
+      if (isAjaxRequest)
+      {
+        return String.format(CLEAR_FEEDBACK_JAVA_SCRIPT, id);
+      }
+
       return null;
     }
   }

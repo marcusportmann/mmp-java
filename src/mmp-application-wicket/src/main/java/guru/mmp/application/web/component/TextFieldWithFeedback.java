@@ -76,7 +76,7 @@ public class TextFieldWithFeedback<T> extends TextField<T>
 
     response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
 
     if (feedbackJavaScript != null)
     {
@@ -107,7 +107,7 @@ public class TextFieldWithFeedback<T> extends TextField<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
+      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
       if (feedbackJavaScript != null)
       {

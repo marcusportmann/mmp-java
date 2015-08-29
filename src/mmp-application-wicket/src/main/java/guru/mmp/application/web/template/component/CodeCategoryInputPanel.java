@@ -18,12 +18,12 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.CodesServiceException;
 import guru.mmp.application.web.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.component.TextAreaWithFeedback;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -31,12 +31,11 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryInputPanel</code> class provides a Wicket component that can
@@ -59,15 +58,13 @@ public class CodeCategoryInputPanel extends InputPanel
   /**
    * Constructs a new <code>CodeCategoryInputPanel</code>.
    *
-   * @param id                the non-null id of this component
-   * @param codeCategoryModel the <code>CodeCategory</code> model
-   * @param isIdReadOnly      <code>true</code> if the ID for the <code>CodeCategory</code>
-   *                          is readonly or <code>false</code> otherwise
+   * @param id           the non-null id of this component
+   * @param isIdReadOnly <code>true</code> if the ID for the <code>CodeCategory</code>
+   *                     is readonly or <code>false</code> otherwise
    */
-  public CodeCategoryInputPanel(String id, IModel<CodeCategory> codeCategoryModel,
-      boolean isIdReadOnly)
+  public CodeCategoryInputPanel(String id, boolean isIdReadOnly)
   {
-    super(id, codeCategoryModel);
+    super(id);
 
     // The "id" field
     TextField<String> idField = new TextFieldWithFeedback<>("id");
@@ -102,6 +99,7 @@ public class CodeCategoryInputPanel extends InputPanel
         try
         {
           target.add(categoryTypeField);
+          target.appendJavaScript("cbr_replace();");
 
           resetContainers(target);
         }
@@ -117,11 +115,9 @@ public class CodeCategoryInputPanel extends InputPanel
 
     // The "codeDataContainer" container
     setupCodeDataContainer();
-    add(codeDataContainer);
 
     // The "endPointContainer" container
-    setupEndPointContainer(codeCategoryModel);
-    add(endPointContainer);
+    setupEndPointContainer();
   }
 
   private List<CodeCategoryType> getCodeCategoryTypeOptions()
@@ -192,6 +188,7 @@ public class CodeCategoryInputPanel extends InputPanel
 
     codeDataContainer.setOutputMarkupId(true);
     codeDataContainer.setOutputMarkupPlaceholderTag(true);
+    add(codeDataContainer);
 
     // The "codeData" field
     codeDataField = new TextAreaWithFeedback<>("codeData");
@@ -199,7 +196,7 @@ public class CodeCategoryInputPanel extends InputPanel
     codeDataContainer.add(codeDataField);
   }
 
-  private void setupEndPointContainer(IModel<CodeCategory> codeCategoryModel)
+  private void setupEndPointContainer()
   {
     endPointContainer = new WebMarkupContainer("endPointContainer")
     {
@@ -226,6 +223,7 @@ public class CodeCategoryInputPanel extends InputPanel
 
     endPointContainer.setOutputMarkupId(true);
     endPointContainer.setOutputMarkupPlaceholderTag(true);
+    add(endPointContainer);
 
     // The "endPoint" field
     endPointField = new TextFieldWithFeedback<>("endPoint");
@@ -258,9 +256,21 @@ public class CodeCategoryInputPanel extends InputPanel
     endPointContainer.add(isCacheableField);
 
     // The "cacheExpiry" field
-    cacheExpiryField = new TextFieldWithFeedback<>("cacheExpiry");
-    cacheExpiryField.setEnabled(codeCategoryModel.getObject().getIsCacheable());
-    cacheExpiryField.setRequired(codeCategoryModel.getObject().getIsCacheable());
+    cacheExpiryField = new TextFieldWithFeedback<Integer>("cacheExpiry")
+    {
+      @Override
+      public boolean isEnabled()
+      {
+        return isCacheableField.getModelObject();
+      }
+
+      @Override
+      public boolean isRequired()
+      {
+        return isCacheableField.getModelObject();
+      }
+    };
+
     cacheExpiryField.setOutputMarkupId(true);
     endPointContainer.add(cacheExpiryField);
   }

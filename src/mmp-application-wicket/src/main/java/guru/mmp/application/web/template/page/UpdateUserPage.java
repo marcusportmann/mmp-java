@@ -63,7 +63,7 @@ public class UpdateUserPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param userModel    the model for the user
    */
-  public UpdateUserPage(final PageReference previousPage, final IModel<User> userModel)
+  public UpdateUserPage(PageReference previousPage, IModel<User> userModel)
   {
     super("Update User");
 
@@ -128,7 +128,7 @@ public class UpdateUserPage extends TemplateWebPage
         {
           try
           {
-            User user = userModel.getObject();
+            User user = updateForm.getModelObject();
 
             securityService.updateUser(user, false, false, getRemoteAddress());
 
