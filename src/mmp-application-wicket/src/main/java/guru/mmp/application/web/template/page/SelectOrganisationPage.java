@@ -26,18 +26,9 @@ import guru.mmp.application.web.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.component.StringSelectOption;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
 import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.resource.thirdparty.datepicker.BootstrapDatePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.selectboxit.JQuerySelectBoxItJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.tagsinput.BootstrapTagsInputJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.timepicker.BootstrapTimePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScriptResourceReference;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
@@ -95,7 +86,8 @@ public class SelectOrganisationPage extends WebPage
     throws SecurityException
   {
     // Setup the page title
-    String title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | Select Organisation";
+    String title = ((TemplateWebApplication) getApplication()).getDisplayName()
+      + " | Select Organisation";
 
     Label titleLabel = new Label("pageTitle", title);
     titleLabel.setRenderBodyOnly(false);
@@ -203,7 +195,6 @@ public class SelectOrganisationPage extends WebPage
 
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-
 
     response.render(Select2CssResourceReference.getCssHeaderItem());
     response.render(Select2BootstrapCssResourceReference.getCssHeaderItem());

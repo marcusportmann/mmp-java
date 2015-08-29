@@ -26,7 +26,6 @@ import guru.mmp.application.web.template.component.MainNavigationMenu;
 import guru.mmp.application.web.template.component.UserMenu;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
-
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;

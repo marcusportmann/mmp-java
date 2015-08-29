@@ -60,8 +60,7 @@ public class UpdateOrganisationPage extends TemplateWebPage
    * @param previousPage      the previous page
    * @param organisationModel the model for the organisation
    */
-  public UpdateOrganisationPage(PageReference previousPage,
-      IModel<Organisation> organisationModel)
+  public UpdateOrganisationPage(PageReference previousPage, IModel<Organisation> organisationModel)
   {
     super("Update Organisation");
 
