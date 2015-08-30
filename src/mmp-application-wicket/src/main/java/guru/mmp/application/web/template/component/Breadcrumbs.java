@@ -24,6 +24,7 @@ import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationState;
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupElement;
@@ -105,7 +106,7 @@ public class Breadcrumbs extends Component
 
         buffer.append("<ol class=\"breadcrumb bc-1\">");
 
-        Class clazz = null;
+        Class<? extends Page> clazz;
 
         if (webSession.isUserLoggedIn())
         {

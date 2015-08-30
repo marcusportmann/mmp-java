@@ -18,9 +18,7 @@ package guru.mmp.application.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
-
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 //~--- JDK imports ------------------------------------------------------------
 

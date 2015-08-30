@@ -31,6 +31,7 @@ import guru.mmp.application.web.template.page.LogoutPage;
 import guru.mmp.application.web.template.resource.*;
 import guru.mmp.common.util.StringUtil;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -102,7 +103,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    *
    * @return the default page that users will be redirected to in order to login to the application
    */
-  public Class<? extends WebPage> getLoginPage()
+  public Class<? extends Page> getLoginPage()
   {
     return LoginPage.class;
   }
@@ -115,7 +116,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    *
    * @return the default page that will log a user out of the application
    */
-  public Class<? extends WebPage> getLogoutPage()
+  public Class<? extends Page> getLogoutPage()
   {
     return LogoutPage.class;
   }

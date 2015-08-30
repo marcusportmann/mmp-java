@@ -18,23 +18,26 @@ package guru.mmp.application.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
+
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.util.convert.converter.DateConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.Locale;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebApplication</code> class provides a base class for all "application specific"
@@ -61,7 +64,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    *
    * @return the page that users will be redirected to in order to login to the application
    */
-  public abstract Class<? extends WebPage> getLoginPage();
+  public abstract Class<? extends Page> getLoginPage();
 
   /**
    * Returns the page that will log a user out of the application.
@@ -71,7 +74,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    *
    * @return the page that will log a user out of the application
    */
-  public abstract Class<? extends WebPage> getLogoutPage();
+  public abstract Class<? extends Page> getLogoutPage();
 
   /**
    * Returns the page that users will be redirected to once they have logged into the application.
@@ -79,7 +82,7 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    *
    * @return the page that users will be redirected to once they have logged into the application
    */
-  public abstract Class<? extends WebPage> getSecureHomePage();
+  public abstract Class<? extends Page> getSecureHomePage();
 
   /**
    * Sets the web application injector.
