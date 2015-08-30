@@ -94,8 +94,9 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
       setOption(WSHandlerConstants.SIG_ALGO, "http://www.w3.org/2000/09/xmldsig#rsa-sha1");
       setOption(WSHandlerConstants.SIGNATURE_PARTS, "Body");
       setOption(WSHandlerConstants.SIG_KEY_ID, "DirectReference");
-      setOption(WSHandlerConstants.MUST_UNDERSTAND, "false");
+      setOption(WSHandlerConstants.MUST_UNDERSTAND, "true");
       setOption(WSHandlerConstants.ENABLE_SIGNATURE_CONFIRMATION, "false");
+      setOption(WSHandlerConstants.SIG_SUBJECT_CERT_CONSTRAINTS, ".*");
 
       cryptoProperties = new Properties();
       cryptoProperties.put("org.apache.ws.security.crypto.provider",
