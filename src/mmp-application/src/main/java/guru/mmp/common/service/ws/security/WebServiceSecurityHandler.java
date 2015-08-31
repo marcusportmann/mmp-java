@@ -21,6 +21,7 @@ package guru.mmp.common.service.ws.security;
 import guru.mmp.common.security.context.ServiceSecurityContext;
 
 import org.apache.ws.security.WSConstants;
+import org.apache.ws.security.WSSecurityEngine;
 import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.RequestData;
@@ -697,6 +698,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
             WebServiceCrypto.class.getName());
         cryptoProperties.put(ServiceSecurityContext.class.getName(), getServiceSecurityContext());
         setOption(WSHandlerConstants.SIG_PROP_REF_ID, MESSAGE_CONTEXT_CRYPTO_PROPERTIES);
+
+        secEngine.getWssConfig().setValidator(WSSecurityEngine.SIGNATURE, new SignatureTrustValidator());
       }
       catch (WebServiceSecurityHandlerException e)
       {
