@@ -27,7 +27,6 @@ import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptR
 import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.selectboxit.JQuerySelectBoxItJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.tagsinput.BootstrapTagsInputJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.timepicker.BootstrapTimePickerJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerCssResourceReference;
 import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerJavaScriptResourceReference;
@@ -75,7 +74,6 @@ public class AdvancedElementsPage extends TemplateWebPage
     response.render(BootstrapTimePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(DateRangePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
-    response.render(BootstrapTagsInputJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(JQueryMultiSelectJavaScriptResourceReference.getJavaScriptHeaderItem());
     response.render(TypeaheadJavaScriptResourceReference.getJavaScriptHeaderItem());
   }
