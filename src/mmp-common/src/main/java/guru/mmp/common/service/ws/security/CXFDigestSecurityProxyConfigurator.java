@@ -129,10 +129,11 @@ public class CXFDigestSecurityProxyConfigurator
     digestAuthSupplierClass =
       contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.DigestAuthSupplier");
 
-    Class<?> authSupplierClass = contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.HttpAuthSupplier");
+    Class<?> authSupplierClass =
+      contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.HttpAuthSupplier");
 
     cxfHTTPConduitSetAuthSupplierMethod = httpConduit.getClass().getMethod("setAuthSupplier",
-      authSupplierClass);
+        authSupplierClass);
 
     cxfHTTPConduitGetClientMethod = httpConduit.getClass().getMethod("getClient");
 

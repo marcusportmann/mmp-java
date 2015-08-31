@@ -19,6 +19,7 @@ package guru.mmp.common.service.ws.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.security.context.ServiceSecurityContext;
+import guru.mmp.common.util.StringUtil;
 
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.WSSecurityException;
@@ -28,6 +29,9 @@ import org.apache.ws.security.components.crypto.DERDecoder;
 import org.apache.ws.security.components.crypto.X509SubjectPublicKeyInfo;
 import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.WSSecurityUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -44,6 +48,7 @@ import java.security.cert.*;
 import java.security.cert.Certificate;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -72,6 +77,15 @@ public class WebServiceCrypto
 
   /* The Bouncy Castle <code>X509Name</code> constructor. */
   static Constructor<?> BouncyCastleX509NameConstructor = null;
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(WebServiceCrypto.class);
+
+  /**
+   * The map of certificate DNs to certificate thumbprints for the certificates that have been
+   * verified successfully as trusted certificates.
+   */
+  private static Map<String, String> verifiedCertificates = new ConcurrentHashMap<>();
 
   static
   {
@@ -107,6 +121,7 @@ public class WebServiceCrypto
    * @throws CredentialException
    * @throws IOException
    */
+  @SuppressWarnings("unused")
   public WebServiceCrypto()
     throws CredentialException, IOException
   {
@@ -136,7 +151,7 @@ public class WebServiceCrypto
    * @throws CredentialException
    * @throws IOException
    */
-  public WebServiceCrypto(Properties properties, ClassLoader loader)
+  public WebServiceCrypto(Properties properties, @SuppressWarnings("unused") ClassLoader loader)
     throws CredentialException, IOException
   {
     Object serviceSecurityContext = properties.get(ServiceSecurityContext.class.getName());
@@ -307,6 +322,7 @@ public class WebServiceCrypto
    *
    * @return the key store associated with the crypto provider
    */
+  @SuppressWarnings("unused")
   public KeyStore getKeyStore()
   {
     return this.keyStore;
@@ -716,6 +732,36 @@ public class WebServiceCrypto
   public boolean verifyTrust(X509Certificate[] certificateChain, boolean enableRevocation)
     throws WSSecurityException
   {
+    if ((certificateChain != null) && (certificateChain.length > 0))
+    {
+      try
+      {
+        String verifiedThumbprint =
+          verifiedCertificates.get(certificateChain[0].getSubjectDN().toString());
+
+        if (verifiedThumbprint != null)
+        {
+          if (StringUtil.toHexString(certificateChain[0].getSignature()).equals(verifiedThumbprint))
+          {
+            if (logger.isDebugEnabled())
+            {
+              logger.debug(
+                  "Successfully verified the trust for the client certificate with subject ("
+                  + certificateChain[0].getSubjectDN() + ") and thumbprint (" + verifiedThumbprint
+                  + ")");
+            }
+
+            return true;
+          }
+        }
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to check whether the trust for the client certificate with subject ("
+            + certificateChain[0].getSubjectDN() + ") was verified previously", e);
+      }
+    }
+
     try
     {
       // Generate certificate path
@@ -765,6 +811,9 @@ public class WebServiceCrypto
       }
 
       validator.validate(path, param);
+
+      verifiedCertificates.put(certificateChain[0].getSubjectDN().toString(),
+          StringUtil.toHexString(certificateChain[0].getSignature()));
 
       return true;
     }
@@ -1307,14 +1356,14 @@ public class WebServiceCrypto
   private X509Certificate[] getX509CertificatesSubjectDN(String subjectDN)
     throws WSSecurityException
   {
-    //
-    // Convert the subject DN to a java X500Principal object first. This is to ensure
-    // interop with a DN constructed from .NET, where e.g. it uses "S" instead of "ST".
-    // Then convert it to a BouncyCastle X509Name, which will order the attributes of
-    // the DN in a particular way (see WSS-168). If the conversion to an X500Principal
-    // object fails (e.g. if the DN contains "E" instead of "EMAILADDRESS"), then fall
-    // back on a direct conversion to a BC X509Name
-    //
+    /**
+     * Convert the subject DN to a java X500Principal object first. This is to ensure
+     * interop with a DN constructed from .NET, where e.g. it uses "S" instead of "ST".
+     * Then convert it to a BouncyCastle X509Name, which will order the attributes of
+     * the DN in a particular way (see WSS-168). If the conversion to an X500Principal
+     * object fails (e.g. if the DN contains "E" instead of "EMAILADDRESS"), then fall
+     * back on a direct conversion to a BC X509Name
+     */
     Object subject;
 
     try

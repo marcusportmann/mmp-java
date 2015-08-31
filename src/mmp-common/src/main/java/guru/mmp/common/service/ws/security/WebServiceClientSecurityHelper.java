@@ -21,29 +21,24 @@ package guru.mmp.common.service.ws.security;
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.util.ClientSSLSocketFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
-import java.net.URL;
-
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceClientSecurityHelper</code> class is a utility class

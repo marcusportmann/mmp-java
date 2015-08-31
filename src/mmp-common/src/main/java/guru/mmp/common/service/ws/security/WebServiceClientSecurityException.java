@@ -30,6 +30,7 @@ public class WebServiceClientSecurityException extends RuntimeException
    * Constructs a new <code>WebServiceClientSecurityException</code> with <code>null</code> as its
    * message.
    */
+  @SuppressWarnings("unused")
   public WebServiceClientSecurityException()
   {
     super();

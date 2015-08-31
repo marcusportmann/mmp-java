@@ -39,6 +39,7 @@ import javax.xml.ws.ResponseWrapper;
 @HandlerChain(file = "/META-INF/SampleServiceSecurity.xml")
 @WebService(name = "ISampleService", portName = "SampleService", serviceName = "SampleService",
     targetNamespace = "http://ws.sample.services.mmp.guru")
+@SuppressWarnings("unused")
 public class SampleServiceBean
 {
   /* Logger */
@@ -52,8 +53,7 @@ public class SampleServiceBean
   @WebMethod(operationName = "GetVersion",
       action = "http://ws.sample.service.mmp.guru/ISampleService/GetVersion")
   @WebResult(name = "out", targetNamespace = "http://ws.sample.service.mmp.guru")
-  @RequestWrapper(localName = "GetVersion",
-      targetNamespace = "http://ws.sample.service.mmp.guru",
+  @RequestWrapper(localName = "GetVersion", targetNamespace = "http://ws.sample.service.mmp.guru",
       className = "guru.mmp.service.sample.ws.GetVersion")
   @ResponseWrapper(localName = "GetVersionResponse",
       targetNamespace = "http://ws.sample.service.mmp.guru",

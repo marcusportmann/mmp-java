@@ -46,6 +46,7 @@ public class WSSUsernameTokenSecurityHandler
   /**
    * The name of the "flow" configuration option.
    */
+  @SuppressWarnings("unused")
   protected static final String FLOW_CONFIG_OPTION = "flow";
   private static final String WSS_USERNAME_TOKEN_PROFILE_PASSWORD_TEXT_TYPE =
     "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
@@ -265,6 +266,7 @@ public class WSSUsernameTokenSecurityHandler
    *
    * @return the SOAP 1.1 factory associated with the web service security handler
    */
+  @SuppressWarnings("unused")
   protected final SOAPFactory getSOAP11Factory()
   {
     return soap11Factory;
@@ -275,6 +277,7 @@ public class WSSUsernameTokenSecurityHandler
    *
    * @return the SOAP 1.2 factory associated with the web service security handler
    */
+  @SuppressWarnings("unused")
   protected final SOAPFactory getSOAP12Factory()
   {
     return soap12Factory;
@@ -287,6 +290,7 @@ public class WSSUsernameTokenSecurityHandler
    *
    * @return the version of the SOAP protocol for the specified SOAP message context
    */
+  @SuppressWarnings("unused")
   protected SOAPVersion getSOAPVersion(SOAPMessageContext messageContext)
   {
     String soapNS;
@@ -328,8 +332,7 @@ public class WSSUsernameTokenSecurityHandler
    *
    * @throws WSSecurityException
    */
-  private boolean doRequest(
-      SOAPMessageContext messageContext)
+  private boolean doRequest(SOAPMessageContext messageContext)
     throws WSSecurityException
   {
     try

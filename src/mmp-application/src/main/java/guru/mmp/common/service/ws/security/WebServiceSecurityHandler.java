@@ -19,7 +19,6 @@ package guru.mmp.common.service.ws.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.security.context.ServiceSecurityContext;
-
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSSecurityEngine;
 import org.apache.ws.security.WSSecurityEngineResult;
@@ -30,32 +29,25 @@ import org.apache.ws.security.handler.WSHandlerResult;
 import org.apache.ws.security.message.token.Timestamp;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.utils.XMLUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
-import java.security.KeyStore;
-import java.security.cert.X509Certificate;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-
 import javax.security.auth.callback.CallbackHandler;
-
 import javax.xml.soap.*;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import javax.xml.ws.soap.SOAPFaultException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceSecurityHandler</code> class is a JAX-WS handler that implements the
@@ -430,42 +422,6 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     securityHeaderElement.setMustUnderstand(true);
 
     /*
-     * Now we can check the certificate used to sign the message. In the following implementation
-     * the certificate is only trusted if either it itself or the certificate of the issuer is
-     * installed in the keystore.
-     *
-     * Note: the method verifyTrust(X509Certificate) allows custom implementations with other
-     * validation algorithms for subclasses.
-     */
-
-    // Extract the signature action result from the action vector
-    WSSecurityEngineResult signActionResult = WSSecurityUtil.fetchActionResult(wsResults,
-      WSConstants.SIGN);
-
-    // Verify the certificate associated with the signature action
-    X509Certificate returnCert = null;
-
-    if (signActionResult != null)
-    {
-      returnCert =
-        (X509Certificate) signActionResult.get(WSSecurityEngineResult.TAG_X509_CERTIFICATE);
-
-      if (returnCert != null)
-      {
-        if (!verifyTrust(returnCert, requestData))
-        {
-          throw new WSSecurityException("Failed to process the SOAP request:"
-              + " The certificate used to sign the request is not trusted");
-        }
-      }
-      else
-      {
-        throw new WSSecurityException("Failed to process the SOAP request:"
-            + " Unable to retrieve the certificate used to sign the request");
-      }
-    }
-
-    /*
      * Perform further checks on the timestamp that was transmitted in the header. In the following
      * implementation the timestamp is valid if it was created after (now-ttl), where ttl is set on
      * server side, not by the client.
@@ -517,9 +473,6 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     WSHandlerResult rResult = new WSHandlerResult(actor, wsResults);
 
     results.add(0, rResult);
-
-    // Save the client's certificate on the web service security context
-    securityContext.setClientCertificate(returnCert);
 
     // Process the security tokens
     Iterator<?> elements =
@@ -699,7 +652,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
         cryptoProperties.put(ServiceSecurityContext.class.getName(), getServiceSecurityContext());
         setOption(WSHandlerConstants.SIG_PROP_REF_ID, MESSAGE_CONTEXT_CRYPTO_PROPERTIES);
 
-        secEngine.getWssConfig().setValidator(WSSecurityEngine.SIGNATURE, new SignatureTrustValidator());
+        secEngine.getWssConfig().setValidator(WSSecurityEngine.SIGNATURE,
+            new WebServiceSignatureTrustValidator());
       }
       catch (WebServiceSecurityHandlerException e)
       {

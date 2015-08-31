@@ -19,31 +19,32 @@ package guru.mmp.common.service.ws.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.security.context.ApplicationSecurityContext;
-
+import guru.mmp.common.util.StringUtil;
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.WSSecurityException;
-import org.apache.ws.security.components.crypto.*;
+import org.apache.ws.security.components.crypto.Crypto;
+import org.apache.ws.security.components.crypto.CryptoType;
+import org.apache.ws.security.components.crypto.DERDecoder;
+import org.apache.ws.security.components.crypto.X509SubjectPublicKeyInfo;
 import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.WSSecurityUtil;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
-import java.lang.reflect.Constructor;
-
-import java.math.BigInteger;
-
-import java.security.*;
-import java.security.cert.*;
-import java.security.cert.Certificate;
-
-import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.x500.X500Principal;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.*;
+import java.security.cert.Certificate;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceClientCrypto</code> class implements the WSS4J crypto operations for
@@ -51,6 +52,7 @@ import javax.security.auth.x500.X500Principal;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class WebServiceClientCrypto
   implements Crypto
 {
@@ -67,6 +69,15 @@ public class WebServiceClientCrypto
 
   /* The Bouncy Castle <code>X509Name</code> constructor. */
   static Constructor<?> BouncyCastleX509NameConstructor = null;
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(WebServiceClientCrypto.class);
+
+  /**
+   * The map of certificate DNs to certificate thumbprints for the certificates that have been
+   * verified successfully as trusted certificates.
+   */
+  private static Map<String, String> verifiedCertificates = new ConcurrentHashMap<>();
 
   static
   {
@@ -88,14 +99,12 @@ public class WebServiceClientCrypto
 
   /* The certificate factories. */
   protected Map<String, CertificateFactory> certificateFactoryMap = new HashMap<>();
-  private ClassLoader classLoader;
 
   /**
    * The crypto provider associated with this implementation.
    */
   private String cryptoProvider = null;
   private KeyStore keyStore = null;
-  private Properties properties;
 
   /**
    * Constructs a new <code>WebServiceClientCrypto</code>.
@@ -121,11 +130,9 @@ public class WebServiceClientCrypto
    * @param properties  the properties used to configure the <code>Crypto</code implementation
    * @param classLoader the Java class loader
    */
-  public WebServiceClientCrypto(Properties properties, ClassLoader classLoader)
+  public WebServiceClientCrypto(@SuppressWarnings("unused") Properties properties,
+      @SuppressWarnings("unused") ClassLoader classLoader)
   {
-    this.properties = properties;
-    this.classLoader = classLoader;
-
     ApplicationSecurityContext applicationSecurityContext = ApplicationSecurityContext.getContext();
 
     this.keyStore = applicationSecurityContext.getKeyStore();
@@ -706,6 +713,36 @@ public class WebServiceClientCrypto
   public boolean verifyTrust(X509Certificate[] certificateChain, boolean enableRevocation)
     throws WSSecurityException
   {
+    if ((certificateChain != null) && (certificateChain.length > 0))
+    {
+      try
+      {
+        String verifiedThumbprint =
+          verifiedCertificates.get(certificateChain[0].getSubjectDN().toString());
+
+        if (verifiedThumbprint != null)
+        {
+          if (StringUtil.toHexString(certificateChain[0].getSignature()).equals(verifiedThumbprint))
+          {
+            if (logger.isInfoEnabled())
+            {
+              logger.info(
+                  "Successfully verified the trust for the service certificate with subject ("
+                  + certificateChain[0].getSubjectDN() + ") and thumbprint (" + verifiedThumbprint
+                  + ")");
+            }
+
+            return true;
+          }
+        }
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to check whether the trust for the service certificate with subject ("
+            + certificateChain[0].getSubjectDN() + ") was verified previously", e);
+      }
+    }
+
     try
     {
       // Generate certificate path
@@ -755,6 +792,9 @@ public class WebServiceClientCrypto
       }
 
       validator.validate(path, param);
+
+      verifiedCertificates.put(certificateChain[0].getSubjectDN().toString(),
+          StringUtil.toHexString(certificateChain[0].getSignature()));
 
       return true;
     }

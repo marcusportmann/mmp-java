@@ -41,7 +41,6 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.KeyStore;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -103,7 +102,8 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
           "guru.mmp.common.service.ws.security.WebServiceClientCrypto");
       setOption(WSHandlerConstants.SIG_PROP_REF_ID, MESSAGE_CONTEXT_CRYPTO_PROPERTIES);
 
-      secEngine.getWssConfig().setValidator(WSSecurityEngine.SIGNATURE, new SignatureTrustValidator());
+      secEngine.getWssConfig().setValidator(WSSecurityEngine.SIGNATURE,
+          new WebServiceClientSignatureTrustValidator());
     }
     catch (WebServiceSecurityHandlerException e)
     {
@@ -177,10 +177,6 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
   @Override
   public boolean handleFault(SOAPMessageContext messageContext)
   {
-    WebServiceClientSecurityContext securityContext = WebServiceClientSecurityContext.getContext();
-
-    securityContext.reset();
-
     return true;
   }
 
@@ -268,8 +264,8 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
    *
    * @throws WSSecurityException
    */
-  private boolean doRequest(SOAPVersion soapVersion, SOAPMessageContext messageContext,
-      RequestData requestData)
+  private boolean doRequest(@SuppressWarnings("unused") SOAPVersion soapVersion,
+      SOAPMessageContext messageContext, RequestData requestData)
     throws WSSecurityException
   {
     // Initialise the request
@@ -373,14 +369,6 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
       RequestData requestData)
     throws WSSecurityException, SOAPException
   {
-    /*
-     * Retrieve the web service client security context associated with the current thread of
-     * execution and reset the service certificate. The context is stored in thread-local storage.
-     */
-    WebServiceClientSecurityContext securityContext = WebServiceClientSecurityContext.getContext();
-
-    securityContext.setServiceCertificate(null);
-
     // Decode the action(s) being performed e.g. Sign, Encrypt, etc
     List<Integer> actions = new ArrayList<>();
 
@@ -525,44 +513,8 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
       }
     }
 
-    // Disable "must understand" header -- David Goosen for details
+    // Disable "must understand" header -- Required to support WebSphere
     securityHeaderElement.setMustUnderstand(false);
-
-    /*
-     * Now we can check the certificate used to sign the message. In the following implementation
-     * the certificate is only trusted if either it itself or the certificate of the issuer is
-     * installed in the keystore.
-     *
-     * Note: the method verifyTrust(X509Certificate) allows custom implementations with other
-     * validation algorithms for subclasses.
-     */
-
-    // Extract the signature action result from the action vector
-    WSSecurityEngineResult signActionResult = WSSecurityUtil.fetchActionResult(wsResults,
-      WSConstants.SIGN);
-
-    // Verify the certificate associated with the signature action
-    X509Certificate returnCert = null;
-
-    if (signActionResult != null)
-    {
-      returnCert =
-        (X509Certificate) signActionResult.get(WSSecurityEngineResult.TAG_X509_CERTIFICATE);
-
-      if (returnCert != null)
-      {
-        if (!verifyTrust(returnCert, requestData))
-        {
-          throw new WSSecurityException("Failed to process the SOAP response:"
-              + " The certificate used to sign the response is not trusted");
-        }
-      }
-      else
-      {
-        throw new WSSecurityException("Failed to process the SOAP response:"
-            + " Unable to retrieve the certificate used to sign the response");
-      }
-    }
 
     /*
      * Perform further checks on the timestamp that was transmitted in the header. In the following
@@ -614,9 +566,6 @@ public class WebServiceClientSecurityHandler extends WebServiceSecurityHandlerBa
     WSHandlerResult rResult = new WSHandlerResult(actor, wsResults);
 
     results.add(0, rResult);
-
-    // Save the service's certificate on the web service client security context
-    securityContext.setServiceCertificate(returnCert);
 
     return true;
   }
