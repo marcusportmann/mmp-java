@@ -19,6 +19,7 @@ package guru.mmp.application.web.util;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -26,9 +27,9 @@ import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>FeedbackUtil</code> class is a utility class that provides methods for working with
@@ -46,33 +47,36 @@ public class FeedbackUtil
     AttributeModifier.append("class", " has-error");
 
   /**
+   * The JavaScript used to clear the feedback for a form component.
+   */
+  private static final String CLEAR_FEEDBACK_JAVA_SCRIPT = "if($('#%1$sFeedback')){"
+    + "if($('#%1$sFeedback').parent().hasClass('form-group')){"
+    + "$('#%1$sFeedback').parent().removeClass('" + "has-error has-warning has-info has-success"
+    + "');} if($('#%1$sFeedback').parent().parent().hasClass('form-group')){"
+    + "$('#%1$sFeedback').parent().parent().removeClass('"
+    + "has-error has-warning has-info has-success"
+    + "');}$('#%1$sFeedback').replaceWith('<div id=\"#%1$sFeedback\"></div>');}";
+
+  /**
    * The JavaScript used to display the feedback for a form component using the 'domready' event.
    */
-  private static final String DOM_READY_FEEDBACK_JAVA_SCRIPT = "$(function(){if($('#%1$s')){"
-    + "if($('#%1$s').parent().hasClass('form-group')){" + "$('#%1$s').parent().addClass('%2$s');}"
-    + "if($('#%1$s').parent().parent().hasClass('form-group')){"
-    + "$('#%1$s').parent().parent().addClass('%2$s');}"
+  private static final String DOM_READY_FEEDBACK_JAVA_SCRIPT =
+    "$(function(){if($('#%1$sFeedback')){"
+    + "if($('#%1$sFeedback').parent().hasClass('form-group')){"
+    + "$('#%1$sFeedback').parent().addClass('%2$s');}"
+    + "if($('#%1$sFeedback').parent().parent().hasClass('form-group')){"
+    + "$('#%1$sFeedback').parent().parent().addClass('%2$s');}"
     + "$('#%1$sFeedback').replaceWith('%3$s');}});";
 
   /**
    * The JavaScript used to display the feedback for a form component.
    */
-  private static final String FEEDBACK_JAVA_SCRIPT = "if($('#%1$s')){"
-    + "if($('#%1$s').parent().hasClass('form-group')){" + "$('#%1$s').parent().addClass('%2$s');}"
-    + "if($('#%1$s').parent().parent().hasClass('form-group')){"
-    + "$('#%1$s').parent().parent().addClass('%2$s');}"
+  private static final String FEEDBACK_JAVA_SCRIPT = "if($('#%1$sFeedback')){"
+    + "if($('#%1$sFeedback').parent().hasClass('form-group')){"
+    + "$('#%1$sFeedback').parent().addClass('%2$s');}"
+    + "if($('#%1$sFeedback').parent().parent().hasClass('form-group')){"
+    + "$('#%1$sFeedback').parent().parent().addClass('%2$s');}"
     + "$('#%1$sFeedback').replaceWith('%3$s');}";
-
-  /**
-   * The JavaScript used to clear the feedback for a form component.
-   */
-  private static final String CLEAR_FEEDBACK_JAVA_SCRIPT = "if($('#%1$s')){"
-    + "if($('#%1$s').parent().hasClass('form-group')){" + "$('#%1$s').parent().removeClass('"
-    + "has-error has-warning has-info has-success"
-    + "');} if($('#%1$s').parent().parent().hasClass('form-group')){"
-    + "$('#%1$s').parent().parent().removeClass('"
-    + "has-error has-warning has-info has-success"
-    + "');}$('#%1$sFeedback').replaceWith('<div id=\"#%1$sFeedback\"></div>');}";
 
   /**
    * Applies the appropriate CSS class to a component based on the type of feedback message

@@ -18,6 +18,7 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.web.component.FileUploadFieldWithFeedback;
 import guru.mmp.application.web.component.TextFieldWithFeedback;
 
 import org.apache.wicket.markup.html.form.TextField;
@@ -64,7 +65,7 @@ public class ReportDefinitionInputPanel extends InputPanel
     add(nameField);
 
     // The "fileUpload" field
-    FileUploadField fileUploadField = new FileUploadField("fileUpload",
+    FileUploadField fileUploadField = new FileUploadFieldWithFeedback<>("fileUpload",
       new PropertyModel<>(this, "fileUploads"));
     fileUploadField.setRequired(true);
     add(fileUploadField);

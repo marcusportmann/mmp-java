@@ -37,9 +37,6 @@ import java.util.List;
  * The <code>DropDownChoiceWithFeedback</code> class extends the Wicket <code>DropDownChoice</code>
  * component to provide support for displaying the feedback message for the component.
  *
- * This class also applies CSS styling to the Wicket <code>DropDownChoice</code>
- * component to indicate the type of feedback message associated with the component.
- *
  * @param <T>
  *
  * @author Marcus Portmann

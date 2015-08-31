@@ -32,9 +32,6 @@ import org.apache.wicket.request.IRequestHandler;
  * The <code>TextFieldWithFeedback</code> class extends the Wicket <code>TextField</code>
  * component to provide support for displaying the feedback message for the component.
  *
- * This class also applies CSS styling to the Wicket <code>TextField</code>
- * component to indicate the type of feedback message associated with the component.
- *
  * @param <T>
  *
  * @author Marcus Portmann

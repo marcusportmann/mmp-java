@@ -27,6 +27,7 @@ import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
 import guru.mmp.sample.web.page.forms.AdvancedElementsPage;
 import guru.mmp.sample.web.page.forms.NativeElementsPage;
+import guru.mmp.sample.web.page.forms.TestFormPage;
 import guru.mmp.sample.web.page.tables.BasicTablesPage;
 import guru.mmp.sample.web.page.tables.ResponsiveTablePage;
 import guru.mmp.sample.web.page.ui.*;
@@ -126,6 +127,7 @@ public class SampleApplication extends TemplateWebApplication
 
     formsGroup.addItem(new NavigationLink("Advanced Elements", AdvancedElementsPage.class));
     formsGroup.addItem(new NavigationLink("Native Elements", NativeElementsPage.class));
+    formsGroup.addItem(new NavigationLink("Test Form", TestFormPage.class));
 
     root.addItem(formsGroup);
 

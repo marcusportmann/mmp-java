@@ -33,9 +33,6 @@ import org.apache.wicket.request.IRequestHandler;
  * <code>PasswordTextField</code> component to provide support for displaying the feedback message
  * for the component.
  *
- * This class also applies CSS styling to the Wicket <code>PasswordTextField</code>
- * component to indicate the type of feedback message associated with the component.
- *
  * @author Marcus Portmann
  */
 public class PasswordTextFieldWithFeedback extends PasswordTextField

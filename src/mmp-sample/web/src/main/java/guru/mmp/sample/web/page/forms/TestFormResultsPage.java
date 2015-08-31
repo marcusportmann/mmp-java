@@ -18,21 +18,10 @@ package guru.mmp.sample.web.page.forms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.resource.thirdparty.datepicker.BootstrapDatePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.tagsinput.BootstrapTagsInputJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.timepicker.BootstrapTimePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScriptResourceReference;
 import guru.mmp.application.web.template.page.TemplateWebPage;
-
 import guru.mmp.sample.model.TestData;
-import org.apache.wicket.markup.head.IHeaderResponse;
+
+import org.apache.wicket.model.IModel;
 
 /**
  * The <code>TestFormResultsPage</code> class implements the "Test Form Results"
@@ -46,9 +35,12 @@ public class TestFormResultsPage extends TemplateWebPage
 
   /**
    * Constructs a new <code>TestFormResultsPage</code>.
+   *
+   * @param model the model
    */
-  public TestFormResultsPage()
+  public TestFormResultsPage(IModel<TestData> model)
   {
     super("Test Form Results", "The test form results");
+
   }
 }

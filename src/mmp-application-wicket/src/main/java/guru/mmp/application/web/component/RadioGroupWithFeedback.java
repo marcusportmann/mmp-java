@@ -24,39 +24,39 @@ import guru.mmp.application.web.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
 /**
- * The <code>TextAreaWithFeedback</code> class extends the Wicket <code>TextArea</code>
+ * The <code>RadioGroupWithFeedback</code> class extends the Wicket <code>RadioGroup</code>
  * component to provide support for displaying the feedback message for the component.
  *
  * @param <T>
  *
  * @author Marcus Portmann
  */
-public class TextAreaWithFeedback<T> extends TextArea<T>
+public class RadioGroupWithFeedback<T> extends RadioGroup<T>
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TextAreaWithFeedback</code>.
+   * Constructs a new <code>RadioGroupWithFeedback</code>.
    *
    * @param id the non-null id of this component
    */
-  public TextAreaWithFeedback(String id)
+  public RadioGroupWithFeedback(String id)
   {
     super(id);
   }
 
   /**
-   * Constructs a new <code>TextAreaWithFeedback</code>.
+   * Constructs a new <code>RadioGroupWithFeedback</code>.
    *
    * @param id    the non-null id of this component
    * @param model the model for this component
    */
-  public TextAreaWithFeedback(String id, IModel<T> model)
+  public RadioGroupWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
   }
