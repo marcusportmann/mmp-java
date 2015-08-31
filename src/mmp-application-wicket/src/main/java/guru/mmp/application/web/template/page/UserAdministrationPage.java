@@ -71,7 +71,7 @@ public class UserAdministrationPage extends TemplateWebPage
    */
   public UserAdministrationPage()
   {
-    super("User Administration");
+    super("Users");
 
     try
     {
