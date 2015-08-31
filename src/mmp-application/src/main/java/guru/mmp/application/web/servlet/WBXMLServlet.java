@@ -21,8 +21,15 @@ package guru.mmp.application.web.servlet;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Encoder;
 import guru.mmp.common.wbxml.Parser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -31,11 +38,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WBXMLServlet</code> servlet acts as an endpoint that remote clients can use to send
@@ -190,21 +192,23 @@ public class WBXMLServlet extends HttpServlet
       PrintWriter pw = response.getWriter();
 
       pw.println("<html>");
-      pw.println("  <head>");
-      pw.println("    <style>");
-      pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
-      pw.println("      h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
-      pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
+      pw.println("<head>");
+      pw.println("  <style>");
+      pw.println(
+          "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
+      pw.println(
+          "    h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
+      pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green;"
           + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
-      pw.println("      .className {color: 808080;}");
-      pw.println("    </style>");
-      pw.println("  </head>");
-      pw.println("  <body>");
+      pw.println("    .className {color: 808080;}");
+      pw.println("  </style>");
+      pw.println("</head>");
+      pw.println("<body>");
 
-      pw.println("    <h1><thirdparty color=\"red\">ERROR</thirdparty></h1>");
-      pw.println("    " + exception.getMessage());
+      pw.println("  <h1><thirdparty color=\"red\">ERROR</thirdparty></h1>");
+      pw.println("  " + exception.getMessage());
 
-      pw.println("  </body>");
+      pw.println("</body>");
       pw.println("</html>");
     }
     catch (IOException ignored) {}

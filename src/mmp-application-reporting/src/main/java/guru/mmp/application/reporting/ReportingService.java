@@ -20,36 +20,29 @@ package guru.mmp.application.reporting;
 
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.common.util.StringUtil;
-
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-
-import java.sql.Connection;
-
-import java.util.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
 import javax.naming.InitialContext;
-
 import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportService</code> class provides the Reporting Service implementation.

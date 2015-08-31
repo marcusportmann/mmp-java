@@ -19,20 +19,23 @@ package guru.mmp.application.web.servlet;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.test.Tests;
+
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UnitTestServlet</code> class provides a simple servlet that can be used to execute
@@ -184,10 +187,14 @@ public class UnitTestServlet extends HttpServlet
     pw.println("<html>");
     pw.println("  <head>");
     pw.println("    <style>");
-    pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 9pt;}");
-    pw.println("      td {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 9pt;}");
-    pw.println("      h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
-    pw.println("      h2 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;"
+    pw.println(
+        "      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 9pt;}");
+    pw.println(
+        "      td {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 9pt;}");
+    pw.println(
+        "      h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
+    pw.println(
+        "      h2 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;"
         + " color: red;}");
     pw.println("      pre {thirdparty-size: 8pt;}");
     pw.println("    </style>");

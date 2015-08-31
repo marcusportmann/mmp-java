@@ -20,10 +20,11 @@ package guru.mmp.application.security;
 
 import guru.mmp.common.util.BinaryBuffer;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.math.BigDecimal;
+
+import java.util.List;
 
 /**
  * The <code>Attribute</code> class stores an attribute for a security entity as name-value pair

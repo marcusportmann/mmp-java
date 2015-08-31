@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,38 +24,39 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "sendZIPZIPResult" })
+@XmlType(name = "", propOrder = {
+    "sendZIPZIPResult"
+})
 @XmlRootElement(name = "Send_ZIP_ZIPResponse")
-public class SendZIPZIPResponse
-{
-  @XmlElement(name = "Send_ZIP_ZIPResult")
-  protected byte[] sendZIPZIPResult;
+public class SendZIPZIPResponse {
 
-  /**
-   * Gets the value of the sendZIPZIPResult property.
-   *
-   * @return
-   *     possible object is
-   *     byte[]
-   */
-  public byte[] getSendZIPZIPResult()
-  {
-    return sendZIPZIPResult;
-  }
+    @XmlElement(name = "Send_ZIP_ZIPResult")
+    protected byte[] sendZIPZIPResult;
 
-  /**
-   * Sets the value of the sendZIPZIPResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     byte[]
-   */
-  public void setSendZIPZIPResult(byte[] value)
-  {
-    this.sendZIPZIPResult = value;
-  }
+    /**
+     * Gets the value of the sendZIPZIPResult property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getSendZIPZIPResult() {
+        return sendZIPZIPResult;
+    }
+
+    /**
+     * Sets the value of the sendZIPZIPResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setSendZIPZIPResult(byte[] value) {
+        this.sendZIPZIPResult = value;
+    }
+
 }

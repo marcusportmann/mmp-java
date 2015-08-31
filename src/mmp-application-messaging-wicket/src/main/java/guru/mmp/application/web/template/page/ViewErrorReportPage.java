@@ -27,8 +27,8 @@ import guru.mmp.application.web.template.TemplateMessagingSecurity;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-
 import org.apache.wicket.markup.html.link.Link;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

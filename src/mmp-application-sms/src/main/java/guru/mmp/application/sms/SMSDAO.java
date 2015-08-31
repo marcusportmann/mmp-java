@@ -23,22 +23,17 @@ import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.sms.SMS.Status;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.sql.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.naming.InitialContext;
-
 import javax.sql.DataSource;
+import java.sql.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSDAO</code> class implements the persistence operations for the SMS infrastructure.

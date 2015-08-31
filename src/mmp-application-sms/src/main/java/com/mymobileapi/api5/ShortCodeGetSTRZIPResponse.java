@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,38 +24,39 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "shortCodeGetSTRZIPResult" })
+@XmlType(name = "", propOrder = {
+    "shortCodeGetSTRZIPResult"
+})
 @XmlRootElement(name = "ShortCode_Get_STR_ZIPResponse")
-public class ShortCodeGetSTRZIPResponse
-{
-  @XmlElement(name = "ShortCode_Get_STR_ZIPResult")
-  protected byte[] shortCodeGetSTRZIPResult;
+public class ShortCodeGetSTRZIPResponse {
 
-  /**
-   * Gets the value of the shortCodeGetSTRZIPResult property.
-   *
-   * @return
-   *     possible object is
-   *     byte[]
-   */
-  public byte[] getShortCodeGetSTRZIPResult()
-  {
-    return shortCodeGetSTRZIPResult;
-  }
+    @XmlElement(name = "ShortCode_Get_STR_ZIPResult")
+    protected byte[] shortCodeGetSTRZIPResult;
 
-  /**
-   * Sets the value of the shortCodeGetSTRZIPResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     byte[]
-   */
-  public void setShortCodeGetSTRZIPResult(byte[] value)
-  {
-    this.shortCodeGetSTRZIPResult = value;
-  }
+    /**
+     * Gets the value of the shortCodeGetSTRZIPResult property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getShortCodeGetSTRZIPResult() {
+        return shortCodeGetSTRZIPResult;
+    }
+
+    /**
+     * Sets the value of the shortCodeGetSTRZIPResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setShortCodeGetSTRZIPResult(byte[] value) {
+        this.shortCodeGetSTRZIPResult = value;
+    }
+
 }

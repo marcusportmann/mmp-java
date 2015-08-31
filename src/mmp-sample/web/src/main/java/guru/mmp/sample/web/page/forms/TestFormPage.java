@@ -19,7 +19,6 @@ package guru.mmp.sample.web.page.forms;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.component.*;
 import guru.mmp.application.web.resource.thirdparty.datepicker
   .BootstrapDatePickerJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.daterangepicker
@@ -38,6 +37,7 @@ import guru.mmp.application.web.resource.thirdparty.tagsinput
 import guru.mmp.application.web.resource.thirdparty.timepicker
   .BootstrapTimePickerJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScriptResourceReference;
+import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 import guru.mmp.sample.model.TestData;
 

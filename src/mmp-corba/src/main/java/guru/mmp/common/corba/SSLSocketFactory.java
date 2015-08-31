@@ -19,24 +19,20 @@ package guru.mmp.common.corba;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.security.context.ApplicationSecurityContext;
-
 import org.omg.CORBA.TIMEOUT;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManagerFactory;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SSLSocketFactory</code> provides the capability to create SSL socket connections

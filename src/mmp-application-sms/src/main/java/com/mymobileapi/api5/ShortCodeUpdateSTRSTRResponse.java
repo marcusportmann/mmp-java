@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "shortCodeUpdateSTRSTRResult" })
+@XmlType(name = "", propOrder = {
+    "shortCodeUpdateSTRSTRResult"
+})
 @XmlRootElement(name = "ShortCode_Update_STR_STRResponse")
-public class ShortCodeUpdateSTRSTRResponse
-{
-  @XmlElement(name = "ShortCode_Update_STR_STRResult")
-  protected String shortCodeUpdateSTRSTRResult;
+public class ShortCodeUpdateSTRSTRResponse {
 
-  /**
-   * Gets the value of the shortCodeUpdateSTRSTRResult property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getShortCodeUpdateSTRSTRResult()
-  {
-    return shortCodeUpdateSTRSTRResult;
-  }
+    @XmlElement(name = "ShortCode_Update_STR_STRResult")
+    protected String shortCodeUpdateSTRSTRResult;
 
-  /**
-   * Sets the value of the shortCodeUpdateSTRSTRResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setShortCodeUpdateSTRSTRResult(String value)
-  {
-    this.shortCodeUpdateSTRSTRResult = value;
-  }
+    /**
+     * Gets the value of the shortCodeUpdateSTRSTRResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getShortCodeUpdateSTRSTRResult() {
+        return shortCodeUpdateSTRSTRResult;
+    }
+
+    /**
+     * Sets the value of the shortCodeUpdateSTRSTRResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setShortCodeUpdateSTRSTRResult(String value) {
+        this.shortCodeUpdateSTRSTRResult = value;
+    }
+
 }

@@ -21,12 +21,15 @@ package guru.mmp.application.task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.*;
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.concurrent.Future;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.ejb.*;
+
+import javax.inject.Inject;
 
 /**
  * The <code>BackgroundScheduledTaskExecutor</code> class implements the background scheduled

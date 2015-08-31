@@ -1,15 +1,18 @@
 
 package com.microsoft.schemas.sharepoint.soap;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "createContentTypeResult" })
+@XmlType(name = "", propOrder = {
+    "createContentTypeResult"
+})
 @XmlRootElement(name = "CreateContentTypeResponse")
-public class CreateContentTypeResponse
-{
-  @XmlElement(name = "CreateContentTypeResult")
-  protected String createContentTypeResult;
+public class CreateContentTypeResponse {
 
-  /**
-   * Gets the value of the createContentTypeResult property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getCreateContentTypeResult()
-  {
-    return createContentTypeResult;
-  }
+    @XmlElement(name = "CreateContentTypeResult")
+    protected String createContentTypeResult;
 
-  /**
-   * Sets the value of the createContentTypeResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setCreateContentTypeResult(String value)
-  {
-    this.createContentTypeResult = value;
-  }
+    /**
+     * Gets the value of the createContentTypeResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCreateContentTypeResult() {
+        return createContentTypeResult;
+    }
+
+    /**
+     * Sets the value of the createContentTypeResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCreateContentTypeResult(String value) {
+        this.createContentTypeResult = value;
+    }
+
 }

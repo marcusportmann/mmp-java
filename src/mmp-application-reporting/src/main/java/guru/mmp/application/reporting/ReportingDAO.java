@@ -21,21 +21,16 @@ package guru.mmp.application.reporting;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingDAO</code> class implements the persistence operations for the

@@ -18,7 +18,6 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.component.TextFieldWithFeedback;
 import org.apache.wicket.markup.html.form.TextField;
 
 /**

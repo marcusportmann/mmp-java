@@ -24,7 +24,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
  * The <code>DateRangePickerCssResourceReference</code> class implements the CSS resource
- * reference for the Date Range Picker thirdparty resource bundled with the Web Application Template.
+ * reference for the Date Range Picker thirdparty resource bundled with the
+ * Web Application Template.
  *
  * @author Marcus Portmann
  */

@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,38 +24,39 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "replySTRZIPResult" })
+@XmlType(name = "", propOrder = {
+    "replySTRZIPResult"
+})
 @XmlRootElement(name = "Reply_STR_ZIPResponse")
-public class ReplySTRZIPResponse
-{
-  @XmlElement(name = "Reply_STR_ZIPResult")
-  protected byte[] replySTRZIPResult;
+public class ReplySTRZIPResponse {
 
-  /**
-   * Gets the value of the replySTRZIPResult property.
-   *
-   * @return
-   *     possible object is
-   *     byte[]
-   */
-  public byte[] getReplySTRZIPResult()
-  {
-    return replySTRZIPResult;
-  }
+    @XmlElement(name = "Reply_STR_ZIPResult")
+    protected byte[] replySTRZIPResult;
 
-  /**
-   * Sets the value of the replySTRZIPResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     byte[]
-   */
-  public void setReplySTRZIPResult(byte[] value)
-  {
-    this.replySTRZIPResult = value;
-  }
+    /**
+     * Gets the value of the replySTRZIPResult property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getReplySTRZIPResult() {
+        return replySTRZIPResult;
+    }
+
+    /**
+     * Sets the value of the replySTRZIPResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setReplySTRZIPResult(byte[] value) {
+        this.replySTRZIPResult = value;
+    }
+
 }

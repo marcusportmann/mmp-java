@@ -18,27 +18,16 @@ package guru.mmp.common.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import javax.net.ssl.*;
 import java.io.IOException;
-
 import java.net.InetAddress;
 import java.net.Socket;
-
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
 /**
  * The <code>ClientSSLSocketFactory</code> class implements the custom SSL socket factory

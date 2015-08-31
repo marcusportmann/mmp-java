@@ -18,9 +18,7 @@ package guru.mmp.application.web.template;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.resource.thirdparty.greensockjs
-  .TweenLiteJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenLiteJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
@@ -30,13 +28,11 @@ import guru.mmp.application.web.template.page.LoginPage;
 import guru.mmp.application.web.template.page.LogoutPage;
 import guru.mmp.application.web.template.resource.*;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.CssResourceReference;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -175,15 +171,13 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     navigationRoot = new NavigationGroup("");
     initNavigation(navigationRoot);
 
-    /*
-     * // Initialise the template-web-application.css resource bundle for the Web Application Template
-     * getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
-     *   "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
-     *   TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
-     */
-
+/*
+    // Initialise the template-web-application.css resource bundle for the Web Application Template
+    getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
+        "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
+        TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
+*/
     // Initialise the template-web-application.js resource bundle for the Web Application Template
-
     getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
         "js/template-web-application.js", MomentJavaScriptResourceReference.get(),
         TweenLiteJavaScriptResourceReference.get(), RWDTableJavaScriptResourceReference.get(),
@@ -272,6 +266,16 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
         else if (getSecureHomePage().isAssignableFrom(navigationLink.getPageClass()))
         {
           logger.debug("Ignoring secure home page navigation item \"" + navigationLink.getName()
+              + "\" under the path \"" + navigationItemPath + "\"");
+        }
+        else if (getLoginPage().isAssignableFrom(navigationLink.getPageClass()))
+        {
+          logger.debug("Ignoring login page navigation item \"" + navigationLink.getName()
+              + "\" under the path \"" + navigationItemPath + "\"");
+        }
+        else if (getLogoutPage().isAssignableFrom(navigationLink.getPageClass()))
+        {
+          logger.debug("Ignoring logout page navigation item \"" + navigationLink.getName()
               + "\" under the path \"" + navigationItemPath + "\"");
         }
         else

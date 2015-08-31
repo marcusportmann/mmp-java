@@ -21,19 +21,24 @@ package guru.mmp.application.task;
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.registry.IRegistry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
+
+import javax.naming.InitialContext;
 
 /**
  * The <code>TaskService</code> class provides the Task Service implementation.

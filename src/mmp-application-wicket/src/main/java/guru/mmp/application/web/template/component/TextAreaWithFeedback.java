@@ -14,49 +14,48 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.web.component;
+package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.util.FeedbackUtil;
-
+import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
 /**
- * The <code>RadioGroupWithFeedback</code> class extends the Wicket <code>RadioGroup</code>
+ * The <code>TextAreaWithFeedback</code> class extends the Wicket <code>TextArea</code>
  * component to provide support for displaying the feedback message for the component.
  *
  * @param <T>
  *
  * @author Marcus Portmann
  */
-public class RadioGroupWithFeedback<T> extends RadioGroup<T>
+public class TextAreaWithFeedback<T> extends TextArea<T>
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>RadioGroupWithFeedback</code>.
+   * Constructs a new <code>TextAreaWithFeedback</code>.
    *
    * @param id the non-null id of this component
    */
-  public RadioGroupWithFeedback(String id)
+  public TextAreaWithFeedback(String id)
   {
     super(id);
   }
 
   /**
-   * Constructs a new <code>RadioGroupWithFeedback</code>.
+   * Constructs a new <code>TextAreaWithFeedback</code>.
    *
    * @param id    the non-null id of this component
    * @param model the model for this component
    */
-  public RadioGroupWithFeedback(String id, IModel<T> model)
+  public TextAreaWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
   }
@@ -71,7 +70,7 @@ public class RadioGroupWithFeedback<T> extends RadioGroup<T>
   {
     super.renderHead(response);
 
-    response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
 

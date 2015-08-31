@@ -39,7 +39,7 @@ public class Select2CssResourceReference extends CssResourceReference
   {
     super(Select2CssResourceReference.class, Debug.inDebugMode()
         ? "select2.css"
-        : "select2.css");
+        : "select2.min.css");
   }
 
   /**

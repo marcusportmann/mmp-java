@@ -1,15 +1,18 @@
 
 package com.microsoft.schemas.sharepoint.soap;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "listName" })
+@XmlType(name = "", propOrder = {
+    "listName"
+})
 @XmlRootElement(name = "DeleteList")
-public class DeleteList
-{
-  @XmlElement(required = true)
-  protected String listName;
+public class DeleteList {
 
-  /**
-   * Gets the value of the listName property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getListName()
-  {
-    return listName;
-  }
+    @XmlElement(required = true)
+    protected String listName;
 
-  /**
-   * Sets the value of the listName property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
+    /**
+     * Gets the value of the listName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getListName() {
+        return listName;
+    }
+
+    /**
+     * Sets the value of the listName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setListName(String value) {
+        this.listName = value;
+    }
+
 }

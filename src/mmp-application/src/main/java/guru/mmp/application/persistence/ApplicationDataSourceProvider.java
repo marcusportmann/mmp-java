@@ -21,11 +21,8 @@ package guru.mmp.application.persistence;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
-
 import javax.inject.Named;
-
 import javax.naming.InitialContext;
-
 import javax.sql.DataSource;
 
 /**

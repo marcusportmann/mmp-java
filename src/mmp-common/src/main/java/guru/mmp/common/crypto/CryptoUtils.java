@@ -20,14 +20,12 @@ package guru.mmp.common.crypto;
 
 import guru.mmp.common.util.Base64;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.math.BigInteger;
-
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CryptUtils</code> class provides cryptography related utility functions.

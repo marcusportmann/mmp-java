@@ -20,12 +20,13 @@ package guru.mmp.application.test;
 
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.common.test.Tests;
+
 import org.slf4j.Logger;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InjectableTests</code> class provides a base class for JUnit tests that wish to use

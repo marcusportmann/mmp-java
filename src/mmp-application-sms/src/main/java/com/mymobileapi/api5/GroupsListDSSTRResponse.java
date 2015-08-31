@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "groupsListDSSTRResult" })
+@XmlType(name = "", propOrder = {
+    "groupsListDSSTRResult"
+})
 @XmlRootElement(name = "Groups_List_DS_STRResponse")
-public class GroupsListDSSTRResponse
-{
-  @XmlElement(name = "Groups_List_DS_STRResult")
-  protected String groupsListDSSTRResult;
+public class GroupsListDSSTRResponse {
 
-  /**
-   * Gets the value of the groupsListDSSTRResult property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getGroupsListDSSTRResult()
-  {
-    return groupsListDSSTRResult;
-  }
+    @XmlElement(name = "Groups_List_DS_STRResult")
+    protected String groupsListDSSTRResult;
 
-  /**
-   * Sets the value of the groupsListDSSTRResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setGroupsListDSSTRResult(String value)
-  {
-    this.groupsListDSSTRResult = value;
-  }
+    /**
+     * Gets the value of the groupsListDSSTRResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getGroupsListDSSTRResult() {
+        return groupsListDSSTRResult;
+    }
+
+    /**
+     * Sets the value of the groupsListDSSTRResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setGroupsListDSSTRResult(String value) {
+        this.groupsListDSSTRResult = value;
+    }
+
 }

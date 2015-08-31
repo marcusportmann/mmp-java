@@ -1,15 +1,18 @@
 
 package com.microsoft.schemas.sharepoint.soap;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,118 +27,112 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "listName", "description", "featureID", "templateID" })
+@XmlType(name = "", propOrder = {
+    "listName",
+    "description",
+    "featureID",
+    "templateID"
+})
 @XmlRootElement(name = "AddListFromFeature")
-public class AddListFromFeature
-{
-  protected String description;
-  @XmlElement(required = true)
-  protected String featureID;
-  @XmlElement(required = true)
-  protected String listName;
-  protected int templateID;
+public class AddListFromFeature {
 
-  /**
-   * Gets the value of the description property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getDescription()
-  {
-    return description;
-  }
+    @XmlElement(required = true)
+    protected String listName;
+    protected String description;
+    @XmlElement(required = true)
+    protected String featureID;
+    protected int templateID;
 
-  /**
-   * Gets the value of the featureID property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getFeatureID()
-  {
-    return featureID;
-  }
+    /**
+     * Gets the value of the listName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getListName() {
+        return listName;
+    }
 
-  /**
-   * Gets the value of the listName property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getListName()
-  {
-    return listName;
-  }
+    /**
+     * Sets the value of the listName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setListName(String value) {
+        this.listName = value;
+    }
 
-  /**
-   * Gets the value of the templateID property.
-   *
-   *
-   * @return
-   */
-  public int getTemplateID()
-  {
-    return templateID;
-  }
+    /**
+     * Gets the value of the description property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDescription() {
+        return description;
+    }
 
-  /**
-   * Sets the value of the description property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setDescription(String value)
-  {
-    this.description = value;
-  }
+    /**
+     * Sets the value of the description property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDescription(String value) {
+        this.description = value;
+    }
 
-  /**
-   * Sets the value of the featureID property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setFeatureID(String value)
-  {
-    this.featureID = value;
-  }
+    /**
+     * Gets the value of the featureID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFeatureID() {
+        return featureID;
+    }
 
-  /**
-   * Sets the value of the listName property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
+    /**
+     * Sets the value of the featureID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFeatureID(String value) {
+        this.featureID = value;
+    }
 
-  /**
-   * Sets the value of the templateID property.
-   *
-   *
-   * @param value
-   */
-  public void setTemplateID(int value)
-  {
-    this.templateID = value;
-  }
+    /**
+     * Gets the value of the templateID property.
+     * 
+     */
+    public int getTemplateID() {
+        return templateID;
+    }
+
+    /**
+     * Sets the value of the templateID property.
+     * 
+     */
+    public void setTemplateID(int value) {
+        this.templateID = value;
+    }
+
 }

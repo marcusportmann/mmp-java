@@ -19,13 +19,6 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenLiteJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenMaxJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.selectboxit.JQuerySelectBoxItJavaScriptResourceReference;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -88,11 +81,6 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
   public List<HeaderItem> getDependencies()
   {
     List<HeaderItem> dependencies = new ArrayList<>();
-
-    dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(JQueryUIJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(MomentJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TweenLiteJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     dependencies.add(TemplateBootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TemplateCombinedJavaScriptResourceReference.getJavaScriptHeaderItem());

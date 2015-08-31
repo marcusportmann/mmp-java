@@ -21,21 +21,26 @@ package guru.mmp.application.cdi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.EJB;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.AnnotatedType;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.InjectionTarget;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.ejb.EJB;
+
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.InjectionTarget;
+
+import javax.inject.Inject;
+
+import javax.naming.InitialContext;
 
 /**
  * The <code>CDIUtil</code> class is a utility class which provides utility methods related to
@@ -157,8 +162,7 @@ public class CDIUtil
       }
       else
       {
-        AnnotatedType<?> annotatedType =
-          cachedBeanManager.createAnnotatedType(clazz);
+        AnnotatedType<?> annotatedType = cachedBeanManager.createAnnotatedType(clazz);
 
         injectionTarget = cachedBeanManager.createInjectionTarget(annotatedType);
 

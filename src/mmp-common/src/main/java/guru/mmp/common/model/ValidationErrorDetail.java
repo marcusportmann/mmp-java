@@ -230,7 +230,8 @@ public class ValidationErrorDetail
         }
         catch (Throwable e)
         {
-          this.detail = "Unable to dump the stack for the exception (" + cause + "): " + e.getMessage();
+          this.detail = "Unable to dump the stack for the exception (" + cause + "): "
+              + e.getMessage();
         }
       }
     }

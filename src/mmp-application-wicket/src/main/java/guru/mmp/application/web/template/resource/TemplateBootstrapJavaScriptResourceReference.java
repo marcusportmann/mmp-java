@@ -19,8 +19,19 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenLiteJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
+import java.util.ArrayList;
+import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateBootstrapJavaScriptResourceReference</code> class implements the
@@ -64,5 +75,24 @@ public class TemplateBootstrapJavaScriptResourceReference extends JavaScriptReso
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  /**
+   * Returns the dependencies for the JavaScript resource reference.
+   *
+   * @return the dependencies for the JavaScript resource reference
+   */
+  @Override
+  public List<HeaderItem> getDependencies()
+  {
+    List<HeaderItem> dependencies = new ArrayList<>();
+
+    dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(JQueryUIJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(MomentJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(TweenLiteJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(RWDTableJavaScriptResourceReference.getJavaScriptHeaderItem());
+
+    return dependencies;
   }
 }

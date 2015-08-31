@@ -20,9 +20,9 @@ package guru.mmp.application.task;
 
 import guru.mmp.application.persistence.DAOException;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>ITaskDAO</code> interface defines the task-related persistence operations.

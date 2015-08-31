@@ -21,15 +21,17 @@ package guru.mmp.application.web.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.naming.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DumpNameSpaceServlet</code> servlet dumps the JNDI namespace.
@@ -232,7 +234,8 @@ public class DumpNamespaceServlet extends HttpServlet
 
           if (processChildren)
           {
-            pw.println("<div style=\"thirdparty-weight: bold; padding-top: 2px; padding-bottom: 2px;"
+            pw.println(
+                "<div style=\"thirdparty-weight: bold; padding-top: 2px; padding-bottom: 2px;"
                 + " padding-left: " + ((depth * 20)) + "px;\">" + nameClassPair.getName()
                 + " <span class=\"className\">[" + nameClassPair.getClassName()
                 + "]</span></div><br>");
@@ -277,15 +280,16 @@ public class DumpNamespaceServlet extends HttpServlet
     throws IOException
   {
     pw.println("<html>");
-    pw.println("  <head>");
-    pw.println("    <style>");
-    pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;}");
-    pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
+    pw.println("<head>");
+    pw.println("  <style>");
+    pw.println(
+        "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;}");
+    pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green;"
         + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
-    pw.println("      .className {color: 808080;}");
-    pw.println("    </style>");
-    pw.println("  </head>");
-    pw.println("  <body>");
+    pw.println("    .className {color: 808080;}");
+    pw.println("  </style>");
+    pw.println("</head>");
+    pw.println("<body>");
   }
 
   class TreeDumpStatus

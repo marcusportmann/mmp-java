@@ -18,8 +18,9 @@ package guru.mmp.application.registry;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.sql.DataSource;
 import java.math.BigDecimal;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>IRegistry</code> interface defines the functionality provided by a "Registry" which is

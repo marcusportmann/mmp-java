@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.web.component;
+package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 

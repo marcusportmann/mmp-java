@@ -1,18 +1,17 @@
 
 package com.microsoft.schemas.sharepoint.soap;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -26,93 +25,92 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "pageUrl", "checkoutToLocal", "lastmodified" })
+@XmlType(name = "", propOrder = {
+    "pageUrl",
+    "checkoutToLocal",
+    "lastmodified"
+})
 @XmlRootElement(name = "CheckOutFile")
-public class CheckOutFile
-{
-  protected String checkoutToLocal;
-  protected String lastmodified;
-  protected String pageUrl;
+public class CheckOutFile {
 
-  /**
-   * Gets the value of the checkoutToLocal property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getCheckoutToLocal()
-  {
-    return checkoutToLocal;
-  }
+    protected String pageUrl;
+    protected String checkoutToLocal;
+    protected String lastmodified;
 
-  /**
-   * Gets the value of the lastmodified property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getLastmodified()
-  {
-    return lastmodified;
-  }
+    /**
+     * Gets the value of the pageUrl property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPageUrl() {
+        return pageUrl;
+    }
 
-  /**
-   * Gets the value of the pageUrl property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getPageUrl()
-  {
-    return pageUrl;
-  }
+    /**
+     * Sets the value of the pageUrl property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPageUrl(String value) {
+        this.pageUrl = value;
+    }
 
-  /**
-   * Sets the value of the checkoutToLocal property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setCheckoutToLocal(String value)
-  {
-    this.checkoutToLocal = value;
-  }
+    /**
+     * Gets the value of the checkoutToLocal property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCheckoutToLocal() {
+        return checkoutToLocal;
+    }
 
-  /**
-   * Sets the value of the lastmodified property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setLastmodified(String value)
-  {
-    this.lastmodified = value;
-  }
+    /**
+     * Sets the value of the checkoutToLocal property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCheckoutToLocal(String value) {
+        this.checkoutToLocal = value;
+    }
 
-  /**
-   * Sets the value of the pageUrl property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setPageUrl(String value)
-  {
-    this.pageUrl = value;
-  }
+    /**
+     * Gets the value of the lastmodified property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLastmodified() {
+        return lastmodified;
+    }
+
+    /**
+     * Sets the value of the lastmodified property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLastmodified(String value) {
+        this.lastmodified = value;
+    }
+
 }

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.web.component;
+package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.util.FeedbackUtil;
-
+import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -70,7 +69,7 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
   {
     super.renderHead(response);
 
-    response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
 

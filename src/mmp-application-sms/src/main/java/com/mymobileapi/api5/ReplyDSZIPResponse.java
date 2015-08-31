@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,38 +24,39 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "replyDSZIPResult" })
+@XmlType(name = "", propOrder = {
+    "replyDSZIPResult"
+})
 @XmlRootElement(name = "Reply_DS_ZIPResponse")
-public class ReplyDSZIPResponse
-{
-  @XmlElement(name = "Reply_DS_ZIPResult")
-  protected byte[] replyDSZIPResult;
+public class ReplyDSZIPResponse {
 
-  /**
-   * Gets the value of the replyDSZIPResult property.
-   *
-   * @return
-   *     possible object is
-   *     byte[]
-   */
-  public byte[] getReplyDSZIPResult()
-  {
-    return replyDSZIPResult;
-  }
+    @XmlElement(name = "Reply_DS_ZIPResult")
+    protected byte[] replyDSZIPResult;
 
-  /**
-   * Sets the value of the replyDSZIPResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     byte[]
-   */
-  public void setReplyDSZIPResult(byte[] value)
-  {
-    this.replyDSZIPResult = value;
-  }
+    /**
+     * Gets the value of the replyDSZIPResult property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getReplyDSZIPResult() {
+        return replyDSZIPResult;
+    }
+
+    /**
+     * Sets the value of the replyDSZIPResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setReplyDSZIPResult(byte[] value) {
+        this.replyDSZIPResult = value;
+    }
+
 }

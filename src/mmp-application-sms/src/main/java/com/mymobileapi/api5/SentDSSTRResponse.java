@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "sentDSSTRResult" })
+@XmlType(name = "", propOrder = {
+    "sentDSSTRResult"
+})
 @XmlRootElement(name = "Sent_DS_STRResponse")
-public class SentDSSTRResponse
-{
-  @XmlElement(name = "Sent_DS_STRResult")
-  protected String sentDSSTRResult;
+public class SentDSSTRResponse {
 
-  /**
-   * Gets the value of the sentDSSTRResult property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getSentDSSTRResult()
-  {
-    return sentDSSTRResult;
-  }
+    @XmlElement(name = "Sent_DS_STRResult")
+    protected String sentDSSTRResult;
 
-  /**
-   * Sets the value of the sentDSSTRResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setSentDSSTRResult(String value)
-  {
-    this.sentDSSTRResult = value;
-  }
+    /**
+     * Gets the value of the sentDSSTRResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSentDSSTRResult() {
+        return sentDSSTRResult;
+    }
+
+    /**
+     * Sets the value of the sentDSSTRResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSentDSSTRResult(String value) {
+        this.sentDSSTRResult = value;
+    }
+
 }

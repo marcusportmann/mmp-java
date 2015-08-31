@@ -20,13 +20,14 @@ package guru.mmp.application.test;
 
 import org.junit.After;
 import org.junit.Before;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InjectableTests</code> class provides a base class for JUnit tests that wish to use

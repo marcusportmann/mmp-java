@@ -19,21 +19,14 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.thirdparty.greensockjs
-  .TweenLiteJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
-
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateCoreJavaScriptResourceReference</code> class implements the
@@ -54,7 +47,7 @@ public class TemplateCoreJavaScriptResourceReference extends JavaScriptResourceR
   {
     super(TemplateCoreJavaScriptResourceReference.class, Debug.inDebugMode()
         ? "js/template-core.js"
-        : "js/template-core.js");
+        : "js/template-core.min.js");
   }
 
   /**
@@ -88,12 +81,6 @@ public class TemplateCoreJavaScriptResourceReference extends JavaScriptResourceR
   public List<HeaderItem> getDependencies()
   {
     List<HeaderItem> dependencies = new ArrayList<>();
-
-    dependencies.add(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(JQueryUIJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(MomentJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TweenLiteJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(RWDTableJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     dependencies.add(TemplateBootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
     dependencies.add(TemplateCombinedJavaScriptResourceReference.getJavaScriptHeaderItem());

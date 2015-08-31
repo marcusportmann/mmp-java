@@ -8744,8 +8744,7 @@ div.datepicker table tr td.disabled, div.datepicker table tr td.disabled:hover
 }
 
 div.datepicker table tr td.today, div.datepicker table tr td.today:hover, div.datepicker table tr td.today.disabled, div.datepicker table tr td.today.disabled:hover
-{;
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+{
   color: #000;
 }
 
@@ -8800,7 +8799,6 @@ div.datepicker table tr td.range, div.datepicker table tr td.range:hover, div.da
 
 div.datepicker table tr td.range.today, div.datepicker table tr td.range.today:hover, div.datepicker table tr td.range.today.disabled, div.datepicker table tr td.range.today.disabled:hover
 {
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
   -webkit-border-radius: 0;
   -webkit-background-clip: padding-box;
   -moz-border-radius: 0;
@@ -8839,7 +8837,6 @@ div.datepicker table tr td.range.today:active, div.datepicker table tr td.range.
 
 div.datepicker table tr td.selected, div.datepicker table tr td.selected:hover, div.datepicker table tr td.selected.disabled, div.datepicker table tr td.selected.disabled:hover
 {
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
 }

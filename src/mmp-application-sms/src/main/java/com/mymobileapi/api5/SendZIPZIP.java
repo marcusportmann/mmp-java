@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -23,94 +26,93 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "username", "password", "data" })
+@XmlType(name = "", propOrder = {
+    "username",
+    "password",
+    "data"
+})
 @XmlRootElement(name = "Send_ZIP_ZIP")
-public class SendZIPZIP
-{
-  @XmlElement(name = "Data")
-  protected byte[] data;
-  @XmlElement(name = "Password")
-  protected String password;
-  @XmlElement(name = "Username")
-  protected String username;
+public class SendZIPZIP {
 
-  /**
-   * Gets the value of the data property.
-   *
-   * @return
-   *     possible object is
-   *     byte[]
-   */
-  public byte[] getData()
-  {
-    return data;
-  }
+    @XmlElement(name = "Username")
+    protected String username;
+    @XmlElement(name = "Password")
+    protected String password;
+    @XmlElement(name = "Data")
+    protected byte[] data;
 
-  /**
-   * Gets the value of the password property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getPassword()
-  {
-    return password;
-  }
+    /**
+     * Gets the value of the username property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUsername() {
+        return username;
+    }
 
-  /**
-   * Gets the value of the username property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getUsername()
-  {
-    return username;
-  }
+    /**
+     * Sets the value of the username property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUsername(String value) {
+        this.username = value;
+    }
 
-  /**
-   * Sets the value of the data property.
-   *
-   * @param value
-   *     allowed object is
-   *     byte[]
-   */
-  public void setData(byte[] value)
-  {
-    this.data = value;
-  }
+    /**
+     * Gets the value of the password property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPassword() {
+        return password;
+    }
 
-  /**
-   * Sets the value of the password property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setPassword(String value)
-  {
-    this.password = value;
-  }
+    /**
+     * Sets the value of the password property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPassword(String value) {
+        this.password = value;
+    }
 
-  /**
-   * Sets the value of the username property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setUsername(String value)
-  {
-    this.username = value;
-  }
+    /**
+     * Gets the value of the data property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getData() {
+        return data;
+    }
+
+    /**
+     * Sets the value of the data property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setData(byte[] value) {
+        this.data = value;
+    }
+
 }

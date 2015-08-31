@@ -20,10 +20,6 @@ package guru.mmp.application.web.template.component;
 
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.CodesServiceException;
-import guru.mmp.application.web.component.DropDownChoiceWithFeedback;
-import guru.mmp.application.web.component.TextAreaWithFeedback;
-import guru.mmp.application.web.component.TextFieldWithFeedback;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -33,10 +29,10 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.string.Strings;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryInputPanel</code> class provides a Wicket component that can

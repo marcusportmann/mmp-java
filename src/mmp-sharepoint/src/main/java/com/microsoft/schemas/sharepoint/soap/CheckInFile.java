@@ -1,15 +1,18 @@
 
 package com.microsoft.schemas.sharepoint.soap;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -23,94 +26,93 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "pageUrl", "comment", "checkinType" })
+@XmlType(name = "", propOrder = {
+    "pageUrl",
+    "comment",
+    "checkinType"
+})
 @XmlRootElement(name = "CheckInFile")
-public class CheckInFile
-{
-  @XmlElement(name = "CheckinType")
-  protected String checkinType;
-  protected String comment;
-  protected String pageUrl;
+public class CheckInFile {
 
-  /**
-   * Gets the value of the checkinType property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getCheckinType()
-  {
-    return checkinType;
-  }
+    protected String pageUrl;
+    protected String comment;
+    @XmlElement(name = "CheckinType")
+    protected String checkinType;
 
-  /**
-   * Gets the value of the comment property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getComment()
-  {
-    return comment;
-  }
+    /**
+     * Gets the value of the pageUrl property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPageUrl() {
+        return pageUrl;
+    }
 
-  /**
-   * Gets the value of the pageUrl property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getPageUrl()
-  {
-    return pageUrl;
-  }
+    /**
+     * Sets the value of the pageUrl property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPageUrl(String value) {
+        this.pageUrl = value;
+    }
 
-  /**
-   * Sets the value of the checkinType property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setCheckinType(String value)
-  {
-    this.checkinType = value;
-  }
+    /**
+     * Gets the value of the comment property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getComment() {
+        return comment;
+    }
 
-  /**
-   * Sets the value of the comment property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setComment(String value)
-  {
-    this.comment = value;
-  }
+    /**
+     * Sets the value of the comment property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setComment(String value) {
+        this.comment = value;
+    }
 
-  /**
-   * Sets the value of the pageUrl property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setPageUrl(String value)
-  {
-    this.pageUrl = value;
-  }
+    /**
+     * Gets the value of the checkinType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCheckinType() {
+        return checkinType;
+    }
+
+    /**
+     * Sets the value of the checkinType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCheckinType(String value) {
+        this.checkinType = value;
+    }
+
 }

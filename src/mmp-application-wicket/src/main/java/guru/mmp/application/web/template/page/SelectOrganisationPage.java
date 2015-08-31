@@ -22,7 +22,6 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebSession;
-import guru.mmp.application.web.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.component.StringSelectOption;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
 import guru.mmp.application.web.page.WebPage;
@@ -31,6 +30,7 @@ import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceRe
 import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.Alerts;
+import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;

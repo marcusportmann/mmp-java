@@ -20,15 +20,13 @@ package guru.mmp.application.web;
 
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.servlet.ViewReportParameters;
-
 import org.apache.wicket.request.Request;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebSession</code> class stores the session information for a user accessing a Wicket
@@ -62,7 +60,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   private String organisation;
 
   /** The unique user ID for the logged in user associated with the web session. */
-  private long userId  = -1;
+  private long userId = -1;
 
   /** The user properties for the logged in user associated with the web session. */
   private Map<String, Serializable> userProperties;

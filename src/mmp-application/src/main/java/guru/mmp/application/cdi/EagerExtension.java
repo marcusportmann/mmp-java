@@ -18,11 +18,12 @@ package guru.mmp.application.cdi;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The <code>EagerExtension</code> class implements a CDI extension that together with the

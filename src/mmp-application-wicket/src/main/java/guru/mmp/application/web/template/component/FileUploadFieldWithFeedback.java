@@ -14,55 +14,57 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.web.component;
+package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.util.FeedbackUtil;
-
+import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
 /**
- * The <code>TextFieldWithFeedback</code> class extends the Wicket <code>TextField</code>
- * component to provide support for displaying the feedback message for the component.
+ * The <code>FileUploadFieldWithFeedback</code> class extends the Wicket
+ * <code>FileUploadField</code> component to provide support for displaying the feedback message
+ * for the component.
  *
  * @param <T>
  *
  * @author Marcus Portmann
  */
-public class TextFieldWithFeedback<T> extends TextField<T>
+public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
+  extends FileUploadField
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TextFieldWithFeedback</code>.
+   * Constructs a new <code>FileUploadFieldWithFeedback</code>.
    *
    * @param id the non-null id of this component
    */
-  public TextFieldWithFeedback(String id)
+  public FileUploadFieldWithFeedback(String id)
   {
     super(id);
   }
 
   /**
-   * Constructs a new <code>TextFieldWithFeedback</code>.
+   * Constructs a new <code>FileUploadFieldWithFeedback</code>.
    *
    * @param id    the non-null id of this component
    * @param model the model for this component
    */
-  public TextFieldWithFeedback(String id, IModel<T> model)
+  public FileUploadFieldWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
+   * @see org.apache.wicket.markup.html.form.FormComponent#renderHead(IHeaderResponse)
    *
    * @param response the Wicket header response
    */
@@ -71,7 +73,7 @@ public class TextFieldWithFeedback<T> extends TextField<T>
   {
     super.renderHead(response);
 
-    response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
 
@@ -82,7 +84,7 @@ public class TextFieldWithFeedback<T> extends TextField<T>
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.TextField#onConfigure()
+   * @see org.apache.wicket.markup.html.form.FormComponent#onConfigure()
    */
   @Override
   protected void onConfigure()
@@ -91,7 +93,7 @@ public class TextFieldWithFeedback<T> extends TextField<T>
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.TextField#onRender()
+   * @see org.apache.wicket.markup.html.form.FormComponent#onRender()
    */
   @Override
   protected void onRender()

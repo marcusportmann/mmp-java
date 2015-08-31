@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,38 +24,39 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "shortCodeGetDSZIPResult" })
+@XmlType(name = "", propOrder = {
+    "shortCodeGetDSZIPResult"
+})
 @XmlRootElement(name = "ShortCode_Get_DS_ZIPResponse")
-public class ShortCodeGetDSZIPResponse
-{
-  @XmlElement(name = "ShortCode_Get_DS_ZIPResult")
-  protected byte[] shortCodeGetDSZIPResult;
+public class ShortCodeGetDSZIPResponse {
 
-  /**
-   * Gets the value of the shortCodeGetDSZIPResult property.
-   *
-   * @return
-   *     possible object is
-   *     byte[]
-   */
-  public byte[] getShortCodeGetDSZIPResult()
-  {
-    return shortCodeGetDSZIPResult;
-  }
+    @XmlElement(name = "ShortCode_Get_DS_ZIPResult")
+    protected byte[] shortCodeGetDSZIPResult;
 
-  /**
-   * Sets the value of the shortCodeGetDSZIPResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     byte[]
-   */
-  public void setShortCodeGetDSZIPResult(byte[] value)
-  {
-    this.shortCodeGetDSZIPResult = value;
-  }
+    /**
+     * Gets the value of the shortCodeGetDSZIPResult property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getShortCodeGetDSZIPResult() {
+        return shortCodeGetDSZIPResult;
+    }
+
+    /**
+     * Sets the value of the shortCodeGetDSZIPResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setShortCodeGetDSZIPResult(byte[] value) {
+        this.shortCodeGetDSZIPResult = value;
+    }
+
 }

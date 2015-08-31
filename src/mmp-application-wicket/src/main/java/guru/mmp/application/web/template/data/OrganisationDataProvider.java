@@ -18,8 +18,8 @@ package guru.mmp.application.web.template.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
 import org.apache.wicket.model.IModel;
@@ -91,8 +91,8 @@ public class OrganisationDataProvider extends InjectableDataProvider<Organisatio
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the organisations from index (" + first + ") to ("
-        + (first + count) + ")", e);
+      throw new WebApplicationException("Failed to load the organisations from index (" + first
+          + ") to (" + (first + count) + ")", e);
     }
   }
 
@@ -124,7 +124,7 @@ public class OrganisationDataProvider extends InjectableDataProvider<Organisatio
       ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
 
       return securityService.getNumberOfOrganisations(
-        servletWebRequest.getContainerRequest().getRemoteAddr());
+          servletWebRequest.getContainerRequest().getRemoteAddr());
     }
     catch (Throwable e)
     {

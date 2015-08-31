@@ -14,58 +14,54 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.web.component;
+package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
-import guru.mmp.application.web.util.FeedbackUtil;
-
+import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
 /**
- * The <code>FileUploadFieldWithFeedback</code> class extends the Wicket
- * <code>FileUploadField</code> component to provide support for displaying the feedback message
- * for the component.
+ * The <code>RadioGroupWithFeedback</code> class extends the Wicket <code>RadioGroup</code>
+ * component to provide support for displaying the feedback message for the component.
  *
  * @param <T>
  *
  * @author Marcus Portmann
  */
-public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
-  extends FileUploadField
+public class RadioGroupWithFeedback<T> extends RadioGroup<T>
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>FileUploadFieldWithFeedback</code>.
+   * Constructs a new <code>RadioGroupWithFeedback</code>.
    *
    * @param id the non-null id of this component
    */
-  public FileUploadFieldWithFeedback(String id)
+  public RadioGroupWithFeedback(String id)
   {
     super(id);
   }
 
   /**
-   * Constructs a new <code>FileUploadFieldWithFeedback</code>.
+   * Constructs a new <code>RadioGroupWithFeedback</code>.
    *
    * @param id    the non-null id of this component
    * @param model the model for this component
    */
-  public FileUploadFieldWithFeedback(String id, IModel<T> model)
+  public RadioGroupWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.FormComponent#renderHead(IHeaderResponse)
+   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
    *
    * @param response the Wicket header response
    */
@@ -74,7 +70,7 @@ public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
   {
     super.renderHead(response);
 
-    response.render(JQueryJavaScriptResourceReference.getJavaScriptHeaderItem());
+    response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
     String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
 
@@ -85,16 +81,18 @@ public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.FormComponent#onConfigure()
+   * @see org.apache.wicket.markup.html.form.TextArea#onConfigure()
    */
   @Override
   protected void onConfigure()
   {
     super.onConfigure();
+
+    FeedbackUtil.applyFeedbackCssClassModifier(this);
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.FormComponent#onRender()
+   * @see org.apache.wicket.markup.html.form.TextArea#onRender()
    */
   @Override
   protected void onRender()

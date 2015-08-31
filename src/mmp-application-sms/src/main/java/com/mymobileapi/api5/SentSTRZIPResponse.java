@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,38 +24,39 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "sentSTRZIPResult" })
+@XmlType(name = "", propOrder = {
+    "sentSTRZIPResult"
+})
 @XmlRootElement(name = "Sent_STR_ZIPResponse")
-public class SentSTRZIPResponse
-{
-  @XmlElement(name = "Sent_STR_ZIPResult")
-  protected byte[] sentSTRZIPResult;
+public class SentSTRZIPResponse {
 
-  /**
-   * Gets the value of the sentSTRZIPResult property.
-   *
-   * @return
-   *     possible object is
-   *     byte[]
-   */
-  public byte[] getSentSTRZIPResult()
-  {
-    return sentSTRZIPResult;
-  }
+    @XmlElement(name = "Sent_STR_ZIPResult")
+    protected byte[] sentSTRZIPResult;
 
-  /**
-   * Sets the value of the sentSTRZIPResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     byte[]
-   */
-  public void setSentSTRZIPResult(byte[] value)
-  {
-    this.sentSTRZIPResult = value;
-  }
+    /**
+     * Gets the value of the sentSTRZIPResult property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getSentSTRZIPResult() {
+        return sentSTRZIPResult;
+    }
+
+    /**
+     * Sets the value of the sentSTRZIPResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setSentSTRZIPResult(byte[] value) {
+        this.sentSTRZIPResult = value;
+    }
+
 }

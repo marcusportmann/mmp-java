@@ -22,13 +22,12 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DetachableOrganisationModel</code> class provides a detachable model

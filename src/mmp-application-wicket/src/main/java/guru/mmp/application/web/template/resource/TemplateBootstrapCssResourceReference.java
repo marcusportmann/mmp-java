@@ -47,7 +47,7 @@ public class TemplateBootstrapCssResourceReference extends CssResourceReference
   {
     super(TemplateBootstrapCssResourceReference.class, Debug.inDebugMode()
         ? "css/template-bootstrap.css"
-        : "css/template-bootstrap.css");
+        : "css/template-bootstrap.min.css");
   }
 
   /**

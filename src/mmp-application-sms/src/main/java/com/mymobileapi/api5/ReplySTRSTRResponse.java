@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "replySTRSTRResult" })
+@XmlType(name = "", propOrder = {
+    "replySTRSTRResult"
+})
 @XmlRootElement(name = "Reply_STR_STRResponse")
-public class ReplySTRSTRResponse
-{
-  @XmlElement(name = "Reply_STR_STRResult")
-  protected String replySTRSTRResult;
+public class ReplySTRSTRResponse {
 
-  /**
-   * Gets the value of the replySTRSTRResult property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getReplySTRSTRResult()
-  {
-    return replySTRSTRResult;
-  }
+    @XmlElement(name = "Reply_STR_STRResult")
+    protected String replySTRSTRResult;
 
-  /**
-   * Sets the value of the replySTRSTRResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setReplySTRSTRResult(String value)
-  {
-    this.replySTRSTRResult = value;
-  }
+    /**
+     * Gets the value of the replySTRSTRResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getReplySTRSTRResult() {
+        return replySTRSTRResult;
+    }
+
+    /**
+     * Sets the value of the replySTRSTRResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setReplySTRSTRResult(String value) {
+        this.replySTRSTRResult = value;
+    }
+
 }

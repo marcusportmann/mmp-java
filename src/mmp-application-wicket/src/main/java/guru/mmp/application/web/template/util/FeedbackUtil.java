@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.web.util;
+package guru.mmp.application.web.template.util;
 
 //~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.common.util.StringUtil;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -49,34 +47,20 @@ public class FeedbackUtil
   /**
    * The JavaScript used to clear the feedback for a form component.
    */
-  private static final String CLEAR_FEEDBACK_JAVA_SCRIPT = "if($('#%1$sFeedback')){"
-    + "if($('#%1$sFeedback').parent().hasClass('form-group')){"
-    + "$('#%1$sFeedback').parent().removeClass('" + "has-error has-warning has-info has-success"
-    + "');} if($('#%1$sFeedback').parent().parent().hasClass('form-group')){"
-    + "$('#%1$sFeedback').parent().parent().removeClass('"
-    + "has-error has-warning has-info has-success"
-    + "');}$('#%1$sFeedback').replaceWith('<div id=\"#%1$sFeedback\"></div>');}";
+  private static final String CLEAR_FEEDBACK_JAVA_SCRIPT =
+    "clear_form_control_feedback('#%1$s');";
 
   /**
    * The JavaScript used to display the feedback for a form component using the 'domready' event.
    */
   private static final String DOM_READY_FEEDBACK_JAVA_SCRIPT =
-    "$(function(){if($('#%1$sFeedback')){"
-    + "if($('#%1$sFeedback').parent().hasClass('form-group')){"
-    + "$('#%1$sFeedback').parent().addClass('%2$s');}"
-    + "if($('#%1$sFeedback').parent().parent().hasClass('form-group')){"
-    + "$('#%1$sFeedback').parent().parent().addClass('%2$s');}"
-    + "$('#%1$sFeedback').replaceWith('%3$s');}});";
+    "$(function(){show_form_control_feedback('#%1$s', '%2$s', '%3$s');});";
 
   /**
    * The JavaScript used to display the feedback for a form component.
    */
-  private static final String FEEDBACK_JAVA_SCRIPT = "if($('#%1$sFeedback')){"
-    + "if($('#%1$sFeedback').parent().hasClass('form-group')){"
-    + "$('#%1$sFeedback').parent().addClass('%2$s');}"
-    + "if($('#%1$sFeedback').parent().parent().hasClass('form-group')){"
-    + "$('#%1$sFeedback').parent().parent().addClass('%2$s');}"
-    + "$('#%1$sFeedback').replaceWith('%3$s');}";
+  private static final String FEEDBACK_JAVA_SCRIPT =
+    "show_form_control_feedback('#%1$s', '%2$s', '%3$s');";
 
   /**
    * Applies the appropriate CSS class to a component based on the type of feedback message
@@ -147,13 +131,10 @@ public class FeedbackUtil
         feedbackClass = "has-success";
       }
 
-      String feedbackId = id + "Feedback";
-
       String javaScript = String.format(isAjaxRequest
           ? FEEDBACK_JAVA_SCRIPT
           : DOM_READY_FEEDBACK_JAVA_SCRIPT, id, feedbackClass,
-            JavaScriptUtils.escapeQuotes(FeedbackUtil.generateFeedbackHtml(feedbackId,
-              feedbackMessage)));
+            JavaScriptUtils.escapeQuotes(feedbackMessage.getMessage().toString()));
 
       // Clear the feedback messages for the component
       for (FeedbackMessage componentFeedbackMessage : feedbackMessages)
@@ -172,25 +153,5 @@ public class FeedbackUtil
 
       return null;
     }
-  }
-
-  private static String generateFeedbackHtml(String id, FeedbackMessage feedbackMessage)
-  {
-    StringBuilder buffer = new StringBuilder();
-
-    if (StringUtil.isNullOrEmpty(id))
-    {
-      buffer.append("<div");
-    }
-    else
-    {
-      buffer.append("<div id=\"").append(id).append("\"");
-    }
-
-    buffer.append(" class=\"feedback\">");
-    buffer.append(feedbackMessage.getMessage());
-    buffer.append("</div>");
-
-    return buffer.toString();
   }
 }

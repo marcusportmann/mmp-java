@@ -74,8 +74,6 @@ public class Alerts extends Component
 
     for (FeedbackMessage message : messages)
     {
-      // System.out.println("[DEBUG][Alerts][getFilteredMessages] " + message.getMessage() + "(" + message.getReporter() + ")");
-
       Component reporter = message.getReporter();
 
       if ((reporter instanceof Button) || (reporter instanceof Form<?>)

@@ -18,7 +18,7 @@ package guru.mmp.application.web.behavior;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.util.FeedbackUtil;
+import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 

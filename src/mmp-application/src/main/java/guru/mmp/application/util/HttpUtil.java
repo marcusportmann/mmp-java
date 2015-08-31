@@ -18,11 +18,12 @@ package guru.mmp.application.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.servlet.ServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+
+import javax.servlet.ServletRequest;
 
 /**
  * The HttpUtil class provides utility methods that are useful when working with the HTTP protocol.

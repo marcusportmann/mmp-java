@@ -19,9 +19,7 @@ package guru.mmp.common.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
-
 import java.text.SimpleDateFormat;
-
 import java.util.*;
 
 /**

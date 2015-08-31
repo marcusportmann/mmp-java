@@ -47,7 +47,7 @@ public class TemplateCoreCssResourceReference extends CssResourceReference
   {
     super(TemplateCoreCssResourceReference.class, Debug.inDebugMode()
         ? "css/template-core.css"
-        : "css/template-core.css");
+        : "css/template-core.min.css");
   }
 
   /**

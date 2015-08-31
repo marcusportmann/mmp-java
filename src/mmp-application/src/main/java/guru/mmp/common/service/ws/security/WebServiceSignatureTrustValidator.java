@@ -21,14 +21,16 @@ package guru.mmp.common.service.ws.security;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.handler.RequestData;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.security.cert.X509Certificate;
+
 import java.util.Collection;
 import java.util.regex.Pattern;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SignatureTrustValidator</code> class implements a custom signature trust validator.
@@ -79,7 +81,7 @@ public class WebServiceSignatureTrustValidator
       if (logger.isDebugEnabled())
       {
         logger.debug("Successfully verified the trust for the client certificate ("
-          + cert.getSubjectDN().getName() + ")");
+            + cert.getSubjectDN().getName() + ")");
       }
 
       return true;
@@ -119,7 +121,7 @@ public class WebServiceSignatureTrustValidator
       if (logger.isDebugEnabled())
       {
         logger.debug("Successfully verified the trust for the client certificate ("
-          + certificates[0].getSubjectDN().getName() + ")");
+            + certificates[0].getSubjectDN().getName() + ")");
       }
 
       return true;
@@ -127,7 +129,7 @@ public class WebServiceSignatureTrustValidator
     else
     {
       logger.warn("Failed to verify the trust for the client certificate ("
-        + certificates[0].getSubjectDN().getName() + ")");
+          + certificates[0].getSubjectDN().getName() + ")");
 
       return false;
     }

@@ -799,21 +799,23 @@ public class MessagingServlet extends HttpServlet
       PrintWriter pw = response.getWriter();
 
       pw.println("<html>");
-      pw.println("  <head>");
-      pw.println("    <style>");
-      pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
-      pw.println("      h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
+      pw.println("<head>");
+      pw.println("  <style>");
+      pw.println(
+          "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
+      pw.println(
+          "    h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
       pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
           + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
-      pw.println("      .className {color: 808080;}");
-      pw.println("    </style>");
-      pw.println("  </head>");
-      pw.println("  <body>");
+      pw.println("    .className {color: 808080;}");
+      pw.println("  </style>");
+      pw.println("</head>");
+      pw.println("<body>");
 
-      pw.println("    <h1><thirdparty color=\"red\">ERROR</thirdparty></h1>");
-      pw.println("    " + exception.getMessage());
+      pw.println("  <h1><thirdparty color=\"red\">ERROR</thirdparty></h1>");
+      pw.println("  " + exception.getMessage());
 
-      pw.println("  </body>");
+      pw.println("</body>");
       pw.println("</html>");
     }
     catch (IOException ignored) {}

@@ -25,6 +25,7 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,6 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(SecureHttpClientBuilder.class);
-
   private SSLConnectionSocketFactory sslSocketFactory;
 
   /**
@@ -98,22 +98,28 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
         sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 
         sslSocketFactory = new SSLConnectionSocketFactory(sslContext.getSocketFactory(),
-          (hostname, sslSession) -> {
+            new HostnameVerifier()
+        {
+          @Override
+          public boolean verify(String hostname, SSLSession sslSession)
+          {
             // TODO: Implement proper verification of the server identity -- MARCUS
 
             return true;
 
-//                if (hostname.equalsIgnoreCase(sslSession.getPeerHost()))
-//                {
-//                  return true;
-//                }
-//                else
-//                {
-//                  logger.error("Failed to verify the SSL connection to the host (" + hostname + ") which returned a certificate for the host (" + sslSession.getPeerHost() + ")");
+//          if (hostname.equalsIgnoreCase(sslSession.getPeerHost()))
+//          {
+//            return true;
+//          }
+//          else
+//          {
+//            logger.error("Failed to verify the SSL connection to the host ("
+// + hostname + ") which returned a certificate for the host (" + sslSession.getPeerHost() + ")");
 //
-//                  return false;
-//                }
-          });
+//            return false;
+//          }
+          }
+        });
       }
       catch (Throwable e)
       {

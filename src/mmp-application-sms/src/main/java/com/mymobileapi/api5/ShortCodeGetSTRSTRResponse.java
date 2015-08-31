@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "shortCodeGetSTRSTRResult" })
+@XmlType(name = "", propOrder = {
+    "shortCodeGetSTRSTRResult"
+})
 @XmlRootElement(name = "ShortCode_Get_STR_STRResponse")
-public class ShortCodeGetSTRSTRResponse
-{
-  @XmlElement(name = "ShortCode_Get_STR_STRResult")
-  protected String shortCodeGetSTRSTRResult;
+public class ShortCodeGetSTRSTRResponse {
 
-  /**
-   * Gets the value of the shortCodeGetSTRSTRResult property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getShortCodeGetSTRSTRResult()
-  {
-    return shortCodeGetSTRSTRResult;
-  }
+    @XmlElement(name = "ShortCode_Get_STR_STRResult")
+    protected String shortCodeGetSTRSTRResult;
 
-  /**
-   * Sets the value of the shortCodeGetSTRSTRResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setShortCodeGetSTRSTRResult(String value)
-  {
-    this.shortCodeGetSTRSTRResult = value;
-  }
+    /**
+     * Gets the value of the shortCodeGetSTRSTRResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getShortCodeGetSTRSTRResult() {
+        return shortCodeGetSTRSTRResult;
+    }
+
+    /**
+     * Sets the value of the shortCodeGetSTRSTRResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setShortCodeGetSTRSTRResult(String value) {
+        this.shortCodeGetSTRSTRResult = value;
+    }
+
 }

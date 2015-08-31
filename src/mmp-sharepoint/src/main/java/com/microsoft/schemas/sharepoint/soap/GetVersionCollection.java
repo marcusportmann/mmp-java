@@ -1,18 +1,17 @@
 
 package com.microsoft.schemas.sharepoint.soap;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -26,93 +25,92 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "strlistID", "strlistItemID", "strFieldName" })
+@XmlType(name = "", propOrder = {
+    "strlistID",
+    "strlistItemID",
+    "strFieldName"
+})
 @XmlRootElement(name = "GetVersionCollection")
-public class GetVersionCollection
-{
-  protected String strFieldName;
-  protected String strlistID;
-  protected String strlistItemID;
+public class GetVersionCollection {
 
-  /**
-   * Gets the value of the strFieldName property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getStrFieldName()
-  {
-    return strFieldName;
-  }
+    protected String strlistID;
+    protected String strlistItemID;
+    protected String strFieldName;
 
-  /**
-   * Gets the value of the strlistID property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getStrlistID()
-  {
-    return strlistID;
-  }
+    /**
+     * Gets the value of the strlistID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getStrlistID() {
+        return strlistID;
+    }
 
-  /**
-   * Gets the value of the strlistItemID property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getStrlistItemID()
-  {
-    return strlistItemID;
-  }
+    /**
+     * Sets the value of the strlistID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setStrlistID(String value) {
+        this.strlistID = value;
+    }
 
-  /**
-   * Sets the value of the strFieldName property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setStrFieldName(String value)
-  {
-    this.strFieldName = value;
-  }
+    /**
+     * Gets the value of the strlistItemID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getStrlistItemID() {
+        return strlistItemID;
+    }
 
-  /**
-   * Sets the value of the strlistID property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setStrlistID(String value)
-  {
-    this.strlistID = value;
-  }
+    /**
+     * Sets the value of the strlistItemID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setStrlistItemID(String value) {
+        this.strlistItemID = value;
+    }
 
-  /**
-   * Sets the value of the strlistItemID property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setStrlistItemID(String value)
-  {
-    this.strlistItemID = value;
-  }
+    /**
+     * Gets the value of the strFieldName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getStrFieldName() {
+        return strFieldName;
+    }
+
+    /**
+     * Sets the value of the strFieldName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setStrFieldName(String value) {
+        this.strFieldName = value;
+    }
+
 }

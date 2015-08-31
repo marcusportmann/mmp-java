@@ -1,15 +1,18 @@
 
 package com.mymobileapi.api5;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,40 +24,41 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "sendSTRSTRResult" })
+@XmlType(name = "", propOrder = {
+    "sendSTRSTRResult"
+})
 @XmlRootElement(name = "Send_STR_STRResponse")
-public class SendSTRSTRResponse
-{
-  @XmlElement(name = "Send_STR_STRResult")
-  protected String sendSTRSTRResult;
+public class SendSTRSTRResponse {
 
-  /**
-   * Gets the value of the sendSTRSTRResult property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getSendSTRSTRResult()
-  {
-    return sendSTRSTRResult;
-  }
+    @XmlElement(name = "Send_STR_STRResult")
+    protected String sendSTRSTRResult;
 
-  /**
-   * Sets the value of the sendSTRSTRResult property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setSendSTRSTRResult(String value)
-  {
-    this.sendSTRSTRResult = value;
-  }
+    /**
+     * Gets the value of the sendSTRSTRResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSendSTRSTRResult() {
+        return sendSTRSTRResult;
+    }
+
+    /**
+     * Sets the value of the sendSTRSTRResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSendSTRSTRResult(String value) {
+        this.sendSTRSTRResult = value;
+    }
+
 }

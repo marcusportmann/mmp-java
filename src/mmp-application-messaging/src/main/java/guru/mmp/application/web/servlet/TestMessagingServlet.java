@@ -317,7 +317,8 @@ public class TestMessagingServlet extends HttpServlet
 
           AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value");
 
-          byte[] testData = getClasspathResource("guru/mmp/application/web/template/resource/image/test.jpg");
+          byte[] testData =
+            getClasspathResource("guru/mmp/application/web/template/resource/image/test.jpg");
 
           logger.info("Loaded " + testData.length + " bytes of test data");
 
@@ -730,7 +731,8 @@ public class TestMessagingServlet extends HttpServlet
     pw.println("<html>");
     pw.println("  <head>");
     pw.println("    <style>");
-    pw.println("      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
+    pw.println(
+        "      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
     pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
         + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
     pw.println("      .className {color: 808080;}");

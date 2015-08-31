@@ -48,13 +48,12 @@ import javax.servlet.http.HttpServletRequest;
 public class UserMenu extends Component
 {
   private static final long serialVersionUID = 1000000;
-  private boolean isMultipleOrganisationSupportEnabled;
   private boolean hasMultipleOrganisations;
+  private boolean isMultipleOrganisationSupportEnabled;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
-
 
   /**
    * @see org.apache.wicket.Component#Component(String)

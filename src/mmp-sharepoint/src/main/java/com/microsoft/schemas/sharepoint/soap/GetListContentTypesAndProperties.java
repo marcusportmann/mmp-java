@@ -1,18 +1,17 @@
 
 package com.microsoft.schemas.sharepoint.soap;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+
 /**
  * <p>Java class for anonymous complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -27,121 +26,118 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "",
-    propOrder = { "listName", "contentTypeId", "propertyPrefix", "includeWebProperties" })
+@XmlType(name = "", propOrder = {
+    "listName",
+    "contentTypeId",
+    "propertyPrefix",
+    "includeWebProperties"
+})
 @XmlRootElement(name = "GetListContentTypesAndProperties")
-public class GetListContentTypesAndProperties
-{
-  protected String contentTypeId;
-  protected Boolean includeWebProperties;
-  protected String listName;
-  protected String propertyPrefix;
+public class GetListContentTypesAndProperties {
 
-  /**
-   * Gets the value of the contentTypeId property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getContentTypeId()
-  {
-    return contentTypeId;
-  }
+    protected String listName;
+    protected String contentTypeId;
+    protected String propertyPrefix;
+    protected Boolean includeWebProperties;
 
-  /**
-   * Gets the value of the listName property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getListName()
-  {
-    return listName;
-  }
+    /**
+     * Gets the value of the listName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getListName() {
+        return listName;
+    }
 
-  /**
-   * Gets the value of the propertyPrefix property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getPropertyPrefix()
-  {
-    return propertyPrefix;
-  }
+    /**
+     * Sets the value of the listName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setListName(String value) {
+        this.listName = value;
+    }
 
-  /**
-   * Gets the value of the includeWebProperties property.
-   *
-   * @return
-   *     possible object is
-   *     {@link Boolean }
-   *
-   */
-  public Boolean isIncludeWebProperties()
-  {
-    return includeWebProperties;
-  }
+    /**
+     * Gets the value of the contentTypeId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getContentTypeId() {
+        return contentTypeId;
+    }
 
-  /**
-   * Sets the value of the contentTypeId property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setContentTypeId(String value)
-  {
-    this.contentTypeId = value;
-  }
+    /**
+     * Sets the value of the contentTypeId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setContentTypeId(String value) {
+        this.contentTypeId = value;
+    }
 
-  /**
-   * Sets the value of the includeWebProperties property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link Boolean }
-   *
-   */
-  public void setIncludeWebProperties(Boolean value)
-  {
-    this.includeWebProperties = value;
-  }
+    /**
+     * Gets the value of the propertyPrefix property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPropertyPrefix() {
+        return propertyPrefix;
+    }
 
-  /**
-   * Sets the value of the listName property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
+    /**
+     * Sets the value of the propertyPrefix property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPropertyPrefix(String value) {
+        this.propertyPrefix = value;
+    }
 
-  /**
-   * Sets the value of the propertyPrefix property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setPropertyPrefix(String value)
-  {
-    this.propertyPrefix = value;
-  }
+    /**
+     * Gets the value of the includeWebProperties property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIncludeWebProperties() {
+        return includeWebProperties;
+    }
+
+    /**
+     * Sets the value of the includeWebProperties property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIncludeWebProperties(Boolean value) {
+        this.includeWebProperties = value;
+    }
+
 }

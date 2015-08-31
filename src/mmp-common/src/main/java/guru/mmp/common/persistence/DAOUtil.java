@@ -20,20 +20,16 @@ package guru.mmp.common.persistence;
 
 import guru.mmp.common.util.StringUtil;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.sql.DataSource;
 import java.io.*;
-
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DAOUtil</code> class provides utility functions used by the Data Access Objects (DAOs).
@@ -46,6 +42,53 @@ public class DAOUtil
    * Private default constructor to enforce utility pattern.
    */
   private DAOUtil() {}
+
+  /**
+   * Close the entity manager and commit or rollback the associated transaction if one is active.
+   *
+   * @param entityManager the entity manager to close
+   */
+  public static void closeAndCommitOrRollback(EntityManager entityManager)
+  {
+    EntityTransaction entityTransaction = entityManager.getTransaction();
+
+    if (entityTransaction.isActive())
+    {
+      if (entityTransaction.getRollbackOnly())
+      {
+        try
+        {
+          entityTransaction.rollback();
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException(
+              "Failed to rollback the entity manager transaction and close the entity manager", e);
+        }
+      }
+      else
+      {
+        try
+        {
+          entityTransaction.commit();
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException(
+              "Failed to commit the entity manager transaction and close the entity manager", e);
+        }
+      }
+    }
+
+    try
+    {
+      entityManager.close();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to close the entity manager", e);
+    }
+  }
 
   /**
    * Close the connection.
@@ -124,53 +167,6 @@ public class DAOUtil
       {
         // Do nothing
       }
-    }
-  }
-
-  /**
-   * Close the entity manager and commit or rollback the associated transaction if one is active.
-   *
-   * @param entityManager the entity manager to close
-   */
-  public static void closeAndCommitOrRollback(EntityManager entityManager)
-  {
-    EntityTransaction entityTransaction = entityManager.getTransaction();
-
-    if (entityTransaction.isActive())
-    {
-      if (entityTransaction.getRollbackOnly())
-      {
-        try
-        {
-          entityTransaction.rollback();
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException(
-              "Failed to rollback the entity manager transaction and close the entity manager", e);
-        }
-      }
-      else
-      {
-        try
-        {
-          entityTransaction.commit();
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException(
-              "Failed to commit the entity manager transaction and close the entity manager", e);
-        }
-      }
-    }
-
-    try
-    {
-      entityManager.close();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to close the entity manager", e);
     }
   }
 

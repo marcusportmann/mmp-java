@@ -19,15 +19,13 @@ package guru.mmp.common.persistence;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.sql.DataSource;
 import java.sql.*;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IDGenerator</code> class provides unique IDs for the entity types in the database.
