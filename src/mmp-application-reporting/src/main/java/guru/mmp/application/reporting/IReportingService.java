@@ -20,11 +20,12 @@ package guru.mmp.application.reporting;
 
 import org.w3c.dom.Document;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
+
 import java.util.List;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IReportingService</code> interface defines the functionality that must be provided by
@@ -37,7 +38,7 @@ public interface IReportingService
   /**
    * The username used to identify operations performed by the system.
    */
-  public static final String SYSTEM_USERNAME = "SYSTEM";
+  String SYSTEM_USERNAME = "SYSTEM";
 
   /**
    * Create a PDF for the report using a connection retrieved from the application data source.
@@ -50,7 +51,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public byte[] createReportPDF(String definitionId, Map<String, Object> parameters)
+  byte[] createReportPDF(String definitionId, Map<String, Object> parameters)
     throws ReportingServiceException;
 
   /**
@@ -65,8 +66,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public byte[] createReportPDF(String definitionId, Map<String, Object> parameters,
-      Connection connection)
+  byte[] createReportPDF(String definitionId, Map<String, Object> parameters, Connection connection)
     throws ReportingServiceException;
 
   /**
@@ -81,8 +81,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public byte[] createReportPDF(String definitionId, Map<String, Object> parameters,
-      Document document)
+  byte[] createReportPDF(String definitionId, Map<String, Object> parameters, Document document)
     throws ReportingServiceException;
 
   /**
@@ -93,7 +92,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public void deleteReportDefinition(String id)
+  void deleteReportDefinition(String id)
     throws ReportingServiceException;
 
   /**
@@ -101,7 +100,7 @@ public interface IReportingService
    *
    * @return the real path to the folder where the local Jasper reports are stored
    */
-  public String getLocalReportFolderPath();
+  String getLocalReportFolderPath();
 
   /**
    * Returns the number of report definitions associated with the organisation identified by the
@@ -114,7 +113,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public int getNumberOfReportDefinitionsForOrganisation(String organisation)
+  int getNumberOfReportDefinitionsForOrganisation(String organisation)
     throws ReportingServiceException;
 
   /**
@@ -128,7 +127,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public ReportDefinition getReportDefinition(String id)
+  ReportDefinition getReportDefinition(String id)
     throws ReportingServiceException;
 
   /**
@@ -142,7 +141,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
+  List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
     throws ReportingServiceException;
 
   /**
@@ -155,7 +154,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public boolean reportDefinitionExists(String id)
+  boolean reportDefinitionExists(String id)
     throws ReportingServiceException;
 
   /**
@@ -172,7 +171,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  public ReportDefinition saveReportDefinition(ReportDefinition reportDefinition, String savedBy)
+  ReportDefinition saveReportDefinition(ReportDefinition reportDefinition, String savedBy)
     throws ReportingServiceException;
 
   /**
@@ -181,5 +180,5 @@ public interface IReportingService
    * @param localReportFolderPath the real path to the folder where the local Jasper reports are
    *                              stored
    */
-  public void setLocalReportFolderPath(String localReportFolderPath);
+  void setLocalReportFolderPath(String localReportFolderPath);
 }

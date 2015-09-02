@@ -123,7 +123,7 @@ public class CDATA
 
       return result;
     }
-    catch (Exception ex)
+    catch (Exception e)
     {
       return super.toString();
     }

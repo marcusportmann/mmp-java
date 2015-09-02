@@ -74,6 +74,7 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected GroupsForUserDataProvider() {}
 
   /**

@@ -260,12 +260,15 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
     {
       CodeCategory codeCategory = codeCategoryModel.getObject();
 
-      id = codeCategory.getId();
-      nameLabel.setDefaultModelObject(codeCategory.getName());
+      if (codeCategory != null)
+      {
+        id = codeCategory.getId();
+        nameLabel.setDefaultModelObject(codeCategory.getName());
 
-      target.add(nameLabel);
+        target.add(nameLabel);
 
-      super.show(target);
+        super.show(target);
+      }
     }
   }
 }

@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.data;
 
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
+import guru.mmp.application.security.UserNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -75,6 +76,7 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected DetachableUserModel() {}
 
   /**
@@ -89,6 +91,10 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
 
       return securityService.getUser(username,
           servletWebRequest.getContainerRequest().getRemoteAddr());
+    }
+    catch (UserNotFoundException e)
+    {
+      return null;
     }
     catch (Throwable e)
     {

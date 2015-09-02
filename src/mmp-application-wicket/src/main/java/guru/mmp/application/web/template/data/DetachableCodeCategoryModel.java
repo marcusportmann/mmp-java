@@ -74,6 +74,7 @@ public class DetachableCodeCategoryModel extends InjectableLoadableDetachableMod
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected DetachableCodeCategoryModel() {}
 
   /**

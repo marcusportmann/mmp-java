@@ -19,6 +19,7 @@ package guru.mmp.application.web.template.data;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.security.Group;
+import guru.mmp.application.security.GroupNotFoundException;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
@@ -75,6 +76,7 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected DetachableGroupModel() {}
 
   /**
@@ -89,6 +91,10 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
 
       return securityService.getGroup(groupName,
           servletWebRequest.getContainerRequest().getRemoteAddr());
+    }
+    catch (GroupNotFoundException e)
+    {
+      return null;
     }
     catch (Throwable e)
     {

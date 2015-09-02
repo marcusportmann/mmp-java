@@ -35,7 +35,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
@@ -139,7 +138,16 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, item.getModel());
+              ReportDefinition reportDefinition = item.getModelObject();
+
+              if (reportDefinition != null)
+              {
+                removeDialog.show(target, reportDefinition);
+              }
+              else
+              {
+                target.add(tableContainer);
+              }
             }
           };
           item.add(removeLink);
@@ -228,13 +236,11 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target                the AJAX request target
-     * @param reportDefinitionModel the model for the report definition being removed
+     * @param target           the AJAX request target
+     * @param reportDefinition the report definition being removed
      */
-    public void show(AjaxRequestTarget target, IModel<ReportDefinition> reportDefinitionModel)
+    public void show(AjaxRequestTarget target, ReportDefinition reportDefinition)
     {
-      ReportDefinition reportDefinition = reportDefinitionModel.getObject();
-
       id = reportDefinition.getId();
       nameLabel.setDefaultModelObject(reportDefinition.getName());
 

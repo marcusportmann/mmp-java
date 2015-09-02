@@ -64,6 +64,7 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected CodeDataProvider() {}
 
   /**

@@ -74,6 +74,7 @@ public class UserDataProvider extends InjectableDataProvider<User>
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected UserDataProvider() {}
 
   /**

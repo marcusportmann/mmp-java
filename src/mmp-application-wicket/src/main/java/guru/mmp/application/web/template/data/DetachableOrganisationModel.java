@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.data;
 
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
+import guru.mmp.application.security.OrganisationNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -75,6 +76,7 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected DetachableOrganisationModel() {}
 
   /**
@@ -89,6 +91,10 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
 
       return securityService.getOrganisation(code,
           servletWebRequest.getContainerRequest().getRemoteAddr());
+    }
+    catch (OrganisationNotFoundException e)
+    {
+      return null;
     }
     catch (Throwable e)
     {

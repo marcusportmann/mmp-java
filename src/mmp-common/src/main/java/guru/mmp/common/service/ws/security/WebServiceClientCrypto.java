@@ -20,6 +20,7 @@ package guru.mmp.common.service.ws.security;
 
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
@@ -28,23 +29,29 @@ import org.apache.ws.security.components.crypto.DERDecoder;
 import org.apache.ws.security.components.crypto.X509SubjectPublicKeyInfo;
 import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.WSSecurityUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import java.lang.reflect.Constructor;
+
+import java.math.BigInteger;
+
+import java.security.*;
+import java.security.cert.*;
+import java.security.cert.Certificate;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.x500.X500Principal;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.*;
-import java.security.cert.Certificate;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceClientCrypto</code> class implements the WSS4J crypto operations for
@@ -464,12 +471,12 @@ public class WebServiceClientCrypto
       {
         return WSSecurityUtil.generateDigest(value);
       }
-      catch (WSSecurityException ex)
+      catch (WSSecurityException e)
       {
         throw new WSSecurityException(WSSecurityException.UNSUPPORTED_SECURITY_TOKEN,
             "noSKIHandling",
             new Object[] { "No SKI certificate extension and no SHA1 message digest available" },
-            ex);
+            e);
       }
     }
 
@@ -713,34 +720,36 @@ public class WebServiceClientCrypto
   public boolean verifyTrust(X509Certificate[] certificateChain, boolean enableRevocation)
     throws WSSecurityException
   {
-    if ((certificateChain != null) && (certificateChain.length > 0))
+    if ((certificateChain == null) || (certificateChain.length == 0))
     {
-      try
+      return false;
+    }
+
+    try
+    {
+      String verifiedThumbprint =
+        verifiedCertificates.get(certificateChain[0].getSubjectDN().toString());
+
+      if (verifiedThumbprint != null)
       {
-        String verifiedThumbprint =
-          verifiedCertificates.get(certificateChain[0].getSubjectDN().toString());
-
-        if (verifiedThumbprint != null)
+        if (StringUtil.toHexString(certificateChain[0].getSignature()).equals(verifiedThumbprint))
         {
-          if (StringUtil.toHexString(certificateChain[0].getSignature()).equals(verifiedThumbprint))
+          if (logger.isInfoEnabled())
           {
-            if (logger.isInfoEnabled())
-            {
-              logger.info(
-                  "Successfully verified the trust for the service certificate with subject ("
-                  + certificateChain[0].getSubjectDN() + ") and thumbprint (" + verifiedThumbprint
-                  + ")");
-            }
-
-            return true;
+            logger.info(
+                "Successfully verified the trust for the service certificate with subject ("
+                + certificateChain[0].getSubjectDN() + ") and thumbprint (" + verifiedThumbprint
+                + ")");
           }
+
+          return true;
         }
       }
-      catch (Throwable e)
-      {
-        logger.error("Failed to check whether the trust for the service certificate with subject ("
-            + certificateChain[0].getSubjectDN() + ") was verified previously", e);
-      }
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to check whether the trust for the service certificate with subject ("
+          + certificateChain[0].getSubjectDN() + ") was verified previously", e);
     }
 
     try
@@ -934,9 +943,9 @@ public class WebServiceClientCrypto
   {
     try
     {
-      for (Enumeration<String> e = store.aliases(); e.hasMoreElements(); )
+      for (Enumeration<String> aliases = store.aliases(); aliases.hasMoreElements(); )
       {
-        String alias = e.nextElement();
+        String alias = aliases.nextElement();
         Certificate cert;
         Certificate[] certs = store.getCertificateChain(alias);
 
@@ -965,10 +974,10 @@ public class WebServiceClientCrypto
           {
             sha.update(x509cert.getEncoded());
           }
-          catch (CertificateEncodingException ex)
+          catch (CertificateEncodingException e)
           {
             throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE,
-                "encodeError", null, ex);
+                "encodeError", null, e);
           }
 
           byte[] data = sha.digest();
@@ -1092,7 +1101,7 @@ public class WebServiceClientCrypto
           continue;
         }
 
-        if ((retrievedCert != null) && retrievedCert.equals(cert))
+        if (retrievedCert.equals(cert))
         {
           return alias;
         }
@@ -1264,7 +1273,7 @@ public class WebServiceClientCrypto
 
       issuerName = createBCX509Name(issuerRDN.getName());
     }
-    catch (java.lang.IllegalArgumentException ex)
+    catch (java.lang.IllegalArgumentException e)
     {
       issuerName = createBCX509Name(issuer);
     }
@@ -1351,7 +1360,7 @@ public class WebServiceClientCrypto
 
       subject = createBCX509Name(subjectRDN.getName());
     }
-    catch (java.lang.IllegalArgumentException ex)
+    catch (java.lang.IllegalArgumentException e)
     {
       subject = createBCX509Name(subjectDN);
     }

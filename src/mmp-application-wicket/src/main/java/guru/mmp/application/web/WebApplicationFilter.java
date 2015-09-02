@@ -106,7 +106,7 @@ public class WebApplicationFilter extends org.apache.wicket.protocol.http.Wicket
     {
       super.doFilter(request, response, chain);
     }
-    catch (java.io.FileNotFoundException ex)
+    catch (java.io.FileNotFoundException e)
     {
       if (response instanceof HttpServletResponse)
       {

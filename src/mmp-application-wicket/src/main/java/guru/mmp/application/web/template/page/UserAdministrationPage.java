@@ -38,7 +38,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
@@ -205,9 +204,18 @@ public class UserAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              if (!item.getModelObject().getUsername().equalsIgnoreCase("Administrator"))
+              User user = item.getModelObject();
+
+              if (user != null)
               {
-                removeDialog.show(target, item.getModel());
+                if (!user.getUsername().equalsIgnoreCase("Administrator"))
+                {
+                  removeDialog.show(target, user);
+                }
+              }
+              else
+              {
+                target.add(tableContainer);
               }
             }
           };
@@ -293,13 +301,11 @@ public class UserAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target    the AJAX request target
-     * @param userModel the model for the user being removed
+     * @param target the AJAX request target
+     * @param user   the user being removed
      */
-    public void show(AjaxRequestTarget target, IModel<User> userModel)
+    public void show(AjaxRequestTarget target, User user)
     {
-      User user = userModel.getObject();
-
       this.username = user.getUsername();
       this.nameLabel.setDefaultModelObject(user.getFirstNames() + " " + user.getLastName());
 

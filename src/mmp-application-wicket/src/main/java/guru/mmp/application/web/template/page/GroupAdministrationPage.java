@@ -26,6 +26,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,15 +35,15 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>GroupAdministrationPage</code> class implements the
@@ -135,7 +136,16 @@ public class GroupAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, item.getModel());
+              Group group = item.getModelObject();
+
+              if (group != null)
+              {
+                removeDialog.show(target, group);
+              }
+              else
+              {
+                target.add(tableContainer);
+              }
             }
           };
           item.add(removeLink);
@@ -220,13 +230,11 @@ public class GroupAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target     the AJAX request target
-     * @param groupModel the model for the group being removed
+     * @param target the AJAX request target
+     * @param group  the group being removed
      */
-    public void show(AjaxRequestTarget target, IModel<Group> groupModel)
+    public void show(AjaxRequestTarget target, Group group)
     {
-      Group group = groupModel.getObject();
-
       groupName = group.getGroupName();
       nameLabel.setDefaultModelObject(group.getGroupName());
 

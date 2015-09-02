@@ -26,6 +26,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.OrganisationDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,15 +35,15 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>OrganisationAdministrationPage</code> class implements the
@@ -135,7 +136,16 @@ public class OrganisationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              removeDialog.show(target, item.getModel());
+              Organisation organisation = item.getModelObject();
+
+              if (organisation != null)
+              {
+                removeDialog.show(target, organisation);
+              }
+              else
+              {
+                target.add(tableContainer);
+              }
             }
           };
           item.add(removeLink);
@@ -222,13 +232,11 @@ public class OrganisationAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target            the AJAX request target
-     * @param organisationModel the model for the organisation being removed
+     * @param target       the AJAX request target
+     * @param organisation the organisation being removed
      */
-    public void show(AjaxRequestTarget target, IModel<Organisation> organisationModel)
+    public void show(AjaxRequestTarget target, Organisation organisation)
     {
-      Organisation organisation = organisationModel.getObject();
-
       code = organisation.getCode();
       nameLabel.setDefaultModelObject(organisation.getName());
 

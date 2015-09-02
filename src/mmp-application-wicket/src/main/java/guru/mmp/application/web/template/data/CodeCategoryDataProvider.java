@@ -72,6 +72,7 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected CodeCategoryDataProvider() {}
 
   /**

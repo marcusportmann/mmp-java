@@ -101,10 +101,10 @@ public class MessagingServlet extends HttpServlet
       messagingService.resetMessagePartLocks(MessagePart.Status.ASSEMBLING,
           MessagePart.Status.QUEUED_FOR_ASSEMBLY);
     }
-    catch (Exception ex)
+    catch (Exception e)
     {
       logger.error("Failed to reset the message part locks for the message parts being assembled",
-          ex);
+          e);
     }
   }
 
@@ -492,15 +492,15 @@ public class MessagingServlet extends HttpServlet
 
       return true;
     }
-    catch (Exception ex)
+    catch (Exception e)
     {
       logger.error("Failed to queue the message part (" + messagePart.getId() + ") from the user ("
           + messagePart.getMessageUser() + ") and the device (" + messagePart.getMessageDevice()
           + ") with message type (" + messagePart.getMessageType() + ") and version ("
-          + messagePart.getMessageTypeVersion() + ")", ex);
+          + messagePart.getMessageTypeVersion() + ")", e);
 
       MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_QUEUEING_FAILED,
-        "Failed to queue the message part (" + messagePart.getId() + ")", ex);
+        "Failed to queue the message part (" + messagePart.getId() + ")", e);
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -608,17 +608,17 @@ public class MessagingServlet extends HttpServlet
 
       return true;
     }
-    catch (Exception ex)
+    catch (Exception e)
     {
       logger.error("Failed to process the message part received request for the message part ("
           + receivedRequest.getMessagePartId() + ") from the device ("
-          + receivedRequest.getDevice() + ")", ex);
+          + receivedRequest.getDevice() + ")", e);
 
       MessagePartReceivedResponse result =
         new MessagePartReceivedResponse(MessageReceivedResponse.ERROR_UNKNOWN,
           "Failed to process the message part received request for the message part ("
           + receivedRequest.getMessagePartId() + ") from the device ("
-          + receivedRequest.getDevice() + ")", ex);
+          + receivedRequest.getDevice() + ")", e);
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -657,17 +657,17 @@ public class MessagingServlet extends HttpServlet
 
       return true;
     }
-    catch (Exception ex)
+    catch (Exception e)
     {
       logger.error("Failed to process the message received request for the message ("
           + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDevice()
-          + ")", ex);
+          + ")", e);
 
       MessageReceivedResponse result =
         new MessageReceivedResponse(MessageReceivedResponse.ERROR_UNKNOWN,
           "Failed to process the message received request for the message ("
           + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDevice()
-          + ")", ex);
+          + ")", e);
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -706,13 +706,13 @@ public class MessagingServlet extends HttpServlet
 
       return true;
     }
-    catch (Exception ex)
+    catch (Exception e)
     {
       logger.error("Failed to queue the message (" + message.getId() + ") from the user ("
-          + message.getUser() + ") and device (" + message.getDevice() + ") for processing", ex);
+          + message.getUser() + ") and device (" + message.getDevice() + ") for processing", e);
 
       MessageResult result = new MessageResult(MessageResult.ERROR_QUEUEING_FAILED,
-        "Failed to queue the message (" + message.getId() + ") for processing", ex);
+        "Failed to queue the message (" + message.getId() + ") for processing", e);
 
       writeResponseDocument(result.toWBXML(), response);
 

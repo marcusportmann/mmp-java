@@ -259,12 +259,15 @@ public class CodeAdministrationPage extends TemplateWebPage
     {
       Code code = codeModel.getObject();
 
-      id = code.getId();
-      nameLabel.setDefaultModelObject(code.getName());
+      if (code != null)
+      {
+        id = code.getId();
+        nameLabel.setDefaultModelObject(code.getName());
 
-      target.add(nameLabel);
+        target.add(nameLabel);
 
-      super.show(target);
+        super.show(target);
+      }
     }
   }
 }

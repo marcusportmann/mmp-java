@@ -483,12 +483,12 @@ public class WebServiceCrypto
       {
         return WSSecurityUtil.generateDigest(value);
       }
-      catch (WSSecurityException ex)
+      catch (WSSecurityException e)
       {
         throw new WSSecurityException(WSSecurityException.UNSUPPORTED_SECURITY_TOKEN,
             "noSKIHandling",
             new Object[] { "No SKI certificate extension and no SHA1 message digest available" },
-            ex);
+            e);
       }
     }
 
@@ -732,34 +732,36 @@ public class WebServiceCrypto
   public boolean verifyTrust(X509Certificate[] certificateChain, boolean enableRevocation)
     throws WSSecurityException
   {
-    if ((certificateChain != null) && (certificateChain.length > 0))
+    if ((certificateChain == null) || (certificateChain.length == 0))
     {
-      try
+      return false;
+    }
+
+    try
+    {
+      String verifiedThumbprint =
+        verifiedCertificates.get(certificateChain[0].getSubjectDN().toString());
+
+      if (verifiedThumbprint != null)
       {
-        String verifiedThumbprint =
-          verifiedCertificates.get(certificateChain[0].getSubjectDN().toString());
-
-        if (verifiedThumbprint != null)
+        if (StringUtil.toHexString(certificateChain[0].getSignature()).equals(verifiedThumbprint))
         {
-          if (StringUtil.toHexString(certificateChain[0].getSignature()).equals(verifiedThumbprint))
+          if (logger.isDebugEnabled())
           {
-            if (logger.isDebugEnabled())
-            {
-              logger.debug(
-                  "Successfully verified the trust for the client certificate with subject ("
-                  + certificateChain[0].getSubjectDN() + ") and thumbprint (" + verifiedThumbprint
-                  + ")");
-            }
-
-            return true;
+            logger.debug(
+                "Successfully verified the trust for the client certificate with subject ("
+                + certificateChain[0].getSubjectDN() + ") and thumbprint (" + verifiedThumbprint
+                + ")");
           }
+
+          return true;
         }
       }
-      catch (Throwable e)
-      {
-        logger.error("Failed to check whether the trust for the client certificate with subject ("
-            + certificateChain[0].getSubjectDN() + ") was verified previously", e);
-      }
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to check whether the trust for the client certificate with subject ("
+          + certificateChain[0].getSubjectDN() + ") was verified previously", e);
     }
 
     try
@@ -953,9 +955,9 @@ public class WebServiceCrypto
   {
     try
     {
-      for (Enumeration<String> e = store.aliases(); e.hasMoreElements(); )
+      for (Enumeration<String> aliases = store.aliases(); aliases.hasMoreElements(); )
       {
-        String alias = e.nextElement();
+        String alias = aliases.nextElement();
         Certificate cert;
         Certificate[] certs = store.getCertificateChain(alias);
 
@@ -984,10 +986,10 @@ public class WebServiceCrypto
           {
             sha.update(x509cert.getEncoded());
           }
-          catch (CertificateEncodingException ex)
+          catch (CertificateEncodingException e)
           {
             throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE,
-                "encodeError", null, ex);
+                "encodeError", null, e);
           }
 
           byte[] data = sha.digest();
@@ -1113,7 +1115,7 @@ public class WebServiceCrypto
           continue;
         }
 
-        if ((retrievedCert != null) && retrievedCert.equals(cert))
+        if (retrievedCert.equals(cert))
         {
           return alias;
         }
@@ -1285,7 +1287,7 @@ public class WebServiceCrypto
 
       issuerName = createBCX509Name(issuerRDN.getName());
     }
-    catch (java.lang.IllegalArgumentException ex)
+    catch (java.lang.IllegalArgumentException e)
     {
       issuerName = createBCX509Name(issuer);
     }
@@ -1372,7 +1374,7 @@ public class WebServiceCrypto
 
       subject = createBCX509Name(subjectRDN.getName());
     }
-    catch (java.lang.IllegalArgumentException ex)
+    catch (java.lang.IllegalArgumentException e)
     {
       subject = createBCX509Name(subjectDN);
     }

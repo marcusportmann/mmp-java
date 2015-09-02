@@ -73,6 +73,7 @@ public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected DetachableCodeModel() {}
 
   /**
