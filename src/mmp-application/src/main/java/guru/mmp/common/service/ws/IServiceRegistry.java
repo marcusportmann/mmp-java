@@ -22,6 +22,7 @@ package guru.mmp.common.service.ws;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface IServiceRegistry
 {
   /**
@@ -33,7 +34,7 @@ public interface IServiceRegistry
    *
    * @throws ServiceRegistryException
    */
-  public int getNumberOfServiceRegistryEntries()
+  int getNumberOfServiceRegistryEntries()
     throws ServiceRegistryException;
 
   /**
@@ -47,7 +48,7 @@ public interface IServiceRegistry
    *
    * @throws ServiceRegistryException
    */
-  public <T> T getServiceProxy(String name, Class<T> serviceInterface)
+  <T> T getServiceProxy(String name, Class<T> serviceInterface)
     throws ServiceRegistryException;
 
   /**
@@ -63,6 +64,6 @@ public interface IServiceRegistry
    *
    * @throws ServiceRegistryException
    */
-  public ServiceRegistryEntry getServiceRegistryEntry(String name)
+  ServiceRegistryEntry getServiceRegistryEntry(String name)
     throws ServiceRegistryException;
 }

@@ -18,7 +18,7 @@ package guru.mmp.application.task;
 
 /**
  * The <code>TaskServiceException</code> exception is thrown to indicate an error condition when
- * working with the task service.
+ * working with the Task Service.
  *
  * @author Marcus Portmann
  */

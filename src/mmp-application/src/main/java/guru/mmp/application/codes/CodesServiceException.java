@@ -18,10 +18,11 @@ package guru.mmp.application.codes;
 
 /**
  * The <code>CodesServiceException</code> exception is thrown to indicate an error condition when
- * working with the codes service.
+ * working with the Codes Service.
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class CodesServiceException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;

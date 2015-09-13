@@ -242,6 +242,7 @@ public abstract class DataAccessObject
    *
    * @return the ID generator used to generate unique numeric IDs for the DAO
    */
+  @SuppressWarnings("unused")
   protected IDGenerator getIDGenerator()
   {
     return idGenerator;
@@ -260,7 +261,7 @@ public abstract class DataAccessObject
   }
 
   /**
-   * Initialise the <code>DataAccessObject</code>.
+   * Initialise the <code>DataAccessObject</code> instance.
    */
   private void init()
   {

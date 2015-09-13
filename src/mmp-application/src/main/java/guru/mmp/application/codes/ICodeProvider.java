@@ -44,7 +44,7 @@ public interface ICodeProvider
    *
    * @throws CodeProviderException
    */
-  public CodeCategory getCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+  CodeCategory getCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
     throws CodeProviderException;
 
@@ -64,7 +64,7 @@ public interface ICodeProvider
    *
    * @throws CodeProviderException
    */
-  public CodeCategory getCodeCategoryWithParameters(CodeCategory codeCategory,
+  CodeCategory getCodeCategoryWithParameters(CodeCategory codeCategory,
       Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodeProviderException;
 }

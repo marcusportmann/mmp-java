@@ -324,6 +324,7 @@ public class CodesService
    *
    * @throws CodesServiceException
    */
+  @SuppressWarnings("unused")
   public List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
     throws CodesServiceException
   {
@@ -761,7 +762,7 @@ public class CodesService
 
     try
     {
-      // Initialise the configuration for the messaging service
+      // Initialise the configuration for the Messaging Service
       initConfiguration();
 
       // Read the codes configuration

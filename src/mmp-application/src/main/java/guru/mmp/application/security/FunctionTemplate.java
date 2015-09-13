@@ -40,17 +40,6 @@ public class FunctionTemplate
   /**
    * Constructs a new <code>FunctionTemplate</code>.
    *
-   * @param code the code for the function template
-   */
-  public FunctionTemplate(String code)
-  {
-    this.code = code;
-    this.functions = new ArrayList<>();
-  }
-
-  /**
-   * Constructs a new <code>FunctionTemplate</code>.
-   *
    * @param code        the code for the function template
    * @param name        the name of the function template
    * @param description the description for the function template

@@ -71,7 +71,7 @@ public class SMSService
   @Inject
   BackgroundSMSSender backgroundSMSSender;
 
-  /* The name of the SMS service instance. */
+  /* The name of the SMS Service instance. */
   private String instanceName;
 
   /* The maximum number of times sending will be attempted for a SMS. */
@@ -559,7 +559,7 @@ public class SMSService
   }
 
   /**
-   * Retrieves the name of the SMS service instance.
+   * Retrieves the name of the SMS Service instance.
    */
   private String getInstanceName()
   {
@@ -586,7 +586,7 @@ public class SMSService
       {
         logger.error("Failed to retrieve the application name from JNDI using the names ("
             + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the SMS service instance name");
+            + " the SMS Service instance name");
 
         applicationName = "Unknown";
       }
@@ -602,7 +602,7 @@ public class SMSService
       catch (Throwable e)
       {
         logger.error("Failed to retrieve the server hostname while constructing the "
-            + "SMS service instance name", e);
+            + "SMS Service instance name", e);
         instanceName = "Unknown";
       }
 
@@ -643,7 +643,7 @@ public class SMSService
         catch (Throwable e)
         {
           logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the SMS service instance name", e);
+              + " while constructing the SMS Service instance name", e);
           instanceName = instanceName + "::Unknown";
         }
       }

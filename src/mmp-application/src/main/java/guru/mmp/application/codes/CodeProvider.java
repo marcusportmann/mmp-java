@@ -22,6 +22,7 @@ package guru.mmp.application.codes;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class CodeProvider
   implements ICodeProvider
 {

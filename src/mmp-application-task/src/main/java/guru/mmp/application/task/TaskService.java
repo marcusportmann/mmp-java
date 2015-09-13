@@ -53,7 +53,7 @@ public class TaskService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-  /* The name of the task service instance. */
+  /* The name of the Task Service instance. */
   private String instanceName;
 
   /*
@@ -348,7 +348,7 @@ public class TaskService
   }
 
   /**
-   * Retrieves the name of the task service instance.
+   * Retrieves the name of the Task Service instance.
    */
   private String getInstanceName()
   {
@@ -375,7 +375,7 @@ public class TaskService
       {
         logger.error("Failed to retrieve the application name from JNDI using the names ("
             + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the task service instance name");
+            + " the Task Service instance name");
 
         applicationName = "Unknown";
       }
@@ -432,7 +432,7 @@ public class TaskService
         catch (Throwable e)
         {
           logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the task service instance name", e);
+              + " while constructing the Task Service instance name", e);
           instanceName = instanceName + "::Unknown";
         }
       }

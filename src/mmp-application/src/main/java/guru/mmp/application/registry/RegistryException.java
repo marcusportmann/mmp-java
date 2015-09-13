@@ -22,6 +22,7 @@ package guru.mmp.application.registry;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class RegistryException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;

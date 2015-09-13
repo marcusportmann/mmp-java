@@ -43,7 +43,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public boolean binaryValueExists(String path, String name)
+  boolean binaryValueExists(String path, String name)
     throws RegistryException;
 
   /**
@@ -56,7 +56,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public boolean decimalValueExists(String path, String name)
+  boolean decimalValueExists(String path, String name)
     throws RegistryException;
 
   /**
@@ -70,7 +70,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public byte[] getBinaryValue(String path, String name, byte[] defaultValue)
+  byte[] getBinaryValue(String path, String name, byte[] defaultValue)
     throws RegistryException;
 
   /**
@@ -86,7 +86,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public byte[] getBinaryValue(String path, String name, byte[] defaultValue, byte[] encryptionKey,
+  byte[] getBinaryValue(String path, String name, byte[] defaultValue, byte[] encryptionKey,
       byte[] encryptionIV)
     throws RegistryException;
 
@@ -95,7 +95,7 @@ public interface IRegistry
    *
    * @return the data source for the registry;
    */
-  public DataSource getDataSource();
+  DataSource getDataSource();
 
   /**
    * Retrieve the decimal value with the specified name under the key with the specified path.
@@ -108,7 +108,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public BigDecimal getDecimalValue(String path, String name, BigDecimal defaultValue)
+  BigDecimal getDecimalValue(String path, String name, BigDecimal defaultValue)
     throws RegistryException;
 
   /**
@@ -122,7 +122,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public int getIntegerValue(String path, String name, int defaultValue)
+  int getIntegerValue(String path, String name, int defaultValue)
     throws RegistryException;
 
   /**
@@ -136,7 +136,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public String getStringValue(String path, String name, String defaultValue)
+  String getStringValue(String path, String name, String defaultValue)
     throws RegistryException;
 
   /**
@@ -152,7 +152,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public String getStringValue(String path, String name, String defaultValue, byte[] encryptionKey,
+  String getStringValue(String path, String name, String defaultValue, byte[] encryptionKey,
       byte[] encryptionIV)
     throws RegistryException;
 
@@ -166,7 +166,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public boolean integerValueExists(String path, String name)
+  boolean integerValueExists(String path, String name)
     throws RegistryException;
 
   /**
@@ -180,7 +180,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public boolean removeValue(String path, String name)
+  boolean removeValue(String path, String name)
     throws RegistryException;
 
   /**
@@ -195,7 +195,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public void setBinaryValue(String path, String name, byte[] value)
+  void setBinaryValue(String path, String name, byte[] value)
     throws RegistryException;
 
   /**
@@ -212,7 +212,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public void setBinaryValue(String path, String name, byte[] value, byte[] encryptionKey,
+  void setBinaryValue(String path, String name, byte[] value, byte[] encryptionKey,
       byte[] encryptionIV)
     throws RegistryException;
 
@@ -228,7 +228,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public void setDecimalValue(String path, String name, BigDecimal value)
+  void setDecimalValue(String path, String name, BigDecimal value)
     throws RegistryException;
 
   /**
@@ -243,7 +243,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public void setIntegerValue(String path, String name, int value)
+  void setIntegerValue(String path, String name, int value)
     throws RegistryException;
 
   /**
@@ -258,7 +258,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public void setStringValue(String path, String name, String value)
+  void setStringValue(String path, String name, String value)
     throws RegistryException;
 
   /**
@@ -275,7 +275,7 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public void setStringValue(String path, String name, String value, byte[] encryptionKey,
+  void setStringValue(String path, String name, String value, byte[] encryptionKey,
       byte[] encryptionIV)
     throws RegistryException;
 
@@ -289,6 +289,6 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  public boolean stringValueExists(String path, String name)
+  boolean stringValueExists(String path, String name)
     throws RegistryException;
 }

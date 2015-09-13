@@ -39,7 +39,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public boolean cachedCodeCategoryExists(String id)
+  boolean cachedCodeCategoryExists(String id)
     throws CodesServiceException;
 
   /**
@@ -51,7 +51,8 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public boolean codeCategoryExists(String id)
+  @SuppressWarnings("unused")
+  boolean codeCategoryExists(String id)
     throws CodesServiceException;
 
   /**
@@ -61,7 +62,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public void createCachedCode(Code code)
+  void createCachedCode(Code code)
     throws CodesServiceException;
 
   /**
@@ -72,7 +73,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
+  void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws CodesServiceException;
 
   /**
@@ -82,7 +83,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public void createCode(Code code)
+  void createCode(Code code)
     throws CodesServiceException;
 
   /**
@@ -93,7 +94,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public void createCodeCategory(CodeCategory codeCategory)
+  void createCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException;
 
   /**
@@ -103,7 +104,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public void deleteCachedCodeCategory(String id)
+  void deleteCachedCodeCategory(String id)
     throws CodesServiceException;
 
   /**
@@ -113,7 +114,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public void deleteCode(String id)
+  void deleteCode(String id)
     throws CodesServiceException;
 
   /**
@@ -123,7 +124,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public void deleteCodeCategory(String id)
+  void deleteCodeCategory(String id)
     throws CodesServiceException;
 
   /**
@@ -137,7 +138,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CachedCodeCategory getCachedCodeCategory(String id, boolean retrieveCodes)
+  CachedCodeCategory getCachedCodeCategory(String id, boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
@@ -149,7 +150,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public Code getCode(String id)
+  Code getCode(String id)
     throws CodesServiceException;
 
   /**
@@ -164,8 +165,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public List<CodeCategory> getCodeCategoriesForOrganisation(String organisation,
-      boolean retrieveCodes)
+  List<CodeCategory> getCodeCategoriesForOrganisation(String organisation, boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
@@ -179,7 +179,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getCodeCategory(String id, boolean retrieveCodes)
+  CodeCategory getCodeCategory(String id, boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
@@ -194,7 +194,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getCodeCategoryWithParameters(String id, Map<String, String> parameters,
+  CodeCategory getCodeCategoryWithParameters(String id, Map<String, String> parameters,
       boolean retrieveCodes)
     throws CodesServiceException;
 
@@ -214,7 +214,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+  CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
@@ -236,7 +236,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory,
+  CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory,
       Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
@@ -249,7 +249,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public List<Code> getCodesForCodeCategory(String codeCategoryId)
+  List<Code> getCodesForCodeCategory(String codeCategoryId)
     throws CodesServiceException;
 
   /**
@@ -263,7 +263,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public int getNumberOfCodeCategoriesForOrganisation(String organisation)
+  int getNumberOfCodeCategoriesForOrganisation(String organisation)
     throws CodesServiceException;
 
   /**
@@ -275,7 +275,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public int getNumberOfCodesForCodeCategory(String codeCategoryId)
+  int getNumberOfCodesForCodeCategory(String codeCategoryId)
     throws CodesServiceException;
 
   /**
@@ -294,7 +294,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+  CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
@@ -315,7 +315,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory,
+  CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory,
       Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
@@ -329,7 +329,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public boolean isCachedCodeCategoryCurrent(String id)
+  boolean isCachedCodeCategoryCurrent(String id)
     throws CodesServiceException;
 
   /**
@@ -344,7 +344,8 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory,
+  @SuppressWarnings("unused")
+  CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory,
       String updatedBy)
     throws CodesServiceException;
 
@@ -358,7 +359,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public Code updateCode(Code code, String updatedBy)
+  Code updateCode(Code code, String updatedBy)
     throws CodesServiceException;
 
   /**
@@ -372,6 +373,6 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory updateCodeCategory(CodeCategory codeCategory, String updatedBy)
+  CodeCategory updateCodeCategory(CodeCategory codeCategory, String updatedBy)
     throws CodesServiceException;
 }

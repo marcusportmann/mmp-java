@@ -61,6 +61,7 @@ public class CachedCodeCategory
   /**
    * Constructs a new <code>CachedCodeCategory</code>.
    */
+  @SuppressWarnings("unused")
   public CachedCodeCategory() {}
 
   /**
@@ -147,6 +148,7 @@ public class CachedCodeCategory
    *
    * @param codeData the custom code data for the cached code category
    */
+  @SuppressWarnings("unused")
   public void setCodeData(String codeData)
   {
     this.codeData = codeData;
@@ -179,6 +181,7 @@ public class CachedCodeCategory
    *
    * @param lastUpdated the date and time the cached code category was last updated
    */
+  @SuppressWarnings("unused")
   public void setLastUpdated(Date lastUpdated)
   {
     this.lastUpdated = lastUpdated;

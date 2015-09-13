@@ -26,6 +26,7 @@ import java.security.Principal;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class UserPrincipal
   implements Principal
 {

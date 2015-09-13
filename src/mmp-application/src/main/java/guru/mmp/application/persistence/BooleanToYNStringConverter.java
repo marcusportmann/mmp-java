@@ -26,6 +26,7 @@ import javax.persistence.AttributeConverter;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class BooleanToYNStringConverter
   implements AttributeConverter<Boolean, String>
 {
@@ -47,7 +48,7 @@ public class BooleanToYNStringConverter
       return null;
     }
 
-    if (b.booleanValue())
+    if (b)
     {
       return "Y";
     }

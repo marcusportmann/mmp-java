@@ -30,6 +30,7 @@ import javax.servlet.ServletRequest;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class HttpUtil
 {
   /**

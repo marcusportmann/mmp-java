@@ -34,7 +34,7 @@ public interface Credential
    *         of this interface
    */
   @Override
-  public boolean equals(Object another);
+  boolean equals(Object another);
 
   /**
    * The hashCode method returns an integer hash code to represent this credential.
@@ -43,7 +43,7 @@ public interface Credential
    * @return an integer hash code representing the credential
    */
   @Override
-  public int hashCode();
+  int hashCode();
 
   /**
    * Returns a string representation of this credential.
@@ -51,5 +51,5 @@ public interface Credential
    * @return a string representation of this credential
    */
   @Override
-  public String toString();
+  String toString();
 }

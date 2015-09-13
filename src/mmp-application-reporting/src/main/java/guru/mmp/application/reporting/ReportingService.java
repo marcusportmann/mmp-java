@@ -60,7 +60,7 @@ public class ReportingService
   /** The data source used to provide connections to the database. */
   private DataSource dataSource;
 
-  /* The name of the reporting service instance. */
+  /* The name of the Reporting Service instance. */
   private String instanceName;
 
   /* The real path to the folder where the local Jasper reports are stored. */
@@ -460,7 +460,7 @@ public class ReportingService
   }
 
   /**
-   * Retrieves the name of the reporting service instance.
+   * Retrieves the name of the Reporting Service instance.
    */
   private String getInstanceName()
   {
@@ -487,7 +487,7 @@ public class ReportingService
       {
         logger.error("Failed to retrieve the application name from JNDI using the names ("
             + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the reporting service instance name");
+            + " the Reporting Service instance name");
 
         applicationName = "Unknown";
       }
@@ -544,7 +544,7 @@ public class ReportingService
         catch (Throwable e)
         {
           logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the reporting service instance name", e);
+              + " while constructing the Reporting Service instance name", e);
           instanceName = instanceName + "::Unknown";
         }
       }

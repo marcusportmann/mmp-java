@@ -33,6 +33,7 @@ import java.sql.Connection;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class SimpleDataAccessObject
   implements IDataAccessObject
 {

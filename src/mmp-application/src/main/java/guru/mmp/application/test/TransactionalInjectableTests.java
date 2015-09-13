@@ -35,6 +35,7 @@ import javax.transaction.UserTransaction;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class TransactionalInjectableTests extends InjectableTests
 {
   /* Logger */

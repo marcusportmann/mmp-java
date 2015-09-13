@@ -66,6 +66,7 @@ public class SMSDAO
   /**
    * Constructs a new <code>SMSDAO</code>.
    */
+  @SuppressWarnings("unused")
   public SMSDAO() {}
 
   /**
@@ -75,6 +76,7 @@ public class SMSDAO
    *
    * @throws DAOException
    */
+  @SuppressWarnings("unused")
   public SMSDAO(DataSource dataSource)
     throws DAOException
   {
@@ -95,6 +97,7 @@ public class SMSDAO
    *
    * @throws DAOException
    */
+  @SuppressWarnings("unused")
   public SMSDAO(String dataSourceJndiName)
     throws DAOException
   {
@@ -385,7 +388,7 @@ public class SMSDAO
   }
 
   /**
-   * Initialise the <code>DataAccessObject</code>.
+   * Initialise the <code>SMSDAO</code> instance.
    */
   @PostConstruct
   public void init()
@@ -548,8 +551,7 @@ public class SMSDAO
   }
 
   /**
-   * This method must be implemented by all classes derived from <code>DataAccessObject</code> and
-   * should contain the code to generate the SQL statements for the DAO.
+   * Generate the SQL statements for the DAO.
    *
    * @param schemaPrefix the schema prefix to append to database objects reference by the DAO
    *

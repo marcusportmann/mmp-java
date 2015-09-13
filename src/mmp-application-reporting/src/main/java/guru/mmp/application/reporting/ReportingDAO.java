@@ -57,6 +57,7 @@ public class ReportingDAO
   /**
    * Constructs a new <code>ReportingDAO</code>.
    */
+  @SuppressWarnings("unused")
   public ReportingDAO() {}
 
   /**
@@ -66,6 +67,7 @@ public class ReportingDAO
    *
    * @throws DAOException
    */
+  @SuppressWarnings("unused")
   public ReportingDAO(DataSource dataSource)
     throws DAOException
   {
@@ -87,6 +89,7 @@ public class ReportingDAO
    *
    * @throws DAOException
    */
+  @SuppressWarnings("unused")
   public ReportingDAO(String dataSourceJndiName)
     throws DAOException
   {
@@ -321,7 +324,7 @@ public class ReportingDAO
   }
 
   /**
-   * Initialise the <code>DataAccessObject</code>.
+   * Initialise the <code>ReportingDAO</code> instance.
    */
   @PostConstruct
   public void init()
@@ -473,10 +476,9 @@ public class ReportingDAO
   }
 
   /**
-   * This method must be implemented by all classes derived from <code>DataAccessObject</code> and
-   * should contain the code to generate the SQL statements for the DAO.
+   * Generate the SQL statements for the DAO.
    *
-   * @param schemaPrefix    the schema prefix to append to database objects reference by the DAO
+   * @param schemaPrefix the schema prefix to append to database objects reference by the DAO
    *
    * @throws SQLException if a database error occurs
    */

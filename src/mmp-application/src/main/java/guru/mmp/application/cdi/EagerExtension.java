@@ -58,7 +58,9 @@ public class EagerExtension
    * @param event       the <code>AfterDeploymentValidation</code> event
    * @param beanManager the bean manager
    */
-  public void load(@Observes AfterDeploymentValidation event, BeanManager beanManager)
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  public void load(@SuppressWarnings("unused")
+  @Observes AfterDeploymentValidation event, BeanManager beanManager)
   {
     for (Bean<?> bean : eagerBeansList)
     {

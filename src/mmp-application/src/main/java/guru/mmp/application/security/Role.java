@@ -29,6 +29,7 @@ import java.util.Set;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class Role
   implements java.io.Serializable
 {

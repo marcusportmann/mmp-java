@@ -32,6 +32,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 @Embeddable
 public class ArchivedId
   implements Serializable

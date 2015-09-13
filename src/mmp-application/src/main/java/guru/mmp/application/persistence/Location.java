@@ -27,6 +27,7 @@ import java.io.Serializable;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 @Embeddable
 public class Location
   implements Serializable

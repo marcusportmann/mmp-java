@@ -104,7 +104,7 @@ public class MessagingService
   @Inject
   private BackgroundMessageProcessor backgroundMessageProcessor;
 
-  /* The name of the messaging service instance. */
+  /* The name of the Messaging Service instance. */
   private String instanceName;
 
   /* The maximum number of times processing will be attempted for a message. */
@@ -159,12 +159,12 @@ public class MessagingService
   }
 
   /**
-   * Returns <code>true</code> if the messaging service is capable of processing the specified
+   * Returns <code>true</code> if the Messaging Service is capable of processing the specified
    * message or <code>false</code> otherwise.
    *
    * @param message the message to process
    *
-   * @return <code>true</code> if the messaging service is capable of processing the specified
+   * @return <code>true</code> if the Messaging Service is capable of processing the specified
    *         message or <code>false</code> otherwise
    *
    * @throws MessagingException
@@ -178,12 +178,12 @@ public class MessagingService
   }
 
   /**
-   * Returns <code>true</code> if the messaging service is capable of queueing the specified
+   * Returns <code>true</code> if the Messaging Service is capable of queueing the specified
    * message part for assembly or <code>false</code> otherwise.
    *
    * @param messagePart the message part to queue for assembly
    *
-   * @return <code>true</code> if the messaging service is capable of queueing the specified
+   * @return <code>true</code> if the Messaging Service is capable of queueing the specified
    *         message part for assembly or <code>false</code> otherwise
    *
    * @throws MessagingException
@@ -1419,7 +1419,7 @@ public class MessagingService
   }
 
   /**
-   * Retrieves the name of the messaging service instance.
+   * Retrieves the name of the Messaging Service instance.
    */
   private String getInstanceName()
   {
@@ -1446,7 +1446,7 @@ public class MessagingService
       {
         logger.error("Failed to retrieve the application name from JNDI using the names ("
             + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the messaging service instance name");
+            + " the Messaging Service instance name");
 
         applicationName = "Unknown";
       }
@@ -1509,7 +1509,7 @@ public class MessagingService
         catch (Throwable e)
         {
           logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the messaging service instance name", e);
+              + " while constructing the Messaging Service instance name", e);
           instanceName = instanceName + "::Unknown";
         }
       }

@@ -2010,11 +2010,10 @@ public class SecurityService
       {
         if (rs.next())
         {
-          FunctionTemplate template = new FunctionTemplate(rs.getString(2));
+          FunctionTemplate template = new FunctionTemplate(rs.getString(2), rs.getString(3),
+            rs.getString(4));
 
           template.setId(rs.getInt(1));
-          template.setName(rs.getString(3));
-          template.setDescription(rs.getString(4));
 
           // Retrieve the functions for the template
           List<Function> functions = getFunctionsForTemplate(template.getId());
@@ -2069,11 +2068,10 @@ public class SecurityService
 
         while (rs.next())
         {
-          FunctionTemplate template = new FunctionTemplate(rs.getString(2));
+          FunctionTemplate template = new FunctionTemplate(rs.getString(2), rs.getString(3),
+            rs.getString(4));
 
           template.setId(rs.getInt(1));
-          template.setName(rs.getString(3));
-          template.setDescription(rs.getString(4));
 
           List<Function> functions = getFunctionsForTemplate(template.getId());
 

@@ -317,7 +317,7 @@ public class TaskDAO
   }
 
   /**
-   * Initialise the <code>DataAccessObject</code>.
+   * Initialise the <code>TaskDAO</code> instance.
    */
   @PostConstruct
   public void init()
@@ -660,8 +660,7 @@ public class TaskDAO
   }
 
   /**
-   * This method must be implemented by all classes derived from <code>DataAccessObject</code> and
-   * should contain the code to generate the SQL statements for the DAO.
+   * Generate the SQL statements for the DAO.
    *
    * @param schemaPrefix the schema prefix to append to database objects reference by the DAO
    *

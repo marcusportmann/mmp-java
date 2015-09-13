@@ -31,11 +31,6 @@ import java.util.List;
 public class CodeCategory
   implements Serializable
 {
-  /**
-   * The default time in seconds after which the cached code data for the remote code category will
-   * expire, which is 1 day.
-   */
-  public static final int DEFAULT_CACHE_EXPIRY = 60 * 60 * 24;
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -319,6 +314,7 @@ public class CodeCategory
    * @param categoryType the type of code category e.g. Local, RemoteHTTPService, RemoteWebService,
    *                     etc
    */
+  @SuppressWarnings("unused")
   public void setCategoryType(CodeCategoryType categoryType)
   {
     this.categoryType = categoryType;

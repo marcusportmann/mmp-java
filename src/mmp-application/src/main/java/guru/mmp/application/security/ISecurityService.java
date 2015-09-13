@@ -27,12 +27,13 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface ISecurityService
 {
   /**
    * The possible reasons for why a user's password was changed.
    */
-  public enum PasswordChangeReason
+  enum PasswordChangeReason
   {
     USER(0, "User"), ADMINISTRATIVE(1, "Administrative"), FORGOTTEN(2, "Forgotten");
 
@@ -80,7 +81,7 @@ public interface ISecurityService
    * @throws FunctionTemplateNotFoundException
    * @throws SecurityException
    */
-  public void addFunctionToTemplate(String functionCode, String templateCode, String origin)
+  void addFunctionToTemplate(String functionCode, String templateCode, String origin)
     throws DuplicateFunctionException, FunctionNotFoundException,
       FunctionTemplateNotFoundException, SecurityException;
 
@@ -98,7 +99,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void addUserToGroup(String username, String groupName, String organisation, String origin)
+  void addUserToGroup(String username, String groupName, String organisation, String origin)
     throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
       SecurityException;
 
@@ -114,7 +115,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void addUserToOrganisation(String username, String organisation, String origin)
+  void addUserToOrganisation(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -132,7 +133,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void adminChangePassword(String username, String newPassword, boolean expirePassword,
+  void adminChangePassword(String username, String newPassword, boolean expirePassword,
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason, String origin)
     throws UserNotFoundException, SecurityException;
 
@@ -152,8 +153,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public Map<String, Object> authenticate(String username, List<Credential> credentials,
-      String origin)
+  Map<String, Object> authenticate(String username, List<Credential> credentials, String origin)
     throws AuthenticationFailedException, UserLockedException, ExpiredCredentialsException,
       UserNotFoundException, SecurityException;
 
@@ -173,7 +173,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public Map<String, Object> authenticate(String username, String password, String origin)
+  Map<String, Object> authenticate(String username, String password, String origin)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, SecurityException;
 
@@ -193,7 +193,7 @@ public interface ISecurityService
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
-  public void changePassword(String username, String password, String newPassword, String origin)
+  void changePassword(String username, String password, String newPassword, String origin)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, ExistingPasswordException, SecurityException;
 
@@ -208,7 +208,7 @@ public interface ISecurityService
    * @throws DuplicateFunctionException
    * @throws SecurityException
    */
-  public void createFunction(Function function, String origin)
+  void createFunction(Function function, String origin)
     throws DuplicateFunctionException, SecurityException;
 
   /**
@@ -222,7 +222,7 @@ public interface ISecurityService
    * @throws DuplicateFunctionTemplateException
    * @throws SecurityException
    */
-  public void createFunctionTemplate(FunctionTemplate template, String origin)
+  void createFunctionTemplate(FunctionTemplate template, String origin)
     throws DuplicateFunctionTemplateException, SecurityException;
 
   /**
@@ -235,7 +235,7 @@ public interface ISecurityService
    * @throws DuplicateGroupException
    * @throws SecurityException
    */
-  public void createGroup(Group group, String origin)
+  void createGroup(Group group, String origin)
     throws DuplicateGroupException, SecurityException;
 
   /**
@@ -249,7 +249,7 @@ public interface ISecurityService
    * @throws DuplicateOrganisationException
    * @throws SecurityException
    */
-  public void createOrganisation(Organisation organisation, String origin)
+  void createOrganisation(Organisation organisation, String origin)
     throws DuplicateOrganisationException, SecurityException;
 
   /**
@@ -265,7 +265,7 @@ public interface ISecurityService
    * @throws DuplicateUserException
    * @throws SecurityException
    */
-  public void createUser(User user, boolean expiredPassword, boolean userLocked, String origin)
+  void createUser(User user, boolean expiredPassword, boolean userLocked, String origin)
     throws DuplicateUserException, SecurityException;
 
   /**
@@ -278,7 +278,7 @@ public interface ISecurityService
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public void deleteFunction(String code, String origin)
+  void deleteFunction(String code, String origin)
     throws FunctionNotFoundException, SecurityException;
 
   /**
@@ -291,7 +291,7 @@ public interface ISecurityService
    * @throws FunctionTemplateNotFoundException
    * @throws SecurityException
    */
-  public void deleteFunctionTemplate(String code, String origin)
+  void deleteFunctionTemplate(String code, String origin)
     throws FunctionTemplateNotFoundException, SecurityException;
 
   /**
@@ -305,7 +305,7 @@ public interface ISecurityService
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  public void deleteGroup(String groupName, String origin)
+  void deleteGroup(String groupName, String origin)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException;
 
   /**
@@ -318,7 +318,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void deleteOrganisation(String code, String origin)
+  void deleteOrganisation(String code, String origin)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -331,7 +331,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void deleteUser(String username, String origin)
+  void deleteUser(String username, String origin)
     throws UserNotFoundException, SecurityException;
 
   /**
@@ -346,7 +346,7 @@ public interface ISecurityService
    * @throws InvalidAttributeException
    * @throws SecurityException
    */
-  public List<User> findUsers(List<Attribute> attributes, String origin)
+  List<User> findUsers(List<Attribute> attributes, String origin)
     throws InvalidAttributeException, SecurityException;
 
   /**
@@ -363,8 +363,7 @@ public interface ISecurityService
    * @throws InvalidAttributeException
    * @throws SecurityException
    */
-  public List<User> findUsersEx(List<Attribute> attributes, int startPos, int maxResults,
-      String origin)
+  List<User> findUsersEx(List<Attribute> attributes, int startPos, int maxResults, String origin)
     throws InvalidAttributeException, SecurityException;
 
   /**
@@ -385,8 +384,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<String> getAllFunctionCodesForUser(String username, String organisation,
-      String origin)
+  List<String> getAllFunctionCodesForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -407,7 +405,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<Function> getAllFunctionsForUser(String username, String organisation, String origin)
+  List<Function> getAllFunctionsForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -423,8 +421,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<User> getFilteredUsersForOrganisation(String organisation, String filter,
-      String origin)
+  List<User> getFilteredUsersForOrganisation(String organisation, String filter, String origin)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -439,7 +436,7 @@ public interface ISecurityService
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public Function getFunction(String code, String origin)
+  Function getFunction(String code, String origin)
     throws FunctionNotFoundException, SecurityException;
 
   /**
@@ -454,7 +451,7 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  public List<String> getFunctionCodesForGroup(String groupName, String origin)
+  List<String> getFunctionCodesForGroup(String groupName, String origin)
     throws GroupNotFoundException, SecurityException;
 
   /**
@@ -471,7 +468,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<String> getFunctionCodesForUser(String username, String organisation, String origin)
+  List<String> getFunctionCodesForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -486,7 +483,7 @@ public interface ISecurityService
    * @throws FunctionTemplateNotFoundException
    * @throws SecurityException
    */
-  public FunctionTemplate getFunctionTemplate(String code, String origin)
+  FunctionTemplate getFunctionTemplate(String code, String origin)
     throws FunctionTemplateNotFoundException, SecurityException;
 
   /**
@@ -499,7 +496,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public List<FunctionTemplate> getFunctionTemplates(String origin)
+  List<FunctionTemplate> getFunctionTemplates(String origin)
     throws SecurityException;
 
   /**
@@ -512,7 +509,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public List<Function> getFunctions(String origin)
+  List<Function> getFunctions(String origin)
     throws SecurityException;
 
   /**
@@ -527,7 +524,7 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  public List<Function> getFunctionsForGroup(String groupName, String origin)
+  List<Function> getFunctionsForGroup(String groupName, String origin)
     throws GroupNotFoundException, SecurityException;
 
   /**
@@ -544,7 +541,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<Function> getFunctionsForUser(String username, String organisation, String origin)
+  List<Function> getFunctionsForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -559,7 +556,7 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  public Group getGroup(String groupName, String origin)
+  Group getGroup(String groupName, String origin)
     throws GroupNotFoundException, SecurityException;
 
   /**
@@ -572,7 +569,7 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  public long getGroupId(String groupName)
+  long getGroupId(String groupName)
     throws GroupNotFoundException, SecurityException;
 
   /**
@@ -589,7 +586,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<String> getGroupNamesForUser(String username, String organisation, String origin)
+  List<String> getGroupNamesForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -602,7 +599,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public List<Group> getGroups(String origin)
+  List<Group> getGroups(String origin)
     throws SecurityException;
 
   /**
@@ -617,7 +614,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public List<Group> getGroupsEx(int startPos, int maxResults, String origin)
+  List<Group> getGroupsEx(int startPos, int maxResults, String origin)
     throws SecurityException;
 
   /**
@@ -634,7 +631,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<Group> getGroupsForUser(String username, String organisation, String origin)
+  List<Group> getGroupsForUser(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -650,8 +647,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public int getNumberOfFilteredUsersForOrganisation(String organisation, String filter,
-      String origin)
+  int getNumberOfFilteredUsersForOrganisation(String organisation, String filter, String origin)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -664,7 +660,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public int getNumberOfGroups(String origin)
+  int getNumberOfGroups(String origin)
     throws SecurityException;
 
   /**
@@ -677,7 +673,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public int getNumberOfOrganisations(String origin)
+  int getNumberOfOrganisations(String origin)
     throws SecurityException;
 
   /**
@@ -692,7 +688,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public int getNumberOfUsersForOrganisation(String organisation, String origin)
+  int getNumberOfUsersForOrganisation(String organisation, String origin)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -707,7 +703,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public Organisation getOrganisation(String code, String origin)
+  Organisation getOrganisation(String code, String origin)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -720,7 +716,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public List<Organisation> getOrganisations(String origin)
+  List<Organisation> getOrganisations(String origin)
     throws SecurityException;
 
   /**
@@ -735,7 +731,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public List<Organisation> getOrganisationsForUser(String username, String origin)
+  List<Organisation> getOrganisationsForUser(String username, String origin)
     throws UserNotFoundException, SecurityException;
 
   /**
@@ -750,7 +746,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public User getUser(String username, String origin)
+  User getUser(String username, String origin)
     throws UserNotFoundException, SecurityException;
 
   /**
@@ -763,7 +759,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public long getUserId(String username)
+  long getUserId(String username)
     throws UserNotFoundException, SecurityException;
 
   /**
@@ -776,7 +772,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public List<User> getUsers(String origin)
+  List<User> getUsers(String origin)
     throws SecurityException;
 
   /**
@@ -791,7 +787,7 @@ public interface ISecurityService
    *
    * @throws SecurityException
    */
-  public List<User> getUsersEx(int startPos, int maxResults, String origin)
+  List<User> getUsersEx(int startPos, int maxResults, String origin)
     throws SecurityException;
 
   /**
@@ -808,7 +804,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<User> getUsersForGroup(String groupName, String organisation, String origin)
+  List<User> getUsersForGroup(String groupName, String organisation, String origin)
     throws GroupNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -823,7 +819,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<User> getUsersForOrganisation(String organisation, String origin)
+  List<User> getUsersForOrganisation(String organisation, String origin)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -838,7 +834,7 @@ public interface ISecurityService
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public void grantFunctionToGroup(String groupName, String code, String origin)
+  void grantFunctionToGroup(String groupName, String code, String origin)
     throws GroupNotFoundException, FunctionNotFoundException, SecurityException;
 
   /**
@@ -855,7 +851,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void grantFunctionToUser(String username, String code, String organisation, String origin)
+  void grantFunctionToUser(String username, String code, String organisation, String origin)
     throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
       SecurityException;
 
@@ -875,8 +871,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public boolean isUserAssociatedWithOrganisation(String username, String organisation,
-      String origin)
+  boolean isUserAssociatedWithOrganisation(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -895,8 +890,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public boolean isUserInGroup(String username, String groupName, String organisation,
-      String origin)
+  boolean isUserInGroup(String username, String groupName, String organisation, String origin)
     throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
       SecurityException;
 
@@ -913,7 +907,7 @@ public interface ISecurityService
    * @throws FunctionTemplateNotFoundException
    * @throws SecurityException
    */
-  public void removeFunctionFromTemplate(String functionCode, String templateCode, String origin)
+  void removeFunctionFromTemplate(String functionCode, String templateCode, String origin)
     throws FunctionNotFoundException, FunctionTemplateNotFoundException, SecurityException;
 
   /**
@@ -930,8 +924,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void removeUserFromGroup(String username, String groupName, String organisation,
-      String origin)
+  void removeUserFromGroup(String username, String groupName, String organisation, String origin)
     throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
       SecurityException;
 
@@ -947,7 +940,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void removeUserFromOrganisation(String username, String organisation, String origin)
+  void removeUserFromOrganisation(String username, String organisation, String origin)
     throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
@@ -962,7 +955,7 @@ public interface ISecurityService
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  public void renameGroup(String groupName, String newGroupName, String origin)
+  void renameGroup(String groupName, String newGroupName, String origin)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException;
 
   /**
@@ -977,7 +970,7 @@ public interface ISecurityService
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public void revokeFunctionForGroup(String groupName, String code, String origin)
+  void revokeFunctionForGroup(String groupName, String code, String origin)
     throws GroupNotFoundException, FunctionNotFoundException, SecurityException;
 
   /**
@@ -994,8 +987,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void revokeFunctionForUser(String username, String code, String organisation,
-      String origin)
+  void revokeFunctionForUser(String username, String code, String organisation, String origin)
     throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
       SecurityException;
 
@@ -1010,7 +1002,7 @@ public interface ISecurityService
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public void updateFunction(Function function, String origin)
+  void updateFunction(Function function, String origin)
     throws FunctionNotFoundException, SecurityException;
 
   /**
@@ -1024,7 +1016,7 @@ public interface ISecurityService
    * @throws FunctionTemplateNotFoundException
    * @throws SecurityException
    */
-  public void updateFunctionTemplate(FunctionTemplate template, String origin)
+  void updateFunctionTemplate(FunctionTemplate template, String origin)
     throws FunctionTemplateNotFoundException, SecurityException;
 
   /**
@@ -1037,7 +1029,7 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  public void updateGroup(Group group, String origin)
+  void updateGroup(Group group, String origin)
     throws GroupNotFoundException, SecurityException;
 
   /**
@@ -1051,7 +1043,7 @@ public interface ISecurityService
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void updateOrganisation(Organisation organisation, String origin)
+  void updateOrganisation(Organisation organisation, String origin)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -1066,6 +1058,6 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void updateUser(User user, boolean expirePassword, boolean lockUser, String origin)
+  void updateUser(User user, boolean expirePassword, boolean lockUser, String origin)
     throws UserNotFoundException, SecurityException;
 }
