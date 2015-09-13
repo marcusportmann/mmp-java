@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Implementation-Title: mmp-application-reporting
 Implementation-Vendor: Marcus Portmann
 Implementation-Vendor-Id: guru.mmp
-Implementation-Version: 1.0.0
+Implementation-Version: 2.0.0
 
 
 

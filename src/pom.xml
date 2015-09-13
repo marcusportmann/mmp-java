@@ -19,10 +19,13 @@
     <module>mmp-application</module>
     <module>mmp-application-wicket</module>
     <module>mmp-application-task</module>
+    <module>mmp-application-task-wicket</module>
     <module>mmp-application-messaging</module>
     <module>mmp-application-messaging-wicket</module>
     <module>mmp-application-reporting</module>
     <module>mmp-application-reporting-wicket</module>
+    <module>mmp-application-process</module>
+    <module>mmp-application-process-wicket</module>
     <module>mmp-application-sms</module>
     <module>mmp-tomcat</module>
     <module>mmp-sharepoint</module>

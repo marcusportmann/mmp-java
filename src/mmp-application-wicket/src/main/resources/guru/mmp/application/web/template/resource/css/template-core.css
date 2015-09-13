@@ -552,6 +552,14 @@ html, body
   background: #ccc;
 }
 
+@media screen and (max-width: 768px)
+{
+  .boxed-container
+  {
+    background: #eee;
+  }
+}
+
 html
 {
   -ms-overflow-style: scrollbar;
@@ -8337,6 +8345,7 @@ pre
 {
   position: relative;
   z-index: 3;
+  height: 100%;
 }
 
 div.table-header-left
@@ -8505,9 +8514,9 @@ th.center, td.center
 }
 
 .nav-userinfo ul li
- {
-   position: relative;
- }
+{
+  position: relative;
+}
 
 @media screen and (min-width: 993px)
 {
@@ -12339,7 +12348,28 @@ button.toast-close-button
 
 .login-page
 {
+  display: table;
+  width:100%;
+  height: 100%;
   background: #2c2e2f;
+}
+
+.login-page .login-container
+{
+  display: table-cell;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-page .login-container .col-sm-6
+{
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 480px;
 }
 
 .login-header .logo .logo-image
@@ -12359,9 +12389,11 @@ button.toast-close-button
 
 .login-page .login-form
 {
-  margin-bottom: 20px;
-  padding: 30px;
-  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .login-page .login-form.fade-in-effect
@@ -12382,7 +12414,6 @@ button.toast-close-button
 {
   .login-page .login-form.fade-in-effect
   {
-    left: 0;
   }
 }
 
@@ -12411,7 +12442,7 @@ button.toast-close-button
   -ms-filter: alpha(Opacity=100);
   -webkit-opacity: 1;
   filter: alpha(opacity=100);
-  left: 0;
+  /*left: 0;*/
   opacity: 1;
   zoom: 1;
 }
@@ -12515,7 +12546,7 @@ button.toast-close-button
     padding-top: 0;
   }
 
-  .login-page .login-form, .login-page .errors-container, .login-page .external-login
+  .login-page .errors-container, .login-page .external-login
   {
     padding-left: 10px;
     padding-right: 10px;
@@ -12532,8 +12563,3 @@ button.toast-close-button
   }
 }
 
-.login-container
-{
-  margin: 0 auto;
-  max-width: 960px;
-}
