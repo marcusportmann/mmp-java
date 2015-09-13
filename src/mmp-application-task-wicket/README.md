@@ -1,7 +1,7 @@
-mmp-application-process-wicket
-==============================
+mmp-application-task-wicket
+===========================
 
-The mmp-application-process-wicket library.
+The mmp-application-task-wicket library.
 
 Licensed under the Apache License, Version 2.0 (the "License")
 
