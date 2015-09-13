@@ -34,6 +34,7 @@ import guru.mmp.common.wbxml.Encoder;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class CheckUserExistsRequestData extends WbxmlMessageData
 {
   /**

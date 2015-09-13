@@ -31,6 +31,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class NameValue
   implements java.io.Serializable
 {

@@ -29,6 +29,7 @@ import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ErrorImageResourceStreamResource extends ResourceStreamResource
 {
   private static final long serialVersionUID = 1000000;
@@ -51,12 +52,4 @@ public class ErrorImageResourceStreamResource extends ResourceStreamResource
   {
     return NoOpResourceCachingStrategy.INSTANCE;
   }
-
-//@Override
-//protected void setResponseHeaders(ResourceResponse data, Attributes attributes)
-//{
-//super.setResponseHeaders(data, attributes);
-//
-//data.setContentDisposition(ContentDisposition.ATTACHMENT);
-//}
 }

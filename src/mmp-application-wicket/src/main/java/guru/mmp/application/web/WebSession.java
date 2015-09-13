@@ -20,13 +20,15 @@ package guru.mmp.application.web;
 
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.servlet.ViewReportParameters;
+
 import org.apache.wicket.request.Request;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebSession</code> class stores the session information for a user accessing a Wicket
@@ -34,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class WebSession extends org.apache.wicket.protocol.http.WebSession
 {
   private static final long serialVersionUID = 1000000;
@@ -45,7 +48,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   public static final List<String> NO_FUNCTION_CODES = new ArrayList<>();
 
   /** The active <code>ViewReportParameters</code> instances for reports being viewed. */
-  Map<String, ViewReportParameters> activeViewReportParameters = new ConcurrentHashMap<>();
+  private Map<String, ViewReportParameters> activeViewReportParameters = new ConcurrentHashMap<>();
 
   /** The function codes identifying the functionality assigned to the logged in user. */
   private Map<String, String> functionCodes;

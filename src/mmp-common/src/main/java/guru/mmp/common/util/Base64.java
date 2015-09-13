@@ -22,6 +22,7 @@ package guru.mmp.common.util;
  * @author Robert Harder
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class Base64
 {
   /** Indicates error in encoding. */

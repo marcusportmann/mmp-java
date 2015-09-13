@@ -38,6 +38,7 @@ import java.net.ServerSocket;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SSLServerSocketFactory
   implements org.jacorb.orb.factory.ServerSocketFactory
 

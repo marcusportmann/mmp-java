@@ -29,6 +29,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface ITaskDAO
 {
   /**
@@ -46,7 +47,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public ScheduledTask getNextTaskScheduledForExecution(int executionRetryDelay, String lockName)
+  ScheduledTask getNextTaskScheduledForExecution(int executionRetryDelay, String lockName)
     throws DAOException;
 
   /**
@@ -58,7 +59,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
+  List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
     throws DAOException;
 
   /**
@@ -68,7 +69,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public List<ScheduledTask> getUnscheduledTasks()
+  List<ScheduledTask> getUnscheduledTasks()
     throws DAOException;
 
   /**
@@ -78,7 +79,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public void incrementScheduledTaskExecutionAttempts(String id)
+  void incrementScheduledTaskExecutionAttempts(String id)
     throws DAOException;
 
   /**
@@ -90,7 +91,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public void lockScheduledTask(String id, ScheduledTaskStatus status, String lockName)
+  void lockScheduledTask(String id, ScheduledTaskStatus status, String lockName)
     throws DAOException;
 
   /**
@@ -102,7 +103,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public void rescheduleTask(String id, String schedulingPattern)
+  void rescheduleTask(String id, String schedulingPattern)
     throws DAOException;
 
   /**
@@ -116,7 +117,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public int resetScheduledTaskLocks(String lockName, ScheduledTaskStatus status,
+  int resetScheduledTaskLocks(String lockName, ScheduledTaskStatus status,
       ScheduledTaskStatus newStatus)
     throws DAOException;
 
@@ -128,7 +129,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public boolean scheduleNextUnscheduledTaskForExecution()
+  boolean scheduleNextUnscheduledTaskForExecution()
     throws DAOException;
 
   /**
@@ -139,7 +140,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public void setScheduledTaskStatus(String id, ScheduledTaskStatus status)
+  void setScheduledTaskStatus(String id, ScheduledTaskStatus status)
     throws DAOException;
 
   /**
@@ -150,6 +151,6 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  public void unlockScheduledTask(String id, ScheduledTaskStatus status)
+  void unlockScheduledTask(String id, ScheduledTaskStatus status)
     throws DAOException;
 }

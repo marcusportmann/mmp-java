@@ -28,6 +28,7 @@ import org.apache.wicket.behavior.Behavior;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class FeedbackBehavior extends Behavior
 {
   private static final long serialVersionUID = 1000000;

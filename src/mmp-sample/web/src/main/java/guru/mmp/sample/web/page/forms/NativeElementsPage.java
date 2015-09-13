@@ -18,7 +18,6 @@ package guru.mmp.sample.web.page.forms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.page.AnonymousOnlyWebPage;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 
 import org.apache.wicket.markup.head.IHeaderResponse;

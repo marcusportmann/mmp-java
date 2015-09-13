@@ -26,6 +26,7 @@ import org.jacorb.config.Configuration;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class LoggingInitializer extends org.jacorb.config.LoggingInitializer
 {
   /**

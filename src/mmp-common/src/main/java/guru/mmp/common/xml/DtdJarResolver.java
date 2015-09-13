@@ -26,6 +26,7 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class DtdJarResolver
   implements EntityResolver
 {

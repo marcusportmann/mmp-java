@@ -48,7 +48,7 @@ public class Breadcrumbs extends Component
    *
    * @param id the non-null id of this component
    */
-  public Breadcrumbs(final String id)
+  public Breadcrumbs(String id)
   {
     super(id);
   }

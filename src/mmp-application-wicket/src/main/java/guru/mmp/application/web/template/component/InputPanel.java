@@ -52,6 +52,7 @@ public abstract class InputPanel extends Panel
    * @param id    the non-null id of this component
    * @param model the model for the panel
    */
+  @SuppressWarnings("unused")
   public InputPanel(String id, IModel<?> model)
   {
     super(id, model);

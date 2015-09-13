@@ -26,6 +26,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface ITaskService
 {
   /**
@@ -35,7 +36,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public void executeScheduledTask(ScheduledTask scheduledTask)
+  void executeScheduledTask(ScheduledTask scheduledTask)
     throws TaskServiceException;
 
   /**
@@ -43,7 +44,7 @@ public interface ITaskService
    *
    * @return the maximum number of times execution will be attempted for a scheduled task
    */
-  public int getMaximumScheduledTaskExecutionAttempts();
+  int getMaximumScheduledTaskExecutionAttempts();
 
   /**
    * Retrieve the next task that is scheduled for execution.
@@ -55,7 +56,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public ScheduledTask getNextTaskScheduledForExecution()
+  ScheduledTask getNextTaskScheduledForExecution()
     throws TaskServiceException;
 
   /**
@@ -67,7 +68,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
+  List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
     throws TaskServiceException;
 
   /**
@@ -77,7 +78,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public void incrementScheduledTaskExecutionAttempts(String id)
+  void incrementScheduledTaskExecutionAttempts(String id)
     throws TaskServiceException;
 
   /**
@@ -89,7 +90,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public void rescheduleTask(String id, String schedulingPattern)
+  void rescheduleTask(String id, String schedulingPattern)
     throws TaskServiceException;
 
   /**
@@ -102,7 +103,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public int resetScheduledTaskLocks(ScheduledTaskStatus status, ScheduledTaskStatus newStatus)
+  int resetScheduledTaskLocks(ScheduledTaskStatus status, ScheduledTaskStatus newStatus)
     throws TaskServiceException;
 
   /**
@@ -113,7 +114,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public boolean scheduleNextUnscheduledTaskForExecution()
+  boolean scheduleNextUnscheduledTaskForExecution()
     throws TaskServiceException;
 
   /**
@@ -124,6 +125,6 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public void unlockScheduledTask(String id, ScheduledTaskStatus status)
+  void unlockScheduledTask(String id, ScheduledTaskStatus status)
     throws TaskServiceException;
 }

@@ -49,6 +49,7 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
    *
    * @param id the non-null id of this component
    */
+  @SuppressWarnings("unused")
   public DropDownChoiceWithFeedback(String id)
   {
     super(id);
@@ -60,7 +61,7 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
    * @param id      the non-null id of this component
    * @param choices the choices
    */
-  public DropDownChoiceWithFeedback(java.lang.String id, List<? extends T> choices)
+  public DropDownChoiceWithFeedback(String id, List<? extends T> choices)
   {
     super(id, choices);
   }
@@ -72,7 +73,7 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
    * @param model   the model for this component
    * @param choices the choices
    */
-  public DropDownChoiceWithFeedback(java.lang.String id, IModel<T> model, List<? extends T> choices)
+  public DropDownChoiceWithFeedback(String id, IModel<T> model, List<? extends T> choices)
   {
     super(id, model, choices);
   }
@@ -98,8 +99,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
    * @param choices  the choices
    * @param renderer the custom renderer for the choices
    */
-  public DropDownChoiceWithFeedback(java.lang.String id, IModel<T> model,
-      List<? extends T> choices, IChoiceRenderer<? super T> renderer)
+  public DropDownChoiceWithFeedback(String id, IModel<T> model, List<? extends T> choices,
+      IChoiceRenderer<? super T> renderer)
   {
     super(id, model, choices, renderer);
   }

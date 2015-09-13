@@ -296,6 +296,7 @@ public class SchedulingPattern
    * @return <code>true</code> if the given string represents a valid scheduling pattern or
    *         <code>false</code> otherwise
    */
+  @SuppressWarnings("unused")
   public static boolean validate(String schedulingPattern)
   {
     try
@@ -638,21 +639,21 @@ public class SchedulingPattern
   /**
    * Definition for a value parser.
    */
-  private static interface ValueParser
+  private interface ValueParser
   {
     /**
      * Returns the maximum value accepted by the parser.
      *
      * @return the maximum value accepted by the parser
      */
-    public int getMaxValue();
+    int getMaxValue();
 
     /**
      * Returns the minimum value accepted by the parser.
      *
      * @return the minimum value accepted by the parser
      */
-    public int getMinValue();
+    int getMinValue();
 
     /**
      * Attempts to parse a value.
@@ -663,7 +664,7 @@ public class SchedulingPattern
      *
      * @throws Exception If the value can't be parsed.
      */
-    public int parse(String value)
+    int parse(String value)
       throws Exception;
   }
 

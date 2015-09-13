@@ -60,6 +60,7 @@ public class IDGenerator
    *
    * @param dataSource the data source to use
    */
+  @SuppressWarnings("unused")
   public IDGenerator(DataSource dataSource)
   {
     this.dataSource = dataSource;

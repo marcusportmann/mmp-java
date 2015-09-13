@@ -30,6 +30,7 @@ import org.apache.wicket.request.Response;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class XMLPanel extends Component
 {
   private static final long serialVersionUID = 1000000;

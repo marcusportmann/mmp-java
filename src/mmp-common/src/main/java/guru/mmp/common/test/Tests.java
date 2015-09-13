@@ -36,6 +36,7 @@ public abstract class Tests
 {
   private Logger logger;
 
+  @SuppressWarnings("unused")
   protected byte[] getClasspathResource(String path)
   {
     InputStream is = null;

@@ -187,14 +187,7 @@ public class WebApplicationFilter extends org.apache.wicket.protocol.http.Wicket
 
       if (requestURI.startsWith(wicketUriPrefix))
       {
-        if (requestURI.startsWith(wicketResourceUriPrefix))
-        {
-          return false;
-        }
-        else
-        {
-          return true;
-        }
+        return !requestURI.startsWith(wicketResourceUriPrefix);
       }
     }
 

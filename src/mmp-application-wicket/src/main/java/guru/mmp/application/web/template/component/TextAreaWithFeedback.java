@@ -55,6 +55,7 @@ public class TextAreaWithFeedback<T> extends TextArea<T>
    * @param id    the non-null id of this component
    * @param model the model for this component
    */
+  @SuppressWarnings("unused")
   public TextAreaWithFeedback(String id, IModel<T> model)
   {
     super(id, model);

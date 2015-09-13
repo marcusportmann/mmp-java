@@ -33,6 +33,7 @@ import java.util.concurrent.Future;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)

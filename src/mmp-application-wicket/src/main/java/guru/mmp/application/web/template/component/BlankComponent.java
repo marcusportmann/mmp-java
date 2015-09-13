@@ -26,6 +26,7 @@ import org.apache.wicket.markup.MarkupStream;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class BlankComponent extends Component
 {
   private static final long serialVersionUID = 1000000;
@@ -35,7 +36,7 @@ public class BlankComponent extends Component
    *
    * @param id the non-null id of this component
    */
-  public BlankComponent(final String id)
+  public BlankComponent(String id)
   {
     super(id);
   }

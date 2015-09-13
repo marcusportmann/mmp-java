@@ -65,7 +65,7 @@ public class PagingNavigation extends Loop
    * @param id       the non-null id of this component
    * @param pageable the underlying pageable component to navigate
    */
-  public PagingNavigation(final String id, final IPageable pageable)
+  public PagingNavigation(String id, IPageable pageable)
   {
     super(id, null);
     this.pageable = pageable;
@@ -104,7 +104,7 @@ public class PagingNavigation extends Loop
    *
    * @return start index
    */
-  protected final long getStartIndex()
+  protected long getStartIndex()
   {
     return startIndex;
   }

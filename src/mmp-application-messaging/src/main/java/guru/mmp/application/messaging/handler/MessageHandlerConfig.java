@@ -133,16 +133,6 @@ public class MessageHandlerConfig
   }
 
   /**
-   * Set the fully qualified name of the class that implements the message handler.
-   *
-   * @param className the fully qualified name of the class that implements the message handler
-   */
-  public void setClassName(String className)
-  {
-    this.className = className;
-  }
-
-  /**
    * Set the name of the message handler.
    *
    * @param name the name of the message handler
@@ -306,52 +296,6 @@ public class MessageHandlerConfig
     public boolean isSynchronous()
     {
       return isSynchronous;
-    }
-
-    /**
-     * Set whether messages of the supported message type should be archived.
-     *
-     * @param isArchivable <code>true</code> if messages of the supported message type should be
-     *                     archived or <code>false</code> otherwise
-     */
-    public void setIsArchivable(boolean isArchivable)
-    {
-      this.isArchivable = isArchivable;
-    }
-
-    /**
-     * Set whether the handler is capable of asynchronously processing messages of the supported
-     * message type.
-     *
-     * @param isAsynchronous <code>true</code> if the handler is capable of asynchronously
-     *                       processing messages of the supported message type or
-     *                       <code>false</code> otherwise
-     */
-    public void setIsAsynchronous(boolean isAsynchronous)
-    {
-      this.isAsynchronous = isAsynchronous;
-    }
-
-    /**
-     * Set whether the handler is capable of synchronously processing messages of the supported
-     * message type.
-     *
-     * @param isSynchronous <code>true</code> if the handler is capable of synchronously processing
-     *                      messages of the supported message type or <code>false</code> otherwise
-     */
-    public void setIsSynchronous(boolean isSynchronous)
-    {
-      this.isSynchronous = isSynchronous;
-    }
-
-    /**
-     * Set the UUID identifying the supported message type.
-     *
-     * @param messageType the UUID identifying the supported message type
-     */
-    public void setMessageType(String messageType)
-    {
-      this.messageType = messageType;
     }
 
     /**

@@ -23,6 +23,7 @@ package guru.mmp.application.web.template;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class TemplateSecurity
 {
   /** The unique ID for the <b>Administrators</b> group. */

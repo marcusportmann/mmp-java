@@ -75,6 +75,7 @@ public class DetachableReportDefinitionModel
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected DetachableReportDefinitionModel() {}
 
   /**

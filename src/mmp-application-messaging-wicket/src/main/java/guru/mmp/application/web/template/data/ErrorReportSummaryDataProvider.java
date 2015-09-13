@@ -39,6 +39,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ErrorReportSummaryDataProvider extends InjectableDataProvider<ErrorReportSummary>
 {
   private static final long serialVersionUID = 1000000;

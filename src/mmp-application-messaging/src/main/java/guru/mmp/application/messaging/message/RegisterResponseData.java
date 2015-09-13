@@ -35,6 +35,7 @@ import guru.mmp.common.wbxml.Encoder;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class RegisterResponseData extends WbxmlMessageData
 {
   /**

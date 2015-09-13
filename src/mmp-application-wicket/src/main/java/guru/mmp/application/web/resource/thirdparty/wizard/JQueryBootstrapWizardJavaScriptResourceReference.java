@@ -37,6 +37,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class JQueryBootstrapWizardJavaScriptResourceReference extends JavaScriptResourceReference
 {
   private static final long serialVersionUID = 1000000;

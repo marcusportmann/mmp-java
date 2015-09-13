@@ -81,6 +81,7 @@ public enum ScheduledTaskStatus
    *
    * @return the <code>String</code> value of the numeric code value identifying the status
    */
+  @SuppressWarnings("unused")
   public String getCodeAsString()
   {
     return String.valueOf(code);

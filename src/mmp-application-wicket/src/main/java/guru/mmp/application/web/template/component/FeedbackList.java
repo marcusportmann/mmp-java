@@ -40,6 +40,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class FeedbackList extends Component
   implements IFeedback
 {
@@ -50,7 +51,7 @@ public class FeedbackList extends Component
    *
    * @param id the non-null id of this component
    */
-  public FeedbackList(final String id)
+  public FeedbackList(String id)
   {
     super(id);
 

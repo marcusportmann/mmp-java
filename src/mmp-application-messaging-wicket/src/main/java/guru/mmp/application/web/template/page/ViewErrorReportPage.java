@@ -123,5 +123,6 @@ public class ViewErrorReportPage extends TemplateWebPage
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected ViewErrorReportPage() {}
 }

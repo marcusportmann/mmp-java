@@ -22,6 +22,7 @@ package guru.mmp.application.web;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class WebApplicationBackgroundThread extends Thread
 {
   /**

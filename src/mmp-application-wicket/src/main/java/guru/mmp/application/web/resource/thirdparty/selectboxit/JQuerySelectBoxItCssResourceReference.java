@@ -29,6 +29,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class JQuerySelectBoxItCssResourceReference extends CssResourceReference
 {
   private static final long serialVersionUID = 1000000;

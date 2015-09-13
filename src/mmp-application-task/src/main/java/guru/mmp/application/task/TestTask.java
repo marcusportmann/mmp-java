@@ -30,6 +30,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class TestTask
   implements ITask
 {

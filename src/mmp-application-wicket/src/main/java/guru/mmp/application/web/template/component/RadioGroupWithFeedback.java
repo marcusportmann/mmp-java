@@ -55,6 +55,7 @@ public class RadioGroupWithFeedback<T> extends RadioGroup<T>
    * @param id    the non-null id of this component
    * @param model the model for this component
    */
+  @SuppressWarnings("unused")
   public RadioGroupWithFeedback(String id, IModel<T> model)
   {
     super(id, model);

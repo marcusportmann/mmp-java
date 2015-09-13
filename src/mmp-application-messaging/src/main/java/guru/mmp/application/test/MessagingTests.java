@@ -44,6 +44,7 @@ import java.util.Random;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class MessagingTests extends InjectableTests
 {
   /**

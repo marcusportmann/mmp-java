@@ -59,18 +59,6 @@ public class BinaryBuffer
   }
 
   /**
-   * Initialise the <code>BinaryBuffer</code> and pre-allocate the specified number of bytes of
-   * storage.
-   *
-   * @param length the number of bytes of storage to pre-allocate
-   */
-  public void allocate(int length)
-  {
-    stream = null;
-    stream = new ByteArrayOutputStream(length);
-  }
-
-  /**
    * Append the binary data stored in the specified <code>BinaryBuffer</code> instance to this
    * <code>BinaryBuffer</code>.
    *

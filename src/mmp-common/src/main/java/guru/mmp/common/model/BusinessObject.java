@@ -22,6 +22,7 @@ package guru.mmp.common.model;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class BusinessObject
   implements IBusinessObject
 {

@@ -26,6 +26,7 @@ import guru.mmp.application.messaging.Message;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface IMessageHandler
 {
   /**
@@ -33,14 +34,14 @@ public interface IMessageHandler
    *
    * @return the configuration information for this message handler
    */
-  public MessageHandlerConfig getMessageHandlerConfig();
+  MessageHandlerConfig getMessageHandlerConfig();
 
   /**
    * Returns the name of the message handler.
    *
    * @return the name of the message handler
    */
-  public String getName();
+  String getName();
 
   /**
    * Process the specified message.
@@ -51,7 +52,7 @@ public interface IMessageHandler
    *
    * @throws MessageHandlerException
    */
-  public Message processMessage(Message message)
+  Message processMessage(Message message)
     throws MessageHandlerException;
 
   /**
@@ -63,7 +64,7 @@ public interface IMessageHandler
    * @return <code>true</code> if the message handler is able to process the specified message
    *         asynchronously or <code>false</code> otherwise
    */
-  public boolean supportsAsynchronousProcessing(Message message);
+  boolean supportsAsynchronousProcessing(Message message);
 
   /**
    * Returns <code>true</code> if the message handler is able to process a message with the
@@ -75,7 +76,7 @@ public interface IMessageHandler
    * @return <code>true</code> if the message handler is able to process a message with the
    *         specified type and type version asynchronously or <code>false</code> otherwise
    */
-  public boolean supportsAsynchronousProcessing(String messageType, int messageTypeVersion);
+  boolean supportsAsynchronousProcessing(String messageType, int messageTypeVersion);
 
   /**
    * Returns <code>true</code> if the message handler is able to process the specified message
@@ -86,7 +87,7 @@ public interface IMessageHandler
    * @return <code>true</code> if the message handler is able to process the specified message
    *         synchronously or <code>false</code> otherwise
    */
-  public boolean supportsSynchronousProcessing(Message message);
+  boolean supportsSynchronousProcessing(Message message);
 
   /**
    * Returns <code>true</code> if the message handler is able to process a message with the
@@ -98,5 +99,5 @@ public interface IMessageHandler
    * @return <code>true</code> if the message handler is able to process a message with the
    *         specified type and type version synchronously or <code>false</code> otherwise
    */
-  public boolean supportsSynchronousProcessing(String messageType, int messageTypeVersion);
+  boolean supportsSynchronousProcessing(String messageType, int messageTypeVersion);
 }

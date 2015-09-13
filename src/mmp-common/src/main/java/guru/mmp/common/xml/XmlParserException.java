@@ -32,6 +32,7 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class XmlParserException extends RuntimeException
 {
   private static final String NO_ERROR_CODE = "NONE";

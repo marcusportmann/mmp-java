@@ -27,6 +27,7 @@ import org.apache.wicket.request.resource.IResource;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class InjectableResource
   implements IResource
 {

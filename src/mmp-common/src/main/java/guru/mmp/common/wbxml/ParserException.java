@@ -22,6 +22,7 @@ package guru.mmp.common.wbxml;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ParserException extends Exception
 {
   private static final long serialVersionUID = 1000000;

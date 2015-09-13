@@ -72,6 +72,7 @@ public class SystemMessageHandler extends MessageHandler
    *
    * @param messageHandlerConfig the configuration information for this message handler
    */
+  @SuppressWarnings("unused")
   public SystemMessageHandler(MessageHandlerConfig messageHandlerConfig)
   {
     super("System Message Handler", messageHandlerConfig);
@@ -82,6 +83,7 @@ public class SystemMessageHandler extends MessageHandler
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected SystemMessageHandler() {}
 
   /**

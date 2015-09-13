@@ -54,6 +54,7 @@ import java.util.*;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ApplicationSecurityContext
 {
   /* Logger */

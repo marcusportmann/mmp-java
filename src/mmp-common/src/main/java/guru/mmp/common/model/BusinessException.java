@@ -22,6 +22,7 @@ package guru.mmp.common.model;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class BusinessException extends ModelException
 {
   private static final long serialVersionUID = 1000000;

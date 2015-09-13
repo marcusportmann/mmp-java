@@ -36,6 +36,7 @@ import java.util.jar.JarInputStream;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class MemoryClassLoader extends ClassLoader
 {
   /**

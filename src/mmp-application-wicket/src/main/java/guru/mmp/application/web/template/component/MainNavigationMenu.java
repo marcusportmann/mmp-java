@@ -52,7 +52,7 @@ public class MainNavigationMenu extends Component
    *
    * @param id the non-null id of this component
    */
-  public MainNavigationMenu(final String id)
+  public MainNavigationMenu(String id)
   {
     super(id);
   }

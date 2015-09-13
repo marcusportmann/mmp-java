@@ -75,6 +75,7 @@ public class DetachableErrorReportSummaryModel
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected DetachableErrorReportSummaryModel() {}
 
   /**

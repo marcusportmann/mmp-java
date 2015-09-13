@@ -22,6 +22,7 @@ package guru.mmp.application.sms;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface ISMSService
 {
   /**
@@ -33,7 +34,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public boolean deleteSMS(long id)
+  boolean deleteSMS(long id)
     throws SMSServiceException;
 
   /**
@@ -41,7 +42,7 @@ public interface ISMSService
    *
    * @return the maximum number of send attempts for a SMS
    */
-  public int getMaximumSendAttempts();
+  int getMaximumSendAttempts();
 
   /**
    * Retrieve the next SMS that has been queued for sending.
@@ -53,7 +54,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public SMS getNextSMSQueuedForSending()
+  SMS getNextSMSQueuedForSending()
     throws SMSServiceException;
 
   /**
@@ -63,7 +64,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public int getNumberOfSMSCreditsRemaining()
+  int getNumberOfSMSCreditsRemaining()
     throws SMSServiceException;
 
   /**
@@ -75,7 +76,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public SMS getSMS(long id)
+  SMS getSMS(long id)
     throws SMSServiceException;
 
   /**
@@ -85,7 +86,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public void incrementSMSSendAttempts(SMS sms)
+  void incrementSMSSendAttempts(SMS sms)
     throws SMSServiceException;
 
   /**
@@ -96,7 +97,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public void resetSMSLocks(SMS.Status status, SMS.Status newStatus)
+  void resetSMSLocks(SMS.Status status, SMS.Status newStatus)
     throws SMSServiceException;
 
   /**
@@ -109,7 +110,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public void sendSMS(String mobileNumber, String message)
+  void sendSMS(String mobileNumber, String message)
     throws SMSServiceException;
 
   /**
@@ -125,13 +126,13 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
+  boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
     throws SMSServiceException;
 
   /**
    * Send all the SMSs queued for sending asynchronously.
    */
-  public void sendSMSs();
+  void sendSMSs();
 
   /**
    * Set the status for the SMS.
@@ -141,7 +142,7 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public void setSMSStatus(long id, SMS.Status status)
+  void setSMSStatus(long id, SMS.Status status)
     throws SMSServiceException;
 
   /**
@@ -152,6 +153,6 @@ public interface ISMSService
    *
    * @throws SMSServiceException
    */
-  public void unlockSMS(long id, SMS.Status status)
+  void unlockSMS(long id, SMS.Status status)
     throws SMSServiceException;
 }

@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class JQPlotChart extends WebMarkupContainer
 {
   private static final long serialVersionUID = 1000000;

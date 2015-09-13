@@ -37,6 +37,7 @@ import org.apache.wicket.request.IRequestHandler;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
   extends FileUploadField
 {

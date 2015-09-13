@@ -34,6 +34,7 @@ import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -45,14 +46,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>SelectOrganisationPage</code> class implements the "Select Organisation"
@@ -63,9 +66,6 @@ import java.util.List;
 @SecureAnonymousWebPage
 public class SelectOrganisationPage extends WebPage
 {
-  private static final String SELECT_ORGANISATION_ON_DOM_READY_JAVA_SCRIPT =
-    "TemplateWebApplication.init(); "
-    + "$(\".search-select\").select2({ placeholder: \"\", allowClear: true });";
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
   private static final long serialVersionUID = 1000000;
 
@@ -103,9 +103,8 @@ public class SelectOrganisationPage extends WebPage
     ChoiceRenderer<StringSelectOption> choiceRenderer = new ChoiceRenderer<>("name", "value");
 
     DropDownChoice<StringSelectOption> organisationField =
-      new DropDownChoiceWithFeedback<>("organisation",
-        new PropertyModel<StringSelectOption>(this, "organisation"), getOrganisationOptions(),
-        choiceRenderer);
+      new DropDownChoiceWithFeedback<>("organisation", new PropertyModel<>(this, "organisation"),
+        getOrganisationOptions(), choiceRenderer);
     organisationField.setRequired(true);
     form.add(organisationField);
 

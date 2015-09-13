@@ -37,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <K> the type of keys maintained by this cache
  * @param <V> the type of cached values
  */
+@SuppressWarnings("unused")
 public class ExpiryCache<K, V>
 {
   private ConcurrentHashMap<K, ExpiryCacheEntry<V>> entries = null;

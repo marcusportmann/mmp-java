@@ -21,9 +21,9 @@ package guru.mmp.application.reporting;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.IDataAccessObject;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>IReportingDAO</code> interface defines the persistence operations for the
@@ -41,7 +41,7 @@ public interface IReportingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void createReportDefinition(ReportDefinition reportDefinition)
+  void createReportDefinition(ReportDefinition reportDefinition)
     throws DAOException;
 
   /**
@@ -51,7 +51,7 @@ public interface IReportingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void deleteReportDefinition(String id)
+  void deleteReportDefinition(String id)
     throws DAOException;
 
   /**
@@ -65,7 +65,7 @@ public interface IReportingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public int getNumberOfReportDefinitionsForOrganisation(String organisation)
+  int getNumberOfReportDefinitionsForOrganisation(String organisation)
     throws DAOException;
 
   /**
@@ -79,7 +79,7 @@ public interface IReportingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public ReportDefinition getReportDefinition(String id)
+  ReportDefinition getReportDefinition(String id)
     throws DAOException;
 
   /**
@@ -93,7 +93,7 @@ public interface IReportingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
+  List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
     throws DAOException;
 
   /**
@@ -106,7 +106,7 @@ public interface IReportingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public boolean reportDefinitionExists(String id)
+  boolean reportDefinitionExists(String id)
     throws DAOException;
 
   /**
@@ -120,7 +120,6 @@ public interface IReportingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public ReportDefinition updateReportDefinition(ReportDefinition reportDefinition,
-      String updatedBy)
+  ReportDefinition updateReportDefinition(ReportDefinition reportDefinition, String updatedBy)
     throws DAOException;
 }

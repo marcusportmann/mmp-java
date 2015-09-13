@@ -26,6 +26,7 @@ import org.apache.wicket.protocol.http.WebApplication;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class InjectableResourceStream extends ResourceStream
 {
   private static final long serialVersionUID = 1000000;

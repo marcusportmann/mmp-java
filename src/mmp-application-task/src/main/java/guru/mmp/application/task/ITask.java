@@ -30,6 +30,6 @@ public interface ITask
    *
    * @throws TaskExecutionFailedException
    */
-  public void execute(TaskExecutionContext context)
+  void execute(TaskExecutionContext context)
     throws TaskExecutionFailedException;
 }

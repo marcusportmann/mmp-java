@@ -51,7 +51,7 @@ public class Alerts extends Component
    *
    * @param id the non-null id of this component
    */
-  public Alerts(final String id)
+  public Alerts(String id)
   {
     super(id);
 

@@ -28,6 +28,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class StaticImage extends WebComponent
 {
   private static final long serialVersionUID = 1000000;

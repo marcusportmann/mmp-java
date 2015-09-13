@@ -40,6 +40,7 @@ import java.net.UnknownHostException;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SSLSocketFactory
   implements org.jacorb.orb.factory.SocketFactory
 {

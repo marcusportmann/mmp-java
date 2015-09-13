@@ -28,6 +28,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ToastrJavaScriptResourceReference extends JavaScriptResourceReference
 {
   private static final long serialVersionUID = 1000000;

@@ -43,6 +43,7 @@ import java.util.TimeZone;
  * @author Carlo Pelliccia
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class Predictor
 {
   /**

@@ -32,7 +32,7 @@ public class PagingNavigator extends Panel
 {
   private static final long serialVersionUID = 1000000;
   private boolean isVisible;
-  private final IPageable pageable;
+  private IPageable pageable;
 
   /**
    * Constructor.
@@ -40,7 +40,7 @@ public class PagingNavigator extends Panel
    * @param id       the non-null id of this component
    * @param pageable the pageable component the page links are referring to
    */
-  public PagingNavigator(final String id, final IPageable pageable)
+  public PagingNavigator(String id, IPageable pageable)
   {
     super(id);
     this.pageable = pageable;

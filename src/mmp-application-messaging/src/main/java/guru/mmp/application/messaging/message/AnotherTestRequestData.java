@@ -34,6 +34,7 @@ import guru.mmp.common.wbxml.Encoder;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class AnotherTestRequestData extends WbxmlMessageData
 {
   /**

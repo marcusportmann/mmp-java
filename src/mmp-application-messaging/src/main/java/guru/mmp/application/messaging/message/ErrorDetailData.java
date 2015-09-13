@@ -22,6 +22,7 @@ package guru.mmp.application.messaging.message;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ErrorDetailData
 {
   private String code;

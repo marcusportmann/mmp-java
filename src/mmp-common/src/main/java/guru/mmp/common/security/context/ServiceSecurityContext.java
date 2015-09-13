@@ -53,6 +53,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ServiceSecurityContext
 {
   /* Logger */

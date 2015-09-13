@@ -30,6 +30,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface IMessagingService
 {
   /**
@@ -39,7 +40,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void archiveMessage(Message message)
+  void archiveMessage(Message message)
     throws MessagingException;
 
   /**
@@ -53,7 +54,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public boolean canProcessMessage(Message message)
+  boolean canProcessMessage(Message message)
     throws MessagingException;
 
   /**
@@ -67,7 +68,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public boolean canQueueMessagePartForAssembly(MessagePart messagePart)
+  boolean canQueueMessagePartForAssembly(MessagePart messagePart)
     throws MessagingException;
 
   /**
@@ -78,7 +79,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void createErrorReport(ErrorReport errorReport)
+  void createErrorReport(ErrorReport errorReport)
     throws MessagingException;
 
   /**
@@ -91,7 +92,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public boolean decryptMessage(Message message)
+  boolean decryptMessage(Message message)
     throws MessagingException;
 
   /**
@@ -101,7 +102,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void deleteMessage(Message message)
+  void deleteMessage(Message message)
     throws MessagingException;
 
   /**
@@ -111,7 +112,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void deleteMessage(String id)
+  void deleteMessage(String id)
     throws MessagingException;
 
   /**
@@ -121,7 +122,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void deleteMessagePart(String id)
+  void deleteMessagePart(String id)
     throws MessagingException;
 
   /**
@@ -136,7 +137,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public byte[] deriveUserDeviceEncryptionKey(EncryptionScheme encryptionScheme, String username,
+  byte[] deriveUserDeviceEncryptionKey(EncryptionScheme encryptionScheme, String username,
       String organisation, String deviceId)
     throws MessagingException;
 
@@ -151,7 +152,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public boolean encryptMessage(EncryptionScheme encryptionScheme, Message message)
+  boolean encryptMessage(EncryptionScheme encryptionScheme, Message message)
     throws MessagingException;
 
   /**
@@ -164,7 +165,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public ErrorReport getErrorReport(String id)
+  ErrorReport getErrorReport(String id)
     throws MessagingException;
 
   /**
@@ -177,7 +178,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public ErrorReportSummary getErrorReportSummary(String id)
+  ErrorReportSummary getErrorReportSummary(String id)
     throws MessagingException;
 
   /**
@@ -185,7 +186,7 @@ public interface IMessagingService
    *
    * @return the maximum number of times processing will be attempted for a message
    */
-  public int getMaximumProcessingAttempts();
+  int getMaximumProcessingAttempts();
 
   /**
    * Retrieve the message with the specified ID.
@@ -197,7 +198,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public Message getMessage(String id)
+  Message getMessage(String id)
     throws MessagingException;
 
   /**
@@ -209,7 +210,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public List<MessagePart> getMessagePartsQueuedForDownload(String device)
+  List<MessagePart> getMessagePartsQueuedForDownload(String device)
     throws MessagingException;
 
   /**
@@ -221,7 +222,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public List<Message> getMessagesQueuedForDownload(String device)
+  List<Message> getMessagesQueuedForDownload(String device)
     throws MessagingException;
 
   /**
@@ -235,7 +236,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public List<Message> getMessagesQueuedForDownloadForUser(String user, String device)
+  List<Message> getMessagesQueuedForDownloadForUser(String user, String device)
     throws MessagingException;
 
   /**
@@ -243,7 +244,7 @@ public interface IMessagingService
    *
    * @return the path to the messaging debug directory if it exists of <code>null</code> otherwise
    */
-  public String getMessagingDebugDirectory();
+  String getMessagingDebugDirectory();
 
   /**
    * Retrieve the summaries for the most recent error reports.
@@ -255,7 +256,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
+  List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
     throws MessagingException;
 
   /**
@@ -268,7 +269,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public Message getNextMessageQueuedForProcessing()
+  Message getNextMessageQueuedForProcessing()
     throws MessagingException;
 
   /**
@@ -278,7 +279,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public int getNumberOfErrorReports()
+  int getNumberOfErrorReports()
     throws MessagingException;
 
   /**
@@ -288,7 +289,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void incrementMessageProcessingAttempts(Message message)
+  void incrementMessageProcessingAttempts(Message message)
     throws MessagingException;
 
   /**
@@ -299,7 +300,7 @@ public interface IMessagingService
    * @return <code>true</code> if a message with the specified type information should be archived
    *         or <code>false</code> otherwise
    */
-  public boolean isArchivableMessage(Message message);
+  boolean isArchivableMessage(Message message);
 
   /**
    * Can the specified message be processed asynchronously?
@@ -309,7 +310,7 @@ public interface IMessagingService
    * @return <code>true</code> if the message can be processed asynchronously or
    *         <code>false</code> otherwise
    */
-  public boolean isAsynchronousMessage(Message message);
+  boolean isAsynchronousMessage(Message message);
 
   /**
    * Has the specified message already been archived?
@@ -321,7 +322,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public boolean isMessageArchived(Message message)
+  boolean isMessageArchived(Message message)
     throws MessagingException;
 
   /**
@@ -332,7 +333,7 @@ public interface IMessagingService
    * @return <code>true</code> if the message can be processed synchronously or
    *         <code>false</code> otherwise
    */
-  public boolean isSynchronousMessage(Message message);
+  boolean isSynchronousMessage(Message message);
 
   /**
    * Log the message audit entry.
@@ -351,7 +352,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public boolean logMessageAudit(String type, String user, String organisation, String device,
+  boolean logMessageAudit(String type, String user, String organisation, String device,
       String ip, boolean successful)
     throws MessagingException;
 
@@ -364,7 +365,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public Message processMessage(Message message)
+  Message processMessage(Message message)
     throws MessagingException;
 
   /**
@@ -374,7 +375,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void queueMessageForDownload(Message message)
+  void queueMessageForDownload(Message message)
     throws MessagingException;
 
   /**
@@ -384,7 +385,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void queueMessageForProcessing(Message message)
+  void queueMessageForProcessing(Message message)
     throws MessagingException;
 
   /**
@@ -394,7 +395,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void queueMessagePartForAssembly(MessagePart messagePart)
+  void queueMessagePartForAssembly(MessagePart messagePart)
     throws MessagingException;
 
   /**
@@ -405,7 +406,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void resetMessageLocks(Message.Status status, Message.Status newStatus)
+  void resetMessageLocks(Message.Status status, Message.Status newStatus)
     throws MessagingException;
 
   /**
@@ -416,7 +417,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void resetMessagePartLocks(MessagePart.Status status, MessagePart.Status newStatus)
+  void resetMessagePartLocks(MessagePart.Status status, MessagePart.Status newStatus)
     throws MessagingException;
 
   /**
@@ -427,7 +428,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void setMessageStatus(Message message, Message.Status status)
+  void setMessageStatus(Message message, Message.Status status)
     throws MessagingException;
 
   /**
@@ -438,6 +439,6 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  public void unlockMessage(Message message, Message.Status status)
+  void unlockMessage(Message message, Message.Status status)
     throws MessagingException;
 }

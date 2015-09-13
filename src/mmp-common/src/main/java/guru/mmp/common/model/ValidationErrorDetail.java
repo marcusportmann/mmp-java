@@ -30,6 +30,7 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ValidationErrorDetail
   implements java.io.Serializable
 {

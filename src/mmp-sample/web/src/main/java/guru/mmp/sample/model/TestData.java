@@ -19,6 +19,7 @@ package guru.mmp.sample.model;
 /**
  * The <code>TestData</code> class.
  */
+@SuppressWarnings("unused")
 public class TestData
   implements java.io.Serializable
 {

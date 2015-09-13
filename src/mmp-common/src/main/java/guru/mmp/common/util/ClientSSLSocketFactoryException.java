@@ -22,6 +22,7 @@ package guru.mmp.common.util;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ClientSSLSocketFactoryException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;

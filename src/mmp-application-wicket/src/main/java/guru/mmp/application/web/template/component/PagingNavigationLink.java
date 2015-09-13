@@ -33,8 +33,8 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
 public class PagingNavigationLink<T> extends Link<T>
 {
   private static final long serialVersionUID = 1000000;
-  protected final IPageable pageable;
-  private final long pageNumber;
+  protected IPageable pageable;
+  private long pageNumber;
 
   /**
    * Constructor.
@@ -44,7 +44,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * @param pageNumber The page number in the <code>PageableListView</code> that this link links to.
    *                   Negative pageNumbers are relative to the end of the list.
    */
-  public PagingNavigationLink(final String id, final IPageable pageable, final long pageNumber)
+  public PagingNavigationLink(String id, IPageable pageable, long pageNumber)
   {
     super(id);
     setAutoEnable(true);
@@ -57,7 +57,7 @@ public class PagingNavigationLink<T> extends Link<T>
    *
    * @return the page number in the <code>PageableListView</code> that this link links to
    */
-  public final long getPageNumber()
+  public long getPageNumber()
   {
     return cullPageNumber(pageNumber);
   }
@@ -69,7 +69,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * @return <code>true</code> if this page is the first page of the containing
    *         <code>PageableListView</code> or <code>false</code> otherwise
    */
-  public final boolean isFirst()
+  public boolean isFirst()
   {
     return getPageNumber() == 0;
   }
@@ -81,7 +81,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * @return <code>true</code> if this page is the first page of the containing
    *         <code>PageableListView</code> or <code>false</code> otherwise
    */
-  public final boolean isLast()
+  public boolean isLast()
   {
     return getPageNumber() == (pageable.getPageCount() - 1);
   }
@@ -98,7 +98,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * @see org.apache.wicket.markup.html.link.Link#linksTo(org.apache.wicket.Page)
    */
   @Override
-  public final boolean linksTo(final Page page)
+  public boolean linksTo(final Page page)
   {
     return getPageNumber() == pageable.getCurrentPage();
   }

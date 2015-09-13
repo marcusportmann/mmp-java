@@ -20,31 +20,40 @@ package guru.mmp.application.sms.test;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
+
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.StringReader;
+
+import java.net.URL;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
-import java.io.StringReader;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestSMS</code> class contains the implementation of the SMS JUnit tests.
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class TestSMS
 {
   /* Logger */
@@ -112,7 +121,7 @@ public class TestSMS
         throw new RuntimeException("Invalid API result XML: result element not found");
       }
 
-      if (!result.booleanValue())
+      if (!result)
       {
         String error = XmlUtils.getChildElementText(callResultElement, "error");
 
@@ -135,7 +144,7 @@ public class TestSMS
         throw new RuntimeException("Invalid API result XML: send_info element not found");
       }
 
-      int credits = 0;
+      int credits;
 
       try
       {
@@ -163,29 +172,14 @@ public class TestSMS
 
     Date now = new Date();
 
-    StringBuilder buffer = new StringBuilder();
-
-    buffer.append("<senddata>");
-    buffer.append("<settings>");
-    buffer.append("<live>True</live>");
-    buffer.append("<return_credits>True</return_credits>");
-    buffer.append("<default_date>").append(dateFormat.format(now)).append("</default_date>");
-    buffer.append("<default_time>").append(timeFormat.format(now)).append("</default_time>");
-    buffer.append("<default_curdate>").append(dateFormat.format(now)).append("</default_curdate>");
-    buffer.append("<default_curtime>").append(timeFormat.format(now)).append("</default_curtime>");
-    buffer.append("<mo_forwardemail>").append("sms-reply@mmp.guru").append("</mo_forwardemail>");
-    buffer.append("</settings>");
-    buffer.append("<entries>");
-    buffer.append("<numto>").append(mobileNumber).append("</numto>");
-    buffer.append("<customerid>").append(smsId).append("</customerid>");
-    buffer.append("<data1>").append(message).append("</data1>");
-    buffer.append("<type>").append("SMS").append("</type>");
-
-    // buffer.append("<validityperiod>").append("48").append("</validityperiod>");
-    buffer.append("</entries>");
-    buffer.append("</senddata>");
-
-    return buffer.toString();
+    return "<senddata>" + "<settings>" + "<live>True</live>"
+        + "<return_credits>True</return_credits>" + "<default_date>" + dateFormat.format(now)
+        + "</default_date>" + "<default_time>" + timeFormat.format(now) + "</default_time>"
+        + "<default_curdate>" + dateFormat.format(now) + "</default_curdate>" + "<default_curtime>"
+        + timeFormat.format(now) + "</default_curtime>" + "<mo_forwardemail>"
+        + "sms-reply@mmp.guru" + "</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>"
+        + mobileNumber + "</numto>" + "<customerid>" + smsId + "</customerid>" + "<data1>"
+        + message + "</data1>" + "<type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
   }
 
   private APISoap getMyMobileAPIService()

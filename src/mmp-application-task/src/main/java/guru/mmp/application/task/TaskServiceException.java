@@ -22,6 +22,7 @@ package guru.mmp.application.task;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class TaskServiceException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;

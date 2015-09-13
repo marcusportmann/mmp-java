@@ -25,6 +25,7 @@ package guru.mmp.application.sms;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SMSServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;

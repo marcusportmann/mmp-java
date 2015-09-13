@@ -31,6 +31,7 @@ import org.apache.wicket.protocol.http.WebApplication;
  * @param <T>
  * @param <S>
  */
+@SuppressWarnings("unused")
 public abstract class InjectableSortableDataProvider<T, S> extends SortableDataProvider<T, S>
 {
   private static final long serialVersionUID = 1000000;

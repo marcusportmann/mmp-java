@@ -28,6 +28,7 @@ import java.util.List;
  *
  * @param <T>
  */
+@SuppressWarnings("unused")
 public class Pager<T>
   implements Serializable
 {

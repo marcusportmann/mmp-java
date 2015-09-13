@@ -32,6 +32,7 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class SerializedException extends Exception
 {
   private static final String NO_ERROR_CODE = "NONE";

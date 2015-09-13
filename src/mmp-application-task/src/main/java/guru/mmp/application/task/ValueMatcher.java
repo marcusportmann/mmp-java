@@ -34,5 +34,5 @@ interface ValueMatcher
    * @return <code>true</code> if the given value matches the rules of the
    *         <code>ValueMatcher</code>, <code>false</code> otherwise
    */
-  public boolean match(int value);
+  boolean match(int value);
 }

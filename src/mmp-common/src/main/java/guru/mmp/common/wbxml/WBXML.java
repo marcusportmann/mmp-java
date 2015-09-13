@@ -21,6 +21,7 @@ package guru.mmp.common.wbxml;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class WBXML
 {
   /** The ID for the ISO 8895-1 character set. */

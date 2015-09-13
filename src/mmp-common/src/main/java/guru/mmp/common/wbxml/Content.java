@@ -28,15 +28,12 @@ import java.io.OutputStream;
  */
 public interface Content
 {
-  /** The indent to use when rendering WBXML as text. */
-  public static final String INDENT = "  ";
-
   /**
    * Print the content using the specified indent level.
    *
    * @param indent the indent level
    */
-  public void print(int indent);
+  void print(int indent);
 
   /**
    * Print the content to the specified <code>OutputStream</code> using the specified indent level.
@@ -44,5 +41,5 @@ public interface Content
    * @param out    the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
-  public void print(OutputStream out, int indent);
+  void print(OutputStream out, int indent);
 }

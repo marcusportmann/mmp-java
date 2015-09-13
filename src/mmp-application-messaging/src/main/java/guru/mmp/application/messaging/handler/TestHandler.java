@@ -30,10 +30,10 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class TestHandler extends MessageHandler
 {
   /* Messaging Service */
-  @SuppressWarnings("unused")
   @Inject
   private IMessagingService messagingService;
 

@@ -21,6 +21,7 @@ package guru.mmp.common.crypto;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class SHA1Digest
 {
   // Additive constants

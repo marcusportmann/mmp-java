@@ -26,6 +26,7 @@ import java.io.Serializable;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ScheduledTaskParameter
   implements Serializable
 {

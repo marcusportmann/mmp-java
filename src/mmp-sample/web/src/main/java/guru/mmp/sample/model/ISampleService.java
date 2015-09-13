@@ -27,5 +27,5 @@ public interface ISampleService
   /**
    * The test method.
    */
-  public void testMethod();
+  void testMethod();
 }

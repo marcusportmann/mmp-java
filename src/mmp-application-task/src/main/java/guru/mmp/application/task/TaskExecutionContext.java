@@ -27,6 +27,7 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class TaskExecutionContext
 {
   /* The date and time that the task was scheduled to be executed. */

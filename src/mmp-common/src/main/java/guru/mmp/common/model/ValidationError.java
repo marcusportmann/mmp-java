@@ -27,6 +27,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ValidationError
   implements java.io.Serializable
 {

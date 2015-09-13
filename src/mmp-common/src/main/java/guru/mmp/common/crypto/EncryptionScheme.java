@@ -80,6 +80,7 @@ public enum EncryptionScheme
    * @return the <code>String</code> value of the numeric code value identifying the type of
    *         encryption scheme
    */
+  @SuppressWarnings("unused")
   public String getCodeAsString()
   {
     return String.valueOf(code);

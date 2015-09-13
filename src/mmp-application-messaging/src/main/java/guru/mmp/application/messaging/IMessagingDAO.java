@@ -31,6 +31,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface IMessagingDAO extends IDataAccessObject
 {
   /**
@@ -44,7 +45,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public boolean allPartsQueuedForMessage(String messageId, int totalParts)
+  boolean allPartsQueuedForMessage(String messageId, int totalParts)
     throws DAOException;
 
   /**
@@ -54,7 +55,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void archiveMessage(Message message)
+  void archiveMessage(Message message)
     throws DAOException;
 
   /**
@@ -65,7 +66,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void createErrorReport(ErrorReport errorReport)
+  void createErrorReport(ErrorReport errorReport)
     throws DAOException;
 
   /**
@@ -75,7 +76,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void createMessage(Message message)
+  void createMessage(Message message)
     throws DAOException;
 
   /**
@@ -86,7 +87,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void createMessagePart(MessagePart messagePart)
+  void createMessagePart(MessagePart messagePart)
     throws DAOException;
 
   /**
@@ -96,7 +97,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void deleteMessage(String id)
+  void deleteMessage(String id)
     throws DAOException;
 
   /**
@@ -106,7 +107,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void deleteMessagePart(String id)
+  void deleteMessagePart(String id)
     throws DAOException;
 
   /**
@@ -116,7 +117,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void deleteMessagePartsForMessage(String messageId)
+  void deleteMessagePartsForMessage(String messageId)
     throws DAOException;
 
   /**
@@ -129,7 +130,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public ErrorReport getErrorReport(String id)
+  ErrorReport getErrorReport(String id)
     throws DAOException;
 
   /**
@@ -142,7 +143,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public ErrorReportSummary getErrorReportSummary(String id)
+  ErrorReportSummary getErrorReportSummary(String id)
     throws DAOException;
 
   /**
@@ -155,7 +156,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public Message getMessage(String id)
+  Message getMessage(String id)
     throws DAOException;
 
   /**
@@ -169,7 +170,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public List<MessagePart> getMessagePartsQueuedForAssembly(String messageId, String lockName)
+  List<MessagePart> getMessagePartsQueuedForAssembly(String messageId, String lockName)
     throws DAOException;
 
   /**
@@ -183,7 +184,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public List<MessagePart> getMessagePartsQueuedForDownload(String device, String lockName)
+  List<MessagePart> getMessagePartsQueuedForDownload(String device, String lockName)
     throws DAOException;
 
   /**
@@ -197,7 +198,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public List<Message> getMessagesQueuedForDownload(String device, String lockName)
+  List<Message> getMessagesQueuedForDownload(String device, String lockName)
     throws DAOException;
 
   /**
@@ -213,8 +214,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public List<Message> getMessagesQueuedForDownloadForUser(String user, String device,
-      String lockName)
+  List<Message> getMessagesQueuedForDownloadForUser(String user, String device, String lockName)
     throws DAOException;
 
   /**
@@ -227,7 +227,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
+  List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
     throws DAOException;
 
   /**
@@ -245,7 +245,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public Message getNextMessageQueuedForProcessing(int processingRetryDelay, String lockName)
+  Message getNextMessageQueuedForProcessing(int processingRetryDelay, String lockName)
     throws DAOException;
 
   /**
@@ -255,7 +255,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public int getNumberOfErrorReports()
+  int getNumberOfErrorReports()
     throws DAOException;
 
   /**
@@ -265,7 +265,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void incrementMessageProcessingAttempts(Message message)
+  void incrementMessageProcessingAttempts(Message message)
     throws DAOException;
 
   /**
@@ -278,7 +278,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public boolean isMessageArchived(String id)
+  boolean isMessageArchived(String id)
     throws DAOException;
 
   /**
@@ -291,7 +291,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public boolean isMessagePartQueuedForAssembly(String id)
+  boolean isMessagePartQueuedForAssembly(String id)
     throws DAOException;
 
   /**
@@ -308,8 +308,8 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void logMessageAudit(String type, String user, String organisation, String device,
-      String ip, boolean successful)
+  void logMessageAudit(String type, String user, String organisation, String device, String ip,
+      boolean successful)
     throws DAOException;
 
   /**
@@ -323,8 +323,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public int resetExpiredMessageLocks(int lockTimeout, Message.Status status,
-      Message.Status newStatus)
+  int resetExpiredMessageLocks(int lockTimeout, Message.Status status, Message.Status newStatus)
     throws DAOException;
 
   /**
@@ -338,7 +337,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status,
+  int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status,
       MessagePart.Status newStatus)
     throws DAOException;
 
@@ -353,7 +352,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public int resetMessageLocks(String lockName, Message.Status status, Message.Status newStatus)
+  int resetMessageLocks(String lockName, Message.Status status, Message.Status newStatus)
     throws DAOException;
 
   /**
@@ -367,7 +366,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public int resetMessagePartLocks(String lockName, MessagePart.Status status,
+  int resetMessagePartLocks(String lockName, MessagePart.Status status,
       MessagePart.Status newStatus)
     throws DAOException;
 
@@ -379,7 +378,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void setMessagePartStatus(String id, MessagePart.Status status)
+  void setMessagePartStatus(String id, MessagePart.Status status)
     throws DAOException;
 
   /**
@@ -390,7 +389,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void setMessageStatus(String id, Message.Status status)
+  void setMessageStatus(String id, Message.Status status)
     throws DAOException;
 
   /**
@@ -401,7 +400,7 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void unlockMessage(String id, Message.Status status)
+  void unlockMessage(String id, Message.Status status)
     throws DAOException;
 
   /**
@@ -412,6 +411,6 @@ public interface IMessagingDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void unlockMessagePart(String id, MessagePart.Status status)
+  void unlockMessagePart(String id, MessagePart.Status status)
     throws DAOException;
 }

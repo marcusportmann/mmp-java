@@ -33,8 +33,8 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
 public class PagingNavigationIncrementLink<T> extends Link<T>
 {
   private static final long serialVersionUID = 1000000;
-  protected final IPageable pageable;
-  private final int increment;
+  protected IPageable pageable;
+  private int increment;
 
   /**
    * Constructor.
@@ -43,8 +43,7 @@ public class PagingNavigationIncrementLink<T> extends Link<T>
    * @param pageable  the pageable component the page links are referring to
    * @param increment the increment
    */
-  public PagingNavigationIncrementLink(final String id, final IPageable pageable,
-      final int increment)
+  public PagingNavigationIncrementLink(String id, IPageable pageable, int increment)
   {
     super(id);
     setAutoEnable(true);
@@ -57,7 +56,7 @@ public class PagingNavigationIncrementLink<T> extends Link<T>
    *
    * @return the next page number for the pageable component
    */
-  public final long calculateNextPageNumber()
+  public long calculateNextPageNumber()
   {
     // Determine the page number based on the current PageableListView page and the increment
     long idx = pageable.getCurrentPage() + increment;

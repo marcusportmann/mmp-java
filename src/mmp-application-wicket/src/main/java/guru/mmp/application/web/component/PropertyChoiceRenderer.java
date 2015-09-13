@@ -55,6 +55,7 @@ import java.util.List;
  * @author Davide Alberto Molin (davide.molin@gmail.com)
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class PropertyChoiceRenderer<T>
   implements IChoiceRenderer<T>
 {

@@ -26,6 +26,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -37,12 +38,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>ResetPasswordPage</code> class implements the
@@ -126,13 +128,13 @@ public class ResetUserPasswordPage extends TemplateWebPage
 
       // The "expiredPassword" field
       CheckBox expiredPasswordCheckbox = new CheckBox("expiredPassword",
-        new PropertyModel<Boolean>(this, "expiredPassword"));
+        new PropertyModel<>(this, "expiredPassword"));
       expiredPasswordCheckbox.setRequired(false);
       resetForm.add(expiredPasswordCheckbox);
 
       // The "userLocked" field
       CheckBox userLockedCheckbox = new CheckBox("userLocked",
-        new PropertyModel<Boolean>(this, "userLocked"));
+        new PropertyModel<>(this, "userLocked"));
       userLockedCheckbox.setRequired(false);
       resetForm.add(userLockedCheckbox);
 

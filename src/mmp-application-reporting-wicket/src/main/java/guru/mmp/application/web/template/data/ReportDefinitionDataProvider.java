@@ -66,6 +66,7 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
    * <p/>
    * Hidden default constructor to support CDI.
    */
+  @SuppressWarnings("unused")
   protected ReportDefinitionDataProvider() {}
 
   /**

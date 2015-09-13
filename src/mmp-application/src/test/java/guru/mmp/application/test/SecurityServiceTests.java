@@ -49,6 +49,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SecurityServiceTests extends HsqldbDatabaseTests
 {
   private HsqldbDataSource dataSource;
@@ -1442,12 +1443,8 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
 
   private FunctionTemplate getTestFunctionTemplateDetails()
   {
-    FunctionTemplate template = new FunctionTemplate("Test Function Template Code");
-
-    template.setName("Test Function Template Name");
-    template.setDescription("Test Function Template Description");
-
-    return template;
+    return new FunctionTemplate("Test Function Template Code",
+      "Test Function Template Name", "Test Function Template Description");
   }
 
   private Group getTestGroupDetails()

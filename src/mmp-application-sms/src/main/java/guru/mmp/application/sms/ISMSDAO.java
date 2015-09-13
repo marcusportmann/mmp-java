@@ -35,7 +35,7 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void createSMS(SMS sms)
+  void createSMS(SMS sms)
     throws DAOException;
 
   /**
@@ -47,7 +47,7 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public boolean deleteSMS(long id)
+  boolean deleteSMS(long id)
     throws DAOException;
 
   /**
@@ -64,7 +64,7 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public SMS getNextSMSQueuedForSending(int sendRetryDelay, String lockName)
+  SMS getNextSMSQueuedForSending(int sendRetryDelay, String lockName)
     throws DAOException;
 
   /**
@@ -76,7 +76,7 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public SMS getSMS(long id)
+  SMS getSMS(long id)
     throws DAOException;
 
   /**
@@ -86,7 +86,7 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void incrementSMSSendAttempts(SMS sms)
+  void incrementSMSSendAttempts(SMS sms)
     throws DAOException;
 
   /**
@@ -98,7 +98,7 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void resetSMSLocks(String lockName, SMS.Status status, SMS.Status newStatus)
+  void resetSMSLocks(String lockName, SMS.Status status, SMS.Status newStatus)
     throws DAOException;
 
   /**
@@ -109,7 +109,7 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void setSMSStatus(long id, SMS.Status status)
+  void setSMSStatus(long id, SMS.Status status)
     throws DAOException;
 
   /**
@@ -120,6 +120,6 @@ public interface ISMSDAO extends IDataAccessObject
    *
    * @throws DAOException
    */
-  public void unlockSMS(long id, SMS.Status status)
+  void unlockSMS(long id, SMS.Status status)
     throws DAOException;
 }

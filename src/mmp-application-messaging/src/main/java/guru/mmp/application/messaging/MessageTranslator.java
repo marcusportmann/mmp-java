@@ -39,6 +39,7 @@ import java.security.MessageDigest;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class MessageTranslator
 {
   private static ThreadLocal<MessageDigest> threadLocalMessageDigest =

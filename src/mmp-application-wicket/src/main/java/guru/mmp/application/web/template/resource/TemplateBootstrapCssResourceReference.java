@@ -19,14 +19,9 @@ package guru.mmp.application.web.template.resource;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
-
-import java.util.ArrayList;
-import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateBootstrapCssResourceReference</code> class implements the CSS resource
@@ -72,20 +67,5 @@ public class TemplateBootstrapCssResourceReference extends CssResourceReference
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
-  }
-
-  /**
-   * Returns the dependencies for the CSS resource reference.
-   *
-   * @return the dependencies for the CSS resource reference
-   */
-  @Override
-  public List<HeaderItem> getDependencies()
-  {
-    List<HeaderItem> dependencies = new ArrayList<>();
-
-    // dependencies.add(TemplateBootstrapCssResourceReference.getCssHeaderItem());
-
-    return dependencies;
   }
 }

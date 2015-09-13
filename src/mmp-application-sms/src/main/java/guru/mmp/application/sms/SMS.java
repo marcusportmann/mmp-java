@@ -26,6 +26,7 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SMS
   implements Serializable
 {

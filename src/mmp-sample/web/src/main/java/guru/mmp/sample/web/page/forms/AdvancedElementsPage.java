@@ -19,11 +19,8 @@ package guru.mmp.sample.web.page.forms;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.resource.thirdparty.datepicker.BootstrapDatePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenMaxJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectCssResourceReference;
 import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.selectboxit.JQuerySelectBoxItJavaScriptResourceReference;

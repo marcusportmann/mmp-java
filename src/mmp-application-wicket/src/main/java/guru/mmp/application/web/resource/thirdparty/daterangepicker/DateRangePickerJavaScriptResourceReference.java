@@ -19,14 +19,9 @@ package guru.mmp.application.web.resource.thirdparty.daterangepicker;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import org.apache.wicket.markup.head.HeaderItem;
+
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-
-import java.util.ArrayList;
-import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DateRangePickerJavaScriptResourceReference</code> class implements the
@@ -70,21 +65,5 @@ public class DateRangePickerJavaScriptResourceReference extends JavaScriptResour
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
-  }
-
-  /**
-   * Returns the dependencies for the JavaScript resource reference.
-   *
-   * @return the dependencies for the JavaScript resource reference
-   */
-  @Override
-  public List<HeaderItem> getDependencies()
-  {
-    List<HeaderItem> dependencies = new ArrayList<>();
-
-    // dependencies.add(BootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
-    // dependencies.add(BootstrapCssResourceReference.getCssHeaderItem());
-
-    return dependencies;
   }
 }

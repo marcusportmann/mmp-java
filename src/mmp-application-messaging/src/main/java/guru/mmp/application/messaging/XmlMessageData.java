@@ -22,6 +22,7 @@ package guru.mmp.application.messaging;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class XmlMessageData
 {
   /**

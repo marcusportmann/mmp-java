@@ -43,6 +43,7 @@ public class XmlParserErrorHandler
    *
    * @param logger the logger to use to log errors and warnings
    */
+  @SuppressWarnings("unused")
   public XmlParserErrorHandler(Logger logger)
   {
     this.logger = logger;

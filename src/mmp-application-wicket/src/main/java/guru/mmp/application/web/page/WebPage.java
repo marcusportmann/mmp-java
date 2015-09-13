@@ -41,6 +41,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
 {
   /** The Application.AnonymousAccess function code applied to unsecured web pages. */

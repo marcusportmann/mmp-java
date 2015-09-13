@@ -32,14 +32,6 @@ public class BinaryBuffer
   private byte[] data;
 
   /**
-   * Constructs a new <code>BinaryBuffer</code>.
-   */
-  public BinaryBuffer()
-  {
-    this.data = null;
-  }
-
-  /**
    * Constructs a new <code>BinaryBuffer</code> and initialises it using the specified binary data.
    *
    * @param data <code>BinaryBuffer</code> instance containing the binary data that will be copied

@@ -27,6 +27,7 @@ import java.io.StringWriter;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class JNDIUtil
 {
   /**

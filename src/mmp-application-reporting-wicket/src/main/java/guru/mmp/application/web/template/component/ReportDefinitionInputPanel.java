@@ -36,7 +36,7 @@ import java.util.List;
 public class ReportDefinitionInputPanel extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
-  @SuppressWarnings("unused")
+  @SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
   private List<FileUpload> fileUploads;
 
   /**

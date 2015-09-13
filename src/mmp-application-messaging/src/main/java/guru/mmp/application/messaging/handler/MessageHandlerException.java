@@ -22,6 +22,7 @@ package guru.mmp.application.messaging.handler;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class MessageHandlerException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;

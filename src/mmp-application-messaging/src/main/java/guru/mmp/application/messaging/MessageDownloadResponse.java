@@ -37,6 +37,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class MessageDownloadResponse
 {
   /**
