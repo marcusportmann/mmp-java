@@ -27,6 +27,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -40,14 +41,16 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserGroupsPage</code> class implements the
@@ -101,7 +104,7 @@ public class UserGroupsPage extends TemplateWebPage
     tableContainer.add(backLink);
 
     // The "addUserToGroupForm" form
-    final DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
+    DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
       new PropertyModel<>(this, "groupName"), getGroupOptions(username));
 
     groupNameField.setRequired(true);
@@ -217,7 +220,7 @@ public class UserGroupsPage extends TemplateWebPage
   @SuppressWarnings("unused")
   protected UserGroupsPage() {}
 
-  private List<String> getGroupOptions(final String username)
+  private List<String> getGroupOptions(String username)
     throws SecurityException
   {
     WebSession session = getWebApplicationSession();

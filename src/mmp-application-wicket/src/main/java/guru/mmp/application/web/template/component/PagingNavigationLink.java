@@ -98,7 +98,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * @see org.apache.wicket.markup.html.link.Link#linksTo(org.apache.wicket.Page)
    */
   @Override
-  public boolean linksTo(final Page page)
+  public boolean linksTo(Page page)
   {
     return getPageNumber() == pageable.getCurrentPage();
   }

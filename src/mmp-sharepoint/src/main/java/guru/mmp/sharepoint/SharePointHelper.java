@@ -36,6 +36,7 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SharePointHelper
 {
   private static final String SHAREPOINT_ROWSET_SCHEMA_NAMESPACE = "#RowsetSchema";

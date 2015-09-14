@@ -194,9 +194,9 @@ public class MessageTranslator
     {
       if (encryptionScheme == EncryptionScheme.AES_CFB)
       {
-        final SecretKey secretKey = new SecretKeySpec(encryptionKey, CryptoUtils.AES_KEY_SPEC);
-        final IvParameterSpec iv = new IvParameterSpec(encryptionIV);
-        final Cipher cipher = Cipher.getInstance(CryptoUtils.AES_TRANSFORMATION_NAME);
+        SecretKey secretKey = new SecretKeySpec(encryptionKey, CryptoUtils.AES_KEY_SPEC);
+        IvParameterSpec iv = new IvParameterSpec(encryptionIV);
+        Cipher cipher = Cipher.getInstance(CryptoUtils.AES_TRANSFORMATION_NAME);
 
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
 

@@ -35,6 +35,7 @@ import javax.xml.soap.Detail;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SharePointException extends Exception
 {
   private static final String NO_ERROR_CODE = "NONE";

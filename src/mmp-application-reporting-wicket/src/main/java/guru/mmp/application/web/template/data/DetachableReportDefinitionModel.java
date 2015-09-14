@@ -39,7 +39,7 @@ public class DetachableReportDefinitionModel
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ReportDefinition name for the report definition.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
   private String id;
 

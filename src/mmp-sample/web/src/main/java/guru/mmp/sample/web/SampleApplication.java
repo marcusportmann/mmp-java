@@ -104,6 +104,8 @@ public class SampleApplication extends TemplateWebApplication
         CodeCategoryAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
         ReportDefinitionAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("Process Definitions", "fa fa-gears",
+      ProcessDefinitionAdministrationPage.class));
 
     root.addItem(administrationGroup);
 

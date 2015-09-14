@@ -31,33 +31,46 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
-import javax.annotation.PostConstruct;
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+
 import java.lang.reflect.Constructor;
+
 import java.net.URL;
+
 import java.security.MessageDigest;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
+
+import javax.naming.InitialContext;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>MessagingService</code> class provides the implementation of the Messaging Service
@@ -381,11 +394,10 @@ public class MessagingService
       {
         byte[] key = CryptoUtils.passwordToAESKey(password);
 
-        final SecretKey secretKey = new SecretKeySpec(aesEncryptionMasterKey,
-          CryptoUtils.AES_KEY_SPEC);
-        final IvParameterSpec iv =
+        SecretKey secretKey = new SecretKeySpec(aesEncryptionMasterKey, CryptoUtils.AES_KEY_SPEC);
+        IvParameterSpec iv =
           new IvParameterSpec(AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV);
-        final Cipher cipher = Cipher.getInstance("AES/CFB/NoPadding");
+        Cipher cipher = Cipher.getInstance("AES/CFB/NoPadding");
 
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
 
@@ -747,18 +759,18 @@ public class MessagingService
   }
 
   /**
-   * Initialise the MessagingService instance.
+   * Initialise the Messaging Service instance.
    */
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the MessagingService instance (" + getInstanceName() + ")");
+    logger.info("Initialising the Messaging Service instance (" + getInstanceName() + ")");
 
     messageHandlers = new HashMap<>();
 
     try
     {
-      // Initialise the configuration for the MessagingService instance
+      // Initialise the configuration for the Messaging Service instance
       initConfiguration();
 
       // Read the messaging configuration
@@ -769,7 +781,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to initialise the MessagingService instance", e);
+      throw new MessagingException("Failed to initialise the Messaging Service instance", e);
     }
   }
 
@@ -1461,8 +1473,8 @@ public class MessagingService
       }
       catch (Throwable e)
       {
-        logger.error("Failed to retrieve the server hostname while constructing the messaging"
-            + " service instance name", e);
+        logger.error("Failed to retrieve the server hostname while constructing the Messaging"
+            + " Service instance name", e);
         instanceName = "Unknown";
       }
 
@@ -1531,7 +1543,7 @@ public class MessagingService
   }
 
   /**
-   * Initialise the configuration for the MessagingService instance.
+   * Initialise the configuration for the Messaging Service instance.
    *
    * @throws MessagingException
    */
@@ -1570,7 +1582,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException(
-          "Failed to initialise the configuration for the MessagingService instance", e);
+          "Failed to initialise the configuration for the Messaging Service instance", e);
     }
   }
 

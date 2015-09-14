@@ -40,6 +40,7 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SharePointListModificationRequest
 {
   /**

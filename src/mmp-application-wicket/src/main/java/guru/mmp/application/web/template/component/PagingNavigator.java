@@ -68,7 +68,7 @@ public class PagingNavigator extends Panel
    *
    * @return the navigation object
    */
-  protected PagingNavigation newNavigation(final String id, final IPageable pageable)
+  protected PagingNavigation newNavigation(String id, IPageable pageable)
   {
     return new PagingNavigation(id, pageable);
   }

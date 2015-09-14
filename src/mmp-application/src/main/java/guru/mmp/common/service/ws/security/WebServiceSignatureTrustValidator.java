@@ -55,8 +55,8 @@ public class WebServiceSignatureTrustValidator
    */
 
   @Override
-  protected boolean matches(final java.security.cert.X509Certificate cert,
-      final Collection<Pattern> subjectDNPatterns)
+  protected boolean matches(java.security.cert.X509Certificate cert,
+      Collection<Pattern> subjectDNPatterns)
   {
     return (subjectDNPatterns == null) || (subjectDNPatterns.size() == 0)
         || super.matches(cert, subjectDNPatterns);

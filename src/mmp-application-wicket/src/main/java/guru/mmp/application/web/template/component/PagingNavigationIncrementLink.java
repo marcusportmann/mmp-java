@@ -99,7 +99,7 @@ public class PagingNavigationIncrementLink<T> extends Link<T>
    * @see org.apache.wicket.markup.html.link.BookmarkablePageLink#linksTo(org.apache.wicket.Page)
    */
   @Override
-  public boolean linksTo(final Page page)
+  public boolean linksTo(Page page)
   {
     pageable.getCurrentPage();
 

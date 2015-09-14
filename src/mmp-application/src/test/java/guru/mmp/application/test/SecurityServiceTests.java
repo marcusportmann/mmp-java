@@ -1168,7 +1168,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
 
     registry.init();
 
-    // Create the security service instance using the data source we have just setup
+    // Create the Security Service instance using the data source we have just setup
     securityService = new SecurityService();
 
     securityService.setDataSource(dataSource);

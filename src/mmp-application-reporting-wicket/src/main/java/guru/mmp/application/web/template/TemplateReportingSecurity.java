@@ -19,7 +19,7 @@ package guru.mmp.application.web.template;
 /**
  * The <code>TemplateReportingSecurity</code> class provides access to the security-related
  * information and functionality for the extensions to the Web Application Template provided by the
- * <code>mmp-application-reporting</code> library.
+ * <code>mmp-application-reporting-wicket</code> library.
  *
  * @author Marcus Portmann
  */

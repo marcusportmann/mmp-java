@@ -23,9 +23,9 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import java.util.regex.Pattern;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.regex.Pattern;
 
 /**
  * The <code>PasswordPolicyValidator</code> class implements a Wicket validator that provides
@@ -53,7 +53,7 @@ public class PasswordPolicyValidator extends Behavior
   @Override
   public void validate(IValidatable<String> validatable)
   {
-    final String password = validatable.getValue();
+    String password = validatable.getValue();
 
     if (!NUMBER.matcher(password).find())
     {

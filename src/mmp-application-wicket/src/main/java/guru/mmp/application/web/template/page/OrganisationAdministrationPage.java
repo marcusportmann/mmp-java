@@ -101,8 +101,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
       OrganisationDataProvider dataProvider = new OrganisationDataProvider();
 
       // The organisation data view
-      final DataView<Organisation> dataView = new DataView<Organisation>("organisation",
-        dataProvider)
+      DataView<Organisation> dataView = new DataView<Organisation>("organisation", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
@@ -113,7 +112,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
 
           // The "updateLink" link
-          final Link<Void> updateLink = new Link<Void>("updateLink")
+          Link<Void> updateLink = new Link<Void>("updateLink")
           {
             private static final long serialVersionUID = 1000000;
 
@@ -129,7 +128,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
           item.add(updateLink);
 
           // The "removeLink" link
-          final AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+          AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
           {
             private static final long serialVersionUID = 1000000;
 
@@ -180,7 +179,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the organisation table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(final WebMarkupContainer tableContainer)
+    public RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

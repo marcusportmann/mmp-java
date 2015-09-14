@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="no-js" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
+  <head>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/resource/thirdparty/fontawesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template-core.css"/>
+  </head>
+  <body class="page-body maximum-height boxed-container">
+    <div class="page-container maximum-height">
+      <div class="sidebar-menu toggle-others">
+        <div class="sidebar-menu-inner">
+          <header class="logo-env">
+            <div class="logo">
+              <a href="#" class="logo-expanded">
+                <div class="logo-image"></div>
+              </a>
+              <a href="#" class="logo-collapsed">
+                <div class="logo-image"></div>
+              </a>
+            </div>
+            <div class="mobile-menu-toggle visible-xs">
+              <a href="#" data-toggle="user-info-menu"><i class="fa-bell-o"></i></a>
+              <a href="#" data-toggle="mobile-menu"><i class="fa-bars"></i></a>
+            </div>
+          </header>
+          <ul id="main-menu" class="main-menu">
+            <li class="active opened active">
+              <a href="#"><i class="fa fa-file-code-o"></i><span class="title">Container</span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="main-content maximum-height">
+        <nav class="navbar user-info-navbar" role="navigation">
+          <ul class="user-info-menu left-links list-inline list-unstyled">
+            <li class="hidden-xs"><a href="#" data-toggle="sidebar"><i class="fa-bars"></i></a></li>
+          </ul>
+        </nav>
+        <div class="page-title">
+          <div class="title-env">
+            <h1 class="title">Container</h1>
+          </div>
+          <div class="breadcrumb-env">
+            <ol class="breadcrumb bc-1">
+              <li class="active"><a href="#"><i class="fa-home"></i>Container</a></li>
+            </ol>
+          </div>
+        </div>
+        <wicket:child>
+          <wicket:extend>
+
+            <div class="panel panel-default form-panel">
+
+              <div class="form-intro">Please update the details for the process definition and click <b>Update</b>.</div>
+
+              <form wicket:id="updateForm" id="updateForm" class="form-horizontal">
+
+                <div wicket:id="processDefinition"></div>
+
+                <div class="form-buttons">
+                  <button wicket:id="updateButton" type="submit" class="btn btn-primary pull-right">Update</button>
+                  <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right">Cancel</button>
+                </div>
+
+              </form>
+
+            </div>
+
+          </wicket:extend>
+        </wicket:child>
+      </div>
+    </div>
+  </body>
+</html>

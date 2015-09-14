@@ -20,9 +20,9 @@ package guru.mmp.common.service.ws;
 
 import guru.mmp.common.util.ISO8601;
 
-import java.util.Calendar;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.Calendar;
 
 /**
  * The <code>JaxbDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
@@ -39,7 +39,7 @@ public class JaxbDateTimeAdapter
    *
    * @return the <code>java.util.Calendar</code> value as an ISO8601 string
    */
-  public static String marshal(final Calendar value)
+  public static String marshal(Calendar value)
   {
     if (value == null)
     {

@@ -117,7 +117,7 @@ public class WebApplicationServlet extends HttpServlet
        * @see javax.servlet.FilterConfig#getInitParameter(java.lang.String)
        */
       @Override
-      public String getInitParameter(final String name)
+      public String getInitParameter(String name)
       {
         return WebApplicationServlet.this.getInitParameter(name);
       }
@@ -137,7 +137,7 @@ public class WebApplicationServlet extends HttpServlet
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   @Override
-  protected final void doGet(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
     doPost(request, response);

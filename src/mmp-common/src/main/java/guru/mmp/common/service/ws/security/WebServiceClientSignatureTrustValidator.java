@@ -22,11 +22,12 @@ import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.handler.RequestData;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.security.cert.X509Certificate;
+
 import java.util.Collection;
 import java.util.regex.Pattern;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SignatureTrustValidator</code> class implements a custom signature trust validator.
@@ -46,8 +47,8 @@ public class WebServiceClientSignatureTrustValidator
    *         only has to match ONE of the subject cert constraints (not all)
    */
   @Override
-  protected boolean matches(final java.security.cert.X509Certificate cert,
-      final Collection<Pattern> subjectDNPatterns)
+  protected boolean matches(java.security.cert.X509Certificate cert,
+      Collection<Pattern> subjectDNPatterns)
   {
     return (subjectDNPatterns == null) || (subjectDNPatterns.size() == 0)
         || super.matches(cert, subjectDNPatterns);

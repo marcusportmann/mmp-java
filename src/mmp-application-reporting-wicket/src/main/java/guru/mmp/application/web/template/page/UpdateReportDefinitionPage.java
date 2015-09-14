@@ -25,25 +25,28 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.component.ReportDefinitionInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UpdateReportDefinitionPage</code> class implements the
- * "Update ReportDefinition" page for the Web Application Template.
+ * "Update Report Definition" page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
@@ -66,7 +69,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
    * @param reportDefinitionModel the model for the report definition
    */
   public UpdateReportDefinitionPage(PageReference previousPage,
-      final IModel<ReportDefinition> reportDefinitionModel)
+      IModel<ReportDefinition> reportDefinitionModel)
   {
     super("Update Report Definition");
 

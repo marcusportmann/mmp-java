@@ -237,22 +237,22 @@ public class SMSService
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the SMSService instance");
+    logger.info("Initialising the SMS Service instance");
 
     sendSMSsResult = new AsyncResult<>(false);
 
     try
     {
-      // Initialise the configuration for the SMSService instance
+      // Initialise the configuration for the SMS Service instance
       initConfiguration();
     }
     catch (Exception e)
     {
-      throw new RuntimeException("Failed to initialise the SMSService instance", e);
+      throw new RuntimeException("Failed to initialise the SMS Service instance", e);
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the SMSService instance: " + e.getMessage());
+      throw new RuntimeException("Failed to initialise the SMS Service instance: " + e.getMessage());
     }
   }
 
@@ -672,7 +672,7 @@ public class SMSService
   }
 
   /**
-   * Initialise the configuration for the SMSService instance.
+   * Initialise the configuration for the SMS Service instance.
    *
    * @throws SMSServiceException
    */

@@ -33,6 +33,7 @@ import java.util.logging.Logger;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class AtomikosLifecycleListener
   implements LifecycleListener
 {

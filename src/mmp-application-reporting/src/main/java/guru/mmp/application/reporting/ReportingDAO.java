@@ -21,16 +21,21 @@ package guru.mmp.application.reporting;
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>ReportingDAO</code> class implements the persistence operations for the
@@ -73,8 +78,8 @@ public class ReportingDAO
   {
     if (dataSource == null)
     {
-      throw new DAOException("Failed to initialise the reporting DAO:"
-          + " The specified data source is NULL");
+      throw new DAOException("Failed to initialise the " + getClass().getName()
+          + " data access object: The specified data source is NULL");
     }
 
     this.dataSource = dataSource;
@@ -115,9 +120,9 @@ public class ReportingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to initialise the reporting DAO:"
-          + " Failed to lookup the data source (" + dataSourceJndiName + ") using JNDI: "
-          + e.getMessage(), e);
+      throw new DAOException("Failed to initialise the " + getClass().getName()
+          + " data access object: Failed to lookup the data source (" + dataSourceJndiName
+          + ") using JNDI: " + e.getMessage(), e);
     }
 
     init();

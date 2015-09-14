@@ -200,7 +200,7 @@ public class CodeAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the code table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(final WebMarkupContainer tableContainer)
+    public RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

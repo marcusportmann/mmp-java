@@ -45,7 +45,7 @@ import java.util.Map;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ReportService</code> class provides the Reporting Service implementation.
+ * The <code>ReportingService</code> class provides the Reporting Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -71,7 +71,7 @@ public class ReportingService
   private IReportingDAO reportingDAO;
 
   /**
-   * Constructs a new <code>ReportService</code>.
+   * Constructs a new <code>ReportingService</code>.
    */
   public ReportingService() {}
 
@@ -342,25 +342,25 @@ public class ReportingService
   }
 
   /**
-   * Initialise the ReportingService instance.
+   * Initialise the Reporting Service instance.
    */
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the ReportingService instance (" + getInstanceName() + ")");
+    logger.info("Initialising the Reporting Service instance (" + getInstanceName() + ")");
 
     try
     {
-      // Initialise the configuration for the ReportingService instance
+      // Initialise the configuration for the Reporting Service instance
       initConfiguration();
     }
     catch (Exception e)
     {
-      throw new RuntimeException("Failed to initialise the ReportingService instance", e);
+      throw new RuntimeException("Failed to initialise the Reporting Service instance", e);
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the ReportingService instance: "
+      throw new RuntimeException("Failed to initialise the Reporting Service instance: "
           + e.getMessage());
     }
 
@@ -502,8 +502,8 @@ public class ReportingService
       }
       catch (Throwable e)
       {
-        logger.error("Failed to retrieve the server hostname while constructing the report"
-            + " service instance name", e);
+        logger.error("Failed to retrieve the server hostname while constructing the Reporting"
+            + " Service instance name", e);
         instanceName = "Unknown";
       }
 
@@ -554,7 +554,7 @@ public class ReportingService
   }
 
   /**
-   * Initialise the configuration for the ReportingService instance.
+   * Initialise the configuration for the Reporting Service instance.
    *
    * @throws ReportingServiceException
    */
@@ -567,7 +567,7 @@ public class ReportingService
 //  catch (Throwable e)
 //  {
 //    throw new ReportingServiceException(
-//        "Failed to initialise the configuration for the ReportingService instance", e);
+//        "Failed to initialise the configuration for the Reporting Service instance", e);
 //  }
   }
 }

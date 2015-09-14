@@ -23,6 +23,7 @@ package guru.mmp.sample.web;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SampleSecurity
 {
   /** The Sample.SampleFunction function code */

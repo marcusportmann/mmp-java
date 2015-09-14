@@ -44,7 +44,7 @@ public class JQPlotBehavior extends Behavior
   private static final long serialVersionUID = 1000000;
   private Chart<?> chart;
   private String divId;
-  private final List<String> resources;
+  private List<String> resources;
 
   /**
    * Constructs a new <code>JQPlotBehavior</code>.

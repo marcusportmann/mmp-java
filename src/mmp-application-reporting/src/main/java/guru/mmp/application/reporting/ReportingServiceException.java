@@ -17,8 +17,8 @@
 package guru.mmp.application.reporting;
 
 /**
- * The <code>ReportServiceException</code> exception is thrown to indicate an error condition when
- * working with the report service.
+ * The <code>ReportingServiceException</code> exception is thrown to indicate an error condition when
+ * working with the Reporting Service.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction
  *       by the <code>TransactionalInterceptor</code>.
@@ -31,7 +31,7 @@ public class ReportingServiceException extends Exception
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ReportServiceException</code> with <code>null</code> as its
+   * Constructs a new <code>ReportingServiceException</code> with <code>null</code> as its
    * message.
    */
   public ReportingServiceException()
@@ -40,7 +40,7 @@ public class ReportingServiceException extends Exception
   }
 
   /**
-   * Constructs a new <code>ReportServiceException</code> with the specified message.
+   * Constructs a new <code>ReportingServiceException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
@@ -50,7 +50,7 @@ public class ReportingServiceException extends Exception
   }
 
   /**
-   * Constructs a new <code>ReportServiceException</code> with the specified cause and a
+   * Constructs a new <code>ReportingServiceException</code> with the specified cause and a
    * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
    * class and message of cause).
    *
@@ -63,7 +63,7 @@ public class ReportingServiceException extends Exception
   }
 
   /**
-   * Constructs a new <code>ReportServiceException</code> with the specified message and cause.
+   * Constructs a new <code>ReportingServiceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.

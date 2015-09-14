@@ -82,7 +82,7 @@ public class LoginPage extends WebPage
     add(titleLabel);
 
     // Setup the alerts
-    final Alerts alerts = new Alerts("alerts");
+    Alerts alerts = new Alerts("alerts");
     add(alerts);
 
     // Setup the loginForm

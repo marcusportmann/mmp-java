@@ -27,6 +27,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.UserDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,12 +41,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>UserAdministrationPage</code> class implements the
@@ -111,7 +113,7 @@ public class UserAdministrationPage extends TemplateWebPage
       filterForm.setOutputMarkupId(true);
 
       // The "filter" field
-      final TextField<String> filterField = new TextField<>("filter",
+      TextField<String> filterField = new TextField<>("filter",
         new PropertyModel<>(dataProvider, "filter"));
       filterForm.add(filterField);
 
@@ -128,7 +130,7 @@ public class UserAdministrationPage extends TemplateWebPage
       tableContainer.add(filterForm);
 
       // The user data view
-      final DataView<User> dataView = new DataView<User>("user", dataProvider)
+      DataView<User> dataView = new DataView<User>("user", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
@@ -250,7 +252,7 @@ public class UserAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the user table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(final WebMarkupContainer tableContainer)
+    public RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

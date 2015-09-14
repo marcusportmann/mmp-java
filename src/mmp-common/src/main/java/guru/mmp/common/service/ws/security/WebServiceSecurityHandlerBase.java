@@ -20,8 +20,21 @@ package guru.mmp.common.service.ws.security;
 
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.WSHandler;
+
 import org.slf4j.Logger;
+
 import org.w3c.dom.Document;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+
+import java.security.KeyStore;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -31,14 +44,6 @@ import javax.xml.transform.Source;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import java.io.ByteArrayOutputStream;
-import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceSecurityHandlerBase</code> class provides the base class for all web service
@@ -361,7 +366,7 @@ public abstract class WebServiceSecurityHandlerBase extends WSHandler
    *
    * @return the SOAP 1.1 factory associated with the web service security handler
    */
-  protected final SOAPFactory getSOAP11Factory()
+  protected SOAPFactory getSOAP11Factory()
   {
     return soap11Factory;
   }
@@ -371,7 +376,7 @@ public abstract class WebServiceSecurityHandlerBase extends WSHandler
    *
    * @return the SOAP 1.2 factory associated with the web service security handler
    */
-  protected final SOAPFactory getSOAP12Factory()
+  protected SOAPFactory getSOAP12Factory()
   {
     return soap12Factory;
   }

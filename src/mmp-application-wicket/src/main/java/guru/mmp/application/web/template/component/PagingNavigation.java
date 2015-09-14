@@ -94,7 +94,7 @@ public class PagingNavigation extends Loop
    *
    * @param margin the margin
    */
-  public void setMargin(final int margin)
+  public void setMargin(int margin)
   {
     this.margin = margin;
   }
@@ -144,13 +144,13 @@ public class PagingNavigation extends Loop
    *         org.apache.wicket.markup.html.list.LoopItem)
    */
   @Override
-  protected void populateItem(final LoopItem loopItem)
+  protected void populateItem(LoopItem loopItem)
   {
     // Get the index of page this link shall point to
-    final long pageIndex = getStartIndex() + loopItem.getIndex();
+    long pageIndex = getStartIndex() + loopItem.getIndex();
 
     // Add a page link pointing to the page
-    final AbstractLink link = newPagingNavigationLink("pageLink", pageable, pageIndex);
+    AbstractLink link = newPagingNavigationLink("pageLink", pageable, pageIndex);
 
     if (pageable.getCurrentPage() == pageIndex)
     {

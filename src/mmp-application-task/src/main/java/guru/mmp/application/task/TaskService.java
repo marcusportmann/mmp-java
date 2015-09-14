@@ -238,12 +238,12 @@ public class TaskService
   }
 
   /**
-   * Initialise the TaskService instance.
+   * Initialise the Task Service instance.
    */
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the TaskService instance (" + getInstanceName() + ")");
+    logger.info("Initialising the Task Service instance (" + getInstanceName() + ")");
 
     try
     {
@@ -252,7 +252,7 @@ public class TaskService
     }
     catch (Throwable e)
     {
-      throw new TaskServiceException("Failed to initialise the TaskService instance", e);
+      throw new TaskServiceException("Failed to initialise the Task Service instance", e);
     }
   }
 
@@ -390,8 +390,8 @@ public class TaskService
       }
       catch (Throwable e)
       {
-        logger.error("Failed to retrieve the server hostname while constructing the task "
-            + "service instance name", e);
+        logger.error("Failed to retrieve the server hostname while constructing the Task "
+            + "Service instance name", e);
         instanceName = "Unknown";
       }
 

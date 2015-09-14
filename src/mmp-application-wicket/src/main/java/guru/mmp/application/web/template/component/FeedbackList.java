@@ -65,9 +65,9 @@ public class FeedbackList extends Component
    *
    * @return the filtered feedback messages that will be displayed as alerts, possibly empty
    */
-  protected final List<FeedbackMessage> getFilteredMessages()
+  protected List<FeedbackMessage> getFilteredMessages()
   {
-    @SuppressWarnings("unchecked") final List<FeedbackMessage> messages =
+    @SuppressWarnings("unchecked") List<FeedbackMessage> messages =
       (List<FeedbackMessage>) getDefaultModelObject();
 
     List<FeedbackMessage> filteredMessages = new ArrayList<>();

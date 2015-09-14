@@ -59,10 +59,6 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * The UUID used to uniquely identify the report definition will be generated using the
-   * <code>UUIDGenerator</code>. The <code>UUIDGenerator</code> singleton must have been
-   * successfully initialised prior to invoking this constructor.
-   *
    * @param organisation the organisation code identifying the organisation the report definition
    *                     is associated with
    * @param name         the name of the report definition
@@ -78,10 +74,6 @@ public class ReportDefinition
 
   /**
    * Constructs a new <code>ReportDefinition</code>.
-   *
-   * The UUID used to uniquely identify the report definition will be generated using the
-   * <code>UUIDGenerator</code>. The <code>UUIDGenerator</code> singleton must have been
-   * successfully initialised prior to invoking this constructor.
    *
    * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
    *                     report definition

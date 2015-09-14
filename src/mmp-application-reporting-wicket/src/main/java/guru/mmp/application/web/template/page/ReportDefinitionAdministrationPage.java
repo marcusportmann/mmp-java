@@ -67,7 +67,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
    */
   public ReportDefinitionAdministrationPage()
   {
-    super("Report Definition Administration");
+    super("Report Definitions");
 
     try
     {
@@ -104,7 +104,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
         new ReportDefinitionDataProvider(session.getOrganisation());
 
       // The report definition data view
-      final DataView<ReportDefinition> dataView =
+      DataView<ReportDefinition> dataView =
         new DataView<ReportDefinition>("reportDefinition", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
@@ -182,7 +182,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the code table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(final WebMarkupContainer tableContainer)
+    public RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

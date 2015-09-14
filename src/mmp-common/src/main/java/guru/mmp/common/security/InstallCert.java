@@ -18,12 +18,14 @@ package guru.mmp.common.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.net.ssl.*;
 import java.io.*;
+
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.*;
 
 /*
 * Copyright 2006 Sun Microsystems, Inc.  All Rights Reserved.
@@ -249,7 +251,7 @@ public class InstallCert
     implements X509TrustManager
   {
     private X509Certificate[] chain;
-    private final X509TrustManager tm;
+    private X509TrustManager tm;
 
     SavingTrustManager(X509TrustManager tm)
     {

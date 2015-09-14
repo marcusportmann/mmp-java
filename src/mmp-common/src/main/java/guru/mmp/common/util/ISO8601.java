@@ -20,6 +20,7 @@ package guru.mmp.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -40,7 +41,6 @@ public final class ISO8601
     {
       return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     }
-
   };
 
   /**
@@ -50,7 +50,7 @@ public final class ISO8601
    *
    * @return the ISO 8601 string for the <code>Calendar</code> instance
    */
-  public static String fromCalendar(final Calendar calendar)
+  public static String fromCalendar(Calendar calendar)
   {
     Date date = calendar.getTime();
     String formatted = threadLocalSimpleDateFormat.get().format(date);
@@ -65,7 +65,7 @@ public final class ISO8601
    *
    * @return the ISO 8601 string for the <code>Date</code> instance
    */
-  public static String fromDate(final Date date)
+  public static String fromDate(Date date)
   {
     String formatted = threadLocalSimpleDateFormat.get().format(date);
 
@@ -91,7 +91,7 @@ public final class ISO8601
    *
    * @throws ParseException
    */
-  public static Calendar toCalendar(final String iso8601string)
+  public static Calendar toCalendar(String iso8601string)
     throws ParseException
   {
     Calendar calendar = GregorianCalendar.getInstance();
@@ -122,7 +122,7 @@ public final class ISO8601
    *
    * @throws ParseException
    */
-  public static Date toDate(final String iso8601string)
+  public static Date toDate(String iso8601string)
     throws ParseException
   {
     String s = iso8601string.replace("Z", "+00:00");

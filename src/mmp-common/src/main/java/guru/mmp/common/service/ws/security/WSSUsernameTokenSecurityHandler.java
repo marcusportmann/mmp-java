@@ -20,19 +20,22 @@ package guru.mmp.common.service.ws.security;
 
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.RequestData;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import java.io.ByteArrayOutputStream;
-import java.util.HashSet;
-import java.util.Set;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WSSUsernameTokenSecurityHandler</code> class is a JAX-WS handler that implements the
@@ -267,7 +270,7 @@ public class WSSUsernameTokenSecurityHandler
    * @return the SOAP 1.1 factory associated with the web service security handler
    */
   @SuppressWarnings("unused")
-  protected final SOAPFactory getSOAP11Factory()
+  protected SOAPFactory getSOAP11Factory()
   {
     return soap11Factory;
   }
@@ -278,7 +281,7 @@ public class WSSUsernameTokenSecurityHandler
    * @return the SOAP 1.2 factory associated with the web service security handler
    */
   @SuppressWarnings("unused")
-  protected final SOAPFactory getSOAP12Factory()
+  protected SOAPFactory getSOAP12Factory()
   {
     return soap12Factory;
   }

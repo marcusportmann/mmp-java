@@ -88,7 +88,7 @@ public class ErrorReportsPage extends TemplateWebPage
         }
       };
 
-      final ListView<ErrorReportSummary> listView =
+      ListView<ErrorReportSummary> listView =
         new ListView<ErrorReportSummary>("errorReportSummary", ldm)
       {
         private static final long serialVersionUID = 1000000;
@@ -98,7 +98,7 @@ public class ErrorReportsPage extends TemplateWebPage
         {
           ErrorReportSummary errorReportSummary = item.getModelObject();
 
-          final String id = errorReportSummary.getId();
+          String id = errorReportSummary.getId();
 
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -106,7 +106,7 @@ public class ErrorReportsPage extends TemplateWebPage
           item.add(new Label("created", sdf.format(errorReportSummary.getCreated())));
           item.add(new Label("who", errorReportSummary.getWho()));
 
-          final Link<Void> viewErrorReportLink = new Link<Void>("viewErrorReportLink")
+          Link<Void> viewErrorReportLink = new Link<Void>("viewErrorReportLink")
           {
             private static final long serialVersionUID = 1000000;
 
