@@ -71,6 +71,20 @@ public interface IProcessService
     throws ProcessServiceException;
 
   /**
+   * Retrieve the summary for the process definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           process definition
+   *
+   * @return the summary for the process definition with the specified ID or <code>null</code> if
+   *         the process definition could not be found
+   *
+   * @throws ProcessServiceException
+   */
+  ProcessDefinitionSummary getProcessDefinitionSummary(String id)
+    throws ProcessServiceException;
+
+  /**
    * Returns all the process definitions associated with the organisation identified by the specified
    * organisation code.
    *
@@ -82,6 +96,20 @@ public interface IProcessService
    * @throws ProcessServiceException
    */
   List<ProcessDefinition> getProcessDefinitionsForOrganisation(String organisation)
+    throws ProcessServiceException;
+
+  /**
+   * Returns the summaries for all the process definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for all the process definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws ProcessServiceException
+   */
+  List<ProcessDefinitionSummary> getProcessDefinitionSummariesForOrganisation(String organisation)
     throws ProcessServiceException;
 
   /**

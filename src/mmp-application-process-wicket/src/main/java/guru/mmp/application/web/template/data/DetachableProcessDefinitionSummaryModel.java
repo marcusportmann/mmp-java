@@ -18,8 +18,8 @@ package guru.mmp.application.web.template.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.reporting.IReportingService;
-import guru.mmp.application.reporting.ReportDefinition;
+import guru.mmp.application.process.IProcessService;
+import guru.mmp.application.process.ProcessDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
@@ -28,69 +28,70 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 
 /**
- * The <code>DetachableReportDefinitionModel</code> class provides a detachable model
- * implementation for the <code>ReportDefinition</code> model class.
+ * The <code>DetachableProcessDefinitionSummaryModel</code> class provides a detachable model
+ * implementation for the <code>ProcessDefinitionSummary</code> model class.
  *
  * @author Marcus Portmann
  */
-public class DetachableReportDefinitionModel
-  extends InjectableLoadableDetachableModel<ReportDefinition>
+public class DetachableProcessDefinitionSummaryModel
+  extends InjectableLoadableDetachableModel<ProcessDefinitionSummary>
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the process definition.
    */
   private String id;
 
-  /* Reporting Service */
+  /* Process Service */
   @Inject
-  private IReportingService reportingService;
+  private IProcessService processService;
 
   /**
-   * Constructs a new <code>DetachableReportDefinitionModel</code>.
+   * Constructs a new <code>DetachableProcessDefinitionSummaryModel</code>.
    *
-   * @param reportDefinition the <code>ReportDefinition</code> instance
+   * @param processDefinition the <code>ProcessDefinitionSummary</code> instance
    */
-  public DetachableReportDefinitionModel(ReportDefinition reportDefinition)
+  public DetachableProcessDefinitionSummaryModel(ProcessDefinitionSummary processDefinition)
   {
-    this(reportDefinition.getId());
+    this(processDefinition.getId());
 
-    setObject(reportDefinition);
+    setObject(processDefinition);
   }
 
   /**
-   * Constructs a new <code>DetachableReportDefinitionModel</code>.
+   * Constructs a new <code>DetachableProcessDefinitionSummaryModel</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
    *           definition
    */
-  public DetachableReportDefinitionModel(String id)
+  public DetachableProcessDefinitionSummaryModel(String id)
   {
     this.id = id;
   }
 
   /**
-   * Constructs a new <code>DetachableReportDefinitionModel</code>.
+   * Constructs a new <code>DetachableProcessDefinitionSummaryModel</code>.
    * <p/>
    * Hidden default constructor to support CDI.
    */
   @SuppressWarnings("unused")
-  protected DetachableReportDefinitionModel() {}
+  protected DetachableProcessDefinitionSummaryModel() {}
 
   /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
    */
   @Override
-  protected ReportDefinition load()
+  protected ProcessDefinitionSummary load()
   {
     try
     {
-      return reportingService.getReportDefinition(id);
+      return processService.getProcessDefinitionSummary(id);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the report definition (" + id + ")", e);
+      throw new WebApplicationException("Failed to load the summary for the process definition ("
+          + id + ")", e);
     }
   }
 

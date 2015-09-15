@@ -78,7 +78,7 @@ public class ReportDefinitionSummaryDataProvider
   public void detach() {}
 
   /**
-   * Retrieves the matching report definitions from the database starting with
+   * Retrieves the summaries for the matching report definitions from the database starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
@@ -86,23 +86,23 @@ public class ReportDefinitionSummaryDataProvider
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the report definitions from the database starting with index <code>first</code> and
-   *         ending with <code>first+count</code>
+   * @return the summaries for the report definitions from the database starting with
+   *         index <code>first</code> and ending with <code>first+count</code>
    */
   public Iterator<ReportDefinitionSummary> iterator(long first, long count)
   {
     try
     {
-      List<ReportDefinitionSummary> allReportDefinitionSummarys =
+      List<ReportDefinitionSummary> allReportDefinitionSummaries =
         reportingService.getReportDefinitionSummariesForOrganisation(organisation);
 
       List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
 
       long end = first + count;
 
-      for (long i = first; ((i < end) && (i < allReportDefinitionSummarys.size())); i++)
+      for (long i = first; ((i < end) && (i < allReportDefinitionSummaries.size())); i++)
       {
-        reportDefinitionSummaries.add(allReportDefinitionSummarys.get((int) i));
+        reportDefinitionSummaries.add(allReportDefinitionSummaries.get((int) i));
       }
 
       return reportDefinitionSummaries.iterator();

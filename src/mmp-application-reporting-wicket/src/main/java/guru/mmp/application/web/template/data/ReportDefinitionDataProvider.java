@@ -22,14 +22,16 @@ import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>ReportDefinitionDataProvider</code> class provides an <code>IDataProvider</code>
@@ -37,6 +39,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportDefinition>
 {
   private static final long serialVersionUID = 1000000;
@@ -66,7 +69,6 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
    * <p/>
    * Hidden default constructor to support CDI.
    */
-  @SuppressWarnings("unused")
   protected ReportDefinitionDataProvider() {}
 
   /**

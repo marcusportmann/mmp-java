@@ -132,7 +132,7 @@ public class ProcessService
     {
       ProcessDefinition processDefinition = processDAO.getProcessDefinition(id);
 
-
+      // TODO: Parse the process definition -- MARCUS
 
       return processDefinition;
     }
@@ -140,6 +140,58 @@ public class ProcessService
     {
       throw new ProcessServiceException("Failed to retrieve the process definition with ID (" + id
           + ")", e);
+    }
+  }
+
+  /**
+   * Returns the summaries for all the process definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for all the process definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws ProcessServiceException
+   */
+  public List<ProcessDefinitionSummary> getProcessDefinitionSummariesForOrganisation(
+      String organisation)
+    throws ProcessServiceException
+  {
+    try
+    {
+      return processDAO.getProcessDefinitionSummariesForOrganisation(organisation);
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException(
+          "Failed to retrieve the summaries for all the process definitions for the organisation ("
+          + organisation + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the summary for the process definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           process definition
+   *
+   * @return the summary for the process definition with the specified ID or <code>null</code> if
+   *         the process definition could not be found
+   *
+   * @throws ProcessServiceException
+   */
+  public ProcessDefinitionSummary getProcessDefinitionSummary(String id)
+    throws ProcessServiceException
+  {
+    try
+    {
+      return processDAO.getProcessDefinitionSummary(id);
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException(
+          "Failed to retrieve the summary for the process definition with ID (" + id + ")", e);
     }
   }
 

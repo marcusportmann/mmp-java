@@ -54,6 +54,8 @@ public class ProcessDAO
   private String deleteProcessDefinitionSQL;
   private String getNumberOfProcessDefinitionsForOrganisationSQL;
   private String getProcessDefinitionByIdSQL;
+  private String getProcessDefinitionSummariesForOrganisationSQL;
+  private String getProcessDefinitionSummaryByIdSQL;
   private String getProcessDefinitionsForOrganisationSQL;
   private String processDefinitionExistsSQL;
   private String updateProcessDefinitionSQL;
@@ -285,6 +287,92 @@ public class ProcessDAO
   }
 
   /**
+   * Returns the summaries for all the process definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for all the process definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws DAOException
+   */
+  public List<ProcessDefinitionSummary> getProcessDefinitionSummariesForOrganisation(
+      String organisation)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getProcessDefinitionSummariesForOrganisationSQL))
+    {
+      statement.setString(1, organisation);
+
+      List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        while (rs.next())
+        {
+          processDefinitionSummaries.add(getProcessDefinitionSummary(rs));
+        }
+      }
+
+      return processDefinitionSummaries;
+    }
+    catch (DAOException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException("Failed to retrieve the process definitions for the organisation ("
+          + organisation + ") from the database", e);
+    }
+  }
+
+  /**
+   * Retrieve the summary for the process definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           process definition
+   *
+   * @return the summary for the process definition with the specified ID or <code>null</code> if
+   *         the process definition could not be found
+   *
+   * @throws DAOException
+   */
+  public ProcessDefinitionSummary getProcessDefinitionSummary(String id)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getProcessDefinitionSummaryByIdSQL))
+    {
+      statement.setString(1, id);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return getProcessDefinitionSummary(rs);
+        }
+        else
+        {
+          return null;
+        }
+      }
+    }
+    catch (DAOException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException("Failed to retrieve the summary for the process definition (" + id
+          + ") from the database", e);
+    }
+  }
+
+  /**
    * Returns all the process definitions associated with the organisation identified by the
    * specified organisation code.
    *
@@ -504,6 +592,14 @@ public class ProcessDAO
     getProcessDefinitionByIdSQL = "SELECT ID, ORGANISATION, NAME, DATA FROM " + schemaPrefix
         + "PROCESS_DEFINITIONS WHERE ID=?";
 
+    // getProcessDefinitionSummariesForOrganisationSQL
+    getProcessDefinitionSummariesForOrganisationSQL = "SELECT ID, ORGANISATION, NAME FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS WHERE ORGANISATION=?";
+
+    // getProcessDefinitionSummaryByIdSQL
+    getProcessDefinitionSummaryByIdSQL = "SELECT ID, ORGANISATION, NAME FROM " + schemaPrefix
+        + "PROCESS_DEFINITIONS WHERE ID=?";
+
     // getProcessDefinitionsForOrganisationSQL
     getProcessDefinitionsForOrganisationSQL = "SELECT ID, ORGANISATION, NAME, DATA FROM "
         + schemaPrefix + "PROCESS_DEFINITIONS WHERE ORGANISATION=?";
@@ -521,5 +617,11 @@ public class ProcessDAO
     throws SQLException
   {
     return new ProcessDefinition(rs.getString(1), rs.getString(2), rs.getString(3), rs.getBytes(4));
+  }
+
+  private ProcessDefinitionSummary getProcessDefinitionSummary(ResultSet rs)
+    throws SQLException
+  {
+    return new ProcessDefinitionSummary(rs.getString(1), rs.getString(2), rs.getString(3));
   }
 }

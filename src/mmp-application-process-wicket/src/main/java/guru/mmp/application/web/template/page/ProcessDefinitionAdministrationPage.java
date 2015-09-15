@@ -20,13 +20,14 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
+import guru.mmp.application.process.ProcessDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateProcessSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
-import guru.mmp.application.web.template.data.ProcessDefinitionDataProvider;
+import guru.mmp.application.web.template.data.ProcessDefinitionSummaryDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -102,16 +103,16 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
       };
       tableContainer.add(addLink);
 
-      ProcessDefinitionDataProvider dataProvider =
-        new ProcessDefinitionDataProvider(session.getOrganisation());
+      ProcessDefinitionSummaryDataProvider dataProvider =
+        new ProcessDefinitionSummaryDataProvider(session.getOrganisation());
 
       // The process definition data view
-      DataView<ProcessDefinition> dataView = new DataView<ProcessDefinition>("processDefinition",
-        dataProvider)
+      DataView<ProcessDefinitionSummary> dataView =
+        new DataView<ProcessDefinitionSummary>("processDefinition", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
-        protected void populateItem(Item<ProcessDefinition> item)
+        protected void populateItem(Item<ProcessDefinitionSummary> item)
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
 
@@ -123,10 +124,27 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateProcessDefinitionPage page =
-                new UpdateProcessDefinitionPage(getPageReference(), item.getModel());
+              ProcessDefinitionSummary processDefinitionSummary = item.getModelObject();
 
-              setResponsePage(page);
+              try
+              {
+                ProcessDefinition processDefinition =
+                  processService.getProcessDefinition(processDefinitionSummary.getId());
+
+                UpdateProcessDefinitionPage page =
+                  new UpdateProcessDefinitionPage(getPageReference(),
+                    new Model<>(processDefinition));
+
+                setResponsePage(page);
+              }
+              catch (Throwable e)
+              {
+                logger.error("Failed to retrieve the process definition ("
+                    + processDefinitionSummary.getId() + ")", e);
+
+                error("Failed to retrieve the process definition ("
+                    + processDefinitionSummary.getId() + ")");
+              }
             }
           };
 
@@ -140,11 +158,11 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              ProcessDefinition processDefinition = item.getModelObject();
+              ProcessDefinitionSummary processDefinitionSummary = item.getModelObject();
 
-              if (processDefinition != null)
+              if (processDefinitionSummary != null)
               {
-                removeDialog.show(target, processDefinition);
+                removeDialog.show(target, processDefinitionSummary);
               }
               else
               {
@@ -239,13 +257,13 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target            the AJAX request target
-     * @param processDefinition the process definition being removed
+     * @param target                   the AJAX request target
+     * @param processDefinitionSummary the summary for the process definition being removed
      */
-    public void show(AjaxRequestTarget target, ProcessDefinition processDefinition)
+    public void show(AjaxRequestTarget target, ProcessDefinitionSummary processDefinitionSummary)
     {
-      id = processDefinition.getId();
-      nameLabel.setDefaultModelObject(processDefinition.getName());
+      id = processDefinitionSummary.getId();
+      nameLabel.setDefaultModelObject(processDefinitionSummary.getName());
 
       target.add(nameLabel);
 

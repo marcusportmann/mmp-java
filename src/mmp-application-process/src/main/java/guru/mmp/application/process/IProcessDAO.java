@@ -16,7 +16,11 @@
 
 package guru.mmp.application.process;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.persistence.DAOException;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
@@ -77,6 +81,34 @@ public interface IProcessDAO
     throws DAOException;
 
   /**
+   * Returns the summaries for all the process definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for all the process definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws DAOException
+   */
+  List<ProcessDefinitionSummary> getProcessDefinitionSummariesForOrganisation(String organisation)
+    throws DAOException;
+
+  /**
+   * Retrieve the summary for the process definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           process definition
+   *
+   * @return the summary for the process definition with the specified ID or <code>null</code> if
+   *         the process definition could not be found
+   *
+   * @throws DAOException
+   */
+  ProcessDefinitionSummary getProcessDefinitionSummary(String id)
+    throws DAOException;
+
+  /**
    * Returns all the process definitions associated with the organisation identified by the
    * specified organisation code.
    *
@@ -115,5 +147,5 @@ public interface IProcessDAO
    * @throws DAOException
    */
   ProcessDefinition updateProcessDefinition(ProcessDefinition processDefinition, String updatedBy)
-    throws DAOException;  
+    throws DAOException;
 }

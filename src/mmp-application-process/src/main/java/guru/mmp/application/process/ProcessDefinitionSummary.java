@@ -14,48 +14,54 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.reporting;
+package guru.mmp.application.process;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
 /**
- * The <code>ReportDefinitionSummary</code> class holds the summary information for a report
+ * The <code>ProcessDefinitionSummary</code> class holds the summary information for a process
  * definition.
  *
  * @author Marcus Portmann
  */
-public class ReportDefinitionSummary
+public class ProcessDefinitionSummary
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the process definition.
    */
   private String id;
 
   /**
-   * The name of the report definition.
+   * The name of the process definition.
    */
   private String name;
 
   /**
-   * The organisation code identifying the organisation the report definition is associated with.
+   * The organisation code identifying the organisation the process definition is associated with.
    */
   private String organisation;
 
   /**
-   * Constructs a new <code>ReportDefinitionSummary</code>.
+   * Constructs a new <code>ProcessDefinitionSummary</code>.
+   */
+  @SuppressWarnings("unused")
+  private ProcessDefinitionSummary() {}
+
+  /**
+   * Constructs a new <code>ProcessDefinitionSummary</code>.
    *
    * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                     report definition
-   * @param organisation the organisation code identifying the organisation the report definition
+   *                     process definition
+   * @param organisation the organisation code identifying the organisation the process definition
    *                     is associated with
-   * @param name         the name of the report definition
+   * @param name         the name of the process definition
    */
-  public ReportDefinitionSummary(String id, String organisation, String name)
+  public ProcessDefinitionSummary(String id, String organisation, String name)
   {
     this.id = id;
     this.organisation = organisation;
@@ -63,16 +69,10 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Constructs a new <code>ReportDefinitionSummary</code>.
-   */
-  @SuppressWarnings("unused")
-  private ReportDefinitionSummary() {}
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
    * definition.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
    *         definition
    */
   public String getId()
@@ -81,9 +81,9 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Returns the name of the report definition.
+   * Returns the name of the process definition.
    *
-   * @return the name of the report definition
+   * @return the name of the process definition
    */
   public String getName()
   {
@@ -91,10 +91,10 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Returns the organisation code identifying the organisation the report definition is associated
+   * Returns the organisation code identifying the organisation the process definition is associated
    * with.
    *
-   * @return the organisation code identifying the organisation the report definition is associated
+   * @return the organisation code identifying the organisation the process definition is associated
    *         with
    */
   public String getOrganisation()
@@ -110,7 +110,7 @@ public class ReportDefinitionSummary
   @Override
   public String toString()
   {
-    return "ReportDefinitionSummary {" + "id=\"" + getId() + "\", " + "organisation=\""
-        + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
+    return "ProcessDefinitionSummary {" + "id=\"" + getId() + "\", " + "organisation=\""
+      + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
   }
 }
