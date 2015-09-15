@@ -50,11 +50,15 @@ public class ReportingDAO
 {
   private String createReportDefinitionSQL;
 
-  /** The data source used to provide connections to the database. */
+  /**
+   * The data source used to provide connections to the database.
+   */
   private DataSource dataSource;
   private String deleteReportDefinitionSQL;
   private String getNumberOfReportDefinitionsForOrganisationSQL;
   private String getReportDefinitionByIdSQL;
+  private String getReportDefinitionSummariesForOrganisationSQL;
+  private String getReportDefinitionSummaryByIdSQL;
   private String getReportDefinitionsForOrganisationSQL;
   private String reportDefinitionExistsSQL;
   private String updateReportDefinitionSQL;
@@ -69,7 +73,6 @@ public class ReportingDAO
    * Constructs a new <code>ReportingDAO</code>.
    *
    * @param dataSource the data source to use
-   *
    * @throws DAOException
    */
   @SuppressWarnings("unused")
@@ -91,7 +94,6 @@ public class ReportingDAO
    * Constructs a new <code>ReportingDAO</code>.
    *
    * @param dataSourceJndiName the JNDI name of the data source used to access the database
-   *
    * @throws DAOException
    */
   @SuppressWarnings("unused")
@@ -133,7 +135,6 @@ public class ReportingDAO
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
    *                         for the new report definition
-   *
    * @throws DAOException
    */
   public void createReportDefinition(ReportDefinition reportDefinition)
@@ -165,7 +166,6 @@ public class ReportingDAO
    * Delete the existing report definition.
    *
    * @param id the ID uniquely identifying the report definition
-   *
    * @throws DAOException
    */
   public void deleteReportDefinition(String id)
@@ -200,10 +200,8 @@ public class ReportingDAO
    * specified organisation code.
    *
    * @param organisation the organisation code identifying the organisation
-   *
    * @return the number of report definitions associated with the organisation identified by the
-   *         specified organisation code
-   *
+   * specified organisation code
    * @throws DAOException
    */
   public int getNumberOfReportDefinitionsForOrganisation(String organisation)
@@ -248,10 +246,8 @@ public class ReportingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           report definition
-   *
    * @return the report definition with the specified ID or <code>null</code> if the report
-   *         definition could not be found
-   *
+   * definition could not be found
    * @throws DAOException
    */
   public ReportDefinition getReportDefinition(String id)
@@ -286,14 +282,95 @@ public class ReportingDAO
   }
 
   /**
+   * Returns the summaries for all the report definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   * @return the summaries for all the report definitions associated with the organisation
+   * identified by the specified organisation code
+   * @throws DAOException
+   */
+  public List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(
+      String organisation)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getReportDefinitionSummariesForOrganisationSQL))
+    {
+      statement.setString(1, organisation);
+
+      List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        while (rs.next())
+        {
+          reportDefinitionSummaries.add(getReportDefinitionSummary(rs));
+        }
+      }
+
+      return reportDefinitionSummaries;
+    }
+    catch (DAOException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException(
+          "Failed to retrieve the summaries for the report definitions for the organisation ("
+          + organisation + ") from the database", e);
+    }
+  }
+
+  /**
+   * Retrieve the summary for the report definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           report definition
+   * @return the summary for the report definition with the specified ID or <code>null</code> if
+   * the report definition could not be found
+   * @throws DAOException
+   */
+  public ReportDefinitionSummary getReportDefinitionSummary(String id)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getReportDefinitionSummaryByIdSQL))
+    {
+      statement.setString(1, id);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return getReportDefinitionSummary(rs);
+        }
+        else
+        {
+          return null;
+        }
+      }
+    }
+    catch (DAOException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException("Failed to retrieve the summary for the report definition (" + id
+          + ") from the database", e);
+    }
+  }
+
+  /**
    * Returns all the report definitions associated with the organisation identified by the specified
    * organisation code.
    *
    * @param organisation the organisation code identifying the organisation
-   *
    * @return all the report definitions associated with the organisation identified by the specified
-   *         organisation code
-   *
+   * organisation code
    * @throws DAOException
    */
   public List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
@@ -505,6 +582,14 @@ public class ReportingDAO
     getReportDefinitionByIdSQL = "SELECT ID, ORGANISATION, NAME, TEMPLATE FROM " + schemaPrefix
         + "REPORT_DEFINITIONS WHERE ID=?";
 
+    // getReportDefinitionSummariesForOrganisationSQL
+    getReportDefinitionSummariesForOrganisationSQL = "SELECT ID, ORGANISATION, NAME FROM "
+        + schemaPrefix + "REPORT_DEFINITIONS WHERE ORGANISATION=?";
+
+    // getReportDefinitionSummaryByIdSQL
+    getReportDefinitionSummaryByIdSQL = "SELECT ID, ORGANISATION, NAME FROM " + schemaPrefix
+        + "REPORT_DEFINITIONS WHERE ID=?";
+
     // getReportDefinitionsForOrganisationSQL
     getReportDefinitionsForOrganisationSQL = "SELECT ID, ORGANISATION, NAME, TEMPLATE FROM "
         + schemaPrefix + "REPORT_DEFINITIONS WHERE ORGANISATION=?";
@@ -522,5 +607,11 @@ public class ReportingDAO
     throws SQLException
   {
     return new ReportDefinition(rs.getString(1), rs.getString(2), rs.getString(3), rs.getBytes(4));
+  }
+
+  private ReportDefinitionSummary getReportDefinitionSummary(ResultSet rs)
+    throws SQLException
+  {
+    return new ReportDefinitionSummary(rs.getString(1), rs.getString(2), rs.getString(3));
   }
 }

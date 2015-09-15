@@ -20,13 +20,15 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
+import guru.mmp.application.reporting.ReportDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
-import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
+import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
-import guru.mmp.application.web.template.data.ReportDefinitionDataProvider;
+import guru.mmp.application.web.template.data.ReportDefinitionSummaryDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -37,12 +39,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -100,16 +103,16 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
       };
       tableContainer.add(addLink);
 
-      ReportDefinitionDataProvider dataProvider =
-        new ReportDefinitionDataProvider(session.getOrganisation());
+      ReportDefinitionSummaryDataProvider dataProvider =
+        new ReportDefinitionSummaryDataProvider(session.getOrganisation());
 
       // The report definition data view
-      DataView<ReportDefinition> dataView =
-        new DataView<ReportDefinition>("reportDefinition", dataProvider)
+      DataView<ReportDefinitionSummary> dataView =
+        new DataView<ReportDefinitionSummary>("reportDefinition", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
-        protected void populateItem(Item<ReportDefinition> item)
+        protected void populateItem(Item<ReportDefinitionSummary> item)
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
 
@@ -121,10 +124,26 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateReportDefinitionPage page = new UpdateReportDefinitionPage(getPageReference(),
-                item.getModel());
+              ReportDefinitionSummary reportDefinitionSummary = item.getModelObject();
 
-              setResponsePage(page);
+              try
+              {
+                ReportDefinition reportDefinition =
+                  reportingService.getReportDefinition(reportDefinitionSummary.getId());
+
+                UpdateReportDefinitionPage page =
+                  new UpdateReportDefinitionPage(getPageReference(), new Model<>(reportDefinition));
+
+                setResponsePage(page);
+              }
+              catch (Throwable e)
+              {
+                logger.error("Failed to retrieve the report definition ("
+                    + reportDefinitionSummary.getId() + ")", e);
+
+                error("Failed to retrieve the report definition ("
+                    + reportDefinitionSummary.getId() + ")");
+              }
             }
           };
 
@@ -138,11 +157,11 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              ReportDefinition reportDefinition = item.getModelObject();
+              ReportDefinitionSummary reportDefinitionSummary = item.getModelObject();
 
-              if (reportDefinition != null)
+              if (reportDefinitionSummary != null)
               {
-                removeDialog.show(target, reportDefinition);
+                removeDialog.show(target, reportDefinitionSummary);
               }
               else
               {
@@ -236,13 +255,13 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target           the AJAX request target
-     * @param reportDefinition the report definition being removed
+     * @param target                  the AJAX request target
+     * @param reportDefinitionSummary the summary for the report definition being removed
      */
-    public void show(AjaxRequestTarget target, ReportDefinition reportDefinition)
+    public void show(AjaxRequestTarget target, ReportDefinitionSummary reportDefinitionSummary)
     {
-      id = reportDefinition.getId();
-      nameLabel.setDefaultModelObject(reportDefinition.getName());
+      id = reportDefinitionSummary.getId();
+      nameLabel.setDefaultModelObject(reportDefinitionSummary.getName());
 
       target.add(nameLabel);
 

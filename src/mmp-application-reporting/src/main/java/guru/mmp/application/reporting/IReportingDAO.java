@@ -83,6 +83,34 @@ public interface IReportingDAO extends IDataAccessObject
     throws DAOException;
 
   /**
+   * Returns the summaries for all the report definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for all the report definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws DAOException
+   */
+  List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(String organisation)
+    throws DAOException;
+
+  /**
+   * Retrieve the summary for the report definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           report definition
+   *
+   * @return the summary for the report definition with the specified ID or <code>null</code> if
+   *         the report definition could not be found
+   *
+   * @throws DAOException
+   */
+  ReportDefinitionSummary getReportDefinitionSummary(String id)
+    throws DAOException;
+
+  /**
    * Returns all the report definitions associated with the organisation identified by the specified
    * organisation code.
    *

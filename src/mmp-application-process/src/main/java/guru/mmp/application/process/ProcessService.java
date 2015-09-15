@@ -130,7 +130,11 @@ public class ProcessService
   {
     try
     {
-      return processDAO.getProcessDefinition(id);
+      ProcessDefinition processDefinition = processDAO.getProcessDefinition(id);
+
+
+
+      return processDefinition;
     }
     catch (Throwable e)
     {

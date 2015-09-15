@@ -132,6 +132,34 @@ public interface IReportingService
     throws ReportingServiceException;
 
   /**
+   * Returns the summaries for all the report definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for all the report definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws ReportingServiceException
+   */
+  List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(String organisation)
+    throws ReportingServiceException;
+
+  /**
+   * Retrieve the summary for the report definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           report definition
+   *
+   * @return the summary for the report definition with the specified ID or <code>null</code> if
+   *         the report definition could not be found
+   *
+   * @throws ReportingServiceException
+   */
+  ReportDefinitionSummary getReportDefinitionSummary(String id)
+    throws ReportingServiceException;
+
+  /**
    * Returns all the report definitions associated with the organisation identified by the specified
    * organisation code.
    *

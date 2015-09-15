@@ -20,29 +20,39 @@ package guru.mmp.application.reporting;
 
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.common.util.StringUtil;
+
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
+
 import java.sql.Connection;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
+
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -312,6 +322,58 @@ public class ReportingService
     {
       throw new ReportingServiceException("Failed to retrieve the report definition with ID (" + id
           + ")", e);
+    }
+  }
+
+  /**
+   * Returns the summaries for all the report definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for all the report definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws ReportingServiceException
+   */
+  public List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(
+      String organisation)
+    throws ReportingServiceException
+  {
+    try
+    {
+      return reportingDAO.getReportDefinitionSummariesForOrganisation(organisation);
+    }
+    catch (Throwable e)
+    {
+      throw new ReportingServiceException(
+          "Failed to retrieve the summaries for all the report definitions for the organisation ("
+          + organisation + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the summary for the report definition with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
+   *           report definition
+   *
+   * @return the summary for the report definition with the specified ID or <code>null</code> if
+   *         the report definition could not be found
+   *
+   * @throws ReportingServiceException
+   */
+  public ReportDefinitionSummary getReportDefinitionSummary(String id)
+    throws ReportingServiceException
+  {
+    try
+    {
+      return reportingDAO.getReportDefinitionSummary(id);
+    }
+    catch (Throwable e)
+    {
+      throw new ReportingServiceException(
+          "Failed to retrieve the summary for report definition with ID (" + id + ")", e);
     }
   }
 
