@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="id.Required">An ID is required.</entry>
+  <entry key="name.Required">A name is required.</entry>
+  <entry key="fileUpload.Required">The BPMN data is required.</entry>
+</properties>
