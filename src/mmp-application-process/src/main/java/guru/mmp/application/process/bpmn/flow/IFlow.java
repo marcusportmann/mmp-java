@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.parser;
+package guru.mmp.application.process.bpmn.flow;
+
+import guru.mmp.application.process.bpmn.IElement;
 
 /**
- * The <code>BPMNParser</code> class provides the capability to parse Business Process Model and
- * Notation (BPMN) format files.
+ * The <code>IFlow</code> interface defines the interface that must be implemented by a
+ * Business Process Model and Notation (BPMN) sequence flow subclass.
  *
  * @author Marcus Portmann
  */
-public class BPMNParser
+public interface IFlow extends IElement
 {
-  /**
-   * Constructs a new <code>BPMNParser</code>.
-   */
-  public BPMNParser() {}
-
 }

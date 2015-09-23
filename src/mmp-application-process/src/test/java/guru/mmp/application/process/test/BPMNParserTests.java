@@ -16,18 +16,9 @@
 
 package guru.mmp.application.process.test;
 
-import guru.mmp.common.xml.DtdJarResolver;
-import guru.mmp.common.xml.XmlParserErrorHandler;
+import guru.mmp.application.process.bpmn.Parser;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
@@ -70,14 +61,9 @@ public class BPMNParserTests
       byte[] processDefinitionData = getClasspathResource(
         "guru/mmp/application/process/test/Test.bpmn");
 
-      SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+      Parser parser = new Parser();
 
-      SAXParser parser = parserFactory.newSAXParser();
-
-      //SAXHandler handler = new SAXHandler();
-
-      //parser.parse(new ByteArrayInputStream(processDefinitionData), handler);
-
+      parser.parse(processDefinitionData);
 
 
     }

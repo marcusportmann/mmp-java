@@ -19,6 +19,7 @@ package guru.mmp.application.process;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.persistence.DAOException;
+import guru.mmp.application.process.bpmn.Parser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,7 +133,8 @@ public class ProcessService
     {
       ProcessDefinition processDefinition = processDAO.getProcessDefinition(id);
 
-      // TODO: Parse the process definition -- MARCUS
+      Parser parser = new Parser();
+      parser.parse(processDefinition.getData());
 
       return processDefinition;
     }

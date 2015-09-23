@@ -61,7 +61,7 @@ public class PagingNavigator extends Panel
   /**
    * Create a new <code>PagingNavigation</code> instance.
    *
-   * May be sub-classed to make use of specialized <code>PagingNavigation</code>.
+   * May be subclassed to make use of specialized <code>PagingNavigation</code>.
    *
    * @param id       the id of the navigation component
    * @param pageable the pageable component

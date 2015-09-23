@@ -33,7 +33,7 @@ public class ProcessDefinition
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The data for the process definition.
+   * The BPMN data for the process definition.
    */
   private byte[] data;
 
@@ -92,6 +92,16 @@ public class ProcessDefinition
   }
 
   /**
+   * Returns the BPMN data for the process definition.
+   *
+   * @return the BPMN data for the process definition
+   */
+  public byte[] getData()
+  {
+    return data;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
    * definition.
    *
@@ -126,13 +136,13 @@ public class ProcessDefinition
   }
 
   /**
-   * Returns the data for the process definition.
+   * Set the BPMN data for the process definition.
    *
-   * @return the data for the process definition
+   * @param data the BPMN data for the process definition
    */
-  public byte[] getData()
+  public void setData(byte[] data)
   {
-    return data;
+    this.data = data;
   }
 
   /**
@@ -166,16 +176,6 @@ public class ProcessDefinition
   public void setOrganisation(String organisation)
   {
     this.organisation = organisation;
-  }
-
-  /**
-   * Set the data for the process definition.
-   *
-   * @param data the data for the process definition
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
   }
 
   /**

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.parser;
+package guru.mmp.application.process.bpmn.gateway;
+
+import guru.mmp.application.process.bpmn.IElement;
 
 /**
- * The <code>BPMNParser</code> class implements the SAX handler that provides the capability to
- * parse Business Process Model and Notation (BPMN) format files.
+ * The <code>IGateway</code> interface defines the interface that must be implemented by a
+ * Business Process Model and Notation (BPMN) gateway subclass.
  *
  * @author Marcus Portmann
  */
-public class BPMNHandler
+public interface IGateway extends IElement
 {
-
-
 }
