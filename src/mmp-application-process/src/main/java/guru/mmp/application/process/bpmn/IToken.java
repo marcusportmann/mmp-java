@@ -31,13 +31,13 @@ public interface IToken
   /**
    * Execute the token.
    * <p>
-   * This will execute the Business Process Model and Notation (BPMN) model element the token is
+   * This will execute the Business Process Model and Notation (BPMN) process flow node the token is
    * associated with.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) model element the token is associated with
+   *         Notation (BPMN) process flow node the token is associated with
    */
-  List<Token> execute(ModelExecutionContext context);
+  List<Token> execute(ProcessExecutionContext context);
 }

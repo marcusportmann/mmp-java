@@ -25,7 +25,4 @@ package guru.mmp.application.process.bpmn.event;
  *
  * @author Marcus Portmann
  */
-abstract class EventDefinition
-{
-
-}
+abstract class EventDefinition {}

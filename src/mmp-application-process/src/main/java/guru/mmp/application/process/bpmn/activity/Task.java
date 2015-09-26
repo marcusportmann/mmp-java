@@ -25,7 +25,4 @@ package guru.mmp.application.process.bpmn.activity;
  * @author Marcus Portmann
  */
 abstract class Task extends Activity
-  implements ITask
-{
-
-}
+  implements ITask {}

@@ -18,11 +18,8 @@ package guru.mmp.application.process.bpmn.event;
 
 /**
  * The <code>TimerEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) timer event that forms part of a BPMN model.
+ * Model and Notation (BPMN) timer event that forms part of a BPMN process.
  *
  * @author Marcus Portmann
  */
-public class TimerEventDefinition
-{
-
-}
+public class TimerEventDefinition {}

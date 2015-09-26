@@ -18,16 +18,16 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SubprocessStartEvent</code> class represents a Business Process Model and Notation
- * (BPMN) subprocess start event that forms part of a BPMN model.
+ * (BPMN) subprocess start event that forms part of a BPMN process.
  * <p>
  * A subprocess start event indicates the start of a sub0process. Sub-process start events generate
  * a token when they are triggered. The token then moves down through the event's outgoing sequence
@@ -38,8 +38,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class SubprocessStartEvent
-  extends CatchingEvent
+public class SubprocessStartEvent extends CatchingEvent
 {
   /**
    * Is the catching event interrupting i.e. does the activity that triggered the event terminate
@@ -65,13 +64,13 @@ public class SubprocessStartEvent
   /**
    * Execute the Business Process Model and Notation (BPMN) subprocess start event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) subprocess start event
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return super.execute(context);
   }

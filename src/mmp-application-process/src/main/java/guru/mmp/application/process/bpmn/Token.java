@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>Token</code> class represents the current point in a flow of execution for a
- * Business Process Model and Notation (BPMN) model.
+ * The <code>Token</code> class represents a point in the flow of execution for  Business Process
+ * Model and Notation (BPMN) process.
  *
  * @author Marcus Portmann
  */
@@ -33,16 +33,16 @@ public class Token
   /**
    * Execute the token.
    * <p>
-   * This will execute the Business Process Model and Notation (BPMN) model element the token is
+   * This will execute the Business Process Model and Notation (BPMN) process flow node the token is
    * associated with.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) model element the token is associated with
+   *         Notation (BPMN) process flow node the token is associated with
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
   }

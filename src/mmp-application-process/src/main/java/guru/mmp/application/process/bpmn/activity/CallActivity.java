@@ -16,15 +16,19 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>CallActivity</code> class represents a Business Process Model and Notation (BPMN)
- * call activity that forms part of a BPMN model.
+ * call activity that forms part of a BPMN process.
  * <p>
  * A call activity is just a reusable activity. If a subprocess is referenced in more than one
  * process (diagram), it can be defined in its own diagram and "called" from each process that
@@ -37,13 +41,13 @@ public class CallActivity extends Activity
   /**
    * Execute the Business Process Model and Notation (BPMN) call activity.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) call activity
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
   }

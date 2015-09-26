@@ -16,15 +16,19 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ScriptTask</code> class represents a Business Process Model and Notation (BPMN)
- * script task that forms part of a BPMN model.
+ * script task that forms part of a BPMN process.
  * <p>
  * This task represents work that is performed by the BPM engine as an automated function written
  * in a script language like JavaScript.
@@ -36,13 +40,13 @@ public class ScriptTask extends Task
   /**
    * Execute the Business Process Model and Notation (BPMN) script task.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) script task
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
   }

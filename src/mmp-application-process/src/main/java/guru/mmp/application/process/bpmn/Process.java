@@ -17,13 +17,24 @@
 package guru.mmp.application.process.bpmn;
 
 /**
- * The <code>Model</code> class represents a Business Process Model and Notation (BPMN) model.
+ * The <code>Process</code> class represents a Business Process Model and Notation (BPMN) process.
  *
  * @author Marcus Portmann
  */
-public class Model
+public class Process
 {
+  /**
+   * The ID uniquely identifying the process.
+   */
+  private String id;
 
-
-
+  /**
+   * Returns the ID uniquely identifying the process.
+   *
+   * @return the ID uniquely identifying the process
+   */
+  public String getId()
+  {
+    return id;
+  }
 }

@@ -18,17 +18,17 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>BusinessRuleTask</code> class represents a Business Process Model and Notation (BPMN)
- * business rule task that forms part of a BPMN model.
+ * business rule task that forms part of a BPMN process.
  * <p>
  * This task represents work executed at run-time in a business rule engine, generally a complex
  * decision.
@@ -40,13 +40,13 @@ public class BusinessRuleTask extends Task
   /**
    * Execute the Business Process Model and Notation (BPMN) business rule task.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) business rule task
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
   }

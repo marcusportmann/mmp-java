@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.gateway;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.FlowNode;
 
 /**
@@ -41,6 +43,4 @@ import guru.mmp.application.process.bpmn.FlowNode;
  * @author Marcus Portmann
  */
 abstract class Gateway extends FlowNode
-  implements IGateway
-{
-}
+  implements IGateway {}

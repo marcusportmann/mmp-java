@@ -18,16 +18,16 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>EndEvent</code> class represents a Business Process Model and Notation (BPMN)
- * end event that forms part of a BPMN model.
+ * end event that forms part of a BPMN process.
  * <p>
  * End events finish a particular path of the process (or the whole process) and generate a result
  * (a message for example).
@@ -52,13 +52,13 @@ public class EndEvent extends ThrowingEvent
   /**
    * Execute the Business Process Model and Notation (BPMN) end event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) end event
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return super.execute(context);
   }

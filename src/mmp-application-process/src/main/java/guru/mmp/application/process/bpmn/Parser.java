@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
@@ -38,11 +40,9 @@ public class Parser
    *
    * @param data the BPMN data for the process definition
    *
-   * @returns the parsed Business Process Model and Notation (BPMN) model
-   *
-   * @throws ParserException
+   * @return the parsed Business Process Model and Notation (BPMN) process
    */
-  public Model parse(byte[] data)
+  public Process parse(byte[] data)
   {
     try
     {
@@ -50,13 +50,13 @@ public class Parser
 
       SAXParser parser = parserFactory.newSAXParser();
 
-      Model model = new Model();
+      Process process = new Process();
 
-      ParserHandler handler = new ParserHandler(model);
+      ParserHandler handler = new ParserHandler(process);
 
       parser.parse(new ByteArrayInputStream(data), handler);
 
-      return model;
+      return process;
     }
     catch (Throwable e)
     {

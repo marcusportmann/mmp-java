@@ -16,15 +16,19 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>EmbeddedSubprocess</code> class represents a Business Process Model and Notation (BPMN)
- * embedded subprocess that forms part of a BPMN model.
+ * embedded subprocess that forms part of a BPMN process.
  * <p>
  * An embedded subprocess is the normal type of subprocess that is "embedded" in the parent diagram
  * in either its collapsed or expanded form.
@@ -36,13 +40,13 @@ public class EmbeddedSubprocess extends Subprocess
   /**
    * Execute the Business Process Model and Notation (BPMN) embedded subprocess.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) embedded subprocess
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
   }

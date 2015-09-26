@@ -22,6 +22,4 @@ package guru.mmp.application.process.bpmn.activity;
  *
  * @author Marcus Portmann
  */
-public interface ISubprocess
-{
-}
+public interface ISubprocess {}

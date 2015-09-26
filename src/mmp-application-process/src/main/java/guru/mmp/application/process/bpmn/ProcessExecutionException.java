@@ -17,56 +17,56 @@
 package guru.mmp.application.process.bpmn;
 
 /**
- * The <code>ModelExecutionException</code> exception is thrown to indicate an error condition when
- * executing a Business Process Model and Notation (BPMN) model.
+ * The <code>ProcessExecutionException</code> exception is thrown to indicate an error condition
+ * when executing a Business Process Model and Notation (BPMN) process.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ModelExecutionException extends RuntimeException
+public class ProcessExecutionException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ModelExecutionException</code> with <code>null</code> as its
+   * Constructs a new <code>ProcessExecutionException</code> with <code>null</code> as its
    * message.
    */
-  public ModelExecutionException()
+  public ProcessExecutionException()
   {
     super();
   }
 
   /**
-   * Constructs a new <code>ModelExecutionException</code> with the specified message.
+   * Constructs a new <code>ProcessExecutionException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ModelExecutionException(String message)
+  public ProcessExecutionException(String message)
   {
     super(message);
   }
 
   /**
-   * Constructs a new <code>ModelExecutionException</code> with the specified cause and a
+   * Constructs a new <code>ProcessExecutionException</code> with the specified cause and a
    * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
    * class and message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
    *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ModelExecutionException(Throwable cause)
+  public ProcessExecutionException(Throwable cause)
   {
     super(cause);
   }
 
   /**
-   * Constructs a new <code>ModelExecutionException</code> with the specified message and cause.
+   * Constructs a new <code>ProcessExecutionException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ModelExecutionException(String message, Throwable cause)
+  public ProcessExecutionException(String message, Throwable cause)
   {
     super(message, cause);
   }

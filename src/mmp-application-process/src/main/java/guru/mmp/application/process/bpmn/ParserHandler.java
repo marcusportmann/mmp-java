@@ -31,28 +31,18 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ParserHandler extends DefaultHandler
 {
   /**
-   * The Business Process Model and Notation (BPMN) model to populate.
+   * The Business Process Model and Notation (BPMN) process to populate.
    */
-  private Model model;
+  private Process process;
 
   /**
-   * The Business Process Model and Notation (BPMN) model to populate.
+   * The Business Process Model and Notation (BPMN) process to populate.
    *
-   * @param model the Business Process Model and Notation (BPMN) model to populate
+   * @param process the Business Process Model and Notation (BPMN) process to populate
    */
-  public ParserHandler(Model model)
+  public ParserHandler(Process process)
   {
-    this.model = model;
-  }
-
-  @Override
-  public void startPrefixMapping(String prefix, String uri)
-    throws SAXException
-  {
-    //super.startPrefixMapping(prefix, uri);
-
-    System.out.println("[DEBUG][startPrefixMapping] startPrefixMapping {prefixe=\"" + prefix + "\", uri = \"" + uri + "\"");
-
+    this.process = process;
   }
 
   /**
@@ -87,8 +77,8 @@ public class ParserHandler extends DefaultHandler
   public void endElement(String uri, String localName, String qName)
     throws SAXException
   {
-    System.out.println("[DEBUG][endElement] {uri=\"" + uri + "\", localName=\"" + localName + "\", qName=\"" + qName + "\"}");
-
+    System.out.println("[DEBUG][endElement] {uri=\"" + uri + "\", localName=\"" + localName
+        + "\", qName=\"" + qName + "\"}");
 
 //  switch(qName){
 //    //Add the employee to list once end tag is found
@@ -122,10 +112,10 @@ public class ParserHandler extends DefaultHandler
   public void startElement(String uri, String localName, String qName, Attributes attributes)
     throws SAXException
   {
-    //super.startElement(uri, localName, qName, attributes);
+    // super.startElement(uri, localName, qName, attributes);
 
-    System.out.println("[DEBUG][startElement] {uri=\"" + uri + "\", localName=\"" + localName + "\", qName=\"" + qName + "\"}");
-
+    System.out.println("[DEBUG][startElement] {uri=\"" + uri + "\", localName=\"" + localName
+        + "\", qName=\"" + qName + "\"}");
 
 //  switch(qName){
 //    //Create a new Employee object when the start tag is found
@@ -133,6 +123,25 @@ public class ParserHandler extends DefaultHandler
 //      emp = new Employee();
 //      emp.id = attributes.getValue("id");
 //      break;
+
+  }
+
+  /**
+   * Method description
+   *
+   * @param prefix
+   * @param uri
+   *
+   * @throws SAXException
+   */
+  @Override
+  public void startPrefixMapping(String prefix, String uri)
+    throws SAXException
+  {
+    // super.startPrefixMapping(prefix, uri);
+
+    System.out.println("[DEBUG][startPrefixMapping] startPrefixMapping {prefixe=\"" + prefix
+        + "\", uri = \"" + uri + "\"");
 
   }
 }

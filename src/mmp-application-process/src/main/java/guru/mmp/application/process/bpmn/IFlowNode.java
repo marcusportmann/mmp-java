@@ -31,10 +31,10 @@ public interface IFlowNode
   /**
    * Execute the Business Process Model and Notation (BPMN) flow node.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) flow node
    */
-  List<Token> execute(ModelExecutionContext context);
+  List<Token> execute(ProcessExecutionContext context);
 }

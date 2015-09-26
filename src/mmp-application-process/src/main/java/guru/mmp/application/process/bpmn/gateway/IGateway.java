@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.gateway;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.IFlowNode;
 
 /**
@@ -24,6 +26,4 @@ import guru.mmp.application.process.bpmn.IFlowNode;
  *
  * @author Marcus Portmann
  */
-public interface IGateway extends IFlowNode
-{
-}
+public interface IGateway extends IFlowNode {}

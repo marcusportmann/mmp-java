@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.IFlowNode;
 
 /**

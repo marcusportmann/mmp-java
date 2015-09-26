@@ -16,15 +16,19 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SendTask</code> class represents a Business Process Model and Notation (BPMN)
- * send task that forms part of a BPMN model.
+ * send task that forms part of a BPMN process.
  * <p>
  * This task represents sending a message to an external participant. Once sent, the task is
  * completed. A message can only be sent between different roles.
@@ -36,13 +40,13 @@ public class SendTask extends Task
   /**
    * Execute the Business Process Model and Notation (BPMN) send task.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) send task
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
   }

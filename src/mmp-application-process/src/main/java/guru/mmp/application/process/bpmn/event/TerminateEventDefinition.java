@@ -18,11 +18,8 @@ package guru.mmp.application.process.bpmn.event;
 
 /**
  * The <code>TerminateEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) terminate event that forms part of a BPMN model.
+ * Model and Notation (BPMN) terminate event that forms part of a BPMN process.
  *
  * @author Marcus Portmann
  */
-public class TerminateEventDefinition
-{
-
-}
+public class TerminateEventDefinition {}

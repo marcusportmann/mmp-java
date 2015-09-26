@@ -18,11 +18,8 @@ package guru.mmp.application.process.bpmn.event;
 
 /**
  * The <code>ConditionalEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) conditional event that forms part of a BPMN model.
+ * Model and Notation (BPMN) conditional event that forms part of a BPMN process.
  *
  * @author Marcus Portmann
  */
-public class ConditionalEventDefinition
-{
-
-}
+public class ConditionalEventDefinition {}

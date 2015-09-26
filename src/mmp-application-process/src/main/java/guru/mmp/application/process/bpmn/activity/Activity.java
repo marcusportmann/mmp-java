@@ -76,5 +76,4 @@ abstract class Activity extends FlowNode
   {
     throw new RuntimeException("NOT IMPLEMENTED");
   }
-
 }

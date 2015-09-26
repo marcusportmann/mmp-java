@@ -24,6 +24,4 @@ package guru.mmp.application.process.bpmn.activity;
  *
  * @author Marcus Portmann
  */
-public interface ITask extends IActivity
-{
-}
+public interface ITask extends IActivity {}

@@ -18,7 +18,7 @@ package guru.mmp.application.process.bpmn;
 
 /**
  * The <code>Persistor</code> class provides the capability to serialize and de-serialize the
- * state for an executing Business Process Model and Notation (BPMN) model.
+ * state for an executing Business Process Model and Notation (BPMN) process.
  *
  * @author Marcus Portmann
  */
@@ -28,5 +28,4 @@ public class Persistor
    * Constructs a new <code>Persistor</code>.
    */
   public Persistor() {}
-
 }

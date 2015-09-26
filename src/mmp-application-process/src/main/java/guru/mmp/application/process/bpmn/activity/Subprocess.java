@@ -26,7 +26,4 @@ package guru.mmp.application.process.bpmn.activity;
  * @author Marcus Portmann
  */
 abstract class Subprocess extends Activity
-  implements ISubprocess
-{
-
-}
+  implements ISubprocess {}

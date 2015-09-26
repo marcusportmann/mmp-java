@@ -16,15 +16,19 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
- * The <code>TransactionSubprocess</code> class represents a Business Process Model and Notation (BPMN)
- * Transaction Subprocess that forms part of a BPMN model.
+ * The <code>TransactionSubprocess</code> class represents a Business Process Model and Notation
+ * (BPMN) Transaction Subprocess that forms part of a BPMN process.
  * <p>
  * Transaction subprocesses have the following properies:
  * <ul>
@@ -36,11 +40,12 @@ import java.util.List;
  *     <b>Consistency</b>: The transaction leaves the process (or system) in a valid state.
  *   </li>
  *   <li>
- *     <b>Isolation</b>: The effects of one transaction might not be visible to other parts of the process
- *     (or system).
+ *     <b>Isolation</b>: The effects of one transaction might not be visible to other parts of the
+ *     process (or system).
  *   </li>
  *   <li>
- *     <b>Durability</b>: Once a transaction has finished successfully, changes are persisted permanently.
+ *     <b>Durability</b>: Once a transaction has finished successfully, changes are persisted
+ *     permanently.
  *   </li>
  * </ul>
  * <p>
@@ -58,13 +63,13 @@ public class TransactionSubprocess extends Subprocess
   /**
    * Execute the Business Process Model and Notation (BPMN) transaction subprocess.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) transaction subprocess
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
   }

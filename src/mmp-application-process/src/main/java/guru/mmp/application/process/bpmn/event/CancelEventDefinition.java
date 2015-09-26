@@ -18,11 +18,8 @@ package guru.mmp.application.process.bpmn.event;
 
 /**
  * The <code>CancelEventDefinition</code> class stores the details for a Business Process Model
- * and Notation (BPMN) cancel event that forms part of a BPMN model.
+ * and Notation (BPMN) cancel event that forms part of a BPMN process.
  *
  * @author Marcus Portmann
  */
-public class CancelEventDefinition
-{
-
-}
+public class CancelEventDefinition {}

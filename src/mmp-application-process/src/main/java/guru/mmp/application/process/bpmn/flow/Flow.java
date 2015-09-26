@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.flow;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.FlowNode;
 
 /**
@@ -25,6 +27,4 @@ import guru.mmp.application.process.bpmn.FlowNode;
  * @author Marcus Portmann
  */
 abstract class Flow extends FlowNode
-  implements IFlow
-{
-}
+  implements IFlow {}

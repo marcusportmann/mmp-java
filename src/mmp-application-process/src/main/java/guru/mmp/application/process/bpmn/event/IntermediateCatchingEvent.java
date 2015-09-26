@@ -18,16 +18,16 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>IntermediateCatchingEvent</code> class represents a Business Process Model and Notation
- * (BPMN) intermediate catching event that forms part of a BPMN model.
+ * (BPMN) intermediate catching event that forms part of a BPMN process.
  *
  * @author Marcus Portmann
  */
@@ -47,13 +47,13 @@ public class IntermediateCatchingEvent extends CatchingEvent
   /**
    * Execute the Business Process Model and Notation (BPMN) intermediate catching event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) model
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) intermediate catching event
    */
   @Override
-  public List<Token> execute(ModelExecutionContext context)
+  public List<Token> execute(ProcessExecutionContext context)
   {
     return super.execute(context);
   }

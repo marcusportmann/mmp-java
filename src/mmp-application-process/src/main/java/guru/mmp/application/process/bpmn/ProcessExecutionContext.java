@@ -18,13 +18,8 @@ package guru.mmp.application.process.bpmn;
 
 /**
  * The <code>ModelExecutionContext</code> class represents the execution context for a Business
- * Process Model and Notation (BPMN) model.
+ * Process Model and Notation (BPMN) process.
  *
  * @author Marcus Portmann
  */
-public class ModelExecutionContext
-{
-
-
-
-}
+public class ProcessExecutionContext {}
