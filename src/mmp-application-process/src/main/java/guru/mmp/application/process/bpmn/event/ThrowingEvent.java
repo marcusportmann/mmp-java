@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.activity;
+package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -27,23 +27,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>BusinessRuleTask</code> class represents a Business Process Model and Notation (BPMN)
- * business rule task that forms part of a BPMN model.
- * <p>
- * This task represents work executed at run-time in a business rule engine, generally a complex
- * decision.
+ * The <code>ThrowingEvent</code> class represents a Business Process Model and Notation (BPMN)
+ * throwing event that forms part of a BPMN model.
  *
  * @author Marcus Portmann
  */
-public class BusinessRuleTask extends Task
+public abstract class ThrowingEvent extends Event
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) business rule task.
+   * Constructs a new <code>ThrowingEvent</code>.
+   *
+   * @param name the name of the throwing event
+   * @param type the type of throwing event
+   */
+  protected ThrowingEvent(String name, EventType type)
+  {
+    super(name, type);
+  }
+
+  /**
+   * Execute the Business Process Model and Notation (BPMN) throwing event.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) business rule task
+   *         Notation (BPMN) throwing event
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)

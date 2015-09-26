@@ -18,7 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.Element;
+import guru.mmp.application.process.bpmn.FlowNode;
 
 /**
  * The <code>Activity</code> class provides the base class that all
@@ -29,7 +29,7 @@ import guru.mmp.application.process.bpmn.Element;
  *
  * @author Marcus Portmann
  */
-abstract class Activity extends Element
+abstract class Activity extends FlowNode
   implements IActivity
 {
   /**
@@ -56,4 +56,25 @@ abstract class Activity extends Element
   {
     this.loopType = loopType;
   }
+
+  /**
+   * Throw an error event.
+   *
+   * @param name the name of the error event
+   */
+  public void throwErrorEvent(String name)
+  {
+    throw new RuntimeException("NOT IMPLEMENTED");
+  }
+
+  /**
+   * Throw an escalation event.
+   *
+   * @param name the name of the escalation event
+   */
+  public void throwEscalationEvent(String name)
+  {
+    throw new RuntimeException("NOT IMPLEMENTED");
+  }
+
 }

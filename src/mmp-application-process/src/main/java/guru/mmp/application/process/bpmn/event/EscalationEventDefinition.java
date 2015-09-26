@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.gateway;
-
-import guru.mmp.application.process.bpmn.IFlowNode;
+package guru.mmp.application.process.bpmn.event;
 
 /**
- * The <code>IGateway</code> interface defines the interface that must be implemented by a
- * Business Process Model and Notation (BPMN) gateway subclass.
+ * The <code>EscalationEventDefinition</code> class stores the details for a Business Process
+ * Model and Notation (BPMN) escalation event that forms part of a BPMN model.
  *
  * @author Marcus Portmann
  */
-public interface IGateway extends IFlowNode
+public class EscalationEventDefinition
 {
+
 }

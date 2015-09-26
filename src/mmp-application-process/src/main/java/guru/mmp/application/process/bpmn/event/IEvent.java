@@ -16,7 +16,9 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-import guru.mmp.application.process.bpmn.IElement;
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.IFlowNode;
 
 /**
  * The <code>IEvent</code> interface defines the interface that must be implemented by a
@@ -56,6 +58,33 @@ import guru.mmp.application.process.bpmn.IElement;
  *
  * @author Marcus Portmann
  */
-public interface IEvent extends IElement
+public interface IEvent extends IFlowNode
 {
+  /**
+   * Returns the name of the event.
+   *
+   * @return the name of the event
+   */
+  String getName();
+
+  /**
+   * Returns the type of event.
+   *
+   * @return the type of event
+   */
+  EventType getType();
+
+  /**
+   * Set the name of the event.
+   *
+   * @param name the name of the event
+   */
+  void setName(String name);
+
+  /**
+   * Set the type of event.
+   *
+   * @param type the type of event
+   */
+  void setType(EventType type);
 }

@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.gateway;
-
-import guru.mmp.application.process.bpmn.IFlowNode;
+package guru.mmp.application.process.bpmn.event;
 
 /**
- * The <code>IGateway</code> interface defines the interface that must be implemented by a
- * Business Process Model and Notation (BPMN) gateway subclass.
+ * The <code>EventDefinition</code> class provides the base class that all event definition
+ * subclasses should be derived from.
+ * <p>
+ * An event definition class stores the detail for a particular event type e.g. the timing
+ * conditions for a timer event.
  *
  * @author Marcus Portmann
  */
-public interface IGateway extends IFlowNode
+abstract class EventDefinition
 {
+
 }

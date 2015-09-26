@@ -23,59 +23,44 @@ import guru.mmp.application.process.bpmn.Token;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The <code>StartEvent</code> class represents a Business Process Model and Notation (BPMN)
  * start event that forms part of a BPMN model.
  * <p>
- * A start event indicates the start of a process or subprocess. Start events generate a token when
- * they are triggered. The token then moves down through the event's outgoing sequence flow.
+ * A start event indicates the start of a process. Start events generate a token when they are
+ * triggered. The token then moves down through the event's outgoing sequence flow.
  * <p>
  * Start events can only have one outgoing sequence flow and they cannot have incoming sequence
  * flows.
  *
  * @author Marcus Portmann
  */
-public class StartEvent extends Event
+public class StartEvent extends CatchingEvent
 {
   /**
-   * The type of start event.
+   * Constructs a new <code>StartEvent</code>.
+   *
+   * @param name the name of the start event
+   * @param type the type of start event
    */
-  private StartEventType type;
+  public StartEvent(String name, EventType type)
+  {
+    super(name, type);
+  }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) start event.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) start event
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)
   {
-    return new ArrayList<>();
-  }
-
-  /**
-   * Returns the type of start event.
-   *
-   * @return the type of start event
-   */
-  public StartEventType getType()
-  {
-    return type;
-  }
-
-  /**
-   * Set the type of start event.
-   *
-   * @param type the type of start event
-   */
-  public void setType(StartEventType type)
-  {
-    this.type = type;
+    return super.execute(context);
   }
 }

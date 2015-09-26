@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.event;
+package guru.mmp.application.process.bpmn.gateway;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -27,54 +27,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>IntermediateEvent</code> class represents a Business Process Model and Notation (BPMN)
- * intermediate event that forms part of a BPMN model.
- * <p>
- * End events finish a particular path of the process (or the whole process) and generate a result
- * (a message for example).
- * <p>
- * Start events have one or more incoming flows but no outgoing flows.
+ * The <code>EventGateway</code> class represents a Business Process Model and Notation (BPMN)
+ * event gateway that forms part of a BPMN model.
  *
  * @author Marcus Portmann
  */
-public class IntermediateEvent extends Event
+public class EventGateway extends Gateway
 {
   /**
-   * The type of intermediate event.
-   */
-  private IntermediateEventType type;
-
-  /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) event gateway.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) event gateway
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)
   {
     return new ArrayList<>();
-  }
-
-  /**
-   * Returns the type of intermediate event.
-   *
-   * @return the type of intermediate event
-   */
-  public IntermediateEventType getType()
-  {
-    return type;
-  }
-
-  /**
-   * Set the type of intermediate event.
-   *
-   * @param type the type of intermediate event
-   */
-  public void setType(IntermediateEventType type)
-  {
-    this.type = type;
   }
 }

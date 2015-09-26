@@ -56,12 +56,12 @@ import java.util.List;
 public class TransactionSubprocess extends Subprocess
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) transaction subprocess.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) transaction subprocess
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)

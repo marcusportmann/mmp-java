@@ -20,7 +20,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 import guru.mmp.application.process.bpmn.ModelExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-import guru.mmp.application.process.bpmn.event.StartEventType;
+import guru.mmp.application.process.bpmn.event.EventType;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -50,15 +50,15 @@ public class EventSubprocess extends Subprocess
   /**
    * The type of start event for the event subprocess.
    */
-  private EventSubprocessStartEventType startEventType;
+  private EventType eventType;
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) event subprocess.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) event subprocess
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)
@@ -71,18 +71,18 @@ public class EventSubprocess extends Subprocess
    *
    * @return the type of start event for the event subprocess
    */
-  public EventSubprocessStartEventType getStartEventType()
+  public EventType getEventType()
   {
-    return startEventType;
+    return eventType;
   }
 
   /**
    * Set the type of start event for the event subprocess.
    *
-   * @param startEventType the type of start event for the event subprocess
+   * @param eventType the type of start event for the event subprocess
    */
-  public void setStartEventType(EventSubprocessStartEventType startEventType)
+  public void setEventType(EventType eventType)
   {
-    this.startEventType = startEventType;
+    this.eventType = eventType;
   }
 }

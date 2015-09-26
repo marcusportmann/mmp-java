@@ -34,12 +34,12 @@ import java.util.List;
 public class SendTask extends Task
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) send task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) send task
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)

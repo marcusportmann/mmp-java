@@ -16,7 +16,7 @@
 
 package guru.mmp.application.process.bpmn.flow;
 
-import guru.mmp.application.process.bpmn.Element;
+import guru.mmp.application.process.bpmn.FlowNode;
 
 /**
  * The <code>Flow</code> class provides the base class that all
@@ -24,6 +24,7 @@ import guru.mmp.application.process.bpmn.Element;
  *
  * @author Marcus Portmann
  */
-abstract class Flow extends Element implements IFlow
+abstract class Flow extends FlowNode
+  implements IFlow
 {
 }

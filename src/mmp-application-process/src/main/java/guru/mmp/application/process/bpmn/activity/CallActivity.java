@@ -35,12 +35,12 @@ import java.util.List;
 public class CallActivity extends Activity
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) call activity.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) call activity
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)

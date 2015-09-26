@@ -16,7 +16,7 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-import guru.mmp.application.process.bpmn.IElement;
+import guru.mmp.application.process.bpmn.IFlowNode;
 
 /**
  * The <code>IActivity</code> interface defines the interface that must be implemented by a
@@ -27,7 +27,7 @@ import guru.mmp.application.process.bpmn.IElement;
  *
  * @author Marcus Portmann
  */
-public interface IActivity extends IElement
+public interface IActivity extends IFlowNode
 {
   /**
    * Returns the loop type for the activity.

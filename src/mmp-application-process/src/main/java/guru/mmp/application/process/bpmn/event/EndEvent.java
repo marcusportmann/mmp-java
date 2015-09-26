@@ -21,10 +21,9 @@ package guru.mmp.application.process.bpmn.event;
 import guru.mmp.application.process.bpmn.ModelExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
-import java.util.ArrayList;
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>EndEvent</code> class represents a Business Process Model and Notation (BPMN)
@@ -33,48 +32,34 @@ import java.util.List;
  * End events finish a particular path of the process (or the whole process) and generate a result
  * (a message for example).
  * <p>
- * Start events have one or more incoming flows but no outgoing flows.
+ * End events have one or more incoming flows but no outgoing flows.
  *
  * @author Marcus Portmann
  */
-public class EndEvent extends Event
+public class EndEvent extends ThrowingEvent
 {
   /**
-   * The type of end event.
+   * Constructs a new <code>EndEvent</code>.
+   *
+   * @param name the name of the end event
+   * @param type the type of end event
    */
-  private EndEventType type;
+  public EndEvent(String name, EventType type)
+  {
+    super(name, type);
+  }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) end event.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) end event
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)
   {
-    return new ArrayList<>();
-  }
-
-  /**
-   * Returns the type of end event.
-   *
-   * @return the type of end event
-   */
-  public EndEventType getType()
-  {
-    return type;
-  }
-
-  /**
-   * Set the type of end event.
-   *
-   * @param type the type of end event
-   */
-  public void setType(EndEventType type)
-  {
-    this.type = type;
+    return super.execute(context);
   }
 }

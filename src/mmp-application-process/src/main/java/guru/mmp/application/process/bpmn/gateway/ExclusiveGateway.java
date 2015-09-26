@@ -14,27 +14,37 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn;
+package guru.mmp.application.process.bpmn.gateway;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ModelExecutionContext;
+import guru.mmp.application.process.bpmn.Token;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>INode</code> interface defines the interface that must be implemented by a
- * Business Process Model and Notation (BPMN) element subclass.
+ * The <code>ExclusiveGateway</code> class represents a Business Process Model and Notation (BPMN)
+ * exclusive gateway that forms part of a BPMN model.
  *
  * @author Marcus Portmann
  */
-public interface IElement
+public class ExclusiveGateway extends Gateway
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Execute the Business Process Model and Notation (BPMN) exclusive gateway.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) exclusive gateway
    */
-  List<Token> execute(ModelExecutionContext context);
+  @Override
+  public List<Token> execute(ModelExecutionContext context)
+  {
+    return new ArrayList<>();
+  }
 }

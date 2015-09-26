@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.activity;
+package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -23,31 +23,38 @@ import guru.mmp.application.process.bpmn.Token;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>BusinessRuleTask</code> class represents a Business Process Model and Notation (BPMN)
- * business rule task that forms part of a BPMN model.
- * <p>
- * This task represents work executed at run-time in a business rule engine, generally a complex
- * decision.
+ * The <code>IntermediateCatchingEvent</code> class represents a Business Process Model and Notation
+ * (BPMN) intermediate catching event that forms part of a BPMN model.
  *
  * @author Marcus Portmann
  */
-public class BusinessRuleTask extends Task
+public class IntermediateCatchingEvent extends CatchingEvent
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) business rule task.
+   * Constructs a new <code>IntermediateCatchingEvent</code>.
+   *
+   * @param name the name of the intermediate catching event
+   * @param type the type of intermediate catching event
+   */
+  public IntermediateCatchingEvent(String name, EventType type)
+  {
+    super(name, type);
+  }
+
+  /**
+   * Execute the Business Process Model and Notation (BPMN) intermediate catching event.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) business rule task
+   *         Notation (BPMN) intermediate catching event
    */
   @Override
   public List<Token> execute(ModelExecutionContext context)
   {
-    return new ArrayList<>();
+    return super.execute(context);
   }
 }

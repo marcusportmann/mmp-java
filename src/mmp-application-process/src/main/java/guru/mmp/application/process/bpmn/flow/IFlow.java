@@ -16,7 +16,7 @@
 
 package guru.mmp.application.process.bpmn.flow;
 
-import guru.mmp.application.process.bpmn.IElement;
+import guru.mmp.application.process.bpmn.IFlowNode;
 
 /**
  * The <code>IFlow</code> interface defines the interface that must be implemented by a
@@ -24,6 +24,6 @@ import guru.mmp.application.process.bpmn.IElement;
  *
  * @author Marcus Portmann
  */
-public interface IFlow extends IElement
+public interface IFlow extends IFlowNode
 {
 }

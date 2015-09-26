@@ -14,40 +14,27 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.activity;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.application.process.bpmn.ModelExecutionContext;
-import guru.mmp.application.process.bpmn.Token;
+package guru.mmp.application.process.bpmn;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>BusinessRuleTask</code> class represents a Business Process Model and Notation (BPMN)
- * business rule task that forms part of a BPMN model.
- * <p>
- * This task represents work executed at run-time in a business rule engine, generally a complex
- * decision.
+ * The <code>IFlowNode</code> interface defines the interface that must be implemented by a
+ * Business Process Model and Notation (BPMN) flow node subclass.
  *
  * @author Marcus Portmann
  */
-public class BusinessRuleTask extends Task
+public interface IFlowNode
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) business rule task.
+   * Execute the Business Process Model and Notation (BPMN) flow node.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) business rule task
+   *         Notation (BPMN) flow node
    */
-  @Override
-  public List<Token> execute(ModelExecutionContext context)
-  {
-    return new ArrayList<>();
-  }
+  List<Token> execute(ModelExecutionContext context);
 }

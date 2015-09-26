@@ -14,29 +14,48 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn;
+package guru.mmp.application.process.bpmn.event;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ModelExecutionContext;
+import guru.mmp.application.process.bpmn.Token;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>Node</code> class provides the base class that all elements that form part of a
- * Business Process Model and Notation (BPMN) model should be derived from.
+ * The <code>CatchingEvent</code> class represents a Business Process Model and Notation (BPMN)
+ * catching event that forms part of a BPMN model.
  *
  * @author Marcus Portmann
  */
-public abstract class Element
-  implements IElement
+public abstract class CatchingEvent extends Event
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) element.
+   * Constructs a new <code>CatchingEvent</code>.
+   *
+   * @param name the name of the catching event
+   * @param type the type of catching event
+   */
+  protected CatchingEvent(String name, EventType type)
+  {
+    super(name, type);
+  }
+
+  /**
+   * Execute the Business Process Model and Notation (BPMN) catching event.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) model
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) element
+   *         Notation (BPMN) catching event
    */
   @Override
-  public abstract List<Token> execute(ModelExecutionContext context);
+  public List<Token> execute(ModelExecutionContext context)
+  {
+    return new ArrayList<>();
+  }
 }
