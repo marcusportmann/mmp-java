@@ -27,23 +27,28 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>EmbeddedSubprocess</code> class represents a Business Process Model and Notation (BPMN)
- * embedded subprocess that forms part of a BPMN process.
+ * The <code>SendTaskBehavior</code> class implements the behavior for a Business Process Model
+ * and Notation (BPMN) send task that forms part of a BPMN process.
  * <p>
- * An embedded subprocess is the normal type of subprocess that is "embedded" in the parent diagram
- * in either its collapsed or expanded form.
+ * This task represents sending a message to an external participant. Once sent, the task is
+ * completed. A message can only be sent between different roles.
  *
  * @author Marcus Portmann
  */
-public class EmbeddedSubprocess extends Subprocess
+public class SendTaskBehavior extends TaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) embedded subprocess.
+   * Constructs a new <code>SendTaskBehavior</code>.
+   */
+  public SendTaskBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) send task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) embedded subprocess
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) send task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

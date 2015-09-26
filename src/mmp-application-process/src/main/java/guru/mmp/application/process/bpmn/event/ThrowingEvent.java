@@ -32,17 +32,18 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class ThrowingEvent extends Event
+abstract class ThrowingEvent extends Event
 {
   /**
    * Constructs a new <code>ThrowingEvent</code>.
    *
+   * @param id   the ID uniquely identifying the throwing event
    * @param name the name of the throwing event
    * @param type the type of throwing event
    */
-  protected ThrowingEvent(String name, EventType type)
+  protected ThrowingEvent(String id, String name, EventType type)
   {
-    super(name, type);
+    super(id, name, type);
   }
 
   /**

@@ -21,33 +21,26 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ManualTask</code> class represents a Business Process Model and Notation (BPMN)
- * manual task that forms part of a BPMN process.
- * <p>
- * This task represents work that is not automated and is performed outside the control of the
- * BPM engine.
+ * The <code>ISubprocessBehavior</code> interface defines the interface that must be implemented by
+ * a subprocess behavior class, which implements the behavior for a Business Process Model and
+ * Notation (BPMN) subprocess type.
  *
  * @author Marcus Portmann
  */
-public class ManualTask extends Task
+public interface ISubprocessBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) manual task.
+   * Execute the Business Process Model and Notation (BPMN) subprocess behavior.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) manual task
+   *         Notation (BPMN) subprocess behavior
    */
-  @Override
-  public List<Token> execute(ProcessExecutionContext context)
-  {
-    return new ArrayList<>();
-  }
+  List<Token> execute(ProcessExecutionContext context);
 }

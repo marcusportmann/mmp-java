@@ -21,10 +21,10 @@ package guru.mmp.application.process.bpmn.event;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CatchingEvent</code> class represents a Business Process Model and Notation (BPMN)
@@ -32,17 +32,18 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class CatchingEvent extends Event
+abstract class CatchingEvent extends Event
 {
   /**
    * Constructs a new <code>CatchingEvent</code>.
    *
+   * @param id   the ID uniquely identifying the catching event
    * @param name the name of the catching event
    * @param type the type of catching event
    */
-  protected CatchingEvent(String name, EventType type)
+  protected CatchingEvent(String id, String name, EventType type)
   {
-    super(name, type);
+    super(id, name, type);
   }
 
   /**

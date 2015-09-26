@@ -37,17 +37,28 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class StartEvent extends CatchingEvent
+public final class StartEvent extends CatchingEvent
 {
+  /**
+   * Is the start event interrupting i.e. does the activity that triggered the event terminate
+   * and the flow of the process continue from the event (interrupting) or does the activity
+   * continue and the flow at the event execute in parallel (non-interrupting)?
+   */
+  private boolean interrupting;
+
   /**
    * Constructs a new <code>StartEvent</code>.
    *
-   * @param name the name of the start event
-   * @param type the type of start event
+   * @param id           the ID uniquely identifying the start event
+   * @param name         the name of the start event
+   * @param type         the type of start event
+   * @param interrupting is the start event interrupting
    */
-  public StartEvent(String name, EventType type)
+  public StartEvent(String id, String name, EventType type, boolean interrupting)
   {
-    super(name, type);
+    super(id, name, type);
+
+    this.interrupting = interrupting;
   }
 
   /**
@@ -62,5 +73,19 @@ public class StartEvent extends CatchingEvent
   public List<Token> execute(ProcessExecutionContext context)
   {
     return super.execute(context);
+  }
+
+  /**
+   * Is the start event interrupting?
+   * <p>
+   * Does the activity that triggered the start event terminate and the flow of the process continue
+   * from the event (interrupting) or does the activity continue and the flow at the event execute
+   * in parallel (non-interrupting)?
+   *
+   * @return <code>true</code> if the start event is interrupting or <code>false</code> otherwise
+   */
+  public boolean isInterrupting()
+  {
+    return interrupting;
   }
 }

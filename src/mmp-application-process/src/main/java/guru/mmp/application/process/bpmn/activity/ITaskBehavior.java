@@ -21,33 +21,26 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ReceiveTask</code> class represents a Business Process Model and Notation (BPMN)
- * receive task that forms part of a BPMN process.
- * <p>
- * This task waits for the arrival of a message from an external participant. Once received, the
- * task is completed.
+ * The <code>ITaskBehavior</code> interface defines the interface that must be implemented by a
+ * task behavior class, which implements the behavior for a Business Process Model and Notation
+ * (BPMN) task type.
  *
  * @author Marcus Portmann
  */
-public class ReceiveTask extends Task
+public interface ITaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) receive task.
+   * Execute the Business Process Model and Notation (BPMN) task behavior.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) receive task
+   *         Notation (BPMN) task behavior
    */
-  @Override
-  public List<Token> execute(ProcessExecutionContext context)
-  {
-    return new ArrayList<>();
-  }
+  List<Token> execute(ProcessExecutionContext context);
 }

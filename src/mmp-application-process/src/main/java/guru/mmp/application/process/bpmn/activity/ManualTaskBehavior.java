@@ -27,23 +27,28 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>SendTask</code> class represents a Business Process Model and Notation (BPMN)
- * send task that forms part of a BPMN process.
+ * The <code>ManualTaskBehavior</code> class implements the behavior for a Business Process Model
+ * and Notation (BPMN) manual task that forms part of a BPMN process.
  * <p>
- * This task represents sending a message to an external participant. Once sent, the task is
- * completed. A message can only be sent between different roles.
+ * This task represents work that is not automated and is performed outside the control of the
+ * BPM engine.
  *
  * @author Marcus Portmann
  */
-public class SendTask extends Task
+public final class ManualTaskBehavior extends TaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) send task.
+   * Constructs a new <code>ManualTaskBehavior</code>.
+   */
+  public ManualTaskBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) manual task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) send task
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) manual task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

@@ -27,23 +27,29 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ScriptTask</code> class represents a Business Process Model and Notation (BPMN)
- * script task that forms part of a BPMN process.
+ * The <code>EmbeddedSubprocessBehavior</code> class implements the behavior for a Business Process
+ * Model and Notation (BPMN) embedded subprocess that forms part of a BPMN process.
  * <p>
- * This task represents work that is performed by the BPM engine as an automated function written
- * in a script language like JavaScript.
+ * An embedded subprocess is the normal type of subprocess that is "embedded" in the parent diagram
+ * in either its collapsed or expanded form.
  *
  * @author Marcus Portmann
  */
-public class ScriptTask extends Task
+public final class EmbeddedSubprocessBehavior
+  implements ISubprocessBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) script task.
+   * Constructs a new <code>EmbeddedSubprocess</code>.
+   */
+  public EmbeddedSubprocessBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) embedded subprocess.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) script task
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) embedded subprocess
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

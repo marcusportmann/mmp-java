@@ -21,10 +21,10 @@ package guru.mmp.application.process.bpmn.gateway;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>EventGateway</code> class represents a Business Process Model and Notation (BPMN)
@@ -32,8 +32,18 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class EventGateway extends Gateway
+public final class EventGateway extends Gateway
 {
+  /**
+   * Constructs a new <code>EventGateway</code>.
+   *
+   * @param id the ID uniquely identifying the event gateway
+   */
+  public EventGateway(String id)
+  {
+    super(id);
+  }
+
   /**
    * Execute the Business Process Model and Notation (BPMN) event gateway.
    *

@@ -17,11 +17,10 @@
 package guru.mmp.application.process.bpmn.activity;
 
 /**
- * The <code>ITask</code> interface defines the interface that must be implemented by a
- * Business Process Model and Notation (BPMN) task subclass.
- * <p>
- * A task represents a single action.
+ * The <code>TaskBehavior</code> class provides the base class that all task behavior subclasses
+ * should be derived from.
  *
  * @author Marcus Portmann
  */
-public interface ITask extends IActivity {}
+abstract class TaskBehavior
+  implements ITaskBehavior {}

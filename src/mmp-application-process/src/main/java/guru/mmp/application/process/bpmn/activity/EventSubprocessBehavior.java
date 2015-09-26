@@ -28,8 +28,8 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>EventSubprocess</code> class represents a Business Process Model and Notation (BPMN)
- * event subprocess that forms part of a BPMN process.
+ * The <code>EventSubprocessBehavior</code> class implements the behavior for a Business Process
+ * Model and Notation (BPMN) event subprocess that forms part of a BPMN process.
  * <p>
  * An event subprocess is not part of the normal flow of the process. Instead, it is triggered by
  * one of the following events:
@@ -45,7 +45,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class EventSubprocess extends Subprocess
+public class EventSubprocessBehavior
+  implements ISubprocessBehavior
 {
   /**
    * The type of start event for the event subprocess.
@@ -53,12 +54,22 @@ public class EventSubprocess extends Subprocess
   private EventType eventType;
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) event subprocess.
+   * Constructs a new <code>EventSubprocessBehavior</code>.
+   *
+   * @param eventType the type of start event for the event subprocess
+   */
+  public EventSubprocessBehavior(EventType eventType)
+  {
+    this.eventType = eventType;
+  }
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) event subprocess.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) event subprocess
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) event subprocess
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -74,15 +85,5 @@ public class EventSubprocess extends Subprocess
   public EventType getEventType()
   {
     return eventType;
-  }
-
-  /**
-   * Set the type of start event for the event subprocess.
-   *
-   * @param eventType the type of start event for the event subprocess
-   */
-  public void setEventType(EventType eventType)
-  {
-    this.eventType = eventType;
   }
 }

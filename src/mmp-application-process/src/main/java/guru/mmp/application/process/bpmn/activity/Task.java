@@ -16,13 +16,58 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
+import guru.mmp.application.process.bpmn.Token;
+
+import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
+
 /**
- * The <code>Activity</code> class provides the base class that all
+ * The <code>Task</code> class provides the base class that all
  * Business Process Model and Notation (BPMN) task subclasses should be derived from.
  * <p>
  * A task represents a single action.
  *
  * @author Marcus Portmann
  */
-abstract class Task extends Activity
-  implements ITask {}
+public final class Task extends Activity
+{
+  /**
+   * The behavior for the task.
+   */
+  private ITaskBehavior taskBehavior;
+
+  /**
+   * Constructs a new <code>Task</code>.
+   *
+   * @param id                 the ID uniquely identifying the task
+   * @param forCompensation    is the task for compensation
+   * @param loopType           the loop type for the task
+   * @param startQuantity      the start quantity for the task
+   * @param completionQuantity the completion quantity for the task
+   * @param taskBehavior       the behavior for the task
+   */
+  public Task(String id, boolean forCompensation, LoopType loopType, int startQuantity,
+      int completionQuantity, ITaskBehavior taskBehavior)
+  {
+    super(id, forCompensation, loopType, startQuantity, completionQuantity);
+
+    this.taskBehavior = taskBehavior;
+  }
+
+  /**
+   * Execute the Business Process Model and Notation (BPMN) task.
+   *
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   *
+   * @return the list of tokens generated as a result of executing the Business Process Model and
+   *         Notation (BPMN) task
+   */
+  public List<Token> execute(ProcessExecutionContext context)
+  {
+    return taskBehavior.execute(context);
+  }
+}

@@ -27,23 +27,28 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>BusinessRuleTask</code> class represents a Business Process Model and Notation (BPMN)
- * business rule task that forms part of a BPMN process.
+ * The <code>BusinessRuleTaskBehavior</code> class implements the behavior for a Business Process
+ * Model and Notation (BPMN) business rule task that forms part of a BPMN process.
  * <p>
  * This task represents work executed at run-time in a business rule engine, generally a complex
  * decision.
  *
  * @author Marcus Portmann
  */
-public class BusinessRuleTask extends Task
+public final class BusinessRuleTaskBehavior extends TaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) business rule task.
+   * Constructs a new <code>BusinessRuleTaskBehavior</code>.
+   */
+  public BusinessRuleTaskBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) business rule task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) business rule task
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) business rule task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

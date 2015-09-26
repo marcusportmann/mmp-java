@@ -22,4 +22,4 @@ package guru.mmp.application.process.bpmn.event;
  *
  * @author Marcus Portmann
  */
-public class MessageEventDefinition {}
+public final class MessageEventDefinition {}

@@ -21,8 +21,8 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.FlowNode;
 
 /**
- * The <code>Activity</code> class provides the base class that all
- * Business Process Model and Notation (BPMN) activity subclasses should be derived from.
+ * The <code>Activity</code> class provides the base class that all Business Process Model and
+ * Notation (BPMN) activity subclasses should be derived from.
  * <p>
  * An activity represents a unit of work performed. A step inside a process. It has a defined start
  * and end and generally requires some kind of input to produce an output.
@@ -30,12 +30,56 @@ import guru.mmp.application.process.bpmn.FlowNode;
  * @author Marcus Portmann
  */
 abstract class Activity extends FlowNode
-  implements IActivity
 {
+  /**
+   * The completion quantity for the activity.
+   */
+  private int completionQuantity;
+
+  /**
+   * Is the activity for compensation?
+   */
+  private boolean forCompensation;
+
   /**
    * The loop type for the activity.
    */
   private LoopType loopType;
+
+  /**
+   * The start quantity for the activity.
+   */
+  private int startQuantity;
+
+  /**
+   * Constructs a new <code>Activity</code>.
+   *
+   * @param id                 the ID uniquely identifying the activity
+   * @param forCompensation    is the activity for compensation
+   * @param loopType           the loop type for the activity
+   * @param startQuantity      the start quantity for the activity
+   * @param completionQuantity the completion quantity for the activity
+   */
+  public Activity(String id, boolean forCompensation, LoopType loopType, int startQuantity,
+      int completionQuantity)
+  {
+    super(id);
+
+    this.forCompensation = forCompensation;
+    this.loopType = loopType;
+    this.startQuantity = startQuantity;
+    this.completionQuantity = completionQuantity;
+  }
+
+  /**
+   * Returns the completion quantity for the activity.
+   *
+   * @return the completion quantity for the activity
+   */
+  public int getCompletionQuantity()
+  {
+    return completionQuantity;
+  }
 
   /**
    * Returns the loop type for the activity.
@@ -45,6 +89,26 @@ abstract class Activity extends FlowNode
   public LoopType getLoopType()
   {
     return loopType;
+  }
+
+  /**
+   * Returns the start quantity for the activity.
+   *
+   * @return the start quantity for the activity
+   */
+  public int getStartQuantity()
+  {
+    return startQuantity;
+  }
+
+  /**
+   * Returns <code>true</code> if the activity is for compensation or <code>false</code> otherwise.
+   *
+   * @return <code>true</code> if the activity is for compensation or <code>false</code> otherwise
+   */
+  public boolean isForCompensation()
+  {
+    return forCompensation;
   }
 
   /**

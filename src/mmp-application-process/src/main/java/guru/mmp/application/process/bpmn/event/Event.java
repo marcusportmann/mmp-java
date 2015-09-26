@@ -74,10 +74,14 @@ abstract class Event extends FlowNode
   /**
    * Constructs a new <code>Event</code>.
    *
+   * @param id   the ID uniquely identifying the event
+   * @param name the name of the event
    * @param type the type of event
    */
-  protected Event(String name, EventType type)
+  protected Event(String id, String name, EventType type)
   {
+    super(id);
+
     this.name = name;
     this.type = type;
   }

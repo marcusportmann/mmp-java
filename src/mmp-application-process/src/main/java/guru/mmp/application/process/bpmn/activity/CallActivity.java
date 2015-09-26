@@ -39,6 +39,21 @@ import java.util.List;
 public class CallActivity extends Activity
 {
   /**
+   * Constructs a new <code>CallActivity</code>.
+   *
+   * @param id                 the ID uniquely identifying the call activity
+   * @param forCompensation    is the call activity for compensation
+   * @param loopType           the loop type for the call activity
+   * @param startQuantity      the start quantity for the call activity
+   * @param completionQuantity the completion quantity for the call activity
+   */
+  public CallActivity(String id, boolean forCompensation, LoopType loopType, int startQuantity,
+      int completionQuantity)
+  {
+    super(id, forCompensation, loopType, startQuantity, completionQuantity);
+  }
+
+  /**
    * Execute the Business Process Model and Notation (BPMN) call activity.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process

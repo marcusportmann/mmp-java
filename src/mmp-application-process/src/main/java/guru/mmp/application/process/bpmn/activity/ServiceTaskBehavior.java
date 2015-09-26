@@ -27,46 +27,28 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>TransactionSubprocess</code> class represents a Business Process Model and Notation
- * (BPMN) Transaction Subprocess that forms part of a BPMN process.
+ * The <code>ServiceTaskBehavior</code> class implements the behavior for a Business Process Model
+ * and Notation (BPMN) service task that forms part of a BPMN process.
  * <p>
- * Transaction subprocesses have the following properies:
- * <ul>
- *   <li>
- *     <b>Atomic</b>: Activities inside the transaction subprocess are treated as a unit.
- *     Either all are performed or none.
- *   </li>
- *   <li>
- *     <b>Consistency</b>: The transaction leaves the process (or system) in a valid state.
- *   </li>
- *   <li>
- *     <b>Isolation</b>: The effects of one transaction might not be visible to other parts of the
- *     process (or system).
- *   </li>
- *   <li>
- *     <b>Durability</b>: Once a transaction has finished successfully, changes are persisted
- *     permanently.
- *   </li>
- * </ul>
- * <p>
- * Transactions have only three possible outcomes:
- * <ul>
- *   <li>Success</li>
- *   <li>Cancellation</li>
- *   <li>Exception (error)</li>
- * </ul>
+ * This task represents work that is performed by an external system where there is no human
+ * intervention, like a web service.
  *
  * @author Marcus Portmann
  */
-public class TransactionSubprocess extends Subprocess
+public final class ServiceTaskBehavior extends TaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) transaction subprocess.
+   * Constructs a new <code>ServiceTaskBehavior</code>.
+   */
+  public ServiceTaskBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) service task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) transaction subprocess
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) service task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

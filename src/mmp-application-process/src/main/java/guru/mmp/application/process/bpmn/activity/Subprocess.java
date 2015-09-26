@@ -16,6 +16,15 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
+import guru.mmp.application.process.bpmn.Token;
+
+import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>Activity</code> class provides the base class that all
  * Business Process Model and Notation (BPMN) subprocess subclasses should be derived from.
@@ -25,5 +34,51 @@ package guru.mmp.application.process.bpmn.activity;
  *
  * @author Marcus Portmann
  */
-abstract class Subprocess extends Activity
-  implements ISubprocess {}
+public final class Subprocess extends Activity
+{
+  /**
+   * The behavior for the subprocess.
+   */
+  private ISubprocessBehavior subprocessBehavior;
+
+  /**
+   * Constructs a new <code>Subprocess</code>.
+   *
+   * @param id                 the ID uniquely identifying the subprocess
+   * @param forCompensation    is the subprocess for compensation
+   * @param loopType           the loop type for the subprocess
+   * @param startQuantity      the start quantity for the subprocess
+   * @param completionQuantity the completion quantity for the subprocess
+   * @param subprocessBehavior the behavior for the subprocess
+   */
+  public Subprocess(String id, boolean forCompensation, LoopType loopType, int startQuantity,
+      int completionQuantity, ISubprocessBehavior subprocessBehavior)
+  {
+    super(id, forCompensation, loopType, startQuantity, completionQuantity);
+
+    this.subprocessBehavior = subprocessBehavior;
+  }
+
+  /**
+   * Execute the Business Process Model and Notation (BPMN) subprocess.
+   *
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   *
+   * @return the list of tokens generated as a result of executing the Business Process Model and
+   *         Notation (BPMN) subprocess
+   */
+  public List<Token> execute(ProcessExecutionContext context)
+  {
+    return subprocessBehavior.execute(context);
+  }
+
+  /**
+   * Returns the behavior for the subprocess.
+   *
+   * @return the behavior for the subprocess
+   */
+  public ISubprocessBehavior getSubprocessBehavior()
+  {
+    return subprocessBehavior;
+  }
+}

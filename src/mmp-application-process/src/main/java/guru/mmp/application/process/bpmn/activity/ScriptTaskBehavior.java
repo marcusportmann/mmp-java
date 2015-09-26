@@ -27,23 +27,28 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>UserTask</code> class represents a Business Process Model and Notation (BPMN)
- * User Task that forms part of a BPMN process.
+ * The <code>ScriptTaskBehavior</code> class implements the behavior for a Business Process Model
+ * and Notation (BPMN) script task that forms part of a BPMN process.
  * <p>
- * This task represents work that is performed by a human user with the help of the BPM engine or
- * another software application.
+ * This task represents work that is performed by the BPM engine as an automated function written
+ * in a script language like JavaScript.
  *
  * @author Marcus Portmann
  */
-public class UserTask extends Task
+public final class ScriptTaskBehavior extends TaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) user task.
+   * Constructs a new <code>ScriptTaskBehavior</code>.
+   */
+  public ScriptTaskBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) script task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) user task
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) script task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

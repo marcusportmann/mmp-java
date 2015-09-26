@@ -27,23 +27,28 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ServiceTask</code> class represents a Business Process Model and Notation (BPMN)
- * service task that forms part of a BPMN process.
+ * The <code>UserTaskBehavior</code> class implements the behavior for a Business Process Model
+ * and Notation (BPMN) user task that forms part of a BPMN process.
  * <p>
- * This task represents work that is performed by an external system where there is no human
- * intervention, like a web service.
+ * This task represents work that is performed by a human user with the help of the BPM engine or
+ * another software application.
  *
  * @author Marcus Portmann
  */
-public class ServiceTask extends Task
+public final class UserTaskBehavior extends TaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) service task.
+   * Constructs a new <code>UserTaskBehavior</code>.
+   */
+  public UserTaskBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) user task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) service task
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) user task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

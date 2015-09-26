@@ -17,9 +17,10 @@
 package guru.mmp.application.process.bpmn.activity;
 
 /**
- * The <code>ISubprocess</code> interface defines the interface that must be implemented by a
- * Business Process Model and Notation (BPMN) subprocess subclass.
+ * The <code>SubprocessBehavior</code> class provides the base class that all subprocess behavior
+ * subclasses should be derived from.
  *
  * @author Marcus Portmann
  */
-public interface ISubprocess {}
+abstract class SubprocessBehavior
+  implements ISubprocessBehavior {}

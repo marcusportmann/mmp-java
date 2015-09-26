@@ -36,17 +36,18 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class EndEvent extends ThrowingEvent
+public final class EndEvent extends ThrowingEvent
 {
   /**
    * Constructs a new <code>EndEvent</code>.
    *
+   * @param id   the ID uniquely identifying the end event
    * @param name the name of the end event
    * @param type the type of end event
    */
-  public EndEvent(String name, EventType type)
+  public EndEvent(String id, String name, EventType type)
   {
-    super(name, type);
+    super(id, name, type);
   }
 
   /**

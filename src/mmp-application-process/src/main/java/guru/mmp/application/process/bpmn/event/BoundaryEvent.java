@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class BoundaryEvent extends CatchingEvent
+public final class BoundaryEvent extends CatchingEvent
 {
   /**
    * Is the boundary event interrupting i.e. does the activity that triggered the event terminate
@@ -51,13 +51,14 @@ public class BoundaryEvent extends CatchingEvent
   /**
    * Constructs a new <code>BoundaryEvent</code>.
    *
+   * @param id           the ID uniquely identifying the boundary event
    * @param name         the name of the boundary event
    * @param type         the type of boundary event
    * @param interrupting is the boundary event interrupting
    */
-  public BoundaryEvent(String name, EventType type, boolean interrupting)
+  public BoundaryEvent(String id, String name, EventType type, boolean interrupting)
   {
-    super(name, type);
+    super(id, name, type);
 
     this.interrupting = interrupting;
   }

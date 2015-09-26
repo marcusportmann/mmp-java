@@ -14,48 +14,45 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.event;
+package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>IntermediateCatchingEvent</code> class represents a Business Process Model and Notation
- * (BPMN) intermediate catching event that forms part of a BPMN process.
+ * The <code>ReceiveTaskBehavior</code> class implements the behavior for a Business Process Model
+ * and Notation (BPMN) receive task that forms part of a BPMN process.
+ * <p>
+ * This task waits for the arrival of a message from an external participant. Once received, the
+ * task is completed.
  *
  * @author Marcus Portmann
  */
-public final class IntermediateCatchingEvent extends CatchingEvent
+public class ReceiveTaskBehavior extends TaskBehavior
 {
   /**
-   * Constructs a new <code>IntermediateCatchingEvent</code>.
-   *
-   * @param id   the ID uniquely identifying the intermediate catching event
-   * @param name the name of the intermediate catching event
-   * @param type the type of intermediate catching event
+   * Constructs a new <code>ReceiveTaskBehavior</code>.
    */
-  public IntermediateCatchingEvent(String id, String name, EventType type)
-  {
-    super(id, name, type);
-  }
+  public ReceiveTaskBehavior() {}
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) intermediate catching event.
+   * Execute the behavior for the Business Process Model and Notation (BPMN) receive task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) intermediate catching event
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) receive task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
   {
-    return super.execute(context);
+    return new ArrayList<>();
   }
 }
