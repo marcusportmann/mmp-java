@@ -16,11 +16,29 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.xml.XmlSchemaClasspathInputSource;
+
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
+
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.ByteArrayInputStream;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 /**
  * The <code>Parser</code> class provides the capability to parse Business Process Model and
@@ -46,21 +64,90 @@ public class Parser
   {
     try
     {
-      SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+      SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-      SAXParser parser = parserFactory.newSAXParser();
+      schemaFactory.setResourceResolver(new LSResourceResolver()
+      {
+        @Override
+        public LSInput resolveResource(String type, String namespaceURI, String publicId,
+            String systemId, String baseURI)
+        {
+          switch (systemId)
+          {
+            case "BPMNDI.xsd":
+            {
+              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
+                  "META-INF/BPMNDI.xsd");
+            }
 
-      Process process = new Process();
+            case "DC.xsd":
+            {
+              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
+                  "META-INF/DC.xsd");
+            }
 
-      ParserHandler handler = new ParserHandler(process);
+            case "DI.xsd":
+            {
+              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
+                  "META-INF/DI.xsd");
+            }
 
-      parser.parse(new ByteArrayInputStream(data), handler);
+            case "Semantic.xsd":
+            {
+              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
+                  "META-INF/Semantic.xsd");
+            }
 
-      return process;
+          }
+
+          return null;
+        }
+      });
+
+      Schema schema = schemaFactory.newSchema(
+          new StreamSource(new ByteArrayInputStream(getClasspathResource("META-INF/BPMN20.xsd"))));
+
+      SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+
+      saxParserFactory.setSchema(schema);
+
+      SAXParser saxParser = saxParserFactory.newSAXParser();
+
+      ParserHandler handler = new ParserHandler();
+
+      saxParser.parse(new ByteArrayInputStream(data), handler);
+
+      return handler.getProcesses();
     }
     catch (Throwable e)
     {
       throw new ParserException("Failed to parse the BPMN data for the process definition", e);
+    }
+  }
+
+  private byte[] getClasspathResource(String path)
+  {
+    try
+    {
+      try (InputStream is =
+          Thread.currentThread().getContextClassLoader().getResourceAsStream(path))
+      {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[4096];
+        int numberOfBytesRead;
+
+        while ((numberOfBytesRead = is.read(buffer)) != -1)
+        {
+          baos.write(buffer, 0, numberOfBytesRead);
+        }
+
+        return baos.toByteArray();
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to read the classpath resource (" + path + ")", e);
     }
   }
 }

@@ -22,6 +22,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The <code>ParserHandler</code> class implements the SAX handler that provides the capability to
  * parse Business Process Model and Notation (BPMN) format files.
@@ -31,19 +36,14 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ParserHandler extends DefaultHandler
 {
   /**
-   * The Business Process Model and Notation (BPMN) process to populate.
+   * The Business Process Model and Notation (BPMN) process being parsed.
    */
   private Process process;
 
   /**
-   * The Business Process Model and Notation (BPMN) process to populate.
-   *
-   * @param process the Business Process Model and Notation (BPMN) process to populate
+   * Constructs a new <code>ParserHandler</code>.
    */
-  public ParserHandler(Process process)
-  {
-    this.process = process;
-  }
+  public ParserHandler() {}
 
   /**
    * Receive notification of character data inside an element.
@@ -77,25 +77,27 @@ public class ParserHandler extends DefaultHandler
   public void endElement(String uri, String localName, String qName)
     throws SAXException
   {
-    System.out.println("[DEBUG][endElement] {uri=\"" + uri + "\", localName=\"" + localName
-        + "\", qName=\"" + qName + "\"}");
+    // System.out.println("[DEBUG][endElement] {uri=\"" + uri + "\", localName=\"" + localName
+    // + "\", qName=\"" + qName + "\"}");
 
-//  switch(qName){
-//    //Add the employee to list once end tag is found
-//    case "employee":
-//      empList.add(emp);
-//      break;
-//    //For all other end tags the employee has to be updated.
-//    case "firstName":
-//      emp.firstName = content;
-//      break;
-//    case "lastName":
-//      emp.lastName = content;
-//      break;
-//    case "location":
-//      emp.location = content;
-//      break;
-//  }
+    switch (qName)
+    {
+      case "process":
+      {
+        break;
+      }
+
+    }
+  }
+
+  /**
+   * Returns the parsed Business Process Model and Notation (BPMN) process.
+   *
+   * @return the parsed Business Process Model and Notation (BPMN) process
+   */
+  public Process getProcesses()
+  {
+    return process;
   }
 
   /**
@@ -114,8 +116,21 @@ public class ParserHandler extends DefaultHandler
   {
     // super.startElement(uri, localName, qName, attributes);
 
-    System.out.println("[DEBUG][startElement] {uri=\"" + uri + "\", localName=\"" + localName
-        + "\", qName=\"" + qName + "\"}");
+    // System.out.println("[DEBUG][startElement] {uri=\"" + uri + "\", localName=\"" + localName
+    // + "\", qName=\"" + qName + "\"}");
+
+    switch (qName)
+    {
+      case "process":
+      {
+        // /String id = attributes.getValue("");
+
+        process = new Process();
+
+        break;
+      }
+
+    }
 
 //  switch(qName){
 //    //Create a new Employee object when the start tag is found
