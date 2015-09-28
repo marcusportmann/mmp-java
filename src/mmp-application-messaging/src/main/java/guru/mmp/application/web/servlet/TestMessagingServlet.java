@@ -25,8 +25,10 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.http.SecureHttpClientBuilder;
 import guru.mmp.common.util.Base64;
+import guru.mmp.common.util.ResourceUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Parser;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -34,25 +36,30 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+
+import java.security.MessageDigest;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
 import javax.inject.Inject;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.security.MessageDigest;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestMessagingServlet</code> class implements the servlet used to test the
@@ -317,8 +324,8 @@ public class TestMessagingServlet extends HttpServlet
 
           AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value");
 
-          byte[] testData =
-            getClasspathResource("guru/mmp/application/web/template/resource/image/test.jpg");
+          byte[] testData = ResourceUtil.getClasspathResource(
+              "guru/mmp/application/web/template/resource/image/test.jpg");
 
           logger.info("Loaded " + testData.length + " bytes of test data");
 
@@ -583,47 +590,6 @@ public class TestMessagingServlet extends HttpServlet
     }
 
     printHtmlFooter(pw);
-  }
-
-  protected byte[] getClasspathResource(String path)
-  {
-    InputStream is = null;
-
-    try
-    {
-      is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-      byte[] buffer = new byte[4096];
-      int numberOfBytesRead;
-
-      while ((numberOfBytesRead = is.read(buffer)) != -1)
-      {
-        baos.write(buffer, 0, numberOfBytesRead);
-      }
-
-      return baos.toByteArray();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to read the classpath resource (" + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (is != null)
-        {
-          is.close();
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to close the input stream for the classpath resource (" + path + ")",
-            e);
-      }
-    }
   }
 
   /**

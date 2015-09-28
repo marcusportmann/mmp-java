@@ -20,6 +20,7 @@ package guru.mmp.application.process.bpmn;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -58,7 +59,7 @@ public class ParserHandler extends DefaultHandler
   public void characters(char[] ch, int start, int length)
     throws SAXException
   {
-    System.out.println("[DEBUG][characters] Read: " + String.copyValueOf(ch, start, length).trim());
+    //System.out.println("[DEBUG][characters] Read: " + String.copyValueOf(ch, start, length).trim());
   }
 
   /**
@@ -157,6 +158,41 @@ public class ParserHandler extends DefaultHandler
 
     System.out.println("[DEBUG][startPrefixMapping] startPrefixMapping {prefixe=\"" + prefix
         + "\", uri = \"" + uri + "\"");
+
+  }
+
+
+
+  @Override
+  public void error(SAXParseException e) throws SAXException {
+
+
+    throw e;
+
+//    int xxx = 0;
+//    xxx++;
+
+  }
+
+
+
+
+  @Override
+  public void fatalError(SAXParseException e) throws SAXException {
+    //System.out.println("Fattal error: ");
+    //printInfo(e);
+
+    int xxx = 0;
+    xxx++;
+  }
+
+  @Override
+  public void warning(SAXParseException e) throws SAXException {
+//    System.out.println("Warning: ");
+//    printInfo(e);
+
+    int xxx = 0;
+    xxx++;
 
   }
 }

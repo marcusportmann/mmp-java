@@ -28,7 +28,7 @@ import java.util.*;
  *
  * @author Marcus Portmann
  */
-public class StringUtil
+public final class StringUtil
 {
   /**
    * <code>AE_TAB</code>

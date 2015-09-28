@@ -24,6 +24,7 @@ import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportType;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
+import guru.mmp.common.util.ResourceUtil;
 import guru.mmp.common.util.StringUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -297,7 +298,8 @@ public class ViewReportServlet extends HttpServlet
       response.setContentType("image/png");
 
       byte[] data =
-        getClasspathResource("guru/mmp/application/web/template/resource/image/reportError.png");
+        ResourceUtil.getClasspathResource(
+          "guru/mmp/application/web/template/resource/image/reportError.png");
 
       OutputStream out = response.getOutputStream();
 
@@ -314,47 +316,6 @@ public class ViewReportServlet extends HttpServlet
     throws ServletException, IOException
   {
     doGet(request, response);
-  }
-
-  private byte[] getClasspathResource(String path)
-  {
-    InputStream is = null;
-
-    try
-    {
-      is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-      byte[] buffer = new byte[4096];
-      int numberOfBytesRead;
-
-      while ((numberOfBytesRead = is.read(buffer)) != -1)
-      {
-        baos.write(buffer, 0, numberOfBytesRead);
-      }
-
-      return baos.toByteArray();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to read the classpath resource (" + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (is != null)
-        {
-          is.close();
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to close the input stream for the classpath resource (" + path + ")",
-            e);
-      }
-    }
   }
 
   private String getLocalReportFolderPath()

@@ -36,48 +36,6 @@ public abstract class Tests
 {
   private Logger logger;
 
-  @SuppressWarnings("unused")
-  protected byte[] getClasspathResource(String path)
-  {
-    InputStream is = null;
-
-    try
-    {
-      is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-      byte[] buffer = new byte[4096];
-      int numberOfBytesRead;
-
-      while ((numberOfBytesRead = is.read(buffer)) != -1)
-      {
-        baos.write(buffer, 0, numberOfBytesRead);
-      }
-
-      return baos.toByteArray();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to read the classpath resource (" + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (is != null)
-        {
-          is.close();
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to close the input stream for the classpath resource (" + path + ")",
-            e);
-      }
-    }
-  }
-
   protected Logger getLogger()
   {
     if (logger == null)

@@ -27,7 +27,7 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
-public class DateUtil
+public final class DateUtil
 {
   /**
    * Converts a <code>java.util.Date</code> to a <code>java.util.Calendar</code>.

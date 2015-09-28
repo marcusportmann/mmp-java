@@ -17,6 +17,7 @@
 package guru.mmp.application.process.test;
 
 import guru.mmp.application.process.bpmn.Parser;
+import guru.mmp.common.util.ResourceUtil;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -27,38 +28,13 @@ import java.io.InputStream;
  */
 public class BPMNParserTests
 {
-  protected byte[] getClasspathResource(String path)
-  {
-    try
-    {
-      try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path))
-      {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[4096];
-        int numberOfBytesRead;
-
-        while ((numberOfBytesRead = is.read(buffer)) != -1)
-        {
-          baos.write(buffer, 0, numberOfBytesRead);
-        }
-
-        return baos.toByteArray();
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to read the classpath resource (" + path + ")", e);
-    }
-  }
-
   @Test
   public void bpmnParserTest()
   {
     try
     {
       // Load the XML Business Process Model and Notation (BPMN) data from the classpath
-      byte[] processDefinitionData = getClasspathResource(
+      byte[] processDefinitionData = ResourceUtil.getClasspathResource(
         "guru/mmp/application/process/test/Test.bpmn");
 
       Parser parser = new Parser();

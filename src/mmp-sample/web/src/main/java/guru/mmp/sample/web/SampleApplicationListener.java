@@ -22,6 +22,7 @@ import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.common.persistence.DAOUtil;
+import guru.mmp.common.util.ResourceUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,47 +87,6 @@ public class SampleApplicationListener
     initSampleData();
   }
 
-  private byte[] getClasspathResource(String path)
-  {
-    InputStream is = null;
-
-    try
-    {
-      is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-      byte[] buffer = new byte[4096];
-      int numberOfBytesRead;
-
-      while ((numberOfBytesRead = is.read(buffer)) != -1)
-      {
-        baos.write(buffer, 0, numberOfBytesRead);
-      }
-
-      return baos.toByteArray();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to read the classpath resource (" + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (is != null)
-        {
-          is.close();
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to close the input stream for the classpath resource (" + path + ")",
-            e);
-      }
-    }
-  }
-
   /**
    * Initialise the sample data.
    */
@@ -135,7 +95,7 @@ public class SampleApplicationListener
     try
     {
       byte[] sampleReportDefinitionData =
-        getClasspathResource("guru/mmp/sample/report/SampleReport.jasper");
+        ResourceUtil.getClasspathResource("guru/mmp/sample/report/SampleReport.jasper");
 
       ReportDefinition sampleReportDefinition =
         new ReportDefinition("2a4b74e8-7f03-416f-b058-b35bb06944ef", "MMP", "Sample Report",

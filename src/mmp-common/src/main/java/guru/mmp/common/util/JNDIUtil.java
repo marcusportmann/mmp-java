@@ -28,7 +28,7 @@ import java.io.StringWriter;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class JNDIUtil
+public final class JNDIUtil
 {
   /**
    * Dump the contents of the JNDI tree.

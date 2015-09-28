@@ -3,7 +3,7 @@
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL">
-	
+
 	<xsd:element name="activity" type="tActivity"/>
 	<xsd:complexType name="tActivity" abstract="true">
 		<xsd:complexContent>

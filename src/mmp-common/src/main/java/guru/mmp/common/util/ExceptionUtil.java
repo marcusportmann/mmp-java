@@ -22,7 +22,7 @@ package guru.mmp.common.util;
  *
  * @author Marcus Portmann
  */
-public class ExceptionUtil
+public final class ExceptionUtil
 {
   /**
    * Returns the nested messages for an exception.

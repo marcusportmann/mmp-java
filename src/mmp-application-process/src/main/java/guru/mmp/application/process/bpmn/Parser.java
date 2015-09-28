@@ -18,10 +18,13 @@ package guru.mmp.application.process.bpmn;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.common.util.ResourceUtil;
 import guru.mmp.common.xml.XmlSchemaClasspathInputSource;
 
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
+
+import org.xml.sax.*;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -39,6 +42,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 /**
  * The <code>Parser</code> class provides the capability to parse Business Process Model and
@@ -97,18 +101,19 @@ public class Parser
               return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
                   "META-INF/Semantic.xsd");
             }
-
           }
 
-          return null;
+          throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");
         }
       });
 
       Schema schema = schemaFactory.newSchema(
-          new StreamSource(new ByteArrayInputStream(getClasspathResource("META-INF/BPMN20.xsd"))));
+          new StreamSource(new ByteArrayInputStream(
+            ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))));
 
       SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-
+      saxParserFactory.setValidating(false);
+      saxParserFactory.setNamespaceAware(true);
       saxParserFactory.setSchema(schema);
 
       SAXParser saxParser = saxParserFactory.newSAXParser();
@@ -121,33 +126,7 @@ public class Parser
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the BPMN data for the process definition", e);
-    }
-  }
-
-  private byte[] getClasspathResource(String path)
-  {
-    try
-    {
-      try (InputStream is =
-          Thread.currentThread().getContextClassLoader().getResourceAsStream(path))
-      {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[4096];
-        int numberOfBytesRead;
-
-        while ((numberOfBytesRead = is.read(buffer)) != -1)
-        {
-          baos.write(buffer, 0, numberOfBytesRead);
-        }
-
-        return baos.toByteArray();
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to read the classpath resource (" + path + ")", e);
+      throw new ParserException("Failed to parse the BPMN data for the process", e);
     }
   }
 }
