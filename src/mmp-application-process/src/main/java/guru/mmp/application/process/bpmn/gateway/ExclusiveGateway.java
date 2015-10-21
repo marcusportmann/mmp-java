@@ -37,11 +37,12 @@ public class ExclusiveGateway extends Gateway
   /**
    * Constructs a new <code>ExclusiveGateway</code>.
    *
-   * @param id the ID uniquely identifying the exclusive gateway
+   * @param id   the ID uniquely identifying the exclusive gateway
+   * @param name the name of the exclusive gateway
    */
-  public ExclusiveGateway(String id)
+  public ExclusiveGateway(String id, String name)
   {
-    super(id);
+    super(id, name);
   }
 
   /**

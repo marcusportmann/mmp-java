@@ -59,70 +59,15 @@ import guru.mmp.application.process.bpmn.FlowNode;
  * @author Marcus Portmann
  */
 abstract class Event extends FlowNode
-  implements IEvent
 {
-  /**
-   * The name of the event.
-   */
-  private String name;
-
-  /**
-   * The type of event.
-   */
-  private EventType type;
-
   /**
    * Constructs a new <code>Event</code>.
    *
    * @param id   the ID uniquely identifying the event
    * @param name the name of the event
-   * @param type the type of event
    */
-  protected Event(String id, String name, EventType type)
+  protected Event(String id, String name)
   {
-    super(id);
-
-    this.name = name;
-    this.type = type;
-  }
-
-  /**
-   * Returns the name of the event.
-   *
-   * @return the name of the event
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the type of event.
-   *
-   * @return the type of event
-   */
-  public EventType getType()
-  {
-    return type;
-  }
-
-  /**
-   * Set the name of the event.
-   *
-   * @param name the name of the event
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the type of event.
-   *
-   * @param type the type of event
-   */
-  public void setType(EventType type)
-  {
-    this.type = type;
+    super(id, name);
   }
 }

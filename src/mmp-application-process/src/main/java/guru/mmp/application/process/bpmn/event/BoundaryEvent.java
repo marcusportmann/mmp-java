@@ -53,12 +53,10 @@ public final class BoundaryEvent extends CatchingEvent
    *
    * @param id           the ID uniquely identifying the boundary event
    * @param name         the name of the boundary event
-   * @param type         the type of boundary event
-   * @param interrupting is the boundary event interrupting
    */
-  public BoundaryEvent(String id, String name, EventType type, boolean interrupting)
+  public BoundaryEvent(String id, String name, boolean interrupting)
   {
-    super(id, name, type);
+    super(id, name);
 
     this.interrupting = interrupting;
   }

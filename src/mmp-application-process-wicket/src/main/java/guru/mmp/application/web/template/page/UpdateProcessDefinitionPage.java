@@ -69,12 +69,15 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
    * @param processDefinitionModel the model for the process definition
    */
   public UpdateProcessDefinitionPage(PageReference previousPage,
-    IModel<ProcessDefinition> processDefinitionModel)
+      IModel<ProcessDefinition> processDefinitionModel)
   {
     super("Update Process Definition");
 
     try
     {
+      processDefinitionModel.getObject().setVersion(processDefinitionModel.getObject().getVersion()
+          + 1);
+
       Form<ProcessDefinition> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(processDefinitionModel));
 
@@ -115,7 +118,7 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
 
             processDefinition.setData(baos.toByteArray());
 
-            processService.saveProcessDefinition(processDefinition, session.getUsername());
+            processService.createProcessDefinition(processDefinition, session.getUsername());
 
             setResponsePage(previousPage.getPage());
           }
@@ -138,7 +141,7 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
             catch (Throwable e)
             {
               logger.error("Failed to delete the uploaded file (" + fileUpload.getClientFileName()
-                + ")", e);
+                  + ")", e);
             }
           }
         }

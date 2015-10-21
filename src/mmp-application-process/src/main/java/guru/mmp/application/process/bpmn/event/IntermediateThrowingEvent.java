@@ -38,11 +38,10 @@ public class IntermediateThrowingEvent extends ThrowingEvent
    *
    * @param id   the ID uniquely identifying the intermediate throwing event
    * @param name the name of the intermediate throwing event
-   * @param type the type of intermediate throwing event
    */
-  public IntermediateThrowingEvent(String id, String name, EventType type)
+  public IntermediateThrowingEvent(String id, String name)
   {
-    super(id, name, type);
+    super(id, name);
   }
 
   /**

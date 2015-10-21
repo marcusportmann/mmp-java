@@ -103,7 +103,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  int resetScheduledTaskLocks(ScheduledTaskStatus status, ScheduledTaskStatus newStatus)
+  int resetScheduledTaskLocks(ScheduledTask.Status status, ScheduledTask.Status newStatus)
     throws TaskServiceException;
 
   /**
@@ -125,6 +125,6 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  void unlockScheduledTask(String id, ScheduledTaskStatus status)
+  void unlockScheduledTask(String id, ScheduledTask.Status status)
     throws TaskServiceException;
 }

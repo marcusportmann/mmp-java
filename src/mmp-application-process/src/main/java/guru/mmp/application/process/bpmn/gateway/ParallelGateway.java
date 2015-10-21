@@ -37,11 +37,12 @@ public final class ParallelGateway extends Gateway
   /**
    * Constructs a new <code>ParallelGateway</code>.
    *
-   * @param id the ID uniquely identifying the parallel gateway
+   * @param id   the ID uniquely identifying the parallel gateway
+   * @param name the name of the parallel gateway
    */
-  public ParallelGateway(String id)
+  public ParallelGateway(String id, String name)
   {
-    super(id);
+    super(id, name);
   }
 
   /**

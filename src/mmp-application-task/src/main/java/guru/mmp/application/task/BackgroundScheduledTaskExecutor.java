@@ -98,8 +98,8 @@ public class BackgroundScheduledTaskExecutor
       {
         logger.info("Resetting the locks for the scheduled tasks being executed");
 
-        taskService.resetScheduledTaskLocks(ScheduledTaskStatus.EXECUTING,
-            ScheduledTaskStatus.SCHEDULED);
+        taskService.resetScheduledTaskLocks(ScheduledTask.Status.EXECUTING,
+            ScheduledTask.Status.SCHEDULED);
       }
       catch (Throwable e)
       {
@@ -162,7 +162,7 @@ public class BackgroundScheduledTaskExecutor
 
           try
           {
-            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTaskStatus.SCHEDULED);
+            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTask.Status.SCHEDULED);
           }
           catch (Throwable f)
           {
@@ -177,7 +177,7 @@ public class BackgroundScheduledTaskExecutor
 
           try
           {
-            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTaskStatus.FAILED);
+            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTask.Status.FAILED);
           }
           catch (Throwable f)
           {
@@ -217,11 +217,11 @@ public class BackgroundScheduledTaskExecutor
                 + ") has exceeded the maximum "
                 + " number of execution attempts and will be marked as \"Failed\"");
 
-            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTaskStatus.FAILED);
+            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTask.Status.FAILED);
           }
           else
           {
-            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTaskStatus.SCHEDULED);
+            taskService.unlockScheduledTask(scheduledTask.getId(), ScheduledTask.Status.SCHEDULED);
           }
         }
         catch (Throwable f)

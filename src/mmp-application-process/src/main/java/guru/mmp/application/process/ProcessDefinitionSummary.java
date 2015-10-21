@@ -47,26 +47,33 @@ public class ProcessDefinitionSummary
   private String organisation;
 
   /**
-   * Constructs a new <code>ProcessDefinitionSummary</code>.
+   * The version of the process definition.
    */
-  @SuppressWarnings("unused")
-  private ProcessDefinitionSummary() {}
+  private int version;
 
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
    *
    * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
    *                     process definition
+   * @param version      the version of the process definition
    * @param organisation the organisation code identifying the organisation the process definition
    *                     is associated with
    * @param name         the name of the process definition
    */
-  public ProcessDefinitionSummary(String id, String organisation, String name)
+  public ProcessDefinitionSummary(String id, int version, String organisation, String name)
   {
     this.id = id;
+    this.version = version;
     this.organisation = organisation;
     this.name = name;
   }
+
+  /**
+   * Constructs a new <code>ProcessDefinitionSummary</code>.
+   */
+  @SuppressWarnings("unused")
+  private ProcessDefinitionSummary() {}
 
   /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
@@ -103,6 +110,26 @@ public class ProcessDefinitionSummary
   }
 
   /**
+   * Returns the version of the process definition.
+   *
+   * @return the version of the process definition
+   */
+  public int getVersion()
+  {
+    return version;
+  }
+
+  /**
+   * Set the version of the process definition.
+   *
+   * @param version the version of the process definition
+   */
+  public void setVersion(int version)
+  {
+    this.version = version;
+  }
+
+  /**
    * Returns a string representation of the object.
    *
    * @return a string representation of the object
@@ -111,6 +138,6 @@ public class ProcessDefinitionSummary
   public String toString()
   {
     return "ProcessDefinitionSummary {" + "id=\"" + getId() + "\", " + "organisation=\""
-      + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
+        + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
   }
 }

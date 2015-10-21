@@ -29,6 +29,26 @@ import java.util.List;
 /**
  * The <code>CatchingEvent</code> class represents a Business Process Model and Notation (BPMN)
  * catching event that forms part of a BPMN process.
+ * <p>
+ * <b>Catching Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="catchEvent" type="tCatchEvent"/&gt;
+ * &lt;xsd:complexType name="tCatchEvent" abstract="true"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tEvent"&gt;
+ *       &lt;xsd:sequence&gt;
+ *         &lt;xsd:element ref="dataOutput" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="dataOutputAssociation" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="outputSet" minOccurs="0" maxOccurs="1"/&gt;
+ *         &lt;xsd:element ref="eventDefinition" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element name="eventDefinitionRef" type="xsd:QName" minOccurs="0" 
+ *                      maxOccurs="unbounded"/&gt;
+ *       &lt;/xsd:sequence&gt;
+ *       &lt;xsd:attribute name="parallelMultiple" type="xsd:boolean" default="false"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
@@ -39,11 +59,10 @@ abstract class CatchingEvent extends Event
    *
    * @param id   the ID uniquely identifying the catching event
    * @param name the name of the catching event
-   * @param type the type of catching event
    */
-  protected CatchingEvent(String id, String name, EventType type)
+  protected CatchingEvent(String id, String name)
   {
-    super(id, name, type);
+    super(id, name);
   }
 
   /**

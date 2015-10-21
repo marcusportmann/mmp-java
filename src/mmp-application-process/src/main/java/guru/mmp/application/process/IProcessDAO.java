@@ -43,13 +43,81 @@ public interface IProcessDAO
     throws DAOException;
 
   /**
-   * Delete the existing process definition.
+   * Create the new process instance.
    *
-   * @param id the ID uniquely identifying the process definition
+   * @param processInstance the <code>ProcessInstance</code> instance containing the information
+   *                        for the new process instance
+   *
+   * @throws DAOException
+   */
+  void createProcessInstance(ProcessInstance processInstance)
+    throws DAOException;
+
+  /**
+   * Delete all versions of the existing process definition.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           definition
    *
    * @throws DAOException
    */
   void deleteProcessDefinition(String id)
+    throws DAOException;
+
+  /**
+   * Delete the process instance.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           instance
+   *
+   * @throws DAOException
+   */
+  void deleteProcessInstance(String id)
+    throws DAOException;
+
+  /**
+   * Returns the summaries for the current versions of all the process definitions associated with
+   * the organisation identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for the current versions of all the process definitions associated with
+   *         the organisation identified by the specified organisation code
+   *
+   * @throws DAOException
+   */
+  List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
+      String organisation)
+    throws DAOException;
+
+  /**
+   * Returns the current versions of all the process definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the current versions of all the process definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws DAOException
+   */
+  List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(String organisation)
+    throws DAOException;
+
+  /**
+   * Retrieve the next process instance that is scheduled for execution.
+   * <p/>
+   * The process instance will be locked to prevent duplicate processing.
+   *
+   * @param lockName the name of the lock that should be applied to the process instance scheduled
+   *                 for execution when it is retrieved
+   *
+   * @return the next process instance that is scheduled for execution or <code>null</code> if no
+   *         process instances are currently scheduled for execution
+   *
+   * @throws DAOException
+   */
+  ProcessInstance getNextProcessInstanceScheduledForExecution(String lockName)
     throws DAOException;
 
   /**
@@ -67,85 +135,155 @@ public interface IProcessDAO
     throws DAOException;
 
   /**
-   * Retrieve the process definition with the specified ID.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           process definition
-   *
-   * @return the process definition with the specified ID or <code>null</code> if the process
-   *         definition could not be found
-   *
-   * @throws DAOException
-   */
-  ProcessDefinition getProcessDefinition(String id)
-    throws DAOException;
-
-  /**
-   * Returns the summaries for all the process definitions associated with the organisation
-   * identified by the specified organisation code.
-   *
-   * @param organisation the organisation code identifying the organisation
-   *
-   * @return the summaries for all the process definitions associated with the organisation
-   *         identified by the specified organisation code
-   *
-   * @throws DAOException
-   */
-  List<ProcessDefinitionSummary> getProcessDefinitionSummariesForOrganisation(String organisation)
-    throws DAOException;
-
-  /**
-   * Retrieve the summary for the process definition with the specified ID.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           process definition
-   *
-   * @return the summary for the process definition with the specified ID or <code>null</code> if
-   *         the process definition could not be found
-   *
-   * @throws DAOException
-   */
-  ProcessDefinitionSummary getProcessDefinitionSummary(String id)
-    throws DAOException;
-
-  /**
-   * Returns all the process definitions associated with the organisation identified by the
+   * Returns the number of process instances associated with the organisation identified by the
    * specified organisation code.
    *
    * @param organisation the organisation code identifying the organisation
    *
-   * @return all the process definitions associated with the organisation identified by the
+   * @return the number of process instances associated with the organisation identified by the
    *         specified organisation code
    *
    * @throws DAOException
    */
-  List<ProcessDefinition> getProcessDefinitionsForOrganisation(String organisation)
+  int getNumberOfProcessInstancesForOrganisation(String organisation)
     throws DAOException;
 
   /**
-   * Check whether the process definition with the specified ID exists in the database.
+   * Retrieve the process definition with the specified ID and version.
+   *
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                process definition
+   * @param version the version of the process definition
+   *
+   * @return the process definition with the specified ID and version or <code>null</code> if the
+   *         process definition could not be found
+   *
+   * @throws DAOException
+   */
+  ProcessDefinition getProcessDefinition(String id, int version)
+    throws DAOException;
+
+  /**
+   * Retrieve the summary for the process definition with the specified ID and version.
+   *
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                process definition
+   * @param version the version of the process definition
+   *
+   * @return the summary for the process definition with the specified ID and version or
+   *         <code>null</code> if the process definition could not be found
+   *
+   * @throws DAOException
+   */
+  ProcessDefinitionSummary getProcessDefinitionSummary(String id, int version)
+    throws DAOException;
+
+  /**
+   * Retrieve the process instance with the specified ID.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *           definition
+   *           instance
+   *
+   * @return the process instance with the specified ID or <code>null</code> if the process
+   *         instance could not be found
+   *
+   * @throws DAOException
+   */
+  ProcessInstance getProcessInstance(String id)
+    throws DAOException;
+
+  /**
+   * Returns the summaries for the all the process instances associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for the all the process instances associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws DAOException
+   */
+  List<ProcessInstanceSummary> getProcessInstanceSummariesForOrganisation(String organisation)
+    throws DAOException;
+
+  /**
+   * Retrieve the summary for the process instance with the specified ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           instance
+   *
+   * @return the summary for the process instance with the specified ID or <code>null</code> if the
+   *         process definition could not be found
+   *
+   * @throws DAOException
+   */
+  ProcessInstanceSummary getProcessInstanceSummary(String id)
+    throws DAOException;
+
+  /**
+   * Check whether the process definition with the specified ID and version exists in the database.
+   *
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *                definition
+   * @param version the version of the process definition
    *
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  boolean processDefinitionExists(String id)
+  boolean processDefinitionExists(String id, int version)
     throws DAOException;
 
   /**
-   * Update the process definition.
+   * Check whether the process instance with the specified ID exists in the database.
    *
-   * @param processDefinition the <code>ProcessDefinition</code> instance containing the updated
-   *                         information for the process definition
-   * @param updatedBy        the username identifying the user that updated the process definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           instance
    *
-   * @return the updated process definition
+   * @return <code>true</code> if the process instance exists or <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  ProcessDefinition updateProcessDefinition(ProcessDefinition processDefinition, String updatedBy)
+  boolean processInstanceExists(String id)
+    throws DAOException;
+
+  /**
+   * Reset the process instance locks.
+   *
+   * @param lockName  the name of the lock applied by the entity that has locked the
+   *                  process instances
+   * @param status    the current status of the process instances that have been locked
+   * @param newStatus the new status for the process instances that have been unlocked
+   *
+   * @return the number of process instance locks reset
+   *
+   * @throws DAOException
+   */
+  int resetProcessInstanceLocks(String lockName, ProcessInstance.Status status,
+      ProcessInstance.Status newStatus)
+    throws DAOException;
+
+  /**
+   * Unlock a locked process instance.
+   *
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *               instance
+   * @param status the new status for the unlocked process instance
+   *
+   * @throws DAOException
+   */
+  void unlockProcessInstance(String id, ProcessInstance.Status status)
+    throws DAOException;
+
+  /**
+   * Update the state for process instance with the specified ID.
+   *
+   * @param id    the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *              instance
+   * @param state the data giving the current execution state for the process instance
+   *
+   * @throws DAOException
+   */
+  void updateProcessInstanceState(String id, byte[] state)
     throws DAOException;
 }

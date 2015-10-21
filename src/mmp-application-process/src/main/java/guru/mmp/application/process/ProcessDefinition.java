@@ -53,6 +53,11 @@ public class ProcessDefinition
   private String organisation;
 
   /**
+   * The version of the process definition.
+   */
+  private int version;
+
+  /**
    * Constructs a new <code>ProcessDefinition</code>.
    */
   public ProcessDefinition() {}
@@ -68,6 +73,7 @@ public class ProcessDefinition
   public ProcessDefinition(String organisation, String name, byte[] data)
   {
     this.id = UUID.randomUUID().toString();
+    this.version = 1;
     this.organisation = organisation;
     this.name = name;
     this.data = data;
@@ -78,14 +84,16 @@ public class ProcessDefinition
    *
    * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
    *                     process definition
+   * @param version      the version of the process definition
    * @param organisation the organisation code identifying the organisation the process definition
    *                     is associated with
    * @param name         the name of the process definition
    * @param data         the data for the process definition
    */
-  public ProcessDefinition(String id, String organisation, String name, byte[] data)
+  public ProcessDefinition(String id, int version, String organisation, String name, byte[] data)
   {
     this.id = id;
+    this.version = version;
     this.organisation = organisation;
     this.name = name;
     this.data = data;
@@ -136,6 +144,16 @@ public class ProcessDefinition
   }
 
   /**
+   * Returns the version of the process definition.
+   *
+   * @return the version of the process definition
+   */
+  public int getVersion()
+  {
+    return version;
+  }
+
+  /**
    * Set the BPMN data for the process definition.
    *
    * @param data the BPMN data for the process definition
@@ -176,6 +194,16 @@ public class ProcessDefinition
   public void setOrganisation(String organisation)
   {
     this.organisation = organisation;
+  }
+
+  /**
+   * Set the version of the process definition.
+   *
+   * @param version the version of the process definition
+   */
+  public void setVersion(int version)
+  {
+    this.version = version;
   }
 
   /**

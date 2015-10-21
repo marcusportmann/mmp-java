@@ -48,13 +48,18 @@ public class DetachableProcessDefinitionSummaryModel
   private IProcessService processService;
 
   /**
+   * The version of the process definition.
+   */
+  private int version;
+
+  /**
    * Constructs a new <code>DetachableProcessDefinitionSummaryModel</code>.
    *
    * @param processDefinition the <code>ProcessDefinitionSummary</code> instance
    */
   public DetachableProcessDefinitionSummaryModel(ProcessDefinitionSummary processDefinition)
   {
-    this(processDefinition.getId());
+    this(processDefinition.getId(), processDefinition.getVersion());
 
     setObject(processDefinition);
   }
@@ -62,12 +67,14 @@ public class DetachableProcessDefinitionSummaryModel
   /**
    * Constructs a new <code>DetachableProcessDefinitionSummaryModel</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *           definition
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *                definition
+   * @param version the version of the process definition
    */
-  public DetachableProcessDefinitionSummaryModel(String id)
+  public DetachableProcessDefinitionSummaryModel(String id, int version)
   {
     this.id = id;
+    this.version = version;
   }
 
   /**
@@ -86,12 +93,13 @@ public class DetachableProcessDefinitionSummaryModel
   {
     try
     {
-      return processService.getProcessDefinitionSummary(id);
+      return processService.getProcessDefinitionSummary(id, version);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the summary for the process definition ("
-          + id + ")", e);
+      throw new WebApplicationException(
+          "Failed to load the summary for the process definition with ID (" + id
+          + ") and version (" + version + ")", e);
     }
   }
 

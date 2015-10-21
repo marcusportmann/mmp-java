@@ -93,7 +93,7 @@ public class ProcessDefinitionDataProvider extends InjectableDataProvider<Proces
     try
     {
       List<ProcessDefinition> allProcessDefinitions =
-        processService.getProcessDefinitionsForOrganisation(organisation);
+        processService.getCurrentProcessDefinitionsForOrganisation(organisation);
 
       List<ProcessDefinition> processDefinitions = new ArrayList<>();
 

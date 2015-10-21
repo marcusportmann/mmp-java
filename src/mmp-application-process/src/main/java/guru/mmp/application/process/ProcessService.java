@@ -19,7 +19,6 @@ package guru.mmp.application.process;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.process.bpmn.Parser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +67,38 @@ public class ProcessService
   public ProcessService() {}
 
   /**
-   * Delete the existing process definition.
+   * Create the new process definition.
+   *
+   * @param processDefinition the <code>ProcessDefinition</code> instance containing the information
+   *                         for the new process definition
+   * @param createdBy        the username identifying the user that created the process definition
+   *
+   * @throws ProcessServiceException
+   */
+  public void createProcessDefinition(ProcessDefinition processDefinition, String createdBy)
+    throws ProcessServiceException
+  {
+    if (processDefinitionExists(processDefinition.getId(), processDefinition.getVersion()))
+    {
+      throw new ProcessServiceException("A process definition with ID ("
+          + processDefinition.getId() + ") and version (" + processDefinition.getVersion()
+          + ") already exists");
+    }
+
+    try
+    {
+      processDAO.createProcessDefinition(processDefinition);
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to create the process definition with ID ("
+          + processDefinition.getId() + ") and version (" + processDefinition.getVersion()
+          + ")", e);
+    }
+  }
+
+  /**
+   * Delete all versions of the existing process definition.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           process definition
@@ -84,8 +114,108 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to delete the process definition with ID (" + id
-          + ")", e);
+      throw new ProcessServiceException(
+          "Failed to delete all versions of the process definition with ID (" + id + ")", e);
+    }
+  }
+
+  /**
+   * Execute the process instance.
+   *
+   * @param processInstance the process instance to execute
+   *
+   * @throws ProcessServiceException
+   */
+  public void executeProcessInstance(ProcessInstance processInstance)
+    throws ProcessServiceException
+  {
+    try
+    {
+      // Retrieve the process definition for the process instance
+
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to execute the process instance ("
+          + processInstance.getId() + ")", e);
+    }
+
+  }
+
+  /**
+   * Returns the summaries for the current versions of all the process definitions associated with
+   * the organisation identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the summaries for the current versions of all the process definitions associated with
+   *         the organisation identified by the specified organisation code
+   *
+   * @throws ProcessServiceException
+   */
+  public List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
+      String organisation)
+    throws ProcessServiceException
+  {
+    try
+    {
+      return processDAO.getCurrentProcessDefinitionSummariesForOrganisation(organisation);
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException(
+          "Failed to retrieve the summaries for the current versions of the"
+          + " process definitions for the organisation (" + organisation + ")", e);
+    }
+  }
+
+  /**
+   * Returns the current versions of all the process definitions associated with the organisation
+   * identified by the specified organisation code.
+   *
+   * @param organisation the organisation code identifying the organisation
+   *
+   * @return the current versions of all the process definitions associated with the organisation
+   *         identified by the specified organisation code
+   *
+   * @throws ProcessServiceException
+   */
+  public List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(String organisation)
+    throws ProcessServiceException
+  {
+    try
+    {
+      return processDAO.getCurrentProcessDefinitionsForOrganisation(organisation);
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException(
+          "Failed to retrieve the current versions of the process definitions"
+          + " for the organisation (" + organisation + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the next process instance that is scheduled for execution.
+   * <p/>
+   * The process instance will be locked to prevent duplicate processing.
+   *
+   * @return the next process instance that is scheduled for execution or <code>null</code> if no
+   *         process instances are currently scheduled for execution
+   *
+   * @throws ProcessServiceException
+   */
+  public ProcessInstance getNextProcessInstanceScheduledForExecution()
+    throws ProcessServiceException
+  {
+    try
+    {
+      return processDAO.getNextProcessInstanceScheduledForExecution(getInstanceName());
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException(
+          "Failed to retrieve the next process instance that has been scheduled for execution", e);
     }
   }
 
@@ -116,110 +246,55 @@ public class ProcessService
   }
 
   /**
-   * Retrieve the process definition with the specified ID.
+   * Retrieve the process definition with the specified ID and version.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           process definition
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                process definition
+   * @param version the version of the process definition
    *
-   * @return the process definition with the specified ID or <code>null</code> if the proces
-   *         definition could not be found
+   * @return the process definition with the specified ID and version or <code>null</code>
+   *         if the process definition could not be found
    *
    * @throws ProcessServiceException
    */
-  public ProcessDefinition getProcessDefinition(String id)
+  public ProcessDefinition getProcessDefinition(String id, int version)
     throws ProcessServiceException
   {
     try
     {
-      ProcessDefinition processDefinition = processDAO.getProcessDefinition(id);
-
-      Parser parser = new Parser();
-      parser.parse(processDefinition.getData());
-
-      return processDefinition;
+      return processDAO.getProcessDefinition(id, version);
     }
     catch (Throwable e)
     {
       throw new ProcessServiceException("Failed to retrieve the process definition with ID (" + id
-          + ")", e);
+          + ") and version (" + version + ")", e);
     }
   }
 
   /**
-   * Returns the summaries for all the process definitions associated with the organisation
-   * identified by the specified organisation code.
+   * Retrieve the summary for the process definition with the specified ID and version.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                process definition
+   * @param version the version of the process definition
    *
-   * @return the summaries for all the process definitions associated with the organisation
-   *         identified by the specified organisation code
+   * @return the summary for the process definition with the specified ID and version or
+   *         <code>null</code> if the process definition could not be found
    *
    * @throws ProcessServiceException
    */
-  public List<ProcessDefinitionSummary> getProcessDefinitionSummariesForOrganisation(
-      String organisation)
+  public ProcessDefinitionSummary getProcessDefinitionSummary(String id, int version)
     throws ProcessServiceException
   {
     try
     {
-      return processDAO.getProcessDefinitionSummariesForOrganisation(organisation);
+      return processDAO.getProcessDefinitionSummary(id, version);
     }
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-          "Failed to retrieve the summaries for all the process definitions for the organisation ("
-          + organisation + ")", e);
-    }
-  }
-
-  /**
-   * Retrieve the summary for the process definition with the specified ID.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           process definition
-   *
-   * @return the summary for the process definition with the specified ID or <code>null</code> if
-   *         the process definition could not be found
-   *
-   * @throws ProcessServiceException
-   */
-  public ProcessDefinitionSummary getProcessDefinitionSummary(String id)
-    throws ProcessServiceException
-  {
-    try
-    {
-      return processDAO.getProcessDefinitionSummary(id);
-    }
-    catch (Throwable e)
-    {
-      throw new ProcessServiceException(
-          "Failed to retrieve the summary for the process definition with ID (" + id + ")", e);
-    }
-  }
-
-  /**
-   * Returns all the process definitions associated with the organisation identified by the
-   * specified organisation code.
-   *
-   * @param organisation the organisation code identifying the organisation
-   *
-   * @return all the process definitions associated with the organisation identified by the
-   *         specified organisation code
-   *
-   * @throws ProcessServiceException
-   */
-  public List<ProcessDefinition> getProcessDefinitionsForOrganisation(String organisation)
-    throws ProcessServiceException
-  {
-    try
-    {
-      return processDAO.getProcessDefinitionsForOrganisation(organisation);
-    }
-    catch (Throwable e)
-    {
-      throw new ProcessServiceException(
-          "Failed to retrieve all the process definitions for the organisation (" + organisation
-          + ")", e);
+          "Failed to retrieve the summary for the process definition with ID (" + id
+          + ") and version (" + version + ")", e);
     }
   }
 
@@ -270,63 +345,100 @@ public class ProcessService
   }
 
   /**
-   * Check whether the process definition with the specified ID exists in the database.
+   * Check whether the process definition with the specified ID and version exists in the database.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the proces
-   *           definition
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *                definition
+   * @param version the version of the process definition
    *
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
    *
    * @throws ProcessServiceException
    */
-  public boolean processDefinitionExists(String id)
+  public boolean processDefinitionExists(String id, int version)
     throws ProcessServiceException
   {
     try
     {
-      return processDAO.processDefinitionExists(id);
+      return processDAO.processDefinitionExists(id, version);
     }
     catch (Throwable e)
     {
       throw new ProcessServiceException("Failed to check whether the process definition with ID ("
-          + id + ") exists", e);
+          + id + ") and version (" + version + ") exists", e);
     }
   }
 
   /**
-   * Save the process definition.
-   * <p/>
-   * This will create a new entry for the process definition in the database or update the
-   * existing entry.
+   * Reset the process instance locks.
    *
-   * @param procesDefinition the <code>ProcessDefinition</code> instance containing the information
-   *                         for the process definition
-   * @param savedBy          the username identifying the user that saved the process definition
+   * @param status    the current status of the process instances that have been locked
+   * @param newStatus the new status for the process instances that have been unlocked
    *
-   * @return the saved process definition
+   * @return the number of process instance locks reset
    *
    * @throws ProcessServiceException
    */
-  public ProcessDefinition saveProcessDefinition(ProcessDefinition procesDefinition, String savedBy)
+  public int resetProcessInstanceLocks(ProcessInstance.Status status,
+      ProcessInstance.Status newStatus)
     throws ProcessServiceException
   {
     try
     {
-      if (processDAO.processDefinitionExists(procesDefinition.getId()))
-      {
-        procesDefinition = processDAO.updateProcessDefinition(procesDefinition, savedBy);
-      }
-      else
-      {
-        processDAO.createProcessDefinition(procesDefinition);
-      }
-
-      return procesDefinition;
+      return processDAO.resetProcessInstanceLocks(getInstanceName(), status, newStatus);
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to save the process definition with ID ("
-          + procesDefinition.getId() + ")", e);
+      throw new ProcessServiceException("Failed to reset the locks for the process instances with "
+          + "the status (" + status + ") that have been locked using the lock name ("
+          + getInstanceName() + ")", e);
+    }
+  }
+
+  /**
+   * Unlock a locked process instance.
+   *
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *               instance
+   * @param status the new status for the unlocked process instance
+   *
+   * @throws ProcessServiceException
+   */
+  public void unlockProcessInstance(String id, ProcessInstance.Status status)
+    throws ProcessServiceException
+  {
+    try
+    {
+      processDAO.unlockProcessInstance(id, status);
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException(
+          "Failed to unlock and set the status for the process instance (" + id + ") to (" + status
+          + ")", e);
+    }
+  }
+
+  /**
+   * Update the state for process instance with the specified ID.
+   *
+   * @param id    the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *              instance
+   * @param state the data giving the current execution state for the process instance
+   *
+   * @throws ProcessServiceException
+   */
+  public void updateProcessInstanceState(String id, byte[] state)
+    throws ProcessServiceException
+  {
+    try
+    {
+      processDAO.updateProcessInstanceState(id, state);
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to update the state for the process instance ("
+          + id + ")", e);
     }
   }
 

@@ -37,11 +37,12 @@ public final class ComplexGateway extends Gateway
   /**
    * Constructs a new <code>ComplexGateway</code>.
    *
-   * @param id the ID uniquely identifying the complex gateway
+   * @param id   the ID uniquely identifying the complex gateway
+   * @param name the name of the complex gateway
    */
-  public ComplexGateway(String id)
+  public ComplexGateway(String id, String name)
   {
-    super(id);
+    super(id, name);
   }
 
   /**

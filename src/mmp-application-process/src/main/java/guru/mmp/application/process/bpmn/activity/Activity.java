@@ -20,12 +20,40 @@ package guru.mmp.application.process.bpmn.activity;
 
 import guru.mmp.application.process.bpmn.FlowNode;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The <code>Activity</code> class provides the base class that all Business Process Model and
  * Notation (BPMN) activity subclasses should be derived from.
  * <p>
  * An activity represents a unit of work performed. A step inside a process. It has a defined start
  * and end and generally requires some kind of input to produce an output.
+ * <p>
+ * <b>Activity</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="activity" type="tActivity"/&gt;
+ * &lt;xsd:complexType name="tActivity" abstract="true"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tFlowNode"&gt;
+ *       &lt;xsd:sequence&gt;
+ *         &lt;xsd:element ref="ioSpecification" minOccurs="0" maxOccurs="1"/&gt;
+ *         &lt;xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="dataInputAssociation" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="dataOutputAssociation" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="resourceRole" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="loopCharacteristics" minOccurs="0"/&gt;
+ *       &lt;/xsd:sequence&gt;
+ *       &lt;xsd:attribute name="isForCompensation" type="xsd:boolean" default="false"/&gt;
+ *       &lt;xsd:attribute name="startQuantity" type="xsd:integer" default="1"/&gt;
+ *       &lt;xsd:attribute name="completionQuantity" type="xsd:integer" default="1"/&gt;
+ *       &lt;xsd:attribute name="default" type="xsd:IDREF" use="optional"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
@@ -42,9 +70,9 @@ abstract class Activity extends FlowNode
   private boolean forCompensation;
 
   /**
-   * The loop type for the activity.
+   * The loop characteristics for the activity.
    */
-  private LoopType loopType;
+  private List<LoopCharacteristics> loopCharacteristics = new ArrayList<>();
 
   /**
    * The start quantity for the activity.
@@ -55,18 +83,17 @@ abstract class Activity extends FlowNode
    * Constructs a new <code>Activity</code>.
    *
    * @param id                 the ID uniquely identifying the activity
+   * @param name               the name of the activity
    * @param forCompensation    is the activity for compensation
-   * @param loopType           the loop type for the activity
    * @param startQuantity      the start quantity for the activity
    * @param completionQuantity the completion quantity for the activity
    */
-  public Activity(String id, boolean forCompensation, LoopType loopType, int startQuantity,
+  public Activity(String id, String name, boolean forCompensation, int startQuantity,
       int completionQuantity)
   {
-    super(id);
+    super(id, name);
 
     this.forCompensation = forCompensation;
-    this.loopType = loopType;
     this.startQuantity = startQuantity;
     this.completionQuantity = completionQuantity;
   }
@@ -82,13 +109,13 @@ abstract class Activity extends FlowNode
   }
 
   /**
-   * Returns the loop type for the activity.
+   * Returns the loop characteristics for the activity.
    *
-   * @return the loop type for the activity
+   * @return the loop characteristics for the activity
    */
-  public LoopType getLoopType()
+  public List<LoopCharacteristics> getLoopCharacteristics()
   {
-    return loopType;
+    return loopCharacteristics;
   }
 
   /**
@@ -109,16 +136,6 @@ abstract class Activity extends FlowNode
   public boolean isForCompensation()
   {
     return forCompensation;
-  }
-
-  /**
-   * Set the loop type for the activity.
-   *
-   * @param loopType the loop type for the activity
-   */
-  public void setLoopType(LoopType loopType)
-  {
-    this.loopType = loopType;
   }
 
   /**

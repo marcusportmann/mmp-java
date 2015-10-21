@@ -228,9 +228,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to add the function (" + functionCode
-            + ") to the function template (" + templateCode
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + addFunctionToTemplateSQL + ")");
       }
     }
@@ -327,9 +326,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to add the user (" + username + ") to the group ("
-            + groupName + ") for the organisation (" + organisation
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + addUserToGroupSQL + ")");
       }
     }
@@ -408,9 +406,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to add the user (" + username
-            + ") to the organisation (" + organisation
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + addUserToOrganisationSQL + ")");
       }
     }
@@ -514,8 +511,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to administratively change the password for the user ("
-            + username + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + changePasswordSQL + ")");
       }
 
@@ -753,8 +750,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to change the password for the user (" + username
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + changePasswordSQL + ")");
       }
 
@@ -820,8 +817,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to create the function (" + function.getCode()
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + createFunctionSQL + ")");
       }
 
@@ -886,8 +883,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to create the function template (" + template.getCode()
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + createFunctionTemplateSQL + ")");
       }
 
@@ -945,9 +942,9 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to create the group (" + group.getGroupName()
-            + "): No rows were affected as a result of executing the SQL statement ("
-            + createGroupSQL + ")");
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement (" + createGroupSQL
+            + ")");
       }
 
       group.setId(groupId);
@@ -1011,8 +1008,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to create the organisation (" + organisation.getCode()
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + createOrganisationSQL + ")");
       }
 
@@ -1127,9 +1124,9 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to create the user (" + user.getUsername()
-            + "): No rows were affected as a result of executing the SQL statement ("
-            + createUserSQL + ")");
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement (" + createUserSQL
+            + ")");
       }
 
       user.setId(userId);
@@ -1188,8 +1185,8 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to delete the function (" + code
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + deleteFunctionSQL + ")");
       }
     }
@@ -1241,8 +1238,8 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to delete the function template (" + code
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + deleteFunctionTemplateSQL + ")");
       }
     }
@@ -1305,9 +1302,9 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to delete the group (" + groupName
-            + "): No rows were affected as a result of executing the SQL statement ("
-            + deleteGroupSQL + ")");
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement (" + deleteGroupSQL
+            + ")");
       }
     }
     catch (GroupNotFoundException | ExistingGroupMembersException e)
@@ -1358,8 +1355,8 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to delete the organisation (" + code
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + deleteOrganisationSQL + ")");
       }
     }
@@ -1410,9 +1407,9 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to delete the user (" + username
-            + "): No rows were affected as a result of executing the SQL statement ("
-            + deleteUserSQL + ")");
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement (" + deleteUserSQL
+            + ")");
       }
     }
     catch (UserNotFoundException e)
@@ -3291,8 +3288,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to grant the function (" + code + ") to the group ("
-            + groupName + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + grantFunctionToGroupSQL + ")");
       }
     }
@@ -3388,9 +3385,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to grant the function (" + code + ") to the user ("
-            + username + ") for the organisation (" + organisation
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + grantFunctionToUserSQL + ")");
       }
     }
@@ -3933,9 +3929,8 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityException("Failed to remove the user (" + username
-            + ") from the organisation (" + organisation
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + removeUserFromOrganisationSQL + ")");
       }
     }
@@ -4184,8 +4179,8 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to update the function (" + function.getCode()
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + updateFunctionSQL + ")");
       }
     }
@@ -4245,8 +4240,8 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to update the function template (" + template.getCode()
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + updateFunctionTemplateSQL + ")");
       }
     }
@@ -4299,9 +4294,9 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to update the group (" + group.getGroupName()
-            + "): No rows were affected as a result of executing the SQL statement ("
-            + updateGroupSQL + ")");
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement (" + updateGroupSQL
+            + ")");
       }
     }
     catch (GroupNotFoundException e)
@@ -4359,8 +4354,8 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new SecurityException("Failed to update the organisation (" + organisation.getCode()
-            + "): No rows were affected as a result of executing the SQL statement ("
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
             + updateOrganisationSQL + ")");
       }
     }
@@ -4601,9 +4596,9 @@ public class SecurityService
 
         if (statement.executeUpdate() != 1)
         {
-          throw new SecurityException("Failed to update the user (" + user.getUsername()
-              + "): No rows were affected as a result of executing the SQL statement ("
-              + updateUserSQL + ")");
+          throw new SecurityException(
+              "No rows were affected as a result of executing the SQL statement (" + updateUserSQL
+              + ")");
         }
       }
     }

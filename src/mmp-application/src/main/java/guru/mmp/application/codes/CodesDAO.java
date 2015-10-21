@@ -119,10 +119,6 @@ public class CodesDAO
         return rs.next();
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to check whether the cached code category (" + id
@@ -151,10 +147,6 @@ public class CodesDAO
       {
         return rs.next();
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -192,15 +184,9 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the cached code (" + code.getName()
-            + ") for the cached code category (" + code.getCategoryId() + ") to the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createCachedCodeSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -231,15 +217,9 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the cached code category ("
-            + cachedCodeCategory.getId() + ") to the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createCachedCodeCategorySQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -277,15 +257,9 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the code (" + code.getName()
-            + ") for the code category (" + code.getCategoryId() + ") to the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createCodeSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -332,15 +306,9 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the code category (" + codeCategory.getId()
-            + ") to the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createCodeCategorySQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -366,15 +334,9 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to delete the cached code category (" + id
-            + ") in the database:"
-            + " No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + deleteCachedCodeCategorySQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -400,14 +362,9 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to delete the code (" + id + ") in the database:"
-            + " No rows were affected as a result of executing the SQL statement (" + deleteCodeSQL
-            + ")");
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
+            + deleteCodeSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -432,14 +389,9 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to delete the code category (" + id + ") in the database:"
-            + " No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + deleteCodeCategorySQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -476,10 +428,6 @@ public class CodesDAO
           return null;
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -518,10 +466,6 @@ public class CodesDAO
         return codes;
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the cached codes for the cached code category ("
@@ -557,10 +501,6 @@ public class CodesDAO
           return null;
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -610,10 +550,6 @@ public class CodesDAO
         return codeCategories;
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the code categories for the organisation ("
@@ -651,10 +587,6 @@ public class CodesDAO
         }
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the code category (" + id + ") from the database",
@@ -691,10 +623,6 @@ public class CodesDAO
         return codes;
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the codes for the code category ("
@@ -730,16 +658,11 @@ public class CodesDAO
         }
         else
         {
-          throw new DAOException("Failed to retrieve the number of code categories for the"
-              + " organisation (" + organisation + ") in the database:"
-              + " No results were returned as a result of executing the SQL statement ("
+          throw new DAOException(
+              "No results were returned as a result of executing the SQL statement ("
               + getNumberOfCodeCategoriesForOrganisationSQL + ")");
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -773,16 +696,11 @@ public class CodesDAO
         }
         else
         {
-          throw new DAOException("Failed to retrieve the number of codes for the code category ("
-              + codeCategoryId + ") in the database:"
-              + " No results were returned as a result of executing the SQL statement ("
+          throw new DAOException(
+              "No results were returned as a result of executing the SQL statement ("
               + getNumberOfCodesForCodeCategorySQL + ")");
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -890,10 +808,6 @@ public class CodesDAO
           && (System.currentTimeMillis() <= (cached.getTime() + (cacheExpiry.longValue() * 1000L)));
 
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to check whether the cached code category (" + id
@@ -928,19 +842,13 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to update the cached code category ("
-            + cachedCodeCategory.getId() + ") in the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + updateCachedCodeCategorySQL + ")");
       }
 
       cachedCodeCategory.setCached(cached);
 
       return cachedCodeCategory;
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -972,16 +880,11 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to update the code (" + code.getId() + ") in the database:"
-            + " No rows were affected as a result of executing the SQL statement (" + updateCodeSQL
-            + ")");
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
+            + updateCodeSQL + ")");
       }
 
       return code;
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1032,19 +935,13 @@ public class CodesDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to update the code category (" + codeCategory.getId()
-            + ") in the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + updateCodeCategorySQL + ")");
       }
 
       codeCategory.setUpdated(updated);
 
       return codeCategory;
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1189,10 +1086,6 @@ public class CodesDAO
         }
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the cached date and time for the cached code"
@@ -1252,10 +1145,6 @@ public class CodesDAO
           return null;
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {

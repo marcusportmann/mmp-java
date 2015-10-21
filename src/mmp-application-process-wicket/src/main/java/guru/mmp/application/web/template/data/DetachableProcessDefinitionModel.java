@@ -23,9 +23,9 @@ import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>DetachableProcessDefinitionModel</code> class provides a detachable model
@@ -48,13 +48,18 @@ public class DetachableProcessDefinitionModel
   private IProcessService processService;
 
   /**
+   * The version of the process definition.
+   */
+  private int version;
+
+  /**
    * Constructs a new <code>DetachableProcessDefinitionModel</code>.
    *
    * @param processDefinition the <code>ProcessDefinition</code> instance
    */
   public DetachableProcessDefinitionModel(ProcessDefinition processDefinition)
   {
-    this(processDefinition.getId());
+    this(processDefinition.getId(), processDefinition.getVersion());
 
     setObject(processDefinition);
   }
@@ -62,12 +67,14 @@ public class DetachableProcessDefinitionModel
   /**
    * Constructs a new <code>DetachableProcessDefinitionModel</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *           definition
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *                definition
+   * @param version the version of the process definition
    */
-  public DetachableProcessDefinitionModel(String id)
+  public DetachableProcessDefinitionModel(String id, int version)
   {
     this.id = id;
+    this.version = version;
   }
 
   /**
@@ -86,11 +93,12 @@ public class DetachableProcessDefinitionModel
   {
     try
     {
-      return processService.getProcessDefinition(id);
+      return processService.getProcessDefinition(id, version);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the process definition (" + id + ")", e);
+      throw new WebApplicationException("Failed to load the process definition with ID (" + id
+          + ") and version (" + version + ")", e);
     }
   }
 

@@ -288,7 +288,7 @@ public class TaskService
    *
    * @throws TaskServiceException
    */
-  public int resetScheduledTaskLocks(ScheduledTaskStatus status, ScheduledTaskStatus newStatus)
+  public int resetScheduledTaskLocks(ScheduledTask.Status status, ScheduledTask.Status newStatus)
     throws TaskServiceException
   {
     try
@@ -333,7 +333,7 @@ public class TaskService
    *
    * @throws TaskServiceException
    */
-  public void unlockScheduledTask(String id, ScheduledTaskStatus status)
+  public void unlockScheduledTask(String id, ScheduledTask.Status status)
     throws TaskServiceException
   {
     try

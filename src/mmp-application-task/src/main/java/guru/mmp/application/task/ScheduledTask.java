@@ -71,7 +71,7 @@ public class ScheduledTask
   /**
    * The status of the scheduled task.
    */
-  private ScheduledTaskStatus status;
+  private Status status;
 
   /**
    * The fully qualified name of the Java class that implements the scheduled task.
@@ -107,8 +107,8 @@ public class ScheduledTask
    * @param updated           the date and time the scheduled task was updated
    */
   public ScheduledTask(String id, String name, String schedulingPattern, String taskClass,
-      ScheduledTaskStatus status, int executionAttempts, String lockName, Date lastExecuted,
-      Date nextExecution, Date updated)
+      Status status, int executionAttempts, String lockName, Date lastExecuted, Date nextExecution,
+      Date updated)
   {
     this.id = id;
     this.name = name;
@@ -120,6 +120,98 @@ public class ScheduledTask
     this.lastExecuted = lastExecuted;
     this.nextExecution = nextExecution;
     this.updated = updated;
+  }
+
+  /**
+   * The enumeration giving the possible statuses for a scheduled task.
+   *
+   * @author Marcus Portmann
+   */
+  public enum Status
+  {
+    UNKNOWN(0, "Unknown"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"),
+    EXECUTED(3, "Executed"), ABORTED(4, "Aborted"), FAILED(5, "Failed");
+
+    private int code;
+    private String name;
+
+    Status(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the status given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the status
+     *
+     * @return the status given by the specified numeric code value
+     */
+    public static Status fromCode(int code)
+    {
+      switch (code)
+      {
+        case 1:
+          return Status.SCHEDULED;
+
+        case 2:
+          return Status.EXECUTING;
+
+        case 3:
+          return Status.EXECUTED;
+
+        case 4:
+          return Status.ABORTED;
+
+        case 5:
+          return Status.FAILED;
+
+        default:
+          return Status.UNKNOWN;
+      }
+    }
+
+    /**
+     * Returns the numeric code value identifying the status.
+     *
+     * @return the numeric code value identifying the status
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the <code>String</code> value of the numeric code value identifying the status.
+     *
+     * @return the <code>String</code> value of the numeric code value identifying the status
+     */
+    @SuppressWarnings("unused")
+    public String getCodeAsString()
+    {
+      return String.valueOf(code);
+    }
+
+    /**
+     * Returns the name of the status.
+     *
+     * @return the name of the status
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the status enumeration value.
+     *
+     * @return the string representation of the status enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
   }
 
   /**
@@ -197,7 +289,7 @@ public class ScheduledTask
    *
    * @return the status of the scheduled task
    */
-  public ScheduledTaskStatus getStatus()
+  public Status getStatus()
   {
     return status;
   }
@@ -299,7 +391,7 @@ public class ScheduledTask
    *
    * @param status the status of the scheduled task
    */
-  public void setStatus(ScheduledTaskStatus status)
+  public void setStatus(Status status)
   {
     this.status = status;
   }

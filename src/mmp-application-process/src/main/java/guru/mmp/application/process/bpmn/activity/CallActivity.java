@@ -21,16 +21,16 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CallActivity</code> class represents a Business Process Model and Notation (BPMN)
  * call activity that forms part of a BPMN process.
  * <p>
- * A call activity is just a reusable activity. If a subprocess is referenced in more than one
+ * A call activity is just a reusable activity. If a sub-process is referenced in more than one
  * process (diagram), it can be defined in its own diagram and "called" from each process that
  * uses it.
  *
@@ -42,15 +42,15 @@ public class CallActivity extends Activity
    * Constructs a new <code>CallActivity</code>.
    *
    * @param id                 the ID uniquely identifying the call activity
+   * @param name               the name of the call activity
    * @param forCompensation    is the call activity for compensation
-   * @param loopType           the loop type for the call activity
    * @param startQuantity      the start quantity for the call activity
    * @param completionQuantity the completion quantity for the call activity
    */
-  public CallActivity(String id, boolean forCompensation, LoopType loopType, int startQuantity,
+  public CallActivity(String id, String name, boolean forCompensation, int startQuantity,
       int completionQuantity)
   {
-    super(id, forCompensation, loopType, startQuantity, completionQuantity);
+    super(id, name, forCompensation, startQuantity, completionQuantity);
   }
 
   /**

@@ -79,6 +79,7 @@ public class AddProcessDefinitionPage extends TemplateWebPage
         new CompoundPropertyModel<>(new Model<>(new ProcessDefinition())));
 
       addForm.getModelObject().setId(UUID.randomUUID().toString());
+      addForm.getModelObject().setVersion(1);
 
       ProcessDefinitionInputPanel processDefinitionInputPanel =
         new ProcessDefinitionInputPanel("processDefinition", false);
@@ -117,7 +118,7 @@ public class AddProcessDefinitionPage extends TemplateWebPage
 
             processDefinition.setData(baos.toByteArray());
 
-            processService.saveProcessDefinition(processDefinition, session.getUsername());
+            processService.createProcessDefinition(processDefinition, session.getUsername());
 
             setResponsePage(previousPage.getPage());
           }

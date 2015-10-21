@@ -115,6 +115,7 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
         protected void populateItem(Item<ProcessDefinitionSummary> item)
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
+          item.add(new Label("version", new PropertyModel<String>(item.getModel(), "version")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -129,7 +130,8 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
               try
               {
                 ProcessDefinition processDefinition =
-                  processService.getProcessDefinition(processDefinitionSummary.getId());
+                  processService.getProcessDefinition(processDefinitionSummary.getId(),
+                    processDefinitionSummary.getVersion());
 
                 UpdateProcessDefinitionPage page =
                   new UpdateProcessDefinitionPage(getPageReference(),
@@ -139,11 +141,13 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
               }
               catch (Throwable e)
               {
-                logger.error("Failed to retrieve the process definition ("
-                    + processDefinitionSummary.getId() + ")", e);
+                logger.error("Failed to retrieve the process definition with ID ("
+                    + processDefinitionSummary.getId() + ") and version ("
+                    + processDefinitionSummary.getVersion() + ")", e);
 
-                error("Failed to retrieve the process definition ("
-                    + processDefinitionSummary.getId() + ")");
+                error("Failed to retrieve the process definition with ID ("
+                    + processDefinitionSummary.getId() + ") and version ("
+                    + processDefinitionSummary.getVersion() + ")");
               }
             }
           };

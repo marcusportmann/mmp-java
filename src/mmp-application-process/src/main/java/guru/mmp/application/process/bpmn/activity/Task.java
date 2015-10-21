@@ -21,9 +21,9 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>Task</code> class provides the base class that all
@@ -38,22 +38,22 @@ public final class Task extends Activity
   /**
    * The behavior for the task.
    */
-  private ITaskBehavior taskBehavior;
+  private TaskBehavior taskBehavior;
 
   /**
    * Constructs a new <code>Task</code>.
    *
    * @param id                 the ID uniquely identifying the task
+   * @param name               the name of the task
    * @param forCompensation    is the task for compensation
-   * @param loopType           the loop type for the task
    * @param startQuantity      the start quantity for the task
    * @param completionQuantity the completion quantity for the task
    * @param taskBehavior       the behavior for the task
    */
-  public Task(String id, boolean forCompensation, LoopType loopType, int startQuantity,
-      int completionQuantity, ITaskBehavior taskBehavior)
+  public Task(String id, String name, boolean forCompensation, int startQuantity,
+      int completionQuantity, TaskBehavior taskBehavior)
   {
-    super(id, forCompensation, loopType, startQuantity, completionQuantity);
+    super(id, name, forCompensation, startQuantity, completionQuantity);
 
     this.taskBehavior = taskBehavior;
   }
@@ -69,5 +69,15 @@ public final class Task extends Activity
   public List<Token> execute(ProcessExecutionContext context)
   {
     return taskBehavior.execute(context);
+  }
+
+  /**
+   * Returns the behavior for the task.
+   *
+   * @return the behavior for the task
+   */
+  public TaskBehavior getTaskBehavior()
+  {
+    return taskBehavior;
   }
 }

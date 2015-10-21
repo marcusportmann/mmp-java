@@ -123,10 +123,6 @@ public class MessagingDAO
         return rs.next() && (totalParts == rs.getInt(1));
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to check whether all the message parts for the message ("
@@ -160,14 +156,9 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to archive the message (" + message.getId() + ") in the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + archiveMessageSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -224,15 +215,9 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the error report (" + errorReport.getId()
-            + ") to the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createErrorReportSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -275,17 +260,12 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the message (" + message.getId() + ") to the"
-            + " database: No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createMessageSQL + ")");
       }
 
       message.setPersisted(persisted);
       message.setUpdated(message.getCreated());
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -334,16 +314,11 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the message part (" + messagePart.getId()
-            + ") to the database: No rows were affected as a result of executing the SQL statement"
+        throw new DAOException("No rows were affected as a result of executing the SQL statement"
             + " (" + createMessagePartSQL + ")");
       }
 
       messagePart.setPersisted(persisted);
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -369,13 +344,9 @@ public class MessagingDAO
 
       statement.executeUpdate();
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to delete the message (" + id + ") from the database", e);
+      throw new DAOException("Failed to delete the message (" + id + ") in the database", e);
     }
   }
 
@@ -396,13 +367,9 @@ public class MessagingDAO
 
       statement.executeUpdate();
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to delete the message part (" + id + ") from the database", e);
+      throw new DAOException("Failed to delete the message part (" + id + ") in the database", e);
     }
   }
 
@@ -423,14 +390,10 @@ public class MessagingDAO
 
       statement.executeUpdate();
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to delete the message parts for the message (" + messageId
-          + ") from the database", e);
+          + ") in the database", e);
     }
   }
 
@@ -463,10 +426,6 @@ public class MessagingDAO
           return null;
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -505,10 +464,6 @@ public class MessagingDAO
         }
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the summary for the error report (" + id
@@ -545,10 +500,6 @@ public class MessagingDAO
           return null;
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -620,9 +571,7 @@ public class MessagingDAO
 
             if (updateStatement.executeUpdate() != 1)
             {
-              throw new DAOException("Failed to lock the message part (" + messagePart.getId()
-                  + ") queued for"
-                  + " assembly: No rows were affected as a result of executing the SQL"
+              throw new DAOException("No rows were affected as a result of executing the SQL"
                   + " statement (" + lockMessagePartSQL + ")");
             }
           }
@@ -632,21 +581,6 @@ public class MessagingDAO
       transactionManager.commit();
 
       return messageParts;
-    }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the message parts that have been queued for assembly for the message (" + messageId
-            + ") from the database", f);
-      }
-
-      throw e;
     }
     catch (Throwable e)
     {
@@ -772,8 +706,7 @@ public class MessagingDAO
 
             if (updateStatement.executeUpdate() != 1)
             {
-              throw new DAOException("Failed to lock the message part (" + messagePart.getId()
-                  + ") queued for download: No rows were affected as a result of executing the SQL"
+              throw new DAOException("No rows were affected as a result of executing the SQL"
                   + " statement (" + lockMessagePartForDownloadSQL + ")");
             }
           }
@@ -783,21 +716,6 @@ public class MessagingDAO
       transactionManager.commit();
 
       return messageParts;
-    }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the message parts that have been queued for download by the device (" + device
-            + ") from the database", f);
-      }
-
-      throw e;
     }
     catch (Throwable e)
     {
@@ -937,21 +855,6 @@ public class MessagingDAO
 
       return messages;
     }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the messages that have been queued for download by the device (" + device
-            + ") from the database", f);
-      }
-
-      throw e;
-    }
     catch (Throwable e)
     {
       try
@@ -1082,9 +985,7 @@ public class MessagingDAO
 
             if (updateStatement.executeUpdate() != 1)
             {
-              throw new DAOException("Failed to lock the message (" + message.getId()
-                  + ") queued for"
-                  + " download: No rows were affected as a result of executing the SQL"
+              throw new DAOException("No rows were affected as a result of executing the SQL"
                   + " statement (" + lockMessageForDownloadSQL + ")");
             }
           }
@@ -1094,22 +995,6 @@ public class MessagingDAO
       transactionManager.commit();
 
       return messages;
-    }
-    catch (DAOException e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the messages for the user (" + user
-            + ") that have been queued for download by the device (" + device
-            + ") from the database", f);
-      }
-
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1178,10 +1063,6 @@ public class MessagingDAO
 
         return errorReportSummaries;
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1255,9 +1136,8 @@ public class MessagingDAO
 
               if (updateStatement.executeUpdate() != 1)
               {
-                throw new DAOException("Failed to lock the message (" + message.getId()
-                    + ") for processing:"
-                    + " No rows were affected as a result of executing the SQL statement" + " ("
+                throw new DAOException(
+                    "No rows were affected as a result of executing the SQL statement ("
                     + lockMessageSQL + ")");
               }
             }
@@ -1281,15 +1161,8 @@ public class MessagingDAO
             + " the next message that has been queued for processing from the database", f);
       }
 
-      if (e instanceof DAOException)
-      {
-        throw((DAOException) e);
-      }
-      else
-      {
-        throw new DAOException("Failed to retrieve the next message that has been queued for"
-            + " processing from the database", e);
-      }
+      throw new DAOException("Failed to retrieve the next message that has been queued for"
+          + " processing from the database", e);
     }
     finally
     {
@@ -1333,10 +1206,6 @@ public class MessagingDAO
         }
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException(
@@ -1366,18 +1235,12 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to increment the processing attempts for the message ("
-            + message.getId()
-            + ") in the database: No rows were affected as a result of executing the SQL statement"
+        throw new DAOException("No rows were affected as a result of executing the SQL statement"
             + " (" + incrementMessageProcessingAttemptsSQL + ")");
       }
 
       message.setProcessAttempts(message.getProcessAttempts() + 1);
       message.setLastProcessed(currentTime);
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1470,10 +1333,6 @@ public class MessagingDAO
         return rs.next();
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to check whether the message (" + id
@@ -1503,10 +1362,6 @@ public class MessagingDAO
       {
         return rs.next();
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1549,14 +1404,9 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to log the message audit to the database:"
-            + " No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + logMessageAuditSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1588,10 +1438,6 @@ public class MessagingDAO
       statement.setTimestamp(4, new Timestamp(System.currentTimeMillis() - (lockTimeout * 1000L)));
 
       return statement.executeUpdate();
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1625,10 +1471,6 @@ public class MessagingDAO
 
       return statement.executeUpdate();
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to reset the expired locks for the message parts with the"
@@ -1659,10 +1501,6 @@ public class MessagingDAO
       statement.setInt(4, status.getCode());
 
       return statement.executeUpdate();
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1695,10 +1533,6 @@ public class MessagingDAO
 
       return statement.executeUpdate();
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to reset the locks for the message parts with the status ("
@@ -1726,14 +1560,9 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to set the status for the message part (" + id + ") to ("
-            + status.toString() + ") in the database: No rows were affected as a result of"
+        throw new DAOException("No rows were affected as a result of"
             + " executing the SQL statement (" + setMessagePartStatusSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1762,14 +1591,9 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to set the status for the message (" + id + ") to ("
-            + status.toString() + ") in the database: No rows were affected as a result of"
+        throw new DAOException("No rows were affected as a result of"
             + " executing the SQL statement (" + setMessageStatusSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1798,14 +1622,9 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to unlock and set the status for the message (" + id
-            + ") to (" + status.toString() + ") in the database: No rows were affected as a result"
+        throw new DAOException("No rows were affected as a result"
             + " of executing the SQL statement (" + unlockMessageSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1834,14 +1653,9 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to unlock and set the status for the message part (" + id
-            + ") to (" + status.toString() + ") in the database: No rows were affected as a result"
+        throw new DAOException("No rows were affected as a result"
             + " of executing the SQL statement (" + unlockMessagePartSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {

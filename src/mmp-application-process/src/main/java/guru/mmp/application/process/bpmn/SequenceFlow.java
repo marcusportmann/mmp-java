@@ -26,8 +26,17 @@ import guru.mmp.application.process.bpmn.FlowNode;
  *
  * @author Marcus Portmann
  */
-public final class SequenceFlow
+public final class SequenceFlow extends FlowElement
 {
-
+  /**
+   * Constructs a new <code>SequenceFlow</code>.
+   *
+   * @param id   the ID uniquely identifying the sequence flow
+   * @param name the name of the sequence flow
+   */
+  public SequenceFlow(String id, String name)
+  {
+    super(id, name);
+  }
 }
 

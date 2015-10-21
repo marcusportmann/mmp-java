@@ -150,8 +150,7 @@ public class ReportingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to add the report definition to the database: "
-            + "No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createReportDefinitionSQL + ")");
       }
     }
@@ -178,15 +177,9 @@ public class ReportingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to delete the report definition (" + id
-            + ") in the database:"
-            + " No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + deleteReportDefinitionSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -222,16 +215,10 @@ public class ReportingDAO
         else
         {
           throw new DAOException(
-              "Failed to retrieve the number of report definitions for the organisation ("
-              + organisation + ") in the database:"
-              + " No results were returned as a result of executing the SQL statement ("
+              "No results were returned as a result of executing the SQL statement ("
               + getNumberOfReportDefinitionsForOrganisationSQL + ")");
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -269,10 +256,6 @@ public class ReportingDAO
           return null;
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -312,10 +295,6 @@ public class ReportingDAO
 
       return reportDefinitionSummaries;
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException(
@@ -353,10 +332,6 @@ public class ReportingDAO
         }
       }
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the summary for the report definition (" + id
@@ -393,10 +368,6 @@ public class ReportingDAO
       }
 
       return reportDefinitions;
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -500,16 +471,11 @@ public class ReportingDAO
         }
         else
         {
-          throw new DAOException("Failed to check whether the report definition (" + id
-              + ") exists in the database:"
-              + " No results were returned as a result of executing the SQL statement ("
+          throw new DAOException(
+              "No results were returned as a result of executing the SQL statement ("
               + reportDefinitionExistsSQL + ")");
         }
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -543,8 +509,7 @@ public class ReportingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to update the report definition in the database: "
-            + "No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + updateReportDefinitionSQL + ")");
       }
 

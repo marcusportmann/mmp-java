@@ -91,7 +91,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  void lockScheduledTask(String id, ScheduledTaskStatus status, String lockName)
+  void lockScheduledTask(String id, ScheduledTask.Status status, String lockName)
     throws DAOException;
 
   /**
@@ -117,8 +117,8 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  int resetScheduledTaskLocks(String lockName, ScheduledTaskStatus status,
-      ScheduledTaskStatus newStatus)
+  int resetScheduledTaskLocks(String lockName, ScheduledTask.Status status,
+      ScheduledTask.Status newStatus)
     throws DAOException;
 
   /**
@@ -140,7 +140,7 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  void setScheduledTaskStatus(String id, ScheduledTaskStatus status)
+  void setScheduledTaskStatus(String id, ScheduledTask.Status status)
     throws DAOException;
 
   /**
@@ -151,6 +151,6 @@ public interface ITaskDAO
    *
    * @throws DAOException
    */
-  void unlockScheduledTask(String id, ScheduledTaskStatus status)
+  void unlockScheduledTask(String id, ScheduledTask.Status status)
     throws DAOException;
 }

@@ -16,6 +16,12 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * The <code>Process</code> class represents a Business Process Model and Notation (BPMN) process.
  *
@@ -24,9 +30,74 @@ package guru.mmp.application.process.bpmn;
 public class Process
 {
   /**
+   * The flow nodes for the process.
+   */
+  private Map<String, FlowNode> flowNodes = new ConcurrentHashMap<>();
+
+  /**
    * The ID uniquely identifying the process.
    */
   private String id;
+
+  /**
+   * Can interactions, such as sending and receiving messages and events, not modeled in the
+   * process occur when the process is executed or performed. If the value is <code>true</code>,
+   * they MAY NOT occur. If the value is <code>false</code>, they MAY occur.
+   */
+  private boolean isClosed;
+
+  /**
+   * Is the process executable?
+   */
+  private boolean isExecutable;
+
+  /**
+   * Constructs a new <code>Process</code>.
+   *
+   * @param id           the ID uniquely identifying the process
+   * @param isClosed     can interactions, such as sending and receiving messages and events, not
+   *                     modeled in the process occur when the process is executed or performed
+   * @param isExecutable is the process executable
+   */
+  public Process(String id, boolean isClosed, boolean isExecutable)
+  {
+    this.id = id;
+    this.isClosed = isClosed;
+    this.isExecutable = isExecutable;
+  }
+
+  /**
+   * Add the flow node to the process.
+   *
+   * @param flowNode the flow node to add to the process
+   */
+  public void addFlowNode(FlowNode flowNode)
+  {
+    flowNodes.put(flowNode.getId(), flowNode);
+  }
+
+  /**
+   * Returns the flow node with the specified ID.
+   *
+   * @param id the ID uniquely identifying the flow node
+   *
+   * @return the flow node with the specified ID or <code>null</code> if the flow node could
+   *         not be found
+   */
+  public FlowNode getFlowNode(String id)
+  {
+    return flowNodes.get(id);
+  }
+
+  /**
+   * Returns the flow nodes for the process.
+   *
+   * @return the flow nodes for the process
+   */
+  public Collection<FlowNode> getFlowNodes()
+  {
+    return flowNodes.values();
+  }
 
   /**
    * Returns the ID uniquely identifying the process.
@@ -36,5 +107,34 @@ public class Process
   public String getId()
   {
     return id;
+  }
+
+  /**
+   * Returns whether interactions, such as sending and receiving messages and events, not modeled
+   * in the process may occur when the process is executed or performed.
+   *
+   * @return <code>true</code> if they MAY NOT occur or <code>false</code> if the MAY occur
+   */
+  public boolean isClosed()
+  {
+    return isClosed;
+  }
+
+  /**
+   * Returns whether the process is executable.
+   * <p>
+   * An executable process is a private process that has been modeled for the purpose of being
+   * executed.
+   * <p>
+   * A non-executable process is a private process that has been modeled for the purpose of
+   * documenting process behavior at a modeler-defined level of detail. Thus, information needed
+   * for execution, such as formal condition expressions are typically not included in a
+   * non-executable process.
+   *
+   * @return <code>true</code> if the process is executable or <code>false</code> otherwise
+   */
+  public boolean isExecutable()
+  {
+    return isExecutable;
   }
 }

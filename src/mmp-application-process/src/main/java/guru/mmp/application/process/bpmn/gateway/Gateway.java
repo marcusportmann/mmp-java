@@ -43,15 +43,15 @@ import guru.mmp.application.process.bpmn.FlowNode;
  * @author Marcus Portmann
  */
 abstract class Gateway extends FlowNode
-  implements IGateway
 {
   /**
    * Constructs a new <code>Gateway</code>.
    *
-   * @param id the ID uniquely identifying the gateway
+   * @param id   the ID uniquely identifying the gateway
+   * @param name the name of the gateway
    */
-  public Gateway(String id)
+  public Gateway(String id, String name)
   {
-    super(id);
+    super(id, name);
   }
 }

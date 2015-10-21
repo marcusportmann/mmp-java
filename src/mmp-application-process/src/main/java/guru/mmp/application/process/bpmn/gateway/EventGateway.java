@@ -37,11 +37,12 @@ public final class EventGateway extends Gateway
   /**
    * Constructs a new <code>EventGateway</code>.
    *
-   * @param id the ID uniquely identifying the event gateway
+   * @param id   the ID uniquely identifying the event gateway
+   * @param name the name of the event gateway
    */
-  public EventGateway(String id)
+  public EventGateway(String id, String name)
   {
-    super(id);
+    super(id, name);
   }
 
   /**

@@ -24,25 +24,17 @@ import guru.mmp.common.xml.XmlSchemaClasspathInputSource;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
-import org.xml.sax.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 /**
  * The <code>Parser</code> class provides the capability to parse Business Process Model and
@@ -62,9 +54,9 @@ public class Parser
    *
    * @param data the BPMN data for the process definition
    *
-   * @return the parsed Business Process Model and Notation (BPMN) process
+   * @return the parsed Business Process Model and Notation (BPMN) processes
    */
-  public Process parse(byte[] data)
+  public List<Process> parse(byte[] data)
   {
     try
     {
@@ -108,8 +100,8 @@ public class Parser
       });
 
       Schema schema = schemaFactory.newSchema(
-          new StreamSource(new ByteArrayInputStream(
-            ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))));
+          new StreamSource(
+            new ByteArrayInputStream(ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))));
 
       SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
       saxParserFactory.setValidating(false);

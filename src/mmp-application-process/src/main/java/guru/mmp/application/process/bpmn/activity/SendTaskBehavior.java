@@ -21,10 +21,10 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SendTaskBehavior</code> class implements the behavior for a Business Process Model
@@ -32,15 +32,39 @@ import java.util.List;
  * <p>
  * This task represents sending a message to an external participant. Once sent, the task is
  * completed. A message can only be sent between different roles.
+ * <p>
+ * <b>Send Task</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="sendTask" type="tSendTask" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tSendTask"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tTask"&gt;
+ *       &lt;xsd:attribute name="implementation" type="tImplementation" default="##WebService"/&gt;
+ *       &lt;xsd:attribute name="messageRef" type="xsd:QName" use="optional"/&gt;
+ *       &lt;xsd:attribute name="operationRef" type="xsd:QName" use="optional"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class SendTaskBehavior extends TaskBehavior
+public final class SendTaskBehavior extends TaskBehavior
 {
   /**
-   * Constructs a new <code>SendTaskBehavior</code>.
+   * The implementation type for the send task.
    */
-  public SendTaskBehavior() {}
+  private ImplementationType implementationType;
+
+  /**
+   * Constructs a new <code>SendTaskBehavior</code>.
+   *
+   * @param implementationType the implementation type for the send task
+   */
+  public SendTaskBehavior(ImplementationType implementationType)
+  {
+    this.implementationType = implementationType;
+  }
 
   /**
    * Execute the behavior for the Business Process Model and Notation (BPMN) send task.
@@ -54,5 +78,15 @@ public class SendTaskBehavior extends TaskBehavior
   public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
+  }
+
+  /**
+   * Returns the implementation type for the send task.
+   *
+   * @return the implementation type for the send task
+   */
+  public ImplementationType getImplementationType()
+  {
+    return implementationType;
   }
 }

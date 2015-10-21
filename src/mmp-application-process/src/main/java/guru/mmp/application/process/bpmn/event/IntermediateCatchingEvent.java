@@ -38,11 +38,10 @@ public final class IntermediateCatchingEvent extends CatchingEvent
    *
    * @param id   the ID uniquely identifying the intermediate catching event
    * @param name the name of the intermediate catching event
-   * @param type the type of intermediate catching event
    */
-  public IntermediateCatchingEvent(String id, String name, EventType type)
+  public IntermediateCatchingEvent(String id, String name)
   {
-    super(id, name, type);
+    super(id, name);
   }
 
   /**

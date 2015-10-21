@@ -21,26 +21,35 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * The <code>ITaskBehavior</code> interface defines the interface that must be implemented by a
- * task behavior class, which implements the behavior for a Business Process Model and Notation
- * (BPMN) task type.
+ * The <code>DefaultTaskBehavior</code> class implements the behavior for a Business Process Model
+ * and Notation (BPMN) default task that forms part of a BPMN process.
  *
  * @author Marcus Portmann
  */
-public interface ITaskBehavior
+public final class DefaultTaskBehavior extends TaskBehavior
 {
   /**
-   * Execute the Business Process Model and Notation (BPMN) task behavior.
+   * Constructs a new <code>DefaultTaskBehavior</code>.
+   */
+  public DefaultTaskBehavior() {}
+
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) default task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task behavior
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) default task
    */
-  List<Token> execute(ProcessExecutionContext context);
+  @Override
+  public List<Token> execute(ProcessExecutionContext context)
+  {
+    return new ArrayList<>();
+  }
 }

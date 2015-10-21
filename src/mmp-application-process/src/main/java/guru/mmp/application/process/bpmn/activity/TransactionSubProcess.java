@@ -21,19 +21,19 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
- * The <code>TransactionSubprocessBehavior</code> class implements the behavior for a Business
- * Process Model and Notation (BPMN) transaction subprocess that forms part of a BPMN process.
- * <p>
- * Transaction subprocesses have the following properies:
+ * The <code>TransactionSubProcess</code> class represents a  Business Process Model and Notation
+ * (BPMN) transaction sub-process.
+ *
+ * Transaction sub-processes have the following properties:
  * <ul>
  *   <li>
- *     <b>Atomic</b>: Activities inside the transaction subprocess are treated as a unit.
+ *     <b>Atomic</b>: Activities inside the transaction sub-process are treated as a unit.
  *     Either all are performed or none.
  *   </li>
  *   <li>
@@ -58,21 +58,31 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public final class TransactionSubprocessBehavior
-  implements ISubprocessBehavior
+public final class TransactionSubProcess extends SubProcess
 {
   /**
-   * Constructs a new <code>TransactionSubprocessBehavior</code>.
+   * Constructs a new <code>TransactionSubProcess</code>.
+   *
+   * @param id                 the ID uniquely identifying the transaction sub-process
+   * @param name               the name of the transaction sub-process
+   * @param forCompensation    is the transaction sub-process for compensation
+   * @param startQuantity      the start quantity for the transaction sub-process
+   * @param completionQuantity the completion quantity for the transaction sub-process
+   * @param triggeredByEvent   is the transaction sub-process triggered by an event
    */
-  public TransactionSubprocessBehavior() {}
+  public TransactionSubProcess(String id, String name, boolean forCompensation, int startQuantity,
+      int completionQuantity, boolean triggeredByEvent)
+  {
+    super(id, name, forCompensation, startQuantity, completionQuantity, triggeredByEvent);
+  }
 
   /**
-   * Execute the behavior for the Business Process Model and Notation (BPMN) transaction subprocess.
+   * Execute the Business Process Model and Notation (BPMN) transaction sub-process.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
-   * @return the list of tokens generated as a result of executing the behavior for the
-   *         Business Process Model and Notation (BPMN) transaction subprocess
+   * @return the list of tokens generated as a result of executing the Business Process Model and
+   *         Notation (BPMN) transaction sub-process
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

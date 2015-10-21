@@ -31,12 +31,12 @@ package guru.mmp.application.process.bpmn.event;
  *     <p>
  *     Cancel events work in throw/catch pairs and are interrupting.
  *     <p>
- *     Cancel events are only used with transactional subprocesses. Since it works in the context of
- *     a transaction, the cancel event implies that the trasaction is rolled-back and may result in
- *     (or execute) the compensation of some activities of the transaction.
+ *     Cancel events are only used with transactional sub-processes. Since it works in the context
+ *     of a transaction, the cancel event implies that the trasaction is rolled-back and may result
+ *     in (or execute) the compensation of some activities of the transaction.
  *     <p>
- *     A cancel catch event can only be attached to the boundary of a transaction subprocess and it
- *     is triggered by a cancel throw event within the subprocess.
+ *     A cancel catch event can only be attached to the boundary of a transaction sub-process and it
+ *     is triggered by a cancel throw event within the sub-process.
  *   </li>
  *   <li>
  *     <b>Compensation</b>: The compensation event type is used to undo changes.
@@ -51,7 +51,7 @@ package guru.mmp.application.process.bpmn.event;
  *       <li>
  *         Execute the appropriate compensation handler. A compensation handler is a special
  *         activity that undoes the work done by the activity that it is associated with. It can
- *         have the form of an event subprocess (if a compensation start event is used) or can
+ *         have the form of an event sub-process (if a compensation start event is used) or can
  *         be associated with an activity using a catching compensation boundary event.
  *       </li>
  *     </ol>
@@ -117,7 +117,7 @@ package guru.mmp.application.process.bpmn.event;
  *     <b>Signal</b>: The signal event throws or catches a broadcast signal.
  *   </li>
  *   <li>
- *     <b>Terminate</b>: A terminate event type immediately ends the process or subprocess, even if
+ *     <b>Terminate</b>: A terminate event type immediately ends the process or sub-process, even if
  *     other paths are active at the time.
  *   </li>
  *   <li>

@@ -17,10 +17,11 @@
 package guru.mmp.application.process.bpmn.activity;
 
 /**
- * The <code>SubprocessBehavior</code> class provides the base class that all subprocess behavior
- * subclasses should be derived from.
+ * The <code>LoopCharacteristics</code> class stores the information for the loop characteristics
+ * for a Business Process Model and Notation (BPMN) activity.
  *
  * @author Marcus Portmann
  */
-abstract class SubprocessBehavior
-  implements ISubprocessBehavior {}
+public class LoopCharacteristics
+{
+}

@@ -34,7 +34,18 @@ import java.util.List;
  * <p>
  * Start events can only have one outgoing sequence flow and they cannot have incoming sequence
  * flows.
- *
+ * <p>
+ * <b>Start Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="startEvent" type="tStartEvent" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tStartEvent"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tCatchEvent"&gt;
+ *       &lt;xsd:attribute name="isInterrupting" type="xsd:boolean" default="true"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;  
+ * </pre>
  * @author Marcus Portmann
  */
 public final class StartEvent extends CatchingEvent
@@ -51,12 +62,11 @@ public final class StartEvent extends CatchingEvent
    *
    * @param id           the ID uniquely identifying the start event
    * @param name         the name of the start event
-   * @param type         the type of start event
    * @param interrupting is the start event interrupting
    */
-  public StartEvent(String id, String name, EventType type, boolean interrupting)
+  public StartEvent(String id, String name, boolean interrupting)
   {
-    super(id, name, type);
+    super(id, name);
 
     this.interrupting = interrupting;
   }

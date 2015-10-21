@@ -16,11 +16,30 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.ProcessExecutionContext;
+import guru.mmp.application.process.bpmn.Token;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+
 /**
  * The <code>TaskBehavior</code> class provides the base class that all task behavior subclasses
  * should be derived from.
  *
  * @author Marcus Portmann
  */
-abstract class TaskBehavior
-  implements ITaskBehavior {}
+public abstract class TaskBehavior
+{
+  /**
+   * Execute the behavior for the Business Process Model and Notation (BPMN) task.
+   *
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   *
+   * @return the list of tokens generated as a result of executing the behavior for the
+   *         Business Process Model and Notation (BPMN) task
+   */
+  public abstract List<Token> execute(ProcessExecutionContext context);
+}

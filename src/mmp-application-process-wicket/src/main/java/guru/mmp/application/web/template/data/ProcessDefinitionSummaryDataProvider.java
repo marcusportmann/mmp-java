@@ -95,7 +95,7 @@ public class ProcessDefinitionSummaryDataProvider
     try
     {
       List<ProcessDefinitionSummary> allProcessDefinitionSummaries =
-        processService.getProcessDefinitionSummariesForOrganisation(organisation);
+        processService.getCurrentProcessDefinitionSummariesForOrganisation(organisation);
 
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 

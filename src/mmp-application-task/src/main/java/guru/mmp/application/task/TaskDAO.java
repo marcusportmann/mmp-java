@@ -122,7 +122,7 @@ public class TaskDAO
       {
         Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - executionRetryDelay);
 
-        statement.setInt(1, ScheduledTaskStatus.SCHEDULED.getCode());
+        statement.setInt(1, ScheduledTask.Status.SCHEDULED.getCode());
         statement.setTimestamp(2, processedBefore);
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 
@@ -134,23 +134,22 @@ public class TaskDAO
 
             scheduledTask = getScheduledTask(rs);
 
-            scheduledTask.setStatus(ScheduledTaskStatus.EXECUTING);
+            scheduledTask.setStatus(ScheduledTask.Status.EXECUTING);
             scheduledTask.setLockName(lockName);
             scheduledTask.setUpdated(updated);
 
             try (PreparedStatement updateStatement =
                 connection.prepareStatement(lockScheduledTaskSQL))
             {
-              updateStatement.setInt(1, ScheduledTaskStatus.EXECUTING.getCode());
+              updateStatement.setInt(1, ScheduledTask.Status.EXECUTING.getCode());
               updateStatement.setString(2, lockName);
               updateStatement.setTimestamp(3, updated);
               updateStatement.setString(4, scheduledTask.getId());
 
               if (updateStatement.executeUpdate() != 1)
               {
-                throw new DAOException("Failed to lock the scheduled task ("
-                    + scheduledTask.getId() + ") for execution:"
-                    + " No rows were affected as a result of executing the SQL statement" + " ("
+                throw new DAOException(
+                    "No rows were affected as a result of executing the SQL statement ("
                     + lockScheduledTaskSQL + ")");
               }
             }
@@ -174,15 +173,8 @@ public class TaskDAO
             + "the next task that has been scheduled for execution from the database", f);
       }
 
-      if (e instanceof DAOException)
-      {
-        throw((DAOException) e);
-      }
-      else
-      {
-        throw new DAOException("Failed to retrieve the next task that has been scheduled for "
-            + "execution from the database", e);
-      }
+      throw new DAOException("Failed to retrieve the next task that has been scheduled for "
+          + "execution from the database", e);
     }
     finally
     {
@@ -230,10 +222,6 @@ public class TaskDAO
 
       return scheduledTaskParameters;
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the parameters for the scheduled task (" + id
@@ -266,10 +254,6 @@ public class TaskDAO
 
       return unscheduledTasks;
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the unscheduled tasks from the database", e);
@@ -298,16 +282,9 @@ public class TaskDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-            "Failed to increment the execution attempts for the scheduled task (" + id
-            + ") in the database: "
-            + "No rows were affected as a result of executing the SQL statement" + " ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + incrementScheduledTaskExecutionAttemptsSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -384,7 +361,7 @@ public class TaskDAO
    *
    * @throws DAOException
    */
-  public void lockScheduledTask(String id, ScheduledTaskStatus status, String lockName)
+  public void lockScheduledTask(String id, ScheduledTask.Status status, String lockName)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -397,14 +374,9 @@ public class TaskDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to lock and set the status for the scheduled task (" + id
-            + ") to (" + status.toString() + ") in the database: No rows were affected as a result"
-            + " of executing the SQL statement (" + lockScheduledTaskSQL + ")");
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
+            + lockScheduledTaskSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -433,10 +405,6 @@ public class TaskDAO
 
       scheduleTask(connection, id, nextExecution);
     }
-    catch (DAOException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new DAOException("Failed to reschedule the task (" + id + ") for execution", e);
@@ -454,8 +422,8 @@ public class TaskDAO
    *
    * @throws DAOException
    */
-  public int resetScheduledTaskLocks(String lockName, ScheduledTaskStatus status,
-      ScheduledTaskStatus newStatus)
+  public int resetScheduledTaskLocks(String lockName, ScheduledTask.Status status,
+      ScheduledTask.Status newStatus)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -467,10 +435,6 @@ public class TaskDAO
       statement.setInt(4, status.getCode());
 
       return statement.executeUpdate();
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -536,7 +500,8 @@ public class TaskDAO
 
             if (nextExecution == null)
             {
-              setScheduledTaskStatus(connection, scheduledTask.getId(), ScheduledTaskStatus.FAILED);
+              setScheduledTaskStatus(connection, scheduledTask.getId(),
+                  ScheduledTask.Status.FAILED);
             }
             else
             {
@@ -605,16 +570,12 @@ public class TaskDAO
    *
    * @throws DAOException
    */
-  public void setScheduledTaskStatus(String id, ScheduledTaskStatus status)
+  public void setScheduledTaskStatus(String id, ScheduledTask.Status status)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection())
     {
       setScheduledTaskStatus(connection, id, status);
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -631,7 +592,7 @@ public class TaskDAO
    *
    * @throws DAOException
    */
-  public void unlockScheduledTask(String id, ScheduledTaskStatus status)
+  public void unlockScheduledTask(String id, ScheduledTask.Status status)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -643,14 +604,10 @@ public class TaskDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to unlock and set the status for the scheduled task (" + id
-            + ") to (" + status.toString() + ") in the database: No rows were affected as a result"
-            + " of executing the SQL statement (" + unlockScheduledTaskSQL + ")");
+        throw new DAOException(
+            "No rows were affected as a result  of executing the SQL statement ("
+            + unlockScheduledTaskSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -736,7 +693,7 @@ public class TaskDAO
     throws SQLException
   {
     return new ScheduledTask(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-        ScheduledTaskStatus.fromCode(rs.getInt(5)), rs.getInt(6), rs.getString(7),
+        ScheduledTask.Status.fromCode(rs.getInt(5)), rs.getInt(6), rs.getString(7),
         rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10));
   }
 
@@ -757,14 +714,9 @@ public class TaskDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to scheduled the task (" + id + "): "
-            + "No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + scheduleTaskSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -772,7 +724,7 @@ public class TaskDAO
     }
   }
 
-  private void setScheduledTaskStatus(Connection connection, String id, ScheduledTaskStatus status)
+  private void setScheduledTaskStatus(Connection connection, String id, ScheduledTask.Status status)
   {
     try (PreparedStatement statement = connection.prepareStatement(setScheduledTaskStatusSQL))
     {
@@ -781,14 +733,9 @@ public class TaskDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("Failed to set the status for the scheduled task in the database: "
-            + "No rows were affected as a result of executing the SQL statement ("
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + setScheduledTaskStatusSQL + ")");
       }
-    }
-    catch (DAOException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {

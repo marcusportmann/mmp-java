@@ -18,6 +18,9 @@ package guru.mmp.application.process.bpmn;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.activity.*;
+import guru.mmp.application.process.bpmn.event.StartEvent;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -27,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * The <code>ParserHandler</code> class implements the SAX handler that provides the capability to
@@ -37,9 +41,29 @@ import java.util.List;
 public class ParserHandler extends DefaultHandler
 {
   /**
-   * The Business Process Model and Notation (BPMN) process being parsed.
+   * The Business Process Model and Notation (BPMN) flow node currently being parsed.
    */
-  private Process process;
+  private FlowNode currentFlowNode;
+
+  /**
+   * The Business Process Model and Notation (BPMN) process currently being parsed.
+   */
+  private Process currentProcess;
+
+  /**
+   * The Business Process Model and Notation (BPMN) sub-process stack (sub-processes can be nested).
+   */
+  private Stack<SubProcess> subProcessStack = new Stack<>();
+
+  /**
+   * The parsed Business Process Model and Notation (BPMN) processes.
+   */
+  private List<Process> processes = new ArrayList<>();
+
+  /**
+   * The character data inside the elements currently being parsed.
+   */
+  private Stack<StringBuilder> elementsCharacters = new Stack<>();
 
   /**
    * Constructs a new <code>ParserHandler</code>.
@@ -59,7 +83,10 @@ public class ParserHandler extends DefaultHandler
   public void characters(char[] ch, int start, int length)
     throws SAXException
   {
-    //System.out.println("[DEBUG][characters] Read: " + String.copyValueOf(ch, start, length).trim());
+    if (!elementsCharacters.isEmpty())
+    {
+      elementsCharacters.peek().append(String.copyValueOf(ch, start, length));
+    }
   }
 
   /**
@@ -78,36 +105,253 @@ public class ParserHandler extends DefaultHandler
   public void endElement(String uri, String localName, String qName)
     throws SAXException
   {
-    // System.out.println("[DEBUG][endElement] {uri=\"" + uri + "\", localName=\"" + localName
-    // + "\", qName=\"" + qName + "\"}");
+    StringBuilder elementCharacters = elementsCharacters.pop();
 
     switch (qName)
     {
-      case "process":
+      case "incoming":
       {
+        currentFlowNode.addIncomingFlowElement(elementCharacters.toString());
+
         break;
       }
 
+      case "outgoing":
+      {
+        currentFlowNode.addOutgoingFlowElement(elementCharacters.toString());
+
+        break;
+      }
+
+      case "process":
+      {
+        processes.add(currentProcess);
+
+        currentProcess = null;
+
+        break;
+      }
+
+      case "receiveTask":
+      {
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(currentFlowNode);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(currentFlowNode);
+        }
+
+        currentFlowNode = null;
+
+        break;
+      }
+
+      case "script":
+      {
+        if ((currentFlowNode != null) && (currentFlowNode instanceof Task))
+        {
+          TaskBehavior taskBehavior = ((Task) currentFlowNode).getTaskBehavior();
+
+          if (taskBehavior instanceof ScriptTaskBehavior)
+          {
+            ((ScriptTaskBehavior) taskBehavior).setScript(elementCharacters.toString());
+          }
+          else
+          {
+            throw new ParserException("Failed to parse the \"script\" node: "
+                + "The task behavior is not a ScriptTaskBehavior");
+          }
+        }
+        else
+        {
+          throw new ParserException("Failed to parse the \"script\" node: "
+              + "The current flow node is not a task");
+        }
+
+        break;
+      }
+
+      case "scriptTask":
+      {
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(currentFlowNode);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(currentFlowNode);
+        }
+
+        currentFlowNode = null;
+
+        break;
+      }
+
+      case "sendTask":
+      {
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(currentFlowNode);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(currentFlowNode);
+        }
+
+        currentFlowNode = null;
+
+        break;
+      }
+
+      case "serviceTask":
+      {
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(currentFlowNode);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(currentFlowNode);
+        }
+
+        currentFlowNode = null;
+
+        break;
+      }
+
+      case "startEvent":
+      {
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(currentFlowNode);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(currentFlowNode);
+        }
+
+        currentFlowNode = null;
+
+        break;
+      }
+
+      case "subProcess":
+      {
+        SubProcess subProcess = subProcessStack.pop();
+
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(subProcess);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(subProcess);
+        }
+
+        break;
+      }
+
+      case "task":
+      {
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(currentFlowNode);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(currentFlowNode);
+        }
+
+        currentFlowNode = null;
+
+        break;
+      }
+
+      case "transaction":
+      {
+        SubProcess subProcess = subProcessStack.pop();
+
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(subProcess);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(subProcess);
+        }
+
+        break;
+      }
+
+      case "userTask":
+      {
+        if (subProcessStack.isEmpty())
+        {
+          currentProcess.addFlowNode(currentFlowNode);
+        }
+        else
+        {
+          subProcessStack.peek().addFlowNode(currentFlowNode);
+        }
+
+        currentFlowNode = null;
+
+        break;
+      }
     }
   }
 
   /**
-   * Returns the parsed Business Process Model and Notation (BPMN) process.
+   * Handle the SAX parsing error.
    *
-   * @return the parsed Business Process Model and Notation (BPMN) process
+   * @param e the error
+   *
+   * @throws SAXException
    */
-  public Process getProcesses()
+  @Override
+  public void error(SAXParseException e)
+    throws SAXException
   {
-    return process;
+    throw e;
   }
 
   /**
-   * Method description
+   * Handle the SAX parsing fatal error.
    *
-   * @param uri
-   * @param localName
-   * @param qName
-   * @param attributes
+   * @param e the fatal error
+   *
+   * @throws SAXException
+   */
+  @Override
+  public void fatalError(SAXParseException e)
+    throws SAXException
+  {
+    throw e;
+  }
+
+  /**
+   * Returns the parsed Business Process Model and Notation (BPMN) processes.
+   *
+   * @return the parsed Business Process Model and Notation (BPMN) processes
+   */
+  public List<Process> getProcesses()
+  {
+    return processes;
+  }
+
+  /**
+   * Receive notification of the start of an element.
+   *
+   * @param uri        the Namespace URI, or the empty string if the element has no Namespace URI
+   *                   or if Namespace processing is not being performed
+   * @param localName  the local name (without prefix), or the empty string if Namespace processing
+   *                   is not being performed
+   * @param qName      the qualified name (with prefix), or the empty string if qualified names are
+   *                   not available
+   * @param attributes The attributes attached to the element. If there are no attributes, it shall
+   *                   be an empty Attributes object.
    *
    * @throws SAXException
    */
@@ -115,84 +359,362 @@ public class ParserHandler extends DefaultHandler
   public void startElement(String uri, String localName, String qName, Attributes attributes)
     throws SAXException
   {
-    // super.startElement(uri, localName, qName, attributes);
-
-    // System.out.println("[DEBUG][startElement] {uri=\"" + uri + "\", localName=\"" + localName
-    // + "\", qName=\"" + qName + "\"}");
+    elementsCharacters.push(new StringBuilder());
 
     switch (qName)
     {
-      case "process":
+      case "definitions":
       {
-        // /String id = attributes.getValue("");
+        break;
+      }
 
-        process = new Process();
+      case "extensionElements":
+      {
+        break;
+      }
+
+      case "incoming":
+      {
+        /*
+         * Do nothing as the tag has no attributes and we are interested in the content of the
+         * element which is the ID of the incoming flow element for the current flow node.
+         */
 
         break;
       }
 
+      case "outgoing":
+      {
+        /*
+         * Do nothing as the tag has no attributes and we are interested in the content of the
+         * element which is the ID of the outgoing flow element for the current flow node.
+         */
+
+        break;
+      }
+
+      case "process":
+      {
+        parseProcessNode(attributes);
+
+        break;
+      }
+
+      case "receiveTask":
+      {
+        parseReceiveTask(attributes);
+
+        break;
+      }
+
+      case "script":
+      {
+        /*
+         * Do nothing as the tag has no attributes and we are interested in the content of the
+         * element which is the script.
+         */
+
+        break;
+      }
+
+      case "scriptTask":
+      {
+        parseScriptTask(attributes);
+
+        break;
+      }
+
+      case "serviceTask":
+      {
+        parseServiceTask(attributes);
+
+        break;
+      }
+
+      case "startEvent":
+      {
+        parseStartEvent(attributes);
+
+        break;
+      }
+
+      case "sendTask":
+      {
+        parseSendTask(attributes);
+
+        break;
+      }
+
+      case "subProcess":
+      {
+        parseSubProcess(attributes);
+
+        break;
+      }
+
+      case "task":
+      {
+        parseDefaultTask(attributes);
+
+        break;
+      }
+
+      case "userTask":
+      {
+        parseUserTask(attributes);
+
+        break;
+      }
+
+      default:
+      {
+        if (qName.startsWith("yaoqiang:"))
+        {
+          break;
+        }
+
+        throw new ParserException("Failed to parse the unknown node (" + qName + ")");
+      }
     }
-
-//  switch(qName){
-//    //Create a new Employee object when the start tag is found
-//    case "employee":
-//      emp = new Employee();
-//      emp.id = attributes.getValue("id");
-//      break;
-
   }
 
   /**
-   * Method description
+   * Handle the SAX parsing warning.
    *
-   * @param prefix
-   * @param uri
+   * @param e the warning
    *
    * @throws SAXException
    */
   @Override
-  public void startPrefixMapping(String prefix, String uri)
+  public void warning(SAXParseException e)
     throws SAXException
   {
-    // super.startPrefixMapping(prefix, uri);
-
-    System.out.println("[DEBUG][startPrefixMapping] startPrefixMapping {prefixe=\"" + prefix
-        + "\", uri = \"" + uri + "\"");
-
-  }
-
-
-
-  @Override
-  public void error(SAXParseException e) throws SAXException {
-
-
     throw e;
-
-//    int xxx = 0;
-//    xxx++;
-
   }
 
+  private void parseDefaultTask(Attributes attributes)
+  {
+    try
+    {
+      DefaultTaskBehavior defaultTaskBehavior = new DefaultTaskBehavior();
 
-
-
-  @Override
-  public void fatalError(SAXParseException e) throws SAXException {
-    //System.out.println("Fattal error: ");
-    //printInfo(e);
-
-    int xxx = 0;
-    xxx++;
+      parseTask("task", attributes, defaultTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"task\" node", e);
+    }
   }
 
-  @Override
-  public void warning(SAXParseException e) throws SAXException {
-//    System.out.println("Warning: ");
-//    printInfo(e);
+  private void parseProcessNode(Attributes attributes)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
 
-    int xxx = 0;
-    xxx++;
+      boolean isClosed = Boolean.parseBoolean(attributes.getValue("isClosed"));
 
+      boolean isExecutable = Boolean.parseBoolean(attributes.getValue("isExecutable"));
+
+      String processType = attributes.getValue("processType");
+
+      if (!processType.equals("None"))
+      {
+        throw new ParserException("Failed to parse the unsupported process type (" + processType
+            + "");
+      }
+
+      currentProcess = new Process(id, isClosed, isExecutable);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"process\" node", e);
+    }
+  }
+
+  private void parseReceiveTask(Attributes attributes)
+  {
+    try
+    {
+      ImplementationType implementationType =
+        ImplementationType.fromId(attributes.getValue("implementation"));
+
+      boolean instantiateProcess = Boolean.parseBoolean("instantiate");
+
+      ReceiveTaskBehavior receiveTaskBehavior = new ReceiveTaskBehavior(implementationType,
+        instantiateProcess);
+
+      parseTask("receiveTask", attributes, receiveTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"receiveTask\" node", e);
+    }
+  }
+
+  private void parseScriptTask(Attributes attributes)
+  {
+    try
+    {
+      ScriptTaskBehavior.ScriptFormat scriptFormat =
+        ScriptTaskBehavior.ScriptFormat.fromMimeType(attributes.getValue("scriptFormat"));
+
+      ScriptTaskBehavior scriptTaskBehavior = new ScriptTaskBehavior(scriptFormat);
+
+      parseTask("scriptTask", attributes, scriptTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"scriptTask\" node", e);
+    }
+  }
+
+  private void parseSendTask(Attributes attributes)
+  {
+    try
+    {
+      ImplementationType implementationType =
+        ImplementationType.fromId(attributes.getValue("implementation"));
+
+      SendTaskBehavior sendTaskBehavior = new SendTaskBehavior(implementationType);
+
+      parseTask("sendTask", attributes, sendTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"sendTask\" node", e);
+    }
+  }
+
+  private void parseServiceTask(Attributes attributes)
+  {
+    try
+    {
+      ImplementationType implementationType =
+        ImplementationType.fromId(attributes.getValue("implementation"));
+
+      ServiceTaskBehavior serviceTaskBehavior = new ServiceTaskBehavior(implementationType);
+
+      parseTask("serviceTask", attributes, serviceTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"serviceTask\" node", e);
+    }
+  }
+
+  private void parseStartEvent(Attributes attributes)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
+
+      String name = attributes.getValue("name");
+
+      boolean isInterrupting = Boolean.parseBoolean(attributes.getValue("isInterrupting"));
+
+      boolean parallelMultiple = Boolean.parseBoolean(attributes.getValue("parallelMultiple"));
+
+      currentFlowNode = new StartEvent(id, name, isInterrupting);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"startEvent\" node", e);
+    }
+  }
+
+  private void parseSubProcess(Attributes attributes)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
+
+      String name = attributes.getValue("name");
+
+      boolean forCompensation = Boolean.parseBoolean(attributes.getValue("isForCompensation"));
+
+      int startQuantity = Integer.parseInt(attributes.getValue("startQuantity"));
+
+      int completionQuantity = Integer.parseInt(attributes.getValue("completionQuantity"));
+
+      boolean triggeredByEvent = Boolean.parseBoolean(attributes.getValue("triggeredByEvent"));
+
+      subProcessStack.push(new SubProcess(id, name, forCompensation, startQuantity,
+          completionQuantity, triggeredByEvent));
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"subProcess\" node", e);
+    }
+  }
+
+  private void parseTask(String nodeName, Attributes attributes, TaskBehavior taskBehavior)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
+
+      String name = attributes.getValue("name");
+
+      boolean forCompensation = Boolean.parseBoolean(attributes.getValue("isForCompensation"));
+
+      int startQuantity = Integer.parseInt(attributes.getValue("startQuantity"));
+
+      int completionQuantity = Integer.parseInt(attributes.getValue("completionQuantity"));
+
+      currentFlowNode = new Task(id, name, forCompensation, startQuantity, completionQuantity,
+          taskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the generic task attributes for the \"" + nodeName
+          + "\" task node");
+    }
+  }
+
+  private void parseTransactionSubProcess(Attributes attributes)
+  {
+    try
+    {
+      // <transaction method="##Compensate"
+
+      String id = attributes.getValue("id");
+
+      String name = attributes.getValue("name");
+
+      String method = attributes.getValue("method");
+
+      boolean forCompensation = Boolean.parseBoolean(attributes.getValue("isForCompensation"));
+
+      int startQuantity = Integer.parseInt(attributes.getValue("startQuantity"));
+
+      int completionQuantity = Integer.parseInt(attributes.getValue("completionQuantity"));
+
+      boolean triggeredByEvent = Boolean.parseBoolean(attributes.getValue("triggeredByEvent"));
+
+      subProcessStack.push(new TransactionSubProcess(id, name, forCompensation, startQuantity,
+          completionQuantity, triggeredByEvent));
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"transaction\" node", e);
+    }
+  }
+
+  private void parseUserTask(Attributes attributes)
+  {
+    try
+    {
+      ImplementationType implementationType =
+        ImplementationType.fromId(attributes.getValue("implementation"));
+
+      UserTaskBehavior userTaskBehavior = new UserTaskBehavior(implementationType);
+
+      parseTask("userTask", attributes, userTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"userTask\" node", e);
+    }
   }
 }

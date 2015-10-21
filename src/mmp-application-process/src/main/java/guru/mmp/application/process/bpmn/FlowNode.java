@@ -18,30 +18,71 @@ package guru.mmp.application.process.bpmn;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The <code>FlowNode</code> class provides the base class that all flow nodes that form part of a
  * Business Process Model and Notation (BPMN) process should be derived from.
+ * <p>
+ * <b>Flow Node</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="flowNode" type="tFlowNode"/&gt;
+ * &lt;xsd:complexType name="tFlowNode" abstract="true"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tFlowElement"&gt;
+ *       &lt;xsd:sequence&gt;
+ *         &lt;xsd:element name="incoming" type="xsd:QName" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element name="outgoing" type="xsd:QName" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *       &lt;/xsd:sequence&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public abstract class FlowNode
-  implements IFlowNode
+public abstract class FlowNode extends FlowElement
 {
   /**
-   * The ID uniquely identifying the flow node.
+   * The IDs uniquely identifying the incoming flow elements for the flow node.
    */
-  private String id;
+  private List<String> incomingFlowElementIds = new ArrayList<>();
+
+  /**
+   * The IDs uniquely identifying the incoming flow elements for the flow node.
+   */
+  private List<String> outgoingFlowElementIds = new ArrayList<>();
 
   /**
    * Constructs a new <code>FlowNode</code>.
    *
-   * @param id the ID uniquely identifying the flow node
+   * @param id   the ID uniquely identifying the flow node
+   * @param name the name of the flow node
    */
-  public FlowNode(String id)
+  public FlowNode(String id, String name)
   {
-    this.id = id;
+    super(id, name);
+  }
+
+  /**
+   * Add the ID uniquely identifying the incoming flow element for the flow node.
+   *
+   * @param id the ID uniquely identifying the incoming flow element for the flow node
+   */
+  public void addIncomingFlowElement(String id)
+  {
+    incomingFlowElementIds.add(id);
+  }
+
+  /**
+   * Add the ID uniquely identifying the outgoing flow element for the flow node.
+   *
+   * @param id the ID uniquely identifying the outgoing flow element for the flow node
+   */
+  public void addOutgoingFlowElement(String id)
+  {
+    outgoingFlowElementIds.add(id);
   }
 
   /**
@@ -52,16 +93,25 @@ public abstract class FlowNode
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) flow node
    */
-  @Override
   public abstract List<Token> execute(ProcessExecutionContext context);
 
   /**
-   * Returns the ID uniquely identifying the flow node.
+   * Returns the IDs uniquely identifying the incoming flow elements for the flow node.
    *
-   * @return the ID uniquely identifying the flow node
+   * @return IDs uniquely identifying the incoming flow elements for the flow node
    */
-  public String getId()
+  public List<String> getIncomingFlowElementIds()
   {
-    return id;
+    return incomingFlowElementIds;
+  }
+
+  /**
+   * Returns the IDs uniquely identifying the incoming flow elements for the flow node.
+   *
+   * @return the IDs uniquely identifying the incoming flow elements for the flow node
+   */
+  public List<String> getOutgoingFlowElementIds()
+  {
+    return outgoingFlowElementIds;
   }
 }

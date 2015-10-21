@@ -39,11 +39,10 @@ abstract class ThrowingEvent extends Event
    *
    * @param id   the ID uniquely identifying the throwing event
    * @param name the name of the throwing event
-   * @param type the type of throwing event
    */
-  protected ThrowingEvent(String id, String name, EventType type)
+  protected ThrowingEvent(String id, String name)
   {
-    super(id, name, type);
+    super(id, name);
   }
 
   /**

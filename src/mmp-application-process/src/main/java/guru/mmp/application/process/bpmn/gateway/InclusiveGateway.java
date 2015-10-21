@@ -37,11 +37,12 @@ public final class InclusiveGateway extends Gateway
   /**
    * Constructs a new <code>InclusiveGateway</code>.
    *
-   * @param id the ID uniquely identifying the inclusive gateway
+   * @param id   the ID uniquely identifying the inclusive gateway
+   * @param name the name of the inclusive gateway
    */
-  public InclusiveGateway(String id)
+  public InclusiveGateway(String id, String name)
   {
-    super(id);
+    super(id, name);
   }
 
   /**
