@@ -86,16 +86,6 @@ public abstract class FlowNode extends FlowElement
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) flow node.
-   *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
-   *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) flow node
-   */
-  public abstract List<Token> execute(ProcessExecutionContext context);
-
-  /**
    * Returns the IDs uniquely identifying the incoming flow elements for the flow node.
    *
    * @return IDs uniquely identifying the incoming flow elements for the flow node

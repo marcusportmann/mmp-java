@@ -18,17 +18,17 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.FlowNode;
+import guru.mmp.application.process.bpmn.FlowElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SubProcess</code> class represents a  Business Process Model and Notation (BPMN)
@@ -49,15 +49,19 @@ import java.util.concurrent.ConcurrentHashMap;
  *   <li>Signal</li>
  *   <li>Escalation</li>
  * </ul>
+ * <p>
+ * <b>Sub-Process</b> XML schema:
+ * <pre>
+ * </pre>
  *
  * @author Marcus Portmann
  */
 public class SubProcess extends Activity
 {
   /**
-   * The flow nodes for the sub-process.
+   * The flow elements for the sub-process.
    */
-  private Map<String, FlowNode> flowNodes = new ConcurrentHashMap<>();
+  private Map<String, FlowElement> flowElements = new ConcurrentHashMap<>();
 
   /**
    * Is the sub-process triggered by an event?
@@ -83,13 +87,13 @@ public class SubProcess extends Activity
   }
 
   /**
-   * Add the flow node to the sub-process.
+   * Add the flow element to the sub-process.
    *
-   * @param flowNode the flow node to add to the sub-process
+   * @param flowElement the flow element to add to the sub-process
    */
-  public void addFlowNode(FlowNode flowNode)
+  public void addFlowElement(FlowElement flowElement)
   {
-    flowNodes.put(flowNode.getId(), flowNode);
+    flowElements.put(flowElement.getId(), flowElement);
   }
 
   /**
@@ -106,26 +110,26 @@ public class SubProcess extends Activity
   }
 
   /**
-   * Returns the flow node with the specified ID.
+   * Returns the flow element with the specified ID.
    *
-   * @param id the ID uniquely identifying the flow node
+   * @param id the ID uniquely identifying the flow element
    *
-   * @return the flow node with the specified ID or <code>null</code> if the flow node could
+   * @return the flow element with the specified ID or <code>null</code> if the flow element could
    *         not be found
    */
-  public FlowNode getFlowNode(String id)
+  public FlowElement getFlowElement(String id)
   {
-    return flowNodes.get(id);
+    return flowElements.get(id);
   }
 
   /**
-   * Returns the flow nodes for the sub-process.
+   * Returns the flow elements for the sub-process.
    *
-   * @return the flow nodes for the sub-process
+   * @return the flow elements for the sub-process
    */
-  public Collection<FlowNode> getFlowNodes()
+  public Collection<FlowElement> getFlowElements()
   {
-    return flowNodes.values();
+    return flowElements.values();
   }
 
   /**

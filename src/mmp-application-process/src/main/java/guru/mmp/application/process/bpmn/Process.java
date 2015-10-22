@@ -30,9 +30,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Process
 {
   /**
-   * The flow nodes for the process.
+   * The flow elements for the process.
    */
-  private Map<String, FlowNode> flowNodes = new ConcurrentHashMap<>();
+  private Map<String, FlowElement> flowElements = new ConcurrentHashMap<>();
 
   /**
    * The ID uniquely identifying the process.
@@ -67,36 +67,36 @@ public class Process
   }
 
   /**
-   * Add the flow node to the process.
+   * Add the flow element to the process.
    *
-   * @param flowNode the flow node to add to the process
+   * @param flowElement the flow element to add to the process
    */
-  public void addFlowNode(FlowNode flowNode)
+  public void addFlowElement(FlowElement flowElement)
   {
-    flowNodes.put(flowNode.getId(), flowNode);
+    flowElements.put(flowElement.getId(), flowElement);
   }
 
   /**
-   * Returns the flow node with the specified ID.
+   * Returns the flow element with the specified ID.
    *
-   * @param id the ID uniquely identifying the flow node
+   * @param id the ID uniquely identifying the flow element
    *
-   * @return the flow node with the specified ID or <code>null</code> if the flow node could
+   * @return the flow element with the specified ID or <code>null</code> if the flow element could
    *         not be found
    */
-  public FlowNode getFlowNode(String id)
+  public FlowElement getFlowElement(String id)
   {
-    return flowNodes.get(id);
+    return flowElements.get(id);
   }
 
   /**
-   * Returns the flow nodes for the process.
+   * Returns the flow elements for the process.
    *
-   * @return the flow nodes for the process
+   * @return the flow elements for the process
    */
-  public Collection<FlowNode> getFlowNodes()
+  public Collection<FlowElement> getFlowElements()
   {
-    return flowNodes.values();
+    return flowElements.values();
   }
 
   /**

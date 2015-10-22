@@ -55,6 +55,26 @@ import java.util.List;
  *   <li>Cancellation</li>
  *   <li>Exception (error)</li>
  * </ul>
+ * <p>
+ * <b>Transaction Sub-Process</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="transaction" type="tTransaction" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tTransaction"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tSubProcess"&gt;
+ *       &lt;xsd:attribute name="method" type="tTransactionMethod" default="Compensate"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ *
+ * &lt;xsd:simpleType name="tTransactionMethod"&gt;
+ *   &lt;xsd:restriction base="xsd:string"&gt;
+ *     &lt;xsd:enumeration value="Compensate"/&gt;
+ *     &lt;xsd:enumeration value="Image"/&gt;
+ *     &lt;xsd:enumeration value="Store"/&gt;
+ *   &lt;/xsd:restriction&gt;
+ * &lt;/xsd:simpleType&gt;  
+ * </pre>
  *
  * @author Marcus Portmann
  */

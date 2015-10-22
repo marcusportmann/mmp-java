@@ -16,6 +16,10 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+
 /**
  * The <code>FlowElement</code> class provides the base class that all flow elements that form part
  * of a Business Process Model and Notation (BPMN) process should be derived from.
@@ -59,4 +63,14 @@ public abstract class FlowElement extends BaseElement
 
     this.name = name;
   }
+
+  /**
+   * Execute the Business Process Model and Notation (BPMN) flow element.
+   *
+   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   *
+   * @return the list of tokens generated as a result of executing the Business Process Model and
+   *         Notation (BPMN) flow element
+   */
+  public abstract List<Token> execute(ProcessExecutionContext context);
 }

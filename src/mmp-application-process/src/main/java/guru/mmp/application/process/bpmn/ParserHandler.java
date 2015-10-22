@@ -41,9 +41,9 @@ import java.util.Stack;
 public class ParserHandler extends DefaultHandler
 {
   /**
-   * The Business Process Model and Notation (BPMN) flow node currently being parsed.
+   * The Business Process Model and Notation (BPMN) flow element currently being parsed.
    */
-  private FlowNode currentFlowNode;
+  private FlowElement currentFlowElement;
 
   /**
    * The Business Process Model and Notation (BPMN) process currently being parsed.
@@ -111,14 +111,20 @@ public class ParserHandler extends DefaultHandler
     {
       case "incoming":
       {
-        currentFlowNode.addIncomingFlowElement(elementCharacters.toString());
+        if (currentFlowElement instanceof FlowNode)
+        {
+          ((FlowNode) currentFlowElement).addIncomingFlowElement(elementCharacters.toString());
+        }
 
         break;
       }
 
       case "outgoing":
       {
-        currentFlowNode.addOutgoingFlowElement(elementCharacters.toString());
+        if (currentFlowElement instanceof FlowNode)
+        {
+          ((FlowNode) currentFlowElement).addOutgoingFlowElement(elementCharacters.toString());
+        }
 
         break;
       }
@@ -134,25 +140,16 @@ public class ParserHandler extends DefaultHandler
 
       case "receiveTask":
       {
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(currentFlowNode);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(currentFlowNode);
-        }
-
-        currentFlowNode = null;
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
 
       case "script":
       {
-        if ((currentFlowNode != null) && (currentFlowNode instanceof Task))
+        if ((currentFlowElement != null) && (currentFlowElement instanceof Task))
         {
-          TaskBehavior taskBehavior = ((Task) currentFlowNode).getTaskBehavior();
+          TaskBehavior taskBehavior = ((Task) currentFlowElement).getTaskBehavior();
 
           if (taskBehavior instanceof ScriptTaskBehavior)
           {
@@ -175,128 +172,74 @@ public class ParserHandler extends DefaultHandler
 
       case "scriptTask":
       {
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(currentFlowNode);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(currentFlowNode);
-        }
-
-        currentFlowNode = null;
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
 
       case "sendTask":
       {
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(currentFlowNode);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(currentFlowNode);
-        }
+        addCurrentFlowElementToProcessOrSubProcess();
 
-        currentFlowNode = null;
+        break;
+      }
+
+      case "sequenceFlow":
+      {
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
 
       case "serviceTask":
       {
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(currentFlowNode);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(currentFlowNode);
-        }
+        addCurrentFlowElementToProcessOrSubProcess();
 
-        currentFlowNode = null;
+        break;
+      }
+
+      case "standardLoopCharacteristics":
+      {
+        // TODO: IMPLEMENT THIS -- MARCUS
 
         break;
       }
 
       case "startEvent":
       {
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(currentFlowNode);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(currentFlowNode);
-        }
-
-        currentFlowNode = null;
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
 
       case "subProcess":
       {
-        SubProcess subProcess = subProcessStack.pop();
+        currentFlowElement = subProcessStack.pop();
 
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(subProcess);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(subProcess);
-        }
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
 
       case "task":
       {
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(currentFlowNode);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(currentFlowNode);
-        }
-
-        currentFlowNode = null;
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
 
       case "transaction":
       {
-        SubProcess subProcess = subProcessStack.pop();
+        currentFlowElement = subProcessStack.pop();
 
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(subProcess);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(subProcess);
-        }
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
 
       case "userTask":
       {
-        if (subProcessStack.isEmpty())
-        {
-          currentProcess.addFlowNode(currentFlowNode);
-        }
-        else
-        {
-          subProcessStack.peek().addFlowNode(currentFlowNode);
-        }
-
-        currentFlowNode = null;
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
@@ -424,6 +367,20 @@ public class ParserHandler extends DefaultHandler
         break;
       }
 
+      case "sendTask":
+      {
+        parseSendTask(attributes);
+
+        break;
+      }
+
+      case "sequenceFlow":
+      {
+        parseSequenceFlow(attributes);
+
+        break;
+      }
+
       case "serviceTask":
       {
         parseServiceTask(attributes);
@@ -431,16 +388,16 @@ public class ParserHandler extends DefaultHandler
         break;
       }
 
-      case "startEvent":
+      case "standardLoopCharacteristics":
       {
-        parseStartEvent(attributes);
+        // TODO: IMPLEMENT THIS -- MARCUS
 
         break;
       }
 
-      case "sendTask":
+      case "startEvent":
       {
-        parseSendTask(attributes);
+        parseStartEvent(attributes);
 
         break;
       }
@@ -490,6 +447,23 @@ public class ParserHandler extends DefaultHandler
     throws SAXException
   {
     throw e;
+  }
+
+  private void addCurrentFlowElementToProcessOrSubProcess()
+  {
+    if (currentFlowElement != null)
+    {
+      if (subProcessStack.isEmpty())
+      {
+        currentProcess.addFlowElement(currentFlowElement);
+      }
+      else
+      {
+        subProcessStack.peek().addFlowElement(currentFlowElement);
+      }
+
+      currentFlowElement = null;
+    }
   }
 
   private void parseDefaultTask(Attributes attributes)
@@ -586,6 +560,24 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
+  private void parseSequenceFlow(Attributes attributes)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
+
+      String sourceRef = attributes.getValue("sourceRef");
+
+      String targetRef = attributes.getValue("targetRef");
+
+      currentFlowElement = new SequenceFlow(id, sourceRef, targetRef);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"sequenceFlow\" node", e);
+    }
+  }
+
   private void parseServiceTask(Attributes attributes)
   {
     try
@@ -615,7 +607,7 @@ public class ParserHandler extends DefaultHandler
 
       boolean parallelMultiple = Boolean.parseBoolean(attributes.getValue("parallelMultiple"));
 
-      currentFlowNode = new StartEvent(id, name, isInterrupting);
+      currentFlowElement = new StartEvent(id, name, isInterrupting);
     }
     catch (Throwable e)
     {
@@ -662,7 +654,7 @@ public class ParserHandler extends DefaultHandler
 
       int completionQuantity = Integer.parseInt(attributes.getValue("completionQuantity"));
 
-      currentFlowNode = new Task(id, name, forCompensation, startQuantity, completionQuantity,
+      currentFlowElement = new Task(id, name, forCompensation, startQuantity, completionQuantity,
           taskBehavior);
     }
     catch (Throwable e)

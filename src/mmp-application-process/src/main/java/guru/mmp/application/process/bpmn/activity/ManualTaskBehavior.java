@@ -32,6 +32,16 @@ import java.util.List;
  * <p>
  * This task represents work that is not automated and is performed outside the control of the
  * BPM engine.
+ * <p>
+ * <b>Manual Task</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="manualTask" type="tManualTask" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tManualTask"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tTask"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
