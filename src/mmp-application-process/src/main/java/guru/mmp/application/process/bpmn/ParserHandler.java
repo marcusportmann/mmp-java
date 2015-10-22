@@ -19,7 +19,9 @@ package guru.mmp.application.process.bpmn;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.process.bpmn.activity.*;
+import guru.mmp.application.process.bpmn.event.EndEvent;
 import guru.mmp.application.process.bpmn.event.StartEvent;
+import guru.mmp.common.util.StringUtil;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -109,12 +111,43 @@ public class ParserHandler extends DefaultHandler
 
     switch (qName)
     {
+      case "businessRuleTask":
+      {
+        addCurrentFlowElementToProcessOrSubProcess();
+
+        break;
+      }
+
+      case "definitions":
+      {
+        break;
+      }
+
+      case "endEvent":
+      {
+        addCurrentFlowElementToProcessOrSubProcess();
+
+        break;
+      }
+
+      case "extensionElements":
+      {
+        break;
+      }
+
       case "incoming":
       {
         if (currentFlowElement instanceof FlowNode)
         {
           ((FlowNode) currentFlowElement).addIncomingFlowElement(elementCharacters.toString());
         }
+
+        break;
+      }
+
+      case "manualTask":
+      {
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
@@ -306,8 +339,22 @@ public class ParserHandler extends DefaultHandler
 
     switch (qName)
     {
+      case "businessRuleTask":
+      {
+        parseBusinessRuleTask(attributes);
+
+        break;
+      }
+
       case "definitions":
       {
+        break;
+      }
+
+      case "endEvent":
+      {
+        parseEndEvent(attributes);
+
         break;
       }
 
@@ -322,6 +369,13 @@ public class ParserHandler extends DefaultHandler
          * Do nothing as the tag has no attributes and we are interested in the content of the
          * element which is the ID of the incoming flow element for the current flow node.
          */
+
+        break;
+      }
+
+      case "manualTask":
+      {
+        parseManualTask(attributes);
 
         break;
       }
@@ -466,6 +520,24 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
+  private void parseBusinessRuleTask(Attributes attributes)
+  {
+    try
+    {
+      ImplementationType implementationType =
+        ImplementationType.fromId(attributes.getValue("implementation"));
+
+      BusinessRuleTaskBehavior businessRuleTaskBehavior =
+        new BusinessRuleTaskBehavior(implementationType);
+
+      parseTask("businessRuleTask", attributes, businessRuleTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"businessRuleTask\" node", e);
+    }
+  }
+
   private void parseDefaultTask(Attributes attributes)
   {
     try
@@ -477,6 +549,36 @@ public class ParserHandler extends DefaultHandler
     catch (Throwable e)
     {
       throw new ParserException("Failed to parse the \"task\" node", e);
+    }
+  }
+
+  private void parseEndEvent(Attributes attributes)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
+
+      String name = attributes.getValue("name");
+
+      currentFlowElement = new EndEvent(id, name);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"endEvent\" node", e);
+    }
+  }
+
+  private void parseManualTask(Attributes attributes)
+  {
+    try
+    {
+      ManualTaskBehavior manualTaskBehavior = new ManualTaskBehavior();
+
+      parseTask("manualTask", attributes, manualTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"manualTask\" node", e);
     }
   }
 
@@ -530,8 +632,8 @@ public class ParserHandler extends DefaultHandler
   {
     try
     {
-      ScriptTaskBehavior.ScriptFormat scriptFormat =
-        ScriptTaskBehavior.ScriptFormat.fromMimeType(attributes.getValue("scriptFormat"));
+      ScriptTaskBehavior.ScriptFormat scriptFormat = ScriptTaskBehavior.ScriptFormat.fromMimeType(
+          StringUtil.notNull(attributes.getValue("scriptFormat")));
 
       ScriptTaskBehavior scriptTaskBehavior = new ScriptTaskBehavior(scriptFormat);
 

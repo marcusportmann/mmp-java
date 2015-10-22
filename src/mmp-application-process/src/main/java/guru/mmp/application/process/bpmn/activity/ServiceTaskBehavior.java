@@ -57,11 +57,6 @@ public final class ServiceTaskBehavior extends TaskBehavior
 
   /**
    * Constructs a new <code>ServiceTaskBehavior</code>.
-   */
-  public ServiceTaskBehavior() {}
-
-  /**
-   * Constructs a new <code>ServiceTaskBehavior</code>.
    *
    * @param implementationType the implementation type for the service task
    */

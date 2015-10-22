@@ -21,10 +21,10 @@ package guru.mmp.application.process.bpmn.activity;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BusinessRuleTaskBehavior</code> class implements the behavior for a Business Process
@@ -32,15 +32,38 @@ import java.util.List;
  * <p>
  * This task represents work executed at run-time in a business rule engine, generally a complex
  * decision.
+ * <p>
+ * <b>Business Rule Task</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="businessRuleTask" type="tBusinessRuleTask"
+ *                 substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tBusinessRuleTask"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tTask"&gt;
+ *       &lt;xsd:attribute name="implementation" type="tImplementation" default="##unspecified"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
 public final class BusinessRuleTaskBehavior extends TaskBehavior
 {
   /**
-   * Constructs a new <code>BusinessRuleTaskBehavior</code>.
+   * The implementation type for the business rule task.
    */
-  public BusinessRuleTaskBehavior() {}
+  private ImplementationType implementationType;
+
+  /**
+   * Constructs a new <code>BusinessRuleTaskBehavior</code>.
+   *
+   * @param implementationType the implementation type for the service task
+   */
+  public BusinessRuleTaskBehavior(ImplementationType implementationType)
+  {
+    this.implementationType = implementationType;
+  }
 
   /**
    * Execute the behavior for the Business Process Model and Notation (BPMN) business rule task.
@@ -54,5 +77,15 @@ public final class BusinessRuleTaskBehavior extends TaskBehavior
   public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
+  }
+
+  /**
+   * Returns the implementation type for the business rule task.
+   *
+   * @return the implementation type for the business rule task
+   */
+  public ImplementationType getImplementationType()
+  {
+    return implementationType;
   }
 }

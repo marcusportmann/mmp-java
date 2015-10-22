@@ -80,8 +80,9 @@ public final class ScriptTaskBehavior extends TaskBehavior
    */
   public enum ScriptFormat
   {
-    JAVASCRIPT("text/javascript", "JavaScript"), GROOVY("text/x-groovy", "Groovy"),
-    JAVA("http://www.java.com/java", "Java"), MVEL("http://www.mvel.org/2.0", "MVEL");
+    NONE("", "None"), JAVASCRIPT("text/javascript", "JavaScript"),
+    GROOVY("text/x-groovy", "Groovy"), JAVA("http://www.java.com/java", "Java"),
+    MVEL("http://www.mvel.org/2.0", "MVEL");
 
     private String mimeType;
     private String name;
@@ -101,7 +102,7 @@ public final class ScriptTaskBehavior extends TaskBehavior
      */
     public static ScriptFormat fromMimeType(String mimeType)
     {
-      if (StringUtil.isNullOrEmpty(mimeType))
+      if (mimeType == null)
       {
         throw new RuntimeException("Invalid mime type for script format (" + mimeType + ")");
       }
@@ -110,6 +111,9 @@ public final class ScriptTaskBehavior extends TaskBehavior
 
       switch (mimeType)
       {
+        case "":
+          return ScriptFormat.NONE;
+
         case "text/javascript":
           return ScriptFormat.JAVASCRIPT;
 
