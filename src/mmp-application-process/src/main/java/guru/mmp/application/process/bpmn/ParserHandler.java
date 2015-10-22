@@ -21,6 +21,8 @@ package guru.mmp.application.process.bpmn;
 import guru.mmp.application.process.bpmn.activity.*;
 import guru.mmp.application.process.bpmn.event.EndEvent;
 import guru.mmp.application.process.bpmn.event.StartEvent;
+import guru.mmp.application.process.bpmn.gateway.GatewayDirection;
+import guru.mmp.application.process.bpmn.gateway.ParallelGateway;
 import guru.mmp.common.util.StringUtil;
 
 import org.xml.sax.Attributes;
@@ -158,6 +160,13 @@ public class ParserHandler extends DefaultHandler
         {
           ((FlowNode) currentFlowElement).addOutgoingFlowElement(elementCharacters.toString());
         }
+
+        break;
+      }
+
+      case "parallelGateway":
+      {
+        addCurrentFlowElementToProcessOrSubProcess();
 
         break;
       }
@@ -341,7 +350,7 @@ public class ParserHandler extends DefaultHandler
     {
       case "businessRuleTask":
       {
-        parseBusinessRuleTask(attributes);
+        parseBusinessRuleTaskNode(attributes);
 
         break;
       }
@@ -353,7 +362,7 @@ public class ParserHandler extends DefaultHandler
 
       case "endEvent":
       {
-        parseEndEvent(attributes);
+        parseEndEventNode(attributes);
 
         break;
       }
@@ -375,7 +384,7 @@ public class ParserHandler extends DefaultHandler
 
       case "manualTask":
       {
-        parseManualTask(attributes);
+        parseManualTaskNode(attributes);
 
         break;
       }
@@ -390,6 +399,13 @@ public class ParserHandler extends DefaultHandler
         break;
       }
 
+      case "parallelGateway":
+      {
+        parseParallelGatewayNode(attributes);
+
+        break;
+      }
+
       case "process":
       {
         parseProcessNode(attributes);
@@ -399,7 +415,7 @@ public class ParserHandler extends DefaultHandler
 
       case "receiveTask":
       {
-        parseReceiveTask(attributes);
+        parseReceiveTaskNode(attributes);
 
         break;
       }
@@ -416,28 +432,28 @@ public class ParserHandler extends DefaultHandler
 
       case "scriptTask":
       {
-        parseScriptTask(attributes);
+        parseScriptTaskNode(attributes);
 
         break;
       }
 
       case "sendTask":
       {
-        parseSendTask(attributes);
+        parseSendTaskNode(attributes);
 
         break;
       }
 
       case "sequenceFlow":
       {
-        parseSequenceFlow(attributes);
+        parseSequenceFlowNode(attributes);
 
         break;
       }
 
       case "serviceTask":
       {
-        parseServiceTask(attributes);
+        parseServiceTaskNode(attributes);
 
         break;
       }
@@ -451,28 +467,35 @@ public class ParserHandler extends DefaultHandler
 
       case "startEvent":
       {
-        parseStartEvent(attributes);
+        parseStartEventNode(attributes);
 
         break;
       }
 
       case "subProcess":
       {
-        parseSubProcess(attributes);
+        parseSubProcessNode(attributes);
 
         break;
       }
 
       case "task":
       {
-        parseDefaultTask(attributes);
+        parseDefaultTaskNode(attributes);
+
+        break;
+      }
+
+      case "transaction":
+      {
+        parseTransactionNode(attributes);
 
         break;
       }
 
       case "userTask":
       {
-        parseUserTask(attributes);
+        parseUserTaskNode(attributes);
 
         break;
       }
@@ -520,7 +543,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseBusinessRuleTask(Attributes attributes)
+  private void parseBusinessRuleTaskNode(Attributes attributes)
   {
     try
     {
@@ -538,7 +561,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseDefaultTask(Attributes attributes)
+  private void parseDefaultTaskNode(Attributes attributes)
   {
     try
     {
@@ -552,7 +575,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseEndEvent(Attributes attributes)
+  private void parseEndEventNode(Attributes attributes)
   {
     try
     {
@@ -568,7 +591,24 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseManualTask(Attributes attributes)
+  private void parseGlobalTask(String nodeName, Attributes attributes, TaskBehavior taskBehavior)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
+
+      String name = attributes.getValue("name");
+
+      currentFlowElement = new GlobalTask(id, name, taskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the generic task attributes for the \"" + nodeName
+          + "\" task node");
+    }
+  }
+
+  private void parseManualTaskNode(Attributes attributes)
   {
     try
     {
@@ -579,6 +619,25 @@ public class ParserHandler extends DefaultHandler
     catch (Throwable e)
     {
       throw new ParserException("Failed to parse the \"manualTask\" node", e);
+    }
+  }
+
+  private void parseParallelGatewayNode(Attributes attributes)
+  {
+    try
+    {
+      String id = attributes.getValue("id");
+
+      String name = attributes.getValue("name");
+
+      GatewayDirection gatewayDirection =
+        GatewayDirection.fromId(attributes.getValue("gatewayDirection"));
+
+      currentFlowElement = new ParallelGateway(id, name, gatewayDirection);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"parallelGateway\" node", e);
     }
   }
 
@@ -608,7 +667,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseReceiveTask(Attributes attributes)
+  private void parseReceiveTaskNode(Attributes attributes)
   {
     try
     {
@@ -628,7 +687,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseScriptTask(Attributes attributes)
+  private void parseScriptTaskNode(Attributes attributes)
   {
     try
     {
@@ -645,7 +704,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseSendTask(Attributes attributes)
+  private void parseSendTaskNode(Attributes attributes)
   {
     try
     {
@@ -662,7 +721,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseSequenceFlow(Attributes attributes)
+  private void parseSequenceFlowNode(Attributes attributes)
   {
     try
     {
@@ -680,7 +739,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseServiceTask(Attributes attributes)
+  private void parseServiceTaskNode(Attributes attributes)
   {
     try
     {
@@ -697,7 +756,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseStartEvent(Attributes attributes)
+  private void parseStartEventNode(Attributes attributes)
   {
     try
     {
@@ -717,7 +776,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseSubProcess(Attributes attributes)
+  private void parseSubProcessNode(Attributes attributes)
   {
     try
     {
@@ -766,7 +825,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseTransactionSubProcess(Attributes attributes)
+  private void parseTransactionNode(Attributes attributes)
   {
     try
     {
@@ -795,7 +854,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseUserTask(Attributes attributes)
+  private void parseUserTaskNode(Attributes attributes)
   {
     try
     {

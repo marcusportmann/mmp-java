@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.FlowElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
@@ -26,44 +27,39 @@ import guru.mmp.application.process.bpmn.Token;
 import java.util.List;
 
 /**
- * The <code>Task</code> class represents a Business Process Model and Notation (BPMN) task.
- * <p>
- * A task represents a single action.
+ * The <code>GlobalTask</code> class represents a Business Process Model and Notation (BPMN) global
+ * task.
  *
  * @author Marcus Portmann
  */
-public final class Task extends Activity
+public final class GlobalTask extends FlowElement
 {
   /**
-   * The behavior for the task.
+   * The behavior for the global task.
    */
   private TaskBehavior taskBehavior;
 
   /**
-   * Constructs a new <code>Task</code>.
+   * Constructs a new <code>GlobalTask</code>.
    *
-   * @param id                 the ID uniquely identifying the task
-   * @param name               the name of the task
-   * @param forCompensation    is the task for compensation
-   * @param startQuantity      the start quantity for the task
-   * @param completionQuantity the completion quantity for the task
-   * @param taskBehavior       the behavior for the task
+   * @param id           the ID uniquely identifying the global task
+   * @param name         the name of the global task
+   * @param taskBehavior the behavior for the global task
    */
-  public Task(String id, String name, boolean forCompensation, int startQuantity,
-      int completionQuantity, TaskBehavior taskBehavior)
+  public GlobalTask(String id, String name, TaskBehavior taskBehavior)
   {
-    super(id, name, forCompensation, startQuantity, completionQuantity);
+    super(id, name);
 
     this.taskBehavior = taskBehavior;
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) task.
+   * Execute the Business Process Model and Notation (BPMN) global task.
    *
    * @param context the execution context for the Business Process Model and Notation (BPMN) process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   *         Notation (BPMN) global task
    */
   public List<Token> execute(ProcessExecutionContext context)
   {
@@ -71,9 +67,9 @@ public final class Task extends Activity
   }
 
   /**
-   * Returns the behavior for the task.
+   * Returns the behavior for the global task.
    *
-   * @return the behavior for the task
+   * @return the behavior for the global task
    */
   public TaskBehavior getTaskBehavior()
   {

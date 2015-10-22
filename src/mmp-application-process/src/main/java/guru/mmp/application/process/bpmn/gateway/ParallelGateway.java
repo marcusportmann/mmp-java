@@ -35,14 +35,22 @@ import java.util.List;
 public final class ParallelGateway extends Gateway
 {
   /**
+   * The gateway direction for the parallel gateway.
+   */
+  private GatewayDirection gatewayDirection;
+
+  /**
    * Constructs a new <code>ParallelGateway</code>.
    *
-   * @param id   the ID uniquely identifying the parallel gateway
-   * @param name the name of the parallel gateway
+   * @param id               the ID uniquely identifying the parallel gateway
+   * @param name             the name of the parallel gateway
+   * @param gatewayDirection the gateway direction for the parallel gateway
    */
-  public ParallelGateway(String id, String name)
+  public ParallelGateway(String id, String name, GatewayDirection gatewayDirection)
   {
     super(id, name);
+
+    this.gatewayDirection = gatewayDirection;
   }
 
   /**
@@ -57,5 +65,15 @@ public final class ParallelGateway extends Gateway
   public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
+  }
+
+  /**
+   * Returns the gateway direction for the parallel gateway.
+   *
+   * @return the gateway direction for the parallel gateway
+   */
+  public GatewayDirection getGatewayDirection()
+  {
+    return gatewayDirection;
   }
 }
