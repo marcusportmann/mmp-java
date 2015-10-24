@@ -104,7 +104,9 @@
   </process>
   <globalTask id="GT_1" name="Global Task"/>
   <globalUserTask id="GT_2" implementation="##unspecified" name="Global User Task"/>
-  <globalScriptTask id="GT_3" name="Global Script Task" scriptLanguage="text/javascript"/>
+  <globalScriptTask id="GT_3" name="Global Script Task" scriptLanguage="text/javascript">
+    <script><![CDATA[// Testing 1.. 2.. 3..]]></script>
+  </globalScriptTask>
   <globalManualTask id="GT_4" name="Global Manual Task"/>
   <globalBusinessRuleTask id="GT_5" implementation="##unspecified" name="Global Business Rule Task"/>
   <bpmndi:BPMNDiagram id="Yaoqiang_Diagram-_1" name="Untitled Diagram" resolution="96.0">

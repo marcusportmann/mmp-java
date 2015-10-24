@@ -48,6 +48,7 @@ public class ParserHandler extends DefaultHandler
    * The Business Process Model and Notation (BPMN) flow element currently being parsed.
    */
   private FlowElement currentFlowElement;
+  private GlobalTask currentGlobalTask;
 
   /**
    * The Business Process Model and Notation (BPMN) process currently being parsed.
@@ -63,6 +64,7 @@ public class ParserHandler extends DefaultHandler
    * The parsed Business Process Model and Notation (BPMN) processes.
    */
   private List<Process> processes = new ArrayList<>();
+  private List<GlobalTask> globalTasks = new ArrayList<>();
 
   /**
    * The character data inside the elements currently being parsed.
@@ -137,6 +139,41 @@ public class ParserHandler extends DefaultHandler
         break;
       }
 
+      case "globalBusinessRuleTask":
+      {
+        addGlobalTask();
+
+        break;
+      }
+
+      case "globalManualTask":
+      {
+        addGlobalTask();
+
+        break;
+      }
+
+      case "globalScriptTask":
+      {
+        addGlobalTask();
+
+        break;
+      }
+
+      case "globalTask":
+      {
+        addGlobalTask();
+
+        break;
+      }
+
+      case "globalUserTask":
+      {
+        addGlobalTask();
+
+        break;
+      }
+
       case "incoming":
       {
         if (currentFlowElement instanceof FlowNode)
@@ -189,25 +226,7 @@ public class ParserHandler extends DefaultHandler
 
       case "script":
       {
-        if ((currentFlowElement != null) && (currentFlowElement instanceof Task))
-        {
-          TaskBehavior taskBehavior = ((Task) currentFlowElement).getTaskBehavior();
-
-          if (taskBehavior instanceof ScriptTaskBehavior)
-          {
-            ((ScriptTaskBehavior) taskBehavior).setScript(elementCharacters.toString());
-          }
-          else
-          {
-            throw new ParserException("Failed to parse the \"script\" node: "
-                + "The task behavior is not a ScriptTaskBehavior");
-          }
-        }
-        else
-        {
-          throw new ParserException("Failed to parse the \"script\" node: "
-              + "The current flow node is not a task");
-        }
+        parseScriptNode(elementCharacters.toString());
 
         break;
       }
@@ -283,6 +302,12 @@ public class ParserHandler extends DefaultHandler
       {
         addCurrentFlowElementToProcessOrSubProcess();
 
+        break;
+      }
+
+      default:
+      {
+        // Do nothing
         break;
       }
     }
@@ -369,6 +394,41 @@ public class ParserHandler extends DefaultHandler
 
       case "extensionElements":
       {
+        break;
+      }
+
+      case "globalBusinessRuleTask":
+      {
+        parseGlobalBusinessRuleTaskNode(attributes);
+
+        break;
+      }
+
+      case "globalManualTask":
+      {
+        parseGlobalManualTaskNode(attributes);
+
+        break;
+      }
+
+      case "globalScriptTask":
+      {
+        parseGlobalScriptTaskNode(attributes);
+
+        break;
+      }
+
+      case "globalTask":
+      {
+        parseGlobalTaskNode("globalTask", attributes, new DefaultTaskBehavior());
+
+        break;
+      }
+
+      case "globalUserTask":
+      {
+        parseGlobalUserTaskNode(attributes);
+
         break;
       }
 
@@ -507,6 +567,21 @@ public class ParserHandler extends DefaultHandler
           break;
         }
 
+        if (qName.startsWith("bpmndi:"))
+        {
+          break;
+        }
+
+        if (qName.startsWith("dc:"))
+        {
+          break;
+        }
+
+        if (qName.startsWith("di:"))
+        {
+          break;
+        }
+
         throw new ParserException("Failed to parse the unknown node (" + qName + ")");
       }
     }
@@ -543,6 +618,16 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
+  private void addGlobalTask()
+  {
+    if (currentGlobalTask != null)
+    {
+      globalTasks.add(currentGlobalTask);
+
+      currentGlobalTask = null;
+    }
+  }
+
   private void parseBusinessRuleTaskNode(Attributes attributes)
   {
     try
@@ -553,7 +638,7 @@ public class ParserHandler extends DefaultHandler
       BusinessRuleTaskBehavior businessRuleTaskBehavior =
         new BusinessRuleTaskBehavior(implementationType);
 
-      parseTask("businessRuleTask", attributes, businessRuleTaskBehavior);
+      parseTaskNode("businessRuleTask", attributes, businessRuleTaskBehavior);
     }
     catch (Throwable e)
     {
@@ -567,7 +652,7 @@ public class ParserHandler extends DefaultHandler
     {
       DefaultTaskBehavior defaultTaskBehavior = new DefaultTaskBehavior();
 
-      parseTask("task", attributes, defaultTaskBehavior);
+      parseTaskNode("task", attributes, defaultTaskBehavior);
     }
     catch (Throwable e)
     {
@@ -591,7 +676,57 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseGlobalTask(String nodeName, Attributes attributes, TaskBehavior taskBehavior)
+  private void parseGlobalBusinessRuleTaskNode(Attributes attributes)
+  {
+    try
+    {
+      ImplementationType implementationType =
+        ImplementationType.fromId(attributes.getValue("implementation"));
+
+      BusinessRuleTaskBehavior businessRuleTaskBehavior =
+        new BusinessRuleTaskBehavior(implementationType);
+
+      parseGlobalTaskNode("globalBusinessRuleTask", attributes, businessRuleTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"globalBusinessRuleTask\" node", e);
+    }
+  }
+
+  private void parseGlobalManualTaskNode(Attributes attributes)
+  {
+    try
+    {
+      ManualTaskBehavior manualTaskBehavior = new ManualTaskBehavior();
+
+      parseGlobalTaskNode("globalManualTask", attributes, manualTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"globalManualTask\" node", e);
+    }
+  }
+
+  private void parseGlobalScriptTaskNode(Attributes attributes)
+  {
+    try
+    {
+      ScriptTaskBehavior.ScriptFormat scriptFormat = ScriptTaskBehavior.ScriptFormat.fromMimeType(
+          StringUtil.notNull(attributes.getValue("scriptLanguage")));
+
+      ScriptTaskBehavior scriptTaskBehavior = new ScriptTaskBehavior(scriptFormat);
+
+      parseGlobalTaskNode("globalScriptTask", attributes, scriptTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"globalScriptTask\" node", e);
+    }
+  }
+
+  private void parseGlobalTaskNode(String nodeName, Attributes attributes,
+      TaskBehavior taskBehavior)
   {
     try
     {
@@ -599,12 +734,29 @@ public class ParserHandler extends DefaultHandler
 
       String name = attributes.getValue("name");
 
-      currentFlowElement = new GlobalTask(id, name, taskBehavior);
+      currentGlobalTask = new GlobalTask(id, name, taskBehavior);
     }
     catch (Throwable e)
     {
       throw new ParserException("Failed to parse the generic task attributes for the \"" + nodeName
-          + "\" task node");
+          + "\" global task node", e);
+    }
+  }
+
+  private void parseGlobalUserTaskNode(Attributes attributes)
+  {
+    try
+    {
+      ImplementationType implementationType =
+        ImplementationType.fromId(attributes.getValue("implementation"));
+
+      UserTaskBehavior userTaskBehavior = new UserTaskBehavior(implementationType);
+
+      parseGlobalTaskNode("globalUserTask", attributes, userTaskBehavior);
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the \"globalUserTask\" node", e);
     }
   }
 
@@ -614,7 +766,7 @@ public class ParserHandler extends DefaultHandler
     {
       ManualTaskBehavior manualTaskBehavior = new ManualTaskBehavior();
 
-      parseTask("manualTask", attributes, manualTaskBehavior);
+      parseTaskNode("manualTask", attributes, manualTaskBehavior);
     }
     catch (Throwable e)
     {
@@ -679,11 +831,43 @@ public class ParserHandler extends DefaultHandler
       ReceiveTaskBehavior receiveTaskBehavior = new ReceiveTaskBehavior(implementationType,
         instantiateProcess);
 
-      parseTask("receiveTask", attributes, receiveTaskBehavior);
+      parseTaskNode("receiveTask", attributes, receiveTaskBehavior);
     }
     catch (Throwable e)
     {
       throw new ParserException("Failed to parse the \"receiveTask\" node", e);
+    }
+  }
+
+  private void parseScriptNode(String script)
+  {
+    if ((currentFlowElement != null) && (currentFlowElement instanceof Task))
+    {
+      TaskBehavior taskBehavior = ((Task) currentFlowElement).getTaskBehavior();
+
+      if (taskBehavior instanceof ScriptTaskBehavior)
+      {
+        ((ScriptTaskBehavior) taskBehavior).setScript(script);
+      }
+      else
+      {
+        throw new ParserException("Failed to parse the \"script\" node: "
+            + "The task behavior is not a ScriptTaskBehavior");
+      }
+    }
+    else if (currentGlobalTask != null)
+    {
+      TaskBehavior taskBehavior = currentGlobalTask.getTaskBehavior();
+
+      if (taskBehavior instanceof ScriptTaskBehavior)
+      {
+        ((ScriptTaskBehavior) taskBehavior).setScript(script);
+      }
+      else
+      {
+        throw new ParserException("Failed to parse the \"script\" node: "
+            + "The global task behavior is not a ScriptTaskBehavior");
+      }
     }
   }
 
@@ -696,7 +880,7 @@ public class ParserHandler extends DefaultHandler
 
       ScriptTaskBehavior scriptTaskBehavior = new ScriptTaskBehavior(scriptFormat);
 
-      parseTask("scriptTask", attributes, scriptTaskBehavior);
+      parseTaskNode("scriptTask", attributes, scriptTaskBehavior);
     }
     catch (Throwable e)
     {
@@ -713,7 +897,7 @@ public class ParserHandler extends DefaultHandler
 
       SendTaskBehavior sendTaskBehavior = new SendTaskBehavior(implementationType);
 
-      parseTask("sendTask", attributes, sendTaskBehavior);
+      parseTaskNode("sendTask", attributes, sendTaskBehavior);
     }
     catch (Throwable e)
     {
@@ -748,7 +932,7 @@ public class ParserHandler extends DefaultHandler
 
       ServiceTaskBehavior serviceTaskBehavior = new ServiceTaskBehavior(implementationType);
 
-      parseTask("serviceTask", attributes, serviceTaskBehavior);
+      parseTaskNode("serviceTask", attributes, serviceTaskBehavior);
     }
     catch (Throwable e)
     {
@@ -801,7 +985,7 @@ public class ParserHandler extends DefaultHandler
     }
   }
 
-  private void parseTask(String nodeName, Attributes attributes, TaskBehavior taskBehavior)
+  private void parseTaskNode(String nodeName, Attributes attributes, TaskBehavior taskBehavior)
   {
     try
     {
@@ -863,7 +1047,7 @@ public class ParserHandler extends DefaultHandler
 
       UserTaskBehavior userTaskBehavior = new UserTaskBehavior(implementationType);
 
-      parseTask("userTask", attributes, userTaskBehavior);
+      parseTaskNode("userTask", attributes, userTaskBehavior);
     }
     catch (Throwable e)
     {
