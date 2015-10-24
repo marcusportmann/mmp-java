@@ -24,20 +24,50 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The <code>Process</code> class represents a Business Process Model and Notation (BPMN) process.
+ * <p>
+ * <b>User Task</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="process" type="tProcess" substitutionGroup="rootElement"/&gt;
+ * &lt;xsd:complexType name="tProcess"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tCallableElement"&gt;
+ *       &lt;xsd:sequence&gt;
+ *         &lt;xsd:element ref="auditing" minOccurs="0" maxOccurs="1"/&gt;
+ *         &lt;xsd:element ref="monitoring" minOccurs="0" maxOccurs="1"/&gt;
+ *         &lt;xsd:element ref="processRole" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="laneSet" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="flowElement" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="artifact" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="resourceRole" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="correlationSubcription" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element name="supports" type="xsd:QName" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *       &lt;/xsd:sequence&gt;
+ *       &lt;xsd:attribute name="processType" type="tProcessType" default="None"/&gt;
+ *       &lt;xsd:attribute name="isExecutable" type="xsd:boolean"use="optional"/&gt;
+ *       &lt;xsd:attribute name="isClosed" type="xsd:boolean" default="false"/&gt;
+ *       &lt;xsd:attribute name="definitionalCollaborationRef" type="xsd:QName" use="optional"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ *
+ * &lt;xsd:simpleType name="tProcessType"&gt;
+ *   &lt;xsd:restriction base="xsd:string"&gt;
+ *     &lt;xsd:enumeration value="None"/&gt;
+ *     &lt;xsd:enumeration value="Public"/&gt;
+ *     &lt;xsd:enumeration value="Private"/&gt;
+ *   &lt;/xsd:restriction&gt;
+ * &lt;/xsd:simpleType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class Process
+public class Process extends CallableElement
 {
   /**
    * The flow elements for the process.
    */
   private Map<String, FlowElement> flowElements = new ConcurrentHashMap<>();
-
-  /**
-   * The ID uniquely identifying the process.
-   */
-  private String id;
 
   /**
    * Can interactions, such as sending and receiving messages and events, not modeled in the
@@ -55,13 +85,15 @@ public class Process
    * Constructs a new <code>Process</code>.
    *
    * @param id           the ID uniquely identifying the process
+   * @param name         the name of the process
    * @param isClosed     can interactions, such as sending and receiving messages and events, not
    *                     modeled in the process occur when the process is executed or performed
    * @param isExecutable is the process executable
    */
-  public Process(String id, boolean isClosed, boolean isExecutable)
+  public Process(String id, String name, boolean isClosed, boolean isExecutable)
   {
-    this.id = id;
+    super(id, name);
+
     this.isClosed = isClosed;
     this.isExecutable = isExecutable;
   }
@@ -97,16 +129,6 @@ public class Process
   public Collection<FlowElement> getFlowElements()
   {
     return flowElements.values();
-  }
-
-  /**
-   * Returns the ID uniquely identifying the process.
-   *
-   * @return the ID uniquely identifying the process
-   */
-  public String getId()
-  {
-    return id;
   }
 
   /**

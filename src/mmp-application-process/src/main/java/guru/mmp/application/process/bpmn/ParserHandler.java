@@ -799,6 +799,8 @@ public class ParserHandler extends DefaultHandler
     {
       String id = attributes.getValue("id");
 
+      String name = StringUtil.notNull(attributes.getValue("name"));
+
       boolean isClosed = Boolean.parseBoolean(attributes.getValue("isClosed"));
 
       boolean isExecutable = Boolean.parseBoolean(attributes.getValue("isExecutable"));
@@ -811,7 +813,7 @@ public class ParserHandler extends DefaultHandler
             + "");
       }
 
-      currentProcess = new Process(id, isClosed, isExecutable);
+      currentProcess = new Process(id, name, isClosed, isExecutable);
     }
     catch (Throwable e)
     {

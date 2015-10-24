@@ -43,7 +43,7 @@ public abstract class BaseElement
   private String id;
 
   /**
-   * Constructs a new <code>FlowElement</code>.
+   * Constructs a new <code>BaseElement</code>.
    *
    * @param id the ID uniquely identifying element
    */
