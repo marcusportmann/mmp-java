@@ -21,15 +21,23 @@ package guru.mmp.application.process.bpmn;
 import guru.mmp.common.util.ResourceUtil;
 import guru.mmp.common.xml.XmlSchemaClasspathInputSource;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayInputStream;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.stream.StreamSource;
@@ -103,18 +111,53 @@ public class Parser
           new StreamSource(
             new ByteArrayInputStream(ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))));
 
-      SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-      saxParserFactory.setValidating(false);
-      saxParserFactory.setNamespaceAware(true);
-      saxParserFactory.setSchema(schema);
+      DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+      documentBuilderFactory.setValidating(false);
+      documentBuilderFactory.setNamespaceAware(true);
+      documentBuilderFactory.setSchema(schema);
 
-      SAXParser saxParser = saxParserFactory.newSAXParser();
+      DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
-      ParserHandler handler = new ParserHandler();
+      Document document = documentBuilder.parse(new ByteArrayInputStream(data));
 
-      saxParser.parse(new ByteArrayInputStream(data), handler);
+      NodeList elements = document.getDocumentElement().getChildNodes();
 
-      return handler.getProcesses();
+      List<Process> processes = new ArrayList<>();
+
+      for (int i = 0; i < elements.getLength(); i++)
+      {
+        Node node = elements.item(i);
+
+        if (node instanceof Element)
+        {
+          Element element = (Element) node;
+
+          if (element.getNodeName().equals("process"))
+          {
+            processes.add(Process.fromXML(element));
+          }
+          else
+          {
+            throw new ParserException("Failed to parse the unknown node (" + element.getNodeName()
+                + ")");
+          }
+        }
+      }
+
+//    SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+//    saxParserFactory.setValidating(false);
+//    saxParserFactory.setNamespaceAware(true);
+//    saxParserFactory.setSchema(schema);
+//
+//    SAXParser saxParser = saxParserFactory.newSAXParser();
+//
+//    ParserHandler handler = new ParserHandler();
+//
+//    saxParser.parse(new ByteArrayInputStream(data), handler);
+//
+//    return handler.getProcesses();
+
+      return processes;
     }
     catch (Throwable e)
     {

@@ -18,6 +18,8 @@ package guru.mmp.application.process.bpmn;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import org.w3c.dom.Element;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -158,5 +160,20 @@ public class Process extends CallableElement
   public boolean isExecutable()
   {
     return isExecutable;
+  }
+
+  /**
+   * Parse the XML to retrieve the information for the process.
+   *
+   * @param element the XML for the process
+   *
+   * @return the process
+   */
+  public static Process fromXML(Element element)
+  {
+
+
+
+    return null;
   }
 }
