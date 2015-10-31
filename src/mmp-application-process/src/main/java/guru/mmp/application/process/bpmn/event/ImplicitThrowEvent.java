@@ -21,41 +21,52 @@ package guru.mmp.application.process.bpmn.event;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
+
 /**
- * The <code>ThrowingEvent</code> class represents a Business Process Model and Notation (BPMN)
- * throwing event that forms part of a BPMN process.
+ * The <code>ImplicitThrowEvent</code> class represents a Business Process Model and Notation
+ * (BPMN) implicit throw event that forms part of a Process.
+ * <p>
+ * <b>Implicit Throw Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="implicitThrowEvent" type="tImplicitThrowEvent"
+ *                 substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tImplicitThrowEvent"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tThrowEvent"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-abstract class ThrowingEvent extends Event
+public final class ImplicitThrowEvent extends ThrowEvent
 {
   /**
-   * Constructs a new <code>ThrowingEvent</code>.
+   * Constructs a new <code>ImplicitThrowEvent</code>.
    *
-   * @param id   the ID uniquely identifying the throwing event
-   * @param name the name of the throwing event
+   * @param element the XML element containing the implicit throw event information
    */
-  protected ThrowingEvent(String id, String name)
+  public ImplicitThrowEvent(Element element)
   {
-    super(id, name);
+    super(element);
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) throwing event.
+   * Execute the BPMN implicit throw event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) throwing event
+   *         Notation (BPMN) implicit throw event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
   {
-    return new ArrayList<>();
+    return super.execute(context);
   }
 }

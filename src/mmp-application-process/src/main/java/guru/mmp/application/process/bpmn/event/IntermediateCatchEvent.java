@@ -20,37 +20,49 @@ package guru.mmp.application.process.bpmn.event;
 
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import org.w3c.dom.Element;
 
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>IntermediateCatchingEvent</code> class represents a Business Process Model and Notation
- * (BPMN) intermediate catching event that forms part of a BPMN process.
+ * The <code>IntermediateCatchEvent</code> class represents a Business Process Model and Notation
+ * (BPMN) intermediate catch event that forms part of a Process.
+ * <p>
+ * <b>Intermediate Catch Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="intermediateCatchEvent" type="tIntermediateCatchEvent"
+ *              substitutionGroup="flowElement"/ &gt;
+ * &lt;xsd:complexType name="tIntermediateCatchEvent"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tCatchEvent"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public final class IntermediateCatchingEvent extends CatchingEvent
+public final class IntermediateCatchEvent
+  extends CatchEvent
 {
   /**
-   * Constructs a new <code>IntermediateCatchingEvent</code>.
+   * Constructs a new <code>IntermediateCatchEvent</code>.
    *
-   * @param id   the ID uniquely identifying the intermediate catching event
-   * @param name the name of the intermediate catching event
+   * @param element the XML element containing the intermediate catch event information
    */
-  public IntermediateCatchingEvent(String id, String name)
+  public IntermediateCatchEvent(Element element)
   {
-    super(id, name);
+    super(element);
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) intermediate catching event.
+   * Execute the BPMN intermediate catch event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) intermediate catching event
+   *         Notation (BPMN) intermediate catch event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

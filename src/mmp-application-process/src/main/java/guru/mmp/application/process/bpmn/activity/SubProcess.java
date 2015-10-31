@@ -18,9 +18,11 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.FlowElement;
-import guru.mmp.application.process.bpmn.ProcessExecutionContext;
-import guru.mmp.application.process.bpmn.Token;
+import guru.mmp.application.process.bpmn.*;
+import guru.mmp.common.util.StringUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>SubProcess</code> class represents a  Business Process Model and Notation (BPMN)
+ * The <code>SubProcess</code> class represents a  BPMN
  * sub-process.
  * <p>
  * A sub-process has parts that are modeled in a child-level process, a process with its own
@@ -52,6 +54,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * <b>Sub-Process</b> XML schema:
  * <pre>
+ * &lt;xsd:element name="subProcess" type="tSubProcess" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tSubProcess"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tActivity"&gt;
+ *       &lt;xsd:sequence&gt;
+ *         &lt;xsd:element ref="laneSet" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="flowElement" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="artifact" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *       &lt;/xsd:sequence&gt;
+ *       &lt;xsd:attribute name="triggeredByEvent" type="xsd:boolean" default="false"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
  * </pre>
  *
  * @author Marcus Portmann
@@ -59,7 +74,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SubProcess extends Activity
 {
   /**
-   * The flow elements for the sub-process.
+   * The FlowElements for the sub-process.
    */
   private Map<String, FlowElement> flowElements = new ConcurrentHashMap<>();
 
@@ -71,19 +86,122 @@ public class SubProcess extends Activity
   /**
    * Constructs a new <code>SubProcess</code>.
    *
-   * @param id                 the ID uniquely identifying the sub-process
-   * @param name               the name of the sub-process
-   * @param forCompensation    is the sub-process for compensation
-   * @param startQuantity      the start quantity for the sub-process
-   * @param completionQuantity the completion quantity for the sub-process
-   * @param triggeredByEvent   is the sub-process triggered by an event
+   * @param element the XML element containing the sub-process information
    */
-  public SubProcess(String id, String name, boolean forCompensation, int startQuantity,
-      int completionQuantity, boolean triggeredByEvent)
+  public SubProcess(Element element)
   {
-    super(id, name, forCompensation, startQuantity, completionQuantity);
+    super(element);
 
-    this.triggeredByEvent = triggeredByEvent;
+    try
+    {
+      if (StringUtil.isNullOrEmpty(element.getAttribute("triggeredByEvent")))
+      {
+        this.triggeredByEvent = false;
+      }
+      else
+      {
+        this.triggeredByEvent = Boolean.parseBoolean(element.getAttribute("triggeredByEvent"));
+      }
+
+      NodeList childElements = element.getChildNodes();
+
+      for (int i = 0; i < childElements.getLength(); i++)
+      {
+        Node node = childElements.item(i);
+
+        if (node instanceof Element)
+        {
+          Element childElement = (Element) node;
+
+          switch (childElement.getNodeName())
+          {
+            case "laneSet":
+            {
+              break;
+            }
+
+            case "artifact":
+            {
+              break;
+            }
+
+            // Flow elements
+            case "businessRuleTask":
+            {
+              addFlowElement(new BusinessRuleTask(childElement));
+
+              break;
+            }
+
+            case "manualTask":
+            {
+              addFlowElement(new ManualTask(childElement));
+
+              break;
+            }
+
+            case "receiveTask":
+            {
+              addFlowElement(new ReceiveTask(childElement));
+
+              break;
+            }
+
+            case "scriptTask":
+            {
+              addFlowElement(new ScriptTask(childElement));
+
+              break;
+            }
+
+            case "sendTask":
+            {
+              addFlowElement(new SendTask(childElement));
+
+              break;
+            }
+
+            case "serviceTask":
+            {
+              addFlowElement(new ServiceTask(childElement));
+
+              break;
+            }
+
+            case "task":
+            {
+              addFlowElement(new DefaultTask(childElement));
+
+              break;
+            }
+
+            case "userTask":
+            {
+              addFlowElement(new UserTask(childElement));
+
+              break;
+            }
+
+            case "sequenceFlow":
+            {
+              addFlowElement(new SequenceFlow(childElement));
+
+              break;
+            }
+
+            default:
+            {
+              throw new ParserException("Failed to parse the unknown XML element ("
+                  + childElement.getNodeName() + ")");
+            }
+          }
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the sub-process XML data", e);
+    }
   }
 
   /**
@@ -97,9 +215,9 @@ public class SubProcess extends Activity
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) sub-process.
+   * Execute the BPMN sub-process.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) sub-process
@@ -123,9 +241,9 @@ public class SubProcess extends Activity
   }
 
   /**
-   * Returns the flow elements for the sub-process.
+   * Returns the FlowElements for the sub-process.
    *
-   * @return the flow elements for the sub-process
+   * @return the FlowElements for the sub-process
    */
   public Collection<FlowElement> getFlowElements()
   {

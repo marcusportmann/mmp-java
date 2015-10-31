@@ -18,18 +18,24 @@ package guru.mmp.common.xml;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.common.util.StringUtil;
+
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.XMLConstants;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 
 /**
  * The <code>XmlUtils</code> class provides utility methods for working with XML documents.
@@ -234,6 +240,62 @@ public class XmlUtils
     }
 
     return childElements;
+  }
+
+  /**
+   * Returns the <code>javax.xml.namespace.QName</code> instance for the specified QName.
+   *
+   * @param document the <code>org.w3c.dom.Document</code> instance used to determine the namespace
+   *                 URI for the QName if the namespace is referenced using a prefix as part of the
+   *                 <code>name</code> parameter
+   * @param qname    the QName
+   *
+   * @return
+   */
+  public static QName getQName(Document document, String qname)
+  {
+    qname = StringUtil.notNull(qname).trim();
+
+    String[] nameParts = qname.split(":");
+
+    if (nameParts.length == 1)
+    {
+      if (!StringUtil.isNullOrEmpty(document.getNamespaceURI()))
+      {
+        return new QName(document.getNamespaceURI(), nameParts[0]);
+      }
+      else
+      {
+        return new QName(XMLConstants.NULL_NS_URI, nameParts[0], XMLConstants.DEFAULT_NS_PREFIX);
+      }
+    }
+    else if (nameParts.length == 2)
+    {
+      String namespaceURI = nameParts[0].equals(XMLConstants.DEFAULT_NS_PREFIX)
+          ? document.lookupNamespaceURI(null)
+          : document.lookupNamespaceURI(nameParts[0]);
+
+      return new QName(namespaceURI, nameParts[1], nameParts[0]);
+    }
+    else
+    {
+      throw new RuntimeException("Failed to parse the QName (" + qname + ")");
+    }
+  }
+
+  /**
+   * Returns the <code>javax.xml.namespace.QName</code> instance for the specified QName.
+   *
+   * @param element the <code>org.w3c.dom.Element</code> instance used to determine the namespace
+   *                URI for the QName if the namespace is referenced using a prefix as part of the
+   *                <code>name</code> parameter
+   * @param qname   the QName
+   *
+   * @return
+   */
+  public static QName getQName(Element element, String qname)
+  {
+    return getQName(element.getOwnerDocument(), qname);
   }
 
   /**

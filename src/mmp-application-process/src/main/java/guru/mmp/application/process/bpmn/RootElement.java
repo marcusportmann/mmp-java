@@ -16,11 +16,15 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.w3c.dom.Element;
+
 /**
- * The <code>RootElement</code> class provides the base class that all root elements that form part
- * of a Business Process Model and Notation (BPMN) process should be derived from.
+ * The <code>RootElement</code> class provides the base class that all RootElements that form part
+ * of a Process should be derived from.
  * <p>
- * <b>Root Element</b> XML schema:
+ * <b>RootElement</b> XML schema:
  * <pre>
  * &lt;xsd:element name="rootElement" type="tRootElement"/&gt;
  * &lt;xsd:complexType name="tRootElement" abstract="true"&gt;
@@ -37,10 +41,11 @@ public abstract class RootElement extends BaseElement
   /**
    * Constructs a new <code>RootElement</code>.
    *
-   * @param id the ID uniquely identifying root element
+   * @param parent  the BPMN element that is the parent of this RootElement
+   * @param element the XML element containing the RootElement information
    */
-  public RootElement(String id)
+  protected RootElement(BaseElement parent, Element element)
   {
-    super(id);
+    super(parent, element);
   }
 }

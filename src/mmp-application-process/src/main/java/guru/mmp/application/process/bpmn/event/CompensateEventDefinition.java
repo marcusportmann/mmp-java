@@ -16,24 +16,25 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.ParserException;
-import guru.mmp.common.util.StringUtil;
+
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
- * The <code>SignalEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) signal event that forms part of a Process.
+ * The <code>CompensationEventDefinition</code> class stores the details for a Business Process
+ * Model and Notation (BPMN) compensate event that forms part of a Process.
  * <p>
- * <b>Signal Event Definition</b> XML schema:
+ * <b>Compensate Event Definition</b> XML schema:
  * <pre>
- * &lt;xsd:element name="signalEventDefinition" type="tSignalEventDefinition"
+ * &lt;xsd:element name="compensateEventDefinition" type="tCompensateEventDefinition"
  *              substitutionGroup="eventDefinition"/&gt;
- * &lt;xsd:complexType name="tSignalEventDefinition"&gt;
+ * &lt;xsd:complexType name="tCompensateEventDefinition"&gt;
  *   &lt;xsd:complexContent&gt;
  *     &lt;xsd:extension base="tEventDefinition"&gt;
- *       &lt;xsd:attribute name="signalRef" type="xsd:QName"/&gt;
+ *       &lt;xsd:attribute name="waitForCompletion" type="xsd:boolean"/&gt;
+ *       &lt;xsd:attribute name="activityRef" type="xsd:QName"/&gt;
  *     &lt;/xsd:extension&gt;
  *   &lt;/xsd:complexContent&gt;
  * &lt;/xsd:complexType&gt;
@@ -41,26 +42,26 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
-public final class SignalEventDefinition extends EventDefinition
+public final class CompensateEventDefinition extends EventDefinition
 {
-  signalRef
+  private boolean waitForCompletion;
 
   /**
-   * Constructs a new <code>SignalEventDefinition</code>.
+   * Constructs a new <code>CompensateEventDefinition</code>.
    *
-   * @param element the XML element containing the signal event definition information
+   * @param element the XML element containing the compensate event definition information
    */
-  public SignalEventDefinition(Element element)
+  public CompensateEventDefinition(Element element)
   {
     super(element);
 
     try
     {
-      this.signalRef = StringUtil.notNull(element.getAttribute("signalRef"));
+      this.waitForCompletion = Boolean.parseBoolean(element.getAttribute("waitForCompletion"));
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the signal event definition XML data", e);
+      throw new ParserException("Failed to parse the compensate event definition XML data", e);
     }
   }
 }

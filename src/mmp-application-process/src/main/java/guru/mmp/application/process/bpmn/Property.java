@@ -16,16 +16,27 @@
 
 package guru.mmp.application.process.bpmn;
 
+import org.w3c.dom.Element;
+
 /**
- * The <code>Persistor</code> class provides the capability to serialize and de-serialize the
- * state for an executing Process.
+ * The <code>Property</code> class represents a Property for a BPMN element.
+ * <p>
+ * <b>Property</b> XML schema:
+ * <pre>
+ *
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class Persistor
+public final class Property
 {
   /**
-   * Constructs a new <code>Persistor</code>.
+   * Constructs a new <code>Property</code>.
+   *
+   * @param element the XML element containing the Property information
    */
-  public Persistor() {}
+  public Property(Element element)
+  {
+
+  }
 }

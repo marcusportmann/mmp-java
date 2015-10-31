@@ -16,13 +16,40 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.BaseElement;
+
+import org.w3c.dom.Element;
+
 /**
  * The <code>EventDefinition</code> class provides the base class that all event definition
  * subclasses should be derived from.
  * <p>
  * An event definition class stores the detail for a particular event type e.g. the timing
  * conditions for a timer event.
+ * <p>
+ * <b>Event Definition</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="eventDefinition" type="tEventDefinition"/&gt;
+ * &lt;xsd:complexType name="tEventDefinition" abstract="true"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tBaseElement"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-abstract class EventDefinition {}
+public abstract class EventDefinition extends BaseElement
+{
+  /**
+   * Constructs a new <code>EventDefinition</code>.
+   *
+   * @param element the XML element containing the event definition information
+   */
+  protected EventDefinition(Element element)
+  {
+    super(element);
+  }
+}

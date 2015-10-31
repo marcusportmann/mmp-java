@@ -16,10 +16,36 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.w3c.dom.Element;
+
 /**
  * The <code>TerminateEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) terminate event that forms part of a BPMN process.
+ * Model and Notation (BPMN) terminate event that forms part of a Process.
+ * <p>
+ * <b>Terminate Event Definition</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="terminateEventDefinition" type="tTerminateEventDefinition"
+ *              substitutionGroup="eventDefinition"/&gt;
+ * &lt;xsd:complexType name="tTerminateEventDefinition"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tEventDefinition"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public final class TerminateEventDefinition {}
+public final class TerminateEventDefinition extends EventDefinition
+{
+  /**
+   * Constructs a new <code>TerminateEventDefinition</code>.
+   *
+   * @param element the XML element containing the terminate event definition information
+   */
+  public TerminateEventDefinition(Element element)
+  {
+    super(element);
+  }
+}

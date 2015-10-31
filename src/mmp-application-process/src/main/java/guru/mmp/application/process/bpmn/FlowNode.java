@@ -16,16 +16,26 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.xml.XmlUtils;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 /**
- * The <code>FlowNode</code> class provides the base class that all flow nodes that form part of a
- * Business Process Model and Notation (BPMN) process should be derived from.
+ * The <code>FlowNode</code> class provides the base class that all FlowNodes that form part of a
+ * Process should be derived from.
  * <p>
- * <b>Flow Node</b> XML schema:
+ * <b>FlowNode</b> XML schema:
  * <pre>
  * &lt;xsd:element name="flowNode" type="tFlowNode"/&gt;
  * &lt;xsd:complexType name="tFlowNode" abstract="true"&gt;
@@ -45,62 +55,108 @@ import java.util.List;
 public abstract class FlowNode extends FlowElement
 {
   /**
-   * The IDs uniquely identifying the incoming flow elements for the flow node.
+   * The IDs uniquely identifying the incoming FlowElements for the FlowNode.
    */
-  private List<String> incomingFlowElementIds = new ArrayList<>();
+  private List<QName> incomingFlowElementIds = new ArrayList<>();
 
   /**
-   * The IDs uniquely identifying the incoming flow elements for the flow node.
+   * The IDs uniquely identifying the incoming FlowElements for the FlowNode.
    */
-  private List<String> outgoingFlowElementIds = new ArrayList<>();
+  private List<QName> outgoingFlowElementIds = new ArrayList<>();
 
   /**
    * Constructs a new <code>FlowNode</code>.
    *
-   * @param id   the ID uniquely identifying the flow node
-   * @param name the name of the flow node
+   * @param parent  the BPMN element that is the parent of this FlowNode
+   * @param element the XML element containing the FlowNode information
    */
-  public FlowNode(String id, String name)
+  protected FlowNode(BaseElement parent, Element element)
   {
-    super(id, name);
+    super(parent, element);
+
+    try
+    {
+      NodeList childElements = element.getChildNodes();
+
+      for (int i = 0; i < childElements.getLength(); i++)
+      {
+        Node node = childElements.item(i);
+
+        if (node instanceof Element)
+        {
+          Element childElement = (Element) node;
+
+          switch (childElement.getNodeName())
+          {
+            case "incoming":
+            {
+              System.out.println("[DEBUG] id = " + element.getTextContent());
+
+              addIncomingFlowElement(XmlUtils.getQName(childElement, element.getTextContent()));
+
+              break;
+            }
+
+            case "outgoing":
+            {
+              System.out.println("[DEBUG] id = " + element.getTextContent());
+
+              addOutgoingFlowElement(XmlUtils.getQName(childElement, element.getTextContent()));
+
+              break;
+            }
+
+            default:
+            {
+              throw new ParserException("Failed to parse the unknown XML element ("
+                  + childElement.getNodeName() + ")");
+            }
+          }
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the FlowNode XML data", e);
+    }
   }
 
   /**
-   * Add the ID uniquely identifying the incoming flow element for the flow node.
+   * Add the ID uniquely identifying the incoming FlowElement for the FlowNode.
    *
-   * @param id the ID uniquely identifying the incoming flow element for the flow node
+   * @param id the ID uniquely identifying the incoming FlowElement for the FlowNode
    */
-  public void addIncomingFlowElement(String id)
+  public void addIncomingFlowElement(QName id)
   {
     incomingFlowElementIds.add(id);
   }
 
   /**
-   * Add the ID uniquely identifying the outgoing flow element for the flow node.
+   * Add the ID uniquely identifying the outgoing FlowElement for the FlowNode.
    *
-   * @param id the ID uniquely identifying the outgoing flow element for the flow node
+   * @param id the ID uniquely identifying the outgoing FlowElement for the FlowNode
    */
-  public void addOutgoingFlowElement(String id)
+  public void addOutgoingFlowElement(QName id)
   {
     outgoingFlowElementIds.add(id);
   }
 
   /**
-   * Returns the IDs uniquely identifying the incoming flow elements for the flow node.
+   * Returns the IDs uniquely identifying the incoming FlowElements for the FlowNode.
    *
-   * @return IDs uniquely identifying the incoming flow elements for the flow node
+   * @return IDs uniquely identifying the incoming FlowElements for the FlowNode
    */
-  public List<String> getIncomingFlowElementIds()
+  public List<QName> getIncomingFlowElementIds()
   {
     return incomingFlowElementIds;
   }
 
   /**
-   * Returns the IDs uniquely identifying the incoming flow elements for the flow node.
+   * Returns the IDs uniquely identifying the incoming FlowElements for the FlowNode.
    *
-   * @return the IDs uniquely identifying the incoming flow elements for the flow node
+   * @return the IDs uniquely identifying the incoming FlowElements for the FlowNode
    */
-  public List<String> getOutgoingFlowElementIds()
+  public List<QName> getOutgoingFlowElementIds()
   {
     return outgoingFlowElementIds;
   }

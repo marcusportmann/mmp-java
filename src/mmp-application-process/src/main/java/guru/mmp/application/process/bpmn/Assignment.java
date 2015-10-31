@@ -14,28 +14,36 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.event;
+package guru.mmp.application.process.bpmn;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.ParserException;
+import guru.mmp.common.xml.XmlUtils;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * The <code>EscalationEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) escalation event that forms part of a Process.
+ * The <code>Assignment</code> class represents a Assignment that forms part of a Process.
  * <p>
- * <b>Escalation Event Definition</b> XML schema:
+ * The Assignment class is used to specify a simple mapping of data elements using a specified
+ * Expression language.
+ * <p>
+ * The default Expression language for all Expressions is specified in the Definitions element,
+ * using the expressionLanguage attribute. It can also be overridden on each individual Assignment
+ * using the same attribute.
+ * <p>
+ * <b>Assignment</b> XML schema:
  * <pre>
- * &lt;xsd:element name="escalationEventDefinition" type="tEscalationEventDefinition"
- *              substitutionGroup="eventDefinition"/&gt;
- * &lt;xsd:complexType name="tEscalationEventDefinition"&gt;
+ * &lt;xsd:element name="assignment" type="tAssignment" /&gt;
+ * &lt;xsd:complexType name="tAssignment"&gt;
  *   &lt;xsd:complexContent&gt;
- *     &lt;xsd:extension base="tEventDefinition"&gt;
- *       &lt;xsd:attribute name="escalationRef" type="xsd:QName"/&gt;
+ *     &lt;xsd:extension base="tBaseElement"&gt;
+ *       &lt;xsd:sequence&gt;
+ *         &lt;xsd:element name="from" type="tExpression" minOccurs="1" maxOccurs="1"/&gt;
+ *         &lt;xsd:element name="to" type="tExpression" minOccurs="1" maxOccurs="1"/&gt;
+ *       &lt;/xsd:sequence&gt;
  *     &lt;/xsd:extension&gt;
  *   &lt;/xsd:complexContent&gt;
  * &lt;/xsd:complexType&gt;
@@ -43,16 +51,17 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
-public final class EscalationEventDefinition extends EventDefinition
+public final class Assignment extends BaseElement
 {
   /**
-   * Constructs a new <code>EscalationEventDefinition</code>.
+   * Constructs a new <code>Assignment</code>.
    *
-   * @param element the XML element containing the escalation event definition information
+   * @param parent  the BPMN element that is the parent of this BPMN element
+   * @param element the XML element containing the Assignment information
    */
-  public EscalationEventDefinition(Element element)
+  public Assignment(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -68,17 +77,14 @@ public final class EscalationEventDefinition extends EventDefinition
 
           switch (childElement.getNodeName())
           {
-            case "escalationRef":
+            case "from":
             {
-              // TODO: Parse the escalationRef child element
-
               break;
             }
 
-            default:
+            case "to":
             {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
+              break;
             }
           }
         }
@@ -86,7 +92,7 @@ public final class EscalationEventDefinition extends EventDefinition
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the escalation event definition XML data", e);
+      throw new ParserException("Failed to parse the Assignment XML data", e);
     }
   }
 }

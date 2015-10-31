@@ -16,16 +16,30 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.w3c.dom.Element;
+
 /**
- * The <code>Persistor</code> class provides the capability to serialize and de-serialize the
- * state for an executing Process.
+ * The <code>FormalExpression</code> class represents a FormalExpression that forms part of a
+ * Process.
+ * <p>
+ * <b>FormalExpression</b> XML schema:
+ * <pre>
+ *
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class Persistor
+public final class FormalExpression
 {
   /**
-   * Constructs a new <code>Persistor</code>.
+   * Constructs a new <code>FormalExpression</code>.
+   *
+   * @param element the XML element containing the FormalExpression information
    */
-  public Persistor() {}
+  public FormalExpression(Element element)
+  {
+
+  }
 }

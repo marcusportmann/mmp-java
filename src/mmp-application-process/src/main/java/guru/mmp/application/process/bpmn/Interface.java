@@ -16,16 +16,29 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.w3c.dom.Element;
+
 /**
- * The <code>Persistor</code> class provides the capability to serialize and de-serialize the
- * state for an executing Process.
+ * The <code>Interface</code> class represents an Interface associated with a Process.
+ * <p>
+ * <b>Interface</b> XML schema:
+ * <pre>
+ *
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class Persistor
+public final class Interface
 {
   /**
-   * Constructs a new <code>Persistor</code>.
+   * Constructs a new <code>Interface</code>.
+   *
+   * @param element the XML element containing the Interface information
    */
-  public Persistor() {}
+  public Interface(Element element)
+  {
+
+  }
 }

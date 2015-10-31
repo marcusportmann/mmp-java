@@ -16,15 +16,23 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.util.StringUtil;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
 /**
- * The <code>FlowElement</code> class provides the base class that all flow elements that form part
- * of a Business Process Model and Notation (BPMN) process should be derived from.
+ * The <code>FlowElement</code> class provides the base class that all FlowElements that form part
+ * of a Process should be derived from.
  * <p>
- * <b>Flow Element</b> XML schema:
+ * <b>FlowElement</b> XML schema:
  * <pre>
  * &lt;xsd:element name="flowElement" type="tFlowElement"/&gt;
  * &lt;xsd:complexType name="tFlowElement" abstract="true"&gt;
@@ -47,30 +55,80 @@ import java.util.List;
 public abstract class FlowElement extends BaseElement
 {
   /**
-   * The name of the flow element.
+   * The name of the FlowElement.
    */
   private String name;
 
   /**
    * Constructs a new <code>FlowElement</code>.
    *
-   * @param id   the ID uniquely identifying the flow element
-   * @param name the name of the flow element
+   * @param parent  the BPMN element that is the parent of this FlowElement
+   * @param element the XML element containing the FlowElement information
    */
-  public FlowElement(String id, String name)
+  protected FlowElement(BaseElement parent, Element element)
   {
-    super(id);
+    super(parent, element);
 
-    this.name = name;
+    try
+    {
+      this.name = StringUtil.notNull(element.getAttribute("name"));
+
+      NodeList childElements = element.getChildNodes();
+
+      for (int i = 0; i < childElements.getLength(); i++)
+      {
+        Node node = childElements.item(i);
+
+        if (node instanceof Element)
+        {
+          Element childElement = (Element) node;
+
+          switch (childElement.getNodeName())
+          {
+            case "auditing":
+            {
+              // TODO: Parse the auditing child element
+
+              break;
+            }
+
+            case "monitoring":
+            {
+              // TODO: Parse the monitoring child element
+
+              break;
+            }
+
+            case "categoryValueRef":
+            {
+              // TODO: Parse the categoryValueRef child element
+            }
+          }
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the FlowElement XML data", e);
+    }
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) flow element.
+   * Execute the FlowElement.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) flow element
+   * @return the list of tokens generated as a result of executing the FlowElement
    */
   public abstract List<Token> execute(ProcessExecutionContext context);
+
+  /**
+   * Returns the name of the FlowElement.
+   *
+   * @return the name of the FlowElement
+   */
+  public String getName()
+  {
+    return name;
+  }
 }

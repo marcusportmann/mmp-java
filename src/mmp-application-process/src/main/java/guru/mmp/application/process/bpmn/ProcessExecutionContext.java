@@ -17,22 +17,21 @@
 package guru.mmp.application.process.bpmn;
 
 /**
- * The <code>ProcessExecutionContext</code> class represents the execution context for a Business
- * Process Model and Notation (BPMN) process.
+ * The <code>ProcessExecutionContext</code> class represents the execution context for Process.
  *
  * @author Marcus Portmann
  */
 public class ProcessExecutionContext
 {
   /**
-   * The process being executed.
+   * The Process being executed.
    */
   private Process process;
 
   /**
    * Constructs a new <code>ProcessExecutionContext</code>.
    *
-   * @param process the process being executed
+   * @param process the Process being executed
    */
   public ProcessExecutionContext(Process process)
   {
@@ -40,9 +39,9 @@ public class ProcessExecutionContext
   }
 
   /**
-   * Returns the process being executed.
+   * Returns the Process being executed.
    *
-   * @return the process being executed
+   * @return the Process being executed
    */
   public Process getProcess()
   {

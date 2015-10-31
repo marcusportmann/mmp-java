@@ -18,45 +18,74 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
+import org.w3c.dom.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
- * The <code>CallActivity</code> class represents a Business Process Model and Notation (BPMN)
- * call activity that forms part of a BPMN process.
+ * The <code>CallActivity</code> class represents a BPMN
+ * call activity that forms part of a Process.
  * <p>
  * A call activity is just a reusable activity. If a sub-process is referenced in more than one
  * process (diagram), it can be defined in its own diagram and "called" from each process that
  * uses it.
+ * <p>
+ * <b>Call Activity</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="callActivity" type="tCallActivity" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tCallActivity"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tActivity"&gt;
+ *       &lt;xsd:attribute name="calledElement" type="xsd:QName" use="optional"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class CallActivity extends Activity
+public final class CallActivity extends Activity
 {
+  /**
+   * The QName for the element to be called, which will be either a process or a global task.
+   */
+  private QName calledElement;
+
   /**
    * Constructs a new <code>CallActivity</code>.
    *
-   * @param id                 the ID uniquely identifying the call activity
-   * @param name               the name of the call activity
-   * @param forCompensation    is the call activity for compensation
-   * @param startQuantity      the start quantity for the call activity
-   * @param completionQuantity the completion quantity for the call activity
+   * @param element the XML element containing the call activity information
    */
-  public CallActivity(String id, String name, boolean forCompensation, int startQuantity,
-      int completionQuantity)
+  public CallActivity(Element element)
   {
-    super(id, name, forCompensation, startQuantity, completionQuantity);
+    super(element);
+
+    try
+    {
+      if (!StringUtil.isNullOrEmpty("calledElement"))
+      {
+        this.calledElement = XmlUtils.getQName(element, element.getAttribute("calledElement"));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the call activity XML data", e);
+    }
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) call activity.
+   * Execute the BPMN call activity.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) call activity
@@ -65,5 +94,16 @@ public class CallActivity extends Activity
   public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
+  }
+
+  /**
+   * Returns the QName for the element to be called, which will be either a process or a global
+   * task.
+   *
+   * @return the QName for the element to be called, which will be either a process or a global task
+   */
+  public QName getCalledElement()
+  {
+    return calledElement;
   }
 }

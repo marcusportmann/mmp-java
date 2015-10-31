@@ -22,7 +22,7 @@ import guru.mmp.application.process.bpmn.FlowNode;
 
 /**
  * The <code>Gateway</code> class provides the base class that all
- * Business Process Model and Notation (BPMN) gateway subclasses should be derived from.
+ * BPMN gateway subclasses should be derived from.
  * <p>
  * Gateways are objects that control the flow of the process instead of performing some action.
  * <p>
@@ -50,7 +50,7 @@ abstract class Gateway extends FlowNode
    * @param id   the ID uniquely identifying the gateway
    * @param name the name of the gateway
    */
-  public Gateway(String id, String name)
+  protected Gateway(String id, String name)
   {
     super(id, name);
   }

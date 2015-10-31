@@ -14,34 +14,40 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.activity;
+package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.CallableElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * The <code>GlobalTask</code> class represents a BPMN global
- * task.
+ * The <code>ThrowEvent</code> class represents a BPMN
+ * throw event that forms part of a Process.
  * <p>
- * <b>Global Task</b> XML schema:
+ * <b>Throw Event</b> XML schema:
  * <pre>
- * &lt;xsd:element name="globalTask" type="tGlobalTask" substitutionGroup="rootElement"/&gt;
- * &lt;xsd:complexType name="tGlobalTask"&gt;
+ * &lt;xsd:element name="throwEvent" type="tThrowEvent"/&gt;
+ * &lt;xsd:complexType name="tThrowEvent" abstract="true"&gt;
  *   &lt;xsd:complexContent&gt;
- *     &lt;xsd:extension base="tCallableElement"&gt;
+ *     &lt;xsd:extension base="tEvent"&gt;
  *       &lt;xsd:sequence&gt;
- *         &lt;xsd:element ref="resourceRole" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="dataInput" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="dataInputAssociation" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element ref="inputSet" minOccurs="0" maxOccurs="1"/&gt;
+ *         &lt;xsd:element ref="eventDefinition" minOccurs="0" maxOccurs="unbounded"/&gt;
+ *         &lt;xsd:element name="eventDefinitionRef" type="xsd:QName" minOccurs="0"
+ *                      maxOccurs="unbounded"/&gt;
  *       &lt;/xsd:sequence&gt;
  *     &lt;/xsd:extension&gt;
  *   &lt;/xsd:complexContent&gt;
@@ -50,14 +56,14 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class GlobalTask extends CallableElement
+public abstract class ThrowEvent extends Event
 {
   /**
-   * Constructs a new <code>GlobalTask</code>.
+   * Constructs a new <code>ThrowEvent</code>.
    *
-   * @param element the XML element containing the global task information
+   * @param element the XML element containing the throw event information
    */
-  protected GlobalTask(Element element)
+  protected ThrowEvent(Element element)
   {
     super(element);
 
@@ -75,9 +81,37 @@ public abstract class GlobalTask extends CallableElement
 
           switch (childElement.getNodeName())
           {
-            case "resourceRole":
+            case "dataInput":
             {
-              // TODO: Parse the resourceRole child element
+              // TODO: Parse the dataInput child element
+
+              break;
+            }
+
+            case "dataInputAssociation":
+            {
+              // TODO: Parse the dataInputAssociation child element
+
+              break;
+            }
+
+            case "inputSet":
+            {
+              // TODO: Parse the inputSet child element
+
+              break;
+            }
+
+            case "eventDefinition":
+            {
+              // TODO: Parse the eventDefinition child element
+
+              break;
+            }
+
+            case "eventDefinitionRef":
+            {
+              // TODO: Parse the eventDefinitionRef child element
 
               break;
             }
@@ -93,17 +127,21 @@ public abstract class GlobalTask extends CallableElement
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the global task XML data", e);
+      throw new ParserException("Failed to parse the throw event XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN global task.
+   * Execute the BPMN throw event.
    *
    * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) global task
+   *         Notation (BPMN) throw event
    */
-  public abstract List<Token> execute(ProcessExecutionContext context);
+  @Override
+  public List<Token> execute(ProcessExecutionContext context)
+  {
+    return new ArrayList<>();
+  }
 }

@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>ComplexGateway</code> class represents a Business Process Model and Notation (BPMN)
- * complex gateway that forms part of a BPMN process.
+ * The <code>ComplexGateway</code> class represents a BPMN
+ * complex gateway that forms part of a Process.
  *
  * @author Marcus Portmann
  */
@@ -46,9 +46,9 @@ public final class ComplexGateway extends Gateway
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) complex gateway.
+   * Execute the BPMN complex gateway.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) complex gateway

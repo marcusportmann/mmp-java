@@ -18,16 +18,20 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import guru.mmp.common.util.StringUtil;
 
-import java.util.List;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
+
 /**
- * The <code>StartEvent</code> class represents a Business Process Model and Notation (BPMN)
- * start event that forms part of a BPMN process.
+ * The <code>StartEvent</code> class represents a BPMN
+ * start event that forms part of a Process.
  * <p>
  * A start event indicates the start of a process. Start events generate a token when they are
  * triggered. The token then moves down through the event's outgoing sequence flow.
@@ -44,37 +48,50 @@ import java.util.List;
  *       &lt;xsd:attribute name="isInterrupting" type="xsd:boolean" default="true"/&gt;
  *     &lt;/xsd:extension&gt;
  *   &lt;/xsd:complexContent&gt;
- * &lt;/xsd:complexType&gt;  
+ * &lt;/xsd:complexType&gt;
  * </pre>
+ *
  * @author Marcus Portmann
  */
-public final class StartEvent extends CatchingEvent
+public final class StartEvent extends CatchEvent
 {
   /**
    * Is the start event interrupting i.e. does the activity that triggered the event terminate
    * and the flow of the process continue from the event (interrupting) or does the activity
    * continue and the flow at the event execute in parallel (non-interrupting)?
    */
-  private boolean interrupting;
+  private boolean isInterrupting;
 
   /**
    * Constructs a new <code>StartEvent</code>.
    *
-   * @param id           the ID uniquely identifying the start event
-   * @param name         the name of the start event
-   * @param interrupting is the start event interrupting
+   * @param element the XML element containing the start event information
    */
-  public StartEvent(String id, String name, boolean interrupting)
+  public StartEvent(Element element)
   {
-    super(id, name);
+    super(element);
 
-    this.interrupting = interrupting;
+    try
+    {
+      if (StringUtil.isNullOrEmpty(element.getAttribute("isInterrupting")))
+      {
+        this.isInterrupting = true;
+      }
+      else
+      {
+        this.isInterrupting = Boolean.parseBoolean(element.getAttribute("isInterrupting"));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the start event XML data", e);
+    }
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) start event.
+   * Execute the BPMN start event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) start event
@@ -96,6 +113,6 @@ public final class StartEvent extends CatchingEvent
    */
   public boolean isInterrupting()
   {
-    return interrupting;
+    return isInterrupting;
   }
 }

@@ -14,12 +14,32 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.process.bpmn.event;
+package guru.mmp.application.process.bpmn;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.w3c.dom.Element;
 
 /**
- * The <code>CompensationEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) compensation event that forms part of a BPMN process.
+ * The <code>InputOutputBinding</code> class represents an InputOutputBinding that
+ * forms part of a Process.
+ * <p>
+ * <b>InputOutputBinding</b> XML schema:
+ * <pre>
+ *
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public final class CompensationEventDefinition {}
+public final class InputOutputBinding
+{
+  /**
+   * Constructs a new <code>InputOutputBinding</code>.
+   *
+   * @param element the XML element containing the InputOutputBinding information
+   */
+  public InputOutputBinding(Element element)
+  {
+
+  }
+}

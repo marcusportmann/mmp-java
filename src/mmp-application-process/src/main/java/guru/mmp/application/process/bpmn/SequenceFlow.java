@@ -18,7 +18,9 @@ package guru.mmp.application.process.bpmn;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.FlowNode;
+import guru.mmp.common.util.StringUtil;
+
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -26,10 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>SequenceFlow</code> class represents a Business Process Model and Notation (BPMN)
- * sequence flow that forms part of a BPMN process.
+ * The <code>SequenceFlow</code> class represents a SequenceFlow that forms part of a Process.
  * <p>
- * <b>Sequence Flow</b> XML schema:
+ * <b>SequenceFlow</b> XML schema:
  * <pre>
  * &lt;xsd:element name="sequenceFlow" type="tSequenceFlow" substitutionGroup="flowElement"/&gt;
  * &lt;xsd:complexType name="tSequenceFlow"&gt;
@@ -52,37 +53,61 @@ import java.util.List;
 public final class SequenceFlow extends FlowElement
 {
   /**
-   * The ID uniquely identifying the source flow element.
+   * If <code>false</code> the participants MAY send messages to each other between the elements
+   * connected by the SequenceFlow without additional choreography activities in the choreography.
+   * If <code>true</code> then participants MAY NOT send messages to each other between the
+   * elements connected by the SequenceFlow without additional choreography activities in the
+   * choreography.
+   */
+  private boolean isImmediate;
+
+  /**
+   * The ID uniquely identifying the source FlowElement.
    */
   private String sourceFlowElementId;
 
   /**
-   * The ID uniquely identifying the target flow element.
+   * The ID uniquely identifying the target FlowElement.
    */
   private String targetFlowElementId;
 
   /**
    * Constructs a new <code>SequenceFlow</code>.
    *
-   * @param id                  the ID uniquely identifying the sequence flow
-   * @param sourceFlowElementId the ID uniquely identifying the source flow element
-   * @param targetFlowElementId the ID uniquely identifying the target flow element
+   * @param parent  the BPMN element that is the parent of this SequenceFlow
+   * @param element the XML element containing the SequenceFlow element information
    */
-  public SequenceFlow(String id, String sourceFlowElementId, String targetFlowElementId)
+  public SequenceFlow(BaseElement parent, Element element)
   {
-    super(id, id);
+    super(parent, element);
 
-    this.sourceFlowElementId = sourceFlowElementId;
-    this.targetFlowElementId = targetFlowElementId;
+    try
+    {
+      this.sourceFlowElementId = StringUtil.notNull(element.getAttribute("sourceRef"));
+
+      this.targetFlowElementId = StringUtil.notNull(element.getAttribute("targetRef"));
+
+      if (StringUtil.isNullOrEmpty(element.getAttribute("isImmediate")))
+      {
+        this.isImmediate = false;
+      }
+      else
+      {
+        this.isImmediate = Boolean.parseBoolean(element.getAttribute("isImmediate"));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the SequenceFlow element XML data", e);
+    }
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) flow element.
+   * Execute the SequenceFlow.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) flow element
+   * @return the list of tokens generated as a result of executing the SequenceFlow
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -91,9 +116,9 @@ public final class SequenceFlow extends FlowElement
   }
 
   /**
-   * Returns the ID uniquely identifying the source flow element.
+   * Returns the ID uniquely identifying the source FlowElement.
    *
-   * @return the ID uniquely identifying the source flow element
+   * @return the ID uniquely identifying the source FlowElement
    */
   public String getSourceFlowElementId()
   {
@@ -101,9 +126,9 @@ public final class SequenceFlow extends FlowElement
   }
 
   /**
-   * Returns the ID uniquely identifying the target flow element.
+   * Returns the ID uniquely identifying the target FlowElement.
    *
-   * @return ID uniquely identifying the target flow element
+   * @return ID uniquely identifying the target FlowElement
    */
   public String getTargetFlowElementId()
   {

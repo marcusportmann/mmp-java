@@ -18,16 +18,23 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
 
-import java.util.List;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 /**
- * The <code>BoundaryEvent</code> class represents a Business Process Model and Notation (BPMN)
- * boundary event that forms part of a BPMN process.
+ * The <code>BoundaryEvent</code> class represents a BPMN
+ * boundary event that forms part of a Process.
  * <p>
  * Boundary events are placed on the boundary of an activity.
  * <p>
@@ -36,35 +43,71 @@ import java.util.List;
  * activity catches them.
  * <p>
  * Common uses of boundary events include deadlines and timeouts.
+ * <p>
+ * <b>Boundary Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="boundaryEvent" type="tBoundaryEvent" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tBoundaryEvent"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tCatchEvent"&gt;
+ *       &lt;xsd:attribute name="cancelActivity" type="xsd:boolean" default="true"/&gt;
+ *       &lt;xsd:attribute name="attachedToRef" type="xsd:QName"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public final class BoundaryEvent extends CatchingEvent
+public abstract class BoundaryEvent extends CatchEvent
 {
   /**
-   * Is the boundary event interrupting i.e. does the activity that triggered the event terminate
-   * and the flow of the process continue from the boundary event (interrupting) or does the
-   * activity continue and the flow at the boundary event execute in parallel (non-interrupting)?
+   * The QName for the element the boundary event is attached to.
    */
-  private boolean interrupting;
+  private QName attachedToRef;
+
+  /**
+   * Should the activity be cancelled or not, i.e., does the boundary catch event act as an error
+   * or an escalation. If the activity is not cancelled, multiple instances of that handler can run
+   * concurrently.
+   */
+  private boolean cancelActivity;
 
   /**
    * Constructs a new <code>BoundaryEvent</code>.
    *
-   * @param id           the ID uniquely identifying the boundary event
-   * @param name         the name of the boundary event
+   * @param element the XML element containing the boundary event information
    */
-  public BoundaryEvent(String id, String name, boolean interrupting)
+  protected BoundaryEvent(Element element)
   {
-    super(id, name);
+    super(element);
 
-    this.interrupting = interrupting;
+    try
+    {
+      if (StringUtil.isNullOrEmpty(element.getAttribute("cancelActivity")))
+      {
+        this.cancelActivity = true;
+      }
+      else
+      {
+        this.cancelActivity = Boolean.parseBoolean(element.getAttribute("cancelActivity"));
+      }
+
+      if (!StringUtil.isNullOrEmpty("attachedToRef"))
+      {
+        this.attachedToRef = XmlUtils.getQName(element, element.getAttribute("attachedToRef"));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the boundary event XML data", e);
+    }
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) boundary event.
+   * Execute the BPMN boundary event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) boundary event
@@ -76,32 +119,24 @@ public final class BoundaryEvent extends CatchingEvent
   }
 
   /**
-   * Is the boundary event interrupting?
-   * <p>
-   * Does the activity that triggered the boundary event terminate and the flow of the process
-   * continue from the event (interrupting) or does the activity continue and the flow at the
-   * event execute in parallel (non-interrupting)?
+   * Returns the QName for the element the boundary event is attached to.
    *
-   * @return <code>true</code> if the boundary event is interrupting or <code>false</code> otherwise
+   * @return the QName for the element the boundary event is attached to
    */
-  public boolean isInterrupting()
+  public QName getAttachedToRef()
   {
-    return interrupting;
+    return attachedToRef;
   }
 
   /**
-   * Set whether the boundary event is interrupting.
+   * Returns <code>true</code> if the activity should be cancelled or <code>false</code> otherwise.
    * <p>
-   * If the boundary event is interrupting, the activity that triggered the event will be
-   * terminated and the flow of the process will continue from the event. If the boundary
-   * event is non-interrupting the activity that triggered the event will continue and the flow at
-   * the event will execute in parallel.
+   * If the activity is cancelled the boundary catch event acts as an error or an escalation.
    *
-   * @param interrupting <code>true</code> if the boundary event is interrupting or
-   *                     <code>false</code> otherwise
+   * @return <code>true</code> if the activity should be cancelled or <code>false</code> otherwise
    */
-  public void setInterrupting(boolean interrupting)
+  public boolean getCancelActivity()
   {
-    this.interrupting = interrupting;
+    return cancelActivity;
   }
 }

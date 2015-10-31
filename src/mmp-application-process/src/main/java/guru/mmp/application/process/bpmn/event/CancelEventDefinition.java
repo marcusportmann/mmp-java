@@ -16,10 +16,34 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+import org.w3c.dom.Element;
+
 /**
  * The <code>CancelEventDefinition</code> class stores the details for a Business Process Model
- * and Notation (BPMN) cancel event that forms part of a BPMN process.
+ * and Notation (BPMN) cancel event that forms part of a Process.
+ * <p>
+ * <b>Cancel Event Definition</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="cancelEventDefinition" type="tCancelEventDefinition"
+ *                 substitutionGroup="eventDefinition"/&gt;
+ * &lt;xsd:complexType name="tCancelEventDefinition"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tEventDefinition"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public final class CancelEventDefinition {}
+public final class CancelEventDefinition extends EventDefinition
+{
+  /**
+   * Constructs a new <code>CancelEventDefinition</code>.
+   *
+   * @param element the XML element containing the cancel event definition information
+   */
+  public CancelEventDefinition(Element element)
+  {
+    super(element);
+  }
+}

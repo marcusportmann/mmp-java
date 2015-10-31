@@ -18,13 +18,15 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionSubProcess</code> class represents a  Business Process Model and Notation
@@ -66,14 +68,6 @@ import java.util.List;
  *     &lt;/xsd:extension&gt;
  *   &lt;/xsd:complexContent&gt;
  * &lt;/xsd:complexType&gt;
- *
- * &lt;xsd:simpleType name="tTransactionMethod"&gt;
- *   &lt;xsd:restriction base="xsd:string"&gt;
- *     &lt;xsd:enumeration value="Compensate"/&gt;
- *     &lt;xsd:enumeration value="Image"/&gt;
- *     &lt;xsd:enumeration value="Store"/&gt;
- *   &lt;/xsd:restriction&gt;
- * &lt;/xsd:simpleType&gt;  
  * </pre>
  *
  * @author Marcus Portmann
@@ -81,25 +75,33 @@ import java.util.List;
 public final class TransactionSubProcess extends SubProcess
 {
   /**
+   * The transaction method for the transaction sub-process.
+   */
+  private TransactionMethod method;
+
+  /**
    * Constructs a new <code>TransactionSubProcess</code>.
    *
-   * @param id                 the ID uniquely identifying the transaction sub-process
-   * @param name               the name of the transaction sub-process
-   * @param forCompensation    is the transaction sub-process for compensation
-   * @param startQuantity      the start quantity for the transaction sub-process
-   * @param completionQuantity the completion quantity for the transaction sub-process
-   * @param triggeredByEvent   is the transaction sub-process triggered by an event
+   * @param element the XML element containing the sub-process information
    */
-  public TransactionSubProcess(String id, String name, boolean forCompensation, int startQuantity,
-      int completionQuantity, boolean triggeredByEvent)
+  public TransactionSubProcess(Element element)
   {
-    super(id, name, forCompensation, startQuantity, completionQuantity, triggeredByEvent);
+    super(element);
+
+    try
+    {
+      method = TransactionMethod.fromId(element.getAttribute("method"));
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the transaction sub-process XML data", e);
+    }
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) transaction sub-process.
+   * Execute the BPMN transaction sub-process.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) transaction sub-process
@@ -108,5 +110,15 @@ public final class TransactionSubProcess extends SubProcess
   public List<Token> execute(ProcessExecutionContext context)
   {
     return new ArrayList<>();
+  }
+
+  /**
+   * Returns the transaction method for the transaction sub-process.
+   *
+   * @return the transaction method for the transaction sub-process
+   */
+  public TransactionMethod getMethod()
+  {
+    return method;
   }
 }

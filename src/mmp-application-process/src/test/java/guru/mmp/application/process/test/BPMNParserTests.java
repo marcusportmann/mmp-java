@@ -33,7 +33,7 @@ public class BPMNParserTests
   {
     try
     {
-      // Load the XML Business Process Model and Notation (BPMN) data from the classpath
+      // Load the XML BPMN data from the classpath
       byte[] processDefinitionData = ResourceUtil.getClasspathResource(
         "guru/mmp/application/process/test/Test.bpmn");
 

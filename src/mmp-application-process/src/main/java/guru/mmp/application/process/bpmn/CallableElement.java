@@ -16,11 +16,27 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 /**
- * The <code>CallableElement</code> class provides the base class that all callable elements that
- * form part of a Business Process Model and Notation (BPMN) process should be derived from.
+ * The <code>CallableElement</code> class provides the base class that all CallableElements that
+ * form part of a Process should be derived from.
  * <p>
- * <b>Callable Element</b> XML schema:
+ * <b>CallableElement</b> XML schema:
  * <pre>
  * &lt;xsd:element name="callableElement" type="tCallableElement"/&gt;
  * &lt;xsd:complexType name="tCallableElement"&gt;
@@ -43,30 +59,128 @@ package guru.mmp.application.process.bpmn;
 public abstract class CallableElement extends RootElement
 {
   /**
-   * The name of the callable element.
+   * The InputOutputBinding, which defines a combination of one InputSet and one OutputSet in order
+   * to bind this to an operation defined in an interface.
+   */
+  private InputOutputBinding inputOutputBinding;
+
+  /**
+   * The InputOutputSpecification, which defines the inputs and outputs and the
+   * InputSets and OutputSets for the CallableElement.
+   */
+  private InputOutputSpecification inputOutputSpecification;
+
+  /**
+   * The name of the CallableElement.
    */
   private String name;
 
   /**
+   * The IDs uniquely identifying the Interfaces describing the external behavior provided by this
+   * element.
+   */
+  private List<QName> supportedInterfaceIds = new ArrayList<>();
+
+  /**
    * Constructs a new <code>CallableElement</code>.
    *
-   * @param id   the ID uniquely identifying callable element
-   * @param name the name of the callable element
+   * @param parent  the BPMN element that is the parent of this CallableElement
+   * @param element the XML element containing the CallableElement information
    */
-  public CallableElement(String id, String name)
+  protected CallableElement(BaseElement parent, Element element)
   {
-    super(id);
+    super(parent, element);
 
-    this.name = name;
+    try
+    {
+      this.name = StringUtil.notNull(element.getAttribute("name"));
+
+      NodeList childElements = element.getChildNodes();
+
+      for (int i = 0; i < childElements.getLength(); i++)
+      {
+        Node node = childElements.item(i);
+
+        if (node instanceof Element)
+        {
+          Element childElement = (Element) node;
+
+          switch (childElement.getNodeName())
+          {
+            case "supportedInterfaceRef":
+            {
+              supportedInterfaceIds.add(XmlUtils.getQName(childElement,
+                  childElement.getTextContent()));
+
+              break;
+            }
+
+            case "ioSpecification":
+            {
+              inputOutputSpecification = new InputOutputSpecification(childElement);
+
+              break;
+            }
+
+            case "ioBinding":
+            {
+              inputOutputBinding = new InputOutputBinding(childElement);
+
+              break;
+            }
+          }
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the CallableElement XML data", e);
+    }
   }
 
   /**
-   * Returns the name of the callable element.
+   * Returns the InputOutputBinding, which defines a combination of one InputSet and one OutputSet
+   * in order to bind this to an operation defined in an interface.
    *
-   * @return the name of the callable element
+   * @return the InputOutputBinding, which defines a combination of one InputSet and one OutputSet
+   *         in order to bind this to an operation defined in an interface
+   */
+  public InputOutputBinding getInputOutputBinding()
+  {
+    return inputOutputBinding;
+  }
+
+  /**
+   * Returns the InputOutputSpecification, which defines the inputs and outputs and the InputSets
+   * and OutputSets for the CallableElement.
+   *
+   * @return the InputOutputSpecification, which defines the inputs and outputs and the InputSets
+   *         and OutputSets for the CallableElement
+   */
+  public InputOutputSpecification getInputOutputSpecification()
+  {
+    return inputOutputSpecification;
+  }
+
+  /**
+   * Returns the name of the CallableElement.
+   *
+   * @return the name of the CallableElement
    */
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Returns the IDs uniquely identifying the Interfaces describing the external behavior provided
+   * by this element.
+   *
+   * @return the IDs uniquely identifying the Interfaces describing the external behavior provided
+   *         by this element
+   */
+  public List<QName> getSupportedInterfaceIds()
+  {
+    return supportedInterfaceIds;
   }
 }

@@ -18,17 +18,19 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
- * The <code>BusinessRuleTaskBehavior</code> class implements the behavior for a Business Process
- * Model and Notation (BPMN) business rule task that forms part of a BPMN process.
+ * The <code>BusinessRuleTask</code> class represents a BPMN
+ * business rule task that forms part of a Process.
  * <p>
  * This task represents work executed at run-time in a business rule engine, generally a complex
  * decision.
@@ -48,30 +50,39 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public final class BusinessRuleTaskBehavior extends TaskBehavior
+public final class BusinessRuleTask extends Task
 {
   /**
-   * The implementation type for the business rule task.
+   * The technology that the business rule task will use to send and receive messages.
    */
-  private ImplementationType implementationType;
+  private Implementation implementation;
 
   /**
-   * Constructs a new <code>BusinessRuleTaskBehavior</code>.
+   * Constructs a new <code>BusinessRuleTask</code>.
    *
-   * @param implementationType the implementation type for the service task
+   * @param element the XML element containing the business rule task information
    */
-  public BusinessRuleTaskBehavior(ImplementationType implementationType)
+  public BusinessRuleTask(Element element)
   {
-    this.implementationType = implementationType;
+    super(element);
+
+    try
+    {
+      this.implementation = Implementation.fromId(element.getAttribute("implementation"));
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the business rule task XML data", e);
+    }
   }
 
   /**
-   * Execute the behavior for the Business Process Model and Notation (BPMN) business rule task.
+   * Execute the BPMN task.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the behavior for the
-   *         Business Process Model and Notation (BPMN) business rule task
+   * @return the list of tokens generated as a result of executing the Business Process Model and
+   *         Notation (BPMN) task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -80,12 +91,12 @@ public final class BusinessRuleTaskBehavior extends TaskBehavior
   }
 
   /**
-   * Returns the implementation type for the business rule task.
+   * Returns the technology that the business rule task will use to send and receive messages.
    *
-   * @return the implementation type for the business rule task
+   * @return the technology that the business rule task will use to send and receive messages
    */
-  public ImplementationType getImplementationType()
+  public Implementation getImplementation()
   {
-    return implementationType;
+    return implementation;
   }
 }

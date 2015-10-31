@@ -16,16 +16,28 @@
 
 package guru.mmp.application.process.bpmn;
 
+import org.w3c.dom.Element;
+
 /**
- * The <code>Persistor</code> class provides the capability to serialize and de-serialize the
- * state for an executing Process.
+ * The <code>InputOutputSpecification</code> class represents an InputOutputSpecification that
+ * forms part of a Process.
+ * <p>
+ * <b>InputOutputSpecification</b> XML schema:
+ * <pre>
+ *
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class Persistor
+public final class InputOutputSpecification
 {
   /**
-   * Constructs a new <code>Persistor</code>.
+   * Constructs a new <code>InputOutputSpecification</code>.
+   *
+   * @param element the XML element containing the InputOutputSpecification information
    */
-  public Persistor() {}
+  public InputOutputSpecification(Element element)
+  {
+
+  }
 }

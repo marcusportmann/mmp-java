@@ -19,10 +19,11 @@ package guru.mmp.application.process.bpmn.event;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.process.bpmn.FlowNode;
+import org.w3c.dom.Element;
 
 /**
  * The <code>Event</code> class provides the base class that all
- * Business Process Model and Notation (BPMN) event subclasses should be derived from.
+ * BPMN event subclasses should be derived from.
  * <p>
  * An event is something important to the process from a business perspective that just happens.
  * <p>
@@ -55,19 +56,28 @@ import guru.mmp.application.process.bpmn.FlowNode;
  *     in parallel (represented by a dashed boundary in a BPMN diagram).
  *   </li>
  * </ul>
+ * <p>
+ * <b>Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="event" type="tEvent" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tEvent" abstract="true"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tFlowNode"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-abstract class Event extends FlowNode
+public abstract class Event extends FlowNode
 {
   /**
    * Constructs a new <code>Event</code>.
    *
-   * @param id   the ID uniquely identifying the event
-   * @param name the name of the event
+   * @param element the XML element containing the event information
    */
-  protected Event(String id, String name)
+  protected Event(Element element)
   {
-    super(id, name);
+    super(element);
   }
 }

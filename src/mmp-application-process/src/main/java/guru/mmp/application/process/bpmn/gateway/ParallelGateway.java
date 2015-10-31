@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>ParallelGateway</code> class represents a Business Process Model and Notation (BPMN)
- * parallel gateway that forms part of a BPMN process.
+ * The <code>ParallelGateway</code> class represents a BPMN
+ * parallel gateway that forms part of a Process.
  *
  * @author Marcus Portmann
  */
@@ -54,9 +54,9 @@ public final class ParallelGateway extends Gateway
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) parallel gateway.
+   * Execute the BPMN parallel gateway.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) parallel gateway

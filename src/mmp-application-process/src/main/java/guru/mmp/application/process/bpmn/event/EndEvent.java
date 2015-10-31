@@ -21,38 +21,50 @@ package guru.mmp.application.process.bpmn.event;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
+import org.w3c.dom.Element;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
 /**
- * The <code>EndEvent</code> class represents a Business Process Model and Notation (BPMN)
- * end event that forms part of a BPMN process.
+ * The <code>EndEvent</code> class represents a BPMN
+ * end event that forms part of a Process.
  * <p>
  * End events finish a particular path of the process (or the whole process) and generate a result
  * (a message for example).
  * <p>
  * End events have one or more incoming flows but no outgoing flows.
- *
+ * <p>
+ * <b>End Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="endEvent" type="tEndEvent" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tEndEvent"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tThrowEvent"&gt;
+ *       &lt;xsd:anyAttribute processContents='lax' namespace='##other'/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  * @author Marcus Portmann
  */
-public final class EndEvent extends ThrowingEvent
+public final class EndEvent extends ThrowEvent
 {
   /**
    * Constructs a new <code>EndEvent</code>.
    *
-   * @param id   the ID uniquely identifying the end event
-   * @param name the name of the end event
+   * @param element the XML element containing the end event information
    */
-  public EndEvent(String id, String name)
+  public EndEvent(Element element)
   {
-    super(id, name);
+    super(element);
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) end event.
+   * Execute the BPMN end event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
    *         Notation (BPMN) end event

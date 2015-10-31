@@ -17,19 +17,19 @@
 package guru.mmp.application.process.bpmn.activity;
 
 /**
- * The <code>ImplementationType</code> enumeration defines the possible ways that a Business Process
- * Model and Notation (BPMN) send task or service task can be implemented.
+ * The <code>Implementation</code> enumeration defines the possible technologies that a
+ * BPMN task can use to send and receive messages.
  *
  * @author Marcus Portmann
  */
-public enum ImplementationType
+public enum Implementation
 {
   UNSPECIFIED("##unspecified", "Unspecified"), WEB_SERVICE("##WebService", "WebService");
 
   private String id;
   private String name;
 
-  ImplementationType(String id, String name)
+  Implementation(String id, String name)
   {
     this.id = id;
     this.name = name;
@@ -42,15 +42,15 @@ public enum ImplementationType
    *
    * @return the implementation type given by the specified ID
    */
-  public static ImplementationType fromId(String id)
+  public static Implementation fromId(String id)
   {
     switch (id)
     {
       case "##unspecified":
-        return ImplementationType.UNSPECIFIED;
+        return Implementation.UNSPECIFIED;
 
       case "##WebService":
-        return ImplementationType.WEB_SERVICE;
+        return Implementation.WEB_SERVICE;
 
       default:
         throw new RuntimeException("Invalid ID for implementation type (" + id + ")");
@@ -78,10 +78,10 @@ public enum ImplementationType
   }
 
   /**
-   * Return the string representation of the <code>ImplementationType</code>
+   * Return the string representation of the <code>Implementation</code>
    * enumeration value.
    *
-   * @return the string representation of the <code>ImplementationType</code>
+   * @return the string representation of the <code>Implementation</code>
    *         enumeration value
    */
   public String toString()

@@ -18,7 +18,7 @@ package guru.mmp.application.process.bpmn;
 
 /**
  * The <code>ParserException</code> exception is thrown to indicate an error condition when
- * parsing a Business Process Model and Notation (BPMN) format file.
+ * parsing the XML definition for the Process.
  *
  * @author Marcus Portmann
  */

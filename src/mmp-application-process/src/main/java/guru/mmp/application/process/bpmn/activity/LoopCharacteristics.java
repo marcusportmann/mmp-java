@@ -16,12 +16,23 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+import org.w3c.dom.Element;
+
 /**
- * The <code>LoopCharacteristics</code> class stores the information for the loop characteristics
- * for a Business Process Model and Notation (BPMN) activity.
+ * The <code>LoopCharacteristics</code> class stores the information for the Loop Characteristics
+ * for a BPMN activity.
  *
  * @author Marcus Portmann
  */
 public class LoopCharacteristics
 {
+  /**
+   * Constructs a new <code>LoopCharacteristics</code>.
+   *
+   * @param element the XML element containing the Loop Characteristics information
+   */
+  public LoopCharacteristics(Element element)
+  {
+
+  }
 }

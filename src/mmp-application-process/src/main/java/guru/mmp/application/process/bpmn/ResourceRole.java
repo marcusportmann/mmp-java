@@ -16,16 +16,27 @@
 
 package guru.mmp.application.process.bpmn;
 
+import org.w3c.dom.Element;
+
 /**
- * The <code>Persistor</code> class provides the capability to serialize and de-serialize the
- * state for an executing Process.
+ * The <code>ResourceRole</code> class represents a ResourceRole that forms part of a Process.
+ * <p>
+ * <b>ResourceRole</b> XML schema:
+ * <pre>
+ *
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class Persistor
+public final class ResourceRole
 {
   /**
-   * Constructs a new <code>Persistor</code>.
+   * Constructs a new <code>ResourceRole</code>.
+   *
+   * @param element the XML element containing the ResourceRole information
    */
-  public Persistor() {}
+  public ResourceRole(Element element)
+  {
+
+  }
 }

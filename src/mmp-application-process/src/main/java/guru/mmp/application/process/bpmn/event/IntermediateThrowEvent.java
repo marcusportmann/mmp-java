@@ -21,36 +21,48 @@ package guru.mmp.application.process.bpmn.event;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
-import java.util.List;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
+
 /**
- * The <code>IntermediateThrowingEvent</code> class represents a Business Process Model and Notation
- * (BPMN) intermediate throwing event that forms part of a BPMN process.
+ * The <code>IntermediateThrowEvent</code> class represents a Business Process Model and Notation
+ * (BPMN) intermediate throw event that forms part of a Process.
+ * <p>
+ * <b>Intermediate Throw Event</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="intermediateThrowEvent" type="tIntermediateThrowEvent"
+ *              substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tIntermediateThrowEvent"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tThrowEvent"/&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
-public class IntermediateThrowingEvent extends ThrowingEvent
+public final class IntermediateThrowEvent extends ThrowEvent
 {
   /**
-   * Constructs a new <code>IntermediateThrowingEvent</code>.
+   * Constructs a new <code>IntermediateThrowEvent</code>.
    *
-   * @param id   the ID uniquely identifying the intermediate throwing event
-   * @param name the name of the intermediate throwing event
+   * @param element the XML element containing the intermediate throw event information
    */
-  public IntermediateThrowingEvent(String id, String name)
+  public IntermediateThrowEvent(Element element)
   {
-    super(id, name);
+    super(element);
   }
 
   /**
-   * Execute the Business Process Model and Notation (BPMN) intermediate throwing event.
+   * Execute the BPMN intermediate throw event.
    *
-   * @param context the execution context for the Business Process Model and Notation (BPMN) process
+   * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) intermediate throwing event
+   *         Notation (BPMN) intermediate throw event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

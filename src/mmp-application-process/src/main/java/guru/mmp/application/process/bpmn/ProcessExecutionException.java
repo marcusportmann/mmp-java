@@ -18,7 +18,7 @@ package guru.mmp.application.process.bpmn;
 
 /**
  * The <code>ProcessExecutionException</code> exception is thrown to indicate an error condition
- * when executing a Business Process Model and Notation (BPMN) process.
+ * when executing a Process.
  *
  * @author Marcus Portmann
  */

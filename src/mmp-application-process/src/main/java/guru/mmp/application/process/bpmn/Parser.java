@@ -45,8 +45,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 /**
- * The <code>Parser</code> class provides the capability to parse Business Process Model and
- * Notation (BPMN) format files.
+ * The <code>Parser</code> class provides the capability to parse the XML definition for a Process.
  *
  * @author Marcus Portmann
  */
@@ -58,11 +57,11 @@ public class Parser
   public Parser() {}
 
   /**
-   * Parse the Business Process Model and Notation (BPMN) data for the process definition.
+   * Parse the XML definition for the Process.
    *
-   * @param data the BPMN data for the process definition
+   * @param data the XML definition for the Process
    *
-   * @return the parsed Business Process Model and Notation (BPMN) processes
+   * @return the parsed Processes
    */
   public List<Process> parse(byte[] data)
   {
@@ -134,7 +133,7 @@ public class Parser
 
           if (element.getNodeName().equals("process"))
           {
-            processes.add(Process.fromXML(element));
+            processes.add(new Process(element));
           }
           else
           {
@@ -161,7 +160,7 @@ public class Parser
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the BPMN data for the process", e);
+      throw new ParserException("Failed to parse the XML definition for the Process", e);
     }
   }
 }

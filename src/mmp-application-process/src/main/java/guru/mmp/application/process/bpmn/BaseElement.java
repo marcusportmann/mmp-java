@@ -16,11 +16,24 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.namespace.QName;
+
 /**
- * The <code>BaseElement</code> class provides the base class that all elements that form part of
- * a Business Process Model and Notation (BPMN) process should be derived from.
+ * The <code>BaseElement</code> class provides the base class that all BPMN elements that form part
+ * of a Process should be derived from.
  * <p>
- * <b>Base Element</b> XML schema:
+ * <b>BaseElement</b> XML schema:
  * <pre>
  * &lt;xsd:element name="baseElement" type="tBaseElement"/&gt;
  * &lt;xsd:complexType name="tBaseElement" abstract="true"&gt;
@@ -38,27 +51,80 @@ package guru.mmp.application.process.bpmn;
 public abstract class BaseElement
 {
   /**
-   * The ID uniquely identifying the element.
+   * The ID uniquely identifying the BPMN element.
    */
-  private String id;
+  private QName id;
+
+  /**
+   * The BPMN element that is the parent of this BPMN element or <code>null</code> if the BPMN
+   * element does not have a parent.
+   */
+  private BaseElement parent;
 
   /**
    * Constructs a new <code>BaseElement</code>.
    *
-   * @param id the ID uniquely identifying element
+   * @param parent  the BPMN element that is the parent of this BPMN element
+   * @param element the XML element containing the BaseElement information
    */
-  public BaseElement(String id)
+  protected BaseElement(BaseElement parent, Element element)
   {
-    this.id = id;
+    try
+    {
+      this.id = XmlUtils.getQName(element, StringUtil.notNull(element.getAttribute("id")));
+
+      NodeList childElements = element.getChildNodes();
+
+      for (int i = 0; i < childElements.getLength(); i++)
+      {
+        Node node = childElements.item(i);
+
+        if (node instanceof Element)
+        {
+          Element childElement = (Element) node;
+
+          switch (childElement.getNodeName())
+          {
+            case "documentation":
+            {
+              // TODO: Parse the documentation child element
+              break;
+            }
+
+            case "extensionElements":
+            {
+              // TODO: Parse the extensionElements child element
+              break;
+            }
+          }
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the BaseElement XML data", e);
+    }
   }
 
   /**
-   * Returns the ID uniquely identifying the element.
+   * Returns the ID uniquely identifying the BPMN element.
    *
-   * @return the ID uniquely identifying the element
+   * @return the ID uniquely identifying the BPMN element
    */
-  public String getId()
+  public QName getId()
   {
     return id;
+  }
+
+  /**
+   * The BPMN element that is the parent of this BPMN element or <code>null</code> if the BPMN
+   * element does not have a parent.
+   *
+   * @return the BPMN element that is the parent of this BPMN element or <code>null</code> if the
+   *         BPMN element does not have a parent
+   */
+  public BaseElement getParent()
+  {
+    return parent;
   }
 }
