@@ -144,11 +144,11 @@ public enum EventType
   }
 
   /**
-   * Returns the event type given by the specified numeric code value.
+   * Returns the Event type given by the specified numeric code value.
    *
-   * @param code the numeric code value identifying the event type
+   * @param code the numeric code value identifying the Event type
    *
-   * @return the event type given by the specified numeric code value
+   * @return the Event type given by the specified numeric code value
    */
   public static EventType fromCode(int code)
   {
@@ -194,14 +194,14 @@ public enum EventType
         return EventType.TIMER;
 
       default:
-        throw new RuntimeException("Unknown event type (" + code + ")");
+        throw new RuntimeException("Unknown Event type (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying the event type.
+   * Returns the numeric code value identifying the Event type.
    *
-   * @return the numeric code value identifying the event type
+   * @return the numeric code value identifying the Event type
    */
   public int getCode()
   {
@@ -209,9 +209,9 @@ public enum EventType
   }
 
   /**
-   * Returns the <code>String</code> code value identifying the event type.
+   * Returns the <code>String</code> code value identifying the Event type.
    *
-   * @return the <code>String</code> code value identifying the event type
+   * @return the <code>String</code> code value identifying the Event type
    */
   public String getCodeAsString()
   {
@@ -219,9 +219,9 @@ public enum EventType
   }
 
   /**
-   * Returns the name of the event type.
+   * Returns the name of the Event type.
    *
-   * @return the name of the event type
+   * @return the name of the Event type
    */
   public String getName()
   {

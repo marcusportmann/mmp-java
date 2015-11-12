@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -33,8 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>CatchEvent</code> class represents a BPMN
- * catch event that forms part of a Process.
+ * The <code>CatchEvent</code> class provides the base class that all Catch Event subclasses should
+ * be derived from.
  * <p>
  * <b>Catch Event</b> XML schema:
  * <pre>
@@ -58,33 +59,30 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class CatchEvent extends Event
 {
   /**
-   * Must all of the types of triggers that are listed in the catch event must be triggered before
-   * the process is instantiated.
+   * Must all of the types of triggers that are listed in the Catch Event must be triggered before
+   * the Process is instantiated.
    */
   private boolean isParallelMultiple;
 
   /**
    * Constructs a new <code>CatchEvent</code>.
    *
-   * @param element the XML element containing the catch event information
+   * @param parent  the BPMN element that is the parent of this Catch Event
+   * @param element the XML element containing the Catch Event information
    */
-  protected CatchEvent(Element element)
+  protected CatchEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      if (StringUtil.isNullOrEmpty(element.getAttribute("parallelMultiple")))
-      {
-        this.isParallelMultiple = false;
-      }
-      else
-      {
-        this.isParallelMultiple = Boolean.parseBoolean(element.getAttribute("parallelMultiple"));
-      }
+      this.isParallelMultiple = !StringUtil
+        .isNullOrEmpty(element.getAttribute("parallelMultiple")) && Boolean
+        .parseBoolean(element.getAttribute("parallelMultiple"));
 
       NodeList childElements = element.getChildNodes();
 
@@ -132,29 +130,22 @@ public abstract class CatchEvent extends Event
 
               break;
             }
-
-            default:
-            {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
-            }
           }
         }
       }
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the catch event XML data", e);
+      throw new ParserException("Failed to parse the Catch Event XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN catch event.
+   * Execute the Catch Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) catch event
+   * @return the list of tokens generated as a result of executing the Catch Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -163,11 +154,11 @@ public abstract class CatchEvent extends Event
   }
 
   /**
-   * Returns <code>true</code> if all of the types of triggers that are listed in the catch event
-   * must be triggered before the process is instantiated or <code>false</code> otherwise.
+   * Returns <code>true</code> if all of the types of triggers that are listed in the Catch Event
+   * must be triggered before the Process is instantiated or <code>false</code> otherwise.
    *
-   * @return <code>true</code> if all of the types of triggers that are listed in the catch event
-   *         must be triggered before the process is instantiated or <code>false</code> otherwise
+   * @return <code>true</code> if all of the types of triggers that are listed in the Catch Event
+   *         must be triggered before the Process is instantiated or <code>false</code> otherwise
    */
   public boolean isParallelMultiple()
   {

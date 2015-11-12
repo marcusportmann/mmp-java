@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import org.w3c.dom.Element;
@@ -27,11 +28,12 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>Task</code> class represents a BPMN task.
+ * The <code>Task</code> class provides the base class that all Task subclasses should be
+ * derived from.
  * <p>
- * A task represents a single action.
+ * A Task represents a single action.
  * <p>
- * <b>Activity</b> XML schema:
+ * <b>Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="task" type="tTask" substitutionGroup="flowElement"/&gt;
  * &lt;xsd:complexType name="tTask"&gt;
@@ -48,20 +50,20 @@ public abstract class Task extends Activity
   /**
    * Constructs a new <code>Task</code>.
    *
-   * @param element the XML element containing the task information
+   * @param parent  the BPMN element that is the parent of this Task
+   * @param element the XML element containing the Task information
    */
-  protected Task(Element element)
+  protected Task(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Task
    */
   public abstract List<Token> execute(ProcessExecutionContext context);
 }

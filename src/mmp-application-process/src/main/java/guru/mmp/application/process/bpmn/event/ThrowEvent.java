@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -32,8 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>ThrowEvent</code> class represents a BPMN
- * throw event that forms part of a Process.
+ * The <code>ThrowEvent</code> class provides the base class that all Throw Event subclasses should
+ * be derived from.
  * <p>
  * <b>Throw Event</b> XML schema:
  * <pre>
@@ -61,11 +62,12 @@ public abstract class ThrowEvent extends Event
   /**
    * Constructs a new <code>ThrowEvent</code>.
    *
-   * @param element the XML element containing the throw event information
+   * @param parent  the BPMN element that is the parent of this Throw Event
+   * @param element the XML element containing the Throw Event information
    */
-  protected ThrowEvent(Element element)
+  protected ThrowEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -115,29 +117,22 @@ public abstract class ThrowEvent extends Event
 
               break;
             }
-
-            default:
-            {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
-            }
           }
         }
       }
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the throw event XML data", e);
+      throw new ParserException("Failed to parse the Throw Event XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN throw event.
+   * Execute the Throw Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) throw event
+   * @return the list of tokens generated as a result of executing the Throw Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

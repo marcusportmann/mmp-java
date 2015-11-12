@@ -18,15 +18,20 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.namespace.QName;
 
 /**
- * The <code>ErrorEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) error event that forms part of a Process.
+ * The <code>ErrorEventDefinition</code> class represents an Error Event Definition that forms part
+ * of a Process.
  * <p>
  * <b>Error Event Definition</b> XML schema:
  * <pre>
@@ -43,50 +48,44 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class ErrorEventDefinition extends EventDefinition
 {
   /**
+   * The reference to the error associated with this Error Event Definition.
+   */
+  private QName errorRef;
+
+  /**
    * Constructs a new <code>ErrorEventDefinition</code>.
    *
-   * @param element the XML element containing the error event definition information
+   * @param parent  the BPMN element that is the parent of this Error Event Definition
+   * @param element the XML element containing the Error Event Definition information
    */
-  public ErrorEventDefinition(Element element)
+  public ErrorEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      NodeList childElements = element.getChildNodes();
-
-      for (int i = 0; i < childElements.getLength(); i++)
+      if (!StringUtil.isNullOrEmpty(element.getAttribute("errorRef")))
       {
-        Node node = childElements.item(i);
-
-        if (node instanceof Element)
-        {
-          Element childElement = (Element) node;
-
-          switch (childElement.getNodeName())
-          {
-            case "errorRef":
-            {
-              // TODO: Parse the errorRef child element
-
-              break;
-            }
-
-            default:
-            {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
-            }
-          }
-        }
+        errorRef = XmlUtils.getQName(element, element.getAttribute("errorRef"));
       }
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the error event definition XML data", e);
+      throw new ParserException("Failed to parse the Error Event Definition XML data", e);
     }
+  }
+
+  /**
+   * Returns the reference to the error associated with this Error Event Definition.
+   *
+   * @return reference to the error associated with this Error Event Definition
+   */
+  public QName getErrorRef()
+  {
+    return errorRef;
   }
 }

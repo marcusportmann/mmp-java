@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -29,8 +30,8 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>BusinessRuleTask</code> class represents a BPMN
- * business rule task that forms part of a Process.
+ * The <code>BusinessRuleTask</code> class represents a Business Rule Task that forms part of a
+ * Process.
  * <p>
  * This task represents work executed at run-time in a business rule engine, generally a complex
  * decision.
@@ -53,18 +54,19 @@ import java.util.List;
 public final class BusinessRuleTask extends Task
 {
   /**
-   * The technology that the business rule task will use to send and receive messages.
+   * The technology that the Business Rule Task will use to send and receive messages.
    */
   private Implementation implementation;
 
   /**
    * Constructs a new <code>BusinessRuleTask</code>.
    *
-   * @param element the XML element containing the business rule task information
+   * @param parent  the BPMN element that is the parent of this Business Rule Task
+   * @param element the XML element containing the Business Rule Task information
    */
-  public BusinessRuleTask(Element element)
+  public BusinessRuleTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -72,17 +74,16 @@ public final class BusinessRuleTask extends Task
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the business rule task XML data", e);
+      throw new ParserException("Failed to parse the Business Rule Task XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Business Rule Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Business Rule Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -91,9 +92,9 @@ public final class BusinessRuleTask extends Task
   }
 
   /**
-   * Returns the technology that the business rule task will use to send and receive messages.
+   * Returns the technology that the Business Rule Task will use to send and receive messages.
    *
-   * @return the technology that the business rule task will use to send and receive messages
+   * @return the technology that the Business Rule Task will use to send and receive messages
    */
   public Implementation getImplementation()
   {

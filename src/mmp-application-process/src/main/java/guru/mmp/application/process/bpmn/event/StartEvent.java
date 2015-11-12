@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -30,8 +31,7 @@ import org.w3c.dom.Element;
 import java.util.List;
 
 /**
- * The <code>StartEvent</code> class represents a BPMN
- * start event that forms part of a Process.
+ * The <code>StartEvent</code> class represents a Start Event that forms part of a Process.
  * <p>
  * A start event indicates the start of a process. Start events generate a token when they are
  * triggered. The token then moves down through the event's outgoing sequence flow.
@@ -53,6 +53,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class StartEvent extends CatchEvent
 {
   /**
@@ -65,36 +66,31 @@ public final class StartEvent extends CatchEvent
   /**
    * Constructs a new <code>StartEvent</code>.
    *
-   * @param element the XML element containing the start event information
+   * @param parent  the BPMN element that is the parent of this Start Event
+   * @param element the XML element containing the Start Event information
    */
-  public StartEvent(Element element)
+  public StartEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      if (StringUtil.isNullOrEmpty(element.getAttribute("isInterrupting")))
-      {
-        this.isInterrupting = true;
-      }
-      else
-      {
-        this.isInterrupting = Boolean.parseBoolean(element.getAttribute("isInterrupting"));
-      }
+      this.isInterrupting = StringUtil
+        .isNullOrEmpty(element.getAttribute("isInterrupting")) || Boolean
+        .parseBoolean(element.getAttribute("isInterrupting"));
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the start event XML data", e);
+      throw new ParserException("Failed to parse the Start Event XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN start event.
+   * Execute the Start Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) start event
+   * @return the list of tokens generated as a result of executing the Start Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -103,13 +99,13 @@ public final class StartEvent extends CatchEvent
   }
 
   /**
-   * Is the start event interrupting?
+   * Is the Start Event interrupting?
    * <p>
-   * Does the activity that triggered the start event terminate and the flow of the process continue
+   * Does the activity that triggered the Start Event terminate and the flow of the process continue
    * from the event (interrupting) or does the activity continue and the flow at the event execute
    * in parallel (non-interrupting)?
    *
-   * @return <code>true</code> if the start event is interrupting or <code>false</code> otherwise
+   * @return <code>true</code> if the Start Event is interrupting or <code>false</code> otherwise
    */
   public boolean isInterrupting()
   {

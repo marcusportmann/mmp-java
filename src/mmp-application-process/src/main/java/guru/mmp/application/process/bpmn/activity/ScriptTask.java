@@ -18,21 +18,22 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
- * The <code>ScriptTask</code> class represents a BPMN
- * script task that forms part of a Process.
+ * The <code>ScriptTask</code> class represents a Script Task that forms part of a Process.
  * <p>
  * This task represents work that is performed by the BPM engine as an automated function written
  * in a script language like JavaScript.
@@ -54,6 +55,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class ScriptTask extends Task
 {
   /**
@@ -69,11 +71,12 @@ public final class ScriptTask extends Task
   /**
    * Constructs a new <code>ScriptTask</code>.
    *
-   * @param element the XML element containing the script task information
+   * @param parent  the BPMN element that is the parent of this Script Task
+   * @param element the XML element containing the Script Task information
    */
-  public ScriptTask(Element element)
+  public ScriptTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -84,24 +87,23 @@ public final class ScriptTask extends Task
 
       if (scriptElements.getLength() > 0)
       {
-        this.script = ((Element) scriptElements.item(0)).getTextContent();
+        this.script = scriptElements.item(0).getTextContent();
 
         System.out.println("[DEBUG] script = " + script);
       }
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the script task XML data", e);
+      throw new ParserException("Failed to parse the Script Task XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Script Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Script Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

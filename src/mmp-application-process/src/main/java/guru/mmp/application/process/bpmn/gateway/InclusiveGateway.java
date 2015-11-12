@@ -46,7 +46,7 @@ public final class InclusiveGateway extends Gateway
   }
 
   /**
-   * Execute the BPMN inclusive gateway.
+   * Execute the inclusive gateway.
    *
    * @param context the execution context for the Process
    *

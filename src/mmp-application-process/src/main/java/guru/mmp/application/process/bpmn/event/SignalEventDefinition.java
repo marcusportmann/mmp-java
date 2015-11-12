@@ -16,15 +16,22 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
+
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.namespace.QName;
 
 /**
- * The <code>SignalEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) signal event that forms part of a Process.
+ * The <code>SignalEventDefinition</code> class represents a Signal Event Definition that forms
+ * part of a Process.
  * <p>
  * <b>Signal Event Definition</b> XML schema:
  * <pre>
@@ -41,26 +48,44 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class SignalEventDefinition extends EventDefinition
 {
-  signalRef
+  /**
+   * The reference to the Signal for the Singal Event Definition.
+   */
+  private QName signalRef;
 
   /**
    * Constructs a new <code>SignalEventDefinition</code>.
    *
-   * @param element the XML element containing the signal event definition information
+   * @param parent  the BPMN element that is the parent of this Signal Event Definition
+   * @param element the XML element containing the Signal Event Definition information
    */
-  public SignalEventDefinition(Element element)
+  public SignalEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      this.signalRef = StringUtil.notNull(element.getAttribute("signalRef"));
+      if (!StringUtil.isNullOrEmpty(element.getAttribute("signalRef")))
+      {
+        this.signalRef = XmlUtils.getQName(element, element.getAttribute("signalRef"));
+      }
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the signal event definition XML data", e);
+      throw new ParserException("Failed to parse the Signal Event Definition XML data", e);
     }
+  }
+
+  /**
+   * Returns the reference to the Signal for the Singal Event Definition.
+   *
+   * @return the reference to the Signal for the Singal Event Definition
+   */
+  public QName getSignalRef()
+  {
+    return signalRef;
   }
 }

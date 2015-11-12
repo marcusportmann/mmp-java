@@ -18,22 +18,24 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-import org.w3c.dom.Element;
 
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 /**
- * The <code>CallActivity</code> class represents a BPMN
- * call activity that forms part of a Process.
+ * The <code>CallActivity</code> class represents a Call Activity that forms part of a Process.
  * <p>
  * A call activity is just a reusable activity. If a sub-process is referenced in more than one
  * process (diagram), it can be defined in its own diagram and "called" from each process that
@@ -53,42 +55,43 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class CallActivity extends Activity
 {
   /**
-   * The QName for the element to be called, which will be either a process or a global task.
+   * The reference to the element to be called, which will be either a Process or a Global Task.
    */
-  private QName calledElement;
+  private QName calledElementRef;
 
   /**
    * Constructs a new <code>CallActivity</code>.
    *
-   * @param element the XML element containing the call activity information
+   * @param parent  the BPMN element that is the parent of this Call Activity
+   * @param element the XML element containing the Call Activity information
    */
-  public CallActivity(Element element)
+  public CallActivity(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
       if (!StringUtil.isNullOrEmpty("calledElement"))
       {
-        this.calledElement = XmlUtils.getQName(element, element.getAttribute("calledElement"));
+        this.calledElementRef = XmlUtils.getQName(element, element.getAttribute("calledElement"));
       }
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the call activity XML data", e);
+      throw new ParserException("Failed to parse the Call Activity XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN call activity.
+   * Execute the Call Activity.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) call activity
+   * @return the list of tokens generated as a result of executing the Call Activity
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -97,13 +100,14 @@ public final class CallActivity extends Activity
   }
 
   /**
-   * Returns the QName for the element to be called, which will be either a process or a global
-   * task.
+   * Returns the reference to the element to be called, which will be either a Process or a Global
+   * Task.
    *
-   * @return the QName for the element to be called, which will be either a process or a global task
+   * @return the reference to the element to be called, which will be either a Process or a Global
+   *         Task
    */
-  public QName getCalledElement()
+  public QName getCalledElementRef()
   {
-    return calledElement;
+    return calledElementRef;
   }
 }

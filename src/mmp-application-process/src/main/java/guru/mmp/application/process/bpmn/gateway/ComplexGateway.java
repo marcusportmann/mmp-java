@@ -46,7 +46,7 @@ public final class ComplexGateway extends Gateway
   }
 
   /**
-   * Execute the BPMN complex gateway.
+   * Execute the complex gateway.
    *
    * @param context the execution context for the Process
    *

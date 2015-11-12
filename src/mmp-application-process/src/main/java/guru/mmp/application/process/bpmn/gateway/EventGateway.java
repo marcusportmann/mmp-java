@@ -46,7 +46,7 @@ public final class EventGateway extends Gateway
   }
 
   /**
-   * Execute the BPMN event gateway.
+   * Execute the event gateway.
    *
    * @param context the execution context for the Process
    *

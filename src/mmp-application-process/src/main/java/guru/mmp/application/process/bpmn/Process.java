@@ -19,7 +19,6 @@ package guru.mmp.application.process.bpmn;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.process.bpmn.activity.*;
-import guru.mmp.common.util.StringUtil;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,9 +26,8 @@ import org.w3c.dom.NodeList;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
+import javax.xml.namespace.QName;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -65,12 +63,13 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class Process extends CallableElement
 {
   /**
    * The FlowElements for the process.
    */
-  private Map<String, FlowElement> flowElements = new ConcurrentHashMap<>();
+  private Map<QName, FlowElement> flowElements = new ConcurrentHashMap<>();
 
   /**
    * Can interactions, such as sending and receiving messages and events, not modeled in the
@@ -166,63 +165,63 @@ public final class Process extends CallableElement
             // Flow elements
             case "businessRuleTask":
             {
-              addFlowElement(new BusinessRuleTask(childElement));
+              addFlowElement(new BusinessRuleTask(this, childElement));
 
               break;
             }
 
             case "manualTask":
             {
-              addFlowElement(new ManualTask(childElement));
+              addFlowElement(new ManualTask(this, childElement));
 
               break;
             }
 
             case "receiveTask":
             {
-              addFlowElement(new ReceiveTask(childElement));
+              addFlowElement(new ReceiveTask(this, childElement));
 
               break;
             }
 
             case "scriptTask":
             {
-              addFlowElement(new ScriptTask(childElement));
+              addFlowElement(new ScriptTask(this, childElement));
 
               break;
             }
 
             case "sendTask":
             {
-              addFlowElement(new SendTask(childElement));
+              addFlowElement(new SendTask(this, childElement));
 
               break;
             }
 
             case "serviceTask":
             {
-              addFlowElement(new ServiceTask(childElement));
+              addFlowElement(new ServiceTask(this, childElement));
 
               break;
             }
 
             case "task":
             {
-              addFlowElement(new DefaultTask(childElement));
+              addFlowElement(new DefaultTask(this, childElement));
 
               break;
             }
 
             case "userTask":
             {
-              addFlowElement(new UserTask(childElement));
+              addFlowElement(new UserTask(this, childElement));
 
               break;
             }
 
             case "sequenceFlow":
             {
-              addFlowElement(new SequenceFlow(childElement));
+              addFlowElement(new SequenceFlow(this, childElement));
 
               break;
             }
@@ -260,7 +259,7 @@ public final class Process extends CallableElement
    * @return the FlowElement with the specified ID or <code>null</code> if the FlowElement could
    *         not be found
    */
-  public FlowElement getFlowElement(String id)
+  public FlowElement getFlowElement(QName id)
   {
     return flowElements.get(id);
   }

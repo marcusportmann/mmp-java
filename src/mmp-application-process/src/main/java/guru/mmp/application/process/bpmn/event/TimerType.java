@@ -17,8 +17,7 @@
 package guru.mmp.application.process.bpmn.event;
 
 /**
- * The <code>TimerType</code> enumeration defines the possible types for a Business
- * Process Model and Notation (BPMN) timer.
+ * The <code>TimerType</code> enumeration defines the possible types for a Timer.
  *
  * @author Marcus Portmann
  */
@@ -36,11 +35,11 @@ public enum TimerType
   }
 
   /**
-   * Returns the timer type given by the specified numeric code value.
+   * Returns the Timer type given by the specified numeric code value.
    *
-   * @param code the numeric code value identifying the timer type
+   * @param code the numeric code value identifying the Timer type
    *
-   * @return the timer type given by the specified numeric code value
+   * @return the Timer type given by the specified numeric code value
    */
   public static TimerType fromCode(int code)
   {
@@ -56,14 +55,14 @@ public enum TimerType
         return TimerType.DURATION;
 
       default:
-        throw new RuntimeException("Unknown timer type (" + code + ")");
+        throw new RuntimeException("Unknown Timer type (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying the timer type.
+   * Returns the numeric code value identifying the Timer type.
    *
-   * @return the numeric code value identifying the timer type
+   * @return the numeric code value identifying the Timer type
    */
   public int getCode()
   {
@@ -71,9 +70,9 @@ public enum TimerType
   }
 
   /**
-   * Returns the <code>String</code> code value identifying the timer type.
+   * Returns the <code>String</code> code value identifying the Timer type.
    *
-   * @return the <code>String</code> code value identifying the timer type
+   * @return the <code>String</code> code value identifying the Timer type
    */
   public String getCodeAsString()
   {
@@ -81,9 +80,9 @@ public enum TimerType
   }
 
   /**
-   * Returns the name of the timer type.
+   * Returns the name of the Timer type.
    *
-   * @return the name of the timer type
+   * @return the name of the Timer type
    */
   public String getName()
   {

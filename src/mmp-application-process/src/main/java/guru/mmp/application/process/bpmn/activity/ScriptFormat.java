@@ -17,7 +17,7 @@
 package guru.mmp.application.process.bpmn.activity;
 
 /**
- * The <code>ScriptFormat</code> enumeration defines the possible script formats for a script task.
+ * The <code>ScriptFormat</code> enumeration defines the possible Script Formats for a script task.
  *
  * @author Marcus Portmann
  */
@@ -36,17 +36,17 @@ public enum ScriptFormat
   }
 
   /**
-   * Returns the script format given by the specified mime type.
+   * Returns the Script Format given by the specified mime type.
    *
-   * @param mimeType the mime type identifying the script format
+   * @param mimeType the mime type identifying the Script Format
    *
-   * @return the script format given by the specified mime type
+   * @return the Script Format given by the specified mime type
    */
   public static ScriptFormat fromMimeType(String mimeType)
   {
     if (mimeType == null)
     {
-      throw new RuntimeException("Invalid mime type for script format (" + mimeType + ")");
+      throw new RuntimeException("Invalid mime type for Script Format (" + mimeType + ")");
     }
 
     mimeType = mimeType.toLowerCase().trim();
@@ -70,14 +70,14 @@ public enum ScriptFormat
 
       default:
 
-        throw new RuntimeException("Invalid mime type for script format (" + mimeType + ")");
+        throw new RuntimeException("Invalid mime type for Script Format (" + mimeType + ")");
     }
   }
 
   /**
-   * Returns the mime type identifying the script format.
+   * Returns the mime type identifying the Script Format.
    *
-   * @return the mime type identifying the script format
+   * @return the mime type identifying the Script Format
    */
   public String getMimeType()
   {
@@ -85,9 +85,9 @@ public enum ScriptFormat
   }
 
   /**
-   * Returns the name of the script format.
+   * Returns the name of the Script Format.
    *
-   * @return the name of the script format
+   * @return the name of the Script Format
    */
   public String getName()
   {
@@ -95,9 +95,9 @@ public enum ScriptFormat
   }
 
   /**
-   * Return the string representation of the script format enumeration value.
+   * Return the string representation of the Script Format enumeration value.
    *
-   * @return the string representation of the script format enumeration value
+   * @return the string representation of the Script Format enumeration value
    */
   public String toString()
   {

@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -32,8 +33,7 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>SendTask</code> class represents a BPMN
- * send task that forms part of a Process.
+ * The <code>SendTask</code> class represents a Send Task that forms part of a Process.
  * <p>
  * This task represents sending a message to an external participant. Once sent, the task is
  * completed. A message can only be sent between different roles.
@@ -54,31 +54,33 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class SendTask extends Task
 {
   /**
-   * The technology that the send task will use to send and receive messages.
+   * The technology that the Send Task will use to send and receive messages.
    */
   private Implementation implementation;
 
   /**
-   * The QName for the optional message associated with the send task.
+   * The reference to the optional message associated with the Send Task.
    */
   private QName messageRef;
 
   /**
-   * The QName for the optional operation associated with the send task.
+   * The reference to the optional operation associated with the Send Task.
    */
   private QName operationRef;
 
   /**
    * Constructs a new <code>SendTask</code>.
    *
-   * @param element the XML element containing the send task information
+   * @param parent  the BPMN element that is the parent of this Send Task
+   * @param element the XML element containing the Send Task information
    */
-  public SendTask(Element element)
+  public SendTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -96,17 +98,16 @@ public final class SendTask extends Task
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the send task XML data", e);
+      throw new ParserException("Failed to parse the SendTask XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Send Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Send Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -115,9 +116,9 @@ public final class SendTask extends Task
   }
 
   /**
-   * Returns the technology that the send task will use to send and receive messages.
+   * Returns the technology that the Send Task will use to send and receive messages.
    *
-   * @return the technology that the send task will use to send and receive messages
+   * @return the technology that the Send Task will use to send and receive messages
    */
   public Implementation getImplementation()
   {
@@ -125,9 +126,9 @@ public final class SendTask extends Task
   }
 
   /**
-   * Returns the QName for the optional message associated with the send task.
+   * Returns the reference to the optional message associated with the Send Task.
    *
-   * @return the QName for the optional message associated with the send task
+   * @return the reference to the optional message associated with the Send Task
    */
   public QName getMessageRef()
   {
@@ -135,9 +136,9 @@ public final class SendTask extends Task
   }
 
   /**
-   * Returns the QName for the optional operation associated with the send task.
+   * Returns the reference to the optional operation associated with the Send Task.
    *
-   * @return the QName for the optional operation associated with the send task
+   * @return the reference to the optional operation associated with the Send Task
    */
   public QName getOperationRef()
   {

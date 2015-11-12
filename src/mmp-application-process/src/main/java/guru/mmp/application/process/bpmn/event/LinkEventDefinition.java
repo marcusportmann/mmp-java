@@ -18,16 +18,25 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 /**
- * The <code>LinkEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) link event that forms part of a Process.
+ * The <code>LinkEventDefinition</code> class represents a Link Event Definition that forms part
+ * of a Process.
  * <p>
  * <b>Link Event Definition</b> XML schema:
  * <pre>
@@ -48,6 +57,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class LinkEventDefinition extends EventDefinition
 {
   /**
@@ -56,13 +66,26 @@ public final class LinkEventDefinition extends EventDefinition
   private String name;
 
   /**
+   * The references to the corresponding 'catch' or 'target' Link Event Definition(s), when this
+   * Link Event Definition represents a 'throw' or 'source' Link Event Definition.
+   */
+  private List<QName> sourceRefs = new ArrayList<>();
+
+  /**
+   * The reference to the corresponding 'throw' or 'source' Link Event Definition, when this Link
+   * Event Definition represents a 'catch' or 'target' Link Event Definition.
+   */
+  private QName targetRef;
+
+  /**
    * Constructs a new <code>LinkEventDefinition</code>.
    *
-   * @param element the XML element containing the link event definition information
+   * @param parent  the BPMN element that is the parent of this Link Event Definition
+   * @param element the XML element containing the Link Event Definition information
    */
-  public LinkEventDefinition(Element element)
+  public LinkEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -82,14 +105,14 @@ public final class LinkEventDefinition extends EventDefinition
           {
             case "source":
             {
-              // TODO: Parse the source child element
+              sourceRefs.add(XmlUtils.getQName(childElement, childElement.getTextContent()));
 
               break;
             }
 
             case "target":
             {
-              // TODO: Parse the target child element
+              targetRef = XmlUtils.getQName(childElement, childElement.getTextContent());
 
               break;
             }
@@ -105,7 +128,7 @@ public final class LinkEventDefinition extends EventDefinition
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the link event definition XML data", e);
+      throw new ParserException("Failed to parse the Link Event Definition XML data", e);
     }
   }
 
@@ -117,5 +140,29 @@ public final class LinkEventDefinition extends EventDefinition
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Returns the references to the corresponding 'catch' or 'target' Link Event Definition(s), when
+   * this Link Event Definition represents a 'throw' or 'source' Link Event Definition.
+   *
+   * @return the references to the corresponding 'catch' or 'target' Link Event Definition(s), when
+   *         this Link Event Definition represents a 'throw' or 'source' Link Event Definition
+   */
+  public List<QName> getSourceRefs()
+  {
+    return sourceRefs;
+  }
+
+  /**
+   * Returns the reference to the corresponding 'throw' or 'source' Link Event Definition, when
+   * this Link Event Definition represents a 'catch' or 'target' Link Event Definition.
+   *
+   * @return the reference to the corresponding 'throw' or 'source' Link Event Definition, when
+   *         this Link Event Definition represents a 'catch' or 'target' Link Event Definition
+   */
+  public QName getTargetRef()
+  {
+    return targetRef;
   }
 }

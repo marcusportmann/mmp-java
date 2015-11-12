@@ -20,10 +20,11 @@ import org.w3c.dom.Element;
 
 /**
  * The <code>LoopCharacteristics</code> class stores the information for the Loop Characteristics
- * for a BPMN activity.
+ * for an Activity.
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class LoopCharacteristics
 {
   /**

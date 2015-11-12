@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -33,16 +34,15 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 /**
- * The <code>BoundaryEvent</code> class represents a BPMN
- * boundary event that forms part of a Process.
+ * The <code>BoundaryEvent</code> class represents a Boundary Event that forms part of a Process.
  * <p>
- * Boundary events are placed on the boundary of an activity.
+ * Boundary Events are placed on the boundary of an Activity.
  * <p>
- * Boundary events are catching only intermediate events that may or may not be interrupting to the
- * activity. Events thrown inside an activity are passed up the process hierarchy until some
- * activity catches them.
+ * Boundary Events are catching only Intermediate Events that may or may not be interrupting to the
+ * Activity. Events thrown inside an Activity are passed up the Process hierarchy until some
+ * Activity catches them.
  * <p>
- * Common uses of boundary events include deadlines and timeouts.
+ * Common uses of Boundary Events include deadlines and timeouts.
  * <p>
  * <b>Boundary Event</b> XML schema:
  * <pre>
@@ -59,16 +59,17 @@ import javax.xml.namespace.QName;
  *
  * @author Marcus Portmann
  */
-public abstract class BoundaryEvent extends CatchEvent
+@SuppressWarnings("unused")
+public final class BoundaryEvent extends CatchEvent
 {
   /**
-   * The QName for the element the boundary event is attached to.
+   * The reference to the element the Boundary Event is attached to.
    */
   private QName attachedToRef;
 
   /**
-   * Should the activity be cancelled or not, i.e., does the boundary catch event act as an error
-   * or an escalation. If the activity is not cancelled, multiple instances of that handler can run
+   * Should the Activity be cancelled or not, i.e., does the Boundary Event act as an error or an
+   * escalation. If the Activity is not cancelled, multiple instances of that handler can run
    * concurrently.
    */
   private boolean cancelActivity;
@@ -76,22 +77,18 @@ public abstract class BoundaryEvent extends CatchEvent
   /**
    * Constructs a new <code>BoundaryEvent</code>.
    *
-   * @param element the XML element containing the boundary event information
+   * @param parent  the BPMN element that is the parent of this Boundary Event
+   * @param element the XML element containing the Boundary Event information
    */
-  protected BoundaryEvent(Element element)
+  protected BoundaryEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      if (StringUtil.isNullOrEmpty(element.getAttribute("cancelActivity")))
-      {
-        this.cancelActivity = true;
-      }
-      else
-      {
-        this.cancelActivity = Boolean.parseBoolean(element.getAttribute("cancelActivity"));
-      }
+      this.cancelActivity = StringUtil
+        .isNullOrEmpty(element.getAttribute("cancelActivity")) || Boolean
+        .parseBoolean(element.getAttribute("cancelActivity"));
 
       if (!StringUtil.isNullOrEmpty("attachedToRef"))
       {
@@ -100,17 +97,16 @@ public abstract class BoundaryEvent extends CatchEvent
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the boundary event XML data", e);
+      throw new ParserException("Failed to parse the Boundary Event XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN boundary event.
+   * Execute the Boundary Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) boundary event
+   * @return the list of tokens generated as a result of executing the Boundary Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -119,9 +115,9 @@ public abstract class BoundaryEvent extends CatchEvent
   }
 
   /**
-   * Returns the QName for the element the boundary event is attached to.
+   * Returns the reference to the element the Boundary Event is attached to.
    *
-   * @return the QName for the element the boundary event is attached to
+   * @return the reference to the element the Boundary Event is attached to
    */
   public QName getAttachedToRef()
   {
@@ -129,11 +125,11 @@ public abstract class BoundaryEvent extends CatchEvent
   }
 
   /**
-   * Returns <code>true</code> if the activity should be cancelled or <code>false</code> otherwise.
+   * Returns <code>true</code> if the Activity should be cancelled or <code>false</code> otherwise.
    * <p>
-   * If the activity is cancelled the boundary catch event acts as an error or an escalation.
+   * If the Activity is cancelled the Boundary Event acts as an error or an escalation.
    *
-   * @return <code>true</code> if the activity should be cancelled or <code>false</code> otherwise
+   * @return <code>true</code> if the Activity should be cancelled or <code>false</code> otherwise
    */
   public boolean getCancelActivity()
   {

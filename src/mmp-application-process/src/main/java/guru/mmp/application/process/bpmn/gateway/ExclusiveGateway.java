@@ -46,7 +46,7 @@ public class ExclusiveGateway extends Gateway
   }
 
   /**
-   * Execute the BPMN exclusive gateway.
+   * Execute the exclusive gateway.
    *
    * @param context the execution context for the Process
    *

@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -32,13 +33,12 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ServiceTask</code> class represents a BPMN
- * service task that forms part of a Process.
+ * The <code>ServiceTask</code> class represents a Service Task that forms part of a Process.
  * <p>
  * This task represents work that is performed by an external system where there is no human
  * intervention, like a web service.
  * <p>
- * <b>Script Task</b> XML schema:
+ * <b>Service Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="serviceTask" type="tServiceTask" substitutionGroup="flowElement"/&gt;
  * &lt;xsd:complexType name="tServiceTask"&gt;
@@ -53,26 +53,28 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class ServiceTask extends Task
 {
   /**
-   * The technology that the service task will use to send and receive messages.
+   * The technology that the Service Task will use to send and receive messages.
    */
   private Implementation implementation;
 
   /**
-   * The QName for the optional operation associated with the service task.
+   * The reference to the optional operation associated with the Service Task.
    */
   private QName operationRef;
 
   /**
    * Constructs a new <code>ServiceTask</code>.
    *
-   * @param element the XML element containing the service task information
+   * @param parent  the BPMN element that is the parent of this Service Task
+   * @param element the XML element containing the Service Task information
    */
-  public ServiceTask(Element element)
+  public ServiceTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -85,17 +87,16 @@ public final class ServiceTask extends Task
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the service task XML data", e);
+      throw new ParserException("Failed to parse the Service Task XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Service Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Service Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -104,9 +105,9 @@ public final class ServiceTask extends Task
   }
 
   /**
-   * Returns technology that the service task will use to send and receive messages.
+   * Returns technology that the Service Task will use to send and receive messages.
    *
-   * @return the technology that the service task will use to send and receive messages
+   * @return the technology that the Service Task will use to send and receive messages
    */
   public Implementation getImplementation()
   {
@@ -114,9 +115,9 @@ public final class ServiceTask extends Task
   }
 
   /**
-   * Returns the QName for the optional operation associated with the service task.
+   * Returns the reference to the optional operation associated with the Service Task.
    *
-   * @return the QName for the optional operation associated with the service task
+   * @return the reference to the optional operation associated with the Service Task
    */
   public QName getOperationRef()
   {

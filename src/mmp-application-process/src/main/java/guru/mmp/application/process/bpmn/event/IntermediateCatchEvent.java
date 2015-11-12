@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import org.w3c.dom.Element;
@@ -27,8 +28,8 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>IntermediateCatchEvent</code> class represents a Business Process Model and Notation
- * (BPMN) intermediate catch event that forms part of a Process.
+ * The <code>IntermediateCatchEvent</code> class represents an Intermediate Catch Event that forms
+ * part of a Process.
  * <p>
  * <b>Intermediate Catch Event</b> XML schema:
  * <pre>
@@ -43,26 +44,27 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class IntermediateCatchEvent
   extends CatchEvent
 {
   /**
    * Constructs a new <code>IntermediateCatchEvent</code>.
    *
-   * @param element the XML element containing the intermediate catch event information
+   * @param parent  the BPMN element that is the parent of this Intermediate Catch Event
+   * @param element the XML element containing the Intermediate Catch Event information
    */
-  public IntermediateCatchEvent(Element element)
+  public IntermediateCatchEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 
   /**
-   * Execute the BPMN intermediate catch event.
+   * Execute the Intermediate Catch Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) intermediate catch event
+   * @return the list of tokens generated as a result of executing the Intermediate Catch Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

@@ -18,6 +18,8 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.sun.xml.internal.rngom.parse.host.Base;
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 
 import org.w3c.dom.Element;
@@ -25,8 +27,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * The <code>TimerEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) timer event that forms part of a Process.
+ * The <code>TimerEventDefinition</code> class represents a Timer Event Definition that
+ * forms part of a Process.
  * <p>
  * <b>Timer Event Definition</b> XML schema:
  * <pre>
@@ -52,11 +54,12 @@ public final class TimerEventDefinition extends EventDefinition
   /**
    * Constructs a new <code>TimerEventDefinition</code>.
    *
+   * @param parent  the BPMN element that is the parent of this Timer Event Definition
    * @param element the XML element containing the timer event definition information
    */
-  public TimerEventDefinition(Element element)
+  public TimerEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -104,7 +107,7 @@ public final class TimerEventDefinition extends EventDefinition
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the timer event definition XML data", e);
+      throw new ParserException("Failed to parse the Timer Event Definition XML data", e);
     }
   }
 }

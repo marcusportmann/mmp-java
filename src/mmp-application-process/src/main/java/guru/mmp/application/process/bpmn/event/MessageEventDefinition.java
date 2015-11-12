@@ -18,16 +18,22 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.namespace.QName;
+
 /**
- * The <code>MessageEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) message event that forms part of a Process.
+ * The <code>MessageEventDefinition</code> class represents a Message Event Definition that forms
+ * part of a Process.
  * <p>
  * <b>Message Event Definition</b> XML schema:
  * <pre>
@@ -47,40 +53,37 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class MessageEventDefinition extends EventDefinition
 {
   /**
-   * The ID of the message.
+   * The reference to the message for the Message Event.
    */
-  private String messageRef;
+  private QName messageRef;
 
   /**
-   * The optional ID of the operation;
+   * The reference to the Operation that is used by the Message Event.
+   * <p>
+   * It MUST be specified for executable Processes.
    */
-  private String operationRef;
-
-  /**
-   * Returns the optional ID of the operation.
-   *
-   * @return the optional ID of the operation
-   */
-  public String getOperationRef()
-  {
-    return operationRef;
-  }
+  private QName operationRef;
 
   /**
    * Constructs a new <code>MessageEventDefinition</code>.
    *
+   * @param parent  the BPMN element that is the parent of this Message Event Definition
    * @param element the XML element containing the message event definition information
    */
-  public MessageEventDefinition(Element element)
+  public MessageEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      this.messageRef = StringUtil.notNull(element.getAttribute("messageRef"));
+      if (!StringUtil.isNullOrEmpty(element.getAttribute("messageRef")))
+      {
+        this.messageRef = XmlUtils.getQName(element, element.getAttribute("messageRef"));
+      }
 
       NodeList childElements = element.getChildNodes();
 
@@ -96,16 +99,12 @@ public final class MessageEventDefinition extends EventDefinition
           {
             case "operationRef":
             {
-
-              // TODO: Parse the operationRef child element
+              if (!StringUtil.isNullOrEmpty(childElement.getTextContent()))
+              {
+                this.operationRef = XmlUtils.getQName(element, childElement.getTextContent());
+              }
 
               break;
-            }
-
-            default:
-            {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
             }
           }
         }
@@ -118,12 +117,24 @@ public final class MessageEventDefinition extends EventDefinition
   }
 
   /**
-   * Returns the ID of the message.
+   * Returns the reference to the message for the Message Event.
    *
-   * @return the ID of the message
+   * @return the reference to the message for the Message Event
    */
-  public String getMessageRef()
+  public QName getMessageRef()
   {
     return messageRef;
+  }
+
+  /**
+   * Returns the reference to the Operation that is used by the Message Event.
+   * <p>
+   * It MUST be specified for executable Processes.
+   *
+   * @return the reference to the Operation that is used by the Message Event
+   */
+  public QName getOperationRef()
+  {
+    return operationRef;
   }
 }

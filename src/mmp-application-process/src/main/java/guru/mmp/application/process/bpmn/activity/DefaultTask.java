@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import org.w3c.dom.Element;
@@ -28,8 +29,7 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>DefaultTask</code> class represents a BPMN
- * default task that forms part of a Process.
+ * The <code>DefaultTask</code> class represents a Default Task that forms part of a Process.
  *
  * @author Marcus Portmann
  */
@@ -38,20 +38,20 @@ public final class DefaultTask extends Task
   /**
    * Constructs a new <code>DefaultTask</code>.
    *
-   * @param element the XML element containing the default task information
+   * @param parent  the BPMN element that is the parent of this Default Task
+   * @param element the XML element containing the Default Task information
    */
-  public DefaultTask(Element element)
+  public DefaultTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Default Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Default Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

@@ -18,21 +18,19 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.process.bpmn.CallableElement;
-import guru.mmp.application.process.bpmn.ParserException;
-import guru.mmp.application.process.bpmn.ProcessExecutionContext;
-import guru.mmp.application.process.bpmn.Token;
+import guru.mmp.application.process.bpmn.*;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * The <code>GlobalTask</code> class represents a BPMN global
- * task.
+ * The <code>GlobalTask</code> class represents a Global Task that forms part of a Process.
  * <p>
  * <b>Global Task</b> XML schema:
  * <pre>
@@ -50,16 +48,26 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class GlobalTask extends CallableElement
 {
   /**
+   * The resources that will perform or will be responsible for the Global Task.
+   * <p>
+   * In the case where the Call Activity that references this Global Task defines its own resources,
+   * they will override the ones defined here.
+   */
+  private List<String> resources = new ArrayList<>();
+
+  /**
    * Constructs a new <code>GlobalTask</code>.
    *
-   * @param element the XML element containing the global task information
+   * @param parent  the BPMN element that is the parent of this Global Task
+   * @param element the XML element containing the Global Task information
    */
-  protected GlobalTask(Element element)
+  protected GlobalTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -77,15 +85,9 @@ public abstract class GlobalTask extends CallableElement
           {
             case "resourceRole":
             {
-              // TODO: Parse the resourceRole child element
+              resources.add(childElement.getTextContent());
 
               break;
-            }
-
-            default:
-            {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
             }
           }
         }
@@ -93,17 +95,26 @@ public abstract class GlobalTask extends CallableElement
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the global task XML data", e);
+      throw new ParserException("Failed to parse the Global Task XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN global task.
+   * Execute the Global Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) global task
+   * @return the list of tokens generated as a result of executing the Global Task
    */
   public abstract List<Token> execute(ProcessExecutionContext context);
+
+  /**
+   * Returns the resources that will perform or will be responsible for the Global Task.
+   *
+   * @return the resources that will perform or will be responsible for the Global Task
+   */
+  public List<String> getResources()
+  {
+    return resources;
+  }
 }

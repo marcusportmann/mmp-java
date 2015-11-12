@@ -16,11 +16,15 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.process.bpmn.BaseElement;
+
 import org.w3c.dom.Element;
 
 /**
- * The <code>CancelEventDefinition</code> class stores the details for a Business Process Model
- * and Notation (BPMN) cancel event that forms part of a Process.
+ * The <code>CancelEventDefinition</code> class represents a Cancel Event Definition that forms part
+ * of a Process.
  * <p>
  * <b>Cancel Event Definition</b> XML schema:
  * <pre>
@@ -35,15 +39,17 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class CancelEventDefinition extends EventDefinition
 {
   /**
    * Constructs a new <code>CancelEventDefinition</code>.
    *
-   * @param element the XML element containing the cancel event definition information
+   * @param parent  the BPMN element that is the parent of this Cancel Event Definition
+   * @param element the XML element containing the Cancel Event Definition information
    */
-  public CancelEventDefinition(Element element)
+  public CancelEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 }

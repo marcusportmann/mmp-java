@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -32,8 +33,7 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ReceiveTask</code> class represents a BPMN
- * receive task that forms part of a Process.
+ * The <code>ReceiveTask</code> class represents a Receive Task that forms part of a Process.
  * <p>
  * This task waits for the arrival of a message from an external participant. Once received, the
  * task is completed.
@@ -55,36 +55,38 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class ReceiveTask extends Task
 {
   /**
-   * The technology that the receive task will use to send and receive messages.
+   * The technology that the Receive Task will use to send and receive messages.
    */
   private Implementation implementation;
 
   /**
-   * Can the receive task be used as the instantiation mechanism for the process?
+   * Can the Receive Task be used as the instantiation mechanism for the process?
    */
   private boolean instantiate;
 
   /**
-   * The QName for the optional message associated with the receive task.
+   * The reference to the optional message associated with the Receive Task.
    */
   private QName messageRef;
 
   /**
-   * The QName for the optional operation associated with the receive task.
+   * The reference to the optional operation associated with the Receive Task.
    */
   private QName operationRef;
 
   /**
    * Constructs a new <code>ReceiveTask</code>.
    *
-   * @param element the XML element containing the receive task information
+   * @param parent  the BPMN element that is the parent of this Receive Task
+   * @param element the XML element containing the Receive Task information
    */
-  public ReceiveTask(Element element)
+  public ReceiveTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -104,17 +106,16 @@ public final class ReceiveTask extends Task
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the receive task XML data", e);
+      throw new ParserException("Failed to parse the Receive Task XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Receive Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Receive Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -123,9 +124,9 @@ public final class ReceiveTask extends Task
   }
 
   /**
-   * Returns the technology that the receive task will use to send and receive messages.
+   * Returns the technology that the Receive Task will use to send and receive messages.
    *
-   * @return the technology that the receive task will use to send and receive messages
+   * @return the technology that the Receive Task will use to send and receive messages
    */
   public Implementation getImplementation()
   {
@@ -133,9 +134,9 @@ public final class ReceiveTask extends Task
   }
 
   /**
-   * Returns whether the receive task be used as the instantiation mechanism for the process.
+   * Returns whether the Receive Task be used as the instantiation mechanism for the process.
    *
-   * @return <code>true</code> if the receive task be used as the instantiation mechanism for the
+   * @return <code>true</code> if the Receive Task be used as the instantiation mechanism for the
    *         process or <code>false</code> otherwise
    */
   public boolean getInstantiate()
@@ -144,9 +145,9 @@ public final class ReceiveTask extends Task
   }
 
   /**
-   * Returns the QName for the optional message associated with the receive task.
+   * Returns the reference to the optional message associated with the Receive Task.
    *
-   * @return the QName for the optional message associated with the receive task
+   * @return the reference to the optional message associated with the Receive Task
    */
   public QName getMessageRef()
   {
@@ -154,9 +155,9 @@ public final class ReceiveTask extends Task
   }
 
   /**
-   * Returns the QName for the optional operation associated with the receive task.
+   * Returns the reference to the optional operation associated with the Receive Task.
    *
-   * @return the QName for the optional operation associated with the receive task
+   * @return the reference to the optional operation associated with the Receive Task
    */
   public QName getOperationRef()
   {

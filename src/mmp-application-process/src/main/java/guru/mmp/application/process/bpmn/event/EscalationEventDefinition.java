@@ -18,15 +18,20 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.XmlUtils;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.namespace.QName;
 
 /**
- * The <code>EscalationEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) escalation event that forms part of a Process.
+ * The <code>EscalationEventDefinition</code> class represents an Escalation Event Definition that
+ * forms part of a Process.
  * <p>
  * <b>Escalation Event Definition</b> XML schema:
  * <pre>
@@ -43,50 +48,44 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class EscalationEventDefinition extends EventDefinition
 {
   /**
+   * The reference to the escalation associated with this Escalation Event Definition.
+   */
+  private QName escalationRef;
+
+  /**
    * Constructs a new <code>EscalationEventDefinition</code>.
    *
-   * @param element the XML element containing the escalation event definition information
+   * @param parent  the BPMN element that is the parent of this Escalation Event Definition
+   * @param element the XML element containing the Escalation Event Definition information
    */
-  public EscalationEventDefinition(Element element)
+  public EscalationEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      NodeList childElements = element.getChildNodes();
-
-      for (int i = 0; i < childElements.getLength(); i++)
+      if (!StringUtil.isNullOrEmpty(element.getAttribute("escalationRef")))
       {
-        Node node = childElements.item(i);
-
-        if (node instanceof Element)
-        {
-          Element childElement = (Element) node;
-
-          switch (childElement.getNodeName())
-          {
-            case "escalationRef":
-            {
-              // TODO: Parse the escalationRef child element
-
-              break;
-            }
-
-            default:
-            {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
-            }
-          }
-        }
+        escalationRef = XmlUtils.getQName(element, element.getAttribute("escalationRef"));
       }
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the escalation event definition XML data", e);
+      throw new ParserException("Failed to parse the Escalation Event Definition XML data", e);
     }
+  }
+
+  /**
+   * Returns the reference to the escalation associated with this Escalation Event Definition.
+   *
+   * @return the reference to the escalation associated with this Escalation Event Definition
+   */
+  public QName getEscalationRef()
+  {
+    return escalationRef;
   }
 }

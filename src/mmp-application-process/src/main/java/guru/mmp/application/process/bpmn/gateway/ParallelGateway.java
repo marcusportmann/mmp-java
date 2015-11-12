@@ -54,7 +54,7 @@ public final class ParallelGateway extends Gateway
   }
 
   /**
-   * Execute the BPMN parallel gateway.
+   * Execute the parallel gateway.
    *
    * @param context the execution context for the Process
    *

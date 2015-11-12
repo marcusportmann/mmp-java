@@ -18,14 +18,12 @@ package guru.mmp.application.process.bpmn;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * The <code>Assignment</code> class represents a Assignment that forms part of a Process.
+ * The <code>Assignment</code> class represents an Assignment that forms part of a Process.
  * <p>
  * The Assignment class is used to specify a simple mapping of data elements using a specified
  * Expression language.
@@ -54,6 +52,16 @@ import org.w3c.dom.NodeList;
 public final class Assignment extends BaseElement
 {
   /**
+   * The Expression that evaluates the source of the Assignment.
+   */
+  private Expression from;
+
+  /**
+   * The Expression that defines the actual Assignment operation and the target data element.
+   */
+  private Expression to;
+
+  /**
    * Constructs a new <code>Assignment</code>.
    *
    * @param parent  the BPMN element that is the parent of this BPMN element
@@ -79,11 +87,15 @@ public final class Assignment extends BaseElement
           {
             case "from":
             {
+              from = new Expression(childElement);
+
               break;
             }
 
             case "to":
             {
+              to = new Expression(childElement);
+
               break;
             }
           }
@@ -94,5 +106,27 @@ public final class Assignment extends BaseElement
     {
       throw new ParserException("Failed to parse the Assignment XML data", e);
     }
+  }
+
+  /**
+   * Returns the Expression that evaluates the source of the Assignment.
+   *
+   * @return the Expression that evaluates the source of the Assignment
+   */
+  public Expression getFrom()
+  {
+    return from;
+  }
+
+  /**
+   * Returns the Expression that defines the actual Assignment operation and the target data
+   * element.
+   *
+   * @return the Expression that defines the actual Assignment operation and the target data
+   *         element
+   */
+  public Expression getTo()
+  {
+    return to;
   }
 }

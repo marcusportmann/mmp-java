@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -31,8 +32,7 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>UserTask</code> class represents a BPMN
- * user task that forms part of a Process.
+ * The <code>UserTask</code> class represents a User Task that forms part of a Process.
  * <p>
  * This task represents work that is performed by a human user with the help of the BPM engine or
  * another software application.
@@ -57,18 +57,19 @@ import java.util.List;
 public final class UserTask extends Task
 {
   /**
-   * The technology that the user task will use to send and receive messages.
+   * The technology that the User Task will use to send and receive messages.
    */
   private Implementation implementation;
 
   /**
    * Constructs a new <code>UserTask</code>.
    *
-   * @param element the XML element containing the user task information
+   * @param parent  the BPMN element that is the parent of this User Task
+   * @param element the XML element containing the User Task information
    */
-  public UserTask(Element element)
+  public UserTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -104,17 +105,16 @@ public final class UserTask extends Task
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the user task XML data", e);
+      throw new ParserException("Failed to parse the User Task XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the User Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the User Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -123,9 +123,9 @@ public final class UserTask extends Task
   }
 
   /**
-   * Returns the technology that the user task will use to send and receive messages.
+   * Returns the technology that the User Task will use to send and receive messages.
    *
-   * @return the technology that the user task will use to send and receive messages
+   * @return the technology that the User Task will use to send and receive messages
    */
   public Implementation getImplementation()
   {

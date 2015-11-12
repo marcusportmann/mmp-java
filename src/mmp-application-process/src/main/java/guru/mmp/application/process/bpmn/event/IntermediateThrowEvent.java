@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
@@ -28,8 +29,8 @@ import org.w3c.dom.Element;
 import java.util.List;
 
 /**
- * The <code>IntermediateThrowEvent</code> class represents a Business Process Model and Notation
- * (BPMN) intermediate throw event that forms part of a Process.
+ * The <code>IntermediateThrowEvent</code> class represents an Intermediate Throw Event that forms
+ * part of a Process.
  * <p>
  * <b>Intermediate Throw Event</b> XML schema:
  * <pre>
@@ -44,25 +45,26 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class IntermediateThrowEvent extends ThrowEvent
 {
   /**
    * Constructs a new <code>IntermediateThrowEvent</code>.
    *
-   * @param element the XML element containing the intermediate throw event information
+   * @param parent  the BPMN element that is the parent of this Intermediate Throw Event
+   * @param element the XML element containing the Intermediate Throw Event information
    */
-  public IntermediateThrowEvent(Element element)
+  public IntermediateThrowEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 
   /**
-   * Execute the BPMN intermediate throw event.
+   * Execute the Intermediate Throw Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) intermediate throw event
+   * @return the list of tokens generated as a result of executing the Intermediate Throw Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

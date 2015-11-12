@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import org.w3c.dom.Element;
@@ -28,8 +29,7 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ManualTask</code> class represents a BPMN
- * manual task that forms part of a Process.
+ * The <code>ManualTask</code> class represents a Manual Task that forms part of a Process.
  * <p>
  * This task represents work that is not automated and is performed outside the control of the
  * BPM engine.
@@ -51,20 +51,20 @@ public final class ManualTask extends Task
   /**
    * Constructs a new <code>ManualTask</code>.
    *
-   * @param element the XML element containing the manual task information
+   * @param parent  the BPMN element that is the parent of this Manual Task
+   * @param element the XML element containing the Manual Task information
    */
-  public ManualTask(Element element)
+  public ManualTask(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 
   /**
-   * Execute the BPMN task.
+   * Execute the Manual Task.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) task
+   * @return the list of tokens generated as a result of executing the Manual Task
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

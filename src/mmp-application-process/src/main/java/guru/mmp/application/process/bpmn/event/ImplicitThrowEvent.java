@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
@@ -28,8 +29,8 @@ import org.w3c.dom.Element;
 import java.util.List;
 
 /**
- * The <code>ImplicitThrowEvent</code> class represents a Business Process Model and Notation
- * (BPMN) implicit throw event that forms part of a Process.
+ * The <code>ImplicitThrowEvent</code> class represents an Implicit Throw Event that forms part of
+ * a Process.
  * <p>
  * <b>Implicit Throw Event</b> XML schema:
  * <pre>
@@ -44,25 +45,26 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class ImplicitThrowEvent extends ThrowEvent
 {
   /**
    * Constructs a new <code>ImplicitThrowEvent</code>.
    *
-   * @param element the XML element containing the implicit throw event information
+   * @param parent  the BPMN element that is the parent of this Implicit Throw Event
+   * @param element the XML element containing the Implicit Throw Event information
    */
-  public ImplicitThrowEvent(Element element)
+  public ImplicitThrowEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 
   /**
-   * Execute the BPMN implicit throw event.
+   * Execute the Implicit Throw Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) implicit throw event
+   * @return the list of tokens generated as a result of executing the Implicit Throw Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

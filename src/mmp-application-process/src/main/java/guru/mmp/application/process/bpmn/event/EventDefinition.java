@@ -23,10 +23,10 @@ import guru.mmp.application.process.bpmn.BaseElement;
 import org.w3c.dom.Element;
 
 /**
- * The <code>EventDefinition</code> class provides the base class that all event definition
+ * The <code>EventDefinition</code> class provides the base class that all Event Definition
  * subclasses should be derived from.
  * <p>
- * An event definition class stores the detail for a particular event type e.g. the timing
+ * An Event Definition subclass stores the detail for a particular event type e.g. the timing
  * conditions for a timer event.
  * <p>
  * <b>Event Definition</b> XML schema:
@@ -46,10 +46,11 @@ public abstract class EventDefinition extends BaseElement
   /**
    * Constructs a new <code>EventDefinition</code>.
    *
-   * @param element the XML element containing the event definition information
+   * @param parent  the BPMN element that is the parent of this Event Definition
+   * @param element the XML element containing the Event Definition information
    */
-  protected EventDefinition(Element element)
+  protected EventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 }

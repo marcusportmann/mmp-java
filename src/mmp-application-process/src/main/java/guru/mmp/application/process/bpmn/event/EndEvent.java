@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 
@@ -28,13 +29,12 @@ import org.w3c.dom.Element;
 import java.util.List;
 
 /**
- * The <code>EndEvent</code> class represents a BPMN
- * end event that forms part of a Process.
+ * The <code>EndEvent</code> class represents an End Event that forms part of a Process.
  * <p>
- * End events finish a particular path of the process (or the whole process) and generate a result
+ * End Events finish a particular path of the Process (or the whole Process) and generate a result
  * (a message for example).
  * <p>
- * End events have one or more incoming flows but no outgoing flows.
+ * End Events have one or more incoming flows but no outgoing flows.
  * <p>
  * <b>End Event</b> XML schema:
  * <pre>
@@ -49,25 +49,26 @@ import java.util.List;
  * </pre>
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class EndEvent extends ThrowEvent
 {
   /**
    * Constructs a new <code>EndEvent</code>.
    *
-   * @param element the XML element containing the end event information
+   * @param parent  the BPMN element that is the parent of this End Event
+   * @param element the XML element containing the End Event information
    */
-  public EndEvent(Element element)
+  public EndEvent(BaseElement parent, Element element)
   {
     super(element);
   }
 
   /**
-   * Execute the BPMN end event.
+   * Execute the End Event.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) end event
+   * @return the list of tokens generated as a result of executing the End Event
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

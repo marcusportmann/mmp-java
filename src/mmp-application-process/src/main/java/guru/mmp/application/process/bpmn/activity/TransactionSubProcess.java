@@ -18,6 +18,7 @@ package guru.mmp.application.process.bpmn.activity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -29,13 +30,13 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>TransactionSubProcess</code> class represents a  Business Process Model and Notation
- * (BPMN) transaction sub-process.
+ * The <code>TransactionSubProcess</code> class represents a Transaction Sub-Process that forms
+ * part of a Process.
  *
- * Transaction sub-processes have the following properties:
+ * Transaction Sub-Processes have the following properties:
  * <ul>
  *   <li>
- *     <b>Atomic</b>: Activities inside the transaction sub-process are treated as a unit.
+ *     <b>Atomic</b>: Activities inside the Transaction Sub-Process are treated as a unit.
  *     Either all are performed or none.
  *   </li>
  *   <li>
@@ -72,21 +73,23 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class TransactionSubProcess extends SubProcess
 {
   /**
-   * The transaction method for the transaction sub-process.
+   * The transaction method for the Transaction Sub-Process.
    */
   private TransactionMethod method;
 
   /**
    * Constructs a new <code>TransactionSubProcess</code>.
    *
-   * @param element the XML element containing the sub-process information
+   * @param parent  the BPMN element that is the parent of this Transaction Sub-Process
+   * @param element the XML element containing the Transaction Sub-Process information
    */
-  public TransactionSubProcess(Element element)
+  public TransactionSubProcess(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -94,17 +97,16 @@ public final class TransactionSubProcess extends SubProcess
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the transaction sub-process XML data", e);
+      throw new ParserException("Failed to parse the Transaction Sub-Process XML data", e);
     }
   }
 
   /**
-   * Execute the BPMN transaction sub-process.
+   * Execute the Transaction Sub-Process.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) transaction sub-process
+   * @return the list of tokens generated as a result of executing the Transaction Sub-Process
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
@@ -113,9 +115,9 @@ public final class TransactionSubProcess extends SubProcess
   }
 
   /**
-   * Returns the transaction method for the transaction sub-process.
+   * Returns the transaction method for the Transaction Sub-Process.
    *
-   * @return the transaction method for the transaction sub-process
+   * @return the transaction method for the Transaction Sub-Process
    */
   public TransactionMethod getMethod()
   {

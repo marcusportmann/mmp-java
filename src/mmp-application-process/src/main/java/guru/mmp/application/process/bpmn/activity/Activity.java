@@ -62,28 +62,29 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class Activity extends FlowNode
 {
   /**
-   * The number of tokens will be sent down any outgoing SequenceFlow (assuming any SequenceFlow
+   * The number of tokens will be sent down any outgoing Sequence Flow (assuming any Sequence Flow
    * conditions are satisfied).
    */
   private int completionQuantity;
 
   /**
-   * The SequenceFlow that will receive a token when none of the <code>conditionExpression</code>s
-   * on other outgoing SequenceFlows evaluate to <code>true</code>.
+   * The Sequence Flow that will receive a token when none of the <code>conditionExpression</code>s
+   * on other outgoing Sequence Flows evaluate to <code>true</code>.
    * <p>
-   * The default SequenceFlow should not have a <code>conditionExpression</code>. Any such
+   * The default Sequence Flow should not have a <code>conditionExpression</code>. Any such
    * Expression SHALL be ignored.
    */
-  private String defaultSequenceFlowId;
+  private String defaultRef;
 
   /**
    * The <code>InputOutputSpecification</code>, which defines the inputs and outputs and the
    * <code>InputSet</code>s and <code>OutputSet</code>s for the Activity.
    */
-  private InputOutputSpecification inputOutputSpecification;
+  private InputOutputSpecification ioSpecification;
 
   /**
    * Is the Activity intended for the purposes of compensation?
@@ -130,22 +131,17 @@ public abstract class Activity extends FlowNode
   /**
    * Constructs a new <code>Activity</code>.
    *
+   * @param parent  the BPMN element that is the parent of this Activity
    * @param element the XML element containing the Activity information
    */
-  public Activity(Element element)
+  public Activity(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
-      if (StringUtil.isNullOrEmpty(element.getAttribute("isForCompensation")))
-      {
-        this.isForCompensation = false;
-      }
-      else
-      {
-        this.isForCompensation = Boolean.parseBoolean(element.getAttribute("isForCompensation"));
-      }
+      this.isForCompensation = !StringUtil.isNullOrEmpty(element.getAttribute("isForCompensation"))
+          && Boolean.parseBoolean(element.getAttribute("isForCompensation"));
 
       if (StringUtil.isNullOrEmpty(element.getAttribute("startQuantity")))
       {
@@ -167,7 +163,7 @@ public abstract class Activity extends FlowNode
 
       if (!StringUtil.isNullOrEmpty(element.getAttribute("default")))
       {
-        this.defaultSequenceFlowId = element.getAttribute("default");
+        this.defaultRef = element.getAttribute("default");
       }
 
       NodeList childElements = element.getChildNodes();
@@ -184,13 +180,15 @@ public abstract class Activity extends FlowNode
           {
             case "ioSpecification":
             {
-              inputOutputSpecification = new InputOutputSpecification(childElement);
+              ioSpecification = new InputOutputSpecification(childElement);
+
               break;
             }
 
             case "property":
             {
               properties.add(new Property(childElement));
+
               break;
             }
 
@@ -209,12 +207,14 @@ public abstract class Activity extends FlowNode
             case "resourceRole":
             {
               resources.add(new ResourceRole(childElement));
+
               break;
             }
 
             case "loopCharacteristics":
             {
               loopCharacteristics = new LoopCharacteristics(childElement);
+
               break;
             }
 
@@ -234,11 +234,11 @@ public abstract class Activity extends FlowNode
   }
 
   /**
-   * Returns the number of tokens will be sent down any outgoing SequenceFlow (assuming any
-   * SequenceFlow conditions are satisfied).
+   * Returns the number of tokens will be sent down any outgoing Sequence Flow (assuming any
+   * Sequence Flow conditions are satisfied).
    *
-   * @return the number of tokens will be sent down any outgoing SequenceFlow (assuming any
-   *         SequenceFlow conditions are satisfied)
+   * @return the number of tokens will be sent down any outgoing Sequence Flow (assuming any
+   *         Sequence Flow conditions are satisfied)
    */
   public int getCompletionQuantity()
   {
@@ -246,20 +246,20 @@ public abstract class Activity extends FlowNode
   }
 
   /**
-   * Returns the ID of the SequenceFlow that will receive a token when none of the
-   * <code>conditionExpression</code>s on other outgoing SequenceFlows evaluate to
+   * Returns the ID of the Sequence Flow that will receive a token when none of the
+   * <code>conditionExpression</code>s on other outgoing Sequence Flows evaluate to
    * <code>true</code>.
    * <p>
-   * The default SequenceFlow should not have a <code>conditionExpression</code>. Any such
+   * The default Sequence Flow should not have a <code>conditionExpression</code>. Any such
    * Expression SHALL be ignored.
    *
-   * @return the ID of the SequenceFlow that will receive a token when none of the
-   *         <code>conditionExpression</code>s on other outgoing SequenceFlows evaluate to
+   * @return the ID of the Sequence Flow that will receive a token when none of the
+   *         <code>conditionExpression</code>s on other outgoing Sequence Flows evaluate to
    *         <code>true</code>
    */
-  public String getDefaultSequenceFlowId()
+  public String getDefaultRef()
   {
-    return defaultSequenceFlowId;
+    return defaultRef;
   }
 
   /**
@@ -269,9 +269,9 @@ public abstract class Activity extends FlowNode
    * @return the <code>InputOutputSpecification</code>, which defines the inputs and outputs and
    *         the <code>InputSet</code>s and <code>OutputSet</code>s for the Activity
    */
-  public InputOutputSpecification getInputOutputSpecification()
+  public InputOutputSpecification getIoSpecification()
   {
-    return inputOutputSpecification;
+    return ioSpecification;
   }
 
   /**

@@ -30,13 +30,13 @@ import org.w3c.dom.NodeList;
 import javax.xml.namespace.QName;
 
 /**
- * The <code>BaseElement</code> class provides the base class that all BPMN elements that form part
- * of a Process should be derived from.
+ * The <code>BaseElementWithMixedContent</code> class provides the base class that all BPMN
+ * elements with mixed content that form part of a Process should be derived from.
  * <p>
- * <b>BaseElement</b> XML schema:
+ * <b>BaseElementWithMixedContent</b> XML schema:
  * <pre>
- * &lt;xsd:element name="baseElement" type="tBaseElement"/&gt;
- * &lt;xsd:complexType name="tBaseElement" abstract="true"&gt;
+ * &lt;xsd:element name="baseElementWithMixedContent" type="tBaseElementWithMixedContent"/&gt;
+ * &lt;xsd:complexType name="tBaseElementWithMixedContent" abstract="true" mixed="true"&gt;
  *   &lt;xsd:sequence&gt;
  *     &lt;xsd:element ref="documentation" minOccurs="0" maxOccurs="unbounded"/&gt;
  *     &lt;xsd:element ref="extensionElements" minOccurs="0" maxOccurs="1"/&gt;
@@ -48,7 +48,7 @@ import javax.xml.namespace.QName;
  *
  * @author Marcus Portmann
  */
-public abstract class BaseElement
+public abstract class BaseElementWithMixedContent
 {
   /**
    * The ID uniquely identifying the BPMN element.
@@ -56,21 +56,12 @@ public abstract class BaseElement
   private QName id;
 
   /**
-   * The BPMN element that is the parent of this BPMN element or <code>null</code> if the BPMN
-   * element does not have a parent.
-   */
-  private BaseElement parent;
-
-  /**
-   * Constructs a new <code>BaseElement</code>.
+   * Constructs a new <code>BaseElementWithMixedContent</code>.
    *
-   * @param parent  the BPMN element that is the parent of this BPMN element
-   * @param element the XML element containing the BaseElement information
+   * @param element the XML element containing the BaseElementWithMixedContent information
    */
-  protected BaseElement(BaseElement parent, Element element)
+  protected BaseElementWithMixedContent(Element element)
   {
-    this.parent = parent;
-
     try
     {
       this.id = XmlUtils.getQName(element, StringUtil.notNull(element.getAttribute("id")));
@@ -104,7 +95,7 @@ public abstract class BaseElement
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the BaseElement XML data", e);
+      throw new ParserException("Failed to parse the BaseElementWithMixedContent XML data", e);
     }
   }
 
@@ -116,39 +107,5 @@ public abstract class BaseElement
   public QName getId()
   {
     return id;
-  }
-
-  /**
-   * The BPMN element that is the parent of this BPMN element or <code>null</code> if the BPMN
-   * element does not have a parent.
-   *
-   * @return the BPMN element that is the parent of this BPMN element or <code>null</code> if the
-   *         BPMN element does not have a parent
-   */
-  public BaseElement getParent()
-  {
-    return parent;
-  }
-
-  /**
-   * Returns the Process the BPMN element is associated with.
-   *
-   * @return the Process the BPMN element is associated with
-   */
-  public Process getProcess()
-  {
-    BaseElement parent = getParent();
-
-    while (parent != null)
-    {
-      if (parent instanceof Process)
-      {
-        return ((Process) parent);
-      }
-
-      parent = parent.getParent();
-    }
-
-    return null;
   }
 }

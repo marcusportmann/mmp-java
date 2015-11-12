@@ -18,13 +18,18 @@ package guru.mmp.application.process.bpmn.event;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 
 import org.w3c.dom.Element;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.namespace.QName;
+
 /**
- * The <code>CompensationEventDefinition</code> class stores the details for a Business Process
- * Model and Notation (BPMN) compensate event that forms part of a Process.
+ * The <code>CompensateEventDefinition</code> class represents a Compensate Event Definition that
+ * forms part of a Process.
  * <p>
  * <b>Compensate Event Definition</b> XML schema:
  * <pre>
@@ -42,18 +47,24 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class CompensateEventDefinition extends EventDefinition
 {
+  /**
+   * The reference to the Activity associated with the Compensate Event Definition.
+   */
+  private QName activityRef;
   private boolean waitForCompletion;
 
   /**
    * Constructs a new <code>CompensateEventDefinition</code>.
    *
-   * @param element the XML element containing the compensate event definition information
+   * @param parent  the BPMN element that is the parent of this Compensate Event Definition
+   * @param element the XML element containing the Compensate Event Definition information
    */
-  public CompensateEventDefinition(Element element)
+  public CompensateEventDefinition(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
 
     try
     {
@@ -61,7 +72,17 @@ public final class CompensateEventDefinition extends EventDefinition
     }
     catch (Throwable e)
     {
-      throw new ParserException("Failed to parse the compensate event definition XML data", e);
+      throw new ParserException("Failed to parse the Compensate Event Definition XML data", e);
     }
+  }
+
+  /**
+   * Returns the reference to the Activity associated with the Compensate Event Definition.
+   *
+   * @return the reference to the Activity associated with the Compensate Event Definition
+   */
+  public QName getMessageRef()
+  {
+    return activityRef;
   }
 }
