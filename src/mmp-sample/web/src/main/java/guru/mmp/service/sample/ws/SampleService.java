@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "SampleService", targetNamespace = "http://ws.sample.service.mmp.guru", wsdlLocation = "file:/Volumes/Data/Develop/MMP/mmp-java/src/mmp-sample/web/src/main/webapp/WEB-INF/wsdl/SampleService.wsdl")
+@WebServiceClient(name = "SampleService", targetNamespace = "http://ws.sample.service.mmp.guru", wsdlLocation = "file:/C:/Data/Develop/MMP/mmp-java/src/mmp-sample/web/src/main/webapp/WEB-INF/wsdl/SampleService.wsdl")
 public class SampleService
     extends Service
 {
@@ -30,7 +30,7 @@ public class SampleService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/Volumes/Data/Develop/MMP/mmp-java/src/mmp-sample/web/src/main/webapp/WEB-INF/wsdl/SampleService.wsdl");
+            url = new URL("file:/C:/Data/Develop/MMP/mmp-java/src/mmp-sample/web/src/main/webapp/WEB-INF/wsdl/SampleService.wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

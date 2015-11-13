@@ -932,9 +932,9 @@ public class CodesService
       URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
           "META-INF/wsdl/CodesService.wsdl");
 
-      guru.mmp.services.codes.ws.CodesService service =
-        new guru.mmp.services.codes.ws.CodesService(wsdlLocation,
-          new QName("http://ws.codes.services.mmp.guru", "CodesService"));
+      guru.mmp.service.codes.ws.CodesService service =
+        new guru.mmp.service.codes.ws.CodesService(wsdlLocation,
+          new QName("http://ws.codes.service.mmp.guru", "CodesService"));
 
       // Setup the JAX-WS handlers that implement the MMP Web Service Security model
       if (codeCategory.getIsEndPointSecure())
@@ -943,7 +943,7 @@ public class CodesService
       }
 
       // Retrieve the web service proxy
-      guru.mmp.services.codes.ws.ICodesService codesService = service.getCodesService();
+      guru.mmp.service.codes.ws.ICodesService codesService = service.getCodesService();
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) codesService);
@@ -951,7 +951,7 @@ public class CodesService
       bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
           codeCategory.getEndPoint());
 
-      guru.mmp.services.codes.ws.CodeCategory remoteCodeCategory =
+      guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory =
         codesService.getCodeCategory(codeCategory.getId(), DateUtil.toCalendar(lastRetrieved),
           returnCodesIfCurrent);
 
@@ -959,7 +959,7 @@ public class CodesService
 
       List<Code> codes = new ArrayList<>();
 
-      for (guru.mmp.services.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
+      for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
       {
         codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
             remoteCode.getDescription(), remoteCode.getValue()));
@@ -987,9 +987,9 @@ public class CodesService
       URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
           "META-INF/wsdl/CodesService.wsdl");
 
-      guru.mmp.services.codes.ws.CodesService service =
-        new guru.mmp.services.codes.ws.CodesService(wsdlLocation,
-          new QName("http://ws.codes.services.mmp.guru", "CodesService"));
+      guru.mmp.service.codes.ws.CodesService service =
+        new guru.mmp.service.codes.ws.CodesService(wsdlLocation,
+          new QName("http://ws.codes.service.mmp.guru", "CodesService"));
 
       // Setup the JAX-WS handlers that implement the MMP Web Service Security model
       if (codeCategory.getIsEndPointSecure())
@@ -998,7 +998,7 @@ public class CodesService
       }
 
       // Retrieve the web service proxy
-      guru.mmp.services.codes.ws.ICodesService codesService = service.getCodesService();
+      guru.mmp.service.codes.ws.ICodesService codesService = service.getCodesService();
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) codesService);
@@ -1006,14 +1006,14 @@ public class CodesService
       bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
           codeCategory.getEndPoint());
 
-      List<guru.mmp.services.codes.ws.Parameter> wsParameters = new ArrayList<>();
+      List<guru.mmp.service.codes.ws.Parameter> wsParameters = new ArrayList<>();
 
       for (String parameterName : parameters.keySet())
       {
         String parameterValue = parameters.get(parameterName);
 
-        guru.mmp.services.codes.ws.Parameter wsParameter =
-          new guru.mmp.services.codes.ws.Parameter();
+        guru.mmp.service.codes.ws.Parameter wsParameter =
+          new guru.mmp.service.codes.ws.Parameter();
 
         wsParameter.setName(parameterName);
         wsParameter.setValue(parameterValue);
@@ -1021,7 +1021,7 @@ public class CodesService
         wsParameters.add(wsParameter);
       }
 
-      guru.mmp.services.codes.ws.CodeCategory remoteCodeCategory =
+      guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory =
         codesService.getCodeCategoryWithParameters(codeCategory.getId(), wsParameters,
           DateUtil.toCalendar(lastRetrieved), returnCodesIfCurrent);
 
@@ -1029,7 +1029,7 @@ public class CodesService
 
       List<Code> codes = new ArrayList<>();
 
-      for (guru.mmp.services.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
+      for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
       {
         codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
             remoteCode.getDescription(), remoteCode.getValue()));

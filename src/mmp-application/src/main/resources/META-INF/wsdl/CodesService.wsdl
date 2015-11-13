@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<wsdl:definitions name="CodesService" targetNamespace="http://ws.codes.services.mmp.guru"
-                  xmlns:interface="http://ws.codes.services.mmp.guru"
+<wsdl:definitions name="CodesService" targetNamespace="http://ws.codes.service.mmp.guru"
+                  xmlns:interface="http://ws.codes.service.mmp.guru"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
                   xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
@@ -14,8 +14,8 @@
   <wsdl:types>
 
     <xs:schema elementFormDefault="qualified"
-               targetNamespace="http://ws.codes.services.mmp.guru"
-               xmlns:interface="http://ws.codes.services.mmp.guru"
+               targetNamespace="http://ws.codes.service.mmp.guru"
+               xmlns:interface="http://ws.codes.service.mmp.guru"
                xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
       <!-- ===================================================================================== -->
@@ -302,7 +302,7 @@
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
     <wsdl:operation name="GetCodeCategory">
-      <soap:operation soapAction="http://ws.codes.services.mmp.guru/ICodesService/GetCodeCategory"/>
+      <soap:operation soapAction="http://ws.codes.service.mmp.guru/ICodesService/GetCodeCategory"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -315,7 +315,7 @@
     </wsdl:operation>
 
     <wsdl:operation name="GetCodeCategoryWithParameters">
-      <soap:operation soapAction="http://ws.codes.services.mmp.guru/ICodesService/GetCodeCategoryWithParameters"/>
+      <soap:operation soapAction="http://ws.codes.service.mmp.guru/ICodesService/GetCodeCategoryWithParameters"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -328,7 +328,7 @@
     </wsdl:operation>
 
     <wsdl:operation name="GetVersion">
-      <soap:operation soapAction="http://ws.codes.services.mmp.guru/ICodesService/GetVersion"/>
+      <soap:operation soapAction="http://ws.codes.service.mmp.guru/ICodesService/GetVersion"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

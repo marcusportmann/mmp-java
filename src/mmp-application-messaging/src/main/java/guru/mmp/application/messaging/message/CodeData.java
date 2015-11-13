@@ -110,7 +110,7 @@ public class CodeData
    * @param code       the <code>guru.mmp.services.codes.ws.Code</code> instance containing the
    *                   code data
    */
-  public CodeData(String categoryId, guru.mmp.services.codes.ws.Code code)
+  public CodeData(String categoryId, guru.mmp.service.codes.ws.Code code)
   {
     this.id = code.getId();
     this.categoryId = categoryId;

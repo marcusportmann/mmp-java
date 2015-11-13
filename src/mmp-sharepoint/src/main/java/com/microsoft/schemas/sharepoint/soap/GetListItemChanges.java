@@ -212,8 +212,8 @@ public class GetListItemChanges {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Object }
          * {@link String }
+         * {@link Object }
          * 
          * 
          */
@@ -274,8 +274,8 @@ public class GetListItemChanges {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Object }
          * {@link String }
+         * {@link Object }
          * 
          * 
          */

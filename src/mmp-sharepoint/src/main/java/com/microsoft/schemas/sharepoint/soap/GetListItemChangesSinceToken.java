@@ -340,8 +340,8 @@ public class GetListItemChangesSinceToken {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Object }
          * {@link String }
+         * {@link Object }
          * 
          * 
          */
@@ -402,8 +402,8 @@ public class GetListItemChangesSinceToken {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Object }
          * {@link String }
+         * {@link Object }
          * 
          * 
          */
@@ -464,8 +464,8 @@ public class GetListItemChangesSinceToken {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Object }
          * {@link String }
+         * {@link Object }
          * 
          * 
          */
@@ -526,8 +526,8 @@ public class GetListItemChangesSinceToken {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Object }
          * {@link String }
+         * {@link Object }
          * 
          * 
          */
