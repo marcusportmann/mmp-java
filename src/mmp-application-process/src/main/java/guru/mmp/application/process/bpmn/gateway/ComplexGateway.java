@@ -18,8 +18,12 @@ package guru.mmp.application.process.bpmn.gateway;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
+import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import guru.mmp.common.util.StringUtil;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -27,31 +31,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>ComplexGateway</code> class represents a BPMN
- * complex gateway that forms part of a Process.
+ * The <code>ComplexGateway</code> class represents a Complex Gateway that forms part of a Process.
+ * <p>
+ * <b>Complex Gateway</b> XML schema:
+ * <pre>
+ * &lt;xsd:element name="complexGateway" type="tComplexGateway" substitutionGroup="flowElement"/&gt;
+ * &lt;xsd:complexType name="tComplexGateway"&gt;
+ *   &lt;xsd:complexContent&gt;
+ *     &lt;xsd:extension base="tGateway"&gt;
+ *       &lt;xsd:sequence&gt;
+ *         &lt;xsd:element name="activationCondition" type="tExpression" minOccurs="0"
+ *                         maxOccurs="1"/&gt;
+ *       &lt;/xsd:sequence&gt;
+ *       &lt;xsd:attribute name="default" type="xsd:IDREF"/&gt;
+ *     &lt;/xsd:extension&gt;
+ *   &lt;/xsd:complexContent&gt;
+ * &lt;/xsd:complexType&gt;
+ * </pre>
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public final class ComplexGateway extends Gateway
 {
+  private
+
   /**
-   * Constructs a new <code>ComplexGateway</code>.
+   * Constructs a new <code>ThrowEvent</code>.
    *
-   * @param id   the ID uniquely identifying the complex gateway
-   * @param name the name of the complex gateway
+   * @param parent  the BPMN element that is the parent of this Complex Gateway
+   * @param element the XML element containing the Complex Gateway information
    */
-  public ComplexGateway(String id, String name)
+  protected ComplexGateway(BaseElement parent, Element element)
   {
-    super(id, name);
+    super(parent, element);
+
+    try
+    {
+      if (StringUtil.isNullOrEmpty(element.getAttribute("gatewayDirection")))
+      {
+        this.gatewayDirection = GatewayDirection.UNSPECIFIED;
+      }
+      else
+      {
+        this.gatewayDirection = GatewayDirection.fromId(element.getAttribute("gatewayDirection"));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ParserException("Failed to parse the Gateway XML data", e);
+    }
   }
 
   /**
-   * Execute the complex gateway.
+   * Execute the Complex Gateway.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) complex gateway
+   * @return the list of tokens generated as a result of executing the Complex Gateway
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

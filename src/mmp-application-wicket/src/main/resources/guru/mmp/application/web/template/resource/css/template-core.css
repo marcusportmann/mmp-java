@@ -2616,7 +2616,7 @@ footer.main-footer.fixed
   box-shadow: 0 2px 8px rgba(0, 1, 1, .05);
   margin: 0 0 0 -1px;
   padding: 0;
-  z-index: 3;
+  z-index: 1000;
 }
 
 .user-info-navbar .user-info-menu > li .dropdown-menu .dropdown-menu-list, .navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu .dropdown-menu-list

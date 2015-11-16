@@ -1121,6 +1121,17 @@ function setup_sidebar_menu()
 
     $items_with_subs.filter('.active').addClass('expanded');
 
+    if (is('tabletscreen'))
+    {
+      public_vars.$sidebarMenu.addClass('collapsed');
+      ps_destroy();
+    }
+    else if (is('largescreen'))
+    {
+      public_vars.$sidebarMenu.removeClass('collapsed');
+      ps_init();
+    }
+
     // On larger screens collapse sidebar when the window is tablet screen
     if (is('largescreen') && public_vars.$sidebarMenu.hasClass('collapsed') == false)
     {

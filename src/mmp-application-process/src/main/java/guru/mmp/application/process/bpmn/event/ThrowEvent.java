@@ -48,7 +48,7 @@ import java.util.List;
  *         &lt;xsd:element ref="inputSet" minOccurs="0" maxOccurs="1"/&gt;
  *         &lt;xsd:element ref="eventDefinition" minOccurs="0" maxOccurs="unbounded"/&gt;
  *         &lt;xsd:element name="eventDefinitionRef" type="xsd:QName" minOccurs="0"
- *                      maxOccurs="unbounded"/&gt;
+ *                         maxOccurs="unbounded"/&gt;
  *       &lt;/xsd:sequence&gt;
  *     &lt;/xsd:extension&gt;
  *   &lt;/xsd:complexContent&gt;
