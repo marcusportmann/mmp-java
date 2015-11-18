@@ -45,7 +45,7 @@ public interface IProcessService
    *
    * @throws ProcessServiceException
    */
-  public ProcessDefinition getProcessDefinition(String id, int version)
+  ProcessDefinition getProcessDefinition(String id, int version)
     throws ProcessServiceException;
 
   /**
@@ -194,12 +194,12 @@ public interface IProcessService
   /**
    * Update the state for process instance with the specified ID.
    *
-   * @param id    the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *              instance
-   * @param state the data giving the current execution state for the process instance
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *             instance
+   * @param data the data giving the current execution state for the process instance
    *
    * @throws ProcessServiceException
    */
-  void updateProcessInstanceState(String id, byte[] state)
+  void updateProcessInstanceData(String id, byte[] data)
     throws ProcessServiceException;
 }

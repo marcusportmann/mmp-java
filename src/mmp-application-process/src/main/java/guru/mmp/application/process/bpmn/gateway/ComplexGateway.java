@@ -19,10 +19,9 @@ package guru.mmp.application.process.bpmn.gateway;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.process.bpmn.BaseElement;
-import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-import guru.mmp.common.util.StringUtil;
+
 import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -54,10 +53,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 public final class ComplexGateway extends Gateway
 {
-  private
-
   /**
-   * Constructs a new <code>ThrowEvent</code>.
+   * Constructs a new <code>ComplexGateway</code>.
    *
    * @param parent  the BPMN element that is the parent of this Complex Gateway
    * @param element the XML element containing the Complex Gateway information
@@ -66,20 +63,9 @@ public final class ComplexGateway extends Gateway
   {
     super(parent, element);
 
-    try
+    if (true)
     {
-      if (StringUtil.isNullOrEmpty(element.getAttribute("gatewayDirection")))
-      {
-        this.gatewayDirection = GatewayDirection.UNSPECIFIED;
-      }
-      else
-      {
-        this.gatewayDirection = GatewayDirection.fromId(element.getAttribute("gatewayDirection"));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new ParserException("Failed to parse the Gateway XML data", e);
+      throw new RuntimeException("TODO: IMPLEMENT ME");
     }
   }
 

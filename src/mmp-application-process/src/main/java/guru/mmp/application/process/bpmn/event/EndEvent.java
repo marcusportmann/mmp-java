@@ -60,7 +60,7 @@ public final class EndEvent extends ThrowEvent
    */
   public EndEvent(BaseElement parent, Element element)
   {
-    super(element);
+    super(parent, element);
   }
 
   /**

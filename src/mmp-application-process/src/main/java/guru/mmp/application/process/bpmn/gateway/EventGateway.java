@@ -18,8 +18,10 @@ package guru.mmp.application.process.bpmn.gateway;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -37,21 +39,25 @@ public final class EventGateway extends Gateway
   /**
    * Constructs a new <code>EventGateway</code>.
    *
-   * @param id   the ID uniquely identifying the event gateway
-   * @param name the name of the event gateway
+   * @param parent  the BPMN element that is the parent of this Event Gateway
+   * @param element the XML element containing the Event Gateway information
    */
-  public EventGateway(String id, String name)
+  public EventGateway(BaseElement parent, Element element)
   {
-    super(id, name);
+    super(parent, element);
+
+    if (true)
+    {
+      throw new RuntimeException("TODO: IMPLEMENT ME");
+    }
   }
 
   /**
-   * Execute the event gateway.
+   * Execute the Event Gateway.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) event gateway
+   * @return the list of tokens generated as a result of executing the Event Gateway
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

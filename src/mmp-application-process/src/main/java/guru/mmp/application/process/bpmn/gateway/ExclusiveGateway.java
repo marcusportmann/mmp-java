@@ -18,8 +18,10 @@ package guru.mmp.application.process.bpmn.gateway;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -37,21 +39,25 @@ public class ExclusiveGateway extends Gateway
   /**
    * Constructs a new <code>ExclusiveGateway</code>.
    *
-   * @param id   the ID uniquely identifying the exclusive gateway
-   * @param name the name of the exclusive gateway
+   * @param parent  the BPMN element that is the parent of this Exclusive Gateway
+   * @param element the XML element containing the Exclusive Gateway information
    */
-  public ExclusiveGateway(String id, String name)
+  public ExclusiveGateway(BaseElement parent, Element element)
   {
-    super(id, name);
+    super(parent, element);
+
+    if (true)
+    {
+      throw new RuntimeException("TODO: IMPLEMENT ME");
+    }
   }
 
   /**
-   * Execute the exclusive gateway.
+   * Execute the Exclusive Gateway.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) exclusive gateway
+   * @return the list of tokens generated as a result of executing the Exclusive Gateway
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)

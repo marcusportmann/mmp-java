@@ -422,23 +422,23 @@ public class ProcessService
   /**
    * Update the state for process instance with the specified ID.
    *
-   * @param id    the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *              instance
-   * @param state the data giving the current execution state for the process instance
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *             instance
+   * @param data the data giving the current execution state for the process instance
    *
    * @throws ProcessServiceException
    */
-  public void updateProcessInstanceState(String id, byte[] state)
+  public void updateProcessInstanceData(String id, byte[] data)
     throws ProcessServiceException
   {
     try
     {
-      processDAO.updateProcessInstanceState(id, state);
+      processDAO.updateProcessInstanceData(id, data);
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to update the state for the process instance ("
-          + id + ")", e);
+      throw new ProcessServiceException("Failed to update the data for the process instance (" + id
+          + ")", e);
     }
   }
 

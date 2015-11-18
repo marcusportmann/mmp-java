@@ -34,6 +34,11 @@ public class ProcessInstance
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The data giving the current execution state for the process instance.
+   */
+  private byte[] data;
+
+  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the process definition for
    * the process instance.
    */
@@ -60,11 +65,6 @@ public class ProcessInstance
   private Date nextExecution;
 
   /**
-   * The data giving the current execution state for the process instance.
-   */
-  private byte[] state;
-
-  /**
    * The status of the process instance.
    */
   private Status status;
@@ -82,19 +82,19 @@ public class ProcessInstance
    * @param definitionId      the Universally Unique Identifier (UUID) used to uniquely identify
    *                          the process definition for the process instance
    * @param definitionVersion the version of the process definition for the process instance
-   * @param state             the data giving the current execution state for the process instance
+   * @param data              the data giving the current execution state for the process instance
    * @param status            the status of the process instance
    * @param nextExecution     the date and time when the process instance will next be executed
    * @param lockName          the name of the entity that has locked the process instance for
    *                          execution
    */
-  public ProcessInstance(String id, String definitionId, int definitionVersion, byte[] state,
+  public ProcessInstance(String id, String definitionId, int definitionVersion, byte[] data,
       Status status, Date nextExecution, String lockName)
   {
     this.id = id;
     this.definitionId = definitionId;
     this.definitionVersion = definitionVersion;
-    this.state = state;
+    this.data = data;
     this.status = status;
     this.nextExecution = nextExecution;
     this.lockName = lockName;
@@ -190,6 +190,16 @@ public class ProcessInstance
   }
 
   /**
+   * Returns the data giving the current execution state for the process instance.
+   *
+   * @return the data giving the current execution state for the process instance
+   */
+  public byte[] getData()
+  {
+    return data;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
    * definition for the process instance.
    *
@@ -244,16 +254,6 @@ public class ProcessInstance
   }
 
   /**
-   * Returns the data giving the current execution state for the process instance.
-   *
-   * @return the data giving the current execution state for the process instance
-   */
-  public byte[] getState()
-  {
-    return state;
-  }
-
-  /**
    * Returns the status of the process instance.
    *
    * @return the status of the process instance
@@ -261,6 +261,16 @@ public class ProcessInstance
   public Status getStatus()
   {
     return status;
+  }
+
+  /**
+   * Set the data giving the current execution state for the process instance.
+   *
+   * @param data the data giving the current execution state for the process instance
+   */
+  public void setData(byte[] data)
+  {
+    this.data = data;
   }
 
   /**
@@ -314,16 +324,6 @@ public class ProcessInstance
   public void setNextExecution(Date nextExecution)
   {
     this.nextExecution = nextExecution;
-  }
-
-  /**
-   * Set the data giving the current execution state for the process instance.
-   *
-   * @param state the data giving the current execution state for the process instance
-   */
-  public void setState(byte[] state)
-  {
-    this.state = state;
   }
 
   /**

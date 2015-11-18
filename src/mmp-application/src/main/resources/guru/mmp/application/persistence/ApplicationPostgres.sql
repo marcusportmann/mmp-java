@@ -20,12 +20,12 @@
 --  Execute the following command to delete the database:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/dropdb dbname'
---    CentOS (as root): su postgres -c 'dropdb sampledb'
+--    CentOS (as root): su postgres -c 'dropdb dbname'
 --
 --  Execute the following command to clean-up unreferenced large objects on the database:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/vacuumlo dbname'
---    CentOS (as root): su postgres -c 'vacuumlo sampledb'
+--    CentOS (as root): su postgres -c 'vacuumlo dbname'
 --
 -- -------------------------------------------------------------------------------------------------
 set client_min_messages='warning';

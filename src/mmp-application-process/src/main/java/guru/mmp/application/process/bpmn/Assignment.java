@@ -71,6 +71,11 @@ public final class Assignment extends BaseElement
   {
     super(parent, element);
 
+    if (true)
+    {
+      throw new RuntimeException("TODO: IMPLEMENT ME");
+    }
+
     try
     {
       NodeList childElements = element.getChildNodes();
@@ -87,14 +92,14 @@ public final class Assignment extends BaseElement
           {
             case "from":
             {
-              from = new Expression(childElement);
+              //from = new Expression(this, childElement);
 
               break;
             }
 
             case "to":
             {
-              to = new Expression(childElement);
+              //to = new Expression(this, childElement);
 
               break;
             }

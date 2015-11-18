@@ -278,12 +278,12 @@ public interface IProcessDAO
   /**
    * Update the state for process instance with the specified ID.
    *
-   * @param id    the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *              instance
-   * @param state the data giving the current execution state for the process instance
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *             instance
+   * @param data the data giving the current execution state for the process instance
    *
    * @throws DAOException
    */
-  void updateProcessInstanceState(String id, byte[] state)
+  void updateProcessInstanceData(String id, byte[] data)
     throws DAOException;
 }

@@ -75,7 +75,7 @@ public class ProcessDAO
   private String processInstanceExistsSQL;
   private String resetProcessInstanceLocksSQL;
   private String unlockProcessInstanceSQL;
-  private String updateProcessInstanceStateSQL;
+  private String updateProcessInstanceDataSQL;
 
   /**
    * Constructs a new <code>ProcessDAO</code>.
@@ -197,7 +197,7 @@ public class ProcessDAO
       statement.setString(1, processInstance.getId());
       statement.setString(2, processInstance.getDefinitionId());
       statement.setInt(3, processInstance.getDefinitionVersion());
-      statement.setBytes(4, processInstance.getState());
+      statement.setBytes(4, processInstance.getData());
       statement.setInt(5, processInstance.getStatus().getCode());
 
       if (processInstance.getNextExecution() == null)
@@ -963,30 +963,30 @@ public class ProcessDAO
   /**
    * Update the state for process instance with the specified ID.
    *
-   * @param id    the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *              instance
-   * @param state the data giving the current execution state for the process instance
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *             instance
+   * @param data the data giving the current execution state for the process instance
    *
    * @throws DAOException
    */
-  public void updateProcessInstanceState(String id, byte[] state)
+  public void updateProcessInstanceData(String id, byte[] data)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateProcessInstanceStateSQL))
+      PreparedStatement statement = connection.prepareStatement(updateProcessInstanceDataSQL))
     {
-      statement.setBytes(1, state);
+      statement.setBytes(1, data);
       statement.setString(2, id);
 
       if (statement.executeUpdate() != 1)
       {
         throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + updateProcessInstanceStateSQL + ")");
+            + updateProcessInstanceDataSQL + ")");
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to update the state for the process instance (" + id
+      throw new DAOException("Failed to update the data for the process instance (" + id
           + ") in the database", e);
     }
   }
@@ -1006,10 +1006,9 @@ public class ProcessDAO
         + "PROCESS_DEFINITIONS (ID, VERSION, ORGANISATION, NAME, DATA) VALUES (?, ?, ?, ?, ?)";
 
     // createProcessInstanceSQL
-    createProcessInstanceSQL =
-      "INSERT INTO " + schemaPrefix
-      + "PROCESS_INSTANCES (ID, DEFINITION_ID, DEFINITION_VERSION, STATE, STATUS, NEXT_EXECUTION)"
-      + " VALUES (?, ?, ?, ?, ?, ?)";
+    createProcessInstanceSQL = "INSERT INTO " + schemaPrefix
+        + "PROCESS_INSTANCES (ID, DEFINITION_ID, DEFINITION_VERSION, DATA, STATUS, NEXT_EXECUTION)"
+        + " VALUES (?, ?, ?, ?, ?, ?)";
 
     // deleteProcessDefinitionSQL
     deleteProcessDefinitionSQL = "DELETE FROM " + schemaPrefix + "PROCESS_DEFINITIONS WHERE ID=?";
@@ -1034,7 +1033,7 @@ public class ProcessDAO
 
     // getNextProcessInstanceScheduledForExecutionSQL
     getNextProcessInstanceScheduledForExecutionSQL =
-      "SELECT ID, DEFINITION_ID, DEFINITION_VERSION, STATE, STATUS, NEXT_EXECUTION, LOCK_NAME FROM "
+      "SELECT ID, DEFINITION_ID, DEFINITION_VERSION, DATA, STATUS, NEXT_EXECUTION, LOCK_NAME FROM "
       + schemaPrefix + "PROCESS_INSTANCES WHERE STATUS=? AND NEXT_EXECUTION <= ?"
       + " FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
@@ -1057,7 +1056,7 @@ public class ProcessDAO
         + schemaPrefix + "PROCESS_DEFINITIONS WHERE ID=? AND VERSION=?";
 
     // getProcessInstanceByIdSQL
-    getProcessInstanceByIdSQL = "SELECT ID, DEFINITION_ID, DEFINITION_VERSION, STATE, STATUS,"
+    getProcessInstanceByIdSQL = "SELECT ID, DEFINITION_ID, DEFINITION_VERSION, DATA, STATUS,"
         + " NEXT_EXECUTION, LOCK_NAME FROM " + schemaPrefix + "PROCESS_INSTANCES WHERE ID=?";
 
     // getProcessInstanceSummariesForOrganisationSQL
@@ -1094,9 +1093,9 @@ public class ProcessDAO
     unlockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES"
         + " SET STATUS=?, LOCK_NAME=NULL WHERE ID=?";
 
-    // updateProcessInstanceStateSQL
-    updateProcessInstanceStateSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES"
-        + " SET STATE=? WHERE ID=?";
+    // updateProcessInstanceDataSQL
+    updateProcessInstanceDataSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES"
+        + " SET DATA=? WHERE ID=?";
   }
 
   private ProcessDefinition getProcessDefinition(ResultSet rs)

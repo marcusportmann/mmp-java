@@ -18,8 +18,10 @@ package guru.mmp.application.process.bpmn.gateway;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
+import org.w3c.dom.Element;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -42,24 +44,25 @@ public final class ParallelGateway extends Gateway
   /**
    * Constructs a new <code>ParallelGateway</code>.
    *
-   * @param id               the ID uniquely identifying the parallel gateway
-   * @param name             the name of the parallel gateway
-   * @param gatewayDirection the gateway direction for the parallel gateway
+   * @param parent  the BPMN element that is the parent of this Parallel Gateway
+   * @param element the XML element containing the Parallel Gateway information
    */
-  public ParallelGateway(String id, String name, GatewayDirection gatewayDirection)
+  public ParallelGateway(BaseElement parent, Element element)
   {
-    super(id, name);
+    super(parent, element);
 
-    this.gatewayDirection = gatewayDirection;
+    if (true)
+    {
+      throw new RuntimeException("TODO: IMPLEMENT ME");
+    }
   }
 
   /**
-   * Execute the parallel gateway.
+   * Execute the Parallel Gateway.
    *
    * @param context the execution context for the Process
    *
-   * @return the list of tokens generated as a result of executing the Business Process Model and
-   *         Notation (BPMN) parallel gateway
+   * @return the list of tokens generated as a result of executing the Parallel Gateway
    */
   @Override
   public List<Token> execute(ProcessExecutionContext context)
