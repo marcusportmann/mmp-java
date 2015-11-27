@@ -67,9 +67,11 @@ public class SecurityService
   private String getFunctionsSQL;
   private String getInternalUserDirectoryIdForUserSQL;
   private String getNumberOfOrganisationsSQL;
+  private String getNumberOfUserDirectoriesSQL;
   private String getOrganisationIdSQL;
   private String getOrganisationSQL;
   private String getOrganisationsSQL;
+  private String getUserDirectoriesSQL;
   private String insertIDGeneratorSQL;
 
   /* Registry */
@@ -1152,6 +1154,42 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the number of user directories
+   *
+   * @return the number of user directories
+   *
+   * @throws SecurityException
+   */
+  public int getNumberOfUserDirectories()
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getNumberOfUserDirectoriesSQL))
+    {
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
+      }
+    }
+    catch (SecurityException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the number of user directories"
+          + e.getMessage(), e);
+    }
+  }
+
+  /**
    * Retrieve the number of users.
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
@@ -1292,6 +1330,44 @@ public class SecurityService
     return userDirectory.getUser(username);
   }
 
+  /**
+   * Retrieve the user directories.
+   *
+   * @return the list of user directories
+   *
+   * @throws SecurityException
+   */
+  public List<UserDirectory> getUserDirectories()
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
+    {
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectory> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          UserDirectory userDirectory = new UserDirectory();
+
+          userDirectory.setId(rs.getLong(1));
+          userDirectory.setName(rs.getString(2));
+          userDirectory.setDescription(rs.getString(3));
+          userDirectory.setUserDirectoryClass(rs.getString(4));
+
+          list.add(userDirectory);
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the user directories: " + e.getMessage(), e);
+    }
+  }
+
 ///**
 // * Retrieve the unique numeric ID for the user.
 // *
@@ -1380,7 +1456,7 @@ public class SecurityService
 
     try
     {
-      userDirectory = new InternalUserDirectory(1, new HashMap<>());
+      userDirectories.put(1L, new InternalUserDirectory(1, new HashMap<>()));
 
       // Retrieve the database meta data
       String schemaSeparator;
@@ -1406,6 +1482,9 @@ public class SecurityService
 
       // Initialise the configuration
       initConfiguration();
+
+      // Load the user directories
+      reloadUserDirectories();
     }
     catch (Throwable e)
     {
@@ -1546,6 +1625,18 @@ public class SecurityService
         logger.error("Failed to resume the original transaction while retrieving the new"
             + " ID for the entity of type (" + type + ") from the IDGENERATOR table", e);
       }
+    }
+  }
+
+  /**
+   * Reload the user directories.
+   */
+  public void reloadUserDirectories()
+  {
+    try {}
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to reload the user directories", e);
     }
   }
 
@@ -1800,59 +1891,68 @@ public class SecurityService
         + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
     // deleteFunctionSQL
-    deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS WHERE CODE=?";
+    deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
 
     // deleteOrganisationSQL
-    deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS"
-        + " WHERE UPPER(CODE)=UPPER(CAST(? AS VARCHAR(100)))";
+    deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O"
+        + " WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getFunctionIdSQL
-    getFunctionIdSQL = "SELECT ID FROM " + schemaPrefix + "FUNCTIONS WHERE CODE=?";
+    getFunctionIdSQL = "SELECT F.ID FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
 
     // getFunctionSQL
-    getFunctionSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS WHERE CODE=?";
+    getFunctionSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
+        + "FUNCTIONS F WHERE F.CODE=?";
 
     // getFunctionsSQL
-    getFunctionsSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix + "FUNCTIONS";
+    getFunctionsSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
+        + "FUNCTIONS F";
 
     // getInternalUserDirectoryIdForUserSQL
     getInternalUserDirectoryIdForUserSQL = "SELECT IU.USER_DIRECTORY_ID FROM " + schemaPrefix
         + "INTERNAL_USERS IU WHERE UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getNumberOfOrganisationsSQL
-    getNumberOfOrganisationsSQL = "SELECT COUNT(A.ID) FROM " + schemaPrefix + "ORGANISATIONS A";
+    getNumberOfOrganisationsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O";
+
+    // getNumberOfUserDirectoriesSQL
+    getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix
+        + "USER_DIRECTORIES UD";
 
     // getOrganisationIdSQL
-    getOrganisationIdSQL = "SELECT ID FROM " + schemaPrefix + "ORGANISATIONS"
-        + " WHERE UPPER(CODE)=UPPER(CAST(? AS VARCHAR(100)))";
+    getOrganisationIdSQL = "SELECT O.ID FROM " + schemaPrefix + "ORGANISATIONS O"
+        + " WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getOrganisationSQL
-    getOrganisationSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS WHERE UPPER(CODE)=UPPER(CAST(? AS VARCHAR(100)))";
+    getOrganisationSQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
+        + "ORGANISATIONS O WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getOrganisationsSQL
-    getOrganisationsSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS ORDER BY NAME";
+    getOrganisationsSQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
+        + "ORGANISATIONS O ORDER BY NAME";
+
+    // getUserDirectoriesSQL
+    getUserDirectoriesSQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION, UD.USER_DIRECTORY_CLASS FROM "
+        + schemaPrefix + "USER_DIRECTORIES UD";
 
     // insertIDGeneratorSQL
     insertIDGeneratorSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR"
         + " (CURRENT, NAME) VALUES (?, ?)";
 
     // selectIDGeneratorSQL
-    selectIDGeneratorSQL = "SELECT CURRENT FROM " + schemaPrefix + "IDGENERATOR" + " WHERE NAME=?";
+    selectIDGeneratorSQL = "SELECT I.CURRENT FROM " + schemaPrefix + "IDGENERATOR I WHERE I.NAME=?";
 
     // updateFunctionSQL
-    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS"
-        + " SET NAME=?, DESCRIPTION=? WHERE CODE=?";
+    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F"
+        + " SET F.NAME=?, F.DESCRIPTION=? WHERE F.CODE=?";
 
     // updateIDGeneratorSQL
-    updateIDGeneratorSQL = "UPDATE " + schemaPrefix + "IDGENERATOR"
-        + " SET CURRENT = CURRENT + 1 WHERE NAME=?";
+    updateIDGeneratorSQL = "UPDATE " + schemaPrefix + "IDGENERATOR I"
+        + " SET I.CURRENT = I.CURRENT + 1 WHERE I.NAME=?";
 
     // updateOrganisationSQL
-    updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS"
-        + " SET NAME=?, DESCRIPTION=? WHERE CODE=?";
+    updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O"
+        + " SET O.NAME=?, O.DESCRIPTION=? WHERE O.CODE=?";
   }
 
   /**

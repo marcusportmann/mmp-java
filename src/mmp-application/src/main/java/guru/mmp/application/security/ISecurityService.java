@@ -31,6 +31,16 @@ import java.util.Map;
 public interface ISecurityService
 {
   /**
+   * Retrieve the user directories.
+   *
+   * @return the list of user directories
+   *
+   * @throws SecurityException
+   */
+  public List<UserDirectory> getUserDirectories()
+    throws SecurityException;
+
+  /**
    * Add the user to the group.
    *
    * @param userDirectoryId the unique ID for the user directory the user and group are associated
@@ -401,6 +411,16 @@ public interface ISecurityService
     throws SecurityException;
 
   /**
+   * Retrieve the number of user directories
+   *
+   * @return the number of user directories
+   *
+   * @throws SecurityException
+   */
+  int getNumberOfUserDirectories()
+    throws SecurityException;
+
+  /**
    * Retrieve the number of users.
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
@@ -497,6 +517,11 @@ public interface ISecurityService
   boolean isUserInGroup(long userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException;
+
+  /**
+   * Reload the user directories.
+   */
+  void reloadUserDirectories();
 
   /**
    * Remove the user from the group.
