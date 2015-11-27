@@ -756,7 +756,7 @@ public class CodesService
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the CodesService instance");
+    logger.info("Initialising the Codes Service");
 
     codeProviders = new ArrayList<>();
 
@@ -773,7 +773,7 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException("Failed to initialise the CodesService instance", e);
+      throw new CodesServiceException("Failed to initialise the Codes Service", e);
     }
   }
 

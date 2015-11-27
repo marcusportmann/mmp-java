@@ -22,7 +22,6 @@ import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.common.persistence.TransactionManager;
-import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
 
 import org.slf4j.Logger;
@@ -30,12 +29,10 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.security.MessageDigest;
-
 import java.sql.*;
 
 import java.util.*;
-import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 
@@ -58,97 +55,31 @@ import javax.sql.DataSource;
 public class SecurityService
   implements ISecurityService
 {
-  /**
-   * The default number of failed password attempts before the user is locked.
-   */
-  public static final int DEFAULT_MAX_PASSWORD_ATTEMPTS = 5;
-
-  /**
-   * The default number of months before a user's password expires.
-   */
-  public static final int DEFAULT_PASSWORD_EXPIRY_MONTHS = 12;
-
-  /**
-   * The default number of months to check password history against.
-   */
-  public static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
-  private String addFunctionToTemplateSQL;
-  private String addUserToGroupSQL;
-  private String addUserToOrganisationSQL;
-  private String changePasswordSQL;
   private String createFunctionSQL;
-  private String createFunctionTemplateSQL;
-  private String createGroupSQL;
   private String createOrganisationSQL;
-  private String createUserSQL;
   private DataSource dataSource;
-  private String databaseCatalogSeparator = ".";
   private String deleteFunctionSQL;
-  private String deleteFunctionTemplateSQL;
-  private String deleteGroupSQL;
   private String deleteOrganisationSQL;
-  private String deleteUserSQL;
-  private String getAllFunctionCodesForUserSQL;
-  private String getFilteredUsersForOrganisationSQL;
-  private String getFunctionCodesForGroupSQL;
-  private String getFunctionCodesForUserSQL;
   private String getFunctionIdSQL;
   private String getFunctionSQL;
-  private String getFunctionTemplateIdSQL;
-  private String getFunctionTemplateSQL;
-  private String getFunctionTemplatesSQL;
-  private String getFunctionsForGroupSQL;
-  private String getFunctionsForTemplateSQL;
-  private String getFunctionsForUserSQL;
   private String getFunctionsSQL;
-  private String getGroupIdSQL;
-  private String getGroupNamesForUserSQL;
-  private String getGroupSQL;
-  private String getGroupsForUserSQL;
-  private String getGroupsSQL;
-  private String getNumberOfFilteredUsersForOrganisationSQL;
-  private String getNumberOfGroupsSQL;
+  private String getInternalUserDirectoryIdForUserSQL;
   private String getNumberOfOrganisationsSQL;
-  private String getNumberOfUsersForOrganisationSQL;
   private String getOrganisationIdSQL;
   private String getOrganisationSQL;
-  private String getOrganisationsForUserSQL;
   private String getOrganisationsSQL;
-  private String getUserIdSQL;
-  private String getUserIdsForGroupSQL;
-  private String getUserSQL;
-  private String getUsersForOrganisationSQL;
-  private String getUsersSQL;
-  private String grantFunctionToGroupSQL;
-  private String grantFunctionToUserSQL;
   private String insertIDGeneratorSQL;
-  private String isGroupGrantedFunctionSQL;
-  private String isPasswordInHistorySQL;
-  private String isUserAssociatedWithOrganisationSQL;
-  private String isUserGrantedFunctionSQL;
-  private String isUserInGroupSQL;
-  private int maxPasswordAttempts;
-  private int passwordExpiryMonths;
-  private int passwordHistoryMonths;
 
   /* Registry */
   @Inject
   private IRegistry registry;
-  private String removeFunctionFromTemplateSQL;
-  private String removeUserFromGroupSQL;
-  private String removeUserFromOrganisationSQL;
-  private String revokeFunctionForGroupSQL;
-  private String revokeFunctionForUserSQL;
-  private String savePasswordHistorySQL;
   private String selectIDGeneratorSQL;
   private String updateFunctionSQL;
-  private String updateFunctionTemplateSQL;
-  private String updateGroupSQL;
   private String updateIDGeneratorSQL;
   private String updateOrganisationSQL;
+  private Map<Long, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -156,111 +87,20 @@ public class SecurityService
   public SecurityService() {}
 
   /**
-   * Add the authorised function with the specified code to the authorised function template given
-   * by the specified code.
+   * Add the user to the group.
    *
-   * @param functionCode the code identifying the authorised function
-   * @param templateCode the code identifying the authorised function template
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user and group are associated
+   *                        with
+   * @param username        the username identifying the user
+   * @param groupName       the name of the group uniquely identifying the group
    *
-   * @throws DuplicateFunctionException
-   * @throws FunctionNotFoundException
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  public void addFunctionToTemplate(String functionCode, String templateCode, String origin)
-    throws DuplicateFunctionException, FunctionNotFoundException,
-      FunctionTemplateNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(functionCode))
-    {
-      throw new InvalidArgumentException("functionCode");
-    }
-
-    if (isNullOrEmpty(templateCode))
-    {
-      throw new InvalidArgumentException("templateCode");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(addFunctionToTemplateSQL))
-    {
-      // Get the ID of the function with the specified code
-      long functionId;
-
-      if ((functionId = getFunctionId(connection, functionCode)) == -1)
-      {
-        throw new FunctionNotFoundException("A function with the code (" + functionCode
-            + ") could not be found");
-      }
-
-      // Get the ID of the function template with the specified code
-      long templateId;
-
-      if ((templateId = getFunctionTemplateId(connection, templateCode)) == -1)
-      {
-        throw new FunctionTemplateNotFoundException("A function template with the code ("
-            + templateCode + ") could not be found");
-      }
-
-      // Get the current list of functions for the function template
-      List<Function> functions = getFunctionsForTemplate(templateId);
-
-      for (Function function : functions)
-      {
-        if (function.getCode().equals(functionCode))
-        {
-          // The function has already been added to the function template so do nothing
-          return;
-        }
-      }
-
-      // Add the function to the template
-      statement.setLong(1, functionId);
-      statement.setLong(2, templateId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + addFunctionToTemplateSQL + ")");
-      }
-    }
-    catch (DuplicateFunctionException | FunctionNotFoundException
-        | FunctionTemplateNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to add the function (" + functionCode
-          + ") to the function template (" + templateCode + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Add the user to the group for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param groupName    the name of the group uniquely identifying the group
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void addUserToGroup(String username, String groupName, String organisation, String origin)
-    throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
+  public void addUserToGroup(long userDirectoryId, String username, String groupName)
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException
   {
     // Validate parameters
@@ -274,172 +114,28 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(addUserToGroupSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the group with the specified group name
-      long groupId;
-
-      if ((groupId = getGroupId(connection, groupName)) == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Check if the user has already been added to the group for the specified organisation
-      if (isUserInGroup(connection, userId, groupId, organisationId))
-      {
-        // The user is already a member of the specified group do nothing
-        return;
-      }
-
-      // Add the user to the group
-      statement.setLong(1, userId);
-      statement.setLong(2, groupId);
-      statement.setLong(3, organisationId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + addUserToGroupSQL + ")");
-      }
-    }
-    catch (UserNotFoundException | GroupNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to add the user (" + username + ") to the group ("
-          + groupName + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Add the user to the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public void addUserToOrganisation(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(addUserToOrganisationSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Check if the user has already been associated with the specified organisation
-      if (isUserAssociatedWithOrganisation(connection, userId, organisationId))
-      {
-        // The user is already associated with the specified organisation
-        return;
-      }
-
-      // Add the user to the organisation
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + addUserToOrganisationSQL + ")");
-      }
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to add the user (" + username + ") to the organisation ("
-          + organisation + "): " + e.getMessage(), e);
-    }
+    userDirectory.addUserToGroup(username, groupName);
   }
 
   /**
    * Administratively change the password for the user.
    *
+   * @param userDirectoryId      the unique ID for the user directory the user is associated with
    * @param username             the username identifying the user
    * @param newPassword          the new password
    * @param expirePassword       expire the user's password
    * @param lockUser             lock the user
    * @param resetPasswordHistory reset the user's password history
    * @param reason               the reason for changing the password
-   * @param origin               the origin of the request e.g. the IP address, subnetwork or
-   *                             workstation name for the remote client
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void adminChangePassword(String username, String newPassword, boolean expirePassword,
-      boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason, String origin)
-    throws UserNotFoundException, SecurityException
+  public void adminChangePassword(long userDirectoryId, String username, String newPassword,
+      boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
+      PasswordChangeReason reason)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -452,116 +148,17 @@ public class SecurityService
       throw new InvalidArgumentException("newPassword");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(changePasswordSQL))
-    {
-      User user = getUser(connection, username);
-
-      if (user == null)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      String passwordHash = createPasswordHash(newPassword);
-
-      statement.setString(1, passwordHash);
-
-      if (lockUser)
-      {
-        statement.setInt(2, -1);
-      }
-      else
-      {
-        if (!isNullOrEmpty(user.getPasswordAttempts()))
-        {
-          statement.setInt(2, 0);
-        }
-        else
-        {
-          statement.setNull(2, java.sql.Types.INTEGER);
-        }
-      }
-
-      if (expirePassword)
-      {
-        statement.setTimestamp(3, new Timestamp(System.currentTimeMillis() - 1000L));
-      }
-      else
-      {
-        if (user.getPasswordExpiry() != null)
-        {
-          Calendar calendar = Calendar.getInstance();
-
-          calendar.setTime(new Date());
-          calendar.add(Calendar.MONTH, passwordExpiryMonths);
-          statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
-        }
-        else
-        {
-          statement.setTimestamp(3, null);
-        }
-      }
-
-      statement.setString(4, username);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + changePasswordSQL + ")");
-      }
-
-      savePasswordHistory(connection, user.getId(), passwordHash);
-    }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to administratively change the password for the user ("
-          + username + "): " + e.getMessage(), e);
-    }
+    userDirectory.adminChangePassword(username, newPassword, expirePassword, lockUser,
+        resetPasswordHistory, reason);
   }
 
   /**
-   * Authenticate a user using credentials other than a simple password.
-   *
-   * @param username    the username identifying the user
-   * @param credentials the credentials used to authenticate
-   * @param origin      the origin of the request e.g. the IP address, subnetwork or workstation
-   *                    name for the remote client
-   *
-   * @return the results of authenticating the user successfully
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws ExpiredCredentialsException
-   * @throws UserNotFoundException
-   * @throws SecurityException
-   */
-  public Map<String, Object> authenticate(String username, List<Credential> credentials,
-      String origin)
-    throws AuthenticationFailedException, UserLockedException, ExpiredCredentialsException,
-      UserNotFoundException, SecurityException
-  {
-    throw new AuthenticationFailedException("Not implemented");
-  }
-
-  /**
-   * Authenticate.
+   * Authenticate the user.
    *
    * @param username the username identifying the user
    * @param password the password being used to authenticate
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
    *
-   * @return the results of authenticating the user successfully
+   * @return the unique ID for the user directory the user is associated with
    *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
@@ -569,7 +166,7 @@ public class SecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public Map<String, Object> authenticate(String username, String password, String origin)
+  public long authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, SecurityException
   {
@@ -584,51 +181,52 @@ public class SecurityService
       throw new InvalidArgumentException("password");
     }
 
-    if (isNullOrEmpty(origin))
+    try
     {
-      throw new InvalidArgumentException("origin");
-    }
+      // First check if this is an internal user and if so determine the user directory ID
+      long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
-    try (Connection connection = dataSource.getConnection())
-    {
-      User user = getUser(connection, username);
-
-      if (user == null)
+      if (internalUserDirectoryId != -1)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
+        IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
-      if (user.getPasswordAttempts() != null)
-      {
-        if ((user.getPasswordAttempts() == -1)
-            || (user.getPasswordAttempts() > maxPasswordAttempts))
+        if (internalUserDirectory == null)
         {
-          throw new UserLockedException("The user (" + username
-              + ") has exceeded the number of failed password attempts and has been locked");
+          throw new SecurityException("The user directory ID (" + internalUserDirectoryId
+              + ") for the internal user (" + username + ") is invalid");
+        }
+        else
+        {
+          internalUserDirectory.authenticate(username, password);
+
+          return internalUserDirectoryId;
         }
       }
-
-      if (user.getPasswordExpiry() != null)
+      else
       {
-        if (user.getPasswordExpiry().before(new Date()))
+        /*
+         * Check all of the "external" user directories to see if one of them can authenticate this
+         * user.
+         */
+        for (long userDirectoryId : userDirectories.keySet())
         {
-          throw new ExpiredPasswordException("The password for the user (" + username
-              + ") has expired");
+          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+          if (userDirectory != null)
+          {
+            if (!(userDirectory instanceof InternalUserDirectory))
+            {
+              if (userDirectory.isExistingUser(username))
+              {
+                userDirectory.authenticate(username, password);
+
+                return userDirectoryId;
+              }
+            }
+          }
         }
-      }
 
-      if (!user.getPassword().equals(createPasswordHash(password)))
-      {
-        throw new AuthenticationFailedException("Authentication failed for the user (" + username
-            + ")");
       }
-
-      return new HashMap<>();
-    }
-    catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
-        | ExpiredPasswordException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -640,12 +238,12 @@ public class SecurityService
   /**
    * Change the password for the user.
    *
-   * @param username    the username identifying the user
-   * @param password    the password for the user that is used to authorise the operation
-   * @param newPassword the new password
-   * @param origin      the origin of the request e.g. the IP address, subnetwork or workstation
-   *                    name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
+   * @param password        the password for the user that is used to authorise the operation
+   * @param newPassword     the new password
    *
+   * @throws UserDirectoryNotFoundException
    * @throws AuthenticationFailedException
    * @throws UserLockedException
    * @throws ExpiredPasswordException
@@ -653,9 +251,10 @@ public class SecurityService
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
-  public void changePassword(String username, String password, String newPassword, String origin)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, ExistingPasswordException, SecurityException
+  public void changePassword(long userDirectoryId, String username, String password,
+      String newPassword)
+    throws UserDirectoryNotFoundException, AuthenticationFailedException, UserLockedException,
+      ExpiredPasswordException, UserNotFoundException, ExistingPasswordException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -673,115 +272,20 @@ public class SecurityService
       throw new InvalidArgumentException("newPassword");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(changePasswordSQL))
-    {
-      User user = getUser(connection, username);
-
-      if (user == null)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      if (user.getPasswordAttempts() != null)
-      {
-        if ((user.getPasswordAttempts() == -1)
-            || (user.getPasswordAttempts() > maxPasswordAttempts))
-        {
-          throw new UserLockedException("The user (" + username
-              + ") has exceeded the number of failed password attempts and has been locked");
-        }
-      }
-
-      if (user.getPasswordExpiry() != null)
-      {
-        if (user.getPasswordExpiry().before(new Date()))
-        {
-          throw new ExpiredPasswordException("The password for the user (" + username
-              + ") has expired");
-        }
-      }
-
-      String passwordHash = createPasswordHash(password);
-      String newPasswordHash = createPasswordHash(newPassword);
-
-      if (!user.getPassword().equals(passwordHash))
-      {
-        throw new AuthenticationFailedException("Authentication failed while attempting to change"
-            + " the password for the user (" + username + ")");
-      }
-
-      if (isPasswordInHistory(connection, user.getId(), newPasswordHash))
-      {
-        throw new ExistingPasswordException("The new password for the user (" + username
-            + ") has been used recently and is not valid");
-      }
-
-      statement.setString(1, newPasswordHash);
-
-      if (!isNullOrEmpty(user.getPasswordAttempts()))
-      {
-        statement.setInt(2, 0);
-      }
-      else
-      {
-        statement.setNull(2, java.sql.Types.INTEGER);
-      }
-
-      if (user.getPasswordExpiry() != null)
-      {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MONTH, passwordExpiryMonths);
-        statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
-      }
-      else
-      {
-        statement.setTimestamp(3, null);
-      }
-
-      statement.setString(4, username);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + changePasswordSQL + ")");
-      }
-
-      savePasswordHistory(connection, user.getId(), newPasswordHash);
-    }
-    catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
-        | ExpiredPasswordException | UserLockedException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to change the password for the user (" + username + "): "
-          + e.getMessage(), e);
-    }
+    userDirectory.changePassword(username, password, newPassword);
   }
 
   /**
    * Create a new authorised function.
    *
-   * @param function the <code>Function</code> instance containing the information for the new
-   *                 authorised function
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param function the function
    *
    * @throws DuplicateFunctionException
    * @throws SecurityException
    */
-  public void createFunction(Function function, String origin)
+  public void createFunction(Function function)
     throws DuplicateFunctionException, SecurityException
+
   {
     // Validate parameters
     if (isNullOrEmpty(function.getCode()))
@@ -792,11 +296,6 @@ public class SecurityService
     if (isNullOrEmpty(function.getName()))
     {
       throw new InvalidArgumentException("function.name");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try (Connection connection = dataSource.getConnection();
@@ -836,83 +335,17 @@ public class SecurityService
   }
 
   /**
-   * Create a new authorised function template.
-   *
-   * @param template the <code>FunctionTemplate</code> instance containing the information for the
-   *                 new authorised function template
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
-   *
-   * @throws DuplicateFunctionTemplateException
-   * @throws SecurityException
-   */
-  public void createFunctionTemplate(FunctionTemplate template, String origin)
-    throws DuplicateFunctionTemplateException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(template.getCode()))
-    {
-      throw new InvalidArgumentException("template.code");
-    }
-
-    if (isNullOrEmpty(template.getName()))
-    {
-      throw new InvalidArgumentException("template.name");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createFunctionTemplateSQL))
-    {
-      if (getFunctionTemplateId(connection, template.getCode()) != -1)
-      {
-        throw new DuplicateFunctionTemplateException("A function template with the code ("
-            + template.getCode() + ") already exists");
-      }
-
-      long templateId = nextId("Application.FunctionTemplateId");
-
-      statement.setLong(1, templateId);
-      statement.setString(2, template.getCode());
-      statement.setString(3, template.getName());
-      statement.setString(4, template.getDescription());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createFunctionTemplateSQL + ")");
-      }
-
-      template.setId(templateId);
-    }
-    catch (DuplicateFunctionTemplateException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to create the function template (" + template.getCode()
-          + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
    * Create a new group.
    *
-   * @param group  the <code>Group</code> instance containing the information for the new group
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param group           the group
    *
+   * @throws UserDirectoryNotFoundException
    * @throws DuplicateGroupException
    * @throws SecurityException
    */
-  public void createGroup(Group group, String origin)
-    throws DuplicateGroupException, SecurityException
+  public void createGroup(long userDirectoryId, Group group)
+    throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(group.getGroupName()))
@@ -920,59 +353,20 @@ public class SecurityService
       throw new InvalidArgumentException("group.groupName");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createGroupSQL))
-    {
-      if (getGroupId(connection, group.getGroupName()) != -1)
-      {
-        throw new DuplicateGroupException("The group (" + group.getGroupName()
-            + ") already exists");
-      }
-
-      long groupId = nextId("Application.GroupId");
-
-      statement.setLong(1, groupId);
-      statement.setString(2, group.getGroupName());
-      statement.setString(3, group.getDescription());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement (" + createGroupSQL
-            + ")");
-      }
-
-      group.setId(groupId);
-    }
-    catch (DuplicateGroupException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to create the group (" + group.getGroupName() + "): "
-          + e.getMessage(), e);
-    }
+    userDirectory.createGroup(group);
   }
 
   /**
    * Create a new organisation.
    *
-   * @param organisation the <code>Organisation</code> instance containing the information for the
-   *                     new organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param organisation the organisation
    *
    * @throws DuplicateOrganisationException
    * @throws SecurityException
    */
-  public void createOrganisation(Organisation organisation, String origin)
+  public void createOrganisation(Organisation organisation)
     throws DuplicateOrganisationException, SecurityException
+
   {
     // Validate parameters
     if (isNullOrEmpty(organisation.getCode()))
@@ -983,11 +377,6 @@ public class SecurityService
     if (isNullOrEmpty(organisation.getName()))
     {
       throw new InvalidArgumentException("organisation.name");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try (Connection connection = dataSource.getConnection();
@@ -1029,19 +418,18 @@ public class SecurityService
   /**
    * Create a new user.
    *
-   * @param user            the <code>User</code> instance containing the information for the new
-   *                        user
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
-   * @param origin          the origin of the request e.g. the IP address, subnetwork or
-   *                        workstation name for the remote client
    *
+   * @throws UserDirectoryNotFoundException
    * @throws DuplicateUserException
    * @throws SecurityException
    */
-  @SuppressWarnings("ConstantConditions")
-  public void createUser(User user, boolean expiredPassword, boolean userLocked, String origin)
-    throws DuplicateUserException, SecurityException
+  public void createUser(long userDirectoryId, User user, boolean expiredPassword,
+      boolean userLocked)
+    throws UserDirectoryNotFoundException, DuplicateUserException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(user.getUsername()))
@@ -1049,127 +437,24 @@ public class SecurityService
       throw new InvalidArgumentException("user.username");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createUserSQL))
-    {
-      if (getUserId(connection, user.getUsername()) != -1)
-      {
-        throw new DuplicateUserException("The user (" + user.getUsername() + ") already exists");
-      }
-
-      long userId = nextId("Application.UserId");
-
-      statement.setLong(1, userId);
-      statement.setString(2, user.getUsername());
-
-      String passwordHash;
-
-      if (!isNullOrEmpty(user.getPassword()))
-      {
-        passwordHash = createPasswordHash(user.getPassword());
-        statement.setString(3, passwordHash);
-      }
-      else
-      {
-        passwordHash = createPasswordHash("");
-        statement.setString(3, passwordHash);
-      }
-
-      statement.setString(4, StringUtil.notNull(user.getTitle()));
-      statement.setString(5, StringUtil.notNull(user.getFirstNames()));
-      statement.setString(6, StringUtil.notNull(user.getLastName()));
-      statement.setString(7, StringUtil.notNull(user.getPhoneNumber()));
-      statement.setString(8, StringUtil.notNull(user.getFaxNumber()));
-      statement.setString(9, StringUtil.notNull(user.getMobileNumber()));
-      statement.setString(10, StringUtil.notNull(user.getEmail()));
-
-      if (userLocked)
-      {
-        statement.setInt(11, -1);
-      }
-      else
-      {
-        if (!isNullOrEmpty(user.getPasswordAttempts()))
-        {
-          statement.setInt(11, user.getPasswordAttempts());
-        }
-        else
-        {
-          statement.setNull(11, java.sql.Types.INTEGER);
-        }
-      }
-
-      if (expiredPassword)
-      {
-        statement.setTimestamp(12, new Timestamp(System.currentTimeMillis()));
-      }
-      else
-      {
-        if (user.getPasswordExpiry() != null)
-        {
-          statement.setTimestamp(12, new Timestamp(user.getPasswordExpiry().getTime()));
-        }
-        else
-        {
-          statement.setTimestamp(12, null);
-        }
-      }
-
-      statement.setString(13, StringUtil.notNull(user.getDescription()));
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement (" + createUserSQL
-            + ")");
-      }
-
-      user.setId(userId);
-
-      // Save the password in the password history if one was specified
-      if (passwordHash != null)
-      {
-        savePasswordHistory(connection, userId, passwordHash);
-      }
-    }
-    catch (DuplicateUserException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to create the user (" + user.getUsername() + "): "
-          + e.getMessage(), e);
-    }
+    userDirectory.createUser(user, expiredPassword, userLocked);
   }
 
   /**
-   * Delete the existing authorised function.
+   * Delete the authorised function.
    *
-   * @param code   the code identifying the function
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code identifying the authorised function
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public void deleteFunction(String code, String origin)
+  public void deleteFunction(String code)
     throws FunctionNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(code))
     {
       throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try (Connection connection = dataSource.getConnection();
@@ -1202,71 +487,19 @@ public class SecurityService
   }
 
   /**
-   * Delete the existing authorised function template.
+   * Delete the group.
    *
-   * @param code   the code identifying the function template
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param groupName       the name of the group uniquely identifying the group
    *
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  public void deleteFunctionTemplate(String code, String origin)
-    throws FunctionTemplateNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(code))
-    {
-      throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteFunctionTemplateSQL))
-    {
-      if (getFunctionTemplateId(connection, code) == -1)
-      {
-        throw new FunctionTemplateNotFoundException("A function template with the code (" + code
-            + ") could not be found");
-      }
-
-      statement.setString(1, code);
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + deleteFunctionTemplateSQL + ")");
-      }
-    }
-    catch (FunctionTemplateNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to delete the function template (" + code + "): "
-          + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Delete the existing group.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  public void deleteGroup(String groupName, String origin)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
+  public void deleteGroup(long userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
+      SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(groupName))
@@ -1274,72 +507,24 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
-    {
-      long groupId = getGroupId(connection, groupName);
-
-      if (groupId == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      List<Long> userIds = getUserIdsForGroup(connection, groupId);
-
-      if (userIds.size() > 0)
-      {
-        throw new ExistingGroupMembersException("The group (" + groupName
-            + ") could not be deleted since it is still associated with " + userIds.size()
-            + " user(s)");
-      }
-
-      statement.setString(1, groupName);
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement (" + deleteGroupSQL
-            + ")");
-      }
-    }
-    catch (GroupNotFoundException | ExistingGroupMembersException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to delete the group (" + groupName + "): "
-          + e.getMessage(), e);
-    }
+    userDirectory.deleteGroup(groupName);
   }
 
   /**
-   * Delete the existing organisation.
+   * Delete the organisation.
    *
-   * @param code   the code uniquely identifying the organisation
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code uniquely identifying the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void deleteOrganisation(String code, String origin)
+  public void deleteOrganisation(String code)
     throws OrganisationNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(code))
     {
       throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try (Connection connection = dataSource.getConnection();
@@ -1372,17 +557,17 @@ public class SecurityService
   }
 
   /**
-   * Delete the existing user.
+   * Delete the user.
    *
-   * @param username the username identifying the user
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void deleteUser(String username, String origin)
-    throws UserNotFoundException, SecurityException
+  public void deleteUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -1390,53 +575,23 @@ public class SecurityService
       throw new InvalidArgumentException("username");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteUserSQL))
-    {
-      if (getUserId(connection, username) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      statement.setString(1, username);
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement (" + deleteUserSQL
-            + ")");
-      }
-    }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to delete the user (" + username + "): "
-          + e.getMessage(), e);
-    }
+    userDirectory.deleteUser(username);
   }
 
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param attributes the attribute criteria used to select the users
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param attributes      the attribute criteria used to select the users
    *
-   * @return a list of <code>User</code>s whose attributes match the attribute criteria
+   * @return the list of users whose attributes match the attribute criteria
    *
+   * @throws UserDirectoryNotFoundException
    * @throws InvalidAttributeException
    * @throws SecurityException
    */
-  public List<User> findUsers(List<Attribute> attributes, String origin)
-    throws InvalidAttributeException, SecurityException
+  public List<User> findUsers(long userDirectoryId, List<Attribute> attributes)
+    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException
   {
     // Validate parameters
     if (attributes == null)
@@ -1444,194 +599,161 @@ public class SecurityService
       throw new InvalidArgumentException("attributes");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      try (PreparedStatement statement = buildFindUsersStatement(connection, attributes))
-      {
-        try (ResultSet rs = statement.executeQuery())
-        {
-          List<User> list = new ArrayList<>();
-
-          while (rs.next())
-          {
-            User user = buildUserFromResultSet(rs);
-
-            list.add(user);
-          }
-
-          return list;
-        }
-      }
-    }
-    catch (InvalidAttributeException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to find the users: " + e.getMessage(), e);
-    }
+    return userDirectory.findUsers(attributes);
   }
 
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param attributes the attribute criteria used to select the users
-   * @param startPos   the position in the list of users to start from '0-based'
-   * @param maxResults the maximum number of results to return or -1 for all
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param attributes      the attribute criteria used to select the users
+   * @param startPos        the position in the list of users to start from
+   * @param maxResults      the maximum number of results to return or -1 for all
    *
-   * @return a list of <code>User</code>s whose attributes match the attribute criteria
+   * @return the list of users whose attributes match the attribute criteria
    *
+   * @throws UserDirectoryNotFoundException
    * @throws InvalidAttributeException
    * @throws SecurityException
    */
-  public List<User> findUsersEx(List<Attribute> attributes, int startPos, int maxResults,
-      String origin)
-    throws InvalidAttributeException, SecurityException
-  {
-    List<User> allUsers = findUsers(attributes, origin);
-    List<User> selectedUsers = new ArrayList<>();
-
-    for (int i = startPos; i < (startPos + maxResults); i++)
-    {
-      selectedUsers.add(allUsers.get(i));
-    }
-
-    return selectedUsers;
-  }
-
-  /**
-   * Retrieve the authorised function codes for the user for the specified organisation.
-   * <p/>
-   * This list will include all of the authorised functions that the user is associated with as a
-   * result of being a member of one or more groups that have also been linked to authorised
-   * functions.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the list of authorised function codes for the user for the specified organisation
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public List<String> getAllFunctionCodesForUser(String username, String organisation,
-      String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
+  public List<User> findUsersEx(long userDirectoryId, List<Attribute> attributes, int startPos,
+      int maxResults)
+    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException
   {
     // Validate parameters
-    if (isNullOrEmpty(username))
+    if (attributes == null)
     {
-      throw new InvalidArgumentException("username");
+      throw new InvalidArgumentException("attributes");
     }
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getAllFunctionCodesForUserSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      List<String> list = new ArrayList<>();
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          list.add(rs.getString(1));
-        }
-      }
-
-      // Add the function codes assigned to the user directly
-      getFunctionCodesForUserId(connection, userId, organisationId, list);
-
-      return list;
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve all the function codes for the user ("
-          + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
+    return userDirectory.findUsersEx(attributes, startPos, maxResults);
   }
 
-  /**
-   * Retrieve the list of authorised functions for the user for the specified organisation.
-   * <p/>
-   * This list will include all of the authorised functions that the user is associated with as a
-   * result of being a member of one or more groups that have also been linked to authorised
-   * functions.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the list of authorised functions for the user for the specified organisation
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public List<Function> getAllFunctionsForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
-  {
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
+///**
+// * Retrieve the authorised function codes for the user for the specified organisation.
+// * <p/>
+// * This list will include all of the authorised functions that the user is associated with as a
+// * result of being a member of one or more groups that have also been linked to authorised
+// * functions.
+// *
+// * @param username     the username identifying the user
+// * @param organisation the code uniquely identifying the organisation
+// * @param origin       the origin of the request e.g. the IP address, subnetwork or
+// *                     workstation name for the remote client
+// *
+// * @return the list of authorised function codes for the user for the specified organisation
+// *
+// * @throws UserNotFoundException
+// * @throws OrganisationNotFoundException
+// * @throws SecurityException
+// */
+//public List<String> getAllFunctionCodesForUser(String username, String organisation,
+//    String origin)
+//  throws UserNotFoundException, OrganisationNotFoundException, SecurityException
+//{
+//  // Validate parameters
+//  if (isNullOrEmpty(username))
+//  {
+//    throw new InvalidArgumentException("username");
+//  }
+//
+//  if (isNullOrEmpty(organisation))
+//  {
+//    throw new InvalidArgumentException("organisation");
+//  }
+//
+//  if (isNullOrEmpty(origin))
+//  {
+//    throw new InvalidArgumentException("origin");
+//  }
+//
+//  try (Connection connection = dataSource.getConnection();
+//    PreparedStatement statement = connection.prepareStatement(getAllFunctionCodesForUserSQL))
+//  {
+//    // Get the ID of the user with the specified username
+//    long userId;
+//
+//    if ((userId = getUserId(connection, username)) == -1)
+//    {
+//      throw new UserNotFoundException("The user (" + username + ") could not be found");
+//    }
+//
+//    // Get the ID of the organisation with the specified code
+//    long organisationId;
+//
+//    if ((organisationId = getOrganisationId(connection, organisation)) == -1)
+//    {
+//      throw new OrganisationNotFoundException("The organisation (" + organisation
+//          + ") could not be found");
+//    }
+//
+//    statement.setLong(1, userId);
+//    statement.setLong(2, organisationId);
+//
+//    List<String> list = new ArrayList<>();
+//
+//    try (ResultSet rs = statement.executeQuery())
+//    {
+//      while (rs.next())
+//      {
+//        list.add(rs.getString(1));
+//      }
+//    }
+//
+//    // Add the function codes assigned to the user directly
+//    getFunctionCodesForUserId(connection, userId, organisationId, list);
+//
+//    return list;
+//  }
+//  catch (UserNotFoundException | OrganisationNotFoundException e)
+//  {
+//    throw e;
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new SecurityException("Failed to retrieve all the function codes for the user ("
+//        + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
+//  }
+//}
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    throw new SecurityException("TODO: IMPLEMENT ME");
-  }
+///**
+// * Retrieve the list of authorised functions for the user for the specified organisation.
+// * <p/>
+// * This list will include all of the authorised functions that the user is associated with as a
+// * result of being a member of one or more groups that have also been linked to authorised
+// * functions.
+// *
+// * @param username     the username identifying the user
+// * @param organisation the code uniquely identifying the organisation
+// * @param origin       the origin of the request e.g. the IP address, subnetwork or
+// *                     workstation name for the remote client
+// *
+// * @return the list of authorised functions for the user for the specified organisation
+// *
+// * @throws UserNotFoundException
+// * @throws OrganisationNotFoundException
+// * @throws SecurityException
+// */
+//public List<Function> getAllFunctionsForUser(String username, String organisation, String origin)
+//  throws UserNotFoundException, OrganisationNotFoundException, SecurityException
+//{
+//  if (isNullOrEmpty(username))
+//  {
+//    throw new InvalidArgumentException("username");
+//  }
+//
+//  if (isNullOrEmpty(organisation))
+//  {
+//    throw new InvalidArgumentException("organisation");
+//  }
+//
+//  if (isNullOrEmpty(origin))
+//  {
+//    throw new InvalidArgumentException("origin");
+//  }
+//
+//  throw new SecurityException("TODO: IMPLEMENT ME");
+//}
 
   /**
    * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
@@ -1644,109 +766,45 @@ public class SecurityService
   }
 
   /**
-   * Returns the filtered list of users associated with the specified organisation.
+   * Retrieve the filtered list of users.
    *
-   * @param organisation the code uniquely identifying the organisation
-   * @param filter       the filter to apply to the users
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param filter          the filter to apply to the users
    *
-   * @return the filtered list of the users associated with the specified organisation
+   * @return the filtered list of users
    *
-   * @throws OrganisationNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public List<User> getFilteredUsersForOrganisation(String organisation, String filter,
-      String origin)
-    throws OrganisationNotFoundException, SecurityException
+  public List<User> getFilteredUsers(long userDirectoryId, String filter)
+    throws UserDirectoryNotFoundException, SecurityException
   {
     // Validate parameters
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
     if (isNullOrEmpty(filter))
     {
       throw new InvalidArgumentException("filter");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFilteredUsersForOrganisationSQL))
-    {
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      StringBuilder filterBuffer = new StringBuilder("%");
-
-      filterBuffer.append(filter.toUpperCase());
-      filterBuffer.append("%");
-
-      statement.setLong(1, organisationId);
-      statement.setString(2, filterBuffer.toString());
-      statement.setString(3, filterBuffer.toString());
-      statement.setString(4, filterBuffer.toString());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<User> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          User user = buildUserFromResultSet(rs);
-
-          list.add(user);
-        }
-
-        return list;
-      }
-    }
-    catch (OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the users for the organisation ("
-          + organisation + "): " + e.getMessage(), e);
-    }
+    return userDirectory.getFilteredUsers(filter);
   }
 
   /**
-   * Retrieve the details for the authorised function with the specified code.
+   * Retrieve the authorised function.
    *
-   * @param code   the code identifying the function
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code identifying the function
    *
    * @return the details for the authorised function with the specified code
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public Function getFunction(String code, String origin)
+  public Function getFunction(String code)
     throws FunctionNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(code))
     {
       throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try
@@ -1787,87 +845,85 @@ public class SecurityService
     }
   }
 
+///**
+// * Retrieve the list of authorised function codes for the group.
+// *
+// * @param groupName the name of the group uniquely identifying the group
+// * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
+// *                  for the remote client
+// *
+// * @return the list of authorised function codes for the group
+// *
+// * @throws GroupNotFoundException
+// * @throws SecurityException
+// */
+//public List<String> getFunctionCodesForGroup(String groupName, String origin)
+//  throws GroupNotFoundException, SecurityException
+//{
+//  // Validate parameters
+//  if (isNullOrEmpty(groupName))
+//  {
+//    throw new InvalidArgumentException("groupName");
+//  }
+//
+//  if (isNullOrEmpty(origin))
+//  {
+//    throw new InvalidArgumentException("origin");
+//  }
+//
+//  try
+//  {
+//    try (Connection connection = dataSource.getConnection();
+//      PreparedStatement statement = connection.prepareStatement(getFunctionCodesForGroupSQL))
+//    {
+//      // Get the ID of the group with the specified group name
+//      long groupId;
+//
+//      if ((groupId = getGroupId(connection, groupName)) == -1)
+//      {
+//        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+//      }
+//
+//      statement.setLong(1, groupId);
+//
+//      try (ResultSet rs = statement.executeQuery())
+//      {
+//        List<String> list = new ArrayList<>();
+//
+//        while (rs.next())
+//        {
+//          list.add(rs.getString(1));
+//        }
+//
+//        return list;
+//      }
+//    }
+//  }
+//  catch (GroupNotFoundException e)
+//  {
+//    throw e;
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new SecurityException("Failed to retrieve the function codes for the group ("
+//        + groupName + "): " + e.getMessage(), e);
+//  }
+//}
+
   /**
-   * Retrieve the list of authorised function codes for the group.
+   * Retrieve the authorised function codes for the user.
    *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the list of authorised function codes for the group
+   * @return the list of authorised function codes for the user
    *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
-   */
-  public List<String> getFunctionCodesForGroup(String groupName, String origin)
-    throws GroupNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try
-    {
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getFunctionCodesForGroupSQL))
-      {
-        // Get the ID of the group with the specified group name
-        long groupId;
-
-        if ((groupId = getGroupId(connection, groupName)) == -1)
-        {
-          throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-        }
-
-        statement.setLong(1, groupId);
-
-        try (ResultSet rs = statement.executeQuery())
-        {
-          List<String> list = new ArrayList<>();
-
-          while (rs.next())
-          {
-            list.add(rs.getString(1));
-          }
-
-          return list;
-        }
-      }
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the function codes for the group ("
-          + groupName + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve the list of authorised function codes for the user for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the list of authorised function codes for the user for the specified organisation
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<String> getFunctionCodesForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
+  public List<String> getFunctionCodesForUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -1875,236 +931,19 @@ public class SecurityService
       throw new InvalidArgumentException("username");
     }
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try
-    {
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserSQL))
-      {
-        // Get the ID of the user with the specified username
-        long userId;
-
-        if ((userId = getUserId(connection, username)) == -1)
-        {
-          throw new UserNotFoundException("The user (" + username + ") could not be found");
-        }
-
-        // Get the ID of the organisation with the specified code
-        long organisationId;
-
-        if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-        {
-          throw new OrganisationNotFoundException("The organisation (" + organisation
-              + ") could not be found");
-        }
-
-        statement.setLong(1, userId);
-        statement.setLong(2, organisationId);
-
-        try (ResultSet rs = statement.executeQuery())
-        {
-          List<String> list = new ArrayList<>();
-
-          while (rs.next())
-          {
-            list.add(rs.getString(1));
-          }
-
-          return list;
-        }
-      }
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the function codes for the user (" + username
-          + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve the list of authorised function codes for the user.
-   *
-   * @param connection     the existing database connection to use
-   * @param userId         the numeric ID uniquely identifying the user
-   * @param organisationId the numeric ID uniquely identifying the organisation
-   * @param functionCodes  the list of function codes to populate
-   *
-   * @return the list of authorised function codes for the user with the specified ID
-   *
-   * @throws SQLException
-   */
-  public List<String> getFunctionCodesForUserId(Connection connection, long userId,
-      long organisationId, List<String> functionCodes)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserSQL))
-    {
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          String functionCode = rs.getString(1);
-
-          if (!functionCodes.contains(functionCode))
-          {
-            functionCodes.add(functionCode);
-          }
-        }
-
-        return functionCodes;
-      }
-    }
-  }
-
-  /**
-   * Retrieve the details for the authorised function template with the specified code.
-   *
-   * @param code   the code identifying the function template
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return the details for the authorised function template with the specified code
-   *
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  public FunctionTemplate getFunctionTemplate(String code, String origin)
-    throws FunctionTemplateNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(code))
-    {
-      throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFunctionTemplateSQL))
-    {
-      statement.setString(1, code);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          FunctionTemplate template = new FunctionTemplate(rs.getString(2), rs.getString(3),
-            rs.getString(4));
-
-          template.setId(rs.getInt(1));
-
-          // Retrieve the functions for the template
-          List<Function> functions = getFunctionsForTemplate(template.getId());
-
-          template.setFunctions(functions);
-
-          return template;
-        }
-        else
-        {
-          throw new FunctionTemplateNotFoundException("A function template with the code (" + code
-              + ") could not be found");
-        }
-      }
-    }
-    catch (FunctionTemplateNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the function template (" + code + "): "
-          + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve all the authorised function templates.
-   *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return the list of authorised function templates
-   *
-   * @throws SecurityException
-   */
-  public List<FunctionTemplate> getFunctionTemplates(String origin)
-    throws SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFunctionTemplatesSQL))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<FunctionTemplate> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          FunctionTemplate template = new FunctionTemplate(rs.getString(2), rs.getString(3),
-            rs.getString(4));
-
-          template.setId(rs.getInt(1));
-
-          List<Function> functions = getFunctionsForTemplate(template.getId());
-
-          template.setFunctions(functions);
-          list.add(template);
-        }
-
-        return list;
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the function templates: " + e.getMessage(),
-          e);
-    }
+    return userDirectory.getFunctionCodesForUser(username);
   }
 
   /**
    * Retrieve all the authorised functions.
    *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
    * @return the list of authorised functions
    *
    * @throws SecurityException
    */
-  public List<Function> getFunctions(String origin)
+  public List<Function> getFunctions()
     throws SecurityException
   {
-    // Validate parameters
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getFunctionsSQL))
     {
@@ -2132,170 +971,19 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the list of authorised functions for the group.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
-   * @return the list of authorised functions for the group
-   *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
-   */
-  public List<Function> getFunctionsForGroup(String groupName, String origin)
-    throws GroupNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFunctionsForGroupSQL))
-    {
-      // Get the ID of the group with the specified group name
-      long groupId;
-
-      if ((groupId = getGroupId(connection, groupName)) == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      statement.setLong(1, groupId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Function> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Function function = new Function(rs.getString(2));
-
-          function.setId(rs.getInt(1));
-          function.setName(rs.getString(3));
-          function.setDescription(rs.getString(4));
-          list.add(function);
-        }
-
-        return list;
-      }
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the functions for the group (" + groupName
-          + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve the list of authorised functions for the user for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the list of authorised functions for the user for the specified organisation
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public List<Function> getFunctionsForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFunctionsForUserSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Function> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Function function = new Function(rs.getString(2));
-
-          function.setId(rs.getInt(1));
-          function.setName(rs.getString(3));
-          function.setDescription(rs.getString(4));
-          list.add(function);
-        }
-
-        return list;
-      }
-    }
-    catch (UserNotFoundException | GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the functions for the user (" + username
-          + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
    * Retrieve the group.
    *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param groupName       the name of the group uniquely identifying the group
    *
-   * @return the <code>Group</code>
+   * @return the group
    *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  public Group getGroup(String groupName, String origin)
-    throws GroupNotFoundException, SecurityException
+  public Group getGroup(long userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(groupName))
@@ -2303,101 +991,23 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getGroupSQL))
-    {
-      statement.setString(1, groupName);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          Group group = new Group(rs.getString(2));
-
-          group.setId(rs.getLong(1));
-          group.setDescription(StringUtil.notNull(rs.getString(3)));
-
-          return group;
-        }
-        else
-        {
-          throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-        }
-      }
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the group (" + groupName + "): "
-          + e.getMessage(), e);
-    }
+    return userDirectory.getGroup(groupName);
   }
 
   /**
-   * Retrieve the unique numeric ID for the group.
+   * Retrieve the group names for the user.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the unique numeric ID for the group
+   * @return the group names for the user
    *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
-   */
-  public long getGroupId(String groupName)
-    throws GroupNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      long groupId = getGroupId(connection, groupName);
-
-      if (groupId == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      return groupId;
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the ID for the group (" + groupName + "): "
-          + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve the group names for the user for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the group names for the user for the specified organisation
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<String> getGroupNamesForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
+  public List<String> getGroupNamesForUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -2405,126 +1015,57 @@ public class SecurityService
       throw new InvalidArgumentException("username");
     }
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      return getGroupNamesForUser(connection, userId, organisationId);
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the group names for the user (" + username
-          + ") and organisation (" + organisation + "): " + e.getMessage(), e);
-    }
+    return userDirectory.getGroupNamesForUser(username);
   }
 
   /**
    * Retrieve all the groups.
    *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param userDirectoryId the unique ID for the user directory the groups are associated with
    *
-   * @return a list of <code>Group</code> objects containing the group information
+   * @return the list of groups
    *
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public List<Group> getGroups(String origin)
-    throws SecurityException
+  public List<Group> getGroups(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException
   {
-    // Validate parameters
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getGroupsSQL))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Group> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Group group = new Group(rs.getString(2));
-
-          group.setId(rs.getLong(1));
-          group.setDescription(StringUtil.notNull(rs.getString(3)));
-          list.add(group);
-        }
-
-        return list;
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the groups: " + e.getMessage(), e);
-    }
+    return userDirectory.getGroups();
   }
 
   /**
-   * Retrieve a list of groups.
+   * Retrieve the groups.
    *
-   * @param startPos   the position in the list of groups to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the groups are associated with
+   * @param startPos        the position in the list of groups to start from
+   * @param maxResults      the maximum number of results to return or -1 for all
    *
-   * @return a list of <code>Group</code> objects containing the group information
+   * @return the list of groups
    *
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public List<Group> getGroupsEx(int startPos, int maxResults, String origin)
-    throws SecurityException
+  public List<Group> getGroupsEx(long userDirectoryId, int startPos, int maxResults)
+    throws UserDirectoryNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: IMPLEMENT ME");
+    return userDirectory.getGroupsEx(startPos, maxResults);
   }
 
   /**
-   * Retrieve the groups for the user for the specified organisation.
+   * Retrieve the groups for the user.
    *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the groups for the user for the specified organisation
+   * @return the groups for the user
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<Group> getGroupsForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
+  public List<Group> getGroupsForUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -2532,189 +1073,58 @@ public class SecurityService
       throw new InvalidArgumentException("username");
     }
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Get the list of groups the user is associated with
-      return getGroupsForUser(connection, userId, organisationId);
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the groups for the user (" + username
-          + ") and organisation (" + organisation + "): " + e.getMessage(), e);
-    }
+    return userDirectory.getGroupsForUser(username);
   }
 
   /**
-   * Returns the number of filtered users associated with the specified organisation.
+   * Retrieve the number of filtered users.
    *
-   * @param organisation the code uniquely identifying the organisation
-   * @param filter       the filter to apply to the users
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param filter          the filter to apply to the users
    *
-   * @return the number of filtered users associated with the specified organisation
+   * @return the number of filtered users
    *
-   * @throws OrganisationNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public int getNumberOfFilteredUsersForOrganisation(String organisation, String filter,
-      String origin)
-    throws OrganisationNotFoundException, SecurityException
+  public int getNumberOfFilteredUsers(long userDirectoryId, String filter)
+    throws UserDirectoryNotFoundException, SecurityException
   {
     // Validate parameters
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
     if (isNullOrEmpty(filter))
     {
       throw new InvalidArgumentException("filter");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getNumberOfFilteredUsersForOrganisationSQL))
-    {
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      StringBuilder filterBuffer = new StringBuilder("%");
-
-      filterBuffer.append(filter.toUpperCase());
-      filterBuffer.append("%");
-
-      statement.setLong(1, organisationId);
-      statement.setString(2, filterBuffer.toString());
-      statement.setString(3, filterBuffer.toString());
-      statement.setString(4, filterBuffer.toString());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-    catch (OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the number of users for the organisation ("
-          + organisation + "): " + e.getMessage(), e);
-    }
+    return userDirectory.getNumberOfFilteredUsers(filter);
   }
 
   /**
-   * Returns the number of groups
+   * Retrieve the number of groups
    *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or
-   *               workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the groups are associated with
    *
    * @return the number of groups
    *
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public int getNumberOfGroups(String origin)
-    throws SecurityException
+  public int getNumberOfGroups(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException
   {
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfGroupsSQL))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-    catch (SecurityException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the number of groups" + e.getMessage(), e);
-    }
+    return userDirectory.getNumberOfGroups();
   }
 
   /**
-   * Returns the number of organisations
-   *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or
-   *               workstation name for the remote client
+   * Retrieve the number of organisations
    *
    * @return the number of organisations
    *
    * @throws SecurityException
    */
-  public int getNumberOfOrganisations(String origin)
+  public int getNumberOfOrganisations()
     throws SecurityException
   {
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfOrganisationsSQL))
     {
@@ -2742,92 +1152,38 @@ public class SecurityService
   }
 
   /**
-   * Returns the number of users associated with the specified organisation.
+   * Retrieve the number of users.
    *
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
    *
-   * @return the number of users associated with the specified organisation
+   * @return the number of users
    *
-   * @throws OrganisationNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public int getNumberOfUsersForOrganisation(String organisation, String origin)
-    throws OrganisationNotFoundException, SecurityException
+  public int getNumberOfUsers(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException
   {
-    // Validate parameters
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForOrganisationSQL))
-    {
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      statement.setLong(1, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-    catch (OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the number of users for the organisation ("
-          + organisation + "): " + e.getMessage(), e);
-    }
+    return userDirectory.getNumberOfUsers();
   }
 
   /**
    * Retrieve the organisation.
    *
-   * @param code   the code uniquely identifying the organisation
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code uniquely identifying the organisation
    *
    * @return the details for the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public Organisation getOrganisation(String code, String origin)
+  public Organisation getOrganisation(String code)
     throws OrganisationNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(code))
     {
       throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try (Connection connection = dataSource.getConnection();
@@ -2866,24 +1222,15 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the information for all existing organisations.
+   * Retrieve the organisations.
    *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return a list of <code>Organisation</code> objects containing the organisation information
+   * @return the list of organisations
    *
    * @throws SecurityException
    */
-  public List<Organisation> getOrganisations(String origin)
+  public List<Organisation> getOrganisations()
     throws SecurityException
   {
-    // Validate parameters
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getOrganisationsSQL))
     {
@@ -2912,74 +1259,6 @@ public class SecurityService
   }
 
   /**
-   * Returns the organisations the user is associated with.
-   *
-   * @param username the username identifying the user
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
-   *
-   * @return the organisations the user is associated with
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
-   */
-  public List<Organisation> getOrganisationsForUser(String username, String origin)
-    throws UserNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getOrganisationsForUserSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      statement.setLong(1, userId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Organisation> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Organisation organisation = new Organisation(rs.getString(2));
-
-          organisation.setId(rs.getLong(1));
-          organisation.setName(rs.getString(3));
-          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
-
-          list.add(organisation);
-        }
-
-        return list;
-      }
-    }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the organisations for the user (" + username
-          + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
    * Returns the <code>Registry</code> for the <code>SecurityService</code>.
    *
    * @return the <code>Registry</code> for the <code>SecurityService</code>
@@ -2990,19 +1269,19 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the information for an existing user.
+   * Retrieve the user.
    *
-   * @param username the username identifying the user
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the <code>User</code>
+   * @return the user
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public User getUser(String username, String origin)
-    throws UserNotFoundException, SecurityException
+  public User getUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -3010,395 +1289,65 @@ public class SecurityService
       throw new InvalidArgumentException("username");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
+    return userDirectory.getUser(username);
+  }
 
-    try (Connection connection = dataSource.getConnection())
-    {
-      User user = getUser(connection, username);
+///**
+// * Retrieve the unique numeric ID for the user.
+// *
+// * @param userDirectoryId the unique ID for the user directory the user is associated with
+// * @param username        the username identifying the user
+// *
+// * @return the unique numeric ID for the user
+// *
+// * @throws UserDirectoryNotFoundException
+// * @throws UserNotFoundException
+// * @throws SecurityException
+// */
+//public long getUserId(long userDirectoryId, String username)
+//  throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
+//{
+//  // Validate parameters
+//  if (isNullOrEmpty(username))
+//  {
+//    throw new InvalidArgumentException("username");
+//  }
+//
+//  return userDirectory.getUserId(username);
+//}
 
-      if (user != null)
-      {
-        return user;
-      }
-      else
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-    }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the user (" + username + "): "
-          + e.getMessage(), e);
-    }
+  /**
+   * Retrieve all the users.
+   *
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   *
+   * @return the list of users
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  public List<User> getUsers(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException
+  {
+    return userDirectory.getUsers();
   }
 
   /**
-   * Retrieve the unique numeric ID for the user.
+   * Retrieve the users.
    *
-   * @param username the username identifying the user
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param startPos        the position in the list of users to start from
+   * @param maxResults      the maximum number of results to return or -1 for all
    *
-   * @return the unique numeric ID for the user
+   * @return the list of users
    *
-   * @throws UserNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public long getUserId(String username)
-    throws UserNotFoundException, SecurityException
+  public List<User> getUsersEx(long userDirectoryId, int startPos, int maxResults)
+    throws UserDirectoryNotFoundException, SecurityException
   {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      long userId = getUserId(connection, username);
-
-      if (userId == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      return userId;
-    }
-    catch (SecurityException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the ID for the user (" + username + "): "
-          + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve the information for all existing users.
-   *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return a list of <code>User</code> objects containing the user information
-   *
-   * @throws SecurityException
-   */
-  public List<User> getUsers(String origin)
-    throws SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUsersSQL))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<User> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          User user = buildUserFromResultSet(rs);
-
-          list.add(user);
-        }
-
-        return list;
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the users: " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve the information for a subset of all the existing users.
-   *
-   * @param startPos   the position in the list of users to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
-   *
-   * @return a list of <code>User</code> objects containing the user information
-   *
-   * @throws SecurityException
-   */
-  public List<User> getUsersEx(int startPos, int maxResults, String origin)
-    throws SecurityException
-  {
-    throw new SecurityException("TODO: IMPLEMENT ME");
-  }
-
-  /**
-   * Retrieve the users for the group for the specified organisation.
-   *
-   * @param groupName    the name of the group uniquely identifying the group
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return a list of <code>User</code> objects containing the user information
-   *
-   * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public List<User> getUsersForGroup(String groupName, String organisation, String origin)
-    throws GroupNotFoundException, OrganisationNotFoundException, SecurityException
-  {
-    throw new SecurityException("TODO: IMPLEMENT ME");
-  }
-
-  /**
-   * Returns the users associated with the specified organisation.
-   *
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the users associated with the specified organisation
-   *
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public List<User> getUsersForOrganisation(String organisation, String origin)
-    throws OrganisationNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUsersForOrganisationSQL))
-    {
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      statement.setLong(1, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<User> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          User user = buildUserFromResultSet(rs);
-
-          list.add(user);
-        }
-
-        return list;
-      }
-    }
-    catch (OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the users for the organisation ("
-          + organisation + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Add the authorised function to the group's access profile.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param code      the code identifying the authorised function
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
-   * @throws GroupNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws SecurityException
-   */
-  public void grantFunctionToGroup(String groupName, String code, String origin)
-    throws GroupNotFoundException, FunctionNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (isNullOrEmpty(code))
-    {
-      throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(grantFunctionToGroupSQL))
-    {
-      // Get the ID of the group with the specified group name
-      long groupId;
-
-      if ((groupId = getGroupId(connection, groupName)) == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      // Get the ID of the function with the specified code
-      long functionId;
-
-      if ((functionId = getFunctionId(connection, code)) == -1)
-      {
-        throw new FunctionNotFoundException("The function (" + code + ") could not be found");
-      }
-
-      // Check if the group has already been granted the function
-      if (isGroupGrantedFunction(connection, groupId, functionId))
-      {
-        // The user has already been granted the function
-        return;
-      }
-
-      // Grant the function to the user
-      statement.setLong(1, groupId);
-      statement.setLong(2, functionId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + grantFunctionToGroupSQL + ")");
-      }
-    }
-    catch (GroupNotFoundException | FunctionNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to grant the function (" + code + ") to the group ("
-          + groupName + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Add the authorised function to the user's access profile for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param code         the code identifying the authorised function
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public void grantFunctionToUser(String username, String code, String organisation, String origin)
-    throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
-      SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(code))
-    {
-      throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(grantFunctionToUserSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the function with the specified code
-      long functionId;
-
-      if ((functionId = getFunctionId(connection, code)) == -1)
-      {
-        throw new FunctionNotFoundException("The function (" + code + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Check if the user has already been granted the function
-      if (isUserGrantedFunction(connection, userId, functionId, organisationId))
-      {
-        // The user has already been granted the function
-        return;
-      }
-
-      // Grant the function to the user
-      statement.setLong(1, userId);
-      statement.setLong(2, functionId);
-      statement.setLong(3, organisationId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + grantFunctionToUserSQL + ")");
-      }
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException | FunctionNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to grant the function (" + code + ") to the user ("
-          + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
+    return userDirectory.getUsersEx(startPos, maxResults);
   }
 
   /**
@@ -3431,6 +1380,8 @@ public class SecurityService
 
     try
     {
+      userDirectory = new InternalUserDirectory(1, new HashMap<>());
+
       // Retrieve the database meta data
       String schemaSeparator;
 
@@ -3458,99 +1409,28 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to initialise the SecurityService instance: "
-          + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if the user is associated with the specified organisation or
-   * <code>false</code> otherwise.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return <code>true</code> if the user is associated with the specified organisation or
-   *         <code>false</code> otherwise
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public boolean isUserAssociatedWithOrganisation(String username, String organisation,
-      String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Get the current list of groups for the user
-      return isUserAssociatedWithOrganisation(connection, userId, organisationId);
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to check whether the user (" + username
-          + ") is associated with the organisation (" + organisation + "): " + e.getMessage(), e);
+      throw new SecurityException("Failed to initialise the Security Service: " + e.getMessage(),
+          e);
     }
   }
 
   /**
    * Is the user in the group for the specified organisation?
    *
-   * @param username     the username identifying the user
-   * @param groupName    the name of the group uniquely identifying the group
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group and user are associated
+   *                        with
+   * @param username        the username identifying the user
+   * @param groupName       the name of the group uniquely identifying the group
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public boolean isUserInGroup(String username, String groupName, String organisation,
-      String origin)
-    throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
+  public boolean isUserInGroup(long userDirectoryId, String username, String groupName)
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException
   {
     // Validate parameters
@@ -3564,56 +1444,7 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the group with the specified group name
-      long groupId;
-
-      if ((groupId = getGroupId(connection, groupName)) == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Get the current list of groups for the user
-      return isUserInGroup(connection, userId, groupId, organisationId);
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException | GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to check whether the user (" + username
-          + ") is in the group (" + groupName + ") for the organisation (" + organisation + "): "
-          + e.getMessage(), e);
-    }
+    return userDirectory.isUserInGroup(username, groupName);
   }
 
   /**
@@ -3719,91 +1550,20 @@ public class SecurityService
   }
 
   /**
-   * Remove the authorised function with specified code from the authorised function template with
-   * the specified code.
+   * Remove the user from the group.
    *
-   * @param functionCode the code identifying the authorised function
-   * @param templateCode the code identifying the authorised function template
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user and group are associated
+   *                        with
+   * @param username        the username identifying the user
+   * @param groupName       the group name
    *
-   * @throws FunctionNotFoundException
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  public void removeFunctionFromTemplate(String functionCode, String templateCode, String origin)
-    throws FunctionNotFoundException, FunctionTemplateNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(functionCode))
-    {
-      throw new InvalidArgumentException("functionCode");
-    }
-
-    if (isNullOrEmpty(templateCode))
-    {
-      throw new InvalidArgumentException("templateCode");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(removeFunctionFromTemplateSQL))
-    {
-      // Get the ID of the function with the specified code
-      long functionId;
-
-      if ((functionId = getFunctionId(connection, functionCode)) == -1)
-      {
-        throw new FunctionNotFoundException("A function with the code (" + functionCode
-            + ") could not be found");
-      }
-
-      // Get the ID of the function template with the specified code
-      long templateId;
-
-      if ((templateId = getFunctionTemplateId(connection, templateCode)) == -1)
-      {
-        throw new FunctionTemplateNotFoundException("A function template with the code ("
-            + templateCode + ") could not be found");
-      }
-
-      // Remove the function from the template
-      statement.setLong(1, functionId);
-      statement.setLong(2, templateId);
-      statement.executeUpdate();
-    }
-    catch (FunctionNotFoundException | FunctionTemplateNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to remove the function (" + functionCode
-          + ") from the function template (" + templateCode + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Remove the user from the group for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param groupName    the group name
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void removeUserFromGroup(String username, String groupName, String organisation,
-      String origin)
-    throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
+  public void removeUserFromGroup(long userDirectoryId, String username, String groupName)
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException
   {
     // Validate parameters
@@ -3817,166 +1577,24 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(removeUserFromGroupSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the group with the specified group name
-      long groupId;
-
-      if ((groupId = getGroupId(connection, groupName)) == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Remove the user from the group
-      statement.setLong(1, userId);
-      statement.setLong(2, groupId);
-      statement.setLong(3, organisationId);
-      statement.executeUpdate();
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException | GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to remove the user (" + username + ") from the group ("
-          + groupName + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Remove the user from the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public void removeUserFromOrganisation(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(removeUserFromOrganisationSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Remove the user from the organisation
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + removeUserFromOrganisationSQL + ")");
-      }
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to remove the user (" + username
-          + ") from the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
+    userDirectory.removeUserFromGroup(username, groupName);
   }
 
   /**
    * Rename the existing group.
    *
-   * @param groupName    the name of the group that will be renamed
-   * @param newGroupName the new name of the group
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param groupName       the name of the group that will be renamed
+   * @param newGroupName    the new name of the group
    *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  public void renameGroup(String groupName, String newGroupName, String origin)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
-  {
-    throw new SecurityException("TODO: IMPLEMENT ME");
-  }
-
-  /**
-   * Remove the authorised function from the group's access profile.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param code      the code identifying the authorised function
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
-   * @throws GroupNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws SecurityException
-   */
-  public void revokeFunctionForGroup(String groupName, String code, String origin)
-    throws GroupNotFoundException, FunctionNotFoundException, SecurityException
+  public void renameGroup(long userDirectoryId, String groupName, String newGroupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
+      SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(groupName))
@@ -3984,134 +1602,12 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
-    if (isNullOrEmpty(code))
+    if (isNullOrEmpty(newGroupName))
     {
-      throw new InvalidArgumentException("code");
+      throw new InvalidArgumentException("newGroupName");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(revokeFunctionForGroupSQL))
-    {
-      // Get the ID of the group with the specified group name
-      long groupId;
-
-      if ((groupId = getGroupId(connection, groupName)) == -1)
-      {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-      }
-
-      // Get the ID of the function with the specified code
-      long functionId;
-
-      if ((functionId = getFunctionId(connection, code)) == -1)
-      {
-        throw new FunctionNotFoundException("The function (" + code + ") could not be found");
-      }
-
-      // Revoke the function for the group
-      statement.setLong(1, groupId);
-      statement.setLong(2, functionId);
-      statement.executeUpdate();
-    }
-    catch (GroupNotFoundException | FunctionNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to revoke the function (" + code + ") for the group ("
-          + groupName + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Remove the authorised function from the user's access profile for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param code         the code identifying the authorised function
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  public void revokeFunctionForUser(String username, String code, String organisation,
-      String origin)
-    throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
-      SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(code))
-    {
-      throw new InvalidArgumentException("code");
-    }
-
-    if (isNullOrEmpty(organisation))
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(revokeFunctionForUserSQL))
-    {
-      // Get the ID of the user with the specified username
-      long userId;
-
-      if ((userId = getUserId(connection, username)) == -1)
-      {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
-      }
-
-      // Get the ID of the function with the specified code
-      long functionId;
-
-      if ((functionId = getFunctionId(connection, code)) == -1)
-      {
-        throw new FunctionNotFoundException("The function (" + code + ") could not be found");
-      }
-
-      // Get the ID of the organisation with the specified code
-      long organisationId;
-
-      if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-      {
-        throw new OrganisationNotFoundException("The organisation (" + organisation
-            + ") could not be found");
-      }
-
-      // Revoke the function for the user
-      statement.setLong(1, userId);
-      statement.setLong(2, functionId);
-      statement.setLong(3, organisationId);
-      statement.executeUpdate();
-    }
-    catch (UserNotFoundException | OrganisationNotFoundException | GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to revoke the function (" + code + ") for the user ("
-          + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-    }
+    userDirectory.renameGroup(groupName, newGroupName);
   }
 
   /**
@@ -4137,15 +1633,12 @@ public class SecurityService
   /**
    * Update the authorised function.
    *
-   * @param function the <code>Function</code> instance containing the updated authorised function
-   *                 information
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param function the function
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  public void updateFunction(Function function, String origin)
+  public void updateFunction(Function function)
     throws FunctionNotFoundException, SecurityException
   {
     // Validate parameters
@@ -4157,11 +1650,6 @@ public class SecurityService
     if (isNullOrEmpty(function.getName()))
     {
       throw new InvalidArgumentException("function.name");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try (Connection connection = dataSource.getConnection();
@@ -4196,78 +1684,17 @@ public class SecurityService
   }
 
   /**
-   * Update the authorised function template.
+   * Update the group.
    *
-   * @param template the <code>FunctionTemplate</code> instance containing the updated authorised
-   *                 function template information
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param group           the group
    *
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  public void updateFunctionTemplate(FunctionTemplate template, String origin)
-    throws FunctionTemplateNotFoundException, SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(template.getCode()))
-    {
-      throw new InvalidArgumentException("template.code");
-    }
-
-    if (isNullOrEmpty(template.getName()))
-    {
-      throw new InvalidArgumentException("template.name");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateFunctionTemplateSQL))
-    {
-      if (getFunctionTemplateId(connection, template.getCode()) == -1)
-      {
-        throw new FunctionTemplateNotFoundException("A function template with the code ("
-            + template.getCode() + ") could not be found");
-      }
-
-      statement.setString(1, template.getName());
-      statement.setString(2, StringUtil.notNull(template.getDescription()));
-      statement.setString(3, template.getCode());
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + updateFunctionTemplateSQL + ")");
-      }
-    }
-    catch (FunctionTemplateNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to update the function template (" + template.getCode()
-          + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Update the existing group.
-   *
-   * @param group  the <code>Group</code> instance containing the updated group information
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  public void updateGroup(Group group, String origin)
-    throws GroupNotFoundException, SecurityException
+  public void updateGroup(long userDirectoryId, Group group)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(group.getGroupName()))
@@ -4275,53 +1702,18 @@ public class SecurityService
       throw new InvalidArgumentException("group.groupName");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateGroupSQL))
-    {
-      if (getGroupId(connection, group.getGroupName()) == -1)
-      {
-        throw new GroupNotFoundException("The group (" + group.getGroupName()
-            + ") could not be found");
-      }
-
-      statement.setString(1, StringUtil.notNull(group.getDescription()));
-      statement.setString(2, group.getGroupName());
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement (" + updateGroupSQL
-            + ")");
-      }
-    }
-    catch (GroupNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to update the group (" + group.getGroupName() + "): "
-          + e.getMessage(), e);
-    }
+    userDirectory.updateGroup(group);
   }
 
   /**
-   * Update the existing organisation.
+   * Update the organisation.
    *
-   * @param organisation the <code>Organisation</code> instance containing the updated information
-   *                     for the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param organisation the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void updateOrganisation(Organisation organisation, String origin)
+  public void updateOrganisation(Organisation organisation)
     throws OrganisationNotFoundException, SecurityException
   {
     if (isNullOrEmpty(organisation.getCode()))
@@ -4332,11 +1724,6 @@ public class SecurityService
     if (isNullOrEmpty(organisation.getName()))
     {
       throw new InvalidArgumentException("organisation.name");
-    }
-
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
     }
 
     try (Connection connection = dataSource.getConnection();
@@ -4371,21 +1758,19 @@ public class SecurityService
   }
 
   /**
-   * Update the existing user.
+   * Update the user.
    *
-   * @param user           the <code>User</code> instance containing the update information for the
-   *                       user
-   * @param expirePassword expire the user's password as part of the update
-   * @param lockUser       lock the user as part of the update
-   * @param origin         the origin of the request e.g. the IP address, subnetwork or workstation
-   *                       name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param user            the user
+   * @param expirePassword  expire the user's password as part of the update
+   * @param lockUser        lock the user as part of the update
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  @SuppressWarnings("ConstantConditions")
-  public void updateUser(User user, boolean expirePassword, boolean lockUser, String origin)
-    throws UserNotFoundException, SecurityException
+  public void updateUser(long userDirectoryId, User user, boolean expirePassword, boolean lockUser)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(user.getUsername()))
@@ -4393,317 +1778,33 @@ public class SecurityService
       throw new InvalidArgumentException("user.username");
     }
 
-    if (isNullOrEmpty(origin))
-    {
-      throw new InvalidArgumentException("origin");
-    }
-
-    try (Connection connection = dataSource.getConnection())
-    {
-      if (getUserId(connection, user.getUsername()) == -1)
-      {
-        throw new UserNotFoundException("The user (" + user.getUsername() + ") could not be found");
-      }
-
-      StringBuilder buffer = new StringBuilder();
-
-      buffer.append("UPDATE ");
-      buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
-          databaseCatalogSeparator);
-
-      buffer.append("USERS ");
-
-      StringBuilder fieldsBuffer = new StringBuilder();
-
-      if (user.getTitle() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET TITLE=?"
-            : ", TITLE=?");
-      }
-
-      if (user.getFirstNames() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET FIRST_NAMES=?"
-            : ", FIRST_NAMES=?");
-      }
-
-      if (user.getLastName() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET LAST_NAME=?"
-            : ", LAST_NAME=?");
-      }
-
-      if (user.getEmail() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET EMAIL=?"
-            : ", EMAIL=?");
-      }
-
-      if (user.getPhoneNumber() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PHONE=?"
-            : ", PHONE=?");
-      }
-
-      if (user.getFaxNumber() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET FAX=?"
-            : ", FAX=?");
-      }
-
-      if (user.getMobileNumber() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET MOBILE=?"
-            : ", MOBILE=?");
-      }
-
-      if (user.getDescription() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET DESCRIPTION=?"
-            : ", DESCRIPTION=?");
-      }
-
-      if (!StringUtil.isNullOrEmpty(user.getPassword()))
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PASSWORD=?"
-            : ", PASSWORD=?");
-      }
-
-      if (lockUser || (user.getPasswordAttempts() != null))
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PASSWORD_ATTEMPTS=?"
-            : ", PASSWORD_ATTEMPTS=?");
-      }
-
-      if (expirePassword || (user.getPasswordExpiry() != null))
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PASSWORD_EXPIRY=?"
-            : ", PASSWORD_EXPIRY=?");
-      }
-
-      buffer.append(fieldsBuffer.toString());
-      buffer.append(" WHERE UPPER(USERNAME)=UPPER(CAST(? AS VARCHAR(100)))");
-
-      String updateUserSQL = buffer.toString();
-
-      try (PreparedStatement statement = connection.prepareStatement(updateUserSQL))
-      {
-        int parameterIndex = 1;
-
-        if (user.getTitle() != null)
-        {
-          statement.setString(parameterIndex, user.getTitle());
-          parameterIndex++;
-        }
-
-        if (user.getFirstNames() != null)
-        {
-          statement.setString(parameterIndex, user.getFirstNames());
-          parameterIndex++;
-        }
-
-        if (user.getLastName() != null)
-        {
-          statement.setString(parameterIndex, user.getLastName());
-          parameterIndex++;
-        }
-
-        if (user.getEmail() != null)
-        {
-          statement.setString(parameterIndex, user.getEmail());
-          parameterIndex++;
-        }
-
-        if (user.getPhoneNumber() != null)
-        {
-          statement.setString(parameterIndex, user.getPhoneNumber());
-          parameterIndex++;
-        }
-
-        if (user.getFaxNumber() != null)
-        {
-          statement.setString(parameterIndex, user.getFaxNumber());
-          parameterIndex++;
-        }
-
-        if (user.getMobileNumber() != null)
-        {
-          statement.setString(parameterIndex, user.getMobileNumber());
-          parameterIndex++;
-        }
-
-        if (user.getDescription() != null)
-        {
-          statement.setString(parameterIndex, user.getDescription());
-          parameterIndex++;
-        }
-
-        if (user.getPassword() != null)
-        {
-          if (user.getPassword().length() > 0)
-          {
-            statement.setString(parameterIndex, createPasswordHash(user.getPassword()));
-          }
-          else
-          {
-            statement.setString(parameterIndex, "");
-          }
-
-          parameterIndex++;
-        }
-
-        if (lockUser || (user.getPasswordAttempts() != null))
-        {
-          if (lockUser)
-          {
-            statement.setInt(parameterIndex, -1);
-          }
-          else
-          {
-            statement.setInt(parameterIndex, user.getPasswordAttempts());
-          }
-
-          parameterIndex++;
-        }
-
-        if (expirePassword || (user.getPasswordExpiry() != null))
-        {
-          if (expirePassword)
-          {
-            statement.setTimestamp(parameterIndex, new Timestamp(System.currentTimeMillis()));
-          }
-          else
-          {
-            statement.setTimestamp(parameterIndex,
-                new Timestamp(user.getPasswordExpiry().getTime()));
-          }
-
-          parameterIndex++;
-        }
-
-        statement.setString(parameterIndex, user.getUsername());
-
-        if (statement.executeUpdate() != 1)
-        {
-          throw new SecurityException(
-              "No rows were affected as a result of executing the SQL statement (" + updateUserSQL
-              + ")");
-        }
-      }
-    }
-    catch (UserNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to update the user (" + user.getUsername() + "): "
-          + e.getMessage(), e);
-    }
+    userDirectory.updateUser(user, expirePassword, lockUser);
   }
 
   /**
    * Generate the SQL statements for the <code>SecurityService</code>.
    *
-   * @param schemaPrefix the schema prefix to append to database objects reference by the
+   * @param schemaPrefix the schema prefix to prepend to database objects
    *
-   * @throws SQLException if a database error occurs
+   * @throws SQLException
    */
-  protected void buildStatements(String schemaPrefix)
+  private void buildStatements(String schemaPrefix)
     throws SQLException
   {
-    // addFunctionToTemplateSQL
-    addFunctionToTemplateSQL = "INSERT INTO " + schemaPrefix + "FUNCTION_TEMPLATE_MAP"
-        + " (FUNCTION_ID, TEMPLATE_ID) VALUES (?, ?)";
-
-    // addUserToGroupSQL
-    addUserToGroupSQL = "INSERT INTO " + schemaPrefix + "USER_GROUP_MAP"
-        + " (USER_ID, GROUP_ID, ORGANISATION_ID) VALUES (?, ?, ?)";
-
-    // addUserToOrganisationSQL
-    addUserToOrganisationSQL = "INSERT INTO " + schemaPrefix + "USER_ORGANISATION_MAP"
-        + " (USER_ID, ORGANISATION_ID) VALUES (?, ?)";
-
-    // changePasswordSQL
-    changePasswordSQL = "UPDATE " + schemaPrefix + "USERS"
-        + " SET PASSWORD=?, PASSWORD_ATTEMPTS=?, PASSWORD_EXPIRY=?"
-        + " WHERE UPPER(USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
     // createFunctionSQL
     createFunctionSQL = "INSERT INTO " + schemaPrefix + "FUNCTIONS"
         + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
-
-    // createFunctionTemplateSQL
-    createFunctionTemplateSQL = "INSERT INTO " + schemaPrefix + "FUNCTION_TEMPLATES"
-        + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
-
-    // createGroupSQL
-    createGroupSQL = "INSERT INTO " + schemaPrefix + "GROUPS"
-        + " (ID, GROUPNAME, DESCRIPTION) VALUES (?, ?, ?)";
 
     // createOrganisationSQL
     createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS"
         + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
-    // createUserSQL
-    createUserSQL = "INSERT INTO " + schemaPrefix + "USERS"
-        + " (ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, PHONE,"
-        + " FAX, MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY,"
-        + " DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
     // deleteFunctionSQL
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS WHERE CODE=?";
-
-    // deleteFunctionTemplateSQL
-    deleteFunctionTemplateSQL = "DELETE FROM " + schemaPrefix + "FUNCTION_TEMPLATES"
-        + " WHERE CODE=?";
-
-    // deleteGroupSQL
-    deleteGroupSQL = "DELETE FROM " + schemaPrefix + "GROUPS"
-        + " WHERE UPPER(GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // deleteOrganisationSQL
     deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS"
         + " WHERE UPPER(CODE)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // deleteUserSQL
-    deleteUserSQL = "DELETE FROM " + schemaPrefix + "USERS"
-        + " WHERE UPPER(USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // getAllFunctionCodesForUserSQL
-    getAllFunctionCodesForUserSQL = "SELECT DISTINCT A.CODE FROM " + schemaPrefix + "FUNCTIONS A, "
-        + schemaPrefix + "FUNCTION_GROUP_MAP B WHERE A.ID = B.FUNCTION_ID AND"
-        + " B.GROUP_ID IN (SELECT GROUP_ID FROM " + schemaPrefix + "USER_GROUP_MAP WHERE"
-        + " USER_ID=? AND ORGANISATION_ID=?)";
-
-    // getFilteredUsersForOrganisationSQL
-    getFilteredUsersForOrganisationSQL = "SELECT A.ID, A.USERNAME, A.PASSWORD,"
-        + " A.TITLE, A.FIRST_NAMES, A.LAST_NAME, A.PHONE, A.FAX, A.MOBILE,"
-        + " A.EMAIL, A.PASSWORD_ATTEMPTS, A.PASSWORD_EXPIRY, A.DESCRIPTION FROM " + schemaPrefix
-        + "USERS A, " + schemaPrefix + "USER_ORGANISATION_MAP B"
-        + " WHERE A.ID = B.USER_ID AND B.ORGANISATION_ID=?"
-        + " AND ((UPPER(A.USERNAME) LIKE ?) OR (UPPER(A.FIRST_NAMES) LIKE ?)"
-        + " OR (UPPER(A.LAST_NAME) LIKE ?)) ORDER BY A.USERNAME";
-
-    // getFunctionCodesForGroupSQL
-    getFunctionCodesForGroupSQL = "SELECT DISTINCT A.CODE FROM " + schemaPrefix + "FUNCTIONS A, "
-        + schemaPrefix + "FUNCTION_GROUP_MAP B WHERE A.ID = B.FUNCTION_ID AND" + " B.GROUP_ID=?";
-
-    // getFunctionCodesForUserSQL
-    getFunctionCodesForUserSQL = "SELECT DISTINCT A.CODE FROM " + schemaPrefix + "FUNCTIONS A, "
-        + schemaPrefix + "FUNCTION_USER_MAP B WHERE A.ID = B.FUNCTION_ID AND"
-        + " B.USER_ID=? AND B.ORGANISATION_ID=?";
 
     // getFunctionIdSQL
     getFunctionIdSQL = "SELECT ID FROM " + schemaPrefix + "FUNCTIONS WHERE CODE=?";
@@ -4712,77 +1813,15 @@ public class SecurityService
     getFunctionSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
         + "FUNCTIONS WHERE CODE=?";
 
-    // getFunctionTemplateIdSQL
-    getFunctionTemplateIdSQL = "SELECT ID FROM " + schemaPrefix + "FUNCTION_TEMPLATES"
-        + " WHERE CODE=?";
-
-    // getFunctionTemplateSQL
-    getFunctionTemplateSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTION_TEMPLATES WHERE CODE=?";
-
-    // getFunctionTemplatesSQL
-    getFunctionTemplatesSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTION_TEMPLATES";
-
-    // getFunctionsForGroupSQL
-    getFunctionsForGroupSQL = "SELECT A.ID, A.CODE, A.NAME, A.DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS A, " + schemaPrefix + "FUNCTION_GROUP_MAP B"
-        + " WHERE A.ID = B.FUNCTION_ID AND B.GROUP_ID=?";
-
-    // getFunctionsForTemplateSQL
-    getFunctionsForTemplateSQL = "SELECT A.ID, A.CODE, A.NAME, A.DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS A, " + schemaPrefix + "FUNCTION_TEMPLATE_MAP B"
-        + " WHERE A.ID = B.FUNCTION_ID AND B.TEMPLATE_ID=?";
-
-    // getFunctionsForUserSQL
-    getFunctionsForUserSQL = "SELECT A.ID, A.CODE, A.NAME, A.DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS A, " + schemaPrefix + "FUNCTION_USER_MAP B"
-        + " WHERE A.ID = B.FUNCTION_ID AND B.USER_ID=? AND B.ORGANISATION_ID=?";
-
     // getFunctionsSQL
     getFunctionsSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix + "FUNCTIONS";
 
-    // getGroupIdSQL
-    getGroupIdSQL = "SELECT ID FROM " + schemaPrefix + "GROUPS"
-        + " WHERE UPPER(GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // getGroupNamesForUserSQL
-    getGroupNamesForUserSQL = "SELECT A.GROUPNAME FROM " + schemaPrefix + "GROUPS A, "
-        + schemaPrefix + "USER_GROUP_MAP B"
-        + " WHERE A.ID = B.GROUP_ID AND B.USER_ID=? AND B.ORGANISATION_ID=?"
-        + " ORDER BY A.GROUPNAME";
-
-    // getGroupSQL
-    getGroupSQL = "SELECT ID, GROUPNAME, DESCRIPTION FROM " + schemaPrefix
-        + "GROUPS WHERE UPPER(GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // getGroupsForUserSQL
-    getGroupsForUserSQL = "SELECT A.ID, A.GROUPNAME, A.DESCRIPTION FROM " + schemaPrefix
-        + "GROUPS A, " + schemaPrefix + "USER_GROUP_MAP B"
-        + " WHERE A.ID = B.GROUP_ID AND B.USER_ID=? AND B.ORGANISATION_ID=?"
-        + " ORDER BY A.GROUPNAME";
-
-    // getGroupsSQL
-    getGroupsSQL = "SELECT ID, GROUPNAME, DESCRIPTION FROM " + schemaPrefix
-        + "GROUPS ORDER BY GROUPNAME";
-
-    // getNumberOfFilteredUsersForOrganisationSQL
-    getNumberOfFilteredUsersForOrganisationSQL = "SELECT COUNT(A.ID) FROM " + schemaPrefix
-        + "USERS A, " + schemaPrefix + " USER_ORGANISATION_MAP B"
-        + " WHERE A.ID = B.USER_ID AND B.ORGANISATION_ID=?"
-        + " AND ((UPPER(A.USERNAME) LIKE ?) OR (UPPER(A.FIRST_NAMES) LIKE ?)"
-        + " OR (UPPER(A.LAST_NAME) LIKE ?))";
-
-    // getNumberOfGroupsSQL
-    getNumberOfGroupsSQL = "SELECT COUNT(A.ID) FROM " + schemaPrefix + "GROUPS A";
+    // getInternalUserDirectoryIdForUserSQL
+    getInternalUserDirectoryIdForUserSQL = "SELECT IU.USER_DIRECTORY_ID FROM " + schemaPrefix
+        + "INTERNAL_USERS IU WHERE UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getNumberOfOrganisationsSQL
     getNumberOfOrganisationsSQL = "SELECT COUNT(A.ID) FROM " + schemaPrefix + "ORGANISATIONS A";
-
-    // getNumberOfUsersForOrganisationSQL
-    getNumberOfUsersForOrganisationSQL = "SELECT COUNT(A.ID) FROM " + schemaPrefix + "USERS A, "
-        + schemaPrefix + "USER_ORGANISATION_MAP B"
-        + " WHERE A.ID = B.USER_ID AND B.ORGANISATION_ID=?";
 
     // getOrganisationIdSQL
     getOrganisationIdSQL = "SELECT ID FROM " + schemaPrefix + "ORGANISATIONS"
@@ -4792,96 +1831,13 @@ public class SecurityService
     getOrganisationSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
         + "ORGANISATIONS WHERE UPPER(CODE)=UPPER(CAST(? AS VARCHAR(100)))";
 
-    // getOrganisationsForUserSQL
-    getOrganisationsForUserSQL = "SELECT A.ID, A.CODE, A.NAME, A.DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS A, " + schemaPrefix + "USER_ORGANISATION_MAP B"
-        + " WHERE A.ID = B.ORGANISATION_ID AND B.USER_ID=? ORDER BY A.NAME";
-
     // getOrganisationsSQL
     getOrganisationsSQL = "SELECT ID, CODE, NAME, DESCRIPTION FROM " + schemaPrefix
         + "ORGANISATIONS ORDER BY NAME";
 
-    // getUserIdSQL
-    getUserIdSQL = "SELECT ID FROM " + schemaPrefix + "USERS"
-        + " WHERE UPPER(USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // getUserIdsForGroupSQL
-    getUserIdsForGroupSQL = "SELECT A.ID FROM " + schemaPrefix + "USERS A, " + schemaPrefix
-        + "USER_GROUP_MAP B WHERE A.ID = B.USER_ID AND B.GROUP_ID=?";
-
-    // getUserSQL
-    getUserSQL = "SELECT ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES,"
-        + " LAST_NAME, PHONE, FAX,  MOBILE, EMAIL, PASSWORD_ATTEMPTS,"
-        + " PASSWORD_EXPIRY, DESCRIPTION FROM " + schemaPrefix + "USERS"
-        + " WHERE UPPER(USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // getUsersForOrganisationSQL
-    getUsersForOrganisationSQL = "SELECT A.ID, A.USERNAME, A.PASSWORD,"
-        + " A.TITLE, A.FIRST_NAMES, A.LAST_NAME, A.PHONE, A.FAX, A.MOBILE,"
-        + " A.EMAIL, A.PASSWORD_ATTEMPTS, A.PASSWORD_EXPIRY, A.DESCRIPTION FROM " + schemaPrefix
-        + "USERS A, " + schemaPrefix + "USER_ORGANISATION_MAP B"
-        + " WHERE A.ID = B.USER_ID AND B.ORGANISATION_ID=?" + " ORDER BY A.USERNAME";
-
-    // getUsersSQL
-    getUsersSQL = "SELECT ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES,"
-        + " LAST_NAME, PHONE, FAX, MOBILE, EMAIL, PASSWORD_ATTEMPTS,"
-        + " PASSWORD_EXPIRY, DESCRIPTION FROM " + schemaPrefix + "USERS";
-
-    // grantFunctionToGroupSQL
-    grantFunctionToGroupSQL = "INSERT INTO " + schemaPrefix + "FUNCTION_GROUP_MAP"
-        + " (GROUP_ID, FUNCTION_ID) VALUES (?, ?)";
-
-    // grantFunctionToUserSQL
-    grantFunctionToUserSQL = "INSERT INTO " + schemaPrefix + "FUNCTION_USER_MAP"
-        + " (USER_ID, FUNCTION_ID, ORGANISATION_ID) VALUES (?, ?, ?)";
-
     // insertIDGeneratorSQL
     insertIDGeneratorSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR"
         + " (CURRENT, NAME) VALUES (?, ?)";
-
-    // isGroupGrantedFunctionSQL
-    isGroupGrantedFunctionSQL = "SELECT GROUP_ID FROM " + schemaPrefix
-        + "FUNCTION_GROUP_MAP WHERE GROUP_ID=? AND FUNCTION_ID=?";
-
-    // isPasswordInHistorySQL
-    isPasswordInHistorySQL = "SELECT ID FROM " + schemaPrefix + "PASSWORD_HISTORY"
-        + " WHERE USER_ID=? AND CHANGED > ? AND PASSWORD=?";
-
-    // isUserAssociatedWithOrganisationSQL
-    isUserAssociatedWithOrganisationSQL = "SELECT USER_ID FROM " + schemaPrefix
-        + "USER_ORGANISATION_MAP" + " WHERE USER_ID=? AND ORGANISATION_ID=?";
-
-    // isUserGrantedFunctionSQL
-    isUserGrantedFunctionSQL = "SELECT USER_ID FROM " + schemaPrefix + "FUNCTION_USER_MAP"
-        + " WHERE USER_ID=? AND FUNCTION_ID=? AND ORGANISATION_ID=?";
-
-    // isUserInGroupSQL
-    isUserInGroupSQL = "SELECT USER_ID FROM " + schemaPrefix + "USER_GROUP_MAP"
-        + " WHERE USER_ID=? AND GROUP_ID=? AND ORGANISATION_ID=?";
-
-    // removeFunctionFromTemplateSQL
-    removeFunctionFromTemplateSQL = "DELETE FROM " + schemaPrefix + "FUNCTION_TEMPLATE_MAP"
-        + " WHERE FUNCTION_ID=? AND TEMPLATE_ID=?";
-
-    // removeUserFromGroupSQL
-    removeUserFromGroupSQL = "DELETE FROM " + schemaPrefix + "USER_GROUP_MAP"
-        + " WHERE USER_ID=? AND GROUP_ID=? AND ORGANISATION_ID=?";
-
-    // removeUserFromOrganisationSQL
-    removeUserFromOrganisationSQL = "DELETE FROM " + schemaPrefix + "USER_ORGANISATION_MAP"
-        + " WHERE USER_ID=? AND ORGANISATION_ID=?";
-
-    // revokeFunctionForGroupSQL
-    revokeFunctionForGroupSQL = "DELETE FROM " + schemaPrefix + "FUNCTION_GROUP_MAP"
-        + " WHERE GROUP_ID=? AND FUNCTION_ID=?";
-
-    // revokeFunctionForUserSQL
-    revokeFunctionForUserSQL = "DELETE FROM " + schemaPrefix + "FUNCTION_USER_MAP"
-        + " WHERE USER_ID=? AND FUNCTION_ID=? AND ORGANISATION_ID=?";
-
-    // savePasswordHistorySQL
-    savePasswordHistorySQL = "INSERT INTO " + schemaPrefix + "PASSWORD_HISTORY"
-        + " (ID, USER_ID, CHANGED, PASSWORD) VALUES (?, ?, ?, ?)";
 
     // selectIDGeneratorSQL
     selectIDGeneratorSQL = "SELECT CURRENT FROM " + schemaPrefix + "IDGENERATOR" + " WHERE NAME=?";
@@ -4890,14 +1846,6 @@ public class SecurityService
     updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS"
         + " SET NAME=?, DESCRIPTION=? WHERE CODE=?";
 
-    // updateFunctionTemplateSQL
-    updateFunctionTemplateSQL = "UPDATE " + schemaPrefix + "FUNCTION_TEMPLATES"
-        + " SET NAME=?, DESCRIPTION=? WHERE CODE=?";
-
-    // updateGroupSQL
-    updateGroupSQL = "UPDATE " + schemaPrefix + "GROUPS"
-        + " SET DESCRIPTION=? WHERE UPPER(GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
     // updateIDGeneratorSQL
     updateIDGeneratorSQL = "UPDATE " + schemaPrefix + "IDGENERATOR"
         + " SET CURRENT = CURRENT + 1 WHERE NAME=?";
@@ -4905,330 +1853,6 @@ public class SecurityService
     // updateOrganisationSQL
     updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS"
         + " SET NAME=?, DESCRIPTION=? WHERE CODE=?";
-  }
-
-  /**
-   * Returns the numeric ID for the group with the specified group name.
-   *
-   * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the group
-   *
-   * @return the numeric ID for the group or -1 if a group with the specified group name could not
-   *         be found
-   *
-   * @throws SecurityException
-   */
-  protected synchronized long getGroupId(Connection connection, String groupName)
-    throws SecurityException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
-    {
-      statement.setString(1, groupName);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getLong(1);
-        }
-        else
-        {
-          return -1;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the numeric ID for the group (" + groupName
-          + ")", e);
-    }
-  }
-
-  /**
-   * Returns the numeric ID for the organisation with the specified code.
-   *
-   * @param connection the existing database connection to use
-   * @param code       the code uniquely identifying the organisation
-   *
-   * @return the numeric ID for the organisation or -1 if an organisation with the specified code
-   *         could not be found
-   *
-   * @throws SecurityException
-   */
-  protected synchronized long getOrganisationId(Connection connection, String code)
-    throws SecurityException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getOrganisationIdSQL))
-    {
-      statement.setString(1, code);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getLong(1);
-        }
-        else
-        {
-          return -1;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the numeric ID for the organisation (" + code
-          + ")", e);
-    }
-  }
-
-  /**
-   * Returns the numeric ID for the user with the specified username.
-   *
-   * @param connection the existing database connection to use
-   * @param username   the username uniquely identifying the user
-   *
-   * @return the numeric ID for the user or -1 if a user with the specified username could not be
-   *         found
-   *
-   * @throws SecurityException
-   */
-  protected synchronized long getUserId(Connection connection, String username)
-    throws SecurityException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getUserIdSQL))
-    {
-      statement.setString(1, username);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getLong(1);
-        }
-        else
-        {
-          return -1;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the numeric ID for the user (" + username
-          + ")", e);
-    }
-  }
-
-  /**
-   * Build the JDBC <code>PreparedStatement</code> for the SQL query that will select the users
-   * in the USER table using the values of the specified attributes as the selection criteria.
-   *
-   * @param connection the existing database connection to use
-   * @param attributes the attributes to be used as the selection criteria
-   *
-   * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-   *         USER table using the values of the specified attributes as the selection criteria
-   *
-   * @throws InvalidAttributeException
-   * @throws SQLException
-   */
-  private PreparedStatement buildFindUsersStatement(Connection connection,
-      List<Attribute> attributes)
-    throws InvalidAttributeException, AttributeException, SQLException
-  {
-    // Build the SQL statement to select the users
-    StringBuilder buffer = new StringBuilder();
-
-    buffer.append("SELECT ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, ");
-    buffer.append("LAST_NAME, PHONE, FAX, MOBILE, EMAIL, ");
-    buffer.append("PASSWORD_ATTEMPTS, PASSWORD_EXPIRY, DESCRIPTION FROM ");
-
-    buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
-        databaseCatalogSeparator);
-
-    buffer.append("USERS");
-
-    if (attributes.size() > 0)
-    {
-      // Build the parameters for the "WHERE" clause for the SQL statement
-      StringBuilder whereParameters = new StringBuilder();
-
-      for (Attribute attribute : attributes)
-      {
-        if (whereParameters.length() > 0)
-        {
-          whereParameters.append(" AND ");
-        }
-
-        if (attribute.getName().equalsIgnoreCase("description"))
-        {
-          whereParameters.append("DESCRIPTION LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("email"))
-        {
-          whereParameters.append("EMAIL LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("faxNumber"))
-        {
-          whereParameters.append("FAX LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("firstNames"))
-        {
-          whereParameters.append("FIRST_NAMES LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("lastName"))
-        {
-          whereParameters.append("LAST_NAME LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-        {
-          whereParameters.append("MOBILE LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-        {
-          whereParameters.append("PHONE LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("title"))
-        {
-          whereParameters.append("TITLE LIKE ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("username"))
-        {
-          whereParameters.append("USERNAME LIKE ?");
-        }
-        else
-        {
-          throw new InvalidAttributeException("The attribute (" + attribute.getName()
-              + ") is invalid");
-        }
-      }
-
-      buffer.append(" WHERE ");
-      buffer.append(whereParameters.toString());
-    }
-
-    PreparedStatement statement = connection.prepareStatement(buffer.toString());
-
-    // Set the parameters for the prepared statement
-    int parameterIndex = 1;
-
-    for (Attribute attribute : attributes)
-    {
-      if (attribute.getName().equalsIgnoreCase("description"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("email"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("faxNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("firstNames"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("lastName"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("title"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("username"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-    }
-
-    return statement;
-  }
-
-  /**
-   * Create a new <code>User</code> instance and populate it with the contents of the current
-   * row in the specified <code>ResultSet</code>.
-   *
-   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-   *           <code>User</code> instance
-   *
-   * @return the populated <code>User</code> instance
-   *
-   * @throws SQLException
-   */
-  private User buildUserFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    User user = new User(rs.getString(2));
-
-    user.setId(rs.getLong(1));
-    user.setPassword(StringUtil.notNull(rs.getString(3)));
-    user.setTitle(StringUtil.notNull(rs.getString(4)));
-    user.setFirstNames(StringUtil.notNull(rs.getString(5)));
-    user.setLastName(StringUtil.notNull(rs.getString(6)));
-    user.setPhoneNumber(StringUtil.notNull(rs.getString(7)));
-    user.setFaxNumber(StringUtil.notNull(rs.getString(8)));
-    user.setMobileNumber(StringUtil.notNull(rs.getString(9)));
-    user.setEmail(StringUtil.notNull(rs.getString(10)));
-
-    if (rs.getObject(11) != null)
-    {
-      user.setPasswordAttempts(rs.getInt(11));
-    }
-
-    if (rs.getObject(12) != null)
-    {
-      user.setPasswordExpiry(new Date(rs.getTimestamp(12).getTime()));
-    }
-
-    user.setDescription(StringUtil.notNull(rs.getString(13)));
-
-    return user;
-  }
-
-  /**
-   * Create a SHA-1 has of the specified password.
-   *
-   * @param password the password to hash
-   *
-   * @return the SHA-1 hash of the password
-   *
-   * @throws SecurityException
-   */
-  private String createPasswordHash(String password)
-    throws SecurityException
-  {
-    try
-    {
-      MessageDigest md = MessageDigest.getInstance("SHA-1");
-
-      md.update(password.getBytes("iso-8859-1"), 0, password.length());
-
-      return Base64.encodeBytes(md.digest());
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to generate a SHA-1 hash of the password (" + password
-          + "): " + e.getMessage(), e);
-    }
   }
 
   /**
@@ -5264,20 +1888,60 @@ public class SecurityService
   }
 
   /**
-   * Returns the numeric ID for the function template with the specified code.
+   * Returns the numeric ID for the internal user directory the internal user with the specified
+   * username is associated with.
+   *
+   * @param username the username uniquely identifying the internal user
+   *
+   * @return the numeric ID for the internal user directory the internal user with the specified
+   *         username is associated with or -1 if an internal user with the specified username
+   *         could not be found
+   *
+   * @throws SecurityException
+   */
+  private long getInternalUserDirectoryIdForUser(String username)
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getInternalUserDirectoryIdForUserSQL))
+    {
+      statement.setString(1, username);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return -1;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the numeric ID for the internal user ("
+          + username + ")", e);
+    }
+  }
+
+  /**
+   * Returns the numeric ID for the organisation with the specified code.
    *
    * @param connection the existing database connection to use
-   * @param code       the code uniquely identifying the function template
+   * @param code       the code uniquely identifying the organisation
    *
-   * @return the numeric ID for the function template or -1 if a function template with the
-   *         specified name could not be found
+   * @return the numeric ID for the organisation or -1 if an organisation with the specified code
+   *         could not be found
    *
-   * @throws SQLException
+   * @throws SecurityException
    */
-  private long getFunctionTemplateId(Connection connection, String code)
-    throws SQLException
+  private long getOrganisationId(Connection connection, String code)
+    throws SecurityException
   {
-    try (PreparedStatement statement = connection.prepareStatement(getFunctionTemplateIdSQL))
+    try (PreparedStatement statement = connection.prepareStatement(getOrganisationIdSQL))
     {
       statement.setString(1, code);
 
@@ -5293,177 +1957,10 @@ public class SecurityService
         }
       }
     }
-  }
-
-  /**
-   * Retrieve all the authorised functions associated with the function template with the specified
-   * numeric ID.
-   *
-   * @param templateId the numeric ID for the function template
-   *
-   * @return the list of authorised functions
-   *
-   * @throws SQLException
-   */
-  private List<Function> getFunctionsForTemplate(long templateId)
-    throws SQLException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFunctionsForTemplateSQL))
+    catch (Throwable e)
     {
-      statement.setLong(1, templateId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Function> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Function function = new Function(rs.getString(2));
-
-          function.setId(rs.getInt(1));
-          function.setName(rs.getString(3));
-          function.setDescription(rs.getString(4));
-          list.add(function);
-        }
-
-        return list;
-      }
-    }
-  }
-
-  /**
-   * Retrieve the names for all the groups that the user with the specific numeric ID is associated
-   * with for the specified organisation.
-   *
-   * @param connection     the existing database connection
-   * @param userId         the numeric ID for the user
-   * @param organisationId the numeric ID for the organisation
-   *
-   * @return the list of groups
-   *
-   * @throws SQLException
-   */
-  private List<String> getGroupNamesForUser(Connection connection, long userId, long organisationId)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getGroupNamesForUserSQL))
-    {
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<String> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(rs.getString(1));
-        }
-
-        return list;
-      }
-    }
-  }
-
-  /**
-   * Retrieve all the groups that the user with the specific numeric ID is associated with for the
-   * specified organisation.
-   *
-   * @param connection     the existing database connection
-   * @param userId         the numeric ID for the user
-   * @param organisationId the numeric ID for the organisation
-   *
-   * @return the list of groups
-   *
-   * @throws SQLException
-   */
-  private List<Group> getGroupsForUser(Connection connection, long userId, long organisationId)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getGroupsForUserSQL))
-    {
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Group> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Group group = new Group(rs.getString(2));
-
-          group.setId(rs.getLong(1));
-          group.setDescription(rs.getString(3));
-          list.add(group);
-        }
-
-        return list;
-      }
-    }
-  }
-
-  /**
-   * Retrieve the information for the user with the specified username.
-   *
-   * @param connection the existing database connection to use
-   * @param username   the username identifying the user
-   *
-   * @return the <code>User</code> or <code>null</code> if the user could not be found
-   *
-   * @throws SQLException
-   */
-  private User getUser(Connection connection, String username)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getUserSQL))
-    {
-      statement.setString(1, username);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return buildUserFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-  }
-
-  /**
-   * Retrieve the IDs for all the users that are associated with the group with the specific
-   * numeric ID.
-   *
-   * @param connection the existing database connection
-   * @param groupId    the numeric ID for the group
-   *
-   * @return the IDs for all the users that are associated with the group the specific numeric ID
-   *
-   * @throws SQLException
-   */
-  private List<Long> getUserIdsForGroup(Connection connection, long groupId)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getUserIdsForGroupSQL))
-    {
-      statement.setLong(1, groupId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Long> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(rs.getLong(1));
-        }
-
-        return list;
-      }
+      throw new SecurityException("Failed to retrieve the numeric ID for the organisation (" + code
+          + ")", e);
     }
   }
 
@@ -5475,65 +1972,13 @@ public class SecurityService
   private void initConfiguration()
     throws SecurityException
   {
-    try
-    {
-      if (!registry.integerValueExists("/SecurityService", "MaxPasswordAttempts"))
-      {
-        registry.setIntegerValue("/SecurityService", "MaxPasswordAttempts",
-            DEFAULT_MAX_PASSWORD_ATTEMPTS);
-      }
-
-      if (!registry.integerValueExists("/SecurityService", "PasswordExpiryMonths"))
-      {
-        registry.setIntegerValue("/SecurityService", "PasswordExpiryMonths",
-            DEFAULT_PASSWORD_EXPIRY_MONTHS);
-      }
-
-      if (!registry.integerValueExists("/SecurityService", "PasswordHistoryMonths"))
-      {
-        registry.setIntegerValue("/SecurityService", "PasswordHistoryMonths",
-            DEFAULT_PASSWORD_HISTORY_MONTHS);
-      }
-
-      maxPasswordAttempts = registry.getIntegerValue("/SecurityService", "MaxPasswordAttempts",
-          DEFAULT_MAX_PASSWORD_ATTEMPTS);
-      passwordExpiryMonths = registry.getIntegerValue("/SecurityService", "PasswordExpiryMonths",
-          DEFAULT_PASSWORD_EXPIRY_MONTHS);
-      passwordHistoryMonths = registry.getIntegerValue("/SecurityService", "PasswordHistoryMonths",
-          DEFAULT_PASSWORD_HISTORY_MONTHS);
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException(
-          "Failed to initialise the configuration for the SecurityService instance: "
-          + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Has the group been granted the function?
-   *
-   * @param connection the existing database connection
-   * @param groupId    the numeric ID uniquely identifying the group
-   * @param functionId the numeric ID uniquely identifying the function
-   *
-   * @return true if the user is a member of the group or false otherwise
-   *
-   * @throws SQLException
-   */
-  private boolean isGroupGrantedFunction(Connection connection, long groupId, long functionId)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(isGroupGrantedFunctionSQL))
-    {
-      statement.setLong(1, groupId);
-      statement.setLong(2, functionId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
+//  try
+//  {}
+//  catch (Throwable e)
+//  {
+//    throw new SecurityException(
+//        "Failed to initialise the configuration for the Security Service: " + e.getMessage(), e);
+//  }
   }
 
   /**
@@ -5559,142 +2004,5 @@ public class SecurityService
     }
 
     return false;
-  }
-
-  /**
-   * Is the password, given by the specified password hash, a historical password that cannot
-   * be reused for a period of time i.e. was the password used previously in the last X months.
-   * Where X is a configuration value retrieved from the registry.
-   *
-   * @param connection   the existing database connection
-   * @param userId       the numeric ID uniquely identifying the user
-   * @param passwordHash the password hash
-   *
-   * @return <code>true</code> if the password was previously used and cannot be reused for a
-   *         period of time or <code>false</code> otherwise
-   *
-   * @throws SQLException
-   */
-  private boolean isPasswordInHistory(Connection connection, long userId, String passwordHash)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(isPasswordInHistorySQL))
-    {
-      Calendar calendar = Calendar.getInstance();
-
-      calendar.setTime(new Date());
-      calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
-
-      statement.setLong(1, userId);
-      statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
-      statement.setString(3, passwordHash);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  /**
-   * Is the user associated with the organisation?
-   *
-   * @param connection     the existing database connection
-   * @param userId         the numeric ID uniquely identifying the user
-   * @param organisationId the numeric ID uniquely identifying the organisation
-   *
-   * @return <code>true</code> if the user is associated with the organisation or <code>false</code>
-   *         otherwise
-   *
-   * @throws SQLException
-   */
-  private boolean isUserAssociatedWithOrganisation(Connection connection, long userId,
-      long organisationId)
-    throws SQLException
-  {
-    try (PreparedStatement statement =
-        connection.prepareStatement(isUserAssociatedWithOrganisationSQL))
-    {
-      statement.setLong(1, userId);
-      statement.setLong(2, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  /**
-   * Has the user been granted the function?
-   *
-   * @param connection     the existing database connection
-   * @param userId         the numeric ID uniquely identifying the user
-   * @param functionId     the numeric ID uniquely identifying the function
-   * @param organisationId the numeric ID uniquely identifying the organisation
-   *
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
-   *
-   * @throws SQLException
-   */
-  private boolean isUserGrantedFunction(Connection connection, long userId, long functionId,
-      long organisationId)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(isUserGrantedFunctionSQL))
-    {
-      statement.setLong(1, userId);
-      statement.setLong(2, functionId);
-      statement.setLong(3, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  /**
-   * Is the user in the group?
-   *
-   * @param connection     the existing database connection
-   * @param userId         the numeric ID uniquely identifying the user
-   * @param groupId        the numeric ID uniquely identifying the group
-   * @param organisationId the numeric ID uniquely identifying the organisation
-   *
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
-   *
-   * @throws SQLException
-   */
-  private boolean isUserInGroup(Connection connection, long userId, long groupId,
-      long organisationId)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(isUserInGroupSQL))
-    {
-      statement.setLong(1, userId);
-      statement.setLong(2, groupId);
-      statement.setLong(3, organisationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  private void savePasswordHistory(Connection connection, long userId, String passwordHash)
-    throws SQLException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(savePasswordHistorySQL))
-    {
-      long id = nextId("Application.UserPasswordHistoryId");
-
-      statement.setLong(1, id);
-      statement.setLong(2, userId);
-      statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-      statement.setString(4, passwordHash);
-      statement.execute();
-    }
   }
 }

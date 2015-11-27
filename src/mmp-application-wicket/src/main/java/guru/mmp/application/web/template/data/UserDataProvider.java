@@ -23,16 +23,18 @@ import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserDataProvider</code> class provides an <code>IDataProvider</code>
@@ -49,24 +51,23 @@ public class UserDataProvider extends InjectableDataProvider<User>
    */
   private String filter;
 
-  /**
-   * The organisation code identifying the organisation the users are associated with.
-   */
-  private String organisation;
-
   /* Security Service */
   @Inject
   private ISecurityService securityService;
 
   /**
+   * The unique ID for the user directory the users are associated with.
+   */
+  private long userDirectoryId;
+
+  /**
    * Constructs a new <code>UserDataProvider</code>.
    *
-   * @param organisation the organisation code identifying the organisation the users are
-   *                     associated with
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
    */
-  public UserDataProvider(String organisation)
+  public UserDataProvider(long userDirectoryId)
   {
-    this.organisation = organisation;
+    this.userDirectoryId = userDirectoryId;
   }
 
   /**
@@ -114,13 +115,11 @@ public class UserDataProvider extends InjectableDataProvider<User>
 
       if (StringUtil.isNullOrEmpty(filter))
       {
-        allUsers = securityService.getUsersForOrganisation(organisation,
-            servletWebRequest.getContainerRequest().getRemoteAddr());
+        allUsers = securityService.getUsers(userDirectoryId);
       }
       else
       {
-        allUsers = securityService.getFilteredUsersForOrganisation(organisation, filter,
-            servletWebRequest.getContainerRequest().getRemoteAddr());
+        allUsers = securityService.getFilteredUsers(userDirectoryId, filter);
       }
 
       List<User> users = new ArrayList<>();
@@ -185,13 +184,11 @@ public class UserDataProvider extends InjectableDataProvider<User>
 
       if (StringUtil.isNullOrEmpty(filter))
       {
-        return securityService.getNumberOfUsersForOrganisation(organisation,
-            servletWebRequest.getContainerRequest().getRemoteAddr());
+        return securityService.getNumberOfUsers(userDirectoryId);
       }
       else
       {
-        return securityService.getNumberOfFilteredUsersForOrganisation(organisation, filter,
-            servletWebRequest.getContainerRequest().getRemoteAddr());
+        return securityService.getNumberOfFilteredUsers(userDirectoryId, filter);
       }
     }
     catch (Throwable e)

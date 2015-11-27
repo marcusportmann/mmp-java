@@ -28,6 +28,7 @@ public class Group
   private String description;
   private String groupName;
   private long id;
+  private long userDirectoryId;
 
   /**
    * Constructs a new <code>Group</code>.
@@ -75,6 +76,16 @@ public class Group
   }
 
   /**
+   * Returns the unique ID for the user directory the group is associated with.
+   *
+   * @return the unique ID for the user directory the group is associated with
+   */
+  public long getUserDirectoryId()
+  {
+    return userDirectoryId;
+  }
+
+  /**
    * Set the description for the group.
    *
    * @param description the description for the group
@@ -102,5 +113,15 @@ public class Group
   public void setId(long id)
   {
     this.id = id;
+  }
+
+  /**
+   * Set the unique ID for the user directory the group is associated with.
+   *
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   */
+  public void setUserDirectoryId(long userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
   }
 }

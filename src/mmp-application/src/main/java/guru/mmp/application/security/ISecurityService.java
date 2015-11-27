@@ -31,141 +31,49 @@ import java.util.Map;
 public interface ISecurityService
 {
   /**
-   * The possible reasons for why a user's password was changed.
-   */
-  enum PasswordChangeReason
-  {
-    USER(0, "User"), ADMINISTRATIVE(1, "Administrative"), FORGOTTEN(2, "Forgotten");
-
-    private String description;
-    private int id;
-
-    PasswordChangeReason(int id, String description)
-    {
-      this.id = id;
-      this.description = description;
-    }
-
-    /**
-     * Returns the description for the password change reason.
-     *
-     * @return the description for the password change reason
-     */
-    public String description()
-    {
-      return description;
-    }
-
-    /**
-     * Returns the numeric identifier for the password change reason.
-     *
-     * @return the numeric identifier for the password change reason
-     */
-    public int id()
-    {
-      return id;
-    }
-  }
-
-  /**
-   * Add the authorised function with the specified code to the authorised function template given
-   * by the specified code.
+   * Add the user to the group.
    *
-   * @param functionCode the code identifying the authorised function
-   * @param templateCode the code identifying the authorised function template
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user and group are associated
+   *                        with
+   * @param username        the username identifying the user
+   * @param groupName       the name of the group uniquely identifying the group
    *
-   * @throws DuplicateFunctionException
-   * @throws FunctionNotFoundException
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  void addFunctionToTemplate(String functionCode, String templateCode, String origin)
-    throws DuplicateFunctionException, FunctionNotFoundException,
-      FunctionTemplateNotFoundException, SecurityException;
-
-  /**
-   * Add the user to the group for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param groupName    the name of the group uniquely identifying the group
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  void addUserToGroup(String username, String groupName, String organisation, String origin)
-    throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
+  void addUserToGroup(long userDirectoryId, String username, String groupName)
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException;
-
-  /**
-   * Add the user to the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  void addUserToOrganisation(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
    * Administratively change the password for the user.
    *
+   * @param userDirectoryId      the unique ID for the user directory the user is associated with
    * @param username             the username identifying the user
    * @param newPassword          the new password
    * @param expirePassword       expire the user's password
    * @param lockUser             lock the user
    * @param resetPasswordHistory reset the user's password history
    * @param reason               the reason for changing the password
-   * @param origin               the origin of the request e.g. the IP address, subnetwork or
-   *                             workstation name for the remote client
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void adminChangePassword(String username, String newPassword, boolean expirePassword,
-      boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason, String origin)
-    throws UserNotFoundException, SecurityException;
+  void adminChangePassword(long userDirectoryId, String username, String newPassword,
+      boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
+      PasswordChangeReason reason)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
-   * Authenticate a user using credentials other than a simple password.
-   *
-   * @param username    the username identifying the user
-   * @param credentials the credentials used to authenticate
-   * @param origin      the origin of the request e.g. the IP address, subnetwork or workstation
-   *                    name for the remote client
-   *
-   * @return the results of authenticating the user successfully
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws ExpiredCredentialsException
-   * @throws UserNotFoundException
-   * @throws SecurityException
-   */
-  Map<String, Object> authenticate(String username, List<Credential> credentials, String origin)
-    throws AuthenticationFailedException, UserLockedException, ExpiredCredentialsException,
-      UserNotFoundException, SecurityException;
-
-  /**
-   * Authenticate.
+   * Authenticate the user.
    *
    * @param username the username identifying the user
    * @param password the password being used to authenticate
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
    *
-   * @return the results of authenticating the user successfully
+   * @return the unique ID for the user directory the user is associated with
    *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
@@ -173,19 +81,19 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  Map<String, Object> authenticate(String username, String password, String origin)
+  long authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, SecurityException;
 
   /**
    * Change the password for the user.
    *
-   * @param username    the username identifying the user
-   * @param password    the password for the user that is used to authorise the operation
-   * @param newPassword the new password
-   * @param origin      the origin of the request e.g. the IP address, subnetwork or workstation
-   *                    name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
+   * @param password        the password for the user that is used to authorise the operation
+   * @param newPassword     the new password
    *
+   * @throws UserDirectoryNotFoundException
    * @throws AuthenticationFailedException
    * @throws UserLockedException
    * @throws ExpiredPasswordException
@@ -193,871 +101,483 @@ public interface ISecurityService
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
-  void changePassword(String username, String password, String newPassword, String origin)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, ExistingPasswordException, SecurityException;
+  void changePassword(long userDirectoryId, String username, String password, String newPassword)
+    throws UserDirectoryNotFoundException, AuthenticationFailedException, UserLockedException,
+      ExpiredPasswordException, UserNotFoundException, ExistingPasswordException, SecurityException;
 
   /**
    * Create a new authorised function.
    *
-   * @param function the <code>Function</code> instance containing the information for the new
-   *                 authorised function
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param function the function
    *
    * @throws DuplicateFunctionException
    * @throws SecurityException
    */
-  void createFunction(Function function, String origin)
+  void createFunction(Function function)
     throws DuplicateFunctionException, SecurityException;
-
-  /**
-   * Create a new authorised function template.
-   *
-   * @param template the <code>FunctionTemplate</code> instance containing the information for the
-   *                 new authorised function template
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
-   *
-   * @throws DuplicateFunctionTemplateException
-   * @throws SecurityException
-   */
-  void createFunctionTemplate(FunctionTemplate template, String origin)
-    throws DuplicateFunctionTemplateException, SecurityException;
 
   /**
    * Create a new group.
    *
-   * @param group  the <code>Group</code> instance containing the information for the new group
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param group           the group
    *
+   * @throws UserDirectoryNotFoundException
    * @throws DuplicateGroupException
    * @throws SecurityException
    */
-  void createGroup(Group group, String origin)
-    throws DuplicateGroupException, SecurityException;
+  void createGroup(long userDirectoryId, Group group)
+    throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityException;
 
   /**
    * Create a new organisation.
    *
-   * @param organisation the <code>Organisation</code> instance containing the information for the
-   *                     new organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param organisation the organisation
    *
    * @throws DuplicateOrganisationException
    * @throws SecurityException
    */
-  void createOrganisation(Organisation organisation, String origin)
+  void createOrganisation(Organisation organisation)
     throws DuplicateOrganisationException, SecurityException;
 
   /**
    * Create a new user.
    *
-   * @param user            the <code>User</code> instance containing the information for the new
-   *                        user
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
-   * @param origin          the origin of the request e.g. the IP address, subnetwork or
-   *                        workstation name for the remote client
    *
+   * @throws UserDirectoryNotFoundException
    * @throws DuplicateUserException
    * @throws SecurityException
    */
-  void createUser(User user, boolean expiredPassword, boolean userLocked, String origin)
-    throws DuplicateUserException, SecurityException;
+  void createUser(long userDirectoryId, User user, boolean expiredPassword, boolean userLocked)
+    throws UserDirectoryNotFoundException, DuplicateUserException, SecurityException;
 
   /**
-   * Delete the existing authorised function.
+   * Delete the authorised function.
    *
-   * @param code   the code identifying the function
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code identifying the authorised function
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  void deleteFunction(String code, String origin)
+  void deleteFunction(String code)
     throws FunctionNotFoundException, SecurityException;
 
   /**
-   * Delete the existing authorised function template.
+   * Delete the group.
    *
-   * @param code   the code identifying the function template
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param groupName       the name of the group uniquely identifying the group
    *
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  void deleteFunctionTemplate(String code, String origin)
-    throws FunctionTemplateNotFoundException, SecurityException;
-
-  /**
-   * Delete the existing group.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  void deleteGroup(String groupName, String origin)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityException;
+  void deleteGroup(long userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
+      SecurityException;
 
   /**
-   * Delete the existing organisation.
+   * Delete the organisation.
    *
-   * @param code   the code uniquely identifying the organisation
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code uniquely identifying the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  void deleteOrganisation(String code, String origin)
+  void deleteOrganisation(String code)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
-   * Delete the existing user.
+   * Delete the user.
    *
-   * @param username the username identifying the user
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void deleteUser(String username, String origin)
-    throws UserNotFoundException, SecurityException;
+  void deleteUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param attributes the attribute criteria used to select the users
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param attributes      the attribute criteria used to select the users
    *
-   * @return a list of <code>User</code>s whose attributes match the attribute criteria
+   * @return the list of users whose attributes match the attribute criteria
    *
+   * @throws UserDirectoryNotFoundException
    * @throws InvalidAttributeException
    * @throws SecurityException
    */
-  List<User> findUsers(List<Attribute> attributes, String origin)
-    throws InvalidAttributeException, SecurityException;
+  List<User> findUsers(long userDirectoryId, List<Attribute> attributes)
+    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException;
 
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param attributes the attribute criteria used to select the users
-   * @param startPos   the position in the list of users to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param attributes      the attribute criteria used to select the users
+   * @param startPos        the position in the list of users to start from
+   * @param maxResults      the maximum number of results to return or -1 for all
    *
-   * @return a list of <code>User</code>s whose attributes match the attribute criteria
+   * @return the list of users whose attributes match the attribute criteria
    *
+   * @throws UserDirectoryNotFoundException
    * @throws InvalidAttributeException
    * @throws SecurityException
    */
-  List<User> findUsersEx(List<Attribute> attributes, int startPos, int maxResults, String origin)
-    throws InvalidAttributeException, SecurityException;
+  List<User> findUsersEx(long userDirectoryId, List<Attribute> attributes, int startPos,
+      int maxResults)
+    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException;
 
   /**
-   * Retrieve the authorised function codes for the user for the specified organisation.
-   * <p/>
-   * This list will include all of the authorised functions that the user is associated with as a
-   * result of being a member of one or more groups that have also been linked to authorised
-   * functions.
+   * Retrieve the filtered list of users.
    *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param filter          the filter to apply to the users
    *
-   * @return the list of authorised function codes for the user for the specified organisation
+   * @return the filtered list of users
    *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  List<String> getAllFunctionCodesForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
+  List<User> getFilteredUsers(long userDirectoryId, String filter)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Retrieve the list of authorised functions for the user for the specified organisation.
-   * <p/>
-   * This list will include all of the authorised functions that the user is associated with as a
-   * result of being a member of one or more groups that have also been linked to authorised
-   * functions.
+   * Retrieve the authorised function.
    *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the list of authorised functions for the user for the specified organisation
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  List<Function> getAllFunctionsForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
-
-  /**
-   * Returns the filtered list of users associated with the specified organisation.
-   *
-   * @param organisation the code uniquely identifying the organisation
-   * @param filter       the filter to apply to the users
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the filtered list of the users associated with the specified organisation
-   *
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  List<User> getFilteredUsersForOrganisation(String organisation, String filter, String origin)
-    throws OrganisationNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the details for the authorised function with the specified code.
-   *
-   * @param code   the code identifying the function
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code identifying the function
    *
    * @return the details for the authorised function with the specified code
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  Function getFunction(String code, String origin)
+  Function getFunction(String code)
     throws FunctionNotFoundException, SecurityException;
 
   /**
-   * Retrieve the list of authorised function codes for the group.
+   * Retrieve the authorised function codes for the user.
    *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the list of authorised function codes for the group
+   * @return the list of authorised function codes for the user
    *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
-   */
-  List<String> getFunctionCodesForGroup(String groupName, String origin)
-    throws GroupNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the list of authorised function codes for the user for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the list of authorised function codes for the user for the specified organisation
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  List<String> getFunctionCodesForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the details for the authorised function template with the specified code.
-   *
-   * @param code   the code identifying the function template
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return the details for the authorised function template with the specified code
-   *
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  FunctionTemplate getFunctionTemplate(String code, String origin)
-    throws FunctionTemplateNotFoundException, SecurityException;
-
-  /**
-   * Retrieve all the authorised function templates.
-   *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return the list of authorised function templates
-   *
-   * @throws SecurityException
-   */
-  List<FunctionTemplate> getFunctionTemplates(String origin)
-    throws SecurityException;
+  List<String> getFunctionCodesForUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
    * Retrieve all the authorised functions.
-   *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
    *
    * @return the list of authorised functions
    *
    * @throws SecurityException
    */
-  List<Function> getFunctions(String origin)
+  List<Function> getFunctions()
     throws SecurityException;
-
-  /**
-   * Retrieve the list of authorised functions for the group.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
-   * @return the list of authorised functions for the group
-   *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
-   */
-  List<Function> getFunctionsForGroup(String groupName, String origin)
-    throws GroupNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the list of authorised functions for the user for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the list of authorised functions for the user for the specified organisation
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  List<Function> getFunctionsForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
    * Retrieve the group.
    *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param groupName       the name of the group uniquely identifying the group
    *
-   * @return the <code>Group</code>
+   * @return the group
    *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  Group getGroup(String groupName, String origin)
-    throws GroupNotFoundException, SecurityException;
+  Group getGroup(long userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException;
 
   /**
-   * Retrieve the unique numeric ID for the group.
+   * Retrieve the group names for the user.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the unique numeric ID for the group
+   * @return the group names for the user
    *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
-   */
-  long getGroupId(String groupName)
-    throws GroupNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the group names for the user for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the group names for the user for the specified organisation
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  List<String> getGroupNamesForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
+  List<String> getGroupNamesForUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
    * Retrieve all the groups.
    *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param userDirectoryId the unique ID for the user directory the groups are associated with
    *
-   * @return a list of <code>Group</code> containing the group information
+   * @return the list of groups
    *
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  List<Group> getGroups(String origin)
-    throws SecurityException;
+  List<Group> getGroups(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Retrieve a list of groups.
+   * Retrieve the groups.
    *
-   * @param startPos   the position in the list of groups to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the groups are associated with
+   * @param startPos        the position in the list of groups to start from
+   * @param maxResults      the maximum number of results to return or -1 for all
    *
-   * @return a list of <code>Group</code> objects containing the group information
+   * @return the list of groups
    *
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  List<Group> getGroupsEx(int startPos, int maxResults, String origin)
-    throws SecurityException;
+  List<Group> getGroupsEx(long userDirectoryId, int startPos, int maxResults)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Retrieve the groups for the user for the specified organisation.
+   * Retrieve the groups for the user.
    *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the groups for the user for the specified organisation
+   * @return the groups for the user
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  List<Group> getGroupsForUser(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
+  List<Group> getGroupsForUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
-   * Returns the number of filtered users associated with the specified organisation.
+   * Retrieve the number of filtered users.
    *
-   * @param organisation the code uniquely identifying the organisation
-   * @param filter       the filter to apply to the users
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param filter          the filter to apply to the users
    *
-   * @return the number of filtered users associated with the specified organisation
+   * @return the number of filtered users
    *
-   * @throws OrganisationNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  int getNumberOfFilteredUsersForOrganisation(String organisation, String filter, String origin)
-    throws OrganisationNotFoundException, SecurityException;
+  int getNumberOfFilteredUsers(long userDirectoryId, String filter)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Returns the number of groups
+   * Retrieve the number of groups
    *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or
-   *               workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the groups are associated with
    *
    * @return the number of groups
    *
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  int getNumberOfGroups(String origin)
-    throws SecurityException;
+  int getNumberOfGroups(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Returns the number of organisations
-   *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or
-   *               workstation name for the remote client
+   * Retrieve the number of organisations
    *
    * @return the number of organisations
    *
    * @throws SecurityException
    */
-  int getNumberOfOrganisations(String origin)
+  int getNumberOfOrganisations()
     throws SecurityException;
 
   /**
-   * Returns the number of users associated with the specified organisation.
+   * Retrieve the number of users.
    *
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
    *
-   * @return the number of users associated with the specified organisation
+   * @return the number of users
    *
-   * @throws OrganisationNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  int getNumberOfUsersForOrganisation(String organisation, String origin)
-    throws OrganisationNotFoundException, SecurityException;
+  int getNumberOfUsers(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Retrieve the organisation.
    *
-   * @param code   the code uniquely identifying the organisation
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
+   * @param code the code uniquely identifying the organisation
    *
    * @return the details for the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  Organisation getOrganisation(String code, String origin)
+  Organisation getOrganisation(String code)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
-   * Retrieve the information for all existing organisations.
+   * Retrieve the organisations.
    *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return a list of <code>Organisation</code> objects containing the organisation information
+   * @return the list of organisations
    *
    * @throws SecurityException
    */
-  List<Organisation> getOrganisations(String origin)
+  List<Organisation> getOrganisations()
     throws SecurityException;
 
   /**
-   * Returns the organisations the user is associated with.
+   * Retrieve the user.
    *
-   * @param username the username identifying the user
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    *
-   * @return the organisations the user is associated with
+   * @return the user
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  List<Organisation> getOrganisationsForUser(String username, String origin)
-    throws UserNotFoundException, SecurityException;
+  User getUser(long userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
-   * Retrieve the information for an existing user.
+   * Retrieve all the users.
    *
-   * @param username the username identifying the user
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
    *
-   * @return the <code>User</code>
+   * @return the list of users
    *
-   * @throws UserNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  User getUser(String username, String origin)
-    throws UserNotFoundException, SecurityException;
+  List<User> getUsers(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Retrieve the unique numeric ID for the user.
+   * Retrieve the users.
    *
-   * @param username the username identifying the user
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param startPos        the position in the list of users to start from
+   * @param maxResults      the maximum number of results to return or -1 for all
    *
-   * @return the unique numeric ID for the user
+   * @return the list of users
    *
-   * @throws UserNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  long getUserId(String username)
-    throws UserNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the information for all existing users.
-   *
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
-   * @return a list of <code>User</code> objects containing the user information
-   *
-   * @throws SecurityException
-   */
-  List<User> getUsers(String origin)
-    throws SecurityException;
-
-  /**
-   * Retrieve the information for a subset of all the existing users.
-   *
-   * @param startPos   the position in the list of users to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   * @param origin     the origin of the request e.g. the IP address, subnetwork or workstation
-   *                   name for the remote client
-   *
-   * @return a list of <code>User</code> objects containing the user information
-   *
-   * @throws SecurityException
-   */
-  List<User> getUsersEx(int startPos, int maxResults, String origin)
-    throws SecurityException;
-
-  /**
-   * Retrieve the users for the group for the specified organisation.
-   *
-   * @param groupName    the name of the group uniquely identifying the group
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return a list of <code>User</code> objects containing the user information
-   *
-   * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  List<User> getUsersForGroup(String groupName, String organisation, String origin)
-    throws GroupNotFoundException, OrganisationNotFoundException, SecurityException;
-
-  /**
-   * Returns the users associated with the specified organisation.
-   *
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return the users associated with the specified organisation
-   *
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  List<User> getUsersForOrganisation(String organisation, String origin)
-    throws OrganisationNotFoundException, SecurityException;
-
-  /**
-   * Add the authorised function to the group's access profile.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param code      the code identifying the authorised function
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
-   * @throws GroupNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws SecurityException
-   */
-  void grantFunctionToGroup(String groupName, String code, String origin)
-    throws GroupNotFoundException, FunctionNotFoundException, SecurityException;
-
-  /**
-   * Add the authorised function to the user's access profile for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param code         the code identifying the authorised function
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  void grantFunctionToUser(String username, String code, String organisation, String origin)
-    throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
-      SecurityException;
-
-  /**
-   * Returns <code>true</code> if the user is associated with the specified organisation or
-   * <code>false</code> otherwise.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @return <code>true</code> if the user is associated with the specified organisation or
-   *         <code>false</code> otherwise
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  boolean isUserAssociatedWithOrganisation(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
+  List<User> getUsersEx(long userDirectoryId, int startPos, int maxResults)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Is the user in the group for the specified organisation?
    *
-   * @param username     the username identifying the user
-   * @param groupName    the name of the group uniquely identifying the group
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group and user are associated
+   *                        with
+   * @param username        the username identifying the user
+   * @param groupName       the name of the group uniquely identifying the group
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  boolean isUserInGroup(String username, String groupName, String organisation, String origin)
-    throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
+  boolean isUserInGroup(long userDirectoryId, String username, String groupName)
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException;
 
   /**
-   * Remove the authorised function with specified code from the authorised function template with
-   * the specified code.
+   * Remove the user from the group.
    *
-   * @param functionCode the code identifying the authorised function
-   * @param templateCode the code identifying the authorised function template
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user and group are associated
+   *                        with
+   * @param username        the username identifying the user
+   * @param groupName       the group name
    *
-   * @throws FunctionNotFoundException
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  void removeFunctionFromTemplate(String functionCode, String templateCode, String origin)
-    throws FunctionNotFoundException, FunctionTemplateNotFoundException, SecurityException;
-
-  /**
-   * Remove the user from the group for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param groupName    the group name
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
-   * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  void removeUserFromGroup(String username, String groupName, String organisation, String origin)
-    throws UserNotFoundException, GroupNotFoundException, OrganisationNotFoundException,
+  void removeUserFromGroup(long userDirectoryId, String username, String groupName)
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException;
-
-  /**
-   * Remove the user from the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  void removeUserFromOrganisation(String username, String organisation, String origin)
-    throws UserNotFoundException, OrganisationNotFoundException, SecurityException;
 
   /**
    * Rename the existing group.
    *
-   * @param groupName    the name of the group that will be renamed
-   * @param newGroupName the new name of the group
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param groupName       the name of the group that will be renamed
+   * @param newGroupName    the new name of the group
    *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  void renameGroup(String groupName, String newGroupName, String origin)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityException;
-
-  /**
-   * Remove the authorised function from the group's access profile.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   * @param code      the code identifying the authorised function
-   * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                  for the remote client
-   *
-   * @throws GroupNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws SecurityException
-   */
-  void revokeFunctionForGroup(String groupName, String code, String origin)
-    throws GroupNotFoundException, FunctionNotFoundException, SecurityException;
-
-  /**
-   * Remove the authorised function from the user's access profile for the specified organisation.
-   *
-   * @param username     the username identifying the user
-   * @param code         the code identifying the authorised function
-   * @param organisation the code uniquely identifying the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or
-   *                     workstation name for the remote client
-   *
-   * @throws UserNotFoundException
-   * @throws FunctionNotFoundException
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
-   */
-  void revokeFunctionForUser(String username, String code, String organisation, String origin)
-    throws UserNotFoundException, FunctionNotFoundException, OrganisationNotFoundException,
+  void renameGroup(long userDirectoryId, String groupName, String newGroupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
       SecurityException;
 
   /**
    * Update the authorised function.
    *
-   * @param function the <code>Function</code> instance containing the updated authorised function
-   *                 information
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param function the function
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
-  void updateFunction(Function function, String origin)
+  void updateFunction(Function function)
     throws FunctionNotFoundException, SecurityException;
 
   /**
-   * Update the authorised function template.
+   * Update the group.
    *
-   * @param template the <code>FunctionTemplate</code> instance containing the updated authorised
-   *                 function template information
-   * @param origin   the origin of the request e.g. the IP address, subnetwork or workstation name
-   *                 for the remote client
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param group           the group
    *
-   * @throws FunctionTemplateNotFoundException
-   * @throws SecurityException
-   */
-  void updateFunctionTemplate(FunctionTemplate template, String origin)
-    throws FunctionTemplateNotFoundException, SecurityException;
-
-  /**
-   * Update the existing group.
-   *
-   * @param group  the <code>Group</code> instance containing the updated group information
-   * @param origin the origin of the request e.g. the IP address, subnetwork or workstation name
-   *               for the remote client
-   *
+   * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  void updateGroup(Group group, String origin)
-    throws GroupNotFoundException, SecurityException;
+  void updateGroup(long userDirectoryId, Group group)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException;
 
   /**
-   * Update the existing organisation.
+   * Update the organisation.
    *
-   * @param organisation the <code>Organisation</code> instance containing the updated information
-   *                     for the organisation
-   * @param origin       the origin of the request e.g. the IP address, subnetwork or workstation
-   *                     name for the remote client
+   * @param organisation the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  void updateOrganisation(Organisation organisation, String origin)
+  void updateOrganisation(Organisation organisation)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
-   * Update the existing user.
+   * Update the user.
    *
-   * @param user           the <code>User</code> instance containing the updated user information
-   * @param expirePassword expire the user's password as part of the update
-   * @param lockUser       lock the user as part of the update
-   * @param origin         the origin of the request e.g. the IP address, subnetwork or workstation
-   *                       name for the remote client
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param user            the user
+   * @param expirePassword  expire the user's password as part of the update
+   * @param lockUser        lock the user as part of the update
    *
+   * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void updateUser(User user, boolean expirePassword, boolean lockUser, String origin)
-    throws UserNotFoundException, SecurityException;
+  void updateUser(long userDirectoryId, User user, boolean expirePassword, boolean lockUser)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 }

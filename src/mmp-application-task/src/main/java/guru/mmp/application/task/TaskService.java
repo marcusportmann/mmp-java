@@ -252,7 +252,7 @@ public class TaskService
     }
     catch (Throwable e)
     {
-      throw new TaskServiceException("Failed to initialise the Task Service instance", e);
+      throw new TaskServiceException("Failed to initialise the Task Service", e);
     }
   }
 
@@ -471,7 +471,7 @@ public class TaskService
     catch (Throwable e)
     {
       throw new TaskServiceException(
-          "Failed to initialise the configuration for the TaskService instance", e);
+          "Failed to initialise the configuration for the Task Service", e);
     }
   }
 

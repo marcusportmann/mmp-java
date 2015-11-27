@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -123,14 +124,15 @@ public class LoginPage extends WebPage
           }
 
           // Authenticate the user
-          securityService.authenticate(username, password, origin);
+          long userDirectoryId = securityService.authenticate(username, password);
 
           // Retrieve the user details
-          User user = securityService.getUser(username, origin);
+          User user = securityService.getUser(userDirectoryId, username);
 
           // Initialise the web session for the user
           WebSession session = getWebApplicationSession();
 
+          session.setUserDirectoryId(user.getUserDirectoryId());
           session.setUserId(user.getId());
           session.setUsername(user.getUsername());
 
@@ -143,6 +145,13 @@ public class LoginPage extends WebPage
           {
             session.dirty();  // for cluster replication
           }
+
+
+
+          GET ORGANISATIONS FOR THE USER DIRECTORY
+
+
+
 
           // Check whether the user is associated with more than 1 organisation
           List<Organisation> organisations = securityService.getOrganisationsForUser(username,

@@ -85,6 +85,10 @@ public class TemplateSecurity
   /** The Application.SecureHome function code. */
   public static final String FUNCTION_CODE_SECURE_HOME = "Application.SecureHome";
 
+  /** The Application.SecurityAdministration function code. */
+  public static final String FUNCTION_CODE_SECURITY_ADMINISTRATION =
+    "Application.SecurityAdministration";
+
   /** The Application.UpdateCode function code. */
   public static final String FUNCTION_CODE_UPDATE_CODE = "Application.UpdateCode";
 

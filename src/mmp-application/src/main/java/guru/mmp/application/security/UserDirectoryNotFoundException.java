@@ -17,56 +17,57 @@
 package guru.mmp.application.security;
 
 /**
- * A <code>RoleNotFoundException</code> is thrown to indicate that a security operation failed as a
- * result of a role that could not be found.
+ * An <code>UserDirectoryNotFoundException</code> is thrown to indicate that a security operation
+ * failed as a result of a user directory that could not be found.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class RoleNotFoundException extends RuntimeException
+public class UserDirectoryNotFoundException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>RoleNotFoundException</code> with <code>null</code> as its
+   * Constructs a new <code>UserDirectoryNotFoundException</code> with <code>null</code> as its
    * message.
    */
-  public RoleNotFoundException()
+  public UserDirectoryNotFoundException()
   {
     super();
   }
 
   /**
-   * Constructs a new <code>RoleNotFoundException</code> with the specified message.
+   * Constructs a new <code>UserDirectoryNotFoundException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public RoleNotFoundException(String message)
+  public UserDirectoryNotFoundException(String message)
   {
     super(message);
   }
 
   /**
-   * Constructs a new <code>RoleNotFoundException</code> with the specified cause and a
+   * Constructs a new <code>UserDirectoryNotFoundException</code> with the specified cause and a
    * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
    * class and message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
    *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public RoleNotFoundException(Throwable cause)
+  public UserDirectoryNotFoundException(Throwable cause)
   {
     super(cause);
   }
 
   /**
-   * Constructs a new <code>RoleNotFoundException</code> with the specified message and cause.
+   * Constructs a new <code>UserDirectoryNotFoundException</code> with the specified message and
+   * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public RoleNotFoundException(String message, Throwable cause)
+  public UserDirectoryNotFoundException(String message, Throwable cause)
   {
     super(message, cause);
   }

@@ -516,14 +516,11 @@ public class SMSDAO
   }
 
   /**
-   * Generate the SQL statements for the DAO.
+   * Build the SQL statements for the DAO.
    *
-   * @param schemaPrefix the schema prefix to append to database objects reference by the DAO
-   *
-   * @throws SQLException if a database error occurs
+   * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
    */
   protected void buildStatements(String schemaPrefix)
-    throws SQLException
   {
     // createSMSSQL
     createSMSSQL = "INSERT INTO " + schemaPrefix + "SMS"

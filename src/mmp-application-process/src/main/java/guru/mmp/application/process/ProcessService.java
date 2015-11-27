@@ -313,11 +313,11 @@ public class ProcessService
     }
     catch (Exception e)
     {
-      throw new RuntimeException("Failed to initialise the Process Service instance", e);
+      throw new RuntimeException("Failed to initialise the Process Service", e);
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Process Service instance: "
+      throw new RuntimeException("Failed to initialise the Process Service: "
           + e.getMessage());
     }
 
@@ -550,7 +550,7 @@ public class ProcessService
 //  catch (Throwable e)
 //  {
 //    throw new ProcessServiceException(
-//        "Failed to initialise the configuration for the Process Service instance", e);
+//        "Failed to initialise the configuration for the Process Service", e);
 //  }
   }
 }

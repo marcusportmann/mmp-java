@@ -43,6 +43,7 @@ public class User
   private String phoneNumber;
   private HashMap<String, String> properties;
   private String title;
+  private long userDirectoryId;
   private String username;
 
   /**
@@ -198,6 +199,16 @@ public class User
   public String getTitle()
   {
     return title;
+  }
+
+  /**
+   * Returns the unique ID for the user directory the user is associated with.
+   *
+   * @return the unique ID for the user directory the user is associated with
+   */
+  public long getUserDirectoryId()
+  {
+    return userDirectoryId;
   }
 
   /**
@@ -358,5 +369,15 @@ public class User
   public void setTitle(String title)
   {
     this.title = title;
+  }
+
+  /**
+   * Set the unique ID for the user directory the user is associated with.
+   *
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   */
+  public void setUserDirectoryId(long userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
   }
 }

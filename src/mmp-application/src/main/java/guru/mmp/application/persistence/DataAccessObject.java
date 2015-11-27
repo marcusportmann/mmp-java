@@ -218,10 +218,10 @@ public abstract class DataAccessObject
    *                        referenced by the DAO
    * @param schemaSeparator the separator that the database uses to separate the name of a
    *                        database schema and a database object located in the schema
-   * @param schemaPrefix    the schema prefix to append to database objects reference by the DAO
+   * @param schemaPrefix    the schema prefix to prepend to database objects referenced by the DAO
    * @param idQuote         the string used quote SQL identifiers
    *
-   * @throws SQLException if a database error occurs
+   * @throws SQLException
    */
   protected abstract void buildStatements(String schema, String schemaSeparator,
       String schemaPrefix, String idQuote)

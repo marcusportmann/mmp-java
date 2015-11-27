@@ -1570,14 +1570,11 @@ public class Registry
   }
 
   /**
-   * Generate the SQL statements for the <code>Registry</code>.
+   * Build the SQL statements for the <code>Registry</code>.
    *
-   * @param schemaPrefix the schema prefix to append to database objects reference by the
-   *
-   * @throws SQLException if a database error occurs
+   * @param schemaPrefix the schema prefix to prepend to database objects
    */
   protected void buildStatements(String schemaPrefix)
-    throws SQLException
   {
     // setStringValueInsertSQL
     setStringValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY"

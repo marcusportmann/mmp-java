@@ -176,15 +176,12 @@ public class IDGenerator
   }
 
   /**
-   * Generate the SQL statements for the <code>IDGenerator</code>.
+   * Build the SQL statements for the <code>IDGenerator</code>.
    *
-   * @param schemaPrefix    the schema prefix to append to database objects reference by the
-   *                        <code>IDGenerator</code>
-   *
-   * @throws SQLException if a database error occurs
+   * @param schemaPrefix the schema prefix to prepend to database objects referenced by the
+   *                     <code>IDGenerator</code>
    */
   protected void buildStatements(String schemaPrefix)
-    throws SQLException
   {
     // getCurrentIdSQL
     getCurrentIdSQL = "SELECT CURRENT FROM " + schemaPrefix + "IDGENERATOR"

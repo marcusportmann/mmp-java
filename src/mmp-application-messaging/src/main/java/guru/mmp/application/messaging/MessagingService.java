@@ -781,7 +781,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to initialise the Messaging Service instance", e);
+      throw new MessagingException("Failed to initialise the Messaging Service", e);
     }
   }
 
@@ -1582,7 +1582,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException(
-          "Failed to initialise the configuration for the Messaging Service instance", e);
+          "Failed to initialise the configuration for the Messaging Service", e);
     }
   }
 

@@ -418,11 +418,11 @@ public class ReportingService
     }
     catch (Exception e)
     {
-      throw new RuntimeException("Failed to initialise the Reporting Service instance", e);
+      throw new RuntimeException("Failed to initialise the Reporting Service", e);
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Reporting Service instance: "
+      throw new RuntimeException("Failed to initialise the Reporting Service: "
           + e.getMessage());
     }
 
@@ -629,7 +629,7 @@ public class ReportingService
 //  catch (Throwable e)
 //  {
 //    throw new ReportingServiceException(
-//        "Failed to initialise the configuration for the Reporting Service instance", e);
+//        "Failed to initialise the configuration for the Reporting Service", e);
 //  }
   }
 }

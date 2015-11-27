@@ -21,7 +21,6 @@ package guru.mmp.application.test;
 import guru.mmp.application.persistence.HsqldbDataSource;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.security.*;
-import guru.mmp.application.security.ISecurityService.PasswordChangeReason;
 
 import org.junit.After;
 import org.junit.Before;
@@ -58,35 +57,6 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   private SecurityService securityService;
 
   /**
-   * Test the functionality to add a function to a function template.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void addFunctionToTemplateTest()
-    throws guru.mmp.application.security.SecurityException
-  {
-    Function function = getTestFunctionDetails();
-
-    securityService.createFunction(function, origin);
-
-    FunctionTemplate template = getTestFunctionTemplateDetails();
-
-    securityService.createFunctionTemplate(template, origin);
-    securityService.addFunctionToTemplate(function.getCode(), template.getCode(), origin);
-
-    FunctionTemplate retrievedTemplate = securityService.getFunctionTemplate(template.getCode(),
-      origin);
-
-    assertEquals(
-        "The correct number of functions (1) was not retrieved for the function template ("
-        + template.getCode() + ")", 1, retrievedTemplate.getFunctions().size());
-    assertEquals("The function (" + function.getCode()
-        + ") was not added to the function template (" + template.getCode()
-        + ")", function.getCode(), retrievedTemplate.getFunctions().get(0).getCode());
-  }
-
-  /**
    * Test the functionality to add a user to a group.
    *
    * @throws guru.mmp.application.security.SecurityException
@@ -97,53 +67,27 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.addUserToGroup(user.getUsername(), group.getGroupName(),
-        organisation.getCode(), origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), group.getGroupName());
 
-    List<String> groupNames = securityService.getGroupNamesForUser(user.getUsername(),
-      organisation.getCode(), origin);
+    List<String> groupNames =
+      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername());
 
     assertEquals("The correct number of group names (1) was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getGroupName() + ")", group.getGroupName(), groupNames.get(0));
-  }
-
-  /**
-   * Test the functionality to add a user to an organisation.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void addUserToOrganisationTest()
-    throws guru.mmp.application.security.SecurityException
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-
-    securityService.addUserToOrganisation(user.getUsername(), organisation.getCode(), origin);
-
-    List<User> retrievedUsers = securityService.getUsersForOrganisation(organisation.getCode(),
-      origin);
-
-    assertEquals("The correct number of users (1) was not retrieved for the organisation ("
-        + organisation.getCode() + ")", 1, retrievedUsers.size());
-
-    compareUsers(user, retrievedUsers.get(0), false);
   }
 
   /**
@@ -157,10 +101,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.adminChangePassword(user.getUsername(), "Password2", false, false, true,
-        PasswordChangeReason.ADMINISTRATIVE, origin);
-    securityService.authenticate(user.getUsername(), "Password2", origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.adminChangePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password2", false, false, true, PasswordChangeReason.ADMINISTRATIVE);
+    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password2");
   }
 
   /**
@@ -174,9 +120,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.changePassword(user.getUsername(), user.getPassword(), "Password1", origin);
-    securityService.authenticate(user.getUsername(), "Password1", origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.changePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), user.getPassword(), "Password1");
+    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password1");
   }
 
   /**
@@ -190,9 +139,9 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Function function = getTestFunctionDetails();
 
-    securityService.createFunction(function, origin);
+    securityService.createFunction(function);
 
-    Function retrievedFunction = securityService.getFunction(function.getCode(), origin);
+    Function retrievedFunction = securityService.getFunction(function.getCode());
 
     compareFunctions(function, retrievedFunction);
   }
@@ -208,9 +157,11 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
 
-    Group retrievedGroup = securityService.getGroup(group.getGroupName(), origin);
+    Group retrievedGroup =
+      securityService.getGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        group.getGroupName());
 
     compareGroups(group, retrievedGroup);
   }
@@ -226,32 +177,11 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
-    Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode(),
-      origin);
+    Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode());
 
     compareOrganisations(organisation, retrievedOrganisation);
-  }
-
-  /**
-   * Test the create function template functionality.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void createTemplateTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    FunctionTemplate template = getTestFunctionTemplateDetails();
-
-    securityService.createFunctionTemplate(template, origin);
-
-    FunctionTemplate retrievedTemplate = securityService.getFunctionTemplate(template.getCode(),
-      origin);
-
-    compareTemplates(template, retrievedTemplate);
   }
 
   /**
@@ -266,9 +196,11 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
 
-    User retrievedUser = securityService.getUser(user.getUsername(), origin);
+    User retrievedUser = securityService.getUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+      user.getUsername());
 
     compareUsers(user, retrievedUser, false);
   }
@@ -285,12 +217,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Function function = getTestFunctionDetails();
 
-    securityService.createFunction(function, origin);
-    securityService.deleteFunction(function.getCode(), origin);
+    securityService.createFunction(function);
+    securityService.deleteFunction(function.getCode());
 
     try
     {
-      securityService.getFunction(function.getCode(), origin);
+      securityService.getFunction(function.getCode());
 
       fail("Retrieved the function (" + function.getCode() + ") that should have been deleted");
     }
@@ -310,12 +242,14 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
-    securityService.deleteGroup(group.getGroupName(), origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
+    securityService.deleteGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        group.getGroupName());
 
     try
     {
-      securityService.getGroup(group.getGroupName(), origin);
+      securityService.getGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+          group.getGroupName());
 
       fail("Retrieved the group (" + group.getGroupName() + ") that should have been deleted");
     }
@@ -335,26 +269,29 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.addUserToGroup(user.getUsername(), group.getGroupName(),
-        organisation.getCode(), origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), group.getGroupName());
 
-    List<String> groupNames = securityService.getGroupNamesForUser(user.getUsername(),
-      organisation.getCode(), origin);
+    List<String> groupNames =
+      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername());
 
     assertEquals("The correct number of group names (1) was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getGroupName() + ")", group.getGroupName(), groupNames.get(0));
-    securityService.deleteGroup(group.getGroupName(), origin);
+    securityService.deleteGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        group.getGroupName());
   }
 
   /**
@@ -369,8 +306,8 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Function function = getTestFunctionDetails();
 
-    securityService.createFunction(function, origin);
-    securityService.deleteFunction("INVALID", origin);
+    securityService.createFunction(function);
+    securityService.deleteFunction("INVALID");
   }
 
   /**
@@ -385,24 +322,8 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
-    securityService.deleteGroup("INVALID", origin);
-  }
-
-  /**
-   * Test the delete invalid function template functionality.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test(expected = guru.mmp.application.security.FunctionTemplateNotFoundException.class)
-  public void deleteInvalidTemplateTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    FunctionTemplate template = getTestFunctionTemplateDetails();
-
-    securityService.createFunctionTemplate(template, origin);
-    securityService.deleteFunctionTemplate("INVALID", origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
+    securityService.deleteGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, "INVALID");
   }
 
   /**
@@ -417,8 +338,9 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.deleteUser("INVALID", origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.deleteUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, "INVALID");
   }
 
   /**
@@ -433,12 +355,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
-    securityService.deleteOrganisation(organisation.getCode(), origin);
+    securityService.createOrganisation(organisation);
+    securityService.deleteOrganisation(organisation.getCode());
 
     try
     {
-      securityService.getOrganisation(organisation.getCode(), origin);
+      securityService.getOrganisation(organisation.getCode());
 
       fail("Retrieved the organisation (" + organisation.getId()
           + ") that should have been deleted");
@@ -457,34 +379,18 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
-    securityService.deleteOrganisation(organisation.getCode(), origin);
+    securityService.deleteOrganisation(organisation.getCode());
 
     try
     {
-      securityService.getOrganisation(organisation.getCode(), origin);
+      securityService.getOrganisation(organisation.getCode());
 
       fail("Retrieved the organisation (" + organisation.getId()
           + ") that should have been deleted");
     }
     catch (OrganisationNotFoundException ignored) {}
-  }
-
-  /**
-   * Test the delete function template functionality.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void deleteTemplateTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    FunctionTemplate template = getTestFunctionTemplateDetails();
-
-    securityService.createFunctionTemplate(template, origin);
-    securityService.deleteFunctionTemplate(template.getCode(), origin);
   }
 
   /**
@@ -499,12 +405,15 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.deleteUser(user.getUsername(), origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.deleteUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername());
 
     try
     {
-      securityService.getUser(user.getUsername(), origin);
+      securityService.getUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+          user.getUsername());
 
       fail("Retrieved the user (" + user.getUsername() + ") that should have been deleted");
     }
@@ -523,10 +432,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.adminChangePassword(user.getUsername(), "Password2", true, false, true,
-        PasswordChangeReason.ADMINISTRATIVE, origin);
-    securityService.authenticate(user.getUsername(), "Password2", origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.adminChangePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password2", true, false, true, PasswordChangeReason.ADMINISTRATIVE);
+    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password2");
   }
 
   /**
@@ -543,7 +454,8 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
     {
       User user = getNumberedTestUserDetails(i);
 
-      securityService.createUser(user, false, false, origin);
+      securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+          false);
     }
 
     List<Attribute> attributes = new ArrayList<>();
@@ -558,53 +470,52 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
     attributes.add(new Attribute("title", "%Title 1%"));
     attributes.add(new Attribute("username", "%Username 1%"));
 
-    List<User> retrievedUsers = securityService.findUsers(attributes, origin);
+    List<User> retrievedUsers =
+      securityService.findUsers(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, attributes);
 
     assertEquals("The correct number of users (11) was not retrieved matching the search criteria",
         11, retrievedUsers.size());
   }
 
-  /**
-   * Test the functionality to revoke a function for a group.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void getAllFunctionCodesForUserTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    Group group = getTestGroupDetails();
-
-    securityService.createGroup(group, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-    securityService.addUserToGroup(user.getUsername(), group.getGroupName(),
-        organisation.getCode(), origin);
-
-    Function function = getTestFunctionDetails();
-
-    securityService.createFunction(function, origin);
-    securityService.grantFunctionToUser(user.getUsername(), function.getCode(),
-        organisation.getCode(), origin);
-
-    Function anotherFunction = getAnotherTestFunctionDetails();
-
-    securityService.createFunction(anotherFunction, origin);
-    securityService.grantFunctionToGroup(group.getGroupName(), anotherFunction.getCode(), origin);
-
-    List<String> functionCodes = securityService.getAllFunctionCodesForUser(user.getUsername(),
-      organisation.getCode(), origin);
-
-    assertEquals("The correct number of functions (2) was not retrieved for the user ("
-        + user.getUsername() + ")", 2, functionCodes.size());
-  }
+///**
+// * Test the functionality to revoke a function for a group.
+// *
+// * @throws guru.mmp.application.security.SecurityException
+// */
+//@Test
+//public void getAllFunctionCodesForUserTest()
+//  throws guru.mmp.application.security.SecurityException
+//
+//{
+//  Organisation organisation = getTestOrganisationDetails();
+//
+//  securityService.createOrganisation(organisation);
+//
+//  Group group = getTestGroupDetails();
+//
+//  securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
+//
+//  User user = getTestUserDetails();
+//
+//  securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false, false);
+//  securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user.getUsername(), group.getGroupName());
+//
+//  Function function = getTestFunctionDetails();
+//
+//  securityService.createFunction(function);
+//  securityService.grantFunctionToUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user.getUsername(), function.getCode());
+//
+//  Function anotherFunction = getAnotherTestFunctionDetails();
+//
+//  securityService.createFunction(anotherFunction);
+//  securityService.grantFunctionToGroup(group.getGroupName(), anotherFunction.getCode());
+//
+//  List<String> functionCodes = securityService.getAllFunctionCodesForUser(user.getUsername(),
+//    organisation.getCode());
+//
+//  assertEquals("The correct number of functions (2) was not retrieved for the user ("
+//      + user.getUsername() + ")", 2, functionCodes.size());
+//}
 
   /**
    * Test the get functions functionality.
@@ -618,9 +529,9 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Function function = getTestFunctionDetails();
 
-    securityService.createFunction(function, origin);
+    securityService.createFunction(function);
 
-    List<Function> retrievedFunctions = securityService.getFunctions(origin);
+    List<Function> retrievedFunctions = securityService.getFunctions();
 
     assertEquals("The correct number of functions (1) was not retrieved", 1,
         retrievedFunctions.size());
@@ -639,9 +550,10 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
 
-    List<Group> retrievedGroups = securityService.getGroups(origin);
+    List<Group> retrievedGroups =
+      securityService.getGroups(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID);
 
     assertEquals("The correct number of groups (1) was not retrieved", 1, retrievedGroups.size());
     compareGroups(group, retrievedGroups.get(0));
@@ -659,42 +571,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
-    Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode(),
-      origin);
+    Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode());
 
     compareOrganisations(organisation, retrievedOrganisation);
 
-  }
-
-  /**
-   * Test the functionality to retrieve the organisations a user is associated with.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void getOrganisationsForUserTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-
-    securityService.addUserToOrganisation(user.getUsername(), organisation.getCode(), origin);
-
-    List<Organisation> retrievedOrganisations =
-      securityService.getOrganisationsForUser(user.getUsername(), origin);
-
-    assertEquals("The correct number of organisations (1) was not retrieved for the user ("
-        + user.getUsername() + ")", 1, retrievedOrganisations.size());
-
-    compareOrganisations(organisation, retrievedOrganisations.get(0));
   }
 
   /**
@@ -709,9 +591,9 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
-    List<Organisation> retrievedOrganisations = securityService.getOrganisations(origin);
+    List<Organisation> retrievedOrganisations = securityService.getOrganisations();
 
     assertEquals("The correct number of organisations (2) was not retrieved", 2,
         retrievedOrganisations.size());
@@ -731,56 +613,6 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   }
 
   /**
-   * Test the get function templates functionality.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void getTemplatesTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    FunctionTemplate template = getTestFunctionTemplateDetails();
-
-    securityService.createFunctionTemplate(template, origin);
-
-    List<FunctionTemplate> retrievedTemplates = securityService.getFunctionTemplates(origin);
-
-    assertEquals("The correct number of function templates (1) was not retrieved", 1,
-        retrievedTemplates.size());
-    compareTemplates(template, retrievedTemplates.get(0));
-  }
-
-  /**
-   * Test the functionality to retrieve the users associated with an organisation.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void getUsersForOrganisationTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-
-    securityService.addUserToOrganisation(user.getUsername(), organisation.getCode(), origin);
-
-    List<User> retrievedUsers = securityService.getUsersForOrganisation(organisation.getCode(),
-      origin);
-
-    assertEquals("The correct number of users (1) was not retrieved for the organisation ("
-        + organisation.getCode() + ")", 1, retrievedUsers.size());
-
-    compareUsers(user, retrievedUsers.get(0), false);
-  }
-
-  /**
    * Test the get users functionality.
    *
    * @throws guru.mmp.application.security.SecurityException
@@ -792,9 +624,11 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
 
-    List<User> retrievedUsers = securityService.getUsers(origin);
+    List<User> retrievedUsers =
+      securityService.getUsers(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID);
 
     assertEquals("The correct number of users (2) was not retrieved", 2, retrievedUsers.size());
 
@@ -812,106 +646,6 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   }
 
   /**
-   * Test the functionality to grant a function to a group.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void grantFunctionToGroupTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Group group = getTestGroupDetails();
-
-    securityService.createGroup(group, origin);
-
-    Function function = getTestFunctionDetails();
-
-    securityService.createFunction(function, origin);
-    securityService.grantFunctionToGroup(group.getGroupName(), function.getCode(), origin);
-
-    List<String> functionCodes = securityService.getFunctionCodesForGroup(group.getGroupName(),
-      origin);
-
-    assertEquals("The correct number of function codes (1) was not retrieved for the group ("
-        + group.getGroupName() + ")", 1, functionCodes.size());
-    assertEquals("The function (" + function.getCode() + ") was not assigned to the group ("
-        + group.getGroupName() + ")", function.getCode(), functionCodes.get(0));
-
-    List<Function> functions = securityService.getFunctionsForGroup(group.getGroupName(), origin);
-
-    assertEquals("The correct number of functions (1) was not retrieved for the group ("
-        + group.getGroupName() + ")", 1, functions.size());
-    compareFunctions(function, functions.get(0));
-  }
-
-  /**
-   * Test the functionality to grant a function to a user.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void grantFunctionToUserTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-
-    Function function = getTestFunctionDetails();
-
-    securityService.createFunction(function, origin);
-    securityService.grantFunctionToUser(user.getUsername(), function.getCode(),
-        organisation.getCode(), origin);
-
-    List<String> functionCodes = securityService.getFunctionCodesForUser(user.getUsername(),
-      organisation.getCode(), origin);
-
-    assertEquals("The correct number of function codes (1) was not retrieved for the user ("
-        + user.getUsername() + ")", 1, functionCodes.size());
-    assertEquals("The function (" + function.getCode() + ") was not assigned to the user ("
-        + user.getUsername() + ")", function.getCode(), functionCodes.get(0));
-
-    List<Function> functions = securityService.getFunctionsForUser(user.getUsername(),
-      organisation.getCode(), origin);
-
-    assertEquals("The correct number of functions (1) was not retrieved for the user ("
-        + user.getUsername() + ")", 1, functions.size());
-    compareFunctions(function, functions.get(0));
-  }
-
-  /**
-   * Test the functionality to check whether a user is associated with an organisation.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void isUserAssociatedWithOrganisationTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-
-    securityService.addUserToOrganisation(user.getUsername(), organisation.getCode(), origin);
-
-    assertEquals("The user (" + user.getUsername() + ") is not associated with the organisation ("
-        + organisation.getCode() + ")", true,
-          securityService.isUserAssociatedWithOrganisation(user.getUsername(),
-            organisation.getCode(), origin));
-  }
-
-  /**
    * Test the functionality to check whether a user is a member of a group.
    *
    * @throws guru.mmp.application.security.SecurityException
@@ -923,21 +657,22 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.addUserToGroup(user.getUsername(), group.getGroupName(),
-        organisation.getCode(), origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), group.getGroupName());
     assertEquals("Could not determine that the user (" + user.getUsername()
         + ") is a member of the group (" + group.getGroupName() + ")", true,
-          securityService.isUserInGroup(user.getUsername(), group.getGroupName(),
-            organisation.getCode(), origin));
+          securityService.isUserInGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+            user.getUsername(), group.getGroupName()));
   }
 
   /**
@@ -952,45 +687,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.adminChangePassword(user.getUsername(), "Password2", false, true, true,
-        PasswordChangeReason.ADMINISTRATIVE, origin);
-    securityService.authenticate(user.getUsername(), "Password2", origin);
-  }
-
-  /**
-   * Test the functionality to remove a function from a function template.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void removeFunctionFromFunctionTemplateTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Function function = getTestFunctionDetails();
-
-    securityService.createFunction(function, origin);
-
-    FunctionTemplate template = getTestFunctionTemplateDetails();
-
-    securityService.createFunctionTemplate(template, origin);
-    securityService.addFunctionToTemplate(function.getCode(), template.getCode(), origin);
-
-    FunctionTemplate retrievedTemplate = securityService.getFunctionTemplate(template.getCode(),
-      origin);
-
-    assertEquals(
-        "The correct number of functions (1) was not retrieved for the function template ("
-        + template.getCode() + ")", 1, retrievedTemplate.getFunctions().size());
-    assertEquals("The function (" + function.getCode()
-        + ") was not added to the function template (" + template.getCode()
-        + ")", function.getCode(), retrievedTemplate.getFunctions().get(0).getCode());
-    securityService.removeFunctionFromTemplate(function.getCode(), template.getCode(), origin);
-    retrievedTemplate = securityService.getFunctionTemplate(template.getCode(), origin);
-    assertEquals(
-        "The correct number of functions (0) was not retrieved for the function template ("
-        + template.getCode() + ")", 0, retrievedTemplate.getFunctions().size());
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.adminChangePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password2", false, true, true, PasswordChangeReason.ADMINISTRATIVE);
+    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password2");
   }
 
   /**
@@ -1005,140 +707,68 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation, origin);
+    securityService.createOrganisation(organisation);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.addUserToGroup(user.getUsername(), group.getGroupName(),
-        organisation.getCode(), origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), group.getGroupName());
 
-    List<String> groupNames = securityService.getGroupNamesForUser(user.getUsername(),
-      organisation.getCode(), origin);
+    List<String> groupNames =
+      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername());
 
     assertEquals("The correct number of group names (1) was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getGroupName() + ")", group.getGroupName(), groupNames.get(0));
-    securityService.removeUserFromGroup(user.getUsername(), group.getGroupName(),
-        organisation.getCode(), origin);
-    groupNames = securityService.getGroupNamesForUser(user.getUsername(), organisation.getCode(),
-        origin);
+    securityService.removeUserFromGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), group.getGroupName());
+    groupNames =
+      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername());
 
     assertEquals("The correct number of group names (0) was not retrieved for the user ("
         + user.getUsername() + ")", 0, groupNames.size());
   }
 
-  /**
-   * Test the functionality to remove a user from an organisation.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void removeUserFromOrganisationTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-
-    securityService.addUserToOrganisation(user.getUsername(), organisation.getCode(), origin);
-
-    List<User> retrievedUsers = securityService.getUsersForOrganisation(organisation.getCode(),
-      origin);
-
-    assertEquals("The correct number of users (1) was not retrieved for the organisation ("
-        + organisation.getCode() + ")", 1, retrievedUsers.size());
-
-    compareUsers(user, retrievedUsers.get(0), false);
-
-    securityService.removeUserFromOrganisation(user.getUsername(), organisation.getCode(), origin);
-
-    retrievedUsers = securityService.getUsersForOrganisation(organisation.getCode(), origin);
-
-    assertEquals("The correct number of users (0) was not retrieved for the organisation ("
-        + organisation.getCode() + ")", 0, retrievedUsers.size());
-  }
-
-  /**
-   * Test the functionality to revoke a function for a group.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void revokeFunctionForGroupTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Group group = getTestGroupDetails();
-
-    securityService.createGroup(group, origin);
-
-    Function function = getTestFunctionDetails();
-
-    securityService.createFunction(function, origin);
-    securityService.grantFunctionToGroup(group.getGroupName(), function.getCode(), origin);
-
-    List<String> functionCodes = securityService.getFunctionCodesForGroup(group.getGroupName(),
-      origin);
-
-    assertEquals("The correct number of function codes (1) was not retrieved for the group ("
-        + group.getGroupName() + ")", 1, functionCodes.size());
-    assertEquals("The function (" + function.getCode() + ") was not assigned to the group ("
-        + group.getGroupName() + ")", function.getCode(), functionCodes.get(0));
-    securityService.revokeFunctionForGroup(group.getGroupName(), function.getCode(), origin);
-    functionCodes = securityService.getFunctionCodesForGroup(group.getGroupName(), origin);
-    assertEquals("The correct number of function codes (0) was not retrieved for the group ("
-        + group.getGroupName() + ")", 0, functionCodes.size());
-  }
-
-  /**
-   * Test the functionality to revoke a function for a user.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void revokeFunctionForUserTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    Organisation organisation = getTestOrganisationDetails();
-
-    securityService.createOrganisation(organisation, origin);
-
-    User user = getTestUserDetails();
-
-    securityService.createUser(user, false, false, origin);
-
-    Function function = getTestFunctionDetails();
-
-    securityService.createFunction(function, origin);
-    securityService.grantFunctionToUser(user.getUsername(), function.getCode(),
-        organisation.getCode(), origin);
-
-    List<String> functionCodes = securityService.getFunctionCodesForUser(user.getUsername(),
-      organisation.getCode(), origin);
-
-    assertEquals("The correct number of function codes (1) was not retrieved for the user ("
-        + user.getUsername() + ")", 1, functionCodes.size());
-    assertEquals("The function (" + function.getCode() + ") was not assigned to the user ("
-        + user.getUsername() + ")", function.getCode(), functionCodes.get(0));
-    securityService.revokeFunctionForUser(user.getUsername(), function.getCode(),
-        organisation.getCode(), origin);
-    functionCodes = securityService.getFunctionCodesForUser(user.getUsername(),
-        organisation.getCode(), origin);
-    assertEquals("The correct number of function codes (0) was not retrieved for the user ("
-        + user.getUsername() + ")", 0, functionCodes.size());
-  }
+///**
+// * Test the functionality to revoke a function for a group.
+// *
+// * @throws guru.mmp.application.security.SecurityException
+// */
+//@Test
+//public void revokeFunctionForGroupTest()
+//  throws guru.mmp.application.security.SecurityException
+//
+//{
+//  Group group = getTestGroupDetails();
+//
+//  securityService.createGroup(group);
+//
+//  Function function = getTestFunctionDetails();
+//
+//  securityService.createFunction(function);
+//  securityService.grantFunctionToGroup(group.getGroupName(), function.getCode());
+//
+//  List<String> functionCodes = securityService.getFunctionCodesForGroup(group.getGroupName(),
+//    origin);
+//
+//  assertEquals("The correct number of function codes (1) was not retrieved for the group ("
+//      + group.getGroupName() + ")", 1, functionCodes.size());
+//  assertEquals("The function (" + function.getCode() + ") was not assigned to the group ("
+//      + group.getGroupName() + ")", function.getCode(), functionCodes.get(0));
+//  securityService.revokeFunctionForGroup(group.getGroupName(), function.getCode());
+//  functionCodes = securityService.getFunctionCodesForGroup(group.getGroupName());
+//  assertEquals("The correct number of function codes (0) was not retrieved for the group ("
+//      + group.getGroupName() + ")", 0, functionCodes.size());
+//}
 
   /**
    * This method is executed by the JUnit test infrastructure before a JUnit test is executed.
@@ -1216,12 +846,12 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Function function = getTestFunctionDetails();
 
-    securityService.createFunction(function, origin);
+    securityService.createFunction(function);
     function.setName("Test Updated Function Name");
     function.setDescription("Test Updated Function Description");
-    securityService.updateFunction(function, origin);
+    securityService.updateFunction(function);
 
-    Function retrievedFunction = securityService.getFunction(function.getCode(), origin);
+    Function retrievedFunction = securityService.getFunction(function.getCode());
 
     compareFunctions(function, retrievedFunction);
   }
@@ -1238,36 +868,15 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(group, origin);
+    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
     group.setDescription("Test Updated Group Description");
-    securityService.updateGroup(group, origin);
+    securityService.updateGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
 
-    Group retrievedGroup = securityService.getGroup(group.getGroupName(), origin);
+    Group retrievedGroup =
+      securityService.getGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        group.getGroupName());
 
     compareGroups(group, retrievedGroup);
-  }
-
-  /**
-   * Test the update function template functionality.
-   *
-   * @throws guru.mmp.application.security.SecurityException
-   */
-  @Test
-  public void updateTemplateTest()
-    throws guru.mmp.application.security.SecurityException
-
-  {
-    FunctionTemplate template = getTestFunctionTemplateDetails();
-
-    securityService.createFunctionTemplate(template, origin);
-    template.setName("Test Updated Function Template Name");
-    template.setDescription("Test Updated Function Template Description");
-    securityService.updateFunctionTemplate(template, origin);
-
-    FunctionTemplate retrievedTemplate = securityService.getFunctionTemplate(template.getCode(),
-      origin);
-
-    compareTemplates(template, retrievedTemplate);
   }
 
   /**
@@ -1282,7 +891,8 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
 
     Calendar calendar = Calendar.getInstance();
 
@@ -1299,9 +909,11 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
     user.setPhoneNumber("Test Updated Phone Number");
     user.setMobileNumber("Test Updated Mobile Number");
     user.setFaxNumber("Test Updated Fax Number");
-    securityService.updateUser(user, false, false, origin);
+    securityService.updateUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
 
-    User retrievedUser = securityService.getUser(user.getUsername(), origin);
+    User retrievedUser = securityService.getUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+      user.getUsername());
 
     compareUsers(user, retrievedUser, true);
   }
@@ -1318,10 +930,14 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(user, false, false, origin);
-    securityService.changePassword(user.getUsername(), user.getPassword(), "Password1", origin);
-    securityService.changePassword(user.getUsername(), "Password1", "Password2", origin);
-    securityService.changePassword(user.getUsername(), "Password2", "Password1", origin);
+    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+        false);
+    securityService.changePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), user.getPassword(), "Password1");
+    securityService.changePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password1", "Password2");
+    securityService.changePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+        user.getUsername(), "Password2", "Password1");
   }
 
   private void compareFunctions(Function function1, Function function2)
@@ -1353,26 +969,6 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
         organisation2.getName());
     assertEquals("The description values for the two organisations do not match",
         organisation1.getDescription(), organisation2.getDescription());
-  }
-
-  private void compareTemplates(FunctionTemplate template1, FunctionTemplate template2)
-  {
-    assertEquals("The code values for the two function templates do not match",
-        template1.getCode(), template2.getCode());
-    assertEquals("The description values for the two function templates do not match",
-        template1.getDescription(), template2.getDescription());
-
-    List<Function> template1Functions = template1.getFunctions();
-    List<Function> template2Functions = template2.getFunctions();
-
-    assertEquals("The two function templates do not have the same number of associated functions",
-        template1Functions.size(), template2Functions.size());
-
-    // TODO: Compare the functions on each function template
-    assertEquals("The ID values for the two function templates do not match", template1.getId(),
-        template2.getId());
-    assertEquals("The name values for the two function templates do not match",
-        template1.getName(), template2.getName());
   }
 
   private void compareUsers(User user1, User user2, boolean checkPasswordExpiry)
@@ -1439,12 +1035,6 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
     function.setDescription("Test Function Description");
 
     return function;
-  }
-
-  private FunctionTemplate getTestFunctionTemplateDetails()
-  {
-    return new FunctionTemplate("Test Function Template Code",
-      "Test Function Template Name", "Test Function Template Description");
   }
 
   private Group getTestGroupDetails()
