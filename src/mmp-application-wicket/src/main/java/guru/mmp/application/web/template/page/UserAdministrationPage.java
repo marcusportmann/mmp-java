@@ -115,7 +115,7 @@ public class UserAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          AddUserPage page = new AddUserPage(getPageReference());
+          AddUserPage page = new AddUserPage(userDirectoryId, getPageReference());
 
           setResponsePage(page);
         }

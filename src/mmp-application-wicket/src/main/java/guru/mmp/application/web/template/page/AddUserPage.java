@@ -80,9 +80,10 @@ public class AddUserPage extends TemplateWebPage
   /**
    * Constructs a new <code>AddUserPage</code>.
    *
-   * @param previousPage the previous page
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param previousPage    the previous page
    */
-  public AddUserPage(PageReference previousPage)
+  public AddUserPage(long userDirectoryId, PageReference previousPage)
   {
     super("Add User");
 
@@ -188,7 +189,7 @@ public class AddUserPage extends TemplateWebPage
             // Check if a user with the specified username already exists and if so return an error
             try
             {
-              securityService.getUser(user.getUsername(), getRemoteAddress());
+              securityService.getUser(userDirectoryId, user.getUsername());
 
               error("A user with the specified username already exists.");
 
@@ -196,15 +197,11 @@ public class AddUserPage extends TemplateWebPage
             }
             catch (UserNotFoundException ignored) {}
 
-            securityService.createUser(user, expiredPassword, userLocked, getRemoteAddress());
-
-            securityService.addUserToOrganisation(user.getUsername(), session.getOrganisation(),
-                getRemoteAddress());
+            securityService.createUser(userDirectoryId, user, expiredPassword, userLocked);
 
             if (!StringUtil.isNullOrEmpty(groupName))
             {
-              securityService.addUserToGroup(user.getUsername(), groupName,
-                  session.getOrganisation(), getRemoteAddress());
+              securityService.addUserToGroup(userDirectoryId, user.getUsername(), groupName);
             }
 
             setResponsePage(previousPage.getPage());
