@@ -20,7 +20,9 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
+import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
@@ -44,6 +46,7 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * The <code>GroupAdministrationPage</code> class implements the
@@ -64,6 +67,11 @@ public class GroupAdministrationPage extends TemplateWebPage
   private ISecurityService securityService;
 
   /**
+   * The unique ID for the user directory the groups are associated with.
+   */
+  private long userDirectoryId;
+
+  /**
    * Constructs a new <code>GroupAdministrationPage</code>.
    */
   public GroupAdministrationPage()
@@ -72,6 +80,17 @@ public class GroupAdministrationPage extends TemplateWebPage
 
     try
     {
+      WebSession session = getWebApplicationSession();
+
+      /*
+       * Retrieve the list of user directories for the organisation the currently logged on user
+       * is associated with and default to the first user directory.
+       */
+      List<UserDirectory> userDirectories =
+        securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
+
+      userDirectoryId = userDirectories.get(0).getId();
+
       /*
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
@@ -92,7 +111,7 @@ public class GroupAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          AddGroupPage page = new AddGroupPage(getPageReference());
+          AddGroupPage page = new AddGroupPage(userDirectoryId, getPageReference());
 
           setResponsePage(page);
         }
@@ -100,7 +119,7 @@ public class GroupAdministrationPage extends TemplateWebPage
       tableContainer.add(addLink);
 
       // The group data view
-      GroupDataProvider dataProvider = new GroupDataProvider();
+      GroupDataProvider dataProvider = new GroupDataProvider(userDirectoryId);
 
       DataView<Group> dataView = new DataView<Group>("group", dataProvider)
       {
@@ -196,7 +215,7 @@ public class GroupAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteGroup(groupName, getRemoteAddress());
+            securityService.deleteGroup(userDirectoryId, groupName);
 
             target.add(tableContainer);
 

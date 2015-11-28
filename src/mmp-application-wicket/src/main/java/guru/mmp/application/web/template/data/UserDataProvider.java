@@ -25,8 +25,6 @@ import guru.mmp.application.web.data.InjectableDataProvider;
 import guru.mmp.common.util.StringUtil;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -109,8 +107,6 @@ public class UserDataProvider extends InjectableDataProvider<User>
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
       List<User> allUsers;
 
       if (StringUtil.isNullOrEmpty(filter))
@@ -141,7 +137,7 @@ public class UserDataProvider extends InjectableDataProvider<User>
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to load the users from index (" + first + ") to ("
-          + (first + count) + ")", e);
+          + (first + count) + ") for the user directory (" + userDirectoryId + ")", e);
     }
   }
 
@@ -180,8 +176,6 @@ public class UserDataProvider extends InjectableDataProvider<User>
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
       if (StringUtil.isNullOrEmpty(filter))
       {
         return securityService.getNumberOfUsers(userDirectoryId);
@@ -193,7 +187,9 @@ public class UserDataProvider extends InjectableDataProvider<User>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to retrieve the number of users", e);
+      throw new WebApplicationException(
+          "Failed to retrieve the number of users for the user directory (" + userDirectoryId
+          + ")", e);
     }
   }
 }

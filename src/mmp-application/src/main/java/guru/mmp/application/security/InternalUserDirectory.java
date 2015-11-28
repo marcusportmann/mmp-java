@@ -43,7 +43,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * The default number of months before a user's password expires.
    */
-  public static final int DEFAULT_PASSWORD_EXPIRY_MONTHS = 12;
+  public static final int DEFAULT_PASSWORD_EXPIRY_MONTHS = 3;
 
   /**
    * The default number of months to check password history against.

@@ -30,6 +30,7 @@ import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -41,14 +42,15 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import java.util.List;
-import java.util.Map;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * The <code>LoginPage</code> class implements the "Login"
@@ -115,8 +117,6 @@ public class LoginPage extends WebPage
       {
         try
         {
-          String origin = getRemoteAddress();
-
           if (Debug.inDebugMode() && "s".equals(username))
           {
             username = "Administrator";
@@ -133,7 +133,6 @@ public class LoginPage extends WebPage
           WebSession session = getWebApplicationSession();
 
           session.setUserDirectoryId(user.getUserDirectoryId());
-          session.setUserId(user.getId());
           session.setUsername(user.getUsername());
 
           // Make session permanent after login
@@ -146,16 +145,9 @@ public class LoginPage extends WebPage
             session.dirty();  // for cluster replication
           }
 
-
-
-          GET ORGANISATIONS FOR THE USER DIRECTORY
-
-
-
-
           // Check whether the user is associated with more than 1 organisation
-          List<Organisation> organisations = securityService.getOrganisationsForUser(username,
-            origin);
+          List<Organisation> organisations =
+            securityService.getOrganisationsForUserDirectory(userDirectoryId);
 
           if (organisations.size() == 0)
           {
@@ -166,10 +158,10 @@ public class LoginPage extends WebPage
           {
             String organisation = organisations.get(0).getCode();
 
-            List<String> groupNames = securityService.getGroupNamesForUser(username, organisation,
-              origin);
-            List<String> functionCodes = securityService.getAllFunctionCodesForUser(username,
-              organisation, origin);
+            List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
+              username);
+            List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
+              username);
 
             session.setOrganisation(organisation);
             session.setGroupNames(groupNames);

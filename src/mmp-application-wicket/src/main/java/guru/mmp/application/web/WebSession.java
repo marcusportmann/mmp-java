@@ -62,8 +62,8 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    */
   private String organisation;
 
-  /** The unique user ID for the logged in user associated with the web session. */
-  private long userId = -1;
+  /** The unique ID for the user directory the user is associated with. */
+  private long userDirectoryId;
 
   /** The user properties for the logged in user associated with the web session. */
   private Map<String, Serializable> userProperties;
@@ -138,15 +138,15 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Returns the unique numeric ID for the logged in user associated with the web session or -1 if
-   * this is an 'anonymous' web session.
+   * Returns the unique ID for the user directory the user is associated with or -1 if this is an
+   * 'anonymous' web session.
    *
-   * @return the the unique numeric ID for the logged in user associated with the web session or
-   *         -1 if this is an 'anonymous' web session
+   * @return the unique ID for the user directory the user is associated with or -1 if this is an
+   *         'anonymous' web session
    */
-  public long getUserId()
+  public long getUserDirectoryId()
   {
-    return userId;
+    return userDirectoryId;
   }
 
   /**
@@ -275,8 +275,8 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
     functionCodes = null;
     groupNames = null;
     organisation = null;
-    userId = -1;
     userProperties = null;
+    userDirectoryId = -1;
     username = null;
   }
 
@@ -378,15 +378,13 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Set the unique numeric ID for the logged in user associated with the web session or -1 if this
-   * is an 'anonymous' web session.
+   * Set the unique ID for the user directory the user is associated with.
    *
-   * @param userId the the unique numeric ID for the logged in user associated with the web
-   *               session or -1 if this is an 'anonymous' web session
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
    */
-  public void setUserId(long userId)
+  public void setUserDirectoryId(long userDirectoryId)
   {
-    this.userId = userId;
+    this.userDirectoryId = userDirectoryId;
   }
 
   /**

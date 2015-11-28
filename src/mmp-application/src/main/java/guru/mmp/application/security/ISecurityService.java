@@ -19,7 +19,6 @@ package guru.mmp.application.security;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The <code>ISecurityService</code> interface defines the functionality provided by the
@@ -30,16 +29,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public interface ISecurityService
 {
-  /**
-   * Retrieve the user directories.
-   *
-   * @return the list of user directories
-   *
-   * @throws SecurityException
-   */
-  public List<UserDirectory> getUserDirectories()
-    throws SecurityException;
-
   /**
    * Add the user to the group.
    *
@@ -457,6 +446,20 @@ public interface ISecurityService
     throws SecurityException;
 
   /**
+   * Retrieve the organisations associated with the user directory.
+   *
+   * @param userDirectoryId the unique ID for the user directory the organisations are associated
+   *                        with
+   *
+   * @return the organisations associated with the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  List<Organisation> getOrganisationsForUserDirectory(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
+
+  /**
    * Retrieve the user.
    *
    * @param userDirectoryId the unique ID for the user directory the user is associated with
@@ -470,6 +473,39 @@ public interface ISecurityService
    */
   User getUser(long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
+
+  /**
+   * Retrieve the user directories.
+   *
+   * @return the list of user directories
+   *
+   * @throws SecurityException
+   */
+  List<UserDirectory> getUserDirectories()
+    throws SecurityException;
+
+  /**
+   * Retrieve the user directories the organisation is associated with.
+   *
+   * @param code the code uniquely identifying the organisation
+   *
+   * @return the user directories the organisation is associated with
+   *
+   * @throws OrganisationNotFoundException
+   * @throws SecurityException
+   */
+  List<UserDirectory> getUserDirectoriesForOrganisation(String code)
+    throws OrganisationNotFoundException, SecurityException;
+
+  /**
+   * Retrieve the user directories with parameters.
+   *
+   * @return the list of user directories with parameters
+   *
+   * @throws SecurityException
+   */
+  List<UserDirectory> getUserDirectoriesWithParameters()
+    throws SecurityException;
 
   /**
    * Retrieve all the users.

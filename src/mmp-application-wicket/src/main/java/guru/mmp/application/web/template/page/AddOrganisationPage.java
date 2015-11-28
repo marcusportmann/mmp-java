@@ -92,7 +92,7 @@ public class AddOrganisationPage extends TemplateWebPage
              */
             try
             {
-              securityService.getOrganisation(organisation.getCode(), getRemoteAddress());
+              securityService.getOrganisation(organisation.getCode());
 
               AddOrganisationPage.this.error(
                   "An organisation with the specified code already exists.");
@@ -104,13 +104,15 @@ public class AddOrganisationPage extends TemplateWebPage
               // Do nothing, this is not an error
             }
 
-            securityService.createOrganisation(organisation, getRemoteAddress());
+            securityService.createOrganisation(organisation);
 
-            securityService.addUserToOrganisation(session.getUsername(), organisation.getCode(),
-                getRemoteAddress());
+            TODO: BOOTSTRAP THE NEW ORGANISATION WITH A NEW USER DIRECTORY
 
-            securityService.addUserToGroup(session.getUsername(), "Administrators",
-                organisation.getCode(), getRemoteAddress());
+//            securityService.addUserToOrganisation(session.getUsername(), organisation.getCode(),
+//                getRemoteAddress());
+//
+//            securityService.addUserToGroup(session.getUsername(), "Administrators",
+//                organisation.getCode(), getRemoteAddress());
 
             setResponsePage(previousPage.getPage());
           }

@@ -23,12 +23,10 @@ import guru.mmp.application.security.GroupNotFoundException;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
-
-import javax.inject.Inject;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>DetachableGroupModel</code> class provides a detachable model
@@ -50,13 +48,18 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
   private ISecurityService securityService;
 
   /**
+   * The unique ID for the user directory the group is associated with;
+   */
+  private long userDirectoryId;
+
+  /**
    * Constructs a new <code>DetachableGroupModel</code>.
    *
    * @param group the <code>Group</code> instance
    */
   public DetachableGroupModel(Group group)
   {
-    this(group.getGroupName());
+    this(group.getUserDirectoryId(), group.getGroupName());
 
     setObject(group);
   }
@@ -64,10 +67,12 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
   /**
    * Constructs a new <code>DetachableGroupModel</code>.
    *
-   * @param groupName the group name for the group
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param groupName       the group name for the group
    */
-  public DetachableGroupModel(String groupName)
+  public DetachableGroupModel(long userDirectoryId, String groupName)
   {
+    this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
   }
 
@@ -87,10 +92,7 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      return securityService.getGroup(groupName,
-          servletWebRequest.getContainerRequest().getRemoteAddr());
+      return securityService.getGroup(userDirectoryId, groupName);
     }
     catch (GroupNotFoundException e)
     {

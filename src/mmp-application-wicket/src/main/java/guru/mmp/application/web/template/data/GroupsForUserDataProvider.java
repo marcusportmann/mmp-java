@@ -22,15 +22,15 @@ import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
 
-import javax.inject.Inject;
+import org.apache.wicket.model.IModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>GroupsForUserDataProvider</code> class provides an <code>IDataProvider</code>
@@ -43,14 +43,14 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
 {
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code uniquely identifying the organisation the user is associated with.
-   */
-  private String organisation;
-
   /* Security Service */
   @Inject
   private ISecurityService securityService;
+
+  /**
+   * The unique ID for the user directory the user is associated with.
+   */
+  private long userDirectoryId;
 
   /**
    * The username identifying the user the groups are associated with.
@@ -60,13 +60,13 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   /**
    * Constructs a new <code>GroupsForUserDataProvider</code>.
    *
-   * @param username     the username identifying the user the groups are associated with
-   * @param organisation the code uniquely identifying the organisation the user is associated with
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user the groups are associated with
    */
-  public GroupsForUserDataProvider(String username, String organisation)
+  public GroupsForUserDataProvider(long userDirectoryId, String username)
   {
+    this.userDirectoryId = userDirectoryId;
     this.username = username;
-    this.organisation = organisation;
   }
 
   /**
@@ -98,17 +98,14 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      List<Group> groups = securityService.getGroupsForUser(username, organisation,
-        servletWebRequest.getContainerRequest().getRemoteAddr());
+      List<Group> groups = securityService.getGroupsForUser(userDirectoryId, username);
 
       return groups.iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to load the groups from index (" + first + ") to ("
-          + (first + count) + ")", e);
+          + (first + count) + ") for the user directory (" + userDirectoryId + ")", e);
     }
   }
 
@@ -137,16 +134,15 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      List<Group> groups = securityService.getGroupsForUser(username, organisation,
-        servletWebRequest.getContainerRequest().getRemoteAddr());
+      List<Group> groups = securityService.getGroupsForUser(userDirectoryId, username);
 
       return groups.size();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to retrieve the number of groups", e);
+      throw new WebApplicationException(
+          "Failed to retrieve the number of groups for the user directory (" + userDirectoryId
+          + ")", e);
     }
   }
 }

@@ -196,7 +196,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteOrganisation(code, getRemoteAddress());
+            securityService.deleteOrganisation(code);
 
             target.add(tableContainer);
 

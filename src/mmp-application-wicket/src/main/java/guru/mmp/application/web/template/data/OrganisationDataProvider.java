@@ -22,16 +22,16 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
 
-import javax.inject.Inject;
+import org.apache.wicket.model.IModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>OrganisationDataProvider</code> class provides an <code>IDataProvider</code>
@@ -73,10 +73,7 @@ public class OrganisationDataProvider extends InjectableDataProvider<Organisatio
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      List<Organisation> allOrganisations =
-        securityService.getOrganisations(servletWebRequest.getContainerRequest().getRemoteAddr());
+      List<Organisation> allOrganisations = securityService.getOrganisations();
 
       List<Organisation> organisations = new ArrayList<>();
 
@@ -121,10 +118,7 @@ public class OrganisationDataProvider extends InjectableDataProvider<Organisatio
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      return securityService.getNumberOfOrganisations(
-          servletWebRequest.getContainerRequest().getRemoteAddr());
+      return securityService.getNumberOfOrganisations();
     }
     catch (Throwable e)
     {

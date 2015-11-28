@@ -23,8 +23,6 @@ import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.OrganisationNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
 
 import javax.inject.Inject;
 
@@ -87,10 +85,7 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      return securityService.getOrganisation(code,
-          servletWebRequest.getContainerRequest().getRemoteAddr());
+      return securityService.getOrganisation(code);
     }
     catch (OrganisationNotFoundException e)
     {

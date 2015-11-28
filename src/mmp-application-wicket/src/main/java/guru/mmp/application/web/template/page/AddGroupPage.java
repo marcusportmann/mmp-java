@@ -58,9 +58,10 @@ public class AddGroupPage extends TemplateWebPage
   /**
    * Constructs a new <code>AddGroupPage</code>.
    *
-   * @param previousPage the previous page
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param previousPage    the previous page
    */
-  public AddGroupPage(PageReference previousPage)
+  public AddGroupPage(long userDirectoryId, PageReference previousPage)
   {
     super("Add Group");
 
@@ -86,7 +87,7 @@ public class AddGroupPage extends TemplateWebPage
             // Check if a group with the specified code already exists and if so return an error
             try
             {
-              securityService.getGroup(group.getGroupName(), getRemoteAddress());
+              securityService.getGroup(userDirectoryId, group.getGroupName());
 
               AddGroupPage.this.error("A group with the specified group name already exists.");
 
@@ -97,7 +98,7 @@ public class AddGroupPage extends TemplateWebPage
               // Do nothing, this is not an error
             }
 
-            securityService.createGroup(group, getRemoteAddress());
+            securityService.createGroup(userDirectoryId, group);
 
             setResponsePage(previousPage.getPage());
           }

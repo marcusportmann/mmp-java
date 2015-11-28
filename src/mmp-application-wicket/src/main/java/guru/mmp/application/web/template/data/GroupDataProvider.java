@@ -22,16 +22,18 @@ import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>GroupDataProvider</code> class provides an <code>IDataProvider</code>
@@ -48,9 +50,19 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
   private ISecurityService securityService;
 
   /**
-   * Constructs a new <code>GroupDataProvider</code>.
+   * The unique ID for the user directory the groups are associated with.
    */
-  public GroupDataProvider() {}
+  private long userDirectoryId;
+
+  /**
+   * Constructs a new <code>GroupDataProvider</code>.
+   *
+   * @param userDirectoryId the unique ID for the user directory the groups are associated with
+   */
+  public GroupDataProvider(long userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
+  }
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -73,10 +85,7 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      List<Group> allGroups =
-        securityService.getGroups(servletWebRequest.getContainerRequest().getRemoteAddr());
+      List<Group> allGroups = securityService.getGroups(userDirectoryId);
 
       List<Group> groups = new ArrayList<>();
 
@@ -92,7 +101,7 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to load the groups from index (" + first + ") to ("
-          + (first + count) + ")", e);
+          + (first + count) + ") for the user directory (" + userDirectoryId + ")", e);
     }
   }
 
@@ -121,14 +130,13 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      return securityService.getNumberOfGroups(
-          servletWebRequest.getContainerRequest().getRemoteAddr());
+      return securityService.getNumberOfGroups(userDirectoryId);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to retrieve the number of groups", e);
+      throw new WebApplicationException(
+          "Failed to retrieve the number of groups for the user directory (" + userDirectoryId
+          + ")", e);
     }
   }
 }

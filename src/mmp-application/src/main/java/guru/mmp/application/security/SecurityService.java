@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.reflect.Constructor;
+
 import java.sql.*;
 
 import java.util.*;
@@ -70,8 +72,11 @@ public class SecurityService
   private String getNumberOfUserDirectoriesSQL;
   private String getOrganisationIdSQL;
   private String getOrganisationSQL;
+  private String getOrganisationsForUserDirectorySQL;
   private String getOrganisationsSQL;
+  private String getUserDirectoriesForOrganisationSQL;
   private String getUserDirectoriesSQL;
+  private String getUserDirectoryParametersSQL;
   private String insertIDGeneratorSQL;
 
   /* Registry */
@@ -116,6 +121,14 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     userDirectory.addUserToGroup(username, groupName);
   }
 
@@ -148,6 +161,14 @@ public class SecurityService
     if (newPassword == null)
     {
       throw new InvalidArgumentException("newPassword");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     userDirectory.adminChangePassword(username, newPassword, expirePassword, lockUser,
@@ -228,7 +249,13 @@ public class SecurityService
           }
         }
 
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
+    }
+    catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
+        | ExpiredPasswordException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -272,6 +299,14 @@ public class SecurityService
     if (newPassword == null)
     {
       throw new InvalidArgumentException("newPassword");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     userDirectory.changePassword(username, password, newPassword);
@@ -353,6 +388,14 @@ public class SecurityService
     if (isNullOrEmpty(group.getGroupName()))
     {
       throw new InvalidArgumentException("group.groupName");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     userDirectory.createGroup(group);
@@ -439,6 +482,14 @@ public class SecurityService
       throw new InvalidArgumentException("user.username");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     userDirectory.createUser(user, expiredPassword, userLocked);
   }
 
@@ -509,6 +560,14 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     userDirectory.deleteGroup(groupName);
   }
 
@@ -577,6 +636,14 @@ public class SecurityService
       throw new InvalidArgumentException("username");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     userDirectory.deleteUser(username);
   }
 
@@ -599,6 +666,14 @@ public class SecurityService
     if (attributes == null)
     {
       throw new InvalidArgumentException("attributes");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     return userDirectory.findUsers(attributes);
@@ -628,134 +703,16 @@ public class SecurityService
       throw new InvalidArgumentException("attributes");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.findUsersEx(attributes, startPos, maxResults);
   }
-
-///**
-// * Retrieve the authorised function codes for the user for the specified organisation.
-// * <p/>
-// * This list will include all of the authorised functions that the user is associated with as a
-// * result of being a member of one or more groups that have also been linked to authorised
-// * functions.
-// *
-// * @param username     the username identifying the user
-// * @param organisation the code uniquely identifying the organisation
-// * @param origin       the origin of the request e.g. the IP address, subnetwork or
-// *                     workstation name for the remote client
-// *
-// * @return the list of authorised function codes for the user for the specified organisation
-// *
-// * @throws UserNotFoundException
-// * @throws OrganisationNotFoundException
-// * @throws SecurityException
-// */
-//public List<String> getAllFunctionCodesForUser(String username, String organisation,
-//    String origin)
-//  throws UserNotFoundException, OrganisationNotFoundException, SecurityException
-//{
-//  // Validate parameters
-//  if (isNullOrEmpty(username))
-//  {
-//    throw new InvalidArgumentException("username");
-//  }
-//
-//  if (isNullOrEmpty(organisation))
-//  {
-//    throw new InvalidArgumentException("organisation");
-//  }
-//
-//  if (isNullOrEmpty(origin))
-//  {
-//    throw new InvalidArgumentException("origin");
-//  }
-//
-//  try (Connection connection = dataSource.getConnection();
-//    PreparedStatement statement = connection.prepareStatement(getAllFunctionCodesForUserSQL))
-//  {
-//    // Get the ID of the user with the specified username
-//    long userId;
-//
-//    if ((userId = getUserId(connection, username)) == -1)
-//    {
-//      throw new UserNotFoundException("The user (" + username + ") could not be found");
-//    }
-//
-//    // Get the ID of the organisation with the specified code
-//    long organisationId;
-//
-//    if ((organisationId = getOrganisationId(connection, organisation)) == -1)
-//    {
-//      throw new OrganisationNotFoundException("The organisation (" + organisation
-//          + ") could not be found");
-//    }
-//
-//    statement.setLong(1, userId);
-//    statement.setLong(2, organisationId);
-//
-//    List<String> list = new ArrayList<>();
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      while (rs.next())
-//      {
-//        list.add(rs.getString(1));
-//      }
-//    }
-//
-//    // Add the function codes assigned to the user directly
-//    getFunctionCodesForUserId(connection, userId, organisationId, list);
-//
-//    return list;
-//  }
-//  catch (UserNotFoundException | OrganisationNotFoundException e)
-//  {
-//    throw e;
-//  }
-//  catch (Throwable e)
-//  {
-//    throw new SecurityException("Failed to retrieve all the function codes for the user ("
-//        + username + ") for the organisation (" + organisation + "): " + e.getMessage(), e);
-//  }
-//}
-
-///**
-// * Retrieve the list of authorised functions for the user for the specified organisation.
-// * <p/>
-// * This list will include all of the authorised functions that the user is associated with as a
-// * result of being a member of one or more groups that have also been linked to authorised
-// * functions.
-// *
-// * @param username     the username identifying the user
-// * @param organisation the code uniquely identifying the organisation
-// * @param origin       the origin of the request e.g. the IP address, subnetwork or
-// *                     workstation name for the remote client
-// *
-// * @return the list of authorised functions for the user for the specified organisation
-// *
-// * @throws UserNotFoundException
-// * @throws OrganisationNotFoundException
-// * @throws SecurityException
-// */
-//public List<Function> getAllFunctionsForUser(String username, String organisation, String origin)
-//  throws UserNotFoundException, OrganisationNotFoundException, SecurityException
-//{
-//  if (isNullOrEmpty(username))
-//  {
-//    throw new InvalidArgumentException("username");
-//  }
-//
-//  if (isNullOrEmpty(organisation))
-//  {
-//    throw new InvalidArgumentException("organisation");
-//  }
-//
-//  if (isNullOrEmpty(origin))
-//  {
-//    throw new InvalidArgumentException("origin");
-//  }
-//
-//  throw new SecurityException("TODO: IMPLEMENT ME");
-//}
 
   /**
    * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
@@ -785,6 +742,14 @@ public class SecurityService
     if (isNullOrEmpty(filter))
     {
       throw new InvalidArgumentException("filter");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     return userDirectory.getFilteredUsers(filter);
@@ -847,71 +812,6 @@ public class SecurityService
     }
   }
 
-///**
-// * Retrieve the list of authorised function codes for the group.
-// *
-// * @param groupName the name of the group uniquely identifying the group
-// * @param origin    the origin of the request e.g. the IP address, subnetwork or workstation name
-// *                  for the remote client
-// *
-// * @return the list of authorised function codes for the group
-// *
-// * @throws GroupNotFoundException
-// * @throws SecurityException
-// */
-//public List<String> getFunctionCodesForGroup(String groupName, String origin)
-//  throws GroupNotFoundException, SecurityException
-//{
-//  // Validate parameters
-//  if (isNullOrEmpty(groupName))
-//  {
-//    throw new InvalidArgumentException("groupName");
-//  }
-//
-//  if (isNullOrEmpty(origin))
-//  {
-//    throw new InvalidArgumentException("origin");
-//  }
-//
-//  try
-//  {
-//    try (Connection connection = dataSource.getConnection();
-//      PreparedStatement statement = connection.prepareStatement(getFunctionCodesForGroupSQL))
-//    {
-//      // Get the ID of the group with the specified group name
-//      long groupId;
-//
-//      if ((groupId = getGroupId(connection, groupName)) == -1)
-//      {
-//        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-//      }
-//
-//      statement.setLong(1, groupId);
-//
-//      try (ResultSet rs = statement.executeQuery())
-//      {
-//        List<String> list = new ArrayList<>();
-//
-//        while (rs.next())
-//        {
-//          list.add(rs.getString(1));
-//        }
-//
-//        return list;
-//      }
-//    }
-//  }
-//  catch (GroupNotFoundException e)
-//  {
-//    throw e;
-//  }
-//  catch (Throwable e)
-//  {
-//    throw new SecurityException("Failed to retrieve the function codes for the group ("
-//        + groupName + "): " + e.getMessage(), e);
-//  }
-//}
-
   /**
    * Retrieve the authorised function codes for the user.
    *
@@ -931,6 +831,14 @@ public class SecurityService
     if (isNullOrEmpty(username))
     {
       throw new InvalidArgumentException("username");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     return userDirectory.getFunctionCodesForUser(username);
@@ -993,6 +901,14 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getGroup(groupName);
   }
 
@@ -1017,6 +933,14 @@ public class SecurityService
       throw new InvalidArgumentException("username");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getGroupNamesForUser(username);
   }
 
@@ -1033,6 +957,14 @@ public class SecurityService
   public List<Group> getGroups(long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getGroups();
   }
 
@@ -1051,6 +983,14 @@ public class SecurityService
   public List<Group> getGroupsEx(long userDirectoryId, int startPos, int maxResults)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getGroupsEx(startPos, maxResults);
   }
 
@@ -1073,6 +1013,14 @@ public class SecurityService
     if (isNullOrEmpty(username))
     {
       throw new InvalidArgumentException("username");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     return userDirectory.getGroupsForUser(username);
@@ -1098,6 +1046,14 @@ public class SecurityService
       throw new InvalidArgumentException("filter");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getNumberOfFilteredUsers(filter);
   }
 
@@ -1114,6 +1070,14 @@ public class SecurityService
   public int getNumberOfGroups(long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getNumberOfGroups();
   }
 
@@ -1202,6 +1166,14 @@ public class SecurityService
   public int getNumberOfUsers(long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getNumberOfUsers();
   }
 
@@ -1297,6 +1269,52 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the organisations associated with the user directory.
+   *
+   * @param userDirectoryId the unique ID for the user directory the organisations are associated
+   *                        with
+   *
+   * @return the organisations associated with the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  public List<Organisation> getOrganisationsForUserDirectory(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getOrganisationsForUserDirectorySQL))
+    {
+      statement.setLong(1, userDirectoryId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<Organisation> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          Organisation organisation = new Organisation(rs.getString(2));
+
+          organisation.setId(rs.getLong(1));
+          organisation.setName(rs.getString(3));
+          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+
+          list.add(organisation);
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+          "Failed to retrieve the organisations associated with the user directory ("
+          + userDirectoryId + "): " + e.getMessage(), e);
+    }
+  }
+
+  /**
    * Returns the <code>Registry</code> for the <code>SecurityService</code>.
    *
    * @return the <code>Registry</code> for the <code>SecurityService</code>
@@ -1325,6 +1343,14 @@ public class SecurityService
     if (isNullOrEmpty(username))
     {
       throw new InvalidArgumentException("username");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     return userDirectory.getUser(username);
@@ -1368,29 +1394,106 @@ public class SecurityService
     }
   }
 
-///**
-// * Retrieve the unique numeric ID for the user.
-// *
-// * @param userDirectoryId the unique ID for the user directory the user is associated with
-// * @param username        the username identifying the user
-// *
-// * @return the unique numeric ID for the user
-// *
-// * @throws UserDirectoryNotFoundException
-// * @throws UserNotFoundException
-// * @throws SecurityException
-// */
-//public long getUserId(long userDirectoryId, String username)
-//  throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
-//{
-//  // Validate parameters
-//  if (isNullOrEmpty(username))
-//  {
-//    throw new InvalidArgumentException("username");
-//  }
-//
-//  return userDirectory.getUserId(username);
-//}
+  /**
+   * Retrieve the user directories the organisation is associated with.
+   *
+   * @param code the code uniquely identifying the organisation
+   *
+   * @return the user directories the organisation is associated with
+   *
+   * @throws OrganisationNotFoundException
+   * @throws SecurityException
+   */
+  public List<UserDirectory> getUserDirectoriesForOrganisation(String code)
+    throws OrganisationNotFoundException, SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getUserDirectoriesForOrganisationSQL))
+    {
+      statement.setString(1, code);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectory> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          UserDirectory userDirectory = new UserDirectory();
+          userDirectory.setId(rs.getLong(1));
+          userDirectory.setName(rs.getString(2));
+          userDirectory.setDescription(rs.getString(3));
+          userDirectory.setUserDirectoryClass(rs.getString(4));
+
+          list.add(userDirectory);
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+          "Failed to retrieve the user directories associated with the organisation (" + code
+          + "): " + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Retrieve the user directories with parameters.
+   *
+   * @return the list of user directories with parameters
+   *
+   * @throws SecurityException
+   */
+  public List<UserDirectory> getUserDirectoriesWithParameters()
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
+    {
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectory> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          UserDirectory userDirectory = new UserDirectory();
+
+          userDirectory.setId(rs.getLong(1));
+          userDirectory.setName(rs.getString(2));
+          userDirectory.setDescription(rs.getString(3));
+          userDirectory.setUserDirectoryClass(rs.getString(4));
+
+          try (PreparedStatement parametersStatement =
+              connection.prepareStatement(getUserDirectoryParametersSQL))
+          {
+            parametersStatement.setLong(1, userDirectory.getId());
+
+            try (ResultSet parametersResults = statement.executeQuery())
+            {
+              UserDirectoryParameter parameter = new UserDirectoryParameter();
+              parameter.setId(parametersResults.getLong(1));
+              parameter.setUserDirectoryId(userDirectory.getId());
+              parameter.setName(parametersResults.getString(2));
+              parameter.setValue(parametersResults.getString(3));
+
+              userDirectory.addParameter(parameter);
+            }
+          }
+
+          list.add(userDirectory);
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the user directories with parameters: "
+          + e.getMessage(), e);
+    }
+  }
 
   /**
    * Retrieve all the users.
@@ -1405,6 +1508,14 @@ public class SecurityService
   public List<User> getUsers(long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getUsers();
   }
 
@@ -1423,6 +1534,14 @@ public class SecurityService
   public List<User> getUsersEx(long userDirectoryId, int startPos, int maxResults)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     return userDirectory.getUsersEx(startPos, maxResults);
   }
 
@@ -1521,6 +1640,14 @@ public class SecurityService
     if (isNullOrEmpty(groupName))
     {
       throw new InvalidArgumentException("groupName");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     return userDirectory.isUserInGroup(username, groupName);
@@ -1633,7 +1760,53 @@ public class SecurityService
    */
   public void reloadUserDirectories()
   {
-    try {}
+    try
+    {
+      Map<Long, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
+
+      for (UserDirectory userDirectoryWithParameters : getUserDirectoriesWithParameters())
+      {
+        try
+        {
+          Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
+              userDirectoryWithParameters.getUserDirectoryClass());
+
+          Class<? extends IUserDirectory> userDirectoryClass =
+            clazz.asSubclass(IUserDirectory.class);
+
+          if (userDirectoryClass == null)
+          {
+            throw new SecurityException("The user directory class ("
+                + userDirectoryWithParameters.getUserDirectoryClass()
+                + ") does not implement the IUserDirectory interface");
+          }
+
+          Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
+            userDirectoryClass.getConstructor(Long.TYPE, Map.class);
+
+          if (userDirectoryClassConstructor == null)
+          {
+            throw new SecurityException("The user directory class ("
+                + userDirectoryWithParameters.getUserDirectoryClass()
+                + ") does not provide a valid constructor (long, Map<String,String>)");
+          }
+
+          IUserDirectory userDirectory =
+            userDirectoryClassConstructor.newInstance(userDirectoryWithParameters.getId(),
+              userDirectoryWithParameters.getParametersMap());
+
+          reloadedUserDirectories.put(userDirectoryWithParameters.getId(), userDirectory);
+        }
+        catch (Throwable e)
+        {
+          throw new SecurityException("Failed to initialise the user directory ("
+              + userDirectoryWithParameters.getId() + ")(" + userDirectoryWithParameters.getName()
+              + ")", e);
+        }
+      }
+
+      this.userDirectories = reloadedUserDirectories;
+    }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to reload the user directories", e);
@@ -1668,6 +1841,14 @@ public class SecurityService
       throw new InvalidArgumentException("groupName");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     userDirectory.removeUserFromGroup(username, groupName);
   }
 
@@ -1696,6 +1877,14 @@ public class SecurityService
     if (isNullOrEmpty(newGroupName))
     {
       throw new InvalidArgumentException("newGroupName");
+    }
+
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
     }
 
     userDirectory.renameGroup(groupName, newGroupName);
@@ -1793,6 +1982,14 @@ public class SecurityService
       throw new InvalidArgumentException("group.groupName");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     userDirectory.updateGroup(group);
   }
 
@@ -1869,6 +2066,14 @@ public class SecurityService
       throw new InvalidArgumentException("user.username");
     }
 
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
     userDirectory.updateUser(user, expirePassword, lockUser);
   }
 
@@ -1919,6 +2124,12 @@ public class SecurityService
     getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix
         + "USER_DIRECTORIES UD";
 
+    // getOrganisationsForUserDirectorySQL
+    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM "
+        + schemaPrefix + "ORGANISATIONS O INNER JOIN " + schemaPrefix
+        + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID"
+        + "WHERE UDTOM.USER_DIRECTORY_ID=?";
+
     // getOrganisationIdSQL
     getOrganisationIdSQL = "SELECT O.ID FROM " + schemaPrefix + "ORGANISATIONS O"
         + " WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
@@ -1931,9 +2142,20 @@ public class SecurityService
     getOrganisationsSQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
         + "ORGANISATIONS O ORDER BY NAME";
 
+    // getUserDirectoriesForOrganisationSQL
+    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION,"
+        + " UD.USER_DIRECTORY_CLASS FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
+        + schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM"
+        + " ON UD.ID = UDTOM.USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O"
+        + " ON UDTOM.ORGANISATION_ID = O.ID WHERE O.CODE=?";
+
     // getUserDirectoriesSQL
     getUserDirectoriesSQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION, UD.USER_DIRECTORY_CLASS FROM "
         + schemaPrefix + "USER_DIRECTORIES UD";
+
+    // getUserDirectoryParametersSQL
+    getUserDirectoryParametersSQL = "SELECT UDP.ID, UDP.NAME, UDP.VALUE FROM " + schemaPrefix
+        + "USER_DIRECTORY_PARAMETERS UDP WHERE UDP.USER_DIRECTORY_ID=?";
 
     // insertIDGeneratorSQL
     insertIDGeneratorSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR"

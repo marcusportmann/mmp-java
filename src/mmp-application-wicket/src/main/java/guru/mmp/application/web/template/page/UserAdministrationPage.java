@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
+import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -47,6 +48,8 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 /**
@@ -68,6 +71,11 @@ public class UserAdministrationPage extends TemplateWebPage
   private ISecurityService securityService;
 
   /**
+   * The unique ID for the user directory the users are associated with.
+   */
+  private long userDirectoryId;
+
+  /**
    * Constructs a new <code>UserAdministrationPage</code>.
    */
   public UserAdministrationPage()
@@ -77,6 +85,15 @@ public class UserAdministrationPage extends TemplateWebPage
     try
     {
       WebSession session = getWebApplicationSession();
+
+      /*
+       * Retrieve the list of user directories for the organisation the currently logged on user
+       * is associated with and default to the first user directory.
+       */
+      List<UserDirectory> userDirectories =
+        securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
+
+      userDirectoryId = userDirectories.get(0).getId();
 
       /*
        * The table container, which allows the table and its associated navigator to be updated
@@ -105,7 +122,7 @@ public class UserAdministrationPage extends TemplateWebPage
       };
       tableContainer.add(addLink);
 
-      UserDataProvider dataProvider = new UserDataProvider(session.getOrganisation());
+      UserDataProvider dataProvider = new UserDataProvider(userDirectoryId);
 
       // The "filterForm" form
       Form<Void> filterForm = new Form<>("filterForm");
@@ -269,7 +286,7 @@ public class UserAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteUser(username, getRemoteAddress());
+            securityService.deleteUser(userDirectoryId, username);
 
             target.add(tableContainer);
 

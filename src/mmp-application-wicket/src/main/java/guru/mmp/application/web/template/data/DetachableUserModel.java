@@ -23,12 +23,10 @@ import guru.mmp.application.security.User;
 import guru.mmp.application.security.UserNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
-
-import javax.inject.Inject;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>DetachableUserModel</code> class provides a detachable model
@@ -45,19 +43,14 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
   private ISecurityService securityService;
 
   /**
+   * The unique ID for the user directory the user is associated with.
+   */
+  private long userDirectoryId;
+
+  /**
    * The username for the user.
    */
   private String username;
-
-  /**
-   * Constructs a new <code>DetachableUserModel</code>.
-   *
-   * @param username the username for the user
-   */
-  public DetachableUserModel(String username)
-  {
-    this.username = username;
-  }
 
   /**
    * Constructs a new <code>DetachableUserModel</code>.
@@ -66,9 +59,21 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
    */
   public DetachableUserModel(User user)
   {
-    this(user.getUsername());
+    this(user.getUserDirectoryId(), user.getUsername());
 
     setObject(user);
+  }
+
+  /**
+   * Constructs a new <code>DetachableUserModel</code>.
+   *
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username for the user
+   */
+  public DetachableUserModel(long userDirectoryId, String username)
+  {
+    this.userDirectoryId = userDirectoryId;
+    this.username = username;
   }
 
   /**
@@ -87,10 +92,7 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
   {
     try
     {
-      ServletWebRequest servletWebRequest = (ServletWebRequest) RequestCycle.get().getRequest();
-
-      return securityService.getUser(username,
-          servletWebRequest.getContainerRequest().getRemoteAddr());
+      return securityService.getUser(userDirectoryId, username);
     }
     catch (UserNotFoundException e)
     {

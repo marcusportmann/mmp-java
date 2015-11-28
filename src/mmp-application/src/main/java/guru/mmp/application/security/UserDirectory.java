@@ -16,6 +16,12 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The <code>UserDirectory</code> class stores the information for a user directory.
  *
@@ -28,12 +34,23 @@ public class UserDirectory
   private String description;
   private long id;
   private String name;
+  private Map<String, UserDirectoryParameter> parameters = new HashMap<>();
   private String userDirectoryClass;
 
   /**
    * Constructs a new <code>UserDirectory</code>.
    */
   public UserDirectory() {}
+
+  /**
+   * Add the parameter for the user directory.
+   *
+   * @param parameter the parameter for the user directory
+   */
+  public void addParameter(UserDirectoryParameter parameter)
+  {
+    parameters.put(parameter.getName(), parameter);
+  }
 
   /**
    * Returns the description for the user directory.
@@ -63,6 +80,33 @@ public class UserDirectory
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Returns the parameters for the user directory.
+   *
+   * @return the parameters for the user directory
+   */
+  public Collection<UserDirectoryParameter> getParameters()
+  {
+    return parameters.values();
+  }
+
+  /**
+   * Returns a map containing the key-value pairs for the parameters for the user directory.
+   *
+   * @return a map containing the key-value pairs for the parameters for the user directory
+   */
+  public Map<String, String> getParametersMap()
+  {
+    Map<String, String> parametersMap = new HashMap<>();
+
+    for (UserDirectoryParameter userDirectoryParameter : parameters.values())
+    {
+      parametersMap.put(userDirectoryParameter.getName(), userDirectoryParameter.getValue());
+    }
+
+    return parametersMap;
   }
 
   /**
