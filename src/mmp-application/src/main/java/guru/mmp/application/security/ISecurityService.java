@@ -508,6 +508,20 @@ public interface ISecurityService
     throws SecurityException;
 
   /**
+   * Retrieve the ID for the user directory that the user with the specified username is associated
+   * with.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the ID for the user directory that the user with the specified username is associated
+   *         with or -1 if the user cannot be found
+   *
+   * @throws SecurityException
+   */
+  long getUserDirectoryIdForUser(String username)
+    throws SecurityException;
+
+  /**
    * Retrieve all the users.
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with

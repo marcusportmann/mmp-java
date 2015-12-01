@@ -27,7 +27,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -41,16 +40,14 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserGroupsPage</code> class implements the
@@ -75,10 +72,11 @@ public class UserGroupsPage extends TemplateWebPage
   /**
    * Constructs a new <code>UserGroupsPage</code>.
    *
-   * @param previousPage the previous page
-   * @param username     the username identifying the user
+   * @param previousPage    the previous page
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param username        the username identifying the user
    */
-  public UserGroupsPage(PageReference previousPage, String username)
+  public UserGroupsPage(PageReference previousPage, long userDirectoryId, String username)
   {
     super("User Groups", username);
 
@@ -105,7 +103,7 @@ public class UserGroupsPage extends TemplateWebPage
 
     // The "addUserToGroupForm" form
     DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
-      new PropertyModel<>(this, "groupName"), getGroupOptions(username));
+      new PropertyModel<>(this, "groupName"), getGroupOptions(userDirectoryId, username));
 
     groupNameField.setRequired(true);
 
@@ -120,14 +118,13 @@ public class UserGroupsPage extends TemplateWebPage
 
         try
         {
-          securityService.addUserToGroup(username, groupName, session.getOrganisation(),
-              getRemoteAddress());
+          securityService.addUserToGroup(userDirectoryId, username, groupName);
 
           logger.info("User (" + session.getUsername() + ") added the user (" + username
               + ") to the group (" + groupName + ") for the organisation ("
               + session.getOrganisation() + ")");
 
-          groupNameField.setChoices(getGroupOptions(username));
+          groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
           groupNameField.setModelObject(null);
         }
         catch (Throwable e)
@@ -147,8 +144,8 @@ public class UserGroupsPage extends TemplateWebPage
     addUserToGroupForm.add(groupNameField);
 
     // The group data view
-    GroupsForUserDataProvider dataProvider = new GroupsForUserDataProvider(username,
-      getWebApplicationSession().getOrganisation());
+    GroupsForUserDataProvider dataProvider = new GroupsForUserDataProvider(userDirectoryId,
+      username);
 
     DataView<Group> dataView = new DataView<Group>("group", dataProvider)
     {
@@ -179,14 +176,13 @@ public class UserGroupsPage extends TemplateWebPage
 
             try
             {
-              securityService.removeUserFromGroup(username, group.getGroupName(),
-                  session.getOrganisation(), getRemoteAddress());
+              securityService.removeUserFromGroup(userDirectoryId, username, group.getGroupName());
 
               logger.info("User (" + session.getUsername() + ") removed the user (" + username
                   + ") from the group (" + group.getGroupName() + ") for the organisation ("
                   + session.getOrganisation() + ")");
 
-              groupNameField.setChoices(getGroupOptions(username));
+              groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
               groupNameField.setModelObject(null);
 
               target.add(tableContainer);
@@ -220,17 +216,17 @@ public class UserGroupsPage extends TemplateWebPage
   @SuppressWarnings("unused")
   protected UserGroupsPage() {}
 
-  private List<String> getGroupOptions(String username)
+  private List<String> getGroupOptions(long userDirectoryId, String username)
     throws SecurityException
   {
     WebSession session = getWebApplicationSession();
 
     // Retrieve a list of name of the existing groups for the user
-    List<String> existingGroupNames = securityService.getGroupNamesForUser(username,
-      session.getOrganisation(), getRemoteAddress());
+    List<String> existingGroupNames = securityService.getGroupNamesForUser(userDirectoryId,
+      username);
 
     // Retrieve a complete list of groups for the organisation
-    List<Group> groups = securityService.getGroups(getRemoteAddress());
+    List<Group> groups = securityService.getGroups(userDirectoryId);
 
     // Filter the list of available groups for the user
     List<String> groupOptions = new ArrayList<>();

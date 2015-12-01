@@ -105,8 +105,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
         false);
     securityService.adminChangePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
         user.getUsername(), "Password2", false, false, true, PasswordChangeReason.ADMINISTRATIVE);
-    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), "Password2");
+    securityService.authenticate(user.getUsername(), "Password2");
   }
 
   /**
@@ -124,8 +123,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
         false);
     securityService.changePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
         user.getUsername(), user.getPassword(), "Password1");
-    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), "Password1");
+    securityService.authenticate(user.getUsername(), "Password1");
   }
 
   /**
@@ -436,8 +434,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
         false);
     securityService.adminChangePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
         user.getUsername(), "Password2", true, false, true, PasswordChangeReason.ADMINISTRATIVE);
-    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), "Password2");
+    securityService.authenticate(user.getUsername(), "Password2");
   }
 
   /**
@@ -691,8 +688,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
         false);
     securityService.adminChangePassword(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
         user.getUsername(), "Password2", false, true, true, PasswordChangeReason.ADMINISTRATIVE);
-    securityService.authenticate(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), "Password2");
+    securityService.authenticate(user.getUsername(), "Password2");
   }
 
   /**

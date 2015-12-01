@@ -26,7 +26,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -38,13 +37,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ResetPasswordPage</code> class implements the
@@ -150,7 +148,8 @@ public class ResetUserPasswordPage extends TemplateWebPage
           {
             User user = userModel.getObject();
 
-            securityService.updateUser(user, expiredPassword, userLocked, getRemoteAddress());
+            securityService.updateUser(user.getUserDirectoryId(), user, expiredPassword,
+                userLocked);
 
             setResponsePage(previousPage.getPage());
           }

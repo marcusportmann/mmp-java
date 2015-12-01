@@ -267,7 +267,7 @@ public abstract class UserDirectoryBase
 
     // createGroupSQL
     deleteExternalGroupSQL = "DELETE FROM " + schemaPrefix + "EXTERNAL_GROUPS EG"
-        + " WHERE EG.USER_DIRECTORY_ID=? AND EG.GROUPNAME=UPPER(CAST(? AS VARCHAR(100)))";
+        + " WHERE EG.USER_DIRECTORY_ID=? AND UPPER(EG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getExternalGroupIdSQL
     getExternalGroupIdSQL = "SELECT EG.ID FROM " + schemaPrefix + "EXTERNAL_GROUPS EG"

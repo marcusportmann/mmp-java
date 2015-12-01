@@ -1470,15 +1470,18 @@ public class SecurityService
           {
             parametersStatement.setLong(1, userDirectory.getId());
 
-            try (ResultSet parametersResults = statement.executeQuery())
+            try (ResultSet parametersResults = parametersStatement.executeQuery())
             {
-              UserDirectoryParameter parameter = new UserDirectoryParameter();
-              parameter.setId(parametersResults.getLong(1));
-              parameter.setUserDirectoryId(userDirectory.getId());
-              parameter.setName(parametersResults.getString(2));
-              parameter.setValue(parametersResults.getString(3));
+              while (parametersResults.next())
+              {
+                UserDirectoryParameter parameter = new UserDirectoryParameter();
+                parameter.setId(parametersResults.getLong(1));
+                parameter.setUserDirectoryId(userDirectory.getId());
+                parameter.setName(parametersResults.getString(2));
+                parameter.setValue(parametersResults.getString(3));
 
-              userDirectory.addParameter(parameter);
+                userDirectory.addParameter(parameter);
+              }
             }
           }
 
@@ -1492,6 +1495,67 @@ public class SecurityService
     {
       throw new SecurityException("Failed to retrieve the user directories with parameters: "
           + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Retrieve the ID for the user directory that the user with the specified username is associated
+   * with.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the ID for the user directory that the user with the specified username is associated
+   *         with or -1 if the user cannot be found
+   *
+   * @throws SecurityException
+   */
+  public long getUserDirectoryIdForUser(String username)
+    throws SecurityException
+  {
+    // Validate parameters
+    if (isNullOrEmpty(username))
+    {
+      throw new InvalidArgumentException("username");
+    }
+
+    try
+    {
+      // First check if this is an internal user and if so determine the user directory ID
+      long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+
+      if (internalUserDirectoryId != -1)
+      {
+        return internalUserDirectoryId;
+      }
+      else
+      {
+        /*
+         * Check all of the "external" user directories to see if one of them can authenticate this
+         * user.
+         */
+        for (long userDirectoryId : userDirectories.keySet())
+        {
+          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+          if (userDirectory != null)
+          {
+            if (!(userDirectory instanceof InternalUserDirectory))
+            {
+              if (userDirectory.isExistingUser(username))
+              {
+                return userDirectoryId;
+              }
+            }
+          }
+        }
+
+        return -1;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the user directory ID for the user ("
+          + username + "): " + e.getMessage(), e);
     }
   }
 
@@ -2128,7 +2192,7 @@ public class SecurityService
     getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM "
         + schemaPrefix + "ORGANISATIONS O INNER JOIN " + schemaPrefix
         + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID"
-        + "WHERE UDTOM.USER_DIRECTORY_ID=?";
+        + " WHERE UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationIdSQL
     getOrganisationIdSQL = "SELECT O.ID FROM " + schemaPrefix + "ORGANISATIONS O"

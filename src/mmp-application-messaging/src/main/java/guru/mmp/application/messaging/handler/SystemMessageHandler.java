@@ -33,12 +33,13 @@ import guru.mmp.application.security.UserNotFoundException;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.ExceptionUtil;
 import guru.mmp.common.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the
@@ -247,8 +248,7 @@ public class SystemMessageHandler extends MessageHandler
 
       try
       {
-        securityService.authenticate(requestData.getUser(), requestData.getPassword(),
-            requestData.getDevice());
+        securityService.authenticate(requestData.getUser(), requestData.getPassword());
 
         byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
             requestData.getPreferredEncryptionScheme(), requestData.getUser(),
@@ -304,7 +304,7 @@ public class SystemMessageHandler extends MessageHandler
   private Message processCheckUserExistsMessage(Message requestMessage)
     throws MessageHandlerException
   {
-    MessageTranslator messageTranslator = null;
+    MessageTranslator messageTranslator;
 
     try
     {
@@ -320,25 +320,26 @@ public class SystemMessageHandler extends MessageHandler
             + ") associated with the organisation (" + requestData.getOrganisation() + ") exists");
       }
 
-      securityService.getUser(requestData.getUser(), "UNKNOWN");
+      if (securityService.getUserDirectoryIdForUser(requestData.getUser()) != -1)
+      {
+        CheckUserExistsResponseData responseData = new CheckUserExistsResponseData(true);
 
-      CheckUserExistsResponseData responseData = new CheckUserExistsResponseData(true);
+        Message responseMessage = messageTranslator.toMessage(responseData);
 
-      Message responseMessage = messageTranslator.toMessage(responseData);
+        responseMessage.setIsEncryptionDisabled(true);
 
-      responseMessage.setIsEncryptionDisabled(true);
+        return responseMessage;
+      }
+      else
+      {
+        CheckUserExistsResponseData responseData = new CheckUserExistsResponseData(false);
 
-      return responseMessage;
-    }
-    catch (UserNotFoundException e)
-    {
-      CheckUserExistsResponseData responseData = new CheckUserExistsResponseData(false);
+        Message responseMessage = messageTranslator.toMessage(responseData);
 
-      Message responseMessage = messageTranslator.toMessage(responseData);
+        responseMessage.setIsEncryptionDisabled(false);
 
-      responseMessage.setIsEncryptionDisabled(false);
-
-      return responseMessage;
+        return responseMessage;
+      }
     }
     catch (Throwable e)
     {
@@ -605,8 +606,7 @@ public class SystemMessageHandler extends MessageHandler
 
       try
       {
-        securityService.authenticate(requestData.getUser(), requestData.getPassword(),
-            requestData.getDevice());
+        securityService.authenticate(requestData.getUser(), requestData.getPassword());
 
         byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
             requestData.getPreferredEncryptionScheme(), requestData.getUser(),

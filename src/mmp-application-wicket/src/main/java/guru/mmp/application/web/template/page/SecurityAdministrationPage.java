@@ -22,13 +22,12 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityAdministrationPage</code> class implements the
@@ -55,10 +54,7 @@ public class SecurityAdministrationPage extends TemplateWebPage
   {
     super("Security");
 
-    try
-    {
-
-    }
+    try {}
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to initialise the SecurityAdministrationPage", e);

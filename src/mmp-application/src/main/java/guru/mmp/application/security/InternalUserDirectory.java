@@ -872,7 +872,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(getInternalGroupSQL))
     {
-      statement.setString(1, groupName);
+      statement.setLong(1, getUserDirectoryId());
+      statement.setString(2, groupName);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -962,6 +963,7 @@ public class InternalUserDirectory extends UserDirectoryBase
           Group group = new Group(rs.getString(2));
 
           group.setId(rs.getLong(1));
+          group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(StringUtil.notNull(rs.getString(3)));
           list.add(group);
         }
@@ -1745,7 +1747,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "INTERNAL_GROUPS IG" + " WHERE IG.USER_DIRECTORY_ID=?";
 
     // getNumberOfUsersForGroupSQL
-    getNumberOfUsersForGroupSQL = "SELECT COUNT (IUTGM.ID) FROM " + schemaPrefix
+    getNumberOfUsersForGroupSQL = "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM " + schemaPrefix
         + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=?"
         + " AND IUTGM.INTERNAL_GROUP_ID=?";
 

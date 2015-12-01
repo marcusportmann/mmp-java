@@ -83,7 +83,7 @@ public class UpdateOrganisationPage extends TemplateWebPage
           {
             Organisation organisation = updateForm.getModelObject();
 
-            securityService.updateOrganisation(organisation, getRemoteAddress());
+            securityService.updateOrganisation(organisation);
 
             setResponsePage(previousPage.getPage());
           }

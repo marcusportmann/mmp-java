@@ -82,7 +82,7 @@ public class UpdateGroupPage extends TemplateWebPage
           {
             Group group = updateForm.getModelObject();
 
-            securityService.updateGroup(group, getRemoteAddress());
+            securityService.updateGroup(group.getUserDirectoryId(), group);
 
             setResponsePage(previousPage.getPage());
           }

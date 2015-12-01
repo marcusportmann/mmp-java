@@ -130,7 +130,7 @@ public class UpdateUserPage extends TemplateWebPage
           {
             User user = updateForm.getModelObject();
 
-            securityService.updateUser(user, false, false, getRemoteAddress());
+            securityService.updateUser(user.getUserDirectoryId(), user, false, false);
 
             setResponsePage(previousPage.getPage());
           }

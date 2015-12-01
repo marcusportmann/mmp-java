@@ -80,10 +80,10 @@ public class AddUserPage extends TemplateWebPage
   /**
    * Constructs a new <code>AddUserPage</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param previousPage    the previous page
+   * @param userDirectoryId the unique ID for the user directory the user is associated with
    */
-  public AddUserPage(long userDirectoryId, PageReference previousPage)
+  public AddUserPage(PageReference previousPage, long userDirectoryId)
   {
     super("Add User");
 
@@ -168,7 +168,7 @@ public class AddUserPage extends TemplateWebPage
 
       // The "groupName" field
       DropDownChoice<String> groupNameField = new DropDownChoiceWithFeedback<>("groupName",
-        new PropertyModel<>(this, "groupName"), getGroupOptions());
+        new PropertyModel<>(this, "groupName"), getGroupOptions(userDirectoryId));
       groupNameField.setRequired(false);
       addForm.add(groupNameField);
 
@@ -262,13 +262,13 @@ public class AddUserPage extends TemplateWebPage
     return titleOptions;
   }
 
-  private List<String> getGroupOptions()
+  private List<String> getGroupOptions(long userDirectoryId)
     throws guru.mmp.application.security.SecurityException
   {
     WebSession session = getWebApplicationSession();
 
     // Retrieve a complete list of groups for the organisation
-    List<Group> groups = securityService.getGroups(getRemoteAddress());
+    List<Group> groups = securityService.getGroups(userDirectoryId);
 
     // Filter the list of available groups for the user
     List<String> groupOptions = new ArrayList<>();

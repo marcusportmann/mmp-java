@@ -58,10 +58,10 @@ public class AddGroupPage extends TemplateWebPage
   /**
    * Constructs a new <code>AddGroupPage</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param previousPage    the previous page
+   * @param userDirectoryId the unique ID for the user directory the group is associated with
    */
-  public AddGroupPage(long userDirectoryId, PageReference previousPage)
+  public AddGroupPage(PageReference previousPage, long userDirectoryId)
   {
     super("Add Group");
 

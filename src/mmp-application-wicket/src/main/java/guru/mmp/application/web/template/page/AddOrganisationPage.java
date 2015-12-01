@@ -106,13 +106,13 @@ public class AddOrganisationPage extends TemplateWebPage
 
             securityService.createOrganisation(organisation);
 
-            TODO: BOOTSTRAP THE NEW ORGANISATION WITH A NEW USER DIRECTORY
+            // TODO: BOOTSTRAP THE NEW ORGANISATION WITH A NEW USER DIRECTORY
 
-//            securityService.addUserToOrganisation(session.getUsername(), organisation.getCode(),
-//                getRemoteAddress());
+//          securityService.addUserToOrganisation(session.getUsername(), organisation.getCode(),
+//              getRemoteAddress());
 //
-//            securityService.addUserToGroup(session.getUsername(), "Administrators",
-//                organisation.getCode(), getRemoteAddress());
+//          securityService.addUserToGroup(session.getUsername(), "Administrators",
+//              organisation.getCode(), getRemoteAddress());
 
             setResponsePage(previousPage.getPage());
           }
