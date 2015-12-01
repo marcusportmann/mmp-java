@@ -1433,7 +1433,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = getDataSource().getConnection())
     {
-      if (getInternalUserId(connection, user.getUsername()) == -1)
+      long internalUserId = getInternalUserId(connection, user.getUsername());
+
+      if (internalUserId == -1)
       {
         throw new UserNotFoundException("The user (" + user.getUsername() + ") could not be found");
       }
@@ -1444,7 +1446,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
           getDatabaseCatalogSeparator());
 
-      buffer.append("USERS ");
+      buffer.append("INTERNAL_USERS ");
 
       StringBuilder fieldsBuffer = new StringBuilder();
 
@@ -1527,7 +1529,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       buffer.append(fieldsBuffer.toString());
       buffer.append(
-          " WHERE USER_DIRECTORY_ID=?  AND UPPER(USERNAME)=UPPER(CAST(? AS VARCHAR(100)))");
+          " WHERE USER_DIRECTORY_ID=? AND ID=?");
 
       String updateUserSQL = buffer.toString();
 
@@ -1630,7 +1632,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
         parameterIndex++;
 
-        statement.setString(parameterIndex, user.getUsername());
+        statement.setLong(parameterIndex, internalUserId);
 
         if (statement.executeUpdate() != 1)
         {
@@ -1740,7 +1742,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     getNumberOfFilteredInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix
         + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND"
         + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
-        + " OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
+        + " OR (UPPER(IU.LAST_NAME) LIKE ?))";
 
     // getNumberOfInternalGroupsSQL
     getNumberOfInternalGroupsSQL = "SELECT COUNT(IG.ID) FROM " + schemaPrefix

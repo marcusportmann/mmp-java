@@ -106,7 +106,7 @@ public class SampleApplication extends TemplateWebApplication
         ReportDefinitionAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Process Definitions", "fa fa-gears",
       ProcessDefinitionAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Security", "fa fa-shields",
+    administrationGroup.addItem(new NavigationLink("Security", "fa fa-shield",
       SecurityAdministrationPage.class));
 
     root.addItem(administrationGroup);
