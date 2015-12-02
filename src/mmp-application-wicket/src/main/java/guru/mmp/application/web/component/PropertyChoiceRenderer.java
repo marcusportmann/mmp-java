@@ -116,7 +116,7 @@ public class PropertyChoiceRenderer<T>
    * the same id in the list.
    *
    * @param id      the id representation of the object
-   * @param choices the list of all rendered choices
+   * @param choices the model providing the list of all rendered choices
    *
    * @return a choice from the list that has this id
    */

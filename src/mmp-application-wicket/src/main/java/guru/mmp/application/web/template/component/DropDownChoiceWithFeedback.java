@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.component;
 
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
+
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -28,9 +29,9 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>DropDownChoiceWithFeedback</code> class extends the Wicket <code>DropDownChoice</code>

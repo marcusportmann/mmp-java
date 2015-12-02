@@ -4400,6 +4400,11 @@ textarea.form-group-lg .form-control, select[multiple].form-group-lg .form-contr
   margin-top: 5px
 }
 
+.btn i.fa
+{
+  padding-right: 2px;
+}
+
 input[type=submit].btn-block, input[type=reset].btn-block, input[type=button].btn-block
 {
   width: 100%

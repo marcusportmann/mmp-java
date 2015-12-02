@@ -18,55 +18,56 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.codes.CodeCategoryType;
+import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
+
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
+
 /**
- * The <code>CodeCategoryTypeChoiceRenderer</code> class implements a <code>ChoiceRenderer</code>
- * for <code>CodeCategoryType</code> instances.
+ * The <code>UserDirectoryChoiceRenderer</code> class implements a <code>ChoiceRenderer</code> for
+ * <code>UserDirectory</code> instances.
  *
  * @author Marcus Portmann
  */
-public class CodeCategoryTypeChoiceRenderer
-  implements IChoiceRenderer<CodeCategoryType>
+public class UserDirectoryChoiceRenderer
+  implements IChoiceRenderer<UserDirectory>
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>CodeCategoryTypeChoiceRenderer</code>.
+   * Constructs a new <code>UserDirectoryChoiceRenderer</code>.
    */
-  public CodeCategoryTypeChoiceRenderer() {}
+  public UserDirectoryChoiceRenderer() {}
 
   /**
    * Get the value for displaying to an end user.
    *
-   * @param codeCategoryType the code category type
+   * @param userDirectory the user directory
    *
    * @return the value meant for displaying to an end user
    */
-  public Object getDisplayValue(CodeCategoryType codeCategoryType)
+  public Object getDisplayValue(UserDirectory userDirectory)
   {
-    return codeCategoryType.getName();
+    return userDirectory.getName();
   }
 
   /**
-   * This method is called to get the id value of a code category type (used as the value attribute
-   * of a choice element).
+   * This method is called to get the id value of a user directory (used as the value attribute of
+   * a choice element).
    *
-   * @param codeCategoryType the code category type for which the id should be generated
-   * @param index            the index of the object in the choices list
+   * @param userDirectory the user directory for which the id should be generated
+   * @param index         the index of the object in the choices list
    *
    * @return the id value of the object
    */
-  public String getIdValue(CodeCategoryType codeCategoryType, int index)
+  public String getIdValue(UserDirectory userDirectory, int index)
   {
-    return String.valueOf(codeCategoryType.getCode());
+    return String.valueOf(userDirectory.getId());
   }
 
   /**
@@ -79,20 +80,18 @@ public class CodeCategoryTypeChoiceRenderer
    *
    * @return a choice from the list that has this id
    */
-  public CodeCategoryType getObject(String id,
-      IModel<? extends List<? extends CodeCategoryType>> choices)
+  public UserDirectory getObject(String id, IModel<? extends List<? extends UserDirectory>> choices)
   {
-    int code = Integer.valueOf(id);
+    long userDirectoryId = Long.parseLong(id);
 
-    for (CodeCategoryType choice : choices.getObject())
+    for (UserDirectory choice : choices.getObject())
     {
-      if (choice.getCode() == code)
+      if (choice.getId() == userDirectoryId)
       {
         return choice;
       }
     }
 
-    throw new WebApplicationException("Failed to find the code category choice with ID (" + id
-        + ")");
+    throw new WebApplicationException("Failed to find the user directory with ID (" + id + ")");
   }
 }

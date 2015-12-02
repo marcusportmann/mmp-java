@@ -79,6 +79,21 @@
               <div class="table-header">
                 <div class="table-header-left">
                   <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User</a>
+
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                      <i class="fa fa-users"></i> Internal User Directory <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-primary" role="menu">
+                      <li>
+                        <a href="#">Internal User Directory</a>
+                      </li>
+                      <li>
+                        <a href="#">Test Internal User Directory</a>
+                      </li>
+                    </ul>
+                  </div>
+
                 </div>
                 <div class="table-header-right">
                   <form wicket:id="filterForm" class="table-filter-form">

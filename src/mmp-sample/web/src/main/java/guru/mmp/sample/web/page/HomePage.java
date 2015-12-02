@@ -18,8 +18,19 @@ package guru.mmp.sample.web.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.page.AnonymousOnlyWebPage;
+import guru.mmp.application.web.template.component.CodeCategoryTypeChoiceRenderer;
+import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
+import guru.mmp.application.web.template.component.DropdownButton;
+import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.page.TemplateWebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * The <code>HomePage</code> class implements the "Home"
@@ -32,11 +43,29 @@ public class HomePage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
+  @Inject
+  private ISecurityService securityService;
+
+  private UserDirectory userDirectory;
+
   /**
    * Constructs a new <code>HomePage</code>.
    */
   public HomePage()
   {
     super("Home");
+
+    UserDirectoryChoiceRenderer userDirectoryChoiceRenderer =
+      new UserDirectoryChoiceRenderer();
+
+    List<UserDirectory> userDirectories = securityService.getUserDirectories();
+
+
+    add(new Label("name", new PropertyModel<>(this, "userDirectory.name")));
+
+    add( new DropdownButton<>("dropdownButton", new PropertyModel(this, "userDirectory"),
+      userDirectories, userDirectoryChoiceRenderer));
+
+
   }
 }
