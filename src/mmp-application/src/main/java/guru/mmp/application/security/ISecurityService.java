@@ -131,12 +131,16 @@ public interface ISecurityService
   /**
    * Create a new organisation.
    *
-   * @param organisation the organisation
+   * @param organisation        the organisation
+   * @param createUserDirectory should a new internal user directory be created for the organisation
+   *
+   * @return the new internal user directory that was created for the organisation or
+   *         <code>null</code> if no user directory was created
    *
    * @throws DuplicateOrganisationException
    * @throws SecurityException
    */
-  void createOrganisation(Organisation organisation)
+  UserDirectory createOrganisation(Organisation organisation, boolean createUserDirectory)
     throws DuplicateOrganisationException, SecurityException;
 
   /**

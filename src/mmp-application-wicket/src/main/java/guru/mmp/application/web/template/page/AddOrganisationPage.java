@@ -22,21 +22,25 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.OrganisationNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.component.OrganisationInputPanel;
+import guru.mmp.application.web.template.component.TextFieldWithFeedback;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>AddOrganisationPage</code> class implements the
@@ -51,6 +55,9 @@ public class AddOrganisationPage extends TemplateWebPage
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddOrganisationPage.class);
+
+  @SuppressWarnings("unused")
+  private boolean createUserDirectory;
 
   /* Security Service */
   @Inject
@@ -70,7 +77,26 @@ public class AddOrganisationPage extends TemplateWebPage
       Form<Organisation> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(new Organisation())));
 
-      addForm.add(new OrganisationInputPanel("organisation", false));
+      // The "code" field
+      TextField<String> codeField = new TextFieldWithFeedback<>("code");
+      codeField.setRequired(true);
+      addForm.add(codeField);
+
+      // The "name" field
+      TextField<String> nameField = new TextFieldWithFeedback<>("name");
+      nameField.setRequired(true);
+      addForm.add(nameField);
+
+      // The "description" field
+      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
+      descriptionField.setRequired(false);
+      addForm.add(descriptionField);
+
+      // The "createUserDirectory" field
+      CheckBox createUserDirectoryCheckbox = new CheckBox("createUserDirectory",
+        new PropertyModel<>(this, "createUserDirectory"));
+      createUserDirectoryCheckbox.setRequired(false);
+      addForm.add(createUserDirectoryCheckbox);
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -82,8 +108,6 @@ public class AddOrganisationPage extends TemplateWebPage
         {
           try
           {
-            WebSession session = getWebApplicationSession();
-
             Organisation organisation = addForm.getModelObject();
 
             /*
@@ -104,15 +128,7 @@ public class AddOrganisationPage extends TemplateWebPage
               // Do nothing, this is not an error
             }
 
-            securityService.createOrganisation(organisation);
-
-            // TODO: BOOTSTRAP THE NEW ORGANISATION WITH A NEW USER DIRECTORY
-
-//          securityService.addUserToOrganisation(session.getUsername(), organisation.getCode(),
-//              getRemoteAddress());
-//
-//          securityService.addUserToGroup(session.getUsername(), "Administrators",
-//              organisation.getCode(), getRemoteAddress());
+            securityService.createOrganisation(organisation, createUserDirectory);
 
             setResponsePage(previousPage.getPage());
           }

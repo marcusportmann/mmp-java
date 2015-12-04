@@ -23,18 +23,21 @@ import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.component.OrganisationInputPanel;
+import guru.mmp.application.web.template.component.TextFieldWithFeedback;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>UpdateOrganisationPage</code> class implements the
@@ -69,7 +72,21 @@ public class UpdateOrganisationPage extends TemplateWebPage
       Form<Organisation> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(organisationModel));
 
-      updateForm.add(new OrganisationInputPanel("organisation", true));
+      // The "code" field
+      TextField<String> codeField = new TextFieldWithFeedback<>("code");
+      codeField.setRequired(true);
+      codeField.setEnabled(false);
+      updateForm.add(codeField);
+
+      // The "name" field
+      TextField<String> nameField = new TextFieldWithFeedback<>("name");
+      nameField.setRequired(true);
+      updateForm.add(nameField);
+
+      // The "description" field
+      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
+      descriptionField.setRequired(false);
+      updateForm.add(descriptionField);
 
       // The "updateButton" button
       Button updateButton = new Button("updateButton")
@@ -109,6 +126,7 @@ public class UpdateOrganisationPage extends TemplateWebPage
           setResponsePage(previousPage.getPage());
         }
       };
+
       cancelButton.setDefaultFormProcessing(false);
       updateForm.add(cancelButton);
 

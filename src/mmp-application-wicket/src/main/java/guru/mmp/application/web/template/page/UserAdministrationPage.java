@@ -26,8 +26,11 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
+import guru.mmp.application.web.template.component.DropdownButton;
 import guru.mmp.application.web.template.component.PagingNavigator;
+import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.data.UserDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,13 +44,15 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserAdministrationPage</code> class implements the
@@ -68,9 +73,9 @@ public class UserAdministrationPage extends TemplateWebPage
   private ISecurityService securityService;
 
   /**
-   * The unique ID for the user directory the users are associated with.
+   * The user directory the users are associated with.
    */
-  private long userDirectoryId;
+  private UserDirectory userDirectory;
 
   /**
    * Constructs a new <code>UserAdministrationPage</code>.
@@ -90,7 +95,7 @@ public class UserAdministrationPage extends TemplateWebPage
       List<UserDirectory> userDirectories =
         securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
 
-      userDirectoryId = userDirectories.get(0).getId();
+      userDirectory = userDirectories.get(0);
 
       /*
        * The table container, which allows the table and its associated navigator to be updated
@@ -112,14 +117,22 @@ public class UserAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          AddUserPage page = new AddUserPage(getPageReference(), userDirectoryId);
+          AddUserPage page = new AddUserPage(getPageReference(), userDirectory.getId());
 
           setResponsePage(page);
         }
       };
       tableContainer.add(addLink);
 
-      UserDataProvider dataProvider = new UserDataProvider(userDirectoryId);
+      // The "userDirectoryDropdownButton" dropdown button
+      DropdownButton<UserDirectory> userDirectoryDropdownButton =
+        new DropdownButton<>("userDirectoryDropdownButton",
+          new PropertyModel(this, "userDirectory"), userDirectories,
+          new UserDirectoryChoiceRenderer());
+      userDirectoryDropdownButton.setVisible(userDirectories.size() > 1);
+      tableContainer.add(userDirectoryDropdownButton);
+
+      UserDataProvider dataProvider = new UserDataProvider(userDirectory.getId());
 
       // The "filterForm" form
       Form<Void> filterForm = new Form<>("filterForm");
@@ -168,7 +181,7 @@ public class UserAdministrationPage extends TemplateWebPage
 
               if (!user.getUsername().equalsIgnoreCase("Administrator"))
               {
-                UserGroupsPage page = new UserGroupsPage(getPageReference(), userDirectoryId,
+                UserGroupsPage page = new UserGroupsPage(getPageReference(), userDirectory.getId(),
                   user.getUsername());
 
                 setResponsePage(page);
@@ -284,7 +297,7 @@ public class UserAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteUser(userDirectoryId, username);
+            securityService.deleteUser(userDirectory.getId(), username);
 
             target.add(tableContainer);
 

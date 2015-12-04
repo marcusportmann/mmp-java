@@ -63,9 +63,7 @@ public class HomePage extends TemplateWebPage
 
     add(new Label("name", new PropertyModel<>(this, "userDirectory.name")));
 
-    add( new DropdownButton<>("dropdownButton", new PropertyModel(this, "userDirectory"),
-      userDirectories, userDirectoryChoiceRenderer));
-
-
+    add(new DropdownButton<>("dropdownButton", new PropertyModel(this, "userDirectory"),
+      userDirectories, userDirectoryChoiceRenderer, "fa fa-users"));
   }
 }

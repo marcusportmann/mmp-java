@@ -61,6 +61,8 @@ public class SecurityService
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
   private String createFunctionSQL;
   private String createOrganisationSQL;
+  private String createUserDirectoryParameterSQL;
+  private String createUserDirectorySQL;
   private DataSource dataSource;
   private String deleteFunctionSQL;
   private String deleteOrganisationSQL;
@@ -404,14 +406,17 @@ public class SecurityService
   /**
    * Create a new organisation.
    *
-   * @param organisation the organisation
+   * @param organisation        the organisation
+   * @param createUserDirectory should a new internal user directory be created for the organisation
+   *
+   * @return the new internal user directory that was created for the organisation or
+   *         <code>null</code> if no user directory was created
    *
    * @throws DuplicateOrganisationException
    * @throws SecurityException
    */
-  public void createOrganisation(Organisation organisation)
+  public UserDirectory createOrganisation(Organisation organisation, boolean createUserDirectory)
     throws DuplicateOrganisationException, SecurityException
-
   {
     // Validate parameters
     if (isNullOrEmpty(organisation.getCode()))
@@ -424,30 +429,110 @@ public class SecurityService
       throw new InvalidArgumentException("organisation.name");
     }
 
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createOrganisationSQL))
+    // Retrieve the Transaction Manager
+    TransactionManager transactionManager = TransactionManager.getTransactionManager();
+    javax.transaction.Transaction existingTransaction = null;
+
+    try
     {
-      if (getOrganisationId(connection, organisation.getCode()) != -1)
+      if (transactionManager.isTransactionActive())
       {
-        throw new DuplicateGroupException("The organisation (" + organisation.getCode()
-            + ") already exists");
+        existingTransaction = transactionManager.beginNew();
+      }
+      else
+      {
+        transactionManager.begin();
       }
 
-      long organisationId = nextId("Application.OrganisationId");
-
-      statement.setLong(1, organisationId);
-      statement.setString(2, organisation.getCode());
-      statement.setString(3, organisation.getName());
-      statement.setString(4, organisation.getDescription());
-
-      if (statement.executeUpdate() != 1)
+      try (Connection connection = dataSource.getConnection())
       {
-        throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createOrganisationSQL + ")");
-      }
+        long organisationId;
 
-      organisation.setId(organisationId);
+        try (PreparedStatement statement = connection.prepareStatement(createOrganisationSQL))
+        {
+          if (getOrganisationId(connection, organisation.getCode()) != -1)
+          {
+            throw new DuplicateGroupException("The organisation (" + organisation.getCode()
+                + ") already exists");
+          }
+
+          organisationId = nextId("Application.OrganisationId");
+
+          statement.setLong(1, organisationId);
+          statement.setString(2, organisation.getCode());
+          statement.setString(3, organisation.getName());
+          statement.setString(4, organisation.getDescription());
+
+          if (statement.executeUpdate() != 1)
+          {
+            throw new SecurityException(
+                "No rows were affected as a result of executing the SQL statement ("
+                + createOrganisationSQL + ")");
+          }
+        }
+
+        UserDirectory userDirectory = null;
+
+        if (createUserDirectory)
+        {
+          userDirectory = newInternalUserDirectoryForOrganisation(organisation);
+
+          long userDirectoryId;
+
+          try (PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
+          {
+            userDirectoryId = nextId("Application.UserDirectoryId");
+
+            statement.setLong(1, userDirectoryId);
+            statement.setString(2, userDirectory.getName());
+            statement.setString(3, userDirectory.getDescription());
+            statement.setString(4, userDirectory.getUserDirectoryClass());
+
+            if (statement.executeUpdate() != 1)
+            {
+              throw new SecurityException(
+                  "No rows were affected as a result of executing the SQL statement ("
+                  + createUserDirectorySQL + ")");
+            }
+          }
+
+          for (UserDirectoryParameter userDirectoryParameter : userDirectory.getParameters())
+          {
+            try (PreparedStatement statement =
+                connection.prepareStatement(createUserDirectoryParameterSQL))
+            {
+              long userDirectoryParameterId = nextId("Application.UserDirectoryParameterId");
+
+              statement.setLong(1, userDirectoryParameterId);
+              statement.setLong(2, userDirectoryId);
+              statement.setString(3, userDirectoryParameter.getName());
+              statement.setString(4, userDirectoryParameter.getValue());
+
+              if (statement.executeUpdate() != 1)
+              {
+                throw new SecurityException(
+                    "No rows were affected as a result of executing the SQL statement ("
+                    + createUserDirectoryParameterSQL + ")");
+              }
+
+              userDirectoryParameter.setId(userDirectoryParameterId);
+              userDirectoryParameter.setUserDirectoryId(userDirectoryId);
+            }
+          }
+
+          userDirectory.setId(userDirectoryId);
+        }
+
+        /*
+         * Only update the organisation ID after the internal user directory has been successfully
+         * if required.
+         */
+        organisation.setId(organisationId);
+
+        transactionManager.commit();
+
+        return userDirectory;
+      }
     }
     catch (DuplicateOrganisationException e)
     {
@@ -455,8 +540,30 @@ public class SecurityService
     }
     catch (Throwable e)
     {
+      try
+      {
+        transactionManager.rollback();
+      }
+      catch (Throwable f)
+      {
+        logger.error("Failed to rollback the transaction while creating the organisation ("
+            + organisation.getCode() + ")", f);
+      }
+
       throw new SecurityException("Failed to create the organisation (" + organisation.getCode()
           + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      try
+      {
+        transactionManager.resume(existingTransaction);
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to resume the original transaction while creating the organisation ("
+            + organisation.getCode() + ")", e);
+      }
     }
   }
 
@@ -2159,6 +2266,14 @@ public class SecurityService
     createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS"
         + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
+    // createUserDirectoryParameterSQL
+    createUserDirectoryParameterSQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORY_PARAMETERS"
+        + " (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES (?, ?, ?, ?)";
+
+    // createUserDirectorySQL
+    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES"
+        + " (ID, NAME, DESCRIPTION, USER_DIRECTORY_CLASS) VALUES (?, ?, ?, ?)";
+
     // deleteFunctionSQL
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
 
@@ -2390,5 +2505,23 @@ public class SecurityService
     }
 
     return false;
+  }
+
+  private UserDirectory newInternalUserDirectoryForOrganisation(Organisation organisation)
+  {
+    UserDirectory userDirectory = new UserDirectory();
+
+    userDirectory.setName(organisation.getName() + " User Directory");
+    userDirectory.setDescription(organisation.getDescription() + " User Directory");
+    userDirectory.setUserDirectoryClass("guru.mmp.application.security.InternalUserDirectory");
+
+    userDirectory.addParameter(new UserDirectoryParameter("MaxPasswordAttempts",
+        String.valueOf(InternalUserDirectory.DEFAULT_MAX_PASSWORD_ATTEMPTS)));
+    userDirectory.addParameter(new UserDirectoryParameter("PasswordExpiryMonths",
+        String.valueOf(InternalUserDirectory.DEFAULT_PASSWORD_EXPIRY_MONTHS)));
+    userDirectory.addParameter(new UserDirectoryParameter("PasswordHistoryMonths",
+        String.valueOf(InternalUserDirectory.DEFAULT_PASSWORD_HISTORY_MONTHS)));
+
+    return userDirectory;
   }
 }

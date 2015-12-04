@@ -19,6 +19,7 @@ package guru.mmp.application.web.template.component;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.security.UserDirectory;
+import guru.mmp.common.util.StringUtil;
 
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.MarkupElement;
@@ -50,8 +51,12 @@ import java.util.List;
 public class DropdownButton<T> extends Panel
   implements ILinkListener
 {
+  private static final String DROPDOWN_HTML_PREFIX = "<div class=\"btn-group\">"
+    + "<button type=\"button\" class=\"btn btn-primary btn-sm dropdown-toggle\""
+    + " data-toggle=\"dropdown\" aria-expanded=\"true\">";
   private static final long serialVersionUID = 1000000;
   private IModel<? extends List<? extends T>> choices;
+  private String iconClass;
   private IChoiceRenderer<T> renderer;
 
   /**
@@ -86,6 +91,40 @@ public class DropdownButton<T> extends Panel
   }
 
   /**
+   * Constructs a new <code>DropdownButton</code>.
+   *
+   * @param id        the non-null id of this component
+   * @param model     the model for the component
+   * @param choices   the model providing the list of all rendered choices
+   * @param renderer  the custom renderer for the choices
+   * @param iconClass the CSS class for the icon for the dropdown
+   */
+  public DropdownButton(String id, IModel<T> model, IModel<? extends List<? extends T>> choices,
+      IChoiceRenderer<T> renderer, String iconClass)
+  {
+    super(id, model);
+
+    this.choices = choices;
+    this.renderer = renderer;
+    this.iconClass = iconClass;
+  }
+
+  /**
+   * Constructs a new <code>DropdownButton</code>.
+   *
+   * @param id        the non-null id of this component
+   * @param model     the model for the component
+   * @param choices   the choices
+   * @param renderer  the custom renderer for the choices
+   * @param iconClass the CSS class for the icon for the dropdown
+   */
+  public DropdownButton(String id, IModel<T> model, List<? extends T> choices,
+      IChoiceRenderer<T> renderer, String iconClass)
+  {
+    this(id, model, new ListModel<>(choices), renderer, iconClass);
+  }
+
+  /**
    * Method description
    */
   @Override
@@ -99,7 +138,6 @@ public class DropdownButton<T> extends Panel
     {
       setDefaultModelObject(renderer.getObject(choiceId.toString(), choices));
     }
-
   }
 
   /**
@@ -114,6 +152,27 @@ public class DropdownButton<T> extends Panel
 
     List<? extends T> choices = this.choices.getObject();
 
+    response.write(DROPDOWN_HTML_PREFIX);
+
+    if (!StringUtil.isNullOrEmpty(iconClass))
+    {
+      response.write("<i class=\"" + iconClass + "\"></i>&nbsp;");
+    }
+
+    T currentChoice = ((IModel<T>) getDefaultModel()).getObject();
+
+    if (currentChoice != null)
+    {
+      response.write(renderer.getDisplayValue(currentChoice).toString());
+    }
+    else
+    {
+      response.write("Select an option...");
+    }
+
+    response.write("&nbsp;&nbsp;<span class=\"caret\"></span></button>");
+    response.write("<ul class=\"dropdown-menu dropdown-primary\" role=\"menu\">");
+
     for (int i = 0; i < choices.size(); i++)
     {
       T choice = choices.get(i);
@@ -121,9 +180,10 @@ public class DropdownButton<T> extends Panel
       PageParameters pageParameters = new PageParameters();
       pageParameters.add("choiceId", renderer.getIdValue(choice, i));
 
-      response.write("<a href=\"" + urlFor(ILinkListener.INTERFACE, pageParameters) + "\">"
-          + renderer.getDisplayValue(choice) + "</a>");
-
+      response.write("<li><a href=\"" + urlFor(ILinkListener.INTERFACE, pageParameters) + "\">"
+          + renderer.getDisplayValue(choice) + "</a></li>");
     }
+
+    response.write("</ul></div>");
   }
 }

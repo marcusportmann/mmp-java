@@ -26,7 +26,9 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
+import guru.mmp.application.web.template.component.DropdownButton;
 import guru.mmp.application.web.template.component.PagingNavigator;
+import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.data.GroupDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -65,9 +67,9 @@ public class GroupAdministrationPage extends TemplateWebPage
   private ISecurityService securityService;
 
   /**
-   * The unique ID for the user directory the groups are associated with.
+   * The user directory the groups are associated with.
    */
-  private long userDirectoryId;
+  private UserDirectory userDirectory;
 
   /**
    * Constructs a new <code>GroupAdministrationPage</code>.
@@ -87,7 +89,7 @@ public class GroupAdministrationPage extends TemplateWebPage
       List<UserDirectory> userDirectories =
         securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
 
-      userDirectoryId = userDirectories.get(0).getId();
+      userDirectory = userDirectories.get(0);
 
       /*
        * The table container, which allows the table and its associated navigator to be updated
@@ -109,15 +111,23 @@ public class GroupAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          AddGroupPage page = new AddGroupPage(getPageReference(), userDirectoryId);
+          AddGroupPage page = new AddGroupPage(getPageReference(), userDirectory.getId());
 
           setResponsePage(page);
         }
       };
       tableContainer.add(addLink);
 
+      // The "userDirectoryDropdownButton" dropdown button
+      DropdownButton<UserDirectory> userDirectoryDropdownButton =
+        new DropdownButton<>("userDirectoryDropdownButton",
+          new PropertyModel(this, "userDirectory"), userDirectories,
+          new UserDirectoryChoiceRenderer());
+      userDirectoryDropdownButton.setVisible(userDirectories.size() > 1);
+      tableContainer.add(userDirectoryDropdownButton);
+
       // The group data view
-      GroupDataProvider dataProvider = new GroupDataProvider(userDirectoryId);
+      GroupDataProvider dataProvider = new GroupDataProvider(userDirectory.getId());
 
       DataView<Group> dataView = new DataView<Group>("group", dataProvider)
       {
@@ -213,7 +223,7 @@ public class GroupAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteGroup(userDirectoryId, groupName);
+            securityService.deleteGroup(userDirectory.getId(), groupName);
 
             target.add(tableContainer);
 

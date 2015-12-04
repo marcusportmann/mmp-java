@@ -4292,6 +4292,11 @@ label.cbr-inline + .cbr-inline
   outline: 0;
 }
 
+.btn.dropdown-toggle
+{
+  margin-bottom: 0px;
+}
+
 .btn.text-left
 {
   text-align: left;

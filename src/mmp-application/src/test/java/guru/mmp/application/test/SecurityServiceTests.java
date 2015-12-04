@@ -67,22 +67,19 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
+    securityService.createGroup(userDirectory.getId(), group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
-        false);
-    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), group.getGroupName());
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
 
-    List<String> groupNames =
-      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername());
+    List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
+      user.getUsername());
 
     assertEquals("The correct number of group names (1) was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
@@ -175,7 +172,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
 
     Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode());
 
@@ -267,29 +264,25 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
+    securityService.createGroup(userDirectory.getId(), group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
-        false);
-    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), group.getGroupName());
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
 
-    List<String> groupNames =
-      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername());
+    List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
+      user.getUsername());
 
     assertEquals("The correct number of group names (1) was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getGroupName() + ")", group.getGroupName(), groupNames.get(0));
-    securityService.deleteGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        group.getGroupName());
+    securityService.deleteGroup(userDirectory.getId(), group.getGroupName());
   }
 
   /**
@@ -353,7 +346,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    securityService.createOrganisation(organisation, false);
     securityService.deleteOrganisation(organisation.getCode());
 
     try
@@ -377,7 +370,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    securityService.createOrganisation(organisation, false);
 
     securityService.deleteOrganisation(organisation.getCode());
 
@@ -475,7 +468,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   }
 
 ///**
-// * Test the functionality to revoke a function for a group.
+// * Test the functionality to retrieve all the function codes for a user.
 // *
 // * @throws guru.mmp.application.security.SecurityException
 // */
@@ -568,7 +561,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    securityService.createOrganisation(organisation, false);
 
     Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode());
 
@@ -588,7 +581,7 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    securityService.createOrganisation(organisation, false);
 
     List<Organisation> retrievedOrganisations = securityService.getOrganisations();
 
@@ -654,22 +647,20 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
+    securityService.createGroup(userDirectory.getId(), group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
-        false);
-    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), group.getGroupName());
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
     assertEquals("Could not determine that the user (" + user.getUsername()
         + ") is a member of the group (" + group.getGroupName() + ")", true,
-          securityService.isUserInGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-            user.getUsername(), group.getGroupName()));
+          securityService.isUserInGroup(userDirectory.getId(), user.getUsername(),
+            group.getGroupName()));
   }
 
   /**
@@ -703,32 +694,27 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   {
     Organisation organisation = getTestOrganisationDetails();
 
-    securityService.createOrganisation(organisation);
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
 
     Group group = getTestGroupDetails();
 
-    securityService.createGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, group);
+    securityService.createGroup(userDirectory.getId(), group);
 
     User user = getTestUserDetails();
 
-    securityService.createUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
-        false);
-    securityService.addUserToGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), group.getGroupName());
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
 
-    List<String> groupNames =
-      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername());
+    List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
+      user.getUsername());
 
     assertEquals("The correct number of group names (1) was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getGroupName() + ")", group.getGroupName(), groupNames.get(0));
-    securityService.removeUserFromGroup(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername(), group.getGroupName());
-    groupNames =
-      securityService.getGroupNamesForUser(IUserDirectory.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
-        user.getUsername());
+    securityService.removeUserFromGroup(userDirectory.getId(), user.getUsername(),
+        group.getGroupName());
+    groupNames = securityService.getGroupNamesForUser(userDirectory.getId(), user.getUsername());
 
     assertEquals("The correct number of group names (0) was not retrieved for the user ("
         + user.getUsername() + ")", 0, groupNames.size());

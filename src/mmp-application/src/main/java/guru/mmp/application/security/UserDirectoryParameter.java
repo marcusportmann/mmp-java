@@ -41,6 +41,18 @@ public class UserDirectoryParameter
   /**
    * Constructs a new <code>UserDirectoryParameter</code>.
    *
+   * @param name  the name of the user directory parameter
+   * @param value the value for the user directory parameter
+   */
+  public UserDirectoryParameter(String name, String value)
+  {
+    this.name = name;
+    this.value = value;
+  }
+
+  /**
+   * Constructs a new <code>UserDirectoryParameter</code>.
+   *
    * @param id              the unique ID for the user directory parameter
    * @param userDirectoryId the unique ID for the user directory the user directory parameter is
    *                        associated with
