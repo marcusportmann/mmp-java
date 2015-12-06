@@ -59,6 +59,7 @@ public class SecurityService
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+  private String addUserDirectoryToOrganisationSQL;
   private String createFunctionSQL;
   private String createOrganisationSQL;
   private String createUserDirectoryParameterSQL;
@@ -445,6 +446,8 @@ public class SecurityService
         transactionManager.begin();
       }
 
+      UserDirectory userDirectory = null;
+
       try (Connection connection = dataSource.getConnection())
       {
         long organisationId;
@@ -471,8 +474,6 @@ public class SecurityService
                 + createOrganisationSQL + ")");
           }
         }
-
-        UserDirectory userDirectory = null;
 
         if (createUserDirectory)
         {
@@ -522,6 +523,36 @@ public class SecurityService
           }
 
           userDirectory.setId(userDirectoryId);
+
+          // Link the new user directory to the new organisation
+          try (PreparedStatement statement =
+              connection.prepareStatement(addUserDirectoryToOrganisationSQL))
+          {
+            statement.setLong(1, userDirectoryId);
+            statement.setLong(2, organisationId);
+
+            if (statement.executeUpdate() != 1)
+            {
+              throw new SecurityException(
+                  "No rows were affected as a result of executing the SQL statement ("
+                  + addUserDirectoryToOrganisationSQL + ")");
+            }
+          }
+        }
+
+        // Link the new organisation to the default user directory
+        try (PreparedStatement statement =
+            connection.prepareStatement(addUserDirectoryToOrganisationSQL))
+        {
+          statement.setLong(1, 1);
+          statement.setLong(2, organisationId);
+
+          if (statement.executeUpdate() != 1)
+          {
+            throw new SecurityException(
+                "No rows were affected as a result of executing the SQL statement ("
+                + addUserDirectoryToOrganisationSQL + ")");
+          }
         }
 
         /*
@@ -529,11 +560,20 @@ public class SecurityService
          * if required.
          */
         organisation.setId(organisationId);
-
-        transactionManager.commit();
-
-        return userDirectory;
       }
+
+      transactionManager.commit();
+
+      try
+      {
+        reloadUserDirectories();
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to reload the user directories", e);
+      }
+
+      return userDirectory;
     }
     catch (DuplicateOrganisationException e)
     {
@@ -2368,6 +2408,10 @@ public class SecurityService
   private void buildStatements(String schemaPrefix)
     throws SQLException
   {
+    // addUserDirectoryToOrganisationSQL
+    addUserDirectoryToOrganisationSQL = "INSERT INTO " + schemaPrefix
+        + "USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES (?, ?)";
+
     // createFunctionSQL
     createFunctionSQL = "INSERT INTO " + schemaPrefix + "FUNCTIONS"
         + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
