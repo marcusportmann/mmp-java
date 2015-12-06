@@ -50,6 +50,14 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   public static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
   private static final int DEFAULT_MAX_FILTERED_USERS = 100;
+
+  /**
+   * The fully qualified name of the Java class that implements the Wicket component used to
+   * administer the configuration for the user directory.
+   */
+  @SuppressWarnings("unused")
+  public final String ADMINISTRATION_CLASS =
+    "guru.mmp.application.web.template.component.InternalUserDirectoryAdministrationPanel";
   private String addInternalUserToInternalGroupSQL;
   private String changeInternalUserPasswordSQL;
   private String createInternalGroupSQL;
@@ -783,18 +791,6 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
 
     return selectedUsers;
-  }
-
-  /**
-   * Returns the fully qualified name of the Java class that implements the Wicket component used
-   * to administer the configuration for the user directory.
-   *
-   * @return the fully qualified name of the Java class that implements the Wicket component used
-   *         to administer the configuration for the user directory
-   */
-  public String getAdministrationClass()
-  {
-    return "guru.mmp.application.web.template.component.InternalUserDirectoryAdministrationPanel";
   }
 
   /**

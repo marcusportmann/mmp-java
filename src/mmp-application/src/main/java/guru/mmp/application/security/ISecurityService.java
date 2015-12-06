@@ -525,20 +525,6 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Returns the fully qualified name of the Java class that implements the Wicket component used
-   * to administer the configuration for the user directory.
-   *
-   * @param userDirectoryId the unique ID for the user directory
-   *
-   * @return the fully qualified name of the Java class that implements the Wicket component used
-   *         to administer the configuration for the user directory
-   *
-   * @throws UserDirectoryNotFoundException
-   */
-  String getUserDirectoryAdministrationClass(long userDirectoryId)
-    throws UserDirectoryNotFoundException;
-
-  /**
    * Retrieve the ID for the user directory that the user with the specified username is associated
    * with.
    *

@@ -174,15 +174,6 @@ public interface IUserDirectory
     throws InvalidAttributeException, SecurityException;
 
   /**
-   * Returns the fully qualified name of the Java class that implements the Wicket component used
-   * to administer the configuration for the user directory.
-   *
-   * @return the fully qualified name of the Java class that implements the Wicket component used
-   *         to administer the configuration for the user directory
-   */
-  String getAdministrationClass();
-
-  /**
    * Retrieve the filtered list of users.
    *
    * @param filter the filter to apply to the users
