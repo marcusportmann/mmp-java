@@ -37,11 +37,13 @@ INSERT INTO MMP.USER_DIRECTORIES (ID, NAME, DESCRIPTION, USER_DIRECTORY_CLASS) V
   (2, 'Test Internal User Directory', 'Test Internal User Directory', 'guru.mmp.application.security.InternalUserDirectory');
 
 INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
-  (4, 2, 'MaxPasswordAttempts', '5');
+  (5, 2, 'MaxPasswordAttempts', '5');
 INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
-  (5, 2, 'PasswordExpiryMonths', '3');
+  (6, 2, 'PasswordExpiryMonths', '3');
 INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
-  (6, 2, 'PasswordHistoryMonths', '12');
+  (7, 2, 'PasswordHistoryMonths', '12');
+INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
+  (8, 2, 'MaxFilteredUsers', '100');
 
 INSERT INTO MMP.USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES
   (1, 2);

@@ -174,6 +174,15 @@ public interface IUserDirectory
     throws InvalidAttributeException, SecurityException;
 
   /**
+   * Returns the fully qualified name of the Java class that implements the Wicket component used
+   * to administer the configuration for the user directory.
+   *
+   * @return the fully qualified name of the Java class that implements the Wicket component used
+   *         to administer the configuration for the user directory
+   */
+  String getAdministrationClass();
+
+  /**
    * Retrieve the filtered list of users.
    *
    * @param filter the filter to apply to the users
@@ -381,6 +390,22 @@ public interface IUserDirectory
    */
   void renameGroup(String groupName, String newGroupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException;
+
+  /**
+   * Does the user directory support administering groups.
+   *
+   * @return <code>true</code> if the directory supports administering groups or <code>false</code>
+   *         otherwise
+   */
+  boolean supportsGroupAdministration();
+
+  /**
+   * Does the user directory support administering users.
+   *
+   * @return <code>true</code> if the directory supports administering users or <code>false</code>
+   *         otherwise
+   */
+  boolean supportsUserAdministration();
 
   /**
    * Update the group.

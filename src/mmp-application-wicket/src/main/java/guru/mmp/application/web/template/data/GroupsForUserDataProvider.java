@@ -35,7 +35,7 @@ import javax.inject.Inject;
 /**
  * The <code>GroupsForUserDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves the <code>Group</code> instances for the groups a user
- * is associated with from the database.
+ * is associated with from the Security Service for a particular user directory.
  *
  * @author Marcus Portmann
  */
@@ -83,7 +83,7 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   public void detach() {}
 
   /**
-   * Retrieves the matching groups from the database starting with
+   * Retrieves the matching groups from the Security Service starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
@@ -91,8 +91,8 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the groups from the database starting with index <code>first</code> and
-   *         ending with <code>first+count</code>
+   * @return the groups retrieved from the Security Service starting with
+   *         index <code>first</code> and ending with <code>first+count</code>
    */
   public Iterator<Group> iterator(long first, long count)
   {
@@ -124,11 +124,11 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   }
 
   /**
-   * Returns the total number of matching groups in the database.
+   * Returns the total number of groups.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of matching groups in the database
+   * @return the total number of groups
    */
   public long size()
   {

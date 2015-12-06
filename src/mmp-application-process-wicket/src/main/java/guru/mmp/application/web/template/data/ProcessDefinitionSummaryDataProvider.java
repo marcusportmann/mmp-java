@@ -87,8 +87,8 @@ public class ProcessDefinitionSummaryDataProvider
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the summaries for the process definitions from the database starting with index
-   *         <code>first</code> and ending with <code>first+count</code>
+   * @return the summaries for the process definitions retrieved from the database starting with
+   *         index <code>first</code> and ending with <code>first+count</code>
    */
   public Iterator<ProcessDefinitionSummary> iterator(long first, long count)
   {
@@ -131,11 +131,11 @@ public class ProcessDefinitionSummaryDataProvider
   }
 
   /**
-   * Returns the total number of matching process definitions in the database.
+   * Returns the total number of process definitions.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of matching process definitions in the database
+   * @return the total number of process definitions
    */
   public long size()
   {

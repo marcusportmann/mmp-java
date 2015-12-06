@@ -79,6 +79,7 @@ public class SecurityService
   private String getUserDirectoriesForOrganisationSQL;
   private String getUserDirectoriesSQL;
   private String getUserDirectoryParametersSQL;
+  private String getUserDirectorySQL;
   private String insertIDGeneratorSQL;
 
   /* Registry */
@@ -845,12 +846,6 @@ public class SecurityService
   public List<User> getFilteredUsers(long userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityException
   {
-    // Validate parameters
-    if (isNullOrEmpty(filter))
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1147,12 +1142,6 @@ public class SecurityService
   public int getNumberOfFilteredUsers(long userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityException
   {
-    // Validate parameters
-    if (isNullOrEmpty(filter))
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1603,6 +1592,79 @@ public class SecurityService
       throw new SecurityException("Failed to retrieve the user directories with parameters: "
           + e.getMessage(), e);
     }
+  }
+
+  /**
+   * Retrieve the user directory.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  public UserDirectory getUserDirectory(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUserDirectorySQL))
+    {
+      statement.setLong(1, userDirectoryId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          UserDirectory userDirectory = new UserDirectory();
+          userDirectory.setId(rs.getLong(1));
+          userDirectory.setName(rs.getString(2));
+          userDirectory.setDescription(rs.getString(3));
+          userDirectory.setUserDirectoryClass(rs.getString(4));
+
+          return userDirectory;
+        }
+        else
+        {
+          throw new UserDirectoryNotFoundException("The user directory (" + userDirectoryId
+              + ") could not be found");
+        }
+      }
+    }
+    catch (UserDirectoryNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the user directory (" + userDirectoryId
+          + "): " + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Returns the fully qualified name of the Java class that implements the Wicket component used
+   * to administer the configuration for the user directory.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return the fully qualified name of the Java class that implements the Wicket component used
+   *         to administer the configuration for the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   */
+  public String getUserDirectoryAdministrationClass(long userDirectoryId)
+    throws UserDirectoryNotFoundException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
+    return userDirectory.getAdministrationClass();
   }
 
   /**
@@ -2082,6 +2144,54 @@ public class SecurityService
   }
 
   /**
+   * Does the user directory support administering groups.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return <code>true</code> if the directory supports administering groups or <code>false</code>
+   *         otherwise
+   *
+   * @throws UserDirectoryNotFoundException
+   */
+  public boolean supportsGroupAdministration(long userDirectoryId)
+    throws UserDirectoryNotFoundException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
+    return userDirectory.supportsGroupAdministration();
+  }
+
+  /**
+   * Does the user directory support administering users.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return <code>true</code> if the directory supports administering users or <code>false</code>
+   *         otherwise
+   *
+   * @throws UserDirectoryNotFoundException
+   */
+  public boolean supportsUserAdministration(long userDirectoryId)
+    throws UserDirectoryNotFoundException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
+          + ") is invalid");
+    }
+
+    return userDirectory.supportsUserAdministration();
+  }
+
+  /**
    * Update the authorised function.
    *
    * @param function the function
@@ -2272,7 +2382,7 @@ public class SecurityService
 
     // createUserDirectorySQL
     createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES"
-        + " (ID, NAME, DESCRIPTION, USER_DIRECTORY_CLASS) VALUES (?, ?, ?, ?)";
+        + " (ID, NAME, DESCRIPTION, USER_DIRECTORY_CLASS)" + " VALUES (?, ?, ?, ?)";
 
     // deleteFunctionSQL
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
@@ -2329,12 +2439,16 @@ public class SecurityService
         + " ON UDTOM.ORGANISATION_ID = O.ID WHERE O.CODE=?";
 
     // getUserDirectoriesSQL
-    getUserDirectoriesSQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION, UD.USER_DIRECTORY_CLASS FROM "
-        + schemaPrefix + "USER_DIRECTORIES UD";
+    getUserDirectoriesSQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION, UD.USER_DIRECTORY_CLASS"
+        + " FROM " + schemaPrefix + "USER_DIRECTORIES UD";
 
     // getUserDirectoryParametersSQL
     getUserDirectoryParametersSQL = "SELECT UDP.ID, UDP.NAME, UDP.VALUE FROM " + schemaPrefix
         + "USER_DIRECTORY_PARAMETERS UDP WHERE UDP.USER_DIRECTORY_ID=?";
+
+    // getUserDirectorySQL
+    getUserDirectorySQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION, UD.USER_DIRECTORY_CLASS"
+        + " FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
 
     // insertIDGeneratorSQL
     insertIDGeneratorSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR"

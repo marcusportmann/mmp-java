@@ -24,8 +24,6 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -37,7 +35,8 @@ import javax.inject.Inject;
 
 /**
  * The <code>GroupDataProvider</code> class provides an <code>IDataProvider</code>
- * implementation that retrieves <code>Group</code> instances from the database.
+ * implementation that retrieves a list of <code>Group</code> instances from the Security Service
+ * that are associated with a particular user directory.
  *
  * @author Marcus Portmann
  */
@@ -65,12 +64,20 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
   }
 
   /**
+   * Constructs a new <code>GroupDataProvider</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected GroupDataProvider() {}
+
+  /**
    * @see org.apache.wicket.model.IDetachable#detach()
    */
   public void detach() {}
 
   /**
-   * Retrieves the matching groups from the database starting with
+   * Retrieves the matching groups from the Security Service starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
@@ -78,8 +85,8 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the groups from the database starting with index <code>first</code> and
-   *         ending with <code>first+count</code>
+   * @return the groups retrieved from the Security Service starting with index <code>first</code>
+   *         and ending with <code>first+count</code>
    */
   public Iterator<Group> iterator(long first, long count)
   {
@@ -120,11 +127,21 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
   }
 
   /**
-   * Returns the total number of matching groups in the database.
+   * Set the unique ID for the user directory the groups are associated with.
+   *
+   * @param userDirectoryId the unique ID for the groups directory the users are associated with
+   */
+  public void setUserDirectoryId(long userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Returns the total number of groups.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of matching groups in the database
+   * @return the total number of groups
    */
   public long size()
   {

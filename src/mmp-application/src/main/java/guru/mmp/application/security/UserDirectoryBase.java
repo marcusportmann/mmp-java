@@ -46,11 +46,11 @@ public abstract class UserDirectoryBase
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserDirectoryBase.class);
-  private String createExternalGroupSQL;
+  private String createGroupSQL;
   private DataSource dataSource;
   private String databaseCatalogSeparator;
-  private String deleteExternalGroupSQL;
-  private String getExternalGroupIdSQL;
+  private String deleteGroupSQL;
+  private String getGroupIdSQL;
   private String insertIDGeneratorSQL;
 
   /**
@@ -261,17 +261,17 @@ public abstract class UserDirectoryBase
    */
   protected void buildStatements(String schemaPrefix)
   {
-    // createExternalGroupSQL
-    createExternalGroupSQL = "INSERT INTO " + schemaPrefix + "EXTERNAL_GROUPS"
+    // createGroupSQL
+    createGroupSQL = "INSERT INTO " + schemaPrefix + "GROUPS"
         + " (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES (?, ?, ?)";
 
-    // createGroupSQL
-    deleteExternalGroupSQL = "DELETE FROM " + schemaPrefix + "EXTERNAL_GROUPS EG"
-        + " WHERE EG.USER_DIRECTORY_ID=? AND UPPER(EG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    // deleteGroupSQL
+    deleteGroupSQL = "DELETE FROM " + schemaPrefix + "GROUPS G"
+        + " WHERE G.USER_DIRECTORY_ID=? AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
-    // getExternalGroupIdSQL
-    getExternalGroupIdSQL = "SELECT EG.ID FROM " + schemaPrefix + "EXTERNAL_GROUPS EG"
-        + " WHERE EG.USER_DIRECTORY_ID=? AND UPPER(EG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    // getGroupIdSQL
+    getGroupIdSQL = "SELECT G.ID FROM " + schemaPrefix + "GROUPS G"
+        + " WHERE G.USER_DIRECTORY_ID=? AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // insertIDGeneratorSQL
     insertIDGeneratorSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR"
@@ -286,48 +286,48 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Create a new external group.
+   * Create a new group.
    * <p>
-   * If an external group with the specified group name already exists the ID for this existing
-   * external group will be returned.
+   * If a group with the specified group name already exists the ID for this existing group will be
+   * returned.
    *
    * @param connection the existing database connection
-   * @param groupName  the group name uniquely identifying the external group
+   * @param groupName  the group name uniquely identifying the group
    *
-   * @return the numeric ID for the external group
+   * @return the numeric ID for the group
    *
    * @throws SecurityException
    */
-  protected long createExternalGroup(Connection connection, String groupName)
+  protected long createGroup(Connection connection, String groupName)
     throws SecurityException
   {
-    try (PreparedStatement statement = connection.prepareStatement(createExternalGroupSQL))
+    try (PreparedStatement statement = connection.prepareStatement(createGroupSQL))
     {
-      long externalGroupId = getExternalGroupId(connection, groupName);
+      long groupId = getGroupId(connection, groupName);
 
-      if (externalGroupId != -1)
+      if (groupId != -1)
       {
-        return externalGroupId;
+        return groupId;
       }
 
-      externalGroupId = nextId("Application.ExternalGroupId");
+      groupId = nextId("Application.GroupId");
 
-      statement.setLong(1, externalGroupId);
+      statement.setLong(1, groupId);
       statement.setLong(2, getUserDirectoryId());
       statement.setString(3, groupName);
 
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createExternalGroupSQL + ")");
+            "No rows were affected as a result of executing the SQL statement (" + createGroupSQL
+            + ")");
       }
 
-      return externalGroupId;
+      return groupId;
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the external group (" + groupName
+      throw new SecurityException("Failed to create the group (" + groupName
           + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
   }
@@ -360,26 +360,26 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Delete the external group.
+   * Delete the group.
    *
    * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the external group
+   * @param groupName  the group name uniquely identifying the group
    *
-   * @return the numeric ID for the external group or -1 if an external group with the specified
-   *         group name could not be found
+   * @return the numeric ID for the group or -1 if a group with the specified group name could not
+   *         be found
    *
    * @throws SecurityException
    */
-  protected long deleteExternalGroup(Connection connection, String groupName)
+  protected long deleteGroup(Connection connection, String groupName)
     throws SecurityException
   {
-    try (PreparedStatement statement = connection.prepareStatement(deleteExternalGroupSQL))
+    try (PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
     {
-      long externalGroupId = getExternalGroupId(connection, groupName);
+      long groupId = getGroupId(connection, groupName);
 
-      if (externalGroupId == -1)
+      if (groupId == -1)
       {
-        return externalGroupId;
+        return groupId;
       }
 
       statement.setLong(1, getUserDirectoryId());
@@ -388,15 +388,15 @@ public abstract class UserDirectoryBase
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + deleteExternalGroupSQL + ")");
+            "No rows were affected as a result of executing the SQL statement (" + deleteGroupSQL
+            + ")");
       }
 
-      return externalGroupId;
+      return groupId;
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the external group (" + groupName
+      throw new SecurityException("Failed to delete the group (" + groupName
           + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
   }
@@ -422,20 +422,20 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the numeric ID for the external group with the specified group name.
+   * Returns the numeric ID for the group with the specified group name.
    *
    * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the external group
+   * @param groupName  the group name uniquely identifying the group
    *
-   * @return the numeric ID for the external group or -1 if an external group with the specified
-   *         group name could not be found
+   * @return the numeric ID for the group or -1 if a group with the specified group name could not
+   *         be found
    *
    * @throws SecurityException
    */
-  protected long getExternalGroupId(Connection connection, String groupName)
+  protected long getGroupId(Connection connection, String groupName)
     throws SecurityException
   {
-    try (PreparedStatement statement = connection.prepareStatement(getExternalGroupIdSQL))
+    try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
     {
       statement.setLong(1, getUserDirectoryId());
       statement.setString(2, groupName);
@@ -454,8 +454,8 @@ public abstract class UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the numeric ID for the external group ("
-          + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityException("Failed to retrieve the numeric ID for the group (" + groupName
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 

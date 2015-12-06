@@ -52,21 +52,20 @@
         <wicket:child>
           <wicket:extend>
 
-            <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+            <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog">
               <div class="modal-dialog">
                 <div class="modal-content">
-
                   <div class="modal-header">
-                    <h4 class="modal-title">Remove User</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Remove User Directory</h4>
                   </div>
-
                   <div class="modal-body">
                     <p>
-                      Are you sure you wish to remove the user
-                      <b><span wicket:id="name">[Name]</span></b>?
+                      Are you sure you wish to remove the user directory <b><span wicket:id="name">[Name]</span></b>?
                     </p>
                   </div>
-
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                     <a wicket:id="removeLink" class="btn btn-primary">Yes</a>
@@ -75,40 +74,29 @@
               </div>
             </div>
 
+
             <div wicket:id="tableContainer" class="panel panel-default">
               <div class="table-header">
                 <div class="table-header-left">
-                  <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User</a>
-                  <div wicket:id="userDirectoryDropdownMenu"></div>
-                </div>
-                <div class="table-header-right">
-                  <form wicket:id="filterForm" class="table-filter-form">
-                    <input wicket:id="filter" type="text" name="filter"/>
-                    <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm">
-                      <i class="fa fa-filter"> Filter</i></button>
-                  </form>
+                  <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User Directory</a>
                 </div>
               </div>
 
               <table class="table table-bordered table-striped table-condensed table-actions">
                 <thead>
                   <tr>
-                    <th>Username</th>
-                    <th>First Name(s)</th>
-                    <th>Last Name</th>
+                    <th class="stretch-column">Name</th>
+                    <th>User Directory Class</th>
                     <th class="center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr wicket:id="user">
-                    <td><span wicket:id="username">[Username]</span></td>
-                    <td><span wicket:id="firstNames">[First Name(s)]</span></td>
-                    <td><span wicket:id="lastName">[Surname]</span></td>
-                    <td class="four-actions">
-                      <a wicket:id="userGroupsLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="User Groups" title="User Groups"><i class="fa fa-group"></i></a>
-                      <a wicket:id="updateLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Update User" title="Update User"><i class="fa fa-edit"></i></a>
-                      <a wicket:id="resetPasswordLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Reset Password" title="Reset Password"><i class="fa fa-lock"></i></a>
-                      <a wicket:id="removeLink" href="#" class="btn btn-xs btn-action tooltips" data-placement="top" data-original-title="Remove User" title="Remove User"><i class="fa fa-times fa fa-white"></i></a>
+                  <tr wicket:id="userDirectory">
+                    <td><span wicket:id="name">[Code]</span></td>
+                    <td><span wicket:id="userDirectoryClass">[UserDirectoryClass]</span></td>
+                    <td class="two-actions">
+                      <a wicket:id="updateLink" href="#" class="btn btn-xs btn-action tooltips" title="Update User Directory"><i class="fa fa-edit"></i></a>
+                      <a wicket:id="removeLink" href="#" class="btn btn-xs btn-action tooltips" title="Remove User Directory"><i class="fa fa-times fa fa-white"></i></a>
                     </td>
                   </tr>
                 </tbody>

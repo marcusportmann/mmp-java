@@ -142,6 +142,11 @@
   visibility: visible;
 }
 
+.dropdown-menu-holder
+{
+  display: inline-block;
+}
+
 .dropdown-menu > li.checkbox-row
 {
   padding: 5px 20px;

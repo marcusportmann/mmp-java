@@ -63,9 +63,9 @@ public class UserDirectory
   }
 
   /**
-   * Returns the unique numeric ID for the user directory.
+   * Returns the unique ID for the user directory.
    *
-   * @return the unique numeric ID for the user directory
+   * @return the unique ID for the user directory
    */
   public long getId()
   {
@@ -130,9 +130,9 @@ public class UserDirectory
   }
 
   /**
-   * Set the unique numeric ID for the user directory.
+   * Set the unique ID for the user directory.
    *
-   * @param id the unique numeric ID for the user directory
+   * @param id the unique ID for the user directory
    */
   public void setId(long id)
   {

@@ -26,10 +26,9 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
-import guru.mmp.application.web.template.component.DropdownButton;
+import guru.mmp.application.web.template.component.DropdownMenu;
 import guru.mmp.application.web.template.component.PagingNavigator;
-import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
-import guru.mmp.application.web.template.data.UserDataProvider;
+import guru.mmp.application.web.template.data.FilteredUserDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -50,6 +49,7 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -86,14 +86,11 @@ public class UserAdministrationPage extends TemplateWebPage
 
     try
     {
-      WebSession session = getWebApplicationSession();
-
       /*
        * Retrieve the list of user directories for the organisation the currently logged on user
        * is associated with and default to the first user directory.
        */
-      List<UserDirectory> userDirectories =
-        securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
+      List<UserDirectory> userDirectories = getUserDirectories();
 
       userDirectory = userDirectories.get(0);
 
@@ -124,15 +121,32 @@ public class UserAdministrationPage extends TemplateWebPage
       };
       tableContainer.add(addLink);
 
-      // The "userDirectoryDropdownButton" dropdown button
-      DropdownButton<UserDirectory> userDirectoryDropdownButton =
-        new DropdownButton<>("userDirectoryDropdownButton",
-          new PropertyModel(this, "userDirectory"), userDirectories,
-          new UserDirectoryChoiceRenderer());
-      userDirectoryDropdownButton.setVisible(userDirectories.size() > 1);
-      tableContainer.add(userDirectoryDropdownButton);
+      FilteredUserDataProvider dataProvider = new FilteredUserDataProvider(userDirectory.getId());
 
-      UserDataProvider dataProvider = new UserDataProvider(userDirectory.getId());
+      // The "userDirectoryDropdownMenu" dropdown button
+      DropdownMenu<UserDirectory> userDirectoryDropdownMenu =
+        new DropdownMenu<UserDirectory>("userDirectoryDropdownMenu",
+          new PropertyModel<>(this, "userDirectory"), userDirectories, "fa fa-users")
+      {
+        @Override
+        protected String getDisplayValue(UserDirectory menuItem)
+        {
+          return menuItem.getName();
+        }
+
+        @Override
+        protected void onMenuItemSelected(AjaxRequestTarget target, UserDirectory menuItem)
+        {
+          dataProvider.setUserDirectoryId(userDirectory.getId());
+
+          if (target != null)
+          {
+            target.add(tableContainer);
+          }
+        }
+      };
+      userDirectoryDropdownMenu.setVisible(userDirectories.size() > 1);
+      tableContainer.add(userDirectoryDropdownMenu);
 
       // The "filterForm" form
       Form<Void> filterForm = new Form<>("filterForm");
@@ -262,6 +276,30 @@ public class UserAdministrationPage extends TemplateWebPage
     {
       throw new WebApplicationException("Failed to initialise the UserAdministrationPage", e);
     }
+  }
+
+  private List<UserDirectory> getUserDirectories()
+  {
+    WebSession session = getWebApplicationSession();
+
+    List<UserDirectory> allUserDirectories =
+      securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
+
+    List<UserDirectory> userDirectories = new ArrayList<>();
+
+    for (UserDirectory userDirectory : allUserDirectories)
+    {
+      if ((userDirectory.getId() == 1) && (session.getUserDirectoryId() != 1))
+      {
+        // Do nothing
+      }
+      else if (securityService.supportsUserAdministration(userDirectory.getId()))
+      {
+        userDirectories.add(userDirectory);
+      }
+    }
+
+    return userDirectories;
   }
 
   /**

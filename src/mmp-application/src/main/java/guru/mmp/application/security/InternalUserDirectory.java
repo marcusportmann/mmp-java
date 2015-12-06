@@ -49,6 +49,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * The default number of months to check password history against.
    */
   public static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
+  private static final int DEFAULT_MAX_FILTERED_USERS = 100;
   private String addInternalUserToInternalGroupSQL;
   private String changeInternalUserPasswordSQL;
   private String createInternalGroupSQL;
@@ -71,6 +72,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   private String getNumberOfUsersForGroupSQL;
   private String isInternalUserInInternalGroupSQL;
   private String isPasswordInInternalUserPasswordHistorySQL;
+  private int maxFilteredUsers;
   private int maxPasswordAttempts;
   private int passwordExpiryMonths;
   private int passwordHistoryMonths;
@@ -118,6 +120,15 @@ public class InternalUserDirectory extends UserDirectoryBase
       else
       {
         passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MONTHS;
+      }
+
+      if (parameters.containsKey("MaxFilteredUsers"))
+      {
+        maxFilteredUsers = Integer.parseInt(parameters.get("MaxFilteredUsers"));
+      }
+      else
+      {
+        maxFilteredUsers = DEFAULT_MAX_FILTERED_USERS;
       }
     }
     catch (Throwable e)
@@ -490,7 +501,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       group.setId(internalGroupId);
       group.setUserDirectoryId(getUserDirectoryId());
 
-      createExternalGroup(connection, group.getGroupName());
+      createGroup(connection, group.getGroupName());
     }
     catch (DuplicateGroupException e)
     {
@@ -650,7 +661,7 @@ public class InternalUserDirectory extends UserDirectoryBase
             + deleteInternalGroupSQL + ")");
       }
 
-      deleteExternalGroup(connection, groupName);
+      deleteGroup(connection, groupName);
     }
     catch (GroupNotFoundException | ExistingGroupMembersException e)
     {
@@ -775,6 +786,18 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Returns the fully qualified name of the Java class that implements the Wicket component used
+   * to administer the configuration for the user directory.
+   *
+   * @return the fully qualified name of the Java class that implements the Wicket component used
+   *         to administer the configuration for the user directory
+   */
+  public String getAdministrationClass()
+  {
+    return "guru.mmp.application.web.template.component.InternalUserDirectoryAdministrationPanel";
+  }
+
+  /**
    * Retrieve the filtered list of users.
    *
    * @param filter the filter to apply to the users
@@ -787,17 +810,28 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFilteredInternalUsersSQL))
+      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+          ? getInternalUsersSQL
+          : getFilteredInternalUsersSQL))
     {
-      StringBuilder filterBuffer = new StringBuilder("%");
+      statement.setMaxRows(maxFilteredUsers);
 
-      filterBuffer.append(filter.toUpperCase());
-      filterBuffer.append("%");
+      if (StringUtil.isNullOrEmpty(filter))
+      {
+        statement.setLong(1, getUserDirectoryId());
+      }
+      else
+      {
+        StringBuilder filterBuffer = new StringBuilder("%");
 
-      statement.setLong(1, getUserDirectoryId());
-      statement.setString(2, filterBuffer.toString());
-      statement.setString(3, filterBuffer.toString());
-      statement.setString(4, filterBuffer.toString());
+        filterBuffer.append(filter.toUpperCase());
+        filterBuffer.append("%");
+
+        statement.setLong(1, getUserDirectoryId());
+        statement.setString(2, filterBuffer.toString());
+        statement.setString(3, filterBuffer.toString());
+        statement.setString(4, filterBuffer.toString());
+      }
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1044,24 +1078,36 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getNumberOfFilteredInternalUsersSQL))
+      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+          ? getNumberOfInternalUsersSQL
+          : getNumberOfFilteredInternalUsersSQL))
     {
-      StringBuilder filterBuffer = new StringBuilder("%");
+      if (StringUtil.isNullOrEmpty(filter))
+      {
+        statement.setLong(1, getUserDirectoryId());
+      }
+      else
+      {
+        StringBuilder filterBuffer = new StringBuilder("%");
 
-      filterBuffer.append(filter.toUpperCase());
-      filterBuffer.append("%");
+        filterBuffer.append(filter.toUpperCase());
+        filterBuffer.append("%");
 
-      statement.setLong(1, getUserDirectoryId());
-      statement.setString(2, filterBuffer.toString());
-      statement.setString(3, filterBuffer.toString());
-      statement.setString(4, filterBuffer.toString());
+        statement.setLong(1, getUserDirectoryId());
+        statement.setString(2, filterBuffer.toString());
+        statement.setString(3, filterBuffer.toString());
+        statement.setString(4, filterBuffer.toString());
+      }
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return rs.getInt(1);
+          int numberOfFilteredUsers = rs.getInt(1);
+
+          return ((numberOfFilteredUsers > maxFilteredUsers)
+              ? maxFilteredUsers
+              : numberOfFilteredUsers);
         }
         else
         {
@@ -1375,6 +1421,28 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Does the user directory support administering groups.
+   *
+   * @return <code>true</code> if the directory supports administering groups or <code>false</code>
+   *         otherwise
+   */
+  public boolean supportsGroupAdministration()
+  {
+    return true;
+  }
+
+  /**
+   * Does the user directory support administering users.
+   *
+   * @return <code>true</code> if the directory supports administering users or <code>false</code>
+   *         otherwise
+   */
+  public boolean supportsUserAdministration()
+  {
+    return true;
+  }
+
+  /**
    * Update the group.
    *
    * @param group the group
@@ -1528,8 +1596,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       buffer.append(fieldsBuffer.toString());
-      buffer.append(
-          " WHERE USER_DIRECTORY_ID=? AND ID=?");
+      buffer.append(" WHERE USER_DIRECTORY_ID=? AND ID=?");
 
       String updateUserSQL = buffer.toString();
 
@@ -1704,9 +1771,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     getFunctionCodesForUserIdSQL =
       "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F" + " INNER JOIN " + schemaPrefix
       + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID INNER JOIN " + schemaPrefix
-      + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID INNER JOIN "
-      + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID INNER JOIN "
-      + schemaPrefix + "INTERNAL_GROUPS IG ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID"
+      + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID INNER JOIN " + schemaPrefix
+      + "GROUPS G ON G.ID = RTGM.GROUP_ID INNER JOIN " + schemaPrefix
+      + "INTERNAL_GROUPS IG ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID"
       + "     AND UPPER(IG.GROUPNAME) = UPPER(G.GROUPNAME) INNER JOIN " + schemaPrefix
       + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTIGM"
       + "   ON IUTIGM.USER_DIRECTORY_ID = IG.USER_DIRECTORY_ID AND IUTIGM.INTERNAL_GROUP_ID = IG.ID"

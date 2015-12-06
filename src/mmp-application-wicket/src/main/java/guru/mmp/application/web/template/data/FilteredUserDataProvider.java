@@ -22,7 +22,6 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-import guru.mmp.common.util.StringUtil;
 
 import org.apache.wicket.model.IModel;
 
@@ -35,12 +34,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * The <code>UserDataProvider</code> class provides an <code>IDataProvider</code>
- * implementation that retrieves <code>User</code> instances from the database.
+ * The <code>FilteredUserDataProvider</code> class provides an <code>IDataProvider</code>
+ * implementation that retrieves a filtered list of <code>User</code> instances from the
+ * Security Service that are associated with a particular user directory.
  *
  * @author Marcus Portmann
  */
-public class UserDataProvider extends InjectableDataProvider<User>
+public class FilteredUserDataProvider extends InjectableDataProvider<User>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -63,7 +63,7 @@ public class UserDataProvider extends InjectableDataProvider<User>
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
    */
-  public UserDataProvider(long userDirectoryId)
+  public FilteredUserDataProvider(long userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }
@@ -74,7 +74,7 @@ public class UserDataProvider extends InjectableDataProvider<User>
    * Hidden default constructor to support CDI.
    */
   @SuppressWarnings("unused")
-  protected UserDataProvider() {}
+  protected FilteredUserDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -92,7 +92,7 @@ public class UserDataProvider extends InjectableDataProvider<User>
   }
 
   /**
-   * Retrieves the matching users from the database starting with
+   * Retrieves the matching users from the Security Service starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
@@ -100,23 +100,15 @@ public class UserDataProvider extends InjectableDataProvider<User>
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the users from the database starting with index <code>first</code> and
-   *         ending with <code>first+count</code>
+   * @return the users retrieved from the Security Service starting with index <code>first</code>
+   *         and ending with <code>first+count</code>
    */
+
   public Iterator<User> iterator(long first, long count)
   {
     try
     {
-      List<User> allUsers;
-
-      if (StringUtil.isNullOrEmpty(filter))
-      {
-        allUsers = securityService.getUsers(userDirectoryId);
-      }
-      else
-      {
-        allUsers = securityService.getFilteredUsers(userDirectoryId, filter);
-      }
+      List<User> allUsers = securityService.getFilteredUsers(userDirectoryId, filter);
 
       List<User> users = new ArrayList<>();
 
@@ -166,24 +158,27 @@ public class UserDataProvider extends InjectableDataProvider<User>
   }
 
   /**
-   * Returns the total number of matching users in the database.
+   * Set the unique ID for the user directory the users are associated with.
+   *
+   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   */
+  public void setUserDirectoryId(long userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Returns the total number of users.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of matching users in the database
+   * @return the total number of users
    */
   public long size()
   {
     try
     {
-      if (StringUtil.isNullOrEmpty(filter))
-      {
-        return securityService.getNumberOfUsers(userDirectoryId);
-      }
-      else
-      {
-        return securityService.getNumberOfFilteredUsers(userDirectoryId, filter);
-      }
+      return securityService.getNumberOfFilteredUsers(userDirectoryId, filter);
     }
     catch (Throwable e)
     {

@@ -18,18 +18,14 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
-import guru.mmp.application.web.template.component.DropdownMenu;
 import guru.mmp.application.web.template.component.PagingNavigator;
-import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
-import guru.mmp.application.web.template.data.GroupDataProvider;
+import guru.mmp.application.web.template.data.UserDirectoryDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -47,51 +43,36 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 /**
- * The <code>GroupAdministrationPage</code> class implements the
- * "Group Administration" page for the Web Application Template.
+ * The <code>UserDirectoryAdministrationPage</code> class implements the
+ * "UserDirectory Administration" page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_GROUP_ADMINISTRATION)
-public class GroupAdministrationPage extends TemplateWebPage
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
+public class UserDirectoryAdministrationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(GroupAdministrationPage.class);
+  private static final Logger logger =
+    LoggerFactory.getLogger(UserDirectoryAdministrationPage.class);
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
 
   /**
-   * The user directory the groups are associated with.
+   * Constructs a new <code>UserDirectoryAdministrationPage</code>.
    */
-  private UserDirectory userDirectory;
-
-  /**
-   * Constructs a new <code>GroupAdministrationPage</code>.
-   */
-  public GroupAdministrationPage()
+  public UserDirectoryAdministrationPage()
   {
-    super("Groups");
+    super("User Directories");
 
     try
     {
-      /*
-       * Retrieve the list of user directories for the organisation the currently logged on user
-       * is associated with and default to the first user directory.
-       */
-      List<UserDirectory> userDirectories = getUserDirectories();
-
-      userDirectory = userDirectories.get(0);
-
       /*
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
@@ -100,11 +81,11 @@ public class GroupAdministrationPage extends TemplateWebPage
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
-      // The dialog used to confirm the removal of a group
+      // The dialog used to confirm the removal of a user directory
       RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
-      // The "addLink" link
+      // The "addLink" used to add a new user directory
       Link<Void> addLink = new Link<Void>("addLink")
       {
         private static final long serialVersionUID = 1000000;
@@ -112,51 +93,24 @@ public class GroupAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          AddGroupPage page = new AddGroupPage(getPageReference(), userDirectory.getId());
-
-          setResponsePage(page);
+          // setResponsePage(new AddUserDirectoryPage(getPageReference()));
         }
       };
       tableContainer.add(addLink);
 
-      GroupDataProvider dataProvider = new GroupDataProvider(userDirectory.getId());
+      UserDirectoryDataProvider dataProvider = new UserDirectoryDataProvider();
 
-      // The "userDirectoryDropdownMenu" dropdown button
-      DropdownMenu<UserDirectory> userDirectoryDropdownMenu =
-        new DropdownMenu<UserDirectory>("userDirectoryDropdownMenu",
-          new PropertyModel<>(this, "userDirectory"), userDirectories, "fa fa-users")
-      {
-        @Override
-        protected String getDisplayValue(UserDirectory menuItem)
-        {
-          return menuItem.getName();
-        }
-
-        @Override
-        protected void onMenuItemSelected(AjaxRequestTarget target, UserDirectory menuItem)
-        {
-          dataProvider.setUserDirectoryId(userDirectory.getId());
-
-          if (target != null)
-          {
-            target.add(tableContainer);
-          }
-        }
-      };
-      userDirectoryDropdownMenu.setVisible(userDirectories.size() > 1);
-      tableContainer.add(userDirectoryDropdownMenu);
-
-      // The group data view
-      DataView<Group> dataView = new DataView<Group>("group", dataProvider)
+      // The user directory data view
+      DataView<UserDirectory> dataView = new DataView<UserDirectory>("userDirectory", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
         @Override
-        protected void populateItem(Item<Group> item)
+        protected void populateItem(Item<UserDirectory> item)
         {
-          item.add(new Label("groupName", new PropertyModel<String>(item.getModel(), "groupName")));
-          item.add(new Label("description",
-              new PropertyModel<String>(item.getModel(), "description")));
+          item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
+          item.add(new Label("userDirectoryClass",
+              new PropertyModel<String>(item.getModel(), "userDirectoryClass")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -166,9 +120,10 @@ public class GroupAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateGroupPage page = new UpdateGroupPage(getPageReference(), item.getModel());
-
-              setResponsePage(page);
+//            UpdateUserDirectoryPage page = new UpdateUserDirectoryPage(getPageReference(),
+//              item.getModel());
+//
+//            setResponsePage(page);
             }
           };
           item.add(updateLink);
@@ -181,11 +136,11 @@ public class GroupAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              Group group = item.getModelObject();
+              UserDirectory userDirectory = item.getModelObject();
 
-              if (group != null)
+              if (userDirectory != null)
               {
-                removeDialog.show(target, group);
+                removeDialog.show(target, userDirectory);
               }
               else
               {
@@ -204,48 +159,25 @@ public class GroupAdministrationPage extends TemplateWebPage
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the GroupAdministrationPage", e);
+      throw new WebApplicationException("Failed to initialise the UserDirectoryAdministrationPage",
+          e);
     }
-  }
-
-  private List<UserDirectory> getUserDirectories()
-  {
-    WebSession session = getWebApplicationSession();
-
-    List<UserDirectory> allUserDirectories =
-      securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
-
-    List<UserDirectory> userDirectories = new ArrayList<>();
-
-    for (UserDirectory userDirectory : allUserDirectories)
-    {
-      if ((userDirectory.getId() == 1) && (session.getUserDirectoryId() != 1))
-      {
-        // Do nothing
-      }
-      else if (securityService.supportsGroupAdministration(userDirectory.getId()))
-      {
-        userDirectories.add(userDirectory);
-      }
-    }
-
-    return userDirectories;
   }
 
   /**
-   * The <code>RemoveDialog</code> class implements a dialog that allows the removal
-   * of a group to be confirmed.
+   * The <code>RemoveDialog</code> class implements a dialog that allows the removal of a
+   * user directory to be confirmed.
    */
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private String groupName;
+    private long id;
     private Label nameLabel;
 
     /**
      * Constructs a new <code>RemoveDialog</code>.
      *
-     * @param tableContainer the table container, which allows the group table and its
+     * @param tableContainer the table container, which allows the user directory table and its
      *                       associated navigator to be updated using AJAX
      */
     public RemoveDialog(WebMarkupContainer tableContainer)
@@ -265,18 +197,20 @@ public class GroupAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteGroup(userDirectory.getId(), groupName);
+            // TODO: Confirm that there are no organisations associated with this user directory
+
+            // securityService.deleteUserDirectory(id);
 
             target.add(tableContainer);
 
-            GroupAdministrationPage.this.info("Successfully removed the group "
+            UserDirectoryAdministrationPage.this.info("Successfully removed the user directory "
                 + nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the group (" + groupName + "): " + e.getMessage(), e);
+            logger.error("Failed to remove the user directory (" + id + "): " + e.getMessage(), e);
 
-            GroupAdministrationPage.this.error("Failed to remove the group "
+            UserDirectoryAdministrationPage.this.error("Failed to remove the user directory "
                 + nameLabel.getDefaultModelObjectAsString());
           }
 
@@ -288,8 +222,9 @@ public class GroupAdministrationPage extends TemplateWebPage
     }
 
     /**
-     * @param target the AJAX request target
      * @see Dialog#hide(org.apache.wicket.ajax.AjaxRequestTarget)
+     *
+     * @param target the AJAX request target
      */
     public void hide(AjaxRequestTarget target)
     {
@@ -299,13 +234,13 @@ public class GroupAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target the AJAX request target
-     * @param group  the group being removed
+     * @param target        the AJAX request target
+     * @param userDirectory the user directory being removed
      */
-    public void show(AjaxRequestTarget target, Group group)
+    public void show(AjaxRequestTarget target, UserDirectory userDirectory)
     {
-      groupName = group.getGroupName();
-      nameLabel.setDefaultModelObject(group.getGroupName());
+      id = userDirectory.getId();
+      nameLabel.setDefaultModelObject(userDirectory.getName());
 
       target.add(nameLabel);
 

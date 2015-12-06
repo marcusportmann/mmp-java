@@ -512,6 +512,33 @@ public interface ISecurityService
     throws SecurityException;
 
   /**
+   * Retrieve the user directory.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return the user directory
+   *
+   * @throws UserNotFoundException
+   * @throws SecurityException
+   */
+  UserDirectory getUserDirectory(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
+
+  /**
+   * Returns the fully qualified name of the Java class that implements the Wicket component used
+   * to administer the configuration for the user directory.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return the fully qualified name of the Java class that implements the Wicket component used
+   *         to administer the configuration for the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   */
+  String getUserDirectoryAdministrationClass(long userDirectoryId)
+    throws UserDirectoryNotFoundException;
+
+  /**
    * Retrieve the ID for the user directory that the user with the specified username is associated
    * with.
    *
@@ -609,6 +636,32 @@ public interface ISecurityService
   void renameGroup(long userDirectoryId, String groupName, String newGroupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
       SecurityException;
+
+  /**
+   * Does the user directory support administering groups.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return <code>true</code> if the directory supports administering groups or <code>false</code>
+   *         otherwise
+   *
+   * @throws UserDirectoryNotFoundException
+   */
+  boolean supportsGroupAdministration(long userDirectoryId)
+    throws UserDirectoryNotFoundException;
+
+  /**
+   * Does the user directory support administering users.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @return <code>true</code> if the directory supports administering users or <code>false</code>
+   *         otherwise
+   *
+   * @throws UserDirectoryNotFoundException
+   */
+  boolean supportsUserAdministration(long userDirectoryId)
+    throws UserDirectoryNotFoundException;
 
   /**
    * Update the authorised function.

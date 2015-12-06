@@ -34,6 +34,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class UserDirectoryChoiceRenderer
   implements IChoiceRenderer<UserDirectory>
 {

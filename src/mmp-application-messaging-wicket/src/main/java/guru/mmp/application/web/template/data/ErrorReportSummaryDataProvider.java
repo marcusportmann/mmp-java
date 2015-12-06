@@ -121,11 +121,11 @@ public class ErrorReportSummaryDataProvider extends InjectableDataProvider<Error
   }
 
   /**
-   * Returns the total number of summaries for the error reports in the database.
+   * Returns the total number of summaries for the error reports.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of summaries for the error reports in the database
+   * @return the total number of summaries for the error reports
    */
   public long size()
   {

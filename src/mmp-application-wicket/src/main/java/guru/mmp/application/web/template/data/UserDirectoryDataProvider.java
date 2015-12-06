@@ -19,7 +19,7 @@ package guru.mmp.application.web.template.data;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.security.ISecurityService;
-import guru.mmp.application.security.Organisation;
+import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
 
@@ -34,12 +34,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * The <code>OrganisationDataProvider</code> class provides an <code>IDataProvider</code>
- * implementation that retrieves <code>Organisation</code> instances from the database.
+ * The <code>UserDirectoryDataProvider</code> class provides an <code>IDataProvider</code>
+ * implementation that retrieves <code>UserDirectory</code> instances from the database.
  *
  * @author Marcus Portmann
  */
-public class OrganisationDataProvider extends InjectableDataProvider<Organisation>
+public class UserDirectoryDataProvider extends InjectableDataProvider<UserDirectory>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -48,9 +48,9 @@ public class OrganisationDataProvider extends InjectableDataProvider<Organisatio
   private ISecurityService securityService;
 
   /**
-   * Constructs a new <code>OrganisationDataProvider</code>.
+   * Constructs a new <code>UserDirectoryDataProvider</code>.
    */
-  public OrganisationDataProvider() {}
+  public UserDirectoryDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -58,7 +58,7 @@ public class OrganisationDataProvider extends InjectableDataProvider<Organisatio
   public void detach() {}
 
   /**
-   * Retrieves the matching organisations from the database starting with
+   * Retrieves the matching user directories from the database starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
@@ -66,63 +66,63 @@ public class OrganisationDataProvider extends InjectableDataProvider<Organisatio
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the organisations retrieved from the database starting with index
+   * @return the user directories retrieved from the database starting with index
    *         <code>first</code> and ending with <code>first+count</code>
    */
-  public Iterator<Organisation> iterator(long first, long count)
+  public Iterator<UserDirectory> iterator(long first, long count)
   {
     try
     {
-      List<Organisation> allOrganisations = securityService.getOrganisations();
+      List<UserDirectory> allUserDirectories = securityService.getUserDirectories();
 
-      List<Organisation> organisations = new ArrayList<>();
+      List<UserDirectory> userDirectories = new ArrayList<>();
 
       long end = first + count;
 
-      for (long i = first; ((i < end) && (i < allOrganisations.size())); i++)
+      for (long i = first; ((i < end) && (i < allUserDirectories.size())); i++)
       {
-        organisations.add(allOrganisations.get((int) i));
+        userDirectories.add(allUserDirectories.get((int) i));
       }
 
-      return organisations.iterator();
+      return userDirectories.iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the organisations from index (" + first
+      throw new WebApplicationException("Failed to load the user directories from index (" + first
           + ") to (" + (first + count) + ")", e);
     }
   }
 
   /**
-   * Wraps the retrieved <code>Organisation</code> POJO with a Wicket model.
+   * Wraps the retrieved <code>UserDirectory</code> POJO with a Wicket model.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    *
-   * @param organisation the <code>Organisation</code> instance to wrap
+   * @param userDirectory the <code>UserDirectory</code> instance to wrap
    *
-   * @return the Wicket model wrapping the <code>Organisation</code> instance
+   * @return the Wicket model wrapping the <code>UserDirectory</code> instance
    */
-  public IModel<Organisation> model(Organisation organisation)
+  public IModel<UserDirectory> model(UserDirectory userDirectory)
   {
-    return new DetachableOrganisationModel(organisation);
+    return new DetachableUserDirectoryModel(userDirectory);
   }
 
   /**
-   * Returns the total number of organisations.
+   * Returns the total number of user directories.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of organisations
+   * @return the total number of user directories
    */
   public long size()
   {
     try
     {
-      return securityService.getNumberOfOrganisations();
+      return securityService.getNumberOfUserDirectories();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to retrieve the number of organisations", e);
+      throw new WebApplicationException("Failed to retrieve the number of user directories", e);
     }
   }
 }

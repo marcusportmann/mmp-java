@@ -89,8 +89,8 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the code categories from the database starting with index <code>first</code> and
-   *         ending with <code>first+count</code>
+   * @return the code categories retrieved from the database starting with
+   *         index <code>first</code> and ending with <code>first+count</code>
    */
   public Iterator<CodeCategory> iterator(long first, long count)
   {
@@ -124,11 +124,11 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   }
 
   /**
-   * Returns the total number of matching code categories in the database.
+   * Returns the total number of code categories.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of matching code categories in the database
+   * @return the total number of code categories
    */
   public long size()
   {

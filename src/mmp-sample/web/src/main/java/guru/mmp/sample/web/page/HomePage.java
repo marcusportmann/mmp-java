@@ -21,9 +21,7 @@ package guru.mmp.sample.web.page;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.page.AnonymousOnlyWebPage;
-import guru.mmp.application.web.template.component.CodeCategoryTypeChoiceRenderer;
-import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
-import guru.mmp.application.web.template.component.DropdownButton;
+import guru.mmp.application.web.template.component.DropdownMenu;
 import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -61,9 +59,5 @@ public class HomePage extends TemplateWebPage
     List<UserDirectory> userDirectories = securityService.getUserDirectories();
 
 
-    add(new Label("name", new PropertyModel<>(this, "userDirectory.name")));
-
-    add(new DropdownButton<>("dropdownButton", new PropertyModel(this, "userDirectory"),
-      userDirectories, userDirectoryChoiceRenderer, "fa fa-users"));
   }
 }

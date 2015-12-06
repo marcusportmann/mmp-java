@@ -130,11 +130,11 @@ public class ReportDefinitionSummaryDataProvider
   }
 
   /**
-   * Returns the total number of matching report definitions in the database.
+   * Returns the total number of report definitions.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of matching report definitions in the database
+   * @return the total number of report definitions
    */
   public long size()
   {

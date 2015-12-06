@@ -85,8 +85,8 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the report definitions from the database starting with index <code>first</code> and
-   *         ending with <code>first+count</code>
+   * @return the report definitions retrieved from the database starting with
+   *         index <code>first</code> and ending with <code>first+count</code>
    */
   public Iterator<ReportDefinition> iterator(long first, long count)
   {
@@ -128,11 +128,11 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
   }
 
   /**
-   * Returns the total number of matching report definitions in the database.
+   * Returns the total number of report definitions.
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    *
-   * @return the total number of matching report definitions in the database
+   * @return the total number of report definitions
    */
   public long size()
   {

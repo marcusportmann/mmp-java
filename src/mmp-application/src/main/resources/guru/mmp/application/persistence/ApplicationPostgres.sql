@@ -260,16 +260,16 @@ CREATE TABLE MMP.USER_DIRECTORIES (
 );
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.ID
-  IS 'The unique ID for the user directory used to associate the user directory with other database entities';
+IS 'The unique ID for the user directory used to associate the user directory with other database entities';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.NAME
-  IS 'The name of the user directory';
+IS 'The name of the user directory';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.DESCRIPTION
-  IS 'A description for the user directory';
+IS 'A description for the user directory';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.USER_DIRECTORY_CLASS
-  IS 'The fully qualified name of the Java class that implements the user directory';
+IS 'The fully qualified name of the Java class that implements the user directory';
 
 
 
@@ -1441,7 +1441,7 @@ INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
 INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
   ('Application.InternalUserPasswordHistoryId', 100000);
 INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.InternalGroupId', 100000);
+  ('Application.GroupId', 100000);
 INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
   ('Application.ExternalGroupId', 100000);
 INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
@@ -1465,6 +1465,8 @@ INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) V
   (2, 1, 'PasswordExpiryMonths', '12');
 INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
   (3, 1, 'PasswordHistoryMonths', '24');
+INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
+  (4, 1, 'MaxFilteredUsers', '100');
 
 INSERT INTO MMP.USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES
   (1, 1);

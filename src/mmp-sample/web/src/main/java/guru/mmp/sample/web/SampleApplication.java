@@ -31,6 +31,7 @@ import guru.mmp.sample.web.page.forms.TestFormPage;
 import guru.mmp.sample.web.page.tables.BasicTablesPage;
 import guru.mmp.sample.web.page.tables.ResponsiveTablePage;
 import guru.mmp.sample.web.page.ui.*;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -105,9 +106,16 @@ public class SampleApplication extends TemplateWebApplication
     administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
         ReportDefinitionAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Process Definitions", "fa fa-gears",
-      ProcessDefinitionAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Security", "fa fa-shield",
-      SecurityAdministrationPage.class));
+        ProcessDefinitionAdministrationPage.class));
+
+    NavigationGroup securityGroup = new NavigationGroup("Security", "fa fa-shield");
+
+    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
+        SecurityAdministrationPage.class));
+    securityGroup.addItem(new NavigationLink("User Directories", "fa fa-users",
+        UserDirectoryAdministrationPage.class));
+
+    administrationGroup.addItem(securityGroup);
 
     root.addItem(administrationGroup);
 
@@ -122,7 +130,8 @@ public class SampleApplication extends TemplateWebApplication
     uiElementsGroup.addItem(new NavigationLink("Pagination", PaginationPage.class));
     uiElementsGroup.addItem(new NavigationLink("Panels", PanelsPage.class));
     uiElementsGroup.addItem(new NavigationLink("Progress Bars", ProgressBarsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Tabs &amp; Accordions", TabsAndAccordionsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Tabs &amp; Accordions",
+        TabsAndAccordionsPage.class));
     uiElementsGroup.addItem(new NavigationLink("Typography", TypographyPage.class));
 
     root.addItem(uiElementsGroup);
@@ -134,7 +143,6 @@ public class SampleApplication extends TemplateWebApplication
     formsGroup.addItem(new NavigationLink("Test Form", TestFormPage.class));
 
     root.addItem(formsGroup);
-
 
     NavigationGroup tablesGroup = new NavigationGroup("Tables", "fa fa-table");
 
