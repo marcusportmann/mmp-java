@@ -93,6 +93,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
+          /*
           ADD A METHOD TO THE SECURITY SERVICE TO RETRIEVE THE POSSIBLE USER DIRECTORY TYPES AS A MAP OF NAME VS CLASS
 
           ADD A NEW DIALOG THAT IS USED TO SELECT THE TYPE OF USER DIRECTORY BEFORE REDIRECTING TO THE ADD USER DIRECTORY PAGE
@@ -100,6 +101,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
           CREATE THE ADD USER DIRECTORY PAGE BUT ENSURE WE PASS THE TYPE OF USER DIRECTORY
 
           ADD A METHOD TO THE ADD USER DIRECTORY PAGE CLASS TO DETERMINE THE ADMINISTRATION CLASS FROM THE USER DIRECTORY CLASS
+          */
 
           // setResponsePage(new AddUserDirectoryPage(getPageReference()));
         }
