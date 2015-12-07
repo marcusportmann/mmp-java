@@ -19,6 +19,7 @@ package guru.mmp.application.security;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The <code>ISecurityService</code> interface defines the functionality provided by the
@@ -537,6 +538,13 @@ public interface ISecurityService
    */
   long getUserDirectoryIdForUser(String username)
     throws SecurityException;
+
+  /**
+   * Retrieve the supported user directory types.
+   *
+   * @return the supported user directory types
+   */
+  List<UserDirectoryType> getUserDirectoryTypes();
 
   /**
    * Retrieve all the users.

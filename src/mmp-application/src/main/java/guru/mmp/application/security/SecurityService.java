@@ -91,6 +91,7 @@ public class SecurityService
   private String updateIDGeneratorSQL;
   private String updateOrganisationSQL;
   private Map<Long, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private List<UserDirectoryType> userDirectoryTypes;
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -104,7 +105,6 @@ public class SecurityService
    *                        with
    * @param username        the username identifying the user
    * @param groupName       the name of the group uniquely identifying the group
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -146,7 +146,6 @@ public class SecurityService
    * @param lockUser             lock the user
    * @param resetPasswordHistory reset the user's password history
    * @param reason               the reason for changing the password
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -184,9 +183,7 @@ public class SecurityService
    *
    * @param username the username identifying the user
    * @param password the password being used to authenticate
-   *
    * @return the unique ID for the user directory the user is associated with
-   *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
    * @throws ExpiredPasswordException
@@ -275,7 +272,6 @@ public class SecurityService
    * @param username        the username identifying the user
    * @param password        the password for the user that is used to authorise the operation
    * @param newPassword     the new password
-   *
    * @throws UserDirectoryNotFoundException
    * @throws AuthenticationFailedException
    * @throws UserLockedException
@@ -320,7 +316,6 @@ public class SecurityService
    * Create a new authorised function.
    *
    * @param function the function
-   *
    * @throws DuplicateFunctionException
    * @throws SecurityException
    */
@@ -380,7 +375,6 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param group           the group
-   *
    * @throws UserDirectoryNotFoundException
    * @throws DuplicateGroupException
    * @throws SecurityException
@@ -410,10 +404,8 @@ public class SecurityService
    *
    * @param organisation        the organisation
    * @param createUserDirectory should a new internal user directory be created for the organisation
-   *
    * @return the new internal user directory that was created for the organisation or
-   *         <code>null</code> if no user directory was created
-   *
+   * <code>null</code> if no user directory was created
    * @throws DuplicateOrganisationException
    * @throws SecurityException
    */
@@ -615,7 +607,6 @@ public class SecurityService
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
-   *
    * @throws UserDirectoryNotFoundException
    * @throws DuplicateUserException
    * @throws SecurityException
@@ -645,7 +636,6 @@ public class SecurityService
    * Delete the authorised function.
    *
    * @param code the code identifying the authorised function
-   *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
@@ -692,7 +682,6 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param groupName       the name of the group uniquely identifying the group
-   *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
@@ -723,7 +712,6 @@ public class SecurityService
    * Delete the organisation.
    *
    * @param code the code uniquely identifying the organisation
-   *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
@@ -770,7 +758,6 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username identifying the user
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -800,9 +787,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
    * @param attributes      the attribute criteria used to select the users
-   *
    * @return the list of users whose attributes match the attribute criteria
-   *
    * @throws UserDirectoryNotFoundException
    * @throws InvalidAttributeException
    * @throws SecurityException
@@ -834,9 +819,7 @@ public class SecurityService
    * @param attributes      the attribute criteria used to select the users
    * @param startPos        the position in the list of users to start from
    * @param maxResults      the maximum number of results to return or -1 for all
-   *
    * @return the list of users whose attributes match the attribute criteria
-   *
    * @throws UserDirectoryNotFoundException
    * @throws InvalidAttributeException
    * @throws SecurityException
@@ -877,9 +860,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
    * @param filter          the filter to apply to the users
-   *
    * @return the filtered list of users
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -901,9 +882,7 @@ public class SecurityService
    * Retrieve the authorised function.
    *
    * @param code the code identifying the function
-   *
    * @return the details for the authorised function with the specified code
-   *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
@@ -959,9 +938,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username identifying the user
-   *
    * @return the list of authorised function codes for the user
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -990,7 +967,6 @@ public class SecurityService
    * Retrieve all the authorised functions.
    *
    * @return the list of authorised functions
-   *
    * @throws SecurityException
    */
   public List<Function> getFunctions()
@@ -1027,9 +1003,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param groupName       the name of the group uniquely identifying the group
-   *
    * @return the group
-   *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws SecurityException
@@ -1059,9 +1033,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username identifying the user
-   *
    * @return the group names for the user
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -1090,9 +1062,7 @@ public class SecurityService
    * Retrieve all the groups.
    *
    * @param userDirectoryId the unique ID for the user directory the groups are associated with
-   *
    * @return the list of groups
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1116,9 +1086,7 @@ public class SecurityService
    * @param userDirectoryId the unique ID for the user directory the groups are associated with
    * @param startPos        the position in the list of groups to start from
    * @param maxResults      the maximum number of results to return or -1 for all
-   *
    * @return the list of groups
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1141,9 +1109,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username identifying the user
-   *
    * @return the groups for the user
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -1173,9 +1139,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
    * @param filter          the filter to apply to the users
-   *
    * @return the number of filtered users
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1197,9 +1161,7 @@ public class SecurityService
    * Retrieve the number of groups
    *
    * @param userDirectoryId the unique ID for the user directory the groups are associated with
-   *
    * @return the number of groups
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1221,7 +1183,6 @@ public class SecurityService
    * Retrieve the number of organisations
    *
    * @return the number of organisations
-   *
    * @throws SecurityException
    */
   public int getNumberOfOrganisations()
@@ -1257,7 +1218,6 @@ public class SecurityService
    * Retrieve the number of user directories
    *
    * @return the number of user directories
-   *
    * @throws SecurityException
    */
   public int getNumberOfUserDirectories()
@@ -1293,9 +1253,7 @@ public class SecurityService
    * Retrieve the number of users.
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
-   *
    * @return the number of users
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1317,9 +1275,7 @@ public class SecurityService
    * Retrieve the organisation.
    *
    * @param code the code uniquely identifying the organisation
-   *
    * @return the details for the organisation
-   *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
@@ -1371,7 +1327,6 @@ public class SecurityService
    * Retrieve the organisations.
    *
    * @return the list of organisations
-   *
    * @throws SecurityException
    */
   public List<Organisation> getOrganisations()
@@ -1409,9 +1364,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the organisations are associated
    *                        with
-   *
    * @return the organisations associated with the user directory
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1465,9 +1418,7 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username identifying the user
-   *
    * @return the user
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -1496,7 +1447,6 @@ public class SecurityService
    * Retrieve the user directories.
    *
    * @return the list of user directories
-   *
    * @throws SecurityException
    */
   public List<UserDirectory> getUserDirectories()
@@ -1534,9 +1484,7 @@ public class SecurityService
    * Retrieve the user directories the organisation is associated with.
    *
    * @param code the code uniquely identifying the organisation
-   *
    * @return the user directories the organisation is associated with
-   *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
@@ -1579,7 +1527,6 @@ public class SecurityService
    * Retrieve the user directories with parameters.
    *
    * @return the list of user directories with parameters
-   *
    * @throws SecurityException
    */
   public List<UserDirectory> getUserDirectoriesWithParameters()
@@ -1638,9 +1585,7 @@ public class SecurityService
    * Retrieve the user directory.
    *
    * @param userDirectoryId the unique ID for the user directory
-   *
    * @return the user directory
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1687,10 +1632,8 @@ public class SecurityService
    * with.
    *
    * @param username the username identifying the user
-   *
    * @return the ID for the user directory that the user with the specified username is associated
-   *         with or -1 if the user cannot be found
-   *
+   * with or -1 if the user cannot be found
    * @throws SecurityException
    */
   public long getUserDirectoryIdForUser(String username)
@@ -1744,12 +1687,29 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the supported user directory types.
+   *
+   * @return the supported user directory types
+   */
+  public List<UserDirectoryType> getUserDirectoryTypes()
+  {
+    if (userDirectoryTypes == null)
+    {
+      userDirectoryTypes = new ArrayList<>();
+
+      userDirectoryTypes.add(new UserDirectoryType("Internal User Directory",
+          "guru.mmp.application.security.InternalUserDirectory",
+          "guru.mmp.application.web.template.component.InternalUserDirectoryAdministrationPanel"));
+    }
+
+    return userDirectoryTypes;
+  }
+
+  /**
    * Retrieve all the users.
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
-   *
    * @return the list of users
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1773,9 +1733,7 @@ public class SecurityService
    * @param userDirectoryId the unique ID for the user directory the users are associated with
    * @param startPos        the position in the list of users to start from
    * @param maxResults      the maximum number of results to return or -1 for all
-   *
    * @return the list of users
-   *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
@@ -1867,9 +1825,7 @@ public class SecurityService
    *                        with
    * @param username        the username identifying the user
    * @param groupName       the name of the group uniquely identifying the group
-   *
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -1905,9 +1861,7 @@ public class SecurityService
    * Get the next unique <code>long</code> ID for the entity with the specified type.
    *
    * @param type the type of entity to retrieve the next ID for
-   *
    * @return the next unique <code>long</code> ID for the entity with the specified type
-   *
    * @throws SQLException
    */
   public long nextId(String type)
@@ -2068,7 +2022,6 @@ public class SecurityService
    *                        with
    * @param username        the username identifying the user
    * @param groupName       the group name
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -2106,7 +2059,6 @@ public class SecurityService
    * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param groupName       the name of the group that will be renamed
    * @param newGroupName    the new name of the group
-   *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
@@ -2162,10 +2114,8 @@ public class SecurityService
    * Does the user directory support administering groups.
    *
    * @param userDirectoryId the unique ID for the user directory
-   *
    * @return <code>true</code> if the directory supports administering groups or <code>false</code>
-   *         otherwise
-   *
+   * otherwise
    * @throws UserDirectoryNotFoundException
    */
   public boolean supportsGroupAdministration(long userDirectoryId)
@@ -2186,10 +2136,8 @@ public class SecurityService
    * Does the user directory support administering users.
    *
    * @param userDirectoryId the unique ID for the user directory
-   *
    * @return <code>true</code> if the directory supports administering users or <code>false</code>
-   *         otherwise
-   *
+   * otherwise
    * @throws UserDirectoryNotFoundException
    */
   public boolean supportsUserAdministration(long userDirectoryId)
@@ -2210,7 +2158,6 @@ public class SecurityService
    * Update the authorised function.
    *
    * @param function the function
-   *
    * @throws FunctionNotFoundException
    * @throws SecurityException
    */
@@ -2264,7 +2211,6 @@ public class SecurityService
    *
    * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param group           the group
-   *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws SecurityException
@@ -2293,7 +2239,6 @@ public class SecurityService
    * Update the organisation.
    *
    * @param organisation the organisation
-   *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
@@ -2348,7 +2293,6 @@ public class SecurityService
    * @param user            the user
    * @param expirePassword  expire the user's password as part of the update
    * @param lockUser        lock the user as part of the update
-   *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -2377,7 +2321,6 @@ public class SecurityService
    * Generate the SQL statements for the <code>SecurityService</code>.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects
-   *
    * @throws SQLException
    */
   private void buildStatements(String schemaPrefix)
@@ -2494,10 +2437,8 @@ public class SecurityService
    *
    * @param connection the existing database connection to use
    * @param code       the code uniquely identifying the function
-   *
    * @return the numeric ID for the function or -1 if a function with the specified name could not
-   *         be found
-   *
+   * be found
    * @throws SQLException
    */
   private long getFunctionId(Connection connection, String code)
@@ -2526,11 +2467,9 @@ public class SecurityService
    * username is associated with.
    *
    * @param username the username uniquely identifying the internal user
-   *
    * @return the numeric ID for the internal user directory the internal user with the specified
-   *         username is associated with or -1 if an internal user with the specified username
-   *         could not be found
-   *
+   * username is associated with or -1 if an internal user with the specified username
+   * could not be found
    * @throws SecurityException
    */
   private long getInternalUserDirectoryIdForUser(String username)
@@ -2566,10 +2505,8 @@ public class SecurityService
    *
    * @param connection the existing database connection to use
    * @param code       the code uniquely identifying the organisation
-   *
    * @return the numeric ID for the organisation or -1 if an organisation with the specified code
-   *         could not be found
-   *
+   * could not be found
    * @throws SecurityException
    */
   private long getOrganisationId(Connection connection, String code)
@@ -2619,7 +2556,6 @@ public class SecurityService
    * Checks whether the specified value is <code>null</code> or blank.
    *
    * @param value the value to check
-   *
    * @return true if the value is <code>null</code> or blank
    */
   private boolean isNullOrEmpty(Object value)

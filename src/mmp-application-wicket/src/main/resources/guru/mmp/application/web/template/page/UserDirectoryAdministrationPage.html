@@ -74,6 +74,32 @@
               </div>
             </div>
 
+            <div id="addDialog" wicket:id="addDialog" class="modal fade" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Add User Directory</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form wicket:id="addForm" id="addForm" class="form-horizontal">
+                      <div class="form-group">
+                        <label for="userDirectoryType" class="control-label col-sm-3">User Directory Type</label>
+                        <div class="col-sm-9">
+                          <select wicket:id="userDirectoryType" id="userDirectoryType" class="form-control" type="text" name="userDirectoryType"></select>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a wicket:id="addLink" id="addLink" class="btn btn-primary pull-right">OK</a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div wicket:id="tableContainer" class="panel panel-default">
               <div class="table-header">
