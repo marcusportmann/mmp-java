@@ -62,7 +62,6 @@ public class SecurityService
   private String addUserDirectoryToOrganisationSQL;
   private String createFunctionSQL;
   private String createOrganisationSQL;
-  private String createUserDirectoryParameterSQL;
   private String createUserDirectorySQL;
   private DataSource dataSource;
   private String deleteFunctionSQL;
@@ -79,8 +78,8 @@ public class SecurityService
   private String getOrganisationsSQL;
   private String getUserDirectoriesForOrganisationSQL;
   private String getUserDirectoriesSQL;
-  private String getUserDirectoryParametersSQL;
   private String getUserDirectorySQL;
+  private String getUserDirectoryTypesSQL;
   private String insertIDGeneratorSQL;
 
   /* Registry */
@@ -91,7 +90,7 @@ public class SecurityService
   private String updateIDGeneratorSQL;
   private String updateOrganisationSQL;
   private Map<Long, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
-  private List<UserDirectoryType> userDirectoryTypes;
+  private Map<String, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -478,39 +477,16 @@ public class SecurityService
             userDirectoryId = nextId("Application.UserDirectoryId");
 
             statement.setLong(1, userDirectoryId);
-            statement.setString(2, userDirectory.getName());
-            statement.setString(3, userDirectory.getDescription());
-            statement.setString(4, userDirectory.getUserDirectoryClass());
+            statement.setString(2, userDirectory.getTypeId());
+            statement.setString(3, userDirectory.getName());
+            statement.setString(4, userDirectory.getDescription());
+            statement.setString(5, userDirectory.getConfiguration());
 
             if (statement.executeUpdate() != 1)
             {
               throw new SecurityException(
                   "No rows were affected as a result of executing the SQL statement ("
                   + createUserDirectorySQL + ")");
-            }
-          }
-
-          for (UserDirectoryParameter userDirectoryParameter : userDirectory.getParameters())
-          {
-            try (PreparedStatement statement =
-                connection.prepareStatement(createUserDirectoryParameterSQL))
-            {
-              long userDirectoryParameterId = nextId("Application.UserDirectoryParameterId");
-
-              statement.setLong(1, userDirectoryParameterId);
-              statement.setLong(2, userDirectoryId);
-              statement.setString(3, userDirectoryParameter.getName());
-              statement.setString(4, userDirectoryParameter.getValue());
-
-              if (statement.executeUpdate() != 1)
-              {
-                throw new SecurityException(
-                    "No rows were affected as a result of executing the SQL statement ("
-                    + createUserDirectoryParameterSQL + ")");
-              }
-
-              userDirectoryParameter.setId(userDirectoryParameterId);
-              userDirectoryParameter.setUserDirectoryId(userDirectoryId);
             }
           }
 
@@ -1461,14 +1437,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          UserDirectory userDirectory = new UserDirectory();
-
-          userDirectory.setId(rs.getLong(1));
-          userDirectory.setName(rs.getString(2));
-          userDirectory.setDescription(rs.getString(3));
-          userDirectory.setUserDirectoryClass(rs.getString(4));
-
-          list.add(userDirectory);
+          list.add(buildUserDirectoryFromResultSet(rs));
         }
 
         return list;
@@ -1503,13 +1472,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          UserDirectory userDirectory = new UserDirectory();
-          userDirectory.setId(rs.getLong(1));
-          userDirectory.setName(rs.getString(2));
-          userDirectory.setDescription(rs.getString(3));
-          userDirectory.setUserDirectoryClass(rs.getString(4));
-
-          list.add(userDirectory);
+          list.add(buildUserDirectoryFromResultSet(rs));
         }
 
         return list;
@@ -1520,64 +1483,6 @@ public class SecurityService
       throw new SecurityException(
           "Failed to retrieve the user directories associated with the organisation (" + code
           + "): " + e.getMessage(), e);
-    }
-  }
-
-  /**
-   * Retrieve the user directories with parameters.
-   *
-   * @return the list of user directories with parameters
-   * @throws SecurityException
-   */
-  public List<UserDirectory> getUserDirectoriesWithParameters()
-    throws SecurityException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectory> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          UserDirectory userDirectory = new UserDirectory();
-
-          userDirectory.setId(rs.getLong(1));
-          userDirectory.setName(rs.getString(2));
-          userDirectory.setDescription(rs.getString(3));
-          userDirectory.setUserDirectoryClass(rs.getString(4));
-
-          try (PreparedStatement parametersStatement =
-              connection.prepareStatement(getUserDirectoryParametersSQL))
-          {
-            parametersStatement.setLong(1, userDirectory.getId());
-
-            try (ResultSet parametersResults = parametersStatement.executeQuery())
-            {
-              while (parametersResults.next())
-              {
-                UserDirectoryParameter parameter = new UserDirectoryParameter();
-                parameter.setId(parametersResults.getLong(1));
-                parameter.setUserDirectoryId(userDirectory.getId());
-                parameter.setName(parametersResults.getString(2));
-                parameter.setValue(parametersResults.getString(3));
-
-                userDirectory.addParameter(parameter);
-              }
-            }
-          }
-
-          list.add(userDirectory);
-        }
-
-        return list;
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the user directories with parameters: "
-          + e.getMessage(), e);
     }
   }
 
@@ -1601,13 +1506,7 @@ public class SecurityService
       {
         if (rs.next())
         {
-          UserDirectory userDirectory = new UserDirectory();
-          userDirectory.setId(rs.getLong(1));
-          userDirectory.setName(rs.getString(2));
-          userDirectory.setDescription(rs.getString(3));
-          userDirectory.setUserDirectoryClass(rs.getString(4));
-
-          return userDirectory;
+          return buildUserDirectoryFromResultSet(rs);
         }
         else
         {
@@ -1687,22 +1586,33 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the supported user directory types.
+   * Retrieve the user directory types.
    *
-   * @return the supported user directory types
+   * @return the user directory types
    */
   public List<UserDirectoryType> getUserDirectoryTypes()
   {
-    if (userDirectoryTypes == null)
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUserDirectoryTypesSQL))
     {
-      userDirectoryTypes = new ArrayList<>();
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectoryType> list = new ArrayList<>();
 
-      userDirectoryTypes.add(new UserDirectoryType("Internal User Directory",
-          "guru.mmp.application.security.InternalUserDirectory",
-          "guru.mmp.application.web.template.component.InternalUserDirectoryAdministrationPanel"));
+        while (rs.next())
+        {
+          list.add(new UserDirectoryType(rs.getString(1), rs.getString(2), rs.getString(3),
+              rs.getString(4)));
+        }
+
+        return list;
+      }
     }
-
-    return userDirectoryTypes;
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the user directory types: " + e.getMessage(),
+          e);
+    }
   }
 
   /**
@@ -1781,8 +1691,6 @@ public class SecurityService
 
     try
     {
-      userDirectories.put(1L, new InternalUserDirectory(1, new HashMap<>()));
-
       // Retrieve the database meta data
       String schemaSeparator;
 
@@ -1807,6 +1715,9 @@ public class SecurityService
 
       // Initialise the configuration
       initConfiguration();
+
+      // Load the user directory types
+      reloadUserDirectoryTypes();
 
       // Load the user directories
       reloadUserDirectories();
@@ -1966,12 +1877,20 @@ public class SecurityService
     {
       Map<Long, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
-      for (UserDirectory userDirectoryWithParameters : getUserDirectoriesWithParameters())
+      for (UserDirectory userDirectory : getUserDirectories())
       {
+        if (userDirectory.getType() == null)
+        {
+          logger.error("Failed to load the user directory (" + userDirectory.getId()
+              + "): The user directory type for the user directory (" + userDirectory.getTypeId()
+              + ") was not loaded");
+
+          continue;
+        }
+
         try
         {
-          Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-              userDirectoryWithParameters.getUserDirectoryClass());
+          Class<?> clazz = userDirectory.getType().getUserDirectoryClass();
 
           Class<? extends IUserDirectory> userDirectoryClass =
             clazz.asSubclass(IUserDirectory.class);
@@ -1979,7 +1898,7 @@ public class SecurityService
           if (userDirectoryClass == null)
           {
             throw new SecurityException("The user directory class ("
-                + userDirectoryWithParameters.getUserDirectoryClass()
+                + userDirectory.getType().getUserDirectoryClassName()
                 + ") does not implement the IUserDirectory interface");
           }
 
@@ -1989,21 +1908,20 @@ public class SecurityService
           if (userDirectoryClassConstructor == null)
           {
             throw new SecurityException("The user directory class ("
-                + userDirectoryWithParameters.getUserDirectoryClass()
+                + userDirectory.getType().getUserDirectoryClassName()
                 + ") does not provide a valid constructor (long, Map<String,String>)");
           }
 
-          IUserDirectory userDirectory =
-            userDirectoryClassConstructor.newInstance(userDirectoryWithParameters.getId(),
-              userDirectoryWithParameters.getParametersMap());
+          IUserDirectory userDirectoryInstance =
+            userDirectoryClassConstructor.newInstance(userDirectory.getId(),
+              userDirectory.getParameters());
 
-          reloadedUserDirectories.put(userDirectoryWithParameters.getId(), userDirectory);
+          reloadedUserDirectories.put(userDirectory.getId(), userDirectoryInstance);
         }
         catch (Throwable e)
         {
           throw new SecurityException("Failed to initialise the user directory ("
-              + userDirectoryWithParameters.getId() + ")(" + userDirectoryWithParameters.getName()
-              + ")", e);
+              + userDirectory.getId() + ")(" + userDirectory.getName() + ")", e);
         }
       }
 
@@ -2012,6 +1930,52 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityException("Failed to reload the user directories", e);
+    }
+  }
+
+  /**
+   * Reload the user directory types.
+   */
+  public void reloadUserDirectoryTypes()
+  {
+    try
+    {
+      Map<String, UserDirectoryType> reloadedUserDirectoryTypes = new ConcurrentHashMap<>();
+
+      for (UserDirectoryType userDirectoryType : getUserDirectoryTypes())
+      {
+        try
+        {
+          userDirectoryType.getUserDirectoryClass();
+        }
+        catch (Throwable e)
+        {
+          logger.error("Failed to load the user directory type (" + userDirectoryType.getId()
+              + "): Failed to retrieve the user directory class for the user directory type", e);
+
+          continue;
+        }
+
+        try
+        {
+          userDirectoryType.getAdministrationClass();
+        }
+        catch (Throwable e)
+        {
+          logger.error("Failed to load the user directory type (" + userDirectoryType.getId()
+              + "): Failed to retrieve the administration class for the user directory type", e);
+
+          continue;
+        }
+
+        reloadedUserDirectoryTypes.put(userDirectoryType.getId(), userDirectoryType);
+      }
+
+      this.userDirectoryTypes = reloadedUserDirectoryTypes;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to reload the user directory types", e);
     }
   }
 
@@ -2338,13 +2302,9 @@ public class SecurityService
     createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS"
         + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
-    // createUserDirectoryParameterSQL
-    createUserDirectoryParameterSQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORY_PARAMETERS"
-        + " (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES (?, ?, ?, ?)";
-
     // createUserDirectorySQL
     createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES"
-        + " (ID, NAME, DESCRIPTION, USER_DIRECTORY_CLASS)" + " VALUES (?, ?, ?, ?)";
+        + " (ID, TYPE_ID, NAME, DESCRIPTION, CONFIGURATION) VALUES (?, ?, ?, ?, ?)";
 
     // deleteFunctionSQL
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
@@ -2394,23 +2354,23 @@ public class SecurityService
         + "ORGANISATIONS O ORDER BY NAME";
 
     // getUserDirectoriesForOrganisationSQL
-    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION,"
-        + " UD.USER_DIRECTORY_CLASS FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
+    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION,"
+        + " UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
         + schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM"
         + " ON UD.ID = UDTOM.USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O"
         + " ON UDTOM.ORGANISATION_ID = O.ID WHERE O.CODE=?";
 
     // getUserDirectoriesSQL
-    getUserDirectoriesSQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION, UD.USER_DIRECTORY_CLASS"
+    getUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION"
         + " FROM " + schemaPrefix + "USER_DIRECTORIES UD";
 
-    // getUserDirectoryParametersSQL
-    getUserDirectoryParametersSQL = "SELECT UDP.ID, UDP.NAME, UDP.VALUE FROM " + schemaPrefix
-        + "USER_DIRECTORY_PARAMETERS UDP WHERE UDP.USER_DIRECTORY_ID=?";
-
     // getUserDirectorySQL
-    getUserDirectorySQL = "SELECT UD.ID, UD.NAME, UD.DESCRIPTION, UD.USER_DIRECTORY_CLASS"
+    getUserDirectorySQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION"
         + " FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
+
+    // getUserDirectoryTypesSQL
+    getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS,"
+        + " UDT.ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
 
     // insertIDGeneratorSQL
     insertIDGeneratorSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR"
@@ -2430,6 +2390,31 @@ public class SecurityService
     // updateOrganisationSQL
     updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O"
         + " SET O.NAME=?, O.DESCRIPTION=? WHERE O.CODE=?";
+  }
+
+  /**
+   * Create a new <code>UserDirectory</code> instance and populate it with the contents of the
+   * current row in the specified <code>ResultSet</code>.
+   *
+   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
+   *           <code>UserDirectory</code> instance
+   *
+   * @return the populated <code>UserDirectory</code> instance
+   *
+   * @throws SQLException
+   */
+  private UserDirectory buildUserDirectoryFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    UserDirectory userDirectory = new UserDirectory();
+    userDirectory.setId(rs.getLong(1));
+    userDirectory.setTypeId(rs.getString(2));
+    userDirectory.setType(userDirectoryTypes.get(rs.getString(2)));
+    userDirectory.setName(rs.getString(3));
+    userDirectory.setDescription(rs.getString(4));
+    userDirectory.setConfiguration(rs.getString(5));
+
+    return userDirectory;
   }
 
   /**
@@ -2580,16 +2565,20 @@ public class SecurityService
   {
     UserDirectory userDirectory = new UserDirectory();
 
+    userDirectory.setTypeId("b43fda33-d3b0-4f80-a39a-110b8e530f4f");
     userDirectory.setName(organisation.getName() + " User Directory");
     userDirectory.setDescription(organisation.getDescription() + " User Directory");
-    userDirectory.setUserDirectoryClass("guru.mmp.application.security.InternalUserDirectory");
 
-    userDirectory.addParameter(new UserDirectoryParameter("MaxPasswordAttempts",
-        String.valueOf(InternalUserDirectory.DEFAULT_MAX_PASSWORD_ATTEMPTS)));
-    userDirectory.addParameter(new UserDirectoryParameter("PasswordExpiryMonths",
-        String.valueOf(InternalUserDirectory.DEFAULT_PASSWORD_EXPIRY_MONTHS)));
-    userDirectory.addParameter(new UserDirectoryParameter("PasswordHistoryMonths",
-        String.valueOf(InternalUserDirectory.DEFAULT_PASSWORD_HISTORY_MONTHS)));
+    StringBuilder buffer = new StringBuilder();
+    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    buffer.append("<user-directory>");
+    buffer.append("<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>");
+    buffer.append("<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>");
+    buffer.append("<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>");
+    buffer.append("<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>");
+    buffer.append("</user-directory>");
+
+    userDirectory.setConfiguration(buffer.toString());
 
     return userDirectory;
   }

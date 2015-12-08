@@ -16,11 +16,28 @@
 
 package guru.mmp.application.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.util.StringUtil;
+import guru.mmp.common.xml.DtdJarResolver;
+import guru.mmp.common.xml.XmlParserErrorHandler;
+import guru.mmp.common.xml.XmlUtils;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import org.xml.sax.InputSource;
+
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Collection;
+import java.io.ByteArrayInputStream;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>UserDirectory</code> class stores the information for a user directory.
@@ -34,8 +51,9 @@ public class UserDirectory
   private String description;
   private long id;
   private String name;
-  private Map<String, UserDirectoryParameter> parameters = new HashMap<>();
-  private String userDirectoryClass;
+  private Map<String, String> parameters = new HashMap<>();
+  private String typeId;
+  private UserDirectoryType userDirectoryType;
 
   /**
    * Constructs a new <code>UserDirectory</code>.
@@ -45,11 +63,38 @@ public class UserDirectory
   /**
    * Add the parameter for the user directory.
    *
-   * @param parameter the parameter for the user directory
+   * @param name  the name of the parameter
+   * @param value the value of the parameter
    */
-  public void addParameter(UserDirectoryParameter parameter)
+  public void addParameter(String name, String value)
   {
-    parameters.put(parameter.getName(), parameter);
+    parameters.put(name, value);
+  }
+
+  /**
+   * Returns the XML configuration data for the user directory.
+   *
+   * @return the XML configuration data for the user directory
+   */
+  public String getConfiguration()
+  {
+    StringBuilder buffer = new StringBuilder();
+
+    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><user-directory>");
+    buffer.append("<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\">");
+
+    for (String parameterName : parameters.keySet())
+    {
+      buffer.append("<parameter>");
+      buffer.append("<name>").append(parameterName).append("</name>");
+      buffer.append("<value>").append(StringUtil.notNull(parameters.get(parameterName))).append(
+          "</value>");
+      buffer.append("</parameter>");
+    }
+
+    buffer.append("</user-directory>");
+
+    return buffer.toString();
   }
 
   /**
@@ -87,36 +132,76 @@ public class UserDirectory
    *
    * @return the parameters for the user directory
    */
-  public Collection<UserDirectoryParameter> getParameters()
+  public Map<String, String> getParameters()
   {
-    return parameters.values();
+    return parameters;
   }
 
   /**
-   * Returns a map containing the key-value pairs for the parameters for the user directory.
+   * Returns the user directory type.
    *
-   * @return a map containing the key-value pairs for the parameters for the user directory
+   * @return the user directory type
    */
-  public Map<String, String> getParametersMap()
+  public UserDirectoryType getType()
   {
-    Map<String, String> parametersMap = new HashMap<>();
+    return userDirectoryType;
+  }
 
-    for (UserDirectoryParameter userDirectoryParameter : parameters.values())
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * type.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         type
+   */
+  public String getTypeId()
+  {
+    return typeId;
+  }
+
+  /**
+   * Set the XML configuration data for the user directory.
+   *
+   * @param configuration the XML configuration data for the user directory
+   */
+  public void setConfiguration(String configuration)
+  {
+    try
     {
-      parametersMap.put(userDirectoryParameter.getName(), userDirectoryParameter.getValue());
+      // Parse the XML configuration data
+      DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+      builderFactory.setValidating(true);
+
+      DocumentBuilder builder = builderFactory.newDocumentBuilder();
+
+      builder.setEntityResolver(new DtdJarResolver("UserDirectoryConfiguration.dtd",
+        "META-INF/UserDirectoryConfiguration.dtd"));
+      builder.setErrorHandler(new XmlParserErrorHandler());
+
+      InputSource inputSource = new InputSource(new ByteArrayInputStream(configuration.getBytes()));
+      Document document = builder.parse(inputSource);
+
+      Element rootElement = document.getDocumentElement();
+
+      // Read the user directory parameters configuration
+      parameters = new HashMap<>();
+
+      NodeList parameterElements = rootElement.getElementsByTagName("parameter");
+
+      for (int i = 0; i < parameterElements.getLength(); i++)
+      {
+        Element parameterElement = (Element) parameterElements.item(i);
+
+        parameters.put(XmlUtils.getChildElementText(parameterElement, "name"),
+            XmlUtils.getChildElementText(parameterElement, "value"));
+      }
     }
-
-    return parametersMap;
-  }
-
-  /**
-   * Returns the fully qualified name of the Java class that implements the user directory.
-   *
-   * @return the fully qualified name of the Java class that implements the user directory
-   */
-  public String getUserDirectoryClass()
-  {
-    return userDirectoryClass;
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+          "Failed to parse the XML configuration data for the user directory", e);
+    }
   }
 
   /**
@@ -150,13 +235,23 @@ public class UserDirectory
   }
 
   /**
-   * Set the fully qualified name of the Java class that implements the user directory.
+   * Set the user directory type.
    *
-   * @param userDirectoryClass the fully qualified name of the Java class that implements the user
-   *                           directory
+   * @param userDirectoryType the user directory type
    */
-  public void setUserDirectoryClass(String userDirectoryClass)
+  public void setType(UserDirectoryType userDirectoryType)
   {
-    this.userDirectoryClass = userDirectoryClass;
+    this.userDirectoryType = userDirectoryType;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
+   *
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the user
+   *               directory type
+   */
+  public void setTypeId(String typeId)
+  {
+    this.typeId = typeId;
   }
 }

@@ -19,7 +19,6 @@ package guru.mmp.application.security;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The <code>ISecurityService</code> interface defines the functionality provided by the
@@ -503,16 +502,6 @@ public interface ISecurityService
     throws OrganisationNotFoundException, SecurityException;
 
   /**
-   * Retrieve the user directories with parameters.
-   *
-   * @return the list of user directories with parameters
-   *
-   * @throws SecurityException
-   */
-  List<UserDirectory> getUserDirectoriesWithParameters()
-    throws SecurityException;
-
-  /**
    * Retrieve the user directory.
    *
    * @param userDirectoryId the unique ID for the user directory
@@ -540,9 +529,9 @@ public interface ISecurityService
     throws SecurityException;
 
   /**
-   * Retrieve the supported user directory types.
+   * Retrieve the user directory types.
    *
-   * @return the supported user directory types
+   * @return the user directory types
    */
   List<UserDirectoryType> getUserDirectoryTypes();
 

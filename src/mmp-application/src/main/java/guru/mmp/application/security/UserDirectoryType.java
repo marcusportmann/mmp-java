@@ -33,62 +33,92 @@ public class UserDirectoryType
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserDirectoryType.class);
   private static final long serialVersionUID = 1000000;
-  private Class administrationClass;
+  private transient Class administrationClass;
+  private String administrationClassName;
+  private String id;
   private String name;
-  private Class userDirectoryClass;
+  private transient Class userDirectoryClass;
+  private String userDirectoryClassName;
 
   /**
    * Constructs a new <code>UserDirectoryType</code>.
    *
-   * @param name                    the name of the user directory
-   * @param userDirectoryClassName  the Java class that implements the user directory
-   * @param administrationClassName the Java class that implements the Wicket component used to
-   *                                administer the configuration for the user directory
+   * @param id                      the Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the user directory type
+   * @param name                    the name of the user directory type
+   * @param userDirectoryClassName  the fully qualified name of the Java class that implements the
+   *                                user directory type
+   * @param administrationClassName the fully qualified name of the Java class that implements the
+   *                                Wicket component used to administer the configuration for the
+   *                                user directory type
    */
-  public UserDirectoryType(String name, String userDirectoryClassName,
+  public UserDirectoryType(String id, String name, String userDirectoryClassName,
       String administrationClassName)
   {
+    this.id = id;
     this.name = name;
+    this.userDirectoryClassName = userDirectoryClassName;
+    this.administrationClassName = administrationClassName;
 
-    try
-    {
-      userDirectoryClass =
-        Thread.currentThread().getContextClassLoader().loadClass(userDirectoryClassName);
-    }
-    catch (Throwable e)
-    {
-      logger.warn("Failed to load the user directory class (" + userDirectoryClassName
-          + ") for the user directory (" + name + ")");
-    }
-
-    try
-    {
-      administrationClass =
-        Thread.currentThread().getContextClassLoader().loadClass(administrationClassName);
-    }
-    catch (Throwable e)
-    {
-      logger.warn("Failed to load the administration class (" + administrationClassName
-          + ") for the user directory (" + name + ")");
-    }
   }
 
   /**
    * Returns the Java class that implements the Wicket component used to administer the
-   * configuration for the user directory.
+   * configuration for the user directory type.
    *
    * @return the Java class that implements the Wicket component used to administer the
-   *         configuration for the user directory
+   *         configuration for the user directory type
+   *
+   * @throws SecurityException
    */
   public Class getAdministrationClass()
+    throws SecurityException
   {
+    if (administrationClass == null)
+    {
+      try
+      {
+        administrationClass =
+          Thread.currentThread().getContextClassLoader().loadClass(administrationClassName);
+      }
+      catch (Throwable e)
+      {
+        throw new SecurityException("Failed to load the administration class ("
+            + administrationClassName + ") for the user directory (" + name + ")");
+      }
+    }
+
     return administrationClass;
   }
 
   /**
-   * Returns the name of the user directory.
+   * Returns the fully qualified name of the Java class that implements the Wicket component used
+   * to administer the configuration for the user directory type.
    *
-   * @return the name of the user directory
+   * @return the fully qualified name of the Java class that implements the Wicket component used
+   *         to administer the configuration for the user directory type
+   */
+  public String getAdministrationClassName()
+  {
+    return administrationClassName;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * type.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         type
+   */
+  public String getId()
+  {
+    return id;
+  }
+
+  /**
+   * Returns the name of the user directory type.
+   *
+   * @return the name of the user directory type
    */
   public String getName()
   {
@@ -96,12 +126,45 @@ public class UserDirectoryType
   }
 
   /**
-   * Returns the Java class that implements the user directory.
+   * Returns the Java class that implements the user directory type.
    *
-   * @return the Java class that implements the user directory
+   * @return the Java class that implements the user directory type
+   *
+   * @throws SecurityException
    */
   public Class getUserDirectoryClass()
+    throws SecurityException
   {
+    if (userDirectoryClass == null)
+    {
+      try
+      {
+        userDirectoryClass =
+          Thread.currentThread().getContextClassLoader().loadClass(userDirectoryClassName);
+
+        if (!IUserDirectory.class.isAssignableFrom(administrationClass))
+        {
+          throw new SecurityException(
+            "The user directory class does not implement the IUserDirectory interface");
+        }
+      }
+      catch (Throwable e)
+      {
+        throw new SecurityException("Failed to load the user directory class ("
+            + userDirectoryClassName + ") for the user directory (" + name + ")");
+      }
+    }
+
     return userDirectoryClass;
+  }
+
+  /**
+   * Returns the fully qualified name of the Java class that implements the user directory type.
+   *
+   * @return the fully qualified name of the Java class that implements the user directory type
+   */
+  public String getUserDirectoryClassName()
+  {
+    return userDirectoryClassName;
   }
 }

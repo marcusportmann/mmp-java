@@ -33,17 +33,8 @@ COMMENT ON COLUMN SAMPLE.DATA.VALUE
 INSERT INTO MMP.ORGANISATIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   (2, 'TEST', 'Test', 'Test');
 
-INSERT INTO MMP.USER_DIRECTORIES (ID, NAME, DESCRIPTION, USER_DIRECTORY_CLASS) VALUES
-  (2, 'Test Internal User Directory', 'Test Internal User Directory', 'guru.mmp.application.security.InternalUserDirectory');
-
-INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
-  (5, 2, 'MaxPasswordAttempts', '5');
-INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
-  (6, 2, 'PasswordExpiryMonths', '3');
-INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
-  (7, 2, 'PasswordHistoryMonths', '12');
-INSERT INTO MMP.USER_DIRECTORY_PARAMETERS (ID, USER_DIRECTORY_ID, NAME, VALUE) VALUES
-  (8, 2, 'MaxFilteredUsers', '100');
+INSERT INTO MMP.USER_DIRECTORIES (ID, TYPE_ID, NAME, DESCRIPTION, CONFIGURATION) VALUES
+  (2, 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Test Internal User Directory', 'Test Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE user-directory SYSTEM "UserDirectoryConfiguration.dtd"><user-directory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></user-directory>');
 
 INSERT INTO MMP.USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES
   (1, 2);

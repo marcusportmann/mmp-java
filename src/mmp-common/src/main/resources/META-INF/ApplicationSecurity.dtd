@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!ELEMENT applicationSecurity (keyStoreName, keyStoreAlias, keyStorePassword)>
+<!ELEMENT application-security (keystore-name, keystore-alias, keystore-password)>
 
-	<!ELEMENT keyStoreName ( #PCDATA )>
+  <!ELEMENT keystore-name ( #PCDATA )>
 
-	<!ELEMENT keyStoreAlias ( #PCDATA )>
+  <!ELEMENT keystore-alias ( #PCDATA )>
 
-	<!ELEMENT keyStorePassword ( #PCDATA )>
+  <!ELEMENT keystore-password ( #PCDATA )>
 
 
 

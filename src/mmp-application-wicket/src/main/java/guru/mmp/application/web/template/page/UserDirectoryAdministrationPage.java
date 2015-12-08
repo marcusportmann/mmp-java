@@ -28,6 +28,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.component.PagingNavigator;
+import guru.mmp.application.web.template.component.UserDirectoryTypeChoiceRenderer;
 import guru.mmp.application.web.template.data.UserDirectoryDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,7 +50,6 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -123,8 +123,8 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
         protected void populateItem(Item<UserDirectory> item)
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
-          item.add(new Label("userDirectoryClass",
-              new PropertyModel<String>(item.getModel(), "userDirectoryClass")));
+          item.add(new Label("type",
+              new PropertyModel<String>(item.getModel(), "type.name")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -186,7 +186,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
   {
     private static final long serialVersionUID = 1000000;
     @SuppressWarnings("unused")
-    private String userDirectoryTypeName;
+    private UserDirectoryType userDirectoryType;
 
     /**
      * Constructs a new <code>AddDialog</code>.
@@ -197,10 +197,14 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
 
       Form<User> addForm = new Form<>("addForm");
 
+      UserDirectoryTypeChoiceRenderer userDirectoryTypeChoiceRenderer =
+        new UserDirectoryTypeChoiceRenderer();
+
       // The "userDirectoryType" field
-      DropDownChoice<String> userDirectoryTypeField =
+      DropDownChoice<UserDirectoryType> userDirectoryTypeField =
         new DropDownChoiceWithFeedback<>("userDirectoryType",
-          new PropertyModel<>(this, "userDirectoryTypeName"), getUserDirectoryTypeOptions());
+          new PropertyModel<>(this, "userDirectoryType"), getUserDirectoryTypeOptions(),
+          userDirectoryTypeChoiceRenderer);
       userDirectoryTypeField.setRequired(true);
       userDirectoryTypeField.setOutputMarkupId(true);
       addForm.add(userDirectoryTypeField);
@@ -212,12 +216,9 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
         @Override
         protected void onSubmit(AjaxRequestTarget target, Form<?> form)
         {
-          logger.info("[onSubmit] userDirectoryTypeField.getModelObject() = "
-              + userDirectoryTypeField.getModelObject());
+          setResponsePage(new AddUserDirectoryPage(getPageReference(), userDirectoryType));
 
           userDirectoryTypeField.setDefaultModelObject(null);
-
-          setResponsePage(new AddUserDirectoryPage(getPageReference()));
         }
 
         @Override
@@ -253,18 +254,12 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
       super.show(target);
     }
 
-    private List<String> getUserDirectoryTypeOptions()
+    private List<UserDirectoryType> getUserDirectoryTypeOptions()
     {
-      List<String> userDirectoryTypeOptions = new ArrayList<>();
-
-      for (UserDirectoryType userDirectoryType : securityService.getUserDirectoryTypes())
-      {
-        userDirectoryTypeOptions.add(userDirectoryType.getName());
-      }
-
-      return userDirectoryTypeOptions;
+      return securityService.getUserDirectoryTypes();
     }
   }
+
 
   /**
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal of a

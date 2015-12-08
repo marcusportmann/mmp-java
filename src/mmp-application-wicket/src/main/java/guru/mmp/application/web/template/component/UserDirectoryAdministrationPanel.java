@@ -17,12 +17,11 @@
 package guru.mmp.application.web.template.component;
 
 /**
- * The <code>UserDirectoryAdministrationPanel</code> class implements the Wicket component used to
- * administer the configuration for the internal user directory type.
+ * The <code>UserDirectoryAdministrationPanel</code> class provides the base class that all Wicket
+ * components that are used to administer the configuration for a user directory type should extend.
  *
  * @author Marcus Portmann
  */
-
-public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdministrationPanel
+public abstract class UserDirectoryAdministrationPanel
 {
 }

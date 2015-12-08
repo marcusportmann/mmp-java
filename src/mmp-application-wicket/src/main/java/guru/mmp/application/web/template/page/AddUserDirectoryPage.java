@@ -18,10 +18,7 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.Group;
-import guru.mmp.application.security.ISecurityService;
-import guru.mmp.application.security.User;
-import guru.mmp.application.security.UserNotFoundException;
+import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -31,6 +28,7 @@ import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -38,15 +36,16 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import guru.mmp.application.security.UserDirectory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddUserDirectoryPage</code> class implements the
@@ -54,6 +53,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+
 //@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
 public class AddUserDirectoryPage extends TemplateWebPage
 {
@@ -69,16 +69,18 @@ public class AddUserDirectoryPage extends TemplateWebPage
   /**
    * Constructs a new <code>AddUserDirectoryPage</code>.
    *
-   * @param previousPage the previous page
+   * @param previousPage      the previous page
+   * @param userDirectoryType the user directory type
    */
-  public AddUserDirectoryPage(PageReference previousPage)
+  public AddUserDirectoryPage(PageReference previousPage, UserDirectoryType userDirectoryType)
   {
     super("Add User Directory");
 
     try
     {
       UserDirectory userDirectory = new UserDirectory();
-      userDirectory.setUserDirectoryClass("BLAH!!!");
+      userDirectory.setTypeId(userDirectoryType.getId());
+      userDirectory.setType(userDirectory.getType());
 
       Form<UserDirectory> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(userDirectory)));
@@ -93,11 +95,11 @@ public class AddUserDirectoryPage extends TemplateWebPage
       descriptionField.setRequired(false);
       addForm.add(descriptionField);
 
-      // The "userDirectoryClass" field
-      TextField<String> userDirectoryClassField = new TextFieldWithFeedback<>("userDirectoryClass");
-      userDirectoryClassField.setRequired(true);
-      userDirectoryClassField.setEnabled(false);
-      addForm.add(userDirectoryClassField);
+      // The "userDirectoryTypeName" field
+      TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName", new Model(userDirectoryType.getName()));
+      userDirectoryTypeNameField.setRequired(false);
+      userDirectoryTypeNameField.setEnabled(false);
+      addForm.add(userDirectoryTypeNameField);
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -112,7 +114,6 @@ public class AddUserDirectoryPage extends TemplateWebPage
             UserDirectory userDirectory = addForm.getModelObject();
 
             logger.info("Adding the user directory (" + userDirectory.getName() + ")");
-
 
             setResponsePage(previousPage.getPage());
           }
