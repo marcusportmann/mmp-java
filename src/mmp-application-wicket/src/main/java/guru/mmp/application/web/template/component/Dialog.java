@@ -18,8 +18,15 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 /**
  * The <code>Dialog</code> class provides a modal dialog box which appears over other content.
@@ -66,6 +73,47 @@ public class Dialog extends WebMarkupContainer
   }
 
   /**
+   * Add a cancel link to the dialog that will reset all the forms associated with the dialog, and
+   * their associated form components, and then hide the dialog.
+   */
+  protected void addCancelLink()
+  {
+    AjaxLink cancelLink = new AjaxLink("cancelLink")
+    {
+      @Override
+      public void onClick(AjaxRequestTarget target)
+      {
+        // Visit each component
+        Dialog.this.visitChildren(new IVisitor<Component, Object>()
+        {
+          @Override
+          public void component(Component component, IVisit<Object> iVisit)
+          {
+            // Is this a form?
+            if (Form.class.isAssignableFrom(component.getClass()))
+            {
+              // Visit each form component and clear its input and feedback messages
+              ((Form) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
+              {
+                @Override
+                public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
+                {
+                  formComponent.clearInput();
+                  formComponent.getFeedbackMessages().clear();
+                  target.add(formComponent);
+                }
+              });
+            }
+          }
+        });
+
+        hide(target);
+      }
+    };
+    add(cancelLink);
+  }
+
+  /**
    * Returns the JavaScript required to hide the dialog in the client browser.
    *
    * @return the JavaScript required to hide the dialog in the client browser
@@ -88,5 +136,41 @@ public class Dialog extends WebMarkupContainer
     }
 
     return "$('#" + getMarkupId() + "').modal('show')";
+  }
+
+  /**
+   * Reset the dialog including all forms associated with the dialog, and their associated form
+   * components.
+   *
+   * @param target the AJAX request target
+   */
+  protected void resetDialog(AjaxRequestTarget target)
+  {
+    visitChildren(new IVisitor<Component, Object>()
+    {
+      // Visit each component
+      @Override
+      public void component(Component component, IVisit<Object> iVisit)
+      {
+        // Is this a form?
+        if (Form.class.isAssignableFrom(component.getClass()))
+        {
+          // Visit each form component and clear its input and feedback messages
+          ((Form) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
+          {
+            @Override
+            public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
+            {
+              System.out.println("Resetting form component (" + formComponent.getId()
+                  + ") for form (" + component.getId() + ")");
+
+              formComponent.clearInput();
+              formComponent.getFeedbackMessages().clear();
+              target.add(formComponent);
+            }
+          });
+        }
+      }
+    });
   }
 }

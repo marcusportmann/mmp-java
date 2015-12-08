@@ -18,17 +18,13 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.ISecurityService;
-import guru.mmp.application.security.User;
-import guru.mmp.application.security.UserDirectory;
-import guru.mmp.application.security.UserDirectoryType;
+import guru.mmp.application.security.*;
+import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
+import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.component.Dialog;
-import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
-import guru.mmp.application.web.template.component.PagingNavigator;
-import guru.mmp.application.web.template.component.UserDirectoryTypeChoiceRenderer;
+import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.data.UserDirectoryDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -38,6 +34,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
@@ -45,6 +42,8 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,8 +122,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
         protected void populateItem(Item<UserDirectory> item)
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
-          item.add(new Label("type",
-              new PropertyModel<String>(item.getModel(), "type.name")));
+          item.add(new Label("type", new PropertyModel<String>(item.getModel(), "type.name")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -211,14 +209,46 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
 
       add(addForm);
 
-      add(new AjaxSubmitLink("addLink", addForm)
+      // The "cancelLink" link
+      addCancelLink();
+
+      // The "addLink" link
+      AjaxSubmitLink addLink = new AjaxSubmitLink("addLink", addForm)
       {
         @Override
         protected void onSubmit(AjaxRequestTarget target, Form<?> form)
         {
-          setResponsePage(new AddUserDirectoryPage(getPageReference(), userDirectoryType));
+          try
+          {
+            Class administrationClass = userDirectoryType.getAdministrationClass();
 
-          userDirectoryTypeField.setDefaultModelObject(null);
+            if (!UserDirectoryAdministrationPanel.class.isAssignableFrom(administrationClass))
+            {
+              throw new WebApplicationException("The administration class ("
+                  + administrationClass.getName()
+                  + ") does not extend the UserDirectoryAdministrationPanel class");
+            }
+
+            setResponsePage(new AddUserDirectoryPage(getPageReference(), userDirectoryType));
+
+            // userDirectoryTypeField.setDefaultModelObject(null);
+          }
+          catch (Throwable e)
+          {
+            logger.error("Failed to retrieve the administration class ("
+              + userDirectoryType.getAdministrationClassName()
+              + ") for the user directory type (" + userDirectoryType.getName() + ")", e);
+
+            UserDirectoryAdministrationPage.this.error(
+                "Failed to retrieve the administration class for the user directory type ("
+                + userDirectoryType.getName() + ")");
+
+            resetDialog(target);
+
+            target.add(getAlerts());
+
+            hide(target);
+          }
         }
 
         @Override
@@ -231,7 +261,9 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
             target.add(userDirectoryTypeField);
           }
         }
-      });
+      };
+      addLink.setDefaultFormProcessing(true);
+      add(addLink);
     }
 
     /**
@@ -251,6 +283,8 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
      */
     public void show(AjaxRequestTarget target)
     {
+      userDirectoryType = null;
+
       super.show(target);
     }
 

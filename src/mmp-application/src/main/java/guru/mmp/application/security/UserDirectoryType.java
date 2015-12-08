@@ -142,10 +142,10 @@ public class UserDirectoryType
         userDirectoryClass =
           Thread.currentThread().getContextClassLoader().loadClass(userDirectoryClassName);
 
-        if (!IUserDirectory.class.isAssignableFrom(administrationClass))
+        if (!IUserDirectory.class.isAssignableFrom(userDirectoryClass))
         {
           throw new SecurityException(
-            "The user directory class does not implement the IUserDirectory interface");
+              "The user directory class does not implement the IUserDirectory interface");
         }
       }
       catch (Throwable e)

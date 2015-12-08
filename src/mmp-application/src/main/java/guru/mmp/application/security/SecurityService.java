@@ -1882,8 +1882,7 @@ public class SecurityService
         if (userDirectory.getType() == null)
         {
           logger.error("Failed to load the user directory (" + userDirectory.getId()
-              + "): The user directory type for the user directory (" + userDirectory.getTypeId()
-              + ") was not loaded");
+              + "): The user directory type (" + userDirectory.getTypeId() + ") was not loaded");
 
           continue;
         }
@@ -2569,16 +2568,14 @@ public class SecurityService
     userDirectory.setName(organisation.getName() + " User Directory");
     userDirectory.setDescription(organisation.getDescription() + " User Directory");
 
-    StringBuilder buffer = new StringBuilder();
-    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    buffer.append("<user-directory>");
-    buffer.append("<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>");
-    buffer.append("<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>");
-    buffer.append("<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>");
-    buffer.append("<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>");
-    buffer.append("</user-directory>");
+    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><user-directory>"
+      + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
+      + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
+      + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
+      + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
+      + "</user-directory>";
 
-    userDirectory.setConfiguration(buffer.toString());
+    userDirectory.setConfiguration(buffer);
 
     return userDirectory;
   }

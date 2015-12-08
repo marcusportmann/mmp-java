@@ -22,7 +22,7 @@ package guru.mmp.application.web.template.component;
  *
  * @author Marcus Portmann
  */
-
-public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdministrationPanel
+public class InternalUserDirectoryAdministrationPanel
+//public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdministrationPanel
 {
 }

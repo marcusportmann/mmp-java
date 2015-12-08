@@ -1679,7 +1679,7 @@ function cbr_recheck()
 // Show feedback for a form control
 function show_form_control_feedback(field_name, feedback_class, feedback_message)
 {
-  var feedback_field_name = field_name + 'Feedback';
+  var feedback_field_name = '#' + field_name + 'Feedback';
 
   if ($(feedback_field_name))
   {
@@ -1693,14 +1693,14 @@ function show_form_control_feedback(field_name, feedback_class, feedback_message
       $(feedback_field_name).parent().parent().addClass(feedback_class);
     }
 
-    $(feedback_field_name).replaceWith('<div id="' + feedback_field_name + '" class="feedback">' + feedback_message + '</div>');
+    $(feedback_field_name).replaceWith('<div id="' + field_name + 'Feedback" class="feedback">' + feedback_message + '</div>');
   }
 }
 
 // Clear feedback for a form control
 function clear_form_control_feedback(field_name)
 {
-  var feedback_field_name = field_name + 'Feedback';
+  var feedback_field_name = '#' + field_name + 'Feedback';
 
   if ($(feedback_field_name))
   {
@@ -1714,7 +1714,7 @@ function clear_form_control_feedback(field_name)
       $(feedback_field_name).parent().parent().removeClass('has-error has-warning has-info has-success');
     }
 
-    $(feedback_field_name).replaceWith('<div id="' + feedback_field_name + '" class="hidden"></div>');
+    $(feedback_field_name).replaceWith('<div id="' + field_name + 'Feedback" class="hidden"></div>');
   }
 }
 

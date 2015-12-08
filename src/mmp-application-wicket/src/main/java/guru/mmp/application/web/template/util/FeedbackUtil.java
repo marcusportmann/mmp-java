@@ -48,19 +48,19 @@ public class FeedbackUtil
    * The JavaScript used to clear the feedback for a form component.
    */
   private static final String CLEAR_FEEDBACK_JAVA_SCRIPT =
-    "clear_form_control_feedback('#%1$s');";
+    "clear_form_control_feedback('%1$s');";
 
   /**
    * The JavaScript used to display the feedback for a form component using the 'domready' event.
    */
   private static final String DOM_READY_FEEDBACK_JAVA_SCRIPT =
-    "$(function(){show_form_control_feedback('#%1$s', '%2$s', '%3$s');});";
+    "$(function(){show_form_control_feedback('%1$s', '%2$s', '%3$s');});";
 
   /**
    * The JavaScript used to display the feedback for a form component.
    */
   private static final String FEEDBACK_JAVA_SCRIPT =
-    "show_form_control_feedback('#%1$s', '%2$s', '%3$s');";
+    "show_form_control_feedback('%1$s', '%2$s', '%3$s');";
 
   /**
    * Applies the appropriate CSS class to a component based on the type of feedback message
