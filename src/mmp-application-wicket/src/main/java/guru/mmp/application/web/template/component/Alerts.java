@@ -18,6 +18,8 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessagesModel;
@@ -29,10 +31,10 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.Response;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Alerts</code> class provides a Wicket component that renders the
@@ -45,6 +47,7 @@ public class Alerts extends Component
   implements IFeedback
 {
   private static final long serialVersionUID = 1000000;
+  private String reporterId;
 
   /**
    * @see org.apache.wicket.Component#Component(String)
@@ -54,6 +57,23 @@ public class Alerts extends Component
   public Alerts(String id)
   {
     super(id);
+
+    setOutputMarkupId(true);
+
+    setDefaultModel(new FeedbackMessagesModel(this));
+  }
+
+  /**
+   * @see org.apache.wicket.Component#Component(String)
+   *
+   * @param id         the non-null id of this component
+   * @param reporterId the ID of the reporter to display alerts for
+   */
+  public Alerts(String id, String reporterId)
+  {
+    super(id);
+
+    this.reporterId = reporterId;
 
     setOutputMarkupId(true);
 
@@ -72,15 +92,30 @@ public class Alerts extends Component
 
     List<FeedbackMessage> filteredMessages = new ArrayList<>();
 
-    for (FeedbackMessage message : messages)
+    if (StringUtil.isNullOrEmpty(reporterId))
     {
-      Component reporter = message.getReporter();
-
-      if ((reporter instanceof Button) || (reporter instanceof Form<?>)
-          || (reporter instanceof org.apache.wicket.markup.html.WebPage)
-          || (reporter instanceof InputPanel))
+      for (FeedbackMessage message : messages)
       {
-        filteredMessages.add(message);
+        Component reporter = message.getReporter();
+
+        if ((reporter instanceof Button) || (reporter instanceof Form<?>)
+            || (reporter instanceof org.apache.wicket.markup.html.WebPage)
+            || (reporter instanceof InputPanel))
+        {
+          filteredMessages.add(message);
+        }
+      }
+    }
+    else
+    {
+      for (FeedbackMessage message : messages)
+      {
+        Component reporter = message.getReporter();
+
+        if (reporterId.equals(reporter.getId()))
+        {
+          filteredMessages.add(message);
+        }
       }
     }
 

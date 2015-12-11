@@ -26,6 +26,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
+import guru.mmp.application.web.template.component.UserDirectoryAdministrationPanel;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
 
@@ -42,8 +43,12 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.reflect.Constructor;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -61,6 +66,7 @@ public class AddUserDirectoryPage extends TemplateWebPage
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddUserDirectoryPage.class);
+  private Map<String, String> parameters = new HashMap<>();
 
   /* Security Service */
   @Inject
@@ -96,10 +102,23 @@ public class AddUserDirectoryPage extends TemplateWebPage
       addForm.add(descriptionField);
 
       // The "userDirectoryTypeName" field
-      TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName", new Model(userDirectoryType.getName()));
+      TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName",
+        new Model(userDirectoryType.getName()));
       userDirectoryTypeNameField.setRequired(false);
       userDirectoryTypeNameField.setEnabled(false);
       addForm.add(userDirectoryTypeNameField);
+
+      Class<? extends UserDirectoryAdministrationPanel> userDirectoryAdministrationPanelClass =
+        userDirectoryType.getAdministrationClass().asSubclass(
+          UserDirectoryAdministrationPanel.class);
+
+      Constructor<? extends UserDirectoryAdministrationPanel> constructor =
+        userDirectoryAdministrationPanelClass.getConstructor(String.class, Map.class);
+
+      UserDirectoryAdministrationPanel userDirectoryAdministrationPanel =
+        constructor.newInstance("userDirectoryAdministrationPanel", parameters);
+
+      addForm.add(userDirectoryAdministrationPanel);
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -112,6 +131,8 @@ public class AddUserDirectoryPage extends TemplateWebPage
           try
           {
             UserDirectory userDirectory = addForm.getModelObject();
+
+            userDirectory.setParameters(parameters);
 
             logger.info("Adding the user directory (" + userDirectory.getName() + ")");
 

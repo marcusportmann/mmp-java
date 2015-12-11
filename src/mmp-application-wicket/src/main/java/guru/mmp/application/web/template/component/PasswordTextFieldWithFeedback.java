@@ -104,6 +104,11 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
+      if (ajaxRequestHandler.getComponents().contains(this.getForm()))
+      {
+        getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
+      }
+
       String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
       if (feedbackJavaScript != null)

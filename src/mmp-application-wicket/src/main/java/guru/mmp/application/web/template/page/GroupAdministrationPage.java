@@ -288,15 +288,6 @@ public class GroupAdministrationPage extends TemplateWebPage
     }
 
     /**
-     * @param target the AJAX request target
-     * @see Dialog#hide(org.apache.wicket.ajax.AjaxRequestTarget)
-     */
-    public void hide(AjaxRequestTarget target)
-    {
-      super.hide(target);
-    }
-
-    /**
      * Show the dialog using Ajax.
      *
      * @param target the AJAX request target

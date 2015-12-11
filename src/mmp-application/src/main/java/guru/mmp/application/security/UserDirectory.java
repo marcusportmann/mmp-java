@@ -176,7 +176,7 @@ public class UserDirectory
       DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
       builder.setEntityResolver(new DtdJarResolver("UserDirectoryConfiguration.dtd",
-        "META-INF/UserDirectoryConfiguration.dtd"));
+          "META-INF/UserDirectoryConfiguration.dtd"));
       builder.setErrorHandler(new XmlParserErrorHandler());
 
       InputSource inputSource = new InputSource(new ByteArrayInputStream(configuration.getBytes()));
@@ -232,6 +232,16 @@ public class UserDirectory
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Set the parameters for the user directory.
+   *
+   * @param parameters the parameters for the user directory
+   */
+  public void setParameters(Map<String, String> parameters)
+  {
+    this.parameters = parameters;
   }
 
   /**

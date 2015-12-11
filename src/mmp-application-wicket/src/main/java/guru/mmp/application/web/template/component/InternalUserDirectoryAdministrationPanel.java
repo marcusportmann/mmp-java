@@ -16,13 +16,89 @@
 
 package guru.mmp.application.web.template.component;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.PropertyModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Map;
+
 /**
  * The <code>UserDirectoryAdministrationPanel</code> class implements the Wicket component used to
  * administer the configuration for the internal user directory type.
  *
  * @author Marcus Portmann
  */
-public class InternalUserDirectoryAdministrationPanel
-//public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdministrationPanel
+public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdministrationPanel
 {
+  /**
+   * Constructs a new <code>InternalUserDirectoryAdministrationPanel</code>.
+   *
+   * @param id         the non-null id of this component
+   * @param parameters the parameters for the user directory
+   */
+  public InternalUserDirectoryAdministrationPanel(String id, Map<String, String> parameters)
+  {
+    super(id, parameters);
+
+    // The "maxPasswordAttempts" field
+    TextField<String> maxPasswordAttemptsField = new TextFieldWithFeedback<>("maxPasswordAttempts",
+      new PropertyModel<>(parameters, "MaxPasswordAttempts"));
+    maxPasswordAttemptsField.setType(String.class);
+    maxPasswordAttemptsField.setRequired(true);
+    add(maxPasswordAttemptsField);
+
+    // The "passwordExpiryMonths" field
+    TextField<String> passwordExpiryMonthsField =
+      new TextFieldWithFeedback<>("passwordExpiryMonths",
+        new PropertyModel<>(parameters, "PasswordExpiryMonths"));
+    passwordExpiryMonthsField.setType(String.class);
+    passwordExpiryMonthsField.setRequired(true);
+    add(passwordExpiryMonthsField);
+
+    // The "passwordHistoryMonths" field
+    TextField<String> passwordHistoryMonthsField =
+      new TextFieldWithFeedback<>("passwordHistoryMonths",
+        new PropertyModel<>(parameters, "PasswordHistoryMonths"));
+    passwordHistoryMonthsField.setType(String.class);
+    passwordHistoryMonthsField.setRequired(true);
+    add(passwordHistoryMonthsField);
+
+    // The "maxFilteredUsers" field
+    TextField<String> maxFilteredUsersField = new TextFieldWithFeedback<>("maxFilteredUsers",
+      new PropertyModel<>(parameters, "MaxFilteredUsers"));
+    maxFilteredUsersField.setType(String.class);
+    maxFilteredUsersField.setRequired(true);
+    add(maxFilteredUsersField);
+  }
+
+  /**
+   * Initialise the user directory parameters.
+   *
+   * @param parameters the user directory parameters
+   */
+  protected void initParameters(Map<String, String> parameters)
+  {
+    if (!parameters.containsKey("MaxPasswordAttempts"))
+    {
+      parameters.put("MaxPasswordAttempts", "5");
+    }
+
+    if (!parameters.containsKey("PasswordExpiryMonths"))
+    {
+      parameters.put("PasswordExpiryMonths", "12");
+    }
+
+    if (!parameters.containsKey("PasswordHistoryMonths"))
+    {
+      parameters.put("PasswordHistoryMonths", "24");
+    }
+
+    if (!parameters.containsKey("MaxFilteredUsers"))
+    {
+      parameters.put("MaxFilteredUsers", "100");
+    }
+  }
 }

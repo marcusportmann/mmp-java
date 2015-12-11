@@ -217,16 +217,6 @@ public class OrganisationAdministrationPage extends TemplateWebPage
     }
 
     /**
-     * @see Dialog#hide(org.apache.wicket.ajax.AjaxRequestTarget)
-     *
-     * @param target the AJAX request target
-     */
-    public void hide(AjaxRequestTarget target)
-    {
-      super.hide(target);
-    }
-
-    /**
      * Show the dialog using Ajax.
      *
      * @param target       the AJAX request target
