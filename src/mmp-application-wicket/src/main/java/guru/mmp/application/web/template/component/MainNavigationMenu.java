@@ -157,14 +157,7 @@ public class MainNavigationMenu extends Component
 
         if (navigationItem == selectedNavigationItemForCurrentPage)
         {
-          if (depth == 0)
-          {
-            buffer.append("<li class=\"active opened\">");
-          }
-          else
-          {
-            buffer.append("<li class=\"active\">");
-          }
+          buffer.append("<li class=\"active opened\">");
         }
         else
         {
