@@ -1,0 +1,31 @@
+dn: cn=schema
+changetype: modify
+replace: attributeTypes
+attributeTypes: ( 1.3.6.1.4.1.5417.1.1 NAME 'PasswordExpiry' DESC 'Password Expiry' EQUALITY 1.3.6.1.4.1.1466.109.114.2 SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{240} SINGLE-VALUE )
+-
+replace: IBMattributeTypes
+IBMattributeTypes: ( 1.3.6.1.4.1.5417.1.1 DBNAME ( 'PASSWORDEXPIRY' 'PASSWORDEXPIRY' ) ACCESS-CLASS SENSITIVE LENGTH 240 )
+
+dn: cn=schema
+changetype: modify
+replace: attributeTypes
+attributeTypes: ( 1.3.6.1.4.1.5417.1.2 NAME 'PasswordAttempts' DESC 'Password Attempts' EQUALITY 1.3.6.1.4.1.1466.109.114.2 SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{240} SINGLE-VALUE )
+-
+replace: IBMattributeTypes
+IBMattributeTypes: ( 1.3.6.1.4.1.5417.1.2 DBNAME ( 'PASSWORDATTEMPTS' 'PASSWORDATTEMPTS' ) ACCESS-CLASS SENSITIVE LENGTH 240 )
+
+dn: cn=schema
+changetype: modify
+replace: attributeTypes
+attributeTypes: ( 1.3.6.1.4.1.5417.1.5 NAME 'PasswordHistory' DESC 'Password History' EQUALITY 1.3.6.1.4.1.1466.109.114.2 SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{240} )
+-
+replace: IBMattributeTypes
+IBMattributeTypes: ( 1.3.6.1.4.1.5417.1.5 DBNAME ( 'PASSWORDHISTORY' 'PASSWORDHISTORY' ) ACCESS-CLASS CRITICAL LENGTH 240 )
+
+
+
+
+
+
+
+

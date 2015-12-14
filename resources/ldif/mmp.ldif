@@ -1,0 +1,313 @@
+dn: ou=extranet,ou=sites,o=MMP
+changetype: delete
+
+dn: ou=internet,ou=sites,o=MMP
+changetype: delete
+
+dn: ou=intranet,ou=sites,o=MMP
+changetype: delete
+
+dn: ou=sites,o=MMP
+changetype: delete
+
+dn: ou=applications,o=MMP
+changetype: delete
+
+dn: uid=staffuser,ou=users,ou=staff,o=MMP
+changetype: delete
+
+dn: ou=users,ou=staff,o=MMP
+changetype: delete
+
+dn: ou=groups,ou=staff,o=MMP
+changetype: delete
+
+dn: ou=staff,o=MMP
+changetype: delete
+
+dn: cn=admins,o=MMP
+changetype: delete
+
+dn: uid=admin,o=MMP
+changetype: delete
+
+dn: o=MMP
+changetype: add
+objectClass: top
+objectClass: organization
+o: absa
+
+dn: uid=admin,o=MMP
+changetype: add
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: person
+objectClass: organizationalPerson
+uid: test
+userPassword: Password1
+cn: Administrator
+givenName: Administrator
+sn: Administrator
+
+dn: cn=admins,o=MMP
+changetype: add
+objectclass: groupOfNames
+objectclass: top
+member: uid=admin,o=MMP
+cn: admins
+
+dn: ou=staff,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: staff
+
+dn: ou=users,ou=staff,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,ou=staff,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=staffuser,ou=users,ou=staff,o=MMP
+changetype: add
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: person
+objectClass: organizationalPerson
+uid: staffuser
+userPassword: Password1
+cn: Staff User
+givenName: FirstName
+sn: LastName
+
+dn: ou=applications,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: applications
+
+dn: ou=sites,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: sites
+
+dn: ou=intranet,ou=sites,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: intranet
+
+dn: ou=internet,ou=sites,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: internet
+
+dn: ou=extranet,ou=sites,o=MMP
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: extranet
+
+dn: ou=test,ou=applications, o=MMP
+changetype: add
+objectclass: organizationalUnit
+objectclass: top
+ou: test
+
+dn: ou=users,ou=test,ou=applications,o=MMP
+changetype: add
+objectclass: organizationalUnit
+objectclass: top
+ou: users
+
+dn: uid=system,ou=users,ou=test,ou=applications,o=MMP
+changetype: add
+objectclass: inetOrgPerson
+objectclass: person
+objectclass: top
+objectclass: organizationalPerson
+userpassword: Password1
+uid: system
+passwordexpiry: -1
+passwordattempts: -1
+sn: Test System User
+cn: Test System User
+
+dn: uid=test,ou=users,ou=test,ou=applications,o=MMP
+changetype: add
+objectclass: inetOrgPerson
+objectclass: person
+objectclass: top
+objectclass: organizationalPerson
+passwordattempts: -1
+givenname: FirstName
+sn: LastName
+userpassword: Password1
+passwordexpiry: -1
+mail: test@mmp.guru
+uid: test
+cn: FirstName LastName
+
+dn: ou=groups,ou=test,ou=applications,o=MMP
+changetype: add
+objectclass: organizationalUnit
+objectclass: top
+ou: groups
+
+dn: cn=test,ou=groups,ou=test,ou=applications,o=MMP
+changetype: add
+objectclass: groupOfNames
+objectclass: top
+description: Test Group
+member: uid=test,ou=users,ou=test,ou=applications,o=MMP
+cn: test
+
+dn: uid=admin,o=MMP
+changetype: modify
+replace: entryOwner
+entryOwner: group:cn=admins,o=MMP
+-
+replace: ownerPropagate
+ownerPropagate: TRUE
+-
+replace: aclpropagate
+aclpropagate: TRUE
+-
+replace: aclentry
+aclentry: group: cn=admins,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
+aclentry: group: cn=Authenticated:object:deny:a:object:deny:d:normal:deny:rwsc:sensitive:deny:rwsc:critical:deny:rwsc
+
+dn: cn=admins,o=MMP
+changetype: modify
+replace: entryOwner
+entryOwner: group:cn=admins,o=MMP
+-
+replace: ownerPropagate
+ownerPropagate: TRUE
+-
+replace: aclpropagate
+aclpropagate: TRUE
+-
+replace: aclentry
+aclentry: group: cn=admins,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
+aclentry: group: cn=Authenticated:object:deny:a:object:deny:d:normal:deny:rwsc:sensitive:deny:rwsc:critical:deny:rwsc
+
+dn: ou=staff,o=MMP
+changetype: modify
+replace: entryOwner
+entryOwner: group:cn=admins,o=MMP
+-
+replace: ownerPropagate
+ownerPropagate: TRUE
+-
+replace: aclpropagate
+aclpropagate: TRUE
+-
+replace: aclentry
+aclentry: access-id: uid=ldapsync,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
+aclentry: group: cn=admins,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
+aclentry: group: cn=Authenticated:object:deny:a:object:deny:d:normal:grant:rsc:normal:deny:w:sensitive:grant:rsc:sensitive:deny:w:critical:deny:rwsc:at.AbsaWpsRole:grant:rwsc
+
+dn: ou=users,ou=staff,o=MMP
+changetype: modify
+delete: entryOwner
+-
+delete: ownerPropagate
+-
+delete: aclpropagate
+-
+delete: aclentry
+
+dn: ou=groups,ou=staff,o=MMP
+changetype: modify
+delete: entryOwner
+-
+delete: ownerPropagate
+-
+delete: aclpropagate
+-
+delete: aclentry
+
+dn: ou=sites,o=MMP
+changetype: modify
+replace: entryOwner
+entryOwner: group:cn=admins,o=MMP
+-
+replace: ownerPropagate
+ownerPropagate: TRUE
+-
+replace: aclpropagate
+aclpropagate: TRUE
+-
+replace: aclentry
+aclentry: group: cn=admins,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
+aclentry: group: cn=Authenticated:object:deny:a:object:deny:d:normal:grant:rsc:normal:deny:w:sensitive:grant:rsc:sensitive:deny:w:critical:deny:rwsc
+
+dn: ou=intranet,ou=sites,o=MMP
+changetype: modify
+delete: entryOwner
+-
+delete: ownerPropagate
+-
+delete: aclpropagate
+-
+delete: aclentry
+
+dn: ou=internet,ou=sites,o=MMP
+changetype: modify
+delete: entryOwner
+-
+delete: ownerPropagate
+-
+delete: aclpropagate
+-
+delete: aclentry
+
+dn: ou=extranet,ou=sites,o=MMP
+changetype: modify
+delete: entryOwner
+-
+delete: ownerPropagate
+-
+delete: aclpropagate
+-
+delete: aclentry
+
+dn: ou=applications,o=MMP
+changetype: modify
+replace: entryOwner
+entryOwner: group:cn=admins,o=MMP
+-
+replace: ownerPropagate
+ownerPropagate: TRUE
+-
+replace: aclpropagate
+aclpropagate: TRUE
+-
+replace: aclentry
+aclentry: group: cn=admins,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
+aclentry: group: cn=Authenticated:object:deny:a:object:deny:d:normal:grant:rsc:normal:deny:w:sensitive:grant:rsc:sensitive:deny:w:critical:deny:rwsc
+
+dn: ou=test,ou=applications,o=MMP
+changetype: modify
+replace: entryOwner
+entryOwner: group:cn=admins,o=MMP
+-
+replace: ownerPropagate
+ownerPropagate: TRUE
+-
+replace: aclpropagate
+aclpropagate: TRUE
+-
+replace: aclentry
+aclentry: group: cn=admins,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
+aclentry: group: cn=Authenticated:object:deny:a:object:deny:d:normal:deny:rwsc:sensitive:deny:rwsc:critical:deny:rwsc
+aclentry: access-id: uid=system,ou=users,ou=test,ou=applications,o=MMP:object:grant:a:object:grant:d:normal:grant:rwsc:sensitive:grant:rwsc:critical:grant:rwsc
