@@ -18,7 +18,10 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.security.UserDirectory;
+
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -36,16 +39,17 @@ public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdmin
   /**
    * Constructs a new <code>InternalUserDirectoryAdministrationPanel</code>.
    *
-   * @param id         the non-null id of this component
-   * @param parameters the parameters for the user directory
+   * @param id                 the non-null id of this component
+   * @param userDirectoryModel the model for the user directory
    */
-  public InternalUserDirectoryAdministrationPanel(String id, Map<String, String> parameters)
+  public InternalUserDirectoryAdministrationPanel(String id,
+      IModel<UserDirectory> userDirectoryModel)
   {
-    super(id, parameters);
+    super(id, userDirectoryModel);
 
     // The "maxPasswordAttempts" field
     TextField<String> maxPasswordAttemptsField = new TextFieldWithFeedback<>("maxPasswordAttempts",
-      new PropertyModel<>(parameters, "MaxPasswordAttempts"));
+      new PropertyModel<>(userDirectoryModel, "parameters.MaxPasswordAttempts"));
     maxPasswordAttemptsField.setType(String.class);
     maxPasswordAttemptsField.setRequired(true);
     add(maxPasswordAttemptsField);
@@ -53,7 +57,7 @@ public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdmin
     // The "passwordExpiryMonths" field
     TextField<String> passwordExpiryMonthsField =
       new TextFieldWithFeedback<>("passwordExpiryMonths",
-        new PropertyModel<>(parameters, "PasswordExpiryMonths"));
+        new PropertyModel<>(userDirectoryModel, "parameters.PasswordExpiryMonths"));
     passwordExpiryMonthsField.setType(String.class);
     passwordExpiryMonthsField.setRequired(true);
     add(passwordExpiryMonthsField);
@@ -61,14 +65,14 @@ public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdmin
     // The "passwordHistoryMonths" field
     TextField<String> passwordHistoryMonthsField =
       new TextFieldWithFeedback<>("passwordHistoryMonths",
-        new PropertyModel<>(parameters, "PasswordHistoryMonths"));
+        new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMonths"));
     passwordHistoryMonthsField.setType(String.class);
     passwordHistoryMonthsField.setRequired(true);
     add(passwordHistoryMonthsField);
 
     // The "maxFilteredUsers" field
     TextField<String> maxFilteredUsersField = new TextFieldWithFeedback<>("maxFilteredUsers",
-      new PropertyModel<>(parameters, "MaxFilteredUsers"));
+      new PropertyModel<>(userDirectoryModel, "parameters.MaxFilteredUsers"));
     maxFilteredUsersField.setType(String.class);
     maxFilteredUsersField.setRequired(true);
     add(maxFilteredUsersField);

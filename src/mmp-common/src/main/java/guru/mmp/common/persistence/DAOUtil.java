@@ -96,7 +96,7 @@ public class DAOUtil
    *
    * @param connection the connection to close
    */
-  public static void closex(Connection connection)
+  public static void close(Connection connection)
   {
     if (connection != null)
     {
@@ -116,7 +116,7 @@ public class DAOUtil
    *
    * @param entityManager the entity manager to close
    */
-  public static void closex(EntityManager entityManager)
+  public static void close(EntityManager entityManager)
   {
     if (entityManager != null)
     {
@@ -136,7 +136,7 @@ public class DAOUtil
    *
    * @param rs the result set to close
    */
-  public static void closex(ResultSet rs)
+  public static void close(ResultSet rs)
   {
     if (rs != null)
     {
@@ -156,7 +156,7 @@ public class DAOUtil
    *
    * @param statement the statement to close
    */
-  public static void closex(Statement statement)
+  public static void close(Statement statement)
   {
     if (statement != null)
     {
@@ -198,7 +198,7 @@ public class DAOUtil
     }
     finally
     {
-      DAOUtil.closex(statement);
+      DAOUtil.close(statement);
     }
   }
 
@@ -506,7 +506,7 @@ public class DAOUtil
     }
     finally
     {
-      DAOUtil.closex(rs);
+      DAOUtil.close(rs);
     }
   }
 
@@ -560,8 +560,8 @@ public class DAOUtil
     }
     finally
     {
-      DAOUtil.closex(rs);
-      DAOUtil.closex(connection);
+      DAOUtil.close(rs);
+      DAOUtil.close(connection);
     }
   }
 
@@ -588,7 +588,7 @@ public class DAOUtil
     }
     finally
     {
-      DAOUtil.closex(statement);
+      DAOUtil.close(statement);
     }
   }
 
@@ -643,7 +643,7 @@ public class DAOUtil
     }
     finally
     {
-      DAOUtil.closex(rs);
+      DAOUtil.close(rs);
     }
   }
 
@@ -701,8 +701,8 @@ public class DAOUtil
     }
     finally
     {
-      DAOUtil.closex(rs);
-      DAOUtil.closex(connection);
+      DAOUtil.close(rs);
+      DAOUtil.close(connection);
     }
   }
 

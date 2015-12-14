@@ -38,65 +38,60 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 
-import java.util.Map;
-
 import javax.inject.Inject;
 
 /**
- * The <code>AddUserDirectoryPage</code> class implements the
- * "Add User Directory" page for the Web Application Template.
+ * The <code>UpdateUserDirectoryPage</code> class implements the
+ * "Update User Directory" page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
-public class AddUserDirectoryPage extends TemplateWebPage
+public class UpdateUserDirectoryPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(AddUserDirectoryPage.class);
+  private static final Logger logger = LoggerFactory.getLogger(UpdateUserDirectoryPage.class);
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
 
   /**
-   * Constructs a new <code>AddUserDirectoryPage</code>.
+   * Constructs a new <code>UpdateUserDirectoryPage</code>.
    *
-   * @param previousPage      the previous page
-   * @param userDirectoryType the user directory type
+   * @param previousPage       the previous page
+   * @param userDirectoryModel the model for the user directory
    */
-  public AddUserDirectoryPage(PageReference previousPage, UserDirectoryType userDirectoryType)
+  public UpdateUserDirectoryPage(PageReference previousPage,
+      IModel<UserDirectory> userDirectoryModel)
   {
-    super("Add User Directory");
+    super("Update User Directory");
 
     try
     {
-      UserDirectory userDirectory = new UserDirectory();
-      userDirectory.setTypeId(userDirectoryType.getId());
-      userDirectory.setType(userDirectory.getType());
+      UserDirectoryType userDirectoryType = userDirectoryModel.getObject().getType();
 
-      IModel<UserDirectory> userDirectoryModel = new Model<>(userDirectory);
-
-      Form<UserDirectory> addForm = new Form<>("addForm",
+      Form<UserDirectory> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(userDirectoryModel));
 
       // The "name" field
       TextField<String> nameField = new TextFieldWithFeedback<>("name");
       nameField.setRequired(true);
-      addForm.add(nameField);
+      updateForm.add(nameField);
 
       // The "description" field
       TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
       descriptionField.setRequired(false);
-      addForm.add(descriptionField);
+      updateForm.add(descriptionField);
 
       // The "userDirectoryTypeName" field
       TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName",
-        new Model(userDirectoryType.getName()));
+        new Model<>(userDirectoryType.getName()));
       userDirectoryTypeNameField.setRequired(false);
       userDirectoryTypeNameField.setEnabled(false);
-      addForm.add(userDirectoryTypeNameField);
+      updateForm.add(userDirectoryTypeNameField);
 
       Class<? extends UserDirectoryAdministrationPanel> userDirectoryAdministrationPanelClass =
         userDirectoryType.getAdministrationClass().asSubclass(
@@ -108,10 +103,10 @@ public class AddUserDirectoryPage extends TemplateWebPage
       UserDirectoryAdministrationPanel userDirectoryAdministrationPanel =
         constructor.newInstance("userDirectoryAdministrationPanel", userDirectoryModel);
 
-      addForm.add(userDirectoryAdministrationPanel);
+      updateForm.add(userDirectoryAdministrationPanel);
 
-      // The "addButton" button
-      Button addButton = new Button("addButton")
+      // The "updateButton" button
+      Button updateButton = new Button("updateButton")
       {
         private static final long serialVersionUID = 1000000;
 
@@ -120,22 +115,22 @@ public class AddUserDirectoryPage extends TemplateWebPage
         {
           try
           {
-            UserDirectory userDirectory = addForm.getModelObject();
+            UserDirectory userDirectory = updateForm.getModelObject();
 
-            securityService.createUserDirectory(userDirectory);
+            securityService.updateUserDirectory(userDirectory);
 
             setResponsePage(previousPage.getPage());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to add the user directory: " + e.getMessage(), e);
+            logger.error("Failed to update the user directory: " + e.getMessage(), e);
 
-            AddUserDirectoryPage.this.error("Failed to add the user directory");
+            UpdateUserDirectoryPage.this.error("Failed to update the user directory");
           }
         }
       };
-      addButton.setDefaultFormProcessing(true);
-      addForm.add(addButton);
+      updateButton.setDefaultFormProcessing(true);
+      updateForm.add(updateButton);
 
       // The "cancelButton" button
       Button cancelButton = new Button("cancelButton")
@@ -149,19 +144,19 @@ public class AddUserDirectoryPage extends TemplateWebPage
         }
       };
       cancelButton.setDefaultFormProcessing(false);
-      addForm.add(cancelButton);
+      updateForm.add(cancelButton);
 
-      add(addForm);
+      add(updateForm);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the AddUserDirectoryPage", e);
+      throw new WebApplicationException("Failed to initialise the UpdateUserDirectoryPage", e);
     }
   }
 
   /**
-   * Hidden <code>AddUserDirectoryPage</code> constructor.
+   * Hidden <code>UpdateUserDirectoryPage</code> constructor.
    */
   @SuppressWarnings("unused")
-  protected AddUserDirectoryPage() {}
+  protected UpdateUserDirectoryPage() {}
 }

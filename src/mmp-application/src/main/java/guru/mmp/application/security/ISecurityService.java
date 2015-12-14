@@ -126,7 +126,7 @@ public interface ISecurityService
    * @throws SecurityException
    */
   void createGroup(long userDirectoryId, Group group)
-    throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityException;
+    throws DuplicateGroupException, SecurityException;
 
   /**
    * Create a new organisation.
@@ -157,6 +157,17 @@ public interface ISecurityService
    */
   void createUser(long userDirectoryId, User user, boolean expiredPassword, boolean userLocked)
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityException;
+
+  /**
+   * Create a new user directory.
+   *
+   * @param userDirectory the user directory
+   *
+   * @throws DuplicateUserDirectoryException
+   * @throws SecurityException
+   */
+  void createUserDirectory(UserDirectory userDirectory)
+    throws DuplicateUserDirectoryException, SecurityException;
 
   /**
    * Delete the authorised function.
@@ -207,6 +218,17 @@ public interface ISecurityService
    */
   void deleteUser(long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
+
+  /**
+   * Delete the user directory.
+   *
+   * @param userDirectoryId the unique ID for the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  void deleteUserDirectory(long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Retrieve the users matching the attribute criteria.
@@ -695,4 +717,15 @@ public interface ISecurityService
    */
   void updateUser(long userDirectoryId, User user, boolean expirePassword, boolean lockUser)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
+
+  /**
+   * Update the user directory.
+   *
+   * @param userDirectory the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  void updateUserDirectory(UserDirectory userDirectory)
+    throws UserDirectoryNotFoundException, SecurityException;
 }

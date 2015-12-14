@@ -18,9 +18,12 @@ package guru.mmp.common.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.naming.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import javax.naming.*;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.SearchResult;
 
 /**
  * The <code>JNDIUtil</code> class.
@@ -30,6 +33,58 @@ import java.io.StringWriter;
 @SuppressWarnings("unused")
 public final class JNDIUtil
 {
+  /**
+   * Close the JNDI directory context.
+   *
+   * @param dirContext the JNDI directory context
+   */
+  public static void close(DirContext dirContext)
+  {
+    if (dirContext != null)
+    {
+      try
+      {
+        dirContext.close();
+      }
+      catch (Throwable e) {}
+    }
+  }
+
+  /**
+   * Close the JNDI search results.
+   *
+   * @param searchResults the JNDI search results
+   */
+  public static void close(NamingEnumeration<SearchResult> searchResults)
+  {
+    if (searchResults != null)
+    {
+      try
+      {
+        searchResults.close();
+      }
+      catch (Throwable e) {}
+    }
+  }
+
+  /**
+   * Close the JNDI search result.
+   *
+   * @param searchResult the JNDI search result
+   */
+  public static void close(SearchResult searchResult)
+  {
+    if ((searchResult != null) && (searchResult.getObject() != null)
+        && (searchResult.getObject() instanceof Context))
+    {
+      try
+      {
+        ((Context) searchResult.getObject()).close();
+      }
+      catch (Throwable e) {}
+    }
+  }
+
   /**
    * Dump the contents of the JNDI tree.
    */

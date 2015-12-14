@@ -18,7 +18,10 @@ package guru.mmp.application.web.template.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.security.UserDirectory;
+
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -35,14 +38,14 @@ public abstract class UserDirectoryAdministrationPanel extends Panel
   /**
    * Constructs a new <code>UserDirectoryAdministrationPanel</code>.
    *
-   * @param id         the non-null id of this component
-   * @param parameters the parameters for the user directory
+   * @param id                 the non-null id of this component
+   * @param userDirectoryModel the model for the user directory
    */
-  public UserDirectoryAdministrationPanel(String id, Map<String, String> parameters)
+  public UserDirectoryAdministrationPanel(String id, IModel<UserDirectory> userDirectoryModel)
   {
     super(id);
 
-    initParameters(parameters);
+    initParameters(userDirectoryModel.getObject().getParameters());
   }
 
   /**

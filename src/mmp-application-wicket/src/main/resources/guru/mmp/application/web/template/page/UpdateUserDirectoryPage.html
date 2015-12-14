@@ -54,72 +54,32 @@
 
             <div class="panel panel-default form-panel">
 
-              <div class="form-intro">Please update the details for the user and click <b>Update</b>.</div>
+              <div class="form-intro">Please update the details for the user directory and click <b>Update</b>.</div>
 
               <form wicket:id="updateForm" id="updateForm" class="form-horizontal">
 
                 <div class="form-group">
-                  <label for="username" class="control-label col-sm-3">Username</label>
-                  <div class="col-sm-9">
-                    <input wicket:id="username" id="username" class="form-control" type="text" name="username"/>
+                  <label for="name" class="control-label col-sm-4">Name</label>
+                  <div class="col-sm-8">
+                    <input wicket:id="name" id="name" class="form-control" type="text" name="name"/>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="title" class="control-label col-sm-3">Title</label>
-                  <div class="col-sm-9">
-                    <select wicket:id="title" id="title" class="form-control" type="text" name="title"></select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="firstNames" class="control-label col-sm-3">First Name(s)</label>
-                  <div class="col-sm-9">
-                    <input wicket:id="firstNames" id="firstNames" class="form-control" type="text" name="firstNames"/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="lastName" class="control-label col-sm-3">Last Name</label>
-                  <div class="col-sm-9">
-                    <input wicket:id="lastName" id="lastName" class="form-control" type="text" name="lastName"/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="email" class="control-label col-sm-3">E-Mail</label>
-                  <div class="col-sm-9">
-                    <input wicket:id="email" id="email" class="form-control" type="text" name="email"/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="phoneNumber" class="control-label col-sm-3">Phone Number</label>
-                  <div class="col-sm-9">
-                    <input wicket:id="phoneNumber" id="phoneNumber" class="form-control" type="text" name="phoneNumber"/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="faxNumber" class="control-label col-sm-3">Fax Number</label>
-                  <div class="col-sm-9">
-                    <input wicket:id="faxNumber" id="faxNumber" class="form-control" type="text" name="faxNumber"/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="mobileNumber" class="control-label col-sm-3">Mobile Number</label>
-                  <div class="col-sm-9">
-                    <input wicket:id="mobileNumber" id="mobileNumber" class="form-control" type="text" name="mobileNumber"/>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="description" class="control-label col-sm-3">Description</label>
-                  <div class="col-sm-9">
+                  <label for="description" class="control-label col-sm-4">Description</label>
+                  <div class="col-sm-8">
                     <input wicket:id="description" id="description" class="form-control" type="text" name="description"/>
                   </div>
                 </div>
+
+                <div class="form-group">
+                  <label for="userDirectoryTypeName" class="control-label col-sm-4">User Directory Type</label>
+                  <div class="col-sm-8">
+                    <input wicket:id="userDirectoryTypeName" id="userDirectoryTypeName" class="form-control" type="text" name="userDirectoryTypeName"/>
+                  </div>
+                </div>
+
+                <div wicket:id="userDirectoryAdministrationPanel"></div>
 
                 <div class="form-buttons">
                   <button wicket:id="updateButton" type="submit" class="btn btn-primary pull-right">Update</button>
@@ -136,4 +96,3 @@
     </div>
   </body>
 </html>
-

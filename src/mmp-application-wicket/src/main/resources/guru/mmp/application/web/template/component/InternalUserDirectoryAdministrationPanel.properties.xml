@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+  <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="maxPasswordAttempts.Required">The maximum password attempts is required.</entry>
-  <entry key="passwordExpiryMonths.Required">The password expiry in months is required.</entry>
-  <entry key="passwordHistoryMonths.Required">The password history in months is required.</entry>
-  <entry key="maxFilteredUsers.Required">The maximum filtered users is required.</entry>
+<entry key="maxPasswordAttempts.Required">The maximum password attempts is required.</entry>
+<entry key="passwordExpiryMonths.Required">The password expiry in months is required.</entry>
+<entry key="passwordHistoryMonths.Required">The password history in months is required.</entry>
+<entry key="maxFilteredUsers.Required">The maximum filtered users is required.</entry>
 </properties>

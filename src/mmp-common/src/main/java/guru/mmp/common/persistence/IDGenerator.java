@@ -252,7 +252,7 @@ public class IDGenerator
       }
       finally
       {
-        DAOUtil.closex(connection);
+        DAOUtil.close(connection);
       }
 
       // Determine the schema prefix

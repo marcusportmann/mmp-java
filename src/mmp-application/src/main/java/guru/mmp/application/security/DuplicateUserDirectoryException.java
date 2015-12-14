@@ -17,56 +17,57 @@
 package guru.mmp.application.security;
 
 /**
- * A <code>DuplicateFunctionException</code> is thrown to indicate that a security
- * operation failed as a result of a duplicate authorised function.
+ * A <code>DuplicateUserDirectoryException</code> is thrown to indicate that a security operation
+ * failed as a result of a duplicate user directory.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class DuplicateFunctionException extends RuntimeException
+public class DuplicateUserDirectoryException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateFunctionException</code> with <code>null</code> as its
+   * Constructs a new <code>DuplicateUserDirectoryException</code> with <code>null</code> as its
    * message.
    */
-  public DuplicateFunctionException()
+  public DuplicateUserDirectoryException()
   {
     super();
   }
 
   /**
-   * Constructs a new <code>DuplicateFunctionException</code> with the specified message.
+   * Constructs a new <code>DuplicateUserDirectoryException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public DuplicateFunctionException(String message)
+  public DuplicateUserDirectoryException(String message)
   {
     super(message);
   }
 
   /**
-   * Constructs a new <code>DuplicateFunctionException</code> with the specified cause and a
+   * Constructs a new <code>DuplicateUserDirectoryException</code> with the specified cause and a
    * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
    * class and message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
    *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public DuplicateFunctionException(Throwable cause)
+  public DuplicateUserDirectoryException(Throwable cause)
   {
     super(cause);
   }
 
   /**
-   * Constructs a new <code>DuplicateFunctionException</code> with the specified message and cause.
+   * Constructs a new <code>DuplicateUserDirectoryException</code> with the specified message and
+   * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public DuplicateFunctionException(String message, Throwable cause)
+  public DuplicateUserDirectoryException(String message, Throwable cause)
   {
     super(message, cause);
   }

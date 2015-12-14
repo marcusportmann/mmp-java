@@ -19,7 +19,11 @@ package guru.mmp.application.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.persistence.DataAccessObject;
+import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -49,15 +53,14 @@ public class InternalUserDirectory extends UserDirectoryBase
    * The default number of months to check password history against.
    */
   public static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
-  private static final int DEFAULT_MAX_FILTERED_USERS = 100;
 
   /**
-   * The fully qualified name of the Java class that implements the Wicket component used to
-   * administer the configuration for the user directory.
+   * The default maximum number of filtered users.
    */
-  @SuppressWarnings("unused")
-  public final String ADMINISTRATION_CLASS =
-    "guru.mmp.application.web.template.component.InternalUserDirectoryAdministrationPanel";
+  private static final int DEFAULT_MAX_FILTERED_USERS = 100;
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(InternalUserDirectory.class);
   private String addInternalUserToInternalGroupSQL;
   private String changeInternalUserPasswordSQL;
   private String createInternalGroupSQL;
@@ -78,6 +81,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   private String getNumberOfInternalGroupsSQL;
   private String getNumberOfInternalUsersSQL;
   private String getNumberOfUsersForGroupSQL;
+  private String incrementPasswordAttemptsSQL;
   private String isInternalUserInInternalGroupSQL;
   private String isPasswordInInternalUserPasswordHistorySQL;
   private int maxFilteredUsers;
@@ -242,17 +246,17 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (lockUser)
       {
-        statement.setInt(2, -1);
+        statement.setNull(2, java.sql.Types.INTEGER);
       }
       else
       {
-        if (!isNullOrEmpty(user.getPasswordAttempts()))
+        if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() == -1))
         {
-          statement.setInt(2, 0);
+          statement.setInt(2, -1);
         }
         else
         {
-          statement.setNull(2, java.sql.Types.INTEGER);
+          statement.setInt(2, 0);
         }
       }
 
@@ -325,14 +329,11 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      if (user.getPasswordAttempts() != null)
+      if ((user.getPasswordAttempts() == null)
+          || (user.getPasswordAttempts() >= maxPasswordAttempts))
       {
-        if ((user.getPasswordAttempts() == -1)
-            || (user.getPasswordAttempts() > maxPasswordAttempts))
-        {
-          throw new UserLockedException("The user (" + username
-              + ") has exceeded the number of failed password attempts and has been locked");
-        }
+        throw new UserLockedException("The user (" + username
+            + ") has exceeded the number of failed password attempts and has been locked");
       }
 
       if (user.getPasswordExpiry() != null)
@@ -346,6 +347,11 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (!user.getPassword().equals(createPasswordHash(password)))
       {
+        if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1))
+        {
+          incrementPasswordAttempts(user.getId());
+        }
+
         throw new AuthenticationFailedException("Authentication failed for the user (" + username
             + ")");
       }
@@ -390,14 +396,11 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      if (user.getPasswordAttempts() != null)
+      if ((user.getPasswordAttempts() == null)
+          || (user.getPasswordAttempts() > maxPasswordAttempts))
       {
-        if ((user.getPasswordAttempts() == -1)
-            || (user.getPasswordAttempts() > maxPasswordAttempts))
-        {
-          throw new UserLockedException("The user (" + username
-              + ") has exceeded the number of failed password attempts and has been locked");
-        }
+        throw new UserLockedException("The user (" + username
+            + ") has exceeded the number of failed password attempts and has been locked");
       }
 
       if (user.getPasswordExpiry() != null)
@@ -426,13 +429,13 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       statement.setString(1, newPasswordHash);
 
-      if (!isNullOrEmpty(user.getPasswordAttempts()))
+      if (user.getPasswordAttempts() == -1)
       {
-        statement.setInt(2, 0);
+        statement.setInt(2, -1);
       }
       else
       {
-        statement.setNull(2, java.sql.Types.INTEGER);
+        statement.setInt(2, 0);
       }
 
       if (user.getPasswordExpiry() != null)
@@ -572,18 +575,11 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (userLocked)
       {
-        statement.setInt(12, -1);
+        statement.setNull(12, java.sql.Types.INTEGER);
       }
       else
       {
-        if (!isNullOrEmpty(user.getPasswordAttempts()))
-        {
-          statement.setInt(12, user.getPasswordAttempts());
-        }
-        else
-        {
-          statement.setNull(12, java.sql.Types.INTEGER);
-        }
+        statement.setInt(12, 0);
       }
 
       if (expiredPassword)
@@ -912,6 +908,7 @@ public class InternalUserDirectory extends UserDirectoryBase
           Group group = new Group(rs.getString(2));
 
           group.setId(rs.getLong(1));
+          group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(StringUtil.notNull(rs.getString(3)));
 
           return group;
@@ -1577,12 +1574,9 @@ public class InternalUserDirectory extends UserDirectoryBase
             : ", PASSWORD=?");
       }
 
-      if (lockUser || (user.getPasswordAttempts() != null))
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PASSWORD_ATTEMPTS=?"
-            : ", PASSWORD_ATTEMPTS=?");
-      }
+      fieldsBuffer.append((fieldsBuffer.length() == 0)
+          ? "SET PASSWORD_ATTEMPTS=?"
+          : ", PASSWORD_ATTEMPTS=?");
 
       if (expirePassword || (user.getPasswordExpiry() != null))
       {
@@ -1662,19 +1656,16 @@ public class InternalUserDirectory extends UserDirectoryBase
           parameterIndex++;
         }
 
-        if (lockUser || (user.getPasswordAttempts() != null))
+        if (lockUser)
         {
-          if (lockUser)
-          {
-            statement.setInt(parameterIndex, -1);
-          }
-          else
-          {
-            statement.setInt(parameterIndex, user.getPasswordAttempts());
-          }
-
-          parameterIndex++;
+          statement.setNull(parameterIndex, java.sql.Types.INTEGER);
         }
+        else
+        {
+          statement.setInt(parameterIndex, 0);
+        }
+
+        parameterIndex++;
 
         if (expirePassword || (user.getPasswordExpiry() != null))
         {
@@ -1835,6 +1826,11 @@ public class InternalUserDirectory extends UserDirectoryBase
         + " IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,"
         + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU"
         + " WHERE IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
+
+    // incrementPasswordAttemptsSQL
+    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU"
+        + " SET IU.PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1"
+        + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // isPasswordInInternalUserPasswordHistorySQL
     isPasswordInInternalUserPasswordHistorySQL = "SELECT IUPH.ID FROM " + schemaPrefix
@@ -2294,6 +2290,75 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           return null;
         }
+      }
+    }
+  }
+
+  private void incrementPasswordAttempts(long internalUserId)
+  {
+    // Retrieve the Transaction Manager
+    TransactionManager transactionManager = TransactionManager.getTransactionManager();
+    javax.transaction.Transaction existingTransaction = null;
+
+    try
+    {
+      if (transactionManager.isTransactionActive())
+      {
+        existingTransaction = transactionManager.beginNew();
+      }
+      else
+      {
+        transactionManager.begin();
+      }
+
+      try (Connection connection = getDataSource().getConnection())
+      {
+        try (PreparedStatement statement =
+            connection.prepareStatement(incrementPasswordAttemptsSQL))
+        {
+          statement.setLong(1, getUserDirectoryId());
+          statement.setLong(2, internalUserId);
+
+          if (statement.executeUpdate() != 1)
+          {
+            throw new SecurityException(
+                "No rows were affected as a result of executing the SQL statement ("
+                + incrementPasswordAttemptsSQL + ")");
+          }
+        }
+      }
+
+      transactionManager.commit();
+    }
+    catch (Throwable e)
+    {
+      try
+      {
+        transactionManager.rollback();
+      }
+      catch (Throwable f)
+      {
+        logger.error("Failed to rollback the transaction while incrementing the password attempts"
+            + " for the user (" + internalUserId + ") for the user directory ("
+            + getUserDirectoryId() + ")", f);
+      }
+
+      throw new SecurityException("Failed to increment the password attempts for the user ("
+          + internalUserId + ") for the user directory (" + getUserDirectoryId() + "): "
+          + e.getMessage(), e);
+    }
+    finally
+    {
+      try
+      {
+        transactionManager.resume(existingTransaction);
+      }
+      catch (Throwable e)
+      {
+        logger.error(
+            "Failed to resume the original transaction while incrementing the password attempts"
+            + " for the user (" + internalUserId + ") for the user directory ("
+            + getUserDirectoryId() + ")", e);
       }
     }
   }

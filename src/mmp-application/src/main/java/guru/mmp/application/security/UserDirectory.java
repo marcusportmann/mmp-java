@@ -61,17 +61,6 @@ public class UserDirectory
   public UserDirectory() {}
 
   /**
-   * Add the parameter for the user directory.
-   *
-   * @param name  the name of the parameter
-   * @param value the value of the parameter
-   */
-  public void addParameter(String name, String value)
-  {
-    parameters.put(name, value);
-  }
-
-  /**
    * Returns the XML configuration data for the user directory.
    *
    * @return the XML configuration data for the user directory
@@ -80,8 +69,9 @@ public class UserDirectory
   {
     StringBuilder buffer = new StringBuilder();
 
-    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><user-directory>");
-    buffer.append("<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\">");
+    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    buffer.append(
+        "<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\"><user-directory>");
 
     for (String parameterName : parameters.keySet())
     {

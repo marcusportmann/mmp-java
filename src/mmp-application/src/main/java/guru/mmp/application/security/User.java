@@ -41,7 +41,7 @@ public class User
   private Integer passwordAttempts;
   private Date passwordExpiry;
   private String phoneNumber;
-  private HashMap<String, String> properties;
+  private HashMap<String, String> properties = new HashMap<>();
   private String title;
   private long userDirectoryId;
   private String username;
@@ -49,10 +49,7 @@ public class User
   /**
    * Constructs a new <code>User</code>.
    */
-  public User()
-  {
-    this.properties = new HashMap<>();
-  }
+  public User() {}
 
   /**
    * Constructs a new <code>User</code>.
@@ -62,7 +59,6 @@ public class User
   public User(String username)
   {
     this.username = username;
-    this.properties = new HashMap<>();
   }
 
   /**

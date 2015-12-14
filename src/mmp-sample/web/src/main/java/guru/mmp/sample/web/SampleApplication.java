@@ -110,8 +110,8 @@ public class SampleApplication extends TemplateWebApplication
 
     NavigationGroup securityGroup = new NavigationGroup("Security", "fa fa-shield");
 
-    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
-        SecurityAdministrationPage.class));
+//    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
+//        SecurityAdministrationPage.class));
     securityGroup.addItem(new NavigationLink("User Directories", "fa fa-users",
         UserDirectoryAdministrationPage.class));
 

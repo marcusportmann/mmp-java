@@ -20,6 +20,8 @@ package guru.mmp.application.web.template.page;
 
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
+import guru.mmp.application.web.page.WebPageSecurity;
+import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.data.UserDirectoryDataProvider;
 
@@ -51,8 +53,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
 public class UserDirectoryAdministrationPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
@@ -124,10 +125,10 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-//            UpdateUserDirectoryPage page = new UpdateUserDirectoryPage(getPageReference(),
-//              item.getModel());
-//
-//            setResponsePage(page);
+              UpdateUserDirectoryPage page = new UpdateUserDirectoryPage(getPageReference(),
+                item.getModel());
+
+              setResponsePage(page);
             }
           };
           item.add(updateLink);
@@ -299,9 +300,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
         {
           try
           {
-            // TODO: Confirm that there are no organisations associated with this user directory
-
-            // securityService.deleteUserDirectory(id);
+            securityService.deleteUserDirectory(id);
 
             target.add(tableContainer);
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="host.Required">The LDAP server hostname is required.</entry>
+  <entry key="port.Required">The LDAP server port is required.</entry>
+  <entry key="useSSL.Required">The use SSL value is required.</entry>
+  <entry key="bindDN.Required">The bind DN is required.</entry>
+  <entry key="bindPassword.Required">The bind password is required.</entry>
+  <entry key="baseDN.Required">The base DN is required.</entry>
+  <entry key="userBaseDN.Required">The user base DN is required.</entry>
+  <entry key="groupBaseDN.Required">The group base DN is required.</entry>
+  <entry key="userObjectClass.Required">The user object class is required.</entry>
+  <entry key="usernameAttribute.Required">The username attribute is required.</entry>
+  <entry key="passwordExpiryAttribute.Required">The password expiry attribute is required.</entry>
+  <entry key="passwordAttemptsAttribute.Required">The password attempts attribute is required.</entry>
+  <entry key="passwordHistoryAttribute.Required">The password history attribute is required.</entry>
+  <entry key="titleAttribute.Required">The title attribute is required.</entry>
+  <entry key="firstNamesAttribute.Required">The first names attribute is required.</entry>
+  <entry key="lastNameAttribute.Required">The last name attribute is required.</entry>
+  <entry key="phoneNumberAttribute.Required">The phone number attribute is required.</entry>
+  <entry key="faxNumberAttribute.Required">The fax number attribute is required.</entry>
+  <entry key="mobileNumberAttribute.Required">The mobile number attribute is required.</entry>
+  <entry key="emailAttribute.Required">The e-mail attribute is required.</entry>
+  <entry key="descriptionAttribute.Required">The description attribute is required.</entry>
+  <entry key="groupObjectClass.Required">The group object class is required.</entry>
+  <entry key="groupAttribute.Required">The group attribute is required.</entry>
+  <entry key="groupMemberAttribute.Required">The group member attribute is required.</entry>
+  <entry key="maxPasswordAttempts.Required">The maximum password attempts is required.</entry>
+  <entry key="passwordExpiryMonths.Required">The password expiry in months is required.</entry>
+  <entry key="supportPasswordHistory.Required">The support password history value is required.</entry>
+  <entry key="passwordHistoryMonths.Required">The password history in months is required.</entry>
+  <entry key="passwordHistoryMaxLength.Required">The maximum password history length is required.</entry>
+  <entry key="maxFilteredUsers.Required">The maximum number of filtered users is required.</entry>
+  <entry key="maxFilteredGroups.Required">The maximum number of filtered groups is required.</entry>
+</properties>
+

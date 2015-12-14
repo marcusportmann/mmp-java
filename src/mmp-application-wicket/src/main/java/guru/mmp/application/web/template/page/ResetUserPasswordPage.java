@@ -19,6 +19,7 @@ package guru.mmp.application.web.template.page;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.PasswordChangeReason;
 import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -26,6 +27,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -37,12 +39,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.inject.Inject;
 
 /**
  * The <code>ResetPasswordPage</code> class implements the
@@ -148,8 +151,9 @@ public class ResetUserPasswordPage extends TemplateWebPage
           {
             User user = userModel.getObject();
 
-            securityService.updateUser(user.getUserDirectoryId(), user, expiredPassword,
-                userLocked);
+            securityService.adminChangePassword(user.getUserDirectoryId(), user.getUsername(),
+                user.getPassword(), expiredPassword, userLocked, false,
+                PasswordChangeReason.ADMINISTRATIVE);
 
             setResponsePage(previousPage.getPage());
           }
