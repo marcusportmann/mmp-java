@@ -281,7 +281,6 @@ public class SecurityService
    * @throws UserDirectoryNotFoundException
    * @throws AuthenticationFailedException
    * @throws UserLockedException
-   * @throws ExpiredPasswordException
    * @throws UserNotFoundException
    * @throws ExistingPasswordException
    * @throws SecurityException
@@ -289,7 +288,7 @@ public class SecurityService
   public void changePassword(long userDirectoryId, String username, String password,
       String newPassword)
     throws UserDirectoryNotFoundException, AuthenticationFailedException, UserLockedException,
-      ExpiredPasswordException, UserNotFoundException, ExistingPasswordException, SecurityException
+      UserNotFoundException, ExistingPasswordException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))

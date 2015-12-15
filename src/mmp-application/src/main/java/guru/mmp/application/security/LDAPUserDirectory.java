@@ -81,11 +81,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String bindDN;
   private String bindPassword;
   private String getFunctionCodesForGroupsSQL;
-  private String groupAttribute;
   private String groupBaseDN;
   private String groupDescriptionAttribute;
   private String groupMemberAttribute;
   private String[] groupMemberAttributeArray;
+  private String groupNameAttribute;
   private String groupObjectClass;
   private String host;
   private int maxFilteredGroups;
@@ -380,14 +380,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("GroupAttribute"))
+      if (parameters.containsKey("GroupNameAttribute"))
       {
-        groupAttribute = parameters.get("GroupAttribute");
+        groupNameAttribute = parameters.get("GroupNameAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No GroupAttribute configuration parameter found for the user directory ("
+            "No GroupNameAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -427,14 +427,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
         passwordExpiryMonths = DEFAULT_PASSWORD_EXPIRY_MONTHS;
       }
 
-      if (parameters.containsKey("SupportPasswordHistory"))
-      {
-        supportPasswordHistory = Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
-      }
-      else
-      {
-        supportPasswordHistory = false;
-      }
+      supportPasswordHistory = parameters.containsKey("SupportPasswordHistory")
+          && Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
 
       if (parameters.containsKey("PasswordHistoryMonths"))
       {
@@ -667,7 +661,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       User user = getUser(dirContext, username);
 
@@ -704,7 +698,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (e.getCause() instanceof javax.naming.AuthenticationException)
         {
-          // TODO: INCREMENT PASSWORD ATTEMPTS
+          incrementPasswordAttempts(dirContext, user);
 
           throw new AuthenticationFailedException("Failed to authenticate the user (" + username
               + ") for the user directory (" + getUserDirectoryId() + ")");
@@ -748,14 +742,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
-   * @throws ExpiredPasswordException
    * @throws UserNotFoundException
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
   public void changePassword(String username, String password, String newPassword)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, ExistingPasswordException, SecurityException
+    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+      ExistingPasswordException, SecurityException
   {
     throw new SecurityException("TODO: NOT IMPLEMENTED");
 
@@ -782,15 +775,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
      *   {
      *     throw new UserLockedException("The user (" + username
      *         + ") has exceeded the number of failed password attempts and has been locked");
-     *   }
-     * }
-     *
-     * if (user.getPasswordExpiry() != null)
-     * {
-     *   if (user.getPasswordExpiry().before(new Date()))
-     *   {
-     *     throw new ExpiredPasswordException("The password for the user (" + username
-     *         + ") has expired");
      *   }
      * }
      *
@@ -869,47 +853,49 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void createGroup(Group group)
     throws DuplicateGroupException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(createInternalGroupSQL))
-     * {
-     * if (getInternalGroupId(connection, group.getGroupName()) != -1)
-     * {
-     *   throw new DuplicateGroupException("The group (" + group.getGroupName()
-     *       + ") already exists");
-     * }
-     *
-     * long internalGroupId = nextId("Application.InternalGroupId");
-     *
-     * statement.setLong(1, internalGroupId);
-     * statement.setLong(2, getUserDirectoryId());
-     * statement.setString(3, group.getGroupName());
-     * statement.setString(4, group.getDescription());
-     *
-     * if (statement.executeUpdate() != 1)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + createInternalGroupSQL + ")");
-     * }
-     *
-     * group.setId(internalGroupId);
-     * group.setUserDirectoryId(getUserDirectoryId());
-     *
-     * createGroup(connection, group.getGroupName());
-     * }
-     * catch (DuplicateGroupException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to create the group (" + group.getGroupName()
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName groupDN = getGroupDN(dirContext, group.getGroupName());
+
+      if (groupDN != null)
+      {
+        throw new DuplicateGroupException("The group (" + group.getGroupName()
+            + ") already exists");
+      }
+
+      Attributes attributes = new BasicAttributes();
+
+      attributes.put(new BasicAttribute("objectclass", "top"));
+      attributes.put(new BasicAttribute("objectclass", "groupOfNames"));
+
+      attributes.put(new BasicAttribute(groupNameAttribute, group.getGroupName()));
+
+      if ((!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
+          && (!StringUtil.isNullOrEmpty(group.getDescription())))
+      {
+        attributes.put(new BasicAttribute(groupDescriptionAttribute, group.getDescription()));
+      }
+
+      dirContext.bind(groupNameAttribute + "=" + group.getGroupName() + "," + groupBaseDN,
+          dirContext, attributes);
+    }
+    catch (DuplicateGroupException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to create the group (" + group.getGroupName()
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1252,7 +1238,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       LdapName userDN = getUserDN(dirContext, username);
 
@@ -1276,9 +1262,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         SearchResult searchResult = searchResults.next();
 
-        if (searchResult.getAttributes().get(groupAttribute) != null)
+        if (searchResult.getAttributes().get(groupNameAttribute) != null)
         {
-          groupNames.add(String.valueOf(searchResult.getAttributes().get(groupAttribute).get()));
+          groupNames.add(
+              String.valueOf(searchResult.getAttributes().get(groupNameAttribute).get()));
         }
       }
 
@@ -1358,9 +1345,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
-      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupAttribute + "="
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupNameAttribute + "="
         + groupName + "))";
 
       SearchControls searchControls = new SearchControls();
@@ -1412,7 +1399,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       LdapName userDN = getUserDN(dirContext, username);
 
@@ -1436,9 +1423,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         SearchResult searchResult = searchResults.next();
 
-        if (searchResult.getAttributes().get(groupAttribute) != null)
+        if (searchResult.getAttributes().get(groupNameAttribute) != null)
         {
-          groupNames.add(String.valueOf(searchResult.getAttributes().get(groupAttribute).get()));
+          groupNames.add(
+              String.valueOf(searchResult.getAttributes().get(groupNameAttribute).get()));
         }
       }
 
@@ -1475,7 +1463,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter = "(objectClass=" + groupObjectClass + ")";
 
@@ -1524,7 +1512,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       LdapName userDN = getUserDN(dirContext, username);
 
@@ -1644,7 +1632,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter = "(objectClass=" + groupObjectClass + ")";
 
@@ -1733,7 +1721,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       User user = getUser(dirContext, username);
 
@@ -1818,7 +1806,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + userUsernameAttribute
         + "=" + username + "))";
@@ -1884,7 +1872,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      dirContext = getDirContext();
+      dirContext = getDirContext(bindDN, bindPassword);
 
       LdapName userDN = getUserDN(dirContext, username);
 
@@ -2466,7 +2454,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     Attributes attributes = searchResult.getAttributes();
 
-    Group group = new Group(String.valueOf(attributes.get(groupAttribute).get()));
+    Group group = new Group(String.valueOf(attributes.get(groupNameAttribute).get()));
 
     group.setId(-1);
     group.setUserDirectoryId(getUserDirectoryId());
@@ -2608,38 +2596,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
     return user;
   }
 
-  private DirContext getDirContext()
-    throws SecurityException
-  {
-    try
-    {
-      String url = useSSL
-          ? "ldaps://"
-          : "ldap://";
-      url += host;
-      url += ":";
-      url += port;
-
-      String connectionType = "simple";
-
-      Hashtable<String, String> environment = new Hashtable<>();
-
-      environment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-      environment.put(Context.PROVIDER_URL, url);
-      environment.put(Context.SECURITY_AUTHENTICATION, connectionType);
-      environment.put(Context.SECURITY_PRINCIPAL, bindDN);
-      environment.put(Context.SECURITY_CREDENTIALS, bindPassword);
-
-      return new InitialDirContext(environment);
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException(
-          "Failed to retrieve the JNDI directory context for the user directory ("
-          + getUserDirectoryId() + ")", e);
-    }
-  }
-
   private DirContext getDirContext(String userDN, String password)
     throws SecurityException
   {
@@ -2681,7 +2637,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       List<LdapName> groupDNs = new ArrayList<>();
 
-      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupAttribute + "="
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupNameAttribute + "="
         + groupName + "))";
 
       SearchControls searchControls = new SearchControls();
@@ -2890,6 +2846,29 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       JNDIUtil.close(searchResultsSharedUsers);
       JNDIUtil.close(searchResultsNonSharedUsers);
+    }
+  }
+
+  private void incrementPasswordAttempts(DirContext dirContext, User user)
+  {
+    try
+    {
+      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+          && (user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1))
+      {
+        ModificationItem[] modificationItems = new ModificationItem[1];
+
+        modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+            new BasicAttribute(userPasswordAttemptsAttribute,
+              String.valueOf(user.getPasswordAttempts() + 1)));
+
+        dirContext.modifyAttributes(user.getProperty("dn"), modificationItems);
+      }
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to increment the password attempts for the user (" + user.getUsername()
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 

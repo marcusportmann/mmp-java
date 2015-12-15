@@ -377,14 +377,13 @@ public class InternalUserDirectory extends UserDirectoryBase
    *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
-   * @throws ExpiredPasswordException
    * @throws UserNotFoundException
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
   public void changePassword(String username, String password, String newPassword)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, ExistingPasswordException, SecurityException
+    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+      ExistingPasswordException, SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
@@ -401,15 +400,6 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         throw new UserLockedException("The user (" + username
             + ") has exceeded the number of failed password attempts and has been locked");
-      }
-
-      if (user.getPasswordExpiry() != null)
-      {
-        if (user.getPasswordExpiry().before(new Date()))
-        {
-          throw new ExpiredPasswordException("The password for the user (" + username
-              + ") has expired");
-        }
       }
 
       String passwordHash = createPasswordHash(password);

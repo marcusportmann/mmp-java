@@ -61,3 +61,12 @@ objectClasses: ( 2.16.840.1.113730.3.2.2 NAME 'inetOrgPerson' DESC 'Defines en
  jpegPhoto $ labeledURI $ mail $ manager $ mobile $ o $ pager $ 
  photo $ preferredLanguage $ roomNumber $ secretary $ uid $ userCert
  ificate $ userPKCS12 $ userSMIMECertificate $ x500UniqueIdentifier ) )
+
+dn: cn=schema
+changetype: modify
+replace: objectClasses
+objectClasses: ( 2.5.6.9 NAME 'groupOfNames' DESC 'Defines entries for a group
+  of names.  Represents a list containing an unordered list of names' SUP top
+  STRUCTURAL MUST ( cn ) MAY ( member $ businessCategory $ description $ o $
+ ou $ owner $ seeAlso ) )
+

@@ -211,18 +211,19 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
     add(userPasswordHistoryAttributeField);
 
     // The "groupObjectClass" field
+    // The "groupObjectClass" field
     TextField<String> groupObjectClassField = new TextFieldWithFeedback<>("groupObjectClass",
       new PropertyModel<>(userDirectoryModel, "parameters.GroupObjectClass"));
     groupObjectClassField.setType(String.class);
     groupObjectClassField.setRequired(true);
     add(groupObjectClassField);
 
-    // The "groupAttribute" field
-    TextField<String> groupAttributeField = new TextFieldWithFeedback<>("groupAttribute",
-      new PropertyModel<>(userDirectoryModel, "parameters.GroupAttribute"));
-    groupAttributeField.setType(String.class);
-    groupAttributeField.setRequired(true);
-    add(groupAttributeField);
+    // The "groupNameAttribute" field
+    TextField<String> groupNameAttributeField = new TextFieldWithFeedback<>("groupNameAttribute",
+      new PropertyModel<>(userDirectoryModel, "parameters.GroupNameAttribute"));
+    groupNameAttributeField.setType(String.class);
+    groupNameAttributeField.setRequired(true);
+    add(groupNameAttributeField);
 
     // The "groupMemberAttribute" field
     TextField<String> groupMemberAttributeField =
@@ -416,9 +417,9 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       parameters.put("GroupObjectClass", "groupOfNames");
     }
 
-    if (!parameters.containsKey("GroupAttribute"))
+    if (!parameters.containsKey("GroupNameAttribute"))
     {
-      parameters.put("GroupAttribute", "cn");
+      parameters.put("GroupNameAttribute", "cn");
     }
 
     if (!parameters.containsKey("GroupMemberAttribute"))

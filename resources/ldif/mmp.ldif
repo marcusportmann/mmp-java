@@ -147,7 +147,7 @@ objectclass: inetOrgPerson
 objectclass: person
 objectclass: top
 objectclass: organizationalPerson
-passwordattempts: -1
+passwordattempts: 0 
 givenname: FirstName
 sn: LastName
 userpassword: Password1

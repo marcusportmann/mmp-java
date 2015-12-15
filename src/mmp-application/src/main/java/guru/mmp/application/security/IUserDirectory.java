@@ -89,14 +89,13 @@ public interface IUserDirectory
    *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
-   * @throws ExpiredPasswordException
    * @throws UserNotFoundException
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
   void changePassword(String username, String password, String newPassword)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, ExistingPasswordException, SecurityException;
+    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+      ExistingPasswordException, SecurityException;
 
   /**
    * Create a new group.

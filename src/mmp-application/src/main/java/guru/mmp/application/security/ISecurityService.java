@@ -95,14 +95,13 @@ public interface ISecurityService
    * @throws UserDirectoryNotFoundException
    * @throws AuthenticationFailedException
    * @throws UserLockedException
-   * @throws ExpiredPasswordException
    * @throws UserNotFoundException
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
   void changePassword(long userDirectoryId, String username, String password, String newPassword)
     throws UserDirectoryNotFoundException, AuthenticationFailedException, UserLockedException,
-      ExpiredPasswordException, UserNotFoundException, ExistingPasswordException, SecurityException;
+      UserNotFoundException, ExistingPasswordException, SecurityException;
 
   /**
    * Create a new authorised function.
