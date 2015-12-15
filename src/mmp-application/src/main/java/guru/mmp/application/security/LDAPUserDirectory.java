@@ -85,6 +85,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String groupBaseDN;
   private String groupDescriptionAttribute;
   private String groupMemberAttribute;
+  private String[] groupMemberAttributeArray;
   private String groupObjectClass;
   private String host;
   private int maxFilteredGroups;
@@ -393,6 +394,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (parameters.containsKey("GroupMemberAttribute"))
       {
         groupMemberAttribute = parameters.get("GroupMemberAttribute");
+
+        groupMemberAttributeArray = new String[] { groupMemberAttribute };
       }
       else
       {
@@ -1892,12 +1895,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       LdapName groupDN = getGroupDN(dirContext, groupName);
 
-      if (userDN == null)
+      if (groupDN == null)
       {
         throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
       }
 
-      Attributes attributes = dirContext.getAttributes(groupDN);
+      Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
 
       if (attributes.get(groupMemberAttribute) != null)
       {
@@ -1905,38 +1908,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         while (attributeValues.hasMore())
         {
-          LdapName memberDN = new new LdapName((String)attributeValues.next());
+          LdapName memberDN = new LdapName((String) attributeValues.next());
 
-          if (memberDN.)
-
-
-        }
-
-      }
-
-      for ()
-
-
-
-
-      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute
-        + "=" + userDN + "))";
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-
-      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
-
-      List<String> groupNames = new ArrayList<>();
-
-      while (searchResults.hasMore())
-      {
-        SearchResult searchResult = searchResults.next();
-
-        if ((searchResult.getAttributes().get(groupAttribute) != null) && (String.valueOf(searchResult.getAttributes().get(groupAttribute).get()).equalsIgnoreCase(groupName)))
-        {
-          return true;
+          if (memberDN.equals(userDN))
+          {
+            return true;
+          }
         }
       }
 
@@ -1949,50 +1926,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException("Failed to check whether the user (" + username
-           + ") is in the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
-           + "): " + e.getMessage(), e);
+          + ") is in the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
+          + "): " + e.getMessage(), e);
     }
     finally
     {
       JNDIUtil.close(searchResults);
       JNDIUtil.close(dirContext);
     }
-
-
-
-
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
-
-    /*
-     * try (Connection connection = getDataSource().getConnection())
-     * {
-     * // Get the ID of the internal user with the specified username
-     * long internalUserId = getInternalUserId(connection, username);
-     *
-     * if (internalUserId == -1)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     * // Get the ID of the internal group with the specified group name
-     * long internalGroupId = getInternalGroupId(connection, groupName);
-     *
-     * if (internalGroupId == -1)
-     * {
-     *   throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-     * }
-     *
-     * // Get the current list of internal groups for the internal user
-     * return isInternalUserInInternalGroup(connection, internalUserId, internalGroupId);
-     * }
-     * catch (UserNotFoundException | GroupNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * }
-     */
   }
 
   /**
@@ -2661,7 +2602,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       user.setDescription("");
     }
 
-    user.setProperty("dn", searchResult.getNameInNamespace());
+    user.setProperty("dn",
+        new LdapName(searchResult.getNameInNamespace().toLowerCase()).toString());
 
     return user;
   }
@@ -2730,6 +2672,70 @@ public class LDAPUserDirectory extends UserDirectoryBase
     }
   }
 
+  private LdapName getGroupDN(DirContext dirContext, String groupName)
+    throws SecurityException
+  {
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try
+    {
+      List<LdapName> groupDNs = new ArrayList<>();
+
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupAttribute + "="
+        + groupName + "))";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(new String[0]);
+
+      if (!StringUtil.isNullOrEmpty(groupBaseDN))
+      {
+        searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+        while (searchResults.hasMore())
+        {
+          groupDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));
+        }
+      }
+
+      if (groupDNs.size() == 0)
+      {
+        return null;
+      }
+      else if (groupDNs.size() == 1)
+      {
+        return groupDNs.get(0);
+      }
+      else
+      {
+        StringBuilder buffer = new StringBuilder();
+
+        for (LdapName groupDN : groupDNs)
+        {
+          if (buffer.length() > 0)
+          {
+            buffer.append(" ");
+          }
+
+          buffer.append("(").append(groupDN).append(")");
+        }
+
+        throw new SecurityException("Found multiple groups (" + groupDNs.size()
+            + ") with the group name (" + groupName + ") with DNs " + buffer.toString());
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the DN for the group (" + groupName
+          + ") from the LDAP directory (" + host + ":" + port + ")", e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+    }
+  }
+
   private User getUser(DirContext dirContext, String username)
     throws SecurityException
   {
@@ -2738,6 +2744,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
+      List<User> users = new ArrayList<>();
+
       String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + userUsernameAttribute
         + "=" + username + "))";
 
@@ -2750,9 +2758,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
 
-        if (searchResultsNonSharedUsers.hasMore())
+        while (searchResultsNonSharedUsers.hasMore())
         {
-          return buildUserFromSearchResult(searchResultsNonSharedUsers.next());
+          users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next()));
         }
       }
 
@@ -2761,13 +2769,37 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
 
-        if (searchResultsSharedUsers.hasMore())
+        while (searchResultsSharedUsers.hasMore())
         {
-          return buildUserFromSearchResult(searchResultsSharedUsers.next());
+          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next()));
         }
       }
 
-      return null;
+      if (users.size() == 0)
+      {
+        return null;
+      }
+      else if (users.size() == 1)
+      {
+        return users.get(0);
+      }
+      else
+      {
+        StringBuilder buffer = new StringBuilder();
+
+        for (User user : users)
+        {
+          if (buffer.length() > 0)
+          {
+            buffer.append(" ");
+          }
+
+          buffer.append("(").append(user.getProperty("dn")).append(")");
+        }
+
+        throw new SecurityException("Found multiple users (" + users.size()
+            + ") with the username (" + username + ") with DNs " + buffer.toString());
+      }
     }
     catch (Throwable e)
     {
@@ -2789,6 +2821,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
+      List<LdapName> userDNs = new ArrayList<>();
+
       String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + userUsernameAttribute
         + "=" + username + "))";
 
@@ -2802,9 +2836,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
 
-        if (searchResultsNonSharedUsers.hasMore())
+        while (searchResultsNonSharedUsers.hasMore())
         {
-          return new LdapName(searchResultsNonSharedUsers.next().getNameInNamespace().toLowerCase());
+          userDNs.add(
+              new LdapName(searchResultsNonSharedUsers.next().getNameInNamespace().toLowerCase()));
         }
       }
 
@@ -2813,13 +2848,38 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
 
-        if (searchResultsSharedUsers.hasMore())
+        while (searchResultsSharedUsers.hasMore())
         {
-          return new LdapName(searchResultsSharedUsers.next().getNameInNamespace().toLowerCase());
+          userDNs.add(
+              new LdapName(searchResultsSharedUsers.next().getNameInNamespace().toLowerCase()));
         }
       }
 
-      return null;
+      if (userDNs.size() == 0)
+      {
+        return null;
+      }
+      else if (userDNs.size() == 1)
+      {
+        return userDNs.get(0);
+      }
+      else
+      {
+        StringBuilder buffer = new StringBuilder();
+
+        for (LdapName userDN : userDNs)
+        {
+          if (buffer.length() > 0)
+          {
+            buffer.append(" ");
+          }
+
+          buffer.append("(").append(userDN).append(")");
+        }
+
+        throw new SecurityException("Found multiple users (" + userDNs.size()
+            + ") with the username (" + username + ") with DNs " + buffer.toString());
+      }
     }
     catch (Throwable e)
     {
@@ -2832,45 +2892,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
       JNDIUtil.close(searchResultsNonSharedUsers);
     }
   }
-
-  private LdapName getGroupDN(DirContext dirContext, String groupName)
-    throws SecurityException
-  {
-    NamingEnumeration<SearchResult> searchResults = null;
-
-    try
-    {
-      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupAttribute
-        + "=" + groupName + "))";
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(new String[0]);
-
-      if (!StringUtil.isNullOrEmpty(groupBaseDN))
-      {
-        searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
-
-        if (searchResults.hasMore())
-        {
-          return new LdapName(searchResults.next().getNameInNamespace().toLowerCase());
-        }
-      }
-
-      return null;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the DN for the group (" + groupName
-        + ") from the LDAP directory (" + host + ":" + port + ")", e);
-    }
-    finally
-    {
-      JNDIUtil.close(searchResults);
-    }
-  }
-
 
 ///**
 // * Is the password, given by the specified password hash, a historical password that cannot
