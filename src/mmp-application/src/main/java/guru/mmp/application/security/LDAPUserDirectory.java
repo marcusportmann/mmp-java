@@ -36,6 +36,7 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import javax.naming.ldap.LdapName;
 
 /**
  * The <code>LDAPUserDirectory</code> class provides the LDAP user directory implementation.
@@ -1170,36 +1171,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the users matching the attribute criteria.
-   *
-   * @param attributes the attribute criteria used to select the users
-   * @param startPos   the position in the list of users to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   *
-   * @return the list of users whose attributes match the attribute criteria
-   *
-   * @throws InvalidAttributeException
-   * @throws SecurityException
-   */
-  public List<User> findUsersEx(List<Attribute> attributes, int startPos, int maxResults)
-    throws InvalidAttributeException, SecurityException
-  {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
-
-    /*
-     * List<User> allUsers = findUsers(attributes);
-     * List<User> selectedUsers = new ArrayList<>();
-     *
-     * for (int i = startPos; i < (startPos + maxResults); i++)
-     * {
-     * selectedUsers.add(allUsers.get(i));
-     * }
-     *
-     * return selectedUsers;
-     */
-  }
-
-  /**
    * Retrieve the filtered list of users.
    *
    * @param filter the filter to apply to the users
@@ -1280,7 +1251,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       dirContext = getDirContext();
 
-      String userDN = getUserDN(dirContext, username);
+      LdapName userDN = getUserDN(dirContext, username);
 
       if (userDN == null)
       {
@@ -1288,7 +1259,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute
-        + "=" + userDN + "))";
+        + "=" + userDN.toString() + "))";
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1298,9 +1269,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<String> groupNames = new ArrayList<>();
 
-      while (searchResults.hasMoreElements())
+      while (searchResults.hasMore())
       {
-        SearchResult searchResult = searchResults.nextElement();
+        SearchResult searchResult = searchResults.next();
 
         if (searchResult.getAttributes().get(groupAttribute) != null)
         {
@@ -1379,43 +1350,45 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public Group getGroup(String groupName)
     throws GroupNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(getInternalGroupSQL))
-     * {
-     * statement.setLong(1, getUserDirectoryId());
-     * statement.setString(2, groupName);
-     *
-     * try (ResultSet rs = statement.executeQuery())
-     * {
-     *   if (rs.next())
-     *   {
-     *     Group group = new Group(rs.getString(2));
-     *
-     *     group.setId(rs.getLong(1));
-     *     group.setUserDirectoryId(getUserDirectoryId());
-     *     group.setDescription(StringUtil.notNull(rs.getString(3)));
-     *
-     *     return group;
-     *   }
-     *   else
-     *   {
-     *     throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-     *   }
-     * }
-     * }
-     * catch (GroupNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to retrieve the group (" + groupName
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext();
+
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupAttribute + "="
+        + groupName + "))";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      if (searchResults.hasMore())
+      {
+        return buildGroupFromSearchResult(searchResults.next());
+      }
+      else
+      {
+        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+      }
+    }
+    catch (GroupNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the group (" + groupName
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1438,7 +1411,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       dirContext = getDirContext();
 
-      String userDN = getUserDN(dirContext, username);
+      LdapName userDN = getUserDN(dirContext, username);
 
       if (userDN == null)
       {
@@ -1446,7 +1419,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute
-        + "=" + userDN + "))";
+        + "=" + userDN.toString() + "))";
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1456,9 +1429,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<String> groupNames = new ArrayList<>();
 
-      while (searchResults.hasMoreElements())
+      while (searchResults.hasMore())
       {
-        SearchResult searchResult = searchResults.nextElement();
+        SearchResult searchResult = searchResults.next();
 
         if (searchResult.getAttributes().get(groupAttribute) != null)
         {
@@ -1494,53 +1467,40 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public List<Group> getGroups()
     throws SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(getInternalGroupsSQL))
-     * {
-     * statement.setLong(1, getUserDirectoryId());
-     *
-     * try (ResultSet rs = statement.executeQuery())
-     * {
-     *   List<Group> list = new ArrayList<>();
-     *
-     *   while (rs.next())
-     *   {
-     *     Group group = new Group(rs.getString(2));
-     *
-     *     group.setId(rs.getLong(1));
-     *     group.setUserDirectoryId(getUserDirectoryId());
-     *     group.setDescription(StringUtil.notNull(rs.getString(3)));
-     *     list.add(group);
-     *   }
-     *
-     *   return list;
-     * }
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to retrieve the groups for the user ("
-     *     + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
-  }
+    try
+    {
+      dirContext = getDirContext();
 
-  /**
-   * Retrieve the groups.
-   *
-   * @param startPos   the position in the list of groups to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   *
-   * @return the list of groups
-   *
-   * @throws SecurityException
-   */
-  public List<Group> getGroupsEx(int startPos, int maxResults)
-    throws SecurityException
-  {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+      String searchFilter = "(objectClass=" + groupObjectClass + ")";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      List<Group> groups = new ArrayList<>();
+
+      while (searchResults.hasMore())
+      {
+        groups.add(buildGroupFromSearchResult(searchResults.next()));
+      }
+
+      return groups;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the groups for the user directory ("
+          + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1556,32 +1516,52 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection())
-     * {
-     * // Get the ID of the user with the specified username
-     * long internalUserId = getInternalUserId(connection, username);
-     *
-     * if (internalUserId == -1)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     * // Get the list of groups the user is associated with
-     * return getInternalGroupsForInternalUser(connection, internalUserId);
-     * }
-     * catch (UserNotFoundException | OrganisationNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to retrieve the groups for the user (" + username
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext();
+
+      LdapName userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute
+        + "=" + userDN.toString() + "))";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      List<Group> groups = new ArrayList<>();
+
+      while (searchResults.hasMore())
+      {
+        groups.add(buildGroupFromSearchResult(searchResults.next()));
+      }
+
+      return groups;
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the groups for the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1673,18 +1653,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       int numberOfGroups = 0;
 
-      while (searchResults.hasMoreElements())
+      while (searchResults.hasMore())
       {
-        searchResults.nextElement();
+        searchResults.next();
 
         numberOfGroups++;
       }
 
       return numberOfGroups;
-    }
-    catch (UserNotFoundException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1821,22 +1797,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the users.
-   *
-   * @param startPos   the position in the list of users to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   *
-   * @return the list of users
-   *
-   * @throws SecurityException
-   */
-  public List<User> getUsersEx(int startPos, int maxResults)
-    throws SecurityException
-  {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
-  }
-
-  /**
    * Does the user with the specified username exist?
    *
    * @param username the username identifying the user
@@ -1869,7 +1829,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
 
-        if (searchResultsNonSharedUsers.hasMoreElements())
+        if (searchResultsNonSharedUsers.hasMore())
         {
           return true;
         }
@@ -1880,7 +1840,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
 
-        if (searchResultsSharedUsers.hasMoreElements())
+        if (searchResultsSharedUsers.hasMore())
         {
           return true;
         }
@@ -1916,6 +1876,91 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public boolean isUserInGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException
   {
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try
+    {
+      dirContext = getDirContext();
+
+      LdapName userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      LdapName groupDN = getGroupDN(dirContext, groupName);
+
+      if (userDN == null)
+      {
+        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+      }
+
+      Attributes attributes = dirContext.getAttributes(groupDN);
+
+      if (attributes.get(groupMemberAttribute) != null)
+      {
+        NamingEnumeration<?> attributeValues = attributes.get(groupMemberAttribute).getAll();
+
+        while (attributeValues.hasMore())
+        {
+          LdapName memberDN = new new LdapName((String)attributeValues.next());
+
+          if (memberDN.)
+
+
+        }
+
+      }
+
+      for ()
+
+
+
+
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute
+        + "=" + userDN + "))";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      List<String> groupNames = new ArrayList<>();
+
+      while (searchResults.hasMore())
+      {
+        SearchResult searchResult = searchResults.next();
+
+        if ((searchResult.getAttributes().get(groupAttribute) != null) && (String.valueOf(searchResult.getAttributes().get(groupAttribute).get()).equalsIgnoreCase(groupName)))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+    catch (UserNotFoundException | GroupNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to check whether the user (" + username
+           + ") is in the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
+           + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
+
+
+
+
     throw new SecurityException("TODO: NOT IMPLEMENTED");
 
     /*
@@ -1946,9 +1991,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
      * }
      * catch (Throwable e)
      * {
-     * throw new SecurityException("Failed to check whether the user (" + username
-     *     + ") is in the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
-     *     + "): " + e.getMessage(), e);
      * }
      */
   }
@@ -2708,9 +2750,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
 
-        if (searchResultsNonSharedUsers.hasMoreElements())
+        if (searchResultsNonSharedUsers.hasMore())
         {
-          return buildUserFromSearchResult(searchResultsNonSharedUsers.nextElement());
+          return buildUserFromSearchResult(searchResultsNonSharedUsers.next());
         }
       }
 
@@ -2719,9 +2761,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
 
-        if (searchResultsSharedUsers.hasMoreElements())
+        if (searchResultsSharedUsers.hasMore())
         {
-          return buildUserFromSearchResult(searchResultsSharedUsers.nextElement());
+          return buildUserFromSearchResult(searchResultsSharedUsers.next());
         }
       }
 
@@ -2739,7 +2781,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     }
   }
 
-  private String getUserDN(DirContext dirContext, String username)
+  private LdapName getUserDN(DirContext dirContext, String username)
     throws SecurityException
   {
     NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
@@ -2760,9 +2802,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
 
-        if (searchResultsNonSharedUsers.hasMoreElements())
+        if (searchResultsNonSharedUsers.hasMore())
         {
-          return searchResultsNonSharedUsers.nextElement().getNameInNamespace();
+          return new LdapName(searchResultsNonSharedUsers.next().getNameInNamespace().toLowerCase());
         }
       }
 
@@ -2771,9 +2813,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
 
-        if (searchResultsSharedUsers.hasMoreElements())
+        if (searchResultsSharedUsers.hasMore())
         {
-          return searchResultsSharedUsers.nextElement().getNameInNamespace();
+          return new LdapName(searchResultsSharedUsers.next().getNameInNamespace().toLowerCase());
         }
       }
 
@@ -2791,37 +2833,44 @@ public class LDAPUserDirectory extends UserDirectoryBase
     }
   }
 
-///**
-// * Retrieve the list of authorised function codes for the internal user.
-// *
-// * @param connection     the existing database connection to use
-// * @param internalUserId the numeric ID uniquely identifying the internal user
-// *
-// * @return the list of authorised function codes for the internal user with the specified ID
-// *
-// * @throws SQLException
-// */
-//private List<String> getFunctionCodesForUserId(Connection connection, long internalUserId)
-//  throws SQLException
-//{
-//  List<String> functionCodes = new ArrayList<>();
-//
-//  try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setLong(2, internalUserId);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      while (rs.next())
-//      {
-//        functionCodes.add(rs.getString(1));
-//      }
-//
-//      return functionCodes;
-//    }
-//  }
-//}
+  private LdapName getGroupDN(DirContext dirContext, String groupName)
+    throws SecurityException
+  {
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try
+    {
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupAttribute
+        + "=" + groupName + "))";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(new String[0]);
+
+      if (!StringUtil.isNullOrEmpty(groupBaseDN))
+      {
+        searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+        if (searchResults.hasMore())
+        {
+          return new LdapName(searchResults.next().getNameInNamespace().toLowerCase());
+        }
+      }
+
+      return null;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the DN for the group (" + groupName
+        + ") from the LDAP directory (" + host + ":" + port + ")", e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+    }
+  }
+
 
 ///**
 // * Is the password, given by the specified password hash, a historical password that cannot

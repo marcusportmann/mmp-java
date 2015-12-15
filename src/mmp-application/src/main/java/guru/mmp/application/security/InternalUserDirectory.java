@@ -201,7 +201,7 @@ public class InternalUserDirectory extends UserDirectoryBase
             + addInternalUserToInternalGroupSQL + ")");
       }
     }
-    catch (UserNotFoundException | GroupNotFoundException | OrganisationNotFoundException e)
+    catch (UserNotFoundException | GroupNotFoundException e)
     {
       throw e;
     }
@@ -764,32 +764,6 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the users matching the attribute criteria.
-   *
-   * @param attributes the attribute criteria used to select the users
-   * @param startPos   the position in the list of users to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   *
-   * @return the list of users whose attributes match the attribute criteria
-   *
-   * @throws InvalidAttributeException
-   * @throws SecurityException
-   */
-  public List<User> findUsersEx(List<Attribute> attributes, int startPos, int maxResults)
-    throws InvalidAttributeException, SecurityException
-  {
-    List<User> allUsers = findUsers(attributes);
-    List<User> selectedUsers = new ArrayList<>();
-
-    for (int i = startPos; i < (startPos + maxResults); i++)
-    {
-      selectedUsers.add(allUsers.get(i));
-    }
-
-    return selectedUsers;
-  }
-
-  /**
    * Retrieve the filtered list of users.
    *
    * @param filter the filter to apply to the users
@@ -1000,25 +974,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the groups for the user ("
+      throw new SecurityException("Failed to retrieve the groups for the user directory ("
           + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
-  }
-
-  /**
-   * Retrieve the groups.
-   *
-   * @param startPos   the position in the list of groups to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   *
-   * @return the list of groups
-   *
-   * @throws SecurityException
-   */
-  public List<Group> getGroupsEx(int startPos, int maxResults)
-    throws SecurityException
-  {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
   }
 
   /**
@@ -1047,7 +1005,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       // Get the list of groups the user is associated with
       return getInternalGroupsForInternalUser(connection, internalUserId);
     }
-    catch (UserNotFoundException | OrganisationNotFoundException e)
+    catch (UserNotFoundException e)
     {
       throw e;
     }
@@ -1256,22 +1214,6 @@ public class InternalUserDirectory extends UserDirectoryBase
       throw new SecurityException("Failed to retrieve the users for the user directory ("
           + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
-  }
-
-  /**
-   * Retrieve the users.
-   *
-   * @param startPos   the position in the list of users to start from
-   * @param maxResults the maximum number of results to return or -1 for all
-   *
-   * @return the list of users
-   *
-   * @throws SecurityException
-   */
-  public List<User> getUsersEx(int startPos, int maxResults)
-    throws SecurityException
-  {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
   }
 
   /**

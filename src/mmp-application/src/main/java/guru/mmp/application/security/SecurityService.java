@@ -910,41 +910,6 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the users matching the attribute criteria.
-   *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
-   * @param attributes      the attribute criteria used to select the users
-   * @param startPos        the position in the list of users to start from
-   * @param maxResults      the maximum number of results to return or -1 for all
-   *
-   * @return the list of users whose attributes match the attribute criteria
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws InvalidAttributeException
-   * @throws SecurityException
-   */
-  public List<User> findUsersEx(long userDirectoryId, List<Attribute> attributes, int startPos,
-      int maxResults)
-    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException
-  {
-    // Validate parameters
-    if (attributes == null)
-    {
-      throw new InvalidArgumentException("attributes");
-    }
-
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
-    }
-
-    return userDirectory.findUsersEx(attributes, startPos, maxResults);
-  }
-
-  /**
    * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
    *
    * @return the <code>DataSource</code> for the <code>SecurityService</code>
@@ -1190,32 +1155,6 @@ public class SecurityService
     }
 
     return userDirectory.getGroups();
-  }
-
-  /**
-   * Retrieve the groups.
-   *
-   * @param userDirectoryId the unique ID for the user directory the groups are associated with
-   * @param startPos        the position in the list of groups to start from
-   * @param maxResults      the maximum number of results to return or -1 for all
-   *
-   * @return the list of groups
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
-   */
-  public List<Group> getGroupsEx(long userDirectoryId, int startPos, int maxResults)
-    throws UserDirectoryNotFoundException, SecurityException
-  {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
-    }
-
-    return userDirectory.getGroupsEx(startPos, maxResults);
   }
 
   /**
@@ -1799,32 +1738,6 @@ public class SecurityService
     }
 
     return userDirectory.getUsers();
-  }
-
-  /**
-   * Retrieve the users.
-   *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
-   * @param startPos        the position in the list of users to start from
-   * @param maxResults      the maximum number of results to return or -1 for all
-   *
-   * @return the list of users
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
-   */
-  public List<User> getUsersEx(long userDirectoryId, int startPos, int maxResults)
-    throws UserDirectoryNotFoundException, SecurityException
-  {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
-    }
-
-    return userDirectory.getUsersEx(startPos, maxResults);
   }
 
   /**

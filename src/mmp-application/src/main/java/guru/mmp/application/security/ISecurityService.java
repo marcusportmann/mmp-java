@@ -246,24 +246,6 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException;
 
   /**
-   * Retrieve the users matching the attribute criteria.
-   *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
-   * @param attributes      the attribute criteria used to select the users
-   * @param startPos        the position in the list of users to start from
-   * @param maxResults      the maximum number of results to return or -1 for all
-   *
-   * @return the list of users whose attributes match the attribute criteria
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws InvalidAttributeException
-   * @throws SecurityException
-   */
-  List<User> findUsersEx(long userDirectoryId, List<Attribute> attributes, int startPos,
-      int maxResults)
-    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException;
-
-  /**
    * Retrieve the filtered list of users.
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
@@ -356,21 +338,6 @@ public interface ISecurityService
    * @throws SecurityException
    */
   List<Group> getGroups(long userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the groups.
-   *
-   * @param userDirectoryId the unique ID for the user directory the groups are associated with
-   * @param startPos        the position in the list of groups to start from
-   * @param maxResults      the maximum number of results to return or -1 for all
-   *
-   * @return the list of groups
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
-   */
-  List<Group> getGroupsEx(long userDirectoryId, int startPos, int maxResults)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
@@ -568,21 +535,6 @@ public interface ISecurityService
    * @throws SecurityException
    */
   List<User> getUsers(long userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityException;
-
-  /**
-   * Retrieve the users.
-   *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
-   * @param startPos        the position in the list of users to start from
-   * @param maxResults      the maximum number of results to return or -1 for all
-   *
-   * @return the list of users
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
-   */
-  List<User> getUsersEx(long userDirectoryId, int startPos, int maxResults)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
