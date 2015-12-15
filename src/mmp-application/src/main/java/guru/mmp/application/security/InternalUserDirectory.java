@@ -1018,7 +1018,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<Group> getGroupsEx(int startPos, int maxResults)
     throws SecurityException
   {
-    throw new SecurityException("TODO: IMPLEMENT ME");
+    throw new SecurityException("TODO: NOT IMPLEMENTED");
   }
 
   /**
@@ -1410,7 +1410,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void renameGroup(String groupName, String newGroupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
   {
-    throw new SecurityException("TODO: IMPLEMENT ME!!!");
+    throw new SecurityException("TODO: NOT IMPLEMENTED");
   }
 
   /**

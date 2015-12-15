@@ -2813,8 +2813,7 @@ public class SecurityService
     userDirectory.setDescription(organisation.getDescription() + " User Directory");
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-      + "<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\">"
-      + "<user-directory>"
+      + "<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<user-directory>"
       + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
       + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
       + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"

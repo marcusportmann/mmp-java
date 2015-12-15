@@ -26,6 +26,10 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import java.util.*;
 
 import javax.naming.Context;
@@ -75,16 +79,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String baseDN;
   private String bindDN;
   private String bindPassword;
-  private String descriptionAttribute;
-  private String emailAttribute;
-  private String faxNumberAttribute;
-  private String firstNamesAttribute;
+  private String getFunctionCodesForGroupsSQL;
   private String groupAttribute;
   private String groupBaseDN;
+  private String groupDescriptionAttribute;
   private String groupMemberAttribute;
   private String groupObjectClass;
   private String host;
-  private String lastNameAttribute;
   private int maxFilteredGroups;
 
   /*
@@ -113,22 +114,27 @@ public class LDAPUserDirectory extends UserDirectoryBase
    */
   private int maxFilteredUsers;
   private int maxPasswordAttempts;
-  private String mobileNumberAttribute;
-  private String passwordAttemptsAttribute;
-  private String passwordExpiryAttribute;
   private int passwordExpiryMonths;
-  private String passwordHistoryAttribute;
   private int passwordHistoryMaxLength;
   private int passwordHistoryMonths;
-  private String phoneNumberAttribute;
   private int port;
   private String sharedBaseDN;
   private boolean supportPasswordHistory;
-  private String titleAttribute;
   private boolean useSSL;
   private String userBaseDN;
+  private String userDescriptionAttribute;
+  private String userEmailAttribute;
+  private String userFaxNumberAttribute;
+  private String userFirstNamesAttribute;
+  private String userLastNameAttribute;
+  private String userMobileNumberAttribute;
   private String userObjectClass;
-  private String usernameAttribute;
+  private String userPasswordAttemptsAttribute;
+  private String userPasswordExpiryAttribute;
+  private String userPasswordHistoryAttribute;
+  private String userPhoneNumberAttribute;
+  private String userTitleAttribute;
+  private String userUsernameAttribute;
 
   /*
    * private String removeInternalUserFromInternalGroupSQL;
@@ -253,112 +259,112 @@ public class LDAPUserDirectory extends UserDirectoryBase
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("UsernameAttribute"))
+      if (parameters.containsKey("UserUsernameAttribute"))
       {
-        usernameAttribute = parameters.get("UsernameAttribute");
+        userUsernameAttribute = parameters.get("UserUsernameAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No UsernameAttribute configuration parameter found for the user directory ("
+            "No UserUsernameAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("PasswordExpiryAttribute"))
+      if (parameters.containsKey("UserPasswordExpiryAttribute"))
       {
-        passwordExpiryAttribute = parameters.get("PasswordExpiryAttribute");
+        userPasswordExpiryAttribute = parameters.get("UserPasswordExpiryAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No PasswordExpiryAttribute configuration parameter found for the user directory ("
+            "No UserPasswordExpiryAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("PasswordAttemptsAttribute"))
+      if (parameters.containsKey("UserPasswordAttemptsAttribute"))
       {
-        passwordAttemptsAttribute = parameters.get("PasswordAttemptsAttribute");
+        userPasswordAttemptsAttribute = parameters.get("UserPasswordAttemptsAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No PasswordAttemptsAttribute configuration parameter found for the user directory ("
+            "No UserPasswordAttemptsAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("PasswordHistoryAttribute"))
+      if (parameters.containsKey("UserPasswordHistoryAttribute"))
       {
-        passwordHistoryAttribute = parameters.get("PasswordHistoryAttribute");
+        userPasswordHistoryAttribute = parameters.get("UserPasswordHistoryAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No PasswordHistoryAttribute configuration parameter found for the user directory ("
+            "No UserPasswordHistoryAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("TitleAttribute"))
+      if (parameters.containsKey("UserTitleAttribute"))
       {
-        titleAttribute = parameters.get("TitleAttribute");
+        userTitleAttribute = parameters.get("UserTitleAttribute");
       }
 
-      if (parameters.containsKey("FirstNamesAttribute"))
+      if (parameters.containsKey("UserFirstNamesAttribute"))
       {
-        firstNamesAttribute = parameters.get("FirstNamesAttribute");
+        userFirstNamesAttribute = parameters.get("UserFirstNamesAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No FirstNamesAttribute configuration parameter found for the user directory ("
+            "No UserFirstNamesAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("LastNameAttribute"))
+      if (parameters.containsKey("UserLastNameAttribute"))
       {
-        lastNameAttribute = parameters.get("LastNameAttribute");
+        userLastNameAttribute = parameters.get("UserLastNameAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No LastNameAttribute configuration parameter found for the user directory ("
+            "No UserLastNameAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("PhoneNumberAttribute"))
+      if (parameters.containsKey("UserPhoneNumberAttribute"))
       {
-        phoneNumberAttribute = parameters.get("PhoneNumberAttribute");
+        userPhoneNumberAttribute = parameters.get("UserPhoneNumberAttribute");
       }
 
-      if (parameters.containsKey("FaxNumberAttribute"))
+      if (parameters.containsKey("UserFaxNumberAttribute"))
       {
-        faxNumberAttribute = parameters.get("FaxNumberAttribute");
+        userFaxNumberAttribute = parameters.get("UserFaxNumberAttribute");
       }
 
-      if (parameters.containsKey("MobileNumberAttribute"))
+      if (parameters.containsKey("UserMobileNumberAttribute"))
       {
-        mobileNumberAttribute = parameters.get("MobileNumberAttribute");
+        userMobileNumberAttribute = parameters.get("UserMobileNumberAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No MobileNumberAttribute configuration parameter found for the user directory ("
+            "No UserMobileNumberAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("EmailAttribute"))
+      if (parameters.containsKey("UserEmailAttribute"))
       {
-        emailAttribute = parameters.get("EmailAttribute");
+        userEmailAttribute = parameters.get("UserEmailAttribute");
       }
       else
       {
         throw new SecurityException(
-            "No EmailAttribute configuration parameter found for the user directory ("
+            "No UserEmailAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
-      if (parameters.containsKey("DescriptionAttribute"))
+      if (parameters.containsKey("UserDescriptionAttribute"))
       {
-        descriptionAttribute = parameters.get("DescriptionAttribute");
+        userDescriptionAttribute = parameters.get("UserDescriptionAttribute");
       }
 
       if (parameters.containsKey("GroupObjectClass"))
@@ -392,6 +398,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new SecurityException(
             "No GroupMemberAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
+      }
+
+      if (parameters.containsKey("GroupDescriptionAttribute"))
+      {
+        groupDescriptionAttribute = parameters.get("GroupDescriptionAttribute");
       }
 
       if (parameters.containsKey("MaxPasswordAttempts"))
@@ -1262,31 +1273,97 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public List<String> getFunctionCodesForUser(String username)
     throws UserNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection())
-     * {
-     * // Get the ID of the user with the specified username
-     * long internalUserId = getInternalUserId(connection, username);
-     *
-     * if (internalUserId == -1)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     * return getFunctionCodesForUserId(connection, internalUserId);
-     * }
-     * catch (UserNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to retrieve the function codes for the user (" + username
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext();
+
+      String userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute
+        + "=" + userDN + "))";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      List<String> groupNames = new ArrayList<>();
+
+      while (searchResults.hasMoreElements())
+      {
+        SearchResult searchResult = searchResults.nextElement();
+
+        if (searchResult.getAttributes().get(groupAttribute) != null)
+        {
+          groupNames.add(String.valueOf(searchResult.getAttributes().get(groupAttribute).get()));
+        }
+      }
+
+      /*
+       * Build the SQL statement used to retrieve the function codes associated with the LDAP
+       * groups the user is a member of.
+       *
+       * NOTE: This is not the ideal solution as a carefully crafted group name in the LDAP
+       *       directory can be used to perpetrate a SQL injection attack. A better option
+       *       would to be to use the ANY operator in the WHERE clause but this is not
+       *       supported by H2.
+       */
+
+      StringBuilder buffer = new StringBuilder(getFunctionCodesForGroupsSQL);
+      buffer.append(" WHERE G.USER_DIRECTORY_ID=").append(getUserDirectoryId());
+      buffer.append(" AND G.GROUPNAME IN (");
+
+      for (int i = 0; i < groupNames.size(); i++)
+      {
+        if (i > 0)
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("'").append(groupNames.get(i).replaceAll("'", "''")).append("'");
+      }
+
+      buffer.append(")");
+
+      List<String> functionCodes = new ArrayList<>();
+
+      try (Connection connection = getDataSource().getConnection();
+        Statement statement = connection.createStatement())
+      {
+        try (ResultSet rs = statement.executeQuery(buffer.toString()))
+        {
+          while (rs.next())
+          {
+            functionCodes.add(rs.getString(1));
+          }
+        }
+      }
+
+      return functionCodes;
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the function codes for the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1368,8 +1445,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute + "="
-        + userDN + "))";
+      String searchFilter = "(&(objectClass=" + groupObjectClass + ")(" + groupMemberAttribute
+        + "=" + userDN + "))";
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1391,14 +1468,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       return groupNames;
     }
-    catch (UserNotFoundException  e)
+    catch (UserNotFoundException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the group names for the user (" + username
-           + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
     finally
     {
@@ -1579,33 +1656,47 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public int getNumberOfGroups()
     throws SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(getNumberOfInternalGroupsSQL))
-     * {
-     * statement.setLong(1, getUserDirectoryId());
-     *
-     * try (ResultSet rs = statement.executeQuery())
-     * {
-     *   if (rs.next())
-     *   {
-     *     return rs.getInt(1);
-     *   }
-     *   else
-     *   {
-     *     return 0;
-     *   }
-     * }
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException(
-     *     "Failed to retrieve the number of groups for the user directory (" + getUserDirectoryId()
-     *     + "):" + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext();
+
+      String searchFilter = "(objectClass=" + groupObjectClass + ")";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      int numberOfGroups = 0;
+
+      while (searchResults.hasMoreElements())
+      {
+        searchResults.nextElement();
+
+        numberOfGroups++;
+      }
+
+      return numberOfGroups;
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+          "Failed to retrieve the number of groups for the user directory (" + getUserDirectoryId()
+          + "):" + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1766,8 +1857,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       dirContext = getDirContext();
 
-      String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + usernameAttribute + "="
-        + username + "))";
+      String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + userUsernameAttribute
+        + "=" + username + "))";
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2251,6 +2342,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     super.buildStatements(schemaPrefix);
 
+    // getFunctionCodesForGroupsSQL
+    getFunctionCodesForGroupsSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F"
+        + " INNER JOIN " + schemaPrefix
+        + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID INNER JOIN " + schemaPrefix
+        + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID INNER JOIN " + schemaPrefix
+        + "GROUPS G ON G.ID = RTGM.GROUP_ID ";
+
     /*
      *
      * // addInternalUserToInternalGroupSQL
@@ -2290,17 +2388,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
      * + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
      * + " OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
      *
-     * // getFunctionCodesForUserIdSQL
-     * getFunctionCodesForUserIdSQL =
-     * "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F" + " INNER JOIN " + schemaPrefix
-     * + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID INNER JOIN " + schemaPrefix
-     * + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID INNER JOIN " + schemaPrefix
-     * + "GROUPS G ON G.ID = RTGM.GROUP_ID INNER JOIN " + schemaPrefix
-     * + "INTERNAL_GROUPS IG ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID"
-     * + "     AND UPPER(IG.GROUPNAME) = UPPER(G.GROUPNAME) INNER JOIN " + schemaPrefix
-     * + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTIGM"
-     * + "   ON IUTIGM.USER_DIRECTORY_ID = IG.USER_DIRECTORY_ID AND IUTIGM.INTERNAL_GROUP_ID = IG.ID"
-     * + " WHERE IUTIGM.USER_DIRECTORY_ID=? AND IUTIGM.INTERNAL_USER_ID=?";
+     *
      *
      * // getInternalGroupIdSQL
      * getInternalGroupIdSQL = "SELECT IG.ID FROM " + schemaPrefix + "INTERNAL_GROUPS IG"
@@ -2390,100 +2478,125 @@ public class LDAPUserDirectory extends UserDirectoryBase
      */
   }
 
+  private Group buildGroupFromSearchResult(SearchResult searchResult)
+    throws NamingException
+  {
+    Attributes attributes = searchResult.getAttributes();
+
+    Group group = new Group(String.valueOf(attributes.get(groupAttribute).get()));
+
+    group.setId(-1);
+    group.setUserDirectoryId(getUserDirectoryId());
+
+    if ((!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
+        && (attributes.get(groupDescriptionAttribute) != null))
+    {
+      group.setDescription(String.valueOf(attributes.get(groupDescriptionAttribute).get()));
+    }
+    else
+    {
+      group.setDescription("");
+    }
+
+    return group;
+  }
+
   private User buildUserFromSearchResult(SearchResult searchResult)
     throws NamingException
   {
     Attributes attributes = searchResult.getAttributes();
 
-    User user = new User(String.valueOf(attributes.get(usernameAttribute).get()));
+    User user = new User(String.valueOf(attributes.get(userUsernameAttribute).get()));
 
     user.setId(-1);
     user.setUserDirectoryId(getUserDirectoryId());
     user.setPassword("");
 
-    if ((!StringUtil.isNullOrEmpty(titleAttribute)) && (attributes.get(titleAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userTitleAttribute))
+        && (attributes.get(userTitleAttribute) != null))
     {
-      user.setTitle(String.valueOf(attributes.get(titleAttribute).get()));
+      user.setTitle(String.valueOf(attributes.get(userTitleAttribute).get()));
     }
     else
     {
       user.setTitle("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(firstNamesAttribute))
-        && (attributes.get(firstNamesAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
+        && (attributes.get(userFirstNamesAttribute) != null))
     {
-      user.setFirstNames(String.valueOf(attributes.get(firstNamesAttribute).get()));
+      user.setFirstNames(String.valueOf(attributes.get(userFirstNamesAttribute).get()));
     }
     else
     {
       user.setFirstNames("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(lastNameAttribute))
-        && (attributes.get(lastNameAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userLastNameAttribute))
+        && (attributes.get(userLastNameAttribute) != null))
     {
-      user.setLastName(String.valueOf(attributes.get(lastNameAttribute).get()));
+      user.setLastName(String.valueOf(attributes.get(userLastNameAttribute).get()));
     }
     else
     {
       user.setLastName("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(phoneNumberAttribute))
-        && (attributes.get(phoneNumberAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+        && (attributes.get(userPhoneNumberAttribute) != null))
     {
-      user.setPhoneNumber(String.valueOf(attributes.get(phoneNumberAttribute).get()));
+      user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
     }
     else
     {
       user.setPhoneNumber("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(faxNumberAttribute))
-        && (attributes.get(faxNumberAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userFaxNumberAttribute))
+        && (attributes.get(userFaxNumberAttribute) != null))
     {
-      user.setFaxNumber(String.valueOf(attributes.get(faxNumberAttribute).get()));
+      user.setFaxNumber(String.valueOf(attributes.get(userFaxNumberAttribute).get()));
     }
     else
     {
       user.setFaxNumber("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(mobileNumberAttribute))
-        && (attributes.get(mobileNumberAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
+        && (attributes.get(userMobileNumberAttribute) != null))
     {
-      user.setMobileNumber(String.valueOf(attributes.get(mobileNumberAttribute).get()));
+      user.setMobileNumber(String.valueOf(attributes.get(userMobileNumberAttribute).get()));
     }
     else
     {
       user.setMobileNumber("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(emailAttribute)) && (attributes.get(emailAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userEmailAttribute))
+        && (attributes.get(userEmailAttribute) != null))
     {
-      user.setEmail(String.valueOf(attributes.get(emailAttribute).get()));
+      user.setEmail(String.valueOf(attributes.get(userEmailAttribute).get()));
     }
     else
     {
       user.setEmail("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(passwordAttemptsAttribute))
-        && (attributes.get(passwordAttemptsAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+        && (attributes.get(userPasswordAttemptsAttribute) != null))
     {
       user.setPasswordAttempts(
-          Integer.parseInt(String.valueOf(attributes.get(passwordAttemptsAttribute).get())));
+          Integer.parseInt(String.valueOf(attributes.get(userPasswordAttemptsAttribute).get())));
     }
     else
     {
       user.setPasswordAttempts(-1);
     }
 
-    if ((!StringUtil.isNullOrEmpty(passwordExpiryAttribute))
-        && (attributes.get(passwordExpiryAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+        && (attributes.get(userPasswordExpiryAttribute) != null))
     {
-      if (String.valueOf(attributes.get(passwordExpiryAttribute).get()).equals("-1"))
+      if (String.valueOf(attributes.get(userPasswordExpiryAttribute).get()).equals("-1"))
       {
         user.setPasswordExpiry(new Date(System.currentTimeMillis()
             + (1000L * 60L * 60L * 24L * 365L * 20L)));
@@ -2492,14 +2605,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         user.setPasswordExpiry(
             new Date(
-              Long.parseLong(String.valueOf(attributes.get(passwordExpiryAttribute).get()))));
+              Long.parseLong(String.valueOf(attributes.get(userPasswordExpiryAttribute).get()))));
       }
     }
 
-    if ((!StringUtil.isNullOrEmpty(descriptionAttribute))
-        && (attributes.get(descriptionAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userDescriptionAttribute))
+        && (attributes.get(userDescriptionAttribute) != null))
     {
-      user.setDescription(String.valueOf(attributes.get(descriptionAttribute).get()));
+      user.setDescription(String.valueOf(attributes.get(userDescriptionAttribute).get()));
     }
     else
     {
@@ -2583,8 +2696,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + usernameAttribute + "="
-        + username + "))";
+      String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + userUsernameAttribute
+        + "=" + username + "))";
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2621,8 +2734,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     }
     finally
     {
-      JNDIUtil.close(searchResultsNonSharedUsers);
       JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
     }
   }
 
@@ -2634,8 +2747,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     try
     {
-      String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + usernameAttribute + "="
-        + username + "))";
+      String searchFilter = "(&(objectClass=" + userObjectClass + ")(" + userUsernameAttribute
+        + "=" + username + "))";
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2660,7 +2773,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         if (searchResultsSharedUsers.hasMoreElements())
         {
-          return searchResultsNonSharedUsers.nextElement().getNameInNamespace();
+          return searchResultsSharedUsers.nextElement().getNameInNamespace();
         }
       }
 
@@ -2673,199 +2786,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
     }
     finally
     {
-      JNDIUtil.close(searchResultsNonSharedUsers);
       JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
     }
   }
-
-///**
-// * Build the JDBC <code>PreparedStatement</code> for the SQL query that will select the users
-// * in the INTERNAL_USERS table using the values of the specified attributes as the selection
-// * criteria.
-// *
-// * @param connection the existing database connection to use
-// * @param attributes the attributes to be used as the selection criteria
-// *
-// * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-// *         INTERNAL_USERS table using the values of the specified attributes as the selection
-// *         criteria
-// *
-// * @throws InvalidAttributeException
-// * @throws SQLException
-// */
-//private PreparedStatement buildFindUsersStatement(Connection connection,
-//    List<Attribute> attributes)
-//  throws InvalidAttributeException, AttributeException, SQLException
-//{
-//  // Build the SQL statement to select the users
-//  StringBuilder buffer = new StringBuilder();
-//
-//  buffer.append("SELECT ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, ");
-//  buffer.append("LAST_NAME, PHONE, FAX, MOBILE, EMAIL, ");
-//  buffer.append("PASSWORD_ATTEMPTS, PASSWORD_EXPIRY, DESCRIPTION FROM ");
-//
-//  buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
-//      getDatabaseCatalogSeparator());
-//
-//  buffer.append("INTERNAL_USERS");
-//
-//  if (attributes.size() > 0)
-//  {
-//    // Build the parameters for the "WHERE" clause for the SQL statement
-//    StringBuilder whereParameters = new StringBuilder();
-//
-//    for (Attribute attribute : attributes)
-//    {
-//      if (whereParameters.length() > 0)
-//      {
-//        whereParameters.append(" AND ");
-//      }
-//
-//      if (attribute.getName().equalsIgnoreCase("description"))
-//      {
-//        whereParameters.append("DESCRIPTION LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("email"))
-//      {
-//        whereParameters.append("EMAIL LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("faxNumber"))
-//      {
-//        whereParameters.append("FAX LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("firstNames"))
-//      {
-//        whereParameters.append("FIRST_NAMES LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("lastName"))
-//      {
-//        whereParameters.append("LAST_NAME LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-//      {
-//        whereParameters.append("MOBILE LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-//      {
-//        whereParameters.append("PHONE LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("title"))
-//      {
-//        whereParameters.append("TITLE LIKE ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("username"))
-//      {
-//        whereParameters.append("USERNAME LIKE ?");
-//      }
-//      else
-//      {
-//        throw new InvalidAttributeException("The attribute (" + attribute.getName()
-//            + ") is invalid");
-//      }
-//    }
-//
-//    buffer.append(" WHERE ");
-//    buffer.append(whereParameters.toString());
-//  }
-//
-//  PreparedStatement statement = connection.prepareStatement(buffer.toString());
-//
-//  // Set the parameters for the prepared statement
-//  int parameterIndex = 1;
-//
-//  for (Attribute attribute : attributes)
-//  {
-//    if (attribute.getName().equalsIgnoreCase("description"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("email"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("faxNumber"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("firstNames"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("lastName"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("title"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("username"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//  }
-//
-//  return statement;
-//}
-
-///**
-// * Create a new <code>User</code> instance and populate it with the contents of the current
-// * row in the specified <code>ResultSet</code>.
-// *
-// * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-// *           <code>User</code> instance
-// *
-// * @return the populated <code>User</code> instance
-// *
-// * @throws SQLException
-// */
-//private User buildUserFromResultSet(ResultSet rs)
-//  throws SQLException
-//{
-//  User user = new User(rs.getString(2));
-//
-//  user.setId(rs.getLong(1));
-//  user.setUserDirectoryId(getUserDirectoryId());
-//  user.setPassword(StringUtil.notNull(rs.getString(3)));
-//  user.setTitle(StringUtil.notNull(rs.getString(4)));
-//  user.setFirstNames(StringUtil.notNull(rs.getString(5)));
-//  user.setLastName(StringUtil.notNull(rs.getString(6)));
-//  user.setPhoneNumber(StringUtil.notNull(rs.getString(7)));
-//  user.setFaxNumber(StringUtil.notNull(rs.getString(8)));
-//  user.setMobileNumber(StringUtil.notNull(rs.getString(9)));
-//  user.setEmail(StringUtil.notNull(rs.getString(10)));
-//
-//  if (rs.getObject(11) != null)
-//  {
-//    user.setPasswordAttempts(rs.getInt(11));
-//  }
-//
-//  if (rs.getObject(12) != null)
-//  {
-//    user.setPasswordExpiry(new Date(rs.getTimestamp(12).getTime()));
-//  }
-//
-//  user.setDescription(StringUtil.notNull(rs.getString(13)));
-//
-//  return user;
-//}
 
 ///**
 // * Retrieve the list of authorised function codes for the internal user.
@@ -2895,250 +2819,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
 //      }
 //
 //      return functionCodes;
-//    }
-//  }
-//}
-
-///**
-// * Retrieve the names for all the groups that the internal user with the specific numeric ID is
-// * associated with.
-// *
-// * @param connection     the existing database connection
-// * @param internalUserId the numeric ID for the internal user
-// *
-// * @return the list of groups
-// *
-// * @throws SQLException
-// */
-//private List<String> getGroupNamesForUser(Connection connection, long internalUserId)
-//  throws SQLException
-//{
-//  try (PreparedStatement statement =
-//      connection.prepareStatement(getInternalGroupNamesForInternalUserSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setLong(2, internalUserId);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      List<String> list = new ArrayList<>();
-//
-//      while (rs.next())
-//      {
-//        list.add(rs.getString(1));
-//      }
-//
-//      return list;
-//    }
-//  }
-//}
-
-///**
-// * Returns the numeric ID for the internal group with the specified group name.
-// *
-// * @param connection the existing database connection to use
-// * @param groupName  the group name uniquely identifying the internal group
-// *
-// * @return the numeric ID for the internal group or -1 if an internal group with the specified
-// *         group name could not be found
-// *
-// * @throws SecurityException
-// */
-//private long getInternalGroupId(Connection connection, String groupName)
-//  throws SecurityException
-//{
-//  try (PreparedStatement statement = connection.prepareStatement(getInternalGroupIdSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setString(2, groupName);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      if (rs.next())
-//      {
-//        return rs.getLong(1);
-//      }
-//      else
-//      {
-//        return -1;
-//      }
-//    }
-//  }
-//  catch (Throwable e)
-//  {
-//    throw new SecurityException("Failed to retrieve the numeric ID for the group (" + groupName
-//        + ") for the user directory (" + getUserDirectoryId() + ")", e);
-//  }
-//}
-
-///**
-// * Retrieve all the internal groups that the internal user with the specific numeric ID is
-// * associated with.
-// *
-// * @param connection     the existing database connection
-// * @param internalUserId the numeric ID for the internal user
-// *
-// * @return the list of internal groups
-// *
-// * @throws SQLException
-// */
-//private List<Group> getInternalGroupsForInternalUser(Connection connection, long internalUserId)
-//  throws SQLException
-//{
-//  try (PreparedStatement statement =
-//      connection.prepareStatement(getInternalGroupsForInternalUserSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setLong(2, internalUserId);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      List<Group> list = new ArrayList<>();
-//
-//      while (rs.next())
-//      {
-//        Group group = new Group(rs.getString(2));
-//
-//        group.setId(rs.getLong(1));
-//        group.setUserDirectoryId(getUserDirectoryId());
-//        group.setDescription(rs.getString(3));
-//        list.add(group);
-//      }
-//
-//      return list;
-//    }
-//  }
-//}
-
-///**
-// * Returns the numeric ID for the internal user with the specified username.
-// *
-// * @param connection the existing database connection to use
-// * @param username   the username uniquely identifying the internal user
-// *
-// * @return the numeric ID for the internal user or -1 if an internal user with the specified
-// *         username could not be found
-// *
-// * @throws SecurityException
-// */
-//private long getInternalUserId(Connection connection, String username)
-//  throws SecurityException
-//{
-//  try (PreparedStatement statement = connection.prepareStatement(getInternalUserIdSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setString(2, username);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      if (rs.next())
-//      {
-//        return rs.getLong(1);
-//      }
-//      else
-//      {
-//        return -1;
-//      }
-//    }
-//  }
-//  catch (Throwable e)
-//  {
-//    throw new SecurityException("Failed to retrieve the numeric ID for the user (" + username
-//        + ") for the user directory (" + getUserDirectoryId() + ")", e);
-//  }
-//}
-
-///**
-// * Retrieve the IDs for all the internal users that are associated with the group with the
-// * specific numeric ID.
-// *
-// * @param connection      the existing database connection
-// * @param internalGroupId the numeric ID for the internal group
-// *
-// * @return the IDs for all the internal users that are associated with the group the specific
-// *         numeric ID
-// *
-// * @throws SQLException
-// */
-//private long getNumberOfInternalUsersForInternalGroup(Connection connection, long internalGroupId)
-//  throws SQLException
-//{
-//  try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setLong(2, internalGroupId);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      if (rs.next())
-//      {
-//        return rs.getLong(1);
-//      }
-//      else
-//      {
-//        return 0;
-//      }
-//    }
-//  }
-//}
-
-///**
-// * Retrieve the information for the internal user with the specified username.
-// *
-// * @param connection the existing database connection to use
-// * @param username   the username identifying the internal user
-// *
-// * @return the <code>User</code> or <code>null</code> if the internal user could not be found
-// *
-// * @throws SQLException
-// */
-//private User getUser(Connection connection, String username)
-//  throws SQLException
-//{
-//  try (PreparedStatement statement = connection.prepareStatement(getInternalUserSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setString(2, username);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      if (rs.next())
-//      {
-//        return buildUserFromResultSet(rs);
-//      }
-//      else
-//      {
-//        return null;
-//      }
-//    }
-//  }
-//}
-
-///**
-// * Is the user in the group?
-// *
-// * @param connection      the existing database connection
-// * @param internalUserId  the numeric ID uniquely identifying the internal user
-// * @param internalGroupId the numeric ID uniquely identifying the internal group
-// *
-// * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
-// *
-// * @throws SQLException
-// */
-//private boolean isInternalUserInInternalGroup(Connection connection, long internalUserId,
-//    long internalGroupId)
-//  throws SQLException
-//{
-//  try (PreparedStatement statement =
-//      connection.prepareStatement(isInternalUserInInternalGroupSQL))
-//  {
-//    statement.setLong(1, getUserDirectoryId());
-//    statement.setLong(2, internalUserId);
-//    statement.setLong(3, internalGroupId);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      return rs.next();
 //    }
 //  }
 //}
