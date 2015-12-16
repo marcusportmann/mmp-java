@@ -217,7 +217,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (parameters.containsKey("BaseDN"))
       {
-        baseDN = parameters.get("BindDN");
+        baseDN = parameters.get("BaseDN");
       }
       else
       {
@@ -682,17 +682,22 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      if ((user.getPasswordAttempts() != null)
-          && (user.getPasswordAttempts() >= maxPasswordAttempts))
-      {
-        throw new UserLockedException("The user (" + username
-            + ") has exceeded the number of failed password attempts and has been locked");
-      }
+      LdapName userDN = new LdapName(user.getProperty("dn"));
 
-      if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
+      if (!userDN.startsWith(new LdapName(sharedBaseDN)))
       {
-        throw new ExpiredPasswordException("The password for the user (" + username
+        if ((user.getPasswordAttempts() != null)
+          && (user.getPasswordAttempts() >= maxPasswordAttempts))
+        {
+          throw new UserLockedException("The user (" + username
+            + ") has exceeded the number of failed password attempts and has been locked");
+        }
+
+        if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
+        {
+          throw new ExpiredPasswordException("The password for the user (" + username
             + ") has expired");
+        }
       }
 
       DirContext userDirContext = null;
