@@ -2141,18 +2141,18 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (existingAttributes.get(groupDescriptionAttribute) == null)
       {
         modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-            new BasicAttribute(groupDescriptionAttribute, group.getDescription())));
+            new BasicAttribute(groupDescriptionAttribute, StringUtil.notNull(group.getDescription()))));
       }
       else
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(groupDescriptionAttribute, group.getDescription())));
+            new BasicAttribute(groupDescriptionAttribute, StringUtil.notNull(group.getDescription()))));
       }
 
       dirContext.modifyAttributes(groupDN,
           modificationItems.toArray(new ModificationItem[modificationItems.size()]));
     }
-    catch (DuplicateGroupException e)
+    catch (GroupNotFoundException e)
     {
       throw e;
     }
@@ -2180,229 +2180,172 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
     throws UserNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection())
-     * {
-     * long internalUserId = getInternalUserId(connection, user.getUsername());
-     *
-     * if (internalUserId == -1)
-     * {
-     *   throw new UserNotFoundException("The user (" + user.getUsername() + ") could not be found");
-     * }
-     *
-     * StringBuilder buffer = new StringBuilder();
-     *
-     * buffer.append("UPDATE ");
-     * buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
-     *     getDatabaseCatalogSeparator());
-     *
-     * buffer.append("INTERNAL_USERS ");
-     *
-     * StringBuilder fieldsBuffer = new StringBuilder();
-     *
-     * if (user.getTitle() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET TITLE=?"
-     *       : ", TITLE=?");
-     * }
-     *
-     * if (user.getFirstNames() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET FIRST_NAMES=?"
-     *       : ", FIRST_NAMES=?");
-     * }
-     *
-     * if (user.getLastName() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET LAST_NAME=?"
-     *       : ", LAST_NAME=?");
-     * }
-     *
-     * if (user.getEmail() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET EMAIL=?"
-     *       : ", EMAIL=?");
-     * }
-     *
-     * if (user.getPhoneNumber() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET PHONE=?"
-     *       : ", PHONE=?");
-     * }
-     *
-     * if (user.getFaxNumber() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET FAX=?"
-     *       : ", FAX=?");
-     * }
-     *
-     * if (user.getMobileNumber() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET MOBILE=?"
-     *       : ", MOBILE=?");
-     * }
-     *
-     * if (user.getDescription() != null)
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET DESCRIPTION=?"
-     *       : ", DESCRIPTION=?");
-     * }
-     *
-     * if (!StringUtil.isNullOrEmpty(user.getPassword()))
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET PASSWORD=?"
-     *       : ", PASSWORD=?");
-     * }
-     *
-     * if (lockUser || (user.getPasswordAttempts() != null))
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET PASSWORD_ATTEMPTS=?"
-     *       : ", PASSWORD_ATTEMPTS=?");
-     * }
-     *
-     * if (expirePassword || (user.getPasswordExpiry() != null))
-     * {
-     *   fieldsBuffer.append((fieldsBuffer.length() == 0)
-     *       ? "SET PASSWORD_EXPIRY=?"
-     *       : ", PASSWORD_EXPIRY=?");
-     * }
-     *
-     * buffer.append(fieldsBuffer.toString());
-     * buffer.append(" WHERE USER_DIRECTORY_ID=? AND ID=?");
-     *
-     * String updateUserSQL = buffer.toString();
-     *
-     * try (PreparedStatement statement = connection.prepareStatement(updateUserSQL))
-     * {
-     *   int parameterIndex = 1;
-     *
-     *   if (user.getTitle() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getTitle());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getFirstNames() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getFirstNames());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getLastName() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getLastName());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getEmail() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getEmail());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getPhoneNumber() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getPhoneNumber());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getFaxNumber() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getFaxNumber());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getMobileNumber() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getMobileNumber());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getDescription() != null)
-     *   {
-     *     statement.setString(parameterIndex, user.getDescription());
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (user.getPassword() != null)
-     *   {
-     *     if (user.getPassword().length() > 0)
-     *     {
-     *       statement.setString(parameterIndex, createPasswordHash(user.getPassword()));
-     *     }
-     *     else
-     *     {
-     *       statement.setString(parameterIndex, "");
-     *     }
-     *
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (lockUser || (user.getPasswordAttempts() != null))
-     *   {
-     *     if (lockUser)
-     *     {
-     *       statement.setInt(parameterIndex, -1);
-     *     }
-     *     else
-     *     {
-     *       statement.setInt(parameterIndex, user.getPasswordAttempts());
-     *     }
-     *
-     *     parameterIndex++;
-     *   }
-     *
-     *   if (expirePassword || (user.getPasswordExpiry() != null))
-     *   {
-     *     if (expirePassword)
-     *     {
-     *       statement.setTimestamp(parameterIndex, new Timestamp(System.currentTimeMillis()));
-     *     }
-     *     else
-     *     {
-     *       statement.setTimestamp(parameterIndex,
-     *           new Timestamp(user.getPasswordExpiry().getTime()));
-     *     }
-     *
-     *     parameterIndex++;
-     *   }
-     *
-     *   statement.setLong(parameterIndex, getUserDirectoryId());
-     *
-     *   parameterIndex++;
-     *
-     *   statement.setLong(parameterIndex, internalUserId);
-     *
-     *   if (statement.executeUpdate() != 1)
-     *   {
-     *     throw new SecurityException(
-     *         "No rows were affected as a result of executing the SQL statement (" + updateUserSQL
-     *         + ")");
-     *   }
-     * }
-     * }
-     * catch (UserNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to update the user (" + user.getUsername()
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName userDN = getUserDN(dirContext, user.getUsername());
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException("The user (" + user.getUsername()
+          + ") could not be found");
+      }
+
+      Attributes existingAttributes = dirContext.getAttributes(userDN);
+
+      List<ModificationItem> modificationItems = new ArrayList<>();
+
+
+      private static final long serialVersionUID = 1000000;
+      private String description;
+      private String email;
+      private String faxNumber;
+      private long id;
+      private boolean isReadOnly;
+      private String lastName;
+      private String mobileNumber;
+      private String password;
+      private Integer passwordAttempts;
+      private Date passwordExpiry;
+      private String phoneNumber;
+      private HashMap<String, String> properties = new HashMap<>();
+
+
+      if (existingAttributes.get(userTitleAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle()))));
+      }
+
+      if (existingAttributes.get(userFirstNamesAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
+      }
+
+      if (existingAttributes.get(userLastNameAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
+      }
+
+      if (existingAttributes.get(userEmailAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail()))));
+      }
+
+      if (existingAttributes.get(userPhoneNumberAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
+      }
+
+      if (existingAttributes.get(userFaxNumberAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userFaxNumberAttribute, StringUtil.notNull(user.getFaxNumber()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userFaxNumberAttribute, StringUtil.notNull(user.getFaxNumber()))));
+      }
+
+      if (existingAttributes.get(userMobileNumberAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userMobileNumberAttribute, StringUtil.notNull(user.getMobileNumber()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userMobileNumberAttribute, StringUtil.notNull(user.getMobileNumber()))));
+      }
+
+      if (existingAttributes.get(userDescriptionAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+          new BasicAttribute(userDescriptionAttribute, StringUtil.notNull(user.getDescription()))));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(userDescriptionAttribute, StringUtil.notNull(user.getDescription()))));
+      }
+
+      if (expirePassword)
+      {
+        if (existingAttributes.get(userPasswordExpiryAttribute) == null)
+        {
+          modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+            new BasicAttribute(userPasswordExpiryAttribute, "0")));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+            new BasicAttribute(userPasswordExpiryAttribute, "0")));
+        }
+      }
+
+      if (lockUser)
+      {
+        if (existingAttributes.get(userPasswordAttemptsAttribute) == null)
+        {
+          modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+            new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(maxPasswordAttempts))));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+            new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(maxPasswordAttempts))));
+        }
+      }
+
+      dirContext.modifyAttributes(userDN,
+        modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to update the user (" + user.getUsername()
+        + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
