@@ -2198,22 +2198,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-
-      private static final long serialVersionUID = 1000000;
-      private String description;
-      private String email;
-      private String faxNumber;
-      private long id;
-      private boolean isReadOnly;
-      private String lastName;
-      private String mobileNumber;
-      private String password;
-      private Integer passwordAttempts;
-      private Date passwordExpiry;
-      private String phoneNumber;
-      private HashMap<String, String> properties = new HashMap<>();
-
-
       if (existingAttributes.get(userTitleAttribute) == null)
       {
         modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
