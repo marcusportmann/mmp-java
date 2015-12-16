@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import java.util.*;
 
@@ -135,6 +136,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String userPasswordAttemptsAttribute;
   private String userPasswordExpiryAttribute;
   private String userPasswordHistoryAttribute;
+  private String[] userPasswordHistoryAttributeArray;
   private String userPhoneNumberAttribute;
   private String userTitleAttribute;
   private String userUsernameAttribute;
@@ -290,14 +292,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
       else
       {
-        throw new SecurityException(
-            "No UserPasswordAttemptsAttribute configuration parameter found for the user directory ("
-            + userDirectoryId + ")");
+        throw new SecurityException("No UserPasswordAttemptsAttribute configuration parameter"
+            + " found for the user directory (" + userDirectoryId + ")");
       }
 
       if (parameters.containsKey("UserPasswordHistoryAttribute"))
       {
         userPasswordHistoryAttribute = parameters.get("UserPasswordHistoryAttribute");
+        userPasswordHistoryAttributeArray = new String[] { userPasswordHistoryAttribute };
       }
       else
       {
@@ -534,11 +536,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       attribute.add(userDN.toString());
 
-      ModificationItem[] modificationItems = new ModificationItem[1];
-
-      modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute);
-
-      dirContext.modifyAttributes(groupDN, modificationItems);
+      dirContext.modifyAttributes(groupDN,
+          new ModificationItem[] { new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute) });
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {
@@ -575,85 +574,83 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     throw new SecurityException("TODO: NOT IMPLEMENTED");
 
-    /* NOTE: THE LOGIC BELOW FOR PASSWORD ATTEMPTS IS BROKEN!!!! */
+/*
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
-     * {
-     * User user = getUser(connection, username);
-     *
-     * if (user == null)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     * String passwordHash = createPasswordHash(newPassword);
-     *
-     * statement.setString(1, passwordHash);
-     *
-     *
-     *  THIS LOGIC IS WRONG SEE InternalUserDirectory
-     *
-     * if (lockUser)
-     * {
-     *   statement.setInt(2, -1);
-     * }
-     * else
-     * {
-     *   if (!isNullOrEmpty(user.getPasswordAttempts()))
-     *   {
-     *     statement.setInt(2, 0);
-     *   }
-     *   else
-     *   {
-     *     statement.setNull(2, java.sql.Types.INTEGER);
-     *   }
-     * }
-     *
-     * if (expirePassword)
-     * {
-     *   statement.setTimestamp(3, new Timestamp(System.currentTimeMillis() - 1000L));
-     * }
-     * else
-     * {
-     *   if (user.getPasswordExpiry() != null)
-     *   {
-     *     Calendar calendar = Calendar.getInstance();
-     *
-     *     calendar.setTime(new Date());
-     *     calendar.add(Calendar.MONTH, passwordExpiryMonths);
-     *     statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
-     *   }
-     *   else
-     *   {
-     *     statement.setTimestamp(3, null);
-     *   }
-     * }
-     *
-     * statement.setLong(4, getUserDirectoryId());
-     * statement.setLong(5, user.getId());
-     *
-     * if (statement.executeUpdate() != 1)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + changeInternalUserPasswordSQL + ")");
-     * }
-     *
-     * savePasswordHistory(connection, user.getId(), passwordHash);
-     * }
-     * catch (UserNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to administratively change the password for the user ("
-     *     + username + ") for the user directory (" + getUserDirectoryId() + "): "
-     *     + e.getMessage(), e);
-     * }
-     */
+
+    try (Connection connection = getDataSource().getConnection();
+      PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
+    {
+      User user = getUser(connection, username);
+
+      if (user == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      String passwordHash = createPasswordHash(newPassword);
+
+      statement.setString(1, passwordHash);
+
+      if (user.getPasswordAttempts() == null)
+      {
+        statement.setNull(2, java.sql.Types.INTEGER);
+      }
+      else
+      {
+        if (lockUser)
+        {
+          statement.setInt(2, maxPasswordAttempts);
+        }
+        else
+        {
+          statement.setInt(2, 0);
+        }
+      }
+
+      if (user.getPasswordExpiry() == null)
+      {
+        statement.setNull(3, Types.TIMESTAMP);
+      }
+      else
+      {
+        if (expirePassword)
+        {
+          statement.setTimestamp(3, new Timestamp(0));
+        }
+        else
+        {
+          Calendar calendar = Calendar.getInstance();
+          calendar.setTime(new Date());
+          calendar.add(Calendar.MONTH, passwordExpiryMonths);
+
+          statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
+        }
+      }
+
+      statement.setLong(4, getUserDirectoryId());
+      statement.setLong(5, user.getId());
+
+      if (statement.executeUpdate() != 1)
+      {
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
+            + changeInternalUserPasswordSQL + ")");
+      }
+
+      savePasswordHistory(connection, user.getId(), passwordHash);
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to administratively change the password for the user ("
+          + username + ") for the user directory (" + getUserDirectoryId() + "): "
+          + e.getMessage(), e);
+    }
+ */
+
   }
 
   /**
@@ -685,20 +682,17 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      if ((user.getPasswordAttempts() == null)
-          || (user.getPasswordAttempts() >= maxPasswordAttempts))
+      if ((user.getPasswordAttempts() != null)
+          && (user.getPasswordAttempts() >= maxPasswordAttempts))
       {
         throw new UserLockedException("The user (" + username
             + ") has exceeded the number of failed password attempts and has been locked");
       }
 
-      if (user.getPasswordExpiry() != null)
+      if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
       {
-        if (user.getPasswordExpiry().before(new Date()))
-        {
-          throw new ExpiredPasswordException("The password for the user (" + username
-              + ") has expired");
-        }
+        throw new ExpiredPasswordException("The password for the user (" + username
+            + ") has expired");
       }
 
       DirContext userDirContext = null;
@@ -767,94 +761,90 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     throw new SecurityException("TODO: NOT IMPLEMENTED");
 
-    /* NOTE: THE LOGIC BELOW FOR PASSWORD ATTEMPTS IS BROKEN!!!! */
+/*
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
-     * {
-     * User user = getUser(connection, username);
-     *
-     * if (user == null)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     *
-     * if (user.getPasswordAttempts() != null)
-     *  {
-     *   THIS LOGIC IS WRONG SEE InternalUserDirectory
-     *
-     *   if ((user.getPasswordAttempts() == -1)
-     *       || (user.getPasswordAttempts() > maxPasswordAttempts))
-     *   {
-     *     throw new UserLockedException("The user (" + username
-     *         + ") has exceeded the number of failed password attempts and has been locked");
-     *   }
-     * }
-     *
-     * String passwordHash = createPasswordHash(password);
-     * String newPasswordHash = createPasswordHash(newPassword);
-     *
-     * if (!user.getPassword().equals(passwordHash))
-     * {
-     *   throw new AuthenticationFailedException("Authentication failed while attempting to change"
-     *       + " the password for the user (" + username + ")");
-     * }
-     *
-     * if (isPasswordInHistory(connection, user.getId(), newPasswordHash))
-     * {
-     *   throw new ExistingPasswordException("The new password for the user (" + username
-     *       + ") has been used recently and is not valid");
-     * }
-     *
-     * statement.setString(1, newPasswordHash);
-     *
-     * if (!isNullOrEmpty(user.getPasswordAttempts()))
-     * {
-     *   statement.setInt(2, 0);
-     * }
-     * else
-     * {
-     *   statement.setNull(2, java.sql.Types.INTEGER);
-     * }
-     *
-     * if (user.getPasswordExpiry() != null)
-     * {
-     *   Calendar calendar = Calendar.getInstance();
-     *
-     *   calendar.setTime(new Date());
-     *   calendar.add(Calendar.MONTH, passwordExpiryMonths);
-     *   statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
-     * }
-     * else
-     * {
-     *   statement.setTimestamp(3, null);
-     * }
-     *
-     * statement.setLong(4, getUserDirectoryId());
-     * statement.setLong(5, user.getId());
-     *
-     * if (statement.executeUpdate() != 1)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + changeInternalUserPasswordSQL + ")");
-     * }
-     *
-     * savePasswordHistory(connection, user.getId(), newPasswordHash);
-     * }
-     * catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
-     *   | ExpiredPasswordException | UserLockedException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to change the password for the user (" + username
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try (Connection connection = getDataSource().getConnection();
+      PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
+    {
+      User user = getUser(connection, username);
+
+      if (user == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      if ((user.getPasswordAttempts() == null)
+          || (user.getPasswordAttempts() > maxPasswordAttempts))
+      {
+        throw new UserLockedException("The user (" + username
+            + ") has exceeded the number of failed password attempts and has been locked");
+      }
+
+      String passwordHash = createPasswordHash(password);
+      String newPasswordHash = createPasswordHash(newPassword);
+
+      if (!user.getPassword().equals(passwordHash))
+      {
+        throw new AuthenticationFailedException("Authentication failed while attempting to change"
+            + " the password for the user (" + username + ")");
+      }
+
+      if (isPasswordInHistory(connection, user.getId(), newPasswordHash))
+      {
+        throw new ExistingPasswordException("The new password for the user (" + username
+            + ") has been used recently and is not valid");
+      }
+
+      statement.setString(1, newPasswordHash);
+
+      if (user.getPasswordAttempts() == null)
+      {
+        statement.setNull(2, java.sql.Types.INTEGER);
+      }
+      else
+      {
+        statement.setInt(2, 0);
+      }
+
+      if (user.getPasswordExpiry() == null)
+      {
+        statement.setNull(3, Types.TIMESTAMP);
+      }
+      else
+      {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, passwordExpiryMonths);
+
+        statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
+      }
+
+      statement.setLong(4, getUserDirectoryId());
+      statement.setLong(5, user.getId());
+
+      if (statement.executeUpdate() != 1)
+      {
+        throw new SecurityException(
+            "No rows were affected as a result of executing the SQL statement ("
+            + changeInternalUserPasswordSQL + ")");
+      }
+
+      savePasswordHistory(connection, user.getId(), newPasswordHash);
+    }
+    catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
+        | ExpiredPasswordException | UserLockedException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to change the password for the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+
+
+ */
+
   }
 
   /**
@@ -885,14 +875,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
       Attributes attributes = new BasicAttributes();
 
       attributes.put(new BasicAttribute("objectclass", "top"));
-      attributes.put(new BasicAttribute("objectclass", "groupOfNames"));
+      attributes.put(new BasicAttribute("objectclass", groupObjectClass));
 
       attributes.put(new BasicAttribute(groupNameAttribute, group.getGroupName()));
 
-      if ((!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
-          && (!StringUtil.isNullOrEmpty(group.getDescription())))
+      if (!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
       {
-        attributes.put(new BasicAttribute(groupDescriptionAttribute, group.getDescription()));
+        attributes.put(new BasicAttribute(groupDescriptionAttribute,
+            StringUtil.notNull(group.getDescription())));
       }
 
       dirContext.bind(groupNameAttribute + "=" + group.getGroupName() + "," + groupBaseDN,
@@ -926,104 +916,136 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
     throws DuplicateUserException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(createInternalUserSQL))
-     * {
-     * if (getInternalUserId(connection, user.getUsername()) != -1)
-     * {
-     *   throw new DuplicateUserException("The user (" + user.getUsername() + ") already exists");
-     * }
-     *
-     * long internalUserId = nextId("Application.InternalUserId");
-     *
-     * statement.setLong(1, internalUserId);
-     * statement.setLong(2, getUserDirectoryId());
-     * statement.setString(3, user.getUsername());
-     *
-     * String passwordHash;
-     *
-     * if (!isNullOrEmpty(user.getPassword()))
-     * {
-     *   passwordHash = createPasswordHash(user.getPassword());
-     *   statement.setString(4, passwordHash);
-     * }
-     * else
-     * {
-     *   passwordHash = createPasswordHash("");
-     *   statement.setString(4, passwordHash);
-     * }
-     *
-     * statement.setString(5, StringUtil.notNull(user.getTitle()));
-     * statement.setString(6, StringUtil.notNull(user.getFirstNames()));
-     * statement.setString(7, StringUtil.notNull(user.getLastName()));
-     * statement.setString(8, StringUtil.notNull(user.getPhoneNumber()));
-     * statement.setString(9, StringUtil.notNull(user.getFaxNumber()));
-     * statement.setString(10, StringUtil.notNull(user.getMobileNumber()));
-     * statement.setString(11, StringUtil.notNull(user.getEmail()));
-     *
-     * if (userLocked)
-     * {
-     *   statement.setInt(12, -1);
-     * }
-     * else
-     * {
-     *   if (!isNullOrEmpty(user.getPasswordAttempts()))
-     *   {
-     *     statement.setInt(12, user.getPasswordAttempts());
-     *   }
-     *   else
-     *   {
-     *     statement.setNull(12, java.sql.Types.INTEGER);
-     *   }
-     * }
-     *
-     * if (expiredPassword)
-     * {
-     *   statement.setTimestamp(13, new Timestamp(System.currentTimeMillis()));
-     * }
-     * else
-     * {
-     *   if (user.getPasswordExpiry() != null)
-     *   {
-     *     statement.setTimestamp(13, new Timestamp(user.getPasswordExpiry().getTime()));
-     *   }
-     *   else
-     *   {
-     *     statement.setTimestamp(13, null);
-     *   }
-     * }
-     *
-     * statement.setString(14, StringUtil.notNull(user.getDescription()));
-     *
-     * if (statement.executeUpdate() != 1)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + createInternalUserSQL + ")");
-     * }
-     *
-     * user.setId(internalUserId);
-     * user.setUserDirectoryId(getUserDirectoryId());
-     *
-     * // Save the password in the password history if one was specified
-     * if (passwordHash != null)
-     * {
-     *   savePasswordHistory(connection, internalUserId, passwordHash);
-     * }
-     * }
-     * catch (DuplicateUserException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to create the user (" + user.getUsername()
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName userDN = getUserDN(dirContext, user.getUsername());
+
+      if (userDN != null)
+      {
+        throw new DuplicateUserException("The user (" + user.getUsername() + ") already exists");
+      }
+
+      Attributes attributes = new BasicAttributes();
+
+      attributes.put(new BasicAttribute("objectclass", "top"));
+      attributes.put(new BasicAttribute("objectclass", userObjectClass));
+
+      attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
+
+      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
+      {
+        attributes.put(new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
+      {
+        attributes.put(new BasicAttribute(userFirstNamesAttribute,
+            StringUtil.notNull(user.getFirstNames())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
+      {
+        attributes.put(new BasicAttribute(userLastNameAttribute,
+            StringUtil.notNull(user.getLastName())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userEmailAttribute))
+      {
+        attributes.put(new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+      {
+        attributes.put(new BasicAttribute(userPhoneNumberAttribute,
+            StringUtil.notNull(user.getPhoneNumber())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userFaxNumberAttribute))
+      {
+        attributes.put(new BasicAttribute(userFaxNumberAttribute,
+            StringUtil.notNull(user.getFaxNumber())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
+      {
+        attributes.put(new BasicAttribute(userMobileNumberAttribute,
+            StringUtil.notNull(user.getMobileNumber())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userDescriptionAttribute))
+      {
+        attributes.put(new BasicAttribute(userDescriptionAttribute,
+            StringUtil.notNull(user.getDescription())));
+      }
+
+      String passwordHash;
+
+      if (!isNullOrEmpty(user.getPassword()))
+      {
+        passwordHash = createPasswordHash(user.getPassword());
+      }
+      else
+      {
+        passwordHash = createPasswordHash("");
+      }
+
+      if (!StringUtil.isNullOrEmpty(userPasswordHistoryAttribute))
+      {
+        attributes.put(new BasicAttribute(userPasswordHistoryAttribute, passwordHash));
+      }
+
+      attributes.put(new BasicAttribute("userPassword", StringUtil.notNull(user.getPassword())));
+
+      if (!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+      {
+        if (userLocked)
+        {
+          attributes.put(new BasicAttribute(userPasswordAttemptsAttribute,
+              String.valueOf(maxPasswordAttempts)));
+        }
+        else
+        {
+          attributes.put(new BasicAttribute(userPasswordAttemptsAttribute, "0"));
+        }
+      }
+
+      if (!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+      {
+        if (expiredPassword)
+        {
+          attributes.put(new BasicAttribute(userPasswordExpiryAttribute, "0"));
+        }
+        else
+        {
+          Calendar calendar = Calendar.getInstance();
+          calendar.add(Calendar.MONTH, passwordExpiryMonths);
+
+          attributes.put(new BasicAttribute(userPasswordExpiryAttribute,
+              String.valueOf(calendar.getTimeInMillis())));
+        }
+      }
+
+      userDN = new LdapName(userUsernameAttribute + "=" + user.getUsername() + "," + userBaseDN);
+
+      dirContext.bind(userDN, dirContext, attributes);
+    }
+    catch (DuplicateUserException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to create the user (" + user.getUsername()
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1131,38 +1153,94 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public List<User> findUsers(List<Attribute> attributes)
     throws InvalidAttributeException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
+    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection())
-     * {
-     * try (PreparedStatement statement = buildFindUsersStatement(connection, attributes))
-     * {
-     *   try (ResultSet rs = statement.executeQuery())
-     *   {
-     *     List<User> list = new ArrayList<>();
-     *
-     *     while (rs.next())
-     *     {
-     *       User user = buildUserFromResultSet(rs);
-     *
-     *       list.add(user);
-     *     }
-     *
-     *     return list;
-     *   }
-     * }
-     * }
-     * catch (InvalidAttributeException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to find the users for the user directory ("
-     *     + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      String searchFilter = "(objectClass=" + userObjectClass + ")";
+
+      if (attributes.size() > 0)
+      {
+        StringBuilder buffer = new StringBuilder();
+
+        buffer.append("(&(objectClass=");
+        buffer.append(userObjectClass);
+        buffer.append(")");
+
+        for (Attribute attribute : attributes)
+        {
+          buffer.append("(");
+          buffer.append(attribute.getName());
+          buffer.append("=*");
+
+          if (attribute.getType().equals(Attribute.ValueType.STRING_VALUE))
+          {
+            buffer.append(attribute.getStringValue());
+          }
+          else if (attribute.getType().equals(Attribute.ValueType.DECIMAL_VALUE))
+          {
+            buffer.append(attribute.getDecimalValue());
+          }
+          else if (attribute.getType().equals(Attribute.ValueType.DOUBLE_VALUE))
+          {
+            buffer.append(attribute.getDoubleValue());
+          }
+          else if (attribute.getType().equals(Attribute.ValueType.LONG_VALUE))
+          {
+            buffer.append(attribute.getLongValue());
+          }
+          else
+          {
+            throw new RuntimeException("Unsupported criteria attribute type ("
+                + attribute.getType() + ")");
+          }
+
+          buffer.append("*)");
+        }
+
+        buffer.append(")");
+
+        searchFilter = buffer.toString();
+      }
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setCountLimit(maxFilteredUsers);
+
+      List<User> users = new ArrayList<>();
+
+      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+
+      while (searchResultsNonSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
+      {
+        users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
+      }
+
+      searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
+
+      while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
+      {
+        users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
+      }
+
+      return users;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to find the users for the user directory ("
+          + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -2040,19 +2118,15 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (attribute.size() > 0)
       {
-        ModificationItem[] modificationItems = new ModificationItem[1];
-
-        modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute);
-
-        dirContext.modifyAttributes(groupDN, modificationItems);
+        dirContext.modifyAttributes(groupDN,
+            new ModificationItem[] {
+              new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute) });
       }
       else
       {
-        ModificationItem[] modificationItems = new ModificationItem[1];
-
-        modificationItems[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute);
-
-        dirContext.modifyAttributes(groupDN, modificationItems);
+        dirContext.modifyAttributes(groupDN,
+            new ModificationItem[] {
+              new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute) });
       }
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -2134,23 +2208,20 @@ public class LDAPUserDirectory extends UserDirectoryBase
             + ") could not be found");
       }
 
-      Attributes existingAttributes = dirContext.getAttributes(groupDN);
-
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (existingAttributes.get(groupDescriptionAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-            new BasicAttribute(groupDescriptionAttribute, StringUtil.notNull(group.getDescription()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(groupDescriptionAttribute, StringUtil.notNull(group.getDescription()))));
+            new BasicAttribute(groupDescriptionAttribute,
+              StringUtil.notNull(group.getDescription()))));
       }
 
-      dirContext.modifyAttributes(groupDN,
-          modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+      if (modificationItems.size() > 0)
+      {
+        dirContext.modifyAttributes(groupDN,
+            modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+      }
     }
     catch (GroupNotFoundException e)
     {
@@ -2190,132 +2261,101 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (userDN == null)
       {
-        throw new UserNotFoundException("The user (" + user.getUsername()
-          + ") could not be found");
+        throw new UserNotFoundException("The user (" + user.getUsername() + ") could not be found");
       }
-
-      Attributes existingAttributes = dirContext.getAttributes(userDN);
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (existingAttributes.get(userTitleAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle()))));
+            new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle()))));
       }
 
-      if (existingAttributes.get(userFirstNamesAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
+            new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
       }
 
-      if (existingAttributes.get(userLastNameAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
+            new BasicAttribute(userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
       }
 
-      if (existingAttributes.get(userEmailAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userEmailAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail()))));
+            new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail()))));
       }
 
-      if (existingAttributes.get(userPhoneNumberAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
+            new BasicAttribute(userPhoneNumberAttribute,
+              StringUtil.notNull(user.getPhoneNumber()))));
       }
 
-      if (existingAttributes.get(userFaxNumberAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userFaxNumberAttribute, StringUtil.notNull(user.getFaxNumber()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userFaxNumberAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userFaxNumberAttribute, StringUtil.notNull(user.getFaxNumber()))));
+            new BasicAttribute(userFaxNumberAttribute, StringUtil.notNull(user.getFaxNumber()))));
       }
 
-      if (existingAttributes.get(userMobileNumberAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userMobileNumberAttribute, StringUtil.notNull(user.getMobileNumber()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userMobileNumberAttribute, StringUtil.notNull(user.getMobileNumber()))));
+            new BasicAttribute(userMobileNumberAttribute,
+              StringUtil.notNull(user.getMobileNumber()))));
       }
 
-      if (existingAttributes.get(userDescriptionAttribute) == null)
-      {
-        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-          new BasicAttribute(userDescriptionAttribute, StringUtil.notNull(user.getDescription()))));
-      }
-      else
+      if (!StringUtil.isNullOrEmpty(userDescriptionAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userDescriptionAttribute, StringUtil.notNull(user.getDescription()))));
+            new BasicAttribute(userDescriptionAttribute,
+              StringUtil.notNull(user.getDescription()))));
       }
 
-      if (expirePassword)
+      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+          && (user.getPasswordAttempts() != null))
       {
-        if (existingAttributes.get(userPasswordExpiryAttribute) == null)
+        if (lockUser)
         {
-          modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-            new BasicAttribute(userPasswordExpiryAttribute, "0")));
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userPasswordAttemptsAttribute,
+                String.valueOf(maxPasswordAttempts))));
         }
         else
         {
           modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordExpiryAttribute, "0")));
+              new BasicAttribute(userPasswordAttemptsAttribute,
+                String.valueOf(user.getPasswordAttempts()))));
         }
       }
 
-      if (lockUser)
+      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+          && (user.getPasswordExpiry() != null))
       {
-        if (existingAttributes.get(userPasswordAttemptsAttribute) == null)
+        if (expirePassword)
         {
-          modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-            new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(maxPasswordAttempts))));
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userPasswordExpiryAttribute,
+                String.valueOf(System.currentTimeMillis()))));
         }
         else
         {
           modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(maxPasswordAttempts))));
+              new BasicAttribute(userPasswordExpiryAttribute,
+                String.valueOf(user.getPasswordExpiry().getTime()))));
         }
       }
 
-      dirContext.modifyAttributes(userDN,
-        modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+      if (modificationItems.size() > 0)
+      {
+        dirContext.modifyAttributes(userDN,
+            modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+      }
     }
     catch (UserNotFoundException e)
     {
@@ -2324,7 +2364,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException("Failed to update the user (" + user.getUsername()
-        + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
     finally
     {
@@ -2348,134 +2388,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
         + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID INNER JOIN " + schemaPrefix
         + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID INNER JOIN " + schemaPrefix
         + "GROUPS G ON G.ID = RTGM.GROUP_ID ";
-
-    /*
-     *
-     * // addInternalUserToInternalGroupSQL
-     * addInternalUserToInternalGroupSQL = "INSERT INTO " + schemaPrefix
-     *   + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP"
-     *   + " (USER_DIRECTORY_ID, INTERNAL_USER_ID, INTERNAL_GROUP_ID) VALUES (?, ?, ?)";
-     *
-     * // changeInternalUserPasswordSQL
-     * changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU"
-     *   + " SET IU.PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=?"
-     *   + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
-     *
-     * // createInternalGroupSQL
-     * createInternalGroupSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_GROUPS"
-     *   + " (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
-     *
-     * // createInternalUserSQL
-     * createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS"
-     *   + " (ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, PHONE,"
-     *   + " FAX, MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY,"
-     *   + " DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-     *
-     * // deleteInternalGroupSQL
-     * deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG"
-     *   + " WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
-     *
-     * // deleteInternalUserSQL
-     * deleteInternalUserSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_USERS IU"
-     *   + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
-     *
-     * // getFilteredInternalUsersSQL
-     * getFilteredInternalUsersSQL =
-     * "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-     * + " IU.LAST_NAME, IU.PHONE, IU.FAX, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,"
-     * + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix
-     * + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND"
-     * + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
-     * + " OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
-     *
-     *
-     *
-     * // getInternalGroupIdSQL
-     * getInternalGroupIdSQL = "SELECT IG.ID FROM " + schemaPrefix + "INTERNAL_GROUPS IG"
-     *   + " WHERE IG.USER_DIRECTORY_ID=? AND UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-     *
-     * // getInternalGroupNamesForInternalUserSQL
-     * getInternalGroupNamesForInternalUserSQL = "SELECT IG.GROUPNAME FROM " + schemaPrefix
-     *   + "INTERNAL_GROUPS IG, " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-     *   + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.USER_DIRECTORY_ID=?"
-     *   + " AND IUTGM.INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
-     *
-     * // getInternalGroupSQL
-     * getInternalGroupSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
-     *   + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? AND"
-     *   + " UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-     *
-     * // getInternalGroupsForInternalUserSQL
-     * getInternalGroupsForInternalUserSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM "
-     *   + schemaPrefix + "INTERNAL_GROUPS IG, " + schemaPrefix
-     *   + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-     *   + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.USER_DIRECTORY_ID=?"
-     *   + " AND IUTGM.INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
-     *
-     * // getInternalGroupsSQL
-     * getInternalGroupsSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
-     *   + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? ORDER BY IG.GROUPNAME";
-     *
-     * // getNumberOfFilteredInternalUsersSQL
-     * getNumberOfFilteredInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix
-     *   + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND"
-     *   + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
-     *   + " OR (UPPER(IU.LAST_NAME) LIKE ?))";
-     *
-     * // getNumberOfInternalGroupsSQL
-     * getNumberOfInternalGroupsSQL = "SELECT COUNT(IG.ID) FROM " + schemaPrefix
-     *   + "INTERNAL_GROUPS IG" + " WHERE IG.USER_DIRECTORY_ID=?";
-     *
-     * // getNumberOfUsersForGroupSQL
-     * getNumberOfUsersForGroupSQL = "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM " + schemaPrefix
-     *   + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=?"
-     *   + " AND IUTGM.INTERNAL_GROUP_ID=?";
-     *
-     * // getNumberOfInternalUsersSQL
-     * getNumberOfInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix + "INTERNAL_USERS IU"
-     *   + " WHERE IU.USER_DIRECTORY_ID=?";
-     *
-     * // getInternalUserIdSQL
-     * getInternalUserIdSQL = "SELECT IU.ID FROM " + schemaPrefix + "INTERNAL_USERS IU"
-     *   + " WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-     *
-     * // getInternalUserSQL
-     * getInternalUserSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-     *   + " IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,"
-     *   + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU"
-     *   + " WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-     *
-     * // getInternalUsersSQL
-     * getInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-     *   + " IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,"
-     *   + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU"
-     *   + " WHERE IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
-     *
-     * // isPasswordInInternalUserPasswordHistorySQL
-     * isPasswordInInternalUserPasswordHistorySQL = "SELECT IUPH.ID FROM " + schemaPrefix
-     *   + "INTERNAL_USERS_PASSWORD_HISTORY IUPH"
-     *   + " WHERE IUPH.INTERNAL_USER_ID=? AND IUPH.CHANGED > ? AND IUPH.PASSWORD=?";
-     *
-     * // isInternalUserInInternalGroupSQL
-     * isInternalUserInInternalGroupSQL = "SELECT IUTGM.INTERNAL_USER_ID FROM " + schemaPrefix
-     *   + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=? AND"
-     *   + " IUTGM.INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
-     *
-     * // removeInternalUserFromInternalGroupSQL
-     * removeInternalUserFromInternalGroupSQL = "DELETE FROM " + schemaPrefix
-     *   + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-     *   + " WHERE IUTGM.USER_DIRECTORY_ID=? AND IUTGM.INTERNAL_USER_ID=?"
-     *   + " AND IUTGM.INTERNAL_GROUP_ID=?";
-     *
-     * // saveInternalUserPasswordHistorySQL
-     * saveInternalUserPasswordHistorySQL = "INSERT INTO " + schemaPrefix
-     *   + "INTERNAL_USERS_PASSWORD_HISTORY"
-     *   + " (ID, INTERNAL_USER_ID, CHANGED, PASSWORD) VALUES (?, ?, ?, ?)";
-     *
-     * // updateInternalGroupSQL
-     * updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG"
-     *   + " SET IG.DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
-     */
   }
 
   private Group buildGroupFromSearchResult(SearchResult searchResult)
@@ -2586,23 +2498,25 @@ public class LDAPUserDirectory extends UserDirectoryBase
     if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
         && (attributes.get(userPasswordAttemptsAttribute) != null))
     {
-      user.setPasswordAttempts(
-          Integer.parseInt(String.valueOf(attributes.get(userPasswordAttemptsAttribute).get())));
-    }
-    else
-    {
-      user.setPasswordAttempts(-1);
+      String userPasswordAttemptsAttributeValue =
+        String.valueOf(attributes.get(userPasswordAttemptsAttribute).get());
+
+      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttributeValue))
+          && (!userPasswordAttemptsAttributeValue.equals("-1")))
+      {
+        user.setPasswordAttempts(
+            Integer.parseInt(String.valueOf(attributes.get(userPasswordAttemptsAttribute).get())));
+      }
     }
 
     if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
         && (attributes.get(userPasswordExpiryAttribute) != null))
     {
-      if (String.valueOf(attributes.get(userPasswordExpiryAttribute).get()).equals("-1"))
-      {
-        user.setPasswordExpiry(new Date(System.currentTimeMillis()
-            + (1000L * 60L * 60L * 24L * 365L * 20L)));
-      }
-      else
+      String userPasswordExpiryAttributeValue =
+        String.valueOf(attributes.get(userPasswordExpiryAttribute).get());
+
+      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttributeValue))
+          && (!userPasswordExpiryAttributeValue.equals("-1")))
       {
         user.setPasswordExpiry(
             new Date(
@@ -2886,13 +2800,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
           && (user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1))
       {
-        ModificationItem[] modificationItems = new ModificationItem[1];
-
-        modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordAttemptsAttribute,
-              String.valueOf(user.getPasswordAttempts() + 1)));
-
-        dirContext.modifyAttributes(user.getProperty("dn"), modificationItems);
+        dirContext.modifyAttributes(user.getProperty("dn"),
+            new ModificationItem[] {
+              new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+                new BasicAttribute(userPasswordAttemptsAttribute,
+                  String.valueOf(user.getPasswordAttempts() + 1))) });
       }
     }
     catch (Throwable e)
@@ -2902,56 +2814,76 @@ public class LDAPUserDirectory extends UserDirectoryBase
     }
   }
 
-///**
-// * Is the password, given by the specified password hash, a historical password that cannot
-// * be reused for a period of time i.e. was the password used previously in the last X months.
-// * Where X is a configuration value retrieved from the registry.
-// *
-// * @param connection     the existing database connection
-// * @param internalUserId the numeric ID uniquely identifying the internal user
-// * @param passwordHash   the password hash
-// *
-// * @return <code>true</code> if the password was previously used and cannot be reused for a
-// *         period of time or <code>false</code> otherwise
-// *
-// * @throws SQLException
-// */
-//private boolean isPasswordInHistory(Connection connection, long internalUserId,
-//    String passwordHash)
-//  throws SQLException
-//{
-//  try (PreparedStatement statement =
-//      connection.prepareStatement(isPasswordInInternalUserPasswordHistorySQL))
-//  {
-//    Calendar calendar = Calendar.getInstance();
-//
-//    calendar.setTime(new Date());
-//    calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
-//
-//    statement.setLong(1, internalUserId);
-//    statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
-//    statement.setString(3, passwordHash);
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      return rs.next();
-//    }
-//  }
-//}
+  private boolean isPasswordInHistory(DirContext dirContext, String username, LdapName userDN,
+      String passwordHash)
+    throws SecurityException
+  {
+    try
+    {
+      if (!StringUtil.isNullOrEmpty(userPasswordHistoryAttribute))
+      {
+        Attributes attributes = dirContext.getAttributes(userDN, userPasswordHistoryAttributeArray);
 
-//private void savePasswordHistory(Connection connection, long internalUserId, String passwordHash)
-//  throws SQLException
-//{
-//  try (PreparedStatement statement =
-//      connection.prepareStatement(saveInternalUserPasswordHistorySQL))
-//  {
-//    long id = nextId("Application.InternalUserPasswordHistoryId");
-//
-//    statement.setLong(1, id);
-//    statement.setLong(2, internalUserId);
-//    statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-//    statement.setString(4, passwordHash);
-//    statement.execute();
-//  }
-//}
+        if (attributes.get(userPasswordHistoryAttribute) != null)
+        {
+          NamingEnumeration<String> existingPasswordHashes =
+            (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
+
+          while (existingPasswordHashes.hasMore())
+          {
+            if (existingPasswordHashes.next().equals(passwordHash))
+            {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to check whether the password hash (" + passwordHash
+          + ") is in the password history for the user (" + username + ") for the user directory ("
+          + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+
+    return false;
+  }
+
+  private void savePasswordHistory(DirContext dirContext, String username, LdapName userDN,
+      String passwordHash)
+    throws SecurityException
+  {
+    try
+    {
+      if (!StringUtil.isNullOrEmpty(userPasswordHistoryAttribute))
+      {
+        BasicAttribute attribute = new BasicAttribute(userPasswordHistoryAttribute);
+
+        Attributes attributes = dirContext.getAttributes(userDN, userPasswordHistoryAttributeArray);
+
+        if (attributes.get(userPasswordHistoryAttribute) != null)
+        {
+          NamingEnumeration<String> existingPasswordHashes =
+            (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
+
+          while (existingPasswordHashes.hasMore())
+          {
+            attribute.add(existingPasswordHashes.next());
+          }
+        }
+
+        attribute.add(passwordHash);
+
+        dirContext.modifyAttributes(userDN,
+            new ModificationItem[] {
+              new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute) });
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to save the password hash (" + passwordHash
+          + ") in the password history for the user (" + username + ") for the user directory ("
+          + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+  }
 }

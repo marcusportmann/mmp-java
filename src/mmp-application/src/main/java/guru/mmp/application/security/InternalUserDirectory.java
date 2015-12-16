@@ -244,15 +244,15 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       statement.setString(1, passwordHash);
 
-      if (lockUser)
+      if (user.getPasswordAttempts() == null)
       {
         statement.setNull(2, java.sql.Types.INTEGER);
       }
       else
       {
-        if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() == -1))
+        if (lockUser)
         {
-          statement.setInt(2, -1);
+          statement.setInt(2, maxPasswordAttempts);
         }
         else
         {
@@ -260,23 +260,23 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
       }
 
-      if (expirePassword)
+      if (user.getPasswordExpiry() == null)
       {
-        statement.setTimestamp(3, new Timestamp(System.currentTimeMillis() - 1000L));
+        statement.setNull(3, Types.TIMESTAMP);
       }
       else
       {
-        if (user.getPasswordExpiry() != null)
+        if (expirePassword)
         {
-          Calendar calendar = Calendar.getInstance();
-
-          calendar.setTime(new Date());
-          calendar.add(Calendar.MONTH, passwordExpiryMonths);
-          statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
+          statement.setTimestamp(3, new Timestamp(0));
         }
         else
         {
-          statement.setTimestamp(3, null);
+          Calendar calendar = Calendar.getInstance();
+          calendar.setTime(new Date());
+          calendar.add(Calendar.MONTH, passwordExpiryMonths);
+
+          statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
         }
       }
 
@@ -329,20 +329,17 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      if ((user.getPasswordAttempts() == null)
-          || (user.getPasswordAttempts() >= maxPasswordAttempts))
+      if ((user.getPasswordAttempts() != null)
+        && (user.getPasswordAttempts() >= maxPasswordAttempts))
       {
         throw new UserLockedException("The user (" + username
-            + ") has exceeded the number of failed password attempts and has been locked");
+          + ") has exceeded the number of failed password attempts and has been locked");
       }
 
-      if (user.getPasswordExpiry() != null)
+      if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
       {
-        if (user.getPasswordExpiry().before(new Date()))
-        {
-          throw new ExpiredPasswordException("The password for the user (" + username
-              + ") has expired");
-        }
+        throw new ExpiredPasswordException("The password for the user (" + username
+          + ") has expired");
       }
 
       if (!user.getPassword().equals(createPasswordHash(password)))
@@ -419,26 +416,26 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       statement.setString(1, newPasswordHash);
 
-      if (user.getPasswordAttempts() == -1)
+      if (user.getPasswordAttempts() == null)
       {
-        statement.setInt(2, -1);
+        statement.setNull(2, java.sql.Types.INTEGER);
       }
       else
       {
         statement.setInt(2, 0);
       }
 
-      if (user.getPasswordExpiry() != null)
+      if (user.getPasswordExpiry() == null)
       {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MONTH, passwordExpiryMonths);
-        statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
+        statement.setNull(3, Types.TIMESTAMP);
       }
       else
       {
-        statement.setTimestamp(3, null);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, passwordExpiryMonths);
+
+        statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
       }
 
       statement.setLong(4, getUserDirectoryId());
@@ -547,14 +544,13 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (!isNullOrEmpty(user.getPassword()))
       {
         passwordHash = createPasswordHash(user.getPassword());
-        statement.setString(4, passwordHash);
       }
       else
       {
         passwordHash = createPasswordHash("");
-        statement.setString(4, passwordHash);
       }
 
+      statement.setString(4, passwordHash);
       statement.setString(5, StringUtil.notNull(user.getTitle()));
       statement.setString(6, StringUtil.notNull(user.getFirstNames()));
       statement.setString(7, StringUtil.notNull(user.getLastName()));
@@ -565,7 +561,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (userLocked)
       {
-        statement.setNull(12, java.sql.Types.INTEGER);
+        statement.setInt(12, maxPasswordAttempts);
       }
       else
       {
@@ -574,18 +570,15 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (expiredPassword)
       {
-        statement.setTimestamp(13, new Timestamp(System.currentTimeMillis()));
+        statement.setTimestamp(13, new Timestamp(0));
       }
       else
       {
-        if (user.getPasswordExpiry() != null)
-        {
-          statement.setTimestamp(13, new Timestamp(user.getPasswordExpiry().getTime()));
-        }
-        else
-        {
-          statement.setTimestamp(13, null);
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, passwordExpiryMonths);
+
+        statement.setTimestamp(13, new Timestamp(calendar.getTimeInMillis()));
       }
 
       statement.setString(14, StringUtil.notNull(user.getDescription()));
@@ -1510,12 +1503,9 @@ public class InternalUserDirectory extends UserDirectoryBase
           ? "SET PASSWORD_ATTEMPTS=?"
           : ", PASSWORD_ATTEMPTS=?");
 
-      if (expirePassword || (user.getPasswordExpiry() != null))
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PASSWORD_EXPIRY=?"
-            : ", PASSWORD_EXPIRY=?");
-      }
+      fieldsBuffer.append((fieldsBuffer.length() == 0)
+        ? "SET PASSWORD_EXPIRY=?"
+        : ", PASSWORD_EXPIRY=?");
 
       buffer.append(fieldsBuffer.toString());
       buffer.append(" WHERE USER_DIRECTORY_ID=? AND ID=?");
@@ -1588,18 +1578,29 @@ public class InternalUserDirectory extends UserDirectoryBase
           parameterIndex++;
         }
 
-        if (lockUser)
+        if (user.getPasswordAttempts() == null)
         {
-          statement.setNull(parameterIndex, java.sql.Types.INTEGER);
+          statement.setNull(parameterIndex, Types.INTEGER);
         }
         else
         {
-          statement.setInt(parameterIndex, 0);
+          if (lockUser)
+          {
+            statement.setInt(parameterIndex, maxPasswordAttempts);
+          }
+          else
+          {
+            statement.setInt(parameterIndex, user.getPasswordAttempts());
+          }
         }
 
         parameterIndex++;
 
-        if (expirePassword || (user.getPasswordExpiry() != null))
+        if (user.getPasswordExpiry() == null)
+        {
+          statement.setNull(parameterIndex, Types.TIMESTAMP);
+        }
+        else
         {
           if (expirePassword)
           {
@@ -1608,11 +1609,11 @@ public class InternalUserDirectory extends UserDirectoryBase
           else
           {
             statement.setTimestamp(parameterIndex,
-                new Timestamp(user.getPasswordExpiry().getTime()));
+              new Timestamp(user.getPasswordExpiry().getTime()));
           }
-
-          parameterIndex++;
         }
+
+        parameterIndex++;
 
         statement.setLong(parameterIndex, getUserDirectoryId());
 
@@ -2327,7 +2328,6 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Is the password, given by the specified password hash, a historical password that cannot
    * be reused for a period of time i.e. was the password used previously in the last X months.
-   * Where X is a configuration value retrieved from the registry.
    *
    * @param connection     the existing database connection
    * @param internalUserId the numeric ID uniquely identifying the internal user
