@@ -74,6 +74,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * The default maximum length of a users's password history.
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MAX_LENGTH = 128;
+  private static final String[] EMPTY_ATTRIBUTE_LIST = new String[0];
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LDAPUserDirectory.class);
@@ -1470,6 +1471,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setCountLimit(maxFilteredGroups);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1639,6 +1641,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
+      searchControls.setCountLimit(maxFilteredGroups);
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1676,32 +1680,54 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public int getNumberOfUsers()
     throws SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
+    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(getNumberOfInternalUsersSQL))
-     * {
-     * statement.setLong(1, getUserDirectoryId());
-     *
-     * try (ResultSet rs = statement.executeQuery())
-     * {
-     *   if (rs.next())
-     *   {
-     *     return rs.getInt(1);
-     *   }
-     *   else
-     *   {
-     *     return 0;
-     *   }
-     * }
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to retrieve the number of users for the user directory ("
-     *     + getUserDirectoryId() + "):" + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      String searchFilter = "(objectClass=" + userObjectClass + ")";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setCountLimit(maxFilteredUsers);
+
+      int numberOfUsers = 0;
+
+      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+
+      while (searchResultsNonSharedUsers.hasMore())
+      {
+        searchResultsNonSharedUsers.next();
+
+        numberOfUsers++;
+      }
+
+      searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
+
+      while (searchResultsSharedUsers.hasMore())
+      {
+        searchResultsSharedUsers.next();
+
+        numberOfUsers++;
+      }
+
+      return numberOfUsers;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the number of users for the user directory ("
+          + getUserDirectoryId() + "):" + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1757,34 +1783,50 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public List<User> getUsers()
     throws SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
+    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(getInternalUsersSQL))
-     * {
-     * statement.setLong(1, getUserDirectoryId());
-     *
-     * try (ResultSet rs = statement.executeQuery())
-     * {
-     *   List<User> list = new ArrayList<>();
-     *
-     *   while (rs.next())
-     *   {
-     *     User user = buildUserFromResultSet(rs);
-     *
-     *     list.add(user);
-     *   }
-     *
-     *   return list;
-     * }
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to retrieve the users for the user directory ("
-     *     + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      String searchFilter = "(objectClass=" + userObjectClass + ")";
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setCountLimit(maxFilteredUsers);
+
+      List<User> users = new ArrayList<>();
+
+      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+
+      while (searchResultsNonSharedUsers.hasMore())
+      {
+        users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
+      }
+
+      searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
+
+      while (searchResultsSharedUsers.hasMore())
+      {
+        users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
+      }
+
+      return users;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the users for the user directory ("
+          + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -2472,7 +2514,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     return group;
   }
 
-  private User buildUserFromSearchResult(SearchResult searchResult)
+  private User buildUserFromSearchResult(SearchResult searchResult, boolean isReadOnly)
     throws NamingException
   {
     Attributes attributes = searchResult.getAttributes();
@@ -2481,6 +2523,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     user.setId(-1);
     user.setUserDirectoryId(getUserDirectoryId());
+    user.setReadOnly(isReadOnly);
     user.setPassword("");
 
     if ((!StringUtil.isNullOrEmpty(userTitleAttribute))
@@ -2643,7 +2686,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(new String[0]);
+      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
 
       if (!StringUtil.isNullOrEmpty(groupBaseDN))
       {
@@ -2716,7 +2759,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         while (searchResultsNonSharedUsers.hasMore())
         {
-          users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next()));
+          users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
         }
       }
 
@@ -2727,7 +2770,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         while (searchResultsSharedUsers.hasMore())
         {
-          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next()));
+          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
         }
       }
 
@@ -2785,7 +2828,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(new String[0]);
+      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
 
       // First search for a non-shared user
       if (!StringUtil.isNullOrEmpty(userBaseDN))

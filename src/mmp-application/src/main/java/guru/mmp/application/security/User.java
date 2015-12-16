@@ -35,6 +35,7 @@ public class User
   private String faxNumber;
   private String firstNames;
   private long id;
+  private boolean isReadOnly;
   private String lastName;
   private String mobileNumber;
   private String password;
@@ -237,6 +238,16 @@ public class User
   }
 
   /**
+   * Returns <code>true</code> if the user is read-only or <code>false</code> otherwise.
+   *
+   * @return <code>true</code> if the user is read-only or <code>false</code> otherwise
+   */
+  public boolean isReadOnly()
+  {
+    return isReadOnly;
+  }
+
+  /**
    * Set the description for the user.
    *
    * @param description the description for the user
@@ -355,6 +366,16 @@ public class User
   public void setProperty(String name, String value)
   {
     properties.put(name, value);
+  }
+
+  /**
+   * Set whether the user is read-only.
+   *
+   * @param isReadOnly <code>true</code> if the user is read-only or <code>false</code> otherwise
+   */
+  public void setReadOnly(boolean isReadOnly)
+  {
+    this.isReadOnly = isReadOnly;
   }
 
   /**
