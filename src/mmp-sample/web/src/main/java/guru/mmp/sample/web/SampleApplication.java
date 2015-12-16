@@ -97,10 +97,6 @@ public class SampleApplication extends TemplateWebApplication
 
     administrationGroup.addItem(new NavigationLink("Organisations", "fa fa-globe",
         OrganisationAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Groups", "fa fa-group",
-        GroupAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Users", "fa fa-user",
-        UserAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Codes", "fa fa-list",
         CodeCategoryAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
@@ -112,8 +108,12 @@ public class SampleApplication extends TemplateWebApplication
 
 //    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
 //        SecurityAdministrationPage.class));
+    securityGroup.addItem(new NavigationLink("Groups", "fa fa-group",
+      GroupAdministrationPage.class));
+    securityGroup.addItem(new NavigationLink("Users", "fa fa-user",
+      UserAdministrationPage.class));
     securityGroup.addItem(new NavigationLink("User Directories", "fa fa-users",
-        UserDirectoryAdministrationPage.class));
+      UserDirectoryAdministrationPage.class));
 
     administrationGroup.addItem(securityGroup);
 

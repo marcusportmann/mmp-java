@@ -1024,47 +1024,46 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(deleteInternalGroupSQL))
-     * {
-     * long internalGroupId = getInternalGroupId(connection, groupName);
-     *
-     * if (internalGroupId == -1)
-     * {
-     *   throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-     * }
-     *
-     * if (getNumberOfInternalUsersForInternalGroup(connection, internalGroupId) > 0)
-     * {
-     *   throw new ExistingGroupMembersException("The group (" + groupName
-     *       + ") could not be deleted since it is still associated with 1 or more user(s)");
-     * }
-     *
-     * statement.setLong(1, getUserDirectoryId());
-     * statement.setLong(2, internalGroupId);
-     *
-     * if (statement.executeUpdate() <= 0)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + deleteInternalGroupSQL + ")");
-     * }
-     *
-     * deleteGroup(connection, groupName);
-     * }
-     * catch (GroupNotFoundException | ExistingGroupMembersException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to delete the group (" + groupName
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName groupDN = getGroupDN(dirContext, groupName);
+
+      if (groupDN == null)
+      {
+        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+      }
+
+
+      if (true)
+      {
+        throw new ExistingGroupMembersException("The group (" + groupName
+          + ") could not be deleted since it is still associated with 1 or more user(s)");
+      }
+
+      XXX
+
+
+      dirContext.destroySubcontext(groupDN);
+    }
+    catch (GroupNotFoundException | ExistingGroupMembersException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to delete the group (" + groupName
+           + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1172,53 +1171,57 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public List<User> getFilteredUsers(String filter)
     throws SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
+    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-     *     ? getInternalUsersSQL
-     *     : getFilteredInternalUsersSQL))
-     * {
-     * statement.setMaxRows(maxFilteredUsers);
-     *
-     * if (StringUtil.isNullOrEmpty(filter))
-     * {
-     *   statement.setLong(1, getUserDirectoryId());
-     * }
-     * else
-     * {
-     *   StringBuilder filterBuffer = new StringBuilder("%");
-     *
-     *   filterBuffer.append(filter.toUpperCase());
-     *   filterBuffer.append("%");
-     *
-     *   statement.setLong(1, getUserDirectoryId());
-     *   statement.setString(2, filterBuffer.toString());
-     *   statement.setString(3, filterBuffer.toString());
-     *   statement.setString(4, filterBuffer.toString());
-     * }
-     *
-     * try (ResultSet rs = statement.executeQuery())
-     * {
-     *   List<User> list = new ArrayList<>();
-     *
-     *   while (rs.next())
-     *   {
-     *     User user = buildUserFromResultSet(rs);
-     *
-     *     list.add(user);
-     *   }
-     *
-     *   return list;
-     * }
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to retrieve the filtered users for the user directory ("
-     *     + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      String searchFilter = "(objectClass=" + userObjectClass + ")";
+
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        searchFilter = "(&(objectClass=" + userObjectClass + ")(|(" + userUsernameAttribute
+          + "=*" + filter + "*)(" + userFirstNamesAttribute + "=*" + filter + "*)("
+          + userLastNameAttribute + "=*" + filter + "*)))";
+      }
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setCountLimit(maxFilteredUsers);
+
+      List<User> users = new ArrayList<>();
+
+      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+
+      while (searchResultsNonSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
+      {
+        users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
+      }
+
+      searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
+
+      while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
+      {
+        users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
+      }
+
+      return users;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to retrieve the filtered users for the user directory ("
+          + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1569,54 +1572,63 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public int getNumberOfFilteredUsers(String filter)
     throws SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
+    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-     *     ? getNumberOfInternalUsersSQL
-     *     : getNumberOfFilteredInternalUsersSQL))
-     * {
-     * if (StringUtil.isNullOrEmpty(filter))
-     * {
-     *   statement.setLong(1, getUserDirectoryId());
-     * }
-     * else
-     * {
-     *   StringBuilder filterBuffer = new StringBuilder("%");
-     *
-     *   filterBuffer.append(filter.toUpperCase());
-     *   filterBuffer.append("%");
-     *
-     *   statement.setLong(1, getUserDirectoryId());
-     *   statement.setString(2, filterBuffer.toString());
-     *   statement.setString(3, filterBuffer.toString());
-     *   statement.setString(4, filterBuffer.toString());
-     * }
-     *
-     * try (ResultSet rs = statement.executeQuery())
-     * {
-     *   if (rs.next())
-     *   {
-     *     int numberOfFilteredUsers = rs.getInt(1);
-     *
-     *     return ((numberOfFilteredUsers > maxFilteredUsers)
-     *         ? maxFilteredUsers
-     *         : numberOfFilteredUsers);
-     *   }
-     *   else
-     *   {
-     *     return 0;
-     *   }
-     * }
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException(
-     *     "Failed to retrieve the number of filtered users for the user directory ("
-     *     + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      String searchFilter = "(objectClass=" + userObjectClass + ")";
+
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        searchFilter = "(&(objectClass=" + userObjectClass + ")(|(" + userUsernameAttribute
+          + "=*" + filter + "*)(" + userFirstNamesAttribute + "=*" + filter + "*)("
+          + userLastNameAttribute + "=*" + filter + "*)))";
+      }
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
+      searchControls.setCountLimit(maxFilteredUsers);
+
+      int numberOfUsers = 0;
+
+      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+
+      while (searchResultsNonSharedUsers.hasMore() && (numberOfUsers <= maxFilteredUsers))
+      {
+        searchResultsNonSharedUsers.next();
+
+        numberOfUsers++;
+      }
+
+      searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
+
+      while (searchResultsSharedUsers.hasMore() && (numberOfUsers <= maxFilteredUsers))
+      {
+        searchResultsSharedUsers.next();
+
+        numberOfUsers++;
+      }
+
+      return numberOfUsers;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+          "Failed to retrieve the number of filtered users for the user directory ("
+          + getUserDirectoryId() + "):" + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1693,13 +1705,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
       searchControls.setCountLimit(maxFilteredUsers);
 
       int numberOfUsers = 0;
 
       searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
 
-      while (searchResultsNonSharedUsers.hasMore())
+      while (searchResultsNonSharedUsers.hasMore() && (numberOfUsers <= maxFilteredUsers))
       {
         searchResultsNonSharedUsers.next();
 
@@ -1708,7 +1721,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
 
-      while (searchResultsSharedUsers.hasMore())
+      while (searchResultsSharedUsers.hasMore() && (numberOfUsers <= maxFilteredUsers))
       {
         searchResultsSharedUsers.next();
 
@@ -1802,14 +1815,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
 
-      while (searchResultsNonSharedUsers.hasMore())
+      while (searchResultsNonSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
       {
         users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
       }
 
       searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
 
-      while (searchResultsSharedUsers.hasMore())
+      while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
       {
         users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
       }

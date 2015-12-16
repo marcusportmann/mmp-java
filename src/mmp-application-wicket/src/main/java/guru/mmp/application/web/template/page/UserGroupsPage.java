@@ -121,8 +121,8 @@ public class UserGroupsPage extends TemplateWebPage
           securityService.addUserToGroup(userDirectoryId, username, groupName);
 
           logger.info("User (" + session.getUsername() + ") added the user (" + username
-              + ") to the group (" + groupName + ") for the organisation ("
-              + session.getOrganisation() + ")");
+              + ") to the group (" + groupName + ") for the user directory ("
+              + userDirectoryId + ")");
 
           groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
           groupNameField.setModelObject(null);
@@ -130,9 +130,10 @@ public class UserGroupsPage extends TemplateWebPage
         catch (Throwable e)
         {
           logger.error("Failed to add the user (" + username + ") to the group (" + groupName
-              + ") for the organisation (" + session.getOrganisation() + "): " + e.getMessage(), e);
-          UserGroupsPage.this.error("Failed to add the user " + username + " to the group ("
-              + groupName + ") for the organisation (" + session.getOrganisation());
+              + ") for the user directory (" + userDirectoryId + "): " + e.getMessage(), e);
+
+          UserGroupsPage.this.error("Failed to add the user " + username + " to the group "
+              + groupName + ")");
         }
       }
     };
@@ -179,8 +180,8 @@ public class UserGroupsPage extends TemplateWebPage
               securityService.removeUserFromGroup(userDirectoryId, username, group.getGroupName());
 
               logger.info("User (" + session.getUsername() + ") removed the user (" + username
-                  + ") from the group (" + group.getGroupName() + ") for the organisation ("
-                  + session.getOrganisation() + ")");
+                  + ") from the group (" + group.getGroupName() + ") for the user directory ("
+                  + userDirectoryId + ")");
 
               groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
               groupNameField.setModelObject(null);
@@ -190,12 +191,11 @@ public class UserGroupsPage extends TemplateWebPage
             catch (Throwable e)
             {
               logger.error("Failed to remove the user (" + username + ") from the group ("
-                  + group.getGroupName() + ") for the organisation (" + session.getOrganisation()
+                  + group.getGroupName() + ") for the user directory (" + userDirectoryId
                   + "): " + e.getMessage(), e);
 
               UserGroupsPage.this.error("Failed to remove the user " + username
-                  + " from the group " + group.getGroupName() + " for the organisation "
-                  + session.getOrganisation());
+                  + " from the group " + group.getGroupName());
             }
           }
         };

@@ -178,6 +178,8 @@ public class UserAdministrationPage extends TemplateWebPage
         @Override
         protected void populateItem(Item<User> item)
         {
+          User user = item.getModelObject();
+
           item.add(new Label("username", new PropertyModel<String>(item.getModel(), "username")));
           item.add(new Label("firstNames",
               new PropertyModel<String>(item.getModel(), "firstNames")));
@@ -222,6 +224,7 @@ public class UserAdministrationPage extends TemplateWebPage
               }
             }
           };
+          updateLink.setVisible(!user.isReadOnly());
           item.add(updateLink);
 
           // The "resetPassword" link
@@ -238,6 +241,7 @@ public class UserAdministrationPage extends TemplateWebPage
               setResponsePage(page);
             }
           };
+          resetPasswordLink.setVisible(!user.isReadOnly());
           item.add(resetPasswordLink);
 
           // The "removeLink" link
@@ -263,6 +267,7 @@ public class UserAdministrationPage extends TemplateWebPage
               }
             }
           };
+          removeLink.setVisible(!user.isReadOnly());
           item.add(removeLink);
         }
       };
