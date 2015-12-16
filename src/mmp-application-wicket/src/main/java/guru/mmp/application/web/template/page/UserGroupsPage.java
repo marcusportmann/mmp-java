@@ -133,7 +133,7 @@ public class UserGroupsPage extends TemplateWebPage
               + ") for the user directory (" + userDirectoryId + "): " + e.getMessage(), e);
 
           UserGroupsPage.this.error("Failed to add the user " + username + " to the group "
-              + groupName + ")");
+              + groupName);
         }
       }
     };

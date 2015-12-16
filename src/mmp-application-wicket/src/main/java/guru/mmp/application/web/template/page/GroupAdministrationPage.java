@@ -18,6 +18,7 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.security.ExistingGroupMembersException;
 import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
@@ -271,6 +272,11 @@ public class GroupAdministrationPage extends TemplateWebPage
 
             GroupAdministrationPage.this.info("Successfully removed the group "
                 + nameLabel.getDefaultModelObjectAsString());
+          }
+          catch (ExistingGroupMembersException e)
+          {
+            GroupAdministrationPage.this.error("Failed to remove the group "
+              + nameLabel.getDefaultModelObjectAsString() + " with existing users");
           }
           catch (Throwable e)
           {

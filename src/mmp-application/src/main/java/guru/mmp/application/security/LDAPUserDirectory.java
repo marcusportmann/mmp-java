@@ -488,58 +488,72 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void addUserToGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(addInternalUserToInternalGroupSQL))
-     * {
-     * // Get the ID of the internal user with the specified username
-     * long internalUserId;
-     *
-     * if ((internalUserId = getInternalUserId(connection, username)) == -1)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     * // Get the ID of the internal group with the specified group name
-     * long internalGroupId;
-     *
-     * if ((internalGroupId = getInternalGroupId(connection, groupName)) == -1)
-     * {
-     *   throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-     * }
-     *
-     * // Check if the user has already been added to the group for the user directory
-     * if (isInternalUserInInternalGroup(connection, internalUserId, internalGroupId))
-     * {
-     *   // The user is already a member of the specified group do nothing
-     *   return;
-     * }
-     *
-     * // Add the user to the group
-     * statement.setLong(1, getUserDirectoryId());
-     * statement.setLong(2, internalUserId);
-     * statement.setLong(3, internalGroupId);
-     *
-     * if (statement.executeUpdate() != 1)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + addInternalUserToInternalGroupSQL + ")");
-     * }
-     * }
-     * catch (UserNotFoundException | GroupNotFoundException | OrganisationNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to add the user (" + username + ") to the group ("
-     *     + groupName + ") for the user directory (" + getUserDirectoryId() + "): "
-     *     + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      LdapName groupDN = getGroupDN(dirContext, groupName);
+
+      if (groupDN == null)
+      {
+        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+      }
+
+      Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
+
+      BasicAttribute attribute = new BasicAttribute(groupMemberAttribute);
+
+      if (attributes.get(groupMemberAttribute) != null)
+      {
+        NamingEnumeration<String> groupMembers =
+          (NamingEnumeration<String>) attributes.get(groupMemberAttribute).getAll();
+
+        while (groupMembers.hasMore())
+        {
+          LdapName groupMemberDN = new LdapName(groupMembers.next());
+
+          if (groupMemberDN.equals(userDN))
+          {
+            return;
+          }
+          else
+          {
+            attribute.add(groupMemberDN.toString());
+          }
+        }
+      }
+
+      attribute.add(userDN.toString());
+
+      ModificationItem[] modificationItems = new ModificationItem[1];
+
+      modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute);
+
+      dirContext.modifyAttributes(groupDN, modificationItems);
+    }
+    catch (UserNotFoundException | GroupNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to add the user (" + username + ") to the group ("
+          + groupName + ") for the user directory (" + getUserDirectoryId() + "): "
+          + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1025,7 +1039,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
   {
     DirContext dirContext = null;
-    NamingEnumeration<SearchResult> searchResults = null;
 
     try
     {
@@ -1038,15 +1051,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
       }
 
+      Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
 
-      if (true)
+      if ((attributes.get(groupMemberAttribute) != null)
+          && (attributes.get(groupMemberAttribute).size() > 0))
       {
         throw new ExistingGroupMembersException("The group (" + groupName
-          + ") could not be deleted since it is still associated with 1 or more user(s)");
+            + ") could not be deleted since it is still associated with 1 or more user(s)");
       }
-
-      XXX
-
 
       dirContext.destroySubcontext(groupDN);
     }
@@ -1057,11 +1069,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException("Failed to delete the group (" + groupName
-           + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
     finally
     {
-      JNDIUtil.close(searchResults);
       JNDIUtil.close(dirContext);
     }
   }
@@ -1077,39 +1088,34 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void deleteUser(String username)
     throws UserNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(deleteInternalUserSQL))
-     * {
-     * long internalUserId = getInternalUserId(connection, username);
-     *
-     * if (internalUserId == -1)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     * statement.setLong(1, getUserDirectoryId());
-     * statement.setLong(2, internalUserId);
-     *
-     * if (statement.executeUpdate() <= 0)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + deleteInternalUserSQL + ")");
-     * }
-     * }
-     * catch (UserNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to delete the user (" + username
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      dirContext.destroySubcontext(userDN);
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to delete the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -1183,9 +1189,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (!StringUtil.isNullOrEmpty(filter))
       {
-        searchFilter = "(&(objectClass=" + userObjectClass + ")(|(" + userUsernameAttribute
-          + "=*" + filter + "*)(" + userFirstNamesAttribute + "=*" + filter + "*)("
-          + userLastNameAttribute + "=*" + filter + "*)))";
+        searchFilter = "(&(objectClass=" + userObjectClass + ")(|(" + userUsernameAttribute + "=*"
+            + filter + "*)(" + userFirstNamesAttribute + "=*" + filter + "*)("
+            + userLastNameAttribute + "=*" + filter + "*)))";
       }
 
       SearchControls searchControls = new SearchControls();
@@ -1584,9 +1590,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (!StringUtil.isNullOrEmpty(filter))
       {
-        searchFilter = "(&(objectClass=" + userObjectClass + ")(|(" + userUsernameAttribute
-          + "=*" + filter + "*)(" + userFirstNamesAttribute + "=*" + filter + "*)("
-          + userLastNameAttribute + "=*" + filter + "*)))";
+        searchFilter = "(&(objectClass=" + userObjectClass + ")(|(" + userUsernameAttribute + "=*"
+            + filter + "*)(" + userFirstNamesAttribute + "=*" + filter + "*)("
+            + userLastNameAttribute + "=*" + filter + "*)))";
       }
 
       SearchControls searchControls = new SearchControls();
@@ -1992,46 +1998,77 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement =
-     *     connection.prepareStatement(removeInternalUserFromInternalGroupSQL))
-     * {
-     * // Get the ID of the internal user with the specified username
-     * long internalUserId = getInternalUserId(connection, username);
-     *
-     * if (internalUserId == -1)
-     * {
-     *   throw new UserNotFoundException("The user (" + username + ") could not be found");
-     * }
-     *
-     * // Get the ID of the internal group with the specified group name
-     * long internalGroupId = getInternalGroupId(connection, groupName);
-     *
-     * if (internalGroupId == -1)
-     * {
-     *   throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
-     * }
-     *
-     * // Remove the user from the group
-     * statement.setLong(1, getUserDirectoryId());
-     * statement.setLong(2, internalUserId);
-     * statement.setLong(3, internalGroupId);
-     * statement.executeUpdate();
-     * }
-     * catch (UserNotFoundException | GroupNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to remove the user (" + username + ") from the group ("
-     *     + groupName + ") for the user directory (" + getUserDirectoryId() + "): "
-     *     + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException("The user (" + username + ") could not be found");
+      }
+
+      LdapName groupDN = getGroupDN(dirContext, groupName);
+
+      if (groupDN == null)
+      {
+        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+      }
+
+      Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
+
+      BasicAttribute attribute = new BasicAttribute(groupMemberAttribute);
+
+      if (attributes.get(groupMemberAttribute) != null)
+      {
+        NamingEnumeration<String> groupMembers =
+          (NamingEnumeration<String>) attributes.get(groupMemberAttribute).getAll();
+
+        while (groupMembers.hasMore())
+        {
+          LdapName groupMemberDN = new LdapName(groupMembers.next());
+
+          if (!groupMemberDN.equals(userDN))
+          {
+            attribute.add(groupMemberDN.toString());
+          }
+        }
+      }
+
+      if (attribute.size() > 0)
+      {
+        ModificationItem[] modificationItems = new ModificationItem[1];
+
+        modificationItems[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute);
+
+        dirContext.modifyAttributes(groupDN, modificationItems);
+      }
+      else
+      {
+        ModificationItem[] modificationItems = new ModificationItem[1];
+
+        modificationItems[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute);
+
+        dirContext.modifyAttributes(groupDN, modificationItems);
+      }
+    }
+    catch (UserNotFoundException | GroupNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to remove the user (" + username + ") from the group ("
+          + groupName + ") for the user directory (" + getUserDirectoryId() + "): "
+          + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
@@ -2083,41 +2120,51 @@ public class LDAPUserDirectory extends UserDirectoryBase
   public void updateGroup(Group group)
     throws GroupNotFoundException, SecurityException
   {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
+    DirContext dirContext = null;
 
-    /*
-     * try (Connection connection = getDataSource().getConnection();
-     * PreparedStatement statement = connection.prepareStatement(updateInternalGroupSQL))
-     * {
-     * long internalGroupId = getInternalGroupId(connection, group.getGroupName());
-     *
-     * if (internalGroupId == -1)
-     * {
-     *   throw new GroupNotFoundException("The group (" + group.getGroupName()
-     *       + ") could not be found");
-     * }
-     *
-     * statement.setString(1, StringUtil.notNull(group.getDescription()));
-     * statement.setLong(2, getUserDirectoryId());
-     * statement.setLong(3, internalGroupId);
-     *
-     * if (statement.executeUpdate() <= 0)
-     * {
-     *   throw new SecurityException(
-     *       "No rows were affected as a result of executing the SQL statement ("
-     *       + updateInternalGroupSQL + ")");
-     * }
-     * }
-     * catch (GroupNotFoundException e)
-     * {
-     * throw e;
-     * }
-     * catch (Throwable e)
-     * {
-     * throw new SecurityException("Failed to update the group (" + group.getGroupName()
-     *     + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
-     * }
-     */
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName groupDN = getGroupDN(dirContext, group.getGroupName());
+
+      if (groupDN == null)
+      {
+        throw new GroupNotFoundException("The group (" + group.getGroupName()
+            + ") could not be found");
+      }
+
+      Attributes existingAttributes = dirContext.getAttributes(groupDN);
+
+      List<ModificationItem> modificationItems = new ArrayList<>();
+
+      if (existingAttributes.get(groupDescriptionAttribute) == null)
+      {
+        modificationItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
+            new BasicAttribute(groupDescriptionAttribute, group.getDescription())));
+      }
+      else
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+            new BasicAttribute(groupDescriptionAttribute, group.getDescription())));
+      }
+
+      dirContext.modifyAttributes(groupDN,
+          modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+    }
+    catch (DuplicateGroupException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to update the group (" + group.getGroupName()
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+    finally
+    {
+      JNDIUtil.close(dirContext);
+    }
   }
 
   /**
