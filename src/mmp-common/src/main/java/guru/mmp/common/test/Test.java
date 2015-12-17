@@ -16,30 +16,10 @@
 
 package guru.mmp.common.test;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
 /**
- * The <code>Test</code> class provides a base class that contains functionality common to all
+ * The <code>Test</code> class provides the base class that contains functionality common to all
  * JUnit test classes.
  *
  * @author Marcus Portmann
  */
-public abstract class Test
-{
-  private Logger logger;
-
-  protected Logger getLogger()
-  {
-    if (logger == null)
-    {
-      logger = LoggerFactory.getLogger(getClass());
-    }
-
-    return logger;
-  }
-}
+public abstract class Test {}

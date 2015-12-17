@@ -23,9 +23,8 @@ import guru.mmp.application.registry.Registry;
 import guru.mmp.application.registry.RegistryException;
 
 import guru.mmp.common.test.DatabaseTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 
@@ -39,6 +38,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -49,9 +49,9 @@ import javax.sql.DataSource;
  *
  * @author Marcus Portmann
  */
-public class RegistryTest extends DatabaseTest
+public class RegistryTest extends ApplicationTest
 {
-  private DataSource dataSource;
+  @Inject
   private IRegistry registry;
 
   /**
@@ -181,35 +181,6 @@ public class RegistryTest extends DatabaseTest
   }
 
   /**
-   * This method is executed by the JUnit test infrastructure before a JUnit test is executed.
-   * It is responsible for initialising the resources used by the tests e.g. the in-memory
-   * database.
-   *
-   * @throws IOException
-   * @throws SQLException
-   */
-  @Before
-  public void setup()
-    throws IOException, SQLException, NamingException
-  {
-    InitialContext ic = new InitialContext();
-
-    ic.bind("java:app/env/RegistryPathPrefix", "/RegistryTest");
-
-
-
-    // Initialise the in-memory database that will be used when executing a test
-    dataSource = initDatabase("RegistryTest", "guru/mmp/application/persistence/ApplicationH2.sql",
-        false);
-
-    // Create the Registry instance
-    //registry = new Registry(dataSource, "/RegistryTest");
-    registry = new Registry();
-
-    ((Registry)registry).init();
-  }
-
-  /**
    * Test the management of string configuration values by the <code>Registry</code>.
    *
    * @throws RegistryException
@@ -218,6 +189,9 @@ public class RegistryTest extends DatabaseTest
   public void stringConfigurationTest()
     throws RegistryException
   {
+    Registry registry = new Registry();
+    registry.init();
+
     // Set the value
     registry.setStringValue("/Section1/Section1.1", "StringName", "StringValue");
 
@@ -249,30 +223,5 @@ public class RegistryTest extends DatabaseTest
     // Check whether the value was removed
     assertEquals("String value was not removed from the registry", false,
         registry.stringValueExists("/Section1/Section1.1", "StringName"));
-  }
-
-  /**
-   * This method is executed by the JUnit test infrastructure after each JUnit test has been
-   * executed. It is responsible for cleaning up the resources used by the tests.
-   *
-   * @throws SQLException
-   */
-  @After
-  public void tearDown()
-    throws SQLException
-  {
-    if (dataSource != null)
-    {
-      try (Connection connection = dataSource.getConnection();
-        Statement statement = connection.createStatement())
-      {
-        statement.execute("SHUTDOWN");
-      }
-      catch (Throwable ignored) {}
-
-      dataSource = null;
-    }
-
-    registry = null;
   }
 }

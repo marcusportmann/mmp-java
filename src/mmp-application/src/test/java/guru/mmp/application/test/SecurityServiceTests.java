@@ -771,7 +771,7 @@ public class SecurityServiceTests extends DatabaseTest
         "guru/mmp/application/persistence/ApplicationH2.sql", false);
 
     // Create the Registry instance
-    registry = new Registry(dataSource, "/SecurityServiceTest");
+    //registry = new Registry(dataSource, "/SecurityServiceTest");
 
     // Create the Security Service instance
     securityService = new SecurityService(dataSource, registry);
