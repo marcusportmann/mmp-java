@@ -562,15 +562,18 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (userLocked)
       {
         statement.setInt(12, maxPasswordAttempts);
+        user.setPasswordAttempts(maxPasswordAttempts);
       }
       else
       {
         statement.setInt(12, 0);
+        user.setPasswordAttempts(0);
       }
 
       if (expiredPassword)
       {
         statement.setTimestamp(13, new Timestamp(0));
+        user.setPasswordExpiry(new Date(0));
       }
       else
       {
@@ -578,7 +581,10 @@ public class InternalUserDirectory extends UserDirectoryBase
         calendar.setTime(new Date());
         calendar.add(Calendar.MONTH, passwordExpiryMonths);
 
-        statement.setTimestamp(13, new Timestamp(calendar.getTimeInMillis()));
+        long expiryTime = calendar.getTimeInMillis();
+
+        statement.setTimestamp(13, new Timestamp(expiryTime));
+        user.setPasswordExpiry(new Date(expiryTime));
       }
 
       statement.setString(14, StringUtil.notNull(user.getDescription()));
