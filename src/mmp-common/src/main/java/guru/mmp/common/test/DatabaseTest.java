@@ -16,24 +16,184 @@
 
 package guru.mmp.common.test;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DatabaseTest</code> class provides a base class that contains functionality common to
- * all JUnit database test classes.
+ * all JUnit test classes that make use of an in-memory H2 database.
  *
  * @author Marcus Portmann
  */
-public abstract class DatabaseTest extends Test
+public abstract class DatabaseTest extends JNDITest
 {
+  /**
+   * Initialise an in-memory H2 database and return a data source that can be used to interact
+   * with the database.
+   * <p/>
+   * The database will be initialised using the SQL statements in the files given by the specified
+   * resource path. Each file will be loaded as a resource using the Java classloader associated
+   * with the current thread.
+   * <p/>
+   * NOTE: This data source returned by this method must be closed after use with the
+   * <code>close()</code> method.
+   *
+   * @param name                      the name of the in-memory H2 database
+   * @param resourcePaths             the paths to the files containing the SQL statements that
+   *                                  will be used to initialise the in-memory H2 database
+   * @param bindApplicationDataSource should the data source for the database be bound under the
+   *                                  java:app/jdbc/ApplicationDataSource JNDI name otherwise it
+   *                                  will just be bound under the java:comp/env/jdbc/DBNAME name
+   * @param logSQL                    log the statements that are executed when initialising the
+   *                                  database
+   *
+   * @return the data source that can be used to interact with the in-memory H2 database
+   *
+   * @throws IOException
+   * @throws SQLException
+   */
+  public DataSource initDatabase(String name, List<String> resourcePaths, boolean bindApplicationDataSource, boolean logSQL)
+    throws IOException, SQLException
+  {
+    // Setup the data source
+    BasicDataSource dataSource = new BasicDataSource()
+    {
+      @Override
+      public synchronized void close()
+        throws SQLException
+      {
+        try (Connection connection = getConnection();
+          Statement statement = connection.createStatement())
+        {
+          statement.executeUpdate("SHUTDOWN");
+        }
+
+        super.close();
+      }
+    };
+
+    dataSource.setDriverClassName("org.h2.Driver");
+    dataSource.setUsername("");
+    dataSource.setPassword("");
+    dataSource.setUrl("jdbc:h2:mem:" + name + ";MODE=DB2;DB_CLOSE_DELAY=-1");
+
+    /*
+     * Initialise the in-memory database using the SQL statements contained in the file with the
+     * specified resource path.
+     */
+    for (String resourcePath : resourcePaths)
+    {
+      try
+      {
+        // Load the SQL statements used to initialise the database tables
+        List<String> sqlStatements = loadSQL(resourcePath);
+
+        // Get a connection to the in-memory database
+        try (Connection connection = dataSource.getConnection())
+        {
+          for (String sqlStatement : sqlStatements)
+          {
+            if (logSQL)
+            {
+              getLogger().info("Executing SQL statement: " + sqlStatement);
+            }
+
+            try (Statement statement = connection.createStatement())
+            {
+              statement.execute(sqlStatement);
+            }
+          }
+        }
+      }
+      catch (SQLException e)
+      {
+        try (Connection connection = dataSource.getConnection();
+          Statement shutdownStatement = connection.createStatement())
+        {
+          shutdownStatement.executeUpdate("SHUTDOWN");
+        }
+        catch (Throwable f)
+        {
+          System.err.println("[ERROR] " + f.getMessage());
+          f.printStackTrace(System.err);
+        }
+
+        throw e;
+      }
+    }
+
+    try
+    {
+      InitialContext ic = new InitialContext();
+
+      if (bindApplicationDataSource)
+      {
+        ic.bind("java:app/jdbc/ApplicationDataSource", dataSource);
+      }
+
+      ic.bind("java:comp/env/jdbc/" + name, dataSource);
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to bind the data source (" + name
+          + ") under the java:/comp/env/jdbc JNDI context", e);
+    }
+
+    return dataSource;
+  }
+
+  /**
+   * Initialise an in-memory H2 database and return a data source that can be used to interact
+   * with the database.
+   * <p/>
+   * The database will be initialised using the SQL statements in the file given by the specified
+   * resource path. This file will be loaded as a resource using the Java classloader associated
+   * with the current thread.
+   * <p/>
+   * NOTE: This data source returned by this method must be closed after use with the
+   * <code>close()</code> method.
+   *
+   * @param name         the name of the in-memory H2 database
+   * @param resourcePath the path to the file containing the SQL statements that will be used to
+   *                     initialise the in-memory H2 database
+   * @param logSQL       log the statements that are executed when initialising the database
+   *
+   * @return the data source that can be used to interact with the in-memory H2 database
+   *
+   * @throws IOException
+   * @throws SQLException
+   */
+  public DataSource initDatabase(String name, String resourcePath, boolean logSQL)
+    throws IOException, SQLException
+  {
+    List<String> resourcePaths = new ArrayList<>();
+    resourcePaths.add(resourcePath);
+
+    return initDatabase(name, resourcePaths, logSQL);
+  }
+
+  /**
+   * Cleanup the SQL.
+   *
+   * @param text the SQL to cleanup
+   *
+   * @return the SQL that has been cleaned up
+   */
   protected String cleanSQL(String text)
   {
     if (text == null)
@@ -77,6 +237,15 @@ public abstract class DatabaseTest extends Test
     return text;
   }
 
+  /**
+   * Load the SQL statements from the resource on the classpath.
+   *
+   * @param resourcePath the path to the resource on the classpath containing the SQL statements
+   *
+   * @return the SQL statements loaded from the resource on the classpath
+   *
+   * @throws IOException
+   */
   protected List<String> loadSQL(String resourcePath)
     throws IOException
   {

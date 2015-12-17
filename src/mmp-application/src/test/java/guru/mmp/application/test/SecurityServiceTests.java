@@ -18,16 +18,14 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.HsqldbDataSource;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.security.*;
 
+import guru.mmp.common.test.DatabaseTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.sql.DataSource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -45,6 +43,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 /**
  * The <code>SecurityServiceTests</code> class contains the implementation of the JUnit
  * tests for the <code>SecurityService</code> class.
@@ -52,7 +52,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SecurityServiceTests extends HsqldbDatabaseTest
+public class SecurityServiceTests extends DatabaseTest
 {
   private DataSource dataSource;
   private IRegistry registry;
@@ -767,7 +767,8 @@ public class SecurityServiceTests extends HsqldbDatabaseTest
     throws IOException, SQLException
   {
     // Initialise the in-memory database that will be used when executing a test
-    dataSource = initDatabase("SecurityServiceTest", "guru/mmp/application/persistence/ApplicationH2.sql", false);
+    dataSource = initDatabase("SecurityServiceTest",
+        "guru/mmp/application/persistence/ApplicationH2.sql", false);
 
     // Create the Registry instance
     registry = new Registry(dataSource, "/SecurityServiceTest");

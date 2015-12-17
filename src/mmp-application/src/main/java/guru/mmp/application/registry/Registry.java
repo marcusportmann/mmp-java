@@ -118,23 +118,6 @@ public class Registry
   public Registry() {}
 
   /**
-   * Constructs a new <code>Registry</code>.
-   * <p>
-   * This constructor will initialise the <code>Registry</code> instance manually and will not
-   * make use of JNDI or CDI.
-   *
-   * @param dataSource         the data source
-   * @param registryPathPrefix the registry path prefix
-   */
-  public Registry(DataSource dataSource, String registryPathPrefix)
-  {
-    this.dataSource = dataSource;
-    this.registryPathPrefix = registryPathPrefix;
-
-    init();
-  }
-
-  /**
    * Check whether the binary value with the specified path exists.
    *
    * @param path the path for the Registry key e.g. /XYZApp/Section/SubSection
@@ -676,52 +659,49 @@ public class Registry
   @PostConstruct
   public void init()
   {
+    try
+    {
+      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+    }
+    catch (Throwable ignored) {}
+
     if (dataSource == null)
     {
       try
       {
-        dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+        InitialContext ic = new InitialContext();
+
+        dataSource = ic.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+      }
+      catch (Throwable ignored)
+      {}
+    }
+
+    if (dataSource == null)
+    {
+      throw new DAOException("Failed to retrieve the application data source"
+        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+        + " (java:comp/env/jdbc/ApplicationDataSource)");
+    }
+
+    try
+    {
+      registryPathPrefix = InitialContext.doLookup("java:app/env/RegistryPathPrefix");
+    }
+    catch (Throwable ignored) {}
+
+    if (StringUtil.isNullOrEmpty(registryPathPrefix))
+    {
+      try
+      {
+        registryPathPrefix = InitialContext.doLookup("java:comp/env/RegistryPathPrefix");
       }
       catch (Throwable ignored) {}
-
-      if (dataSource == null)
-      {
-        try
-        {
-          dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-        }
-        catch (Throwable ignored) {}
-      }
-
-      if (dataSource == null)
-      {
-        throw new DAOException("Failed to retrieve the application data source"
-            + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-            + " (java:comp/env/jdbc/ApplicationDataSource)");
-      }
     }
 
     if (registryPathPrefix == null)
     {
-      try
-      {
-        registryPathPrefix = InitialContext.doLookup("java:app/env/RegistryPathPrefix");
-      }
-      catch (Throwable ignored) {}
-
-      if (StringUtil.isNullOrEmpty(registryPathPrefix))
-      {
-        try
-        {
-          registryPathPrefix = InitialContext.doLookup("java:comp/env/RegistryPathPrefix");
-        }
-        catch (Throwable ignored) {}
-      }
-
-      if (registryPathPrefix == null)
-      {
-        throw new RegistryException("Failed to initialise the Registry: The path prefix is NULL");
-      }
+      throw new RegistryException("Failed to initialise the Registry: The path prefix is NULL");
     }
 
     registryPathPrefix = fixRegistryPathPrefix(registryPathPrefix);

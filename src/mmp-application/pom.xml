@@ -33,26 +33,21 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <groupId>tomcat</groupId>
+      <artifactId>naming-factory</artifactId>
+      <version>5.5.23</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-dbcp2</artifactId>
-      <version>2.1.1</version>
+      <groupId>tomcat</groupId>
+      <artifactId>naming-resources</artifactId>
+      <version>5.5.23</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>1.4.190</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>2.3.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

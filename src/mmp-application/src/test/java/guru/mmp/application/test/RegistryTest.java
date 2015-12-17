@@ -22,6 +22,7 @@ import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.registry.RegistryException;
 
+import guru.mmp.common.test.DatabaseTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
@@ -46,7 +49,7 @@ import javax.sql.DataSource;
  *
  * @author Marcus Portmann
  */
-public class RegistryTest extends H2DatabaseTest
+public class RegistryTest extends DatabaseTest
 {
   private DataSource dataSource;
   private IRegistry registry;
@@ -187,14 +190,23 @@ public class RegistryTest extends H2DatabaseTest
    */
   @Before
   public void setup()
-    throws IOException, SQLException
+    throws IOException, SQLException, NamingException
   {
+    InitialContext ic = new InitialContext();
+
+    ic.bind("java:app/env/RegistryPathPrefix", "/RegistryTest");
+
+
+
     // Initialise the in-memory database that will be used when executing a test
     dataSource = initDatabase("RegistryTest", "guru/mmp/application/persistence/ApplicationH2.sql",
         false);
 
     // Create the Registry instance
-    registry = new Registry(dataSource, "/RegistryTest");
+    //registry = new Registry(dataSource, "/RegistryTest");
+    registry = new Registry();
+
+    ((Registry)registry).init();
   }
 
   /**
