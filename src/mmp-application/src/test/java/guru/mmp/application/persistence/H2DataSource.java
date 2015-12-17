@@ -30,21 +30,21 @@ import java.sql.Statement;
 import java.util.logging.Logger;
 
 /**
- * Data source that shuts down the HSQLDB database when the data source is closed. HSQLDB is
- * normally only shutdown with a JVM hook, so this data source is better suited when you need to
- * shutdown/restart within one JVM.
+ * Data source that shuts down the H2 database when the data source is closed. H2 is normally only
+ * shutdown with a JVM hook, so this data source is better suited when you need to shutdown/restart
+ * within one JVM.
  *
  * @author Marcus Portmann
  */
-public class HsqldbDataSource extends BasicDataSource
+public class H2DataSource extends BasicDataSource
 {
-  private static final Logger logger = Logger.getLogger(HsqldbDataSource.class.getName());
+  private static final Logger logger = Logger.getLogger(H2DataSource.class.getName());
 
   /**
    * Close and release all connections that are currently stored in the connection pool associated
    * with the data source.
    * <p/>
-   * The HSQLDB database associated with the data source will also be shutdown.
+   * The H2 database associated with the data source will also be shutdown.
    *
    * @throws SQLException
    */
@@ -53,7 +53,7 @@ public class HsqldbDataSource extends BasicDataSource
     throws SQLException
   {
     try (Connection connection = getConnection();
-      Statement statement = connection.createStatement())
+         Statement statement = connection.createStatement())
     {
       statement.executeUpdate("SHUTDOWN");
     }

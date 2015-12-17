@@ -27,12 +27,12 @@ import java.io.InputStream;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>Tests</code> class provides a base class that contains functionality common to all
+ * The <code>Test</code> class provides a base class that contains functionality common to all
  * JUnit test classes.
  *
  * @author Marcus Portmann
  */
-public abstract class Tests
+public abstract class Test
 {
   private Logger logger;
 

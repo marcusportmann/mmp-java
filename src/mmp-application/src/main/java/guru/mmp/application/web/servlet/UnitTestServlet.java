@@ -18,7 +18,7 @@ package guru.mmp.application.web.servlet;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.test.Tests;
+import guru.mmp.common.test.Test;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -141,7 +141,7 @@ public class UnitTestServlet extends HttpServlet
 
               Object object = clazz.newInstance();
 
-              if (object instanceof Tests)
+              if (object instanceof Test)
               {
                 pw.println("      <li><a href=\"" + request.getContextPath()
                     + "/servlet/UnitTestServlet?class=" + unitTestClassName + "\">"

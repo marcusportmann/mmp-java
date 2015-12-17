@@ -19,12 +19,15 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.persistence.HsqldbDataSource;
+import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.security.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.sql.DataSource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -49,12 +52,11 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SecurityServiceTests extends HsqldbDatabaseTests
+public class SecurityServiceTests extends HsqldbDatabaseTest
 {
-  private HsqldbDataSource dataSource;
-  private String origin = "127.0.0.1";
-  private Registry registry;
-  private SecurityService securityService;
+  private DataSource dataSource;
+  private IRegistry registry;
+  private ISecurityService securityService;
 
   /**
    * Test the functionality to add a user to a group.
@@ -754,8 +756,8 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
 
   /**
    * This method is executed by the JUnit test infrastructure before a JUnit test is executed.
-   * It is responsible for initialising the resources used by the tests e.g. an in-memory
-   * HSQLDB database.
+   * It is responsible for initialising the resources used by the tests e.g. the in-memory
+   * database.
    *
    * @throws IOException
    * @throws SQLException
@@ -764,36 +766,20 @@ public class SecurityServiceTests extends HsqldbDatabaseTests
   public void setup()
     throws IOException, SQLException
   {
-    // The SQL scripts that will be used to initialise the HSQLDB database
-    List<String> resourcePaths = new ArrayList<>();
+    // Initialise the in-memory database that will be used when executing a test
+    dataSource = initDatabase("SecurityServiceTest", "guru/mmp/application/persistence/ApplicationH2.sql", false);
 
-    resourcePaths.add("guru/mmp/application/registry/RegistryHsqldb.sql");
-    resourcePaths.add("guru/mmp/application/security/SecurityServiceHsqldb.sql");
+    // Create the Registry instance
+    registry = new Registry(dataSource, "/SecurityServiceTest");
 
-    // Initialise the in-memory HSQLDB database that will be used when executing a test
-    dataSource = initDatabase("SecurityServiceTests", resourcePaths, false);
-
-    // Create the database registry instance using the data source we have just setup
-    registry = new Registry();
-
-    registry.setDataSource(dataSource);
-
-    registry.init();
-
-    // Create the Security Service instance using the data source we have just setup
-    securityService = new SecurityService();
-
-    securityService.setDataSource(dataSource);
-
-    securityService.setRegistry(registry);
-
-    securityService.init();
+    // Create the Security Service instance
+    securityService = new SecurityService(dataSource, registry);
   }
 
   /**
    * This method is executed by the JUnit test infrastructure after each JUnit test has been
-   * executed. It is responsible for cleaning up the resources used by the tests e.g. an in-memory
-   * HSQLDB database.
+   * executed. It is responsible for cleaning up the resources used by the tests e.g. the in-memory
+   * database.
    *
    * @throws SQLException
    */

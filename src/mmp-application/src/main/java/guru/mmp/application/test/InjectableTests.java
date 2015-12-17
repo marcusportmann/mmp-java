@@ -19,14 +19,12 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.cdi.CDIUtil;
-import guru.mmp.common.test.Tests;
+import guru.mmp.common.test.Test;
 
 import org.slf4j.Logger;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 /**
  * The <code>InjectableTests</code> class provides a base class for JUnit tests that wish to use
@@ -34,7 +32,7 @@ import java.io.InputStream;
  *
  * @author Marcus Portmann
  */
-public abstract class InjectableTests extends Tests
+public abstract class InjectableTests extends Test
 {
   /**
    * Constructs a new <code>InjectableTests</code>.

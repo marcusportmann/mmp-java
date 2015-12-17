@@ -18,7 +18,7 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.HsqldbDataSource;
+import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.registry.RegistryException;
 
@@ -38,16 +38,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.sql.DataSource;
+
 /**
  * The <code>RegistryTests</code> class contains the implementation of the JUnit tests for
  * the <code>Registry</code> class.
  *
  * @author Marcus Portmann
  */
-public class RegistryTests extends HsqldbDatabaseTests
+public class RegistryTest extends H2DatabaseTest
 {
-  private HsqldbDataSource dataSource;
-  private Registry registry;
+  private DataSource dataSource;
+  private IRegistry registry;
 
   /**
    * Test the management of binary configuration values by the <code>Registry</code>.
@@ -113,6 +115,18 @@ public class RegistryTests extends HsqldbDatabaseTests
     assertEquals("Decimal value retrieved from the registry does not match the value set",
         new BigDecimal("666.666000000000"), value);
 
+    // Update the value
+    registry.setDecimalValue("/Section1/Section1.1", "DecimalName",
+      new BigDecimal("888.888000000000"));
+
+    // Retrieve the value
+    value = registry.getDecimalValue("/Section1/Section1.1", "DecimalName",
+      new BigDecimal("777.777000000000"));
+
+    // Check whether the retrieved value is correct
+    assertEquals("Decimal value retrieved from the registry does not match the value set",
+      new BigDecimal("888.888000000000"), value);
+
     // Remove the value
     registry.removeValue("/Section1/Section1.1", "DecimalName");
 
@@ -145,6 +159,16 @@ public class RegistryTests extends HsqldbDatabaseTests
     assertEquals("Integer value retrieved from the registry does not match the value set", 666,
         value);
 
+    // Update the value
+    registry.setIntegerValue("/Section1/Section1.1", "IntegerName", 888);
+
+    // Retrieve the value
+    value = registry.getIntegerValue("/Section1/Section1.1", "IntegerName", 777);
+
+    // Check whether the retrieved value is correct
+    assertEquals("Integer value retrieved from the registry does not match the value set", 888,
+      value);
+
     // Remove the value
     registry.removeValue("/Section1/Section1.1", "IntegerName");
 
@@ -155,8 +179,8 @@ public class RegistryTests extends HsqldbDatabaseTests
 
   /**
    * This method is executed by the JUnit test infrastructure before a JUnit test is executed.
-   * It is responsible for initialising the resources used by the tests e.g. an in-memory
-   * HSQLDB database.
+   * It is responsible for initialising the resources used by the tests e.g. the in-memory
+   * database.
    *
    * @throws IOException
    * @throws SQLException
@@ -165,16 +189,12 @@ public class RegistryTests extends HsqldbDatabaseTests
   public void setup()
     throws IOException, SQLException
   {
-    // Initialise the in-memory HSQLDB database that will be used when executing a test
-    dataSource = initDatabase("RegistryTests", "guru/mmp/application/registry/RegistryHsqldb.sql",
+    // Initialise the in-memory database that will be used when executing a test
+    dataSource = initDatabase("RegistryTest", "guru/mmp/application/persistence/ApplicationH2.sql",
         false);
 
-    // Create the database registry instance using the data source we have just setup
-    registry = new Registry();
-
-    registry.setDataSource(dataSource);
-
-    registry.init();
+    // Create the Registry instance
+    registry = new Registry(dataSource, "/RegistryTest");
   }
 
   /**
@@ -185,7 +205,6 @@ public class RegistryTests extends HsqldbDatabaseTests
   @Test
   public void stringConfigurationTest()
     throws RegistryException
-
   {
     // Set the value
     registry.setStringValue("/Section1/Section1.1", "StringName", "StringValue");
@@ -202,6 +221,16 @@ public class RegistryTests extends HsqldbDatabaseTests
     assertEquals("String value retrieved from the registry does not match the value set",
         "StringValue", value);
 
+    // Update the value
+    registry.setStringValue("/Section1/Section1.1", "StringName", "StringValue2");
+
+    value = registry.getStringValue("/Section1/Section1.1", "StringName",
+      "InvalidStringValue");
+
+    // Check whether the retrieved value is correct
+    assertEquals("String value retrieved from the registry does not match the value set",
+      "StringValue2", value);
+
     // Remove the value
     registry.removeValue("/Section1/Section1.1", "StringName");
 
@@ -212,8 +241,7 @@ public class RegistryTests extends HsqldbDatabaseTests
 
   /**
    * This method is executed by the JUnit test infrastructure after each JUnit test has been
-   * executed. It is responsible for cleaning up the resources used by the tests e.g. an in-memory
-   * HSQLDB database.
+   * executed. It is responsible for cleaning up the resources used by the tests.
    *
    * @throws SQLException
    */

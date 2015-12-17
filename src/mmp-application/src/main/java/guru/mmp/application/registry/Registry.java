@@ -118,6 +118,23 @@ public class Registry
   public Registry() {}
 
   /**
+   * Constructs a new <code>Registry</code>.
+   * <p>
+   * This constructor will initialise the <code>Registry</code> instance manually and will not
+   * make use of JNDI or CDI.
+   *
+   * @param dataSource         the data source
+   * @param registryPathPrefix the registry path prefix
+   */
+  public Registry(DataSource dataSource, String registryPathPrefix)
+  {
+    this.dataSource = dataSource;
+    this.registryPathPrefix = registryPathPrefix;
+
+    init();
+  }
+
+  /**
    * Check whether the binary value with the specified path exists.
    *
    * @param path the path for the Registry key e.g. /XYZApp/Section/SubSection
@@ -659,46 +676,52 @@ public class Registry
   @PostConstruct
   public void init()
   {
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
     if (dataSource == null)
     {
       try
       {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+        dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
       }
       catch (Throwable ignored) {}
-    }
 
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      registryPathPrefix = InitialContext.doLookup("java:app/env/RegistryPathPrefix");
-    }
-    catch (Throwable ignored) {}
-
-    if (StringUtil.isNullOrEmpty(registryPathPrefix))
-    {
-      try
+      if (dataSource == null)
       {
-        registryPathPrefix = InitialContext.doLookup("java:comp/env/RegistryPathPrefix");
+        try
+        {
+          dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+        }
+        catch (Throwable ignored) {}
       }
-      catch (Throwable ignored) {}
+
+      if (dataSource == null)
+      {
+        throw new DAOException("Failed to retrieve the application data source"
+            + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+            + " (java:comp/env/jdbc/ApplicationDataSource)");
+      }
     }
 
     if (registryPathPrefix == null)
     {
-      throw new RegistryException("Failed to initialise the Registry: The path prefix is NULL");
+      try
+      {
+        registryPathPrefix = InitialContext.doLookup("java:app/env/RegistryPathPrefix");
+      }
+      catch (Throwable ignored) {}
+
+      if (StringUtil.isNullOrEmpty(registryPathPrefix))
+      {
+        try
+        {
+          registryPathPrefix = InitialContext.doLookup("java:comp/env/RegistryPathPrefix");
+        }
+        catch (Throwable ignored) {}
+      }
+
+      if (registryPathPrefix == null)
+      {
+        throw new RegistryException("Failed to initialise the Registry: The path prefix is NULL");
+      }
     }
 
     registryPathPrefix = fixRegistryPathPrefix(registryPathPrefix);
@@ -1071,16 +1094,6 @@ public class Registry
   }
 
   /**
-   * Set the <code>DataSource</code> for the <code>Registry</code>.
-   *
-   * @param dataSource the <code>DataSource</code> for the <code>Registry</code>
-   */
-  public void setDataSource(DataSource dataSource)
-  {
-    this.dataSource = dataSource;
-  }
-
-  /**
    * Set the decimal value with the specified name under the key with the specified path to the
    * specified value.
    * <p/>
@@ -1447,6 +1460,8 @@ public class Registry
             statement.setInt(3, RegistryValueType.STRING.getCode());
             statement.setString(4, name);
             statement.setString(5, value);
+
+            statement.execute();
           }
         }
         else

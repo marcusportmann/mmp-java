@@ -100,6 +100,23 @@ public class SecurityService
   public SecurityService() {}
 
   /**
+   * Constructs a new <code>SecurityService</code>.
+   * <p>
+   * This constructor will initialise the <code>SecurityService</code> instance manually and will
+   * not make use of JNDI or CDI.
+   *
+   * @param dataSource the data source
+   * @param registry   the registry
+   */
+  public SecurityService(DataSource dataSource, IRegistry registry)
+  {
+    this.dataSource = dataSource;
+    this.registry = registry;
+
+    init();
+  }
+
+  /**
    * Add the user to the group.
    *
    * @param userDirectoryId the unique ID for the user directory the user and group are associated
@@ -1745,26 +1762,33 @@ public class SecurityService
   @PostConstruct
   public void init()
   {
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
     if (dataSource == null)
     {
       try
       {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+        dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored) {}
-    }
+      catch (Throwable ignored)
+      {
+      }
 
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source"
+      if (dataSource == null)
+      {
+        try
+        {
+          dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+        }
+        catch (Throwable ignored)
+        {
+        }
+      }
+
+      if (dataSource == null)
+      {
+        throw new DAOException("Failed to retrieve the application data source"
           + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
           + " (java:comp/env/jdbc/ApplicationDataSource)");
+      }
     }
 
     try
