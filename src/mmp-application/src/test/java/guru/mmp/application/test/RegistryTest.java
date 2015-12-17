@@ -49,7 +49,8 @@ import javax.sql.DataSource;
  *
  * @author Marcus Portmann
  */
-public class RegistryTest extends ApplicationTest
+@RunWith(ApplicationJUnit4ClassRunner.class)
+public class RegistryTest
 {
   @Inject
   private IRegistry registry;

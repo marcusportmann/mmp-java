@@ -34,8 +34,6 @@ import java.util.logging.Logger;
 
 import javax.naming.InitialContext;
 
-import javax.sql.DataSource;
-
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
  * of an in-memory database.
@@ -74,7 +72,8 @@ public abstract class DatabaseTest extends JNDITest
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  public static BasicDataSource initDatabase(String name, List<String> resourcePaths, boolean logSQL)
+  public static BasicDataSource initDatabase(String name, List<String> resourcePaths,
+      boolean logSQL)
   {
     try
     {

@@ -89,6 +89,36 @@ public class CDIUtil
       if (cachedBeanManager == null)
       {
         throw new CDIException("Failed to inject the object of type (" + target.getClass() + "):"
+          + " Failed to retrieve the CDI BeanManager from JNDI");
+      }
+    }
+
+
+  }
+
+  /**
+   * Perform container-based dependency injection on the target using the spe.
+   *
+   * @param target the object to inject
+   *
+   * @throws CDIException
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public static void inject(Object target)
+    throws CDIException
+  {
+    if (cachedBeanManager == null)
+    {
+      // Lookup the CDI injector
+      try
+      {
+        cachedBeanManager = InitialContext.doLookup("java:comp/BeanManager");
+      }
+      catch (Throwable ignored) {}
+
+      if (cachedBeanManager == null)
+      {
+        throw new CDIException("Failed to inject the object of type (" + target.getClass() + "):"
             + " Failed to retrieve the CDI BeanManager from JNDI");
       }
     }

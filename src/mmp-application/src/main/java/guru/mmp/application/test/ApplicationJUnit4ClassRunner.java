@@ -20,23 +20,29 @@ package guru.mmp.application.test;
 
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.test.Test;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
-import org.slf4j.Logger;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.reflect.Method;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import java.util.List;
+
+import javax.enterprise.inject.Instance;
+
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 /**
  * The <code>ApplicationJUnit4ClassRunner</code> class implements the JUnit runner that provides
@@ -47,10 +53,19 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4ClassRunner
-  extends BlockJUnit4ClassRunner
+public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 {
+  /**
+   * The paths to the resources on the classpath that contain the SQL statements used to initialise
+   * the in-memory application database.
+   */
+  public static final String[] APPLICATION_SQL_RESOURCES = {
+    "guru/mmp/application/persistence/ApplicationH2.sql" };
   private BasicDataSource dataSource;
+  private final Class<?> testClass;
+  private Object weldContainerObject;
+  private Object weldObject;
+  private BeanManager beanManager;
 
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
@@ -59,19 +74,43 @@ public class ApplicationJUnit4ClassRunner
    *
    * @throws InitializationError
    */
-  public ApplicationJUnit4ClassRunner(Class<?> testClass) throws InitializationError
+  public ApplicationJUnit4ClassRunner(Class<?> testClass)
+    throws InitializationError
   {
     super(testClass);
+
+    this.testClass = testClass;
 
     InitialContext ic = null;
 
     try
     {
+      // Initialise Weld
+      try
+      {
+        Class<?> weldClass = Thread.currentThread().getContextClassLoader().loadClass(
+            "org.jboss.weld.environment.se.Weld");
+
+        weldObject = weldClass.newInstance();
+
+        Method initializeMethod = weldObject.getClass().getMethod("initialize");
+
+        weldContainerObject = initializeMethod.invoke(weldObject);
+
+        Method getBeanManagerMethod = weldContainerObject.getClass().getMethod("getBeanManager");
+
+        beanManager = (BeanManager)getBeanManagerMethod.invoke(weldContainerObject);
+      }
+      catch (Throwable e)
+      {
+        throw new RuntimeException("Failed to initialise Weld", e);
+      }
+
       // Initialise the JNDI initial context
       try
       {
         System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-          "org.apache.naming.java.javaURLContextFactory");
+            "org.apache.naming.java.javaURLContextFactory");
         System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 
         ic = new InitialContext();
@@ -87,27 +126,23 @@ public class ApplicationJUnit4ClassRunner
       }
       catch (Throwable e)
       {
-        throw new RuntimeException(
-          "Failed to initialise the JNDI initial context", e);
+        throw new RuntimeException("Failed to initialise the JNDI initial context", e);
       }
 
       // Initialise the in-memory database that will be used when executing a test
       try
       {
-        dataSource = initDatabase("ApplicationTest",
-          "guru/mmp/application/persistence/ApplicationH2.sql", false);
+        dataSource = initApplicationDatabase(false);
 
         // Initialise the JNDI
         ic = new InitialContext();
 
         ic.bind("java:app/env/RegistryPathPrefix", "/ApplicationTest");
         ic.bind("java:app/jdbc/ApplicationDataSource", dataSource);
-
       }
       catch (Throwable e)
       {
-        throw new RuntimeException(
-          "Failed to initialise the in-memory application database", e);
+        throw new RuntimeException("Failed to initialise the in-memory application database", e);
       }
     }
     catch (Throwable e)
@@ -122,25 +157,68 @@ public class ApplicationJUnit4ClassRunner
         {
           ic.close();
         }
-        catch (Throwable ignored){}
+        catch (Throwable ignored) {}
       }
     }
-
   }
 
   /**
-   * Create the test class.
+   * Run the tests for this runner.
    *
-   * @param testClass the test class to create
-   *
-   * @return the test class
+   * @param notifier the run notifier that will be notified of events while tests are being run
    */
   @Override
-  protected TestClass createTestClass(Class<?> testClass)
+  public void run(RunNotifier notifier)
   {
-    return super.createTestClass(testClass);
+    super.run(notifier);
+
+    try
+    {
+      dataSource.close();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to shutdown the in-memory application database", e);
+    }
   }
 
+  @Override
+  protected Object createTest()
+    throws Exception
+  {
+    Object testObject = super.createTest();
+
+    CDIUtil
+
+    beanManager
+
+    return testObject;
+  }
+
+//  /**
+//   * Create the test class.
+//   *
+//   * @param testClass the test class to create
+//   *
+//   * @return the test class
+//   */
+//  @Override
+//  protected TestClass createTestClass(Class<?> testClass)
+//  {
+//    try
+//    {
+//      Instance<Object> instance = (Instance<Object>) instanceMethod.invoke(weldContainerObject);
+//
+//      return instance.select(testClass).get();
+//
+//    }
+//    catch (Throwable e)
+//    {
+//      throw new RuntimeException("Failed to create the test class (" + testClass.getName() + ")");
+//    }
+//
+//    return super.createTestClass(testClass);
+//  }
 
   /**
    * Initialise the in-memory application database and return a data source that can be used to
@@ -153,7 +231,7 @@ public class ApplicationJUnit4ClassRunner
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  public static BasicDataSource initDatabase(boolean logSQL)
+  protected BasicDataSource initApplicationDatabase(boolean logSQL)
   {
     try
     {
@@ -165,7 +243,7 @@ public class ApplicationJUnit4ClassRunner
           throws SQLException
         {
           try (Connection connection = getConnection();
-               Statement statement = connection.createStatement())
+            Statement statement = connection.createStatement())
           {
             statement.executeUpdate("SHUTDOWN");
           }
@@ -183,7 +261,7 @@ public class ApplicationJUnit4ClassRunner
        * Initialise the in-memory database using the SQL statements contained in the file with the
        * specified resource path.
        */
-      for (String resourcePath : resourcePaths)
+      for (String resourcePath : APPLICATION_SQL_RESOURCES)
       {
         try
         {
@@ -197,7 +275,8 @@ public class ApplicationJUnit4ClassRunner
             {
               if (logSQL)
               {
-                java.util.logging.Logger.getAnonymousLogger().info("Executing SQL statement: " + sqlStatement);
+                java.util.logging.Logger.getAnonymousLogger().info("Executing SQL statement: "
+                    + sqlStatement);
               }
 
               try (Statement statement = connection.createStatement())
@@ -210,13 +289,14 @@ public class ApplicationJUnit4ClassRunner
         catch (SQLException e)
         {
           try (Connection connection = dataSource.getConnection();
-               Statement shutdownStatement = connection.createStatement())
+            Statement shutdownStatement = connection.createStatement())
           {
             shutdownStatement.executeUpdate("SHUTDOWN");
           }
           catch (Throwable f)
           {
-            java.util.logging.Logger.getAnonymousLogger().severe("Failed to shutdown the in-memory database: " + e.getMessage());
+            java.util.logging.Logger.getAnonymousLogger().severe(
+                "Failed to shutdown the in-memory application database: " + e.getMessage());
           }
 
           throw e;
@@ -227,9 +307,7 @@ public class ApplicationJUnit4ClassRunner
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the in-memory applicatino database", e);
+      throw new RuntimeException("Failed to initialise the in-memory application database", e);
     }
   }
-
-
 }
