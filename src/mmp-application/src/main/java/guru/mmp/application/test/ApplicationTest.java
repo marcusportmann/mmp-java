@@ -27,11 +27,7 @@ import org.junit.runner.RunWith;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.Method;
-
 import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
 
 /**
  * The <code>ApplicationTest</code> class provides the base class for all JUnit test classes that
@@ -40,7 +36,7 @@ import javax.sql.DataSource;
  *
  * @author Marcus Portmann
  */
-@RunWith(InjectionJUnit4ClassRunner.class)
+@RunWith(ApplicationJUnit4ClassRunner.class)
 public abstract class ApplicationTest extends DatabaseTest
 {
   private static BasicDataSource dataSource;
