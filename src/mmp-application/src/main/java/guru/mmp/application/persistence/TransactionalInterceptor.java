@@ -19,19 +19,26 @@ package guru.mmp.application.persistence;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
 import javax.annotation.Priority;
+
 import javax.inject.Inject;
+
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+
+import javax.naming.InitialContext;
+
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
-import java.io.Serializable;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionalInterceptor</code> CDI interceptor is used together with the
@@ -47,12 +54,6 @@ public class TransactionalInterceptor
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * The injected <code>UserTransaction</code> instance.
-   */
-  @Inject
-  UserTransaction userTransaction;
 
   /**
    * Invokes the intercepted method under a JTA transaction.
@@ -95,6 +96,34 @@ public class TransactionalInterceptor
   private Object executeInExistingTransaction(InvocationContext context)
     throws Exception
   {
+    UserTransaction userTransaction = null;
+
+    try
+    {
+      userTransaction = InitialContext.doLookup("java:comp/UserTransaction");
+
+      getLogger().info("Successfully retrieved the bean managed transaction using the JNDI lookup"
+          + " (java:comp/UserTransaction)");
+    }
+    catch (Throwable ignored) {}
+
+    if ((userTransaction == null) && (System.getProperty("jboss.home.dir") != null))
+    {
+      try
+      {
+        userTransaction = InitialContext.doLookup("java:jboss/UserTransaction");
+
+        getLogger().info(
+            "Successfully retrieved the bean managed transaction using the JNDI lookup"
+            + " (java:jboss/UserTransaction)");
+      }
+      catch (Throwable ignored)
+      {
+        getLogger().warn("Failed to lookup the bean managed transaction using the JNDI lookups"
+            + " (java:comp/UserTransaction) and (java:jboss/UserTransaction)");
+      }
+    }
+
     if (userTransaction != null)
     {
       // Check for an existing transaction
@@ -278,6 +307,34 @@ public class TransactionalInterceptor
   private Object executeInNewTransaction(InvocationContext context)
     throws Exception
   {
+    UserTransaction userTransaction = null;
+
+    try
+    {
+      userTransaction = InitialContext.doLookup("java:comp/UserTransaction");
+
+      getLogger().info("Successfully retrieved the bean managed transaction using the JNDI lookup"
+          + " (java:comp/UserTransaction)");
+    }
+    catch (Throwable ignored) {}
+
+    if ((userTransaction == null) && (System.getProperty("jboss.home.dir") != null))
+    {
+      try
+      {
+        userTransaction = InitialContext.doLookup("java:jboss/UserTransaction");
+
+        getLogger().info(
+            "Successfully retrieved the bean managed transaction using the JNDI lookup"
+            + " (java:jboss/UserTransaction)");
+      }
+      catch (Throwable ignored)
+      {
+        getLogger().warn("Failed to lookup the bean managed transaction using the JNDI lookups"
+            + " (java:comp/UserTransaction) and (java:jboss/UserTransaction)");
+      }
+    }
+
     if (userTransaction != null)
     {
       // Check for an existing transaction

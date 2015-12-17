@@ -21,8 +21,9 @@ package guru.mmp.application.test;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.registry.Registry;
 import guru.mmp.application.registry.RegistryException;
-
 import guru.mmp.common.test.DatabaseTest;
+
+import net.jcip.annotations.NotThreadSafe;
 import org.junit.*;
 import org.junit.runner.RunWith;
 
@@ -39,8 +40,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.inject.Inject;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+
 import javax.sql.DataSource;
 
 /**
@@ -121,15 +124,15 @@ public class RegistryTest
 
     // Update the value
     registry.setDecimalValue("/Section1/Section1.1", "DecimalName",
-      new BigDecimal("888.888000000000"));
+        new BigDecimal("888.888000000000"));
 
     // Retrieve the value
     value = registry.getDecimalValue("/Section1/Section1.1", "DecimalName",
-      new BigDecimal("777.777000000000"));
+        new BigDecimal("777.777000000000"));
 
     // Check whether the retrieved value is correct
     assertEquals("Decimal value retrieved from the registry does not match the value set",
-      new BigDecimal("888.888000000000"), value);
+        new BigDecimal("888.888000000000"), value);
 
     // Remove the value
     registry.removeValue("/Section1/Section1.1", "DecimalName");
@@ -171,7 +174,7 @@ public class RegistryTest
 
     // Check whether the retrieved value is correct
     assertEquals("Integer value retrieved from the registry does not match the value set", 888,
-      value);
+        value);
 
     // Remove the value
     registry.removeValue("/Section1/Section1.1", "IntegerName");
@@ -190,9 +193,6 @@ public class RegistryTest
   public void stringConfigurationTest()
     throws RegistryException
   {
-    Registry registry = new Registry();
-    registry.init();
-
     // Set the value
     registry.setStringValue("/Section1/Section1.1", "StringName", "StringValue");
 
@@ -211,12 +211,11 @@ public class RegistryTest
     // Update the value
     registry.setStringValue("/Section1/Section1.1", "StringName", "StringValue2");
 
-    value = registry.getStringValue("/Section1/Section1.1", "StringName",
-      "InvalidStringValue");
+    value = registry.getStringValue("/Section1/Section1.1", "StringName", "InvalidStringValue");
 
     // Check whether the retrieved value is correct
     assertEquals("String value retrieved from the registry does not match the value set",
-      "StringValue2", value);
+        "StringValue2", value);
 
     // Remove the value
     registry.removeValue("/Section1/Section1.1", "StringName");

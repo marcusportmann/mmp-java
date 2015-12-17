@@ -84,7 +84,7 @@ public class UserDirectoryType
       catch (Throwable e)
       {
         throw new SecurityException("Failed to load the administration class ("
-            + administrationClassName + ") for the user directory (" + name + ")");
+            + administrationClassName + ") for the user directory (" + name + ")", e);
       }
     }
 
@@ -151,7 +151,7 @@ public class UserDirectoryType
       catch (Throwable e)
       {
         throw new SecurityException("Failed to load the user directory class ("
-            + userDirectoryClassName + ") for the user directory (" + name + ")");
+            + userDirectoryClassName + ") for the user directory (" + name + ")", e);
       }
     }
 

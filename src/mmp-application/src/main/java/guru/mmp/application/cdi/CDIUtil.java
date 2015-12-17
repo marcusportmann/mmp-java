@@ -89,50 +89,35 @@ public class CDIUtil
       if (cachedBeanManager == null)
       {
         throw new CDIException("Failed to inject the object of type (" + target.getClass() + "):"
-          + " Failed to retrieve the CDI BeanManager from JNDI");
+            + " Failed to retrieve the CDI BeanManager from JNDI");
       }
     }
 
-
+    inject(cachedBeanManager, target);
   }
 
   /**
    * Perform container-based dependency injection on the target using the spe.
    *
-   * @param target the object to inject
+   * @param beanManager the CDI bean manager
+   * @param target      the object to inject
    *
    * @throws CDIException
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public static void inject(Object target)
+  public static void inject(BeanManager beanManager, Object target)
     throws CDIException
   {
-    if (cachedBeanManager == null)
-    {
-      // Lookup the CDI injector
-      try
-      {
-        cachedBeanManager = InitialContext.doLookup("java:comp/BeanManager");
-      }
-      catch (Throwable ignored) {}
-
-      if (cachedBeanManager == null)
-      {
-        throw new CDIException("Failed to inject the object of type (" + target.getClass() + "):"
-            + " Failed to retrieve the CDI BeanManager from JNDI");
-      }
-    }
-
     if (cachedCreationalContext == null)
     {
       try
       {
-        cachedCreationalContext = cachedBeanManager.createCreationalContext(null);
+        cachedCreationalContext = beanManager.createCreationalContext(null);
       }
       catch (Throwable e)
       {
         throw new CDIException("Failed to inject the object of type (" + target.getClass() + "):"
-            + " Failed to create the CDI CreationalContext", e);
+            + " Failed to create the CDI creational context", e);
       }
     }
 
@@ -192,9 +177,9 @@ public class CDIUtil
       }
       else
       {
-        AnnotatedType<?> annotatedType = cachedBeanManager.createAnnotatedType(clazz);
+        AnnotatedType<?> annotatedType = beanManager.createAnnotatedType(clazz);
 
-        injectionTarget = cachedBeanManager.createInjectionTarget(annotatedType);
+        injectionTarget = beanManager.createInjectionTarget(annotatedType);
 
         cachedInjectionTargets.put(clazz, injectionTarget);
       }

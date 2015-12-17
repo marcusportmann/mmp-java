@@ -669,19 +669,16 @@ public class Registry
     {
       try
       {
-        InitialContext ic = new InitialContext();
-
-        dataSource = ic.doLookup("java:comp/env/jdbc/ApplicationDataSource");
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {}
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
       throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try

@@ -2061,18 +2061,6 @@ public class SecurityService
           continue;
         }
 
-        try
-        {
-          userDirectoryType.getAdministrationClass();
-        }
-        catch (Throwable e)
-        {
-          logger.error("Failed to load the user directory type (" + userDirectoryType.getId()
-              + "): Failed to retrieve the administration class for the user directory type", e);
-
-          continue;
-        }
-
         reloadedUserDirectoryTypes.put(userDirectoryType.getId(), userDirectoryType);
       }
 

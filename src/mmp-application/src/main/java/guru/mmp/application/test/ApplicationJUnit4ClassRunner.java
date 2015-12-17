@@ -25,8 +25,8 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.TestClass;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -38,9 +38,8 @@ import java.sql.Statement;
 
 import java.util.List;
 
-import javax.enterprise.inject.Instance;
-
 import javax.enterprise.inject.spi.BeanManager;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
@@ -61,11 +60,9 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
    */
   public static final String[] APPLICATION_SQL_RESOURCES = {
     "guru/mmp/application/persistence/ApplicationH2.sql" };
-  private BasicDataSource dataSource;
-  private final Class<?> testClass;
-  private Object weldContainerObject;
-  private Object weldObject;
-  private BeanManager beanManager;
+  private static BeanManager beanManager;
+  private static BasicDataSource dataSource;
+  private static InitialContext ic;
 
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
@@ -79,86 +76,98 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   {
     super(testClass);
 
-    this.testClass = testClass;
-
-    InitialContext ic = null;
-
     try
     {
       // Initialise Weld
-      try
+      if (beanManager == null)
       {
-        Class<?> weldClass = Thread.currentThread().getContextClassLoader().loadClass(
-            "org.jboss.weld.environment.se.Weld");
+        try
+        {
+          Class<?> weldClass = Thread.currentThread().getContextClassLoader().loadClass(
+              "org.jboss.weld.environment.se.Weld");
 
-        weldObject = weldClass.newInstance();
+          Method initializeMethod = weldClass.getMethod("initialize");
 
-        Method initializeMethod = weldObject.getClass().getMethod("initialize");
+          Object weldObject = weldClass.newInstance();
 
-        weldContainerObject = initializeMethod.invoke(weldObject);
+          Object weldContainerObject = initializeMethod.invoke(weldObject);
 
-        Method getBeanManagerMethod = weldContainerObject.getClass().getMethod("getBeanManager");
+          Method getBeanManagerMethod = weldContainerObject.getClass().getMethod("getBeanManager");
 
-        beanManager = (BeanManager)getBeanManagerMethod.invoke(weldContainerObject);
-      }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Failed to initialise Weld", e);
+          beanManager = (BeanManager) getBeanManagerMethod.invoke(weldContainerObject);
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to initialise Weld", e);
+        }
       }
 
       // Initialise the JNDI initial context
-      try
+      if (ic == null)
       {
-        System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-            "org.apache.naming.java.javaURLContextFactory");
-        System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
+        try
+        {
+          System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
+              "org.apache.naming.java.javaURLContextFactory");
+          System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 
-        ic = new InitialContext();
+          ic = new InitialContext();
 
-        ic.createSubcontext("java:");
-        ic.createSubcontext("java:app");
-        ic.createSubcontext("java:app/env");
-        ic.createSubcontext("java:app/jdbc");
+          ic.createSubcontext("java:");
+          ic.createSubcontext("java:app");
+          ic.createSubcontext("java:app/env");
+          ic.createSubcontext("java:app/jdbc");
 
-        ic.createSubcontext("java:comp");
-        ic.createSubcontext("java:comp/env");
-        ic.createSubcontext("java:comp/env/jdbc");
-      }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Failed to initialise the JNDI initial context", e);
+          ic.createSubcontext("java:comp");
+          ic.createSubcontext("java:comp/env");
+          ic.createSubcontext("java:comp/env/jdbc");
+
+          ic.bind("java:app/env/RegistryPathPrefix", "/ApplicationTest");
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to initialise the JNDI initial context", e);
+        }
       }
 
       // Initialise the in-memory database that will be used when executing a test
-      try
+      if (dataSource == null)
       {
-        dataSource = initApplicationDatabase(false);
+        try
+        {
+          dataSource = initApplicationDatabase(false);
 
-        // Initialise the JNDI
-        ic = new InitialContext();
+          Runtime.getRuntime().addShutdownHook(new Thread()
+          {
+            @Override
+            public void run()
+            {
+              try
+              {
+                dataSource.close();
+              }
+              catch (Throwable e)
+              {
+                throw new RuntimeException("Failed to shutdown the in-memory application database",
+                    e);
+              }
+            }
+          });
 
-        ic.bind("java:app/env/RegistryPathPrefix", "/ApplicationTest");
-        ic.bind("java:app/jdbc/ApplicationDataSource", dataSource);
-      }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Failed to initialise the in-memory application database", e);
+          // Initialise the JNDI
+          ic = new InitialContext();
+
+          ic.bind("java:app/jdbc/ApplicationDataSource", dataSource);
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to initialise the in-memory application database", e);
+        }
       }
     }
     catch (Throwable e)
     {
       throw new RuntimeException("Failed to initialise the ApplicationJUnit4ClassRunner", e);
-    }
-    finally
-    {
-      if (ic != null)
-      {
-        try
-        {
-          ic.close();
-        }
-        catch (Throwable ignored) {}
-      }
     }
   }
 
@@ -171,15 +180,18 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   public void run(RunNotifier notifier)
   {
     super.run(notifier);
+  }
 
-    try
-    {
-      dataSource.close();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to shutdown the in-memory application database", e);
-    }
+  /**
+   * Run the child test for this runner.
+   *
+   * @param method   the test method being run
+   * @param notifier the run notifier that will be notified of events while tests are being run
+   */
+  @Override
+  protected void runChild(FrameworkMethod method, RunNotifier notifier)
+  {
+    super.runChild(method, notifier);
   }
 
   @Override
@@ -188,37 +200,18 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   {
     Object testObject = super.createTest();
 
-    CDIUtil
-
-    beanManager
+    try
+    {
+      CDIUtil.inject(beanManager, testObject);
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to inject the test object of type ("
+          + testObject.getClass().getName() + ")", e);
+    }
 
     return testObject;
   }
-
-//  /**
-//   * Create the test class.
-//   *
-//   * @param testClass the test class to create
-//   *
-//   * @return the test class
-//   */
-//  @Override
-//  protected TestClass createTestClass(Class<?> testClass)
-//  {
-//    try
-//    {
-//      Instance<Object> instance = (Instance<Object>) instanceMethod.invoke(weldContainerObject);
-//
-//      return instance.select(testClass).get();
-//
-//    }
-//    catch (Throwable e)
-//    {
-//      throw new RuntimeException("Failed to create the test class (" + testClass.getName() + ")");
-//    }
-//
-//    return super.createTestClass(testClass);
-//  }
 
   /**
    * Initialise the in-memory application database and return a data source that can be used to
