@@ -249,7 +249,7 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+  @Test
   public void deleteGroupTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -280,7 +280,7 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test(expected = guru.mmp.application.security.ExistingGroupMembersException.class)
+  @Test(expected = guru.mmp.application.security.ExistingGroupMembersException.class)
   public void deleteGroupWithExistingMembers()
     throws guru.mmp.application.security.SecurityException
 
@@ -329,7 +329,7 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test(expected = guru.mmp.application.security.GroupNotFoundException.class)
+  @Test(expected = guru.mmp.application.security.GroupNotFoundException.class)
   public void deleteInvalidGroupTest()
     throws guru.mmp.application.security.SecurityException
   {

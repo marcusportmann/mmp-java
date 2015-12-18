@@ -58,6 +58,8 @@ public class RegistryTest
   @Inject
   private IRegistry registry;
 
+  USE UUIDS FOR NAMES
+
   /**
    * Test the management of binary configuration values by the <code>Registry</code>.
    *
