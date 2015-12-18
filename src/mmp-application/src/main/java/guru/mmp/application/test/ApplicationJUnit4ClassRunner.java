@@ -21,7 +21,7 @@ package guru.mmp.application.test;
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp2.managed.BasicManagedDataSource;
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -64,8 +64,9 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   public static final String[] APPLICATION_SQL_RESOURCES = {
     "guru/mmp/application/persistence/ApplicationH2.sql" };
   private static BeanManager beanManager;
-  private static BasicDataSource dataSource;
+  private static BasicManagedDataSource dataSource;
   private static InitialContext ic;
+  private static TransactionManager transactionManager;
 
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
@@ -109,8 +110,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
             Thread.currentThread().getContextClassLoader().loadClass(
               "com.atomikos.icatch.jta.UserTransactionManager");
 
-          TransactionManager transactionManager =
-            (TransactionManager) transactionManagerClass.newInstance();
+          transactionManager = (TransactionManager) transactionManagerClass.newInstance();
 
           ic.bind("java:comp/TransactionManager", transactionManager);
           ic.bind("java:jboss/TransactionManager", transactionManager);
@@ -240,12 +240,12 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  protected BasicDataSource initApplicationDatabase(boolean logSQL)
+  protected BasicManagedDataSource initApplicationDatabase(boolean logSQL)
   {
     try
     {
       // Setup the data source
-      BasicDataSource dataSource = new BasicDataSource()
+      BasicManagedDataSource dataSource = new BasicManagedDataSource()
       {
         @Override
         public synchronized void close()
@@ -260,6 +260,8 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
           super.close();
         }
       };
+
+      dataSource.setTransactionManager(transactionManager);
 
       dataSource.setDriverClassName("org.h2.Driver");
       dataSource.setUsername("");

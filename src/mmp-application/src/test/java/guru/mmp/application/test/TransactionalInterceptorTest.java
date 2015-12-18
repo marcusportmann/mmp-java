@@ -18,25 +18,21 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
-import guru.mmp.application.security.SecurityException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import javax.naming.InitialContext;
 
 import javax.sql.DataSource;
+
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 
 /**
  * The <code>TransactionalInterceptorTest</code> class contains the implementation of the JUnit
@@ -47,13 +43,77 @@ import java.sql.DatabaseMetaData;
 @RunWith(ApplicationJUnit4ClassRunner.class)
 public class TransactionalInterceptorTest
 {
+  private static int testDataCount;
+  @Inject
+  private ITestTransactionalService testTransactionalService;
+
   /**
-  * Method description
+   * testFailedExecutionInExistingTransaction
    *
    * @throws Exception
    */
   @Test
-  public void testExecuteInExistingTransaction()
+  public void testFailedExecutionInExistingTransaction()
+    throws Exception
+  {
+    UserTransaction userTransaction = getUserTransaction();
+
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Found an existing transaction");
+    }
+
+    userTransaction.begin();
+
+    TestData testData = getTestData();
+
+    testTransactionalService.createTestData(testData);
+
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Failed to find an active transaction after creating the test data");
+    }
+
+    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Failed to retrieve the test data within the transaction");
+    }
+
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Failed to find an active transaction after retrieving the test data");
+    }
+
+    userTransaction.rollback();
+
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "The transaction was not committed successfully");
+    }
+
+    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData != null)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Retrieved the test data after the transaction was rolled back");
+    }
+  }
+
+  /**
+   * testFailedExecutionInNewTransaction
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testFailedExecutionInNewTransaction()
     throws Exception
   {
     UserTransaction userTransaction = getUserTransaction();
@@ -64,47 +124,176 @@ public class TransactionalInterceptorTest
           + "Found an existing transaction");
     }
 
-    try
+    userTransaction.begin();
+
+    TestData testData = getTestData();
+
+    testTransactionalService.createTestDataInNewTransaction(testData);
+
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
     {
-      userTransaction.begin();
-
-
-
-
-
-      userTransaction.commit();
-    }
-    catch (Throwable e)
-    {
-      if (userTransaction.getStatus() == Status.STATUS_ROLLING_BACK)
-      {
-        fail("Failed to invoked the Test Transactional Service in a new transaction: "
-          + "The transaction is rolling back");
-      }
-      else if (userTransaction.getStatus() == Status.STATUS_ROLLEDBACK)
-      {
-        fail("Failed to invoked the Test Transactional Service in a new transaction: "
-          + "The transaction was rolled back");
-      }
-      else if (userTransaction.getStatus() == Status.STATUS_NO_TRANSACTION)
-      {
-        fail("Failed to invoked the Test Transactional Service in a new transaction: "
-          + "No transaction exists");
-      }
-
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to find an active transaction after creating the test data");
     }
 
+    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
 
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to retrieve the test data within the transaction");
+    }
 
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to find an active transaction after retrieving the test data");
+    }
 
+    userTransaction.rollback();
 
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "The transaction was not committed successfully");
+    }
 
+    retrievedTestData = testTransactionalService.getTestData(testData.getId());
 
-
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to retrieve the test data after the transaction was rolled back");
+    }
   }
 
+  /**
+   * testSuccessfulExecutionInExistingTransaction
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testSuccessfulExecutionInExistingTransaction()
+    throws Exception
+  {
+    UserTransaction userTransaction = getUserTransaction();
 
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Found an existing transaction");
+    }
 
+    userTransaction.begin();
+
+    TestData testData = getTestData();
+
+    testTransactionalService.createTestData(testData);
+
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Failed to find an active transaction after creating the test data");
+    }
+
+    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Failed to retrieve the test data within the transaction");
+    }
+
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Failed to find an active transaction after retrieving the test data");
+    }
+
+    userTransaction.commit();
+
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "The transaction was not committed successfully");
+    }
+
+    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service in an existing transaction: "
+          + "Failed to retrieve the test data after the transaction was committed");
+    }
+  }
+
+  /**
+   * testSuccessfulExecutionInExistingTransaction
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testSuccessfulExecutionInNewTransaction()
+    throws Exception
+  {
+    UserTransaction userTransaction = getUserTransaction();
+
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Found an existing transaction");
+    }
+
+    userTransaction.begin();
+
+    TestData testData = getTestData();
+
+    testTransactionalService.createTestDataInNewTransaction(testData);
+
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to find an active transaction after creating the test data");
+    }
+
+    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to retrieve the test data within the transaction");
+    }
+
+    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to find an active transaction after retrieving the test data");
+    }
+
+    userTransaction.commit();
+
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "The transaction was not committed successfully");
+    }
+
+    retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service in a new transaction: "
+          + "Failed to retrieve the test data after the transaction was committed");
+    }
+  }
+
+  private static synchronized TestData getTestData()
+  {
+    testDataCount++;
+
+    return new TestData("Test Data ID " + testDataCount, "Test Name " + testDataCount,
+        "Test Description " + testDataCount);
+  }
 
   private DataSource getApplicationDataSource()
   {
@@ -115,7 +304,7 @@ public class TransactionalInterceptorTest
     catch (Throwable e)
     {
       throw new RuntimeException("Failed to retrieve the application data source"
-        + " using the JNDI name (java:app/jdbc/ApplicationDataSource)");
+          + " using the JNDI name (java:app/jdbc/ApplicationDataSource)");
     }
   }
 

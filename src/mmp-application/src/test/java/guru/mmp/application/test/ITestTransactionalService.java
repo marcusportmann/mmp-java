@@ -27,24 +27,32 @@ public interface ITestTransactionalService
   /**
    * Create the test data.
    *
-   * @param id    the id
-   * @param name  the name
-   * @param value the value
+   * @param testData the test data
    *
    * @throws TestTransactionalServiceException
    */
-  void createTestData(String id, String name, String value)
+  void createTestData(TestData testData)
     throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction.
    *
-   * @param id    the id
-   * @param name  the name
-   * @param value the value
+   * @param testData the test data
    *
    * @throws TestTransactionalServiceException
    */
-  void createTestDataInNewTransaction(String id, String name, String value)
+  void createTestDataInNewTransaction(TestData testData)
+    throws TestTransactionalServiceException;
+
+  /**
+   * Retrieve the test data with the specified ID.
+   *
+   * @param id the ID
+   *
+   * @return the test data or <code>null</code> if the test data cannot be found
+   *
+   * @throws TestTransactionalServiceException
+   */
+  TestData getTestData(String id)
     throws TestTransactionalServiceException;
 }

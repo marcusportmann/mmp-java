@@ -9,7 +9,7 @@ CREATE SCHEMA MMP;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE MMP.TEST_DATA (
-  ID     BIGINT NOT NULL,
+  ID     VARCHAR(40) NOT NULL,
   NAME   VARCHAR(100) NOT NULL,
   VALUE  VARCHAR(100) NOT NULL,
 

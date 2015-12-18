@@ -16,21 +16,26 @@
 
 package guru.mmp.application.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.persistence.NewTransaction;
+import guru.mmp.application.persistence.Transactional;
 import guru.mmp.application.security.SecurityException;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.sql.*;
+
 import javax.annotation.PostConstruct;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
+
 import javax.naming.InitialContext;
+
 import javax.sql.DataSource;
-import javax.transaction.Transactional;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -41,23 +46,36 @@ import java.sql.SQLException;
 @ApplicationScoped
 @Default
 public class TestTransactionalService
+  implements ITestTransactionalService
 {
+  private String createTestDataSQL;
+  private DataSource dataSource;
+  private String getTestDataSQL;
+
   /**
    * Create the test data.
    *
-   * @param id    the id
-   * @param name  the name
-   * @param value the value
+   * @param testData the test data
    *
    * @throws TestTransactionalServiceException
    */
   @Transactional
-  public void createTestData(String id, String name, String value)
+  public void createTestData(TestData testData)
     throws TestTransactionalServiceException
   {
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
     {
+      statement.setString(1, testData.getId());
+      statement.setString(2, testData.getName());
+      statement.setString(3, testData.getValue());
 
+      if (statement.executeUpdate() != 1)
+      {
+        throw new RuntimeException(
+            "No rows were affected as a result of executing the SQL statement ("
+            + createTestDataSQL + ")");
+      }
     }
     catch (Throwable e)
     {
@@ -68,57 +86,70 @@ public class TestTransactionalService
   /**
    * Create the test data in a new transaction.
    *
-   * @param id    the id
-   * @param name  the name
-   * @param value the value
+   * @param testData the test data
    *
    * @throws TestTransactionalServiceException
    */
   @Transactional
   @NewTransaction
-  void createTestDataInNewTransaction(String id, String name, String value)
+  public void createTestDataInNewTransaction(TestData testData)
     throws TestTransactionalServiceException
   {
-    try
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
     {
-      try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
-      {
-        statement.setString(1, id);
-        statement.setString(2, name);
-        statement.setString(3, value);
+      statement.setString(1, testData.getId());
+      statement.setString(2, testData.getName());
+      statement.setString(3, testData.getValue());
 
-        if (statement.executeUpdate() != 1)
-        {
-          throw new RuntimeException(
+      if (statement.executeUpdate() != 1)
+      {
+        throw new RuntimeException(
             "No rows were affected as a result of executing the SQL statement ("
-              + createTestDataSQL + ")");
+            + createTestDataSQL + ")");
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new TestTransactionalServiceException(
+          "Failed to create the test data in a new transaction", e);
+    }
+  }
+
+  /**
+   * Retrieve the test data with the specified ID.
+   *
+   * @param id the ID
+   *
+   * @return the test data or <code>null</code> if the test data cannot be found
+   *
+   * @throws TestTransactionalServiceException
+   */
+  public TestData getTestData(String id)
+    throws TestTransactionalServiceException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getTestDataSQL))
+    {
+      statement.setString(1, id);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return buildTestDataFromResultSet(rs);
+        }
+        else
+        {
+          return null;
         }
       }
     }
     catch (Throwable e)
     {
-      throw new TestTransactionalServiceException("Failed to create the test data in a new transaction", e);
+      throw new TestTransactionalServiceException(
+          "Failed to create the test data in a new transaction", e);
     }
-  }
-
-  private DataSource dataSource;
-
-  private String createTestDataSQL;
-
-  /**
-   * Generate the SQL statements.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects
-   *
-   * @throws SQLException
-   */
-  private void buildStatements(String schemaPrefix)
-    throws SQLException
-  {
-    // createTestDataSQL
-    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA"
-      + " (ID, NAME, VALUE) VALUES (?, ?, ?)";
-
   }
 
   /**
@@ -133,9 +164,7 @@ public class TestTransactionalService
       {
         dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
 
       if (dataSource == null)
       {
@@ -143,16 +172,14 @@ public class TestTransactionalService
         {
           dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
         }
-        catch (Throwable ignored)
-        {
-        }
+        catch (Throwable ignored) {}
       }
 
       if (dataSource == null)
       {
         throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
+            + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+            + " (java:comp/env/jdbc/ApplicationDataSource)");
       }
     }
 
@@ -183,8 +210,31 @@ public class TestTransactionalService
     catch (Throwable e)
     {
       throw new SecurityException("Failed to initialise the Security Service: " + e.getMessage(),
-        e);
+          e);
     }
   }
 
+  /**
+   * Generate the SQL statements.
+   *
+   * @param schemaPrefix the schema prefix to prepend to database objects
+   *
+   * @throws SQLException
+   */
+  private void buildStatements(String schemaPrefix)
+    throws SQLException
+  {
+    // createTestDataSQL
+    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA"
+        + " (ID, NAME, VALUE) VALUES (?, ?, ?)";
+
+    // getTestDataSQL
+    getTestDataSQL = "SELECT ID, NAME, VALUE FROM " + schemaPrefix + "TEST_DATA WHERE ID=?";
+  }
+
+  private TestData buildTestDataFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
+  }
 }
