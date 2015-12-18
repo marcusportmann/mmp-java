@@ -131,13 +131,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to check if the binary value (" + name
           + ") exists under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to check if the binary value (" + name
           + ") exists under the Registry key (" + path + "): The specified name is invalid");
@@ -205,13 +205,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to check if the decimal value (" + name
           + ") exists under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to check if the decimal value (" + name
           + ") exists under the Registry key (" + path + "): The specified name is invalid");
@@ -300,13 +300,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to get the binary value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to get the binary value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -404,13 +404,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to get the decimal value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to get the decimal value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -479,13 +479,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to get the integer value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to get the integer value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -574,13 +574,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to get the string value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to get the string value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -751,13 +751,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to check if the integer value (" + name
           + ") exists under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to check if the integer value (" + name
           + ") exists under the Registry key (" + path + "): The specified name is invalid");
@@ -942,13 +942,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to set the binary value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to set the binary value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -1086,13 +1086,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to set the decimal value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to set the decimal value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -1213,13 +1213,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to set the integer value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to set the integer value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -1361,13 +1361,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to set the string value (" + name
           + ") under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to set the string value (" + name
           + ") under the Registry key (" + path + "): The specified name is invalid");
@@ -1502,13 +1502,13 @@ public class Registry
     throws RegistryException
   {
     // Check the parameters
-    if ((path == null) || (path.length() == 0))
+    if (StringUtil.isNullOrEmpty(path))
     {
       throw new RegistryException("Failed to check if the string value (" + name
           + ") exists under the Registry key (" + path + "): The specified key path is invalid");
     }
 
-    if ((name == null) || (name.length() == 0))
+    if (StringUtil.isNullOrEmpty(name))
     {
       throw new RegistryException("Failed to check if the string value (" + name
           + ") exists under the Registry key (" + path + "): The specified name is invalid");

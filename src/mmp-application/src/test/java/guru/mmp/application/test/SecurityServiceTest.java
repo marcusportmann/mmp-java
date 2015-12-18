@@ -19,13 +19,8 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.registry.IRegistry;
-import guru.mmp.application.registry.Registry;
 import guru.mmp.application.security.*;
 
-import guru.mmp.common.test.DatabaseTest;
-import net.jcip.annotations.NotThreadSafe;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,16 +29,9 @@ import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import java.util.*;
 
 import javax.inject.Inject;
-import javax.sql.DataSource;
 
 /**
  * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit
@@ -54,11 +42,14 @@ import javax.sql.DataSource;
 @RunWith(ApplicationJUnit4ClassRunner.class)
 public class SecurityServiceTest
 {
+  private static int functionCount;
+  private static int groupCount;
+  private static int organisationCount;
   @Inject
   private IRegistry registry;
-
   @Inject
   private ISecurityService securityService;
+  private static int userCount;
 
   /**
    * Test the functionality to add a user to a group.
@@ -106,10 +97,9 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
-    securityService.adminChangePassword(userDirectory.getId(),
-        user.getUsername(), "Password2", false, false, true, PasswordChangeReason.ADMINISTRATIVE);
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.adminChangePassword(userDirectory.getId(), user.getUsername(), "Password2",
+        false, false, true, PasswordChangeReason.ADMINISTRATIVE);
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
@@ -128,10 +118,9 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
-    securityService.changePassword(userDirectory.getId(),
-        user.getUsername(), user.getPassword(), "Password1");
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.changePassword(userDirectory.getId(), user.getUsername(), user.getPassword(),
+        "Password1");
     securityService.authenticate(user.getUsername(), "Password1");
   }
 
@@ -140,7 +129,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void createFunctionTest()
     throws guru.mmp.application.security.SecurityException
   {
@@ -170,9 +160,7 @@ public class SecurityServiceTest
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    Group retrievedGroup =
-      securityService.getGroup(userDirectory.getId(),
-        group.getGroupName());
+    Group retrievedGroup = securityService.getGroup(userDirectory.getId(), group.getGroupName());
 
     compareGroups(group, retrievedGroup);
   }
@@ -210,11 +198,9 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
+    securityService.createUser(userDirectory.getId(), user, false, false);
 
-    User retrievedUser = securityService.getUser(userDirectory.getId(),
-      user.getUsername());
+    User retrievedUser = securityService.getUser(userDirectory.getId(), user.getUsername());
 
     compareUsers(user, retrievedUser, false);
   }
@@ -224,7 +210,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void deleteFunctionTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -261,13 +248,11 @@ public class SecurityServiceTest
     Group group = getTestGroupDetails();
 
     securityService.createGroup(userDirectory.getId(), group);
-    securityService.deleteGroup(userDirectory.getId(),
-        group.getGroupName());
+    securityService.deleteGroup(userDirectory.getId(), group.getGroupName());
 
     try
     {
-      securityService.getGroup(userDirectory.getId(),
-          group.getGroupName());
+      securityService.getGroup(userDirectory.getId(), group.getGroupName());
 
       fail("Retrieved the group (" + group.getGroupName() + ") that should have been deleted");
     }
@@ -313,7 +298,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test(expected = guru.mmp.application.security.FunctionNotFoundException.class)
+
+  // @Test(expected = guru.mmp.application.security.FunctionNotFoundException.class)
   public void deleteInvalidFunctionTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -348,7 +334,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test(expected = guru.mmp.application.security.UserNotFoundException.class)
+
+  // @Test(expected = guru.mmp.application.security.UserNotFoundException.class)
   public void deleteInvalidUserTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -359,8 +346,7 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
+    securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.deleteUser(userDirectory.getId(), "INVALID");
   }
 
@@ -369,7 +355,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void deleteOrganisationByIdTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -419,7 +406,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void deleteUserTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -430,15 +418,12 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
-    securityService.deleteUser(userDirectory.getId(),
-        user.getUsername());
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.deleteUser(userDirectory.getId(), user.getUsername());
 
     try
     {
-      securityService.getUser(userDirectory.getId(),
-          user.getUsername());
+      securityService.getUser(userDirectory.getId(), user.getUsername());
 
       fail("Retrieved the user (" + user.getUsername() + ") that should have been deleted");
     }
@@ -450,7 +435,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test(expected = guru.mmp.application.security.ExpiredPasswordException.class)
+
+  // @Test(expected = guru.mmp.application.security.ExpiredPasswordException.class)
   public void expiredUserPasswordTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -461,49 +447,48 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
-    securityService.adminChangePassword(userDirectory.getId(),
-        user.getUsername(), "Password2", true, false, true, PasswordChangeReason.ADMINISTRATIVE);
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.adminChangePassword(userDirectory.getId(), user.getUsername(), "Password2",
+        true, false, true, PasswordChangeReason.ADMINISTRATIVE);
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
-//  /**
-//   * Test the find users functionality.
-//   *
-//   * @throws guru.mmp.application.security.SecurityException
-//   */
-//  //@Test
-//  public void findUsersTest()
-//    throws guru.mmp.application.security.SecurityException
+///**
+// * Test the find users functionality.
+// *
+// * @throws guru.mmp.application.security.SecurityException
+// */
+////@Test
+//public void findUsersTest()
+//  throws guru.mmp.application.security.SecurityException
 //
+//{
+//  for (int i = 1; i < 20; i++)
 //  {
-//    for (int i = 1; i < 20; i++)
-//    {
-//      User user = getNumberedTestUserDetails(i);
+//    User user = getNumberedTestUserDetails(i);
 //
-//      securityService.createUser(userDirectory.getId(), user, false,
-//          false);
-//    }
-//
-//    List<Attribute> attributes = new ArrayList<>();
-//
-//    attributes.add(new Attribute("description", "%Description 1%"));
-//    attributes.add(new Attribute("email", "%E-Mail 1%"));
-//    attributes.add(new Attribute("faxNumber", "%Fax Number 1%"));
-//    attributes.add(new Attribute("firstNames", "%FirstName 1%"));
-//    attributes.add(new Attribute("lastName", "%LastName 1%"));
-//    attributes.add(new Attribute("mobileNumber", "%Mobile Number 1%"));
-//    attributes.add(new Attribute("phoneNumber", "%Phone Number 1%"));
-//    attributes.add(new Attribute("title", "%Title 1%"));
-//    attributes.add(new Attribute("username", "%Username 1%"));
-//
-//    List<User> retrievedUsers =
-//      securityService.findUsers(userDirectory.getId(), attributes);
-//
-//    assertEquals("The correct number of users (11) was not retrieved matching the search criteria",
-//        11, retrievedUsers.size());
+//    securityService.createUser(userDirectory.getId(), user, false,
+//        false);
 //  }
+//
+//  List<Attribute> attributes = new ArrayList<>();
+//
+//  attributes.add(new Attribute("description", "%Description 1%"));
+//  attributes.add(new Attribute("email", "%E-Mail 1%"));
+//  attributes.add(new Attribute("faxNumber", "%Fax Number 1%"));
+//  attributes.add(new Attribute("firstNames", "%FirstName 1%"));
+//  attributes.add(new Attribute("lastName", "%LastName 1%"));
+//  attributes.add(new Attribute("mobileNumber", "%Mobile Number 1%"));
+//  attributes.add(new Attribute("phoneNumber", "%Phone Number 1%"));
+//  attributes.add(new Attribute("title", "%Title 1%"));
+//  attributes.add(new Attribute("username", "%Username 1%"));
+//
+//  List<User> retrievedUsers =
+//    securityService.findUsers(userDirectory.getId(), attributes);
+//
+//  assertEquals("The correct number of users (11) was not retrieved matching the search criteria",
+//      11, retrievedUsers.size());
+//}
 
 ///**
 // * Test the functionality to retrieve all the function codes for a user.
@@ -512,37 +497,37 @@ public class SecurityServiceTest
 // */
 //@Test
 //public void getAllFunctionCodesForUserTest()
-//  throws guru.mmp.application.security.SecurityException
+//throws guru.mmp.application.security.SecurityException
 //
 //{
-//  Organisation organisation = getTestOrganisationDetails();
+//Organisation organisation = getTestOrganisationDetails();
 //
-//  securityService.createOrganisation(organisation);
+//securityService.createOrganisation(organisation);
 //
-//  Group group = getTestGroupDetails();
+//Group group = getTestGroupDetails();
 //
-//  securityService.createGroup(userDirectory.getId(), group);
+//securityService.createGroup(userDirectory.getId(), group);
 //
-//  User user = getTestUserDetails();
+//User user = getTestUserDetails();
 //
-//  securityService.createUser(userDirectory.getId(), user, false, false);
-//  securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
+//securityService.createUser(userDirectory.getId(), user, false, false);
+//securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
 //
-//  Function function = getTestFunctionDetails();
+//Function function = getTestFunctionDetails();
 //
-//  securityService.createFunction(function);
-//  securityService.grantFunctionToUser(userDirectory.getId(), user.getUsername(), function.getCode());
+//securityService.createFunction(function);
+//securityService.grantFunctionToUser(userDirectory.getId(), user.getUsername(), function.getCode());
 //
-//  Function anotherFunction = getAnotherTestFunctionDetails();
+//Function anotherFunction = getAnotherTestFunctionDetails();
 //
-//  securityService.createFunction(anotherFunction);
-//  securityService.grantFunctionToGroup(group.getGroupName(), anotherFunction.getCode());
+//securityService.createFunction(anotherFunction);
+//securityService.grantFunctionToGroup(group.getGroupName(), anotherFunction.getCode());
 //
-//  List<String> functionCodes = securityService.getAllFunctionCodesForUser(user.getUsername(),
-//    organisation.getCode());
+//List<String> functionCodes = securityService.getAllFunctionCodesForUser(user.getUsername(),
+//  organisation.getCode());
 //
-//  assertEquals("The correct number of functions (2) was not retrieved for the user ("
-//      + user.getUsername() + ")", 2, functionCodes.size());
+//assertEquals("The correct number of functions (2) was not retrieved for the user ("
+//    + user.getUsername() + ")", 2, functionCodes.size());
 //}
 
   /**
@@ -550,7 +535,7 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+  // @Test
   public void getFunctionsTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -571,7 +556,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void getGroupsTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -584,8 +570,7 @@ public class SecurityServiceTest
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    List<Group> retrievedGroups =
-      securityService.getGroups(userDirectory.getId());
+    List<Group> retrievedGroups = securityService.getGroups(userDirectory.getId());
 
     assertEquals("The correct number of groups (1) was not retrieved", 1, retrievedGroups.size());
     compareGroups(group, retrievedGroups.get(0));
@@ -596,7 +581,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void getOrganisationTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -616,7 +602,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void getOrganisationsTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -649,7 +636,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void getUsersTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -660,11 +648,9 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
+    securityService.createUser(userDirectory.getId(), user, false, false);
 
-    List<User> retrievedUsers =
-      securityService.getUsers(userDirectory.getId());
+    List<User> retrievedUsers = securityService.getUsers(userDirectory.getId());
 
     assertEquals("The correct number of users (2) was not retrieved", 2, retrievedUsers.size());
 
@@ -686,7 +672,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void isUserInGroupTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -714,7 +701,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test(expected = guru.mmp.application.security.UserLockedException.class)
+
+  // @Test(expected = guru.mmp.application.security.UserLockedException.class)
   public void lockedUserTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -725,10 +713,9 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
-    securityService.adminChangePassword(userDirectory.getId(),
-        user.getUsername(), "Password2", false, true, true, PasswordChangeReason.ADMINISTRATIVE);
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.adminChangePassword(userDirectory.getId(), user.getUsername(), "Password2",
+        false, true, true, PasswordChangeReason.ADMINISTRATIVE);
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
@@ -737,7 +724,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void removeUserFromGroupTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -802,14 +790,12 @@ public class SecurityServiceTest
 //      + group.getGroupName() + ")", 0, functionCodes.size());
 //}
 
-
-
   /**
    * Test the update function functionality.
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+  // @Test
   public void updateFunctionTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -831,7 +817,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void updateGroupTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -846,9 +833,7 @@ public class SecurityServiceTest
     group.setDescription("Test Updated Group Description");
     securityService.updateGroup(userDirectory.getId(), group);
 
-    Group retrievedGroup =
-      securityService.getGroup(userDirectory.getId(),
-        group.getGroupName());
+    Group retrievedGroup = securityService.getGroup(userDirectory.getId(), group.getGroupName());
 
     compareGroups(group, retrievedGroup);
   }
@@ -858,7 +843,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test
+
+  // @Test
   public void updateUserTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -869,8 +855,7 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
+    securityService.createUser(userDirectory.getId(), user, false, false);
 
     Calendar calendar = Calendar.getInstance();
 
@@ -887,11 +872,9 @@ public class SecurityServiceTest
     user.setPhoneNumber("Test Updated Phone Number");
     user.setMobileNumber("Test Updated Mobile Number");
     user.setFaxNumber("Test Updated Fax Number");
-    securityService.updateUser(userDirectory.getId(), user, false,
-        false);
+    securityService.updateUser(userDirectory.getId(), user, false, false);
 
-    User retrievedUser = securityService.getUser(userDirectory.getId(),
-      user.getUsername());
+    User retrievedUser = securityService.getUser(userDirectory.getId(), user.getUsername());
 
     compareUsers(user, retrievedUser, true);
   }
@@ -901,7 +884,8 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-  //@Test(expected = guru.mmp.application.security.ExistingPasswordException.class)
+
+  // @Test(expected = guru.mmp.application.security.ExistingPasswordException.class)
   public void userPasswordHistoryTest()
     throws guru.mmp.application.security.SecurityException
 
@@ -912,14 +896,13 @@ public class SecurityServiceTest
 
     User user = getTestUserDetails();
 
-    securityService.createUser(userDirectory.getId(), user, false,
-        false);
-    securityService.changePassword(userDirectory.getId(),
-        user.getUsername(), user.getPassword(), "Password1");
-    securityService.changePassword(userDirectory.getId(),
-        user.getUsername(), "Password1", "Password2");
-    securityService.changePassword(userDirectory.getId(),
-        user.getUsername(), "Password2", "Password1");
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.changePassword(userDirectory.getId(), user.getUsername(), user.getPassword(),
+        "Password1");
+    securityService.changePassword(userDirectory.getId(), user.getUsername(), "Password1",
+        "Password2");
+    securityService.changePassword(userDirectory.getId(), user.getUsername(), "Password2",
+        "Password1");
   }
 
   private void compareFunctions(Function function1, Function function2)
@@ -992,73 +975,73 @@ public class SecurityServiceTest
     return function;
   }
 
-//  private User getNumberedTestUserDetails(int number)
-//  {
-//    User user = new User("Test Username " + number);
-//
-//    user.setPassword("Test Password " + number);
-//    user.setEmail("Test E-Mail " + number);
-//    user.setDescription("Test User Description " + number);
-//    user.setTitle("Test Title " + number);
-//    user.setFirstNames("Test FirstName " + number);
-//    user.setLastName("Test LastName " + number);
-//    user.setPhoneNumber("Test Phone Number " + number);
-//    user.setMobileNumber("Test Mobile Number " + number);
-//    user.setFaxNumber("Test Fax Number " + number);
-//
-//    return user;
-//  }
-
-  private Function getTestFunctionDetails()
+  private static synchronized User getNumberedTestUserDetails(int number)
   {
-    String uuid  = UUID.randomUUID().toString().replace("-", "");
+    User user = new User("Test Username " + number);
 
-    Function function = new Function(uuid);
+    user.setPassword("Test Password " + number);
+    user.setEmail("Test E-Mail " + number);
+    user.setDescription("Test User Description " + number);
+    user.setTitle("Test Title " + number);
+    user.setFirstNames("Test FirstName " + number);
+    user.setLastName("Test LastName " + number);
+    user.setPhoneNumber("Test Phone Number " + number);
+    user.setMobileNumber("Test Mobile Number " + number);
+    user.setFaxNumber("Test Fax Number " + number);
 
-    function.setName("Name " + uuid);
-    function.setDescription("Description " + uuid);
+    return user;
+  }
+
+  private static synchronized Function getTestFunctionDetails()
+  {
+    functionCount++;
+
+    Function function = new Function("Test Function " + functionCount);
+
+    function.setName("Test Function Name " + functionCount);
+    function.setDescription("Test Function Description " + functionCount);
 
     return function;
   }
 
-  private Group getTestGroupDetails()
+  private static synchronized Group getTestGroupDetails()
   {
-    String uuid = UUID.randomUUID().toString().replace("-", "");
+    groupCount++;
 
-    Group group = new Group(uuid);
+    Group group = new Group("Test Group " + groupCount);
 
-    group.setDescription("Description " + uuid);
+    group.setDescription("Test Group Description " + groupCount);
 
     return group;
   }
 
-  private Organisation getTestOrganisationDetails()
+  private static synchronized Organisation getTestOrganisationDetails()
   {
-    String uuid = UUID.randomUUID().toString().replace("-", "");
+    organisationCount++;
 
-    Organisation organisation = new Organisation(uuid);
+    Organisation organisation = new Organisation("Test Organisation " + organisationCount);
 
-    organisation.setName("Name " + uuid);
-    organisation.setDescription("Description " + uuid);
+    organisation.setName("Test Organisation Name " + organisationCount);
+    organisation.setDescription("Test Organisation Description " + organisationCount);
 
     return organisation;
   }
 
-  private User getTestUserDetails()
+  private static synchronized User getTestUserDetails()
   {
-    String uuid = UUID.randomUUID().toString().replace("-", "");
+    userCount++;
 
-    User user = new User(uuid);
+    User user = new User("Test Username " + userCount);
 
-    user.setPassword("Password " + uuid);
-    user.setEmail("E-Mail " + uuid);
-    user.setDescription("User Description " + uuid);
-    user.setTitle("Title " + uuid);
-    user.setFirstNames("FirstName " + uuid);
-    user.setLastName("LastName " + uuid);
-    user.setPhoneNumber("Phone Number " + uuid);
-    user.setMobileNumber("Mobile Number " + uuid);
-    user.setFaxNumber("Fax Number " + uuid);
+    user.setPassword("Test User Password " + userCount);
+    user.setEmail("Test User E-Mail " + userCount);
+    user.setDescription("Test User Description " + userCount);
+    user.setTitle("Test User Title " + userCount);
+    user.setFirstNames("Test User FirstName " + userCount);
+    user.setLastName("Test User LastName " + userCount);
+    user.setPhoneNumber("Test User Phone Number " + userCount);
+    user.setMobileNumber("Test User Mobile Number " + userCount);
+    user.setFaxNumber("Test User Fax Number " + userCount);
 
     return user;
   }
