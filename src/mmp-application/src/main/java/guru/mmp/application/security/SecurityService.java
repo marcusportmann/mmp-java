@@ -48,7 +48,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /**
- * The <code>SecurityService</code> class provides a Security Service implementation.
+ * The <code>SecurityService</code> class provides the Security Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -98,23 +98,6 @@ public class SecurityService
    * Constructs a new <code>SecurityService</code>.
    */
   public SecurityService() {}
-
-  /**
-   * Constructs a new <code>SecurityService</code>.
-   * <p>
-   * This constructor will initialise the <code>SecurityService</code> instance manually and will
-   * not make use of JNDI or CDI.
-   *
-   * @param dataSource the data source
-   * @param registry   the registry
-   */
-  public SecurityService(DataSource dataSource, IRegistry registry)
-  {
-    this.dataSource = dataSource;
-    this.registry = registry;
-
-    init();
-  }
 
   /**
    * Add the user to the group.
@@ -1812,7 +1795,7 @@ public class SecurityService
       // Determine the schema prefix
       String schemaPrefix = DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA + schemaSeparator;
 
-      // Build the SQL statements for the DAO
+      // Build the SQL statements
       buildStatements(schemaPrefix);
 
       // Initialise the configuration
@@ -2434,7 +2417,7 @@ public class SecurityService
   }
 
   /**
-   * Generate the SQL statements for the <code>SecurityService</code>.
+   * Generate the SQL statements.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects
    *

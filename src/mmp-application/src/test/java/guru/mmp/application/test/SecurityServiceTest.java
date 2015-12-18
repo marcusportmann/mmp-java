@@ -45,11 +45,11 @@ public class SecurityServiceTest
   private static int functionCount;
   private static int groupCount;
   private static int organisationCount;
+  private static int userCount;
   @Inject
   private IRegistry registry;
   @Inject
   private ISecurityService securityService;
-  private static int userCount;
 
   /**
    * Test the functionality to add a user to a group.
@@ -903,76 +903,6 @@ public class SecurityServiceTest
         "Password1");
   }
 
-  private void compareFunctions(Function function1, Function function2)
-  {
-    assertEquals("The code values for the two functions do not match", function1.getCode(),
-        function2.getCode());
-    assertEquals("The description values for the two functions do not match",
-        function1.getDescription(), function2.getDescription());
-    assertEquals("The ID values for the two functions do not match", function1.getId(),
-        function2.getId());
-    assertEquals("The name values for the two functions do not match", function1.getName(),
-        function2.getName());
-  }
-
-  private void compareGroups(Group group1, Group group2)
-  {
-    assertEquals("The description values for the two groups do not match", group1.getDescription(),
-        group2.getDescription());
-    assertEquals("The group name values for the two groups do not match", group1.getGroupName(),
-        group2.getGroupName());
-    assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
-  }
-
-  private void compareOrganisations(Organisation organisation1, Organisation organisation2)
-  {
-    assertEquals("The ID values for the two organisations do not match", organisation1.getId(),
-        organisation2.getId());
-    assertEquals("The name values for the two organisations do not match", organisation1.getName(),
-        organisation2.getName());
-    assertEquals("The description values for the two organisations do not match",
-        organisation1.getDescription(), organisation2.getDescription());
-  }
-
-  private void compareUsers(User user1, User user2, boolean checkPasswordExpiry)
-  {
-    if (checkPasswordExpiry)
-    {
-      assertEquals("The password expiry values for the two users do not match",
-          user1.getPasswordExpiry(), user2.getPasswordExpiry());
-    }
-
-    assertEquals("The description values for the two users do not match", user1.getDescription(),
-        user2.getDescription());
-    assertEquals("The e-mail values for the two users do not match", user1.getEmail(),
-        user2.getEmail());
-    assertEquals("The fax number values for the two users do not match", user1.getFaxNumber(),
-        user2.getFaxNumber());
-    assertEquals("The first names values for the two users do not match", user1.getFirstNames(),
-        user2.getFirstNames());
-    assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());
-    assertEquals("The mobile number values for the two users do not match",
-        user1.getMobileNumber(), user2.getMobileNumber());
-    assertEquals("The password attempt values for the two users do not match",
-        user1.getPasswordAttempts(), user2.getPasswordAttempts());
-    assertEquals("The phone number values for the two users do not match", user1.getPhoneNumber(),
-        user2.getPhoneNumber());
-    assertEquals("The title values for the two users do not match", user1.getTitle(),
-        user2.getTitle());
-    assertEquals("The username values for the two users do not match", user1.getUsername(),
-        user2.getUsername());
-  }
-
-  private Function getAnotherTestFunctionDetails()
-  {
-    Function function = new Function("Another Test Function Code");
-
-    function.setName("Another Test Function Name");
-    function.setDescription("Another Test Function Description");
-
-    return function;
-  }
-
   private static synchronized User getNumberedTestUserDetails(int number)
   {
     User user = new User("Test Username " + number);
@@ -1042,5 +972,75 @@ public class SecurityServiceTest
     user.setFaxNumber("Test User Fax Number " + userCount);
 
     return user;
+  }
+
+  private void compareFunctions(Function function1, Function function2)
+  {
+    assertEquals("The code values for the two functions do not match", function1.getCode(),
+        function2.getCode());
+    assertEquals("The description values for the two functions do not match",
+        function1.getDescription(), function2.getDescription());
+    assertEquals("The ID values for the two functions do not match", function1.getId(),
+        function2.getId());
+    assertEquals("The name values for the two functions do not match", function1.getName(),
+        function2.getName());
+  }
+
+  private void compareGroups(Group group1, Group group2)
+  {
+    assertEquals("The description values for the two groups do not match", group1.getDescription(),
+        group2.getDescription());
+    assertEquals("The group name values for the two groups do not match", group1.getGroupName(),
+        group2.getGroupName());
+    assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
+  }
+
+  private void compareOrganisations(Organisation organisation1, Organisation organisation2)
+  {
+    assertEquals("The ID values for the two organisations do not match", organisation1.getId(),
+        organisation2.getId());
+    assertEquals("The name values for the two organisations do not match", organisation1.getName(),
+        organisation2.getName());
+    assertEquals("The description values for the two organisations do not match",
+        organisation1.getDescription(), organisation2.getDescription());
+  }
+
+  private void compareUsers(User user1, User user2, boolean checkPasswordExpiry)
+  {
+    if (checkPasswordExpiry)
+    {
+      assertEquals("The password expiry values for the two users do not match",
+          user1.getPasswordExpiry(), user2.getPasswordExpiry());
+    }
+
+    assertEquals("The description values for the two users do not match", user1.getDescription(),
+        user2.getDescription());
+    assertEquals("The e-mail values for the two users do not match", user1.getEmail(),
+        user2.getEmail());
+    assertEquals("The fax number values for the two users do not match", user1.getFaxNumber(),
+        user2.getFaxNumber());
+    assertEquals("The first names values for the two users do not match", user1.getFirstNames(),
+        user2.getFirstNames());
+    assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());
+    assertEquals("The mobile number values for the two users do not match",
+        user1.getMobileNumber(), user2.getMobileNumber());
+    assertEquals("The password attempt values for the two users do not match",
+        user1.getPasswordAttempts(), user2.getPasswordAttempts());
+    assertEquals("The phone number values for the two users do not match", user1.getPhoneNumber(),
+        user2.getPhoneNumber());
+    assertEquals("The title values for the two users do not match", user1.getTitle(),
+        user2.getTitle());
+    assertEquals("The username values for the two users do not match", user1.getUsername(),
+        user2.getUsername());
+  }
+
+  private Function getAnotherTestFunctionDetails()
+  {
+    Function function = new Function("Another Test Function Code");
+
+    function.setName("Another Test Function Name");
+    function.setDescription("Another Test Function Description");
+
+    return function;
   }
 }

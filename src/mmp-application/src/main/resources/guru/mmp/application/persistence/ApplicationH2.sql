@@ -8,6 +8,25 @@ CREATE SCHEMA MMP;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
+CREATE TABLE MMP.TEST_DATA (
+  ID     BIGINT NOT NULL,
+  NAME   VARCHAR(100) NOT NULL,
+  VALUE  VARCHAR(100) NOT NULL,
+
+  PRIMARY KEY (ID)
+);
+
+COMMENT ON COLUMN MMP.TEST_DATA.ID
+  IS 'The ID used to uniquely identify the test data';
+
+COMMENT ON COLUMN MMP.TEST_DATA.NAME
+  IS 'The name for the test data';
+
+COMMENT ON COLUMN MMP.TEST_DATA.VALUE
+  IS 'The value for the test data';
+
+
+
 CREATE TABLE MMP.IDGENERATOR (
   NAME     VARCHAR(100) NOT NULL,
   CURRENT  BIGINT DEFAULT 0,

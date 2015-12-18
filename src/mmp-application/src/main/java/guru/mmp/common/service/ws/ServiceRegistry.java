@@ -329,10 +329,9 @@ public class ServiceRegistry
   }
 
   /**
-   * Generate the SQL statements for the <code>Service Registry</code>.
+   * Generate the SQL statements.
    *
-   * @param schemaPrefix the schema prefix to append to database objects reference by the
-   *                     <code>Service Registry</code>
+   * @param schemaPrefix the schema prefix to prepend to database objects
    *
    * @throws SQLException if a database error occurs
    */
