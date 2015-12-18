@@ -43,6 +43,9 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
+
 /**
  * The <code>ApplicationJUnit4ClassRunner</code> class implements the JUnit runner that provides
  * support for JUnit test classes that test the capabilities provided by the the <b>mmp-java (Open
@@ -78,6 +81,59 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 
     try
     {
+      // Initialise the JNDI initial context
+      if (ic == null)
+      {
+        try
+        {
+          System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
+              "org.apache.naming.java.javaURLContextFactory");
+          System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
+
+          ic = new InitialContext();
+
+          ic.createSubcontext("java:");
+          ic.createSubcontext("java:app");
+          ic.createSubcontext("java:app/env");
+          ic.createSubcontext("java:app/jdbc");
+
+          ic.createSubcontext("java:comp");
+          ic.createSubcontext("java:comp/env");
+          ic.createSubcontext("java:comp/env/jdbc");
+
+          ic.createSubcontext("java:jboss");
+
+          ic.bind("java:app/env/RegistryPathPrefix", "/ApplicationTest");
+
+          Class<?> transactionManagerClass =
+            Thread.currentThread().getContextClassLoader().loadClass(
+              "com.atomikos.icatch.jta.UserTransactionManager");
+
+          TransactionManager transactionManager =
+            (TransactionManager) transactionManagerClass.newInstance();
+
+          ic.bind("java:comp/TransactionManager", transactionManager);
+          ic.bind("java:jboss/TransactionManager", transactionManager);
+
+          Class<?> userTransactionClass = Thread.currentThread().getContextClassLoader().loadClass(
+              "com.atomikos.icatch.jta.UserTransactionImp");
+
+          UserTransaction userTransaction = (UserTransaction) userTransactionClass.newInstance();
+
+          Method setTransactionTimeoutMethod =
+            userTransactionClass.getMethod("setTransactionTimeout", Integer.TYPE);
+
+          setTransactionTimeoutMethod.invoke(userTransaction, new Integer(300));
+
+          ic.bind("java:comp/UserTransaction", userTransaction);
+          ic.bind("java:jboss/UserTransaction", userTransaction);
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to initialise the JNDI initial context", e);
+        }
+      }
+
       // Initialise Weld
       if (beanManager == null)
       {
@@ -99,34 +155,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         catch (Throwable e)
         {
           throw new RuntimeException("Failed to initialise Weld", e);
-        }
-      }
-
-      // Initialise the JNDI initial context
-      if (ic == null)
-      {
-        try
-        {
-          System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-              "org.apache.naming.java.javaURLContextFactory");
-          System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-
-          ic = new InitialContext();
-
-          ic.createSubcontext("java:");
-          ic.createSubcontext("java:app");
-          ic.createSubcontext("java:app/env");
-          ic.createSubcontext("java:app/jdbc");
-
-          ic.createSubcontext("java:comp");
-          ic.createSubcontext("java:comp/env");
-          ic.createSubcontext("java:comp/env/jdbc");
-
-          ic.bind("java:app/env/RegistryPathPrefix", "/ApplicationTest");
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to initialise the JNDI initial context", e);
         }
       }
 

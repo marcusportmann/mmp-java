@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.naming.InitialContext;
-
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
  * of an in-memory database.
@@ -142,31 +140,6 @@ public abstract class DatabaseTest extends JNDITest
           }
 
           throw e;
-        }
-      }
-
-      InitialContext ic = null;
-
-      try
-      {
-        ic = new InitialContext();
-
-        ic.bind("java:comp/env/jdbc/" + name, dataSource);
-      }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Failed to bind the data source (" + name
-            + ") under the java:/comp/env/jdbc JNDI context", e);
-      }
-      finally
-      {
-        if (ic != null)
-        {
-          try
-          {
-            ic.close();
-          }
-          catch (Throwable ignored) {}
         }
       }
 
