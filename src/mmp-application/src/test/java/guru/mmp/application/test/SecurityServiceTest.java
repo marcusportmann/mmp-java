@@ -120,8 +120,8 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.changePassword(userDirectory.getId(), user.getUsername(), user.getPassword(),
-        "Password1");
-    securityService.authenticate(user.getUsername(), "Password1");
+        "Password2");
+    securityService.authenticate(user.getUsername(), "Password2");
   }
 
   /**
@@ -129,8 +129,7 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-
-  // @Test
+  @Test
   public void createFunctionTest()
     throws guru.mmp.application.security.SecurityException
   {
@@ -210,8 +209,7 @@ public class SecurityServiceTest
    *
    * @throws guru.mmp.application.security.SecurityException
    */
-
-  // @Test
+  @Test
   public void deleteFunctionTest()
     throws guru.mmp.application.security.SecurityException
 

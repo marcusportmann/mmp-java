@@ -97,7 +97,8 @@ public abstract class DatabaseTest extends JNDITest
       dataSource.setDriverClassName("org.h2.Driver");
       dataSource.setUsername("");
       dataSource.setPassword("");
-      dataSource.setUrl("jdbc:h2:mem:" + name + ";MODE=DB2;DB_CLOSE_DELAY=-1");
+      dataSource.setUrl("jdbc:h2:mem:" + name
+          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the

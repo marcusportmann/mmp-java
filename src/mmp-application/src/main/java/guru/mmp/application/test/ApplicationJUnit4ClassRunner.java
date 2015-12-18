@@ -182,18 +182,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
     super.run(notifier);
   }
 
-  /**
-   * Run the child test for this runner.
-   *
-   * @param method   the test method being run
-   * @param notifier the run notifier that will be notified of events while tests are being run
-   */
-  @Override
-  protected void runChild(FrameworkMethod method, RunNotifier notifier)
-  {
-    super.runChild(method, notifier);
-  }
-
   @Override
   protected Object createTest()
     throws Exception
@@ -248,7 +236,8 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
       dataSource.setDriverClassName("org.h2.Driver");
       dataSource.setUsername("");
       dataSource.setPassword("");
-      dataSource.setUrl("jdbc:h2:mem:Application;MODE=DB2;DB_CLOSE_DELAY=-1");
+      dataSource.setUrl(
+          "jdbc:h2:mem:Application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the
@@ -302,5 +291,17 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
     {
       throw new RuntimeException("Failed to initialise the in-memory application database", e);
     }
+  }
+
+  /**
+   * Run the child test for this runner.
+   *
+   * @param method   the test method being run
+   * @param notifier the run notifier that will be notified of events while tests are being run
+   */
+  @Override
+  protected void runChild(FrameworkMethod method, RunNotifier notifier)
+  {
+    super.runChild(method, notifier);
   }
 }
