@@ -36,6 +36,8 @@ import javax.enterprise.inject.Default;
 import javax.naming.InitialContext;
 
 import javax.sql.DataSource;
+import javax.sql.XAConnection;
+import javax.sql.XADataSource;
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -64,7 +66,7 @@ public class TestTransactionalService
     throws TestTransactionalServiceException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
+         PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
     {
       statement.setString(1, testData.getId());
       statement.setString(2, testData.getName());
@@ -158,29 +160,34 @@ public class TestTransactionalService
   @PostConstruct
   public void init()
   {
+    try
+    {
+      Thread currentThread = Thread.currentThread();
+
+      InitialContext ic = new InitialContext();
+
+      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+    }
+    catch (Throwable ignored)
+    {
+      int xxx = 0;
+      xxx++;
+    }
+
     if (dataSource == null)
     {
       try
       {
-        dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
       catch (Throwable ignored) {}
+    }
 
-      if (dataSource == null)
-      {
-        try
-        {
-          dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-        }
-        catch (Throwable ignored) {}
-      }
-
-      if (dataSource == null)
-      {
-        throw new DAOException("Failed to retrieve the application data source"
-            + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-            + " (java:comp/env/jdbc/ApplicationDataSource)");
-      }
+    if (dataSource == null)
+    {
+      throw new DAOException("Failed to retrieve the application data source"
+        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+        + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try

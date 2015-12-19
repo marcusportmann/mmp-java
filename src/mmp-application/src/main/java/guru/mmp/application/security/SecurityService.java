@@ -1745,33 +1745,30 @@ public class SecurityService
   @PostConstruct
   public void init()
   {
+    try
+    {
+      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+    }
+    catch (Throwable ignored)
+    {
+    }
+
     if (dataSource == null)
     {
       try
       {
-        dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
       catch (Throwable ignored)
       {
       }
+    }
 
-      if (dataSource == null)
-      {
-        try
-        {
-          dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-        }
-        catch (Throwable ignored)
-        {
-        }
-      }
-
-      if (dataSource == null)
-      {
-        throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
-      }
+    if (dataSource == null)
+    {
+      throw new DAOException("Failed to retrieve the application data source"
+        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+        + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try

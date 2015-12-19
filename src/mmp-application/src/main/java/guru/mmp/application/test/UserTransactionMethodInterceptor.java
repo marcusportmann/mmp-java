@@ -57,7 +57,7 @@ public class UserTransactionMethodInterceptor
     catch (Throwable e)
     {
       Logger
-        .getAnonymousLogger().log(Level.SEVERE, "Failed to invoke the User Transaction method", e);
+        .getAnonymousLogger().log(Level.SEVERE, "Failed to invoke the UserTransaction method", e);
       throw e;
     }
   }

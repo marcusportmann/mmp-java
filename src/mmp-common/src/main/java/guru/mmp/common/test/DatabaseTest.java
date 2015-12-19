@@ -18,7 +18,6 @@ package guru.mmp.common.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.mchange.v2.c3p0.DataSources;
 
 import guru.mmp.common.persistence.DAOUtil;
 
@@ -78,8 +77,10 @@ public abstract class DatabaseTest extends JNDITest
     {
       Thread.currentThread().getContextClassLoader().loadClass("org.h2.Driver");
 
-      DataSource dataSource = DataSources.unpooledDataSource("jdbc:h2:mem:" + name
-        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE", "", "");
+      DataSource dataSource = null;
+
+//      DataSource dataSource = DataSources.unpooledDataSource("jdbc:h2:mem:" + name
+//        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE", "", "");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
       {

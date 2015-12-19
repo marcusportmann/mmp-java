@@ -18,6 +18,7 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.common.persistence.TransactionManagerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -32,6 +33,9 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import javax.transaction.Status;
+import javax.transaction.Transaction;
+
+import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 /**
@@ -56,7 +60,13 @@ public class TransactionalInterceptorTest
   public void testFailedExecutionInExistingTransaction()
     throws Exception
   {
+    DataSource dataSource = getApplicationDataSource();
+
+    TransactionManager transactionManager = TransactionManagerFactory.getTransactionManager();
+
     UserTransaction userTransaction = getUserTransaction();
+
+    Transaction beforeUserTransactionBeginTransaction = transactionManager.getTransaction();
 
     if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
     {
@@ -65,6 +75,8 @@ public class TransactionalInterceptorTest
     }
 
     userTransaction.begin();
+
+    Transaction afterUserTransactionBeginTransaction = transactionManager.getTransaction();
 
     TestData testData = getTestData();
 
@@ -90,7 +102,11 @@ public class TransactionalInterceptorTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
+    Transaction beforeUserTransactionRollbackTransaction = transactionManager.getTransaction();
+
     userTransaction.rollback();
+
+    Transaction afterUserTransactionRollbackTransaction = transactionManager.getTransaction();
 
     if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
     {
@@ -299,7 +315,11 @@ public class TransactionalInterceptorTest
   {
     try
     {
-      return InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+      DataSource dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
+
+      Thread currentThread = Thread.currentThread();
+
+      return dataSource;
     }
     catch (Throwable e)
     {
@@ -333,4 +353,7 @@ public class TransactionalInterceptorTest
 
     return userTransaction;
   }
+
+
+
 }

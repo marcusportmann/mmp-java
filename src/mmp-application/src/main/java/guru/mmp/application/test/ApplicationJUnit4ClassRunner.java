@@ -18,14 +18,13 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.mchange.v2.c3p0.DataSources;
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
 
 import net.sf.cglib.proxy.*;
 
 
+import org.h2.jdbcx.JdbcDataSource;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -50,9 +49,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import javax.sql.DataSource;
-import javax.sql.XADataSource;
 
-import javax.transaction.Status;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
@@ -240,10 +237,11 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
     {
       Thread.currentThread().getContextClassLoader().loadClass("org.h2.Driver");
 
-      final DataSource dataSource = DataSources.unpooledDataSource("jdbc:h2:mem:" + Thread.currentThread().getName()
-          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
-        "",
-        "");
+      final AutoEnlistJdbcDataSource dataSource = new AutoEnlistJdbcDataSource(new JdbcDataSource());
+      //final JdbcDataSource dataSource = new JdbcAutoEnlistDataSource();
+
+      dataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
+        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
       {
