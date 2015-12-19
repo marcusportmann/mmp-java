@@ -18,12 +18,13 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
 
 import net.sf.cglib.proxy.*;
 
-import org.apache.commons.dbcp2.managed.BasicManagedDataSource;
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -75,7 +76,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
     "guru/mmp/application/persistence/ApplicationH2.sql" };
   private static TransactionManagerTransactionTracker transactionManagerTransactionTracker =
     new TransactionManagerTransactionTracker();
-  private BasicManagedDataSource dataSource;
 
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
@@ -235,32 +235,15 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   protected DataSource initApplicationDatabase(TransactionManager transactionManager,
       boolean logSQL)
   {
-    if (dataSource != null)
-    {
-      return dataSource;
-    }
 
     try
     {
-      // Setup the thread-specific application database and data source
-      dataSource = new BasicManagedDataSource()
-      {
-        @Override
-        public synchronized void close()
-          throws SQLException
-        {
-          Logger.getAnonymousLogger().info("Shutting down the application database for thread ("
-              + Thread.currentThread().getName() + ")");
+      Thread.currentThread().getContextClassLoader().loadClass("org.h2.Driver");
 
-          try (Connection connection = getConnection();
-            Statement statement = connection.createStatement())
-          {
-            statement.executeUpdate("SHUTDOWN");
-          }
-
-          super.close();
-        }
-      };
+      final DataSource dataSource = DataSources.unpooledDataSource("jdbc:h2:mem:" + Thread.currentThread().getName()
+          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+        "",
+        "");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
       {
@@ -269,7 +252,11 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         {
           try
           {
-            dataSource.close();
+            try (Connection connection = dataSource.getConnection();
+                 Statement statement = connection.createStatement())
+            {
+              statement.executeUpdate("SHUTDOWN");
+            }
           }
           catch (Throwable e)
           {
@@ -277,13 +264,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
           }
         }
       });
-
-      dataSource.setTransactionManager(transactionManager);
-      dataSource.setDriverClassName("org.h2.Driver");
-      dataSource.setUsername("");
-      dataSource.setPassword("");
-      dataSource.setUrl("jdbc:h2:mem:" + Thread.currentThread().getName()
-          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the

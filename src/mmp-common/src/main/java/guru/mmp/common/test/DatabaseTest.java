@@ -18,9 +18,9 @@ package guru.mmp.common.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
+import com.mchange.v2.c3p0.DataSources;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import guru.mmp.common.persistence.DAOUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -31,6 +31,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
@@ -70,33 +72,34 @@ public abstract class DatabaseTest extends JNDITest
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  public static BasicDataSource initDatabase(String name, List<String> resourcePaths,
-      boolean logSQL)
+  public static DataSource initDatabase(String name, List<String> resourcePaths, boolean logSQL)
   {
     try
     {
-      // Setup the data source
-      BasicDataSource dataSource = new BasicDataSource()
+      Thread.currentThread().getContextClassLoader().loadClass("org.h2.Driver");
+
+      DataSource dataSource = DataSources.unpooledDataSource("jdbc:h2:mem:" + name
+        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE", "", "");
+
+      Runtime.getRuntime().addShutdownHook(new Thread()
       {
         @Override
-        public synchronized void close()
-          throws SQLException
+        public void run()
         {
-          try (Connection connection = getConnection();
-            Statement statement = connection.createStatement())
+          try
           {
-            statement.executeUpdate("SHUTDOWN");
+            try (Connection connection = dataSource.getConnection();
+              Statement statement = connection.createStatement())
+            {
+              statement.executeUpdate("SHUTDOWN");
+            }
           }
-
-          super.close();
+          catch (Throwable e)
+          {
+            throw new RuntimeException("Failed to shutdown the in-memory application database", e);
+          }
         }
-      };
-
-      dataSource.setDriverClassName("org.h2.Driver");
-      dataSource.setUsername("");
-      dataSource.setPassword("");
-      dataSource.setUrl("jdbc:h2:mem:" + name
-          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+      });
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the
@@ -169,7 +172,7 @@ public abstract class DatabaseTest extends JNDITest
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  public static BasicDataSource initDatabase(String name, String resourcePath, boolean logSQL)
+  public static DataSource initDatabase(String name, String resourcePath, boolean logSQL)
   {
     List<String> resourcePaths = new ArrayList<>();
     resourcePaths.add(resourcePath);
