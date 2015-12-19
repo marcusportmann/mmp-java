@@ -869,9 +869,11 @@ public class Registry
         statement.setString(1, keyId);
         statement.setString(2, name);
         statement.execute();
-
-        return true;
       }
+
+      transactionManager.commit();
+
+      return true;
     }
     catch (Throwable e)
     {

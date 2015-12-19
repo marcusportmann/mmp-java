@@ -26,6 +26,11 @@
       <version>1.9.2</version>
     </dependency>
     <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <version>3.2.0</version>
+    </dependency>
+    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>7.0</version>
@@ -48,7 +53,7 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>1.4.190</version>
-      <!--<scope>test</scope>-->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.atomikos</groupId>

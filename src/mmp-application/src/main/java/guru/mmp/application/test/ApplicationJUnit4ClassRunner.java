@@ -21,9 +21,10 @@ package guru.mmp.application.test;
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
 
+import net.sf.cglib.proxy.*;
+
 import org.apache.commons.dbcp2.managed.BasicManagedDataSource;
 
-import org.h2.jdbcx.JdbcDataSource;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -38,6 +39,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.inject.spi.BeanManager;
 
@@ -46,6 +50,9 @@ import javax.naming.InitialContext;
 
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
+
+import javax.transaction.Status;
+import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
@@ -66,6 +73,9 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
    */
   public static final String[] APPLICATION_SQL_RESOURCES = {
     "guru/mmp/application/persistence/ApplicationH2.sql" };
+  private static TransactionManagerTransactionTracker transactionManagerTransactionTracker =
+    new TransactionManagerTransactionTracker();
+  private BasicManagedDataSource dataSource;
 
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
@@ -114,8 +124,12 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         Class<?> transactionManagerClass = Thread.currentThread().getContextClassLoader().loadClass(
             "com.atomikos.icatch.jta.UserTransactionManager");
 
+        Enhancer transactionManagerEnhancer = new Enhancer();
+        transactionManagerEnhancer.setSuperclass(transactionManagerClass);
+        transactionManagerEnhancer.setCallback(transactionManagerTransactionTracker);
+
         TransactionManager transactionManager =
-          (TransactionManager) transactionManagerClass.newInstance();
+          (TransactionManager) transactionManagerEnhancer.create();
 
         ic.bind("comp/TransactionManager", transactionManager);
         ic.bind("jboss/TransactionManager", transactionManager);
@@ -123,7 +137,11 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         Class<?> userTransactionClass = Thread.currentThread().getContextClassLoader().loadClass(
             "com.atomikos.icatch.jta.UserTransactionImp");
 
-        UserTransaction userTransaction = (UserTransaction) userTransactionClass.newInstance();
+        Enhancer userTransactionEnhancer = new Enhancer();
+        userTransactionEnhancer.setSuperclass(userTransactionClass);
+        userTransactionEnhancer.setCallback(new UserTransactionMethodInterceptor());
+
+        UserTransaction userTransaction = (UserTransaction) userTransactionEnhancer.create();
 
         Method setTransactionTimeoutMethod =
           userTransactionClass.getMethod("setTransactionTimeout", Integer.TYPE);
@@ -151,25 +169,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 
         // Initialise the application data source
         DataSource dataSource = initApplicationDatabase(transactionManager, false);
-
-        /*
-        Runtime.getRuntime().addShutdownHook(new Thread()
-        {
-          @Override
-          public void run()
-          {
-            try
-            {
-              dataSource.close();
-            }
-            catch (Throwable e)
-            {
-              throw new RuntimeException("Failed to shutdown the in-memory application database",
-                  e);
-            }
-          }
-        });
-        */
 
         ic.bind("app/jdbc/ApplicationDataSource", dataSource);
 
@@ -236,58 +235,55 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   protected DataSource initApplicationDatabase(TransactionManager transactionManager,
       boolean logSQL)
   {
+    if (dataSource != null)
+    {
+      return dataSource;
+    }
+
     try
     {
+      // Setup the thread-specific application database and data source
+      dataSource = new BasicManagedDataSource()
+      {
+        @Override
+        public synchronized void close()
+          throws SQLException
+        {
+          Logger.getAnonymousLogger().info("Shutting down the application database for thread ("
+              + Thread.currentThread().getName() + ")");
 
-      JdbcDataSource dataSource = new JdbcDataSource();
-      dataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
-        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+          try (Connection connection = getConnection();
+            Statement statement = connection.createStatement())
+          {
+            statement.executeUpdate("SHUTDOWN");
+          }
 
+          super.close();
+        }
+      };
 
+      Runtime.getRuntime().addShutdownHook(new Thread()
+      {
+        @Override
+        public void run()
+        {
+          try
+          {
+            dataSource.close();
+          }
+          catch (Throwable e)
+          {
+            throw new RuntimeException("Failed to shutdown the in-memory application database", e);
+          }
+        }
+      });
 
-      //ds.setUser("sa");
-      //ds.setPassword("sa");
-
-//      // Setup the data source
-//      BasicManagedDataSource dataSource = new BasicManagedDataSource()
-//      {
-//        @Override
-//        public synchronized void close()
-//          throws SQLException
-//        {
-//          try (Connection connection = getConnection();
-//            Statement statement = connection.createStatement())
-//          {
-//            statement.executeUpdate("SHUTDOWN");
-//          }
-//
-//          super.close();
-//        }
-//      };
-//
-//      Class<?> zzz = Thread.currentThread().getContextClassLoader().loadClass("org.h2.jdbcx.JdbcDataSource");
-//
-//      DataSource yyy = (DataSource)zzz.newInstance();
-//
-//      yyy.setDriverClassName("org.h2.Driver");
-//      yyy.setUsername("");
-//      yyy.setPassword("");
-//      yyy.setUrl("jdbc:h2:mem:" + Thread.currentThread().getName()
-//        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-//
-//
-//
-//      dataSource.setXaDataSourceInstance();
-//
-//      dataSource.setTransactionManager(transactionManager);
-//
-//      dataSource.set
-
-//      dataSource.setDriverClassName("org.h2.Driver");
-//      dataSource.setUsername("");
-//      dataSource.setPassword("");
-//      dataSource.setUrl("jdbc:h2:mem:" + Thread.currentThread().getName()
-//          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+      dataSource.setTransactionManager(transactionManager);
+      dataSource.setDriverClassName("org.h2.Driver");
+      dataSource.setUsername("");
+      dataSource.setPassword("");
+      dataSource.setUrl("jdbc:h2:mem:" + Thread.currentThread().getName()
+          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the
@@ -353,5 +349,33 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   protected void runChild(FrameworkMethod method, RunNotifier notifier)
   {
     super.runChild(method, notifier);
+
+    Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
+      TransactionManagerTransactionTracker.getActiveTransactionStackTraces();
+
+    // Check for unexpected active transactions
+    for (Transaction transaction : activeTransactionStackTraces.keySet())
+    {
+      StackTraceElement[] stackTrace = activeTransactionStackTraces.get(transaction);
+
+      for (int i = 0; i < stackTrace.length; i++)
+      {
+        if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
+        {
+          Logger.getAnonymousLogger().log(Level.WARNING,
+              "Failed to successfully execute the test (" + method.getName()
+              + "): Found an unexpected active transaction (" + transaction.toString()
+              + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
+
+          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
+              + "): Found an unexpected active transaction (" + transaction.toString()
+              + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
+        }
+      }
+    }
   }
 }
