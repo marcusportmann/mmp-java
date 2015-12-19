@@ -23,6 +23,7 @@ import guru.mmp.common.persistence.DAOUtil;
 
 import org.apache.commons.dbcp2.managed.BasicManagedDataSource;
 
+import org.h2.jdbcx.JdbcDataSource;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -43,6 +44,8 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import javax.sql.DataSource;
+import javax.sql.XADataSource;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
@@ -63,10 +66,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
    */
   public static final String[] APPLICATION_SQL_RESOURCES = {
     "guru/mmp/application/persistence/ApplicationH2.sql" };
-  private static BeanManager beanManager;
-  private static BasicManagedDataSource dataSource;
-  private static InitialContext ic;
-  private static TransactionManager transactionManager;
 
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
@@ -82,115 +81,108 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 
     try
     {
-      // Initialise the JNDI initial context
-      if (ic == null)
+      System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
+          "org.apache.naming.java.javaURLContextFactory");
+      System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
+
+      Class<?> contextBindingsClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.apache.naming.ContextBindings");
+
+      Method isThreadBoundMethod = contextBindingsClass.getMethod("isThreadBound");
+
+      Boolean isThreadBound = (Boolean) isThreadBoundMethod.invoke(null);
+
+      if (!isThreadBound)
       {
-        try
+        // Initialise the initial context
+        InitialContext ic = new InitialContext();
+
+        // ic.createSubcontext("");
+        ic.createSubcontext("app");
+        ic.createSubcontext("app/env");
+        ic.createSubcontext("app/jdbc");
+
+        ic.createSubcontext("comp");
+        ic.createSubcontext("comp/env");
+        ic.createSubcontext("comp/env/jdbc");
+
+        ic.createSubcontext("jboss");
+
+        ic.bind("app/env/RegistryPathPrefix", "/ApplicationTest");
+
+        // Initialise the JTA user transaction and transaction manager
+        Class<?> transactionManagerClass = Thread.currentThread().getContextClassLoader().loadClass(
+            "com.atomikos.icatch.jta.UserTransactionManager");
+
+        TransactionManager transactionManager =
+          (TransactionManager) transactionManagerClass.newInstance();
+
+        ic.bind("comp/TransactionManager", transactionManager);
+        ic.bind("jboss/TransactionManager", transactionManager);
+
+        Class<?> userTransactionClass = Thread.currentThread().getContextClassLoader().loadClass(
+            "com.atomikos.icatch.jta.UserTransactionImp");
+
+        UserTransaction userTransaction = (UserTransaction) userTransactionClass.newInstance();
+
+        Method setTransactionTimeoutMethod =
+          userTransactionClass.getMethod("setTransactionTimeout", Integer.TYPE);
+
+        setTransactionTimeoutMethod.invoke(userTransaction, 300);
+
+        ic.bind("comp/UserTransaction", userTransaction);
+        ic.bind("jboss/UserTransaction", userTransaction);
+
+        // Initialise the Weld bean manager
+        Class<?> weldClass = Thread.currentThread().getContextClassLoader().loadClass(
+            "org.jboss.weld.environment.se.Weld");
+
+        Method initializeMethod = weldClass.getMethod("initialize");
+
+        Object weldObject = weldClass.newInstance();
+
+        Object weldContainerObject = initializeMethod.invoke(weldObject);
+
+        Method getBeanManagerMethod = weldContainerObject.getClass().getMethod("getBeanManager");
+
+        BeanManager beanManager = (BeanManager) getBeanManagerMethod.invoke(weldContainerObject);
+
+        ic.bind("comp/BeanManager", beanManager);
+
+        // Initialise the application data source
+        DataSource dataSource = initApplicationDatabase(transactionManager, false);
+
+        /*
+        Runtime.getRuntime().addShutdownHook(new Thread()
         {
-          System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-              "org.apache.naming.java.javaURLContextFactory");
-          System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-
-          ic = new InitialContext();
-
-          ic.createSubcontext("java:");
-          ic.createSubcontext("java:app");
-          ic.createSubcontext("java:app/env");
-          ic.createSubcontext("java:app/jdbc");
-
-          ic.createSubcontext("java:comp");
-          ic.createSubcontext("java:comp/env");
-          ic.createSubcontext("java:comp/env/jdbc");
-
-          ic.createSubcontext("java:jboss");
-
-          ic.bind("java:app/env/RegistryPathPrefix", "/ApplicationTest");
-
-          Class<?> transactionManagerClass =
-            Thread.currentThread().getContextClassLoader().loadClass(
-              "com.atomikos.icatch.jta.UserTransactionManager");
-
-          transactionManager = (TransactionManager) transactionManagerClass.newInstance();
-
-          ic.bind("java:comp/TransactionManager", transactionManager);
-          ic.bind("java:jboss/TransactionManager", transactionManager);
-
-          Class<?> userTransactionClass = Thread.currentThread().getContextClassLoader().loadClass(
-              "com.atomikos.icatch.jta.UserTransactionImp");
-
-          UserTransaction userTransaction = (UserTransaction) userTransactionClass.newInstance();
-
-          Method setTransactionTimeoutMethod =
-            userTransactionClass.getMethod("setTransactionTimeout", Integer.TYPE);
-
-          setTransactionTimeoutMethod.invoke(userTransaction, new Integer(300));
-
-          ic.bind("java:comp/UserTransaction", userTransaction);
-          ic.bind("java:jboss/UserTransaction", userTransaction);
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to initialise the JNDI initial context", e);
-        }
-      }
-
-      // Initialise Weld
-      if (beanManager == null)
-      {
-        try
-        {
-          Class<?> weldClass = Thread.currentThread().getContextClassLoader().loadClass(
-              "org.jboss.weld.environment.se.Weld");
-
-          Method initializeMethod = weldClass.getMethod("initialize");
-
-          Object weldObject = weldClass.newInstance();
-
-          Object weldContainerObject = initializeMethod.invoke(weldObject);
-
-          Method getBeanManagerMethod = weldContainerObject.getClass().getMethod("getBeanManager");
-
-          beanManager = (BeanManager) getBeanManagerMethod.invoke(weldContainerObject);
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to initialise Weld", e);
-        }
-      }
-
-      // Initialise the in-memory database that will be used when executing a test
-      if (dataSource == null)
-      {
-        try
-        {
-          dataSource = initApplicationDatabase(false);
-
-          Runtime.getRuntime().addShutdownHook(new Thread()
+          @Override
+          public void run()
           {
-            @Override
-            public void run()
+            try
             {
-              try
-              {
-                dataSource.close();
-              }
-              catch (Throwable e)
-              {
-                throw new RuntimeException("Failed to shutdown the in-memory application database",
-                    e);
-              }
+              dataSource.close();
             }
-          });
+            catch (Throwable e)
+            {
+              throw new RuntimeException("Failed to shutdown the in-memory application database",
+                  e);
+            }
+          }
+        });
+        */
 
-          // Initialise the JNDI
-          ic = new InitialContext();
+        ic.bind("app/jdbc/ApplicationDataSource", dataSource);
 
-          ic.bind("java:app/jdbc/ApplicationDataSource", dataSource);
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to initialise the in-memory application database", e);
-        }
+        // Bind the initial context on the current thread
+        Method bindContextMethod = contextBindingsClass.getMethod("bindContext", Object.class,
+          Context.class);
+
+        bindContextMethod.invoke(null, Thread.currentThread().getName(), ic);
+
+        Method bindThreadMethod = contextBindingsClass.getMethod("bindThread", Object.class,
+          Object.class);
+
+        bindThreadMethod.invoke(null, Thread.currentThread().getName(), null);
       }
     }
     catch (Throwable e)
@@ -218,7 +210,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 
     try
     {
-      CDIUtil.inject(beanManager, testObject);
+      CDIUtil.inject(testObject);
     }
     catch (Throwable e)
     {
@@ -236,38 +228,66 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
    * NOTE: This data source returned by this method must be closed after use with the
    * <code>close()</code> method.
    *
-   * @param logSQL log the statements that are executed when initialising the database
+   * @param transactionManager the transaction manager
+   * @param logSQL             log the statements that are executed when initialising the database
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  protected BasicManagedDataSource initApplicationDatabase(boolean logSQL)
+  protected DataSource initApplicationDatabase(TransactionManager transactionManager,
+      boolean logSQL)
   {
     try
     {
-      // Setup the data source
-      BasicManagedDataSource dataSource = new BasicManagedDataSource()
-      {
-        @Override
-        public synchronized void close()
-          throws SQLException
-        {
-          try (Connection connection = getConnection();
-            Statement statement = connection.createStatement())
-          {
-            statement.executeUpdate("SHUTDOWN");
-          }
 
-          super.close();
-        }
-      };
+      JdbcDataSource dataSource = new JdbcDataSource();
+      dataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
+        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
-      dataSource.setTransactionManager(transactionManager);
 
-      dataSource.setDriverClassName("org.h2.Driver");
-      dataSource.setUsername("");
-      dataSource.setPassword("");
-      dataSource.setUrl(
-          "jdbc:h2:mem:Application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+
+      //ds.setUser("sa");
+      //ds.setPassword("sa");
+
+//      // Setup the data source
+//      BasicManagedDataSource dataSource = new BasicManagedDataSource()
+//      {
+//        @Override
+//        public synchronized void close()
+//          throws SQLException
+//        {
+//          try (Connection connection = getConnection();
+//            Statement statement = connection.createStatement())
+//          {
+//            statement.executeUpdate("SHUTDOWN");
+//          }
+//
+//          super.close();
+//        }
+//      };
+//
+//      Class<?> zzz = Thread.currentThread().getContextClassLoader().loadClass("org.h2.jdbcx.JdbcDataSource");
+//
+//      DataSource yyy = (DataSource)zzz.newInstance();
+//
+//      yyy.setDriverClassName("org.h2.Driver");
+//      yyy.setUsername("");
+//      yyy.setPassword("");
+//      yyy.setUrl("jdbc:h2:mem:" + Thread.currentThread().getName()
+//        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+//
+//
+//
+//      dataSource.setXaDataSourceInstance();
+//
+//      dataSource.setTransactionManager(transactionManager);
+//
+//      dataSource.set
+
+//      dataSource.setDriverClassName("org.h2.Driver");
+//      dataSource.setUsername("");
+//      dataSource.setPassword("");
+//      dataSource.setUrl("jdbc:h2:mem:" + Thread.currentThread().getName()
+//          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the

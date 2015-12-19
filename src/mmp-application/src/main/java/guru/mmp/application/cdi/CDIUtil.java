@@ -67,7 +67,7 @@ public class CDIUtil
   private static final List<Class<?>> injectableClasses = new ArrayList<>();
 
   /**
-   * Perform container-based dependency injection on the target.
+   * Perform container-based dependency injection on the target using the spe.
    *
    * @param target the object to inject
    *
@@ -93,26 +93,11 @@ public class CDIUtil
       }
     }
 
-    inject(cachedBeanManager, target);
-  }
-
-  /**
-   * Perform container-based dependency injection on the target using the spe.
-   *
-   * @param beanManager the CDI bean manager
-   * @param target      the object to inject
-   *
-   * @throws CDIException
-   */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  public static void inject(BeanManager beanManager, Object target)
-    throws CDIException
-  {
     if (cachedCreationalContext == null)
     {
       try
       {
-        cachedCreationalContext = beanManager.createCreationalContext(null);
+        cachedCreationalContext = cachedBeanManager.createCreationalContext(null);
       }
       catch (Throwable e)
       {
@@ -177,9 +162,9 @@ public class CDIUtil
       }
       else
       {
-        AnnotatedType<?> annotatedType = beanManager.createAnnotatedType(clazz);
+        AnnotatedType<?> annotatedType = cachedBeanManager.createAnnotatedType(clazz);
 
-        injectionTarget = beanManager.createInjectionTarget(annotatedType);
+        injectionTarget = cachedBeanManager.createInjectionTarget(annotatedType);
 
         cachedInjectionTargets.put(clazz, injectionTarget);
       }
