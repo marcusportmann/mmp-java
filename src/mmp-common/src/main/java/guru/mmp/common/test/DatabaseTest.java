@@ -182,6 +182,14 @@ public abstract class DatabaseTest extends JNDITest
 
       setXaDataSourceMethod.invoke(atomikosDataSourceBean, (XADataSource) jdbcDataSource);
 
+      Method setMinPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMinPoolSize",
+        Integer.TYPE);
+      setMinPoolSizeMethod.invoke(atomikosDataSourceBean, 5);
+
+      Method setMaxPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMaxPoolSize",
+        Integer.TYPE);
+      setMaxPoolSizeMethod.invoke(atomikosDataSourceBean, 10);
+
       return ((DataSource) atomikosDataSourceBean);
     }
     catch (Throwable e)

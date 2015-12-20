@@ -20,9 +20,9 @@ package guru.mmp.application.test;
 
 import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
-
 import guru.mmp.common.test.TransactionManagerTransactionTracker;
 import guru.mmp.common.test.UserTransactionTracker;
+
 import net.sf.cglib.proxy.*;
 
 import org.junit.runner.notification.RunNotifier;
@@ -40,6 +40,7 @@ import java.sql.Statement;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -327,6 +328,14 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 
       setXaDataSourceMethod.invoke(atomikosDataSourceBean, (XADataSource) jdbcDataSource);
 
+      Method setMinPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMinPoolSize",
+        Integer.TYPE);
+      setMinPoolSizeMethod.invoke(atomikosDataSourceBean, 5);
+
+      Method setMaxPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMaxPoolSize",
+        Integer.TYPE);
+      setMaxPoolSizeMethod.invoke(atomikosDataSourceBean, 10);
+
       return ((DataSource) atomikosDataSourceBean);
     }
     catch (Throwable e)
@@ -374,8 +383,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
       }
     }
 
-    activeTransactionStackTraces =
-      UserTransactionTracker.getActiveTransactionStackTraces();
+    activeTransactionStackTraces = UserTransactionTracker.getActiveTransactionStackTraces();
 
     // Check for unexpected active transactions managed by the User Transaction implementation
     for (Transaction transaction : activeTransactionStackTraces.keySet())
@@ -387,17 +395,17 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
         {
           Logger.getAnonymousLogger().log(Level.WARNING,
-            "Failed to successfully execute the test (" + method.getName()
+              "Failed to successfully execute the test (" + method.getName()
               + "): Found an unexpected active transaction (" + transaction.toString()
               + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
               + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
               + stackTrace[i + 1].getLineNumber() + ")");
 
           throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
-            + "): Found an unexpected active transaction (" + transaction.toString()
-            + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
-            + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
-            + stackTrace[i + 1].getLineNumber() + ")");
+              + "): Found an unexpected active transaction (" + transaction.toString()
+              + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
         }
       }
     }
