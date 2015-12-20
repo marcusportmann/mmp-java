@@ -57,9 +57,9 @@
     </dependency>
     <dependency>
       <groupId>com.atomikos</groupId>
-      <artifactId>transactions-jta</artifactId>
-      <version>3.9.3</version>
-      <scope>test</scope>
+      <artifactId>transactions-essentials-all</artifactId>
+      <version>3.6.4</version>
+      <!--<scope>test</scope>-->
     </dependency>
     <dependency>
       <groupId>org.jboss.weld.se</groupId>

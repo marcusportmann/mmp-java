@@ -237,10 +237,10 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
     {
       Thread.currentThread().getContextClassLoader().loadClass("org.h2.Driver");
 
-      final AutoEnlistJdbcDataSource dataSource = new AutoEnlistJdbcDataSource(new JdbcDataSource());
-      //final JdbcDataSource dataSource = new JdbcAutoEnlistDataSource();
+      //final AutoEnlistJdbcDataSource dataSource = new AutoEnlistJdbcDataSource(new JdbcDataSource());
+      final JdbcDataSource jdbcDataSource = new JdbcDataSource();
 
-      dataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
+      jdbcDataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
         + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
@@ -250,7 +250,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         {
           try
           {
-            try (Connection connection = dataSource.getConnection();
+            try (Connection connection = jdbcDataSource.getConnection();
                  Statement statement = connection.createStatement())
             {
               statement.executeUpdate("SHUTDOWN");
@@ -262,6 +262,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
           }
         }
       });
+
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the
@@ -275,7 +276,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
           List<String> sqlStatements = DAOUtil.loadSQL(resourcePath);
 
           // Get a connection to the in-memory database
-          try (Connection connection = dataSource.getConnection())
+          try (Connection connection = jdbcDataSource.getConnection())
           {
             for (String sqlStatement : sqlStatements)
             {
@@ -294,7 +295,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         }
         catch (SQLException e)
         {
-          try (Connection connection = dataSource.getConnection();
+          try (Connection connection = jdbcDataSource.getConnection();
             Statement shutdownStatement = connection.createStatement())
           {
             shutdownStatement.executeUpdate("SHUTDOWN");
@@ -308,6 +309,14 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
           throw e;
         }
       }
+
+
+      com.atomikos.jdbc.AtomikosDataSourceBean dataSource =
+        new com.atomikos.jdbc.AtomikosDataSourceBean();
+
+      dataSource.setUniqueResourceName(Thread.currentThread().getName()+"-ApplicationDataSource");
+
+      dataSource.setXaDataSource(jdbcDataSource);
 
       return dataSource;
     }

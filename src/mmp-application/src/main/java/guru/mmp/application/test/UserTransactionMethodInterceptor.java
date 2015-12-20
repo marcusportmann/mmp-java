@@ -52,7 +52,22 @@ public class UserTransactionMethodInterceptor
   {
     try
     {
-      return proxy.invokeSuper(obj, args);
+      if (method.getName().equals("begin"))
+      {
+        return proxy.invokeSuper(obj, args)
+      }
+      else if (method.getName().equals("commit"))
+      {
+        return proxy.invokeSuper(obj, args);
+      }
+      else if (method.getName().equals("commit"))
+      {
+        return proxy.invokeSuper(obj, args);
+      }
+      else
+      {
+        return proxy.invokeSuper(obj, args);
+      }
     }
     catch (Throwable e)
     {
