@@ -330,16 +330,16 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       if ((user.getPasswordAttempts() != null)
-        && (user.getPasswordAttempts() >= maxPasswordAttempts))
+          && (user.getPasswordAttempts() >= maxPasswordAttempts))
       {
         throw new UserLockedException("The user (" + username
-          + ") has exceeded the number of failed password attempts and has been locked");
+            + ") has exceeded the number of failed password attempts and has been locked");
       }
 
       if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
       {
         throw new ExpiredPasswordException("The password for the user (" + username
-          + ") has expired");
+            + ") has expired");
       }
 
       if (!user.getPassword().equals(createPasswordHash(password)))
@@ -1510,8 +1510,8 @@ public class InternalUserDirectory extends UserDirectoryBase
           : ", PASSWORD_ATTEMPTS=?");
 
       fieldsBuffer.append((fieldsBuffer.length() == 0)
-        ? "SET PASSWORD_EXPIRY=?"
-        : ", PASSWORD_EXPIRY=?");
+          ? "SET PASSWORD_EXPIRY=?"
+          : ", PASSWORD_EXPIRY=?");
 
       buffer.append(fieldsBuffer.toString());
       buffer.append(" WHERE USER_DIRECTORY_ID=? AND ID=?");
@@ -1615,7 +1615,7 @@ public class InternalUserDirectory extends UserDirectoryBase
           else
           {
             statement.setTimestamp(parameterIndex,
-              new Timestamp(user.getPasswordExpiry().getTime()));
+                new Timestamp(user.getPasswordExpiry().getTime()));
           }
         }
 
@@ -1819,14 +1819,14 @@ public class InternalUserDirectory extends UserDirectoryBase
     // Build the SQL statement to select the users
     StringBuilder buffer = new StringBuilder();
 
-    buffer.append("SELECT ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, ");
-    buffer.append("LAST_NAME, PHONE, FAX, MOBILE, EMAIL, ");
-    buffer.append("PASSWORD_ATTEMPTS, PASSWORD_EXPIRY, DESCRIPTION FROM ");
+    buffer.append("SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES, ");
+    buffer.append("IU.LAST_NAME, IU.PHONE, IU.FAX, IU.MOBILE, IU.EMAIL, ");
+    buffer.append("IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM ");
 
     buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
         getDatabaseCatalogSeparator());
 
-    buffer.append("INTERNAL_USERS");
+    buffer.append("INTERNAL_USERS IU");
 
     if (attributes.size() > 0)
     {
@@ -1835,46 +1835,43 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       for (Attribute attribute : attributes)
       {
-        if (whereParameters.length() > 0)
-        {
-          whereParameters.append(" AND ");
-        }
+        whereParameters.append(" AND ");
 
         if (attribute.getName().equalsIgnoreCase("description"))
         {
-          whereParameters.append("DESCRIPTION LIKE ?");
+          whereParameters.append("LOWER(IU.DESCRIPTION) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("email"))
         {
-          whereParameters.append("EMAIL LIKE ?");
+          whereParameters.append("LOWER(IU.EMAIL) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("faxNumber"))
         {
-          whereParameters.append("FAX LIKE ?");
+          whereParameters.append("LOWER(IU.FAX) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("firstNames"))
         {
-          whereParameters.append("FIRST_NAMES LIKE ?");
+          whereParameters.append("LOWER(IU.FIRST_NAMES) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("lastName"))
         {
-          whereParameters.append("LAST_NAME LIKE ?");
+          whereParameters.append("LOWER(IU.LAST_NAME) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
         {
-          whereParameters.append("MOBILE LIKE ?");
+          whereParameters.append("LOWER(IU.MOBILE) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
         {
-          whereParameters.append("PHONE LIKE ?");
+          whereParameters.append("LOWER(IU.PHONE) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("title"))
         {
-          whereParameters.append("TITLE LIKE ?");
+          whereParameters.append("LOWER(IU.TITLE) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("username"))
         {
-          whereParameters.append("USERNAME LIKE ?");
+          whereParameters.append("LOWER(IU.USERNAME) LIKE LOWER(?)");
         }
         else
         {
@@ -1883,14 +1880,20 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
       }
 
-      buffer.append(" WHERE ");
+      buffer.append(" WHERE IU.USER_DIRECTORY_ID=?");
       buffer.append(whereParameters.toString());
+    }
+    else
+    {
+      buffer.append(" WHERE IU.USER_DIRECTORY_ID=?");
     }
 
     PreparedStatement statement = connection.prepareStatement(buffer.toString());
 
+    statement.setLong(1, getUserDirectoryId());
+
     // Set the parameters for the prepared statement
-    int parameterIndex = 1;
+    int parameterIndex = 2;
 
     for (Attribute attribute : attributes)
     {
