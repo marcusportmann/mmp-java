@@ -358,11 +358,11 @@ public class AutoEnlistJdbcDataSource
       {
         if (method.getName().equals("close"))
         {
-          Transaction transaction = connectionTransactionMap.get(this);
+          Transaction transaction = connectionTransactionMap.get(proxy);
 
           if (transaction != null)
           {
-            connectionTransactionMap.remove(this);
+            connectionTransactionMap.remove(proxy);
             transactionConnectionMap.remove(transaction);
           }
 
