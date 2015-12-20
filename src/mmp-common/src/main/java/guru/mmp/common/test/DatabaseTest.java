@@ -18,10 +18,15 @@ package guru.mmp.common.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-
 import guru.mmp.common.persistence.DAOUtil;
 
+import net.sf.cglib.proxy.Enhancer;
+
+import org.junit.BeforeClass;
+
 //~--- JDK imports ------------------------------------------------------------
+
+import java.lang.reflect.Method;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,7 +36,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
 import javax.sql.DataSource;
+import javax.sql.XADataSource;
+
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
@@ -77,10 +89,16 @@ public abstract class DatabaseTest extends JNDITest
     {
       Thread.currentThread().getContextClassLoader().loadClass("org.h2.Driver");
 
-      DataSource dataSource = null;
+      Class<?> jdbcDataSourceClass =
+        Thread.currentThread().getContextClassLoader().loadClass("org.h2.jdbcx.JdbcDataSource");
 
-//      DataSource dataSource = DataSources.unpooledDataSource("jdbc:h2:mem:" + name
-//        + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE", "", "");
+      Method setURLMethod = jdbcDataSourceClass.getMethod("setURL", String.class);
+
+      final DataSource jdbcDataSource = (DataSource) jdbcDataSourceClass.newInstance();
+
+      setURLMethod.invoke(jdbcDataSource,
+          "jdbc:h2:mem:" + Thread.currentThread().getName()
+          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
       {
@@ -89,7 +107,7 @@ public abstract class DatabaseTest extends JNDITest
         {
           try
           {
-            try (Connection connection = dataSource.getConnection();
+            try (Connection connection = jdbcDataSource.getConnection();
               Statement statement = connection.createStatement())
             {
               statement.executeUpdate("SHUTDOWN");
@@ -114,7 +132,7 @@ public abstract class DatabaseTest extends JNDITest
           List<String> sqlStatements = DAOUtil.loadSQL(resourcePath);
 
           // Get a connection to the in-memory database
-          try (Connection connection = dataSource.getConnection())
+          try (Connection connection = jdbcDataSource.getConnection())
           {
             for (String sqlStatement : sqlStatements)
             {
@@ -132,7 +150,7 @@ public abstract class DatabaseTest extends JNDITest
         }
         catch (SQLException e)
         {
-          try (Connection connection = dataSource.getConnection();
+          try (Connection connection = jdbcDataSource.getConnection();
             Statement shutdownStatement = connection.createStatement())
           {
             shutdownStatement.executeUpdate("SHUTDOWN");
@@ -147,7 +165,24 @@ public abstract class DatabaseTest extends JNDITest
         }
       }
 
-      return dataSource;
+      Class<?> atomikosDataSourceBeanClass =
+        Thread.currentThread().getContextClassLoader().loadClass(
+          "com.atomikos.jdbc.AtomikosDataSourceBean");
+
+      Object atomikosDataSourceBean = atomikosDataSourceBeanClass.newInstance();
+
+      Method setUniqueResourceNameMethod =
+        atomikosDataSourceBeanClass.getMethod("setUniqueResourceName", String.class);
+
+      setUniqueResourceNameMethod.invoke(atomikosDataSourceBean,
+          Thread.currentThread().getName() + "-ApplicationDataSource");
+
+      Method setXaDataSourceMethod = atomikosDataSourceBeanClass.getMethod("setXaDataSource",
+        XADataSource.class);
+
+      setXaDataSourceMethod.invoke(atomikosDataSourceBean, (XADataSource) jdbcDataSource);
+
+      return ((DataSource) atomikosDataSourceBean);
     }
     catch (Throwable e)
     {
@@ -179,5 +214,56 @@ public abstract class DatabaseTest extends JNDITest
     resourcePaths.add(resourcePath);
 
     return initDatabase(name, resourcePaths, logSQL);
+  }
+
+  /**
+   * This method is executed before any of the test methods are executed for the test class.
+   */
+  @BeforeClass
+  public static void initDatabaseTestResources()
+  {
+    try
+    {
+      System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
+          "org.apache.naming.java.javaURLContextFactory");
+      System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
+
+      InitialContext ic = new InitialContext();
+
+      // Initialise the JTA user transaction and transaction manager
+      Class<?> transactionManagerClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "com.atomikos.icatch.jta.UserTransactionManager");
+
+      Enhancer transactionManagerEnhancer = new Enhancer();
+      transactionManagerEnhancer.setSuperclass(transactionManagerClass);
+      transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
+
+      TransactionManager transactionManager =
+        (TransactionManager) transactionManagerEnhancer.create();
+
+      ic.bind("comp/TransactionManager", transactionManager);
+      ic.bind("jboss/TransactionManager", transactionManager);
+
+      Class<?> userTransactionClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "com.atomikos.icatch.jta.UserTransactionImp");
+
+      Enhancer userTransactionEnhancer = new Enhancer();
+      userTransactionEnhancer.setSuperclass(userTransactionClass);
+      userTransactionEnhancer.setCallback(new UserTransactionTracker());
+
+      UserTransaction userTransaction = (UserTransaction) userTransactionEnhancer.create();
+
+      Method setTransactionTimeoutMethod = userTransactionClass.getMethod("setTransactionTimeout",
+        Integer.TYPE);
+
+      setTransactionTimeoutMethod.invoke(userTransaction, 300);
+
+      ic.bind("comp/UserTransaction", userTransaction);
+      ic.bind("jboss/UserTransaction", userTransaction);
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to initialise the DatabaseTest resources", e);
+    }
   }
 }

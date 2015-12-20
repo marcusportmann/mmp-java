@@ -24,6 +24,7 @@ import org.junit.BeforeClass;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import java.lang.reflect.Method;
 
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
@@ -53,8 +54,7 @@ import javax.naming.InitialContext;
 public abstract class JNDITest extends Test
 {
   /**
-   * This method is executed by the JUnit test infrastructure before any of the JUnit test methods
-   * are executed for the JUnit test class.
+   * This method is executed before any of the test methods are executed for the test class.
    */
   @BeforeClass
   public static void initJNDITestResources()
@@ -67,18 +67,31 @@ public abstract class JNDITest extends Test
 
       InitialContext ic = new InitialContext();
 
-      ic.createSubcontext("java:");
-      ic.createSubcontext("java:app");
-      ic.createSubcontext("java:app/env");
-      ic.createSubcontext("java:app/jdbc");
+      ic.createSubcontext("app");
+      ic.createSubcontext("app/env");
+      ic.createSubcontext("app/jdbc");
 
-      ic.createSubcontext("java:comp");
-      ic.createSubcontext("java:comp/env");
-      ic.createSubcontext("java:comp/env/jdbc");
+      ic.createSubcontext("comp");
+      ic.createSubcontext("comp/env");
+      ic.createSubcontext("comp/env/jdbc");
+
+      // Bind the initial context on the current thread
+      Class<?> contextBindingsClass = Thread.currentThread().getContextClassLoader().loadClass(
+        "org.apache.naming.ContextBindings");
+
+      Method bindContextMethod = contextBindingsClass.getMethod("bindContext", Object.class,
+        Context.class);
+
+      bindContextMethod.invoke(null, Thread.currentThread().getName(), ic);
+
+      Method bindThreadMethod = contextBindingsClass.getMethod("bindThread", Object.class,
+        Object.class);
+
+      bindThreadMethod.invoke(null, Thread.currentThread().getName(), null);
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the test resources", e);
+      throw new RuntimeException("Failed to initialise the JNDITest resources", e);
     }
   }
 }
