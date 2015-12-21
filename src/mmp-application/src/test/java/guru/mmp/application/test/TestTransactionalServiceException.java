@@ -20,8 +20,7 @@ package guru.mmp.application.test;
  * The <code>TestTransactionalServiceException</code> exception is thrown to indicate an error
  * condition when working with the Test Transactional Service.
  * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction
- *       by the <code>TransactionalInterceptor</code>.
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */

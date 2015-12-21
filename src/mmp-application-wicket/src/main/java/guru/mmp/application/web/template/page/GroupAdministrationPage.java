@@ -18,10 +18,8 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.ExistingGroupMembersException;
-import guru.mmp.application.security.Group;
-import guru.mmp.application.security.ISecurityService;
-import guru.mmp.application.security.UserDirectory;
+import guru.mmp.application.security.*;
+import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -210,6 +208,7 @@ public class GroupAdministrationPage extends TemplateWebPage
   }
 
   private List<UserDirectory> getUserDirectories()
+    throws OrganisationNotFoundException, UserDirectoryNotFoundException, SecurityException
   {
     WebSession session = getWebApplicationSession();
 

@@ -19,6 +19,7 @@ package guru.mmp.application.web.template.page;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.security.*;
+import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
@@ -186,17 +187,24 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
     {
       super("addDialog", "Add User Directory", "OK", "Cancel");
 
-      UserDirectoryTypeChoiceRenderer userDirectoryTypeChoiceRenderer =
-        new UserDirectoryTypeChoiceRenderer();
+      try
+      {
+        UserDirectoryTypeChoiceRenderer userDirectoryTypeChoiceRenderer =
+          new UserDirectoryTypeChoiceRenderer();
 
-      // The "userDirectoryType" field
-      DropDownChoice<UserDirectoryType> userDirectoryTypeField =
-        new DropDownChoiceWithFeedback<>("userDirectoryType",
-          new PropertyModel<>(this, "userDirectoryType"), getUserDirectoryTypeOptions(),
-          userDirectoryTypeChoiceRenderer);
-      userDirectoryTypeField.setRequired(true);
-      userDirectoryTypeField.setOutputMarkupId(true);
-      getForm().add(userDirectoryTypeField);
+        // The "userDirectoryType" field
+        DropDownChoice<UserDirectoryType> userDirectoryTypeField =
+          new DropDownChoiceWithFeedback<>("userDirectoryType",
+            new PropertyModel<>(this, "userDirectoryType"), getUserDirectoryTypeOptions(),
+            userDirectoryTypeChoiceRenderer);
+        userDirectoryTypeField.setRequired(true);
+        userDirectoryTypeField.setOutputMarkupId(true);
+        getForm().add(userDirectoryTypeField);
+      }
+      catch (Throwable e)
+      {
+        throw new WebApplicationException("Failed to initialise the AddDialog", e);
+      }
     }
 
     /**
@@ -261,6 +269,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
     }
 
     private List<UserDirectoryType> getUserDirectoryTypeOptions()
+      throws SecurityException
     {
       return securityService.getUserDirectoryTypes();
     }

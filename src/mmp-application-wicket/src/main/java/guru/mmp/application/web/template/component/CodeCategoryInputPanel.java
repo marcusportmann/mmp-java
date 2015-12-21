@@ -20,6 +20,8 @@ package guru.mmp.application.web.template.component;
 
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.CodesServiceException;
+import guru.mmp.application.web.WebApplicationException;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -29,10 +31,10 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.string.Strings;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryInputPanel</code> class provides a Wicket component that can
@@ -63,58 +65,65 @@ public class CodeCategoryInputPanel extends InputPanel
   {
     super(id);
 
-    // The "id" field
-    TextField<String> idField = new TextFieldWithFeedback<>("id");
-    idField.setRequired(true);
-    idField.setEnabled(!isIdReadOnly);
-    add(idField);
-
-    // The "name" field
-    TextField<String> nameField = new TextFieldWithFeedback<>("name");
-    nameField.setRequired(true);
-    add(nameField);
-
-    // The "description" field
-    TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-    descriptionField.setRequired(true);
-    add(descriptionField);
-
-    // The "categoryType" field
-    CodeCategoryTypeChoiceRenderer codeCategoryTypeChoiceRenderer =
-      new CodeCategoryTypeChoiceRenderer();
-
-    categoryTypeField = new DropDownChoiceWithFeedback<>("categoryType",
-        getCodeCategoryTypeOptions(), codeCategoryTypeChoiceRenderer);
-
-    categoryTypeField.add(new AjaxFormComponentUpdatingBehavior("change")
+    try
     {
-      private static final long serialVersionUID = 1000000;
+      // The "id" field
+      TextField<String> idField = new TextFieldWithFeedback<>("id");
+      idField.setRequired(true);
+      idField.setEnabled(!isIdReadOnly);
+      add(idField);
 
-      @Override
-      protected void onUpdate(AjaxRequestTarget target)
+      // The "name" field
+      TextField<String> nameField = new TextFieldWithFeedback<>("name");
+      nameField.setRequired(true);
+      add(nameField);
+
+      // The "description" field
+      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
+      descriptionField.setRequired(true);
+      add(descriptionField);
+
+      // The "categoryType" field
+      CodeCategoryTypeChoiceRenderer codeCategoryTypeChoiceRenderer =
+        new CodeCategoryTypeChoiceRenderer();
+
+      categoryTypeField = new DropDownChoiceWithFeedback<>("categoryType",
+          getCodeCategoryTypeOptions(), codeCategoryTypeChoiceRenderer);
+
+      categoryTypeField.add(new AjaxFormComponentUpdatingBehavior("change")
       {
-        try
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        protected void onUpdate(AjaxRequestTarget target)
         {
-          target.add(categoryTypeField);
-          target.appendJavaScript("cbr_replace();");
+          try
+          {
+            target.add(categoryTypeField);
+            target.appendJavaScript("cbr_replace();");
 
-          resetContainers(target);
+            resetContainers(target);
+          }
+          catch (Throwable e)
+          {
+            throw new RuntimeException("Failed to update the categoryType field", e);
+          }
         }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to update the categoryType field", e);
-        }
-      }
-    });
+      });
 
-    categoryTypeField.setRequired(true);
-    add(categoryTypeField);
+      categoryTypeField.setRequired(true);
+      add(categoryTypeField);
 
-    // The "codeDataContainer" container
-    setupCodeDataContainer();
+      // The "codeDataContainer" container
+      setupCodeDataContainer();
 
-    // The "endPointContainer" container
-    setupEndPointContainer();
+      // The "endPointContainer" container
+      setupEndPointContainer();
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the CodeCategoryInputPanel", e);
+    }
   }
 
   private List<CodeCategoryType> getCodeCategoryTypeOptions()

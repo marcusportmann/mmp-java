@@ -20,11 +20,13 @@ package guru.mmp.application.security;
  * An <code>ExistingPasswordException</code> is thrown to indicate that a security operation failed
  * as a result of an existing password e.g. when attempting to change a user's password using a
  * password that forms part of the user's password history.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ExistingPasswordException extends RuntimeException
+public class ExistingPasswordException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

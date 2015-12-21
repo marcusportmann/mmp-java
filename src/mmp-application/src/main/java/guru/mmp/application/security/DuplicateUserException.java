@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * A <code>DuplicateUserException</code> is thrown to indicate that a security operation failed as
  * a result of duplicate users.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class DuplicateUserException extends RuntimeException
+public class DuplicateUserException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

@@ -56,11 +56,11 @@ public class SecurityServiceTest
   /**
    * Test the functionality to add a user to a group.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void addUserToGroupTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -87,11 +87,11 @@ public class SecurityServiceTest
   /**
    * Test the administrative change user password functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void adminChangePasswordTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -108,11 +108,11 @@ public class SecurityServiceTest
   /**
    * Test the change user password functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void changePasswordTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -129,11 +129,11 @@ public class SecurityServiceTest
   /**
    * Test the functionality to delete a group with existing members.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.ExistingGroupMembersException.class)
   public void deleteGroupWithExistingMembers()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -161,11 +161,11 @@ public class SecurityServiceTest
   /**
    * Test the delete invalid function functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.FunctionNotFoundException.class)
   public void deleteInvalidFunctionTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Function function = getTestFunctionDetails();
 
@@ -176,11 +176,11 @@ public class SecurityServiceTest
   /**
    * Test the delete invalid group functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.GroupNotFoundException.class)
   public void deleteInvalidGroupTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -195,11 +195,11 @@ public class SecurityServiceTest
   /**
    * Test the delete invalid user functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.UserNotFoundException.class)
   public void deleteInvalidUserTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -214,11 +214,11 @@ public class SecurityServiceTest
   /**
    * Test the expired user password functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.ExpiredPasswordException.class)
   public void expiredUserPasswordTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -235,11 +235,11 @@ public class SecurityServiceTest
   /**
    * Test the find users functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void findUsersTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -278,11 +278,11 @@ public class SecurityServiceTest
   /**
    * Test the create function functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void functionTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Function function = getTestFunctionDetails();
 
@@ -341,11 +341,11 @@ public class SecurityServiceTest
   /**
    * Test the group functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void groupTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -387,11 +387,11 @@ public class SecurityServiceTest
 ///**
 // * Test the functionality to retrieve all the function codes for a user.
 // *
-// * @throws guru.mmp.application.security.SecurityException
+// * @throws Exception
 // */
 ////@Test
 //public void getAllFunctionCodesForUserTest()
-//throws guru.mmp.application.security.SecurityException
+//throws Exception
 //
 //{
 //Organisation organisation = getTestOrganisationDetails();
@@ -427,11 +427,11 @@ public class SecurityServiceTest
   /**
    * Test the functionality to check whether a user is a member of a group.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void isUserInGroupTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
 
   {
     Organisation organisation = getTestOrganisationDetails();
@@ -455,11 +455,11 @@ public class SecurityServiceTest
   /**
    * Test the locked user functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.UserLockedException.class)
   public void lockedUserTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
 
   {
     Organisation organisation = getTestOrganisationDetails();
@@ -477,11 +477,11 @@ public class SecurityServiceTest
   /**
    * Test the organisation functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void organisationTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -535,11 +535,11 @@ public class SecurityServiceTest
   /**
    * Test the functionality to remove a user from a group.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void removeUserFromGroupTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
 
   {
     Organisation organisation = getTestOrganisationDetails();
@@ -573,11 +573,11 @@ public class SecurityServiceTest
 ///**
 // * Test the functionality to revoke a function for a group.
 // *
-// * @throws guru.mmp.application.security.SecurityException
+// * @throws Exception
 // */
 ////@Test
 //public void revokeFunctionForGroupTest()
-//  throws guru.mmp.application.security.SecurityException
+//  throws Exception
 //
 //{
 //  Group group = getTestGroupDetails();
@@ -605,11 +605,11 @@ public class SecurityServiceTest
   /**
    * Test the user password history functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.ExistingPasswordException.class)
   public void userPasswordHistoryTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -629,11 +629,11 @@ public class SecurityServiceTest
   /**
    * Test the user functionality.
    *
-   * @throws guru.mmp.application.security.SecurityException
+   * @throws Exception
    */
   @Test
   public void userTest()
-    throws guru.mmp.application.security.SecurityException
+    throws Exception
   {
     Organisation organisation = getTestOrganisationDetails();
 

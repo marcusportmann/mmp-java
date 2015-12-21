@@ -18,6 +18,7 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.Alerts;
@@ -66,44 +67,51 @@ public abstract class TemplateWebPage extends WebPage
    */
   public TemplateWebPage(String heading, String subHeading)
   {
-    if (getApplication().usesDevelopmentConfig())
+    try
     {
-      add(new DebugBar("debug"));
+      if (getApplication().usesDevelopmentConfig())
+      {
+        add(new DebugBar("debug"));
+      }
+      else
+      {
+        add(new Label("debug", ""));
+      }
+
+      // Setup the page title
+      this.title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | " + heading;
+
+      Label titleLabel = new Label("pageTitle", new PropertyModel<String>(this, "title"));
+      titleLabel.setRenderBodyOnly(false);
+      add(titleLabel);
+
+      // Setup the top navigation menu
+      add(new UserMenu("userMenu"));
+
+      // Setup the main navigation menu
+      add(new MainNavigationMenu("mainNavigationMenu"));
+
+      // Setup the breadcrumbs
+      add(new Breadcrumbs("breadcrumbs"));
+
+      // Setup the page heading
+      this.heading = heading;
+
+      add(new Label("pageHeading", new PropertyModel<String>(this, "heading")));
+
+      // Setup the page sub-heading
+      this.subHeading = subHeading;
+
+      add(new Label("pageSubHeading", new PropertyModel<String>(this, "subHeading")));
+
+      // Setup the alerts
+      this.alerts = new Alerts("alerts");
+      add(alerts);
     }
-    else
+    catch (Throwable e)
     {
-      add(new Label("debug", ""));
+      throw new WebApplicationException("Failed to initialise the TemplateWebPage", e);
     }
-
-    // Setup the page title
-    this.title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | " + heading;
-
-    Label titleLabel = new Label("pageTitle", new PropertyModel<String>(this, "title"));
-    titleLabel.setRenderBodyOnly(false);
-    add(titleLabel);
-
-    // Setup the top navigation menu
-    add(new UserMenu("userMenu"));
-
-    // Setup the main navigation menu
-    add(new MainNavigationMenu("mainNavigationMenu"));
-
-    // Setup the breadcrumbs
-    add(new Breadcrumbs("breadcrumbs"));
-
-    // Setup the page heading
-    this.heading = heading;
-
-    add(new Label("pageHeading", new PropertyModel<String>(this, "heading")));
-
-    // Setup the page sub-heading
-    this.subHeading = subHeading;
-
-    add(new Label("pageSubHeading", new PropertyModel<String>(this, "subHeading")));
-
-    // Setup the alerts
-    this.alerts = new Alerts("alerts");
-    add(alerts);
   }
 
   /**

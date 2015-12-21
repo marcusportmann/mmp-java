@@ -654,9 +654,12 @@ public class Registry
 
   /**
    * Initialise the Registry.
+   *
+   * @throws RegistryException
    */
   @PostConstruct
   public void init()
+    throws RegistryException
   {
     try
     {

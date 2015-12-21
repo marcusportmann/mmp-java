@@ -18,10 +18,7 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.Group;
-import guru.mmp.application.security.ISecurityService;
-import guru.mmp.application.security.User;
-import guru.mmp.application.security.UserNotFoundException;
+import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -263,7 +260,7 @@ public class AddUserPage extends TemplateWebPage
   }
 
   private List<String> getGroupOptions(long userDirectoryId)
-    throws guru.mmp.application.security.SecurityException
+    throws UserDirectoryNotFoundException, guru.mmp.application.security.SecurityException
   {
     WebSession session = getWebApplicationSession();
 

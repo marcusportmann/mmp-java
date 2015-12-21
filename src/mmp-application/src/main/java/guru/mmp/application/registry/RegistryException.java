@@ -19,11 +19,13 @@ package guru.mmp.application.registry;
 /**
  * The <code>RegistryException</code> exception is thrown to indicate an error condition when
  * working with a Registry.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class RegistryException extends RuntimeException
+public class RegistryException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

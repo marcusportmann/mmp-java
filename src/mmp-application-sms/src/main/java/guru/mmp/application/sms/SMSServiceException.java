@@ -20,8 +20,7 @@ package guru.mmp.application.sms;
  * The <code>SMSServiceException</code> exception is thrown to indicate an error condition when
  * working with the SMS Service.
  * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction
- *       by the <code>TransactionalInterceptor</code>.
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */

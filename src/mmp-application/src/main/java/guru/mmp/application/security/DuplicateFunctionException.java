@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * A <code>DuplicateFunctionException</code> is thrown to indicate that a security
  * operation failed as a result of a duplicate authorised function.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class DuplicateFunctionException extends RuntimeException
+public class DuplicateFunctionException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

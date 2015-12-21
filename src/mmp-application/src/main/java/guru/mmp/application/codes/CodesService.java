@@ -752,9 +752,12 @@ public class CodesService
 
   /**
    * Initialise the Codes Service instance.
+   *
+   * @throws CodesServiceException
    */
   @PostConstruct
   public void init()
+    throws CodesServiceException
   {
     logger.info("Initialising the Codes Service");
 
@@ -1012,8 +1015,7 @@ public class CodesService
       {
         String parameterValue = parameters.get(parameterName);
 
-        guru.mmp.service.codes.ws.Parameter wsParameter =
-          new guru.mmp.service.codes.ws.Parameter();
+        guru.mmp.service.codes.ws.Parameter wsParameter = new guru.mmp.service.codes.ws.Parameter();
 
         wsParameter.setName(parameterName);
         wsParameter.setValue(parameterValue);

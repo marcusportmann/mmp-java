@@ -19,11 +19,13 @@ package guru.mmp.application.messaging.handler;
 /**
  * The <code>MessageHandlerException</code> exception is thrown to indicate an error condition when
  * a message handler processes a message.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class MessageHandlerException extends RuntimeException
+public class MessageHandlerException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * A <code>DuplicateUserDirectoryException</code> is thrown to indicate that a security operation
  * failed as a result of a duplicate user directory.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class DuplicateUserDirectoryException extends RuntimeException
+public class DuplicateUserDirectoryException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

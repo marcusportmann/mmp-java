@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * An <code>AuthenticationFailedException</code> is thrown to indicate that a security operation
  * failed as a result of an authentication failure.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class AuthenticationFailedException extends RuntimeException
+public class AuthenticationFailedException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

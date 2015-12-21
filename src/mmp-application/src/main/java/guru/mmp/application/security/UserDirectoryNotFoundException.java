@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * An <code>UserDirectoryNotFoundException</code> is thrown to indicate that a security operation
  * failed as a result of a user directory that could not be found.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class UserDirectoryNotFoundException extends RuntimeException
+public class UserDirectoryNotFoundException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

@@ -20,15 +20,20 @@ package guru.mmp.sample.web.page;
 
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.AnonymousOnlyWebPage;
 import guru.mmp.application.web.template.component.DropdownMenu;
 import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.page.TemplateWebPage;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * The <code>HomePage</code> class implements the "Home"
@@ -40,10 +45,8 @@ import java.util.List;
 public class HomePage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
-
   @Inject
   private ISecurityService securityService;
-
   private UserDirectory userDirectory;
 
   /**
@@ -53,11 +56,15 @@ public class HomePage extends TemplateWebPage
   {
     super("Home");
 
-    UserDirectoryChoiceRenderer userDirectoryChoiceRenderer =
-      new UserDirectoryChoiceRenderer();
+    try
+    {
+      UserDirectoryChoiceRenderer userDirectoryChoiceRenderer = new UserDirectoryChoiceRenderer();
 
-    List<UserDirectory> userDirectories = securityService.getUserDirectories();
-
-
+      List<UserDirectory> userDirectories = securityService.getUserDirectories();
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the HomePage", e);
+    }
   }
 }

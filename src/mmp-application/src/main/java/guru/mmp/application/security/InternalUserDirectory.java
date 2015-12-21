@@ -451,7 +451,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       savePasswordHistory(connection, user.getId(), newPasswordHash);
     }
     catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
-        | ExpiredPasswordException | UserLockedException e)
+        | UserLockedException e)
     {
       throw e;
     }
@@ -2235,6 +2235,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   private void incrementPasswordAttempts(long internalUserId)
+    throws SecurityException
   {
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();

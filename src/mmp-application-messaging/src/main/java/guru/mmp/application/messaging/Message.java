@@ -24,10 +24,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Message</code> class holds the information for a message that is processed by the
@@ -165,8 +165,11 @@ public class Message
    * in the specified WBXML document.
    *
    * @param document the WBXML document containing the message information
+   *
+   * @throws MessagingException
    */
   public Message(Document document)
+    throws MessagingException
   {
     Element rootElement = document.getRootElement();
 
@@ -250,10 +253,13 @@ public class Message
    * @param dataHash         the hash of the unencrypted data for the message
    * @param encryptionScheme the encryption scheme used to secure the message
    * @param encryptionIV     the base-64 encoded initialisation vector for the encryption scheme
+   *
+   * @throws MessagingException
    */
   public Message(String user, String organisation, String device, String type, int typeVersion,
       String correlationId, Priority priority, byte[] data, String dataHash,
       EncryptionScheme encryptionScheme, String encryptionIV)
+    throws MessagingException
   {
     this.id = UUID.randomUUID().toString();
     this.user = user;

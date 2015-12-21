@@ -125,7 +125,7 @@ public interface ISecurityService
    * @throws SecurityException
    */
   void createGroup(long userDirectoryId, Group group)
-    throws DuplicateGroupException, SecurityException;
+    throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityException;
 
   /**
    * Create a new organisation.
@@ -162,11 +162,10 @@ public interface ISecurityService
    *
    * @param userDirectory the user directory
    *
-   * @throws DuplicateUserDirectoryException
    * @throws SecurityException
    */
   void createUserDirectory(UserDirectory userDirectory)
-    throws DuplicateUserDirectoryException, SecurityException;
+    throws SecurityException;
 
   /**
    * Delete the authorised function.
@@ -520,8 +519,11 @@ public interface ISecurityService
    * Retrieve the user directory types.
    *
    * @return the user directory types
+   *
+   * @throws SecurityException
    */
-  List<UserDirectoryType> getUserDirectoryTypes();
+  List<UserDirectoryType> getUserDirectoryTypes()
+    throws SecurityException;
 
   /**
    * Retrieve all the users.
@@ -557,8 +559,11 @@ public interface ISecurityService
 
   /**
    * Reload the user directories.
+   *
+   * @throws SecurityException
    */
-  void reloadUserDirectories();
+  void reloadUserDirectories()
+    throws SecurityException;
 
   /**
    * Remove the user from the group.

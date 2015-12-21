@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * A <code>FunctionNotFoundException</code> is thrown to indicate that a security operation failed
  * as a result of an authorised function that could not be found.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class FunctionNotFoundException extends RuntimeException
+public class FunctionNotFoundException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

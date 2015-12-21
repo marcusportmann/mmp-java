@@ -19,10 +19,12 @@ package guru.mmp.application.messaging;
 /**
  * The <code>MessagingException</code> exception is thrown to indicate an error condition when
  * working with the messaging infrastructure.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
-public class MessagingException extends RuntimeException
+public class MessagingException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

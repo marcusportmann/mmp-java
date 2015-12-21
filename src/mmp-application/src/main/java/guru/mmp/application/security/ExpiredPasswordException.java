@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * A <code>ExpiredPasswordException</code> is thrown to indicate that a security operation failed
  * as a result of an expired password.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ExpiredPasswordException extends RuntimeException
+public class ExpiredPasswordException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

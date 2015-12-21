@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * The <code>SecurityException</code> exception is thrown to indicate a security related error
  * condition.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SecurityException extends RuntimeException
+public class SecurityException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

@@ -19,6 +19,7 @@ package guru.mmp.application.web.template.component;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.security.UserDirectory;
+import guru.mmp.application.web.WebApplicationException;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
@@ -46,253 +47,262 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
   {
     super(id, userDirectoryModel);
 
-    // The "host" field
-    TextField<String> hostField = new TextFieldWithFeedback<>("host",
-      new PropertyModel<>(userDirectoryModel, "parameters.Host"));
-    hostField.setType(String.class);
-    hostField.setRequired(true);
-    add(hostField);
+    try
+    {
+      // The "host" field
+      TextField<String> hostField = new TextFieldWithFeedback<>("host",
+        new PropertyModel<>(userDirectoryModel, "parameters.Host"));
+      hostField.setType(String.class);
+      hostField.setRequired(true);
+      add(hostField);
 
-    // The "port" field
-    TextField<String> portField = new TextFieldWithFeedback<>("port",
-      new PropertyModel<>(userDirectoryModel, "parameters.Port"));
-    portField.setType(String.class);
-    portField.setRequired(true);
-    add(portField);
+      // The "port" field
+      TextField<String> portField = new TextFieldWithFeedback<>("port",
+        new PropertyModel<>(userDirectoryModel, "parameters.Port"));
+      portField.setType(String.class);
+      portField.setRequired(true);
+      add(portField);
 
-    // The "useSSL" field
-    TextField<String> useSSLField = new TextFieldWithFeedback<>("useSSL",
-      new PropertyModel<>(userDirectoryModel, "parameters.UseSSL"));
-    useSSLField.setType(String.class);
-    useSSLField.setRequired(true);
-    add(useSSLField);
+      // The "useSSL" field
+      TextField<String> useSSLField = new TextFieldWithFeedback<>("useSSL",
+        new PropertyModel<>(userDirectoryModel, "parameters.UseSSL"));
+      useSSLField.setType(String.class);
+      useSSLField.setRequired(true);
+      add(useSSLField);
 
-    // The "bindDN" field
-    TextField<String> bindDNField = new TextFieldWithFeedback<>("bindDN",
-      new PropertyModel<>(userDirectoryModel, "parameters.BindDN"));
-    bindDNField.setType(String.class);
-    bindDNField.setRequired(true);
-    add(bindDNField);
+      // The "bindDN" field
+      TextField<String> bindDNField = new TextFieldWithFeedback<>("bindDN",
+        new PropertyModel<>(userDirectoryModel, "parameters.BindDN"));
+      bindDNField.setType(String.class);
+      bindDNField.setRequired(true);
+      add(bindDNField);
 
-    // The "bindPassword" field
-    TextField<String> bindPasswordField = new TextFieldWithFeedback<>("bindPassword",
-      new PropertyModel<>(userDirectoryModel, "parameters.BindPassword"));
-    bindPasswordField.setType(String.class);
-    bindPasswordField.setRequired(true);
-    add(bindPasswordField);
+      // The "bindPassword" field
+      TextField<String> bindPasswordField = new TextFieldWithFeedback<>("bindPassword",
+        new PropertyModel<>(userDirectoryModel, "parameters.BindPassword"));
+      bindPasswordField.setType(String.class);
+      bindPasswordField.setRequired(true);
+      add(bindPasswordField);
 
-    // The "baseDN" field
-    TextField<String> baseDNField = new TextFieldWithFeedback<>("baseDN",
-      new PropertyModel<>(userDirectoryModel, "parameters.BaseDN"));
-    baseDNField.setType(String.class);
-    baseDNField.setRequired(true);
-    add(baseDNField);
+      // The "baseDN" field
+      TextField<String> baseDNField = new TextFieldWithFeedback<>("baseDN",
+        new PropertyModel<>(userDirectoryModel, "parameters.BaseDN"));
+      baseDNField.setType(String.class);
+      baseDNField.setRequired(true);
+      add(baseDNField);
 
-    // The "userBaseDN" field
-    TextField<String> userBaseDNField = new TextFieldWithFeedback<>("userBaseDN",
-      new PropertyModel<>(userDirectoryModel, "parameters.UserBaseDN"));
-    userBaseDNField.setType(String.class);
-    userBaseDNField.setRequired(true);
-    add(userBaseDNField);
+      // The "userBaseDN" field
+      TextField<String> userBaseDNField = new TextFieldWithFeedback<>("userBaseDN",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserBaseDN"));
+      userBaseDNField.setType(String.class);
+      userBaseDNField.setRequired(true);
+      add(userBaseDNField);
 
-    // The "groupBaseDN" field
-    TextField<String> groupBaseDNField = new TextFieldWithFeedback<>("groupBaseDN",
-      new PropertyModel<>(userDirectoryModel, "parameters.GroupBaseDN"));
-    groupBaseDNField.setType(String.class);
-    groupBaseDNField.setRequired(true);
-    add(groupBaseDNField);
+      // The "groupBaseDN" field
+      TextField<String> groupBaseDNField = new TextFieldWithFeedback<>("groupBaseDN",
+        new PropertyModel<>(userDirectoryModel, "parameters.GroupBaseDN"));
+      groupBaseDNField.setType(String.class);
+      groupBaseDNField.setRequired(true);
+      add(groupBaseDNField);
 
-    // The "sharedBaseDN" field
-    TextField<String> sharedBaseDNField = new TextFieldWithFeedback<>("sharedBaseDN",
-      new PropertyModel<>(userDirectoryModel, "parameters.SharedBaseDN"));
-    sharedBaseDNField.setType(String.class);
-    sharedBaseDNField.setRequired(false);
-    add(sharedBaseDNField);
+      // The "sharedBaseDN" field
+      TextField<String> sharedBaseDNField = new TextFieldWithFeedback<>("sharedBaseDN",
+        new PropertyModel<>(userDirectoryModel, "parameters.SharedBaseDN"));
+      sharedBaseDNField.setType(String.class);
+      sharedBaseDNField.setRequired(false);
+      add(sharedBaseDNField);
 
-    // The "userObjectClass" field
-    TextField<String> userObjectClassField = new TextFieldWithFeedback<>("userObjectClass",
-      new PropertyModel<>(userDirectoryModel, "parameters.UserObjectClass"));
-    userObjectClassField.setType(String.class);
-    userObjectClassField.setRequired(true);
-    add(userObjectClassField);
+      // The "userObjectClass" field
+      TextField<String> userObjectClassField = new TextFieldWithFeedback<>("userObjectClass",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserObjectClass"));
+      userObjectClassField.setType(String.class);
+      userObjectClassField.setRequired(true);
+      add(userObjectClassField);
 
-    // The "userUsernameAttribute" field
-    TextField<String> userUsernameAttributeField =
-      new TextFieldWithFeedback<>("userUsernameAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserUsernameAttribute"));
-    userUsernameAttributeField.setType(String.class);
-    userUsernameAttributeField.setRequired(true);
-    add(userUsernameAttributeField);
+      // The "userUsernameAttribute" field
+      TextField<String> userUsernameAttributeField =
+        new TextFieldWithFeedback<>("userUsernameAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserUsernameAttribute"));
+      userUsernameAttributeField.setType(String.class);
+      userUsernameAttributeField.setRequired(true);
+      add(userUsernameAttributeField);
 
-    // The "userPasswordExpiryAttribute" field
-    TextField<String> userPasswordExpiryAttributeField =
-      new TextFieldWithFeedback<>("userPasswordExpiryAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordExpiryAttribute"));
-    userPasswordExpiryAttributeField.setType(String.class);
-    userPasswordExpiryAttributeField.setRequired(true);
-    add(userPasswordExpiryAttributeField);
+      // The "userPasswordExpiryAttribute" field
+      TextField<String> userPasswordExpiryAttributeField =
+        new TextFieldWithFeedback<>("userPasswordExpiryAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordExpiryAttribute"));
+      userPasswordExpiryAttributeField.setType(String.class);
+      userPasswordExpiryAttributeField.setRequired(true);
+      add(userPasswordExpiryAttributeField);
 
-    // The "userPasswordAttemptsAttribute" field
-    TextField<String> userPasswordAttemptsAttributeField =
-      new TextFieldWithFeedback<>("userPasswordAttemptsAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordAttemptsAttribute"));
-    userPasswordAttemptsAttributeField.setType(String.class);
-    userPasswordAttemptsAttributeField.setRequired(true);
-    add(userPasswordAttemptsAttributeField);
+      // The "userPasswordAttemptsAttribute" field
+      TextField<String> userPasswordAttemptsAttributeField =
+        new TextFieldWithFeedback<>("userPasswordAttemptsAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordAttemptsAttribute"));
+      userPasswordAttemptsAttributeField.setType(String.class);
+      userPasswordAttemptsAttributeField.setRequired(true);
+      add(userPasswordAttemptsAttributeField);
 
-    // The "userTitleAttribute" field
-    TextField<String> userTitleAttributeField = new TextFieldWithFeedback<>("userTitleAttribute",
-      new PropertyModel<>(userDirectoryModel, "parameters.UserTitleAttribute"));
-    userTitleAttributeField.setType(String.class);
-    userTitleAttributeField.setRequired(false);
-    add(userTitleAttributeField);
+      // The "userTitleAttribute" field
+      TextField<String> userTitleAttributeField = new TextFieldWithFeedback<>("userTitleAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserTitleAttribute"));
+      userTitleAttributeField.setType(String.class);
+      userTitleAttributeField.setRequired(false);
+      add(userTitleAttributeField);
 
-    // The "userFirstNamesAttribute" field
-    TextField<String> userFirstNamesAttributeField =
-      new TextFieldWithFeedback<>("userFirstNamesAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserFirstNamesAttribute"));
-    userFirstNamesAttributeField.setType(String.class);
-    userFirstNamesAttributeField.setRequired(true);
-    add(userFirstNamesAttributeField);
+      // The "userFirstNamesAttribute" field
+      TextField<String> userFirstNamesAttributeField =
+        new TextFieldWithFeedback<>("userFirstNamesAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserFirstNamesAttribute"));
+      userFirstNamesAttributeField.setType(String.class);
+      userFirstNamesAttributeField.setRequired(true);
+      add(userFirstNamesAttributeField);
 
-    // The "userLastNameAttribute" field
-    TextField<String> userLastNameAttributeField =
-      new TextFieldWithFeedback<>("userLastNameAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserLastNameAttribute"));
-    userLastNameAttributeField.setType(String.class);
-    userLastNameAttributeField.setRequired(true);
-    add(userLastNameAttributeField);
+      // The "userLastNameAttribute" field
+      TextField<String> userLastNameAttributeField =
+        new TextFieldWithFeedback<>("userLastNameAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserLastNameAttribute"));
+      userLastNameAttributeField.setType(String.class);
+      userLastNameAttributeField.setRequired(true);
+      add(userLastNameAttributeField);
 
-    // The "userPhoneNumberAttribute" field
-    TextField<String> userPhoneNumberAttributeField =
-      new TextFieldWithFeedback<>("userPhoneNumberAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserPhoneNumberAttribute"));
-    userPhoneNumberAttributeField.setType(String.class);
-    userPhoneNumberAttributeField.setRequired(false);
-    add(userPhoneNumberAttributeField);
+      // The "userPhoneNumberAttribute" field
+      TextField<String> userPhoneNumberAttributeField =
+        new TextFieldWithFeedback<>("userPhoneNumberAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserPhoneNumberAttribute"));
+      userPhoneNumberAttributeField.setType(String.class);
+      userPhoneNumberAttributeField.setRequired(false);
+      add(userPhoneNumberAttributeField);
 
-    // The "userFaxNumberAttribute" field
-    TextField<String> userFaxNumberAttributeField =
-      new TextFieldWithFeedback<>("userFaxNumberAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserFaxNumberAttribute"));
-    userFaxNumberAttributeField.setType(String.class);
-    userFaxNumberAttributeField.setRequired(false);
-    add(userFaxNumberAttributeField);
+      // The "userFaxNumberAttribute" field
+      TextField<String> userFaxNumberAttributeField =
+        new TextFieldWithFeedback<>("userFaxNumberAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserFaxNumberAttribute"));
+      userFaxNumberAttributeField.setType(String.class);
+      userFaxNumberAttributeField.setRequired(false);
+      add(userFaxNumberAttributeField);
 
-    // The "userMobileNumberAttribute" field
-    TextField<String> userMobileNumberAttributeField =
-      new TextFieldWithFeedback<>("userMobileNumberAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserMobileNumberAttribute"));
-    userMobileNumberAttributeField.setType(String.class);
-    userMobileNumberAttributeField.setRequired(true);
-    add(userMobileNumberAttributeField);
+      // The "userMobileNumberAttribute" field
+      TextField<String> userMobileNumberAttributeField =
+        new TextFieldWithFeedback<>("userMobileNumberAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserMobileNumberAttribute"));
+      userMobileNumberAttributeField.setType(String.class);
+      userMobileNumberAttributeField.setRequired(true);
+      add(userMobileNumberAttributeField);
 
-    // The "userEmailAttribute" field
-    TextField<String> userEmailAttributeField = new TextFieldWithFeedback<>("userEmailAttribute",
-      new PropertyModel<>(userDirectoryModel, "parameters.UserEmailAttribute"));
-    userEmailAttributeField.setType(String.class);
-    userEmailAttributeField.setRequired(true);
-    add(userEmailAttributeField);
+      // The "userEmailAttribute" field
+      TextField<String> userEmailAttributeField = new TextFieldWithFeedback<>("userEmailAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserEmailAttribute"));
+      userEmailAttributeField.setType(String.class);
+      userEmailAttributeField.setRequired(true);
+      add(userEmailAttributeField);
 
-    // The "userDescriptionAttribute" field
-    TextField<String> userDescriptionAttributeField =
-      new TextFieldWithFeedback<>("userDescriptionAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserDescriptionAttribute"));
-    userDescriptionAttributeField.setType(String.class);
-    userDescriptionAttributeField.setRequired(false);
-    add(userDescriptionAttributeField);
+      // The "userDescriptionAttribute" field
+      TextField<String> userDescriptionAttributeField =
+        new TextFieldWithFeedback<>("userDescriptionAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserDescriptionAttribute"));
+      userDescriptionAttributeField.setType(String.class);
+      userDescriptionAttributeField.setRequired(false);
+      add(userDescriptionAttributeField);
 
-    // The "userPasswordHistoryAttribute" field
-    TextField<String> userPasswordHistoryAttributeField =
-      new TextFieldWithFeedback<>("userPasswordHistoryAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordHistoryAttribute"));
-    userPasswordHistoryAttributeField.setType(String.class);
-    userPasswordHistoryAttributeField.setRequired(true);
-    add(userPasswordHistoryAttributeField);
+      // The "userPasswordHistoryAttribute" field
+      TextField<String> userPasswordHistoryAttributeField =
+        new TextFieldWithFeedback<>("userPasswordHistoryAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordHistoryAttribute"));
+      userPasswordHistoryAttributeField.setType(String.class);
+      userPasswordHistoryAttributeField.setRequired(true);
+      add(userPasswordHistoryAttributeField);
 
-    // The "groupObjectClass" field
-    // The "groupObjectClass" field
-    TextField<String> groupObjectClassField = new TextFieldWithFeedback<>("groupObjectClass",
-      new PropertyModel<>(userDirectoryModel, "parameters.GroupObjectClass"));
-    groupObjectClassField.setType(String.class);
-    groupObjectClassField.setRequired(true);
-    add(groupObjectClassField);
+      // The "groupObjectClass" field
+      // The "groupObjectClass" field
+      TextField<String> groupObjectClassField = new TextFieldWithFeedback<>("groupObjectClass",
+        new PropertyModel<>(userDirectoryModel, "parameters.GroupObjectClass"));
+      groupObjectClassField.setType(String.class);
+      groupObjectClassField.setRequired(true);
+      add(groupObjectClassField);
 
-    // The "groupNameAttribute" field
-    TextField<String> groupNameAttributeField = new TextFieldWithFeedback<>("groupNameAttribute",
-      new PropertyModel<>(userDirectoryModel, "parameters.GroupNameAttribute"));
-    groupNameAttributeField.setType(String.class);
-    groupNameAttributeField.setRequired(true);
-    add(groupNameAttributeField);
+      // The "groupNameAttribute" field
+      TextField<String> groupNameAttributeField = new TextFieldWithFeedback<>("groupNameAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.GroupNameAttribute"));
+      groupNameAttributeField.setType(String.class);
+      groupNameAttributeField.setRequired(true);
+      add(groupNameAttributeField);
 
-    // The "groupMemberAttribute" field
-    TextField<String> groupMemberAttributeField =
-      new TextFieldWithFeedback<>("groupMemberAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.GroupMemberAttribute"));
-    groupMemberAttributeField.setType(String.class);
-    groupMemberAttributeField.setRequired(true);
-    add(groupMemberAttributeField);
+      // The "groupMemberAttribute" field
+      TextField<String> groupMemberAttributeField =
+        new TextFieldWithFeedback<>("groupMemberAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.GroupMemberAttribute"));
+      groupMemberAttributeField.setType(String.class);
+      groupMemberAttributeField.setRequired(true);
+      add(groupMemberAttributeField);
 
-    // The "groupDescriptionAttribute" field
-    TextField<String> groupDescriptionAttributeField =
-      new TextFieldWithFeedback<>("groupDescriptionAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.GroupDescriptionAttribute"));
-    groupDescriptionAttributeField.setType(String.class);
-    groupDescriptionAttributeField.setRequired(true);
-    add(groupDescriptionAttributeField);
+      // The "groupDescriptionAttribute" field
+      TextField<String> groupDescriptionAttributeField =
+        new TextFieldWithFeedback<>("groupDescriptionAttribute",
+          new PropertyModel<>(userDirectoryModel, "parameters.GroupDescriptionAttribute"));
+      groupDescriptionAttributeField.setType(String.class);
+      groupDescriptionAttributeField.setRequired(true);
+      add(groupDescriptionAttributeField);
 
-    // The "maxPasswordAttempts" field
-    TextField<String> maxPasswordAttemptsField = new TextFieldWithFeedback<>("maxPasswordAttempts",
-      new PropertyModel<>(userDirectoryModel, "parameters.MaxPasswordAttempts"));
-    maxPasswordAttemptsField.setType(String.class);
-    maxPasswordAttemptsField.setRequired(true);
-    add(maxPasswordAttemptsField);
+      // The "maxPasswordAttempts" field
+      TextField<String> maxPasswordAttemptsField =
+        new TextFieldWithFeedback<>("maxPasswordAttempts",
+          new PropertyModel<>(userDirectoryModel, "parameters.MaxPasswordAttempts"));
+      maxPasswordAttemptsField.setType(String.class);
+      maxPasswordAttemptsField.setRequired(true);
+      add(maxPasswordAttemptsField);
 
-    // The "passwordExpiryMonths" field
-    TextField<String> passwordExpiryMonthsField =
-      new TextFieldWithFeedback<>("passwordExpiryMonths",
-        new PropertyModel<>(userDirectoryModel, "parameters.PasswordExpiryMonths"));
-    passwordExpiryMonthsField.setType(String.class);
-    passwordExpiryMonthsField.setRequired(true);
-    add(passwordExpiryMonthsField);
+      // The "passwordExpiryMonths" field
+      TextField<String> passwordExpiryMonthsField =
+        new TextFieldWithFeedback<>("passwordExpiryMonths",
+          new PropertyModel<>(userDirectoryModel, "parameters.PasswordExpiryMonths"));
+      passwordExpiryMonthsField.setType(String.class);
+      passwordExpiryMonthsField.setRequired(true);
+      add(passwordExpiryMonthsField);
 
-    // The "supportPasswordHistory" field
-    TextField<String> supportPasswordHistoryField =
-      new TextFieldWithFeedback<>("supportPasswordHistory",
-        new PropertyModel<>(userDirectoryModel, "parameters.SupportPasswordHistory"));
-    supportPasswordHistoryField.setType(String.class);
-    supportPasswordHistoryField.setRequired(true);
-    add(supportPasswordHistoryField);
+      // The "supportPasswordHistory" field
+      TextField<String> supportPasswordHistoryField =
+        new TextFieldWithFeedback<>("supportPasswordHistory",
+          new PropertyModel<>(userDirectoryModel, "parameters.SupportPasswordHistory"));
+      supportPasswordHistoryField.setType(String.class);
+      supportPasswordHistoryField.setRequired(true);
+      add(supportPasswordHistoryField);
 
-    // The "passwordHistoryMonths" field
-    TextField<String> passwordHistoryMonthsField =
-      new TextFieldWithFeedback<>("passwordHistoryMonths",
-        new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMonths"));
-    passwordHistoryMonthsField.setType(String.class);
-    passwordHistoryMonthsField.setRequired(true);
-    add(passwordHistoryMonthsField);
+      // The "passwordHistoryMonths" field
+      TextField<String> passwordHistoryMonthsField =
+        new TextFieldWithFeedback<>("passwordHistoryMonths",
+          new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMonths"));
+      passwordHistoryMonthsField.setType(String.class);
+      passwordHistoryMonthsField.setRequired(true);
+      add(passwordHistoryMonthsField);
 
-    // The "passwordHistoryMaxLength" field
-    TextField<String> passwordHistoryMaxLengthField =
-      new TextFieldWithFeedback<>("passwordHistoryMaxLength",
-        new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMaxLength"));
-    passwordHistoryMaxLengthField.setType(String.class);
-    passwordHistoryMaxLengthField.setRequired(true);
-    add(passwordHistoryMaxLengthField);
+      // The "passwordHistoryMaxLength" field
+      TextField<String> passwordHistoryMaxLengthField =
+        new TextFieldWithFeedback<>("passwordHistoryMaxLength",
+          new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMaxLength"));
+      passwordHistoryMaxLengthField.setType(String.class);
+      passwordHistoryMaxLengthField.setRequired(true);
+      add(passwordHistoryMaxLengthField);
 
-    // The "maxFilteredUsers" field
-    TextField<String> maxFilteredUsersField = new TextFieldWithFeedback<>("maxFilteredUsers",
-      new PropertyModel<>(userDirectoryModel, "parameters.MaxFilteredUsers"));
-    maxFilteredUsersField.setType(String.class);
-    maxFilteredUsersField.setRequired(true);
-    add(maxFilteredUsersField);
+      // The "maxFilteredUsers" field
+      TextField<String> maxFilteredUsersField = new TextFieldWithFeedback<>("maxFilteredUsers",
+        new PropertyModel<>(userDirectoryModel, "parameters.MaxFilteredUsers"));
+      maxFilteredUsersField.setType(String.class);
+      maxFilteredUsersField.setRequired(true);
+      add(maxFilteredUsersField);
 
-    // The "maxFilteredGroups" field
-    TextField<String> maxFilteredGroupsField = new TextFieldWithFeedback<>("maxFilteredGroups",
-      new PropertyModel<>(userDirectoryModel, "parameters.MaxFilteredGroups"));
-    maxFilteredGroupsField.setType(String.class);
-    maxFilteredGroupsField.setRequired(true);
-    add(maxFilteredGroupsField);
+      // The "maxFilteredGroups" field
+      TextField<String> maxFilteredGroupsField = new TextFieldWithFeedback<>("maxFilteredGroups",
+        new PropertyModel<>(userDirectoryModel, "parameters.MaxFilteredGroups"));
+      maxFilteredGroupsField.setType(String.class);
+      maxFilteredGroupsField.setRequired(true);
+      add(maxFilteredGroupsField);
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException(
+          "Failed to initialise the LDAPUserDirectoryAdministrationPanel", e);
+    }
   }
 
   /**

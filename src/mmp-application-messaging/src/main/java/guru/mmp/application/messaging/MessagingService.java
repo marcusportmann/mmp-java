@@ -760,9 +760,12 @@ public class MessagingService
 
   /**
    * Initialise the Messaging Service instance.
+   *
+   * @throws MessagingException
    */
   @PostConstruct
   public void init()
+    throws MessagingException
   {
     logger.info("Initialising the Messaging Service instance (" + getInstanceName() + ")");
 
@@ -912,7 +915,16 @@ public class MessagingService
 
     IMessageHandler messageHandler = messageHandlers.get(messageTypeKey);
 
-    return messageHandler.processMessage(message);
+    try
+    {
+      return messageHandler.processMessage(message);
+    }
+    catch (Throwable e)
+    {
+      throw new MessagingException("Failed to process the message (" + message.getId()
+          + ") with type (" + message.getType() + ") and version (" + message.getTypeVersion()
+          + ")", e);
+    }
   }
 
   /**

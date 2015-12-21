@@ -19,6 +19,7 @@ package guru.mmp.application.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.registry.IRegistry;
+import guru.mmp.common.exception.InvalidArgumentException;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
@@ -456,7 +457,7 @@ public class SecurityService
         {
           if (getOrganisationId(connection, organisation.getCode()) != -1)
           {
-            throw new DuplicateGroupException("The organisation (" + organisation.getCode()
+            throw new DuplicateOrganisationException("The organisation (" + organisation.getCode()
                 + ") already exists");
           }
 
@@ -623,11 +624,10 @@ public class SecurityService
    *
    * @param userDirectory the user directory
    *
-   * @throws DuplicateUserDirectoryException
    * @throws SecurityException
    */
   public void createUserDirectory(UserDirectory userDirectory)
-    throws DuplicateUserDirectoryException, SecurityException
+    throws SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(userDirectory.getName()))
@@ -668,10 +668,6 @@ public class SecurityService
       {
         logger.error("Failed to reload the user directories", e);
       }
-    }
-    catch (DuplicateUserDirectoryException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1261,10 +1257,6 @@ public class SecurityService
         }
       }
     }
-    catch (SecurityException e)
-    {
-      throw e;
-    }
     catch (Throwable e)
     {
       throw new SecurityException("Failed to retrieve the number of organisations"
@@ -1296,10 +1288,6 @@ public class SecurityService
           return 0;
         }
       }
-    }
-    catch (SecurityException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -1688,8 +1676,11 @@ public class SecurityService
    * Retrieve the user directory types.
    *
    * @return the user directory types
+   *
+   * @throws SecurityException
    */
   public List<UserDirectoryType> getUserDirectoryTypes()
+    throws SecurityException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUserDirectoryTypesSQL))
@@ -1740,9 +1731,12 @@ public class SecurityService
 
   /**
    * Initialise the <code>SecurityService</code> instance.
+   *
+   * @throws SecurityException
    */
   @PostConstruct
   public void init()
+    throws SecurityException
   {
     try
     {
@@ -1951,8 +1945,11 @@ public class SecurityService
 
   /**
    * Reload the user directories.
+   *
+   * @throws SecurityException
    */
   public void reloadUserDirectories()
+    throws SecurityException
   {
     try
     {
@@ -2015,8 +2012,11 @@ public class SecurityService
 
   /**
    * Reload the user directory types.
+   *
+   * @throws SecurityException
    */
   public void reloadUserDirectoryTypes()
+    throws SecurityException
   {
     try
     {
@@ -2301,7 +2301,7 @@ public class SecurityService
     {
       if (getOrganisationId(connection, organisation.getCode()) == -1)
       {
-        throw new FunctionNotFoundException("An organisation with the code ("
+        throw new OrganisationNotFoundException("An organisation with the code ("
             + organisation.getCode() + ") could not be found");
       }
 
@@ -2396,10 +2396,6 @@ public class SecurityService
             "No rows were affected as a result of executing the SQL statement ("
             + updateUserDirectorySQL + ")");
       }
-    }
-    catch (DuplicateUserDirectoryException e)
-    {
-      throw e;
     }
     catch (Throwable e)
     {
@@ -2537,9 +2533,10 @@ public class SecurityService
    * @return the populated <code>UserDirectory</code> instance
    *
    * @throws SQLException
+   * @throws SecurityException
    */
   private UserDirectory buildUserDirectoryFromResultSet(ResultSet rs)
-    throws SQLException
+    throws SQLException, SecurityException
   {
     UserDirectory userDirectory = new UserDirectory();
     userDirectory.setId(rs.getLong(1));
@@ -2704,6 +2701,7 @@ public class SecurityService
   }
 
   private UserDirectory newInternalUserDirectoryForOrganisation(Organisation organisation)
+    throws SecurityException
   {
     UserDirectory userDirectory = new UserDirectory();
 

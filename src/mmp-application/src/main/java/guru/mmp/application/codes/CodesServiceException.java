@@ -19,11 +19,13 @@ package guru.mmp.application.codes;
 /**
  * The <code>CodesServiceException</code> exception is thrown to indicate an error condition when
  * working with the Codes Service.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class CodesServiceException extends RuntimeException
+public class CodesServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

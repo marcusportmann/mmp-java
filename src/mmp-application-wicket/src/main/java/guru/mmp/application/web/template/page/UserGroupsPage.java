@@ -18,15 +18,16 @@ package guru.mmp.application.web.template.page;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.Group;
-import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -40,14 +41,16 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserGroupsPage</code> class implements the
@@ -80,134 +83,142 @@ public class UserGroupsPage extends TemplateWebPage
   {
     super("User Groups", username);
 
-    /*
-     * The table container, which allows the table and its associated navigator to be updated
-     * using AJAX.
-     */
-    WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
-    tableContainer.setOutputMarkupId(true);
-    add(tableContainer);
-
-    // The "backLink" link
-    Link<Void> backLink = new Link<Void>("backLink")
+    try
     {
-      private static final long serialVersionUID = 1000000;
+      /*
+       * The table container, which allows the table and its associated navigator to be updated
+       * using AJAX.
+       */
+      WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+      tableContainer.setOutputMarkupId(true);
+      add(tableContainer);
 
-      @Override
-      public void onClick()
+      // The "backLink" link
+      Link<Void> backLink = new Link<Void>("backLink")
       {
-        setResponsePage(previousPage.getPage());
-      }
-    };
-    tableContainer.add(backLink);
+        private static final long serialVersionUID = 1000000;
 
-    // The "addUserToGroupForm" form
-    DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
-      new PropertyModel<>(this, "groupName"), getGroupOptions(userDirectoryId, username));
-
-    groupNameField.setRequired(true);
-
-    Form<Void> addUserToGroupForm = new Form<Void>("addUserToGroupForm")
-    {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      protected void onSubmit()
-      {
-        WebSession session = getWebApplicationSession();
-
-        try
+        @Override
+        public void onClick()
         {
-          securityService.addUserToGroup(userDirectoryId, username, groupName);
-
-          logger.info("User (" + session.getUsername() + ") added the user (" + username
-              + ") to the group (" + groupName + ") for the user directory ("
-              + userDirectoryId + ")");
-
-          groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
-          groupNameField.setModelObject(null);
+          setResponsePage(previousPage.getPage());
         }
-        catch (Throwable e)
-        {
-          logger.error("Failed to add the user (" + username + ") to the group (" + groupName
-              + ") for the user directory (" + userDirectoryId + "): " + e.getMessage(), e);
+      };
+      tableContainer.add(backLink);
 
-          UserGroupsPage.this.error("Failed to add the user " + username + " to the group "
-              + groupName);
-        }
-      }
-    };
+      // The "addUserToGroupForm" form
+      DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
+        new PropertyModel<>(this, "groupName"), getGroupOptions(userDirectoryId, username));
 
-    addUserToGroupForm.setMarkupId("addUserToGroupForm");
-    addUserToGroupForm.setOutputMarkupId(true);
-    tableContainer.add(addUserToGroupForm);
+      groupNameField.setRequired(true);
 
-    addUserToGroupForm.add(groupNameField);
-
-    // The group data view
-    GroupsForUserDataProvider dataProvider = new GroupsForUserDataProvider(userDirectoryId,
-      username);
-
-    DataView<Group> dataView = new DataView<Group>("group", dataProvider)
-    {
-      private static final long serialVersionUID = 1000000;
-
-      @Override
-      protected void populateItem(Item<Group> item)
+      Form<Void> addUserToGroupForm = new Form<Void>("addUserToGroupForm")
       {
-        Group group = item.getModelObject();
+        private static final long serialVersionUID = 1000000;
 
-        String name = StringUtil.truncate(group.getGroupName(), 25);
-        String description = StringUtil.truncate(group.getDescription(), 30);
-
-        item.add(new Label("name", Model.of(name)));
-        item.add(new Label("description", Model.of(description)));
-
-        // The "removeLink" link
-        AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+        @Override
+        protected void onSubmit()
         {
-          private static final long serialVersionUID = 1000000;
+          WebSession session = getWebApplicationSession();
 
-          @Override
-          public void onClick(AjaxRequestTarget target)
+          try
           {
-            WebSession session = getWebApplicationSession();
+            securityService.addUserToGroup(userDirectoryId, username, groupName);
 
-            Group group = item.getModelObject();
+            logger.info("User (" + session.getUsername() + ") added the user (" + username
+                + ") to the group (" + groupName + ") for the user directory (" + userDirectoryId
+                + ")");
 
-            try
-            {
-              securityService.removeUserFromGroup(userDirectoryId, username, group.getGroupName());
-
-              logger.info("User (" + session.getUsername() + ") removed the user (" + username
-                  + ") from the group (" + group.getGroupName() + ") for the user directory ("
-                  + userDirectoryId + ")");
-
-              groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
-              groupNameField.setModelObject(null);
-
-              target.add(tableContainer);
-            }
-            catch (Throwable e)
-            {
-              logger.error("Failed to remove the user (" + username + ") from the group ("
-                  + group.getGroupName() + ") for the user directory (" + userDirectoryId
-                  + "): " + e.getMessage(), e);
-
-              UserGroupsPage.this.error("Failed to remove the user " + username
-                  + " from the group " + group.getGroupName());
-            }
+            groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
+            groupNameField.setModelObject(null);
           }
-        };
-        item.add(removeLink);
-      }
-    };
+          catch (Throwable e)
+          {
+            logger.error("Failed to add the user (" + username + ") to the group (" + groupName
+                + ") for the user directory (" + userDirectoryId + "): " + e.getMessage(), e);
 
-    dataView.setItemsPerPage(10);
-    dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
-    tableContainer.add(dataView);
+            UserGroupsPage.this.error("Failed to add the user " + username + " to the group "
+                + groupName);
+          }
+        }
+      };
 
-    tableContainer.add(new PagingNavigator("navigator", dataView));
+      addUserToGroupForm.setMarkupId("addUserToGroupForm");
+      addUserToGroupForm.setOutputMarkupId(true);
+      tableContainer.add(addUserToGroupForm);
+
+      addUserToGroupForm.add(groupNameField);
+
+      // The group data view
+      GroupsForUserDataProvider dataProvider = new GroupsForUserDataProvider(userDirectoryId,
+        username);
+
+      DataView<Group> dataView = new DataView<Group>("group", dataProvider)
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        protected void populateItem(Item<Group> item)
+        {
+          Group group = item.getModelObject();
+
+          String name = StringUtil.truncate(group.getGroupName(), 25);
+          String description = StringUtil.truncate(group.getDescription(), 30);
+
+          item.add(new Label("name", Model.of(name)));
+          item.add(new Label("description", Model.of(description)));
+
+          // The "removeLink" link
+          AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              WebSession session = getWebApplicationSession();
+
+              Group group = item.getModelObject();
+
+              try
+              {
+                securityService.removeUserFromGroup(userDirectoryId, username,
+                    group.getGroupName());
+
+                logger.info("User (" + session.getUsername() + ") removed the user (" + username
+                    + ") from the group (" + group.getGroupName() + ") for the user directory ("
+                    + userDirectoryId + ")");
+
+                groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
+                groupNameField.setModelObject(null);
+
+                target.add(tableContainer);
+              }
+              catch (Throwable e)
+              {
+                logger.error("Failed to remove the user (" + username + ") from the group ("
+                    + group.getGroupName() + ") for the user directory (" + userDirectoryId + "): "
+                    + e.getMessage(), e);
+
+                UserGroupsPage.this.error("Failed to remove the user " + username
+                    + " from the group " + group.getGroupName());
+              }
+            }
+          };
+          item.add(removeLink);
+        }
+      };
+
+      dataView.setItemsPerPage(10);
+      dataView.setItemReuseStrategy(ReuseIfModelsEqualStrategy.getInstance());
+      tableContainer.add(dataView);
+
+      tableContainer.add(new PagingNavigator("navigator", dataView));
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the UserGroupsPage", e);
+    }
   }
 
   /**
@@ -217,7 +228,7 @@ public class UserGroupsPage extends TemplateWebPage
   protected UserGroupsPage() {}
 
   private List<String> getGroupOptions(long userDirectoryId, String username)
-    throws SecurityException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     WebSession session = getWebApplicationSession();
 

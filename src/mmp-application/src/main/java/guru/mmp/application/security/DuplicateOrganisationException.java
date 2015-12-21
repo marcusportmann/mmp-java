@@ -19,11 +19,13 @@ package guru.mmp.application.security;
 /**
  * A <code>DuplicateOrganisationException</code> is thrown to indicate that a security operation
  * failed as a result of a duplicate organisation.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class DuplicateOrganisationException extends RuntimeException
+public class DuplicateOrganisationException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

@@ -163,8 +163,11 @@ public class MessagePart
    * in the specified WBXML document.
    *
    * @param document the WBXML document containing the message information
+   *
+   * @throws MessagingException
    */
   public MessagePart(Document document)
+    throws MessagingException
   {
     Element rootElement = document.getRootElement();
 

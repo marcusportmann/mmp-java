@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.security;
+package guru.mmp.common.exception;
 
 /**
- * A <code>InvalidArgumentException</code> is thrown to indicate that a security operation failed
- * as a result of an invalid argument being passed to a method.
+ * A <code>InvalidArgumentException</code> is thrown to indicate that an operation failed as a
+ * result of an invalid argument being passed to a method.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class InvalidArgumentException extends RuntimeException
+public class InvalidArgumentException
+  extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

@@ -59,8 +59,11 @@ public class MessageDownloadRequest
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message download information
+   *
+   * @throws MessagingException
    */
   public MessageDownloadRequest(Document document)
+    throws MessagingException
   {
     Element rootElement = document.getRootElement();
 

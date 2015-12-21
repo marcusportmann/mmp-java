@@ -153,8 +153,11 @@ public class UserDirectory
    * Set the XML configuration data for the user directory.
    *
    * @param configuration the XML configuration data for the user directory
+   *
+   * @throws SecurityException
    */
   public void setConfiguration(String configuration)
+    throws SecurityException
   {
     try
     {

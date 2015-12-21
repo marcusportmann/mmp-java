@@ -21,6 +21,8 @@ package guru.mmp.application.web.template.page;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.SecurityException;
+import guru.mmp.application.security.UserDirectoryNotFoundException;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.StringSelectOption;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
@@ -34,6 +36,7 @@ import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -45,14 +48,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>SelectOrganisationPage</code> class implements the "Select Organisation"
@@ -82,84 +87,91 @@ public class SelectOrganisationPage extends WebPage
   public SelectOrganisationPage()
     throws SecurityException
   {
-    // Setup the page title
-    String title = ((TemplateWebApplication) getApplication()).getDisplayName()
-      + " | Select Organisation";
-
-    Label titleLabel = new Label("pageTitle", title);
-    titleLabel.setRenderBodyOnly(false);
-    add(titleLabel);
-
-    // Setup the alerts
-    add(new Alerts("alerts"));
-
-    Form<Void> form = new Form<>("selectOrganisationForm");
-    add(form);
-
-    // The "organisation" field
-    ChoiceRenderer<StringSelectOption> choiceRenderer = new ChoiceRenderer<>("name", "value");
-
-    DropDownChoice<StringSelectOption> organisationField =
-      new DropDownChoiceWithFeedback<>("organisation", new PropertyModel<>(this, "organisation"),
-        getOrganisationOptions(), choiceRenderer);
-    organisationField.setRequired(true);
-    form.add(organisationField);
-
-    // The "continueButton" button
-    form.add(new Button("continueButton")
+    try
     {
-      private static final long serialVersionUID = 1000000;
+      // Setup the page title
+      String title = ((TemplateWebApplication) getApplication()).getDisplayName()
+        + " | Select Organisation";
 
-      @Override
-      public void onSubmit()
+      Label titleLabel = new Label("pageTitle", title);
+      titleLabel.setRenderBodyOnly(false);
+      add(titleLabel);
+
+      // Setup the alerts
+      add(new Alerts("alerts"));
+
+      Form<Void> form = new Form<>("selectOrganisationForm");
+      add(form);
+
+      // The "organisation" field
+      ChoiceRenderer<StringSelectOption> choiceRenderer = new ChoiceRenderer<>("name", "value");
+
+      DropDownChoice<StringSelectOption> organisationField =
+        new DropDownChoiceWithFeedback<>("organisation", new PropertyModel<>(this, "organisation"),
+          getOrganisationOptions(), choiceRenderer);
+      organisationField.setRequired(true);
+      form.add(organisationField);
+
+      // The "continueButton" button
+      form.add(new Button("continueButton")
       {
-        WebSession session = getWebApplicationSession();
+        private static final long serialVersionUID = 1000000;
 
-        try
+        @Override
+        public void onSubmit()
         {
-          List<String> groupNames =
-            securityService.getGroupNamesForUser(session.getUserDirectoryId(),
-              session.getUsername());
-          List<String> functionCodes =
-            securityService.getFunctionCodesForUser(session.getUserDirectoryId(),
-              session.getUsername());
+          WebSession session = getWebApplicationSession();
 
-          session.setOrganisation(organisation.getValue());
-          session.setGroupNames(groupNames);
-          session.setFunctionCodes(functionCodes);
-
-          if (logger.isDebugEnabled())
+          try
           {
-            logger.debug("Successfully authenticated user (" + session.getUsername()
-                + ") for organisation (" + organisation.getValue() + ") with groups ("
-                + StringUtil.delimit(groupNames, ",") + ") and function codes ("
-                + StringUtil.delimit(functionCodes, ",") + ")");
+            List<String> groupNames =
+              securityService.getGroupNamesForUser(session.getUserDirectoryId(),
+                session.getUsername());
+            List<String> functionCodes =
+              securityService.getFunctionCodesForUser(session.getUserDirectoryId(),
+                session.getUsername());
+
+            session.setOrganisation(organisation.getValue());
+            session.setGroupNames(groupNames);
+            session.setFunctionCodes(functionCodes);
+
+            if (logger.isDebugEnabled())
+            {
+              logger.debug("Successfully authenticated user (" + session.getUsername()
+                  + ") for organisation (" + organisation.getValue() + ") with groups ("
+                  + StringUtil.delimit(groupNames, ",") + ") and function codes ("
+                  + StringUtil.delimit(functionCodes, ",") + ")");
+            }
+
+            // Redirect to the secure home page for the application
+            throw new RedirectToUrlException(
+                urlFor(
+                  ((TemplateWebApplication) getApplication()).getSecureHomePage(),
+                    new PageParameters()).toString());
           }
+          catch (RedirectToUrlException e)
+          {
+            throw e;
+          }
+          catch (Throwable e)
+          {
+            logger.error("Failed to select the organisation for the user (" + session.getUsername()
+                + ")", e);
 
-          // Redirect to the secure home page for the application
-          throw new RedirectToUrlException(
-              urlFor(
-                ((TemplateWebApplication) getApplication()).getSecureHomePage(),
-                  new PageParameters()).toString());
-        }
-        catch (RedirectToUrlException e)
-        {
-          throw e;
-        }
-        catch (Throwable e)
-        {
-          logger.error("Failed to select the organisation for the user (" + session.getUsername()
-              + ")", e);
+            session.invalidateNow();
 
-          session.invalidateNow();
-
-          throw new RedirectToUrlException(
-              urlFor(
-                ((TemplateWebApplication) getApplication()).getHomePage(),
-                  new PageParameters()).toString());
+            throw new RedirectToUrlException(
+                urlFor(
+                  ((TemplateWebApplication) getApplication()).getHomePage(),
+                    new PageParameters()).toString());
+          }
         }
-      }
-    });
+      });
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the SelectOrganisationPage", e);
+    }
   }
 
   /**
@@ -208,7 +220,7 @@ public class SelectOrganisationPage extends WebPage
   }
 
   private List<StringSelectOption> getOrganisationOptions()
-    throws SecurityException
+    throws UserDirectoryNotFoundException, SecurityException
   {
     WebSession session = getWebApplicationSession();
 
