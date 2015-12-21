@@ -75,6 +75,10 @@ public class TaskServiceTest
 
     int numberOfScheduledTasks = taskService.getNumberOfScheduledTasks();
 
+    assertEquals("The correct number of scheduled tasks (" + (beforeRetrievedScheduledTasks.size() + 1)
+        + ") was not retrieved", beforeRetrievedScheduledTasks.size() + 1,
+      numberOfScheduledTasks);
+
     List<ScheduledTask> afterRetrievedScheduledTasks = taskService.getScheduledTasks();
 
     assertEquals("The correct number of scheduled tasks (" + (beforeRetrievedScheduledTasks.size() + 1)
@@ -99,6 +103,9 @@ public class TaskServiceTest
     {
       fail("Failed to find the scheduled task (" + scheduledTask.getId() + ") in the list of scheduled tasks");
     }
+
+    ADD UPDATE AND DELETE TEST CALLS
+
   }
 
   private static synchronized ScheduledTask getTestScheduledTaskDetails()
