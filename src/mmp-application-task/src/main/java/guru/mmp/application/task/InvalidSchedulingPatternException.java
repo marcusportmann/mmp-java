@@ -19,6 +19,8 @@ package guru.mmp.application.task;
 /**
  * The <code>InvalidSchedulingPatternException</code> exception is thrown to indicate an error
  * condition when executing a task.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */

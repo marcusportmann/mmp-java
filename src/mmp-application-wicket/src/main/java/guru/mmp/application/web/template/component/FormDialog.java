@@ -269,7 +269,7 @@ public abstract class FormDialog<T> extends Dialog
         if (Form.class.isAssignableFrom(component.getClass()))
         {
           // Visit each form component and clear its input and feedback messages
-          ((Form) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
+          ((Form<?>) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
           {
             @Override
             public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
@@ -317,7 +317,7 @@ public abstract class FormDialog<T> extends Dialog
           }
 
           // Visit each form component and clear its input and feedback messages
-          ((Form) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
+          ((Form<?>) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
           {
             @Override
             public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)

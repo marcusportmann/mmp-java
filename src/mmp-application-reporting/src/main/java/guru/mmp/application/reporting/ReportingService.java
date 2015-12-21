@@ -401,9 +401,12 @@ public class ReportingService
 
   /**
    * Initialise the Reporting Service instance.
+   *
+   * @throws ReportingServiceException
    */
   @PostConstruct
   public void init()
+    throws ReportingServiceException
   {
     logger.info("Initialising the Reporting Service instance (" + getInstanceName() + ")");
 

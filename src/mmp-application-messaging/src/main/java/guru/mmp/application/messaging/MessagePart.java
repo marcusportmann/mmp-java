@@ -167,7 +167,6 @@ public class MessagePart
    * @throws MessagingException
    */
   public MessagePart(Document document)
-    throws MessagingException
   {
     Element rootElement = document.getRootElement();
 
@@ -195,7 +194,7 @@ public class MessagePart
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to parse the messageCreated ISO8601 timestamp ("
+      throw new RuntimeException("Failed to parse the messageCreated ISO8601 timestamp ("
           + messageCreatedAttributeValue + ") for the message part", e);
     }
 

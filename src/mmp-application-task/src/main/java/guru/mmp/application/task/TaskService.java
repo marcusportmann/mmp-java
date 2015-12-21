@@ -238,9 +238,12 @@ public class TaskService
 
   /**
    * Initialise the Task Service instance.
+   *
+   * @throws TaskServiceException
    */
   @PostConstruct
   public void init()
+    throws TaskServiceException
   {
     logger.info("Initialising the Task Service instance (" + getInstanceName() + ")");
 

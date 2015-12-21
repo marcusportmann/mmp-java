@@ -19,11 +19,13 @@ package guru.mmp.application.task;
 /**
  * The <code>TaskExecutionFailedException</code> exception is thrown to indicate an error condition
  * when executing a task.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TaskExecutionFailedException extends RuntimeException
+public class TaskExecutionFailedException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

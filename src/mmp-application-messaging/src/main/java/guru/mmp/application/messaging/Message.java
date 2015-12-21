@@ -259,7 +259,6 @@ public class Message
   public Message(String user, String organisation, String device, String type, int typeVersion,
       String correlationId, Priority priority, byte[] data, String dataHash,
       EncryptionScheme encryptionScheme, String encryptionIV)
-    throws MessagingException
   {
     this.id = UUID.randomUUID().toString();
     this.user = user;
@@ -274,7 +273,7 @@ public class Message
 
     if (dataHash.length() == 0)
     {
-      throw new MessagingException("Unable to initialise a message with encrypted data using a"
+      throw new RuntimeException("Unable to initialise a message with encrypted data using a"
           + " blank data hash");
     }
 

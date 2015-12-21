@@ -19,11 +19,13 @@ package guru.mmp.application.reporting;
 /**
  * The <code>ReportingServiceException</code> exception is thrown to indicate an error condition when
  * working with the Reporting Service.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ReportingServiceException extends RuntimeException
+public class ReportingServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

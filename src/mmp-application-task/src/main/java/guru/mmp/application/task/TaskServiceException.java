@@ -19,11 +19,13 @@ package guru.mmp.application.task;
 /**
  * The <code>TaskServiceException</code> exception is thrown to indicate an error condition when
  * working with the Task Service.
+ * <p/>
+ * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TaskServiceException extends RuntimeException
+public class TaskServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

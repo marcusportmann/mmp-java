@@ -293,9 +293,12 @@ public class ProcessService
 
   /**
    * Initialise the Process Service instance.
+   *
+   * @throws ProcessServiceException
    */
   @PostConstruct
   public void init()
+    throws ProcessServiceException
   {
     logger.info("Initialising the Process Service instance (" + getInstanceName() + ")");
 

@@ -59,11 +59,8 @@ public class MessageDownloadRequest
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message download information
-   *
-   * @throws MessagingException
    */
   public MessageDownloadRequest(Document document)
-    throws MessagingException
   {
     Element rootElement = document.getRootElement();
 
@@ -85,7 +82,7 @@ public class MessageDownloadRequest
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the message encryption scheme from"
+      throw new RuntimeException("Failed to retrieve the message encryption scheme from"
           + " the message download request data", e);
     }
   }
