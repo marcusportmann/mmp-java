@@ -18,9 +18,12 @@ package guru.mmp.common.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.atomikos.icatch.jta.UserTransactionImp;
+import com.atomikos.icatch.jta.UserTransactionManager;
 import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
 import net.sf.cglib.proxy.Enhancer;
+import org.apache.naming.ContextBindings;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -82,14 +85,7 @@ public class ApplicationJUnit4ClassRunner
           "org.apache.naming.java.javaURLContextFactory");
       System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 
-      Class<?> contextBindingsClass = Thread.currentThread().getContextClassLoader().loadClass(
-          "org.apache.naming.ContextBindings");
-
-      Method isThreadBoundMethod = contextBindingsClass.getMethod("isThreadBound");
-
-      Boolean isThreadBound = (Boolean) isThreadBoundMethod.invoke(null);
-
-      if (!isThreadBound)
+      if (!ContextBindings.isThreadBound())
       {
         // Initialise the initial context
         InitialContext ic = new InitialContext();
@@ -108,11 +104,8 @@ public class ApplicationJUnit4ClassRunner
         ic.bind("app/env/RegistryPathPrefix", "/ApplicationTest");
 
         // Initialise the JTA user transaction and transaction manager
-        Class<?> transactionManagerClass = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.atomikos.icatch.jta.UserTransactionManager");
-
         Enhancer transactionManagerEnhancer = new Enhancer();
-        transactionManagerEnhancer.setSuperclass(transactionManagerClass);
+        transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
         transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
 
         TransactionManager transactionManager =
@@ -121,19 +114,13 @@ public class ApplicationJUnit4ClassRunner
         ic.bind("comp/TransactionManager", transactionManager);
         ic.bind("jboss/TransactionManager", transactionManager);
 
-        Class<?> userTransactionClass = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.atomikos.icatch.jta.UserTransactionImp");
-
         Enhancer userTransactionEnhancer = new Enhancer();
-        userTransactionEnhancer.setSuperclass(userTransactionClass);
+        userTransactionEnhancer.setSuperclass(UserTransactionImp.class);
         userTransactionEnhancer.setCallback(new UserTransactionTracker());
 
-        UserTransaction userTransaction = (UserTransaction) userTransactionEnhancer.create();
+        UserTransactionImp userTransaction = (UserTransactionImp) userTransactionEnhancer.create();
 
-        Method setTransactionTimeoutMethod =
-          userTransactionClass.getMethod("setTransactionTimeout", Integer.TYPE);
-
-        setTransactionTimeoutMethod.invoke(userTransaction, 300);
+        userTransaction.setTransactionTimeout(300);
 
         ic.bind("comp/UserTransaction", userTransaction);
         ic.bind("jboss/UserTransaction", userTransaction);
@@ -160,15 +147,9 @@ public class ApplicationJUnit4ClassRunner
         ic.bind("app/jdbc/ApplicationDataSource", dataSource);
 
         // Bind the initial context on the current thread
-        Method bindContextMethod = contextBindingsClass.getMethod("bindContext", Object.class,
-          Context.class);
+        ContextBindings.bindContext(Thread.currentThread().getName(), ic);
 
-        bindContextMethod.invoke(null, Thread.currentThread().getName(), ic);
-
-        Method bindThreadMethod = contextBindingsClass.getMethod("bindThread", Object.class,
-          Object.class);
-
-        bindThreadMethod.invoke(null, Thread.currentThread().getName(), null);
+        ContextBindings.bindThread(Thread.currentThread().getName(), null);
       }
     }
     catch (Throwable e)
