@@ -78,6 +78,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LDAPUserDirectory.class);
+  @SuppressWarnings("unused")
   private LdapName baseDN;
   private String bindDN;
   private String bindPassword;
@@ -90,31 +91,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String groupObjectClass;
   private String host;
   private int maxFilteredGroups;
-
-  /*
-   * private String addInternalUserToInternalGroupSQL;
-   * private String changeInternalUserPasswordSQL;
-   * private String createInternalGroupSQL;
-   * private String createInternalUserSQL;
-   * private String deleteInternalGroupSQL;
-   * private String deleteInternalUserSQL;
-   * private String getFilteredInternalUsersSQL;
-   * private String getFunctionCodesForUserIdSQL;
-   * private String getInternalGroupIdSQL;
-   * private String getInternalGroupNamesForInternalUserSQL;
-   * private String getInternalGroupSQL;
-   * private String getInternalGroupsForInternalUserSQL;
-   * private String getInternalGroupsSQL;
-   * private String getInternalUserIdSQL;
-   * private String getInternalUserSQL;
-   * private String getInternalUsersSQL;
-   * private String getNumberOfFilteredInternalUsersSQL;
-   * private String getNumberOfInternalGroupsSQL;
-   * private String getNumberOfInternalUsersSQL;
-   * private String getNumberOfUsersForGroupSQL;
-   * private String isInternalUserInInternalGroupSQL;
-   * private String isPasswordInInternalUserPasswordHistorySQL;
-   */
   private int maxFilteredUsers;
   private int maxPasswordAttempts;
   private int passwordExpiryMonths;
@@ -140,12 +116,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String userTitleAttribute;
   private String userUsernameAttribute;
 
-  /*
-   * private String removeInternalUserFromInternalGroupSQL;
-   * private String saveInternalUserPasswordHistorySQL;
-   * private String updateInternalGroupSQL;
-   */
-
   /**
    * Constructs a new <code>LDAPUserDirectory</code>.
    *
@@ -168,7 +138,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No Host configuration parameter found for the user directory (" + userDirectoryId
+          "No Host configuration parameter found for the user directory (" + userDirectoryId
             + ")");
       }
 
@@ -179,18 +149,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No Port configuration parameter found for the user directory (" + userDirectoryId
+          "No Port configuration parameter found for the user directory (" + userDirectoryId
             + ")");
       }
 
-      if (parameters.containsKey("UseSSL"))
-      {
-        useSSL = Boolean.parseBoolean(parameters.get("UseSSL"));
-      }
-      else
-      {
-        useSSL = false;
-      }
+      useSSL = parameters.containsKey("UseSSL") && Boolean.parseBoolean(parameters.get("UseSSL"));
 
       if (parameters.containsKey("BindDN"))
       {
@@ -199,7 +162,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No BindDN configuration parameter found for the user directory (" + userDirectoryId
+          "No BindDN configuration parameter found for the user directory (" + userDirectoryId
             + ")");
       }
 
@@ -210,7 +173,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No BindPassword configuration parameter found for the user directory ("
+          "No BindPassword configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -221,7 +184,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No BindDN configuration parameter found for the user directory (" + userDirectoryId
+          "No BindDN configuration parameter found for the user directory (" + userDirectoryId
             + ")");
       }
 
@@ -232,7 +195,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserBaseDN configuration parameter found for the user directory ("
+          "No UserBaseDN configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -243,12 +206,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No GroupBaseDN configuration parameter found for the user directory ("
+          "No GroupBaseDN configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
       if ((parameters.containsKey("SharedBaseDN"))
-          && (!StringUtil.isNullOrEmpty(parameters.get("SharedBaseDN"))))
+        && (!StringUtil.isNullOrEmpty(parameters.get("SharedBaseDN"))))
       {
         sharedBaseDN = new LdapName(parameters.get("SharedBaseDN"));
       }
@@ -260,7 +223,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserObjectClass configuration parameter found for the user directory ("
+          "No UserObjectClass configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -271,7 +234,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserUsernameAttribute configuration parameter found for the user directory ("
+          "No UserUsernameAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -282,7 +245,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserPasswordExpiryAttribute configuration parameter found for the user directory ("
+          "No UserPasswordExpiryAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -293,18 +256,18 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException("No UserPasswordAttemptsAttribute configuration parameter"
-            + " found for the user directory (" + userDirectoryId + ")");
+          + " found for the user directory (" + userDirectoryId + ")");
       }
 
       if (parameters.containsKey("UserPasswordHistoryAttribute"))
       {
         userPasswordHistoryAttribute = parameters.get("UserPasswordHistoryAttribute");
-        userPasswordHistoryAttributeArray = new String[] { userPasswordHistoryAttribute };
+        userPasswordHistoryAttributeArray = new String[]{userPasswordHistoryAttribute};
       }
       else
       {
         throw new SecurityException(
-            "No UserPasswordHistoryAttribute configuration parameter found for the user directory ("
+          "No UserPasswordHistoryAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -320,7 +283,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserFirstNamesAttribute configuration parameter found for the user directory ("
+          "No UserFirstNamesAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -331,7 +294,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserLastNameAttribute configuration parameter found for the user directory ("
+          "No UserLastNameAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -352,7 +315,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserMobileNumberAttribute configuration parameter found for the user directory ("
+          "No UserMobileNumberAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -363,7 +326,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No UserEmailAttribute configuration parameter found for the user directory ("
+          "No UserEmailAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -379,7 +342,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No GroupObjectClass configuration parameter found for the user directory ("
+          "No GroupObjectClass configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -390,7 +353,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(
-            "No GroupNameAttribute configuration parameter found for the user directory ("
+          "No GroupNameAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -398,12 +361,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         groupMemberAttribute = parameters.get("GroupMemberAttribute");
 
-        groupMemberAttributeArray = new String[] { groupMemberAttribute };
+        groupMemberAttributeArray = new String[]{groupMemberAttribute};
       }
       else
       {
         throw new SecurityException(
-            "No GroupMemberAttribute configuration parameter found for the user directory ("
+          "No GroupMemberAttribute configuration parameter found for the user directory ("
             + userDirectoryId + ")");
       }
 
@@ -431,7 +394,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       supportPasswordHistory = parameters.containsKey("SupportPasswordHistory")
-          && Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
+        && Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
 
       if (parameters.containsKey("PasswordHistoryMonths"))
       {
@@ -2835,6 +2798,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         if (attributes.get(userPasswordHistoryAttribute) != null)
         {
+          @SuppressWarnings("unchecked")
           NamingEnumeration<String> existingPasswordHashes =
             (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
 

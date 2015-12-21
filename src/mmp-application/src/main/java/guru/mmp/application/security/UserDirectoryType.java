@@ -71,7 +71,7 @@ public class UserDirectoryType
    *
    * @throws SecurityException
    */
-  public Class getAdministrationClass()
+  public Class<?> getAdministrationClass()
     throws SecurityException
   {
     if (administrationClass == null)

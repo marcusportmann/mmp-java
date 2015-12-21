@@ -18,12 +18,11 @@ package guru.mmp.application.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.IDataAccessObject;
-
-import java.util.List;
+import guru.mmp.common.persistence.DAOException;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>IMessagingDAO</code> interface defines the persistence operations for the
@@ -32,7 +31,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface IMessagingDAO extends IDataAccessObject
+public interface IMessagingDAO
 {
   /**
    * Have all the parts been queued for assembly for the message with the specified ID?

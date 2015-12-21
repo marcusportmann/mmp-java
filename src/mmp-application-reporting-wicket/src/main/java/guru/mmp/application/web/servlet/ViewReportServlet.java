@@ -18,7 +18,7 @@ package guru.mmp.application.web.servlet;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
+import guru.mmp.application.reporting.IReportingDAO;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportType;
@@ -26,26 +26,29 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.common.util.ResourceUtil;
 import guru.mmp.common.util.StringUtil;
+
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.*;
+
+import java.sql.Connection;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.servlet.ServletConfig;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-import java.io.*;
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ViewReportServlet</code> class implements the servlet used to view reports.
@@ -59,11 +62,12 @@ public class ViewReportServlet extends HttpServlet
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ViewReportServlet.class);
 
-  /** The data source used to provide connections to the database. */
-  private DataSource dataSource;
-
   /** The real path to the WEB-INF/report folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
+
+  /* Reporting DAO */
+  @Inject
+  private IReportingDAO reportingDAO;
 
   /* Reporting Service */
   @Inject
@@ -77,70 +81,6 @@ public class ViewReportServlet extends HttpServlet
     super();
 
     System.setProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel");
-  }
-
-  /**
-   * Called by the servlet container to indicate to a servlet that the servlet is being placed into
-   * service.
-   *
-   * @throws ServletException
-   */
-  @Override
-  public void init()
-    throws ServletException
-  {
-    super.init();
-
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-  }
-
-  /**
-   * Called by the servlet container to indicate to a servlet that the servlet is being placed into
-   * service.
-   *
-   * @param servletConfig  a <code>ServletConfig</code> object containing the servlet's
-   *                       configuration and initialization parameters
-   *
-   * @throws ServletException
-   */
-  @Override
-  public void init(ServletConfig servletConfig)
-    throws ServletException
-  {
-    super.init(servletConfig);
-
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to initialise the process DAO:"
-          + " Failed to retrieve the data source using the JNDI lookup"
-          + " (java:app/jdbc/ApplicationDataSource)");
-    }
   }
 
   /**
@@ -181,7 +121,7 @@ public class ViewReportServlet extends HttpServlet
               // Local Report
               if (viewReportParameters.getReportType() == ReportType.LOCAL)
               {
-                try (Connection connection = dataSource.getConnection())
+                try (Connection connection = reportingDAO.getDataSource().getConnection())
                 {
                   Map<String, Object> parameters = new HashMap<>();
 
@@ -222,7 +162,7 @@ public class ViewReportServlet extends HttpServlet
 
                 if (reportDefinition != null)
                 {
-                  try (Connection connection = dataSource.getConnection())
+                  try (Connection connection = reportingDAO.getDataSource().getConnection())
                   {
                     // Setup the report parameters
                     Map<String, Object> parameters = new HashMap<>();
@@ -297,8 +237,7 @@ public class ViewReportServlet extends HttpServlet
     {
       response.setContentType("image/png");
 
-      byte[] data =
-        ResourceUtil.getClasspathResource(
+      byte[] data = ResourceUtil.getClasspathResource(
           "guru/mmp/application/web/template/resource/image/reportError.png");
 
       OutputStream out = response.getOutputStream();

@@ -18,9 +18,9 @@ package guru.mmp.application.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.sms.SMS.Status;
+import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 
@@ -412,7 +412,7 @@ public class SMSDAO
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + schemaSeparator;
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
@@ -423,7 +423,7 @@ public class SMSDAO
           + " data access object: " + e.getMessage(), e);
     }
 
-    idGenerator = new IDGenerator(dataSource, DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA);
+    idGenerator = new IDGenerator(dataSource, DataAccessObject.DEFAULT_DATABASE_SCHEMA);
   }
 
   /**

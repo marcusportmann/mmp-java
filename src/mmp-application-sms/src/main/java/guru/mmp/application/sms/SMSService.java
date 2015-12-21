@@ -20,34 +20,47 @@ package guru.mmp.application.sms;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
+
 import guru.mmp.application.Debug;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.StringReader;
+
+import java.net.URL;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+import java.util.concurrent.Future;
+
 import javax.annotation.PostConstruct;
+
 import javax.ejb.AsyncResult;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
+
 import javax.inject.Inject;
+
 import javax.naming.InitialContext;
+
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
-import java.io.StringReader;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.Future;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
@@ -682,49 +695,52 @@ public class SMSService
     try
     {
       // Initialise the configuration
-      if (!registry.integerValueExists("/SMSService", "SendRetryDelay"))
+      if (!registry.integerValueExists("/Services/SMSService", "SendRetryDelay"))
       {
-        registry.setIntegerValue("/SMSService", "SendRetryDelay", 600000);
+        registry.setIntegerValue("/Services/SMSService", "SendRetryDelay", 600000);
       }
 
-      if (!registry.integerValueExists("/SMSService", "MaximumSendAttempts"))
+      if (!registry.integerValueExists("/Services/SMSService", "MaximumSendAttempts"))
       {
-        registry.setIntegerValue("/SMSService", "MaximumSendAttempts", 100);
+        registry.setIntegerValue("/Services/SMSService", "MaximumSendAttempts", 100);
       }
 
-      if (!registry.stringValueExists("/SMSService", "MyMobileAPIUsername"))
+      if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIUsername"))
       {
-        registry.setStringValue("/SMSService", "MyMobileAPIUsername", "MyMobileAPIUsername");
+        registry.setStringValue("/Services/SMSService", "MyMobileAPIUsername",
+            "MyMobileAPIUsername");
       }
 
-      if (!registry.stringValueExists("/SMSService", "MyMobileAPIPassword"))
+      if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIPassword"))
       {
-        registry.setStringValue("/SMSService", "MyMobileAPIPassword", "MyMobileAPIPassword");
+        registry.setStringValue("/Services/SMSService", "MyMobileAPIPassword",
+            "MyMobileAPIPassword");
       }
 
-      if (!registry.stringValueExists("/SMSService", "MyMobileAPIEndPoint"))
+      if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIEndPoint"))
       {
-        registry.setStringValue("/SMSService", "MyMobileAPIEndPoint",
+        registry.setStringValue("/Services/SMSService", "MyMobileAPIEndPoint",
             "http://www.mymobileapi.com/api5/api.asmx");
       }
 
-      sendRetryDelay = registry.getIntegerValue("/SMSService", "SendRetryDelay", 600000);
+      sendRetryDelay = registry.getIntegerValue("/Services/SMSService", "SendRetryDelay", 600000);
 
-      maximumSendAttempts = registry.getIntegerValue("/SMSService", "MaximumSendAttempts", 100);
+      maximumSendAttempts = registry.getIntegerValue("/Services/SMSService", "MaximumSendAttempts",
+          100);
 
-      myMobileAPIUsername = registry.getStringValue("/SMSService", "MyMobileAPIUsername",
+      myMobileAPIUsername = registry.getStringValue("/Services/SMSService", "MyMobileAPIUsername",
           "MyMobileAPIUsername");
 
-      myMobileAPIPassword = registry.getStringValue("/SMSService", "MyMobileAPIPassword",
+      myMobileAPIPassword = registry.getStringValue("/Services/SMSService", "MyMobileAPIPassword",
           "MyMobileAPIPassword");
 
-      myMobileAPIEndPoint = registry.getStringValue("/SMSService", "MyMobileAPIEndPoint",
+      myMobileAPIEndPoint = registry.getStringValue("/Services/SMSService", "MyMobileAPIEndPoint",
           "http://www.mymobileapi.com/api5/api.asmx");
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(
-          "Failed to initialise the configuration for the SMS Service", e);
+      throw new SMSServiceException("Failed to initialise the configuration for the SMS Service",
+          e);
     }
   }
 

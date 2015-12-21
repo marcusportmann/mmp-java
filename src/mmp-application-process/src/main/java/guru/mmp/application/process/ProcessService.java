@@ -18,8 +18,6 @@ package guru.mmp.application.process;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +34,6 @@ import javax.inject.Inject;
 
 import javax.naming.InitialContext;
 
-import javax.sql.DataSource;
-
 /**
  * The <code>ProcessService</code> class provides the Process Service implementation.
  *
@@ -50,9 +46,6 @@ public class ProcessService
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ProcessService.class);
-
-  /** The data source used to provide connections to the database. */
-  private DataSource dataSource;
 
   /* The name of the Process Service instance. */
   private String instanceName;
@@ -311,36 +304,10 @@ public class ProcessService
       // Initialise the configuration for the Process Service instance
       initConfiguration();
     }
-    catch (Exception e)
-    {
-      throw new RuntimeException("Failed to initialise the Process Service", e);
-    }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Process Service: "
+      throw new ProcessServiceException("Failed to initialise the Process Service: "
           + e.getMessage());
-    }
-
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
   }
 

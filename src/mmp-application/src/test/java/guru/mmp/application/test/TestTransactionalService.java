@@ -18,11 +18,9 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
-import guru.mmp.application.persistence.NewTransaction;
-import guru.mmp.application.persistence.Transactional;
-import guru.mmp.application.security.SecurityException;
+import guru.mmp.common.persistence.DataAccessObject;
+import guru.mmp.common.persistence.NewTransaction;
+import guru.mmp.common.persistence.Transactional;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -66,7 +64,7 @@ public class TestTransactionalService
     throws TestTransactionalServiceException
   {
     try (Connection connection = dataSource.getConnection();
-         PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
+      PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
     {
       statement.setString(1, testData.getId());
       statement.setString(2, testData.getName());
@@ -156,23 +154,18 @@ public class TestTransactionalService
 
   /**
    * Initialise the Test Transactional Service instance.
+   *
+   * @throws TestTransactionalServiceException
    */
   @PostConstruct
   public void init()
+    throws TestTransactionalServiceException
   {
     try
     {
-      Thread currentThread = Thread.currentThread();
-
-      InitialContext ic = new InitialContext();
-
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-      int xxx = 0;
-      xxx++;
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -185,9 +178,9 @@ public class TestTransactionalService
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new TestTransactionalServiceException("Failed to retrieve the application data source"
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -209,15 +202,15 @@ public class TestTransactionalService
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + schemaSeparator;
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to initialise the Security Service: " + e.getMessage(),
-          e);
+      throw new TestTransactionalServiceException(
+          "Failed to initialise the Test Transactional Service: " + e.getMessage(), e);
     }
   }
 

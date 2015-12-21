@@ -18,15 +18,14 @@ package guru.mmp.application.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.IDataAccessObject;
+import guru.mmp.common.persistence.DAOException;
 
 /**
  * The <code>ISMSDAO</code> interface defines the persistence operations for the SMS infrastructure.
  *
  * @author Marcus Portmann
  */
-public interface ISMSDAO extends IDataAccessObject
+public interface ISMSDAO
 {
   /**
    * Create the entry for the SMS in the database.

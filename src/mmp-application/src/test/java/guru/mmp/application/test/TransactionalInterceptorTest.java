@@ -19,6 +19,7 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManagerFactory;
+import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -60,8 +61,6 @@ public class TransactionalInterceptorTest
   public void testFailedExecutionInExistingTransaction()
     throws Exception
   {
-    DataSource dataSource = getApplicationDataSource();
-
     TransactionManager transactionManager = TransactionManagerFactory.getTransactionManager();
 
     UserTransaction userTransaction = getUserTransaction();

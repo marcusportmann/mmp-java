@@ -20,25 +20,31 @@ package guru.mmp.application.messaging;
 
 import guru.mmp.application.messaging.Message.Priority;
 import guru.mmp.application.messaging.Message.Status;
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.crypto.EncryptionScheme;
+import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>MessagingDAO</code> class implements the persistence operations for the
@@ -1296,7 +1302,7 @@ public class MessagingDAO
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + schemaSeparator;
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
@@ -1307,7 +1313,7 @@ public class MessagingDAO
           + " data access object: " + e.getMessage(), e);
     }
 
-    idGenerator = new IDGenerator(dataSource, DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA);
+    idGenerator = new IDGenerator(dataSource, DataAccessObject.DEFAULT_DATABASE_SCHEMA);
   }
 
   /**

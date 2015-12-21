@@ -18,10 +18,9 @@ package guru.mmp.application.registry;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.persistence.DAOUtil;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
@@ -676,7 +675,7 @@ public class Registry
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to retrieve the application data source"
+      throw new RegistryException("Failed to retrieve the application data source"
           + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
@@ -722,7 +721,7 @@ public class Registry
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + schemaSeparator;
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);

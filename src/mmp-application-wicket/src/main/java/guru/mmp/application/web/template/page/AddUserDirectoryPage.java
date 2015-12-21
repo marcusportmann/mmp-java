@@ -38,8 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 
-import java.util.Map;
-
 import javax.inject.Inject;
 
 /**
@@ -93,7 +91,7 @@ public class AddUserDirectoryPage extends TemplateWebPage
 
       // The "userDirectoryTypeName" field
       TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName",
-        new Model(userDirectoryType.getName()));
+        new Model<>(userDirectoryType.getName()));
       userDirectoryTypeNameField.setRequired(false);
       userDirectoryTypeNameField.setEnabled(false);
       addForm.add(userDirectoryTypeNameField);

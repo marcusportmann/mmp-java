@@ -18,8 +18,8 @@ package guru.mmp.application.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
+import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
 
@@ -765,8 +765,8 @@ public class CodesDAO
       }
 
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA
-        + idQuote + schemaSeparator;
+      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_DATABASE_SCHEMA + idQuote
+        + schemaSeparator;
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
@@ -777,7 +777,7 @@ public class CodesDAO
           + " data access object: " + e.getMessage(), e);
     }
 
-    idGenerator = new IDGenerator(dataSource, DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA);
+    idGenerator = new IDGenerator(dataSource, DataAccessObject.DEFAULT_DATABASE_SCHEMA);
   }
 
   /**

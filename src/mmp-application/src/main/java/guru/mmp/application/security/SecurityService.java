@@ -18,9 +18,8 @@ package guru.mmp.application.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.application.registry.IRegistry;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
 
@@ -1749,9 +1748,7 @@ public class SecurityService
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -1759,16 +1756,14 @@ public class SecurityService
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to retrieve the application data source"
-        + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-        + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new SecurityException("Failed to retrieve the application data source"
+          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
+          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -1790,7 +1785,7 @@ public class SecurityService
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + schemaSeparator;
 
       // Build the SQL statements
       buildStatements(schemaPrefix);

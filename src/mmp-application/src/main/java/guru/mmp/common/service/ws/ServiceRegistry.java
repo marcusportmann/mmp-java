@@ -18,8 +18,7 @@ package guru.mmp.common.service.ws;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
 
 import org.slf4j.Logger;
@@ -267,7 +266,7 @@ public class ServiceRegistry
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to retrieve the application data source"
+      throw new ServiceRegistryException("Failed to retrieve the application data source"
           + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
@@ -300,7 +299,7 @@ public class ServiceRegistry
       }
 
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA
+      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_DATABASE_SCHEMA
         + idQuote + schemaSeparator;
 
       // Build the SQL statements for the DAO

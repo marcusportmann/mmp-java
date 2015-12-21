@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DataAccessObject;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
 
@@ -1435,8 +1435,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       StringBuilder buffer = new StringBuilder();
 
       buffer.append("UPDATE ");
-      buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
-          getDatabaseCatalogSeparator());
+      buffer.append(DataAccessObject.DEFAULT_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
 
       buffer.append("INTERNAL_USERS ");
 
@@ -1823,8 +1822,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     buffer.append("IU.LAST_NAME, IU.PHONE, IU.FAX, IU.MOBILE, IU.EMAIL, ");
     buffer.append("IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM ");
 
-    buffer.append(DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA).append(
-        getDatabaseCatalogSeparator());
+    buffer.append(DataAccessObject.DEFAULT_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
 
     buffer.append("INTERNAL_USERS IU");
 

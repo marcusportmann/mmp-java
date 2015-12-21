@@ -18,9 +18,8 @@ package guru.mmp.application.task;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.cdi.CDIUtil;
-import guru.mmp.application.persistence.DAOException;
 import guru.mmp.application.registry.IRegistry;
+import guru.mmp.common.cdi.CDIUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,8 +231,8 @@ public class TaskService
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to increment the execution attempts for the scheduled task ("
-          + id + ")", e);
+      throw new TaskServiceException(
+          "Failed to increment the execution attempts for the scheduled task (" + id + ")", e);
     }
   }
 
@@ -452,26 +451,29 @@ public class TaskService
     try
     {
       // Initialise the configuration
-      if (!registry.integerValueExists("/Task", "ScheduledTaskExecutionRetryDelay"))
+      if (!registry.integerValueExists("/Services/TaskService", "ScheduledTaskExecutionRetryDelay"))
       {
-        registry.setIntegerValue("/Task", "ScheduledTaskExecutionRetryDelay", 600000);
+        registry.setIntegerValue("/Services/TaskService", "ScheduledTaskExecutionRetryDelay",
+            600000);
       }
 
-      if (!registry.integerValueExists("/Task", "MaximumScheduledTaskExecutionAttempts"))
+      if (!registry.integerValueExists("/Services/TaskService",
+          "MaximumScheduledTaskExecutionAttempts"))
       {
-        registry.setIntegerValue("/Task", "MaximumScheduledTaskExecutionAttempts", 6 * 24);
+        registry.setIntegerValue("/Services/TaskService", "MaximumScheduledTaskExecutionAttempts",
+            6 * 24);
       }
 
-      scheduledTaskExecutionRetryDelay = registry.getIntegerValue("/Task",
+      scheduledTaskExecutionRetryDelay = registry.getIntegerValue("/Services/TaskService",
           "ScheduledTaskExecutionRetryDelay", 600000);
 
-      maximumScheduledTaskExecutionAttempts = registry.getIntegerValue("/Task",
+      maximumScheduledTaskExecutionAttempts = registry.getIntegerValue("/Services/TaskService",
           "MaximumScheduledTaskExecutionAttempts", 6 * 24);
     }
     catch (Throwable e)
     {
-      throw new TaskServiceException(
-          "Failed to initialise the configuration for the Task Service", e);
+      throw new TaskServiceException("Failed to initialise the configuration for the Task Service",
+          e);
     }
   }
 

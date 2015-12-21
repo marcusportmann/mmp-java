@@ -18,8 +18,9 @@ package guru.mmp.application.process;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
+
+import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 
 import org.slf4j.Logger;
@@ -803,7 +804,7 @@ public class ProcessDAO
       }
 
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA
+      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_DATABASE_SCHEMA
         + idQuote + schemaSeparator;
 
       // Build the SQL statements for the DAO

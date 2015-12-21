@@ -18,7 +18,7 @@ package guru.mmp.application.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
+import guru.mmp.common.persistence.DAOException;
 
 //~--- JDK imports ------------------------------------------------------------
 

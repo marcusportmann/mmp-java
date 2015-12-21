@@ -18,7 +18,7 @@ package guru.mmp.application.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.cdi.CDIUtil;
+import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHandlerResolver;
 import guru.mmp.common.util.DateUtil;
 import guru.mmp.common.xml.DtdJarResolver;

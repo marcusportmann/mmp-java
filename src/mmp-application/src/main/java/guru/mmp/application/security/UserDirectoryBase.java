@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DataAccessObject;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.Base64;
 
@@ -119,8 +119,7 @@ public abstract class UserDirectoryBase
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA
-        + databaseCatalogSeparator;
+      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + databaseCatalogSeparator;
 
       // Build the SQL statements
       buildStatements(schemaPrefix);

@@ -18,8 +18,8 @@ package guru.mmp.application.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.DataAccessObject;
+import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DataAccessObject;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -51,7 +51,7 @@ public class ReportingDAO
   private String createReportDefinitionSQL;
 
   /**
-   * The data source used to provide connections to the database.
+   * The data source used to provide connections to the application database.
    */
   private DataSource dataSource;
   private String deleteReportDefinitionSQL;
@@ -66,75 +66,14 @@ public class ReportingDAO
   /**
    * Constructs a new <code>ReportingDAO</code>.
    */
-  @SuppressWarnings("unused")
   public ReportingDAO() {}
-
-  /**
-   * Constructs a new <code>ReportingDAO</code>.
-   *
-   * @param dataSource the data source to use
-   * @throws DAOException
-   */
-  @SuppressWarnings("unused")
-  public ReportingDAO(DataSource dataSource)
-    throws DAOException
-  {
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object: The specified data source is NULL");
-    }
-
-    this.dataSource = dataSource;
-
-    init();
-  }
-
-  /**
-   * Constructs a new <code>ReportingDAO</code>.
-   *
-   * @param dataSourceJndiName the JNDI name of the data source used to access the database
-   * @throws DAOException
-   */
-  @SuppressWarnings("unused")
-  public ReportingDAO(String dataSourceJndiName)
-    throws DAOException
-  {
-    try
-    {
-      InitialContext ic = new InitialContext();
-
-      try
-      {
-        this.dataSource = (DataSource) ic.lookup(dataSourceJndiName);
-      }
-      finally
-      {
-        try
-        {
-          ic.close();
-        }
-        catch (Throwable e)
-        {
-          // Do nothing
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object: Failed to lookup the data source (" + dataSourceJndiName
-          + ") using JNDI: " + e.getMessage(), e);
-    }
-
-    init();
-  }
 
   /**
    * Create the new report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
    *                         for the new report definition
+   *
    * @throws DAOException
    */
   public void createReportDefinition(ReportDefinition reportDefinition)
@@ -165,6 +104,7 @@ public class ReportingDAO
    * Delete the existing report definition.
    *
    * @param id the ID uniquely identifying the report definition
+   *
    * @throws DAOException
    */
   public void deleteReportDefinition(String id)
@@ -189,12 +129,24 @@ public class ReportingDAO
   }
 
   /**
+   * Returns the data source used to provide connections to the application database.
+   *
+   * @return the data source used to provide connections to the application database
+   */
+  public DataSource getDataSource()
+  {
+    return dataSource;
+  }
+
+  /**
    * Returns the number of report definitions associated with the organisation identified by the
    * specified organisation code.
    *
    * @param organisation the organisation code identifying the organisation
+   *
    * @return the number of report definitions associated with the organisation identified by the
-   * specified organisation code
+   *         specified organisation code
+   *
    * @throws DAOException
    */
   public int getNumberOfReportDefinitionsForOrganisation(String organisation)
@@ -233,8 +185,10 @@ public class ReportingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           report definition
+   *
    * @return the report definition with the specified ID or <code>null</code> if the report
-   * definition could not be found
+   *         definition could not be found
+   *
    * @throws DAOException
    */
   public ReportDefinition getReportDefinition(String id)
@@ -269,8 +223,10 @@ public class ReportingDAO
    * identified by the specified organisation code.
    *
    * @param organisation the organisation code identifying the organisation
+   *
    * @return the summaries for all the report definitions associated with the organisation
-   * identified by the specified organisation code
+   *         identified by the specified organisation code
+   *
    * @throws DAOException
    */
   public List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(
@@ -308,8 +264,10 @@ public class ReportingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           report definition
+   *
    * @return the summary for the report definition with the specified ID or <code>null</code> if
-   * the report definition could not be found
+   *         the report definition could not be found
+   *
    * @throws DAOException
    */
   public ReportDefinitionSummary getReportDefinitionSummary(String id)
@@ -344,8 +302,10 @@ public class ReportingDAO
    * organisation code.
    *
    * @param organisation the organisation code identifying the organisation
+   *
    * @return all the report definitions associated with the organisation identified by the specified
-   * organisation code
+   *         organisation code
+   *
    * @throws DAOException
    */
   public List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
@@ -432,8 +392,8 @@ public class ReportingDAO
       }
 
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA
-        + idQuote + schemaSeparator;
+      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_DATABASE_SCHEMA + idQuote
+        + schemaSeparator;
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);

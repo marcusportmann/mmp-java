@@ -16,6 +16,7 @@
 
   <modules>
     <module>mmp-common</module>
+    <module>mmp-test</module>
     <module>mmp-application</module>
     <module>mmp-application-wicket</module>
     <module>mmp-application-task</module>

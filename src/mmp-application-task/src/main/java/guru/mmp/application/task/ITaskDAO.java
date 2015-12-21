@@ -18,7 +18,7 @@ package guru.mmp.application.task;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
+import guru.mmp.common.persistence.DAOException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -29,7 +29,6 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public interface ITaskDAO
 {
   /**

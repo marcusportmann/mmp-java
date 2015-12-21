@@ -40,10 +40,7 @@ public class TransactionManagerFactory
   private TransactionManagerFactory() {}
 
   /**
-   * This class retrieves the implementation of the TransactionManager for the particular J2EE
-   * application server being used.
-   * <p/>
-   * It currently supports WebSphere Applicaton Server v6, v5.1, v5 and v4.
+   * This class retrieves the TransactionManager implementation from JNDI.
    *
    * @return the TransactionManger
    *

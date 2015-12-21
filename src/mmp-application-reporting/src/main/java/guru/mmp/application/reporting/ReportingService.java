@@ -18,7 +18,6 @@ package guru.mmp.application.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
 import guru.mmp.common.util.StringUtil;
 
 import net.sf.jasperreports.engine.JRParameter;
@@ -67,9 +66,6 @@ public class ReportingService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
-  /** The data source used to provide connections to the database. */
-  private DataSource dataSource;
-
   /* The name of the Reporting Service instance. */
   private String instanceName;
 
@@ -99,7 +95,7 @@ public class ReportingService
   public byte[] createReportPDF(String definitionId, Map<String, Object> parameters)
     throws ReportingServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try (Connection connection = reportingDAO.getDataSource().getConnection())
     {
       ReportDefinition reportDefinition = getReportDefinition(definitionId);
 
@@ -416,36 +412,10 @@ public class ReportingService
       // Initialise the configuration for the Reporting Service instance
       initConfiguration();
     }
-    catch (Exception e)
-    {
-      throw new RuntimeException("Failed to initialise the Reporting Service", e);
-    }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Reporting Service: "
+      throw new ReportingServiceException("Failed to initialise the Reporting Service: "
           + e.getMessage());
-    }
-
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
   }
 

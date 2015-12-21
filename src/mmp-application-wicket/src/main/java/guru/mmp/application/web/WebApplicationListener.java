@@ -18,8 +18,8 @@ package guru.mmp.application.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DataAccessObject;
 import guru.mmp.common.persistence.DAOUtil;
+import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
@@ -190,7 +190,7 @@ public class WebApplicationListener
 
       // Create and populate the database tables if required
       if (!DAOUtil.tableExists(connection, null,
-          DataAccessObject.DEFAULT_APPLICATION_DATABASE_SCHEMA, "REGISTRY"))
+          DataAccessObject.DEFAULT_DATABASE_SCHEMA, "REGISTRY"))
       {
         logger.info("Creating and populating the default database tables");
 

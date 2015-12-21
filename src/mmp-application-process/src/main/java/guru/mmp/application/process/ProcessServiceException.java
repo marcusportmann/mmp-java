@@ -19,14 +19,11 @@ package guru.mmp.application.process;
 /**
  * The <code>ProcessServiceException</code> exception is thrown to indicate an error condition when
  * working with the Process Service.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction
- *       by the <code>TransactionalInterceptor</code>.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ProcessServiceException extends Exception
+public class ProcessServiceException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

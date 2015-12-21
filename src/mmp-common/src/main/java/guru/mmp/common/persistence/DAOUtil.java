@@ -749,27 +749,3 @@ public class DAOUtil
     return text;
   }
 }
-
-
-
-/*
-DataSource result = (DataSource) dataSources.get(jndiName);
-
-if (result == null)
-{
-synchronized (dataSources)
-{
-result = (DataSource) dataSources.get(jndiName);
-if (result == null)
-{
-result = new DB2DataSource();
-((DB2DataSource)result).setDatabaseName(jndiName);
-((DB2DataSource)result).setUser("db2admin");
-((DB2DataSource)result).setPassword("db2admin");
-dataSources.put(jndiName, result);
-}
-}
-}
-
-return result;
- */

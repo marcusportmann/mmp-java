@@ -19,11 +19,11 @@ package guru.mmp.application.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.cdi.CDIUtil;
 import guru.mmp.application.messaging.MessagePart.Status;
 import guru.mmp.application.messaging.handler.IMessageHandler;
 import guru.mmp.application.messaging.handler.MessageHandlerConfig;
 import guru.mmp.application.registry.IRegistry;
+import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.util.Base64;
@@ -1553,30 +1553,31 @@ public class MessagingService
     try
     {
       // Initialise the configuration
-      if (!registry.stringValueExists("/Messaging", "AESEncryptionMasterKey"))
+      if (!registry.stringValueExists("/Services/MessagingService", "AESEncryptionMasterKey"))
       {
-        registry.setStringValue("/Messaging", "AESEncryptionMasterKey",
+        registry.setStringValue("/Services/MessagingService", "AESEncryptionMasterKey",
             "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=", REGISTRY_ENCRYPTION_KEY,
             REGISTRY_ENCRYPTION_IV);
       }
 
-      if (!registry.integerValueExists("/Messaging", "ProcessingRetryDelay"))
+      if (!registry.integerValueExists("/Services/MessagingService", "ProcessingRetryDelay"))
       {
-        registry.setIntegerValue("/Messaging", "ProcessingRetryDelay", 60000);
+        registry.setIntegerValue("/Services/MessagingService", "ProcessingRetryDelay", 60000);
       }
 
-      if (!registry.integerValueExists("/Messaging", "MaximumProcessingAttempts"))
+      if (!registry.integerValueExists("/Services/MessagingService", "MaximumProcessingAttempts"))
       {
-        registry.setIntegerValue("/Messaging", "MaximumProcessingAttempts", 10000);
+        registry.setIntegerValue("/Services/MessagingService", "MaximumProcessingAttempts", 10000);
       }
 
-      aesEncryptionMasterKey = Base64.decode(registry.getStringValue("/Messaging",
+      aesEncryptionMasterKey = Base64.decode(registry.getStringValue("/Services/MessagingService",
           "AESEncryptionMasterKey", "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=",
           REGISTRY_ENCRYPTION_KEY, REGISTRY_ENCRYPTION_IV));
 
-      processingRetryDelay = registry.getIntegerValue("/Messaging", "ProcessingRetryDelay", 60000);
+      processingRetryDelay = registry.getIntegerValue("/Services/MessagingService",
+          "ProcessingRetryDelay", 60000);
 
-      maximumProcessingAttempts = registry.getIntegerValue("/Messaging",
+      maximumProcessingAttempts = registry.getIntegerValue("/Services/MessagingService",
           "MaximumProcessingAttempts", 10000);
     }
     catch (Throwable e)

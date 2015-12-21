@@ -21,6 +21,7 @@ package guru.mmp.application.test;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.security.*;
 
+import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

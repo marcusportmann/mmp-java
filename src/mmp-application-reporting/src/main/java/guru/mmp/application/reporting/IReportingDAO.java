@@ -18,12 +18,13 @@ package guru.mmp.application.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.DAOException;
-import guru.mmp.application.persistence.IDataAccessObject;
+import guru.mmp.common.persistence.DAOException;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>IReportingDAO</code> interface defines the persistence operations for the
@@ -31,7 +32,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public interface IReportingDAO extends IDataAccessObject
+public interface IReportingDAO
 {
   /**
    * Create the new report definition.
@@ -53,6 +54,13 @@ public interface IReportingDAO extends IDataAccessObject
    */
   void deleteReportDefinition(String id)
     throws DAOException;
+
+  /**
+   * Returns the data source used to provide connections to the application database.
+   *
+   * @return the data source used to provide connections to the application database
+   */
+  DataSource getDataSource();
 
   /**
    * Returns the number of report definitions associated with the organisation identified by the
