@@ -32,6 +32,17 @@ import java.util.List;
 public interface ITaskDAO
 {
   /**
+   * Create the entry for the scheduled task in the database.
+   *
+   * @param scheduledTask the <code>ScheduledTask</code> instance containing the information for
+   *                      the scheduled task
+   *
+   * @throws DAOException
+   */
+  void createScheduledTask(ScheduledTask scheduledTask)
+    throws DAOException;
+
+  /**
    * Retrieve the next task that is scheduled for execution.
    * <p/>
    * The scheduled task will be locked to prevent duplicate processing.

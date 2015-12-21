@@ -18,6 +18,8 @@ package guru.mmp.application.task;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import guru.mmp.common.persistence.DAOException;
+
 import java.util.List;
 
 /**
@@ -29,6 +31,17 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface ITaskService
 {
+  /**
+   * Create the scheduled task.
+   *
+   * @param scheduledTask the <code>ScheduledTask</code> instance containing the information for
+   *                      the scheduled task
+   *
+   * @throws TaskServiceException
+   */
+  public void createScheduledTask(ScheduledTask scheduledTask)
+    throws TaskServiceException;
+
   /**
    * Execute the scheduled task.
    *

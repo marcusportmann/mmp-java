@@ -82,6 +82,39 @@ public class TaskDAO
   public TaskDAO() {}
 
   /**
+   * Create the entry for the scheduled task in the database.
+   *
+   * @param scheduledTask the <code>ScheduledTask</code> instance containing the information for
+   *                      the scheduled task
+   *
+   * @throws DAOException
+   */
+  public void createScheduledTask(ScheduledTask scheduledTask)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+         PreparedStatement statement = connection.prepareStatement(createScheduledTaskSQL))
+    {
+      statement.setString(1, scheduledTask.getId());
+      statement.setString(2, scheduledTask.getName());
+      statement.setString(3, scheduledTask.getSchedulingPattern());
+      statement.setString(4, scheduledTask.getTaskClass());
+      statement.setInt(5, ScheduledTask.Status.SCHEDULED.getCode());
+
+      if (statement.executeUpdate() != 1)
+      {
+        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
+          + createScheduledTaskSQL + ")");
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException("Failed to add the scheduled task (" + scheduledTask.getName() + ") to the database", e);
+    }
+
+  }
+
+  /**
    * Retrieve the next task that is scheduled for execution.
    * <p/>
    * The scheduled task will be locked to prevent duplicate processing.
@@ -625,8 +658,7 @@ public class TaskDAO
   {
     // createScheduledTaskSQL
     createScheduledTaskSQL = "INSERT INTO " + schemaPrefix + "SCHEDULED_TASKS"
-        + " (ID, NAME, SCHEDULING_PATTERN, TASK_CLASS, STATUS, EXECUTION_ATTEMPTS, LOCK_NAME, "
-        + "LAST_EXECUTED, NEXT_EXECUTION, UPDATED)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      + " (ID, NAME, SCHEDULING_PATTERN, TASK_CLASS, STATUS) VALUES (?, ?, ?, ?, ?)";
 
     // deleteScheduledTaskSQL
     deleteScheduledTaskSQL = "DELETE FROM " + schemaPrefix + "SCHEDULED_TASKS WHERE ID=?";

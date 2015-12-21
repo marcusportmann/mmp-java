@@ -79,6 +79,27 @@ public class TaskService
   public TaskService() {}
 
   /**
+   * Create the scheduled task.
+   *
+   * @param scheduledTask the <code>ScheduledTask</code> instance containing the information for
+   *                      the scheduled task
+   *
+   * @throws TaskServiceException
+   */
+  public void createScheduledTask(ScheduledTask scheduledTask)
+    throws TaskServiceException
+  {
+    try
+    {
+      taskDAO.createScheduledTask(scheduledTask);
+    }
+    catch (Throwable e)
+    {
+      throw new TaskServiceException("Failed to create the scheduled task", e);
+    }
+  }
+
+  /**
    * Execute the scheduled task.
    *
    * @param scheduledTask the scheduled task
