@@ -654,12 +654,9 @@ public class Registry
 
   /**
    * Initialise the Registry.
-   *
-   * @throws RegistryException
    */
   @PostConstruct
   public void init()
-    throws RegistryException
   {
     try
     {
@@ -678,7 +675,7 @@ public class Registry
 
     if (dataSource == null)
     {
-      throw new RegistryException("Failed to retrieve the application data source"
+      throw new RuntimeException("Failed to retrieve the application data source"
           + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
@@ -700,7 +697,7 @@ public class Registry
 
     if (registryPathPrefix == null)
     {
-      throw new RegistryException("Failed to initialise the Registry: The path prefix is NULL");
+      throw new RuntimeException("Failed to initialise the Registry: The path prefix is NULL");
     }
 
     registryPathPrefix = fixRegistryPathPrefix(registryPathPrefix);
@@ -731,11 +728,11 @@ public class Registry
     }
     catch (Exception e)
     {
-      throw new RegistryException("Failed to initialise the Registry: " + e.getMessage(), e);
+      throw new RuntimeException("Failed to initialise the Registry: " + e.getMessage(), e);
     }
     catch (Throwable e)
     {
-      throw new RegistryException("Failed to initialise the Registry: " + e.getMessage());
+      throw new RuntimeException("Failed to initialise the Registry: " + e.getMessage());
     }
   }
 

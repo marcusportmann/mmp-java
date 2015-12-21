@@ -19,12 +19,17 @@ package guru.mmp.application.task;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.registry.IRegistry;
+import guru.mmp.application.security.User;
 import guru.mmp.common.cdi.CDIUtil;
+import guru.mmp.common.persistence.DAOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -214,6 +219,49 @@ public class TaskService
   }
 
   /**
+   * Retrieve the number of scheduled tasks.
+   *
+   * @return the number of scheduled tasks
+   *
+   * @throws TaskServiceException
+   */
+  public int getNumberOfScheduledTasks()
+    throws TaskServiceException
+  {
+    try
+    {
+      return taskDAO.getNumberOfScheduledTasks();
+    }
+    catch (Throwable e)
+    {
+      throw new TaskServiceException("Failed to retrieve the number of scheduled tasks", e);
+    }
+  }
+
+  /**
+   * Retrieve the scheduled task with the specified ID.
+   *
+   * @param id the ID uniquely identifying the scheduled task
+   *
+   * @return the scheduled task with the specified ID or <code>null</code> if the scheduled task
+   *         could not be found
+   *
+   * @throws TaskServiceException
+   */
+  public ScheduledTask getScheduledTask(String id)
+    throws TaskServiceException
+  {
+    try
+    {
+      return taskDAO.getScheduledTask(id);
+    }
+    catch (Throwable e)
+    {
+      throw new TaskServiceException("Failed to retrieve the scheduled task (" + id + ")", e);
+    }
+  }
+
+  /**
    * Retrieve the parameters for the scheduled task with the specified ID.
    *
    * @param id the ID uniquely identifying the scheduled task
@@ -233,6 +281,26 @@ public class TaskService
     {
       throw new TaskServiceException("Failed to retrieve the parameters for the scheduled task ("
           + id + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the scheduled tasks.
+   *
+   * @return the scheduled tasks
+   *
+   * @throws TaskServiceException
+   */
+  public List<ScheduledTask> getScheduledTasks()
+    throws TaskServiceException
+  {
+    try
+    {
+      return taskDAO.getScheduledTasks();
+    }
+    catch (Throwable e)
+    {
+      throw new TaskServiceException("Failed to retrieve scheduled tasks", e);
     }
   }
 
@@ -259,12 +327,9 @@ public class TaskService
 
   /**
    * Initialise the Task Service instance.
-   *
-   * @throws TaskServiceException
    */
   @PostConstruct
   public void init()
-    throws TaskServiceException
   {
     logger.info("Initialising the Task Service instance (" + getInstanceName() + ")");
 
@@ -275,7 +340,7 @@ public class TaskService
     }
     catch (Throwable e)
     {
-      throw new TaskServiceException("Failed to initialise the Task Service", e);
+      throw new RuntimeException("Failed to initialise the Task Service", e);
     }
   }
 

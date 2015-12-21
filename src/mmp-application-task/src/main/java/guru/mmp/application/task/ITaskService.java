@@ -16,9 +16,11 @@
 
 package guru.mmp.application.task;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.DAOException;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
@@ -39,7 +41,7 @@ public interface ITaskService
    *
    * @throws TaskServiceException
    */
-  public void createScheduledTask(ScheduledTask scheduledTask)
+  void createScheduledTask(ScheduledTask scheduledTask)
     throws TaskServiceException;
 
   /**
@@ -73,6 +75,29 @@ public interface ITaskService
     throws TaskServiceException;
 
   /**
+   * Retrieve the number of scheduled tasks.
+   *
+   * @return the number of scheduled tasks
+   *
+   * @throws TaskServiceException
+   */
+  int getNumberOfScheduledTasks()
+    throws TaskServiceException;
+
+  /**
+   * Retrieve the scheduled task with the specified ID.
+   *
+   * @param id the ID uniquely identifying the scheduled task
+   *
+   * @return the scheduled task with the specified ID or <code>null</code> if the scheduled task
+   *         could not be found
+   *
+   * @throws TaskServiceException
+   */
+  ScheduledTask getScheduledTask(String id)
+    throws TaskServiceException;
+
+  /**
    * Retrieve the parameters for the scheduled task with the specified ID.
    *
    * @param id the ID uniquely identifying the scheduled task
@@ -82,6 +107,16 @@ public interface ITaskService
    * @throws TaskServiceException
    */
   List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
+    throws TaskServiceException;
+
+  /**
+   * Retrieve the scheduled tasks.
+   *
+   * @return the scheduled tasks
+   *
+   * @throws TaskServiceException
+   */
+  List<ScheduledTask> getScheduledTasks()
     throws TaskServiceException;
 
   /**

@@ -61,6 +61,29 @@ public interface ITaskDAO
     throws DAOException;
 
   /**
+   * Retrieve the number of scheduled tasks.
+   *
+   * @return the number of scheduled tasks
+   *
+   * @throws DAOException
+   */
+  int getNumberOfScheduledTasks()
+    throws DAOException;
+
+  /**
+   * Retrieve the scheduled task with the specified ID.
+   *
+   * @param id the ID uniquely identifying the scheduled task
+   *
+   * @return the scheduled task with the specified ID or <code>null</code> if the scheduled task
+   *         could not be found
+   *
+   * @throws DAOException
+   */
+  ScheduledTask getScheduledTask(String id)
+    throws DAOException;
+
+  /**
    * Retrieve the parameters for the scheduled task with the specified ID.
    *
    * @param id the ID uniquely identifying the scheduled task
@@ -70,6 +93,16 @@ public interface ITaskDAO
    * @throws DAOException
    */
   List<ScheduledTaskParameter> getScheduledTaskParameters(String id)
+    throws DAOException;
+
+  /**
+   * Retrieve the scheduled tasks.
+   *
+   * @return the scheduled tasks
+   *
+   * @throws DAOException
+   */
+  List<ScheduledTask> getScheduledTasks()
     throws DAOException;
 
   /**

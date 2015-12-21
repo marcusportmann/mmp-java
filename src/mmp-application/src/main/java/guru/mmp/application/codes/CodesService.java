@@ -752,12 +752,9 @@ public class CodesService
 
   /**
    * Initialise the Codes Service instance.
-   *
-   * @throws CodesServiceException
    */
   @PostConstruct
   public void init()
-    throws CodesServiceException
   {
     logger.info("Initialising the Codes Service");
 
@@ -776,7 +773,7 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException("Failed to initialise the Codes Service", e);
+      throw new RuntimeException("Failed to initialise the Codes Service", e);
     }
   }
 

@@ -359,6 +359,10 @@ public class SecurityServiceTest
 
     compareGroups(group, retrievedGroup);
 
+    int numberOfGroups = securityService.getNumberOfGroups(userDirectory.getId());
+
+    assertEquals("The correct number of groups (1) was not retrieved", 1, numberOfGroups);
+
     List<Group> retrievedGroups = securityService.getGroups(userDirectory.getId());
 
     assertEquals("The correct number of groups (1) was not retrieved", 1, retrievedGroups.size());
@@ -432,7 +436,6 @@ public class SecurityServiceTest
   @Test
   public void isUserInGroupTest()
     throws Exception
-
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -460,7 +463,6 @@ public class SecurityServiceTest
   @Test(expected = guru.mmp.application.security.UserLockedException.class)
   public void lockedUserTest()
     throws Exception
-
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -492,6 +494,12 @@ public class SecurityServiceTest
     Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode());
 
     compareOrganisations(organisation, retrievedOrganisation);
+
+    int numberOfOrganisations = securityService.getNumberOfOrganisations();
+
+    assertEquals("The correct number of organisations ("
+        + (beforeRetrievedOrganisations.size() + 1)
+        + ") was not retrieved", beforeRetrievedOrganisations.size() + 1, numberOfOrganisations);
 
     List<Organisation> afterRetrievedOrganisations = securityService.getOrganisations();
 
@@ -540,7 +548,6 @@ public class SecurityServiceTest
   @Test
   public void removeUserFromGroupTest()
     throws Exception
-
   {
     Organisation organisation = getTestOrganisationDetails();
 
@@ -646,6 +653,10 @@ public class SecurityServiceTest
     User retrievedUser = securityService.getUser(userDirectory.getId(), user.getUsername());
 
     compareUsers(user, retrievedUser, false);
+
+    int numberOfUsers = securityService.getNumberOfUsers(userDirectory.getId());
+
+    assertEquals("The correct number of users (1) was not retrieved", 1, numberOfUsers);
 
     List<User> retrievedUsers = securityService.getUsers(userDirectory.getId());
 

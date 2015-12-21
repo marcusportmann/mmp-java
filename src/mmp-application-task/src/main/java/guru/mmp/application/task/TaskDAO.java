@@ -18,6 +18,9 @@ package guru.mmp.application.task;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.security.SecurityException;
+import guru.mmp.application.security.User;
+import guru.mmp.application.security.UserDirectoryNotFoundException;
 import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
@@ -65,9 +68,10 @@ public class TaskDAO
   private String deleteScheduledTaskSQL;
   private String getNextTaskScheduledForExecutionSQL;
   private String getNextUnscheduledTaskSQL;
-  @SuppressWarnings("unused")
-  private String getScheduledTaskByIdSQL;
+  private String getNumberOfScheduledTasksSQL;
   private String getScheduledTaskParametersSQL;
+  private String getScheduledTaskSQL;
+  private String getScheduledTasksSQL;
   private String getUnscheduledTasksSQL;
   private String incrementScheduledTaskExecutionAttemptsSQL;
   private String lockScheduledTaskSQL;
@@ -93,7 +97,7 @@ public class TaskDAO
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-         PreparedStatement statement = connection.prepareStatement(createScheduledTaskSQL))
+      PreparedStatement statement = connection.prepareStatement(createScheduledTaskSQL))
     {
       statement.setString(1, scheduledTask.getId());
       statement.setString(2, scheduledTask.getName());
@@ -104,14 +108,14 @@ public class TaskDAO
       if (statement.executeUpdate() != 1)
       {
         throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-          + createScheduledTaskSQL + ")");
+            + createScheduledTaskSQL + ")");
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to add the scheduled task (" + scheduledTask.getName() + ") to the database", e);
+      throw new DAOException("Failed to add the scheduled task (" + scheduledTask.getName()
+          + ") to the database", e);
     }
-
   }
 
   /**
@@ -227,6 +231,74 @@ public class TaskDAO
   }
 
   /**
+   * Retrieve the number of scheduled tasks.
+   *
+   * @return the number of scheduled tasks
+   *
+   * @throws DAOException
+   */
+  public int getNumberOfScheduledTasks()
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getNumberOfScheduledTasksSQL))
+    {
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException("Failed to retrieve the number of scheduled tasks", e);
+    }
+  }
+
+  /**
+   * Retrieve the scheduled task with the specified ID.
+   *
+   * @param id the ID uniquely identifying the scheduled task
+   *
+   * @return the scheduled task with the specified ID or <code>null</code> if the scheduled task
+   *         could not be found
+   *
+   * @throws DAOException
+   */
+  public ScheduledTask getScheduledTask(String id)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getScheduledTaskSQL))
+    {
+      statement.setString(1, id);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return getScheduledTask(rs);
+        }
+        else
+        {
+          return null;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException("Failed to retrieve the scheduled task (" + id
+          + ") from the database", e);
+    }
+  }
+
+  /**
    * Retrieve the parameters for the scheduled task with the specified ID.
    *
    * @param id the ID uniquely identifying the scheduled task
@@ -259,6 +331,37 @@ public class TaskDAO
     {
       throw new DAOException("Failed to retrieve the parameters for the scheduled task (" + id
           + ") from the database", e);
+    }
+  }
+
+  /**
+   * Retrieve the scheduled tasks.
+   *
+   * @return the scheduled tasks
+   *
+   * @throws DAOException
+   */
+  public List<ScheduledTask> getScheduledTasks()
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getScheduledTasksSQL))
+    {
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<ScheduledTask> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(getScheduledTask(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException("Failed to retrieve the scheduled tasks", e);
     }
   }
 
@@ -658,7 +761,7 @@ public class TaskDAO
   {
     // createScheduledTaskSQL
     createScheduledTaskSQL = "INSERT INTO " + schemaPrefix + "SCHEDULED_TASKS"
-      + " (ID, NAME, SCHEDULING_PATTERN, TASK_CLASS, STATUS) VALUES (?, ?, ?, ?, ?)";
+        + " (ID, NAME, SCHEDULING_PATTERN, TASK_CLASS, STATUS) VALUES (?, ?, ?, ?, ?)";
 
     // deleteScheduledTaskSQL
     deleteScheduledTaskSQL = "DELETE FROM " + schemaPrefix + "SCHEDULED_TASKS WHERE ID=?";
@@ -678,10 +781,18 @@ public class TaskDAO
         + schemaPrefix + "SCHEDULED_TASKS" + " WHERE NEXT_EXECUTION IS NULL AND STATUS <= 2"
         + " ORDER BY UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
-    // getScheduledTaskByIdSQL
-    getScheduledTaskByIdSQL = "SELECT ID, NAME, SCHEDULING_PATTERN, TASK_CLASS, STATUS,"
+    // getNumberOfScheduledTasksSQL
+    getNumberOfScheduledTasksSQL = "SELECT COUNT(ID) FROM " + schemaPrefix + "SCHEDULED_TASKS";
+
+    // getScheduledTaskSQL
+    getScheduledTaskSQL = "SELECT ID, NAME, SCHEDULING_PATTERN, TASK_CLASS, STATUS,"
         + " EXECUTION_ATTEMPTS, LOCK_NAME, LAST_EXECUTED, NEXT_EXECUTION, UPDATED" + " FROM "
         + schemaPrefix + "SCHEDULED_TASKS" + " WHERE ID = ?";
+
+    // getScheduledTasksSQL
+    getScheduledTasksSQL = "SELECT ID, NAME, SCHEDULING_PATTERN, TASK_CLASS, STATUS,"
+        + " EXECUTION_ATTEMPTS, LOCK_NAME, LAST_EXECUTED, NEXT_EXECUTION, UPDATED" + " FROM "
+        + schemaPrefix + "SCHEDULED_TASKS";
 
     // getScheduledTaskParametersSQL
     getScheduledTaskParametersSQL = "SELECT ID, SCHEDULED_TASK_ID, NAME, VALUE" + " FROM "

@@ -1731,12 +1731,9 @@ public class SecurityService
 
   /**
    * Initialise the <code>SecurityService</code> instance.
-   *
-   * @throws SecurityException
    */
   @PostConstruct
   public void init()
-    throws SecurityException
   {
     try
     {
@@ -1755,7 +1752,7 @@ public class SecurityService
 
     if (dataSource == null)
     {
-      throw new SecurityException("Failed to retrieve the application data source"
+      throw new RuntimeException("Failed to retrieve the application data source"
           + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
           + " (java:comp/env/jdbc/ApplicationDataSource)");
     }
@@ -1795,7 +1792,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to initialise the Security Service: " + e.getMessage(),
+      throw new RuntimeException("Failed to initialise the Security Service: " + e.getMessage(),
           e);
     }
   }
