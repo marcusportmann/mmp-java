@@ -100,7 +100,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    *
    * @throws SecurityException
    */
-  public InternalUserDirectory(long userDirectoryId, Map<String, String> parameters)
+  public InternalUserDirectory(UUID userDirectoryId, Map<String, String> parameters)
     throws SecurityException
   {
     super(userDirectoryId, parameters);
@@ -1993,7 +1993,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param connection     the existing database connection to use
    * @param internalUserId the numeric ID uniquely identifying the internal user
    *
-   * @return the list of authorised function codes for the internal user with the specified ID
+   * @return the list of authorised function codes for the internal user
    *
    * @throws SQLException
    */

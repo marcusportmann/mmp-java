@@ -19,6 +19,7 @@ package guru.mmp.application.codes;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * The <code>Code</code> class holds the information for a code.
@@ -31,10 +32,10 @@ public class Code
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the category the code is
-   * associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the code category the code
+   * is associated with.
    */
-  private String categoryId;
+  private UUID categoryId;
 
   /**
    * The description for the code.
@@ -65,13 +66,13 @@ public class Code
    * Constructs a new <code>Code</code>.
    *
    * @param id          the ID used to uniquely identify the code
-   * @param categoryId  the Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param categoryId  the Universally Unique Identifier (UUID) used to uniquely identify the code
    *                    category the code is associated with
    * @param name        the name of the code
    * @param description the description for the code
    * @param value       the value for the code
    */
-  public Code(String id, String categoryId, String name, String description, String value)
+  public Code(String id, UUID categoryId, String name, String description, String value)
   {
     this.id = id;
     this.categoryId = categoryId;
@@ -81,13 +82,13 @@ public class Code
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the category the
-   * code is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * the code is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the category the
-   *         code is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * the code is associated with
    */
-  public String getCategoryId()
+  public UUID getCategoryId()
   {
     return categoryId;
   }
@@ -133,13 +134,13 @@ public class Code
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the category the code
-   * is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category the
+   * code is associated with.
    *
-   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the code
    *                   category the code is associated with
    */
-  public void setCategoryId(String categoryId)
+  public void setCategoryId(UUID categoryId)
   {
     this.categoryId = categoryId;
   }

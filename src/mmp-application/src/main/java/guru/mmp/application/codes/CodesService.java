@@ -91,7 +91,7 @@ public class CodesService
   public CodesService() {}
 
   /**
-   * Check whether the cached code category with the specified ID exists.
+   * Check whether the cached code category exists.
    *
    * @param id the ID uniquely identifying the cached code category
    *
@@ -114,7 +114,7 @@ public class CodesService
   }
 
   /**
-   * Check whether the code category with the specified ID exists.
+   * Check whether the code category exists.
    *
    * @param id the ID uniquely identifying the code category
    *
@@ -282,12 +282,12 @@ public class CodesService
   }
 
   /**
-   * Retrieve the cached code category with the specified ID.
+   * Retrieve the cached code category.
    *
    * @param id            the ID uniquely identifying the cached code category
    * @param retrieveCodes retrieve the codes and/or code data for the cached code category
    *
-   * @return the cached code category with the specified ID or <code>null</code> if the cached code
+   * @return the cached code category or <code>null</code> if the cached code
    *         category could not be found
    *
    * @throws CodesServiceException
@@ -316,11 +316,11 @@ public class CodesService
   }
 
   /**
-   * Returns all the cached codes for the cached code category with the specified ID.
+   * Returns all the cached codes for the cached code category.
    *
    * @param cachedCodeCategoryId the ID uniquely identifying the cached code category
    *
-   * @return all the cached codes for the cached code category with the specified ID
+   * @return all the cached codes for the cached code category
    *
    * @throws CodesServiceException
    */
@@ -340,11 +340,11 @@ public class CodesService
   }
 
   /**
-   * Retrieve the code with the specified ID.
+   * Retrieve the code.
    *
    * @param id the ID uniquely identifying the code
    *
-   * @return the code with the specified ID or <code>null</code> if the code could not be found
+   * @return the code or <code>null</code> if the code could not be found
    *
    * @throws CodesServiceException
    */
@@ -389,12 +389,12 @@ public class CodesService
   }
 
   /**
-   * Retrieve the code category with the specified ID.
+   * Retrieve the code category.
    *
    * @param id            the ID uniquely identifying the code category
    * @param retrieveCodes retrieve the codes and/or code data for the code category
    *
-   * @return the code category with the specified ID or <code>null</code> if the code category
+   * @return the code category or <code>null</code> if the code category
    *         could not be found
    *
    * @throws CodesServiceException
@@ -426,13 +426,13 @@ public class CodesService
   }
 
   /**
-   * Retrieve the code category with the specified ID using the specified parameters.
+   * Retrieve the code category using the specified parameters.
    *
    * @param id            the ID uniquely identifying the code category
    * @param parameters    the parameters
    * @param retrieveCodes retrieve the codes and/or code data for the code category
    *
-   * @return the code category with the specified ID or <code>null</code> if the code category
+   * @return the code category or <code>null</code> if the code category
    *         could not be found
    *
    * @throws CodesServiceException
@@ -552,11 +552,11 @@ public class CodesService
   }
 
   /**
-   * Returns all the codes for the code category with the specified ID.
+   * Returns all the codes for the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
    *
-   * @return all the codes for the code category with the specified ID
+   * @return all the codes for the code category
    *
    * @throws CodesServiceException
    */
@@ -601,11 +601,11 @@ public class CodesService
   }
 
   /**
-   * Returns the number of codes for the code category with the specified ID.
+   * Returns the number of codes for the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
    *
-   * @return the number of codes for the code category with the specified ID
+   * @return the number of codes for the code category
    *
    * @throws CodesServiceException
    */

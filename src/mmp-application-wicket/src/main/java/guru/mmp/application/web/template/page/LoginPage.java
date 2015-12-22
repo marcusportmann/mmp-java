@@ -127,7 +127,7 @@ public class LoginPage extends WebPage
             }
 
             // Authenticate the user
-            long userDirectoryId = securityService.authenticate(username, password);
+            UUID userDirectoryId = securityService.authenticate(username, password);
 
             // Retrieve the user details
             User user = securityService.getUser(userDirectoryId, username);

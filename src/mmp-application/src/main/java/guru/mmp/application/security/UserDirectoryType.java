@@ -21,6 +21,10 @@ package guru.mmp.application.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>UserDirectoryType</code> class stores the information for a user directory type.
  *
@@ -35,7 +39,7 @@ public class UserDirectoryType
   private static final long serialVersionUID = 1000000;
   private transient Class administrationClass;
   private String administrationClassName;
-  private String id;
+  private UUID id;
   private String name;
   private transient Class userDirectoryClass;
   private String userDirectoryClassName;
@@ -52,7 +56,7 @@ public class UserDirectoryType
    *                                Wicket component used to administer the configuration for the
    *                                user directory type
    */
-  public UserDirectoryType(String id, String name, String userDirectoryClassName,
+  public UserDirectoryType(UUID id, String name, String userDirectoryClassName,
       String administrationClassName)
   {
     this.id = id;
@@ -110,7 +114,7 @@ public class UserDirectoryType
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *         type
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }

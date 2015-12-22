@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -86,6 +87,37 @@ public class IDGenerator
   }
 
   /**
+   * Returns the next <code>UUID</code>.
+   *
+   * @param dataSource the data source used to generate the next UUID
+   *
+   * @return the next <code>UUID</code>
+   */
+  public static UUID nextUUID(DataSource dataSource)
+  {
+    /*
+     * First check whether this is a PostgreSQL database and we should be using a stored procedure
+     * to retrieve the next UUID.
+     */
+    try (Connection connection = dataSource.getConnection())
+    {
+      DatabaseMetaData metaData = connection.getMetaData();
+
+      if (metaData.getDatabaseProductName().equals("PostgreSQL"))
+      {
+
+
+      }
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to retrieve the next UUID", e);
+    }
+
+    return UUID.randomUUID();
+  }
+
+  /**
    * Get the next unique <code>long</code> ID for the entity with the specified type.
    * <p/>
    *
@@ -93,7 +125,7 @@ public class IDGenerator
    *
    * @return the next unique <code>long</code> ID for the entity with the specified type
    */
-  public long next(String type)
+  public long nextx(String type)
   {
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();

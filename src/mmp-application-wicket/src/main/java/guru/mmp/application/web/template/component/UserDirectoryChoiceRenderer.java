@@ -83,7 +83,7 @@ public class UserDirectoryChoiceRenderer
    */
   public UserDirectory getObject(String id, IModel<? extends List<? extends UserDirectory>> choices)
   {
-    long userDirectoryId = Long.parseLong(id);
+    UUID userDirectoryId = Long.parseLong(id);
 
     for (UserDirectory choice : choices.getObject())
     {

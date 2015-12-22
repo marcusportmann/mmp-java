@@ -21,6 +21,7 @@ package guru.mmp.application.registry;
 import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
+import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
@@ -37,7 +38,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -1011,7 +1011,7 @@ public class Registry
 
         if (existingType == RegistryValueType.NONE.getCode())
         {
-          String id = UUID.randomUUID().toString();
+          String id = IDGenerator.nextUUID(dataSource).toString();
 
           try (PreparedStatement statement = connection.prepareStatement(setBinaryValueInsertSQL))
           {
@@ -1138,7 +1138,7 @@ public class Registry
 
         if (existingType == RegistryValueType.NONE.getCode())
         {
-          String id = UUID.randomUUID().toString();
+          String id = IDGenerator.nextUUID(dataSource).toString();
 
           try (PreparedStatement statement = connection.prepareStatement(setDecimalValueInsertSQL))
           {
@@ -1265,7 +1265,7 @@ public class Registry
 
         if (existingType == RegistryValueType.NONE.getCode())
         {
-          String id = UUID.randomUUID().toString();
+          String id = IDGenerator.nextUUID(dataSource).toString();
 
           try (PreparedStatement statement = connection.prepareStatement(setIntegerValueInsertSQL))
           {
@@ -1429,7 +1429,7 @@ public class Registry
 
         if (existingType == RegistryValueType.NONE.getCode())
         {
-          String id = UUID.randomUUID().toString();
+          String id = IDGenerator.nextUUID(dataSource).toString();
 
           try (PreparedStatement statement = connection.prepareStatement(setStringValueInsertSQL))
           {
@@ -1665,7 +1665,7 @@ public class Registry
     try (Connection connection = getConnection();
       PreparedStatement statement = connection.prepareStatement(createKeySQL))
     {
-      String id = UUID.randomUUID().toString();
+      String id = IDGenerator.nextUUID(dataSource).toString();
 
       statement.setString(1, id);
       statement.setString(2, parentId);

@@ -16,6 +16,10 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>Function</code> class stores the information for an authorised function that can be
  * assigned to <code>Account</code>s and <code>Role</code>s.
@@ -28,7 +32,7 @@ public class Function
   private static final long serialVersionUID = 1000000;
   private String code;
   private String description;
-  private long id;
+  private UUID id;
   private String name;
 
   /**
@@ -76,11 +80,11 @@ public class Function
   }
 
   /**
-   * Returns the unique numeric ID for the function.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the function.
    *
-   * @return the unique numeric ID for the function
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the function
    */
-  public long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -116,11 +120,11 @@ public class Function
   }
 
   /**
-   * Set the unique numeric ID for the function.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the function.
    *
-   * @param id the unique numeric ID for the function
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the function
    */
-  public void setId(long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

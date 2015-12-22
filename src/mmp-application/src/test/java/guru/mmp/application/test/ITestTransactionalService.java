@@ -45,7 +45,7 @@ public interface ITestTransactionalService
     throws TestTransactionalServiceException;
 
   /**
-   * Retrieve the test data with the specified ID.
+   * Retrieve the test data.
    *
    * @param id the ID
    *

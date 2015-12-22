@@ -67,11 +67,11 @@ public interface ISMSDAO
     throws DAOException;
 
   /**
-   * Retrieve the SMS with the specified ID.
+   * Retrieve the SMS.
    *
    * @param id the ID uniquely identifying the SMS
    *
-   * @return the SMS with the specified ID or <code>null</code> if the SMS could not be found
+   * @return the SMS or <code>null</code> if the SMS could not be found
    *
    * @throws DAOException
    */

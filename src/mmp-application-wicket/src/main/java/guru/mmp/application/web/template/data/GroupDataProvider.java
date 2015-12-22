@@ -51,14 +51,14 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
   /**
    * The unique ID for the user directory the groups are associated with.
    */
-  private long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * Constructs a new <code>GroupDataProvider</code>.
    *
    * @param userDirectoryId the unique ID for the user directory the groups are associated with
    */
-  public GroupDataProvider(long userDirectoryId)
+  public GroupDataProvider(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }
@@ -131,7 +131,7 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
    *
    * @param userDirectoryId the unique ID for the groups directory the users are associated with
    */
-  public void setUserDirectoryId(long userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

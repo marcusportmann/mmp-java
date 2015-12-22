@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>CachedCodeCategory</code> class holds the information for a cached code category.
@@ -51,7 +52,7 @@ public class CachedCodeCategory
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the cached code category.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The date and time the cached code category was last updated.
@@ -73,7 +74,7 @@ public class CachedCodeCategory
    * @param lastUpdated the date and time the cached code category was last updated
    * @param cached      the date and time the code category was cached
    */
-  public CachedCodeCategory(String id, String codeData, Date lastUpdated, Date cached)
+  public CachedCodeCategory(UUID id, String codeData, Date lastUpdated, Date cached)
   {
     this.id = id;
     this.codeData = codeData;
@@ -118,7 +119,7 @@ public class CachedCodeCategory
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the cached code
    *         category
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -171,7 +172,7 @@ public class CachedCodeCategory
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
    *           category
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -185,6 +186,5 @@ public class CachedCodeCategory
   public void setLastUpdated(Date lastUpdated)
   {
     this.lastUpdated = lastUpdated;
-
   }
 }

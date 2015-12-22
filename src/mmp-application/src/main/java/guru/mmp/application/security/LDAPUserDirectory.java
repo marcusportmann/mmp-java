@@ -124,7 +124,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @throws SecurityException
    */
-  public LDAPUserDirectory(long userDirectoryId, Map<String, String> parameters)
+  public LDAPUserDirectory(UUID userDirectoryId, Map<String, String> parameters)
     throws SecurityException
   {
     super(userDirectoryId, parameters);

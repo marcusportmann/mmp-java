@@ -252,11 +252,11 @@ public final class Process extends CallableElement
   }
 
   /**
-   * Returns the FlowElement with the specified ID.
+   * Returns the FlowElement.
    *
    * @param id the ID uniquely identifying the FlowElement
    *
-   * @return the FlowElement with the specified ID or <code>null</code> if the FlowElement could
+   * @return the FlowElement or <code>null</code> if the FlowElement could
    *         not be found
    */
   public FlowElement getFlowElement(QName id)

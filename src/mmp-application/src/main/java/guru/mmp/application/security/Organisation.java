@@ -16,6 +16,10 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>Organisation</code> class stores the information for an organisation.
  *
@@ -25,9 +29,8 @@ public class Organisation
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-  private String code;
   private String description;
-  private long id;
+  private UUID id;
   private String name;
 
   /**
@@ -38,21 +41,11 @@ public class Organisation
   /**
    * Constructs a new <code>Organisation</code>.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    */
-  public Organisation(String code)
+  public Organisation(UUID id)
   {
-    this.code = code;
-  }
-
-  /**
-   * Returns the code uniquely identifying the organisation.
-   *
-   * @return the code uniquely identifying the organisation
-   */
-  public String getCode()
-  {
-    return code;
+    this.id = id;
   }
 
   /**
@@ -66,11 +59,11 @@ public class Organisation
   }
 
   /**
-   * Returns the unique numeric ID for the organisation.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    *
-   * @return the unique numeric ID for the organisation
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    */
-  public long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -86,16 +79,6 @@ public class Organisation
   }
 
   /**
-   * Set the code uniquely identifying the organisation.
-   *
-   * @param code the code uniquely identifying the organisation
-   */
-  public void setCode(String code)
-  {
-    this.code = code;
-  }
-
-  /**
    * Set the description for the organisation.
    *
    * @param description the description for the organisation
@@ -106,11 +89,11 @@ public class Organisation
   }
 
   /**
-   * Set the unique numeric ID for the organisation.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    *
-   * @param id the unique numeric ID for the organisation
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    */
-  public void setId(long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

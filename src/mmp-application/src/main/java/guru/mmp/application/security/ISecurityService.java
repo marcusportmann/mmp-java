@@ -19,6 +19,7 @@ package guru.mmp.application.security;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>ISecurityService</code> interface defines the functionality provided by the
@@ -32,8 +33,8 @@ public interface ISecurityService
   /**
    * Add the user to the group.
    *
-   * @param userDirectoryId the unique ID for the user directory the user and group are associated
-   *                        with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    * @param groupName       the name of the group uniquely identifying the group
    *
@@ -42,14 +43,15 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  void addUserToGroup(long userDirectoryId, String username, String groupName)
+  void addUserToGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException;
 
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId      the unique ID for the user directory the user is associated with
+   * @param userDirectoryId      the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the user directory
    * @param username             the username identifying the user
    * @param newPassword          the new password
    * @param expirePassword       expire the user's password
@@ -61,7 +63,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void adminChangePassword(long userDirectoryId, String username, String newPassword,
+  void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
       PasswordChangeReason reason)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
@@ -87,7 +89,8 @@ public interface ISecurityService
   /**
    * Change the password for the user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    * @param password        the password for the user that is used to authorise the operation
    * @param newPassword     the new password
@@ -99,7 +102,7 @@ public interface ISecurityService
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
-  void changePassword(long userDirectoryId, String username, String password, String newPassword)
+  void changePassword(UUID userDirectoryId, String username, String password, String newPassword)
     throws UserDirectoryNotFoundException, AuthenticationFailedException, UserLockedException,
       UserNotFoundException, ExistingPasswordException, SecurityException;
 
@@ -117,14 +120,15 @@ public interface ISecurityService
   /**
    * Create a new group.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param group           the group
    *
    * @throws UserDirectoryNotFoundException
    * @throws DuplicateGroupException
    * @throws SecurityException
    */
-  void createGroup(long userDirectoryId, Group group)
+  void createGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityException;
 
   /**
@@ -145,7 +149,8 @@ public interface ISecurityService
   /**
    * Create a new user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
@@ -154,7 +159,7 @@ public interface ISecurityService
    * @throws DuplicateUserException
    * @throws SecurityException
    */
-  void createUser(long userDirectoryId, User user, boolean expiredPassword, boolean userLocked)
+  void createUser(UUID userDirectoryId, User user, boolean expiredPassword, boolean userLocked)
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityException;
 
   /**
@@ -181,7 +186,8 @@ public interface ISecurityService
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param groupName       the name of the group uniquely identifying the group
    *
    * @throws UserDirectoryNotFoundException
@@ -189,7 +195,7 @@ public interface ISecurityService
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  void deleteGroup(long userDirectoryId, String groupName)
+  void deleteGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
       SecurityException;
 
@@ -207,31 +213,34 @@ public interface ISecurityService
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void deleteUser(long userDirectoryId, String username)
+  void deleteUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the unique ID for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  void deleteUserDirectory(long userDirectoryId)
+  void deleteUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param attributes      the attribute criteria used to select the users
    *
    * @return the list of users whose attributes match the attribute criteria
@@ -240,13 +249,14 @@ public interface ISecurityService
    * @throws InvalidAttributeException
    * @throws SecurityException
    */
-  List<User> findUsers(long userDirectoryId, List<Attribute> attributes)
+  List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException;
 
   /**
    * Retrieve the filtered list of users.
    *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param filter          the filter to apply to the users
    *
    * @return the filtered list of users
@@ -254,7 +264,7 @@ public interface ISecurityService
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  List<User> getFilteredUsers(long userDirectoryId, String filter)
+  List<User> getFilteredUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
@@ -273,7 +283,8 @@ public interface ISecurityService
   /**
    * Retrieve the authorised function codes for the user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @return the list of authorised function codes for the user
@@ -282,7 +293,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  List<String> getFunctionCodesForUser(long userDirectoryId, String username)
+  List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
@@ -298,7 +309,8 @@ public interface ISecurityService
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param groupName       the name of the group uniquely identifying the group
    *
    * @return the group
@@ -307,13 +319,14 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  Group getGroup(long userDirectoryId, String groupName)
+  Group getGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException;
 
   /**
    * Retrieve the group names for the user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @return the group names for the user
@@ -322,26 +335,28 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  List<String> getGroupNamesForUser(long userDirectoryId, String username)
+  List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
    * Retrieve all the groups.
    *
-   * @param userDirectoryId the unique ID for the user directory the groups are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the list of groups
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  List<Group> getGroups(long userDirectoryId)
+  List<Group> getGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Retrieve the groups for the user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @return the groups for the user
@@ -350,13 +365,14 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  List<Group> getGroupsForUser(long userDirectoryId, String username)
+  List<Group> getGroupsForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
    * Retrieve the number of filtered users.
    *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param filter          the filter to apply to the users
    *
    * @return the number of filtered users
@@ -364,20 +380,21 @@ public interface ISecurityService
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  int getNumberOfFilteredUsers(long userDirectoryId, String filter)
+  int getNumberOfFilteredUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Retrieve the number of groups
    *
-   * @param userDirectoryId the unique ID for the user directory the groups are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the number of groups
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  int getNumberOfGroups(long userDirectoryId)
+  int getNumberOfGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
@@ -403,14 +420,15 @@ public interface ISecurityService
   /**
    * Retrieve the number of users.
    *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the number of users
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  int getNumberOfUsers(long userDirectoryId)
+  int getNumberOfUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
@@ -439,21 +457,22 @@ public interface ISecurityService
   /**
    * Retrieve the organisations associated with the user directory.
    *
-   * @param userDirectoryId the unique ID for the user directory the organisations are associated
-   *                        with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the organisations associated with the user directory
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  List<Organisation> getOrganisationsForUserDirectory(long userDirectoryId)
+  List<Organisation> getOrganisationsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @return the user
@@ -462,7 +481,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  User getUser(long userDirectoryId, String username)
+  User getUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
@@ -491,14 +510,15 @@ public interface ISecurityService
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the unique ID for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the user directory
    *
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  UserDirectory getUserDirectory(long userDirectoryId)
+  UserDirectory getUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
@@ -528,21 +548,22 @@ public interface ISecurityService
   /**
    * Retrieve all the users.
    *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the list of users
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  List<User> getUsers(long userDirectoryId)
+  List<User> getUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
    * Is the user in the group for the specified organisation?
    *
-   * @param userDirectoryId the unique ID for the user directory the group and user are associated
-   *                        with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    * @param groupName       the name of the group uniquely identifying the group
    *
@@ -553,7 +574,7 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  boolean isUserInGroup(long userDirectoryId, String username, String groupName)
+  boolean isUserInGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException;
 
@@ -568,8 +589,8 @@ public interface ISecurityService
   /**
    * Remove the user from the group.
    *
-   * @param userDirectoryId the unique ID for the user directory the user and group are associated
-   *                        with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    * @param groupName       the group name
    *
@@ -578,14 +599,15 @@ public interface ISecurityService
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  void removeUserFromGroup(long userDirectoryId, String username, String groupName)
+  void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
       SecurityException;
 
   /**
    * Rename the existing group.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param groupName       the name of the group that will be renamed
    * @param newGroupName    the new name of the group
    *
@@ -594,34 +616,36 @@ public interface ISecurityService
    * @throws ExistingGroupMembersException
    * @throws SecurityException
    */
-  void renameGroup(long userDirectoryId, String groupName, String newGroupName)
+  void renameGroup(UUID userDirectoryId, String groupName, String newGroupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
       SecurityException;
 
   /**
    * Does the user directory support administering groups.
    *
-   * @param userDirectoryId the unique ID for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return <code>true</code> if the directory supports administering groups or <code>false</code>
    *         otherwise
    *
    * @throws UserDirectoryNotFoundException
    */
-  boolean supportsGroupAdministration(long userDirectoryId)
+  boolean supportsGroupAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException;
 
   /**
    * Does the user directory support administering users.
    *
-   * @param userDirectoryId the unique ID for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return <code>true</code> if the directory supports administering users or <code>false</code>
    *         otherwise
    *
    * @throws UserDirectoryNotFoundException
    */
-  boolean supportsUserAdministration(long userDirectoryId)
+  boolean supportsUserAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException;
 
   /**
@@ -638,14 +662,15 @@ public interface ISecurityService
   /**
    * Update the group.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param group           the group
    *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
    * @throws SecurityException
    */
-  void updateGroup(long userDirectoryId, Group group)
+  void updateGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException;
 
   /**
@@ -662,7 +687,8 @@ public interface ISecurityService
   /**
    * Update the user.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param user            the user
    * @param expirePassword  expire the user's password as part of the update
    * @param lockUser        lock the user as part of the update
@@ -671,7 +697,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void updateUser(long userDirectoryId, User user, boolean expirePassword, boolean lockUser)
+  void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**

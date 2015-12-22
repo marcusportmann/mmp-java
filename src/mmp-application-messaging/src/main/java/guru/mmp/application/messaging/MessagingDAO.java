@@ -106,12 +106,12 @@ public class MessagingDAO
   public MessagingDAO() {}
 
   /**
-   * Have all the parts been queued for assembly for the message with the specified ID?
+   * Have all the parts been queued for assembly for the message?
    *
    * @param messageId  the ID uniquely identifying the message
    * @param totalParts the total number of parts for the message
    *
-   * @return <code>true</code> if all the parts for the message with the specified ID have been
+   * @return <code>true</code> if all the parts for the message have been
    *          queued for assembly or <code>false</code> otherwise
    *
    * @throws DAOException
@@ -380,7 +380,7 @@ public class MessagingDAO
   }
 
   /**
-   * Delete the message parts for the message with the specified ID.
+   * Delete the message parts for the message.
    *
    * @param messageId the ID uniquely identifying the message whose message parts should be deleted
    *
@@ -404,11 +404,11 @@ public class MessagingDAO
   }
 
   /**
-   * Retrieve the error report with the specified ID.
+   * Retrieve the error report.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the error report with the specified ID or <code>null</code> if the error report could
+   * @return the error report or <code>null</code> if the error report could
    *         not be found
    *
    * @throws DAOException
@@ -441,11 +441,11 @@ public class MessagingDAO
   }
 
   /**
-   * Retrieve the summary for the error report with the specified ID.
+   * Retrieve the summary for the error report.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the summary for the error report with the specified ID or <code>null</code> if the
+   * @return the summary for the error report or <code>null</code> if the
    *         error report could not be found
    *
    * @throws DAOException
@@ -478,11 +478,11 @@ public class MessagingDAO
   }
 
   /**
-   * Retrieve the message with the specified ID.
+   * Retrieve the message.
    *
    * @param id the ID uniquely identifying the message
    *
-   * @return the message with the specified ID or <code>null</code> if the message could not
+   * @return the message or <code>null</code> if the message could not
    *          be found
    *
    * @throws DAOException
@@ -514,13 +514,13 @@ public class MessagingDAO
   }
 
   /**
-   * Retrieve the message parts queued for assembly for the message with the specified ID.
+   * Retrieve the message parts queued for assembly for the message.
    *
    * @param messageId the ID uniquely identifying the message
    * @param lockName  the name of the lock that should be applied to the message parts queued for
    *                  assembly when they are retrieved
    *
-   * @return the message parts queued for assembly for the message with the specified ID
+   * @return the message parts queued for assembly for the message
    *
    * @throws DAOException
    */
@@ -1220,7 +1220,7 @@ public class MessagingDAO
   }
 
   /**
-   * Increment the processing attempts for the message with the specified ID.
+   * Increment the processing attempts for the message.
    *
    * @param message the message whose processing attempts should be incremented
    *
@@ -1317,7 +1317,7 @@ public class MessagingDAO
   }
 
   /**
-   * Has the message with the specified ID already been archived?
+   * Has the message already been archived?
    *
    * @param id the ID uniquely identifying the message
    *
@@ -1347,7 +1347,7 @@ public class MessagingDAO
   }
 
   /**
-   * Has the message part with the specified ID already been queued for assembly?
+   * Has the message part already been queued for assembly?
    *
    * @param id the ID uniquely identifying the message part
    *
@@ -1683,7 +1683,7 @@ public class MessagingDAO
 
     // archiveMessageSQL
     archiveMessageSQL = "INSERT INTO " + schemaPrefix + "ARCHIVED_MESSAGES"
-        + " (ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE, MSG_TYPE_VER, CORRELATION_ID,"
+        + " (ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE_ID, MSG_TYPE_ID_VER, CORRELATION_ID,"
         + "  CREATED, ARCHIVED, DATA)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createErrorReportSQL
@@ -1694,14 +1694,14 @@ public class MessagingDAO
     // createMessagePartSQL
     createMessagePartSQL = "INSERT INTO " + schemaPrefix + "MESSAGE_PARTS"
         + " (ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED,"
-        + " MSG_ID, MSG_USERNAME, MSG_ORGANISATION, MSG_DEVICE, MSG_TYPE,"
-        + " MSG_TYPE_VER, MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, MSG_DATA_HASH,"
-        + " MSG_ENC_SCHEME, MSG_ENC_IV, MSG_CHECKSUM, DATA)"
+        + " MSG_ID, MSG_USERNAME, MSG_ORGANISATION_ID, MSG_DEVICE_ID, MSG_TYPE_ID,"
+        + " MSG_TYPE_ID_VER, MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, MSG_DATA_HASH,"
+        + " MSG_ENCRYPTION_SCHEME, MSG_ENCRYPTION_IV, MSG_CHECKSUM, DATA)"
         + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createMessageSQL
     createMessageSQL = "INSERT INTO " + schemaPrefix + "MESSAGES"
-        + " (ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE, MSG_TYPE_VER, CORRELATION_ID,"
+        + " (ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE_ID, MSG_TYPE_ID_VER, CORRELATION_ID,"
         + " PRIORITY, STATUS, CREATED, PERSISTED, UPDATED, SEND_ATTEMPTS,"
         + " PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, DATA)"
         + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -1728,31 +1728,31 @@ public class MessagingDAO
       + "PACKAGES P ON ER.APPLICATION_ID = P.ID AND ER.ID=?";
 
     // getMessageByIdSQL
-    getMessageByIdSQL = "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE,"
-        + " MSG_TYPE_VER, CORRELATION_ID, PRIORITY, STATUS, CREATED, PERSISTED, UPDATED,"
+    getMessageByIdSQL = "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE_ID,"
+        + " MSG_TYPE_ID_VER, CORRELATION_ID, PRIORITY, STATUS, CREATED, PERSISTED, UPDATED,"
         + " SEND_ATTEMPTS, PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, LOCK_NAME,"
         + " LAST_PROCESSED, DATA" + " FROM " + schemaPrefix + "MESSAGES WHERE ID=?";
 
     // getMessagePartsQueuedForAssemblySQL
     getMessagePartsQueuedForAssemblySQL =
       "SELECT ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED,"
-      + " UPDATED, MSG_ID, MSG_USERNAME, MSG_ORGANISATION, MSG_DEVICE,"
-      + " MSG_TYPE, MSG_TYPE_VER, MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, MSG_DATA_HASH,"
-      + " MSG_ENC_SCHEME, MSG_ENC_IV, MSG_CHECKSUM, LOCK_NAME, DATA" + " FROM " + schemaPrefix
+      + " UPDATED, MSG_ID, MSG_USERNAME, MSG_ORGANISATION_ID, MSG_DEVICE_ID,"
+      + " MSG_TYPE_ID, MSG_TYPE_ID_VER, MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, MSG_DATA_HASH,"
+      + " MSG_ENCRYPTION_SCHEME, MSG_ENCRYPTION_IV, MSG_CHECKSUM, LOCK_NAME, DATA" + " FROM " + schemaPrefix
       + "MESSAGE_PARTS" + " WHERE STATUS=? AND MSG_ID=? ORDER BY PART_NO FOR UPDATE";
 
     // getMessagePartsQueuedForDownloadSQL
     getMessagePartsQueuedForDownloadSQL =
       "SELECT ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED,"
-      + " UPDATED, MSG_ID, MSG_USERNAME, MSG_ORGANISATION, MSG_DEVICE,"
-      + " MSG_TYPE, MSG_TYPE_VER, MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, MSG_DATA_HASH,"
-      + " MSG_ENC_SCHEME, MSG_ENC_IV, MSG_CHECKSUM, LOCK_NAME, DATA" + " FROM " + schemaPrefix
+      + " UPDATED, MSG_ID, MSG_USERNAME, MSG_ORGANISATION_ID, MSG_DEVICE_ID,"
+      + " MSG_TYPE_ID, MSG_TYPE_ID_VER, MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, MSG_DATA_HASH,"
+      + " MSG_ENCRYPTION_SCHEME, MSG_ENCRYPTION_IV, MSG_CHECKSUM, LOCK_NAME, DATA" + " FROM " + schemaPrefix
       + "MESSAGE_PARTS"
-      + " WHERE STATUS=? AND MSG_DEVICE=? ORDER BY PART_NO FETCH FIRST 3 ROWS ONLY FOR UPDATE";
+      + " WHERE STATUS=? AND MSG_DEVICE_ID=? ORDER BY PART_NO FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
     // getMessagesQueuedForDownloadForUserSQL
     getMessagesQueuedForDownloadForUserSQL =
-      "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE, MSG_TYPE_VER, CORRELATION_ID,"
+      "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE_ID, MSG_TYPE_ID_VER, CORRELATION_ID,"
       + " PRIORITY, STATUS, CREATED, PERSISTED, UPDATED, SEND_ATTEMPTS,"
       + " PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, LOCK_NAME, LAST_PROCESSED," + " DATA" + " FROM "
       + schemaPrefix + "MESSAGES" + " WHERE STATUS=? AND USERNAME=? AND DEVICE=? ORDER BY CREATED"
@@ -1760,7 +1760,7 @@ public class MessagingDAO
 
     // getMessagesQueuedForDownloadSQL
     getMessagesQueuedForDownloadSQL =
-      "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE, MSG_TYPE_VER, CORRELATION_ID,"
+      "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE_ID, MSG_TYPE_ID_VER, CORRELATION_ID,"
       + " PRIORITY, STATUS, CREATED, PERSISTED, UPDATED, SEND_ATTEMPTS,"
       + " PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, LOCK_NAME, LAST_PROCESSED," + " DATA" + " FROM "
       + schemaPrefix + "MESSAGES" + " WHERE STATUS=? AND DEVICE=? ORDER BY CREATED"
@@ -1774,7 +1774,7 @@ public class MessagingDAO
 
     // getNextMessageForProcessingSQL
     getNextMessageForProcessingSQL =
-      "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE, MSG_TYPE_VER, CORRELATION_ID,"
+      "SELECT ID, USERNAME, ORGANISATION, DEVICE, MSG_TYPE_ID, MSG_TYPE_ID_VER, CORRELATION_ID,"
       + " PRIORITY, STATUS, CREATED, PERSISTED, UPDATED, SEND_ATTEMPTS,"
       + " PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, LOCK_NAME, LAST_PROCESSED," + " DATA" + " FROM "
       + schemaPrefix + "MESSAGES"
@@ -1812,7 +1812,7 @@ public class MessagingDAO
 
     // logMessageAuditSQL
     logMessageAuditSQL = "INSERT INTO " + schemaPrefix + "MESSAGE_AUDIT_LOG"
-        + " (ID, MSG_TYPE, USERNAME, ORGANISATION, DEVICE, IP, LOGGED,"
+        + " (ID, MSG_TYPE_ID, USERNAME, ORGANISATION, DEVICE, IP, LOGGED,"
         + "  SUCCESSFUL) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     // lockMessagePartSQL

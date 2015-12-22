@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>CodeCategory</code> class holds the information for a code category.
@@ -66,7 +67,7 @@ public class CodeCategory
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
-  private String id;
+  private UUID id;
 
   /**
    * Is the code data retrieved for the remote code category cacheable?
@@ -84,9 +85,10 @@ public class CodeCategory
   private String name;
 
   /**
-   * The organisation code identifying the organisation the code category is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the code
+   * category is associated with.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /**
    * The date and time the code category was updated.
@@ -103,8 +105,8 @@ public class CodeCategory
    *
    * @param id               the Universally Unique Identifier (UUID) used to uniquely identify the
    *                         code category
-   * @param organisation     the organisation code identifying the organisation the code category
-   *                         is associated with
+   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         organisation the code category is associated with
    * @param categoryType     the type of code category e.g. Local, RemoteHTTPService,
    *                         RemoteWebService, etc
    * @param name             the name of the code category
@@ -116,12 +118,12 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(String id, String organisation, CodeCategoryType categoryType, String name,
+  public CodeCategory(UUID id, UUID organisationId, CodeCategoryType categoryType, String name,
       String description, String endPoint, boolean isEndPointSecure, boolean isCacheable,
       Integer cacheExpiry, Date updated)
   {
     this.id = id;
-    this.organisation = organisation;
+    this.organisationId = organisationId;
     this.categoryType = categoryType;
     this.name = name;
     this.description = description;
@@ -138,8 +140,8 @@ public class CodeCategory
    *
    * @param id               the Universally Unique Identifier (UUID) used to uniquely identify the
    *                         code category
-   * @param organisation     the organisation code identifying the organisation the code category
-   *                         is associated with
+   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         organisation the code category is associated with
    * @param categoryType     the type of code category e.g. Local, RemoteHTTPService,
    *                         RemoteWebService, etc
    * @param name             the name of the code category
@@ -152,12 +154,12 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(String id, String organisation, CodeCategoryType categoryType, String name,
+  public CodeCategory(UUID id, UUID organisationId, CodeCategoryType categoryType, String name,
       String description, String codeData, String endPoint, boolean isEndPointSecure,
       boolean isCacheable, Integer cacheExpiry, Date updated)
   {
     this.id = id;
-    this.organisation = organisation;
+    this.organisationId = organisationId;
     this.categoryType = categoryType;
     this.name = name;
     this.description = description;
@@ -236,7 +238,7 @@ public class CodeCategory
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -275,15 +277,15 @@ public class CodeCategory
   }
 
   /**
-   * Returns the organisation code identifying the organisation the code category is associated
-   * with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   * the code category is associated with.
    *
-   * @return the organisation code identifying the organisation the code category is associated
-   *         with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   *         the code category is associated with
    */
-  public String getOrganisation()
+  public UUID getOrganisationId()
   {
-    return organisation;
+    return organisationId;
   }
 
   /**
@@ -365,7 +367,7 @@ public class CodeCategory
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -402,14 +404,15 @@ public class CodeCategory
   }
 
   /**
-   * Set the organisation code identifying the organisation the code category is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * code category is associated with.
    *
-   * @param organisation the organisation code identifying the organisation the code category is
-   *                     associated with
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the code category is associated with
    */
-  public void setOrganisation(String organisation)
+  public void setOrganisationId(UUID organisationId)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
   }
 
   /**

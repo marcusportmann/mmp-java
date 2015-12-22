@@ -174,11 +174,11 @@ public class JobService
   }
 
   /**
-   * Retrieve the job with the specified ID.
+   * Retrieve the job.
    *
    * @param id the ID uniquely identifying the job
    *
-   * @return the job with the specified ID or <code>null</code> if the job could not be found
+   * @return the job or <code>null</code> if the job could not be found
    *
    * @throws JobServiceException
    */
@@ -196,7 +196,7 @@ public class JobService
   }
 
   /**
-   * Retrieve the parameters for the job with the specified ID.
+   * Retrieve the parameters for the job.
    *
    * @param id the ID uniquely identifying the job
    *
@@ -293,7 +293,7 @@ public class JobService
   }
 
   /**
-   * Increment the execution attempts for the job with the specified ID.
+   * Increment the execution attempts for the job.
    *
    * @param id the ID uniquely identifying the job
    *

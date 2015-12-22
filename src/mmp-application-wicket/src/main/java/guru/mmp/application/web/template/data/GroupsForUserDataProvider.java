@@ -50,7 +50,7 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   /**
    * The unique ID for the user directory the user is associated with.
    */
-  private long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * The username identifying the user the groups are associated with.
@@ -63,7 +63,7 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username identifying the user the groups are associated with
    */
-  public GroupsForUserDataProvider(long userDirectoryId, String username)
+  public GroupsForUserDataProvider(UUID userDirectoryId, String username)
   {
     this.userDirectoryId = userDirectoryId;
     this.username = username;

@@ -118,12 +118,12 @@ public interface IReportingService
     throws ReportingServiceException;
 
   /**
-   * Retrieve the report definition with the specified ID.
+   * Retrieve the report definition.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           report definition
    *
-   * @return the report definition with the specified ID or <code>null</code> if the report
+   * @return the report definition or <code>null</code> if the report
    *         definition could not be found
    *
    * @throws ReportingServiceException
@@ -146,12 +146,12 @@ public interface IReportingService
     throws ReportingServiceException;
 
   /**
-   * Retrieve the summary for the report definition with the specified ID.
+   * Retrieve the summary for the report definition.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           report definition
    *
-   * @return the summary for the report definition with the specified ID or <code>null</code> if
+   * @return the summary for the report definition or <code>null</code> if
    *         the report definition could not be found
    *
    * @throws ReportingServiceException
@@ -174,7 +174,7 @@ public interface IReportingService
     throws ReportingServiceException;
 
   /**
-   * Check whether the report definition with the specified ID exists in the database.
+   * Check whether the report definition exists in the database.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition

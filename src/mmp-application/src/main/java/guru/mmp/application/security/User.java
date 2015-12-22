@@ -20,6 +20,7 @@ package guru.mmp.application.security;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * The <code>User</code> class stores the information for a user.
@@ -34,7 +35,7 @@ public class User
   private String email;
   private String faxNumber;
   private String firstNames;
-  private long id;
+  private UUID id;
   private boolean isReadOnly;
   private String lastName;
   private String mobileNumber;
@@ -44,7 +45,7 @@ public class User
   private String phoneNumber;
   private HashMap<String, String> properties = new HashMap<>();
   private String title;
-  private long userDirectoryId;
+  private UUID userDirectoryId;
   private String username;
 
   /**
@@ -103,11 +104,11 @@ public class User
   }
 
   /**
-   * Returns the unique numeric ID for the user.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user.
    *
-   * @return the unique numeric ID for the user
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
-  public long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -199,11 +200,13 @@ public class User
   }
 
   /**
-   * Returns the unique ID for the user directory the user is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the user is associated with.
    *
-   * @return the unique ID for the user directory the user is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the user is associated with
    */
-  public long getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -288,11 +291,11 @@ public class User
   }
 
   /**
-   * Set the unique numeric ID for the user.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
    *
-   * @param id the unique numeric ID for the user
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
-  public void setId(long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -389,11 +392,13 @@ public class User
   }
 
   /**
-   * Set the unique ID for the user directory the user is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * user is associated with.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the user is associated with
    */
-  public void setUserDirectoryId(long userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

@@ -225,11 +225,11 @@ public class SubProcess extends Activity
   }
 
   /**
-   * Returns the flow element with the specified ID.
+   * Returns the flow element.
    *
    * @param id the ID uniquely identifying the flow element
    *
-   * @return the flow element with the specified ID or <code>null</code> if the flow element could
+   * @return the flow element or <code>null</code> if the flow element could
    *         not be found
    */
   public FlowElement getFlowElement(QName id)

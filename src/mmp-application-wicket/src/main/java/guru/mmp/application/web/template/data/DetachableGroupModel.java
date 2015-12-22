@@ -50,7 +50,7 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
   /**
    * The unique ID for the user directory the group is associated with;
    */
-  private long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * Constructs a new <code>DetachableGroupModel</code>.
@@ -70,7 +70,7 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
    * @param userDirectoryId the unique ID for the user directory the group is associated with
    * @param groupName       the group name for the group
    */
-  public DetachableGroupModel(long userDirectoryId, String groupName)
+  public DetachableGroupModel(UUID userDirectoryId, String groupName)
   {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;

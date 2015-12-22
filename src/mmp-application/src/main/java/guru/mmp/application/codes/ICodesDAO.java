@@ -23,6 +23,7 @@ import guru.mmp.common.persistence.DAOException;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>ICodesDAO</code> interface defines the codes-related persistence operations.
@@ -32,27 +33,28 @@ import java.util.List;
 public interface ICodesDAO
 {
   /**
-   * Check whether the cached code category with the specified ID exists.
+   * Check whether the cached code category exists.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  boolean cachedCodeCategoryExists(String id)
+  boolean cachedCodeCategoryExists(UUID id)
     throws DAOException;
 
   /**
-   * Check whether the code category with the specified ID exists.
+   * Check whether the code category exists.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  boolean codeCategoryExists(String id)
+  boolean codeCategoryExists(UUID id)
     throws DAOException;
 
   /**
@@ -98,11 +100,12 @@ public interface ICodesDAO
   /**
    * Delete the cached code category.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @throws DAOException
    */
-  void deleteCachedCodeCategory(String id)
+  void deleteCachedCodeCategory(UUID id)
     throws DAOException;
 
   /**
@@ -118,44 +121,46 @@ public interface ICodesDAO
   /**
    * Delete the code category.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @throws DAOException
    */
-  void deleteCodeCategory(String id)
+  void deleteCodeCategory(UUID id)
     throws DAOException;
 
   /**
-   * Retrieve the cached code category with the specified ID.
+   * Retrieve the cached code category.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
-   * @return the cached code category with the specified ID or <code>null</code> if the cached code
-   *         category could not be found
+   * @return the cached code category or <code>null</code> if the cached code category could not be
+   *         found
    *
    * @throws DAOException
    */
-  CachedCodeCategory getCachedCodeCategory(String id)
+  CachedCodeCategory getCachedCodeCategory(UUID id)
     throws DAOException;
 
   /**
-   * Returns all the cached codes for the cached code category with the specified ID.
+   * Returns all the cached codes for the cached code category.
    *
-   * @param cachedCodeCategoryId the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
-   * @return all the cached codes for the cached code category with the specified ID
+   * @return all the cached codes for the cached code category
    *
    * @throws DAOException
    */
-  List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
+  List<Code> getCachedCodesForCachedCodeCategory(UUID id)
     throws DAOException;
 
   /**
-   * Retrieve the code with the specified ID.
+   * Retrieve the code.
    *
    * @param id the ID uniquely identifying the code
    *
-   * @return the code with the specified ID or <code>null</code> if the code could not be found
+   * @return the code or <code>null</code> if the code could not be found
    *
    * @throws DAOException
    */
@@ -163,82 +168,80 @@ public interface ICodesDAO
     throws DAOException;
 
   /**
-   * Returns all the code categories associated with the organisation identified by the
-   * specified organisation code.
+   * Returns all the code categories for the organisation.
    *
-   * @param organisation  the organisation code identifying the organisation
-   * @param retrieveCodes retrieve the codes and/or code data for the code categories
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
+   * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    *
-   * @return all the code categories associated with the organisation identified by the
-   *         specified organisation code
+   * @return all the code categories for the organisation
    *
    * @throws DAOException
    */
-  List<CodeCategory> getCodeCategoriesForOrganisation(String organisation, boolean retrieveCodes)
+  List<CodeCategory> getCodeCategoriesForOrganisation(UUID organisationId, boolean retrieveCodes)
     throws DAOException;
 
   /**
-   * Retrieve the code category with the specified ID.
+   * Retrieve the code category.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
-   * @return the code category with the specified ID or <code>null</code> if the code category
-   *         could not be found
+   * @return the code category or <code>null</code> if the code category could not be found
    *
    * @throws DAOException
    */
-  CodeCategory getCodeCategory(String id)
+  CodeCategory getCodeCategory(UUID id)
     throws DAOException;
 
   /**
-   * Returns all the codes for the code category with the specified ID.
+   * Returns all the codes for the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
-   * @return all the codes for the code category with the specified ID
+   * @return all the codes for the code category
    *
    * @throws DAOException
    */
-  List<Code> getCodesForCodeCategory(String codeCategoryId)
+  List<Code> getCodesForCodeCategory(UUID id)
     throws DAOException;
 
   /**
-   * Returns the number of code categories associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of code categories for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return the number of code categories associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of code categories for the organisation
    *
    * @throws DAOException
    */
-  int getNumberOfCodeCategoriesForOrganisation(String organisation)
+  int getNumberOfCodeCategoriesForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
-   * Returns the number of codes for the code category with the specified ID.
+   * Returns the number of codes for the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
-   * @return the number of codes for the code category with the specified ID
+   * @return the number of codes for the code category
    *
    * @throws DAOException
    */
-  int getNumberOfCodesForCodeCategory(String codeCategoryId)
+  int getNumberOfCodesForCodeCategory(UUID id)
     throws DAOException;
 
   /**
    * Is the cached code category current?
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
    *         otherwise
    *
    * @throws DAOException
    */
-  boolean isCachedCodeCategoryCurrent(String id)
+  boolean isCachedCodeCategoryCurrent(UUID id)
     throws DAOException;
 
   /**

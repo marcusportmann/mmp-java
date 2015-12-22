@@ -45,7 +45,7 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
   /**
    * The unique ID for the user directory the user is associated with.
    */
-  private long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * The username for the user.
@@ -70,7 +70,7 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username for the user
    */
-  public DetachableUserModel(long userDirectoryId, String username)
+  public DetachableUserModel(UUID userDirectoryId, String username)
   {
     this.userDirectoryId = userDirectoryId;
     this.username = username;

@@ -35,6 +35,7 @@ import java.io.ByteArrayInputStream;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,10 +50,10 @@ public class UserDirectory
 {
   private static final long serialVersionUID = 1000000;
   private String description;
-  private long id;
+  private UUID id;
   private String name;
   private Map<String, String> parameters = new HashMap<>();
-  private String typeId;
+  private UUID typeId;
   private UserDirectoryType userDirectoryType;
 
   /**
@@ -98,11 +99,11 @@ public class UserDirectory
   }
 
   /**
-   * Returns the unique ID for the user directory.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @return the unique ID for the user directory
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -144,7 +145,7 @@ public class UserDirectory
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *         type
    */
-  public String getTypeId()
+  public UUID getTypeId()
   {
     return typeId;
   }
@@ -208,11 +209,11 @@ public class UserDirectory
   }
 
   /**
-   * Set the unique ID for the user directory.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @param id the unique ID for the user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public void setId(long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -253,7 +254,7 @@ public class UserDirectory
    * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the user
    *               directory type
    */
-  public void setTypeId(String typeId)
+  public void setTypeId(UUID typeId)
   {
     this.typeId = typeId;
   }

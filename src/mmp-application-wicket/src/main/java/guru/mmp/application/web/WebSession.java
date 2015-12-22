@@ -63,7 +63,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   private String organisation;
 
   /** The unique ID for the user directory the user is associated with. */
-  private long userDirectoryId;
+  private UUID userDirectoryId;
 
   /** The user properties for the logged in user associated with the web session. */
   private Map<String, Serializable> userProperties;
@@ -138,13 +138,13 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Returns the unique ID for the user directory the user is associated with or -1 if this is an
-   * 'anonymous' web session.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the user is associated with or <code>null</code> if this is an 'anonymous' web session.
    *
-   * @return the unique ID for the user directory the user is associated with or -1 if this is an
-   *         'anonymous' web session
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the user is associated with or <code>null</code> if this is an 'anonymous' web session
    */
-  public long getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -208,14 +208,14 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Returns the <code>ViewReportParameters</code> instance with the specified ID from the user's
+   * Returns the <code>ViewReportParameters</code> instance from the user's
    * web session or <code>null</code> if the <code>ViewReportParameters</code> instance could not
    * be found.
    *
    * @param id the ID uniquely identifying the <code>ViewReportParameters</code> instance stored
    *        in the user's web session
    *
-   * @return the <code>ViewReportParameters</code> instance with the specified ID stored in the
+   * @return the <code>ViewReportParameters</code> instance stored in the
    *         user's web session or <code>null</code> if the <code>ViewReportParameters</code>
    *         instance could not found
    */
@@ -276,7 +276,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
     groupNames = null;
     organisation = null;
     userProperties = null;
-    userDirectoryId = -1;
+    userDirectoryId = null;
     username = null;
   }
 
@@ -328,7 +328,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Remove the <code>ViewReportParameters</code> instance with the specified ID stored from the
+   * Remove the <code>ViewReportParameters</code> instance stored from the
    * user's web session.
    *
    * @param id the ID uniquely identifying the <code>ViewReportParameters</code> instance stored
@@ -382,7 +382,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    *
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    */
-  public void setUserDirectoryId(long userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

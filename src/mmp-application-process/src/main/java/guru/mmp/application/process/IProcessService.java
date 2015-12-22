@@ -34,13 +34,13 @@ public interface IProcessService
   String SYSTEM_USERNAME = "SYSTEM";
 
   /**
-   * Retrieve the process definition with the specified ID and version.
+   * Retrieve the process definition and version.
    *
    * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
    *                process definition
    * @param version the version of the process definition
    *
-   * @return the process definition with the specified ID and version or <code>null</code>
+   * @return the process definition and version or <code>null</code>
    *         if the process definition could not be found
    *
    * @throws ProcessServiceException
@@ -138,13 +138,13 @@ public interface IProcessService
     throws ProcessServiceException;
 
   /**
-   * Retrieve the summary for the process definition with the specified ID and version.
+   * Retrieve the summary for the process definition and version.
    *
    * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
    *                process definition
    * @param version the version of the process definition
    *
-   * @return the summary for the process definition with the specified ID and version or
+   * @return the summary for the process definition and version or
    *         <code>null</code> if the process definition could not be found
    *
    * @throws ProcessServiceException
@@ -153,7 +153,7 @@ public interface IProcessService
     throws ProcessServiceException;
 
   /**
-   * Check whether the process definition with the specified ID and version exists in the database.
+   * Check whether the process definition and version exists in the database.
    *
    * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
    *                definition
@@ -192,7 +192,7 @@ public interface IProcessService
     throws ProcessServiceException;
 
   /**
-   * Update the state for process instance with the specified ID.
+   * Update the state for process instance.
    *
    * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the process
    *             instance

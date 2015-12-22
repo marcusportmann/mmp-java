@@ -80,7 +80,7 @@ public class AddUserPage extends TemplateWebPage
    * @param previousPage    the previous page
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    */
-  public AddUserPage(PageReference previousPage, long userDirectoryId)
+  public AddUserPage(PageReference previousPage, UUID userDirectoryId)
   {
     super("Add User");
 
@@ -259,7 +259,7 @@ public class AddUserPage extends TemplateWebPage
     return titleOptions;
   }
 
-  private List<String> getGroupOptions(long userDirectoryId)
+  private List<String> getGroupOptions(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, guru.mmp.application.security.SecurityException
   {
     WebSession session = getWebApplicationSession();

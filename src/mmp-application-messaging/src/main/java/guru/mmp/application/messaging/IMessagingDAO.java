@@ -34,12 +34,12 @@ import java.util.List;
 public interface IMessagingDAO
 {
   /**
-   * Have all the parts been queued for assembly for the message with the specified ID?
+   * Have all the parts been queued for assembly for the message?
    *
    * @param messageId  the ID uniquely identifying the message
    * @param totalParts the total number of parts for the message
    *
-   * @return <code>true</code> if all the parts for the message with the specified ID have been
+   * @return <code>true</code> if all the parts for the message have been
    *          queued for assembly or <code>false</code> otherwise
    *
    * @throws DAOException
@@ -110,7 +110,7 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Delete the message parts for the message with the specified ID.
+   * Delete the message parts for the message.
    *
    * @param messageId the ID uniquely identifying the message whose message parts should be deleted
    *
@@ -120,11 +120,11 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Retrieve the error report with the specified ID.
+   * Retrieve the error report.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the error report with the specified ID or <code>null</code> if the error report could
+   * @return the error report or <code>null</code> if the error report could
    *         not be found
    *
    * @throws DAOException
@@ -133,11 +133,11 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Retrieve the summary for the error report with the specified ID.
+   * Retrieve the summary for the error report.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the summary for the error report with the specified ID or <code>null</code> if the
+   * @return the summary for the error report or <code>null</code> if the
    *         error report could not be found
    *
    * @throws DAOException
@@ -146,11 +146,11 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Retrieve the message with the specified ID.
+   * Retrieve the message.
    *
    * @param id the ID uniquely identifying the message
    *
-   * @return the message with the specified ID or <code>null</code> if the message could not
+   * @return the message or <code>null</code> if the message could not
    *          be found
    *
    * @throws DAOException
@@ -159,13 +159,13 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Retrieve the message parts queued for assembly for the message with the specified ID.
+   * Retrieve the message parts queued for assembly for the message.
    *
    * @param messageId the ID uniquely identifying the message
    * @param lockName  the name of the lock that should be applied to the message parts queued for
    *                  assembly when they are retrieved
    *
-   * @return the message parts queued for assembly for the message with the specified ID
+   * @return the message parts queued for assembly for the message
    *
    * @throws DAOException
    */
@@ -258,7 +258,7 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Increment the processing attempts for the message with the specified ID.
+   * Increment the processing attempts for the message.
    *
    * @param message the message whose processing attempts should be incremented
    *
@@ -268,7 +268,7 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Has the message with the specified ID already been archived?
+   * Has the message already been archived?
    *
    * @param id the ID uniquely identifying the message
    *
@@ -281,7 +281,7 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Has the message part with the specified ID already been queued for assembly?
+   * Has the message part already been queued for assembly?
    *
    * @param id the ID uniquely identifying the message part
    *

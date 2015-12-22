@@ -35,6 +35,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -98,15 +99,16 @@ public class CodesDAO
   public CodesDAO() {}
 
   /**
-   * Check whether the cached code category with the specified ID exists.
+   * Check whether the cached code category exists.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  public boolean cachedCodeCategoryExists(String id)
+  public boolean cachedCodeCategoryExists(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -127,15 +129,15 @@ public class CodesDAO
   }
 
   /**
-   * Check whether the code category with the specified ID exists.
+   * Check whether the code category exists.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  public boolean codeCategoryExists(String id)
+  public boolean codeCategoryExists(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -320,11 +322,12 @@ public class CodesDAO
   /**
    * Delete the cached code category.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @throws DAOException
    */
-  public void deleteCachedCodeCategory(String id)
+  public void deleteCachedCodeCategory(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -375,11 +378,11 @@ public class CodesDAO
   /**
    * Delete the code category.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @throws DAOException
    */
-  public void deleteCodeCategory(String id)
+  public void deleteCodeCategory(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -400,12 +403,13 @@ public class CodesDAO
   }
 
   /**
-   * Retrieve the cached code category with the specified ID.
+   * Retrieve the cached code category.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
-   * @return the cached code category with the specified ID or <code>null</code> if the cached code
-   *         category could not be found
+   * @return the cached code category or <code>null</code> if the cached code category could not be
+   *         found
    *
    * @throws DAOException
    */
@@ -437,22 +441,23 @@ public class CodesDAO
   }
 
   /**
-   * Returns all the cached codes for the cached code category with the specified ID.
+   * Returns all the cached codes for the cached code category.
    *
-   * @param cachedCodeCategoryId the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
-   * @return all the cached codes for the cached code category with the specified ID
+   * @return all the cached codes for the cached code category
    *
    * @throws DAOException
    */
-  public List<Code> getCachedCodesForCachedCodeCategory(String cachedCodeCategoryId)
+  public List<Code> getCachedCodesForCachedCodeCategory(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement =
           connection.prepareStatement(getCachedCodesForCachedCodeCategorySQL))
     {
-      statement.setString(1, cachedCodeCategoryId);
+      statement.setString(1, id);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -469,16 +474,16 @@ public class CodesDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the cached codes for the cached code category ("
-          + cachedCodeCategoryId + ") from the database", e);
+          + id + ") from the database", e);
     }
   }
 
   /**
-   * Retrieve the code with the specified ID.
+   * Retrieve the code.
    *
    * @param id the ID uniquely identifying the code
    *
-   * @return the code with the specified ID or <code>null</code> if the code could not be found
+   * @return the code or <code>null</code> if the code could not be found
    *
    * @throws DAOException
    */
@@ -509,18 +514,17 @@ public class CodesDAO
   }
 
   /**
-   * Returns all the code categories associated with the organisation identified by the
-   * specified organisation code.
+   * Returns all the code categories for with the organisation.
    *
-   * @param organisation  the organisation code identifying the organisation
-   * @param retrieveCodes retrieve the codes and/or code data for the code categories
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
+   * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    *
-   * @return all the code categories associated with the organisation identified by the
-   *         specified organisation code
+   * @return all the code categories for the organisation
    *
    * @throws DAOException
    */
-  public List<CodeCategory> getCodeCategoriesForOrganisation(String organisation,
+  public List<CodeCategory> getCodeCategoriesForOrganisation(UUID organisationId,
       boolean retrieveCodes)
     throws DAOException
   {
@@ -558,16 +562,15 @@ public class CodesDAO
   }
 
   /**
-   * Retrieve the code category with the specified ID.
+   * Retrieve the code category.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
-   * @return the code category with the specified ID or <code>null</code> if the code category
-   *         could not be found
+   * @return the code category or <code>null</code> if the code category could not be found
    *
    * @throws DAOException
    */
-  public CodeCategory getCodeCategory(String id)
+  public CodeCategory getCodeCategory(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -595,21 +598,21 @@ public class CodesDAO
   }
 
   /**
-   * Returns all the codes for the code category with the specified ID.
+   * Returns all the codes for the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
-   * @return all the codes for the code category with the specified ID
+   * @return all the codes for the code category
    *
    * @throws DAOException
    */
-  public List<Code> getCodesForCodeCategory(String codeCategoryId)
+  public List<Code> getCodesForCodeCategory(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
     {
-      statement.setString(1, codeCategoryId);
+      statement.setString(1, id);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -626,22 +629,21 @@ public class CodesDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the codes for the code category ("
-          + codeCategoryId + ") from the database", e);
+          + id + ") from the database", e);
     }
   }
 
   /**
-   * Returns the number of code categories associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of code categories for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return the number of code categories associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of code categories for the organisation
    *
    * @throws DAOException
    */
-  public int getNumberOfCodeCategoriesForOrganisation(String organisation)
+  public int getNumberOfCodeCategoriesForOrganisation(UUID organisationId)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -672,21 +674,21 @@ public class CodesDAO
   }
 
   /**
-   * Returns the number of codes for the code category with the specified ID.
+   * Returns the number of codes for the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
-   * @return the number of codes for the code category with the specified ID
+   * @return the number of codes for the code category
    *
    * @throws DAOException
    */
-  public int getNumberOfCodesForCodeCategory(String codeCategoryId)
+  public int getNumberOfCodesForCodeCategory(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfCodesForCodeCategorySQL))
     {
-      statement.setString(1, codeCategoryId);
+      statement.setString(1, id);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -705,7 +707,7 @@ public class CodesDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the number of codes for the code category ("
-          + codeCategoryId + ") in the database", e);
+          + id + ") in the database", e);
     }
   }
 
@@ -783,14 +785,15 @@ public class CodesDAO
   /**
    * Is the cached code category current?
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
    *         otherwise
    *
    * @throws DAOException
    */
-  public boolean isCachedCodeCategoryCurrent(String id)
+  public boolean isCachedCodeCategoryCurrent(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection())

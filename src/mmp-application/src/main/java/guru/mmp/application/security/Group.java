@@ -16,6 +16,10 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>Group</code> class stores the information for a group.
  *
@@ -27,8 +31,8 @@ public class Group
   private static final long serialVersionUID = 1000000;
   private String description;
   private String groupName;
-  private long id;
-  private long userDirectoryId;
+  private UUID id;
+  private UUID userDirectoryId;
 
   /**
    * Constructs a new <code>Group</code>.
@@ -66,21 +70,23 @@ public class Group
   }
 
   /**
-   * Returns the unique numeric ID for the group.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the group.
    *
-   * @return the unique numeric ID for the group
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
    */
-  public long getId()
+  public UUID getId()
   {
     return id;
   }
 
   /**
-   * Returns the unique ID for the user directory the group is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with.
    *
-   * @return the unique ID for the user directory the group is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the group is associated with
    */
-  public long getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -106,21 +112,23 @@ public class Group
   }
 
   /**
-   * Set the unique numeric ID for the group.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
    *
-   * @param id the unique numeric ID for the group
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
    */
-  public void setId(long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
 
   /**
-   * Set the unique ID for the user directory the group is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * group is associated with.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the group is associated with
    */
-  public void setUserDirectoryId(long userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

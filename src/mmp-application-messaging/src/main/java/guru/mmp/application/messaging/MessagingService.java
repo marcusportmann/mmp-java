@@ -486,11 +486,11 @@ public class MessagingService
   }
 
   /**
-   * Retrieve the error report with the specified ID.
+   * Retrieve the error report.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the error report with the specified ID or <code>null</code> if the error report could
+   * @return the error report or <code>null</code> if the error report could
    *         not be found
    *
    * @throws MessagingException
@@ -509,11 +509,11 @@ public class MessagingService
   }
 
   /**
-   * Retrieve the summary for the error report with the specified ID.
+   * Retrieve the summary for the error report.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the summary for the error report with the specified ID or <code>null</code> if the
+   * @return the summary for the error report or <code>null</code> if the
    *         error report could not be found
    *
    * @throws MessagingException
@@ -543,11 +543,11 @@ public class MessagingService
   }
 
   /**
-   * Retrieve the message with the specified ID.
+   * Retrieve the message.
    *
    * @param id the ID uniquely identifying the message
    *
-   * @return the message with the specified ID or <code>null</code> if the message could not
+   * @return the message or <code>null</code> if the message could not
    *         be found
    *
    * @throws MessagingException

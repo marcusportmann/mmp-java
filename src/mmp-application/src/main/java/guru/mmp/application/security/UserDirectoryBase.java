@@ -51,19 +51,16 @@ public abstract class UserDirectoryBase
   private String databaseCatalogSeparator;
   private String deleteGroupSQL;
   private String getGroupIdSQL;
-  private String insertIDGeneratorSQL;
 
   /**
    * The key-value configuration parameters for the user directory.
    */
   private Map<String, String> parameters;
-  private String selectIDGeneratorSQL;
-  private String updateIDGeneratorSQL;
 
   /**
    * The unique ID for the user directory.
    */
-  private long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * Constructs a new <code>UserDirectoryBase</code>.
@@ -73,7 +70,7 @@ public abstract class UserDirectoryBase
    *
    * @throws SecurityException
    */
-  public UserDirectoryBase(long userDirectoryId, Map<String, String> parameters)
+  public UserDirectoryBase(UUID userDirectoryId, Map<String, String> parameters)
     throws SecurityException
   {
     this.userDirectoryId = userDirectoryId;
@@ -152,108 +149,6 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Get the next unique <code>long</code> ID for the entity with the specified type.
-   *
-   * @param type the type of entity to retrieve the next ID for
-   *
-   * @return the next unique <code>long</code> ID for the entity with the specified type
-   *
-   * @throws SQLException
-   */
-  public long nextId(String type)
-    throws SQLException
-  {
-    // Local variables
-    long result;
-
-    // Retrieve the Transaction Manager
-    TransactionManager transactionManager = TransactionManager.getTransactionManager();
-    javax.transaction.Transaction existingTransaction = null;
-
-    try
-    {
-      if (transactionManager.isTransactionActive())
-      {
-        existingTransaction = transactionManager.beginNew();
-      }
-      else
-      {
-        transactionManager.begin();
-      }
-
-      try (Connection connection = dataSource.getConnection())
-      {
-        try (PreparedStatement updateStatement = connection.prepareStatement(updateIDGeneratorSQL))
-        {
-          updateStatement.setString(1, type);
-
-          // The following statment will block if another connection is currently
-          // executing a transaction that is updating the IDGENERATOR table.
-          if (updateStatement.executeUpdate() == 0)
-          {
-            // The row could not be found so INSERT one starting at id = 1
-            try (PreparedStatement insertStatement =
-                connection.prepareStatement(insertIDGeneratorSQL))
-            {
-              insertStatement.setLong(1, 1);
-              insertStatement.setString(2, type);
-              insertStatement.executeUpdate();
-            }
-          }
-        }
-
-        try (PreparedStatement selectStatement = connection.prepareStatement(selectIDGeneratorSQL))
-        {
-          selectStatement.setString(1, type);
-
-          try (ResultSet rs = selectStatement.executeQuery())
-          {
-            if (rs.next())
-            {
-              result = rs.getLong(1);
-            }
-            else
-            {
-              throw new SQLException("No IDGenerator row found for type (" + type + ")");
-            }
-          }
-        }
-      }
-
-      transactionManager.commit();
-
-      return result;
-    }
-    catch (Throwable e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving the new"
-            + " ID for the entity of type (" + type + ") from the IDGENERATOR table", f);
-      }
-
-      throw new SQLException("Failed to retrieve the new ID for the entity of type (" + type
-          + ") from the IDGENERATOR table", e);
-    }
-    finally
-    {
-      try
-      {
-        transactionManager.resume(existingTransaction);
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to resume the original transaction while retrieving the new"
-            + " ID for the entity of type (" + type + ") from the IDGENERATOR table", e);
-      }
-    }
-  }
-
-  /**
    * Build the SQL statements for the user directory.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects for the user directory
@@ -271,17 +166,6 @@ public abstract class UserDirectoryBase
     // getGroupIdSQL
     getGroupIdSQL = "SELECT G.ID FROM " + schemaPrefix + "GROUPS G"
         + " WHERE G.USER_DIRECTORY_ID=? AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // insertIDGeneratorSQL
-    insertIDGeneratorSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR"
-        + " (CURRENT, NAME) VALUES (?, ?)";
-
-    // selectIDGeneratorSQL
-    selectIDGeneratorSQL = "SELECT CURRENT FROM " + schemaPrefix + "IDGENERATOR" + " WHERE NAME=?";
-
-    // updateIDGeneratorSQL
-    updateIDGeneratorSQL = "UPDATE " + schemaPrefix + "IDGENERATOR"
-        + " SET CURRENT = CURRENT + 1 WHERE NAME=?";
   }
 
   /**

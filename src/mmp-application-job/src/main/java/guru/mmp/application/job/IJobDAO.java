@@ -42,11 +42,11 @@ public interface IJobDAO
     throws DAOException;
 
   /**
-   * Retrieve the job with the specified ID.
+   * Retrieve the job.
    *
    * @param id the ID uniquely identifying the job
    *
-   * @return the job with the specified ID or <code>null</code> if the job could not be found
+   * @return the job or <code>null</code> if the job could not be found
    *
    * @throws DAOException
    */
@@ -54,7 +54,7 @@ public interface IJobDAO
     throws DAOException;
 
   /**
-   * Retrieve the parameters for the job with the specified ID.
+   * Retrieve the parameters for the job.
    *
    * @param id the ID uniquely identifying the job
    *
@@ -114,7 +114,7 @@ public interface IJobDAO
     throws DAOException;
 
   /**
-   * Increment the execution attempts for the job with the specified ID.
+   * Increment the execution attempts for the job.
    *
    * @param id the ID uniquely identifying the job
    *
@@ -173,7 +173,7 @@ public interface IJobDAO
     throws DAOException;
 
   /**
-   * Set the status for the job with the specified ID.
+   * Set the status for the job.
    *
    * @param id     the ID uniquely identifying the job
    * @param status the new status for the job

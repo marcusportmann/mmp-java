@@ -56,14 +56,14 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
   /**
    * The unique ID for the user directory the users are associated with.
    */
-  private long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * Constructs a new <code>UserDataProvider</code>.
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
    */
-  public FilteredUserDataProvider(long userDirectoryId)
+  public FilteredUserDataProvider(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }
@@ -162,7 +162,7 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
    *
    * @param userDirectoryId the unique ID for the user directory the users are associated with
    */
-  public void setUserDirectoryId(long userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

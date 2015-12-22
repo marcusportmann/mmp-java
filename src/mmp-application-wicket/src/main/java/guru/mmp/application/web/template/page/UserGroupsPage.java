@@ -79,7 +79,7 @@ public class UserGroupsPage extends TemplateWebPage
    * @param userDirectoryId the unique ID for the user directory the user is associated with
    * @param username        the username identifying the user
    */
-  public UserGroupsPage(PageReference previousPage, long userDirectoryId, String username)
+  public UserGroupsPage(PageReference previousPage, UUID userDirectoryId, String username)
   {
     super("User Groups", username);
 
@@ -227,7 +227,7 @@ public class UserGroupsPage extends TemplateWebPage
   @SuppressWarnings("unused")
   protected UserGroupsPage() {}
 
-  private List<String> getGroupOptions(long userDirectoryId, String username)
+  private List<String> getGroupOptions(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     WebSession session = getWebApplicationSession();

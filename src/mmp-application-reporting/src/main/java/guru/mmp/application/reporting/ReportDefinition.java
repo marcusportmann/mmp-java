@@ -19,6 +19,7 @@ package guru.mmp.application.reporting;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
 import java.util.UUID;
 
 /**
@@ -34,7 +35,7 @@ public class ReportDefinition
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The name of the report definition.
@@ -42,9 +43,10 @@ public class ReportDefinition
   private String name;
 
   /**
-   * The organisation code identifying the organisation the report definition is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the report
+   * definition is associated with.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /**
    * The JasperReports template for the report definition.
@@ -59,15 +61,15 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param organisation the organisation code identifying the organisation the report definition
-   *                     is associated with
-   * @param name         the name of the report definition
-   * @param template     the JasperReports template for the report definition
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the report definition is associated with
+   * @param name           the name of the report definition
+   * @param template       the JasperReports template for the report definition
    */
-  public ReportDefinition(String organisation, String name, byte[] template)
+  public ReportDefinition(UUID organisationId, String name, byte[] template)
   {
-    this.id = UUID.randomUUID().toString();
-    this.organisation = organisation;
+    this.id = UUID.randomUUID();
+    this.organisationId = organisationId;
     this.name = name;
     this.template = template;
   }
@@ -75,17 +77,17 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                     report definition
-   * @param organisation the organisation code identifying the organisation the report definition
-   *                     is associated with
-   * @param name         the name of the report definition
-   * @param template     the JasperReports template for the report definition
+   * @param id             the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       report definition
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the report definition is associated with
+   * @param name           the name of the report definition
+   * @param template       the JasperReports template for the report definition
    */
-  public ReportDefinition(String id, String organisation, String name, byte[] template)
+  public ReportDefinition(UUID id, UUID organisationId, String name, byte[] template)
   {
     this.id = id;
-    this.organisation = organisation;
+    this.organisationId = organisationId;
     this.name = name;
     this.template = template;
   }
@@ -97,7 +99,7 @@ public class ReportDefinition
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
    *         definition
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -113,15 +115,15 @@ public class ReportDefinition
   }
 
   /**
-   * Returns the organisation code identifying the organisation the report definition is associated
-   * with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   * the report definition is associated with.
    *
-   * @return the organisation code identifying the organisation the report definition is associated
-   *         with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   *         the report definition is associated with
    */
-  public String getOrganisation()
+  public UUID getOrganisationId()
   {
-    return organisation;
+    return organisationId;
   }
 
   /**
@@ -140,7 +142,7 @@ public class ReportDefinition
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -156,15 +158,15 @@ public class ReportDefinition
   }
 
   /**
-   * Set the organisation code identifying the organisation the report definition is associated
-   * with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * report definition is associated with.
    *
-   * @param organisation the organisation code identifying the organisation the report definition
-   *                     is associated with
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the report definition is associated with
    */
-  public void setOrganisation(String organisation)
+  public void setOrganisationId(UUID organisationId)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
   }
 
   /**
@@ -185,7 +187,7 @@ public class ReportDefinition
   @Override
   public String toString()
   {
-    return "ReportDefinition {" + "id=\"" + getId() + "\", " + "organisation=\""
-        + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
+    return "ReportDefinition {" + "id=\"" + getId() + "\", " + "organisationId=\""
+        + getOrganisationId() + "\", " + "name=\"" + getName() + "\"}";
   }
 }

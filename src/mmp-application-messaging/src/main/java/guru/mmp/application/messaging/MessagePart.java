@@ -24,10 +24,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagePart</code> class stores the information for a message part that is
@@ -56,7 +56,7 @@ public class MessagePart
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the message part.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The name of the entity that has locked the message part for processing.
@@ -71,7 +71,7 @@ public class MessagePart
   /**
    * The Universally Unique Identifier (UUID) used to correlate the original message.
    */
-  private String messageCorrelationId;
+  private UUID messageCorrelationId;
 
   /**
    * The date and time the original message was created.
@@ -84,9 +84,10 @@ public class MessagePart
   private String messageDataHash;
 
   /**
-   * The device ID identifying the device the original message originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the original
+   * message originated from.
    */
-  private String messageDevice;
+  private UUID messageDeviceId;
 
   /**
    * The base-64 encoded initialisation vector for the encryption scheme for the original message.
@@ -101,12 +102,13 @@ public class MessagePart
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the original message.
    */
-  private String messageId;
+  private UUID messageId;
 
   /**
-   * The organisation code identifying the organisation associated with the original message.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * original message was associated with.
    */
-  private String messageOrganisation;
+  private UUID messageOrganisationId;
 
   /**
    *  The priority for the original message.
@@ -114,14 +116,10 @@ public class MessagePart
   private Message.Priority messagePriority;
 
   /**
-   * The UUID identifying the type of the original message.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the type of the original
+   * message.
    */
-  private String messageType;
-
-  /**
-   * The version of the original message type.
-   */
-  private int messageTypeVersion;
+  private UUID messageTypeId;
 
   /**
    * The username identifying the user associated with the original message.
@@ -163,26 +161,25 @@ public class MessagePart
    * in the specified WBXML document.
    *
    * @param document the WBXML document containing the message information
-   *
-   * @throws MessagingException
    */
   public MessagePart(Document document)
   {
     Element rootElement = document.getRootElement();
 
-    this.id = rootElement.getAttributeValue("id");
+    this.id = UUID.fromString(rootElement.getAttributeValue("id"));
     this.partNo = Integer.parseInt(rootElement.getAttributeValue("partNo"));
     this.totalParts = Integer.parseInt(rootElement.getAttributeValue("totalParts"));
     this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
     this.status = Status.INITIALISED;
 
-    this.messageId = rootElement.getAttributeValue("messageId");
+    this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
     this.messageUser = rootElement.getAttributeValue("messageUser");
-    this.messageOrganisation = rootElement.getAttributeValue("messageOrganisation");
-    this.messageDevice = rootElement.getAttributeValue("messageDevice");
-    this.messageType = rootElement.getAttributeValue("messageType");
-    this.messageTypeVersion = Integer.parseInt(rootElement.getAttributeValue("messageTypeVersion"));
-    this.messageCorrelationId = rootElement.getAttributeValue("messageCorrelationId");
+    this.messageOrganisationId =
+      UUID.fromString(rootElement.getAttributeValue("messageOrganisationId"));
+    this.messageDeviceId = UUID.fromString(rootElement.getAttributeValue("messageDeviceId"));
+    this.messageTypeId = UUID.fromString(rootElement.getAttributeValue("messageTypeId"));
+    this.messageCorrelationId =
+      UUID.fromString(rootElement.getAttributeValue("messageCorrelationId"));
     this.messagePriority =
       Message.Priority.fromCode(Integer.parseInt(rootElement.getAttributeValue("messagePriority")));
 
@@ -218,12 +215,13 @@ public class MessagePart
    *                                identify the original message
    * @param messageUser             the username identifying the user associated with the original
    *                                message
-   * @param messageOrganisation     the organisation code identifying the organisation associated
-   *                                with the original message
-   * @param messageDevice           the device ID identifying the device the original message
-   *                                originated from
-   * @param messageType             the UUID identifying the type of the original message
-   * @param messageTypeVersion      the version of the original message type
+   * @param messageOrganisationId   the Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the organisation the original message was associated
+   *                                with
+   * @param messageDeviceId         the Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the device the original message originated from
+   * @param messageTypeId           the Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the type of the original message
    * @param messageCorrelationId    the Universally Unique Identifier (UUID) used to correlate the
    *                                original message
    * @param messagePriority         the priority for the original message
@@ -235,23 +233,22 @@ public class MessagePart
    * @param messageChecksum         the checksum for the original message
    * @param data                    the binary data for the message part
    */
-  public MessagePart(int partNo, int totalParts, String messageId, String messageUser,
-      String messageOrganisation, String messageDevice, String messageType, int messageTypeVersion,
-      String messageCorrelationId, Message.Priority messagePriority, Date messageCreated,
+  public MessagePart(int partNo, int totalParts, UUID messageId, String messageUser,
+      UUID messageOrganisationId, UUID messageDeviceId, UUID messageTypeId,
+      UUID messageCorrelationId, Message.Priority messagePriority, Date messageCreated,
       String messageDataHash, EncryptionScheme messageEncryptionScheme, String messageEncryptionIV,
       String messageChecksum, byte[] data)
   {
-    this.id = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID();
     this.partNo = partNo;
     this.totalParts = totalParts;
     this.sendAttempts = 0;
     this.status = Status.INITIALISED;
     this.messageId = messageId;
     this.messageUser = messageUser;
-    this.messageOrganisation = messageOrganisation;
-    this.messageDevice = messageDevice;
-    this.messageType = messageType;
-    this.messageTypeVersion = messageTypeVersion;
+    this.messageOrganisationId = messageOrganisationId;
+    this.messageDeviceId = messageDeviceId;
+    this.messageTypeId = messageTypeId;
     this.messageCorrelationId = messageCorrelationId;
     this.messagePriority = messagePriority;
     this.messageCreated = messageCreated;
@@ -282,12 +279,13 @@ public class MessagePart
    *                                identify the original message
    * @param messageUser             the username identifying the user associated with the original
    *                                message
-   * @param messageOrganisation     the organisation code identifying the organisation associated
-   *                                with the original message
-   * @param messageDevice           the device ID identifying the device the original message
-   *                                originated from
-   * @param messageType             the UUID identifying the type of the original message
-   * @param messageTypeVersion      the version of the original message type
+   * @param messageOrganisationId   the Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the organisation the original message was associated
+   *                                with
+   * @param messageDeviceId         the Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the device the original message originated from
+   * @param messageTypeId           the Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the type of the original message
    * @param messageCorrelationId    the Universally Unique Identifier (UUID) used to correlate the
    *                                original message
    * @param messagePriority         the priority for the original message
@@ -301,10 +299,10 @@ public class MessagePart
    *                                processing
    * @param data                    the binary data for the message part
    */
-  public MessagePart(String id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
-      Status status, Date persisted, Date updated, String messageId, String messageUser,
-      String messageOrganisation, String messageDevice, String messageType, int messageTypeVersion,
-      String messageCorrelationId, Message.Priority messagePriority, Date messageCreated,
+  public MessagePart(UUID id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
+      Status status, Date persisted, Date updated, UUID messageId, String messageUser,
+      UUID messageOrganisationId, UUID messageDeviceId, UUID messageTypeId,
+      UUID messageCorrelationId, Message.Priority messagePriority, Date messageCreated,
       String messageDataHash, EncryptionScheme messageEncryptionScheme, String messageEncryptionIV,
       String messageChecksum, String lockName, byte[] data)
   {
@@ -318,10 +316,9 @@ public class MessagePart
     this.updated = updated;
     this.messageId = messageId;
     this.messageUser = messageUser;
-    this.messageOrganisation = messageOrganisation;
-    this.messageDevice = messageDevice;
-    this.messageType = messageType;
-    this.messageTypeVersion = messageTypeVersion;
+    this.messageOrganisationId = messageOrganisationId;
+    this.messageDeviceId = messageDeviceId;
+    this.messageTypeId = messageTypeId;
     this.messageCorrelationId = messageCorrelationId;
     this.messagePriority = messagePriority;
     this.messageCreated = messageCreated;
@@ -446,17 +443,16 @@ public class MessagePart
             || (!rootElement.hasAttribute("sendAttempts"))
               || (!rootElement.hasAttribute("messageId"))
                 || (!rootElement.hasAttribute("messageUser"))
-                  || (!rootElement.hasAttribute("messageOrganisation"))
-                    || (!rootElement.hasAttribute("messageDevice"))
-                      || (!rootElement.hasAttribute("messageType"))
-                        || (!rootElement.hasAttribute("messageTypeVersion"))
-                          || (!rootElement.hasAttribute("messageCorrelationId"))
-                            || (!rootElement.hasAttribute("messagePriority"))
-                              || (!rootElement.hasAttribute("messageCreated"))
-                                || (!rootElement.hasAttribute("messageDataHash"))
-                                  || (!rootElement.hasAttribute("messageEncryptionScheme"))
-                                    || (!rootElement.hasAttribute("messageEncryptionIV"))
-                                      || (!rootElement.hasAttribute("messageChecksum")));
+                  || (!rootElement.hasAttribute("messageOrganisationId"))
+                    || (!rootElement.hasAttribute("messageDeviceId"))
+                      || (!rootElement.hasAttribute("messageTypeId"))
+                        || (!rootElement.hasAttribute("messageCorrelationId"))
+                          || (!rootElement.hasAttribute("messagePriority"))
+                            || (!rootElement.hasAttribute("messageCreated"))
+                              || (!rootElement.hasAttribute("messageDataHash"))
+                                || (!rootElement.hasAttribute("messageEncryptionScheme"))
+                                  || (!rootElement.hasAttribute("messageEncryptionIV"))
+                                    || (!rootElement.hasAttribute("messageChecksum")));
   }
 
   /**
@@ -484,7 +480,7 @@ public class MessagePart
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the message part
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -514,7 +510,7 @@ public class MessagePart
    *
    * @return the Universally Unique Identifier (UUID) used to correlate the original message
    */
-  public String getMessageCorrelationId()
+  public UUID getMessageCorrelationId()
   {
     return messageCorrelationId;
   }
@@ -540,13 +536,15 @@ public class MessagePart
   }
 
   /**
-   * Returns the device ID identifying the device the original message originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * original message originated from
    *
-   * @return the device ID identifying the device the original message originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   *         original message originated from
    */
-  public String getMessageDevice()
+  public UUID getMessageDeviceId()
   {
-    return messageDevice;
+    return messageDeviceId;
   }
 
   /**
@@ -577,20 +575,21 @@ public class MessagePart
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the original message
    */
-  public String getMessageId()
+  public UUID getMessageId()
   {
     return messageId;
   }
 
   /**
-   * Returns the organisation code identifying the organisation associated with the original
-   * message.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   * the original message was associated with.
    *
-   * @return the organisation code identifying the organisation associated with the original message
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   *         the original message was associated with
    */
-  public String getMessageOrganisation()
+  public UUID getMessageOrganisationId()
   {
-    return messageOrganisation;
+    return messageOrganisationId;
   }
 
   /**
@@ -604,23 +603,15 @@ public class MessagePart
   }
 
   /**
-   * Returns the UUID identifying the type of the original message.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of the
+   * original message.
    *
-   * @return the UUID identifying the type of the original message
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of the
+   *         original message
    */
-  public String getMessageType()
+  public UUID getMessageTypeId()
   {
-    return messageType;
-  }
-
-  /**
-   * Returns the version of the original message type.
-   *
-   * @return the version of the original message type
-   */
-  public int getMessageTypeVersion()
-  {
-    return messageTypeVersion;
+    return messageTypeId;
   }
 
   /**
@@ -730,7 +721,7 @@ public class MessagePart
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -761,7 +752,7 @@ public class MessagePart
    * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
    *                             original message
    */
-  public void setMessageCorrelationId(String messageCorrelationId)
+  public void setMessageCorrelationId(UUID messageCorrelationId)
   {
     this.messageCorrelationId = messageCorrelationId;
   }
@@ -787,13 +778,15 @@ public class MessagePart
   }
 
   /**
-   * Set the device ID identifying the device the original message originated from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the original
+   * message originated from.
    *
-   * @param messageDevice the device ID identifying the device the original message originated from
+   * @param messageDeviceId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        device the original message originated from
    */
-  public void setMessageDevice(String messageDevice)
+  public void setMessageDeviceId(UUID messageDeviceId)
   {
-    this.messageDevice = messageDevice;
+    this.messageDeviceId = messageDeviceId;
   }
 
   /**
@@ -802,20 +795,21 @@ public class MessagePart
    * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                  original message
    */
-  public void setMessageId(String messageId)
+  public void setMessageId(UUID messageId)
   {
     this.messageId = messageId;
   }
 
   /**
-   * Set the organisation code identifying the organisation associated with the original message.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * original message was associated with.
    *
-   * @param messageOrganisation the organisation code identifying the organisation associated with
-   *                            the original message
+   * @param messageOrganisationId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                              the organisation the original message was associated with
    */
-  public void setMessageOrganisation(String messageOrganisation)
+  public void setMessageOrganisationId(UUID messageOrganisationId)
   {
-    this.messageOrganisation = messageOrganisation;
+    this.messageOrganisationId = messageOrganisationId;
   }
 
   /**
@@ -829,23 +823,15 @@ public class MessagePart
   }
 
   /**
-   * Set the UUID identifying the type of the original message.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the type of the original
+   * message.
    *
-   * @param messageType the UUID identifying the type of the original message
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      type of the original message
    */
-  public void setMessageType(String messageType)
+  public void setMessageTypeId(UUID messageTypeId)
   {
-    this.messageType = messageType;
-  }
-
-  /**
-   * Set the version of the original message type.
-   *
-   * @param messageTypeVersion the version of the original message type
-   */
-  public void setMessageTypeVersion(int messageTypeVersion)
-  {
-    this.messageTypeVersion = messageTypeVersion;
+    this.messageTypeId = messageTypeId;
   }
 
   /**
@@ -969,10 +955,9 @@ public class MessagePart
 
     buffer.append(" messageId=\"").append(messageId).append("\"");
     buffer.append(" messageUser=\"").append(messageUser).append("\"");
-    buffer.append(" messageOrganisation=\"").append(messageOrganisation).append("\"");
-    buffer.append(" messageDevice=\"").append(messageDevice).append("\"");
-    buffer.append(" messageType=\"").append(messageType).append("\"");
-    buffer.append(" messageTypeVersion=\"").append(messageTypeVersion).append("\"");
+    buffer.append(" messageOrganisationId=\"").append(messageOrganisationId).append("\"");
+    buffer.append(" messageDeviceId=\"").append(messageDeviceId).append("\"");
+    buffer.append(" messageTypeId=\"").append(messageTypeId).append("\"");
     buffer.append(" messageCorrelationId=\"").append(messageCorrelationId).append("\"");
     buffer.append(" messagePriority=\"").append(messagePriority).append("\"");
     buffer.append(" messageCreated=\"").append(ISO8601.fromDate(messageCreated)).append("\"");
@@ -996,17 +981,16 @@ public class MessagePart
   {
     Element rootElement = new Element("MessagePart");
 
-    rootElement.setAttribute("id", id);
+    rootElement.setAttribute("id", id.toString());
     rootElement.setAttribute("partNo", Integer.toString(partNo));
     rootElement.setAttribute("totalParts", Integer.toString(totalParts));
     rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
-    rootElement.setAttribute("messageId", messageId);
+    rootElement.setAttribute("messageId", messageId.toString());
     rootElement.setAttribute("messageUser", messageUser);
-    rootElement.setAttribute("messageOrganisation", messageOrganisation);
-    rootElement.setAttribute("messageDevice", messageDevice);
-    rootElement.setAttribute("messageType", messageType);
-    rootElement.setAttribute("messageTypeVersion", Integer.toString(messageTypeVersion));
-    rootElement.setAttribute("messageCorrelationId", messageCorrelationId);
+    rootElement.setAttribute("messageOrganisationId", messageOrganisationId.toString());
+    rootElement.setAttribute("messageDeviceId", messageDeviceId.toString());
+    rootElement.setAttribute("messageTypeId", messageTypeId.toString());
+    rootElement.setAttribute("messageCorrelationId", messageCorrelationId.toString());
     rootElement.setAttribute("messagePriority", Integer.toString(messagePriority.getCode()));
     rootElement.setAttribute("messageCreated", ISO8601.fromDate(messageCreated));
     rootElement.setAttribute("messageDataHash", messageDataHash);
