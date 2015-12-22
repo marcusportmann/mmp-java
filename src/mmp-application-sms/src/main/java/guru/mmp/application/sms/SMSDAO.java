@@ -75,65 +75,6 @@ public class SMSDAO
   public SMSDAO() {}
 
   /**
-   * Constructs a new <code>SMSDAO</code>.
-   *
-   * @param dataSource the data source to use
-   *
-   * @throws DAOException
-   */
-  @SuppressWarnings("unused")
-  public SMSDAO(DataSource dataSource)
-    throws DAOException
-  {
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to initialise the SMS DAO:"
-          + " The specified data source is NULL");
-    }
-
-    this.dataSource = dataSource;
-    init();
-  }
-
-  /**
-   * Constructs a new <code>SMSDAO</code>.
-   *
-   * @param dataSourceJndiName the JNDI name of the data source used to access the database
-   *
-   * @throws DAOException
-   */
-  @SuppressWarnings("unused")
-  public SMSDAO(String dataSourceJndiName)
-    throws DAOException
-  {
-    try
-    {
-      InitialContext ic = new InitialContext();
-
-      try
-      {
-        this.dataSource = (DataSource) ic.lookup(dataSourceJndiName);
-      }
-      finally
-      {
-        try
-        {
-          ic.close();
-        }
-        catch (Throwable ignored) {}
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException("Failed to initialise the SMS DAO:"
-          + " Failed to lookup the data source (" + dataSourceJndiName + ") using JNDI: "
-          + e.getMessage(), e);
-    }
-
-    init();
-  }
-
-  /**
    * Create the entry for the SMS in the database.
    *
    * @param sms the <code>SMS</code> instance containing the information for the SMS

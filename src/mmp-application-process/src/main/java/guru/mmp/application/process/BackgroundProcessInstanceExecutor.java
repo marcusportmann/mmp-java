@@ -62,7 +62,7 @@ public class BackgroundProcessInstanceExecutor
     if (processService == null)
     {
       logger.error("Failed to execute the process instances:"
-        + " The ProcessService instance was NOT injected");
+        + " The ProcessService was NOT injected");
 
       return new AsyncResult<>(false);
     }
@@ -110,7 +110,7 @@ public class BackgroundProcessInstanceExecutor
     else
     {
       logger.error("Failed to initialise the background process instance executor:"
-        + " The TaskService instance was NOT injected");
+        + " The Process Service was NOT injected");
     }
   }
 

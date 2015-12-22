@@ -29,7 +29,7 @@ import java.util.concurrent.Future;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>BackgroundSMSSender</code> class implements the background SMS sender.
+ * The <code>BackgroundSMSSender</code> class implements the Background SMS Sender.
  *
  * @author Marcus Portmann
  */
@@ -45,12 +45,12 @@ public class BackgroundSMSSender
   private ISMSService smsService;
 
   /**
-   * Initialise the background SMS sender.
+   * Initialise the Background SMS Sender.
    */
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the background SMS sender");
+    logger.info("Initialising the Background SMS Sender");
 
     if (smsService != null)
     {
@@ -71,8 +71,8 @@ public class BackgroundSMSSender
     }
     else
     {
-      logger.error("Failed to initialise the background SMS sender:"
-          + " The SMSService instance was NOT injected");
+      logger.error("Failed to initialise the Background SMS Sender:"
+          + " The SMS Service was NOT injected");
     }
   }
 

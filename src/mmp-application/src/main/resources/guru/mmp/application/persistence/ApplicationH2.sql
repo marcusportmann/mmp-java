@@ -43,8 +43,8 @@ COMMENT ON COLUMN MMP.IDGENERATOR.CURRENT
 
 
 CREATE TABLE MMP.REGISTRY (
-  ID          CHAR(40) NOT NULL,
-  PARENT_ID   CHAR(40),
+  ID          UUID NOT NULL,
+  PARENT_ID   UUID,
   ENTRY_TYPE  INTEGER NOT NULL,
   NAME        VARCHAR(250) NOT NULL,
   SVALUE      VARCHAR(1024),
@@ -64,10 +64,10 @@ CREATE INDEX MMP_REGISTRY_PARENT_ID_IX
   (PARENT_ID);
 
 COMMENT ON COLUMN MMP.REGISTRY.ID
-  IS 'The unique ID for the registry entry';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the registry entry';
 
 COMMENT ON COLUMN MMP.REGISTRY.PARENT_ID
-  IS 'The ID of the parent entry for the registry entry';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the parent entry for the registry entry';
 
 COMMENT ON COLUMN MMP.REGISTRY.ENTRY_TYPE
   IS 'The type of registry entry';
@@ -512,11 +512,11 @@ COMMENT ON COLUMN MMP.ROLE_TO_GROUP_MAP.GROUP_ID
 
 
 
-CREATE TABLE MMP.SCHEDULED_TASKS (
+CREATE TABLE MMP.JOBS (
   ID                  VARCHAR(40) NOT NULL,
   NAME                VARCHAR(512) NOT NULL,
   SCHEDULING_PATTERN  VARCHAR(200) NOT NULL,
-  TASK_CLASS          VARCHAR(512) NOT NULL,
+  JOB_CLASS           VARCHAR(512) NOT NULL,
   STATUS              INTEGER NOT NULL DEFAULT 1,
   EXECUTION_ATTEMPTS  INTEGER NOT NULL DEFAULT 0,
   LOCK_NAME           VARCHAR(100),
@@ -527,67 +527,67 @@ CREATE TABLE MMP.SCHEDULED_TASKS (
   PRIMARY KEY (ID)
 );
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the scheduled task';
+COMMENT ON COLUMN MMP.JOBS.ID
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.NAME
-  IS 'The name of the scheduled task';
+COMMENT ON COLUMN MMP.JOBS.NAME
+  IS 'The name of the job';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.SCHEDULING_PATTERN
-  IS 'The cron-style scheduling pattern for the scheduled task';
+COMMENT ON COLUMN MMP.JOBS.SCHEDULING_PATTERN
+  IS 'The cron-style scheduling pattern for the job';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.TASK_CLASS
-  IS 'The fully qualified name of the Java class that implements the scheduled task';
+COMMENT ON COLUMN MMP.JOBS.JOB_CLASS
+  IS 'The fully qualified name of the Java class that implements the job';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.STATUS
-  IS 'The status of the scheduled task';
+COMMENT ON COLUMN MMP.JOBS.STATUS
+  IS 'The status of the job';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.EXECUTION_ATTEMPTS
-  IS 'The number of times the current execution of the scheduled task has been attempted';
+COMMENT ON COLUMN MMP.JOBS.EXECUTION_ATTEMPTS
+  IS 'The number of times the current execution of the job has been attempted';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.LOCK_NAME
-  IS 'The name of the entity that has locked the scheduled task for execution';
+COMMENT ON COLUMN MMP.JOBS.LOCK_NAME
+  IS 'The name of the entity that has locked the job for execution';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.LAST_EXECUTED
-  IS 'The date and time the scheduled task was last executed';
+COMMENT ON COLUMN MMP.JOBS.LAST_EXECUTED
+  IS 'The date and time the job was last executed';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.NEXT_EXECUTION
-  IS 'The date and time when the scheduled task will next be executed';
+COMMENT ON COLUMN MMP.JOBS.NEXT_EXECUTION
+  IS 'The date and time when the job will next be executed';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASKS.UPDATED
-  IS 'The date and time the scheduled task was updated';
+COMMENT ON COLUMN MMP.JOBS.UPDATED
+  IS 'The date and time the job was updated';
 
 
 
-CREATE TABLE MMP.SCHEDULED_TASK_PARAMETERS (
-  ID                 BIGINT NOT NULL,
-  SCHEDULED_TASK_ID  VARCHAR(40) NOT NULL,
-  NAME               VARCHAR(250) NOT NULL,
-  VALUE              VARCHAR(1024) NOT NULL,
+CREATE TABLE MMP.JOB_PARAMETERS (
+  ID      BIGINT NOT NULL,
+  JOB_ID  VARCHAR(40) NOT NULL,
+  NAME    VARCHAR(250) NOT NULL,
+  VALUE   VARCHAR(1024) NOT NULL,
 
   PRIMARY KEY (ID),
-  CONSTRAINT MMP_SCHEDULED_TASK_PARAMETERS_SCHEDULED_TASK_FK FOREIGN KEY (SCHEDULED_TASK_ID) REFERENCES MMP.SCHEDULED_TASKS(ID) ON DELETE CASCADE
+  CONSTRAINT MMP_JOB_PARAMETERS_JOB_FK FOREIGN KEY (JOB_ID) REFERENCES MMP.JOBS(ID) ON DELETE CASCADE
 );
 
-CREATE INDEX MMP_SCHEDULED_TASK_PARAMETERS_SCHEDULED_TASK_ID_IX
-  ON MMP.SCHEDULED_TASK_PARAMETERS
-  (SCHEDULED_TASK_ID);
+CREATE INDEX MMP_JOB_PARAMETERS_JOB_ID_IX
+  ON MMP.JOB_PARAMETERS
+  (JOB_ID);
   
-CREATE INDEX MMP_SCHEDULED_TASK_PARAMETERS_NAME_IX
-  ON MMP.SCHEDULED_TASK_PARAMETERS
+CREATE INDEX MMP_JOB_PARAMETERS_NAME_IX
+  ON MMP.JOB_PARAMETERS
   (NAME);  
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASK_PARAMETERS.ID
-  IS 'The ID uniquely identifying the scheduled task parameter';
+COMMENT ON COLUMN MMP.JOB_PARAMETERS.ID
+  IS 'The ID uniquely identifying the job parameter';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASK_PARAMETERS.SCHEDULED_TASK_ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the scheduled task the scheduled task parameter is associated with';
+COMMENT ON COLUMN MMP.JOB_PARAMETERS.JOB_ID
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter is associated with';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASK_PARAMETERS.NAME
-  IS 'The name of the scheduled task parameter';
+COMMENT ON COLUMN MMP.JOB_PARAMETERS.NAME
+  IS 'The name of the job parameter';
 
-COMMENT ON COLUMN MMP.SCHEDULED_TASK_PARAMETERS.VALUE
-  IS 'The value of the scheduled task parameter';
+COMMENT ON COLUMN MMP.JOB_PARAMETERS.VALUE
+  IS 'The value of the job parameter';
 
 
 

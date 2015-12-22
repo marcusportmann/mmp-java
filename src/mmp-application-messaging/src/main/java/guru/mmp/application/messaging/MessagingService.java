@@ -1061,14 +1061,14 @@ public class MessagingService
       logger.debug(message.toString());
     }
 
-    // Inform the background message processor that a new message has been queued for processing
+    // Inform the Background Message Processor that a new message has been queued for processing
     try
     {
       backgroundMessageProcessor.process();
     }
     catch (Throwable e)
     {
-      logger.error("Failed to invoke the background message processor to process the message ("
+      logger.error("Failed to invoke the Background Message Processor to process the message ("
           + message.getId() + ") that was queued for processing", e);
     }
   }

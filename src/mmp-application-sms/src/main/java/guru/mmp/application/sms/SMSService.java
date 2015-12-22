@@ -466,7 +466,7 @@ public class SMSService
     if (sendSMSsResult.isDone())
     {
       /*
-       * Asynchronously inform the background SMS sender that all pending SMSs should be
+       * Asynchronously inform the Background SMS Sender that all pending SMSs should be
        * sent.
        */
       try
@@ -475,7 +475,7 @@ public class SMSService
       }
       catch (Throwable e)
       {
-        logger.error("Failed to invoke the background SMS sender to asynchronously send "
+        logger.error("Failed to invoke the Background SMS Sender to asynchronously send "
             + "all queued SMSs", e);
       }
     }

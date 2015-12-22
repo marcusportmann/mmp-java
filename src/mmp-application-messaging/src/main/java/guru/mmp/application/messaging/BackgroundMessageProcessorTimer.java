@@ -28,8 +28,8 @@ import java.util.concurrent.Future;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>BackgroundMessageProcessorTimer</code> class implements the timer for the background
- * message processor.
+ * The <code>BackgroundMessageProcessorTimer</code> class implements the timer for the Background
+ * Message Processor.
  *
  * @author Marcus Portmann
  */
@@ -66,7 +66,7 @@ public class BackgroundMessageProcessorTimer
     if (processMessagesResult.isDone())
     {
       /*
-       * Asynchronously inform the background message processor that all pending messages should be
+       * Asynchronously inform the Background Message Processor that all pending messages should be
        * processed.
        */
       try
@@ -75,7 +75,7 @@ public class BackgroundMessageProcessorTimer
       }
       catch (Throwable e)
       {
-        logger.error("Failed to invoke the background message processor to asynchronously process"
+        logger.error("Failed to invoke the Background Message Processor to asynchronously process"
             + " all pending messages", e);
       }
     }

@@ -29,7 +29,7 @@ import java.util.concurrent.Future;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>BackgroundMessageProcessor</code> class implements the background message processor.
+ * The <code>BackgroundMessageProcessor</code> class implements the Background Message Processor.
  *
  * @author Marcus Portmann
  */
@@ -46,18 +46,18 @@ public class BackgroundMessageProcessor
   private IMessagingService messagingService;
 
   /**
-   * Initialise the background message processor.
+   * Initialise the Background Message Processor.
    */
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the background message processor");
+    logger.info("Initialising the Background Message Processor");
 
     if (messagingService != null)
     {
       /*
-       * Reset any locks for messages that were previously being processed by the background
-       * message processor.
+       * Reset any locks for messages that were previously being processed by the Background
+       * Message Processor.
        */
       try
       {
@@ -73,8 +73,8 @@ public class BackgroundMessageProcessor
     }
     else
     {
-      logger.error("Failed to initialise the background message processor:"
-          + " The MessagingService instance was NOT injected");
+      logger.error("Failed to initialise the Background Message Processor:"
+          + " The Messaging Service was NOT injected");
     }
   }
 
@@ -90,7 +90,7 @@ public class BackgroundMessageProcessor
     if (messagingService == null)
     {
       logger.error("Failed to process the messages queued for processing:"
-          + " The MessagingService was NOT injected");
+          + " The Messaging Service was NOT injected");
 
       return new AsyncResult<>(false);
     }

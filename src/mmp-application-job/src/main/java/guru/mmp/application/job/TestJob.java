@@ -14,37 +14,43 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.sms;
+package guru.mmp.application.job;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 
 /**
- * The <code>BackgroundSMSSenderTimer</code> class implements the timer for the Background
- * SMS Sender.
+ * The <code>TestJob</code> class implements the test job.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-@Singleton
-@TransactionManagement(TransactionManagementType.BEAN)
-public class BackgroundSMSSenderTimer
+public class TestJob
+  implements IJob
 {
-  /* SMS Service */
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(TestJob.class);
+
+  /* Job Service */
   @Inject
-  private ISMSService smsService;
+  private IJobService jobService;
 
   /**
-   * Send SMSs.
+   * Execute the job.
+   *
+   * @param context the job execution context
+   *
+   * @throws JobExecutionFailedException
    */
-  @Schedule(hour = "*", minute = "*", second = "*/30", persistent = false)
-  public void sendSMSs()
+  public void execute(JobExecutionContext context)
+    throws JobExecutionFailedException
   {
-    smsService.sendSMSs();
+    logger.info("Executing the test job (" + jobService + ")");
   }
 }
