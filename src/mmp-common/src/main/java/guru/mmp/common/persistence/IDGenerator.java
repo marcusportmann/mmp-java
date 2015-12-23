@@ -95,6 +95,8 @@ public class IDGenerator
    */
   public static UUID nextUUID(DataSource dataSource)
   {
+    // TODO: Save the results of checking if we are using a PostgreSQL database
+
     /*
      * First check whether this is a PostgreSQL database and we should be using a stored procedure
      * to retrieve the next UUID.

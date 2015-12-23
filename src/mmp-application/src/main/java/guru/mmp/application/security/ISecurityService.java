@@ -434,14 +434,14 @@ public interface ISecurityService
   /**
    * Retrieve the organisation.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
    * @return the details for the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  Organisation getOrganisation(String code)
+  Organisation getOrganisation(UUID id)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -497,42 +497,43 @@ public interface ISecurityService
   /**
    * Retrieve the user directories the organisation is associated with.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
    * @return the user directories the organisation is associated with
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  List<UserDirectory> getUserDirectoriesForOrganisation(String code)
+  List<UserDirectory> getUserDirectoriesForOrganisation(UUID organisationId)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the user directory
    *
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  UserDirectory getUserDirectory(UUID userDirectoryId)
+  UserDirectory getUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**
-   * Retrieve the ID for the user directory that the user with the specified username is associated
-   * with.
+   * Retrieve the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * that the user with the specified username is associated with.
    *
    * @param username the username identifying the user
    *
-   * @return the ID for the user directory that the user with the specified username is associated
-   *         with or -1 if the user cannot be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         that the user with the specified username is associated with or <code>null</code> if
+   *         the user cannot be found
    *
    * @throws SecurityException
    */
-  long getUserDirectoryIdForUser(String username)
+  UUID getUserDirectoryIdForUser(String username)
     throws SecurityException;
 
   /**

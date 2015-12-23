@@ -18,9 +18,12 @@ package guru.mmp.application.codes;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import guru.mmp.common.persistence.DAOException;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * The <code>ICodesService</code> interface defines the functionality that must be provided by a
@@ -33,26 +36,26 @@ public interface ICodesService
   /**
    * Check whether the cached code category exists.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
    *
    * @throws CodesServiceException
    */
-  boolean cachedCodeCategoryExists(String id)
+  boolean cachedCodeCategoryExists(UUID id)
     throws CodesServiceException;
 
   /**
    * Check whether the code category exists.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    *
    * @throws CodesServiceException
    */
-  @SuppressWarnings("unused")
-  boolean codeCategoryExists(String id)
+  boolean codeCategoryExists(UUID id)
     throws CodesServiceException;
 
   /**
@@ -100,11 +103,12 @@ public interface ICodesService
   /**
    * Delete the cached code category.
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @throws CodesServiceException
    */
-  void deleteCachedCodeCategory(String id)
+  void deleteCachedCodeCategory(UUID id)
     throws CodesServiceException;
 
   /**
@@ -120,25 +124,26 @@ public interface ICodesService
   /**
    * Delete the code category.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @throws CodesServiceException
    */
-  void deleteCodeCategory(String id)
+  void deleteCodeCategory(UUID id)
     throws CodesServiceException;
 
   /**
    * Retrieve the cached code category.
    *
-   * @param id            the ID uniquely identifying the cached code category
+   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      cached code category
    * @param retrieveCodes retrieve the codes and/or code data for the cached code category
    *
-   * @return the cached code category or <code>null</code> if the cached code
-   *         category could not be found
+   * @return the cached code category or <code>null</code> if the cached code category could not be
+   *         found
    *
    * @throws CodesServiceException
    */
-  CachedCodeCategory getCachedCodeCategory(String id, boolean retrieveCodes)
+  CachedCodeCategory getCachedCodeCategory(UUID id, boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
@@ -154,38 +159,36 @@ public interface ICodesService
     throws CodesServiceException;
 
   /**
-   * Returns all the code categories associated with the organisation identified by the
-   * specified organisation code.
+   * Returns all the code categories for the organisation.
    *
-   * @param organisation  the organisation code identifying the organisation
-   * @param retrieveCodes retrieve the codes and/or code data for the code categories
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
+   * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    *
-   * @return all the code categories associated with the organisation identified by the
-   *         specified organisation code
+   * @return all the code categories for the organisation
    *
    * @throws CodesServiceException
    */
-  List<CodeCategory> getCodeCategoriesForOrganisation(String organisation, boolean retrieveCodes)
+  List<CodeCategory> getCodeCategoriesForOrganisation(UUID organisationId, boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
    * Retrieve the code category.
    *
-   * @param id            the ID uniquely identifying the code category
-   * @param retrieveCodes retrieve the codes and/or code data for the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
-   * @return the code category or <code>null</code> if the code category
-   *         could not be found
+   * @return the code category or <code>null</code> if the code category could not be found
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeCategory(String id, boolean retrieveCodes)
+  CodeCategory getCodeCategory(UUID id, boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
    * Retrieve the code category using the specified parameters.
    *
-   * @param id            the ID uniquely identifying the code category
+   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      code category
    * @param parameters    the parameters
    * @param retrieveCodes retrieve the codes and/or code data for the code category
    *
@@ -194,7 +197,7 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeCategoryWithParameters(String id, Map<String, String> parameters,
+  CodeCategory getCodeCategoryWithParameters(UUID id, Map<String, String> parameters,
       boolean retrieveCodes)
     throws CodesServiceException;
 
@@ -243,39 +246,38 @@ public interface ICodesService
   /**
    * Returns all the codes for the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return all the codes for the code category
    *
    * @throws CodesServiceException
    */
-  List<Code> getCodesForCodeCategory(String codeCategoryId)
+  List<Code> getCodesForCodeCategory(UUID id)
     throws CodesServiceException;
 
   /**
-   * Returns the number of code categories associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of code categories for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return the number of code categories associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of code categories for the organisation
    *
    * @throws CodesServiceException
    */
-  int getNumberOfCodeCategoriesForOrganisation(String organisation)
+  int getNumberOfCodeCategoriesForOrganisation(UUID organisationId)
     throws CodesServiceException;
 
   /**
    * Returns the number of codes for the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return the number of codes for the code category
    *
    * @throws CodesServiceException
    */
-  int getNumberOfCodesForCodeCategory(String codeCategoryId)
+  int getNumberOfCodesForCodeCategory(UUID id)
     throws CodesServiceException;
 
   /**
@@ -322,14 +324,15 @@ public interface ICodesService
   /**
    * Is the cached code category current?
    *
-   * @param id the ID uniquely identifying the cached code category
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   *           category
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
    *         otherwise
    *
    * @throws CodesServiceException
    */
-  boolean isCachedCodeCategoryCurrent(String id)
+  boolean isCachedCodeCategoryCurrent(UUID id)
     throws CodesServiceException;
 
   /**

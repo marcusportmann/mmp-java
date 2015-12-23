@@ -73,7 +73,6 @@ public class SecurityService
   private String getInternalUserDirectoryIdForUserSQL;
   private String getNumberOfOrganisationsSQL;
   private String getNumberOfUserDirectoriesSQL;
-  private String getOrganisationIdSQL;
   private String getOrganisationSQL;
   private String getOrganisationsForUserDirectorySQL;
   private String getOrganisationsSQL;
@@ -81,6 +80,7 @@ public class SecurityService
   private String getUserDirectoriesSQL;
   private String getUserDirectorySQL;
   private String getUserDirectoryTypesSQL;
+  private String organisationExistsSQL;
 
   /* Registry */
   @Inject
@@ -88,8 +88,8 @@ public class SecurityService
   private String updateFunctionSQL;
   private String updateOrganisationSQL;
   private String updateUserDirectorySQL;
-  private Map<Long, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
-  private Map<String, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
+  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -422,9 +422,9 @@ public class SecurityService
     throws DuplicateOrganisationException, SecurityException
   {
     // Validate parameters
-    if (isNullOrEmpty(organisation.getCode()))
+    if (isNullOrEmpty(organisation.getId()))
     {
-      throw new InvalidArgumentException("organisation.code");
+      throw new InvalidArgumentException("organisation.id");
     }
 
     if (isNullOrEmpty(organisation.getName()))
@@ -1055,7 +1055,7 @@ public class SecurityService
         {
           Function function = new Function(rs.getString(2));
 
-          function.setId(rs.getInt(1));
+          function.setId((UUID)rs.getObject(1));
           function.setName(rs.getString(3));
           function.setDescription(rs.getString(4));
           list.add(function);
@@ -1337,42 +1337,41 @@ public class SecurityService
   /**
    * Retrieve the organisation.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
    * @return the details for the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public Organisation getOrganisation(String code)
+  public Organisation getOrganisation(UUID id)
     throws OrganisationNotFoundException, SecurityException
   {
     // Validate parameters
-    if (isNullOrEmpty(code))
+    if (isNullOrEmpty(id))
     {
-      throw new InvalidArgumentException("code");
+      throw new InvalidArgumentException("id");
     }
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getOrganisationSQL))
     {
-      statement.setString(1, code);
+      statement.setObject(1, id);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          Organisation organisation = new Organisation(rs.getString(2));
+          Organisation organisation = new Organisation((UUID)rs.getObject(1));
 
-          organisation.setId(rs.getLong(1));
-          organisation.setName(rs.getString(3));
-          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+          organisation.setName(rs.getString(2));
+          organisation.setDescription(StringUtil.notNull(rs.getString(3)));
 
           return organisation;
         }
         else
         {
-          throw new OrganisationNotFoundException("The organisation (" + code
+          throw new OrganisationNotFoundException("The organisation (" + id
               + ") could not be found");
         }
       }
@@ -1383,7 +1382,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the organisation (" + code + "): "
+      throw new SecurityException("Failed to retrieve the organisation (" + id + "): "
           + e.getMessage(), e);
     }
   }
@@ -1407,11 +1406,10 @@ public class SecurityService
 
         while (rs.next())
         {
-          Organisation organisation = new Organisation(rs.getString(2));
+          Organisation organisation = new Organisation((UUID)rs.getObject(1));
 
-          organisation.setId(rs.getLong(1));
           organisation.setName(rs.getString(3));
-          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+          organisation.setDescription(StringUtil.notNull(rs.getString(3)));
 
           list.add(organisation);
         }
@@ -1443,7 +1441,7 @@ public class SecurityService
       PreparedStatement statement =
           connection.prepareStatement(getOrganisationsForUserDirectorySQL))
     {
-      statement.setLong(1, userDirectoryId);
+      statement.setObject(1, userDirectoryId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1451,11 +1449,10 @@ public class SecurityService
 
         while (rs.next())
         {
-          Organisation organisation = new Organisation(rs.getString(2));
+          Organisation organisation = new Organisation((UUID)rs.getObject(1));
 
-          organisation.setId(rs.getLong(1));
-          organisation.setName(rs.getString(3));
-          organisation.setDescription(StringUtil.notNull(rs.getString(4)));
+          organisation.setName(rs.getString(2));
+          organisation.setDescription(StringUtil.notNull(rs.getString(3)));
 
           list.add(organisation);
         }
@@ -1471,15 +1468,15 @@ public class SecurityService
     }
   }
 
-  /**
-   * Returns the <code>Registry</code> for the <code>SecurityService</code>.
-   *
-   * @return the <code>Registry</code> for the <code>SecurityService</code>
-   */
-  public IRegistry getRegistry()
-  {
-    return registry;
-  }
+//  /**
+//   * Returns the <code>Registry</code> for the <code>SecurityService</code>.
+//   *
+//   * @return the <code>Registry</code> for the <code>SecurityService</code>
+//   */
+//  public IRegistry getRegistry()
+//  {
+//    return registry;
+//  }
 
   /**
    * Retrieve the user.
@@ -1548,21 +1545,22 @@ public class SecurityService
   /**
    * Retrieve the user directories the organisation is associated with.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
    * @return the user directories the organisation is associated with
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public List<UserDirectory> getUserDirectoriesForOrganisation(String code)
+  public List<UserDirectory> getUserDirectoriesForOrganisation(UUID organisationId)
     throws OrganisationNotFoundException, SecurityException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement =
           connection.prepareStatement(getUserDirectoriesForOrganisationSQL))
     {
-      statement.setString(1, code);
+      statement.setObject(1, organisationId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1579,7 +1577,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityException(
-          "Failed to retrieve the user directories associated with the organisation (" + code
+          "Failed to retrieve the user directories associated with the organisation (" + organisationId
           + "): " + e.getMessage(), e);
     }
   }
@@ -1587,21 +1585,20 @@ public class SecurityService
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the user directory
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public UserDirectory getUserDirectory(UUID userDirectoryId)
+  public UserDirectory getUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUserDirectorySQL))
     {
-      statement.setLong(1, userDirectoryId);
+      statement.setObject(1, id);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1611,7 +1608,7 @@ public class SecurityService
         }
         else
         {
-          throw new UserDirectoryNotFoundException("The user directory (" + userDirectoryId
+          throw new UserDirectoryNotFoundException("The user directory (" + id
               + ") could not be found");
         }
       }
@@ -1622,23 +1619,24 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the user directory (" + userDirectoryId
+      throw new SecurityException("Failed to retrieve the user directory (" + id
           + "): " + e.getMessage(), e);
     }
   }
 
   /**
-   * Retrieve the ID for the user directory that the user with the specified username is associated
-   * with.
+   * Retrieve the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * that the user with the specified username is associated with.
    *
    * @param username the username identifying the user
    *
-   * @return the ID for the user directory that the user with the specified username is associated
-   *         with or -1 if the user cannot be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         that the user with the specified username is associated with or <code>null</code> if
+   *         the user cannot be found
    *
    * @throws SecurityException
    */
-  public long getUserDirectoryIdForUser(String username)
+  public UUID getUserDirectoryIdForUser(String username)
     throws SecurityException
   {
     // Validate parameters
@@ -1650,17 +1648,17 @@ public class SecurityService
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != -1)
+      if (internalUserDirectoryId != null)
       {
         return internalUserDirectoryId;
       }
       else
       {
         /*
-         * Check all of the "external" user directories to see if one of them can authenticate this
-         * user.
+         * Check all of the "external" user directories to see if the user is associated with one
+         * of them.
          */
         for (UUID userDirectoryId : userDirectories.keySet())
         {
@@ -1678,7 +1676,7 @@ public class SecurityService
           }
         }
 
-        return -1;
+        return null;
       }
     }
     catch (Throwable e)
@@ -1707,7 +1705,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          list.add(new UserDirectoryType(rs.getString(1), rs.getString(2), rs.getString(3),
+          list.add(new UserDirectoryType((UUID)rs.getObject(1), rs.getString(2), rs.getString(3),
               rs.getString(4)));
         }
 
@@ -1809,8 +1807,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Security Service: " + e.getMessage(),
-          e);
+      throw new RuntimeException("Failed to initialise the Security Service: " + e.getMessage(), e);
     }
   }
 
@@ -1865,7 +1862,7 @@ public class SecurityService
   {
     try
     {
-      Map<Long, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
+      Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
       for (UserDirectory userDirectory : getUserDirectories())
       {
@@ -1932,7 +1929,7 @@ public class SecurityService
   {
     try
     {
-      Map<String, UserDirectoryType> reloadedUserDirectoryTypes = new ConcurrentHashMap<>();
+      Map<UUID, UserDirectoryType> reloadedUserDirectoryTypes = new ConcurrentHashMap<>();
 
       for (UserDirectoryType userDirectoryType : getUserDirectoryTypes())
       {
@@ -2037,25 +2034,25 @@ public class SecurityService
     userDirectory.renameGroup(groupName, newGroupName);
   }
 
-  /**
-   * Set the <code>DataSource</code> for the <code>SecurityService</code>.
-   *
-   * @param dataSource the <code>DataSource</code> for the <code>SecurityService</code>
-   */
-  public void setDataSource(DataSource dataSource)
-  {
-    this.dataSource = dataSource;
-  }
+//  /**
+//   * Set the <code>DataSource</code> for the <code>SecurityService</code>.
+//   *
+//   * @param dataSource the <code>DataSource</code> for the <code>SecurityService</code>
+//   */
+//  public void setDataSource(DataSource dataSource)
+//  {
+//    this.dataSource = dataSource;
+//  }
 
-  /**
-   * Set the <code>Registry</code> for the <code>SecurityService</code>.
-   *
-   * @param registry the <code>Registry</code> for the <code>SecurityService</code>
-   */
-  public void setRegistry(IRegistry registry)
-  {
-    this.registry = registry;
-  }
+//  /**
+//   * Set the <code>Registry</code> for the <code>SecurityService</code>.
+//   *
+//   * @param registry the <code>Registry</code> for the <code>SecurityService</code>
+//   */
+//  public void setRegistry(IRegistry registry)
+//  {
+//    this.registry = registry;
+//  }
 
   /**
    * Does the user directory support administering groups.
@@ -2119,6 +2116,11 @@ public class SecurityService
     throws FunctionNotFoundException, SecurityException
   {
     // Validate parameters
+    if (isNullOrEmpty(function.getId()))
+    {
+      throw new InvalidArgumentException("function.id");
+    }
+
     if (isNullOrEmpty(function.getCode()))
     {
       throw new InvalidArgumentException("function.code");
@@ -2132,7 +2134,7 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateFunctionSQL))
     {
-      if (getFunctionId(connection, function.getCode()) == -1)
+      if (getFunctionId(connection, function.getCode()) == null)
       {
         throw new FunctionNotFoundException("A function with the code (" + function.getCode()
             + ") could not be found");
@@ -2202,9 +2204,9 @@ public class SecurityService
   public void updateOrganisation(Organisation organisation)
     throws OrganisationNotFoundException, SecurityException
   {
-    if (isNullOrEmpty(organisation.getCode()))
+    if (isNullOrEmpty(organisation.getId()))
     {
-      throw new InvalidArgumentException("organisation.code");
+      throw new InvalidArgumentException("organisation.id");
     }
 
     if (isNullOrEmpty(organisation.getName()))
@@ -2215,15 +2217,15 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateOrganisationSQL))
     {
-      if (getOrganisationId(connection, organisation.getCode()) == -1)
+      if (!organisationExists(connection, organisation.getId()))
       {
-        throw new OrganisationNotFoundException("An organisation with the code ("
-            + organisation.getCode() + ") could not be found");
+        throw new OrganisationNotFoundException("An organisation with the ID ("
+            + organisation.getId() + ") could not be found");
       }
 
       statement.setString(1, organisation.getName());
       statement.setString(2, StringUtil.notNull(organisation.getDescription()));
-      statement.setString(3, organisation.getCode());
+      statement.setObject(3, organisation.getId());
 
       if (statement.executeUpdate() <= 0)
       {
@@ -2238,7 +2240,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to update the organisation (" + organisation.getCode()
+      throw new SecurityException("Failed to update the organisation (" + organisation.getId()
           + "): " + e.getMessage(), e);
     }
   }
@@ -2304,8 +2306,7 @@ public class SecurityService
       statement.setString(1, userDirectory.getName());
       statement.setString(2, userDirectory.getDescription());
       statement.setString(3, userDirectory.getConfiguration());
-
-      statement.setLong(4, userDirectory.getId());
+      statement.setObject(4, userDirectory.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -2385,10 +2386,6 @@ public class SecurityService
         + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID"
         + " WHERE UDTOM.USER_DIRECTORY_ID=?";
 
-    // getOrganisationIdSQL
-    getOrganisationIdSQL = "SELECT O.ID FROM " + schemaPrefix + "ORGANISATIONS O"
-        + " WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
-
     // getOrganisationSQL
     getOrganisationSQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
         + "ORGANISATIONS O WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
@@ -2415,6 +2412,10 @@ public class SecurityService
     // getUserDirectoryTypesSQL
     getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS,"
         + " UDT.ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
+
+    // organisationExistsSQL
+    organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O"
+      + " WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // updateFunctionSQL
     updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F"
@@ -2445,9 +2446,9 @@ public class SecurityService
     throws SQLException, SecurityException
   {
     UserDirectory userDirectory = new UserDirectory();
-    userDirectory.setId(rs.getLong(1));
-    userDirectory.setTypeId(rs.getString(2));
-    userDirectory.setType(userDirectoryTypes.get(rs.getString(2)));
+    userDirectory.setId((UUID)rs.getObject(1));
+    userDirectory.setTypeId((UUID)rs.getObject(2));
+    userDirectory.setType(userDirectoryTypes.get(rs.getObject(2)));
     userDirectory.setName(rs.getString(3));
     userDirectory.setDescription(rs.getString(4));
     userDirectory.setConfiguration(rs.getString(5));
@@ -2456,17 +2457,18 @@ public class SecurityService
   }
 
   /**
-   * Returns the numeric ID for the function with the specified code.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the function with
+   * the specified code.
    *
    * @param connection the existing database connection to use
    * @param code       the code uniquely identifying the function
    *
-   * @return the numeric ID for the function or -1 if a function with the specified name could not
-   *         be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the function or
+   *         <code>null</code> if a function with the specified code cannot be found
    *
    * @throws SQLException
    */
-  private long getFunctionId(Connection connection, String code)
+  private UUID getFunctionId(Connection connection, String code)
     throws SQLException
   {
     try (PreparedStatement statement = connection.prepareStatement(getFunctionIdSQL))
@@ -2477,29 +2479,29 @@ public class SecurityService
       {
         if (rs.next())
         {
-          return rs.getLong(1);
+          return (UUID)rs.getObject(1);
         }
         else
         {
-          return -1;
+          return null;
         }
       }
     }
   }
 
   /**
-   * Returns the numeric ID for the internal user directory the internal user with the specified
-   * username is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   * directory the internal user with the specified username is associated with.
    *
    * @param username the username uniquely identifying the internal user
    *
-   * @return the numeric ID for the internal user directory the internal user with the specified
-   *         username is associated with or -1 if an internal user with the specified username
-   *         could not be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   *         directory the internal user with the specified username is associated with or
+   *         <code>null</code> if an internal user with the specified username could not be found
    *
    * @throws SecurityException
    */
-  private long getInternalUserDirectoryIdForUser(String username)
+  private UUID getInternalUserDirectoryIdForUser(String username)
     throws SecurityException
   {
     try (Connection connection = dataSource.getConnection();
@@ -2512,55 +2514,19 @@ public class SecurityService
       {
         if (rs.next())
         {
-          return rs.getLong(1);
+          return (UUID) rs.getObject(1);
         }
         else
         {
-          return -1;
+          return null;
         }
       }
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the numeric ID for the internal user ("
+      throw new SecurityException(
+          "Failed to retrieve the ID for the internal user directory for the internal user ("
           + username + ")", e);
-    }
-  }
-
-  /**
-   * Returns the numeric ID for the organisation with the specified code.
-   *
-   * @param connection the existing database connection to use
-   * @param code       the code uniquely identifying the organisation
-   *
-   * @return the numeric ID for the organisation or -1 if an organisation with the specified code
-   *         could not be found
-   *
-   * @throws SecurityException
-   */
-  private long getOrganisationId(Connection connection, String code)
-    throws SecurityException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getOrganisationIdSQL))
-    {
-      statement.setString(1, code);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getLong(1);
-        }
-        else
-        {
-          return -1;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to retrieve the numeric ID for the organisation (" + code
-          + ")", e);
     }
   }
 
@@ -2626,5 +2592,42 @@ public class SecurityService
     userDirectory.setConfiguration(buffer);
 
     return userDirectory;
+  }
+
+  /**
+   * Returns <code>true</code> if the organisation exists or <code>false</code> otherwise.
+   *
+   * @param connection the existing database connection to use
+   * @param id         the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   organisation
+   *
+   * @return <code>true</code> if the organisation exists or <code>false</code> otherwise
+   *
+   * @throws SecurityException
+   */
+  private boolean organisationExists(Connection connection, UUID id)
+    throws SecurityException
+  {
+    try (PreparedStatement statement = connection.prepareStatement(organisationExistsSQL))
+    {
+      statement.setObject(1, id);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return (rs.getInt(1) > 0);
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to check whether the organisation (" + id + ") exists",
+          e);
+    }
   }
 }
