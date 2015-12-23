@@ -202,12 +202,12 @@ public interface ISecurityService
   /**
    * Delete the organisation.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  void deleteOrganisation(String code)
+  void deleteOrganisation(UUID id)
     throws OrganisationNotFoundException, SecurityException;
 
   /**
@@ -272,7 +272,7 @@ public interface ISecurityService
    *
    * @param code the code identifying the function
    *
-   * @return the details for the authorised function with the specified code
+   * @return the authorised function
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
@@ -436,7 +436,7 @@ public interface ISecurityService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
-   * @return the details for the organisation
+   * @return the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException

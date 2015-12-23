@@ -21,6 +21,7 @@ package guru.mmp.application.security;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.common.exception.InvalidArgumentException;
 import guru.mmp.common.persistence.DataAccessObject;
+import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
 
@@ -451,22 +452,17 @@ public class SecurityService
 
       try (Connection connection = dataSource.getConnection())
       {
-        long organisationId;
-
         try (PreparedStatement statement = connection.prepareStatement(createOrganisationSQL))
         {
-          if (getOrganisationId(connection, organisation.getCode()) != -1)
+          if (organisationExists(connection, organisation.getId()))
           {
-            throw new DuplicateOrganisationException("The organisation (" + organisation.getCode()
+            throw new DuplicateOrganisationException("The organisation (" + organisation.getId()
                 + ") already exists");
           }
 
-          organisationId = nextId("Application.OrganisationId");
-
-          statement.setLong(1, organisationId);
-          statement.setString(2, organisation.getCode());
-          statement.setString(3, organisation.getName());
-          statement.setString(4, organisation.getDescription());
+          statement.setObject(1, organisation.getId());
+          statement.setString(2, organisation.getName());
+          statement.setString(3, organisation.getDescription());
 
           if (statement.executeUpdate() != 1)
           {
@@ -480,14 +476,10 @@ public class SecurityService
         {
           userDirectory = newInternalUserDirectoryForOrganisation(organisation);
 
-          UUID userDirectoryId;
-
           try (PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
           {
-            userDirectoryId = nextId("Application.UserDirectoryId");
-
-            statement.setLong(1, userDirectoryId);
-            statement.setString(2, userDirectory.getTypeId());
+            statement.setObject(1, userDirectory.getId());
+            statement.setObject(2, userDirectory.getTypeId());
             statement.setString(3, userDirectory.getName());
             statement.setString(4, userDirectory.getDescription());
             statement.setString(5, userDirectory.getConfiguration());
@@ -500,14 +492,12 @@ public class SecurityService
             }
           }
 
-          userDirectory.setId(userDirectoryId);
-
           // Link the new user directory to the new organisation
           try (PreparedStatement statement =
               connection.prepareStatement(addUserDirectoryToOrganisationSQL))
           {
-            statement.setLong(1, userDirectoryId);
-            statement.setLong(2, organisationId);
+            statement.setObject(1, userDirectory.getId());
+            statement.setObject(2, organisation.getId());
 
             if (statement.executeUpdate() != 1)
             {
@@ -522,8 +512,8 @@ public class SecurityService
         try (PreparedStatement statement =
             connection.prepareStatement(addUserDirectoryToOrganisationSQL))
         {
-          statement.setLong(1, 1);
-          statement.setLong(2, organisationId);
+          statement.setObject(1, XXX);
+          statement.setObject(2, organisation.getId());
 
           if (statement.executeUpdate() != 1)
           {
@@ -532,12 +522,6 @@ public class SecurityService
                 + addUserDirectoryToOrganisationSQL + ")");
           }
         }
-
-        /*
-         * Only update the organisation ID after the internal user directory has been successfully
-         * if required.
-         */
-        organisation.setId(organisationId);
       }
 
       transactionManager.commit();
@@ -566,10 +550,10 @@ public class SecurityService
       catch (Throwable f)
       {
         logger.error("Failed to rollback the transaction while creating the organisation ("
-            + organisation.getCode() + ")", f);
+            + organisation.getId() + ")", f);
       }
 
-      throw new SecurityException("Failed to create the organisation (" + organisation.getCode()
+      throw new SecurityException("Failed to create the organisation (" + organisation.getId()
           + "): " + e.getMessage(), e);
     }
     finally
@@ -581,10 +565,20 @@ public class SecurityService
       catch (Throwable e)
       {
         logger.error("Failed to resume the original transaction while creating the organisation ("
-            + organisation.getCode() + ")", e);
+            + organisation.getId() + ")", e);
       }
     }
   }
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
+   */
+  public static final UUID DEFAULT_ORGANISATION_ID = UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5");
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
+   */
+  public static final UUID DEFAULT_ORGANISATION_ID = UUID.fromString("4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
    * Create a new user.
@@ -644,10 +638,10 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
     {
-      UUID userDirectoryId = nextId("Application.UserDirectoryId");
+      UUID userDirectoryId = IDGenerator.nextUUID(dataSource);
 
-      statement.setLong(1, userDirectoryId);
-      statement.setString(2, userDirectory.getTypeId());
+      statement.setObject(1, userDirectoryId);
+      statement.setObject(2, userDirectory.getTypeId());
       statement.setString(3, userDirectory.getName());
       statement.setString(4, userDirectory.getDescription());
       statement.setString(5, userDirectory.getConfiguration());
@@ -697,7 +691,7 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteFunctionSQL))
     {
-      if (getFunctionId(connection, code) == -1)
+      if (getFunctionId(connection, code) == null)
       {
         throw new FunctionNotFoundException("A function with the code (" + code
             + ") could not be found");
@@ -759,30 +753,30 @@ public class SecurityService
   /**
    * Delete the organisation.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
    */
-  public void deleteOrganisation(String code)
+  public void deleteOrganisation(UUID id)
     throws OrganisationNotFoundException, SecurityException
   {
     // Validate parameters
-    if (isNullOrEmpty(code))
+    if (isNullOrEmpty(id))
     {
-      throw new InvalidArgumentException("code");
+      throw new InvalidArgumentException("id");
     }
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteOrganisationSQL))
     {
-      if (getOrganisationId(connection, code) == -1)
+      if (!organisationExists(connection, id))
       {
-        throw new OrganisationNotFoundException("The organisation (" + code
+        throw new OrganisationNotFoundException("The organisation (" + id
             + ") could not be found");
       }
 
-      statement.setString(1, code);
+      statement.setObject(1, id);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -797,7 +791,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the organisation (" + code + "): "
+      throw new SecurityException("Failed to delete the organisation (" + id + "): "
           + e.getMessage(), e);
     }
   }
@@ -848,7 +842,7 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteUserDirectorySQL))
     {
-      statement.setLong(1, userDirectoryId);
+      statement.setObject(1, userDirectoryId);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -908,15 +902,15 @@ public class SecurityService
     return userDirectory.findUsers(attributes);
   }
 
-  /**
-   * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
-   *
-   * @return the <code>DataSource</code> for the <code>SecurityService</code>
-   */
-  public DataSource getDataSource()
-  {
-    return dataSource;
-  }
+//  /**
+//   * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
+//   *
+//   * @return the <code>DataSource</code> for the <code>SecurityService</code>
+//   */
+//  public DataSource getDataSource()
+//  {
+//    return dataSource;
+//  }
 
   /**
    * Retrieve the filtered list of users.
@@ -949,7 +943,7 @@ public class SecurityService
    *
    * @param code the code identifying the function
    *
-   * @return the details for the authorised function with the specified code
+   * @return the authorised function
    *
    * @throws FunctionNotFoundException
    * @throws SecurityException
@@ -976,7 +970,7 @@ public class SecurityService
           {
             Function function = new Function(rs.getString(2));
 
-            function.setId(rs.getInt(1));
+            function.setId((UUID)rs.getObject(1));
             function.setName(rs.getString(3));
             function.setDescription(rs.getString(4));
 
@@ -1000,8 +994,6 @@ public class SecurityService
           + e.getMessage(), e);
     }
   }
-
-  START HERE GOING UP
 
   /**
    * Retrieve the authorised function codes for the user.
@@ -1341,7 +1333,7 @@ public class SecurityService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
-   * @return the details for the organisation
+   * @return the organisation
    *
    * @throws OrganisationNotFoundException
    * @throws SecurityException
@@ -2579,6 +2571,7 @@ public class SecurityService
   {
     UserDirectory userDirectory = new UserDirectory();
 
+    userDirectory.setId(IDGenerator.nextUUID(dataSource));
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
     userDirectory.setName(organisation.getName() + " User Directory");
     userDirectory.setDescription(organisation.getDescription() + " User Directory");

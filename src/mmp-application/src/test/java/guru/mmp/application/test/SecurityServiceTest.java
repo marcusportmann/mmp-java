@@ -664,6 +664,16 @@ public class SecurityServiceTest
 
     compareUsers(user, retrievedUsers.get(0), true);
 
+    int numberOfFilteredUsers = securityService.getNumberOfFilteredUsers(userDirectory.getId(), "Test");
+
+    assertEquals("The correct number of filtered users (1) was not retrieved", 1, numberOfFilteredUsers);
+
+    List<User> retrievedFilteredUsers = securityService.getFilteredUsers(userDirectory.getId(), "Test");
+
+    assertEquals("The correct number of filtered users (1) was not retrieved", 1, retrievedFilteredUsers.size());
+
+    compareUsers(user, retrievedFilteredUsers.get(0), true);
+
     Calendar calendar = Calendar.getInstance();
 
     calendar.setTime(new Date());
@@ -679,6 +689,7 @@ public class SecurityServiceTest
     user.setPhoneNumber("Test Updated Phone Number");
     user.setMobileNumber("Test Updated Mobile Number");
     user.setFaxNumber("Test Updated Fax Number");
+
     securityService.updateUser(userDirectory.getId(), user, false, false);
 
     User retrievedUpdatedUser = securityService.getUser(userDirectory.getId(), user.getUsername());

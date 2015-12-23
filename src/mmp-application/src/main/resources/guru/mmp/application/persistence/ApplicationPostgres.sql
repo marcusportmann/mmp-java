@@ -1387,31 +1387,33 @@ INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
   ('Application.CodeId', 10000000);
 
 INSERT INTO MMP.ORGANISATIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (1, 'MMP', 'MMP', 'MMP');
+  ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 'MMP', 'MMP');
 
 INSERT INTO MMP.USER_DIRECTORY_TYPES (ID, NAME, USER_DIRECTORY_CLASS, ADMINISTRATION_CLASS) VALUES
   ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'guru.mmp.application.security.InternalUserDirectory', 'guru.mmp.application.web.template.component.InternalUserDirectoryAdministrationPanel');
+INSERT INTO MMP.USER_DIRECTORY_TYPES (ID, NAME, USER_DIRECTORY_CLASS, ADMINISTRATION_CLASS) VALUES
+  ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory', 'guru.mmp.application.security.LDAPUserDirectory', 'guru.mmp.application.web.template.component.LDAPUserDirectoryAdministrationPanel');
 
 INSERT INTO MMP.USER_DIRECTORIES (ID, TYPE_ID, NAME, DESCRIPTION, CONFIGURATION) VALUES
-  (1, 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><user-directory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></user-directory>');
+  ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE user-directory SYSTEM "UserDirectoryConfiguration.dtd"><user-directory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></user-directory>');
 
 INSERT INTO MMP.USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES
-  (1, 1);
+  ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
 INSERT INTO MMP.INTERNAL_USERS (ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, PHONE, FAX,
   MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY, DESCRIPTION) VALUES
-  (1, 1, 'Administrator', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', '', '', '', '', '', '', '', null, null, 'Administrator');
+  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', '', '', '', '', '', '', '', null, null, 'Administrator');
 
 INSERT INTO MMP.INTERNAL_GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES
-  (1, 1, 'Administrators', 'Administrators');
+  ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
 INSERT INTO MMP.INTERNAL_GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES
-  (2, 1, 'Organisation Administrators', 'Organisation Administrators');
+  ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organisation Administrators', 'Organisation Administrators');
 
 INSERT INTO MMP.INTERNAL_USER_TO_INTERNAL_GROUP_MAP (USER_DIRECTORY_ID, INTERNAL_USER_ID, INTERNAL_GROUP_ID) VALUES
-  (1, 1, 1);
+  ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
 
-INSERT INTO MMP.GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES (1, 1, 'Administrators');
-INSERT INTO MMP.GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES (2, 1, 'Organisation Administrators');
+INSERT INTO MMP.GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES ('2ff8560e-773e-413f-9688-df20eeeb3cc2', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators');
+INSERT INTO MMP.GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES ('f2de9182-4425-4e54-b006-a13c1a6d39f7', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organisation Administrators');
 
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   (1, 'Application.SecureHome', 'Secure Home', 'Secure Home');
@@ -1489,16 +1491,10 @@ INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   (4004, 'ApplicationProcess.ViewProcess', 'View Process', 'View Process');
 
--- INSERT INTO MMP.FUNCTION_TEMPLATES (ID, CODE, NAME, DESCRIPTION) VALUES
---   (1, 'Application.Administration', 'Administration', 'Administration');
-
--- INSERT INTO MMP.FUNCTION_TEMPLATE_MAP (FUNCTION_ID, TEMPLATE_ID) VALUES (1, 1);
--- INSERT INTO MMP.FUNCTION_TEMPLATE_MAP (FUNCTION_ID, TEMPLATE_ID) VALUES (2, 1);
-
 INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
-  (1, 'Administrator', 'Administrator');
+  ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
 INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
-  (2, 'Organisation Administrator', 'Organisation Administrator');
+  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organisation Administrator', 'Organisation Administrator');
 
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (1, 1);
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (2, 1);
@@ -1549,8 +1545,8 @@ INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (24, 2);
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3004, 2);
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4004, 2);
 
-INSERT INTO MMP.ROLE_TO_GROUP_MAP (ROLE_ID, GROUP_ID) VALUES (1, 1);
-INSERT INTO MMP.ROLE_TO_GROUP_MAP (ROLE_ID, GROUP_ID) VALUES (2, 2);
+INSERT INTO MMP.ROLE_TO_GROUP_MAP (ROLE_ID, GROUP_ID) VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', '2ff8560e-773e-413f-9688-df20eeeb3cc2');
+INSERT INTO MMP.ROLE_TO_GROUP_MAP (ROLE_ID, GROUP_ID) VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'f2de9182-4425-4e54-b006-a13c1a6d39f7');
 
 INSERT INTO MMP.MESSAGE_TYPES (ID, NAME, DESCRIPTION) VALUES ('3dbf238d-b56f-468a-8850-4ddf9f15c329', 'RegisterRequest', '');
 INSERT INTO MMP.MESSAGE_TYPES (ID, NAME, DESCRIPTION) VALUES ('aa08aac9-4d15-452f-b3f9-756641b71735', 'RegisterResponse', '');
