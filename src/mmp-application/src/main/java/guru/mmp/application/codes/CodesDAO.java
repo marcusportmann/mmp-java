@@ -275,6 +275,7 @@ public class CodesDAO
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
    *                     new code category
+   *                     
    * @throws DAOException
    */
   public void createCodeCategory(CodeCategory codeCategory)
