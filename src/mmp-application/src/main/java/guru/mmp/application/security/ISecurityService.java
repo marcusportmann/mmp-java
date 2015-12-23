@@ -27,7 +27,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public interface ISecurityService
 {
   /**
@@ -74,7 +73,7 @@ public interface ISecurityService
    * @param username the username identifying the user
    * @param password the password being used to authenticate
    *
-   * @return the unique ID for the user directory the user is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
@@ -82,7 +81,7 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  long authenticate(String username, String password)
+  UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, SecurityException;
 
@@ -227,13 +226,12 @@ public interface ISecurityService
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  void deleteUserDirectory(UUID userDirectoryId)
+  void deleteUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException;
 
   /**

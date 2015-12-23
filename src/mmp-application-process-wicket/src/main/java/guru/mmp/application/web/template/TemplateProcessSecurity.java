@@ -27,20 +27,20 @@ public class TemplateProcessSecurity
 {
   /** The Application.AddProcessDefinition function code. */
   public static final String FUNCTION_CODE_ADD_PROCESS_DEFINITION =
-    "ApplicationProcess.AddProcessDefinition";
-
-  /** The Application.RemoveProcessDefinition function code. */
-  public static final String FUNCTION_CODE_REMOVE_PROCESS_DEFINITION =
-    "ApplicationProcess.RemoveProcessDefinition";
+    "Application.AddProcessDefinition";
 
   /** The Application.ProcessDefinitionAdministration function code. */
   public static final String FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION =
-    "ApplicationProcess.ProcessDefinitionAdministration";
+    "Application.ProcessDefinitionAdministration";
+
+  /** The Application.RemoveProcessDefinition function code. */
+  public static final String FUNCTION_CODE_REMOVE_PROCESS_DEFINITION =
+    "Application.RemoveProcessDefinition";
 
   /** The Application.UpdateProcessDefinition function code. */
   public static final String FUNCTION_CODE_UPDATE_PROCESS_DEFINITION =
-    "ApplicationProcess.UpdateProcessDefinition";
+    "Application.UpdateProcessDefinition";
 
   /** The Application.ViewProcess function code. */
-  public static final String FUNCTION_CODE_VIEW_PROCESS = "ApplicationProcess.ViewProcess";
+  public static final String FUNCTION_CODE_VIEW_PROCESS = "Application.ViewProcess";
 }

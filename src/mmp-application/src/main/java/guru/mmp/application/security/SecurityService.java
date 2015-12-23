@@ -186,7 +186,7 @@ public class SecurityService
    * @param username the username identifying the user
    * @param password the password being used to authenticate
    *
-   * @return the unique ID for the user directory the user is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
@@ -194,7 +194,7 @@ public class SecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public long authenticate(String username, String password)
+  public UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
       UserNotFoundException, SecurityException
   {
@@ -212,9 +212,9 @@ public class SecurityService
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != -1)
+      if (internalUserDirectoryId != null)
       {
         IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
@@ -330,6 +330,11 @@ public class SecurityService
 
   {
     // Validate parameters
+    if (isNullOrEmpty(function.getDescription()))
+    {
+      throw new InvalidArgumentException("function.id");
+    }
+
     if (isNullOrEmpty(function.getCode()))
     {
       throw new InvalidArgumentException("function.code");
@@ -343,15 +348,13 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createFunctionSQL))
     {
-      if (getFunctionId(connection, function.getCode()) != -1)
+      if (getFunctionId(connection, function.getCode()) != null)
       {
         throw new DuplicateFunctionException("A function with the code (" + function.getCode()
             + ") already exists");
       }
 
-      long functionId = nextId("Application.FunctionId");
-
-      statement.setLong(1, functionId);
+      statement.setObject(1, function.getId());
       statement.setString(2, function.getCode());
       statement.setString(3, function.getName());
       statement.setString(4, function.getDescription());
@@ -362,8 +365,6 @@ public class SecurityService
             "No rows were affected as a result of executing the SQL statement ("
             + createFunctionSQL + ")");
       }
-
-      function.setId(functionId);
     }
     catch (DuplicateFunctionException e)
     {
@@ -512,7 +513,7 @@ public class SecurityService
         try (PreparedStatement statement =
             connection.prepareStatement(addUserDirectoryToOrganisationSQL))
         {
-          statement.setObject(1, XXX);
+          statement.setObject(1, DEFAULT_USER_DIRECTORY_ID);
           statement.setObject(2, organisation.getId());
 
           if (statement.executeUpdate() != 1)
@@ -576,9 +577,9 @@ public class SecurityService
   public static final UUID DEFAULT_ORGANISATION_ID = UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5");
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
    */
-  public static final UUID DEFAULT_ORGANISATION_ID = UUID.fromString("4ef18395-423a-4df6-b7d7-6bcdd85956e4");
+  public static final UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString("4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
    * Create a new user.
@@ -830,19 +831,18 @@ public class SecurityService
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
-  public void deleteUserDirectory(UUID userDirectoryId)
+  public void deleteUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteUserDirectorySQL))
     {
-      statement.setObject(1, userDirectoryId);
+      statement.setObject(1, id);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -864,7 +864,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the user directory (" + userDirectoryId + "): "
+      throw new SecurityException("Failed to delete the user directory (" + id + "): "
           + e.getMessage(), e);
     }
   }
@@ -2336,7 +2336,7 @@ public class SecurityService
 
     // createOrganisationSQL
     createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS"
-        + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
+        + " (ID, NAME, DESCRIPTION) VALUES (?, ?, ?)";
 
     // createUserDirectorySQL
     createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES"
@@ -2347,7 +2347,7 @@ public class SecurityService
 
     // deleteOrganisationSQL
     deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O"
-        + " WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
+        + " WHERE O.ID=?";
 
     // deleteUserDirectorySQL
     deleteUserDirectorySQL = "DELETE FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
@@ -2375,18 +2375,18 @@ public class SecurityService
         + "USER_DIRECTORIES UD";
 
     // getOrganisationsForUserDirectorySQL
-    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM "
+    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM "
         + schemaPrefix + "ORGANISATIONS O INNER JOIN " + schemaPrefix
         + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID"
         + " WHERE UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationSQL
-    getOrganisationSQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS O WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
+    getOrganisationSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
+        + "ORGANISATIONS O WHERE O.ID=?";
 
     // getOrganisationsSQL
-    getOrganisationsSQL = "SELECT O.ID, O.CODE, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS O ORDER BY NAME";
+    getOrganisationsSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
+        + "ORGANISATIONS O ORDER BY O.NAME";
 
     // getUserDirectoriesForOrganisationSQL
     getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION,"
@@ -2409,7 +2409,7 @@ public class SecurityService
 
     // organisationExistsSQL
     organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O"
-      + " WHERE UPPER(O.CODE)=UPPER(CAST(? AS VARCHAR(100)))";
+      + " WHERE O.ID=?";
 
     // updateFunctionSQL
     updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F"

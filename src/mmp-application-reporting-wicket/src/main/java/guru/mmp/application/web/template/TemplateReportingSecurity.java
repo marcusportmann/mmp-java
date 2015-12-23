@@ -27,20 +27,20 @@ public class TemplateReportingSecurity
 {
   /** The Application.AddReportDefinition function code. */
   public static final String FUNCTION_CODE_ADD_REPORT_DEFINITION =
-    "ApplicationReporting.AddReportDefinition";
+    "Application.AddReportDefinition";
 
   /** The Application.RemoveReportDefinition function code. */
   public static final String FUNCTION_CODE_REMOVE_REPORT_DEFINITION =
-    "ApplicationReporting.RemoveReportDefinition";
+    "Application.RemoveReportDefinition";
 
   /** The Application.ReportDefinitionAdministration function code. */
   public static final String FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION =
-    "ApplicationReporting.ReportDefinitionAdministration";
+    "Application.ReportDefinitionAdministration";
 
   /** The Application.UpdateReportDefinition function code. */
   public static final String FUNCTION_CODE_UPDATE_REPORT_DEFINITION =
-    "ApplicationReporting.UpdateReportDefinition";
+    "Application.UpdateReportDefinition";
 
   /** The Application.ViewReport function code. */
-  public static final String FUNCTION_CODE_VIEW_REPORT = "ApplicationReporting.ViewReport";
+  public static final String FUNCTION_CODE_VIEW_REPORT = "Application.ViewReport";
 }

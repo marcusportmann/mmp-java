@@ -1416,134 +1416,134 @@ INSERT INTO MMP.GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES ('2ff8560e-773e
 INSERT INTO MMP.GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES ('f2de9182-4425-4e54-b006-a13c1a6d39f7', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organisation Administrators');
 
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (1, 'Application.SecureHome', 'Secure Home', 'Secure Home');
+  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (2, 'Application.Dashboard', 'Dashboard', 'Dashboard');
+  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (3, 'Application.OrganisationAdministration', 'Organisation Administration', 'Organisation Administration');
+  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganisationAdministration', 'Organisation Administration', 'Organisation Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (4, 'Application.AddOrganisation', 'Add Organisation', 'Add Organisation');
+  ('0ce064fa-c5df-4c98-a04c-ecaa334476b1', 'Application.AddOrganisation', 'Add Organisation', 'Add Organisation');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (5, 'Application.UpdateOrganisation', 'Update Organisation', 'Update Organisation');
+  ('b2c676e3-e735-4641-ba4c-6255508fa55c', 'Application.UpdateOrganisation', 'Update Organisation', 'Update Organisation');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (6, 'Application.RemoveOrganisation', 'Remove Organisation', 'Remove Organisation');
+  ('9cb8123f-14e5-4807-90d5-233dfbf06eaa', 'Application.RemoveOrganisation', 'Remove Organisation', 'Remove Organisation');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (7, 'Application.UserAdministration', 'User Administration', 'User Administration');
+  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Application.UserAdministration', 'User Administration', 'User Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (8, 'Application.AddUser', 'Add User', 'Add User');
+  ('7852b6da-b8ed-4b83-b3b8-09c8bf75d0da', 'Application.AddUser', 'Add User', 'Add User');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (9, 'Application.UpdateUser', 'Update User', 'Update User');
+  ('7efb41d6-ed4d-4b26-9ef6-afed553adfec', 'Application.UpdateUser', 'Update User', 'Update User');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (10, 'Application.RemoveUser', 'Remove User', 'Remove User');
+  ('72af0117-22fd-4fbd-8c47-25aba3e20ff3', 'Application.RemoveUser', 'Remove User', 'Remove User');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (11, 'Application.GroupAdministration', 'Group Administration', 'Group Administration');
+  ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Application.GroupAdministration', 'Group Administration', 'Group Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (12, 'Application.AddGroup', 'Add Group', 'Add Group');
+  ('a6a5a258-b641-455d-b8e8-895e3c0d4061', 'Application.AddGroup', 'Add Group', 'Add Group');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (13, 'Application.UpdateGroup', 'Update Group', 'Update Group');
+  ('5df604b2-565d-4a31-b5b0-5884232e314f', 'Application.UpdateGroup', 'Update Group', 'Update Group');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (14, 'Application.RemoveGroup', 'Remove Group', 'Remove Group');
+  ('a2cc3b0f-0cc0-4051-b877-17465f2250a6', 'Application.RemoveGroup', 'Remove Group', 'Remove Group');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (15, 'Application.UserGroups', 'User Groups', 'User Groups');
+  ('7a54a71e-3680-4d49-b87d-29604a247413', 'Application.UserGroups', 'User Groups', 'User Groups');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (16, 'Application.CodeCategoryAdministration', 'Code Category Administration', 'Code Category Administration');
+  ('0623bc3f-9a1b-4f19-8438-236660d789c5', 'Application.CodeCategoryAdministration', 'Code Category Administration', 'Code Category Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (17, 'Application.AddCodeCategory', 'Add Code Category', 'Add Code Category');
+  ('8f37a264-2b08-44c4-9f38-476366b387b1', 'Application.AddCodeCategory', 'Add Code Category', 'Add Code Category');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (18, 'Application.RemoveCodeCategory', 'Remove Code Category', 'Remove Code Category');
+  ('6a67414c-26b5-49a7-bc30-543d10781380', 'Application.RemoveCodeCategory', 'Remove Code Category', 'Remove Code Category');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (19, 'Application.UpdateCodeCategory', 'Update Code Category', 'Update Code Category');
+  ('02983557-7377-406b-9042-638bac796e20', 'Application.UpdateCodeCategory', 'Update Code Category', 'Update Code Category');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (20, 'Application.CodeAdministration', 'Code Administration', 'Code Administration');
+  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Application.CodeAdministration', 'Code Administration', 'Code Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (21, 'Application.AddCode', 'Add Code', 'Add Code');
+  ('724ac4a2-fae8-4e55-af58-9b36948eb47e', 'Application.AddCode', 'Add Code', 'Add Code');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (22, 'Application.RemoveCode', 'Remove Code', 'Remove Code');
+  ('abd3e562-0245-41d6-a6aa-558a00b794d9', 'Application.RemoveCode', 'Remove Code', 'Remove Code');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (23, 'Application.UpdateCode', 'Update Code', 'Update Code');
+  ('37de7bc6-a668-4ac2-b4ad-9e2eb98fcdb2', 'Application.UpdateCode', 'Update Code', 'Update Code');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (24, 'Application.ResetUserPassword', 'Reset User Password', 'Reset User Password');
+  ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Application.ResetUserPassword', 'Reset User Password', 'Reset User Password');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (25, 'Application.SecurityAdministration', 'Security Administration', 'Security Administration');
+  ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Application.SecurityAdministration', 'Security Administration', 'Security Administration');
 
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (1000, 'ApplicationMessaging.ErrorReports', 'Error Reports', 'Error Reports');
+  ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Application.ErrorReports', 'Error Reports', 'Error Reports');
 
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (3000, 'ApplicationReporting.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
+  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Application.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (3001, 'ApplicationReporting.AddReportDefinition', 'Add Report Definition', 'Add Report Definition');
+  ('5f3cf70e-d753-4ff9-a97a-314e50869283', 'Application.AddReportDefinition', 'Add Report Definition', 'Add Report Definition');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (3002, 'ApplicationReporting.RemoveReportDefinition', 'Remove Report Definition', 'Remove Report Definition');
+  ('993aefe2-a2a9-4371-a7a5-a4a73b56c385', 'Application.RemoveReportDefinition', 'Remove Report Definition', 'Remove Report Definition');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (3003, 'ApplicationReporting.UpdateReportDefinition', 'Update Report Definition', 'Update Report Definition');
+  ('96e22f92-0b4d-4422-8e59-406d9fab022b', 'Application.UpdateReportDefinition', 'Update Report Definition', 'Update Report Definition');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (3004, 'ApplicationReporting.ViewReport', 'View Report', 'View Report');
+  ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Application.ViewReport', 'View Report', 'View Report');
 
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (4000, 'ApplicationProcess.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
+  ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Application.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (4001, 'ApplicationProcess.AddProcessDefinition', 'Add Process Definition', 'Add Process Definition');
+  ('3dfad4f2-de9c-4666-94de-121e2ab27099', 'Application.AddProcessDefinition', 'Add Process Definition', 'Add Process Definition');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (4002, 'ApplicationProcess.RemoveProcessDefinition', 'Remove Process Definition', 'Remove Process Definition');
+  ('176353f7-ad0c-4d25-9f74-b63e51ef1503', 'Application.RemoveProcessDefinition', 'Remove Process Definition', 'Remove Process Definition');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (4003, 'ApplicationProcess.UpdateProcessDefinition', 'Update Process Definition', 'Update Process Definition');
+  ('53cf2ea1-509e-4b71-b763-f408c165cf41', 'Application.UpdateProcessDefinition', 'Update Process Definition', 'Update Process Definition');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  (4004, 'ApplicationProcess.ViewProcess', 'View Process', 'View Process');
+  ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Application.ViewProcess', 'View Process', 'View Process');
 
 INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
   ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
 INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
   ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organisation Administrator', 'Organisation Administrator');
 
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (1, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (2, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (5, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (6, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (7, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (8, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (9, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (10, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (11, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (12, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (13, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (14, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (15, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (16, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (17, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (18, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (19, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (20, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (21, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (22, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (23, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (24, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (25, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (1000, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3000, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3001, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3002, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3003, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3004, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4000, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4001, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4002, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4003, 1);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4004, 1);
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('2d52b029-920f-4b15-b646-5b9955c188e3', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('0ce064fa-c5df-4c98-a04c-ecaa334476b1', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('b2c676e3-e735-4641-ba4c-6255508fa55c', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('9cb8123f-14e5-4807-90d5-233dfbf06eaa', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7852b6da-b8ed-4b83-b3b8-09c8bf75d0da', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7efb41d6-ed4d-4b26-9ef6-afed553adfec', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('72af0117-22fd-4fbd-8c47-25aba3e20ff3', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('a6a5a258-b641-455d-b8e8-895e3c0d4061', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('5df604b2-565d-4a31-b5b0-5884232e314f', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('a2cc3b0f-0cc0-4051-b877-17465f2250a6', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('0623bc3f-9a1b-4f19-8438-236660d789c5', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('8f37a264-2b08-44c4-9f38-476366b387b1', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('6a67414c-26b5-49a7-bc30-543d10781380', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('02983557-7377-406b-9042-638bac796e20', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('724ac4a2-fae8-4e55-af58-9b36948eb47e', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('abd3e562-0245-41d6-a6aa-558a00b794d9', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('37de7bc6-a668-4ac2-b4ad-9e2eb98fcdb2', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('9105fb6d-1629-4014-bf4c-1990a92db276', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('5f3cf70e-d753-4ff9-a97a-314e50869283', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('993aefe2-a2a9-4371-a7a5-a4a73b56c385', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('96e22f92-0b4d-4422-8e59-406d9fab022b', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('3dfad4f2-de9c-4666-94de-121e2ab27099', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('176353f7-ad0c-4d25-9f74-b63e51ef1503', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('53cf2ea1-509e-4b71-b763-f408c165cf41', '100fafb4-783a-4204-a22d-9e27335dc2ea');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', '100fafb4-783a-4204-a22d-9e27335dc2ea');
 
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (1, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (2, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (7, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (8, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (9, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (10, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (15, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (23, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (24, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (3004, 2);
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES (4004, 2);
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7852b6da-b8ed-4b83-b3b8-09c8bf75d0da', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7efb41d6-ed4d-4b26-9ef6-afed553adfec', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('72af0117-22fd-4fbd-8c47-25aba3e20ff3', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('37de7bc6-a668-4ac2-b4ad-9e2eb98fcdb2', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
+INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35');
 
 INSERT INTO MMP.ROLE_TO_GROUP_MAP (ROLE_ID, GROUP_ID) VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', '2ff8560e-773e-413f-9688-df20eeeb3cc2');
 INSERT INTO MMP.ROLE_TO_GROUP_MAP (ROLE_ID, GROUP_ID) VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'f2de9182-4425-4e54-b006-a13c1a6d39f7');

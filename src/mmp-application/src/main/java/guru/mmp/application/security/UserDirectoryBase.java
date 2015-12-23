@@ -19,6 +19,7 @@ package guru.mmp.application.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.DataAccessObject;
+import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.Base64;
 
@@ -32,6 +33,7 @@ import java.security.MessageDigest;
 import java.sql.*;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.naming.InitialContext;
 
@@ -65,7 +67,8 @@ public abstract class UserDirectoryBase
   /**
    * Constructs a new <code>UserDirectoryBase</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param parameters      the key-value configuration parameters for the user directory
    *
    * @throws SecurityException
@@ -139,11 +142,11 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the unique ID for the user directory.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @return the unique ID for the user directory
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public long getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -177,26 +180,26 @@ public abstract class UserDirectoryBase
    * @param connection the existing database connection
    * @param groupName  the group name uniquely identifying the group
    *
-   * @return the numeric ID for the group
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
    *
    * @throws SecurityException
    */
-  protected long createGroup(Connection connection, String groupName)
+  protected UUID createGroup(Connection connection, String groupName)
     throws SecurityException
   {
     try (PreparedStatement statement = connection.prepareStatement(createGroupSQL))
     {
-      long groupId = getGroupId(connection, groupName);
+      UUID groupId = getGroupId(connection, groupName);
 
-      if (groupId != -1)
+      if (groupId != null)
       {
         return groupId;
       }
 
-      groupId = nextId("Application.GroupId");
+      groupId = IDGenerator.nextUUID(dataSource);
 
-      statement.setLong(1, groupId);
-      statement.setLong(2, getUserDirectoryId());
+      statement.setObject(1, groupId);
+      statement.setObject(2, getUserDirectoryId());
       statement.setString(3, groupName);
 
       if (statement.executeUpdate() != 1)
@@ -248,24 +251,24 @@ public abstract class UserDirectoryBase
    * @param connection the existing database connection to use
    * @param groupName  the group name uniquely identifying the group
    *
-   * @return the numeric ID for the group or -1 if a group with the specified group name could not
-   *         be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
+   *         <code>null</code> if a group with the specified group name could not be found
    *
    * @throws SecurityException
    */
-  protected long deleteGroup(Connection connection, String groupName)
+  protected UUID deleteGroup(Connection connection, String groupName)
     throws SecurityException
   {
     try (PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
     {
-      long groupId = getGroupId(connection, groupName);
+      UUID groupId = getGroupId(connection, groupName);
 
-      if (groupId == -1)
+      if (groupId == null)
       {
         return groupId;
       }
 
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
       statement.setString(2, groupName);
 
       if (statement.executeUpdate() <= 0)
@@ -305,39 +308,39 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the numeric ID for the group with the specified group name.
+   * Returns the ID for the group with the specified group name.
    *
    * @param connection the existing database connection to use
    * @param groupName  the group name uniquely identifying the group
    *
-   * @return the numeric ID for the group or -1 if a group with the specified group name could not
-   *         be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
+   *         <code>null</code> if a group with the specified group name could not be found
    *
    * @throws SecurityException
    */
-  protected long getGroupId(Connection connection, String groupName)
+  protected UUID getGroupId(Connection connection, String groupName)
     throws SecurityException
   {
     try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
       statement.setString(2, groupName);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return rs.getLong(1);
+          return (UUID)rs.getObject(1);
         }
         else
         {
-          return -1;
+          return null;
         }
       }
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the numeric ID for the group (" + groupName
+      throw new SecurityException("Failed to retrieve the ID for the group (" + groupName
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }

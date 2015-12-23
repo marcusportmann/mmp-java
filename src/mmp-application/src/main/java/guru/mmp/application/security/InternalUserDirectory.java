@@ -92,6 +92,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   private String saveInternalUserPasswordHistorySQL;
   private String updateInternalGroupSQL;
 
+  TODO START HERE
+
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
