@@ -1001,6 +1001,8 @@ public class SecurityService
     }
   }
 
+  START HERE GOING UP
+
   /**
    * Retrieve the authorised function codes for the user.
    *
