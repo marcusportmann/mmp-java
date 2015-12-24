@@ -298,7 +298,7 @@ public class ReportingDAO
   }
 
   /**
-   * Returns all the report definitions associated for the organisation.
+   * Returns all the report definitions for the organisation.
    *
    * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       organisation

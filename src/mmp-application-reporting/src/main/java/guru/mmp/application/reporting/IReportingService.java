@@ -26,6 +26,7 @@ import java.sql.Connection;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * The <code>IReportingService</code> interface defines the functionality that must be provided by
@@ -36,8 +37,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public interface IReportingService
 {
-  START HERE AND MAKE SAME AS DAO
-
   /**
    * The username used to identify operations performed by the system.
    */
@@ -54,7 +53,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  byte[] createReportPDF(String definitionId, Map<String, Object> parameters)
+  byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters)
     throws ReportingServiceException;
 
   /**
@@ -69,7 +68,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  byte[] createReportPDF(String definitionId, Map<String, Object> parameters, Connection connection)
+  byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters, Connection connection)
     throws ReportingServiceException;
 
   /**
@@ -84,7 +83,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  byte[] createReportPDF(String definitionId, Map<String, Object> parameters, Document document)
+  byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters, Document document)
     throws ReportingServiceException;
 
   /**
@@ -95,7 +94,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  void deleteReportDefinition(String id)
+  void deleteReportDefinition(UUID id)
     throws ReportingServiceException;
 
   /**
@@ -106,77 +105,73 @@ public interface IReportingService
   String getLocalReportFolderPath();
 
   /**
-   * Returns the number of report definitions associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of report definitions for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return the number of report definitions associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of report definitions for the organisation
    *
    * @throws ReportingServiceException
    */
-  int getNumberOfReportDefinitionsForOrganisation(String organisation)
+  int getNumberOfReportDefinitionsForOrganisation(UUID organisationId)
     throws ReportingServiceException;
 
   /**
    * Retrieve the report definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           report definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *           definition
    *
-   * @return the report definition or <code>null</code> if the report
-   *         definition could not be found
+   * @return the report definition or <code>null</code> if the report definition could not be found
    *
    * @throws ReportingServiceException
    */
-  ReportDefinition getReportDefinition(String id)
+  ReportDefinition getReportDefinition(UUID id)
     throws ReportingServiceException;
 
   /**
-   * Returns the summaries for all the report definitions associated with the organisation
-   * identified by the specified organisation code.
+   * Returns the summaries for all the report definitions for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return the summaries for all the report definitions associated with the organisation
-   *         identified by the specified organisation code
+   * @return the summaries for all the report definitions for the organisation
    *
    * @throws ReportingServiceException
    */
-  List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(String organisation)
+  List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(UUID organisationId)
     throws ReportingServiceException;
 
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           report definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *           definition
    *
-   * @return the summary for the report definition or <code>null</code> if
-   *         the report definition could not be found
-   *
-   * @throws ReportingServiceException
-   */
-  ReportDefinitionSummary getReportDefinitionSummary(String id)
-    throws ReportingServiceException;
-
-  /**
-   * Returns all the report definitions associated with the organisation identified by the specified
-   * organisation code.
-   *
-   * @param organisation the organisation code identifying the organisation
-   *
-   * @return all the report definitions associated with the organisation identified by the specified
-   *         organisation code
+   * @return the summary for the report definition or <code>null</code> if the report definition
+   *         could not be found
    *
    * @throws ReportingServiceException
    */
-  List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
+  ReportDefinitionSummary getReportDefinitionSummary(UUID id)
     throws ReportingServiceException;
 
   /**
-   * Check whether the report definition exists in the database.
+   * Returns all the report definitions for the organisation.
+   *
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
+   *
+   * @return all the report definitions for the organisation
+   *
+   * @throws ReportingServiceException
+   */
+  List<ReportDefinition> getReportDefinitionsForOrganisation(UUID organisationId)
+    throws ReportingServiceException;
+
+  /**
+   * Check whether the report definition exists.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition
@@ -185,7 +180,7 @@ public interface IReportingService
    *
    * @throws ReportingServiceException
    */
-  boolean reportDefinitionExists(String id)
+  boolean reportDefinitionExists(UUID id)
     throws ReportingServiceException;
 
   /**
