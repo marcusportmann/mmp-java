@@ -21,6 +21,7 @@ package guru.mmp.application.messaging;
 import guru.mmp.common.crypto.EncryptionScheme;
 
 import java.util.List;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -108,21 +109,21 @@ public interface IMessagingService
   /**
    * Delete the message.
    *
-   * @param id the ID uniquely identifying the message to delete
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @throws MessagingException
    */
-  void deleteMessage(String id)
+  void deleteMessage(UUID id)
     throws MessagingException;
 
   /**
    * Delete the message part.
    *
-   * @param id the ID uniquely identifying the message part to delete
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @throws MessagingException
    */
-  void deleteMessagePart(String id)
+  void deleteMessagePart(UUID id)
     throws MessagingException;
 
   /**
@@ -130,15 +131,17 @@ public interface IMessagingService
    *
    * @param encryptionScheme the encryption scheme for the encryption key
    * @param username         the username uniquely identifying the user e.g. test1
-   * @param organisation     the organisation code uniquely identifying the organisation
-   * @param deviceId         the device ID uniquely identifying the device
+   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         organisation
+   * @param deviceId         the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         device
    *
    * @return the user-device encryption key
    *
    * @throws MessagingException
    */
   byte[] deriveUserDeviceEncryptionKey(EncryptionScheme encryptionScheme, String username,
-      String organisation, String deviceId)
+      UUID organisationId, UUID deviceId)
     throws MessagingException;
 
   /**
@@ -160,12 +163,11 @@ public interface IMessagingService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the error report or <code>null</code> if the error report could
-   *         not be found
+   * @return the error report or <code>null</code> if the error report could not be found
    *
    * @throws MessagingException
    */
-  ErrorReport getErrorReport(String id)
+  ErrorReport getErrorReport(UUID id)
     throws MessagingException;
 
   /**
@@ -173,12 +175,12 @@ public interface IMessagingService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the summary for the error report or <code>null</code> if the
-   *         error report could not be found
+   * @return the summary for the error report or <code>null</code> if the error report could not be
+   *         found
    *
    * @throws MessagingException
    */
-  ErrorReportSummary getErrorReportSummary(String id)
+  ErrorReportSummary getErrorReportSummary(UUID id)
     throws MessagingException;
 
   /**
@@ -191,52 +193,52 @@ public interface IMessagingService
   /**
    * Retrieve the message.
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @return the message or <code>null</code> if the message could not
    *         be found
    *
    * @throws MessagingException
    */
-  Message getMessage(String id)
+  Message getMessage(UUID id)
     throws MessagingException;
 
   /**
    * Get the message parts that have been queued for download by a particular remote device.
    *
-   * @param device the device ID identifying the device downloading the message parts
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the message parts that have been queued for download by a particular remote device
    *
    * @throws MessagingException
    */
-  List<MessagePart> getMessagePartsQueuedForDownload(String device)
+  List<MessagePart> getMessagePartsQueuedForDownload(UUID deviceId)
     throws MessagingException;
 
   /**
    * Get the messages that have been queued for download by a particular remote device.
    *
-   * @param device the device ID identifying the device downloading the messages
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages that have been queued for download by a particular remote device
    *
    * @throws MessagingException
    */
-  List<Message> getMessagesQueuedForDownload(String device)
+  List<Message> getMessagesQueuedForDownload(UUID deviceId)
     throws MessagingException;
 
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
-   * @param user   the username identifying the user
-   * @param device the device ID identifying the device downloading the messages
+   * @param user     the username identifying the user
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
    *         device
    *
    * @throws MessagingException
    */
-  List<Message> getMessagesQueuedForDownloadForUser(String user, String device)
+  List<Message> getMessagesQueuedForDownloadForUser(String user, UUID deviceId)
     throws MessagingException;
 
   /**
@@ -334,27 +336,6 @@ public interface IMessagingService
    *         <code>false</code> otherwise
    */
   boolean isSynchronousMessage(Message message);
-
-  /**
-   * Log the message audit entry.
-   *
-   * @param type         the type of message
-   * @param user         the user responsible for the message audit entry
-   * @param organisation the organisation code identifying the organisation associated with the
-   *                     message
-   * @param device       the ID for the device associated with the message audit entry
-   * @param ip           the IP address of the remote device associated with the message audit entry
-   * @param successful   was the message associated with the message audit entry successfully
-   *                     processed?
-   *
-   * @return <code>true</code> if the message audit entry was logged successfully or
-   *         <code>false</code> otherwise
-   *
-   * @throws MessagingException
-   */
-  boolean logMessageAudit(String type, String user, String organisation, String device,
-      String ip, boolean successful)
-    throws MessagingException;
 
   /**
    * Process the message.

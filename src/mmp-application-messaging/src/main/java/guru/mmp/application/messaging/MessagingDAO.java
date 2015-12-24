@@ -82,8 +82,6 @@ public class MessagingDAO
   private String getNextMessageForProcessingSQL;
   private String getNumberOfErrorReportsSQL;
 
-  /** The ID generator used to generate unique numeric IDs for the DAO. */
-  private IDGenerator idGenerator;
   private String incrementMessageProcessingAttemptsSQL;
   private String isMessageArchivedSQL;
   private String isMessagePartQueuedForAssemblySQL;
@@ -91,7 +89,6 @@ public class MessagingDAO
   private String lockMessagePartForDownloadSQL;
   private String lockMessagePartSQL;
   private String lockMessageSQL;
-  private String logMessageAuditSQL;
   private String resetExpiredMessageLocksSQL;
   private String resetExpiredMessagePartLocksSQL;
   private String resetMessageLocksSQL;
@@ -113,8 +110,8 @@ public class MessagingDAO
    *                   message
    * @param totalParts the total number of parts for the message
    *
-   * @return <code>true</code> if all the parts for the message have been
-   *          queued for assembly or <code>false</code> otherwise
+   * @return <code>true</code> if all the parts for the message have been queued for assembly or
+   *         <code>false</code> otherwise
    *
    * @throws DAOException
    */
@@ -124,7 +121,7 @@ public class MessagingDAO
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(allPartsQueuedForMessageSQL))
     {
-      statement.setString(1, messageId);
+      statement.setObject(1, messageId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -338,11 +335,11 @@ public class MessagingDAO
   /**
    * Delete the message.
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @throws DAOException
    */
-  public void deleteMessage(String id)
+  public void deleteMessage(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -361,11 +358,11 @@ public class MessagingDAO
   /**
    * Delete the message part.
    *
-   * @param id the ID uniquely identifying the message part
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @throws DAOException
    */
-  public void deleteMessagePart(String id)
+  public void deleteMessagePart(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -384,11 +381,11 @@ public class MessagingDAO
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the ID uniquely identifying the message whose message parts should be deleted
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @throws DAOException
    */
-  public void deleteMessagePartsForMessage(String messageId)
+  public void deleteMessagePartsForMessage(UUID messageId)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -410,12 +407,11 @@ public class MessagingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the error report or <code>null</code> if the error report could
-   *         not be found
+   * @return the error report or <code>null</code> if the error report could not be found
    *
    * @throws DAOException
    */
-  public ErrorReport getErrorReport(String id)
+  public ErrorReport getErrorReport(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -447,12 +443,12 @@ public class MessagingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the summary for the error report or <code>null</code> if the
-   *         error report could not be found
+   * @return the summary for the error report or <code>null</code> if the error report could not be
+   *         found
    *
    * @throws DAOException
    */
-  public ErrorReportSummary getErrorReportSummary(String id)
+  public ErrorReportSummary getErrorReportSummary(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -482,14 +478,13 @@ public class MessagingDAO
   /**
    * Retrieve the message.
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
-   * @return the message or <code>null</code> if the message could not
-   *          be found
+   * @return the message or <code>null</code> if the message could not be found
    *
    * @throws DAOException
    */
-  public Message getMessage(String id)
+  public Message getMessage(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -518,7 +513,7 @@ public class MessagingDAO
   /**
    * Retrieve the message parts queued for assembly for the message.
    *
-   * @param messageId the ID uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param lockName  the name of the lock that should be applied to the message parts queued for
    *                  assembly when they are retrieved
    *
@@ -527,7 +522,7 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<MessagePart> getMessagePartsQueuedForAssembly(String messageId, String lockName)
+  public List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
     throws DAOException
   {
     // Retrieve the Transaction Manager
@@ -627,7 +622,7 @@ public class MessagingDAO
   /**
    * Get the message parts that have been queued for download by a particular remote device.
    *
-   * @param device   the device ID identifying the device downloading the message parts
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the message parts queued for
    *                 download when they are retrieved
    *
@@ -636,7 +631,7 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<MessagePart> getMessagePartsQueuedForDownload(String device, String lockName)
+  public List<MessagePart> getMessagePartsQueuedForDownload(UUID deviceId, String lockName)
     throws DAOException
   {
     // Retrieve the Transaction Manager
@@ -762,7 +757,7 @@ public class MessagingDAO
   /**
    * Get the messages that have been queued for download by a particular remote device.
    *
-   * @param device   the device ID identifying the device downloading the messages
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the messages queued for download
    *                 when they are retrieved
    *
@@ -771,7 +766,7 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<Message> getMessagesQueuedForDownload(String device, String lockName)
+  public List<Message> getMessagesQueuedForDownload(UUID deviceId, String lockName)
     throws DAOException
   {
     // Retrieve the Transaction Manager
@@ -901,7 +896,7 @@ public class MessagingDAO
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
    * @param user     the username identifying the user
-   * @param device   the device ID identifying the device downloading the messages
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the messages queued for download
    *                 when they are retrieved
    *
@@ -911,7 +906,7 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<Message> getMessagesQueuedForDownloadForUser(String user, String device,
+  public List<Message> getMessagesQueuedForDownloadForUser(String user, UUID deviceId,
       String lockName)
     throws DAOException
   {
@@ -1321,14 +1316,14 @@ public class MessagingDAO
   /**
    * Has the message already been archived?
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
    *         otherwise
    *
    * @throws DAOException
    */
-  public boolean isMessageArchived(String id)
+  public boolean isMessageArchived(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1351,14 +1346,14 @@ public class MessagingDAO
   /**
    * Has the message part already been queued for assembly?
    *
-   * @param id the ID uniquely identifying the message part
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @return <code>true</code> if the message part has already been queued for assemble or
    *         <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  public boolean isMessagePartQueuedForAssembly(String id)
+  public boolean isMessagePartQueuedForAssembly(UUID id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1375,50 +1370,6 @@ public class MessagingDAO
     {
       throw new DAOException("Failed to check whether the message part (" + id
           + ") is queued for assembly in the database", e);
-    }
-  }
-
-  /**
-   * Log the message audit entry.
-   *
-   * @param type         the type of message
-   * @param user         the user responsible for the message audit entry
-   * @param organisation the organisation code identifying the organisation associated with the
-   *                     message
-   * @param device       the ID for the device associated with the message audit entry
-   * @param ip           the IP address of the remote device associated with the message audit entry
-   * @param successful   was the message associated with the message audit entry successfully
-   *                     processed
-   *
-   * @throws DAOException
-   */
-  public void logMessageAudit(String type, String user, String organisation, String device,
-      String ip, boolean successful)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(logMessageAuditSQL))
-    {
-      statement.setLong(1, idGenerator.next("Application.MessageAuditId"));
-      statement.setString(2, type);
-      statement.setString(3, user);
-      statement.setString(4, organisation);
-      statement.setString(5, device);
-      statement.setString(6, ip);
-      statement.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
-      statement.setString(8, successful
-          ? "Y"
-          : "N");
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + logMessageAuditSQL + ")");
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException("Failed to log the message audit to the database", e);
     }
   }
 
@@ -1551,12 +1502,12 @@ public class MessagingDAO
   /**
    * Set the status for a message part.
    *
-   * @param id     the ID uniquely identifying the message part
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message part
    * @param status the new status
    *
    * @throws DAOException
    */
-  public void setMessagePartStatus(String id, MessagePart.Status status)
+  public void setMessagePartStatus(UUID id, MessagePart.Status status)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1582,12 +1533,12 @@ public class MessagingDAO
   /**
    * Set the status for a message.
    *
-   * @param id     the ID uniquely identifying the message
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param status the new status
    *
    * @throws DAOException
    */
-  public void setMessageStatus(String id, Message.Status status)
+  public void setMessageStatus(UUID id, Message.Status status)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1613,12 +1564,12 @@ public class MessagingDAO
   /**
    * Unlock a locked message.
    *
-   * @param id     the ID uniquely identifying the message
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param status the new status for the unlocked message
    *
    * @throws DAOException
    */
-  public void unlockMessage(String id, Message.Status status)
+  public void unlockMessage(UUID id, Message.Status status)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1644,12 +1595,13 @@ public class MessagingDAO
   /**
    * Unlock a locked message part.
    *
-   * @param id     the ID uniquely identifying the message part
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *               part
    * @param status the new status for the unlocked message part
    *
    * @throws DAOException
    */
-  public void unlockMessagePart(String id, MessagePart.Status status)
+  public void unlockMessagePart(UUID id, MessagePart.Status status)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();

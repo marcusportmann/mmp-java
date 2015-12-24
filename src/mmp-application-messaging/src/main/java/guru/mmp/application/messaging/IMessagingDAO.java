@@ -41,8 +41,8 @@ public interface IMessagingDAO
    *                   message
    * @param totalParts the total number of parts for the message
    *
-   * @return <code>true</code> if all the parts for the message have been
-   *          queued for assembly or <code>false</code> otherwise
+   * @return <code>true</code> if all the parts for the message have been  queued for assembly or
+   *         <code>false</code> otherwise
    *
    * @throws DAOException
    */
@@ -94,31 +94,31 @@ public interface IMessagingDAO
   /**
    * Delete the message.
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @throws DAOException
    */
-  void deleteMessage(String id)
+  void deleteMessage(UUID id)
     throws DAOException;
 
   /**
    * Delete the message part.
    *
-   * @param id the ID uniquely identifying the message part
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @throws DAOException
    */
-  void deleteMessagePart(String id)
+  void deleteMessagePart(UUID id)
     throws DAOException;
 
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the ID uniquely identifying the message whose message parts should be deleted
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @throws DAOException
    */
-  void deleteMessagePartsForMessage(String messageId)
+  void deleteMessagePartsForMessage(UUID messageId)
     throws DAOException;
 
   /**
@@ -126,12 +126,11 @@ public interface IMessagingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the error report or <code>null</code> if the error report could
-   *         not be found
+   * @return the error report or <code>null</code> if the error report could not be found
    *
    * @throws DAOException
    */
-  ErrorReport getErrorReport(String id)
+  ErrorReport getErrorReport(UUID id)
     throws DAOException;
 
   /**
@@ -139,31 +138,30 @@ public interface IMessagingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the summary for the error report or <code>null</code> if the
-   *         error report could not be found
+   * @return the summary for the error report or <code>null</code> if the error report could not be
+   * found
    *
    * @throws DAOException
    */
-  ErrorReportSummary getErrorReportSummary(String id)
+  ErrorReportSummary getErrorReportSummary(UUID id)
     throws DAOException;
 
   /**
    * Retrieve the message.
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
-   * @return the message or <code>null</code> if the message could not
-   *          be found
+   * @return the message or <code>null</code> if the message could not be found
    *
    * @throws DAOException
    */
-  Message getMessage(String id)
+  Message getMessage(UUID id)
     throws DAOException;
 
   /**
    * Retrieve the message parts queued for assembly for the message.
    *
-   * @param messageId the ID uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param lockName  the name of the lock that should be applied to the message parts queued for
    *                  assembly when they are retrieved
    *
@@ -171,13 +169,13 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<MessagePart> getMessagePartsQueuedForAssembly(String messageId, String lockName)
+  List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
     throws DAOException;
 
   /**
    * Get the message parts that have been queued for download by a particular remote device.
    *
-   * @param device   the device ID identifying the device downloading the message parts
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the message parts queued for
    *                 download when they are retrieved
    *
@@ -185,13 +183,13 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<MessagePart> getMessagePartsQueuedForDownload(String device, String lockName)
+  List<MessagePart> getMessagePartsQueuedForDownload(UUID deviceId, String lockName)
     throws DAOException;
 
   /**
    * Get the messages that have been queued for download by a particular remote device.
    *
-   * @param device   the device ID identifying the device downloading the messages
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the messages queued for download
    *                 when they are retrieved
    *
@@ -199,14 +197,14 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<Message> getMessagesQueuedForDownload(String device, String lockName)
+  List<Message> getMessagesQueuedForDownload(UUID deviceId, String lockName)
     throws DAOException;
 
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
    * @param user     the username identifying the user
-   * @param device   the device ID identifying the device downloading the messages
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the messages queued for download
    *                 when they are retrieved
    *
@@ -215,7 +213,7 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<Message> getMessagesQueuedForDownloadForUser(String user, String device, String lockName)
+  List<Message> getMessagesQueuedForDownloadForUser(String user, UUID deviceId, String lockName)
     throws DAOException;
 
   /**
@@ -272,45 +270,27 @@ public interface IMessagingDAO
   /**
    * Has the message already been archived?
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
    *         otherwise
    *
    * @throws DAOException
    */
-  boolean isMessageArchived(String id)
+  boolean isMessageArchived(UUID id)
     throws DAOException;
 
   /**
    * Has the message part already been queued for assembly?
    *
-   * @param id the ID uniquely identifying the message part
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @return <code>true</code> if the message part has already been queued for assemble or
    *         <code>false</code> otherwise
    *
    * @throws DAOException
    */
-  boolean isMessagePartQueuedForAssembly(String id)
-    throws DAOException;
-
-  /**
-   * Log the message audit entry.
-   *
-   * @param type         the type of message
-   * @param user         the user responsible for the message audit entry
-   * @param organisation the organisation code identifying the organisation associated with the
-   *                     message
-   * @param device       the ID for the device associated with the message audit entry
-   * @param ip           the IP address of the remote device associated with the message audit entry
-   * @param successful   was the message associated with the message audit entry successfully
-   *                     processed
-   *
-   * @throws DAOException
-   */
-  void logMessageAudit(String type, String user, String organisation, String device, String ip,
-      boolean successful)
+  boolean isMessagePartQueuedForAssembly(UUID id)
     throws DAOException;
 
   /**
@@ -374,44 +354,46 @@ public interface IMessagingDAO
   /**
    * Set the status for a message part.
    *
-   * @param id     the ID uniquely identifying the message part
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *               part
    * @param status the new status
    *
    * @throws DAOException
    */
-  void setMessagePartStatus(String id, MessagePart.Status status)
+  void setMessagePartStatus(UUID id, MessagePart.Status status)
     throws DAOException;
 
   /**
    * Set the status for a message.
    *
-   * @param id     the ID uniquely identifying the message
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param status the new status
    *
    * @throws DAOException
    */
-  void setMessageStatus(String id, Message.Status status)
+  void setMessageStatus(UUID id, Message.Status status)
     throws DAOException;
 
   /**
    * Unlock a locked message.
    *
-   * @param id     the ID uniquely identifying the message
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param status the new status for the unlocked message
    *
    * @throws DAOException
    */
-  void unlockMessage(String id, Message.Status status)
+  void unlockMessage(UUID id, Message.Status status)
     throws DAOException;
 
   /**
    * Unlock a locked message part.
    *
-   * @param id     the ID uniquely identifying the message part
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *               part
    * @param status the new status for the unlocked message part
    *
    * @throws DAOException
    */
-  void unlockMessagePart(String id, MessagePart.Status status)
+  void unlockMessagePart(UUID id, MessagePart.Status status)
     throws DAOException;
 }

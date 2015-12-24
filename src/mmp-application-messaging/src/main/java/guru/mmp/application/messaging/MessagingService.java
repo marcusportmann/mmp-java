@@ -124,7 +124,7 @@ public class MessagingService
   private int maximumProcessingAttempts;
 
   /* The message handlers */
-  private Map<String, IMessageHandler> messageHandlers;
+  private Map<UUID, IMessageHandler> messageHandlers;
 
   /**
    * The configuration information for the message handlers read from the messaging configuration
@@ -185,9 +185,7 @@ public class MessagingService
   public boolean canProcessMessage(Message message)
     throws MessagingException
   {
-    String messageTypeKey = getMessageTypeKey(message.getType(), message.getTypeVersion());
-
-    return messageHandlers.containsKey(messageTypeKey);
+    return messageHandlers.containsKey(message.getTypeId());
   }
 
   /**
@@ -204,10 +202,7 @@ public class MessagingService
   public boolean canQueueMessagePartForAssembly(MessagePart messagePart)
     throws MessagingException
   {
-    String messageTypeKey = getMessageTypeKey(messagePart.getMessageType(),
-      messagePart.getMessageTypeVersion());
-
-    return messageHandlers.containsKey(messageTypeKey);
+    return messageHandlers.containsKey(messagePart.getMessageTypeId());
   }
 
   /**
@@ -253,7 +248,7 @@ public class MessagingService
 
     // TODO: Cache this key...
     byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getEncryptionScheme(),
-      message.getUser(), message.getOrganisation(), message.getDevice());
+      message.getUser(), message.getOrganisationId(), message.getDeviceId());
 
     /*
      * if (logger.isDebugEnabled())
@@ -282,7 +277,7 @@ public class MessagingService
       if (!messageChecksum.equals(message.getDataHash()))
       {
         logger.warn("Data hash verification failed for the message (" + message.getId()
-            + ") from the user (" + message.getUser() + ") and device (" + message.getDevice()
+            + ") from the user (" + message.getUser() + ") and device (" + message.getDeviceId()
             + "). " + message.getData().length + " (" + decryptedData.length
             + ") bytes of message data was encrypted using the encryption scheme ("
             + message.getEncryptionScheme() + ") and encryption IV (" + message.getEncryptionIV()
@@ -304,7 +299,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException("Failed to decrypt the data for the message (" + message.getId()
-          + ") from the user (" + message.getUser() + ") and device (" + message.getDevice()
+          + ") from the user (" + message.getUser() + ") and device (" + message.getDeviceId()
           + ")", e);
     }
   }
@@ -332,11 +327,11 @@ public class MessagingService
   /**
    * Delete the message.
    *
-   * @param id the ID uniquely identifying the message to delete
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @throws MessagingException
    */
-  public void deleteMessage(String id)
+  public void deleteMessage(UUID id)
     throws MessagingException
   {
     try
@@ -352,11 +347,11 @@ public class MessagingService
   /**
    * Delete the message part.
    *
-   * @param id the ID uniquely identifying the message part to delete
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @throws MessagingException
    */
-  public void deleteMessagePart(String id)
+  public void deleteMessagePart(UUID id)
     throws MessagingException
   {
     try
@@ -374,21 +369,22 @@ public class MessagingService
    *
    * @param encryptionScheme the encryption scheme for the encryption key
    * @param username         the username uniquely identifying the user e.g. test1
-   * @param organisation     the organisation code uniquely identifying the organisation
-   * @param deviceId         the device ID uniquely identifying the device
+   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         organisation
+   * @param deviceId         the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         device
    *
    * @return the user-device encryption key
    *
    * @throws MessagingException
    */
   public byte[] deriveUserDeviceEncryptionKey(EncryptionScheme encryptionScheme, String username,
-      String organisation, String deviceId)
+      UUID organisationId, UUID deviceId)
     throws MessagingException
   {
     try
     {
-      String password = deviceId.toLowerCase() + username.toLowerCase()
-        + organisation.toLowerCase();
+      String password = deviceId.toString() + username.toLowerCase() + organisationId.toString();
 
       if (encryptionScheme == EncryptionScheme.AES_CFB)
       {
@@ -411,7 +407,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException("Failed to derive the encryption key for the user (" + username
-          + "), organisation (" + organisation + ") and device (" + deviceId + ")", e);
+          + "), organisation (" + organisationId + ") and device (" + deviceId + ")", e);
     }
   }
 
@@ -437,7 +433,7 @@ public class MessagingService
 
     // TODO: Cache this key...
     byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(encryptionScheme, message.getUser(),
-      message.getOrganisation(), message.getDevice());
+      message.getOrganisationId(), message.getDeviceId());
 
     /*
      * if (logger.isDebugEnabled())
@@ -480,7 +476,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException("Failed to encrypt the data for the message (" + message.getId()
-          + ") from the user (" + message.getUser() + ") and device (" + message.getDevice()
+          + ") from the user (" + message.getUser() + ") and device (" + message.getDeviceId()
           + ")", e);
     }
   }
@@ -490,12 +486,11 @@ public class MessagingService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the error report or <code>null</code> if the error report could
-   *         not be found
+   * @return the error report or <code>null</code> if the error report could not be found
    *
    * @throws MessagingException
    */
-  public ErrorReport getErrorReport(String id)
+  public ErrorReport getErrorReport(UUID id)
     throws MessagingException
   {
     try
@@ -513,12 +508,12 @@ public class MessagingService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
-   * @return the summary for the error report or <code>null</code> if the
-   *         error report could not be found
+   * @return the summary for the error report or <code>null</code> if the error report could not be
+   *         found
    *
    * @throws MessagingException
    */
-  public ErrorReportSummary getErrorReportSummary(String id)
+  public ErrorReportSummary getErrorReportSummary(UUID id)
     throws MessagingException
   {
     try
@@ -545,14 +540,13 @@ public class MessagingService
   /**
    * Retrieve the message.
    *
-   * @param id the ID uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
-   * @return the message or <code>null</code> if the message could not
-   *         be found
+   * @return the message or <code>null</code> if the message could not be found
    *
    * @throws MessagingException
    */
-  public Message getMessage(String id)
+  public Message getMessage(UUID id)
     throws MessagingException
   {
     try
@@ -568,71 +562,71 @@ public class MessagingService
   /**
    * Get the message parts that have been queued for download by a particular remote device.
    *
-   * @param device the device ID identifying the device downloading the message parts
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the message parts that have been queued for download by a particular remote device
    *
    * @throws MessagingException
    */
-  public List<MessagePart> getMessagePartsQueuedForDownload(String device)
+  public List<MessagePart> getMessagePartsQueuedForDownload(UUID deviceId)
     throws MessagingException
   {
     try
     {
-      return messagingDAO.getMessagePartsQueuedForDownload(device, getInstanceName());
+      return messagingDAO.getMessagePartsQueuedForDownload(deviceId, getInstanceName());
     }
     catch (Throwable e)
     {
       throw new MessagingException("Failed to retrieve the message parts that have been queued for"
-          + " download by the device (" + device + ")", e);
+          + " download by the device (" + deviceId + ")", e);
     }
   }
 
   /**
    * Get the messages that have been queued for download by a particular remote device.
    *
-   * @param device the device ID identifying the device downloading the messages
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages that have been queued for download by a particular remote device
    *
    * @throws MessagingException
    */
-  public List<Message> getMessagesQueuedForDownload(String device)
+  public List<Message> getMessagesQueuedForDownload(UUID deviceId)
     throws MessagingException
   {
     try
     {
-      return messagingDAO.getMessagesQueuedForDownload(device, getInstanceName());
+      return messagingDAO.getMessagesQueuedForDownload(deviceId, getInstanceName());
     }
     catch (Throwable e)
     {
       throw new MessagingException("Failed to retrieve the messages that have been queued for"
-          + " download by the device (" + device + ")", e);
+          + " download by the device (" + deviceId + ")", e);
     }
   }
 
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
-   * @param user   the username identifying the user
-   * @param device the device ID identifying the device downloading the messages
+   * @param user     the username identifying the user
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
    *         device
    *
    * @throws MessagingException
    */
-  public List<Message> getMessagesQueuedForDownloadForUser(String user, String device)
+  public List<Message> getMessagesQueuedForDownloadForUser(String user, UUID deviceId)
     throws MessagingException
   {
     try
     {
-      return messagingDAO.getMessagesQueuedForDownloadForUser(user, device, getInstanceName());
+      return messagingDAO.getMessagesQueuedForDownloadForUser(user, deviceId, getInstanceName());
     }
     catch (Throwable e)
     {
       throw new MessagingException("Failed to retrieve the messages for the user (" + user
-          + ") that have been queued for download by the device (" + device + ")", e);
+          + ") that have been queued for download by the device (" + deviceId + ")", e);
     }
   }
 
@@ -798,7 +792,7 @@ public class MessagingService
    */
   public boolean isArchivableMessage(Message message)
   {
-    return isArchivableMessage(message.getType(), message.getTypeVersion());
+    return isArchivableMessage(message.getTypeId());
   }
 
   /**
@@ -811,7 +805,7 @@ public class MessagingService
    */
   public boolean isAsynchronousMessage(Message message)
   {
-    return isAsynchronousMessage(message.getType(), message.getTypeVersion());
+    return isAsynchronousMessage(message.getTypeId());
   }
 
   /**
@@ -848,43 +842,7 @@ public class MessagingService
    */
   public boolean isSynchronousMessage(Message message)
   {
-    return isSynchronousMessage(message.getType(), message.getTypeVersion());
-  }
-
-  /**
-   * Log the message audit entry.
-   *
-   * @param type         the type of message
-   * @param user         the user responsible for the message audit entry
-   * @param organisation the organisation code identifying the organisation associated with the
-   *                     message
-   * @param device       the ID for the device associated with the message audit entry
-   * @param ip           the IP address of the remote device associated with the message audit entry
-   * @param successful   was the message associated with the message audit entry successfully
-   *                     processed?
-   *
-   * @return <code>true</code> if the message audit entry was logged successfully or
-   *         <code>false</code> otherwise
-   *
-   * @throws MessagingException
-   */
-  public boolean logMessageAudit(String type, String user, String organisation, String device,
-      String ip, boolean successful)
-    throws MessagingException
-  {
-    try
-    {
-      messagingDAO.logMessageAudit(type, user, organisation, device, ip, successful);
-
-      return true;
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to log the message audit for the message with type (" + type
-          + ") from the user (" + user + ") and device (" + device + ")", e);
-
-      return false;
-    }
+    return isSynchronousMessage(message.getTypeId());
   }
 
   /**
@@ -901,19 +859,17 @@ public class MessagingService
   {
     if (logger.isDebugEnabled())
     {
-      logger.debug("Processing message (" + message.getId() + ") with type (" + message.getType()
-          + ") and version (" + message.getTypeVersion() + ")");
+      logger.debug("Processing message (" + message.getId() + ") with type (" + message.getTypeId()
+          + ")");
     }
 
-    String messageTypeKey = getMessageTypeKey(message.getType(), message.getTypeVersion());
-
-    if (!messageHandlers.containsKey(messageTypeKey))
+    if (!messageHandlers.containsKey(message.getTypeId()))
     {
       throw new MessagingException("No message handler registered to process messages with type ("
-          + message.getType() + ") and version (" + message.getTypeVersion() + ")");
+          + message.getTypeId() + "))");
     }
 
-    IMessageHandler messageHandler = messageHandlers.get(messageTypeKey);
+    IMessageHandler messageHandler = messageHandlers.get(message.getTypeId());
 
     try
     {
@@ -922,8 +878,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException("Failed to process the message (" + message.getId()
-          + ") with type (" + message.getType() + ") and version (" + message.getTypeVersion()
-          + ")", e);
+          + ") with type (" + message.getTypeId() + ")", e);
     }
   }
 
@@ -956,8 +911,7 @@ public class MessagingService
         if (!message.isEncrypted())
         {
           throw new MessagingException("The message (" + message.getId() + ") with type ("
-              + message.getType() + ") and version (" + message.getTypeVersion()
-              + ") exceeds the maximum asynchronous message size ("
+              + message.getTypeId() + ") exceeds the maximum asynchronous message size ("
               + Message.MAX_ASYNC_MESSAGE_SIZE
               + ") and must be encrypted prior to being queued for download");
         }
@@ -1002,8 +956,8 @@ public class MessagingService
           }
 
           MessagePart messagePart = new MessagePart(i + 1, numberOfParts, message.getId(),
-            message.getUser(), message.getOrganisation(), message.getDevice(), message.getType(),
-            message.getTypeVersion(), message.getCorrelationId(), message.getPriority(),
+            message.getUser(), message.getOrganisationId(), message.getDeviceId(),
+            message.getTypeId(), message.getCorrelationId(), message.getPriority(),
             message.getCreated(), message.getDataHash(), message.getEncryptionScheme(),
             message.getEncryptionIV(), messageChecksum, messagePartData);
 
@@ -1055,8 +1009,8 @@ public class MessagingService
 
     if (logger.isDebugEnabled())
     {
-      logger.debug("Queued message (" + message.getId() + ") with type (" + message.getType()
-          + ") and version (" + message.getTypeVersion() + ") for processing");
+      logger.debug("Queued message (" + message.getId() + ") with type (" + message.getTypeId()
+          + ") for processing");
 
       logger.debug(message.toString());
     }
@@ -1150,11 +1104,11 @@ public class MessagingService
           messagingDAO.deleteMessagePartsForMessage(messagePart.getMessageId());
 
           logger.error("Failed to verify the checksum for the reconstructed" + " message ("
-              + messagePart.getMessageId() + ") with type (" + messagePart.getMessageType()
-              + ") and type version (" + messagePart.getMessageTypeVersion() + ") from user ("
-              + messagePart.getMessageUser() + ") and device (" + messagePart.getMessageDevice()
-              + "). Found " + reconstructedData.length + " bytes of message data with the hash ("
-              + messageChecksum + ") that was reconstructed from " + messageParts.size()
+              + messagePart.getMessageId() + ") with type (" + messagePart.getMessageTypeId()
+              + ") from user (" + messagePart.getMessageUser() + ") and device ("
+              + messagePart.getMessageDeviceId() + "). Found " + reconstructedData.length
+              + " bytes of message data with the hash (" + messageChecksum
+              + ") that was reconstructed from " + messageParts.size()
               + " message parts. The message will NOT be processed");
 
           String messagingDebugDirectory = getMessagingDebugDirectory();
@@ -1181,12 +1135,11 @@ public class MessagingService
                 new PrintWriter(new FileOutputStream(new File(invalidMessageInfoFilename)));
 
               invalidMessageInfoWriter.println("ID: " + messagePart.getMessageId());
-              invalidMessageInfoWriter.println("Type: " + messagePart.getMessageType());
-              invalidMessageInfoWriter.println("Version: " + messagePart.getMessageTypeVersion());
+              invalidMessageInfoWriter.println("Type ID: " + messagePart.getMessageTypeId());
               invalidMessageInfoWriter.println("User: " + messagePart.getMessageUser());
-              invalidMessageInfoWriter.println("Device: " + messagePart.getMessageDevice());
-              invalidMessageInfoWriter.println("Organisation: "
-                  + messagePart.getMessageOrganisation());
+              invalidMessageInfoWriter.println("Device ID: " + messagePart.getMessageDeviceId());
+              invalidMessageInfoWriter.println("Organisation ID: "
+                  + messagePart.getMessageOrganisationId());
               invalidMessageInfoWriter.println("Correlation ID: "
                   + messagePart.getMessageCorrelationId());
               invalidMessageInfoWriter.println("Encryption Scheme: "
@@ -1230,12 +1183,12 @@ public class MessagingService
         }
 
         Message message = new Message(messagePart.getMessageId(), messagePart.getMessageUser(),
-          messagePart.getMessageOrganisation(), messagePart.getMessageDevice(),
-          messagePart.getMessageType(), messagePart.getMessageTypeVersion(),
-          messagePart.getMessageCorrelationId(), messagePart.getMessagePriority(),
-          Message.Status.INITIALISED, messagePart.getMessageCreated(), null, null, 0, 0, 0, null,
-          null, reconstructedData, messagePart.getMessageDataHash(),
-          messagePart.getMessageEncryptionScheme(), messagePart.getMessageEncryptionIV());
+          messagePart.getMessageOrganisationId(), messagePart.getMessageDeviceId(),
+          messagePart.getMessageTypeId(), messagePart.getMessageCorrelationId(),
+          messagePart.getMessagePriority(), Message.Status.INITIALISED,
+          messagePart.getMessageCreated(), null, null, 0, 0, 0, null, null, reconstructedData,
+          messagePart.getMessageDataHash(), messagePart.getMessageEncryptionScheme(),
+          messagePart.getMessageEncryptionIV());
 
         if (decryptMessage(message))
         {
@@ -1247,10 +1200,9 @@ public class MessagingService
           messagingDAO.deleteMessagePartsForMessage(messagePart.getMessageId());
 
           logger.error("Failed to decrypt the reconstructed message (" + messagePart.getMessageId()
-              + ") with type (" + messagePart.getMessageType() + ") and type version ("
-              + messagePart.getMessageTypeVersion() + ") from the user ("
-              + messagePart.getMessageUser() + ") and device (" + messagePart.getMessageDevice()
-              + ") associated with the organisation (" + messagePart.getMessageOrganisation()
+              + ") with type (" + messagePart.getMessageTypeId() + ") from the user ("
+              + messagePart.getMessageUser() + ") and device (" + messagePart.getMessageDeviceId()
+              + ") associated with the organisation (" + messagePart.getMessageOrganisationId()
               + "). Found " + reconstructedData.length + " bytes of message data with the hash ("
               + messageChecksum + ") that was reconstructed from " + messageParts.size()
               + " message parts. The message will NOT be processed");
@@ -1279,12 +1231,11 @@ public class MessagingService
                 new PrintWriter(new FileOutputStream(new File(invalidMessageInfoFilename)));
 
               invalidMessageInfoWriter.println("ID: " + messagePart.getMessageId());
-              invalidMessageInfoWriter.println("Type: " + messagePart.getMessageType());
-              invalidMessageInfoWriter.println("Version: " + messagePart.getMessageTypeVersion());
+              invalidMessageInfoWriter.println("Type ID: " + messagePart.getMessageTypeId());
               invalidMessageInfoWriter.println("User: " + messagePart.getMessageUser());
-              invalidMessageInfoWriter.println("Device: " + messagePart.getMessageDevice());
-              invalidMessageInfoWriter.println("Organisation: "
-                  + messagePart.getMessageOrganisation());
+              invalidMessageInfoWriter.println("Device ID: " + messagePart.getMessageDeviceId());
+              invalidMessageInfoWriter.println("Organisation ID: "
+                  + messagePart.getMessageOrganisationId());
               invalidMessageInfoWriter.println("Correlation ID: "
                   + messagePart.getMessageCorrelationId());
               invalidMessageInfoWriter.println("Encryption Scheme: "
@@ -1543,18 +1494,6 @@ public class MessagingService
   }
 
   /**
-   * Returns the message type "key" used to uniquely identify a combination of message type and
-   * message type version.
-   *
-   * @return the message type "key" used to uniquely identify a combination of message type and
-   *         message type version
-   */
-  private String getMessageTypeKey(String messageType, int messageTypeVersion)
-  {
-    return messageType + "-" + messageTypeVersion;
-  }
-
-  /**
    * Initialise the configuration for the Messaging Service instance.
    *
    * @throws MessagingException
@@ -1632,23 +1571,20 @@ public class MessagingService
 
           for (MessageHandlerConfig.MessageConfig messageConfig : messagesConfig)
           {
-            String messageTypeKey = getMessageTypeKey(messageConfig.getMessageType(),
-              messageConfig.getMessageTypeVersion());
-
-            if (messageHandlers.containsKey(messageTypeKey))
+            if (messageHandlers.containsKey(messageConfig.getMessageTypeId()))
             {
-              IMessageHandler existingMessageHandler = messageHandlers.get(messageTypeKey);
+              IMessageHandler existingMessageHandler =
+                messageHandlers.get(messageConfig.getMessageTypeId());
 
               logger.warn("Failed to register the message handler ("
                   + messageHandler.getClass().getName() + ") for the message type ("
-                  + messageConfig.getMessageType() + ") and version ("
-                  + messageConfig.getMessageTypeVersion() + ") since another message handler ("
+                  + messageConfig.getMessageTypeId() + ") since another message handler ("
                   + existingMessageHandler.getClass().getName()
                   + ") has already been registered to process messages of this type");
             }
             else
             {
-              messageHandlers.put(messageTypeKey, messageHandler);
+              messageHandlers.put(messageConfig.getMessageTypeId(), messageHandler);
             }
           }
         }
@@ -1668,22 +1604,22 @@ public class MessagingService
   }
 
   /**
-   * Should a message with the specified type information be archived?
+   * Should a message with the specified type be archived?
    *
-   * @param type        the UUID identifying the type of message
-   * @param typeVersion the version of the message type
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *               type
    *
-   * @return <code>true</code> if a message with the specified type information should be archived
-   *         or <code>false</code> otherwise
+   * @return <code>true</code> if a message with the specified type should be archived or
+   *         <code>false</code> otherwise
    */
-  private boolean isArchivableMessage(String type, int typeVersion)
+  private boolean isArchivableMessage(UUID typeId)
   {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers supports archiving of the message
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
     {
-      if (messageHandlerConfig.isArchivable(type, typeVersion))
+      if (messageHandlerConfig.isArchivable(typeId))
       {
         return true;
       }
@@ -1693,22 +1629,22 @@ public class MessagingService
   }
 
   /**
-   * Can a message with the specified type information be processed asynchronously?
+   * Can a message with the specified type be processed asynchronously?
    *
-   * @param type        the UUID identifying the type of message
-   * @param typeVersion the version of the message type
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *               type
    *
-   * @return <code>true</code> if a message with the specified type information can be processed
-   *         asynchronously or <code>false</code> otherwise
+   * @return <code>true</code> if a message with the specified type can be processed asynchronously
+   *         or <code>false</code> otherwise
    */
-  private boolean isAsynchronousMessage(String type, int typeVersion)
+  private boolean isAsynchronousMessage(UUID typeId)
   {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers support the synchronous processing of this message
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
     {
-      if (messageHandlerConfig.supportsAsynchronousProcessing(type, typeVersion))
+      if (messageHandlerConfig.supportsAsynchronousProcessing(typeId))
       {
         return true;
       }
@@ -1718,22 +1654,22 @@ public class MessagingService
   }
 
   /**
-   * Can a message with the specified type information be processed synchronously?
+   * Can a message with the specified type be processed synchronously?
    *
-   * @param type        the UUID identifying the type of message
-   * @param typeVersion the version of the message type
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *               type
    *
-   * @return <code>true</code> if a message with the specified type information can be processed
-   *         synchronously or <code>false</code> otherwise
+   * @return <code>true</code> if a message with the specified type can be processed synchronously
+   *         or <code>false</code> otherwise
    */
-  private boolean isSynchronousMessage(String type, int typeVersion)
+  private boolean isSynchronousMessage(UUID typeId)
   {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers support the synchronous processing of this message
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
     {
-      if (messageHandlerConfig.supportsSynchronousProcessing(type, typeVersion))
+      if (messageHandlerConfig.supportsSynchronousProcessing(typeId))
       {
         return true;
       }
@@ -1806,8 +1742,7 @@ public class MessagingService
 
           for (Element messageElement : messageElements)
           {
-            String messageType = messageElement.getAttribute("type");
-            int messageTypeVersion = Integer.parseInt(messageElement.getAttribute("typeVersion"));
+            UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
             boolean isSynchronous =
               messageElement.getAttribute("isSynchronous").equalsIgnoreCase("Y");
             boolean isAsynchronous =
@@ -1815,8 +1750,8 @@ public class MessagingService
             boolean isArchivable =
               messageElement.getAttribute("isArchivable").equalsIgnoreCase("Y");
 
-            messageHandlerConfig.addMessageConfig(messageType, messageTypeVersion, isSynchronous,
-                isAsynchronous, isArchivable);
+            messageHandlerConfig.addMessageConfig(messageType, isSynchronous, isAsynchronous,
+                isArchivable);
           }
 
           messageHandlersConfig.add(messageHandlerConfig);

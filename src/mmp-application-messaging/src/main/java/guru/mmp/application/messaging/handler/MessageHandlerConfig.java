@@ -20,6 +20,7 @@ package guru.mmp.application.messaging.handler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>MessageHandlerConfig</code> class stores the configuration information for a
@@ -63,19 +64,19 @@ public class MessageHandlerConfig
    * defines which messages a message handler is capable of processing synchronously and
    * asynchronously.
    *
-   * @param messageType        the UUID identifying the supported message type
-   * @param messageTypeVersion the version of the supported message type
+   * @param messageTypeId      the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the message type
    * @param isSynchronous      is the handler capable of synchronously processing messages of the
    *                           supported message type
    * @param isAsynchronous     is the handler capable of asynchronously processing messages of the
    *                           supported message type
    * @param isArchivable       should messages of the supported message type be archived
    */
-  public void addMessageConfig(String messageType, int messageTypeVersion, boolean isSynchronous,
-      boolean isAsynchronous, boolean isArchivable)
+  public void addMessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+      boolean isArchivable)
   {
-    messagesConfig.add(new MessageConfig(messageType, messageTypeVersion, isSynchronous,
-        isAsynchronous, isArchivable));
+    messagesConfig.add(new MessageConfig(messageTypeId, isSynchronous, isAsynchronous,
+        isArchivable));
   }
 
   /**
@@ -109,21 +110,20 @@ public class MessageHandlerConfig
   }
 
   /**
-   * Returns <code>true</code> if messages of the specified message type and version should be
-   * archived or <code>false</code> otherwise.
+   * Returns <code>true</code> if messages of the specified message type should be archived or
+   * <code>false</code> otherwise.
    *
-   * @param messageType        the UUID identifying the message type
-   * @param messageTypeVersion the version of the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
-   * @return <code>true</code> if messages of the specified message type and version should be
-   *         archived or <code>false</code> otherwise
+   * @return <code>true</code> if messages of the specified message type should be archived or
+   *         <code>false</code> otherwise
    */
-  public boolean isArchivable(String messageType, int messageTypeVersion)
+  public boolean isArchivable(UUID messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
-      if (messageConfig.getMessageType().equals(messageType)
-          && (messageConfig.getMessageTypeVersion() == messageTypeVersion))
+      if (messageConfig.getMessageTypeId().equals(messageTypeId))
       {
         return messageConfig.isArchivable();
       }
@@ -144,20 +144,19 @@ public class MessageHandlerConfig
 
   /**
    * Returns <code>true</code> if the message handler supports asynchronous processing of the
-   * specified message type and version or <code>false</code> otherwise.
+   * specified message type or <code>false</code> otherwise.
    *
-   * @param messageType        the UUID identifying the message type
-   * @param messageTypeVersion the version of the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler supports asynchronous processing of the
-   *         specified message type and version or <code>false</code> otherwise
+   *         specified message type or <code>false</code> otherwise
    */
-  public boolean supportsAsynchronousProcessing(String messageType, int messageTypeVersion)
+  public boolean supportsAsynchronousProcessing(UUID messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
-      if (messageConfig.getMessageType().equals(messageType)
-          && (messageConfig.getMessageTypeVersion() == messageTypeVersion))
+      if (messageConfig.getMessageTypeId().equals(messageTypeId))
       {
         return messageConfig.isAsynchronous();
       }
@@ -168,20 +167,19 @@ public class MessageHandlerConfig
 
   /**
    * Returns <code>true</code> if the message handler supports synchronous processing of the
-   * specified message type and version or <code>false</code> otherwise.
+   * specified message type or <code>false</code> otherwise.
    *
-   * @param messageType        the UUID identifying the message type
-   * @param messageTypeVersion the version of the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler supports synchronous processing of the
-   *         specified message type and version or <code>false</code> otherwise
+   *         specified message type or <code>false</code> otherwise
    */
-  public boolean supportsSynchronousProcessing(String messageType, int messageTypeVersion)
+  public boolean supportsSynchronousProcessing(UUID messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
-      if (messageConfig.getMessageType().equals(messageType)
-          && (messageConfig.getMessageTypeVersion() == messageTypeVersion))
+      if (messageConfig.getMessageTypeId().equals(messageTypeId))
       {
         return messageConfig.isSynchronous();
       }
@@ -212,54 +210,38 @@ public class MessageHandlerConfig
     private boolean isSynchronous;
 
     /**
-     * The UUID identifying the supported message type.
+     * The Universally Unique Identifier (UUID) used to uniquely identify the message type.
      */
-    private String messageType;
-
-    /**
-     * The version of the supported message type.
-     */
-    private int messageTypeVersion;
+    private UUID messageTypeId;
 
     /**
      * Constructs a new <code>MessageConfig</code>.
      *
-     * @param messageType        the UUID identifying the supported message type
-     * @param messageTypeVersion the version of the supported message type
+     * @param messageTypeId      the Universally Unique Identifier (UUID) used to uniquely identify
+     *                           the message type
      * @param isSynchronous      is the handler capable of synchronously processing messages of
      *                           the supported message type
      * @param isAsynchronous     is the handler capable of asynchronously processing messages of
      *                           the supported message type
      * @param isArchivable       should messages of the supported message type be archived
      */
-    public MessageConfig(String messageType, int messageTypeVersion, boolean isSynchronous,
-        boolean isAsynchronous, boolean isArchivable)
+    public MessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+        boolean isArchivable)
     {
-      this.messageType = messageType;
-      this.messageTypeVersion = messageTypeVersion;
+      this.messageTypeId = messageTypeId;
       this.isSynchronous = isSynchronous;
       this.isAsynchronous = isAsynchronous;
       this.isArchivable = isArchivable;
     }
 
     /**
-     * Return the UUID identifying the supported message type.
+     * Return the Universally Unique Identifier (UUID) used to uniquely identify the message type.
      *
-     * @return the UUID identifying the supported message type
+     * @return the Universally Unique Identifier (UUID) used to uniquely identify the message type
      */
-    public String getMessageType()
+    public UUID getMessageTypeId()
     {
-      return messageType;
-    }
-
-    /**
-     * Return the version of the supported message type.
-     *
-     * @return the version of the supported message type
-     */
-    public int getMessageTypeVersion()
-    {
-      return messageTypeVersion;
+      return messageTypeId;
     }
 
     /**
@@ -296,16 +278,6 @@ public class MessageHandlerConfig
     public boolean isSynchronous()
     {
       return isSynchronous;
-    }
-
-    /**
-     * Set the version of the supported message type.
-     *
-     * @param messageTypeVersion the version of the supported message type
-     */
-    public void setMessageTypeVersion(int messageTypeVersion)
-    {
-      this.messageTypeVersion = messageTypeVersion;
     }
   }
 }
