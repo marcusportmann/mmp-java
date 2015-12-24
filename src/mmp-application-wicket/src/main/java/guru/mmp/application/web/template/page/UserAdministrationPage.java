@@ -288,13 +288,14 @@ public class UserAdministrationPage extends TemplateWebPage
     WebSession session = getWebApplicationSession();
 
     List<UserDirectory> allUserDirectories =
-      securityService.getUserDirectoriesForOrganisation(session.getOrganisation());
+      securityService.getUserDirectoriesForOrganisation(session.getOrganisationId());
 
     List<UserDirectory> userDirectories = new ArrayList<>();
 
     for (UserDirectory userDirectory : allUserDirectories)
     {
-      if ((userDirectory.getId() == 1) && (session.getUserDirectoryId() != 1))
+      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID))
+          && (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)))
       {
         // Do nothing
       }

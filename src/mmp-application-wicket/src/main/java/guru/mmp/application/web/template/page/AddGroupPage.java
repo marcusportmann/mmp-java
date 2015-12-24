@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -59,7 +60,8 @@ public class AddGroupPage extends TemplateWebPage
    * Constructs a new <code>AddGroupPage</code>.
    *
    * @param previousPage    the previous page
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    */
   public AddGroupPage(PageReference previousPage, UUID userDirectoryId)
   {

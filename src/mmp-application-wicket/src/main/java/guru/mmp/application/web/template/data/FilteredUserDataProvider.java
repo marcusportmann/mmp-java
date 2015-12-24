@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -54,14 +55,15 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
   private ISecurityService securityService;
 
   /**
-   * The unique ID for the user directory the users are associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
   private UUID userDirectoryId;
 
   /**
    * Constructs a new <code>UserDataProvider</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    */
   public FilteredUserDataProvider(UUID userDirectoryId)
   {
@@ -158,9 +160,10 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
   }
 
   /**
-   * Set the unique ID for the user directory the users are associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @param userDirectoryId the unique ID for the user directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    */
   public void setUserDirectoryId(UUID userDirectoryId)
   {

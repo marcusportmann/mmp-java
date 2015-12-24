@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -76,7 +77,8 @@ public class UserGroupsPage extends TemplateWebPage
    * Constructs a new <code>UserGroupsPage</code>.
    *
    * @param previousPage    the previous page
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    */
   public UserGroupsPage(PageReference previousPage, UUID userDirectoryId, String username)

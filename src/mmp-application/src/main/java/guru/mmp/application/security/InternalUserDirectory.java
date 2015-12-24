@@ -96,7 +96,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param parameters      the key-value configuration parameters for the user directory
    *
    * @throws SecurityException

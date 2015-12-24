@@ -68,7 +68,7 @@ public class UserDirectoryTypeChoiceRenderer
    */
   public String getIdValue(UserDirectoryType userDirectoryType, int index)
   {
-    return userDirectoryType.getId();
+    return userDirectoryType.getId().toString();
   }
 
   /**

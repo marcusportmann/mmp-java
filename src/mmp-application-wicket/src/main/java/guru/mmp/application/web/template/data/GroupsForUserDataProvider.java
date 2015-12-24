@@ -29,6 +29,7 @@ import org.apache.wicket.model.IModel;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -48,7 +49,7 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   private ISecurityService securityService;
 
   /**
-   * The unique ID for the user directory the user is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
   private UUID userDirectoryId;
 
@@ -60,7 +61,8 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   /**
    * Constructs a new <code>GroupsForUserDataProvider</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user the groups are associated with
    */
   public GroupsForUserDataProvider(UUID userDirectoryId, String username)

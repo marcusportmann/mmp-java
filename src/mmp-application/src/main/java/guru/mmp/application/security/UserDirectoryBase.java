@@ -60,7 +60,7 @@ public abstract class UserDirectoryBase
   private Map<String, String> parameters;
 
   /**
-   * The unique ID for the user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
   private UUID userDirectoryId;
 

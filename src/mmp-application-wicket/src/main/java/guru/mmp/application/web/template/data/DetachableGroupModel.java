@@ -27,6 +27,7 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>DetachableGroupModel</code> class provides a detachable model
@@ -48,7 +49,7 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
   private ISecurityService securityService;
 
   /**
-   * The unique ID for the user directory the group is associated with;
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory;
    */
   private UUID userDirectoryId;
 
@@ -67,7 +68,8 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
   /**
    * Constructs a new <code>DetachableGroupModel</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param groupName       the group name for the group
    */
   public DetachableGroupModel(UUID userDirectoryId, String groupName)

@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -78,7 +79,8 @@ public class AddUserPage extends TemplateWebPage
    * Constructs a new <code>AddUserPage</code>.
    *
    * @param previousPage    the previous page
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    */
   public AddUserPage(PageReference previousPage, UUID userDirectoryId)
   {

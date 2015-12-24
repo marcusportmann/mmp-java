@@ -232,7 +232,7 @@ public class SelectOrganisationPage extends WebPage
     for (Organisation organisation : organisations)
     {
       organisationOptions.add(new StringSelectOption(organisation.getName(),
-          organisation.getCode()));
+          organisation.getId().toString()));
     }
 
     return organisationOptions;

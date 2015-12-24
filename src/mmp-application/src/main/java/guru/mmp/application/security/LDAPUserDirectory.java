@@ -119,7 +119,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
   /**
    * Constructs a new <code>LDAPUserDirectory</code>.
    *
-   * @param userDirectoryId the unique ID for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param parameters      the key-value configuration parameters for the user directory
    *
    * @throws SecurityException
@@ -2378,7 +2379,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     Group group = new Group(String.valueOf(attributes.get(groupNameAttribute).get()));
 
-    group.setId(-1);
+    group.setId(null);
     group.setUserDirectoryId(getUserDirectoryId());
 
     if ((!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
@@ -2401,7 +2402,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     User user = new User(String.valueOf(attributes.get(userUsernameAttribute).get()));
 
-    user.setId(-1);
+    user.setId(null);
     user.setUserDirectoryId(getUserDirectoryId());
     user.setReadOnly(isReadOnly);
     user.setPassword("");

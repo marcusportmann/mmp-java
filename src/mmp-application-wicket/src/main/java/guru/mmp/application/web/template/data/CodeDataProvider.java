@@ -27,6 +27,7 @@ import org.apache.wicket.model.IModel;
 import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -41,9 +42,9 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID identifying the code category the codes are associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
-  private String codeCategoryId;
+  private UUID codeCategoryId;
 
   /* Codes Service */
   @Inject
@@ -52,9 +53,10 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
   /**
    * Constructs a new <code>CodeDataProvider</code>.
    *
-   * @param codeCategoryId the ID identifying the code category the codes are associated with
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
    */
-  public CodeDataProvider(String codeCategoryId)
+  public CodeDataProvider(UUID codeCategoryId)
   {
     this.codeCategoryId = codeCategoryId;
   }

@@ -27,6 +27,7 @@ import org.apache.wicket.model.IModel;
 import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -45,9 +46,9 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   private ICodesService codesService;
 
   /**
-   * The organisation code identifying the organisation the code categories are associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /**
    * Whether the codes and/or code data for the code categories should be retrieved.
@@ -57,13 +58,13 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   /**
    * Constructs a new <code>CodeCategoryDataProvider</code>.
    *
-   * @param organisation  the organisation code identifying the organisation the code categories
-   *                      are associated with
-   * @param retrieveCodes retrieve the codes and/or code data for the code categories
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
+   * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    */
-  public CodeCategoryDataProvider(String organisation, boolean retrieveCodes)
+  public CodeCategoryDataProvider(UUID organisationId, boolean retrieveCodes)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
     this.retrieveCodes = retrieveCodes;
   }
 
@@ -97,7 +98,7 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
     try
     {
       List<CodeCategory> allCodeCategories =
-        codesService.getCodeCategoriesForOrganisation(organisation, retrieveCodes);
+        codesService.getCodeCategoriesForOrganisation(organisationId, retrieveCodes);
 
       return allCodeCategories.subList((int) first,
           (int) Math.min(first + count, allCodeCategories.size())).iterator();
@@ -134,7 +135,7 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   {
     try
     {
-      return codesService.getNumberOfCodeCategoriesForOrganisation(organisation);
+      return codesService.getNumberOfCodeCategoriesForOrganisation(organisationId);
     }
     catch (Throwable e)
     {

@@ -27,6 +27,7 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>DetachableUserDirectoryModel</code> class provides a detachable model
@@ -39,9 +40,9 @@ public class DetachableUserDirectoryModel extends InjectableLoadableDetachableMo
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The unique ID for the user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
-  private long id;
+  private UUID id;
 
   /* Security Service */
   @Inject
@@ -50,9 +51,9 @@ public class DetachableUserDirectoryModel extends InjectableLoadableDetachableMo
   /**
    * Constructs a new <code>DetachableUserDirectoryModel</code>.
    *
-   * @param id the unique ID for the user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public DetachableUserDirectoryModel(long id)
+  public DetachableUserDirectoryModel(UUID id)
   {
     this.id = id;
   }

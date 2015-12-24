@@ -57,12 +57,12 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   private List<String> groupNames;
 
   /**
-   * The organisation code identifying the organisational context for the user associated with the
-   * web session.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation for the
+   * user associated with the web session.
    */
-  private String organisation;
+  private UUID organisationId;
 
-  /** The unique ID for the user directory the user is associated with. */
+  /** The Universally Unique Identifier (UUID) used to uniquely identify the user directory. */
   private UUID userDirectoryId;
 
   /** The user properties for the logged in user associated with the web session. */
@@ -126,15 +126,15 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Returns the organisation code identifying the organisational context for the user associated
-   * with the web session.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   * for the user associated with the web session.
    *
-   * @return the organisation code identifying the organisational context for the user associated
-   *         with the web session
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   *         for the user associated with the web session
    */
-  public String getOrganisation()
+  public UUID getOrganisationId()
   {
-    return organisation;
+    return organisationId;
   }
 
   /**
@@ -274,7 +274,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
     activeViewReportParameters = new ConcurrentHashMap<>();
     functionCodes = null;
     groupNames = null;
-    organisation = null;
+    organisationId = null;
     userProperties = null;
     userDirectoryId = null;
     username = null;
@@ -366,21 +366,21 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Set the organisation code identifying the organisational context for the user associated with
-   * the web session.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation for
+   * the user associated with the web session.
    *
-   * @param organisation the organisation code identifying the organisational context for the
-   *                     user associated with the web session
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation for the user associated with the web session
    */
-  public void setOrganisation(String organisation)
+  public void setOrganisation(UUID organisationId)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
   }
 
   /**
-   * Set the unique ID for the user directory the user is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @param userDirectoryId the unique ID for the user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   public void setUserDirectoryId(UUID userDirectoryId)
   {
