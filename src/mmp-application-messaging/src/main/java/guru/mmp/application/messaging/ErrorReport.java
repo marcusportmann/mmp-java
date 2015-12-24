@@ -19,7 +19,9 @@ package guru.mmp.application.messaging;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * The <code>ErrorReport</code> class holds the information for an error report that was submitted
@@ -37,7 +39,7 @@ public class ErrorReport
    * The Universally Unique Identifier (UUID) used to uniquely identify the application that
    * generated the error report.
    */
-  private String applicationId;
+  private UUID applicationId;
 
   /**
    * The version of the application that generated the error report.
@@ -65,9 +67,10 @@ public class ErrorReport
   private String detail;
 
   /**
-   * The device ID identifying the device the error report originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the error report
+   * originated from.
    */
-  private String device;
+  private UUID deviceId;
 
   /**
    * The feedback provided by the user for the error.
@@ -77,7 +80,7 @@ public class ErrorReport
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The username identifying the user associated with the error report.
@@ -97,12 +100,12 @@ public class ErrorReport
    * @param feedback           the feedback provided by the user for the error
    * @param created            the date and time the error report was created
    * @param who                the username identifying the user associated with the error report
-   * @param device             the device ID identifying the device the error report originated
-   *                           from
+   * @param deviceId           the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the device the error report originated from
    * @param data               the data associated with the error report e.g. the application XML
    */
-  public ErrorReport(String id, String applicationId, int applicationVersion, String description,
-      String detail, String feedback, Date created, String who, String device, byte[] data)
+  public ErrorReport(UUID id, UUID applicationId, int applicationVersion, String description,
+      String detail, String feedback, Date created, String who, UUID deviceId, byte[] data)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -112,7 +115,7 @@ public class ErrorReport
     this.feedback = feedback;
     this.created = created;
     this.who = who;
-    this.device = device;
+    this.deviceId = deviceId;
     this.data = data;
   }
 
@@ -123,7 +126,7 @@ public class ErrorReport
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the application
    *         that generated the error report
    */
-  public String getApplicationId()
+  public UUID getApplicationId()
   {
     return applicationId;
   }
@@ -179,13 +182,15 @@ public class ErrorReport
   }
 
   /**
-   * Returns the device ID identifying the device the error report originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   * report originated from.
    *
-   * @return the device ID identifying the device the error report originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   *         report originated from
    */
-  public String getDevice()
+  public UUID getDeviceId()
   {
-    return device;
+    return deviceId;
   }
 
   /**
@@ -203,7 +208,7 @@ public class ErrorReport
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -225,7 +230,7 @@ public class ErrorReport
    * @param applicationId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      application that generated the error report
    */
-  public void setApplicationId(String applicationId)
+  public void setApplicationId(UUID applicationId)
   {
     this.applicationId = applicationId;
   }
@@ -281,13 +286,15 @@ public class ErrorReport
   }
 
   /**
-   * Set the device ID identifying the device the error report originated from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   * report originated from.
    *
-   * @param device the device ID identifying the device the error report originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the error report originated from
    */
-  public void setDevice(String device)
+  public void setDeviceId(UUID deviceId)
   {
-    this.device = device;
+    this.deviceId = deviceId;
   }
 
   /**
@@ -305,7 +312,7 @@ public class ErrorReport
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

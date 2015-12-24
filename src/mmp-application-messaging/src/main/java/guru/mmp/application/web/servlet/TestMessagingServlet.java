@@ -452,7 +452,7 @@ public class TestMessagingServlet extends HttpServlet
           else
           {
             /*
-             * Message responseMessage = messageResult.getMessage();
+             * Message responseMessage = messageResult.buildMessageFromResultSet();
              *
              * if (responseMessage.isEncrypted())
              * {

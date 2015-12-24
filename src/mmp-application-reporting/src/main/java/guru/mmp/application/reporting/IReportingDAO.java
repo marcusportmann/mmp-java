@@ -23,6 +23,7 @@ import guru.mmp.common.persistence.DAOException;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -48,11 +49,12 @@ public interface IReportingDAO
   /**
    * Delete the existing report definition.
    *
-   * @param id the ID uniquely identifying the report definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *           definition
    *
    * @throws DAOException
    */
-  void deleteReportDefinition(String id)
+  void deleteReportDefinition(UUID id)
     throws DAOException;
 
   /**
@@ -63,73 +65,69 @@ public interface IReportingDAO
   DataSource getDataSource();
 
   /**
-   * Returns the number of report definitions associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of report definitions for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return the number of report definitions associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of report definitions for the organisation
    *
    * @throws DAOException
    */
-  int getNumberOfReportDefinitionsForOrganisation(String organisation)
+  int getNumberOfReportDefinitionsForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
    * Retrieve the report definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           report definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *           definition
    *
-   * @return the report definition or <code>null</code> if the report
-   *         definition could not be found
+   * @return the report definition or <code>null</code> if the report definition could not be found
    *
    * @throws DAOException
    */
-  ReportDefinition getReportDefinition(String id)
+  ReportDefinition getReportDefinition(UUID id)
     throws DAOException;
 
   /**
-   * Returns the summaries for all the report definitions associated with the organisation
-   * identified by the specified organisation code.
+   * Returns the summaries for all the report definitions for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return the summaries for all the report definitions associated with the organisation
-   *         identified by the specified organisation code
+   * @return the summaries for all the report definitions for the organisation
    *
    * @throws DAOException
    */
-  List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(String organisation)
+  List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           report definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *           definition
    *
-   * @return the summary for the report definition or <code>null</code> if
-   *         the report definition could not be found
+   * @return the summary for the report definition or <code>null</code> if the report definition
+   *         could not be found
    *
    * @throws DAOException
    */
-  ReportDefinitionSummary getReportDefinitionSummary(String id)
+  ReportDefinitionSummary getReportDefinitionSummary(UUID id)
     throws DAOException;
 
   /**
-   * Returns all the report definitions associated with the organisation identified by the specified
-   * organisation code.
+   * Returns all the report definitions associated for the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    *
-   * @return all the report definitions associated with the organisation identified by the specified
-   *         organisation code
+   * @return all the report definitions for the organisation
    *
    * @throws DAOException
    */
-  List<ReportDefinition> getReportDefinitionsForOrganisation(String organisation)
+  List<ReportDefinition> getReportDefinitionsForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
@@ -142,7 +140,7 @@ public interface IReportingDAO
    *
    * @throws DAOException
    */
-  boolean reportDefinitionExists(String id)
+  boolean reportDefinitionExists(UUID id)
     throws DAOException;
 
   /**

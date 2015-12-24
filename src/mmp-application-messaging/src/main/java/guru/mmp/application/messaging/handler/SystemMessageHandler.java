@@ -198,7 +198,7 @@ public class SystemMessageHandler extends MessageHandler
 //    return new GetCodeCategoryResponseData(GetCodeCategoryResponseData.ERROR_CODE_UNKNOWN_ERROR,
 //        "Failed to retrieve the remote web service code category with ID ("
 //        + codeCategory.getId() + ") and name (" + codeCategory.getName() + "): "
-//        + e.getMessage());
+//        + e.buildMessageFromResultSet());
 //  }
 //}
 

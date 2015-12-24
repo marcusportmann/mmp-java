@@ -40,7 +40,7 @@ public class MessagingException extends Exception
   /**
    * Constructs a new <code>MessagingException</code> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet()</code> method.
    */
   public MessagingException(String message)
   {
@@ -63,7 +63,7 @@ public class MessagingException extends Exception
   /**
    * Constructs a new <code>MessagingException</code> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
