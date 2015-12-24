@@ -491,7 +491,7 @@ public class SecurityServiceTest
 
     securityService.createOrganisation(organisation, false);
 
-    Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getCode());
+    Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getId());
 
     compareOrganisations(organisation, retrievedOrganisation);
 
@@ -512,7 +512,7 @@ public class SecurityServiceTest
 
     for (Organisation afterRetrievedOrganisation : afterRetrievedOrganisations)
     {
-      if (afterRetrievedOrganisation.getCode().equals(organisation.getCode()))
+      if (afterRetrievedOrganisation.getId().equals(organisation.getId()))
       {
         compareOrganisations(organisation, afterRetrievedOrganisation);
 
@@ -524,15 +524,15 @@ public class SecurityServiceTest
 
     if (!foundOrganisation)
     {
-      fail("Failed to find the organisation (" + organisation.getCode()
+      fail("Failed to find the organisation (" + organisation.getId()
           + ") in the list of organisations");
     }
 
-    securityService.deleteOrganisation(organisation.getCode());
+    securityService.deleteOrganisation(organisation.getId());
 
     try
     {
-      securityService.getOrganisation(organisation.getCode());
+      securityService.getOrganisation(organisation.getId());
 
       fail("Retrieved the organisation (" + organisation.getId()
           + ") that should have been deleted");
@@ -751,7 +751,7 @@ public class SecurityServiceTest
   {
     organisationCount++;
 
-    Organisation organisation = new Organisation("Test Organisation " + organisationCount);
+    Organisation organisation = new Organisation(UUID.randomUUID());
 
     organisation.setName("Test Organisation Name " + organisationCount);
     organisation.setDescription("Test Organisation Description " + organisationCount);

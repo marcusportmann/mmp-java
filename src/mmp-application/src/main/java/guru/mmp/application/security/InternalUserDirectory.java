@@ -19,6 +19,7 @@ package guru.mmp.application.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.DataAccessObject;
+import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
 
@@ -91,8 +92,6 @@ public class InternalUserDirectory extends UserDirectoryBase
   private String removeInternalUserFromInternalGroupSQL;
   private String saveInternalUserPasswordHistorySQL;
   private String updateInternalGroupSQL;
-
-  TODO START HERE
 
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
@@ -169,17 +168,17 @@ public class InternalUserDirectory extends UserDirectoryBase
       PreparedStatement statement = connection.prepareStatement(addInternalUserToInternalGroupSQL))
     {
       // Get the ID of the internal user with the specified username
-      long internalUserId;
+      UUID internalUserId;
 
-      if ((internalUserId = getInternalUserId(connection, username)) == -1)
+      if ((internalUserId = getInternalUserId(connection, username)) == null)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
       // Get the ID of the internal group with the specified group name
-      long internalGroupId;
+      UUID internalGroupId;
 
-      if ((internalGroupId = getInternalGroupId(connection, groupName)) == -1)
+      if ((internalGroupId = getInternalGroupId(connection, groupName)) == null)
       {
         throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
       }
@@ -192,9 +191,9 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Add the user to the group
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalUserId);
-      statement.setLong(3, internalGroupId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
+      statement.setObject(3, internalGroupId);
 
       if (statement.executeUpdate() != 1)
       {
@@ -282,8 +281,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
       }
 
-      statement.setLong(4, getUserDirectoryId());
-      statement.setLong(5, user.getId());
+      statement.setObject(4, getUserDirectoryId());
+      statement.setObject(5, user.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -440,8 +439,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
       }
 
-      statement.setLong(4, getUserDirectoryId());
-      statement.setLong(5, user.getId());
+      statement.setObject(4, getUserDirectoryId());
+      statement.setObject(5, user.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -478,16 +477,16 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(createInternalGroupSQL))
     {
-      if (getInternalGroupId(connection, group.getGroupName()) != -1)
+      if (getInternalGroupId(connection, group.getGroupName()) != null)
       {
         throw new DuplicateGroupException("The group (" + group.getGroupName()
             + ") already exists");
       }
 
-      long internalGroupId = nextId("Application.InternalGroupId");
+      UUID internalGroupId = IDGenerator.nextUUID(getDataSource());
 
-      statement.setLong(1, internalGroupId);
-      statement.setLong(2, getUserDirectoryId());
+      statement.setObject(1, internalGroupId);
+      statement.setObject(2, getUserDirectoryId());
       statement.setString(3, group.getGroupName());
       statement.setString(4, group.getDescription());
 
@@ -530,15 +529,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(createInternalUserSQL))
     {
-      if (getInternalUserId(connection, user.getUsername()) != -1)
+      if (getInternalUserId(connection, user.getUsername()) != null)
       {
         throw new DuplicateUserException("The user (" + user.getUsername() + ") already exists");
       }
 
-      long internalUserId = nextId("Application.InternalUserId");
+      UUID internalUserId = IDGenerator.nextUUID(getDataSource());
 
-      statement.setLong(1, internalUserId);
-      statement.setLong(2, getUserDirectoryId());
+      statement.setObject(1, internalUserId);
+      statement.setObject(2, getUserDirectoryId());
       statement.setString(3, user.getUsername());
 
       String passwordHash;
@@ -633,9 +632,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteInternalGroupSQL))
     {
-      long internalGroupId = getInternalGroupId(connection, groupName);
+      UUID internalGroupId = getInternalGroupId(connection, groupName);
 
-      if (internalGroupId == -1)
+      if (internalGroupId == null)
       {
         throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
       }
@@ -646,8 +645,8 @@ public class InternalUserDirectory extends UserDirectoryBase
             + ") could not be deleted since it is still associated with 1 or more user(s)");
       }
 
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalGroupId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalGroupId);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -683,15 +682,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteInternalUserSQL))
     {
-      long internalUserId = getInternalUserId(connection, username);
+      UUID internalUserId = getInternalUserId(connection, username);
 
-      if (internalUserId == -1)
+      if (internalUserId == null)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalUserId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -775,7 +774,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (StringUtil.isNullOrEmpty(filter))
       {
-        statement.setLong(1, getUserDirectoryId());
+        statement.setObject(1, getUserDirectoryId());
       }
       else
       {
@@ -784,7 +783,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         filterBuffer.append(filter.toUpperCase());
         filterBuffer.append("%");
 
-        statement.setLong(1, getUserDirectoryId());
+        statement.setObject(1, getUserDirectoryId());
         statement.setString(2, filterBuffer.toString());
         statement.setString(3, filterBuffer.toString());
         statement.setString(4, filterBuffer.toString());
@@ -827,9 +826,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection())
     {
       // Get the ID of the user with the specified username
-      long internalUserId = getInternalUserId(connection, username);
+      UUID internalUserId = getInternalUserId(connection, username);
 
-      if (internalUserId == -1)
+      if (internalUserId == null)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
@@ -863,7 +862,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(getInternalGroupSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
       statement.setString(2, groupName);
 
       try (ResultSet rs = statement.executeQuery())
@@ -872,7 +871,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           Group group = new Group(rs.getString(2));
 
-          group.setId(rs.getLong(1));
+          group.setId((UUID) rs.getObject(1));
           group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(StringUtil.notNull(rs.getString(3)));
 
@@ -911,9 +910,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection())
     {
       // Get the ID of the internal user with the specified username
-      long internalUserId = getInternalUserId(connection, username);
+      UUID internalUserId = getInternalUserId(connection, username);
 
-      if (internalUserId == -1)
+      if (internalUserId == null)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
@@ -944,7 +943,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(getInternalGroupsSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -954,7 +953,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           Group group = new Group(rs.getString(2));
 
-          group.setId(rs.getLong(1));
+          group.setId((UUID) rs.getObject(1));
           group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(StringUtil.notNull(rs.getString(3)));
           list.add(group);
@@ -986,9 +985,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection())
     {
       // Get the ID of the user with the specified username
-      long internalUserId = getInternalUserId(connection, username);
+      UUID internalUserId = getInternalUserId(connection, username);
 
-      if (internalUserId == -1)
+      if (internalUserId == null)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
@@ -1026,7 +1025,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       if (StringUtil.isNullOrEmpty(filter))
       {
-        statement.setLong(1, getUserDirectoryId());
+        statement.setObject(1, getUserDirectoryId());
       }
       else
       {
@@ -1035,7 +1034,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         filterBuffer.append(filter.toUpperCase());
         filterBuffer.append("%");
 
-        statement.setLong(1, getUserDirectoryId());
+        statement.setObject(1, getUserDirectoryId());
         statement.setString(2, filterBuffer.toString());
         statement.setString(3, filterBuffer.toString());
         statement.setString(4, filterBuffer.toString());
@@ -1078,7 +1077,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfInternalGroupsSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1113,7 +1112,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfInternalUsersSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1184,7 +1183,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(getInternalUsersSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1222,7 +1221,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = getDataSource().getConnection())
     {
-      return (getInternalUserId(connection, username) != -1);
+      return (getInternalUserId(connection, username) != null);
     }
     catch (Throwable e)
     {
@@ -1249,17 +1248,17 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection())
     {
       // Get the ID of the internal user with the specified username
-      long internalUserId = getInternalUserId(connection, username);
+      UUID internalUserId = getInternalUserId(connection, username);
 
-      if (internalUserId == -1)
+      if (internalUserId == null)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
       // Get the ID of the internal group with the specified group name
-      long internalGroupId = getInternalGroupId(connection, groupName);
+      UUID internalGroupId = getInternalGroupId(connection, groupName);
 
-      if (internalGroupId == -1)
+      if (internalGroupId == null)
       {
         throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
       }
@@ -1297,25 +1296,25 @@ public class InternalUserDirectory extends UserDirectoryBase
           connection.prepareStatement(removeInternalUserFromInternalGroupSQL))
     {
       // Get the ID of the internal user with the specified username
-      long internalUserId = getInternalUserId(connection, username);
+      UUID internalUserId = getInternalUserId(connection, username);
 
-      if (internalUserId == -1)
+      if (internalUserId == null)
       {
         throw new UserNotFoundException("The user (" + username + ") could not be found");
       }
 
       // Get the ID of the internal group with the specified group name
-      long internalGroupId = getInternalGroupId(connection, groupName);
+      UUID internalGroupId = getInternalGroupId(connection, groupName);
 
-      if (internalGroupId == -1)
+      if (internalGroupId == null)
       {
         throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
       }
 
       // Remove the user from the group
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalUserId);
-      statement.setLong(3, internalGroupId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
+      statement.setObject(3, internalGroupId);
       statement.executeUpdate();
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -1382,17 +1381,17 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(updateInternalGroupSQL))
     {
-      long internalGroupId = getInternalGroupId(connection, group.getGroupName());
+      UUID internalGroupId = getInternalGroupId(connection, group.getGroupName());
 
-      if (internalGroupId == -1)
+      if (internalGroupId == null)
       {
         throw new GroupNotFoundException("The group (" + group.getGroupName()
             + ") could not be found");
       }
 
       statement.setString(1, StringUtil.notNull(group.getDescription()));
-      statement.setLong(2, getUserDirectoryId());
-      statement.setLong(3, internalGroupId);
+      statement.setObject(2, getUserDirectoryId());
+      statement.setObject(3, internalGroupId);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -1427,9 +1426,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = getDataSource().getConnection())
     {
-      long internalUserId = getInternalUserId(connection, user.getUsername());
+      UUID internalUserId = getInternalUserId(connection, user.getUsername());
 
-      if (internalUserId == -1)
+      if (internalUserId == null)
       {
         throw new UserNotFoundException("The user (" + user.getUsername() + ") could not be found");
       }
@@ -1622,11 +1621,11 @@ public class InternalUserDirectory extends UserDirectoryBase
 
         parameterIndex++;
 
-        statement.setLong(parameterIndex, getUserDirectoryId());
+        statement.setObject(parameterIndex, getUserDirectoryId());
 
         parameterIndex++;
 
-        statement.setLong(parameterIndex, internalUserId);
+        statement.setObject(parameterIndex, internalUserId);
 
         if (statement.executeUpdate() != 1)
         {
@@ -1890,7 +1889,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     PreparedStatement statement = connection.prepareStatement(buffer.toString());
 
-    statement.setLong(1, getUserDirectoryId());
+    statement.setObject(1, getUserDirectoryId());
 
     // Set the parameters for the prepared statement
     int parameterIndex = 2;
@@ -1963,7 +1962,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     User user = new User(rs.getString(2));
 
-    user.setId(rs.getLong(1));
+    user.setId((UUID) rs.getObject(1));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setPassword(StringUtil.notNull(rs.getString(3)));
     user.setTitle(StringUtil.notNull(rs.getString(4)));
@@ -1993,21 +1992,22 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Retrieve the list of authorised function codes for the internal user.
    *
    * @param connection     the existing database connection to use
-   * @param internalUserId the numeric ID uniquely identifying the internal user
+   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       internal user
    *
    * @return the list of authorised function codes for the internal user
    *
    * @throws SQLException
    */
-  private List<String> getFunctionCodesForUserId(Connection connection, long internalUserId)
+  private List<String> getFunctionCodesForUserId(Connection connection, UUID internalUserId)
     throws SQLException
   {
     List<String> functionCodes = new ArrayList<>();
 
     try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalUserId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2026,20 +2026,21 @@ public class InternalUserDirectory extends UserDirectoryBase
    * associated with.
    *
    * @param connection     the existing database connection
-   * @param internalUserId the numeric ID for the internal user
+   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       internal user
    *
    * @return the list of groups
    *
    * @throws SQLException
    */
-  private List<String> getGroupNamesForUser(Connection connection, long internalUserId)
+  private List<String> getGroupNamesForUser(Connection connection, UUID internalUserId)
     throws SQLException
   {
     try (PreparedStatement statement =
         connection.prepareStatement(getInternalGroupNamesForInternalUserSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalUserId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2056,39 +2057,40 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Returns the numeric ID for the internal group with the specified group name.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal group
+   * with the specified group name.
    *
    * @param connection the existing database connection to use
    * @param groupName  the group name uniquely identifying the internal group
    *
-   * @return the numeric ID for the internal group or -1 if an internal group with the specified
-   *         group name could not be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal group
+   *         with the specified group name
    *
    * @throws SecurityException
    */
-  private long getInternalGroupId(Connection connection, String groupName)
+  private UUID getInternalGroupId(Connection connection, String groupName)
     throws SecurityException
   {
     try (PreparedStatement statement = connection.prepareStatement(getInternalGroupIdSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
       statement.setString(2, groupName);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return rs.getLong(1);
+          return (UUID) rs.getObject(1);
         }
         else
         {
-          return -1;
+          return null;
         }
       }
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the numeric ID for the group (" + groupName
+      throw new SecurityException("Failed to retrieve the ID for the group (" + groupName
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
@@ -2098,20 +2100,21 @@ public class InternalUserDirectory extends UserDirectoryBase
    * associated with.
    *
    * @param connection     the existing database connection
-   * @param internalUserId the numeric ID for the internal user
+   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       internal user
    *
    * @return the list of internal groups
    *
    * @throws SQLException
    */
-  private List<Group> getInternalGroupsForInternalUser(Connection connection, long internalUserId)
+  private List<Group> getInternalGroupsForInternalUser(Connection connection, UUID internalUserId)
     throws SQLException
   {
     try (PreparedStatement statement =
         connection.prepareStatement(getInternalGroupsForInternalUserSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalUserId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2121,7 +2124,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           Group group = new Group(rs.getString(2));
 
-          group.setId(rs.getLong(1));
+          group.setId((UUID) rs.getObject(1));
           group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(rs.getString(3));
           list.add(group);
@@ -2133,62 +2136,63 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Returns the numeric ID for the internal user with the specified username.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   * with the specified username.
    *
    * @param connection the existing database connection to use
    * @param username   the username uniquely identifying the internal user
    *
-   * @return the numeric ID for the internal user or -1 if an internal user with the specified
-   *         username could not be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   *         with the specified username
    *
    * @throws SecurityException
    */
-  private long getInternalUserId(Connection connection, String username)
+  private UUID getInternalUserId(Connection connection, String username)
     throws SecurityException
   {
     try (PreparedStatement statement = connection.prepareStatement(getInternalUserIdSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
       statement.setString(2, username);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return rs.getLong(1);
+          return (UUID) rs.getObject(1);
         }
         else
         {
-          return -1;
+          return null;
         }
       }
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the numeric ID for the user (" + username
+      throw new SecurityException("Failed to retrieve the ID for the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
   /**
-   * Retrieve the IDs for all the internal users that are associated with the group with the
-   * specific numeric ID.
+   * Retrieve the number of internal users for the internal group.
    *
    * @param connection      the existing database connection
-   * @param internalGroupId the numeric ID for the internal group
+   * @param internalGroupId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        internal group
    *
    * @return the IDs for all the internal users that are associated with the group the specific
    *         numeric ID
    *
    * @throws SQLException
    */
-  private long getNumberOfInternalUsersForInternalGroup(Connection connection, long internalGroupId)
+  private long getNumberOfInternalUsersForInternalGroup(Connection connection, UUID internalGroupId)
     throws SQLException
   {
     try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalGroupId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalGroupId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2219,7 +2223,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (PreparedStatement statement = connection.prepareStatement(getInternalUserSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
+      statement.setObject(1, getUserDirectoryId());
       statement.setString(2, username);
 
       try (ResultSet rs = statement.executeQuery())
@@ -2236,7 +2240,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
-  private void incrementPasswordAttempts(long internalUserId)
+  private void incrementPasswordAttempts(UUID internalUserId)
     throws SecurityException
   {
     // Retrieve the Transaction Manager
@@ -2259,8 +2263,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         try (PreparedStatement statement =
             connection.prepareStatement(incrementPasswordAttemptsSQL))
         {
-          statement.setLong(1, getUserDirectoryId());
-          statement.setLong(2, internalUserId);
+          statement.setObject(1, getUserDirectoryId());
+          statement.setObject(2, internalUserId);
 
           if (statement.executeUpdate() != 1)
           {
@@ -2310,23 +2314,25 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Is the user in the group?
    *
    * @param connection      the existing database connection
-   * @param internalUserId  the numeric ID uniquely identifying the internal user
-   * @param internalGroupId the numeric ID uniquely identifying the internal group
+   * @param internalUserId  the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        internal user
+   * @param internalGroupId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        internal group
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    *
    * @throws SQLException
    */
-  private boolean isInternalUserInInternalGroup(Connection connection, long internalUserId,
-      long internalGroupId)
+  private boolean isInternalUserInInternalGroup(Connection connection, UUID internalUserId,
+      UUID internalGroupId)
     throws SQLException
   {
     try (PreparedStatement statement =
         connection.prepareStatement(isInternalUserInInternalGroupSQL))
     {
-      statement.setLong(1, getUserDirectoryId());
-      statement.setLong(2, internalUserId);
-      statement.setLong(3, internalGroupId);
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
+      statement.setObject(3, internalGroupId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2340,7 +2346,8 @@ public class InternalUserDirectory extends UserDirectoryBase
    * be reused for a period of time i.e. was the password used previously in the last X months.
    *
    * @param connection     the existing database connection
-   * @param internalUserId the numeric ID uniquely identifying the internal user
+   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       internal user
    * @param passwordHash   the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
@@ -2348,7 +2355,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    *
    * @throws SQLException
    */
-  private boolean isPasswordInHistory(Connection connection, long internalUserId,
+  private boolean isPasswordInHistory(Connection connection, UUID internalUserId,
       String passwordHash)
     throws SQLException
   {
@@ -2360,7 +2367,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       calendar.setTime(new Date());
       calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
 
-      statement.setLong(1, internalUserId);
+      statement.setObject(1, internalUserId);
       statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
       statement.setString(3, passwordHash);
 
@@ -2371,16 +2378,16 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
-  private void savePasswordHistory(Connection connection, long internalUserId, String passwordHash)
+  private void savePasswordHistory(Connection connection, UUID internalUserId, String passwordHash)
     throws SQLException
   {
     try (PreparedStatement statement =
         connection.prepareStatement(saveInternalUserPasswordHistorySQL))
     {
-      long id = nextId("Application.InternalUserPasswordHistoryId");
+      UUID id = IDGenerator.nextUUID(getDataSource());
 
-      statement.setLong(1, id);
-      statement.setLong(2, internalUserId);
+      statement.setObject(1, id);
+      statement.setObject(2, internalUserId);
       statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
       statement.setString(4, passwordHash);
       statement.execute();

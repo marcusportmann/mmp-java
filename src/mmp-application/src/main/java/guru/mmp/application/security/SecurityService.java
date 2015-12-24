@@ -60,6 +60,18 @@ public class SecurityService
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
+   */
+  public static final UUID DEFAULT_USER_DIRECTORY_ID =
+    UUID.fromString("4ef18395-423a-4df6-b7d7-6bcdd85956e4");
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
+   */
+  public static final UUID DEFAULT_ORGANISATION_ID =
+    UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5");
   private String addUserDirectoryToOrganisationSQL;
   private String createFunctionSQL;
   private String createOrganisationSQL;
@@ -572,16 +584,6 @@ public class SecurityService
   }
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
-   */
-  public static final UUID DEFAULT_ORGANISATION_ID = UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5");
-
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
-   */
-  public static final UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString("4ef18395-423a-4df6-b7d7-6bcdd85956e4");
-
-  /**
    * Create a new user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -773,8 +775,7 @@ public class SecurityService
     {
       if (!organisationExists(connection, id))
       {
-        throw new OrganisationNotFoundException("The organisation (" + id
-            + ") could not be found");
+        throw new OrganisationNotFoundException("The organisation (" + id + ") could not be found");
       }
 
       statement.setObject(1, id);
@@ -902,15 +903,15 @@ public class SecurityService
     return userDirectory.findUsers(attributes);
   }
 
-//  /**
-//   * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
-//   *
-//   * @return the <code>DataSource</code> for the <code>SecurityService</code>
-//   */
-//  public DataSource getDataSource()
-//  {
-//    return dataSource;
-//  }
+///**
+// * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
+// *
+// * @return the <code>DataSource</code> for the <code>SecurityService</code>
+// */
+//public DataSource getDataSource()
+//{
+//  return dataSource;
+//}
 
   /**
    * Retrieve the filtered list of users.
@@ -970,7 +971,7 @@ public class SecurityService
           {
             Function function = new Function(rs.getString(2));
 
-            function.setId((UUID)rs.getObject(1));
+            function.setId((UUID) rs.getObject(1));
             function.setName(rs.getString(3));
             function.setDescription(rs.getString(4));
 
@@ -1049,7 +1050,7 @@ public class SecurityService
         {
           Function function = new Function(rs.getString(2));
 
-          function.setId((UUID)rs.getObject(1));
+          function.setId((UUID) rs.getObject(1));
           function.setName(rs.getString(3));
           function.setDescription(rs.getString(4));
           list.add(function);
@@ -1356,7 +1357,7 @@ public class SecurityService
       {
         if (rs.next())
         {
-          Organisation organisation = new Organisation((UUID)rs.getObject(1));
+          Organisation organisation = new Organisation((UUID) rs.getObject(1));
 
           organisation.setName(rs.getString(2));
           organisation.setDescription(StringUtil.notNull(rs.getString(3)));
@@ -1400,7 +1401,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          Organisation organisation = new Organisation((UUID)rs.getObject(1));
+          Organisation organisation = new Organisation((UUID) rs.getObject(1));
 
           organisation.setName(rs.getString(3));
           organisation.setDescription(StringUtil.notNull(rs.getString(3)));
@@ -1443,7 +1444,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          Organisation organisation = new Organisation((UUID)rs.getObject(1));
+          Organisation organisation = new Organisation((UUID) rs.getObject(1));
 
           organisation.setName(rs.getString(2));
           organisation.setDescription(StringUtil.notNull(rs.getString(3)));
@@ -1462,15 +1463,15 @@ public class SecurityService
     }
   }
 
-//  /**
-//   * Returns the <code>Registry</code> for the <code>SecurityService</code>.
-//   *
-//   * @return the <code>Registry</code> for the <code>SecurityService</code>
-//   */
-//  public IRegistry getRegistry()
-//  {
-//    return registry;
-//  }
+///**
+// * Returns the <code>Registry</code> for the <code>SecurityService</code>.
+// *
+// * @return the <code>Registry</code> for the <code>SecurityService</code>
+// */
+//public IRegistry getRegistry()
+//{
+//  return registry;
+//}
 
   /**
    * Retrieve the user.
@@ -1571,8 +1572,8 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityException(
-          "Failed to retrieve the user directories associated with the organisation (" + organisationId
-          + "): " + e.getMessage(), e);
+          "Failed to retrieve the user directories associated with the organisation ("
+          + organisationId + "): " + e.getMessage(), e);
     }
   }
 
@@ -1613,8 +1614,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the user directory (" + id
-          + "): " + e.getMessage(), e);
+      throw new SecurityException("Failed to retrieve the user directory (" + id + "): "
+          + e.getMessage(), e);
     }
   }
 
@@ -1699,7 +1700,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          list.add(new UserDirectoryType((UUID)rs.getObject(1), rs.getString(2), rs.getString(3),
+          list.add(new UserDirectoryType((UUID) rs.getObject(1), rs.getString(2), rs.getString(3),
               rs.getString(4)));
         }
 
@@ -2028,25 +2029,25 @@ public class SecurityService
     userDirectory.renameGroup(groupName, newGroupName);
   }
 
-//  /**
-//   * Set the <code>DataSource</code> for the <code>SecurityService</code>.
-//   *
-//   * @param dataSource the <code>DataSource</code> for the <code>SecurityService</code>
-//   */
-//  public void setDataSource(DataSource dataSource)
-//  {
-//    this.dataSource = dataSource;
-//  }
+///**
+// * Set the <code>DataSource</code> for the <code>SecurityService</code>.
+// *
+// * @param dataSource the <code>DataSource</code> for the <code>SecurityService</code>
+// */
+//public void setDataSource(DataSource dataSource)
+//{
+//  this.dataSource = dataSource;
+//}
 
-//  /**
-//   * Set the <code>Registry</code> for the <code>SecurityService</code>.
-//   *
-//   * @param registry the <code>Registry</code> for the <code>SecurityService</code>
-//   */
-//  public void setRegistry(IRegistry registry)
-//  {
-//    this.registry = registry;
-//  }
+///**
+// * Set the <code>Registry</code> for the <code>SecurityService</code>.
+// *
+// * @param registry the <code>Registry</code> for the <code>SecurityService</code>
+// */
+//public void setRegistry(IRegistry registry)
+//{
+//  this.registry = registry;
+//}
 
   /**
    * Does the user directory support administering groups.
@@ -2346,8 +2347,7 @@ public class SecurityService
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
 
     // deleteOrganisationSQL
-    deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O"
-        + " WHERE O.ID=?";
+    deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O" + " WHERE O.ID=?";
 
     // deleteUserDirectorySQL
     deleteUserDirectorySQL = "DELETE FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
@@ -2375,8 +2375,8 @@ public class SecurityService
         + "USER_DIRECTORIES UD";
 
     // getOrganisationsForUserDirectorySQL
-    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM "
-        + schemaPrefix + "ORGANISATIONS O INNER JOIN " + schemaPrefix
+    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
+        + "ORGANISATIONS O INNER JOIN " + schemaPrefix
         + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID"
         + " WHERE UDTOM.USER_DIRECTORY_ID=?";
 
@@ -2409,7 +2409,7 @@ public class SecurityService
 
     // organisationExistsSQL
     organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O"
-      + " WHERE O.ID=?";
+        + " WHERE O.ID=?";
 
     // updateFunctionSQL
     updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F"
@@ -2440,8 +2440,8 @@ public class SecurityService
     throws SQLException, SecurityException
   {
     UserDirectory userDirectory = new UserDirectory();
-    userDirectory.setId((UUID)rs.getObject(1));
-    userDirectory.setTypeId((UUID)rs.getObject(2));
+    userDirectory.setId((UUID) rs.getObject(1));
+    userDirectory.setTypeId((UUID) rs.getObject(2));
     userDirectory.setType(userDirectoryTypes.get(rs.getObject(2)));
     userDirectory.setName(rs.getString(3));
     userDirectory.setDescription(rs.getString(4));
@@ -2473,7 +2473,7 @@ public class SecurityService
       {
         if (rs.next())
         {
-          return (UUID)rs.getObject(1);
+          return (UUID) rs.getObject(1);
         }
         else
         {

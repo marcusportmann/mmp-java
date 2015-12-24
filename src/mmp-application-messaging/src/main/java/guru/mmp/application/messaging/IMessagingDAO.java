@@ -23,6 +23,7 @@ import guru.mmp.common.persistence.DAOException;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>IMessagingDAO</code> interface defines the persistence operations for the
@@ -36,7 +37,8 @@ public interface IMessagingDAO
   /**
    * Have all the parts been queued for assembly for the message?
    *
-   * @param messageId  the ID uniquely identifying the message
+   * @param messageId  the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   message
    * @param totalParts the total number of parts for the message
    *
    * @return <code>true</code> if all the parts for the message have been
@@ -44,7 +46,7 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  boolean allPartsQueuedForMessage(String messageId, int totalParts)
+  boolean allPartsQueuedForMessage(UUID messageId, int totalParts)
     throws DAOException;
 
   /**

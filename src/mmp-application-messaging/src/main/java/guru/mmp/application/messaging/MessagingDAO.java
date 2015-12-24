@@ -36,6 +36,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -108,7 +109,8 @@ public class MessagingDAO
   /**
    * Have all the parts been queued for assembly for the message?
    *
-   * @param messageId  the ID uniquely identifying the message
+   * @param messageId  the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   message
    * @param totalParts the total number of parts for the message
    *
    * @return <code>true</code> if all the parts for the message have been
@@ -116,7 +118,7 @@ public class MessagingDAO
    *
    * @throws DAOException
    */
-  public boolean allPartsQueuedForMessage(String messageId, int totalParts)
+  public boolean allPartsQueuedForMessage(UUID messageId, int totalParts)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
