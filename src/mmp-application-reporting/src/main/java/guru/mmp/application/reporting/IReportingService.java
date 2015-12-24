@@ -36,6 +36,8 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public interface IReportingService
 {
+  START HERE AND MAKE SAME AS DAO
+
   /**
    * The username used to identify operations performed by the system.
    */
