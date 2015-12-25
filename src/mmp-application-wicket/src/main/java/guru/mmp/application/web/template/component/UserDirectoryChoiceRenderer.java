@@ -27,6 +27,7 @@ import org.apache.wicket.model.IModel;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>UserDirectoryChoiceRenderer</code> class implements a <code>ChoiceRenderer</code> for
@@ -83,7 +84,7 @@ public class UserDirectoryChoiceRenderer
    */
   public UserDirectory getObject(String id, IModel<? extends List<? extends UserDirectory>> choices)
   {
-    UUID userDirectoryId = Long.parseLong(id);
+    UUID userDirectoryId = UUID.fromString(id);
 
     for (UserDirectory choice : choices.getObject())
     {

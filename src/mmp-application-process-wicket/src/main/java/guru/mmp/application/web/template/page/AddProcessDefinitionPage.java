@@ -78,7 +78,7 @@ public class AddProcessDefinitionPage extends TemplateWebPage
       Form<ProcessDefinition> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(new ProcessDefinition())));
 
-      addForm.getModelObject().setId(UUID.randomUUID().toString());
+      addForm.getModelObject().setId(UUID.randomUUID());
       addForm.getModelObject().setVersion(1);
 
       ProcessDefinitionInputPanel processDefinitionInputPanel =
@@ -102,7 +102,7 @@ public class AddProcessDefinitionPage extends TemplateWebPage
 
             WebSession session = getWebApplicationSession();
 
-            processDefinition.setOrganisation(session.getOrganisation());
+            processDefinition.setOrganisationId(session.getOrganisation().getId());
 
             fileUpload = processDefinitionInputPanel.getFileUpload();
 

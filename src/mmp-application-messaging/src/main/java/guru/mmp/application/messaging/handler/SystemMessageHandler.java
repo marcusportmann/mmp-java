@@ -99,49 +99,54 @@ public class SystemMessageHandler extends MessageHandler
   public Message processMessage(Message message)
     throws MessageHandlerException
   {
-    switch (message.getType())
+    if (message.getTypeId().equals(RegisterRequestData.MESSAGE_TYPE_ID))
     {
-      // Process a "Register Request" message
-      case RegisterRequestData.MESSAGE_TYPE:
-        return processRegisterMessage(message);
-
-      // Process a "Authenticate Request" message
-      case AuthenticateRequestData.MESSAGE_TYPE:
-        return processAuthenticateMessage(message);
-
-      // Process a "Check User Exists Request" message
-      case CheckUserExistsRequestData.MESSAGE_TYPE:
-        return processCheckUserExistsMessage(message);
-
-      // Process a "Test Request" message
-      case TestRequestData.MESSAGE_TYPE:
-        return processTestMessage(message);
-
-      // Process a "Another Test Request" message
-      case AnotherTestRequestData.MESSAGE_TYPE:
-        return processAnotherTestMessage(message);
-
-      // Process a "Message Part Download Test Request" message
-      case MessagePartDownloadTestRequestData.MESSAGE_TYPE:
-        return processMessagePartDownloadTestMessage(message);
-
-      // Process a "Submit Error Report Request" message
-      case SubmitErrorReportRequestData.MESSAGE_TYPE:
-        return processSubmitErrorReportRequestMessage(message);
-
-      // Process a "Get Code Category Request" message
-      case GetCodeCategoryRequestData.MESSAGE_TYPE:
-        return processGetCodeCategoryRequestMessage(message);
-
-      // Process a "Get Code Category With Parameters Request" message
-      case GetCodeCategoryWithParametersRequestData.MESSAGE_TYPE:
-        return processGetCodeCategoryWithParametersRequestMessage(message);
+      return processRegisterMessage(message);
+    }
+    // Process a "Authenticate Request" message
+    else if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID))
+    {
+      return processAuthenticateMessage(message);
+    }
+    // Process a "Check User Exists Request" message
+    else if (message.getTypeId().equals(CheckUserExistsRequestData.MESSAGE_TYPE_ID))
+    {
+      return processCheckUserExistsMessage(message);
+    }
+    // Process a "Test Request" message
+    else if (message.getTypeId().equals(TestRequestData.MESSAGE_TYPE_ID))
+    {
+      return processTestMessage(message);
+    }
+    // Process a "Another Test Request" message
+    else if (message.getTypeId().equals(AnotherTestRequestData.MESSAGE_TYPE_ID))
+    {
+      return processAnotherTestMessage(message);
+    }
+    // Process a "Message Part Download Test Request" message
+    else if (message.getTypeId().equals(MessagePartDownloadTestRequestData.MESSAGE_TYPE_ID))
+    {
+      return processMessagePartDownloadTestMessage(message);
+    }
+    // Process a "Submit Error Report Request" message
+    else if (message.getTypeId().equals(SubmitErrorReportRequestData.MESSAGE_TYPE_ID))
+    {
+      return processSubmitErrorReportRequestMessage(message);
+    }
+    // Process a "Get Code Category Request" message
+    else if (message.getTypeId().equals(GetCodeCategoryRequestData.MESSAGE_TYPE_ID))
+    {
+      return processGetCodeCategoryRequestMessage(message);
+    }
+    // Process a "Get Code Category With Parameters Request" message
+    else if (message.getTypeId().equals(GetCodeCategoryWithParametersRequestData.MESSAGE_TYPE_ID))
+    {
+      return processGetCodeCategoryWithParametersRequestMessage(message);
     }
 
     throw new MessageHandlerException("Failed to process the unrecognised message ("
-        + message.getId() + ") with type (" + message.getType() + ") and version ("
-        + message.getTypeVersion() + ") from user (" + message.getUser() + ") and device ("
-        + message.getDevice() + ")");
+        + message.getId() + ") with type (" + message.getTypeId() + ") from user (" + message.getUser() + ") and device ("
+        + message.getDeviceId() + ")");
   }
 
 //private GetCodeCategoryResponseData getRemoteWebServiceCodeCategory(CodeCategory codeCategory,

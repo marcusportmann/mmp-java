@@ -42,7 +42,7 @@ public class ProcessInstance
    * The Universally Unique Identifier (UUID) used to uniquely identify the process definition for
    * the process instance.
    */
-  private String definitionId;
+  private UUID definitionId;
 
   /**
    * The version of the process definition for the process instance.
@@ -52,7 +52,7 @@ public class ProcessInstance
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the process instance.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The name of the entity that has locked the process instance for execution.
@@ -88,7 +88,7 @@ public class ProcessInstance
    * @param lockName          the name of the entity that has locked the process instance for
    *                          execution
    */
-  public ProcessInstance(String id, String definitionId, int definitionVersion, byte[] data,
+  public ProcessInstance(UUID id, UUID definitionId, int definitionVersion, byte[] data,
       Status status, Date nextExecution, String lockName)
   {
     this.id = id;
@@ -206,7 +206,7 @@ public class ProcessInstance
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
    *         definition for the process instance
    */
-  public String getDefinitionId()
+  public UUID getDefinitionId()
   {
     return definitionId;
   }
@@ -228,7 +228,7 @@ public class ProcessInstance
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
    *         instance
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -280,7 +280,7 @@ public class ProcessInstance
    * @param definitionId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                     process definition for the process instance
    */
-  public void setDefinitionId(String definitionId)
+  public void setDefinitionId(UUID definitionId)
   {
     this.definitionId = definitionId;
   }
@@ -301,7 +301,7 @@ public class ProcessInstance
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
    *           instance
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

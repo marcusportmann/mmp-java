@@ -25,6 +25,7 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -39,9 +40,9 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The code uniquely identifying the organisation.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    */
-  private String code;
+  private UUID id;
 
   /* Security Service */
   @Inject
@@ -54,7 +55,7 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
    */
   public DetachableOrganisationModel(Organisation organisation)
   {
-    this(organisation.getCode());
+    this(organisation.getId());
 
     setObject(organisation);
   }
@@ -62,11 +63,11 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
   /**
    * Constructs a new <code>DetachableOrganisationModel</code>.
    *
-   * @param code the code uniquely identifying the organisation
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    */
-  public DetachableOrganisationModel(String code)
+  public DetachableOrganisationModel(UUID id)
   {
-    this.code = code;
+    this.id = id;
   }
 
   /**
@@ -85,7 +86,7 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
   {
     try
     {
-      return securityService.getOrganisation(code);
+      return securityService.getOrganisation(id);
     }
     catch (OrganisationNotFoundException e)
     {
@@ -93,7 +94,7 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the organisation (" + code + ")", e);
+      throw new WebApplicationException("Failed to load the organisation (" + id + ")", e);
     }
   }
 

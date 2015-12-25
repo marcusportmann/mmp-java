@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -93,12 +94,12 @@ public class ProcessService
   /**
    * Delete all versions of the existing process definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           process definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           definition
    *
    * @throws ProcessServiceException
    */
-  public void deleteProcessDefinition(String id)
+  public void deleteProcessDefinition(UUID id)
     throws ProcessServiceException
   {
     try
@@ -137,54 +138,54 @@ public class ProcessService
 
   /**
    * Returns the summaries for the current versions of all the process definitions associated with
-   * the organisation identified by the specified organisation code.
+   * the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definitions are associated with
    *
    * @return the summaries for the current versions of all the process definitions associated with
-   *         the organisation identified by the specified organisation code
+   *         the organisation
    *
    * @throws ProcessServiceException
    */
   public List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
-      String organisation)
+      UUID organisationId)
     throws ProcessServiceException
   {
     try
     {
-      return processDAO.getCurrentProcessDefinitionSummariesForOrganisation(organisation);
+      return processDAO.getCurrentProcessDefinitionSummariesForOrganisation(organisationId);
     }
     catch (Throwable e)
     {
       throw new ProcessServiceException(
           "Failed to retrieve the summaries for the current versions of the"
-          + " process definitions for the organisation (" + organisation + ")", e);
+          + " process definitions for the organisation (" + organisationId + ")", e);
     }
   }
 
   /**
-   * Returns the current versions of all the process definitions associated with the organisation
-   * identified by the specified organisation code.
+   * Returns the current versions of all the process definitions associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
    *
    * @return the current versions of all the process definitions associated with the organisation
-   *         identified by the specified organisation code
    *
    * @throws ProcessServiceException
    */
-  public List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(String organisation)
+  public List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(UUID organisationId)
     throws ProcessServiceException
   {
     try
     {
-      return processDAO.getCurrentProcessDefinitionsForOrganisation(organisation);
+      return processDAO.getCurrentProcessDefinitionsForOrganisation(organisationId);
     }
     catch (Throwable e)
     {
       throw new ProcessServiceException(
           "Failed to retrieve the current versions of the process definitions"
-          + " for the organisation (" + organisation + ")", e);
+          + " for the organisation (" + organisationId + ")", e);
     }
   }
 
@@ -213,28 +214,27 @@ public class ProcessService
   }
 
   /**
-   * Returns the number of process definitions associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of process definitions associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definitions are associated with
    *
-   * @return the number of process definitions associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of process definitions associated with the organisation
    *
    * @throws ProcessServiceException
    */
-  public int getNumberOfProcessDefinitionsForOrganisation(String organisation)
+  public int getNumberOfProcessDefinitionsForOrganisation(UUID organisationId)
     throws ProcessServiceException
   {
     try
     {
-      return processDAO.getNumberOfProcessDefinitionsForOrganisation(organisation);
+      return processDAO.getNumberOfProcessDefinitionsForOrganisation(organisationId);
     }
     catch (Throwable e)
     {
       throw new ProcessServiceException(
           "Failed to retrieve the number of process definitions for the organisation ("
-          + organisation + ")", e);
+          + organisationId + ")", e);
     }
   }
 
@@ -245,12 +245,12 @@ public class ProcessService
    *                process definition
    * @param version the version of the process definition
    *
-   * @return the process definition and version or <code>null</code>
-   *         if the process definition could not be found
+   * @return the process definition and version or <code>null</code> if the process definition
+   * could not be found
    *
    * @throws ProcessServiceException
    */
-  public ProcessDefinition getProcessDefinition(String id, int version)
+  public ProcessDefinition getProcessDefinition(UUID id, int version)
     throws ProcessServiceException
   {
     try
@@ -271,12 +271,12 @@ public class ProcessService
    *                process definition
    * @param version the version of the process definition
    *
-   * @return the summary for the process definition and version or
-   *         <code>null</code> if the process definition could not be found
+   * @return the summary for the process definition and version or <code>null</code> if the process
+   *         definition could not be found
    *
    * @throws ProcessServiceException
    */
-  public ProcessDefinitionSummary getProcessDefinitionSummary(String id, int version)
+  public ProcessDefinitionSummary getProcessDefinitionSummary(UUID id, int version)
     throws ProcessServiceException
   {
     try
@@ -325,7 +325,7 @@ public class ProcessService
    *
    * @throws ProcessServiceException
    */
-  public boolean processDefinitionExists(String id, int version)
+  public boolean processDefinitionExists(UUID id, int version)
     throws ProcessServiceException
   {
     try
@@ -374,7 +374,7 @@ public class ProcessService
    *
    * @throws ProcessServiceException
    */
-  public void unlockProcessInstance(String id, ProcessInstance.Status status)
+  public void unlockProcessInstance(UUID id, ProcessInstance.Status status)
     throws ProcessServiceException
   {
     try
@@ -398,7 +398,7 @@ public class ProcessService
    *
    * @throws ProcessServiceException
    */
-  public void updateProcessInstanceData(String id, byte[] data)
+  public void updateProcessInstanceData(UUID id, byte[] data)
     throws ProcessServiceException
   {
     try

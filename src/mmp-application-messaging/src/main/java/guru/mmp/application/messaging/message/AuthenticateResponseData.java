@@ -27,11 +27,12 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
+import java.util.UUID;
 
 /**
  * The <code>AuthenticateResponseData</code> class manages the data for a
@@ -57,7 +58,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Authenticate Response" message.
    */
-  public static final String MESSAGE_TYPE = "82223035-1726-407f-8703-3977708e792c";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("82223035-1726-407f-8703-3977708e792c");
 
   /**
    * The error code indicating the result of processing the authentication where a code of '0'
@@ -91,7 +93,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    */
   public AuthenticateResponseData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -103,7 +105,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    */
   public AuthenticateResponseData(EncryptionScheme userEncryptionScheme, byte[] userEncryptionKey)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = 0;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;
@@ -120,7 +122,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    */
   public AuthenticateResponseData(int errorCode, String errorMessage)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
@@ -140,7 +142,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
   public AuthenticateResponseData(EncryptionScheme userEncryptionScheme, byte[] userEncryptionKey,
       Map<String, Object> userProperties)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = 0;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;

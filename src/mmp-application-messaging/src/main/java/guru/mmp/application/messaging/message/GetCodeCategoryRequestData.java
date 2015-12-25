@@ -27,9 +27,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
-import java.util.Date;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * The <code>GetCodeCategoryRequestData</code> class manages the data for a
@@ -45,13 +46,14 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category Request" message.
    */
-  public static final String MESSAGE_TYPE = "94d60eb6-a062-492d-b5e7-9fb1f05cf088";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("94d60eb6-a062-492d-b5e7-9fb1f05cf088");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category to
    * retrieve.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The date and time the code category was last retrieved.
@@ -68,7 +70,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    */
   public GetCodeCategoryRequestData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -81,9 +83,9 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    *                             category is current
    *
    */
-  public GetCodeCategoryRequestData(String id, Date lastRetrieved, boolean returnCodesIfCurrent)
+  public GetCodeCategoryRequestData(UUID id, Date lastRetrieved, boolean returnCodesIfCurrent)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.id = id;
     this.lastRetrieved = lastRetrieved;
@@ -119,7 +121,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
       return false;
     }
 
-    this.id = rootElement.getChildText("Id");
+    this.id = UUID.fromString(rootElement.getChildText("Id"));
 
     String lastRetrievedValue = rootElement.getChildText("LastRetrieved");
 
@@ -153,7 +155,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    * @return the Universally Unique Identifier (UUID) uniquely identify the code category to
    *         retrieve
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -187,7 +189,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    * @param id the Universally Unique Identifier (UUID) uniquely identifying the code category to
    *           retrieve
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -227,7 +229,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   {
     Element rootElement = new Element("GetCodeCategoryRequest");
 
-    rootElement.addContent(new Element("Id", StringUtil.notNull(id)));
+    rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("LastRetrieved", (lastRetrieved == null)
         ? ISO8601.now()
         : ISO8601.fromDate(lastRetrieved)));

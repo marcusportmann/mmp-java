@@ -19,6 +19,7 @@ package guru.mmp.application.process;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>IProcessService</code> interface defines the functionality that must be provided
@@ -34,26 +35,11 @@ public interface IProcessService
   String SYSTEM_USERNAME = "SYSTEM";
 
   /**
-   * Retrieve the process definition and version.
-   *
-   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                process definition
-   * @param version the version of the process definition
-   *
-   * @return the process definition and version or <code>null</code>
-   *         if the process definition could not be found
-   *
-   * @throws ProcessServiceException
-   */
-  ProcessDefinition getProcessDefinition(String id, int version)
-    throws ProcessServiceException;
-
-  /**
    * Create the new process definition.
    *
    * @param processDefinition the <code>ProcessDefinition</code> instance containing the information
-   *                         for the new process definition
-   * @param createdBy        the username identifying the user that created the process definition
+   *                          for the new process definition
+   * @param createdBy         the username identifying the user that created the process definition
    *
    * @throws ProcessServiceException
    */
@@ -63,12 +49,12 @@ public interface IProcessService
   /**
    * Delete all versions of the existing process definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
-   *           process definition
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           definition
    *
    * @throws ProcessServiceException
    */
-  void deleteProcessDefinition(String id)
+  void deleteProcessDefinition(UUID id)
     throws ProcessServiceException;
 
   /**
@@ -83,31 +69,31 @@ public interface IProcessService
 
   /**
    * Returns the summaries for the current versions of all the process definitions associated with
-   * the organisation identified by the specified organisation code.
+   * the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definitions are associated with
    *
    * @return the summaries for the current versions of all the process definitions associated with
-   *         the organisation identified by the specified organisation code
+   *         the organisation
    *
    * @throws ProcessServiceException
    */
   List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
-      String organisation)
+      UUID organisationId)
     throws ProcessServiceException;
 
   /**
-   * Returns the current versions of all the process definitions associated with the organisation
-   * identified by the specified organisation code.
+   * Returns the current versions of all the process definitions associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
    *
    * @return the current versions of all the process definitions associated with the organisation
-   *         identified by the specified organisation code
    *
    * @throws ProcessServiceException
    */
-  List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(String organisation)
+  List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(UUID organisationId)
     throws ProcessServiceException;
 
   /**
@@ -124,17 +110,31 @@ public interface IProcessService
     throws ProcessServiceException;
 
   /**
-   * Returns the number of process definitions associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of process definitions associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definitions are associated with
    *
-   * @return the number of process definitions associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of process definitions associated with the organisation
    *
    * @throws ProcessServiceException
    */
-  int getNumberOfProcessDefinitionsForOrganisation(String organisation)
+  int getNumberOfProcessDefinitionsForOrganisation(UUID organisationId)
+    throws ProcessServiceException;
+
+  /**
+   * Retrieve the process definition and version.
+   *
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                process definition
+   * @param version the version of the process definition
+   *
+   * @return the process definition and version or <code>null</code> if the process definition
+   * could not be found
+   *
+   * @throws ProcessServiceException
+   */
+  ProcessDefinition getProcessDefinition(UUID id, int version)
     throws ProcessServiceException;
 
   /**
@@ -144,12 +144,12 @@ public interface IProcessService
    *                process definition
    * @param version the version of the process definition
    *
-   * @return the summary for the process definition and version or
-   *         <code>null</code> if the process definition could not be found
+   * @return the summary for the process definition and version or <code>null</code> if the process
+   *         definition could not be found
    *
    * @throws ProcessServiceException
    */
-  ProcessDefinitionSummary getProcessDefinitionSummary(String id, int version)
+  ProcessDefinitionSummary getProcessDefinitionSummary(UUID id, int version)
     throws ProcessServiceException;
 
   /**
@@ -163,7 +163,7 @@ public interface IProcessService
    *
    * @throws ProcessServiceException
    */
-  boolean processDefinitionExists(String id, int version)
+  boolean processDefinitionExists(UUID id, int version)
     throws ProcessServiceException;
 
   /**
@@ -188,7 +188,7 @@ public interface IProcessService
    *
    * @throws ProcessServiceException
    */
-  void unlockProcessInstance(String id, ProcessInstance.Status status)
+  void unlockProcessInstance(UUID id, ProcessInstance.Status status)
     throws ProcessServiceException;
 
   /**
@@ -200,6 +200,6 @@ public interface IProcessService
    *
    * @throws ProcessServiceException
    */
-  void updateProcessInstanceData(String id, byte[] data)
+  void updateProcessInstanceData(UUID id, byte[] data)
     throws ProcessServiceException;
 }

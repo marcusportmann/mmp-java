@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -45,9 +46,9 @@ public class ReportDefinitionSummaryDataProvider
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The organisation code identifying the organisation the report definitions are associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /* Reporting Service */
   @Inject
@@ -56,12 +57,12 @@ public class ReportDefinitionSummaryDataProvider
   /**
    * Constructs a new <code>ReportDefinitionSummaryDataProvider</code>.
    *
-   * @param organisation the organisation code identifying the organisation the report definitions
-   *                     are associated with
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
    */
-  public ReportDefinitionSummaryDataProvider(String organisation)
+  public ReportDefinitionSummaryDataProvider(UUID organisationId)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
   }
 
   /**
@@ -94,7 +95,7 @@ public class ReportDefinitionSummaryDataProvider
     try
     {
       List<ReportDefinitionSummary> allReportDefinitionSummaries =
-        reportingService.getReportDefinitionSummariesForOrganisation(organisation);
+        reportingService.getReportDefinitionSummariesForOrganisation(organisationId);
 
       List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
 
@@ -140,7 +141,7 @@ public class ReportDefinitionSummaryDataProvider
   {
     try
     {
-      return reportingService.getNumberOfReportDefinitionsForOrganisation(organisation);
+      return reportingService.getNumberOfReportDefinitionsForOrganisation(organisationId);
     }
     catch (Throwable e)
     {

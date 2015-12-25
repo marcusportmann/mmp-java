@@ -102,7 +102,7 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
 
             WebSession session = getWebApplicationSession();
 
-            processDefinition.setOrganisation(session.getOrganisation());
+            processDefinition.setOrganisationId(session.getOrganisation().getId());
 
             fileUpload = processDefinitionInputPanel.getFileUpload();
 

@@ -26,6 +26,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>MessagePartDownloadTestRequestData</code> class manages the data for a
  * "Message Part Download Test Request" message.
@@ -40,7 +44,8 @@ public class MessagePartDownloadTestRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Message Part Download Test Request" message.
    */
-  public static final String MESSAGE_TYPE = "def49acc-426f-4e6a-ad31-78732e24c0c2";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("def49acc-426f-4e6a-ad31-78732e24c0c2");
 
   /**
    * The test value.
@@ -52,7 +57,7 @@ public class MessagePartDownloadTestRequestData extends WbxmlMessageData
    */
   public MessagePartDownloadTestRequestData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -62,7 +67,7 @@ public class MessagePartDownloadTestRequestData extends WbxmlMessageData
    */
   public MessagePartDownloadTestRequestData(String testValue)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.testValue = testValue;
   }

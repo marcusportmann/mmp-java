@@ -535,6 +535,7 @@ public class ReportingDAO
   private ReportDefinitionSummary getReportDefinitionSummary(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinitionSummary(rs.getString(1), rs.getString(2), rs.getString(3));
+    return new ReportDefinitionSummary((UUID) rs.getObject(1), (UUID) rs.getObject(2),
+        rs.getString(3));
   }
 }

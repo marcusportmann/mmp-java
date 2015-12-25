@@ -151,7 +151,7 @@ public class ViewReportParameters
    * @param reportFileNameOrId the name of the local report file under the WEB-INF/report folder for
    *                           the web project or the ID of the report stored in the database
    */
-  public void setReportFileNameOrId(String reportFileNameOrId)
+  public void setReportFileNameOrIdx(String reportFileNameOrId)
   {
     this.reportFileNameOrId = reportFileNameOrId;
   }

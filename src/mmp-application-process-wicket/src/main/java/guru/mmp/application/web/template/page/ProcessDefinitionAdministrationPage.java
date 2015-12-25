@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>ProcessDefinitionAdministrationPage</code> class implements the
@@ -104,7 +105,7 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
       tableContainer.add(addLink);
 
       ProcessDefinitionSummaryDataProvider dataProvider =
-        new ProcessDefinitionSummaryDataProvider(session.getOrganisation());
+        new ProcessDefinitionSummaryDataProvider(session.getOrganisation().getId());
 
       // The process definition data view
       DataView<ProcessDefinitionSummary> dataView =
@@ -197,7 +198,7 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private String id;
+    private UUID id;
     private Label nameLabel;
 
     /**

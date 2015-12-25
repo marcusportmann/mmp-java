@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -103,7 +104,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
 
       // The code category data view
       CodeCategoryDataProvider dataProvider =
-        new CodeCategoryDataProvider(session.getOrganisation(), false);
+        new CodeCategoryDataProvider(session.getOrganisation().getId(), false);
 
       DataView<CodeCategory> dataView = new DataView<CodeCategory>("codeCategory", dataProvider)
       {
@@ -155,7 +156,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
             {
               CodeCategory codeCategory = item.getModelObject();
 
-              String codeCategoryId = codeCategory.getId();
+              UUID codeCategoryId = codeCategory.getId();
               String codeCategoryName = codeCategory.getName();
 
               setResponsePage(new CodeAdministrationPage(getPageReference(), codeCategoryId,
@@ -192,7 +193,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private String id;
+    private UUID id;
     private Label nameLabel;
 
     /**

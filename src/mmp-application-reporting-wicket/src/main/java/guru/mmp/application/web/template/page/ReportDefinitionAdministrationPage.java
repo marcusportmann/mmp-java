@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -104,7 +105,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
       tableContainer.add(addLink);
 
       ReportDefinitionSummaryDataProvider dataProvider =
-        new ReportDefinitionSummaryDataProvider(session.getOrganisation());
+        new ReportDefinitionSummaryDataProvider(session.getOrganisation().getId());
 
       // The report definition data view
       DataView<ReportDefinitionSummary> dataView =
@@ -192,7 +193,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private String id;
+    private UUID id;
     private Label nameLabel;
 
     /**

@@ -480,6 +480,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (attributes.get(groupMemberAttribute) != null)
       {
+        @SuppressWarnings("unchecked")
         NamingEnumeration<String> groupMembers =
           (NamingEnumeration<String>) attributes.get(groupMemberAttribute).getAll();
 
@@ -2084,6 +2085,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (attributes.get(groupMemberAttribute) != null)
       {
+        @SuppressWarnings("unchecked")
         NamingEnumeration<String> groupMembers =
           (NamingEnumeration<String>) attributes.get(groupMemberAttribute).getAll();
 
@@ -2837,6 +2839,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         if (attributes.get(userPasswordHistoryAttribute) != null)
         {
+          @SuppressWarnings("unchecked")
           NamingEnumeration<String> existingPasswordHashes =
             (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
 

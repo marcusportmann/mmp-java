@@ -26,6 +26,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>CheckUserExistsRequestData</code> class manages the data for a
  * "Check User Exists Request" message.
@@ -40,12 +44,8 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Check User Exists Request" message.
    */
-  public static final String MESSAGE_TYPE = "cc005e6a-b01b-48eb-98a0-026297be69f3";
-
-  /**
-   * The organisation code identifying the organisation the user is associated with.
-   */
-  private String organisation;
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("cc005e6a-b01b-48eb-98a0-026297be69f3");
 
   /**
    * The username identifying the user.
@@ -57,7 +57,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
    */
   public CheckUserExistsRequestData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -69,10 +69,9 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
    */
   public CheckUserExistsRequestData(String user, String organisation)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.user = user;
-    this.organisation = organisation;
   }
 
   /**
@@ -107,26 +106,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
 
     this.user = rootElement.getChildText("User");
 
-    if (rootElement.hasChild("Organisation"))
-    {
-      this.organisation = rootElement.getChildText("Organisation");
-    }
-    else
-    {
-      this.organisation = "MMP";
-    }
-
     return true;
-  }
-
-  /**
-   * Returns the organisation code identifying the organisation the user is associated with.
-   *
-   * @return the organisation code identifying the organisation the user is associated with
-   */
-  public String getOrganisation()
-  {
-    return organisation;
   }
 
   /**
@@ -137,17 +117,6 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   public String getUser()
   {
     return user;
-  }
-
-  /**
-   * Set the organisation code identifying the organisation the user is associated with.
-   *
-   * @param organisation the organisation code identifying the organisation the user is associated
-   *        with
-   */
-  public void setOrganisation(String organisation)
-  {
-    this.organisation = organisation;
   }
 
   /**
@@ -175,7 +144,6 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
     Element rootElement = new Element("CheckUserExistsRequest");
 
     rootElement.addContent(new Element("User", StringUtil.notNull(user)));
-    rootElement.addContent(new Element("Organisation", StringUtil.notNull(organisation)));
 
     Document document = new Document(rootElement);
 

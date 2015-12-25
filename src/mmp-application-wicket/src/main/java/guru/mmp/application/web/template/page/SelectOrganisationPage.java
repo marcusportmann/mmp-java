@@ -56,6 +56,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -73,7 +74,7 @@ public class SelectOrganisationPage extends WebPage
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SelectOrganisationPage.class);
-  private StringSelectOption organisation = null;
+  private StringSelectOption organisationId = null;
 
   /* Security Service */
   @Inject
@@ -131,14 +132,15 @@ public class SelectOrganisationPage extends WebPage
               securityService.getFunctionCodesForUser(session.getUserDirectoryId(),
                 session.getUsername());
 
-            session.setOrganisation(organisation.getValue());
+            session.setOrganisation(
+                securityService.getOrganisation(UUID.fromString(organisationId.getValue())));
             session.setGroupNames(groupNames);
             session.setFunctionCodes(functionCodes);
 
             if (logger.isDebugEnabled())
             {
               logger.debug("Successfully authenticated user (" + session.getUsername()
-                  + ") for organisation (" + organisation.getValue() + ") with groups ("
+                  + ") for organisation (" + organisationId.getName() + ") with groups ("
                   + StringUtil.delimit(groupNames, ",") + ") and function codes ("
                   + StringUtil.delimit(functionCodes, ",") + ")");
             }

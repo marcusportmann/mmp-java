@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -71,7 +72,7 @@ public class CodeAdministrationPage extends TemplateWebPage
    *                       code category the codes are associated with
    * @param codeCategoryName the name of the code category
    */
-  public CodeAdministrationPage(PageReference previousPage, String codeCategoryId,
+  public CodeAdministrationPage(PageReference previousPage, UUID codeCategoryId,
       String codeCategoryName)
   {
     super("Codes", codeCategoryName);

@@ -99,7 +99,7 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
 
             WebSession session = getWebApplicationSession();
 
-            reportDefinition.setOrganisation(session.getOrganisation());
+            reportDefinition.setOrganisationId(session.getOrganisation().getId());
 
             fileUpload = reportDefinitionInputPanel.getFileUpload();
 

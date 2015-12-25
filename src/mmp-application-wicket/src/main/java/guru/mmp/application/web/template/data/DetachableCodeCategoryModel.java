@@ -24,6 +24,7 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -44,7 +45,7 @@ public class DetachableCodeCategoryModel extends InjectableLoadableDetachableMod
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
-  private String id;
+  private UUID id;
 
   /**
    * Constructs a new <code>DetachableCodeCategoryModel</code>.
@@ -64,7 +65,7 @@ public class DetachableCodeCategoryModel extends InjectableLoadableDetachableMod
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           code category
    */
-  public DetachableCodeCategoryModel(String id)
+  public DetachableCodeCategoryModel(UUID id)
   {
     this.id = id;
   }

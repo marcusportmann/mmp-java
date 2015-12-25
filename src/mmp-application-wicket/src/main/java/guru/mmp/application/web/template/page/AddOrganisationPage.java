@@ -116,7 +116,7 @@ public class AddOrganisationPage extends TemplateWebPage
              */
             try
             {
-              securityService.getOrganisation(organisation.getCode());
+              securityService.getOrganisation(organisation.getId());
 
               AddOrganisationPage.this.error(
                   "An organisation with the specified code already exists.");

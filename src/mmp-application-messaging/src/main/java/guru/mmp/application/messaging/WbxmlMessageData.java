@@ -21,6 +21,8 @@ package guru.mmp.application.messaging;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Parser;
 
+import java.util.UUID;
+
 /**
  * The <code>WbxmlMessageData</code> class provides the abstract base class from which all
  * WBXML-based infrastructural and application-specific message data classes should be derived.
@@ -32,7 +34,7 @@ public abstract class WbxmlMessageData
   /**
    * The UUID identifying the type of message the message data is associated with.
    */
-  private String messageType;
+  private UUID messageTypeId;
 
   /**
    * The priority for the message type the message data is associated with.
@@ -47,16 +49,16 @@ public abstract class WbxmlMessageData
   /**
    * Constructs a new <code>WbxmlMessageData</code>.
    *
-   * @param messageType         the UUID identifying the type of message the message data is
+   * @param messageTypeId       the UUID identifying the type of message the message data is
    *                            associated with
    * @param messageTypeVersion  the version of the message type the message data is associated with
    * @param messageTypePriority the priority for the message type the message data is associated
    *                            with
    */
-  public WbxmlMessageData(String messageType, int messageTypeVersion,
+  public WbxmlMessageData(UUID messageTypeId, int messageTypeVersion,
       Message.Priority messageTypePriority)
   {
-    this.messageType = messageType;
+    this.messageTypeId = messageTypeId;
     this.messageTypeVersion = messageTypeVersion;
     this.messageTypePriority = messageTypePriority;
   }
@@ -83,9 +85,9 @@ public abstract class WbxmlMessageData
    *
    * @return the UUID identifying the type of message the message data is associated with
    */
-  public String getMessageType()
+  public UUID getMessageTypeId()
   {
-    return messageType;
+    return messageTypeId;
   }
 
   /**

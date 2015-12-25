@@ -27,9 +27,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
-import java.util.Date;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * The <code>SubmitErrorReportRequestData</code> class manages the data for a
@@ -45,13 +46,14 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Submit Error Report Request" message.
    */
-  public static final String MESSAGE_TYPE = "ff638c33-b4f1-4e79-804c-9560da2543d6";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("ff638c33-b4f1-4e79-804c-9560da2543d6");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the application that
    * generated the error report.
    */
-  private String applicationId;
+  private UUID applicationId;
 
   /**
    * The version of the application that generated the error report.
@@ -103,7 +105,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    */
   public SubmitErrorReportRequestData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -123,11 +125,11 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *                           from
    * @param data               the data associated with the error report e.g. the application XML
    */
-  public SubmitErrorReportRequestData(String id, String applicationId, int applicationVersion,
+  public SubmitErrorReportRequestData(String id, UUID applicationId, int applicationVersion,
       String description, String detail, String feedback, Date when, String who, String device,
       byte[] data)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.id = id;
     this.applicationId = applicationId;
@@ -176,7 +178,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     }
 
     this.id = rootElement.getChildText("Id");
-    this.applicationId = rootElement.getChildText("ApplicationId");
+    this.applicationId = UUID.fromString(rootElement.getChildText("ApplicationId"));
     this.applicationVersion = Integer.parseInt(rootElement.getChildText("ApplicationVersion"));
     this.description = rootElement.getChildText("Description");
     this.detail = rootElement.getChildText("Detail");
@@ -215,7 +217,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the application
    *         that generated the error report
    */
-  public String getApplicationId()
+  public UUID getApplicationId()
   {
     return applicationId;
   }
@@ -317,7 +319,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @param applicationId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      application that generated the error report
    */
-  public void setApplicationId(String applicationId)
+  public void setApplicationId(UUID applicationId)
   {
     this.applicationId = applicationId;
   }
@@ -427,7 +429,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     Element rootElement = new Element("SubmitErrorReportRequest");
 
     rootElement.addContent(new Element("Id", StringUtil.notNull(id)));
-    rootElement.addContent(new Element("ApplicationId", StringUtil.notNull(applicationId)));
+    rootElement.addContent(new Element("ApplicationId", applicationId.toString()));
     rootElement.addContent(new Element("ApplicationVersion", String.valueOf(applicationVersion)));
     rootElement.addContent(new Element("Description", StringUtil.notNull(description)));
     rootElement.addContent(new Element("Detail", StringUtil.notNull(detail)));

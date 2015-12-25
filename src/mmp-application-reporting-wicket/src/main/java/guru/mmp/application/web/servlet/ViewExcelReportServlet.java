@@ -44,6 +44,7 @@ import java.sql.Connection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -182,7 +183,7 @@ public class ViewExcelReportServlet extends HttpServlet
               else if (viewReportParameters.getReportType() == ReportType.DATABASE)
               {
                 ReportDefinition reportDefinition = reportingService.getReportDefinition(
-                    viewReportParameters.getReportFileNameOrId());
+                  UUID.fromString(viewReportParameters.getReportFileNameOrId()));
 
                 if (reportDefinition != null)
                 {

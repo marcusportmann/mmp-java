@@ -25,6 +25,8 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 /**
@@ -41,7 +43,7 @@ public class DetachableProcessDefinitionModel
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the process definition.
    */
-  private String id;
+  private UUID id;
 
   /* Process Service */
   @Inject
@@ -71,7 +73,7 @@ public class DetachableProcessDefinitionModel
    *                definition
    * @param version the version of the process definition
    */
-  public DetachableProcessDefinitionModel(String id, int version)
+  public DetachableProcessDefinitionModel(UUID id, int version)
   {
     this.id = id;
     this.version = version;

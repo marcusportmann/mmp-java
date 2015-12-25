@@ -23,6 +23,7 @@ import guru.mmp.common.persistence.DAOException;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>IProcessDAO</code> interface defines the process-related persistence operations.
@@ -61,7 +62,7 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  void deleteProcessDefinition(String id)
+  void deleteProcessDefinition(UUID id)
     throws DAOException;
 
   /**
@@ -72,36 +73,36 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  void deleteProcessInstance(String id)
+  void deleteProcessInstance(UUID id)
     throws DAOException;
 
   /**
    * Returns the summaries for the current versions of all the process definitions associated with
-   * the organisation identified by the specified organisation code.
+   * the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definitions are associated with
    *
    * @return the summaries for the current versions of all the process definitions associated with
-   *         the organisation identified by the specified organisation code
+   *         the organisation
    *
    * @throws DAOException
    */
   List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
-      String organisation)
+      UUID organisationId)
     throws DAOException;
 
   /**
-   * Returns the current versions of all the process definitions associated with the organisation
-   * identified by the specified organisation code.
+   * Returns the current versions of all the process definitions associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
    *
    * @return the current versions of all the process definitions associated with the organisation
-   *         identified by the specified organisation code
    *
    * @throws DAOException
    */
-  List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(String organisation)
+  List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
@@ -121,31 +122,29 @@ public interface IProcessDAO
     throws DAOException;
 
   /**
-   * Returns the number of process definitions associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of process definitions associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definitions are associated with
    *
-   * @return the number of process definitions associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of process definitions associated with the organisation
    *
    * @throws DAOException
    */
-  int getNumberOfProcessDefinitionsForOrganisation(String organisation)
+  int getNumberOfProcessDefinitionsForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
-   * Returns the number of process instances associated with the organisation identified by the
-   * specified organisation code.
+   * Returns the number of process instances associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
    *
-   * @return the number of process instances associated with the organisation identified by the
-   *         specified organisation code
+   * @return the number of process instances associated with the organisation
    *
    * @throws DAOException
    */
-  int getNumberOfProcessInstancesForOrganisation(String organisation)
+  int getNumberOfProcessInstancesForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
@@ -155,12 +154,12 @@ public interface IProcessDAO
    *                process definition
    * @param version the version of the process definition
    *
-   * @return the process definition and version or <code>null</code> if the
-   *         process definition could not be found
+   * @return the process definition and version or <code>null</code> if the process definition
+   * could not be found
    *
    * @throws DAOException
    */
-  ProcessDefinition getProcessDefinition(String id, int version)
+  ProcessDefinition getProcessDefinition(UUID id, int version)
     throws DAOException;
 
   /**
@@ -170,12 +169,12 @@ public interface IProcessDAO
    *                process definition
    * @param version the version of the process definition
    *
-   * @return the summary for the process definition and version or
-   *         <code>null</code> if the process definition could not be found
+   * @return the summary for the process definition and version or <code>null</code> if the process
+   *         definition could not be found
    *
    * @throws DAOException
    */
-  ProcessDefinitionSummary getProcessDefinitionSummary(String id, int version)
+  ProcessDefinitionSummary getProcessDefinitionSummary(UUID id, int version)
     throws DAOException;
 
   /**
@@ -184,26 +183,24 @@ public interface IProcessDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
    *           instance
    *
-   * @return the process instance or <code>null</code> if the process
-   *         instance could not be found
+   * @return the process instance or <code>null</code> if the process instance could not be found
    *
    * @throws DAOException
    */
-  ProcessInstance getProcessInstance(String id)
+  ProcessInstance getProcessInstance(UUID id)
     throws DAOException;
 
   /**
-   * Returns the summaries for the all the process instances associated with the organisation
-   * identified by the specified organisation code.
+   * Returns the summaries for the all the process instances associated with the organisation.
    *
-   * @param organisation the organisation code identifying the organisation
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
    *
    * @return the summaries for the all the process instances associated with the organisation
-   *         identified by the specified organisation code
    *
    * @throws DAOException
    */
-  List<ProcessInstanceSummary> getProcessInstanceSummariesForOrganisation(String organisation)
+  List<ProcessInstanceSummary> getProcessInstanceSummariesForOrganisation(UUID organisationId)
     throws DAOException;
 
   /**
@@ -212,12 +209,12 @@ public interface IProcessDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
    *           instance
    *
-   * @return the summary for the process instance or <code>null</code> if the
-   *         process definition could not be found
+   * @return the summary for the process instance or <code>null</code> if the process definition
+   *         could not be found
    *
    * @throws DAOException
    */
-  ProcessInstanceSummary getProcessInstanceSummary(String id)
+  ProcessInstanceSummary getProcessInstanceSummary(UUID id)
     throws DAOException;
 
   /**
@@ -231,7 +228,7 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  boolean processDefinitionExists(String id, int version)
+  boolean processDefinitionExists(UUID id, int version)
     throws DAOException;
 
   /**
@@ -244,7 +241,7 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  boolean processInstanceExists(String id)
+  boolean processInstanceExists(UUID id)
     throws DAOException;
 
   /**
@@ -272,7 +269,7 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  void unlockProcessInstance(String id, ProcessInstance.Status status)
+  void unlockProcessInstance(UUID id, ProcessInstance.Status status)
     throws DAOException;
 
   /**
@@ -284,6 +281,6 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  void updateProcessInstanceData(String id, byte[] data)
+  void updateProcessInstanceData(UUID id, byte[] data)
     throws DAOException;
 }

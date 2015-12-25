@@ -40,7 +40,7 @@ public class ProcessDefinition
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the process definition.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The name of the process definition.
@@ -48,9 +48,10 @@ public class ProcessDefinition
   private String name;
 
   /**
-   * The organisation code identifying the organisation the process definition is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the process
+   * definition is associated with.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /**
    * The version of the process definition.
@@ -65,16 +66,16 @@ public class ProcessDefinition
   /**
    * Constructs a new <code>ProcessDefinition</code>.
    *
-   * @param organisation the organisation code identifying the organisation the process definition
-   *                     is associated with
-   * @param name         the name of the process definition
-   * @param data         the data for the process definition
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
+   * @param name           the name of the process definition
+   * @param data           the data for the process definition
    */
-  public ProcessDefinition(String organisation, String name, byte[] data)
+  public ProcessDefinition(UUID organisationId, String name, byte[] data)
   {
-    this.id = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID();
     this.version = 1;
-    this.organisation = organisation;
+    this.organisationId = organisationId;
     this.name = name;
     this.data = data;
   }
@@ -82,19 +83,19 @@ public class ProcessDefinition
   /**
    * Constructs a new <code>ProcessDefinition</code>.
    *
-   * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                     process definition
-   * @param version      the version of the process definition
-   * @param organisation the organisation code identifying the organisation the process definition
-   *                     is associated with
-   * @param name         the name of the process definition
-   * @param data         the data for the process definition
+   * @param id             the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       process definition
+   * @param version        the version of the process definition
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
+   * @param name           the name of the process definition
+   * @param data           the data for the process definition
    */
-  public ProcessDefinition(String id, int version, String organisation, String name, byte[] data)
+  public ProcessDefinition(UUID id, int version, UUID organisationId, String name, byte[] data)
   {
     this.id = id;
     this.version = version;
-    this.organisation = organisation;
+    this.organisationId = organisationId;
     this.name = name;
     this.data = data;
   }
@@ -116,7 +117,7 @@ public class ProcessDefinition
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
    *         definition
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -132,15 +133,15 @@ public class ProcessDefinition
   }
 
   /**
-   * Returns the organisation code identifying the organisation the process definition is associated
-   * with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * process definition is associated with.
    *
-   * @return the organisation code identifying the organisation the process definition is associated
-   *         with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   *         process definition is associated with
    */
-  public String getOrganisation()
+  public UUID getOrganisationId()
   {
-    return organisation;
+    return organisationId;
   }
 
   /**
@@ -169,7 +170,7 @@ public class ProcessDefinition
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
    *           definition
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -185,15 +186,15 @@ public class ProcessDefinition
   }
 
   /**
-   * Set the organisation code identifying the organisation the process definition is associated
-   * with.
+   * Set Universally Unique Identifier (UUID) used to uniquely identify the organisation the process
+   * definition is associated with.
    *
-   * @param organisation the organisation code identifying the organisation the process definition
-   *                     is associated with
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
    */
-  public void setOrganisation(String organisation)
+  public void setOrganisationId(UUID organisationId)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
   }
 
   /**
@@ -214,7 +215,7 @@ public class ProcessDefinition
   @Override
   public String toString()
   {
-    return "ProcessDefinition {" + "id=\"" + getId() + "\", " + "organisation=\""
-        + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
+    return "ProcessDefinition {" + "id=\"" + getId() + "\", " + "organisationId=\""
+        + getOrganisationId() + "\", " + "name=\"" + getName() + "\"}";
   }
 }

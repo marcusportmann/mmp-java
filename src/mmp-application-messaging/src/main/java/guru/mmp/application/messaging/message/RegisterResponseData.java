@@ -27,6 +27,8 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+import java.util.UUID;
+
 /**
  * The <code>RegisterResponseData</code> class manages the data for a
  * "Register Response" message.
@@ -56,7 +58,7 @@ public class RegisterResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Register Response" message.
    */
-  public static final String MESSAGE_TYPE = "aa08aac9-4d15-452f-b3f9-756641b71735";
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString("aa08aac9-4d15-452f-b3f9-756641b71735");
 
   /**
    * The error code indicating the result of processing the registration where a code of '0'
@@ -85,7 +87,7 @@ public class RegisterResponseData extends WbxmlMessageData
    */
   public RegisterResponseData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -97,7 +99,7 @@ public class RegisterResponseData extends WbxmlMessageData
    */
   public RegisterResponseData(EncryptionScheme userEncryptionScheme, byte[] userEncryptionKey)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = 0;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;
@@ -113,7 +115,7 @@ public class RegisterResponseData extends WbxmlMessageData
    */
   public RegisterResponseData(int errorCode, String errorMessage)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

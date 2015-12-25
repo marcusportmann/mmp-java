@@ -26,6 +26,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>GetCodeCategoryResponseData</code> class manages the data for a
  * "Get Code Category Response" message.
@@ -55,7 +59,8 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category Response" message.
    */
-  public static final String MESSAGE_TYPE = "0336b544-91e5-4eb9-81db-3dd94e116c92";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("0336b544-91e5-4eb9-81db-3dd94e116c92");
 
   /**
    * The code category.
@@ -78,7 +83,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    */
   public GetCodeCategoryResponseData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -88,7 +93,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    */
   public GetCodeCategoryResponseData(CodeCategoryData codeCategory)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.codeCategory = codeCategory;
   }
@@ -101,7 +106,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    */
   public GetCodeCategoryResponseData(int errorCode, String errorMessage)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

@@ -27,6 +27,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>AuthenticateRequestData</code> class manages the data for a
  * "Authenticate Request" message.
@@ -41,17 +45,14 @@ public class AuthenticateRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Authenticate Request" message.
    */
-  public static final String MESSAGE_TYPE = "d21fb54e-5c5b-49e8-881f-ce00c6ced1a3";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
   /**
-   * The device ID identifying the device.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * authentication request originated from.
    */
-  private String device;
-
-  /**
-   * The organisation code identifying the organisation associated with the message.
-   */
-  private String organisation;
+  private UUID deviceId;
 
   /**
    * The password used to authenticate the user.
@@ -73,26 +74,24 @@ public class AuthenticateRequestData extends WbxmlMessageData
    */
   public AuthenticateRequestData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
    * Constructs a new <code>AuthenticateRequestData</code>.
    *
    * @param user                      the username identifying the user associated with the message
-   * @param organisation              the organisation code identifying the organisation associated
-   *                                  with the message
    * @param password                  the password used to authenticate the user
-   * @param device                    the device ID identifying the device
+   * @param deviceId                  the Universally Unique Identifier (UUID) used to uniquely
+   *                                  identify the device the authentication request originated from
    * @param preferredEncryptionScheme the preferred encryption scheme for the user
    */
-  public AuthenticateRequestData(String user, String organisation, String password, String device,
+  public AuthenticateRequestData(String user, String password, UUID deviceId,
       EncryptionScheme preferredEncryptionScheme)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
-    this.device = device;
-    this.organisation = organisation;
+    this.deviceId = deviceId;
     this.password = password;
     this.preferredEncryptionScheme = preferredEncryptionScheme;
     this.user = user;
@@ -123,17 +122,14 @@ public class AuthenticateRequestData extends WbxmlMessageData
       return false;
     }
 
-    // TODO: Make PreferredEncryptionScheme mandatory -- MARCUS
     if ((!rootElement.hasChild("User")) || (!rootElement.hasChild("Password"))
         || (!rootElement.hasChild("Device"))
-        || (!rootElement.hasChild("PreferredEncryptionScheme"))
-        || (!rootElement.hasChild("Organisation")))
+        || (!rootElement.hasChild("PreferredEncryptionScheme")))
     {
       return false;
     }
 
-    this.device = rootElement.getChildText("Device");
-    this.organisation = rootElement.getChildText("Organisation");
+    this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
     this.password = rootElement.getChildText("Password");
 
     try
@@ -153,23 +149,15 @@ public class AuthenticateRequestData extends WbxmlMessageData
   }
 
   /**
-   * Returns the device ID identifying the device.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * authentication request originated from.
    *
-   * @return the device ID identifying the device
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   *         authentication request originated from
    */
-  public String getDevice()
+  public UUID getDeviceId()
   {
-    return device;
-  }
-
-  /**
-   * Returns the organisation code identifying the organisation associated with the message.
-   *
-   * @return the organisation code identifying the organisation associated with the message
-   */
-  public String getOrganisation()
-  {
-    return organisation;
+    return deviceId;
   }
 
   /**
@@ -203,24 +191,15 @@ public class AuthenticateRequestData extends WbxmlMessageData
   }
 
   /**
-   * Set the device ID identifying the device.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * authentication request originated from.
    *
-   * @param device the device ID identifying the device
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the authentication request originated from
    */
-  public void setDevice(String device)
+  public void setDevice(UUID deviceId)
   {
-    this.device = device;
-  }
-
-  /**
-   * Set the organisation code identifying the organisation associated with the message.
-   *
-   * @param organisation the organisation code identifying the organisation associated with the
-   *                     message
-   */
-  public void setOrganisation(String organisation)
-  {
-    this.organisation = organisation;
+    this.deviceId = deviceId;
   }
 
   /**
@@ -267,8 +246,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
   {
     Element rootElement = new Element("AuthenticateRequest");
 
-    rootElement.addContent(new Element("Device", StringUtil.notNull(device)));
-    rootElement.addContent(new Element("Organisation", StringUtil.notNull(organisation)));
+    rootElement.addContent(new Element("DeviceId", deviceId.toString()));
     rootElement.addContent(new Element("Password", StringUtil.notNull(password)));
     rootElement.addContent(new Element("PreferredEncryptionScheme",
         String.valueOf(preferredEncryptionScheme.getCode())));

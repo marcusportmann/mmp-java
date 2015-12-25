@@ -26,6 +26,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>GetCodeCategoryWithParametersResponseData</code> class manages the data for a
  * "Get Code Category With Parameters Response" message.
@@ -55,7 +59,8 @@ public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category With Parameters Response" message.
    */
-  public static final String MESSAGE_TYPE = "12757310-9eee-4a3a-970c-9b4ee0e1108e";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("12757310-9eee-4a3a-970c-9b4ee0e1108e");
 
   /**
    * The code category.
@@ -78,7 +83,7 @@ public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
    */
   public GetCodeCategoryWithParametersResponseData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -88,7 +93,7 @@ public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
    */
   public GetCodeCategoryWithParametersResponseData(CodeCategoryData codeCategory)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.codeCategory = codeCategory;
   }
@@ -101,7 +106,7 @@ public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
    */
   public GetCodeCategoryWithParametersResponseData(int errorCode, String errorMessage)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

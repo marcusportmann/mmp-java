@@ -74,7 +74,7 @@ public class AddReportDefinitionPage extends TemplateWebPage
       Form<ReportDefinition> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(new ReportDefinition())));
 
-      addForm.getModelObject().setId(UUID.randomUUID().toString());
+      addForm.getModelObject().setId(UUID.randomUUID());
 
       ReportDefinitionInputPanel reportDefinitionInputPanel =
         new ReportDefinitionInputPanel("reportDefinition", false);
@@ -97,7 +97,7 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
             WebSession session = getWebApplicationSession();
 
-            reportDefinition.setOrganisation(session.getOrganisation());
+            reportDefinition.setOrganisationId(session.getOrganisation().getId());
 
             fileUpload = reportDefinitionInputPanel.getFileUpload();
 

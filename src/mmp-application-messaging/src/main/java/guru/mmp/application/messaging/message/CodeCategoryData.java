@@ -24,12 +24,14 @@ import guru.mmp.common.util.ISO8601;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
+import java.util.UUID;
 
 /**
  * The <code>CodeCategoryData</code> class stores the information for a code category.
@@ -65,7 +67,7 @@ public class CodeCategoryData
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The date and time the code category was last updated.
@@ -127,7 +129,7 @@ public class CodeCategoryData
   {
     this.codeDataType =
       CodeDataType.fromCode(Integer.parseInt(element.getChildText("CodeDataType")));
-    this.id = element.getChildText("Id");
+    this.id = UUID.fromString(element.getChildText("Id"));
     this.name = element.getChildText("Name");
     this.description = element.getChildText("Description");
 
@@ -286,7 +288,7 @@ public class CodeCategoryData
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -356,7 +358,7 @@ public class CodeCategoryData
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -392,7 +394,7 @@ public class CodeCategoryData
 
     codeCategoryElement.addContent(new Element("CodeDataType",
         String.valueOf(codeDataType.getCode())));
-    codeCategoryElement.addContent(new Element("Id", StringUtil.notNull(id)));
+    codeCategoryElement.addContent(new Element("Id", id.toString()));
     codeCategoryElement.addContent(new Element("Name", StringUtil.notNull(name)));
     codeCategoryElement.addContent(new Element("Description", StringUtil.notNull(description)));
     codeCategoryElement.addContent(new Element("LastUpdated", (lastUpdated == null)

@@ -26,6 +26,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>CheckUserExistsResponseData</code> class manages the data for a
  * "Check User Exists Response" message.
@@ -55,7 +59,8 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Check User Exists Response" message.
    */
-  public static final String MESSAGE_TYPE = "a38bd55e-3470-46f1-a96a-a6b08a9adc63";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("a38bd55e-3470-46f1-a96a-a6b08a9adc63");
 
   /**
    * The error code;
@@ -79,7 +84,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    */
   public CheckUserExistsResponseData(boolean userExists)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.userExists = userExists;
     this.errorCode = ERROR_CODE_SUCCESS;
@@ -94,7 +99,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    */
   public CheckUserExistsResponseData(int errorCode, String errorMessage)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

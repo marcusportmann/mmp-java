@@ -25,6 +25,8 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 /**
@@ -41,7 +43,7 @@ public class DetachableReportDefinitionModel
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
-  private String id;
+  private UUID id;
 
   /* Reporting Service */
   @Inject
@@ -65,7 +67,7 @@ public class DetachableReportDefinitionModel
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition
    */
-  public DetachableReportDefinitionModel(String id)
+  public DetachableReportDefinitionModel(UUID id)
   {
     this.id = id;
   }

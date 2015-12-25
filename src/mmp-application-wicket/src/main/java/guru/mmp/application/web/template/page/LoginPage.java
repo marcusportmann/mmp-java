@@ -50,6 +50,7 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -159,21 +160,19 @@ public class LoginPage extends WebPage
             }
             else if (organisations.size() == 1)
             {
-              String organisation = organisations.get(0).getCode();
-
               List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
                 username);
               List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
                 username);
 
-              session.setOrganisation(organisation);
+              session.setOrganisation(organisations.get(0));
               session.setGroupNames(groupNames);
               session.setFunctionCodes(functionCodes);
 
               if (logger.isDebugEnabled())
               {
                 logger.debug("Successfully authenticated user (" + username
-                    + ") for organisation (" + organisation + ") with groups ("
+                    + ") for organisation (" + organisations.get(0).getId() + ") with groups ("
                     + StringUtil.delimit(groupNames, ",") + ") and function codes ("
                     + StringUtil.delimit(functionCodes, ",") + ")");
               }

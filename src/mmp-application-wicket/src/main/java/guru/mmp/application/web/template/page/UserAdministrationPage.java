@@ -288,7 +288,7 @@ public class UserAdministrationPage extends TemplateWebPage
     WebSession session = getWebApplicationSession();
 
     List<UserDirectory> allUserDirectories =
-      securityService.getUserDirectoriesForOrganisation(session.getOrganisationId());
+      securityService.getUserDirectoriesForOrganisation(session.getOrganisation().getId());
 
     List<UserDirectory> userDirectories = new ArrayList<>();
 

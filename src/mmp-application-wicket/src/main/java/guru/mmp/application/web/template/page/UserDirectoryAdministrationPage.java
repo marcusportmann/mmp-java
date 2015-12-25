@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -283,7 +284,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private long id;
+    private UUID id;
     private Label nameLabel;
 
     /**

@@ -72,7 +72,7 @@ public class AddCodeCategoryPage extends TemplateWebPage
       Form<CodeCategory> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(new CodeCategory())));
 
-      addForm.getModelObject().setId(UUID.randomUUID().toString());
+      addForm.getModelObject().setId(UUID.randomUUID());
 
       addForm.add(new CodeCategoryInputPanel("codeCategory", false));
 
@@ -92,7 +92,7 @@ public class AddCodeCategoryPage extends TemplateWebPage
 
             CodeCategory codeCategory = addForm.getModelObject();
 
-            codeCategory.setOrganisation(session.getOrganisation());
+            codeCategory.setOrganisationId(session.getOrganisation().getId());
             codeCategory.setUpdated(created);
 
             if (codeCategory.getCategoryType() != CodeCategoryType.LOCAL_CUSTOM)

@@ -22,9 +22,11 @@ import guru.mmp.application.codes.Code;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 
-//~--- JDK imports ------------------------------------------------------------
+import java.util.UUID;
 
 /**
  * The <code>CodeData</code> class stores the information for a code.
@@ -40,7 +42,7 @@ public class CodeData
    * The Universally Unique Identifier (UUID) used to uniquely identify the category the code is
    * associated with.
    */
-  private String categoryId;
+  private UUID categoryId;
 
   /**
    * The description for the code.
@@ -91,7 +93,7 @@ public class CodeData
     try
     {
       this.id = element.getChildText("Id");
-      this.categoryId = StringUtil.notNull(element.getChildText("CategoryId"));
+      this.categoryId = UUID.fromString(element.getChildText("CategoryId"));
       this.name = StringUtil.notNull(element.getChildText("Name"));
       this.description = StringUtil.notNull(element.getChildText("Description"));
       this.value = StringUtil.notNull(element.getChildText("Value"));
@@ -110,7 +112,7 @@ public class CodeData
    * @param code       the <code>guru.mmp.services.codes.ws.Code</code> instance containing the
    *                   code data
    */
-  public CodeData(String categoryId, guru.mmp.service.codes.ws.Code code)
+  public CodeData(UUID categoryId, guru.mmp.service.codes.ws.Code code)
   {
     this.id = code.getId();
     this.categoryId = categoryId;
@@ -126,7 +128,7 @@ public class CodeData
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the category the
    *         code is associated with
    */
-  public String getCategoryId()
+  public UUID getCategoryId()
   {
     return categoryId;
   }
@@ -178,7 +180,7 @@ public class CodeData
    * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                   category the code is associated with
    */
-  public void setCategoryId(String categoryId)
+  public void setCategoryId(UUID categoryId)
   {
     this.categoryId = categoryId;
   }
@@ -233,7 +235,7 @@ public class CodeData
     Element codeElement = new Element("Code");
 
     codeElement.addContent(new Element("Id", StringUtil.notNull(id)));
-    codeElement.addContent(new Element("CategoryId", StringUtil.notNull(categoryId)));
+    codeElement.addContent(new Element("CategoryId", categoryId.toString()));
     codeElement.addContent(new Element("Name", StringUtil.notNull(name)));
     codeElement.addContent(new Element("Description", StringUtil.notNull(description)));
     codeElement.addContent(new Element("Value", StringUtil.notNull(value)));

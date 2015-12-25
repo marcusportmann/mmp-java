@@ -26,6 +26,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>AnotherTestRequestData</code> class manages the data for a
  * "Another Test Request" message.
@@ -40,7 +44,8 @@ public class AnotherTestRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Another Test Request" message.
    */
-  public static final String MESSAGE_TYPE = "e9918051-8ebc-48f1-bad7-13c59b550e1a";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("e9918051-8ebc-48f1-bad7-13c59b550e1a");
 
   /**
    * The test data.
@@ -57,7 +62,7 @@ public class AnotherTestRequestData extends WbxmlMessageData
    */
   public AnotherTestRequestData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -67,7 +72,7 @@ public class AnotherTestRequestData extends WbxmlMessageData
    */
   public AnotherTestRequestData(String testValue)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.testValue = testValue;
     this.testData = new byte[0];
@@ -81,7 +86,7 @@ public class AnotherTestRequestData extends WbxmlMessageData
    */
   public AnotherTestRequestData(String testValue, byte[] testData)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.testValue = testValue;
     this.testData = testData;

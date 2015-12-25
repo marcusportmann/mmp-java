@@ -18,6 +18,7 @@ package guru.mmp.application.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.servlet.ViewReportParameters;
 
@@ -57,10 +58,9 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   private List<String> groupNames;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation for the
-   * user associated with the web session.
+   * The organisation for the user associated with the web session.
    */
-  private UUID organisationId;
+  private Organisation organisation;
 
   /** The Universally Unique Identifier (UUID) used to uniquely identify the user directory. */
   private UUID userDirectoryId;
@@ -126,15 +126,13 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   * for the user associated with the web session.
+   * Returns the organisation for the user associated with the web session.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *         for the user associated with the web session
+   * @return the organisation for the user associated with the web session
    */
-  public UUID getOrganisationId()
+  public Organisation getOrganisation()
   {
-    return organisationId;
+    return organisation;
   }
 
   /**
@@ -274,7 +272,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
     activeViewReportParameters = new ConcurrentHashMap<>();
     functionCodes = null;
     groupNames = null;
-    organisationId = null;
+    organisation = null;
     userProperties = null;
     userDirectoryId = null;
     username = null;
@@ -366,15 +364,13 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation for
-   * the user associated with the web session.
+   * The organisation for the user associated with the web session.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation for the user associated with the web session
+   * @param organisation the organisation for the user associated with the web session
    */
-  public void setOrganisation(UUID organisationId)
+  public void setOrganisation(Organisation organisation)
   {
-    this.organisationId = organisationId;
+    this.organisation = organisation;
   }
 
   /**

@@ -20,6 +20,8 @@ package guru.mmp.application.reporting;
 
 import java.io.Serializable;
 
+import java.util.UUID;
+
 /**
  * The <code>ReportDefinitionSummary</code> class holds the summary information for a report
  * definition.
@@ -34,7 +36,7 @@ public class ReportDefinitionSummary
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The name of the report definition.
@@ -42,23 +44,24 @@ public class ReportDefinitionSummary
   private String name;
 
   /**
-   * The organisation code identifying the organisation the report definition is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the report
+   * definition is associated with.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                     report definition
-   * @param organisation the organisation code identifying the organisation the report definition
-   *                     is associated with
-   * @param name         the name of the report definition
+   * @param id             the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       report definition
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the report definition is associated with
+   * @param name           the name of the report definition
    */
-  public ReportDefinitionSummary(String id, String organisation, String name)
+  public ReportDefinitionSummary(UUID id, UUID organisationId, String name)
   {
     this.id = id;
-    this.organisation = organisation;
+    this.organisationId = organisationId;
     this.name = name;
   }
 
@@ -75,7 +78,7 @@ public class ReportDefinitionSummary
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
    *         definition
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -91,15 +94,15 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Returns the organisation code identifying the organisation the report definition is associated
-   * with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   * the report definition is associated with.
    *
-   * @return the organisation code identifying the organisation the report definition is associated
-   *         with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   *         the report definition is associated with
    */
-  public String getOrganisation()
+  public UUID getOrganisationId()
   {
-    return organisation;
+    return organisationId;
   }
 
   /**
@@ -110,7 +113,7 @@ public class ReportDefinitionSummary
   @Override
   public String toString()
   {
-    return "ReportDefinitionSummary {" + "id=\"" + getId() + "\", " + "organisation=\""
-        + getOrganisation() + "\", " + "name=\"" + getName() + "\"}";
+    return "ReportDefinitionSummary {" + "id=\"" + getId() + "\", " + "organisationId=\""
+        + getOrganisationId() + "\", " + "name=\"" + getName() + "\"}";
   }
 }

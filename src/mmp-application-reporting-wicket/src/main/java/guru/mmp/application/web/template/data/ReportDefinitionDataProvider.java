@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -45,9 +46,10 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The organisation code identifying the organisation the report definitions are associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the report
+   * definitions are associated with.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /* Reporting Service */
   @Inject
@@ -56,12 +58,12 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
   /**
    * Constructs a new <code>ReportDefinitionDataProvider</code>.
    *
-   * @param organisation the organisation code identifying the organisation the report definitions
-   *                     are associated with
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the report definitions are associated with
    */
-  public ReportDefinitionDataProvider(String organisation)
+  public ReportDefinitionDataProvider(UUID organisationId)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
   }
 
   /**
@@ -93,7 +95,7 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
     try
     {
       List<ReportDefinition> allReportDefinitions =
-        reportingService.getReportDefinitionsForOrganisation(organisation);
+        reportingService.getReportDefinitionsForOrganisation(organisationId);
 
       List<ReportDefinition> reportDefinitions = new ArrayList<>();
 
@@ -138,7 +140,7 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
   {
     try
     {
-      return reportingService.getNumberOfReportDefinitionsForOrganisation(organisation);
+      return reportingService.getNumberOfReportDefinitionsForOrganisation(organisationId);
     }
     catch (Throwable e)
     {

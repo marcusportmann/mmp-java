@@ -26,6 +26,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>SubmitErrorReportResponseData</code> class manages the data for a
  * "Submit Error Report Response" message.
@@ -45,7 +49,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Submit Error Report Response" message.
    */
-  public static final String MESSAGE_TYPE = "8be50cfa-2fb1-4634-9bfa-d01e77eaf766";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
 
   /**
    * The error code indicating the result of processing the submitted error report where a code
@@ -69,7 +74,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    */
   public SubmitErrorReportResponseData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
   }
 
   /**
@@ -84,7 +89,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    */
   public SubmitErrorReportResponseData(int errorCode, String errorMessage, String errorReportId)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;

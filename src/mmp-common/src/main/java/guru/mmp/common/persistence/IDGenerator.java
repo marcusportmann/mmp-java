@@ -127,7 +127,7 @@ public class IDGenerator
    *
    * @return the next unique <code>long</code> ID for the entity with the specified type
    */
-  public long nextx(String type)
+  public long next(String type)
   {
     // Retrieve the Transaction Manager
     TransactionManager transactionManager = TransactionManager.getTransactionManager();

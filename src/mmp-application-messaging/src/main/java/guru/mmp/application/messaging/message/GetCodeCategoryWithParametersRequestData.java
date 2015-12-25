@@ -27,12 +27,9 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.*;
 
 /**
  * The <code>GetCodeCategoryWithParametersRequestData</code> class manages the data for a
@@ -48,7 +45,8 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category With Parameters Request" message.
    */
-  public static final String MESSAGE_TYPE = "3500a28a-6a2c-482b-b81f-a849c9c3ef79";
+  public static final UUID MESSAGE_TYPE_ID =
+    UUID.fromString("3500a28a-6a2c-482b-b81f-a849c9c3ef79");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category to
@@ -76,7 +74,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    */
   public GetCodeCategoryWithParametersRequestData()
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     parameters = new HashMap<>();
   }
@@ -94,7 +92,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
   public GetCodeCategoryWithParametersRequestData(String id, Date lastRetrieved,
       Map<String, String> parameters, boolean returnCodesIfCurrent)
   {
-    super(MESSAGE_TYPE, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
 
     this.id = id;
     this.lastRetrieved = lastRetrieved;

@@ -26,6 +26,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.OrganisationDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -36,12 +37,15 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>OrganisationAdministrationPage</code> class implements the
@@ -168,7 +172,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private String code;
+    private UUID id;
     private Label nameLabel;
 
     /**
@@ -194,7 +198,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteOrganisation(code);
+            securityService.deleteOrganisation(id);
 
             target.add(tableContainer);
 
@@ -203,7 +207,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the organisation (" + code + "): " + e.getMessage(), e);
+            logger.error("Failed to remove the organisation (" + id + "): " + e.getMessage(), e);
 
             OrganisationAdministrationPage.this.error("Failed to remove the organisation "
                 + nameLabel.getDefaultModelObjectAsString());
@@ -224,7 +228,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
      */
     public void show(AjaxRequestTarget target, Organisation organisation)
     {
-      code = organisation.getCode();
+      id = organisation.getId();
       nameLabel.setDefaultModelObject(organisation.getName());
 
       target.add(nameLabel);

@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -46,9 +47,10 @@ public class ProcessDefinitionSummaryDataProvider
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The organisation code identifying the organisation the process definitions are associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * process definition is associated with.
    */
-  private String organisation;
+  private UUID organisationId;
 
   /* Process Service */
   @Inject
@@ -57,12 +59,12 @@ public class ProcessDefinitionSummaryDataProvider
   /**
    * Constructs a new <code>ProcessDefinitionSummaryDataProvider</code>.
    *
-   * @param organisation the organisation code identifying the organisation the process definitions
-   *                     are associated with
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the process definition is associated with
    */
-  public ProcessDefinitionSummaryDataProvider(String organisation)
+  public ProcessDefinitionSummaryDataProvider(UUID organisationId)
   {
-    this.organisation = organisation;
+    this.organisationId = organisationId;
   }
 
   /**
@@ -95,7 +97,7 @@ public class ProcessDefinitionSummaryDataProvider
     try
     {
       List<ProcessDefinitionSummary> allProcessDefinitionSummaries =
-        processService.getCurrentProcessDefinitionSummariesForOrganisation(organisation);
+        processService.getCurrentProcessDefinitionSummariesForOrganisation(organisationId);
 
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
@@ -141,7 +143,7 @@ public class ProcessDefinitionSummaryDataProvider
   {
     try
     {
-      return processService.getNumberOfProcessDefinitionsForOrganisation(organisation);
+      return processService.getNumberOfProcessDefinitionsForOrganisation(organisationId);
     }
     catch (Throwable e)
     {
