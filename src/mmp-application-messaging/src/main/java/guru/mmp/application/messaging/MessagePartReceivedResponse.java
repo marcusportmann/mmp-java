@@ -22,10 +22,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagePartReceivedResponse</code> class represents the response to a request sent by
@@ -34,7 +34,6 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessagePartReceivedResponse
 {
   /**
@@ -151,8 +150,8 @@ public class MessagePartReceivedResponse
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartReceivedResponse")
-        && (rootElement.getAttributes().size() == 2)
-        && !((!rootElement.hasAttribute("code")) || (!rootElement.hasAttribute("detail")));
+        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code")
+        && rootElement.hasAttribute("detail");
   }
 
   /**

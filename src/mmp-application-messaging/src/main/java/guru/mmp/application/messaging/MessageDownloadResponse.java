@@ -23,12 +23,13 @@ import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 import guru.mmp.common.wbxml.Parser;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageDownloadResponse</code> class represents the response to a request sent by the
@@ -196,9 +197,8 @@ public class MessageDownloadResponse
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessageDownloadResponse")
-        && (rootElement.getAttributes().size() == 3)
-        && !((!rootElement.hasAttribute("numberOfMessages")) || (!rootElement.hasAttribute("code"))
-          || (!rootElement.hasAttribute("detail")));
+        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code")
+        && rootElement.hasAttribute("detail");
   }
 
   /**
@@ -313,9 +313,6 @@ public class MessageDownloadResponse
 
     buffer.append(" code=\"").append(code).append("\"");
     buffer.append(" detail=\"").append(detail).append("\"");
-    buffer.append(" numberOfMessages=\"").append((messages != null)
-        ? messages.size()
-        : 0).append("\"");
     buffer.append(">");
 
     if (messages != null)
@@ -342,9 +339,6 @@ public class MessageDownloadResponse
 
     rootElement.setAttribute("code", Long.toString(code));
     rootElement.setAttribute("detail", detail);
-    rootElement.setAttribute("numberOfMessages", String.valueOf((messages != null)
-        ? messages.size()
-        : 0));
 
     if (exception != null)
     {

@@ -18,8 +18,8 @@ package guru.mmp.application.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.util.ISO8601;
+import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
@@ -62,9 +62,9 @@ public class Message
 
   /**
    * The hash of the unencrypted data for the message.
-   *
-   * NOTE: If the message data is encrypted then this will be the hash of the unencrypted message
-   *       data and will be used to verify the message data has been decrypted successfully.
+   * <p/>
+   * If the message data is encrypted then this will be the hash of the unencrypted message data and
+   * will be used to verify the message data has been decrypted successfully.
    */
   private String dataHash;
 
@@ -83,11 +83,6 @@ public class Message
    * The base-64 encoded initialisation vector for the encryption scheme for the message.
    */
   private String encryptionIV;
-
-  /**
-   * The encryption scheme used to secure the message.
-   */
-  private EncryptionScheme encryptionScheme;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the message.
@@ -179,8 +174,6 @@ public class Message
     this.priority = Priority.fromCode(Integer.parseInt(rootElement.getAttributeValue("priority")));
     this.data = rootElement.getOpaque();
     this.dataHash = rootElement.getAttributeValue("dataHash");
-    this.encryptionScheme = EncryptionScheme.fromCode(
-      Integer.parseInt(rootElement.getAttributeValue("encryptionScheme")));
     this.encryptionIV = rootElement.getAttributeValue("encryptionIV");
 
     String createdAttributeValue = rootElement.getAttributeValue("created");
@@ -226,7 +219,6 @@ public class Message
     this.priority = priority;
     this.data = data;
     this.dataHash = "";
-    this.encryptionScheme = EncryptionScheme.NONE;
     this.encryptionIV = "";
     this.created = new Date();
     this.sendAttempts = 0;
@@ -237,23 +229,21 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param user             the username identifying the user associated with the message
-   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         organisation the message is associated with
-   * @param deviceId         the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         device the message originated from
-   * @param typeId           the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         type of message
-   * @param correlationId    the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority         the message priority
-   * @param data             the data for the message which may be encrypted
-   * @param dataHash         the hash of the unencrypted data for the message
-   * @param encryptionScheme the encryption scheme used to secure the message
-   * @param encryptionIV     the base-64 encoded initialisation vector for the encryption scheme
+   * @param user           the username identifying the user associated with the message
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the message is associated with
+   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       device the message originated from
+   * @param typeId         the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       type of message
+   * @param correlationId  the Universally Unique Identifier (UUID) used to correlate the message
+   * @param priority       the message priority
+   * @param data           the data for the message which may be encrypted
+   * @param dataHash       the hash of the unencrypted data for the message
+   * @param encryptionIV   the base-64 encoded initialisation vector for the encryption scheme
    */
   public Message(String user, UUID organisationId, UUID deviceId, UUID typeId, UUID correlationId,
-      Priority priority, byte[] data, String dataHash, EncryptionScheme encryptionScheme,
-      String encryptionIV)
+      Priority priority, byte[] data, String dataHash, String encryptionIV)
   {
     this.id = UUID.randomUUID();
     this.user = user;
@@ -271,7 +261,6 @@ public class Message
           + " blank data hash");
     }
 
-    this.encryptionScheme = encryptionScheme;
     this.encryptionIV = encryptionIV;
     this.created = new Date();
     this.sendAttempts = 0;
@@ -305,14 +294,12 @@ public class Message
    * @param lastProcessed    the date and time the last attempt was made to process the message
    * @param data             the data for the message which may be encrypted
    * @param dataHash         the hash of the unencrypted data for the message
-   * @param encryptionScheme the encryption scheme used to secure the message
    * @param encryptionIV     the base-64 encoded initialisation vector for the encryption scheme
    */
   public Message(UUID id, String user, UUID organisationId, UUID deviceId, UUID typeId,
       UUID correlationId, Priority priority, Status status, Date created, Date persisted,
       Date updated, int sendAttempts, int processAttempts, int downloadAttempts, String lockName,
-      Date lastProcessed, byte[] data, String dataHash, EncryptionScheme encryptionScheme,
-      String encryptionIV)
+      Date lastProcessed, byte[] data, String dataHash, String encryptionIV)
   {
     this.id = id;
     this.user = user;
@@ -332,7 +319,6 @@ public class Message
     this.lastProcessed = lastProcessed;
     this.data = data;
     this.dataHash = dataHash;
-    this.encryptionScheme = encryptionScheme;
     this.encryptionIV = encryptionIV;
   }
 
@@ -611,16 +597,6 @@ public class Message
   }
 
   /**
-   * Returns the encryption scheme used to secure the message.
-   *
-   * @return the encryption scheme used to secure the message
-   */
-  public EncryptionScheme getEncryptionScheme()
-  {
-    return encryptionScheme;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the message
@@ -756,7 +732,7 @@ public class Message
    */
   public boolean isEncrypted()
   {
-    return ((dataHash != null) && (dataHash.length() > 0));
+    return (!StringUtil.isNullOrEmpty(dataHash));
   }
 
   /**
@@ -842,16 +818,6 @@ public class Message
   public void setEncryptionIV(String encryptionIV)
   {
     this.encryptionIV = encryptionIV;
-  }
-
-  /**
-   * Set the encryption scheme used to secure the message.
-   *
-   * @param encryptionScheme the encryption scheme used to secure the message
-   */
-  public void setEncryptionScheme(EncryptionScheme encryptionScheme)
-  {
-    this.encryptionScheme = encryptionScheme;
   }
 
   /**
@@ -1054,7 +1020,6 @@ public class Message
     }
 
     buffer.append(" dataHash=\"").append(dataHash).append("\"");
-    buffer.append(" encryptionScheme=\"").append(encryptionScheme.toString()).append("\"");
     buffer.append(" encryptionIV=\"").append(encryptionIV).append("\"");
 
     if (isEncrypted())
@@ -1097,7 +1062,6 @@ public class Message
       rootElement.setAttribute("dataHash", "");
     }
 
-    rootElement.setAttribute("encryptionScheme", Integer.toString(encryptionScheme.getCode()));
     rootElement.setAttribute("encryptionIV", encryptionIV);
 
     rootElement.addContent(data);

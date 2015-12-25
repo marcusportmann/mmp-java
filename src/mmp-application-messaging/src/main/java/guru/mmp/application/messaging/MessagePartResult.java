@@ -22,10 +22,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <b>MessagePartResult</b> class stores the results of a message part being uploaded to
@@ -33,7 +33,6 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessagePartResult
 {
   /**
@@ -154,8 +153,8 @@ public class MessagePartResult
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartResult")
-        && (rootElement.getAttributes().size() == 2)
-        && !((!rootElement.hasAttribute("code")) || (!rootElement.hasAttribute("detail")));
+        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code")
+        && rootElement.hasAttribute("detail");
   }
 
   /**

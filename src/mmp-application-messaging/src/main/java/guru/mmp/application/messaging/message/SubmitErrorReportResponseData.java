@@ -67,14 +67,14 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * The Universally Unique Identifier (UUID) used to uniquely identify the error report that was
    * submitted for processing.
    */
-  public String errorReportId;
+  public UUID errorReportId;
 
   /**
    * Constructs a new <code>SubmitErrorReportResponseData</code>.
    */
   public SubmitErrorReportResponseData()
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
   }
 
   /**
@@ -87,9 +87,9 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      error report that was submitted for processing
    */
-  public SubmitErrorReportResponseData(int errorCode, String errorMessage, String errorReportId)
+  public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
@@ -99,17 +99,14 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   /**
    * Extract the message data from the WBXML data for a message.
    *
-   * @param messageType        the UUID identifying the type of message the message data is
-   *                           associated with
-   * @param messageTypeVersion the version of the message type the message data is associated with
-   * @param messageData        the WBXML data for the message
+   * @param messageData the WBXML data for the message
    *
-   * @return <code>true</code> if the message data was extracted successfully from the
-   *         WBXML data or <code>false</code> otherwise
+   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
+   *         <code>false</code> otherwise
    *
    * @throws MessagingException
    */
-  public boolean fromMessageData(String messageType, int messageTypeVersion, byte[] messageData)
+  public boolean fromMessageData(byte[] messageData)
     throws MessagingException
   {
     Document document = parseWBXML(messageData);
@@ -129,7 +126,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
 
     errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
     errorMessage = rootElement.getChildText("ErrorMessage");
-    errorReportId = rootElement.getChildText("ErrorReportId");
+    errorReportId = UUID.fromString(rootElement.getChildText("ErrorReportId"));
 
     return true;
   }
@@ -163,7 +160,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *         that was submitted for processing
    */
-  public String getErrorReportId()
+  public UUID getErrorReportId()
   {
     return errorReportId;
   }
@@ -199,7 +196,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      error report that was submitted for processing
    */
-  public void setErrorReportId(String errorReportId)
+  public void setErrorReportId(UUID errorReportId)
   {
     this.errorReportId = errorReportId;
   }
@@ -220,7 +217,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(new Element("ErrorMessage", StringUtil.notNull(errorMessage)));
-    rootElement.addContent(new Element("ErrorReportId", StringUtil.notNull(errorReportId)));
+    rootElement.addContent(new Element("ErrorReportId", errorReportId.toString()));
 
     Document document = new Document(rootElement);
 

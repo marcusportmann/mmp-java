@@ -22,6 +22,8 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+import java.util.UUID;
+
 /**
  * The <code>MessagePartDownloadRequest</code> class represents a request sent by the Messaging
  * Infrastructure on a mobile device to download the queued message parts for the device from the
@@ -32,9 +34,10 @@ import guru.mmp.common.wbxml.Encoder;
 public class MessagePartDownloadRequest
 {
   /**
-   * The device ID identifying the device the message part download request originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message part
+   * download request originated from.
    */
-  private String device;
+  private UUID deviceId;
 
   /**
    * Constructs a new <code>MessagePartDownloadRequest</code> and populates it from the information
@@ -46,18 +49,18 @@ public class MessagePartDownloadRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.device = rootElement.getAttributeValue("device");
+    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
   }
 
   /**
    * Constructs a new <code>MessagePartDownloadRequest</code>.
    *
-   * @param device the device ID identifying the device the message part download request
-   *               originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message part download request originated from
    */
-  public MessagePartDownloadRequest(String device)
+  public MessagePartDownloadRequest(UUID deviceId)
   {
-    this.device = device;
+    this.deviceId = deviceId;
   }
 
   /**
@@ -74,28 +77,31 @@ public class MessagePartDownloadRequest
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartDownloadRequest")
-        && (rootElement.getAttributes().size() == 1) && rootElement.hasAttribute("device");
+        && (rootElement.getAttributes().size() == 1) && rootElement.hasAttribute("deviceId");
   }
 
   /**
-   * Returns the device ID identifying the device the message part download request originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message part download request originated from.
    *
-   * @return the device ID identifying the device the message part download request originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   *         message part download request originated from
    */
-  public String getDevice()
+  public UUID getDeviceId()
   {
-    return device;
+    return deviceId;
   }
 
   /**
-   * Set the device ID identifying the device the message part download request originated from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * part download request originated from.
    *
-   * @param device the device ID identifying the device the message part download request
-   *               originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message part download request originated from
    */
-  public void setDevice(String device)
+  public void setDeviceId(UUID deviceId)
   {
-    this.device = device;
+    this.deviceId = deviceId;
   }
 
   /**
@@ -106,7 +112,7 @@ public class MessagePartDownloadRequest
   @Override
   public String toString()
   {
-    return "<MessagePartDownloadRequest" + " device=\"" + device + "\"" + "/>";
+    return "<MessagePartDownloadRequest deviceId=\"" + deviceId + "\"" + "/>";
   }
 
   /**
@@ -118,7 +124,7 @@ public class MessagePartDownloadRequest
   {
     Element rootElement = new Element("MessagePartDownloadRequest");
 
-    rootElement.setAttribute("device", device);
+    rootElement.setAttribute("deviceId", deviceId.toString());
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

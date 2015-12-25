@@ -84,7 +84,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    */
   public CheckUserExistsResponseData(boolean userExists)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.userExists = userExists;
     this.errorCode = ERROR_CODE_SUCCESS;
@@ -99,7 +99,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    */
   public CheckUserExistsResponseData(int errorCode, String errorMessage)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
@@ -108,17 +108,14 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
   /**
    * Extract the message data from the WBXML data for a message.
    *
-   * @param messageType        the UUID identifying the type of message the message data is
-   *                           associated with
-   * @param messageTypeVersion the version of the message type the message data is associated with
-   * @param messageData        the WBXML data for the message
+   * @param messageData the WBXML data for the message
    *
-   * @return <code>true</code> if the message data was extracted successfully from the
-   *         WBXML data or <code>false</code> otherwise
+   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
+   *         <code>false</code> otherwise
    *
    * @throws MessagingException
    */
-  public boolean fromMessageData(String messageType, int messageTypeVersion, byte[] messageData)
+  public boolean fromMessageData(byte[] messageData)
     throws MessagingException
   {
     Document document = parseWBXML(messageData);

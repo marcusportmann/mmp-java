@@ -99,12 +99,8 @@ public class SystemMessageHandler extends MessageHandler
   public Message processMessage(Message message)
     throws MessageHandlerException
   {
-    if (message.getTypeId().equals(RegisterRequestData.MESSAGE_TYPE_ID))
-    {
-      return processRegisterMessage(message);
-    }
     // Process a "Authenticate Request" message
-    else if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID))
+    if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID))
     {
       return processAuthenticateMessage(message);
     }
@@ -253,6 +249,10 @@ public class SystemMessageHandler extends MessageHandler
 
       try
       {
+        FIGURE OUT IF WE SHOUD
+
+
+
         securityService.authenticate(requestData.getUser(), requestData.getPassword());
 
         byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
@@ -453,7 +453,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 
@@ -463,7 +463,7 @@ public class SystemMessageHandler extends MessageHandler
     try
     {
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
+        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
 
       GetCodeCategoryWithParametersRequestData requestData =
         messageTranslator.fromMessage(requestMessage,
@@ -481,12 +481,12 @@ public class SystemMessageHandler extends MessageHandler
           // TODO: IMPLEMENT ORGANISATION SECURITY CHECK HERE -- MARCUS
           if (!StringUtil.isNullOrEmpty(codeCategory.getOrganisation()))
           {
-            if (!codeCategory.getOrganisation().equals(requestMessage.getOrganisation()))
+            if (!codeCategory.getOrganisationId().equals(requestMessage.getOrganisationId()))
             {
               logger.warn("The user (" + requestMessage.getUser()
-                  + ") associated with organisation (" + requestMessage.getOrganisation()
+                  + ") associated with organisation (" + requestMessage.getOrganisationId()
                   + ") is attempting to retrieve the code category (" + codeCategory.getId()
-                  + ") associated with organisation (" + codeCategory.getOrganisation() + ")");
+                  + ") associated with organisation (" + codeCategory.getOrganisationId() + ")");
             }
           }
 
@@ -564,7 +564,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 
@@ -574,7 +574,7 @@ public class SystemMessageHandler extends MessageHandler
     try
     {
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
+        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
 
       // MessagePartDownloadTestRequestData requestData =
       // messageTranslator.fromMessage(requestMessage, new MessagePartDownloadTestRequestData());
@@ -591,75 +591,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
-    }
-  }
-
-  private Message processRegisterMessage(Message requestMessage)
-    throws MessageHandlerException
-  {
-    try
-    {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
-
-      RegisterRequestData requestData = messageTranslator.fromMessage(requestMessage,
-        new RegisterRequestData());
-
-      // Authenticate the user
-      RegisterResponseData responseData;
-
-      try
-      {
-        securityService.authenticate(requestData.getUser(), requestData.getPassword());
-
-        byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
-            requestData.getPreferredEncryptionScheme(), requestData.getUser(),
-            requestData.getOrganisation(), requestData.getDevice());
-
-        if (logger.isDebugEnabled())
-        {
-          logger.debug("Generated the encryption key ("
-              + Base64.encodeBytes(userEncryptionKey, false) + ") using the encryption scheme ("
-              + requestData.getPreferredEncryptionScheme() + ") for the user ("
-              + requestData.getUser() + ") from the organisation (" + requestData.getOrganisation()
-              + ") using the device (" + requestData.getDevice() + ")");
-        }
-        else
-        {
-          logger.info("Generated the encryption key using the encryption scheme ("
-              + requestData.getPreferredEncryptionScheme() + ") for the user ("
-              + requestData.getUser() + ") from the organisation (" + requestData.getOrganisation()
-              + ") using the device (" + requestData.getDevice() + ")");
-        }
-
-        responseData = new RegisterResponseData(requestData.getPreferredEncryptionScheme(),
-            userEncryptionKey);
-      }
-      catch (AuthenticationFailedException | UserNotFoundException e)
-      {
-        responseData =
-          new RegisterResponseData(RegisterResponseData.ERROR_CODE_AUTHENTICATION_FAILED,
-            "Failed to authenticate the user (" + requestData.getUser() + ")");
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to authenticate the user (" + requestData.getUser() + ")", e);
-
-        responseData = new RegisterResponseData(RegisterResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to authenticate the user (" + requestData.getUser() + "): " + e.getMessage());
-      }
-
-      Message responseMessage = messageTranslator.toMessage(responseData);
-
-      responseMessage.setIsEncryptionDisabled(true);
-
-      return responseMessage;
-    }
-    catch (Throwable e)
-    {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 
@@ -669,7 +601,7 @@ public class SystemMessageHandler extends MessageHandler
     try
     {
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
+        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
 
       SubmitErrorReportRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new SubmitErrorReportRequestData());
@@ -677,7 +609,7 @@ public class SystemMessageHandler extends MessageHandler
       ErrorReport errorReport = new ErrorReport(requestData.getId(),
         requestData.getApplicationId(), requestData.getApplicationVersion(),
         requestData.getDescription(), requestData.getDetail(), requestData.getFeedback(),
-        requestData.getWhen(), requestData.getWho(), requestData.getDevice(),
+        requestData.getWhen(), requestData.getWho(), requestData.getDeviceId(),
         requestData.getData());
 
       messagingService.createErrorReport(errorReport);
@@ -690,7 +622,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 
@@ -702,7 +634,7 @@ public class SystemMessageHandler extends MessageHandler
       logger.info(requestMessage.toString());
 
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
+        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
 
       TestRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new TestRequestData());
@@ -718,7 +650,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 }

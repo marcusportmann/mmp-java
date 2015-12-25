@@ -21,7 +21,6 @@ package guru.mmp.application.messaging.message;
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
-import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
@@ -42,7 +41,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class AuthenticateResponseData extends WbxmlMessageData
 {
   /**
@@ -73,15 +71,16 @@ public class AuthenticateResponseData extends WbxmlMessageData
   private String errorMessage;
 
   /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * authenticated user is associated with.
+   */
+  private UUID organisationId;
+
+  /**
    * The encryption key used to encrypt data on the user's device and any data passed as part of a
    * message.
    */
   private byte[] userEncryptionKey;
-
-  /**
-   * The encryption scheme for the user's encryption key.
-   */
-  private EncryptionScheme userEncryptionScheme;
 
   /**
    * The properties returned for the authenticated user.
@@ -93,25 +92,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    */
   public AuthenticateResponseData()
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
-  }
-
-  /**
-   * Constructs a new <code>AuthenticateResponseData</code>.
-   *
-   * @param userEncryptionScheme the encryption scheme for the user's encryption key
-   * @param userEncryptionKey    the encryption key used to encrypt data on the user's device and
-   *                             any data passed as part of a message
-   */
-  public AuthenticateResponseData(EncryptionScheme userEncryptionScheme, byte[] userEncryptionKey)
-  {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
-
-    this.errorCode = 0;
-    this.errorMessage = ERROR_MESSAGE_SUCCESS;
-    this.userEncryptionScheme = userEncryptionScheme;
-    this.userEncryptionKey = userEncryptionKey;
-    this.userProperties = new HashMap<>();
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
   }
 
   /**
@@ -122,11 +103,11 @@ public class AuthenticateResponseData extends WbxmlMessageData
    */
   public AuthenticateResponseData(int errorCode, String errorMessage)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
-    this.userEncryptionScheme = EncryptionScheme.NONE;
+    this.organisationId = new UUID(0L, 0L);
     this.userEncryptionKey = new byte[0];
     this.userProperties = new HashMap<>();
   }
@@ -134,19 +115,33 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param userEncryptionScheme the encryption scheme for the user's encryption key
-   * @param userEncryptionKey    the encryption key used to encrypt data on the user's device and
-   *                             any data passed as part of a message
-   * @param userProperties       the properties returned for the authenticated user
+   * @param organisationId    the Universally Unique Identifier (UUID) used to uniquely identify
+   *                          the organisation the authenticated user is associated with
+   * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
+   *                          data passed as part of a message
    */
-  public AuthenticateResponseData(EncryptionScheme userEncryptionScheme, byte[] userEncryptionKey,
+  public AuthenticateResponseData(UUID organisationId, byte[] userEncryptionKey)
+  {
+    this(organisationId, userEncryptionKey, new HashMap<>());
+  }
+
+  /**
+   * Constructs a new <code>AuthenticateResponseData</code>.
+   *
+   * @param organisationId    the Universally Unique Identifier (UUID) used to uniquely identify
+   *                          the organisation the authenticated user is associated with
+   * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
+   *                          data passed as part of a message
+   * @param userProperties    the properties returned for the authenticated user
+   */
+  public AuthenticateResponseData(UUID organisationId, byte[] userEncryptionKey,
       Map<String, Object> userProperties)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.errorCode = 0;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;
-    this.userEncryptionScheme = userEncryptionScheme;
+    this.organisationId = organisationId;
     this.userEncryptionKey = userEncryptionKey;
     this.userProperties = userProperties;
   }
@@ -154,17 +149,14 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * Extract the message data from the WBXML data for a message.
    *
-   * @param messageType        the UUID identifying the type of message the message data is
-   *                           associated with
-   * @param messageTypeVersion the version of the message type the message data is associated with
-   * @param messageData        the WBXML data for the message
+   * @param messageData the WBXML data for the message
    *
-   * @return <code>true</code> if the message data was extracted successfully from the
-   *         WBXML data or <code>false</code> otherwise
+   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
+   *         <code>false</code> otherwise
    *
    * @throws MessagingException
    */
-  public boolean fromMessageData(String messageType, int messageTypeVersion, byte[] messageData)
+  public boolean fromMessageData(byte[] messageData)
     throws MessagingException
   {
     Document document = parseWBXML(messageData);
@@ -194,18 +186,9 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     this.errorMessage = rootElement.getChildText("ErrorMessage");
 
-    this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
+    this.organisationId = UUID.fromString(rootElement.getChildText("OrganisationId"));
 
-    try
-    {
-      this.userEncryptionScheme = EncryptionScheme.fromCode(
-        Integer.parseInt(rootElement.getChildText("UserEncryptionScheme")));
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingException("Failed to retrieve the user encryption scheme from the"
-          + " message data", e);
-    }
+    this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
 
     this.userProperties = new HashMap<>();
 
@@ -265,6 +248,18 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   * the authenticated user is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   *         the authenticated user is associated with
+   */
+  public UUID getOrganisationId()
+  {
+    return organisationId;
+  }
+
+  /**
    * Returns the encryption key used to encrypt data on the user's device and any data passed
    * as part of a message.
    *
@@ -274,16 +269,6 @@ public class AuthenticateResponseData extends WbxmlMessageData
   public byte[] getUserEncryptionKey()
   {
     return userEncryptionKey;
-  }
-
-  /**
-   * Returns the encryption scheme for the user's encryption key.
-   *
-   * @return the encryption scheme for the user's encryption key
-   */
-  public EncryptionScheme getUserEncryptionScheme()
-  {
-    return userEncryptionScheme;
   }
 
   /**
@@ -320,6 +305,18 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * authenticated user is associated with.
+   *
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the authenticated user is associated with
+   */
+  public void setOrganisationId(UUID organisationId)
+  {
+    this.organisationId = organisationId;
+  }
+
+  /**
    * Set the encryption key used to encrypt data on the user's device and any data passed as
    * part of a message.
    *
@@ -329,16 +326,6 @@ public class AuthenticateResponseData extends WbxmlMessageData
   public void setUserEncryptionKey(byte[] userEncryptionKey)
   {
     this.userEncryptionKey = userEncryptionKey;
-  }
-
-  /**
-   * Set the encryption scheme for the user's encryption key.
-   *
-   * @param userEncryptionScheme the encryption scheme for the user's encryption key
-   */
-  public void setUserEncryptionScheme(EncryptionScheme userEncryptionScheme)
-  {
-    this.userEncryptionScheme = userEncryptionScheme;
   }
 
   /**
@@ -367,9 +354,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(new Element("ErrorMessage", StringUtil.notNull(errorMessage)));
+    rootElement.addContent(new Element("OrganisationId", organisationId.toString()));
     rootElement.addContent(new Element("UserEncryptionKey", userEncryptionKey));
-    rootElement.addContent(new Element("UserEncryptionScheme",
-        String.valueOf(userEncryptionScheme.getCode())));
 
     if ((userProperties != null) && (userProperties.size() > 0))
     {

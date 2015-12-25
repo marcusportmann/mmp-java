@@ -19,27 +19,27 @@ package guru.mmp.application.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.crypto.CryptoUtils;
-import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.security.MessageDigest;
+
+import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.MessageDigest;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageTranslator</code> class provides the facilities to create Messaging
- * Infrastructure messages containing WBXML-based or XML-based message data. It also provides
- * facilities to retrieve the WBXML-based or XML-based message data from a Messaging
- * Infrastructure message.
+ * Infrastructure messages containing WBXML-based message data. It also provides facilities to
+ * retrieve the WBXML-based message data from a Messaging Infrastructure message.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessageTranslator
 {
   private static ThreadLocal<MessageDigest> threadLocalMessageDigest =
@@ -50,21 +50,20 @@ public class MessageTranslator
     {
       try
       {
-        return MessageDigest.getInstance("SHA-1");
+        return MessageDigest.getInstance("SHA-256");
       }
       catch (Throwable e)
       {
-        throw new RuntimeException("Failed to initialise the SHA-1 message digest", e);
+        throw new RuntimeException("Failed to initialise the SHA-256 message digest", e);
       }
-
     }
-
   };
 
   /**
-   * The device ID identifying the device the message originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * originated from.
    */
-  private String device;
+  private UUID deviceId;
 
   /**
    * The encryption key used to encrypt or decrypt the message data.
@@ -72,14 +71,10 @@ public class MessageTranslator
   private byte[] encryptionKey;
 
   /**
-   * The encryption scheme used to encrypt or decrypt the message data.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
+   * message is associated with.
    */
-  private EncryptionScheme encryptionScheme;
-
-  /**
-   * The organisation code identifying the organisation associated with the message.
-   */
-  private String organisation;
+  private UUID organisationId;
 
   /**
    * The username uniquely identifying the user responsible for the message.
@@ -89,54 +84,50 @@ public class MessageTranslator
   /**
    * Constructs a new <code>MessageTranslator</code>.
    *
-   * @param user         the username uniquely identifying the user responsible for the message
-   * @param organisation the organisation code identifying the organisation associated with the
-   *                     message
-   * @param device       the device ID identifying the device the message originated from
+   * @param user           the username uniquely identifying the user responsible for the message
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the message is associated with
+   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       device the message originated from
    */
-  public MessageTranslator(String user, String organisation, String device)
+  public MessageTranslator(String user, UUID organisationId, UUID deviceId)
   {
     this.user = user;
-    this.organisation = organisation;
-    this.device = device;
-    this.encryptionScheme = EncryptionScheme.NONE;
+    this.organisationId = organisationId;
+    this.deviceId = deviceId;
     this.encryptionKey = null;
   }
 
   /**
    * Constructs a new <code>MessageTranslator</code>.
    *
-   * @param user             the username uniquely identifying the user responsible for the message
-   * @param organisation     the organisation code identifying the organisation associated with the
-   *                         message
-   * @param device           the device ID identifying the device the message originated from
-   * @param encryptionScheme the encryption scheme used to encrypt or decrypt the message data
-   * @param encryptionKey    the key used to encrypt or decrypt the message data
+   * @param user           the username uniquely identifying the user responsible for the message
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation the message is associated with
+   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       device the message originated from
+   * @param encryptionKey  the key used to encrypt or decrypt the message data
    */
-  public MessageTranslator(String user, String organisation, String device,
-      EncryptionScheme encryptionScheme, byte[] encryptionKey)
+  public MessageTranslator(String user, UUID organisationId, UUID deviceId, byte[] encryptionKey)
   {
     this.user = user;
-    this.organisation = organisation;
-    this.device = device;
-    this.encryptionScheme = encryptionScheme;
+    this.organisationId = organisationId;
+    this.deviceId = deviceId;
     this.encryptionKey = encryptionKey;
   }
 
   /**
    * Decrypt the message data.
    *
-   * @param encryptionScheme the encryption scheme used to decrypt the message data
-   * @param encryptionKey    the encryption key to use to decrypt the message data
-   * @param encryptionIV     the encryption initialisation vector
-   * @param data             the message data to decrypt
+   * @param encryptionKey the encryption key to use to decrypt the message data
+   * @param encryptionIV  the encryption initialisation vector
+   * @param data          the message data to decrypt
    *
    * @return the decrypted message data
    *
    * @throws MessagingException
    */
-  public static byte[] decryptMessageData(EncryptionScheme encryptionScheme, byte[] encryptionKey,
-      byte[] encryptionIV, byte[] data)
+  public static byte[] decryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
     throws MessagingException
   {
     if ((encryptionKey == null) || (encryptionKey.length == 0))
@@ -146,21 +137,13 @@ public class MessageTranslator
 
     try
     {
-      if (encryptionScheme == EncryptionScheme.AES_CFB)
-      {
-        SecretKey secretKey = new SecretKeySpec(encryptionKey, CryptoUtils.AES_KEY_SPEC);
-        IvParameterSpec iv = new IvParameterSpec(encryptionIV);
-        Cipher cipher = Cipher.getInstance(CryptoUtils.AES_TRANSFORMATION_NAME);
+      SecretKey secretKey = new SecretKeySpec(encryptionKey, CryptoUtils.AES_KEY_SPEC);
+      IvParameterSpec iv = new IvParameterSpec(encryptionIV);
+      Cipher cipher = Cipher.getInstance(CryptoUtils.AES_TRANSFORMATION_NAME);
 
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
+      cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
 
-        return cipher.doFinal(data);
-      }
-      else
-      {
-        throw new MessagingException("Unsupported encryption scheme (" + encryptionScheme.getName()
-            + ")");
-      }
+      return cipher.doFinal(data);
     }
     catch (Throwable e)
     {
@@ -171,17 +154,15 @@ public class MessageTranslator
   /**
    * Encrypt the message data.
    *
-   * @param encryptionScheme the encryption scheme used to encrypt the message data
-   * @param encryptionKey    the encryption key to use to encrypt the message data
-   * @param encryptionIV     the encryption initialisation vector
-   * @param data             the message data to encrypt
+   * @param encryptionKey the encryption key to use to encrypt the message data
+   * @param encryptionIV  the encryption initialisation vector
+   * @param data          the message data to encrypt
    *
    * @return the encrypted message data
    *
    * @throws MessagingException
    */
-  public static byte[] encryptMessageData(EncryptionScheme encryptionScheme, byte[] encryptionKey,
-      byte[] encryptionIV, byte[] data)
+  public static byte[] encryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
     throws MessagingException
 
   {
@@ -192,21 +173,13 @@ public class MessageTranslator
 
     try
     {
-      if (encryptionScheme == EncryptionScheme.AES_CFB)
-      {
-        SecretKey secretKey = new SecretKeySpec(encryptionKey, CryptoUtils.AES_KEY_SPEC);
-        IvParameterSpec iv = new IvParameterSpec(encryptionIV);
-        Cipher cipher = Cipher.getInstance(CryptoUtils.AES_TRANSFORMATION_NAME);
+      SecretKey secretKey = new SecretKeySpec(encryptionKey, CryptoUtils.AES_KEY_SPEC);
+      IvParameterSpec iv = new IvParameterSpec(encryptionIV);
+      Cipher cipher = Cipher.getInstance(CryptoUtils.AES_TRANSFORMATION_NAME);
 
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
+      cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
 
-        return cipher.doFinal(data);
-      }
-      else
-      {
-        throw new MessagingException("Unsupported encryption scheme (" + encryptionScheme.getName()
-            + ")");
-      }
+      return cipher.doFinal(data);
     }
     catch (Throwable e)
     {
@@ -233,12 +206,11 @@ public class MessageTranslator
     // Decrypt the message if required
     if (message.isEncrypted())
     {
-      data = decryptMessageData(encryptionScheme, encryptionKey,
-          StringUtil.isNullOrEmpty(message.getEncryptionIV())
+      data = decryptMessageData(encryptionKey, StringUtil.isNullOrEmpty(message.getEncryptionIV())
           ? new byte[0]
           : Base64.decode(message.getEncryptionIV()), message.getData());
 
-      // Retrieve the SHA-1 hash of the unencrypted message data
+      // Retrieve the SHA-256 hash of the unencrypted message data
       String dataHash = getMessageDataHash(data);
 
       if (!message.getDataHash().equals(dataHash))
@@ -250,18 +222,18 @@ public class MessageTranslator
     }
 
     // Check that the message type for the message data and the specified message match
-    if (!messageData.getMessageType().equals(message.getType()))
+    if (!messageData.getMessageTypeId().equals(message.getTypeId()))
     {
-      throw new MessagingException("The message type for the message (" + message.getType()
+      throw new MessagingException("The message type for the message (" + message.getTypeId()
           + ") does not match the message type for the message data ("
-          + messageData.getMessageType() + ")");
+          + messageData.getMessageTypeId() + ")");
     }
 
     /*
      * Populate the message data instance with the information contained in the WBXML data for the
      * message.
      */
-    if (messageData.fromMessageData(message.getType(), message.getTypeVersion(), data))
+    if (messageData.fromMessageData(data))
     {
       return messageData;
     }
@@ -270,26 +242,6 @@ public class MessageTranslator
       throw new MessagingException("Failed to populate the instance of the message data class ("
           + messageData.getClass().getName() + ") from the WBXML data for the message");
     }
-  }
-
-  /**
-   * Returns the encryption scheme used to encrypt or decrypt the message data.
-   *
-   * @return the encryption scheme used to encrypt or decrypt the message data
-   */
-  public EncryptionScheme getEncryptionScheme()
-  {
-    return encryptionScheme;
-  }
-
-  /**
-   * Set the encryption scheme used to encrypt or decrypt the message data.
-   *
-   * @param encryptionScheme the encryption scheme used to encrypt or decrypt the message data
-   */
-  public void setEncryptionScheme(EncryptionScheme encryptionScheme)
-  {
-    this.encryptionScheme = encryptionScheme;
   }
 
   /**
@@ -304,7 +256,7 @@ public class MessageTranslator
   public Message toMessage(WbxmlMessageData messageData)
     throws MessagingException
   {
-    return toMessage(messageData, "");
+    return toMessage(messageData, new UUID(0L, 0L));
   }
 
   /**
@@ -317,28 +269,25 @@ public class MessageTranslator
    *
    * @throws MessagingException
    */
-  public Message toMessage(WbxmlMessageData messageData, String correlationId)
+  public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
     throws MessagingException
   {
     if (StringUtil.isNullOrEmpty(user))
     {
       throw new MessagingException("Failed to create the message with type ("
-          + messageData.getMessageType() + ") and version (" + messageData.getMessageTypeVersion()
-          + "): A user has not been specified");
+          + messageData.getMessageTypeId() + "): A user has not been specified");
     }
 
-    if (StringUtil.isNullOrEmpty(organisation))
+    if (organisationId == null)
     {
       throw new MessagingException("Failed to create the message with type ("
-          + messageData.getMessageType() + ") and version (" + messageData.getMessageTypeVersion()
-          + "): An organisation has not been specified");
+          + messageData.getMessageTypeId() + "): An organisation has not been specified");
     }
 
-    if (StringUtil.isNullOrEmpty(device))
+    if (deviceId == null)
     {
       throw new MessagingException("Failed to create the message with type ("
-          + messageData.getMessageType() + ") and version (" + messageData.getMessageTypeVersion()
-          + "): A device ID has not been specified");
+          + messageData.getMessageTypeId() + "): A device ID has not been specified");
     }
 
     byte[] data = messageData.toMessageData();
@@ -346,38 +295,32 @@ public class MessageTranslator
     // Encrypt the message data
     if (encryptionKey != null)
     {
-      // Retrieve the SHA-1 hash of the unencrypted message data
+      // Retrieve the SHA-256 hash of the unencrypted message data
       String dataHash = getMessageDataHash(data);
 
-      byte[] encryptionIV = new byte[0];
+      byte[] encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
 
-      if (encryptionScheme == EncryptionScheme.AES_CFB)
-      {
-        encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
-      }
+      data = encryptMessageData(encryptionKey, encryptionIV, data);
 
-      data = encryptMessageData(encryptionScheme, encryptionKey, encryptionIV, data);
-
-      return new Message(user, organisation, device, messageData.getMessageType(),
-          messageData.getMessageTypeVersion(), correlationId, messageData.getMessageTypePriority(),
-          data, dataHash, encryptionScheme, (encryptionIV.length == 0)
+      return new Message(user, organisationId, deviceId, messageData.getMessageTypeId(),
+          correlationId, messageData.getMessageTypePriority(), data, dataHash,
+          (encryptionIV.length == 0)
           ? ""
           : Base64.encodeBytes(encryptionIV));
     }
     else
     {
-      return new Message(user, organisation, device, messageData.getMessageType(),
-          messageData.getMessageTypeVersion(), correlationId, messageData.getMessageTypePriority(),
-          data);
+      return new Message(user, organisationId, deviceId, messageData.getMessageTypeId(),
+          correlationId, messageData.getMessageTypePriority(), data);
     }
   }
 
   /**
-   * Generate the SHA-1 hash for the message data.
+   * Generate the SHA-256 hash for the message data.
    *
-   * @param data the message data to return the SHA-1 hash for
+   * @param data the message data to return the SHA-256 hash for
    *
-   * @return the SHA-1 hash for the message data
+   * @return the SHA-256 hash for the message data
    *
    * @throws MessagingException
    */
@@ -390,7 +333,7 @@ public class MessageTranslator
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to generate the SHA-1 hash for the message data", e);
+      throw new MessagingException("Failed to generate the SHA-256 hash for the message data", e);
     }
   }
 }

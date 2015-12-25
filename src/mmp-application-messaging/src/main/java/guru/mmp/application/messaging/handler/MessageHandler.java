@@ -20,6 +20,10 @@ package guru.mmp.application.messaging.handler;
 
 import guru.mmp.application.messaging.Message;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>MessageHandler</code> class provides the base class that all message handlers should
  * be derived from.
@@ -89,22 +93,22 @@ public abstract class MessageHandler
    */
   public boolean supportsAsynchronousProcessing(Message message)
   {
-    return supportsAsynchronousProcessing(message.getType(), message.getTypeVersion());
+    return supportsAsynchronousProcessing(message.getTypeId());
   }
 
   /**
    * Returns <code>true</code> if the message handler is able to process a message with the
-   * specified type and type version asynchronously or <code>false</code> otherwise.
+   * specified type asynchronously or <code>false</code> otherwise.
    *
-   * @param messageType        the message type
-   * @param messageTypeVersion the version of the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler is able to process a message with the
-   *         specified type and type version asynchronously or <code>false</code> otherwise
+   *         specified type asynchronously or <code>false</code> otherwise
    */
-  public boolean supportsAsynchronousProcessing(String messageType, int messageTypeVersion)
+  public boolean supportsAsynchronousProcessing(UUID messageTypeId)
   {
-    return messageHandlerConfig.supportsAsynchronousProcessing(messageType, messageTypeVersion);
+    return messageHandlerConfig.supportsAsynchronousProcessing(messageTypeId);
   }
 
   /**
@@ -118,21 +122,21 @@ public abstract class MessageHandler
    */
   public boolean supportsSynchronousProcessing(Message message)
   {
-    return supportsSynchronousProcessing(message.getType(), message.getTypeVersion());
+    return supportsSynchronousProcessing(message.getTypeId());
   }
 
   /**
    * Returns <code>true</code> if the message handler is able to process a message with the
-   * specified type and type version synchronously or <code>false</code> otherwise.
+   * specified type synchronously or <code>false</code> otherwise.
    *
-   * @param messageType        the message type
-   * @param messageTypeVersion the version of the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler is able to process a message with the
-   *         specified type and type version synchronously or <code>false</code> otherwise
+   *         specified type synchronously or <code>false</code> otherwise
    */
-  public boolean supportsSynchronousProcessing(String messageType, int messageTypeVersion)
+  public boolean supportsSynchronousProcessing(UUID messageTypeId)
   {
-    return messageHandlerConfig.supportsSynchronousProcessing(messageType, messageTypeVersion);
+    return messageHandlerConfig.supportsSynchronousProcessing(messageTypeId);
   }
 }

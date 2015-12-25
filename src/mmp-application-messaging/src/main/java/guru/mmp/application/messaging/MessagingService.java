@@ -25,7 +25,6 @@ import guru.mmp.application.messaging.handler.MessageHandlerConfig;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.crypto.CryptoUtils;
-import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.DtdJarResolver;
@@ -247,8 +246,8 @@ public class MessagingService
     }
 
     // TODO: Cache this key...
-    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getEncryptionScheme(),
-      message.getUser(), message.getOrganisationId(), message.getDeviceId());
+    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getUser(),
+      message.getOrganisationId(), message.getDeviceId());
 
     /*
      * if (logger.isDebugEnabled())
@@ -262,10 +261,10 @@ public class MessagingService
     try
     {
       // Decrypt the message data
-      byte[] decryptedData = MessageTranslator.decryptMessageData(message.getEncryptionScheme(),
-        userEncryptionKey, StringUtil.isNullOrEmpty(message.getEncryptionIV())
-          ? new byte[0]
-          : Base64.decode(message.getEncryptionIV()), message.getData());
+      byte[] decryptedData = MessageTranslator.decryptMessageData(userEncryptionKey,
+        StringUtil.isNullOrEmpty(message.getEncryptionIV())
+        ? new byte[0]
+        : Base64.decode(message.getEncryptionIV()), message.getData());
 
       // Verify the data hash for the unencrypted data
       MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
@@ -279,10 +278,9 @@ public class MessagingService
         logger.warn("Data hash verification failed for the message (" + message.getId()
             + ") from the user (" + message.getUser() + ") and device (" + message.getDeviceId()
             + "). " + message.getData().length + " (" + decryptedData.length
-            + ") bytes of message data was encrypted using the encryption scheme ("
-            + message.getEncryptionScheme() + ") and encryption IV (" + message.getEncryptionIV()
-            + "). Expected data hash (" + message.getDataHash() + ") but got (" + messageChecksum
-            + ")");
+            + ") bytes of message data was encrypted using the encryption IV ("
+            + message.getEncryptionIV() + "). Expected data hash (" + message.getDataHash()
+            + ") but got (" + messageChecksum + ")");
 
         return false;
       }
@@ -290,7 +288,6 @@ public class MessagingService
       {
         message.setData(decryptedData);
         message.setDataHash("");
-        message.setEncryptionScheme(EncryptionScheme.NONE);
         message.setEncryptionIV("");
 
         return true;
@@ -367,42 +364,33 @@ public class MessagingService
   /**
    * Derive the user-device encryption key.
    *
-   * @param encryptionScheme the encryption scheme for the encryption key
-   * @param username         the username uniquely identifying the user e.g. test1
-   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         organisation
-   * @param deviceId         the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         device
+   * @param username       the username uniquely identifying the user e.g. test1
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
+   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       device
    *
    * @return the user-device encryption key
    *
    * @throws MessagingException
    */
-  public byte[] deriveUserDeviceEncryptionKey(EncryptionScheme encryptionScheme, String username,
-      UUID organisationId, UUID deviceId)
+  public byte[] deriveUserDeviceEncryptionKey(String username, UUID organisationId, UUID deviceId)
     throws MessagingException
   {
     try
     {
       String password = deviceId.toString() + username.toLowerCase() + organisationId.toString();
 
-      if (encryptionScheme == EncryptionScheme.AES_CFB)
-      {
-        byte[] key = CryptoUtils.passwordToAESKey(password);
+      byte[] key = CryptoUtils.passwordToAESKey(password);
 
-        SecretKey secretKey = new SecretKeySpec(aesEncryptionMasterKey, CryptoUtils.AES_KEY_SPEC);
-        IvParameterSpec iv =
-          new IvParameterSpec(AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV);
-        Cipher cipher = Cipher.getInstance("AES/CFB/NoPadding");
+      SecretKey secretKey = new SecretKeySpec(aesEncryptionMasterKey, CryptoUtils.AES_KEY_SPEC);
+      IvParameterSpec iv =
+        new IvParameterSpec(AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV);
+      Cipher cipher = Cipher.getInstance("AES/CFB/NoPadding");
 
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
+      cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
 
-        return cipher.doFinal(key);
-      }
-      else
-      {
-        throw new MessagingException("Unsupported encryption scheme (" + encryptionScheme + ")");
-      }
+      return cipher.doFinal(key);
     }
     catch (Throwable e)
     {
@@ -414,15 +402,14 @@ public class MessagingService
   /**
    * Encrypt the message.
    *
-   * @param encryptionScheme the encryption scheme to use to encrypt the message
-   * @param message          the message to encrypt
+   * @param message the message to encrypt
    *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
    *         otherwise
    *
    * @throws MessagingException
    */
-  public boolean encryptMessage(EncryptionScheme encryptionScheme, Message message)
+  public boolean encryptMessage(Message message)
     throws MessagingException
   {
     // If the message is already encrypted then stop here
@@ -432,7 +419,7 @@ public class MessagingService
     }
 
     // TODO: Cache this key...
-    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(encryptionScheme, message.getUser(),
+    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getUser(),
       message.getOrganisationId(), message.getDeviceId());
 
     /*
@@ -446,16 +433,11 @@ public class MessagingService
     // Encrypt the message
     try
     {
-      byte[] encryptionIV = new byte[0];
-
-      if (encryptionScheme == EncryptionScheme.AES_CFB)
-      {
-        encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
-      }
+      byte[] encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
 
       // Encrypt the message data
-      byte[] encryptedData = MessageTranslator.encryptMessageData(encryptionScheme,
-        userEncryptionKey, encryptionIV, message.getData());
+      byte[] encryptedData = MessageTranslator.encryptMessageData(userEncryptionKey, encryptionIV,
+        message.getData());
 
       // Generate the hash for the unencrypted data
       MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
@@ -466,7 +448,6 @@ public class MessagingService
 
       message.setDataHash(messageChecksum);
       message.setData(encryptedData);
-      message.setEncryptionScheme(encryptionScheme);
       message.setEncryptionIV((encryptionIV.length == 0)
           ? ""
           : Base64.encodeBytes(encryptionIV));
@@ -958,8 +939,8 @@ public class MessagingService
           MessagePart messagePart = new MessagePart(i + 1, numberOfParts, message.getId(),
             message.getUser(), message.getOrganisationId(), message.getDeviceId(),
             message.getTypeId(), message.getCorrelationId(), message.getPriority(),
-            message.getCreated(), message.getDataHash(), message.getEncryptionScheme(),
-            message.getEncryptionIV(), messageChecksum, messagePartData);
+            message.getCreated(), message.getDataHash(), message.getEncryptionIV(),
+            messageChecksum, messagePartData);
 
           messagePart.setStatus(Status.QUEUED_FOR_DOWNLOAD);
 
@@ -1142,8 +1123,6 @@ public class MessagingService
                   + messagePart.getMessageOrganisationId());
               invalidMessageInfoWriter.println("Correlation ID: "
                   + messagePart.getMessageCorrelationId());
-              invalidMessageInfoWriter.println("Encryption Scheme: "
-                  + messagePart.getMessageEncryptionScheme());
               invalidMessageInfoWriter.println("Data Hash: " + messagePart.getMessageDataHash());
               invalidMessageInfoWriter.println("Checksum: " + messagePart.getMessageChecksum());
               invalidMessageInfoWriter.println("Parts: " + messageParts.size());
@@ -1187,8 +1166,7 @@ public class MessagingService
           messagePart.getMessageTypeId(), messagePart.getMessageCorrelationId(),
           messagePart.getMessagePriority(), Message.Status.INITIALISED,
           messagePart.getMessageCreated(), null, null, 0, 0, 0, null, null, reconstructedData,
-          messagePart.getMessageDataHash(), messagePart.getMessageEncryptionScheme(),
-          messagePart.getMessageEncryptionIV());
+          messagePart.getMessageDataHash(), messagePart.getMessageEncryptionIV());
 
         if (decryptMessage(message))
         {
@@ -1238,8 +1216,6 @@ public class MessagingService
                   + messagePart.getMessageOrganisationId());
               invalidMessageInfoWriter.println("Correlation ID: "
                   + messagePart.getMessageCorrelationId());
-              invalidMessageInfoWriter.println("Encryption Scheme: "
-                  + messagePart.getMessageEncryptionScheme());
               invalidMessageInfoWriter.println("Checksum: " + messagePart.getMessageChecksum());
               invalidMessageInfoWriter.println("Parts: " + messageParts.size());
               invalidMessageInfoWriter.println("Reconstructucted Checksum: " + messageChecksum);

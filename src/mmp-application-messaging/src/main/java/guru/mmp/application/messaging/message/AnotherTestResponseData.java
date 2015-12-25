@@ -38,7 +38,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class AnotherTestResponseData extends WbxmlMessageData
 {
   /**
@@ -62,7 +61,7 @@ public class AnotherTestResponseData extends WbxmlMessageData
    */
   public AnotherTestResponseData()
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
   }
 
   /**
@@ -72,7 +71,7 @@ public class AnotherTestResponseData extends WbxmlMessageData
    */
   public AnotherTestResponseData(String testValue)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.testValue = testValue;
     this.testData = new byte[0];
@@ -86,7 +85,7 @@ public class AnotherTestResponseData extends WbxmlMessageData
    */
   public AnotherTestResponseData(String testValue, byte[] testData)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.testValue = testValue;
     this.testData = testData;
@@ -95,17 +94,14 @@ public class AnotherTestResponseData extends WbxmlMessageData
   /**
    * Extract the message data from the WBXML data for a message.
    *
-   * @param messageType        the UUID identifying the type of message the message data is
-   *                           associated with
-   * @param messageTypeVersion the version of the message type the message data is associated with
-   * @param messageData        the WBXML data for the message
+   * @param messageData the WBXML data for the message
    *
-   * @return <code>true</code> if the message data was extracted successfully from the
-   *         WBXML data or <code>false</code> otherwise
+   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
+   *         <code>false</code> otherwise
    *
    * @throws MessagingException
    */
-  public boolean fromMessageData(String messageType, int messageTypeVersion, byte[] messageData)
+  public boolean fromMessageData(byte[] messageData)
     throws MessagingException
   {
     Document document = parseWBXML(messageData);

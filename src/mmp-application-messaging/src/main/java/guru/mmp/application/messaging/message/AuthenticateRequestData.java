@@ -21,7 +21,6 @@ package guru.mmp.application.messaging.message;
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
-import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
@@ -39,7 +38,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class AuthenticateRequestData extends WbxmlMessageData
 {
   /**
@@ -60,11 +58,6 @@ public class AuthenticateRequestData extends WbxmlMessageData
   private String password;
 
   /**
-   * The preferred encryption scheme for the user.
-   */
-  private EncryptionScheme preferredEncryptionScheme;
-
-  /**
    * The username identifying the user associated with the message.
    */
   private String user;
@@ -74,43 +67,37 @@ public class AuthenticateRequestData extends WbxmlMessageData
    */
   public AuthenticateRequestData()
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
   }
 
   /**
    * Constructs a new <code>AuthenticateRequestData</code>.
    *
-   * @param user                      the username identifying the user associated with the message
-   * @param password                  the password used to authenticate the user
-   * @param deviceId                  the Universally Unique Identifier (UUID) used to uniquely
-   *                                  identify the device the authentication request originated from
-   * @param preferredEncryptionScheme the preferred encryption scheme for the user
+   * @param user     the username identifying the user associated with the message
+   * @param password the password used to authenticate the user
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the authentication request originated from
    */
-  public AuthenticateRequestData(String user, String password, UUID deviceId,
-      EncryptionScheme preferredEncryptionScheme)
+  public AuthenticateRequestData(String user, String password, UUID deviceId)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.deviceId = deviceId;
     this.password = password;
-    this.preferredEncryptionScheme = preferredEncryptionScheme;
     this.user = user;
   }
 
   /**
    * Extract the message data from the WBXML data for a message.
    *
-   * @param messageType        the UUID identifying the type of message the message data is
-   *                           associated with
-   * @param messageTypeVersion the version of the message type the message data is associated with
-   * @param messageData        the WBXML data for the message
+   * @param messageData the WBXML data for the message
    *
-   * @return <code>true</code> if the message data was extracted successfully from the
-   *         WBXML data or <code>false</code> otherwise
+   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
+   *         <code>false</code> otherwise
    *
    * @throws MessagingException
    */
-  public boolean fromMessageData(String messageType, int messageTypeVersion, byte[] messageData)
+  public boolean fromMessageData(byte[] messageData)
     throws MessagingException
   {
     Document document = parseWBXML(messageData);
@@ -131,18 +118,6 @@ public class AuthenticateRequestData extends WbxmlMessageData
 
     this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
     this.password = rootElement.getChildText("Password");
-
-    try
-    {
-      this.preferredEncryptionScheme = EncryptionScheme.fromCode(
-        Integer.parseInt(rootElement.getChildText("PreferredEncryptionScheme")));
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingException("Failed to retrieve the preferred encryption scheme from"
-          + " the message data", e);
-    }
-
     this.user = rootElement.getChildText("User");
 
     return true;
@@ -168,16 +143,6 @@ public class AuthenticateRequestData extends WbxmlMessageData
   public String getPassword()
   {
     return password;
-  }
-
-  /**
-   * Returns the preferred encryption scheme for the user.
-   *
-   * @return the preferred encryption scheme for the user
-   */
-  public EncryptionScheme getPreferredEncryptionScheme()
-  {
-    return preferredEncryptionScheme;
   }
 
   /**
@@ -213,16 +178,6 @@ public class AuthenticateRequestData extends WbxmlMessageData
   }
 
   /**
-   * Set the preferred encryption scheme for the user.
-   *
-   * @param preferredEncryptionScheme the preferred encryption scheme for the user
-   */
-  public void setPreferredEncryptionScheme(EncryptionScheme preferredEncryptionScheme)
-  {
-    this.preferredEncryptionScheme = preferredEncryptionScheme;
-  }
-
-  /**
    * Set the username identifying the user associated with the message.
    *
    * @param user the username identifying the user associated with the message
@@ -248,8 +203,6 @@ public class AuthenticateRequestData extends WbxmlMessageData
 
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
     rootElement.addContent(new Element("Password", StringUtil.notNull(password)));
-    rootElement.addContent(new Element("PreferredEncryptionScheme",
-        String.valueOf(preferredEncryptionScheme.getCode())));
     rootElement.addContent(new Element("User", StringUtil.notNull(user)));
 
     Document document = new Document(rootElement);

@@ -20,7 +20,6 @@ package guru.mmp.application.messaging;
 
 import guru.mmp.application.messaging.Message.Priority;
 import guru.mmp.application.messaging.Message.Status;
-import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
@@ -307,10 +306,9 @@ public class MessagingDAO
       statement.setInt(14, messagePart.getMessagePriority().getCode());
       statement.setTimestamp(15, new Timestamp(messagePart.getMessageCreated().getTime()));
       statement.setString(16, messagePart.getMessageDataHash());
-      statement.setInt(17, messagePart.getMessageEncryptionScheme().getCode());
-      statement.setString(18, messagePart.getMessageEncryptionIV());
-      statement.setString(19, messagePart.getMessageChecksum());
-      statement.setBytes(20, messagePart.getData());
+      statement.setString(17, messagePart.getMessageEncryptionIV());
+      statement.setString(18, messagePart.getMessageChecksum());
+      statement.setBytes(19, messagePart.getData());
 
       if (statement.executeUpdate() != 1)
       {
@@ -1643,8 +1641,8 @@ public class MessagingDAO
         + " (ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED,"
         + " MSG_ID, MSG_USERNAME, MSG_ORGANISATION_ID, MSG_DEVICE_ID, MSG_TYPE_ID,"
         + " MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, MSG_DATA_HASH,"
-        + " MSG_ENCRYPTION_SCHEME, MSG_ENCRYPTION_IV, MSG_CHECKSUM, DATA)"
-        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        + " MSG_ENCRYPTION_IV, MSG_CHECKSUM, DATA)"
+        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createMessageSQL
     createMessageSQL = "INSERT INTO " + schemaPrefix + "MESSAGES"
@@ -1686,7 +1684,7 @@ public class MessagingDAO
       "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP.SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS,"
       + " MP.STATUS, MP.PERSISTED, MP.UPDATED, MP.MSG_ID, MP.MSG_USERNAME, MP.MSG_ORGANISATION_ID,"
       + " MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, MP.MSG_PRIORITY,"
-      + " MP.MSG_CREATED, MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_SCHEME, MP.MSG_ENCRYPTION_IV,"
+      + " MP.MSG_CREATED, MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV,"
       + " MP.MSG_CHECKSUM, MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP"
       + " WHERE MP.STATUS=? AND MP.MSG_ID=? ORDER BY MP.PART_NO FOR UPDATE";
 
@@ -1695,7 +1693,7 @@ public class MessagingDAO
       "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP.SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS,"
       + " MP.PERSISTED, MP.UPDATED, MP.MSG_ID, MP.MSG_USERNAME, MP.MSG_ORGANISATION_ID,"
       + " MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, MP.MSG_PRIORITY, MP.MSG_CREATED,"
-      + " MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_SCHEME, MP.MSG_ENCRYPTION_IV, MP.MSG_CHECKSUM,"
+      + " MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV, MP.MSG_CHECKSUM,"
       + " MP.LOCK_NAME, MP.DATA" + " FROM " + schemaPrefix + "MESSAGE_PARTS MP"
       + " WHERE MP.STATUS=? AND MP.MSG_DEVICE_ID=? ORDER BY MP.PART_NO"
       + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
@@ -1824,8 +1822,8 @@ public class MessagingDAO
       applicationName = "Unknown";
     }
 
-    return new ErrorReportSummary(rs.getString(1), rs.getString(2), applicationName, rs.getInt(4),
-        rs.getTimestamp(5), rs.getString(6), rs.getString(7));
+    return new ErrorReportSummary((UUID)rs.getObject(1), (UUID)rs.getObject(2), applicationName, rs.getInt(4),
+        rs.getTimestamp(5), rs.getString(6), (UUID)rs.getObject(7));
   }
 
   private Message buildMessageFromResultSet(ResultSet rs)
@@ -1835,7 +1833,7 @@ public class MessagingDAO
       (UUID)rs.getObject(5), (UUID)rs.getObject(6), Priority.fromCode(rs.getInt(7)),
         Status.fromCode(rs.getInt(8)), rs.getTimestamp(9), rs.getTimestamp(10),
         rs.getTimestamp(11), rs.getInt(12), rs.getInt(13), rs.getInt(14), rs.getString(15),
-        rs.getTimestamp(16), rs.getBytes(17), "", EncryptionScheme.NONE, "");
+        rs.getTimestamp(16), rs.getBytes(17), "", "");
   }
 
   private MessagePart buildMessagePartFromResultSet(ResultSet rs)
@@ -1845,7 +1843,7 @@ public class MessagingDAO
         MessagePart.Status.fromCode(rs.getInt(6)), rs.getTimestamp(7), rs.getTimestamp(8),  (UUID)rs.getObject(9), rs.getString(10),
       (UUID)rs.getObject(11), (UUID)rs.getObject(12), (UUID)rs.getObject(13),
       (UUID)rs.getObject(14), Priority.fromCode(rs.getInt(15)), rs.getTimestamp(16),
-        rs.getString(17), EncryptionScheme.fromCode(rs.getInt(18)), rs.getString(19),
-        rs.getString(20), rs.getString(21), rs.getBytes(22));
+        rs.getString(17), rs.getString(18),
+        rs.getString(19), rs.getString(20), rs.getBytes(21));
   }
 }

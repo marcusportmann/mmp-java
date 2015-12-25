@@ -85,35 +85,6 @@ public class CryptoUtils
   }
 
   /**
-   * Main
-   *
-   * @param args the command-line arguments
-   */
-  public static void main(String args[])
-  {
-    SecureRandom secureRandom = new SecureRandom();
-
-    secureRandom.setSeed(System.currentTimeMillis());
-
-    byte[] randomAESKey = new byte[16];
-
-    secureRandom.nextBytes(randomAESKey);
-
-    System.out.println("Random AES key = [" + Base64.encodeBytes(randomAESKey) + "]");
-
-    System.out.println("3DES Key for password (Password1) = ["
-        + Base64.encodeBytes(passwordTo3DESKey("Password1")) + "]");
-    System.out.println("AES Key for password (Password1) = ["
-        + Base64.encodeBytes(passwordToAESKey("Password1")) + "]");
-
-    // 3DES Key for password (Password1) = [3kmNuSkm8e6gYVuxFBuVEY6jBPlmNS00]
-    // AES Key for password (Password1) = [8ckdUe0IGVPImdQ371V9ZA==]
-
-    // [3kmNuSkm8e6gYVuxFBuVEY6jBPlmNS00]
-    // [3kmNuSkm8e6gYVuxFBuVEY6jBPlmNS00]
-  }
-
-  /**
    * Convert the specified password to a 3DES key that can be used with the 3DES cypher encrypt and
    * decrypt functions.
    *

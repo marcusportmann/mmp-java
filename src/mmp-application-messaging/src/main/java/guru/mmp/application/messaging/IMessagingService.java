@@ -16,14 +16,10 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.common.crypto.EncryptionScheme;
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IMessagingService</code> interface defines the interface for the Messaging Service
@@ -129,33 +125,30 @@ public interface IMessagingService
   /**
    * Derive the user-device encryption key.
    *
-   * @param encryptionScheme the encryption scheme for the encryption key
-   * @param username         the username uniquely identifying the user e.g. test1
-   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         organisation
-   * @param deviceId         the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         device
+   * @param username       the username uniquely identifying the user e.g. test1
+   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organisation
+   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       device
    *
    * @return the user-device encryption key
    *
    * @throws MessagingException
    */
-  byte[] deriveUserDeviceEncryptionKey(EncryptionScheme encryptionScheme, String username,
-      UUID organisationId, UUID deviceId)
+  byte[] deriveUserDeviceEncryptionKey(String username, UUID organisationId, UUID deviceId)
     throws MessagingException;
 
   /**
    * Encrypt the message.
    *
-   * @param encryptionScheme the encryption scheme to use to encrypt the message
-   * @param message          the message to encrypt
+   * @param message the message to encrypt
    *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
    *         otherwise
    *
    * @throws MessagingException
    */
-  boolean encryptMessage(EncryptionScheme encryptionScheme, Message message)
+  boolean encryptMessage(Message message)
     throws MessagingException;
 
   /**

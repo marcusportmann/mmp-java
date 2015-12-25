@@ -22,6 +22,10 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>MessageReceivedRequest</code> class represents a request sent by the Messaging
  * Infrastructure on a mobile device to acknowledge the successful download of a message from the
@@ -29,18 +33,19 @@ import guru.mmp.common.wbxml.Encoder;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessageReceivedRequest
 {
   /**
-   * The device ID identifying the device the message received request originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * received request originated from.
    */
-  private String device;
+  private UUID deviceId;
 
   /**
-   * The ID of the message that was successfully downloaded.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the message that was
+   * successfully downloaded.
    */
-  private String messageId;
+  private UUID messageId;
 
   /**
    * Constructs a new <code>MessageReceivedRequest</code> and populates it from the information
@@ -52,20 +57,21 @@ public class MessageReceivedRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.device = rootElement.getAttributeValue("device");
-    this.messageId = rootElement.getAttributeValue("messageId");
+    this.deviceId = UUID.fromString(rootElement.getAttributeValue("device"));
+    this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
   }
 
   /**
    * Constructs a new <code>MessageReceivedRequest</code>.
    *
-   * @param device    the device ID identifying the device the message received request originated
-   *                  from
-   * @param messageId the ID of the message that was successfully downloaded
+   * @param deviceId  the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                  the message received request originated from
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *                  that was successfully downloaded
    */
-  public MessageReceivedRequest(String device, String messageId)
+  public MessageReceivedRequest(UUID deviceId, UUID messageId)
   {
-    this.device = device;
+    this.deviceId = deviceId;
     this.messageId = messageId;
   }
 
@@ -83,47 +89,54 @@ public class MessageReceivedRequest
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessageReceivedRequest")
-        && (rootElement.getAttributes().size() == 2)
-        && !((!rootElement.hasAttribute("device")) || (!rootElement.hasAttribute("messageId")));
+        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("device")
+        && rootElement.hasAttribute("messageId");
   }
 
   /**
-   * Returns the device ID identifying the device the message received request originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message received request originated from.
    *
-   * @return the device ID identifying the device the message received request originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   *         message received request originated from
    */
-  public String getDevice()
+  public UUID getDeviceId()
   {
-    return device;
+    return deviceId;
   }
 
   /**
-   * Returns the ID of the message that was successfully downloaded.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message that was
+   * successfully downloaded.
    *
-   * @return the ID of the message that was successfully downloaded
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message that was
+   *         successfully downloaded
    */
-  public String getMessageId()
+  public UUID getMessageId()
   {
     return messageId;
   }
 
   /**
-   * Set the device ID identifying the device the message received request originated from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * received request originated from.
    *
-   * @param device the device ID identifying the device the message received request originated
-   *               from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message received request originated from
    */
-  public void setDevice(String device)
+  public void setDevice(UUID deviceId)
   {
-    this.device = device;
+    this.deviceId = deviceId;
   }
 
   /**
-   * Set the ID of the message that was successfully downloaded.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message that was
+   * successfully downloaded.
    *
-   * @param messageId the ID of the message that was successfully downloaded
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *                  that was successfully downloaded
    */
-  public void setMessageId(String messageId)
+  public void setMessageId(UUID messageId)
   {
     this.messageId = messageId;
   }
@@ -136,8 +149,8 @@ public class MessageReceivedRequest
   @Override
   public String toString()
   {
-    return "<MessageReceivedRequest" + " device=\"" + device + "\"" + " messageId=\"" + messageId
-        + "\"" + "/>";
+    return "<MessageReceivedRequest" + " deviceId=\"" + deviceId + "\"" + " messageId=\""
+        + messageId + "\"" + "/>";
   }
 
   /**
@@ -149,8 +162,8 @@ public class MessageReceivedRequest
   {
     Element rootElement = new Element("MessageReceivedRequest");
 
-    rootElement.setAttribute("device", device);
-    rootElement.setAttribute("messageId", messageId);
+    rootElement.setAttribute("deviceId", deviceId.toString());
+    rootElement.setAttribute("messageId", messageId.toString());
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

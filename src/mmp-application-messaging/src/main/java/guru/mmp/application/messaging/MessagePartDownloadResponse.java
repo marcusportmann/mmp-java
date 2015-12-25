@@ -23,12 +23,13 @@ import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 import guru.mmp.common.wbxml.Parser;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagePartDownloadResponse</code> class represents the response to a request sent by
@@ -37,7 +38,6 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessagePartDownloadResponse
 {
   /**
@@ -102,9 +102,6 @@ public class MessagePartDownloadResponse
 
       exception = exceptionElement.getText();
     }
-
-    // int numberOfMessageParts          =
-    // Integer.parseInt(rootElement.getAttributeValue("numberOfMessageParts"));
 
     List<Element> messagePartElements = rootElement.getChildren("MessagePart");
 
@@ -198,9 +195,8 @@ public class MessagePartDownloadResponse
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartDownloadResponse")
-        && (rootElement.getAttributes().size() == 3)
-        && !((!rootElement.hasAttribute("numberOfMessageParts"))
-          || (!rootElement.hasAttribute("code")) || (!rootElement.hasAttribute("detail")));
+        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code")
+        && rootElement.hasAttribute("detail");
   }
 
   /**
@@ -245,18 +241,6 @@ public class MessagePartDownloadResponse
   public List<MessagePart> getMessageParts()
   {
     return messageParts;
-  }
-
-  /**
-   * Returns the number of message parts being downloaded.
-   *
-   * @return the number of message parts being downloaded
-   */
-  public int getNumberOfMessageParts()
-  {
-    return (messageParts != null)
-        ? messageParts.size()
-        : 0;
   }
 
   /**
@@ -315,9 +299,6 @@ public class MessagePartDownloadResponse
 
     buffer.append(" code=\"").append(code).append("\"");
     buffer.append(" detail=\"").append(detail).append("\"");
-    buffer.append(" numberOfMessageParts=\"").append((messageParts != null)
-        ? messageParts.size()
-        : 0).append("\"");
     buffer.append(">");
 
     if (messageParts != null)
@@ -344,9 +325,6 @@ public class MessagePartDownloadResponse
 
     rootElement.setAttribute("code", Long.toString(code));
     rootElement.setAttribute("detail", detail);
-    rootElement.setAttribute("numberOfMessageParts", String.valueOf((messageParts != null)
-        ? messageParts.size()
-        : 0));
 
     if (exception != null)
     {

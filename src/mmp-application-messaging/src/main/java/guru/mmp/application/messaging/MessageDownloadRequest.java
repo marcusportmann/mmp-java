@@ -18,11 +18,13 @@ package guru.mmp.application.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.crypto.EncryptionScheme;
-import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * The <code>MessageDownloadRequest</code> class represents a request sent by the Messaging
@@ -35,22 +37,16 @@ import guru.mmp.common.wbxml.Encoder;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessageDownloadRequest
 {
   /**
-   * The device ID identifying the device the message download request originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * download request originated from.
    */
-  private String device;
+  private UUID deviceId;
 
   /**
-   * The encryption scheme that should be used to secure the downloaded messages.
-   */
-  private EncryptionScheme messageEncryptionScheme;
-
-  /**
-   * The username identifying the user whose messages should be downloaded or blank if the messages
-   * for all the users linked to the device should be downloaded.
+   * The username identifying the user whose messages should be downloaded.
    */
   private String user;
 
@@ -64,46 +60,21 @@ public class MessageDownloadRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.device = rootElement.getAttributeValue("device");
-
-    if (rootElement.hasAttribute("user"))
-    {
-      this.user = rootElement.getAttributeValue("user");
-    }
-    else
-    {
-      this.user = "";
-    }
-
-    try
-    {
-      this.messageEncryptionScheme = EncryptionScheme.fromCode(
-        Integer.parseInt(rootElement.getAttributeValue("messageEncryptionScheme")));
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to retrieve the message encryption scheme from"
-          + " the message download request data", e);
-    }
+    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
+    this.user = rootElement.getAttributeValue("user");
   }
 
   /**
    * Constructs a new <code>MessageDownloadRequest</code>.
    *
-   * @param device                  the device ID identifying the device the message download
-   *                                request originated from
-   * @param user                    the username identifying the user whose messages should be
-   *                                downloaded or blank if the messages for all the users linked to
-   *                                the device should be downloaded
-   * @param messageEncryptionScheme the encryption scheme that should be used to secure the
-   *                                downloaded messages
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message download request originated from
+   * @param user     the username identifying the user whose messages should be downloaded
    */
-  public MessageDownloadRequest(String device, String user,
-      EncryptionScheme messageEncryptionScheme)
+  public MessageDownloadRequest(UUID deviceId, String user)
   {
-    this.device = device;
+    this.deviceId = deviceId;
     this.user = user;
-    this.messageEncryptionScheme = messageEncryptionScheme;
   }
 
   /**
@@ -120,38 +91,27 @@ public class MessageDownloadRequest
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessageDownloadRequest")
-        && !((rootElement.getAttributes().size() != 1)
-          && (rootElement.getAttributes().size() != 3)) && !((!rootElement.hasAttribute("device"))
-            || (!rootElement.hasAttribute("messageEncryptionScheme")));
+        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("deviceId")
+        && rootElement.hasAttribute("user");
 
   }
 
   /**
-   * Returns the device ID identifying the device the message download request originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message download request originated from.
    *
-   * @return the device ID identifying the device the message download request originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   *         message download request originated from
    */
-  public String getDevice()
+  public UUID getDeviceId()
   {
-    return device;
+    return deviceId;
   }
 
   /**
-   * Returns the encryption scheme that should be used to secure the downloaded messages.
+   * Returns the username identifying the user whose messages should be downloaded.
    *
-   * @return the encryption scheme that should be used to secure the downloaded messages
-   */
-  public EncryptionScheme getMessageEncryptionScheme()
-  {
-    return messageEncryptionScheme;
-  }
-
-  /**
-   * Returns the username identifying the user whose messages should be downloaded or blank if the
-   * messages for all the users linked to the device should be downloaded.
-   *
-   * @return the username identifying the user whose messages should be downloaded or blank if the
-   *         messages for all the users linked to the device should be downloaded
+   * @return the username identifying the user whose messages should be downloaded
    */
   public String getUser()
   {
@@ -159,45 +119,21 @@ public class MessageDownloadRequest
   }
 
   /**
-   * Returns <code>true</code> if a user has been specified for the message download request or
-   * <code>false</code> otherwise.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * download request originated from.
    *
-   * @return <code>true</code> if a user has been specified for the message download request or
-   *         <code>false</code> otherwise
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message download request originated from
    */
-  public boolean hasUserSpecified()
+  public void setDeviceId(UUID deviceId)
   {
-    return (!StringUtil.isNullOrEmpty(user));
+    this.deviceId = deviceId;
   }
 
   /**
-   * Set the device ID identifying the device the message download request originated from.
+   * Set the username identifying the user whose messages should be downloaded.
    *
-   * @param device the device ID identifying the device the message download request originated
-   *               from
-   */
-  public void setDevice(String device)
-  {
-    this.device = device;
-  }
-
-  /**
-   * Set the encryption scheme that should be used to secure the downloaded messages.
-   *
-   * @param messageEncryptionScheme the encryption scheme that should be used to secure the
-   *                                downloaded messages
-   */
-  public void setMessageEncryptionScheme(EncryptionScheme messageEncryptionScheme)
-  {
-    this.messageEncryptionScheme = messageEncryptionScheme;
-  }
-
-  /**
-   * Set the username identifying the user whose messages should be downloaded or blank if the
-   * messages for all the users linked to the device should be downloaded.
-   *
-   * @param user the username identifying the user whose messages should be downloaded or blank if
-   *             the messages for all the users linked to the device should be downloaded
+   * @param user the username identifying the user whose messages should be downloaded
    */
   public void setUser(String user)
   {
@@ -212,8 +148,7 @@ public class MessageDownloadRequest
   @Override
   public String toString()
   {
-    return "<MessageDownloadRequest" + " device=\"" + device + "\"" + " user=\"" + user + "\""
-        + " messageEncryptionScheme=\"" + messageEncryptionScheme + "\"" + "/>";
+    return "<MessageDownloadRequest deviceId=\"" + deviceId + "\" user=\"" + user + "\"/>";
   }
 
   /**
@@ -225,10 +160,8 @@ public class MessageDownloadRequest
   {
     Element rootElement = new Element("MessageDownloadRequest");
 
-    rootElement.setAttribute("device", device);
+    rootElement.setAttribute("deviceId", deviceId.toString());
     rootElement.setAttribute("user", user);
-    rootElement.setAttribute("messageEncryptionScheme",
-        String.valueOf(messageEncryptionScheme.getCode()));
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

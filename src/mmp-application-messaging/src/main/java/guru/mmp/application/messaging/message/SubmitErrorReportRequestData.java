@@ -76,9 +76,10 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   private String detail;
 
   /**
-   * The device ID identifying the device the error report originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the error report
+   * originated from.
    */
-  private String device;
+  private UUID deviceId;
 
   /**
    * The feedback provided by the user for the error.
@@ -88,7 +89,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The date and time the error report was created.
@@ -105,7 +106,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    */
   public SubmitErrorReportRequestData()
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
   }
 
   /**
@@ -121,15 +122,15 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @param feedback           the feedback provided by the user for the error
    * @param when               the date and time the error report was created
    * @param who                the username identifying the user associated with the error report
-   * @param device             the device ID identifying the device the error report originated
-   *                           from
+   * @param deviceId           the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the device the error report originated from
    * @param data               the data associated with the error report e.g. the application XML
    */
-  public SubmitErrorReportRequestData(String id, UUID applicationId, int applicationVersion,
-      String description, String detail, String feedback, Date when, String who, String device,
+  public SubmitErrorReportRequestData(UUID id, UUID applicationId, int applicationVersion,
+      String description, String detail, String feedback, Date when, String who, UUID deviceId,
       byte[] data)
   {
-    super(MESSAGE_TYPE_ID, 1, Message.Priority.HIGH);
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.id = id;
     this.applicationId = applicationId;
@@ -139,24 +140,21 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     this.feedback = feedback;
     this.when = when;
     this.who = who;
-    this.device = device;
+    this.deviceId = deviceId;
     this.data = data;
   }
 
   /**
    * Extract the message data from the WBXML data for a message.
    *
-   * @param messageType        the UUID identifying the type of message the message data is
-   *                           associated with
-   * @param messageTypeVersion the version of the message type the message data is associated with
-   * @param messageData        the WBXML data for the message
+   * @param messageData the WBXML data for the message
    *
-   * @return <code>true</code> if the message data was extracted successfully from the
-   *         WBXML data or <code>false</code> otherwise
+   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
+   *         <code>false</code> otherwise
    *
    * @throws MessagingException
    */
-  public boolean fromMessageData(String messageType, int messageTypeVersion, byte[] messageData)
+  public boolean fromMessageData(byte[] messageData)
     throws MessagingException
   {
     Document document = parseWBXML(messageData);
@@ -172,12 +170,12 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
         || (!rootElement.hasChild("ApplicationVersion")) || (!rootElement.hasChild("Description"))
         || (!rootElement.hasChild("Detail")) || (!rootElement.hasChild("Feedback"))
         || (!rootElement.hasChild("When")) || (!rootElement.hasChild("Who"))
-        || (!rootElement.hasChild("Device")) || (!rootElement.hasChild("Data")))
+        || (!rootElement.hasChild("DeviceId")) || (!rootElement.hasChild("Data")))
     {
       return false;
     }
 
-    this.id = rootElement.getChildText("Id");
+    this.id = UUID.fromString(rootElement.getChildText("Id"));
     this.applicationId = UUID.fromString(rootElement.getChildText("ApplicationId"));
     this.applicationVersion = Integer.parseInt(rootElement.getChildText("ApplicationVersion"));
     this.description = rootElement.getChildText("Description");
@@ -204,7 +202,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     }
 
     this.who = rootElement.getChildText("Who");
-    this.device = rootElement.getChildText("Device");
+    this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
     this.data = rootElement.getChildOpaque("Data");
 
     return true;
@@ -263,13 +261,15 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   }
 
   /**
-   * Returns the device ID identifying the device the error report originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   * report originated from.
    *
-   * @return the device ID identifying the device the error report originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   *         report originated from
    */
-  public String getDevice()
+  public UUID getDeviceId()
   {
-    return device;
+    return deviceId;
   }
 
   /**
@@ -287,7 +287,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -365,13 +365,15 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   }
 
   /**
-   * Set the device ID identifying the device the error report originated from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   * report originated from.
    *
-   * @param device the device ID identifying the device the error report originated from
+   * @param device the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   *               error report originated from
    */
-  public void setDevice(String device)
+  public void setDeviceId(UUID device)
   {
-    this.device = device;
+    this.deviceId = deviceId;
   }
 
   /**
@@ -389,7 +391,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -428,7 +430,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   {
     Element rootElement = new Element("SubmitErrorReportRequest");
 
-    rootElement.addContent(new Element("Id", StringUtil.notNull(id)));
+    rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("ApplicationId", applicationId.toString()));
     rootElement.addContent(new Element("ApplicationVersion", String.valueOf(applicationVersion)));
     rootElement.addContent(new Element("Description", StringUtil.notNull(description)));
@@ -438,7 +440,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
         ? ISO8601.now()
         : ISO8601.fromDate(when)));
     rootElement.addContent(new Element("Who", StringUtil.notNull(who)));
-    rootElement.addContent(new Element("Device", StringUtil.notNull(device)));
+    rootElement.addContent(new Element("DeviceId", deviceId.toString()));
     rootElement.addContent(new Element("Data", (data != null)
         ? data
         : new byte[0]));

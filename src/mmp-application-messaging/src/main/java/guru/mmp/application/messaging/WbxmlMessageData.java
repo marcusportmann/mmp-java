@@ -21,6 +21,8 @@ package guru.mmp.application.messaging;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Parser;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
 
 /**
@@ -42,42 +44,30 @@ public abstract class WbxmlMessageData
   private Message.Priority messageTypePriority;
 
   /**
-   * The version of the message type the message data is associated with.
-   */
-  private int messageTypeVersion;
-
-  /**
    * Constructs a new <code>WbxmlMessageData</code>.
    *
    * @param messageTypeId       the UUID identifying the type of message the message data is
    *                            associated with
-   * @param messageTypeVersion  the version of the message type the message data is associated with
    * @param messageTypePriority the priority for the message type the message data is associated
    *                            with
    */
-  public WbxmlMessageData(UUID messageTypeId, int messageTypeVersion,
-      Message.Priority messageTypePriority)
+  public WbxmlMessageData(UUID messageTypeId, Message.Priority messageTypePriority)
   {
     this.messageTypeId = messageTypeId;
-    this.messageTypeVersion = messageTypeVersion;
     this.messageTypePriority = messageTypePriority;
   }
 
   /**
    * Extract the message data from the WBXML data for a message.
    *
-   * @param messageType        the UUID identifying the type of message the message data is
-   *                           associated with
-   * @param messageTypeVersion the version of the message type the message data is associated with
-   * @param messageData        the WBXML data for the message
+   * @param messageData the WBXML data for the message
    *
-   * @return <code>true</code> if the message data was extracted successfully from the
-   *         WBXML data or <code>false</code> otherwise
+   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
+   *         <code>false</code> otherwise
    *
    * @throws MessagingException
    */
-  public abstract boolean fromMessageData(String messageType, int messageTypeVersion,
-      byte[] messageData)
+  public abstract boolean fromMessageData(byte[] messageData)
     throws MessagingException;
 
   /**
@@ -98,16 +88,6 @@ public abstract class WbxmlMessageData
   public Message.Priority getMessageTypePriority()
   {
     return messageTypePriority;
-  }
-
-  /**
-   * Returns the version of the message type the message data is associated with.
-   *
-   * @return the version of the message type the message data is associated with
-   */
-  public int getMessageTypeVersion()
-  {
-    return messageTypeVersion;
   }
 
   /**

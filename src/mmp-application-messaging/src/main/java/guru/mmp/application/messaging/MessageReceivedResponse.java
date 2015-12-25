@@ -149,7 +149,7 @@ public class MessageReceivedResponse
 
     return rootElement.getName().equals("MessageReceivedResponse")
         && (rootElement.getAttributes().size() == 2)
-        && !((!rootElement.hasAttribute("code")) || (!rootElement.hasAttribute("detail")));
+        && rootElement.hasAttribute("code") && rootElement.hasAttribute("detail");
   }
 
   /**

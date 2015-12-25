@@ -20,6 +20,8 @@ package guru.mmp.application.messaging.handler;
 
 import guru.mmp.application.messaging.Message;
 
+import java.util.UUID;
+
 /**
  * The <code>IMessageHandler</code> interface defines the interface that must be implemented by all
  * message handlers.
@@ -68,15 +70,15 @@ public interface IMessageHandler
 
   /**
    * Returns <code>true</code> if the message handler is able to process a message with the
-   * specified type and type version asynchronously or <code>false</code> otherwise.
+   * specified type asynchronously or <code>false</code> otherwise.
    *
-   * @param messageType        the message type
-   * @param messageTypeVersion the version of the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler is able to process a message with the
-   *         specified type and type version asynchronously or <code>false</code> otherwise
+   *         specified type asynchronously or <code>false</code> otherwise
    */
-  boolean supportsAsynchronousProcessing(String messageType, int messageTypeVersion);
+  boolean supportsAsynchronousProcessing(UUID messageTypeId);
 
   /**
    * Returns <code>true</code> if the message handler is able to process the specified message
@@ -91,13 +93,13 @@ public interface IMessageHandler
 
   /**
    * Returns <code>true</code> if the message handler is able to process a message with the
-   * specified type and type version synchronously or <code>false</code> otherwise.
+   * specified type synchronously or <code>false</code> otherwise.
    *
-   * @param messageType        the message type
-   * @param messageTypeVersion the version of the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler is able to process a message with the
-   *         specified type and type version synchronously or <code>false</code> otherwise
+   *         specified type synchronously or <code>false</code> otherwise
    */
-  boolean supportsSynchronousProcessing(String messageType, int messageTypeVersion);
+  boolean supportsSynchronousProcessing(UUID messageTypeId);
 }
