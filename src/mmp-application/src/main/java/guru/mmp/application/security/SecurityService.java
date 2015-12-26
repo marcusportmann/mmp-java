@@ -62,6 +62,20 @@ public class SecurityService
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
   /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the LDAP user directory
+   * type.
+   */
+  public static final UUID LDAP_USER_DIRECTORY_TYPE_ID =
+    UUID.fromString("e5741a89-c87b-4406-8a60-2cc0b0a5fa3e");
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the internal user directory
+   * type.
+   */
+  public static final UUID INTERNAL_USER_DIRECTORY_TYPE_ID =
+    UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f");
+
+  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
    */
   public static final UUID DEFAULT_USER_DIRECTORY_ID =
@@ -553,6 +567,16 @@ public class SecurityService
     }
     catch (DuplicateOrganisationException e)
     {
+      try
+      {
+        transactionManager.rollback();
+      }
+      catch (Throwable f)
+      {
+        logger.error("Failed to rollback the transaction while creating the organisation ("
+            + organisation.getId() + ")", f);
+      }
+
       throw e;
     }
     catch (Throwable e)
@@ -970,13 +994,7 @@ public class SecurityService
         {
           if (rs.next())
           {
-            Function function = new Function(rs.getString(2));
-
-            function.setId((UUID) rs.getObject(1));
-            function.setName(rs.getString(3));
-            function.setDescription(rs.getString(4));
-
-            return function;
+            return buildFunctionFromResultSet(rs);
           }
           else
           {
@@ -1049,12 +1067,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          Function function = new Function(rs.getString(2));
-
-          function.setId((UUID) rs.getObject(1));
-          function.setName(rs.getString(3));
-          function.setDescription(rs.getString(4));
-          list.add(function);
+          list.add(buildFunctionFromResultSet(rs));
         }
 
         return list;
@@ -1358,12 +1371,7 @@ public class SecurityService
       {
         if (rs.next())
         {
-          Organisation organisation = new Organisation((UUID) rs.getObject(1));
-
-          organisation.setName(rs.getString(2));
-          organisation.setDescription(StringUtil.notNull(rs.getString(3)));
-
-          return organisation;
+          return buildOrganisationFromResultSet(rs);
         }
         else
         {
@@ -1444,12 +1452,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          Organisation organisation = new Organisation((UUID) rs.getObject(1));
-
-          organisation.setName(rs.getString(3));
-          organisation.setDescription(StringUtil.notNull(rs.getString(3)));
-
-          list.add(organisation);
+          list.add(buildOrganisationFromResultSet(rs));
         }
 
         return list;
@@ -1487,12 +1490,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          Organisation organisation = new Organisation((UUID) rs.getObject(1));
-
-          organisation.setName(rs.getString(2));
-          organisation.setDescription(StringUtil.notNull(rs.getString(3)));
-
-          list.add(organisation);
+          list.add(buildOrganisationFromResultSet(rs));
         }
 
         return list;
@@ -1927,7 +1925,7 @@ public class SecurityService
           }
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
-            userDirectoryClass.getConstructor(Long.TYPE, Map.class);
+            userDirectoryClass.getConstructor(UUID.class, Map.class);
 
           if (userDirectoryClassConstructor == null)
           {
@@ -2361,6 +2359,52 @@ public class SecurityService
   }
 
   /**
+   * Create a new <code>Function</code> instance and populate it with the contents of the
+   * current row in the specified <code>ResultSet</code>.
+   *
+   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
+   *           <code>Function</code> instance
+   *
+   * @return the populated <code>Function</code> instance
+   *
+   * @throws SQLException
+   */
+  private Function buildFunctionFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    Function function = new Function();
+
+    function.setId((UUID) rs.getObject(1));
+    function.setCode(rs.getString(2));
+    function.setName(rs.getString(3));
+    function.setDescription(StringUtil.notNull(rs.getString(4)));
+
+    return function;
+  }
+
+  /**
+   * Create a new <code>Organisation</code> instance and populate it with the contents of the
+   * current row in the specified <code>ResultSet</code>.
+   *
+   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
+   *           <code>Organisation</code> instance
+   *
+   * @return the populated <code>Organisation</code> instance
+   *
+   * @throws SQLException
+   */
+  private Organisation buildOrganisationFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    Organisation organisation = new Organisation();
+    organisation.setId((UUID) rs.getObject(1));
+    organisation.setName(rs.getString(2));
+    organisation.setDescription(StringUtil.notNull(rs.getString(3)));
+
+    return organisation;
+  }
+
+  /**
    * Generate the SQL statements.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects
@@ -2440,7 +2484,7 @@ public class SecurityService
         + " UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
         + schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM"
         + " ON UD.ID = UDTOM.USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O"
-        + " ON UDTOM.ORGANISATION_ID = O.ID WHERE O.CODE=?";
+        + " ON UDTOM.ORGANISATION_ID = O.ID WHERE O.ID=?";
 
     // getUserDirectoriesSQL
     getUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION"
@@ -2464,7 +2508,7 @@ public class SecurityService
 
     // updateOrganisationSQL
     updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O"
-        + " SET O.NAME=?, O.DESCRIPTION=? WHERE O.CODE=?";
+        + " SET O.NAME=?, O.DESCRIPTION=? WHERE O.ID=?";
 
     // updateUserDirectorySQL
     updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD"

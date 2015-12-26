@@ -54,16 +54,6 @@ public class User
   public User() {}
 
   /**
-   * Constructs a new <code>User</code>.
-   *
-   * @param username the username uniquely identifying the user
-   */
-  public User(String username)
-  {
-    this.username = username;
-  }
-
-  /**
    * Returns the description for the user
    *
    * @return the description for the user
@@ -401,5 +391,15 @@ public class User
   public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Set the username for the user.
+   *
+   * @param username the username for the user
+   */
+  public void setUsername(String username)
+  {
+    this.username = username;
   }
 }

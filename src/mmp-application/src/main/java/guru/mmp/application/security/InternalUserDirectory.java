@@ -501,7 +501,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       group.setId(internalGroupId);
       group.setUserDirectoryId(getUserDirectoryId());
 
-      createGroup(connection, group.getGroupName());
+      createGroup(connection, group.getId(), group.getGroupName());
     }
     catch (DuplicateGroupException e)
     {
@@ -1701,7 +1701,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID INNER JOIN " + schemaPrefix
       + "GROUPS G ON G.ID = RTGM.GROUP_ID INNER JOIN " + schemaPrefix
       + "INTERNAL_GROUPS IG ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID"
-      + "     AND UPPER(IG.GROUPNAME) = UPPER(G.GROUPNAME) INNER JOIN " + schemaPrefix
+      + "     AND IG.ID = G.ID INNER JOIN " + schemaPrefix
       + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTIGM"
       + "   ON IUTIGM.USER_DIRECTORY_ID = IG.USER_DIRECTORY_ID AND IUTIGM.INTERNAL_GROUP_ID = IG.ID"
       + " WHERE IUTIGM.USER_DIRECTORY_ID=? AND IUTIGM.INTERNAL_USER_ID=?";
@@ -1961,9 +1961,10 @@ public class InternalUserDirectory extends UserDirectoryBase
   private User buildUserFromResultSet(ResultSet rs)
     throws SQLException
   {
-    User user = new User(rs.getString(2));
+    User user = new User();
 
     user.setId((UUID) rs.getObject(1));
+    user.setUsername(rs.getString(2));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setPassword(StringUtil.notNull(rs.getString(3)));
     user.setTitle(StringUtil.notNull(rs.getString(4)));

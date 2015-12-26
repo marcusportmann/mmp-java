@@ -187,16 +187,42 @@ public abstract class UserDirectoryBase
   protected UUID createGroup(Connection connection, String groupName)
     throws SecurityException
   {
+    try
+    {
+      return createGroup(connection, IDGenerator.nextUUID(dataSource), groupName);
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to create the group (" + groupName
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Create a new group.
+   * <p>
+   * If a group with the specified group name already exists the ID for this existing group will be
+   * returned.
+   *
+   * @param connection the existing database connection
+   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the group
+   * @param groupName  the group name uniquely identifying the group
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
+   *
+   * @throws SecurityException
+   */
+  protected UUID createGroup(Connection connection, UUID groupId, String groupName)
+    throws SecurityException
+  {
     try (PreparedStatement statement = connection.prepareStatement(createGroupSQL))
     {
-      UUID groupId = getGroupId(connection, groupName);
+      UUID existingGroupId = getGroupId(connection, groupName);
 
-      if (groupId != null)
+      if (existingGroupId != null)
       {
-        return groupId;
+        return existingGroupId;
       }
-
-      groupId = IDGenerator.nextUUID(dataSource);
 
       statement.setObject(1, groupId);
       statement.setObject(2, getUserDirectoryId());
@@ -213,8 +239,9 @@ public abstract class UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException("Failed to create the group (" + groupName + ") with the ID ("
+          + groupId + ") for the user directory (" + getUserDirectoryId() + "): "
+          + e.getMessage(), e);
     }
   }
 
@@ -330,7 +357,7 @@ public abstract class UserDirectoryBase
       {
         if (rs.next())
         {
-          return (UUID)rs.getObject(1);
+          return (UUID) rs.getObject(1);
         }
         else
         {

@@ -279,6 +279,12 @@ public class DAOUtil
         // Only process the line if it is not a SQL comment
         if (!line.startsWith("--"))
         {
+          // If the line contains a SQL comment then only process the portion before the comment
+          if (line.contains("--"))
+          {
+            line = line.substring(0, line.indexOf("--"));
+          }
+
           /*
            * If we have already built up part of the multi-line SQL statement then add spacing
            * between this and the next part of the SQL statement on the current line.

@@ -53,13 +53,14 @@ public class UserDirectory
   private UUID id;
   private String name;
   private Map<String, String> parameters = new HashMap<>();
+  private UserDirectoryType type;
   private UUID typeId;
-  private UserDirectoryType userDirectoryType;
 
   /**
    * Constructs a new <code>UserDirectory</code>.
    */
-  public UserDirectory() {}
+  public UserDirectory()
+  {}
 
   /**
    * Returns the XML configuration data for the user directory.
@@ -135,7 +136,7 @@ public class UserDirectory
    */
   public UserDirectoryType getType()
   {
-    return userDirectoryType;
+    return type;
   }
 
   /**
@@ -241,11 +242,11 @@ public class UserDirectory
   /**
    * Set the user directory type.
    *
-   * @param userDirectoryType the user directory type
+   * @param type the user directory type
    */
-  public void setType(UserDirectoryType userDirectoryType)
+  public void setType(UserDirectoryType type)
   {
-    this.userDirectoryType = userDirectoryType;
+    this.type = type;
   }
 
   /**

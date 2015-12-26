@@ -37,27 +37,9 @@ public class Function
 
   /**
    * Constructs a new <code>Function</code>.
-   *
-   * @param code the code for the function
    */
-  public Function(String code)
-  {
-    this.code = code;
-  }
-
-  /**
-   * Constructs a new <code>Function</code>.
-   *
-   * @param code        the code for the function
-   * @param name        the name of the function
-   * @param description the description for the function
-   */
-  public Function(String code, String name, String description)
-  {
-    this.code = code;
-    this.name = name;
-    this.description = description;
-  }
+  public Function()
+  {}
 
   /**
    * Returns the code for the function.

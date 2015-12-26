@@ -2402,9 +2402,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     Attributes attributes = searchResult.getAttributes();
 
-    User user = new User(String.valueOf(attributes.get(userUsernameAttribute).get()));
+    User user = new User();
 
     user.setId(null);
+    user.setUsername(String.valueOf(attributes.get(userUsernameAttribute).get()));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setReadOnly(isReadOnly);
     user.setPassword("");

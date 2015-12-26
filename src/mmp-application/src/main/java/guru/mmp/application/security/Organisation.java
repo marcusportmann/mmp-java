@@ -36,17 +36,8 @@ public class Organisation
   /**
    * Constructs a new <code>Organisation</code>.
    */
-  public Organisation() {}
-
-  /**
-   * Constructs a new <code>Organisation</code>.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   */
-  public Organisation(UUID id)
-  {
-    this.id = id;
-  }
+  public Organisation()
+  {}
 
   /**
    * Returns the description for the organisation.

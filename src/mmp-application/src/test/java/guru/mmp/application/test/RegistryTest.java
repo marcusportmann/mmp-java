@@ -20,8 +20,9 @@ package guru.mmp.application.test;
 
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.registry.RegistryException;
-
+import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+
 import org.junit.*;
 import org.junit.runner.RunWith;
 
@@ -42,6 +43,8 @@ import javax.inject.Inject;
 @RunWith(ApplicationJUnit4ClassRunner.class)
 public class RegistryTest
 {
+  private byte[] encryptionKey = CryptoUtils.getRandomAESKey();
+  private byte[] encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
   @Inject
   private IRegistry registry;
 
@@ -81,6 +84,29 @@ public class RegistryTest
     // Check whether the value was removed
     assertEquals("Binary value was not removed from the registry", false,
         registry.binaryValueExists("/Section1/Section1.1", "BinaryName"));
+
+    // Set the encrypted value
+    registry.setBinaryValue("/Section1/Section1.1", "EncryptedBinaryName", inputBinaryValue,
+        encryptionKey, encryptionIV);
+
+    // Check whether the encrypted value was set
+    assertEquals("Encrypted binary value was not set in the registry", true,
+        registry.binaryValueExists("/Section1/Section1.1", "EncryptedBinaryName"));
+
+    // Retrieve the encrypted value
+    byte[] encryptedValue = registry.getBinaryValue("/Section1/Section1.1", "EncryptedBinaryName",
+      anotherBinaryValue, encryptionKey, encryptionIV);
+
+    // Check whether the retrieved encrypted value is correct
+    assertEquals("Encrypted binary value retrieved from the registry does not match the value set",
+        inputBinaryValue.length, encryptedValue.length);
+
+    // Remove the encrypted value
+    registry.removeValue("/Section1/Section1.1", "EncryptedBinaryName");
+
+    // Check whether the encrypted value was removed
+    assertEquals("Encrypted binary value was not removed from the registry", false,
+        registry.binaryValueExists("/Section1/Section1.1", "EncryptedBinaryName"));
   }
 
   /**
@@ -91,7 +117,6 @@ public class RegistryTest
   @Test
   public void decimalConfigurationTest()
     throws RegistryException
-
   {
     // Set the value
     registry.setDecimalValue("/Section2/Section2.1", "DecimalName",
@@ -137,7 +162,6 @@ public class RegistryTest
   @Test
   public void integerConfigurationTest()
     throws RegistryException
-
   {
     // Set the value
     registry.setIntegerValue("/Section3/Section3.1", "IntegerName", 666);
@@ -187,7 +211,6 @@ public class RegistryTest
     // Check whether the value was set
     assertEquals("String value retrieved from the registry does not match the value set",
         "Level11Value", registry.getStringValue("Level1", "Level1Name", "InvalidStringValue"));
-
   }
 
   /**
@@ -229,5 +252,39 @@ public class RegistryTest
     // Check whether the value was removed
     assertEquals("String value was not removed from the registry", false,
         registry.stringValueExists("/Section4/Section4.1", "StringName"));
+
+    // Set the encrypted value
+    registry.setStringValue("/Section4/Section4.1", "EncryptedStringName", "StringValue",
+        encryptionKey, encryptionIV);
+
+    // Check whether the encrypted value was set
+    assertEquals("Encrypted string value was not set in the registry", true,
+        registry.stringValueExists("/Section4/Section4.1", "EncryptedStringName"));
+
+    // Retrieve the encrypted value
+    String encryptedValue = registry.getStringValue("/Section4/Section4.1", "EncryptedStringName",
+      "InvalidStringValue", encryptionKey, encryptionIV);
+
+    // Check whether the retrieved encrypted value is correct
+    assertEquals("Encrypted string value retrieved from the registry does not match the value set",
+        "StringValue", encryptedValue);
+
+    // Update the encrypted value
+    registry.setStringValue("/Section4/Section4.1", "EncryptedStringName", "StringValue2",
+        encryptionKey, encryptionIV);
+
+    encryptedValue = registry.getStringValue("/Section4/Section4.1", "EncryptedStringName",
+        "InvalidStringValue", encryptionKey, encryptionIV);
+
+    // Check whether the retrieved encrypted value is correct
+    assertEquals("Encrypted string value retrieved from the registry does not match the value set",
+        "StringValue2", encryptedValue);
+
+    // Remove the encrypted value
+    registry.removeValue("/Section4/Section4.1", "EncryptedStringName");
+
+    // Check whether the encrypted value was removed
+    assertEquals("Encrypted string value was not removed from the registry", false,
+        registry.stringValueExists("/Section4/Section4.1", "EncryptedStringName"));
   }
 }

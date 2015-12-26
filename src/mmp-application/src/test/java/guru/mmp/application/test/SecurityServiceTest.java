@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -48,6 +47,7 @@ public class SecurityServiceTest
   private static int groupCount;
   private static int organisationCount;
   private static int userCount;
+  private static int userDirectoryCount;
   @Inject
   private IRegistry registry;
   @Inject
@@ -82,6 +82,14 @@ public class SecurityServiceTest
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getGroupName() + ")", group.getGroupName(), groupNames.get(0));
+
+    List<Group> groups = securityService.getGroupsForUser(userDirectory.getId(),
+      user.getUsername());
+
+    assertEquals("The correct number of groups (1) was not retrieved for the user ("
+        + user.getUsername() + ")", 1, groups.size());
+    assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
+        + group.getGroupName() + ")", group.getGroupName(), groups.get(0).getGroupName());
   }
 
   /**
@@ -212,6 +220,74 @@ public class SecurityServiceTest
   }
 
   /**
+   * Test the duplicate function functionality.
+   *
+   * @throws Exception
+   */
+  @Test(expected = guru.mmp.application.security.DuplicateFunctionException.class)
+  public void duplicateFunctionTest()
+    throws Exception
+  {
+    Function function = getTestFunctionDetails();
+
+    securityService.createFunction(function);
+    securityService.createFunction(function);
+  }
+
+  /**
+   * Test the duplicate group functionality.
+   *
+   * @throws Exception
+   */
+  @Test(expected = guru.mmp.application.security.DuplicateGroupException.class)
+  public void duplicateGroupTest()
+    throws Exception
+  {
+    Organisation organisation = getTestOrganisationDetails();
+
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+
+    Group group = getTestGroupDetails();
+
+    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(userDirectory.getId(), group);
+  }
+
+  /**
+   * Test the duplicate organisation functionality.
+   *
+   * @throws Exception
+   */
+  @Test(expected = guru.mmp.application.security.DuplicateOrganisationException.class)
+  public void duplicateOrganisationTest()
+    throws Exception
+  {
+    Organisation organisation = getTestOrganisationDetails();
+
+    securityService.createOrganisation(organisation, false);
+    securityService.createOrganisation(organisation, false);
+  }
+
+  /**
+   * Test the duplicate user functionality.
+   *
+   * @throws Exception
+   */
+  @Test(expected = guru.mmp.application.security.DuplicateUserException.class)
+  public void duplicateUserTest()
+    throws Exception
+  {
+    Organisation organisation = getTestOrganisationDetails();
+
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+
+    User user = getTestUserDetails();
+
+    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(userDirectory.getId(), user, false, false);
+  }
+
+  /**
    * Test the expired user password functionality.
    *
    * @throws Exception
@@ -339,6 +415,40 @@ public class SecurityServiceTest
   }
 
   /**
+   * Test the functionality to retrieve the authorised function codes for the user.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void getFunctionCodesForUserTest()
+    throws Exception
+  {
+    User user = getTestUserDetails();
+
+    securityService.createUser(SecurityService.DEFAULT_USER_DIRECTORY_ID, user, false, false);
+
+    securityService.addUserToGroup(SecurityService.DEFAULT_USER_DIRECTORY_ID, user.getUsername(),
+        "Administrators");
+
+    List<String> groupNamesForUser =
+      securityService.getGroupNamesForUser(SecurityService.DEFAULT_USER_DIRECTORY_ID,
+        user.getUsername());
+
+    assertEquals("The correct number of group names (1) was not retrieved for the user ("
+        + user.getUsername() + ")", 1, groupNamesForUser.size());
+
+    List<String> functionCodesForUser =
+      securityService.getFunctionCodesForUser(SecurityService.DEFAULT_USER_DIRECTORY_ID,
+        user.getUsername());
+
+    List<Function> functions = securityService.getFunctions();
+
+    assertEquals("The correct number of function codes (" + functions.size()
+        + ") was not retrieved for the user (" + user.getUsername() + ")", functions.size(),
+          functionCodesForUser.size());
+  }
+
+  /**
    * Test the group functionality.
    *
    * @throws Exception
@@ -387,46 +497,6 @@ public class SecurityServiceTest
     }
     catch (GroupNotFoundException ignored) {}
   }
-
-///**
-// * Test the functionality to retrieve all the function codes for a user.
-// *
-// * @throws Exception
-// */
-////@Test
-//public void getAllFunctionCodesForUserTest()
-//throws Exception
-//
-//{
-//Organisation organisation = getTestOrganisationDetails();
-//
-// UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
-//
-//Group group = getTestGroupDetails();
-//
-//securityService.createGroup(userDirectory.getId(), group);
-//
-//User user = getTestUserDetails();
-//
-//securityService.createUser(userDirectory.getId(), user, false, false);
-//securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
-//
-//Function function = getTestFunctionDetails();
-//
-//securityService.createFunction(function);
-//securityService.grantFunctionToUser(userDirectory.getId(), user.getUsername(), function.getCode());
-//
-//Function anotherFunction = getAnotherTestFunctionDetails();
-//
-//securityService.createFunction(anotherFunction);
-//securityService.grantFunctionToGroup(group.getGroupName(), anotherFunction.getCode());
-//
-//List<String> functionCodes = securityService.getAllFunctionCodesForUser(user.getUsername(),
-//  organisation.getCode());
-//
-//assertEquals("The correct number of functions (2) was not retrieved for the user ("
-//    + user.getUsername() + ")", 2, functionCodes.size());
-//}
 
   /**
    * Test the functionality to check whether a user is a member of a group.
@@ -528,6 +598,15 @@ public class SecurityServiceTest
           + ") in the list of organisations");
     }
 
+    organisation.setName("Updated " + organisation.getName());
+    organisation.setDescription("Updated " + organisation.getDescription());
+
+    securityService.updateOrganisation(organisation);
+
+    retrievedOrganisation = securityService.getOrganisation(organisation.getId());
+
+    compareOrganisations(organisation, retrievedOrganisation);
+
     securityService.deleteOrganisation(organisation.getId());
 
     try
@@ -538,6 +617,18 @@ public class SecurityServiceTest
           + ") that should have been deleted");
     }
     catch (OrganisationNotFoundException ignored) {}
+  }
+
+  /**
+   * Test the reload user directories functionality.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void reloadUserDirectoriesTest()
+    throws Exception
+  {
+    securityService.reloadUserDirectories();
   }
 
   /**
@@ -577,12 +668,173 @@ public class SecurityServiceTest
         + user.getUsername() + ")", 0, groupNames.size());
   }
 
+  /**
+   * Test the retrieve user directory types functionality.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void retrieveUserDirectoryTypesTest()
+    throws Exception
+  {
+    List<UserDirectoryType> userDirectoryTypes = securityService.getUserDirectoryTypes();
+
+    assertEquals("The correct number of user directory types () was not retrieved", 2,
+        userDirectoryTypes.size());
+
+    boolean foundInternalUserDirectoryType = false;
+
+    for (UserDirectoryType userDirectoryType : userDirectoryTypes)
+    {
+      if (userDirectoryType.getId().equals(SecurityService.INTERNAL_USER_DIRECTORY_TYPE_ID))
+      {
+        foundInternalUserDirectoryType = true;
+
+        break;
+      }
+    }
+
+    if (!foundInternalUserDirectoryType)
+    {
+      fail("Failed to find the internal user directory type ("
+          + SecurityService.INTERNAL_USER_DIRECTORY_TYPE_ID
+          + ") in the list of user directory types");
+    }
+
+    boolean foundLdapUserDirectoryType = false;
+
+    for (UserDirectoryType userDirectoryType : userDirectoryTypes)
+    {
+      if (userDirectoryType.getId().equals(SecurityService.LDAP_USER_DIRECTORY_TYPE_ID))
+      {
+        foundLdapUserDirectoryType = true;
+
+        break;
+      }
+    }
+
+    if (!foundLdapUserDirectoryType)
+    {
+      fail("Failed to find the internal user directory type ("
+          + SecurityService.LDAP_USER_DIRECTORY_TYPE_ID + ") in the list of user directory types");
+    }
+  }
+
+  /**
+   * Test the user directory organisation mapping functionality.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void userDirectoryOrganisationMappingTest()
+    throws Exception
+  {
+    Organisation organisation = getTestOrganisationDetails();
+
+    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+
+    List<Organisation> organisationsForUserDirectory =
+      securityService.getOrganisationsForUserDirectory(userDirectory.getId());
+
+    assertEquals(
+        "The correct number of organisations (1) was not retrieved for the user directory", 1,
+        organisationsForUserDirectory.size());
+
+    List<UUID> organisationIdsForUserDirectory =
+      securityService.getOrganisationIdsForUserDirectory(userDirectory.getId());
+
+    assertEquals(
+        "The correct number of organisation IDs (1) was not retrieved for the user directory", 1,
+        organisationIdsForUserDirectory.size());
+
+    List<UserDirectory> userDirectoriesForOrganisation =
+      securityService.getUserDirectoriesForOrganisation(organisation.getId());
+
+    assertEquals(
+        "The correct number of user directories (1) was not retrieved for the organisation", 2,
+        userDirectoriesForOrganisation.size());
+  }
+
+  /**
+   * Test the user directory functionality.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void userDirectoryTest()
+    throws Exception
+  {
+    List<UserDirectory> beforeRetrievedUserDirectories = securityService.getUserDirectories();
+
+    UserDirectory userDirectory = getTestUserDirectoryDetails();
+
+    securityService.createUserDirectory(userDirectory);
+
+    UserDirectory retrievedUserDirectory = securityService.getUserDirectory(userDirectory.getId());
+
+    compareUserDirectories(userDirectory, retrievedUserDirectory);
+
+    int numberOfUserDirectories = securityService.getNumberOfUserDirectories();
+
+    assertEquals("The correct number of user directories ("
+        + (beforeRetrievedUserDirectories.size() + 1)
+        + ") was not retrieved", beforeRetrievedUserDirectories.size()
+          + 1, numberOfUserDirectories);
+
+    List<UserDirectory> afterRetrievedUserDirectories = securityService.getUserDirectories();
+
+    assertEquals("The correct number of user directories ("
+        + (beforeRetrievedUserDirectories.size() + 1)
+        + ") was not retrieved", beforeRetrievedUserDirectories.size()
+          + 1, afterRetrievedUserDirectories.size());
+
+    boolean foundUserDirectory = false;
+
+    for (UserDirectory afterRetrievedUserDirectory : afterRetrievedUserDirectories)
+    {
+      if (afterRetrievedUserDirectory.getId().equals(userDirectory.getId()))
+      {
+        compareUserDirectories(userDirectory, afterRetrievedUserDirectory);
+
+        foundUserDirectory = true;
+
+        break;
+      }
+    }
+
+    if (!foundUserDirectory)
+    {
+      fail("Failed to find the user directory (" + userDirectory.getId()
+          + ") in the list of organisations");
+    }
+
+    userDirectory.setName("Updated " + userDirectory.getName());
+    userDirectory.setDescription("Updated " + userDirectory.getDescription());
+
+    securityService.updateUserDirectory(userDirectory);
+
+    retrievedUserDirectory = securityService.getUserDirectory(userDirectory.getId());
+
+    compareUserDirectories(userDirectory, retrievedUserDirectory);
+
+    securityService.deleteUserDirectory(userDirectory.getId());
+
+    try
+    {
+      securityService.getUserDirectory(userDirectory.getId());
+
+      fail("Retrieved the user directory (" + userDirectory.getId()
+          + ") that should have been deleted");
+    }
+    catch (UserDirectoryNotFoundException ignored) {}
+  }
+
 ///**
 // * Test the functionality to revoke a function for a group.
 // *
 // * @throws Exception
 // */
-////@Test
+//////@Test
 //public void revokeFunctionForGroupTest()
 //  throws Exception
 //
@@ -650,6 +902,11 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
+    UUID userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
+
+    assertEquals("The correct user directory ID was not retrieved for the user",
+        userDirectory.getId(), userDirectoryId);
+
     User retrievedUser = securityService.getUser(userDirectory.getId(), user.getUsername());
 
     compareUsers(user, retrievedUser, false);
@@ -664,13 +921,17 @@ public class SecurityServiceTest
 
     compareUsers(user, retrievedUsers.get(0), true);
 
-    int numberOfFilteredUsers = securityService.getNumberOfFilteredUsers(userDirectory.getId(), "Test");
+    int numberOfFilteredUsers = securityService.getNumberOfFilteredUsers(userDirectory.getId(),
+      "Test");
 
-    assertEquals("The correct number of filtered users (1) was not retrieved", 1, numberOfFilteredUsers);
+    assertEquals("The correct number of filtered users (1) was not retrieved", 1,
+        numberOfFilteredUsers);
 
-    List<User> retrievedFilteredUsers = securityService.getFilteredUsers(userDirectory.getId(), "Test");
+    List<User> retrievedFilteredUsers = securityService.getFilteredUsers(userDirectory.getId(),
+      "Test");
 
-    assertEquals("The correct number of filtered users (1) was not retrieved", 1, retrievedFilteredUsers.size());
+    assertEquals("The correct number of filtered users (1) was not retrieved", 1,
+        retrievedFilteredUsers.size());
 
     compareUsers(user, retrievedFilteredUsers.get(0), true);
 
@@ -696,7 +957,7 @@ public class SecurityServiceTest
 
     compareUsers(user, retrievedUpdatedUser, true);
 
-    securityService.deleteUser(userDirectory.getId(), user.getUsername());;
+    securityService.deleteUser(userDirectory.getId(), user.getUsername());
 
     try
     {
@@ -709,8 +970,9 @@ public class SecurityServiceTest
 
   private static synchronized User getNumberedTestUserDetails(int number)
   {
-    User user = new User("Numbered Test Username " + number);
+    User user = new User();
 
+    user.setUsername("Numbered Test Username " + number);
     user.setPassword("Numbered Test Password " + number);
     user.setEmail("Numbered Test E-Mail " + number);
     user.setDescription("Numbered Test User Description " + number);
@@ -728,8 +990,10 @@ public class SecurityServiceTest
   {
     functionCount++;
 
-    Function function = new Function("Test Function " + functionCount);
+    Function function = new Function();
 
+    function.setId(UUID.randomUUID());
+    function.setCode("Test Function " + functionCount);
     function.setName("Test Function Name " + functionCount);
     function.setDescription("Test Function Description " + functionCount);
 
@@ -751,8 +1015,8 @@ public class SecurityServiceTest
   {
     organisationCount++;
 
-    Organisation organisation = new Organisation(UUID.randomUUID());
-
+    Organisation organisation = new Organisation();
+    organisation.setId(UUID.randomUUID());
     organisation.setName("Test Organisation Name " + organisationCount);
     organisation.setDescription("Test Organisation Description " + organisationCount);
 
@@ -763,8 +1027,9 @@ public class SecurityServiceTest
   {
     userCount++;
 
-    User user = new User("Test Username " + userCount);
+    User user = new User();
 
+    user.setUsername("Test Username " + userCount);
     user.setPassword("Test User Password " + userCount);
     user.setEmail("Test User E-Mail " + userCount);
     user.setDescription("Test User Description " + userCount);
@@ -776,6 +1041,31 @@ public class SecurityServiceTest
     user.setFaxNumber("Test User Fax Number " + userCount);
 
     return user;
+  }
+
+  private static synchronized UserDirectory getTestUserDirectoryDetails()
+    throws Exception
+  {
+    userDirectoryCount++;
+
+    UserDirectory userDirectory = new UserDirectory();
+
+    userDirectory.setId(UUID.randomUUID());
+    userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
+    userDirectory.setName("Test User Directory Name " + userDirectoryCount);
+    userDirectory.setDescription("Test User Directory Description " + userDirectoryCount);
+
+    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+      + "<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<user-directory>"
+      + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
+      + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
+      + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
+      + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
+      + "</user-directory>";
+
+    userDirectory.setConfiguration(buffer);
+
+    return userDirectory;
   }
 
   private void compareFunctions(Function function1, Function function2)
@@ -809,6 +1099,20 @@ public class SecurityServiceTest
         organisation1.getDescription(), organisation2.getDescription());
   }
 
+  private void compareUserDirectories(UserDirectory userDirectory1, UserDirectory userDirectory2)
+  {
+    assertEquals("The ID values for the two user directories do not match", userDirectory1.getId(),
+        userDirectory2.getId());
+    assertEquals("The name values for the two user directories do not match",
+        userDirectory1.getName(), userDirectory2.getName());
+    assertEquals("The type ID values for the two user directories do not match",
+        userDirectory1.getTypeId(), userDirectory2.getTypeId());
+    assertEquals("The description values for the two user directories do not match",
+        userDirectory1.getDescription(), userDirectory2.getDescription());
+    assertEquals("The configuration values for the two user directories do not match",
+        userDirectory1.getConfiguration(), userDirectory2.getConfiguration());
+  }
+
   private void compareUsers(User user1, User user2, boolean checkPasswordExpiry)
   {
     if (checkPasswordExpiry)
@@ -840,8 +1144,9 @@ public class SecurityServiceTest
 
   private Function getAnotherTestFunctionDetails()
   {
-    Function function = new Function("Another Test Function Code");
-
+    Function function = new Function();
+    function.setId(UUID.randomUUID());
+    function.setCode("Another Test Function Code");
     function.setName("Another Test Function Name");
     function.setDescription("Another Test Function Description");
 

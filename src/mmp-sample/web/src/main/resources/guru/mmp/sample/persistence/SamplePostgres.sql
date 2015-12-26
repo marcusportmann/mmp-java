@@ -5,27 +5,27 @@
 --  Execute the following command to start the database server if it is not running:
 --
 --    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/pg_ctl -D /opt/local/var/db/postgresql94/defaultdb -l /opt/local/var/db/postgresql94/postgres.log start'
---    CentOS (as root): service postgresql-9.4 start 
+--    CentOS (as root): service postgresql-9.4 start
 --
 --  Execute the following command to create the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/createdb  --template=template1 --encoding=UTF8 dbname'
---    CentOS (as root): sudo su postgres -c 'createdb --template=template1 --encoding=UTF8 dbname'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/createdb  --template=template1 --encoding=UTF8 sampledb'
+--    CentOS (as root): sudo su postgres -c 'createdb --template=template1 --encoding=UTF8 sampledb'
 --
 --  Execute the following command to initialise the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/psql -d dbname -f ApplicationPostgres.sql'
---    CentOS (as root): su postgres -c 'psql -d dbname -f ApplicationPostgres.sql'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/psql -d sampledb -f SamplePostgres.sql'
+--    CentOS (as root): su postgres -c 'psql -d sampledb -f ApplicationPostgres.sql'
 --
 --  Execute the following command to delete the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/dropdb dbname'
---    CentOS (as root): su postgres -c 'dropdb dbname'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/dropdb sampledb'
+--    CentOS (as root): su postgres -c 'dropdb sampledb'
 --
 --  Execute the following command to clean-up unreferenced large objects on the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/vacuumlo dbname'
---    CentOS (as root): su postgres -c 'vacuumlo dbname'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/vacuumlo sampledb'
+--    CentOS (as root): su postgres -c 'vacuumlo sampledb'
 --
 -- -------------------------------------------------------------------------------------------------
 set client_min_messages='warning';
@@ -77,16 +77,16 @@ DROP SCHEMA IF EXISTS MMP CASCADE;
 -- -------------------------------------------------------------------------------------------------
 -- DROP ROLES
 -- -------------------------------------------------------------------------------------------------
-DROP OWNED BY dbuser CASCADE;
-DROP ROLE IF EXISTS dbuser;
+DROP OWNED BY sampledb CASCADE;
+DROP ROLE IF EXISTS sampledb;
 
 
 
 -- -------------------------------------------------------------------------------------------------
 -- CREATE ROLES
 -- -------------------------------------------------------------------------------------------------
-CREATE ROLE dbuser WITH LOGIN PASSWORD 'Password1';
-ALTER ROLE dbuser WITH LOGIN;
+CREATE ROLE sampledb WITH LOGIN PASSWORD 'Password1';
+ALTER ROLE sampledb WITH LOGIN;
 
 
 
@@ -1536,38 +1536,38 @@ INSERT INTO MMP.MESSAGE_STATUSES (CODE, NAME) VALUES (10, 'Processed');
 -- -------------------------------------------------------------------------------------------------
 -- SET PERMISSIONS
 -- -------------------------------------------------------------------------------------------------
-GRANT ALL ON SCHEMA MMP TO dbuser;
+GRANT ALL ON SCHEMA MMP TO sampledb;
 
-GRANT ALL ON TABLE MMP.IDGENERATOR TO dbuser;
-GRANT ALL ON TABLE MMP.REGISTRY TO dbuser;
-GRANT ALL ON TABLE MMP.SERVICE_REGISTRY TO dbuser;
-GRANT ALL ON TABLE MMP.ORGANISATIONS TO dbuser;
-GRANT ALL ON TABLE MMP.USER_DIRECTORY_TYPES TO dbuser;
-GRANT ALL ON TABLE MMP.USER_DIRECTORIES TO dbuser;
-GRANT ALL ON TABLE MMP.USER_DIRECTORY_TO_ORGANISATION_MAP TO dbuser;
-GRANT ALL ON TABLE MMP.INTERNAL_USERS TO dbuser;
-GRANT ALL ON TABLE MMP.INTERNAL_USERS_PASSWORD_HISTORY TO dbuser;
-GRANT ALL ON TABLE MMP.INTERNAL_GROUPS TO dbuser;
-GRANT ALL ON TABLE MMP.INTERNAL_USER_TO_INTERNAL_GROUP_MAP TO dbuser;
-GRANT ALL ON TABLE MMP.GROUPS TO dbuser;
-GRANT ALL ON TABLE MMP.FUNCTIONS TO dbuser;
-GRANT ALL ON TABLE MMP.ROLES TO dbuser;
-GRANT ALL ON TABLE MMP.FUNCTION_TO_ROLE_MAP TO dbuser;
-GRANT ALL ON TABLE MMP.ROLE_TO_GROUP_MAP TO dbuser;
-GRANT ALL ON TABLE MMP.JOBS TO dbuser;
-GRANT ALL ON TABLE MMP.JOB_PARAMETERS TO dbuser;
-GRANT ALL ON TABLE MMP.CODE_CATEGORIES TO dbuser;
-GRANT ALL ON TABLE MMP.CODES TO dbuser;
-GRANT ALL ON TABLE MMP.CACHED_CODE_CATEGORIES TO dbuser;
-GRANT ALL ON TABLE MMP.CACHED_CODES TO dbuser;
-GRANT ALL ON TABLE MMP.MESSAGES TO dbuser;
-GRANT ALL ON TABLE MMP.MESSAGE_PARTS TO dbuser;
-GRANT ALL ON TABLE MMP.ARCHIVED_MESSAGES TO dbuser;
-GRANT ALL ON TABLE MMP.MESSAGE_TYPES TO dbuser;
-GRANT ALL ON TABLE MMP.MESSAGE_STATUSES TO dbuser;
-GRANT ALL ON TABLE MMP.PACKAGES TO dbuser;
-GRANT ALL ON TABLE MMP.ERROR_REPORTS TO dbuser;
-GRANT ALL ON TABLE MMP.REPORT_DEFINITIONS TO dbuser;
-GRANT ALL ON TABLE MMP.SMS TO dbuser;
+GRANT ALL ON TABLE MMP.IDGENERATOR TO sampledb;
+GRANT ALL ON TABLE MMP.REGISTRY TO sampledb;
+GRANT ALL ON TABLE MMP.SERVICE_REGISTRY TO sampledb;
+GRANT ALL ON TABLE MMP.ORGANISATIONS TO sampledb;
+GRANT ALL ON TABLE MMP.USER_DIRECTORY_TYPES TO sampledb;
+GRANT ALL ON TABLE MMP.USER_DIRECTORIES TO sampledb;
+GRANT ALL ON TABLE MMP.USER_DIRECTORY_TO_ORGANISATION_MAP TO sampledb;
+GRANT ALL ON TABLE MMP.INTERNAL_USERS TO sampledb;
+GRANT ALL ON TABLE MMP.INTERNAL_USERS_PASSWORD_HISTORY TO sampledb;
+GRANT ALL ON TABLE MMP.INTERNAL_GROUPS TO sampledb;
+GRANT ALL ON TABLE MMP.INTERNAL_USER_TO_INTERNAL_GROUP_MAP TO sampledb;
+GRANT ALL ON TABLE MMP.GROUPS TO sampledb;
+GRANT ALL ON TABLE MMP.FUNCTIONS TO sampledb;
+GRANT ALL ON TABLE MMP.ROLES TO sampledb;
+GRANT ALL ON TABLE MMP.FUNCTION_TO_ROLE_MAP TO sampledb;
+GRANT ALL ON TABLE MMP.ROLE_TO_GROUP_MAP TO sampledb;
+GRANT ALL ON TABLE MMP.JOBS TO sampledb;
+GRANT ALL ON TABLE MMP.JOB_PARAMETERS TO sampledb;
+GRANT ALL ON TABLE MMP.CODE_CATEGORIES TO sampledb;
+GRANT ALL ON TABLE MMP.CODES TO sampledb;
+GRANT ALL ON TABLE MMP.CACHED_CODE_CATEGORIES TO sampledb;
+GRANT ALL ON TABLE MMP.CACHED_CODES TO sampledb;
+GRANT ALL ON TABLE MMP.MESSAGES TO sampledb;
+GRANT ALL ON TABLE MMP.MESSAGE_PARTS TO sampledb;
+GRANT ALL ON TABLE MMP.ARCHIVED_MESSAGES TO sampledb;
+GRANT ALL ON TABLE MMP.MESSAGE_TYPES TO sampledb;
+GRANT ALL ON TABLE MMP.MESSAGE_STATUSES TO sampledb;
+GRANT ALL ON TABLE MMP.PACKAGES TO sampledb;
+GRANT ALL ON TABLE MMP.ERROR_REPORTS TO sampledb;
+GRANT ALL ON TABLE MMP.REPORT_DEFINITIONS TO sampledb;
+GRANT ALL ON TABLE MMP.SMS TO sampledb;
 
 
