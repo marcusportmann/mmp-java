@@ -21,6 +21,7 @@ package guru.mmp.application.messaging.message;
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
+import guru.mmp.application.security.Organisation;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
@@ -28,10 +29,7 @@ import guru.mmp.common.wbxml.Encoder;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The <code>AuthenticateResponseData</code> class manages the data for a
@@ -71,10 +69,9 @@ public class AuthenticateResponseData extends WbxmlMessageData
   private String errorMessage;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * authenticated user is associated with.
+   * The list of organisations the authenticated user is associated with.
    */
-  private UUID organisationId;
+  private List<OrganisationData> organisations;
 
   /**
    * The encryption key used to encrypt data on the user's device and any data passed as part of a
@@ -107,7 +104,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
-    this.organisationId = new UUID(0L, 0L);
+    this.organisations = new ArrayList<>();
     this.userEncryptionKey = new byte[0];
     this.userProperties = new HashMap<>();
   }
@@ -115,35 +112,39 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param organisationId    the Universally Unique Identifier (UUID) used to uniquely identify
-   *                          the organisation the authenticated user is associated with
+   * @param organisations     the list of organisations the authenticated user is associated with
    * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
    *                          data passed as part of a message
    */
-  public AuthenticateResponseData(UUID organisationId, byte[] userEncryptionKey)
+  public AuthenticateResponseData(List<Organisation> organisations, byte[] userEncryptionKey)
   {
-    this(organisationId, userEncryptionKey, new HashMap<>());
+    this(organisations, userEncryptionKey, new HashMap<>());
   }
 
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param organisationId    the Universally Unique Identifier (UUID) used to uniquely identify
-   *                          the organisation the authenticated user is associated with
+   * @param organisations     the list of organisations the authenticated user is associated with
    * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
    *                          data passed as part of a message
    * @param userProperties    the properties returned for the authenticated user
    */
-  public AuthenticateResponseData(UUID organisationId, byte[] userEncryptionKey,
+  public AuthenticateResponseData(List<Organisation> organisations, byte[] userEncryptionKey,
       Map<String, Object> userProperties)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.errorCode = 0;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;
-    this.organisationId = organisationId;
     this.userEncryptionKey = userEncryptionKey;
     this.userProperties = userProperties;
+
+    this.organisations = new ArrayList<>();
+
+    for (Organisation organisation : organisations)
+    {
+      this.organisations.add(new OrganisationData(organisation));
+    }
   }
 
   /**
@@ -186,7 +187,19 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     this.errorMessage = rootElement.getChildText("ErrorMessage");
 
-    this.organisationId = UUID.fromString(rootElement.getChildText("OrganisationId"));
+    this.organisations = new ArrayList<>();
+
+    if (rootElement.hasChild("Organisations"))
+    {
+      Element organisationsElement = rootElement.getChild("Organisations");
+
+      List<Element> organisationElements = organisationsElement.getChildren("Organisation");
+
+      for (Element organisationElement : organisationElements)
+      {
+        this.organisations.add(new OrganisationData(organisationElement));
+      }
+    }
 
     this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
 
@@ -248,15 +261,13 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   * the authenticated user is associated with.
+   * Returns the list of organisations the authenticated user is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *         the authenticated user is associated with
+   * @return the list of organisations the authenticated user is associated with
    */
-  public UUID getOrganisationId()
+  public List<OrganisationData> getOrganisations()
   {
-    return organisationId;
+    return organisations;
   }
 
   /**
@@ -305,15 +316,13 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * authenticated user is associated with.
+   * Set the list of organisations the authenticated user is associated with.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the authenticated user is associated with
+   * @param organisations the list of organisations the authenticated user is associated with
    */
-  public void setOrganisationId(UUID organisationId)
+  public void setOrganisations(List<OrganisationData> organisations)
   {
-    this.organisationId = organisationId;
+    this.organisations = organisations;
   }
 
   /**
@@ -354,8 +363,19 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(new Element("ErrorMessage", StringUtil.notNull(errorMessage)));
-    rootElement.addContent(new Element("OrganisationId", organisationId.toString()));
     rootElement.addContent(new Element("UserEncryptionKey", userEncryptionKey));
+
+    if ((organisations != null) && (organisations.size() > 0))
+    {
+      Element organisationsElement = new Element("Organisations");
+
+      for (OrganisationData organisation : organisations)
+      {
+        organisationsElement.addContent(organisation.toElement());
+      }
+
+      rootElement.addContent(organisationsElement);
+    }
 
     if ((userProperties != null) && (userProperties.size() > 0))
     {

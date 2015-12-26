@@ -246,8 +246,8 @@ public class MessagingService
     }
 
     // TODO: Cache this key...
-    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getUser(),
-      message.getOrganisationId(), message.getDeviceId());
+    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getUsername(),
+      message.getDeviceId());
 
     /*
      * if (logger.isDebugEnabled())
@@ -276,8 +276,9 @@ public class MessagingService
       if (!messageChecksum.equals(message.getDataHash()))
       {
         logger.warn("Data hash verification failed for the message (" + message.getId()
-            + ") from the user (" + message.getUser() + ") and device (" + message.getDeviceId()
-            + "). " + message.getData().length + " (" + decryptedData.length
+            + ") from the user (" + message.getUsername() + ") and device ("
+            + message.getDeviceId() + "). " + message.getData().length + " ("
+            + decryptedData.length
             + ") bytes of message data was encrypted using the encryption IV ("
             + message.getEncryptionIV() + "). Expected data hash (" + message.getDataHash()
             + ") but got (" + messageChecksum + ")");
@@ -296,7 +297,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException("Failed to decrypt the data for the message (" + message.getId()
-          + ") from the user (" + message.getUser() + ") and device (" + message.getDeviceId()
+          + ") from the user (" + message.getUsername() + ") and device (" + message.getDeviceId()
           + ")", e);
     }
   }
@@ -364,22 +365,19 @@ public class MessagingService
   /**
    * Derive the user-device encryption key.
    *
-   * @param username       the username uniquely identifying the user e.g. test1
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       device
+   * @param username the username uniquely identifying the user e.g. test1
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the user-device encryption key
    *
    * @throws MessagingException
    */
-  public byte[] deriveUserDeviceEncryptionKey(String username, UUID organisationId, UUID deviceId)
+  public byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
     throws MessagingException
   {
     try
     {
-      String password = deviceId.toString() + username.toLowerCase() + organisationId.toString();
+      String password = deviceId.toString() + username.toLowerCase();
 
       byte[] key = CryptoUtils.passwordToAESKey(password);
 
@@ -395,7 +393,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException("Failed to derive the encryption key for the user (" + username
-          + "), organisation (" + organisationId + ") and device (" + deviceId + ")", e);
+          + ") and device (" + deviceId + ")", e);
     }
   }
 
@@ -419,8 +417,8 @@ public class MessagingService
     }
 
     // TODO: Cache this key...
-    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getUser(),
-      message.getOrganisationId(), message.getDeviceId());
+    byte[] userEncryptionKey = deriveUserDeviceEncryptionKey(message.getUsername(),
+      message.getDeviceId());
 
     /*
      * if (logger.isDebugEnabled())
@@ -457,7 +455,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException("Failed to encrypt the data for the message (" + message.getId()
-          + ") from the user (" + message.getUser() + ") and device (" + message.getDeviceId()
+          + ") from the user (" + message.getUsername() + ") and device (" + message.getDeviceId()
           + ")", e);
     }
   }
@@ -937,10 +935,9 @@ public class MessagingService
           }
 
           MessagePart messagePart = new MessagePart(i + 1, numberOfParts, message.getId(),
-            message.getUser(), message.getOrganisationId(), message.getDeviceId(),
-            message.getTypeId(), message.getCorrelationId(), message.getPriority(),
-            message.getCreated(), message.getDataHash(), message.getEncryptionIV(),
-            messageChecksum, messagePartData);
+            message.getUsername(), message.getDeviceId(), message.getTypeId(),
+            message.getCorrelationId(), message.getPriority(), message.getCreated(),
+            message.getDataHash(), message.getEncryptionIV(), messageChecksum, messagePartData);
 
           messagePart.setStatus(Status.QUEUED_FOR_DOWNLOAD);
 
@@ -1086,7 +1083,7 @@ public class MessagingService
 
           logger.error("Failed to verify the checksum for the reconstructed" + " message ("
               + messagePart.getMessageId() + ") with type (" + messagePart.getMessageTypeId()
-              + ") from user (" + messagePart.getMessageUser() + ") and device ("
+              + ") from user (" + messagePart.getMessageUsername() + ") and device ("
               + messagePart.getMessageDeviceId() + "). Found " + reconstructedData.length
               + " bytes of message data with the hash (" + messageChecksum
               + ") that was reconstructed from " + messageParts.size()
@@ -1117,10 +1114,8 @@ public class MessagingService
 
               invalidMessageInfoWriter.println("ID: " + messagePart.getMessageId());
               invalidMessageInfoWriter.println("Type ID: " + messagePart.getMessageTypeId());
-              invalidMessageInfoWriter.println("User: " + messagePart.getMessageUser());
+              invalidMessageInfoWriter.println("User: " + messagePart.getMessageUsername());
               invalidMessageInfoWriter.println("Device ID: " + messagePart.getMessageDeviceId());
-              invalidMessageInfoWriter.println("Organisation ID: "
-                  + messagePart.getMessageOrganisationId());
               invalidMessageInfoWriter.println("Correlation ID: "
                   + messagePart.getMessageCorrelationId());
               invalidMessageInfoWriter.println("Data Hash: " + messagePart.getMessageDataHash());
@@ -1161,12 +1156,12 @@ public class MessagingService
           return;
         }
 
-        Message message = new Message(messagePart.getMessageId(), messagePart.getMessageUser(),
-          messagePart.getMessageOrganisationId(), messagePart.getMessageDeviceId(),
-          messagePart.getMessageTypeId(), messagePart.getMessageCorrelationId(),
-          messagePart.getMessagePriority(), Message.Status.INITIALISED,
-          messagePart.getMessageCreated(), null, null, 0, 0, 0, null, null, reconstructedData,
-          messagePart.getMessageDataHash(), messagePart.getMessageEncryptionIV());
+        Message message = new Message(messagePart.getMessageId(), messagePart.getMessageUsername(),
+          messagePart.getMessageDeviceId(), messagePart.getMessageTypeId(),
+          messagePart.getMessageCorrelationId(), messagePart.getMessagePriority(),
+          Message.Status.INITIALISED, messagePart.getMessageCreated(), null, null, 0, 0, 0, null,
+          null, reconstructedData, messagePart.getMessageDataHash(),
+          messagePart.getMessageEncryptionIV());
 
         if (decryptMessage(message))
         {
@@ -1179,10 +1174,10 @@ public class MessagingService
 
           logger.error("Failed to decrypt the reconstructed message (" + messagePart.getMessageId()
               + ") with type (" + messagePart.getMessageTypeId() + ") from the user ("
-              + messagePart.getMessageUser() + ") and device (" + messagePart.getMessageDeviceId()
-              + ") associated with the organisation (" + messagePart.getMessageOrganisationId()
-              + "). Found " + reconstructedData.length + " bytes of message data with the hash ("
-              + messageChecksum + ") that was reconstructed from " + messageParts.size()
+              + messagePart.getMessageUsername() + ") and device ("
+              + messagePart.getMessageDeviceId() + "). Found " + reconstructedData.length
+              + " bytes of message data with the hash (" + messageChecksum
+              + ") that was reconstructed from " + messageParts.size()
               + " message parts. The message will NOT be processed");
 
           String messagingDebugDirectory = getMessagingDebugDirectory();
@@ -1210,10 +1205,8 @@ public class MessagingService
 
               invalidMessageInfoWriter.println("ID: " + messagePart.getMessageId());
               invalidMessageInfoWriter.println("Type ID: " + messagePart.getMessageTypeId());
-              invalidMessageInfoWriter.println("User: " + messagePart.getMessageUser());
+              invalidMessageInfoWriter.println("User: " + messagePart.getMessageUsername());
               invalidMessageInfoWriter.println("Device ID: " + messagePart.getMessageDeviceId());
-              invalidMessageInfoWriter.println("Organisation ID: "
-                  + messagePart.getMessageOrganisationId());
               invalidMessageInfoWriter.println("Correlation ID: "
                   + messagePart.getMessageCorrelationId());
               invalidMessageInfoWriter.println("Checksum: " + messagePart.getMessageChecksum());

@@ -60,7 +60,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
   /**
    * The username identifying the user associated with the message.
    */
-  private String user;
+  private String username;
 
   /**
    * Constructs a new <code>AuthenticateRequestData</code>.
@@ -73,18 +73,18 @@ public class AuthenticateRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>AuthenticateRequestData</code>.
    *
-   * @param user     the username identifying the user associated with the message
+   * @param username the username identifying the user associated with the message
    * @param password the password used to authenticate the user
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *                 the authentication request originated from
    */
-  public AuthenticateRequestData(String user, String password, UUID deviceId)
+  public AuthenticateRequestData(String username, String password, UUID deviceId)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
     this.deviceId = deviceId;
     this.password = password;
-    this.user = user;
+    this.username = username;
   }
 
   /**
@@ -118,7 +118,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
 
     this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
     this.password = rootElement.getChildText("Password");
-    this.user = rootElement.getChildText("User");
+    this.username = rootElement.getChildText("Username");
 
     return true;
   }
@@ -150,9 +150,9 @@ public class AuthenticateRequestData extends WbxmlMessageData
    *
    * @return the username identifying the user associated with the message
    */
-  public String getUser()
+  public String getUsername()
   {
-    return user;
+    return username;
   }
 
   /**
@@ -180,11 +180,11 @@ public class AuthenticateRequestData extends WbxmlMessageData
   /**
    * Set the username identifying the user associated with the message.
    *
-   * @param user the username identifying the user associated with the message
+   * @param username the username identifying the user associated with the message
    */
-  public void setUser(String user)
+  public void setUsername(String username)
   {
-    this.user = user;
+    this.username = username;
   }
 
   /**
@@ -203,7 +203,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
 
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
     rootElement.addContent(new Element("Password", StringUtil.notNull(password)));
-    rootElement.addContent(new Element("User", StringUtil.notNull(user)));
+    rootElement.addContent(new Element("Username", StringUtil.notNull(username)));
 
     Document document = new Document(rootElement);
 

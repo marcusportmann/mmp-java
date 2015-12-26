@@ -125,17 +125,14 @@ public interface IMessagingService
   /**
    * Derive the user-device encryption key.
    *
-   * @param username       the username uniquely identifying the user e.g. test1
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       device
+   * @param username the username uniquely identifying the user e.g. test1
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the user-device encryption key
    *
    * @throws MessagingException
    */
-  byte[] deriveUserDeviceEncryptionKey(String username, UUID organisationId, UUID deviceId)
+  byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
     throws MessagingException;
 
   /**

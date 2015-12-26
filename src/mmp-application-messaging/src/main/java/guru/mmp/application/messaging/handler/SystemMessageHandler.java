@@ -29,6 +29,7 @@ import guru.mmp.application.messaging.message.*;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.security.AuthenticationFailedException;
 import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.UserNotFoundException;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.ExceptionUtil;
@@ -40,6 +41,8 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the
@@ -141,7 +144,7 @@ public class SystemMessageHandler extends MessageHandler
     }
 
     throw new MessageHandlerException("Failed to process the unrecognised message ("
-        + message.getId() + ") with type (" + message.getTypeId() + ") from user (" + message.getUser() + ") and device ("
+        + message.getId() + ") with type (" + message.getTypeId() + ") from user (" + message.getUsername() + ") and device ("
         + message.getDeviceId() + ")");
   }
 
@@ -210,8 +213,8 @@ public class SystemMessageHandler extends MessageHandler
     {
       logger.info(requestMessage.toString());
 
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+         requestMessage.getDeviceId());
 
       AnotherTestRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new AnotherTestRequestData());
@@ -229,7 +232,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 
@@ -238,8 +241,8 @@ public class SystemMessageHandler extends MessageHandler
   {
     try
     {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+        requestMessage.getDeviceId());
 
       AuthenticateRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new AuthenticateRequestData());
@@ -249,48 +252,42 @@ public class SystemMessageHandler extends MessageHandler
 
       try
       {
-        FIGURE OUT IF WE SHOUD
+        UUID userDirectoryId = securityService.authenticate(requestData.getUsername(), requestData.getPassword());
 
-
-
-        securityService.authenticate(requestData.getUser(), requestData.getPassword());
+        List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(userDirectoryId);
 
         byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
-            requestData.getPreferredEncryptionScheme(), requestData.getUser(),
-            requestData.getOrganisation(), requestData.getDevice());
+             requestData.getUsername(),
+             requestData.getDeviceId());
 
         if (logger.isDebugEnabled())
         {
           logger.debug("Generated the encryption key ("
-              + Base64.encodeBytes(userEncryptionKey, false) + ") using the encryption scheme ("
-              + requestData.getPreferredEncryptionScheme() + ") for the user ("
-              + requestData.getUser() + ") from the organisation (" + requestData.getOrganisation()
-              + ") using the device (" + requestData.getDevice() + ")");
+              + Base64.encodeBytes(userEncryptionKey, false) + ") for the user ("
+              + requestData.getUsername() + ") and the device (" + requestData.getDeviceId() + ")");
         }
         else
         {
-          logger.info("Generated the encryption key using the encryption scheme ("
-              + requestData.getPreferredEncryptionScheme() + ") for the user ("
-              + requestData.getUser() + ") from the organisation (" + requestData.getOrganisation()
-              + ") using the device (" + requestData.getDevice() + ")");
+          logger.info("Generated the encryption key for the user ("
+              + requestData.getUsername() + ") and the device (" + requestData.getDeviceId() + ")");
         }
 
-        responseData = new AuthenticateResponseData(requestData.getPreferredEncryptionScheme(),
+        responseData = new AuthenticateResponseData(organisations,
             userEncryptionKey);
       }
       catch (AuthenticationFailedException | UserNotFoundException e)
       {
         responseData =
           new AuthenticateResponseData(AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to authenticate the user (" + requestData.getUser() + ")");
+            "Failed to authenticate the user (" + requestData.getUsername() + ")");
       }
       catch (Throwable e)
       {
-        logger.error("Failed to authenticate the user (" + requestData.getUser() + ")", e);
+        logger.error("Failed to authenticate the user (" + requestData.getUsername() + ")", e);
 
         responseData =
           new AuthenticateResponseData(AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to authenticate the user (" + requestData.getUser() + "): " + e.getMessage());
+            "Failed to authenticate the user (" + requestData.getUsername() + "): " + e.getMessage());
       }
 
       Message responseMessage = messageTranslator.toMessage(responseData);
@@ -462,8 +459,8 @@ public class SystemMessageHandler extends MessageHandler
   {
     try
     {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+         requestMessage.getDeviceId());
 
       GetCodeCategoryWithParametersRequestData requestData =
         messageTranslator.fromMessage(requestMessage,
@@ -573,8 +570,8 @@ public class SystemMessageHandler extends MessageHandler
   {
     try
     {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+         requestMessage.getDeviceId());
 
       // MessagePartDownloadTestRequestData requestData =
       // messageTranslator.fromMessage(requestMessage, new MessagePartDownloadTestRequestData());
@@ -600,8 +597,8 @@ public class SystemMessageHandler extends MessageHandler
   {
     try
     {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+        requestMessage.getDeviceId());
 
       SubmitErrorReportRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new SubmitErrorReportRequestData());
@@ -633,8 +630,8 @@ public class SystemMessageHandler extends MessageHandler
     {
       logger.info(requestMessage.toString());
 
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisationId(), requestMessage.getDeviceId());
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+        requestMessage.getDeviceId());
 
       TestRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new TestRequestData());

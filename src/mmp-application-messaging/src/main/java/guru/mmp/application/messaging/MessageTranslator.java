@@ -71,12 +71,6 @@ public class MessageTranslator
   private byte[] encryptionKey;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * message is associated with.
-   */
-  private UUID organisationId;
-
-  /**
    * The username uniquely identifying the user responsible for the message.
    */
   private String user;
@@ -84,16 +78,13 @@ public class MessageTranslator
   /**
    * Constructs a new <code>MessageTranslator</code>.
    *
-   * @param user           the username uniquely identifying the user responsible for the message
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the message is associated with
-   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       device the message originated from
+   * @param user     the username uniquely identifying the user responsible for the message
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message originated from
    */
-  public MessageTranslator(String user, UUID organisationId, UUID deviceId)
+  public MessageTranslator(String user, UUID deviceId)
   {
     this.user = user;
-    this.organisationId = organisationId;
     this.deviceId = deviceId;
     this.encryptionKey = null;
   }
@@ -101,17 +92,14 @@ public class MessageTranslator
   /**
    * Constructs a new <code>MessageTranslator</code>.
    *
-   * @param user           the username uniquely identifying the user responsible for the message
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the message is associated with
-   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       device the message originated from
-   * @param encryptionKey  the key used to encrypt or decrypt the message data
+   * @param user          the username uniquely identifying the user responsible for the message
+   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      device the message originated from
+   * @param encryptionKey the key used to encrypt or decrypt the message data
    */
-  public MessageTranslator(String user, UUID organisationId, UUID deviceId, byte[] encryptionKey)
+  public MessageTranslator(String user, UUID deviceId, byte[] encryptionKey)
   {
     this.user = user;
-    this.organisationId = organisationId;
     this.deviceId = deviceId;
     this.encryptionKey = encryptionKey;
   }
@@ -278,12 +266,6 @@ public class MessageTranslator
           + messageData.getMessageTypeId() + "): A user has not been specified");
     }
 
-    if (organisationId == null)
-    {
-      throw new MessagingException("Failed to create the message with type ("
-          + messageData.getMessageTypeId() + "): An organisation has not been specified");
-    }
-
     if (deviceId == null)
     {
       throw new MessagingException("Failed to create the message with type ("
@@ -302,16 +284,15 @@ public class MessageTranslator
 
       data = encryptMessageData(encryptionKey, encryptionIV, data);
 
-      return new Message(user, organisationId, deviceId, messageData.getMessageTypeId(),
-          correlationId, messageData.getMessageTypePriority(), data, dataHash,
-          (encryptionIV.length == 0)
+      return new Message(user, deviceId, messageData.getMessageTypeId(), correlationId,
+          messageData.getMessageTypePriority(), data, dataHash, (encryptionIV.length == 0)
           ? ""
           : Base64.encodeBytes(encryptionIV));
     }
     else
     {
-      return new Message(user, organisationId, deviceId, messageData.getMessageTypeId(),
-          correlationId, messageData.getMessageTypePriority(), data);
+      return new Message(user, deviceId, messageData.getMessageTypeId(), correlationId,
+          messageData.getMessageTypePriority(), data);
     }
   }
 
