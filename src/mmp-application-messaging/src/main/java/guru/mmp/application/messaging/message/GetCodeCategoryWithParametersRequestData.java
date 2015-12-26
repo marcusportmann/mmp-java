@@ -22,7 +22,6 @@ import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
 import guru.mmp.common.util.ISO8601;
-import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
@@ -52,7 +51,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category to
    * retrieve.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The date and time the code category was last retrieved.
@@ -89,7 +88,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
    *                             category is current
    */
-  public GetCodeCategoryWithParametersRequestData(String id, Date lastRetrieved,
+  public GetCodeCategoryWithParametersRequestData(UUID id, Date lastRetrieved,
       Map<String, String> parameters, boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
@@ -137,7 +136,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
       return false;
     }
 
-    this.id = rootElement.getChildText("Id");
+    this.id = UUID.fromString(rootElement.getChildText("Id"));
 
     String lastRetrievedValue = rootElement.getChildText("LastRetrieved");
 
@@ -183,7 +182,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * @return the Universally Unique Identifier (UUID) uniquely identify the code category to
    *         retrieve
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -237,7 +236,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * @param id the Universally Unique Identifier (UUID) uniquely identifying the code category to
    *           retrieve
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -287,7 +286,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
   {
     Element rootElement = new Element("GetCodeCategoryWithParametersRequest");
 
-    rootElement.addContent(new Element("Id", StringUtil.notNull(id)));
+    rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("LastRetrieved", (lastRetrieved == null)
         ? ISO8601.now()
         : ISO8601.fromDate(lastRetrieved)));

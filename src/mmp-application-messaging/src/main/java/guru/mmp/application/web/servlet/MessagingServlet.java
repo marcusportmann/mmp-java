@@ -19,7 +19,6 @@ package guru.mmp.application.web.servlet;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.messaging.*;
-import guru.mmp.common.crypto.EncryptionScheme;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Parser;
 import org.slf4j.Logger;
@@ -216,17 +215,17 @@ public class MessagingServlet extends HttpServlet
     if (!messagingService.canProcessMessage(message))
     {
       logger.warn("Failed to process the unrecognised message (" + message.getId()
-          + ") from the user (" + message.getUser() + ") and the device (" + message.getDevice()
+          + ") from the user (" + message.getUsername() + ") and the device (" + message.getDeviceId()
           + ")");
 
       MessageResult messageResult = new MessageResult(MessageResult.ERROR_UNRECOGNISED_TYPE,
         "Failed to process the message (" + message.getId() + ") with the unrecognised type ("
-        + message.getType() + ") and version (" + message.getTypeVersion() + ")");
+        + message.getTypeId() + ")");
 
       writeResponseDocument(messageResult.toWBXML(), response);
 
-      messagingService.logMessageAudit(message.getType(), message.getUser(),
-          message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+      messagingService.logMessageAudit(message.getType(), message.getUsername(),
+          message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
 
       return false;
     }
@@ -235,7 +234,7 @@ public class MessagingServlet extends HttpServlet
     {
       logger.debug("Processing the message (" + message.getId() + ") with type ("
           + message.getType() + ") and version (" + message.getTypeVersion() + ") from user ("
-          + message.getUser() + ") and device (" + message.getDevice() + ")");
+          + message.getUsername() + ") and device (" + message.getDeviceId() + ")");
 
       logger.debug(message.toString());
     }
@@ -248,15 +247,15 @@ public class MessagingServlet extends HttpServlet
       if (!messagingService.decryptMessage(message))
       {
         logger.warn("Failed to decrypt the message (" + message.getId() + ") from the user ("
-            + message.getUser() + ") and device (" + message.getDevice() + ")");
+            + message.getUsername() + ") and device (" + message.getDeviceId() + ")");
 
         MessageResult messageResult = new MessageResult(MessageResult.ERROR_DECRYPTION_FAILED,
           "Failed to decrypt and process the message (" + message.getId() + ")");
 
         writeResponseDocument(messageResult.toWBXML(), response);
 
-        messagingService.logMessageAudit(message.getType(), message.getUser(),
-            message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+        messagingService.logMessageAudit(message.getType(), message.getUsername(),
+            message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
 
         return false;
       }
@@ -305,8 +304,8 @@ public class MessagingServlet extends HttpServlet
 
         writeResponseDocument(messageResult.toWBXML(), response);
 
-        messagingService.logMessageAudit(message.getType(), message.getUser(),
-            message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), true);
+        messagingService.logMessageAudit(message.getType(), message.getUsername(),
+            message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), true);
 
         return true;
       }
@@ -319,15 +318,15 @@ public class MessagingServlet extends HttpServlet
         }
 
         logger.error("Failed to process the message (" + message.getId() + ") from the user ("
-            + message.getUser() + ") and device (" + message.getDevice() + ")", e);
+            + message.getUsername() + ") and device (" + message.getDeviceId() + ")", e);
 
         MessageResult messageResult = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED,
           "Failed to process the message (" + message.getId() + "): " + e.getMessage(), e);
 
         writeResponseDocument(messageResult.toWBXML(), response);
 
-        messagingService.logMessageAudit(message.getType(), message.getUser(),
-            message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+        messagingService.logMessageAudit(message.getType(), message.getUsername(),
+            message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
 
         return false;
       }
@@ -701,23 +700,23 @@ public class MessagingServlet extends HttpServlet
 
       writeResponseDocument(result.toWBXML(), response);
 
-      messagingService.logMessageAudit(message.getType(), message.getUser(),
-          message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), true);
+      messagingService.logMessageAudit(message.getType(), message.getUsername(),
+          message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), true);
 
       return true;
     }
     catch (Exception e)
     {
       logger.error("Failed to queue the message (" + message.getId() + ") from the user ("
-          + message.getUser() + ") and device (" + message.getDevice() + ") for processing", e);
+          + message.getUsername() + ") and device (" + message.getDeviceId() + ") for processing", e);
 
       MessageResult result = new MessageResult(MessageResult.ERROR_QUEUEING_FAILED,
         "Failed to queue the message (" + message.getId() + ") for processing", e);
 
       writeResponseDocument(result.toWBXML(), response);
 
-      messagingService.logMessageAudit(message.getType(), message.getUser(),
-          message.getOrganisation(), message.getDevice(), request.getRemoteAddr(), false);
+      messagingService.logMessageAudit(message.getType(), message.getUsername(),
+          message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
 
       return false;
     }

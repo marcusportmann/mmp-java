@@ -443,6 +443,22 @@ public interface ISecurityService
     throws OrganisationNotFoundException, SecurityException;
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   * associated with the user directory.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   *
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   *         associated with the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  List<UUID> getOrganisationIdsForUserDirectory(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException;
+
+  /**
    * Retrieve the organisations.
    *
    * @return the list of organisations

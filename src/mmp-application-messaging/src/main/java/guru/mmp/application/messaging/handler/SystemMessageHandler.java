@@ -27,22 +27,19 @@ import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessageTranslator;
 import guru.mmp.application.messaging.message.*;
 import guru.mmp.application.registry.IRegistry;
-import guru.mmp.application.security.AuthenticationFailedException;
-import guru.mmp.application.security.ISecurityService;
-import guru.mmp.application.security.Organisation;
-import guru.mmp.application.security.UserNotFoundException;
+import guru.mmp.application.security.*;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.ExceptionUtil;
-import guru.mmp.common.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the
@@ -107,36 +104,43 @@ public class SystemMessageHandler extends MessageHandler
     {
       return processAuthenticateMessage(message);
     }
+
     // Process a "Check User Exists Request" message
     else if (message.getTypeId().equals(CheckUserExistsRequestData.MESSAGE_TYPE_ID))
     {
       return processCheckUserExistsMessage(message);
     }
+
     // Process a "Test Request" message
     else if (message.getTypeId().equals(TestRequestData.MESSAGE_TYPE_ID))
     {
       return processTestMessage(message);
     }
+
     // Process a "Another Test Request" message
     else if (message.getTypeId().equals(AnotherTestRequestData.MESSAGE_TYPE_ID))
     {
       return processAnotherTestMessage(message);
     }
+
     // Process a "Message Part Download Test Request" message
     else if (message.getTypeId().equals(MessagePartDownloadTestRequestData.MESSAGE_TYPE_ID))
     {
       return processMessagePartDownloadTestMessage(message);
     }
+
     // Process a "Submit Error Report Request" message
     else if (message.getTypeId().equals(SubmitErrorReportRequestData.MESSAGE_TYPE_ID))
     {
       return processSubmitErrorReportRequestMessage(message);
     }
+
     // Process a "Get Code Category Request" message
     else if (message.getTypeId().equals(GetCodeCategoryRequestData.MESSAGE_TYPE_ID))
     {
       return processGetCodeCategoryRequestMessage(message);
     }
+
     // Process a "Get Code Category With Parameters Request" message
     else if (message.getTypeId().equals(GetCodeCategoryWithParametersRequestData.MESSAGE_TYPE_ID))
     {
@@ -144,8 +148,8 @@ public class SystemMessageHandler extends MessageHandler
     }
 
     throw new MessageHandlerException("Failed to process the unrecognised message ("
-        + message.getId() + ") with type (" + message.getTypeId() + ") from user (" + message.getUsername() + ") and device ("
-        + message.getDeviceId() + ")");
+        + message.getId() + ") with type (" + message.getTypeId() + ") from user ("
+        + message.getUsername() + ") and device (" + message.getDeviceId() + ")");
   }
 
 //private GetCodeCategoryResponseData getRemoteWebServiceCodeCategory(CodeCategory codeCategory,
@@ -214,7 +218,7 @@ public class SystemMessageHandler extends MessageHandler
       logger.info(requestMessage.toString());
 
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-         requestMessage.getDeviceId());
+        requestMessage.getDeviceId());
 
       AnotherTestRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new AnotherTestRequestData());
@@ -252,13 +256,15 @@ public class SystemMessageHandler extends MessageHandler
 
       try
       {
-        UUID userDirectoryId = securityService.authenticate(requestData.getUsername(), requestData.getPassword());
+        UUID userDirectoryId = securityService.authenticate(requestData.getUsername(),
+          requestData.getPassword());
 
-        List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(userDirectoryId);
+        List<Organisation> organisations =
+          securityService.getOrganisationsForUserDirectory(userDirectoryId);
 
-        byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
-             requestData.getUsername(),
-             requestData.getDeviceId());
+        byte[] userEncryptionKey =
+          messagingService.deriveUserDeviceEncryptionKey(requestData.getUsername(),
+            requestData.getDeviceId());
 
         if (logger.isDebugEnabled())
         {
@@ -268,12 +274,11 @@ public class SystemMessageHandler extends MessageHandler
         }
         else
         {
-          logger.info("Generated the encryption key for the user ("
-              + requestData.getUsername() + ") and the device (" + requestData.getDeviceId() + ")");
+          logger.info("Generated the encryption key for the user (" + requestData.getUsername()
+              + ") and the device (" + requestData.getDeviceId() + ")");
         }
 
-        responseData = new AuthenticateResponseData(organisations,
-            userEncryptionKey);
+        responseData = new AuthenticateResponseData(organisations, userEncryptionKey);
       }
       catch (AuthenticationFailedException | UserNotFoundException e)
       {
@@ -287,7 +292,8 @@ public class SystemMessageHandler extends MessageHandler
 
         responseData =
           new AuthenticateResponseData(AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to authenticate the user (" + requestData.getUsername() + "): " + e.getMessage());
+            "Failed to authenticate the user (" + requestData.getUsername() + "): "
+            + e.getMessage());
       }
 
       Message responseMessage = messageTranslator.toMessage(responseData);
@@ -299,7 +305,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 
@@ -310,19 +316,18 @@ public class SystemMessageHandler extends MessageHandler
 
     try
     {
-      messageTranslator = new MessageTranslator(requestMessage.getUser(),
-          requestMessage.getOrganisation(), requestMessage.getDevice());
+      messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+          requestMessage.getDeviceId());
 
       CheckUserExistsRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new CheckUserExistsRequestData());
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Checking if the user (" + requestData.getUser()
-            + ") associated with the organisation (" + requestData.getOrganisation() + ") exists");
+        logger.debug("Checking if the user (" + requestData.getUsername() + ") exists");
       }
 
-      if (securityService.getUserDirectoryIdForUser(requestData.getUser()) != -1)
+      if (securityService.getUserDirectoryIdForUser(requestData.getUsername()) != null)
       {
         CheckUserExistsResponseData responseData = new CheckUserExistsResponseData(true);
 
@@ -346,7 +351,7 @@ public class SystemMessageHandler extends MessageHandler
     catch (Throwable e)
     {
       throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getType() + ")", e);
+          + requestMessage.getTypeId() + ")", e);
     }
   }
 
@@ -355,8 +360,8 @@ public class SystemMessageHandler extends MessageHandler
   {
     try
     {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUser(),
-        requestMessage.getOrganisation(), requestMessage.getDevice());
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+        requestMessage.getDeviceId());
 
       GetCodeCategoryRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new GetCodeCategoryRequestData());
@@ -369,15 +374,31 @@ public class SystemMessageHandler extends MessageHandler
 
         if (codeCategory != null)
         {
-          // TODO: IMPLEMENT ORGANISATION SECURITY CHECK HERE -- MARCUS
-          if (!StringUtil.isNullOrEmpty(codeCategory.getOrganisation()))
+          if ((codeCategory.getOrganisationId() != null)
+            && (!codeCategory.getOrganisationId().equals(
+            SecurityService.DEFAULT_ORGANISATION_ID)))
           {
-            if (!codeCategory.getOrganisation().equals(requestMessage.getOrganisation()))
+            UUID userDirectoryId =
+              securityService.getUserDirectoryIdForUser(requestMessage.getUsername());
+
+            List<UUID> organisationIds =
+              securityService.getOrganisationIdsForUserDirectory(userDirectoryId);
+
+            if (!organisationIds.contains(codeCategory.getOrganisationId()))
             {
-              logger.warn("The user (" + requestMessage.getUser()
-                  + ") associated with organisation (" + requestMessage.getOrganisation()
-                  + ") is attempting to retrieve the code category (" + codeCategory.getId()
-                  + ") associated with organisation (" + codeCategory.getOrganisation() + ")");
+              logger.warn("The user (" + requestMessage.getUsername()
+                + ") has insufficient access to retrieve the code category ("
+                + codeCategory.getId() + ") associated with organisation ("
+                + codeCategory.getOrganisationId() + ")");
+
+              responseData = new GetCodeCategoryResponseData(
+                GetCodeCategoryResponseData.ERROR_CODE_ACCESS_DENIED,
+                "The user (" + requestMessage.getUsername()
+                  + ") has insufficient access to retrieve the code category ("
+                  + codeCategory.getId() + ") associated with organisation ("
+                  + codeCategory.getOrganisationId() + ")");
+
+              return messageTranslator.toMessage(responseData);
             }
           }
 
@@ -460,7 +481,7 @@ public class SystemMessageHandler extends MessageHandler
     try
     {
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-         requestMessage.getDeviceId());
+        requestMessage.getDeviceId());
 
       GetCodeCategoryWithParametersRequestData requestData =
         messageTranslator.fromMessage(requestMessage,
@@ -475,15 +496,31 @@ public class SystemMessageHandler extends MessageHandler
 
         if (codeCategory != null)
         {
-          // TODO: IMPLEMENT ORGANISATION SECURITY CHECK HERE -- MARCUS
-          if (!StringUtil.isNullOrEmpty(codeCategory.getOrganisation()))
+          if ((codeCategory.getOrganisationId() != null)
+              && (!codeCategory.getOrganisationId().equals(
+                SecurityService.DEFAULT_ORGANISATION_ID)))
           {
-            if (!codeCategory.getOrganisationId().equals(requestMessage.getOrganisationId()))
+            UUID userDirectoryId =
+              securityService.getUserDirectoryIdForUser(requestMessage.getUsername());
+
+            List<UUID> organisationIds =
+              securityService.getOrganisationIdsForUserDirectory(userDirectoryId);
+
+            if (!organisationIds.contains(codeCategory.getOrganisationId()))
             {
-              logger.warn("The user (" + requestMessage.getUser()
-                  + ") associated with organisation (" + requestMessage.getOrganisationId()
-                  + ") is attempting to retrieve the code category (" + codeCategory.getId()
-                  + ") associated with organisation (" + codeCategory.getOrganisationId() + ")");
+              logger.warn("The user (" + requestMessage.getUsername()
+                  + ") has insufficient access to retrieve the code category ("
+                  + codeCategory.getId() + ") associated with organisation ("
+                  + codeCategory.getOrganisationId() + ")");
+
+              responseData = new GetCodeCategoryWithParametersResponseData(
+                  GetCodeCategoryWithParametersResponseData.ERROR_CODE_ACCESS_DENIED,
+                  "The user (" + requestMessage.getUsername()
+                  + ") has insufficient access to retrieve the code category ("
+                  + codeCategory.getId() + ") associated with organisation ("
+                  + codeCategory.getOrganisationId() + ")");
+
+              return messageTranslator.toMessage(responseData);
             }
           }
 
@@ -571,7 +608,7 @@ public class SystemMessageHandler extends MessageHandler
     try
     {
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-         requestMessage.getDeviceId());
+        requestMessage.getDeviceId());
 
       // MessagePartDownloadTestRequestData requestData =
       // messageTranslator.fromMessage(requestMessage, new MessagePartDownloadTestRequestData());

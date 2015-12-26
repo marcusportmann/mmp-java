@@ -50,7 +50,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   /**
    * The username identifying the user.
    */
-  private String user;
+  private String username;
 
   /**
    * Constructs a new <code>CheckUserExistsRequestData</code>.
@@ -63,13 +63,13 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>CheckUserExistsRequestData</code>.
    *
-   * @param user the username identifying the user
+   * @param username the username identifying the user
    */
-  public CheckUserExistsRequestData(String user)
+  public CheckUserExistsRequestData(String username)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
-    this.user = user;
+    this.username = username;
   }
 
   /**
@@ -99,7 +99,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
       return false;
     }
 
-    this.user = rootElement.getChildText("User");
+    this.username = rootElement.getChildText("Username");
 
     return true;
   }
@@ -109,19 +109,19 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
    *
    * @return the username identifying the user
    */
-  public String getUser()
+  public String getUsername()
   {
-    return user;
+    return username;
   }
 
   /**
    * Set the username identifying the user.
    *
-   * @param user the username identifying the user
+   * @param username the username identifying the user
    */
-  public void setUser(String user)
+  public void setUsername(String username)
   {
-    this.user = user;
+    this.username = username;
   }
 
   /**
@@ -138,7 +138,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   {
     Element rootElement = new Element("CheckUserExistsRequest");
 
-    rootElement.addContent(new Element("User", StringUtil.notNull(user)));
+    rootElement.addContent(new Element("Username", StringUtil.notNull(username)));
 
     Document document = new Document(rootElement);
 

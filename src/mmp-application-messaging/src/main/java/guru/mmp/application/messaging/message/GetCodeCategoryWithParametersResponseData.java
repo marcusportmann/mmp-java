@@ -42,6 +42,11 @@ import java.util.UUID;
 public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
 {
   /**
+   * The error code returned when access is denied.
+   */
+  public static final int ERROR_CODE_ACCESS_DENIED = 1;
+
+  /**
    * The error code returned to indicate success.
    */
   public static final int ERROR_CODE_SUCCESS = 0;

@@ -86,6 +86,7 @@ public class SecurityService
   private String getInternalUserDirectoryIdForUserSQL;
   private String getNumberOfOrganisationsSQL;
   private String getNumberOfUserDirectoriesSQL;
+  private String getOrganisationIdsForUserDirectorySQL;
   private String getOrganisationSQL;
   private String getOrganisationsForUserDirectorySQL;
   private String getOrganisationsSQL;
@@ -1383,6 +1384,48 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   * associated with the user directory.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   *
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   *         associated with the user directory
+   *
+   * @throws UserDirectoryNotFoundException
+   * @throws SecurityException
+   */
+  public List<UUID> getOrganisationIdsForUserDirectory(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement =
+          connection.prepareStatement(getOrganisationIdsForUserDirectorySQL))
+    {
+      statement.setObject(1, userDirectoryId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UUID> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add((UUID) rs.getObject(1));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+          "Failed to retrieve the IDs for the organisations associated with the user directory ("
+          + userDirectoryId + "): " + e.getMessage(), e);
+    }
+  }
+
+  /**
    * Retrieve the organisations.
    *
    * @return the list of organisations
@@ -2373,6 +2416,10 @@ public class SecurityService
     // getNumberOfUserDirectoriesSQL
     getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix
         + "USER_DIRECTORIES UD";
+
+    // getOrganisationIdsForUserDirectorySQL
+    getOrganisationIdsForUserDirectorySQL = "SELECT UDTOM.ORGANISATION_ID FROM " + schemaPrefix
+        + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM WHERE UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationsForUserDirectorySQL
     getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
