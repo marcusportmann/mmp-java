@@ -21,10 +21,20 @@ package guru.mmp.application.web.servlet;
 import guru.mmp.application.messaging.*;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Parser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import java.util.List;
+
 import javax.inject.Inject;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -32,12 +42,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageServlet</code> servlet acts as an endpoint that remote clients can use to send
@@ -215,8 +219,8 @@ public class MessagingServlet extends HttpServlet
     if (!messagingService.canProcessMessage(message))
     {
       logger.warn("Failed to process the unrecognised message (" + message.getId()
-          + ") from the user (" + message.getUsername() + ") and the device (" + message.getDeviceId()
-          + ")");
+          + ") from the user (" + message.getUsername() + ") and the device ("
+          + message.getDeviceId() + ")");
 
       MessageResult messageResult = new MessageResult(MessageResult.ERROR_UNRECOGNISED_TYPE,
         "Failed to process the message (" + message.getId() + ") with the unrecognised type ("
@@ -224,22 +228,17 @@ public class MessagingServlet extends HttpServlet
 
       writeResponseDocument(messageResult.toWBXML(), response);
 
-      messagingService.logMessageAudit(message.getType(), message.getUsername(),
-          message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
-
       return false;
     }
 
     if (logger.isDebugEnabled())
     {
       logger.debug("Processing the message (" + message.getId() + ") with type ("
-          + message.getType() + ") and version (" + message.getTypeVersion() + ") from user ("
-          + message.getUsername() + ") and device (" + message.getDeviceId() + ")");
+          + message.getTypeId() + ") from the user (" + message.getUsername()
+          + ") and the device (" + message.getDeviceId() + ")");
 
       logger.debug(message.toString());
     }
-
-    EncryptionScheme messageEncryptionScheme = message.getEncryptionScheme();
 
     // Decrypt the message data
     if (message.isEncrypted())
@@ -253,9 +252,6 @@ public class MessagingServlet extends HttpServlet
           "Failed to decrypt and process the message (" + message.getId() + ")");
 
         writeResponseDocument(messageResult.toWBXML(), response);
-
-        messagingService.logMessageAudit(message.getType(), message.getUsername(),
-            message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
 
         return false;
       }
@@ -289,7 +285,7 @@ public class MessagingServlet extends HttpServlet
           {
             if (!responseMessage.isEncryptionDisabled())
             {
-              messagingService.encryptMessage(messageEncryptionScheme, responseMessage);
+              messagingService.encryptMessage(responseMessage);
             }
           }
 
@@ -304,9 +300,6 @@ public class MessagingServlet extends HttpServlet
 
         writeResponseDocument(messageResult.toWBXML(), response);
 
-        messagingService.logMessageAudit(message.getType(), message.getUsername(),
-            message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), true);
-
         return true;
       }
       catch (Throwable e)
@@ -314,7 +307,7 @@ public class MessagingServlet extends HttpServlet
         // If the message can be queued for asynchronous processing do so now
         if (messagingService.isAsynchronousMessage(message))
         {
-          return queueMessageForAsynchronousProcessing(message, request, response);
+          return queueMessageForAsynchronousProcessing(message, response);
         }
 
         logger.error("Failed to process the message (" + message.getId() + ") from the user ("
@@ -325,21 +318,18 @@ public class MessagingServlet extends HttpServlet
 
         writeResponseDocument(messageResult.toWBXML(), response);
 
-        messagingService.logMessageAudit(message.getType(), message.getUsername(),
-            message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
-
         return false;
       }
     }
     else if (messagingService.isAsynchronousMessage(message))
     {
-      return queueMessageForAsynchronousProcessing(message, request, response);
+      return queueMessageForAsynchronousProcessing(message, response);
     }
     else
     {
       MessageResult result = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED,
         "Synchronous and asynchronous processing are not supported for the message ("
-        + message.getId() + ") with type (" + message.getType() + ")");
+        + message.getId() + ") with type (" + message.getTypeId() + ")");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -368,33 +358,22 @@ public class MessagingServlet extends HttpServlet
 
     try
     {
-      List<Message> messages;
-
-      if (downloadRequest.hasUserSpecified())
-      {
-        messages = messagingService.getMessagesQueuedForDownloadForUser(downloadRequest.getUser(),
-            downloadRequest.getDevice());
-      }
-      else
-      {
-        messages = messagingService.getMessagesQueuedForDownload(downloadRequest.getDevice());
-      }
+      List<Message> messages =
+        messagingService.getMessagesQueuedForDownloadForUser(downloadRequest.getUsername(),
+          downloadRequest.getDeviceId());
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Found " + messages.size() + " messages queued for download for the device"
-            + "(" + downloadRequest.getDevice() + ")");
+        logger.debug("Found " + messages.size() + " messages queued for download for the user ("
+            + downloadRequest.getUsername() + ") and the device (" + downloadRequest.getDeviceId()
+            + ")");
       }
 
-      // Encrypt each message queued for download
-      if (downloadRequest.getMessageEncryptionScheme() != EncryptionScheme.NONE)
+      for (Message message : messages)
       {
-        for (Message message : messages)
+        if (!message.isEncrypted())
         {
-          if (!message.isEncrypted())
-          {
-            messagingService.encryptMessage(downloadRequest.getMessageEncryptionScheme(), message);
-          }
+          messagingService.encryptMessage(message);
         }
       }
 
@@ -417,11 +396,13 @@ public class MessagingServlet extends HttpServlet
     catch (Throwable e)
     {
       logger.error("Failed to retrieve the messages that have been queued for download for the"
-          + " device (" + downloadRequest.getDevice() + ")", e);
+          + " user (" + downloadRequest.getUsername() + ") and the device ("
+          + downloadRequest.getDeviceId() + ")", e);
 
       MessageDownloadResponse downloadResponse = new MessageDownloadResponse(-1,
-        "Failed to retrieve the messages that have been queued for download for  the device ("
-        + downloadRequest.getDevice() + ")", e);
+        "Failed to retrieve the messages that have been queued for download for the user ("
+        + downloadRequest.getUsername() + ") and the device (" + downloadRequest.getDeviceId()
+        + ")", e);
 
       writeResponseDocument(downloadResponse.toWBXML(), response);
 
@@ -456,15 +437,15 @@ public class MessagingServlet extends HttpServlet
     if (!messagingService.canQueueMessagePartForAssembly(messagePart))
     {
       logger.warn("Failed to queue the unrecognised message part (" + messagePart.getId()
-          + ") from the user (" + messagePart.getMessageUser() + ") and the device ("
-          + messagePart.getMessageDevice() + ") with message type (" + messagePart.getMessageType()
-          + ") and version (" + messagePart.getMessageTypeVersion() + ")");
+          + ") from the user (" + messagePart.getMessageUsername() + ") and the device ("
+          + messagePart.getMessageDeviceId() + ") with message type ("
+          + messagePart.getMessageTypeId() + ")");
 
       MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_UNRECOGNISED_TYPE,
         "Failed to queue the unrecognised message part (" + messagePart.getId()
-        + ") from the user (" + messagePart.getMessageUser() + ") and the device ("
-        + messagePart.getMessageDevice() + ") with message type (" + messagePart.getMessageType()
-        + ") and version (" + messagePart.getMessageTypeVersion() + ")");
+        + ") from the user (" + messagePart.getMessageUsername() + ") and the device ("
+        + messagePart.getMessageDeviceId() + ") with message type ("
+        + messagePart.getMessageTypeId() + ")");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -473,9 +454,9 @@ public class MessagingServlet extends HttpServlet
 
     logger.debug("Queuing the message part (" + messagePart.getPartNo() + "/"
         + messagePart.getTotalParts() + ") for the message (" + messagePart.getMessageId()
-        + ") from the user (" + messagePart.getMessageUser() + ") and the device ("
-        + messagePart.getMessageDevice() + ") with message type (" + messagePart.getMessageType()
-        + ") and version (" + messagePart.getMessageTypeVersion() + ")");
+        + ") from the user (" + messagePart.getMessageUsername() + ") and the device ("
+        + messagePart.getMessageDeviceId() + ") with message type ("
+        + messagePart.getMessageTypeId() + ")");
 
     logger.debug(messagePart.toString());
 
@@ -494,9 +475,9 @@ public class MessagingServlet extends HttpServlet
     catch (Exception e)
     {
       logger.error("Failed to queue the message part (" + messagePart.getId() + ") from the user ("
-          + messagePart.getMessageUser() + ") and the device (" + messagePart.getMessageDevice()
-          + ") with message type (" + messagePart.getMessageType() + ") and version ("
-          + messagePart.getMessageTypeVersion() + ")", e);
+          + messagePart.getMessageUsername() + ") and the device ("
+          + messagePart.getMessageDeviceId() + ") with message type ("
+          + messagePart.getMessageTypeId() + ")", e);
 
       MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_QUEUEING_FAILED,
         "Failed to queue the message part (" + messagePart.getId() + ")", e);
@@ -529,12 +510,14 @@ public class MessagingServlet extends HttpServlet
     try
     {
       List<MessagePart> messageParts =
-        messagingService.getMessagePartsQueuedForDownload(downloadRequest.getDevice());
+        messagingService.getMessagePartsQueuedForDownloadForUser(downloadRequest.getUsername(),
+          downloadRequest.getDeviceId());
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Found " + messageParts.size() + " message parts  queued for download for the"
-            + " device (" + downloadRequest.getDevice() + ")");
+        logger.debug("Found " + messageParts.size()
+            + " message partsc queued for download for the user (" + downloadRequest.getUsername()
+            + ") and the device (" + downloadRequest.getDeviceId() + ")");
       }
 
       /*
@@ -563,11 +546,13 @@ public class MessagingServlet extends HttpServlet
     {
       logger.error(
           "Failed to retrieve the message parts that have been queued for download for the"
-          + " device (" + downloadRequest.getDevice() + ")", e);
+          + " user (" + downloadRequest.getUsername() + ") and the device ("
+          + downloadRequest.getDeviceId() + ")", e);
 
       MessageDownloadResponse downloadResponse = new MessageDownloadResponse(-1,
-        "Failed to retrieve the message parts that have been queued for download for  the device ("
-        + downloadRequest.getDevice() + ")", e);
+        "Failed to retrieve the message parts that have been queued for download for the user ("
+        + downloadRequest.getUsername() + ") and the device (" + downloadRequest.getDeviceId()
+        + ")", e);
 
       writeResponseDocument(downloadResponse.toWBXML(), response);
 
@@ -611,13 +596,13 @@ public class MessagingServlet extends HttpServlet
     {
       logger.error("Failed to process the message part received request for the message part ("
           + receivedRequest.getMessagePartId() + ") from the device ("
-          + receivedRequest.getDevice() + ")", e);
+          + receivedRequest.getDeviceId() + ")", e);
 
       MessagePartReceivedResponse result =
         new MessagePartReceivedResponse(MessageReceivedResponse.ERROR_UNKNOWN,
           "Failed to process the message part received request for the message part ("
           + receivedRequest.getMessagePartId() + ") from the device ("
-          + receivedRequest.getDevice() + ")", e);
+          + receivedRequest.getDeviceId() + ")", e);
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -659,13 +644,13 @@ public class MessagingServlet extends HttpServlet
     catch (Exception e)
     {
       logger.error("Failed to process the message received request for the message ("
-          + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDevice()
+          + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDeviceId()
           + ")", e);
 
       MessageReceivedResponse result =
         new MessageReceivedResponse(MessageReceivedResponse.ERROR_UNKNOWN,
           "Failed to process the message received request for the message ("
-          + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDevice()
+          + receivedRequest.getMessageId() + ") from the device (" + receivedRequest.getDeviceId()
           + ")", e);
 
       writeResponseDocument(result.toWBXML(), response);
@@ -675,7 +660,7 @@ public class MessagingServlet extends HttpServlet
   }
 
   private boolean queueMessageForAsynchronousProcessing(Message message,
-      HttpServletRequest request, HttpServletResponse response)
+      HttpServletResponse response)
     throws MessagingException
   {
     try
@@ -700,23 +685,18 @@ public class MessagingServlet extends HttpServlet
 
       writeResponseDocument(result.toWBXML(), response);
 
-      messagingService.logMessageAudit(message.getType(), message.getUsername(),
-          message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), true);
-
       return true;
     }
     catch (Exception e)
     {
       logger.error("Failed to queue the message (" + message.getId() + ") from the user ("
-          + message.getUsername() + ") and device (" + message.getDeviceId() + ") for processing", e);
+          + message.getUsername() + ") and device (" + message.getDeviceId()
+          + ") for processing", e);
 
       MessageResult result = new MessageResult(MessageResult.ERROR_QUEUEING_FAILED,
         "Failed to queue the message (" + message.getId() + ") for processing", e);
 
       writeResponseDocument(result.toWBXML(), response);
-
-      messagingService.logMessageAudit(message.getType(), message.getUsername(),
-          message.getOrganisation(), message.getDeviceId(), request.getRemoteAddr(), false);
 
       return false;
     }

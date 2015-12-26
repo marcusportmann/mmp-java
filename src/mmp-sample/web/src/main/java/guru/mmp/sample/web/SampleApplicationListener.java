@@ -20,6 +20,7 @@ package guru.mmp.sample.web;
 
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
+import guru.mmp.application.security.SecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.ResourceUtil;
@@ -36,6 +37,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -98,8 +100,8 @@ public class SampleApplicationListener
         ResourceUtil.getClasspathResource("guru/mmp/sample/report/SampleReport.jasper");
 
       ReportDefinition sampleReportDefinition =
-        new ReportDefinition("2a4b74e8-7f03-416f-b058-b35bb06944ef", "MMP", "Sample Report",
-          sampleReportDefinitionData);
+        new ReportDefinition(UUID.fromString("2a4b74e8-7f03-416f-b058-b35bb06944ef"),
+          SecurityService.DEFAULT_ORGANISATION_ID, "Sample Report", sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {

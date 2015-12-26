@@ -25,6 +25,8 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 /**
@@ -41,7 +43,7 @@ public class DetachableErrorReportSummaryModel
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
    */
-  private String id;
+  private UUID id;
 
   /* Messaging Service */
   @Inject
@@ -65,7 +67,7 @@ public class DetachableErrorReportSummaryModel
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           error report
    */
-  public DetachableErrorReportSummaryModel(String id)
+  public DetachableErrorReportSummaryModel(UUID id)
   {
     this.id = id;
   }

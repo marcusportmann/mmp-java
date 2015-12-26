@@ -31,7 +31,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public interface IMessagingDAO
 {
   /**
@@ -173,8 +172,10 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Get the message parts that have been queued for download by a particular remote device.
+   * Get the message parts for a user that have been queued for download by a particular remote
+   * device.
    *
+   * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the message parts queued for
    *                 download when they are retrieved
@@ -183,27 +184,14 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<MessagePart> getMessagePartsQueuedForDownload(UUID deviceId, String lockName)
-    throws DAOException;
-
-  /**
-   * Get the messages that have been queued for download by a particular remote device.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   * @param lockName name of the lock that should be applied to the messages queued for download
-   *                 when they are retrieved
-   *
-   * @return the messages that have been queued for download by a particular remote device
-   *
-   * @throws DAOException
-   */
-  List<Message> getMessagesQueuedForDownload(UUID deviceId, String lockName)
+  List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId,
+      String lockName)
     throws DAOException;
 
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
-   * @param user     the username identifying the user
+   * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the messages queued for download
    *                 when they are retrieved
@@ -213,7 +201,7 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<Message> getMessagesQueuedForDownloadForUser(String user, UUID deviceId, String lockName)
+  List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId, String lockName)
     throws DAOException;
 
   /**

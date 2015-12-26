@@ -539,55 +539,35 @@ public class MessagingService
   }
 
   /**
-   * Get the message parts that have been queued for download by a particular remote device.
+   * Get the message parts for a user that have been queued for download by a particular remote
+   * device.
    *
+   * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the message parts that have been queued for download by a particular remote device
    *
    * @throws MessagingException
    */
-  public List<MessagePart> getMessagePartsQueuedForDownload(UUID deviceId)
+  public List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId)
     throws MessagingException
   {
     try
     {
-      return messagingDAO.getMessagePartsQueuedForDownload(deviceId, getInstanceName());
+      return messagingDAO.getMessagePartsQueuedForDownloadForUser(username, deviceId,
+          getInstanceName());
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the message parts that have been queued for"
-          + " download by the device (" + deviceId + ")", e);
-    }
-  }
-
-  /**
-   * Get the messages that have been queued for download by a particular remote device.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *
-   * @return the messages that have been queued for download by a particular remote device
-   *
-   * @throws MessagingException
-   */
-  public List<Message> getMessagesQueuedForDownload(UUID deviceId)
-    throws MessagingException
-  {
-    try
-    {
-      return messagingDAO.getMessagesQueuedForDownload(deviceId, getInstanceName());
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingException("Failed to retrieve the messages that have been queued for"
-          + " download by the device (" + deviceId + ")", e);
+      throw new MessagingException("Failed to retrieve the message parts for the user (" + username
+          + ") that have been queued for" + " download by the device (" + deviceId + ")", e);
     }
   }
 
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
-   * @param user     the username identifying the user
+   * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
@@ -595,16 +575,17 @@ public class MessagingService
    *
    * @throws MessagingException
    */
-  public List<Message> getMessagesQueuedForDownloadForUser(String user, UUID deviceId)
+  public List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId)
     throws MessagingException
   {
     try
     {
-      return messagingDAO.getMessagesQueuedForDownloadForUser(user, deviceId, getInstanceName());
+      return messagingDAO.getMessagesQueuedForDownloadForUser(username, deviceId,
+          getInstanceName());
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the messages for the user (" + user
+      throw new MessagingException("Failed to retrieve the messages for the user (" + username
           + ") that have been queued for download by the device (" + deviceId + ")", e);
     }
   }

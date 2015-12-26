@@ -73,9 +73,8 @@ public class MessagingDAO
   private String getErrorReportSummarySQL;
   private String getMessagSQL;
   private String getMessagePartsQueuedForAssemblySQL;
-  private String getMessagePartsQueuedForDownloadSQL;
+  private String getMessagePartsQueuedForDownloadForUserSQL;
   private String getMessagesQueuedForDownloadForUserSQL;
-  private String getMessagesQueuedForDownloadSQL;
   private String getMostRecentErrorReportSummariesSQL;
   private String getNextMessageForProcessingSQL;
   private String getNumberOfErrorReportsSQL;
@@ -610,8 +609,10 @@ public class MessagingDAO
   }
 
   /**
-   * Get the message parts that have been queued for download by a particular remote device.
+   * Get the message parts for a user that have been queued for download by a particular remote
+   * device.
    *
+   * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the message parts queued for
    *                 download when they are retrieved
@@ -621,7 +622,8 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<MessagePart> getMessagePartsQueuedForDownload(UUID deviceId, String lockName)
+  public List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId,
+      String lockName)
     throws DAOException
   {
     // Retrieve the Transaction Manager
@@ -643,7 +645,7 @@ public class MessagingDAO
 
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement =
-            connection.prepareStatement(getMessagePartsQueuedForDownloadSQL))
+            connection.prepareStatement(getMessagePartsQueuedForDownloadForUserSQL))
       {
         /*
          * First check if we already have message parts locked for downloading for this device, if
@@ -652,7 +654,8 @@ public class MessagingDAO
          * parts locked in a "Downloading" state.
          */
         statement.setInt(1, MessagePart.Status.DOWNLOADING.getCode());
-        statement.setObject(2, deviceId);
+        statement.setString(2, username);
+        statement.setObject(3, deviceId);
 
         try (ResultSet rs = statement.executeQuery())
         {
@@ -669,7 +672,8 @@ public class MessagingDAO
         if (messageParts.size() == 0)
         {
           statement.setInt(1, MessagePart.Status.QUEUED_FOR_DOWNLOAD.getCode());
-          statement.setObject(2, deviceId);
+          statement.setString(2, username);
+          statement.setObject(3, deviceId);
 
           try (ResultSet rs = statement.executeQuery())
           {
@@ -719,12 +723,14 @@ public class MessagingDAO
       catch (Throwable f)
       {
         logger.error("Failed to rollback the transaction while retrieving"
-            + " the message parts that have been queued for download by the device (" + deviceId
+            + " the message parts for the user (" + username
+            + ") that have been queued for download by the device (" + deviceId
             + ") from the database", f);
       }
 
-      throw new DAOException("Failed to retrieve the message parts that have been queued for"
-          + " download by the device (" + deviceId + ") from the database", e);
+      throw new DAOException("Failed to retrieve the message parts for the user (" + username
+          + ") that have been queued for download" + " by the device (" + deviceId
+          + ") from the database", e);
     }
     finally
     {
@@ -738,145 +744,8 @@ public class MessagingDAO
       catch (Throwable e)
       {
         logger.error("Failed to resume the original transaction while retrieving"
-            + " the message parts that have been queued for download by the device (" + deviceId
-            + ") from the database", e);
-      }
-    }
-  }
-
-  /**
-   * Get the messages that have been queued for download by a particular remote device.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   * @param lockName name of the lock that should be applied to the messages queued for download
-   *                 when they are retrieved
-   *
-   * @return the messages that have been queued for download by a particular remote device
-   *
-   * @throws DAOException
-   */
-  @SuppressWarnings("resource")
-  public List<Message> getMessagesQueuedForDownload(UUID deviceId, String lockName)
-    throws DAOException
-  {
-    // Retrieve the Transaction Manager
-    TransactionManager transactionManager = TransactionManager.getTransactionManager();
-    javax.transaction.Transaction existingTransaction = null;
-
-    try
-    {
-      if (transactionManager.isTransactionActive())
-      {
-        existingTransaction = transactionManager.beginNew();
-      }
-      else
-      {
-        transactionManager.begin();
-      }
-
-      List<Message> messages = new ArrayList<>();
-
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getMessagesQueuedForDownloadSQL))
-      {
-        /*
-         * First check if we already have messages locked for downloading for this device, if
-         * so update the lock and return these messages. This handles the situation where a
-         * device attempted to download messages previously and failed leaving these messages
-         * locked in a "Downloading" state.
-         */
-        statement.setInt(1, Message.Status.DOWNLOADING.getCode());
-        statement.setObject(2, deviceId);
-
-        try (ResultSet rs = statement.executeQuery())
-        {
-          while (rs.next())
-          {
-            messages.add(buildMessageFromResultSet(rs));
-          }
-        }
-
-        /*
-         * If we did not find messages already locked for downloading then retrieve the messages
-         * that are "QueuedForDownload" for the device.
-         */
-        if (messages.size() == 0)
-        {
-          statement.setInt(1, Message.Status.QUEUED_FOR_DOWNLOAD.getCode());
-          statement.setObject(2, deviceId);
-
-          try (ResultSet rs = statement.executeQuery())
-          {
-            while (rs.next())
-            {
-              messages.add(buildMessageFromResultSet(rs));
-            }
-
-          }
-        }
-
-        for (Message message : messages)
-        {
-          Timestamp updated = new Timestamp(System.currentTimeMillis());
-
-          message.setStatus(Message.Status.DOWNLOADING);
-          message.setLockName(lockName);
-          message.setUpdated(updated);
-          message.setDownloadAttempts(message.getDownloadAttempts() + 1);
-
-          try (PreparedStatement updateStatement =
-              connection.prepareStatement(lockMessageForDownloadSQL))
-          {
-            updateStatement.setInt(1, Message.Status.DOWNLOADING.getCode());
-            updateStatement.setString(2, lockName);
-            updateStatement.setTimestamp(3, updated);
-            updateStatement.setObject(4, message.getId());
-
-            if (updateStatement.executeUpdate() != 1)
-            {
-              throw new DAOException("Failed to lock the message (" + message.getId()
-                  + ") queued for"
-                  + " download: No rows were affected as a result of executing the SQL"
-                  + " statement (" + lockMessageForDownloadSQL + ")");
-            }
-
-          }
-        }
-      }
-
-      transactionManager.commit();
-
-      return messages;
-    }
-    catch (Throwable e)
-    {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the messages that have been queued for download by the device (" + deviceId
-            + ") from the database", f);
-      }
-
-      throw new DAOException("Failed to retrieve the messages that have been queued for download"
-          + " by the device (" + deviceId + ") from the database", e);
-    }
-    finally
-    {
-      try
-      {
-        if (existingTransaction != null)
-        {
-          transactionManager.resume(existingTransaction);
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to resume the original transaction while retrieving"
-            + " the messages that have been queued for download by the device (" + deviceId
+            + " the message parts for the user (" + username
+            + ") that have been queued for download by the device (" + deviceId
             + ") from the database", e);
       }
     }
@@ -885,7 +754,7 @@ public class MessagingDAO
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
-   * @param user     the username identifying the user
+   * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    * @param lockName name of the lock that should be applied to the messages queued for download
    *                 when they are retrieved
@@ -896,7 +765,7 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<Message> getMessagesQueuedForDownloadForUser(String user, UUID deviceId,
+  public List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId,
       String lockName)
     throws DAOException
   {
@@ -929,7 +798,7 @@ public class MessagingDAO
          */
 
         statement.setInt(1, Message.Status.DOWNLOADING.getCode());
-        statement.setString(2, user);
+        statement.setString(2, username);
         statement.setObject(3, deviceId);
 
         try (ResultSet rs = statement.executeQuery())
@@ -947,7 +816,7 @@ public class MessagingDAO
         if (messages.size() == 0)
         {
           statement.setInt(1, Message.Status.QUEUED_FOR_DOWNLOAD.getCode());
-          statement.setString(2, user);
+          statement.setString(2, username);
           statement.setObject(3, deviceId);
 
           try (ResultSet rs = statement.executeQuery())
@@ -998,12 +867,12 @@ public class MessagingDAO
       catch (Throwable f)
       {
         logger.error("Failed to rollback the transaction while retrieving"
-            + " the messages for the user (" + user
+            + " the messages for the user (" + username
             + ") that have been queued for download by the device (" + deviceId
             + ") from the database", f);
       }
 
-      throw new DAOException("Failed to retrieve the messages for the user (" + user
+      throw new DAOException("Failed to retrieve the messages for the user (" + username
           + ") that have been queued for download" + " by the device (" + deviceId
           + ") from the database", e);
     }
@@ -1019,7 +888,7 @@ public class MessagingDAO
       catch (Throwable e)
       {
         logger.error("Failed to resume the original transaction while retrieving"
-            + " the messages for the user (" + user
+            + " the messages for the user (" + username
             + ") that have been queued for download by the device (" + deviceId
             + ") from the database", e);
       }
@@ -1683,14 +1552,14 @@ public class MessagingDAO
       + schemaPrefix + "MESSAGE_PARTS MP"
       + " WHERE MP.STATUS=? AND MP.MSG_ID=? ORDER BY MP.PART_NO FOR UPDATE";
 
-    // getMessagePartsQueuedForDownloadSQL
-    getMessagePartsQueuedForDownloadSQL =
+    // getMessagePartsQueuedForDownloadForUserSQL
+    getMessagePartsQueuedForDownloadForUserSQL =
       "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP.SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS,"
       + " MP.PERSISTED, MP.UPDATED, MP.MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID,"
       + " MP.MSG_CORRELATION_ID, MP.MSG_PRIORITY, MP.MSG_CREATED, MP.MSG_DATA_HASH,"
       + " MP.MSG_ENCRYPTION_IV, MP.MSG_CHECKSUM," + " MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix
-      + "MESSAGE_PARTS MP" + " WHERE MP.STATUS=? AND MP.MSG_DEVICE_ID=? ORDER BY MP.PART_NO"
-      + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
+      + "MESSAGE_PARTS MP" + " WHERE MP.STATUS=? AND MP.MSG_USERNAME=? AND MP.MSG_DEVICE_ID=?"
+      + " ORDER BY MP.PART_NO FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
     // getMessagesQueuedForDownloadForUserSQL
     getMessagesQueuedForDownloadForUserSQL =
@@ -1698,14 +1567,6 @@ public class MessagingDAO
       + " M.CREATED, M.PERSISTED, M.UPDATED, M.SEND_ATTEMPTS, M.PROCESS_ATTEMPTS,"
       + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M.LAST_PROCESSED, M.DATA FROM " + schemaPrefix
       + "MESSAGES M" + " WHERE M.STATUS=? AND M.USERNAME=? AND M.DEVICE_ID=? ORDER BY M.CREATED"
-      + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
-
-    // getMessagesQueuedForDownloadSQL
-    getMessagesQueuedForDownloadSQL =
-      "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M.CORRELATION_ID, M.PRIORITY, M.STATUS,"
-      + " M.CREATED, M.PERSISTED, M.UPDATED, M.SEND_ATTEMPTS, M.PROCESS_ATTEMPTS,"
-      + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M.LAST_PROCESSED, M.DATA FROM " + schemaPrefix
-      + "MESSAGES M" + " WHERE M.STATUS=? AND M.DEVICE_ID=? ORDER BY M.CREATED"
       + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
     // getMostRecentErrorReportSummariesSQL

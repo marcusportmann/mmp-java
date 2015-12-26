@@ -48,7 +48,7 @@ public class MessageDownloadRequest
   /**
    * The username identifying the user whose messages should be downloaded.
    */
-  private String user;
+  private String username;
 
   /**
    * Constructs a new <code>MessageDownloadRequest</code> and populates it from the information
@@ -61,7 +61,7 @@ public class MessageDownloadRequest
     Element rootElement = document.getRootElement();
 
     this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
-    this.user = rootElement.getAttributeValue("user");
+    this.username = rootElement.getAttributeValue("username");
   }
 
   /**
@@ -69,12 +69,12 @@ public class MessageDownloadRequest
    *
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *                 the message download request originated from
-   * @param user     the username identifying the user whose messages should be downloaded
+   * @param username the username identifying the user whose messages should be downloaded
    */
-  public MessageDownloadRequest(UUID deviceId, String user)
+  public MessageDownloadRequest(UUID deviceId, String username)
   {
     this.deviceId = deviceId;
-    this.user = user;
+    this.username = username;
   }
 
   /**
@@ -92,8 +92,7 @@ public class MessageDownloadRequest
 
     return rootElement.getName().equals("MessageDownloadRequest")
         && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("deviceId")
-        && rootElement.hasAttribute("user");
-
+        && rootElement.hasAttribute("username");
   }
 
   /**
@@ -113,9 +112,9 @@ public class MessageDownloadRequest
    *
    * @return the username identifying the user whose messages should be downloaded
    */
-  public String getUser()
+  public String getUsername()
   {
-    return user;
+    return username;
   }
 
   /**
@@ -133,11 +132,11 @@ public class MessageDownloadRequest
   /**
    * Set the username identifying the user whose messages should be downloaded.
    *
-   * @param user the username identifying the user whose messages should be downloaded
+   * @param username the username identifying the user whose messages should be downloaded
    */
-  public void setUser(String user)
+  public void setUsername(String username)
   {
-    this.user = user;
+    this.username = username;
   }
 
   /**
@@ -148,7 +147,7 @@ public class MessageDownloadRequest
   @Override
   public String toString()
   {
-    return "<MessageDownloadRequest deviceId=\"" + deviceId + "\" user=\"" + user + "\"/>";
+    return "<MessageDownloadRequest deviceId=\"" + deviceId + "\" username=\"" + username + "\"/>";
   }
 
   /**
@@ -161,7 +160,7 @@ public class MessageDownloadRequest
     Element rootElement = new Element("MessageDownloadRequest");
 
     rootElement.setAttribute("deviceId", deviceId.toString());
-    rootElement.setAttribute("user", user);
+    rootElement.setAttribute("username", username);
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

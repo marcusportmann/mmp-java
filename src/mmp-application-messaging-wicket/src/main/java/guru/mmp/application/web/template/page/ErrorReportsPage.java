@@ -36,6 +36,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import java.text.SimpleDateFormat;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -98,7 +99,7 @@ public class ErrorReportsPage extends TemplateWebPage
         {
           ErrorReportSummary errorReportSummary = item.getModelObject();
 
-          String id = errorReportSummary.getId();
+          UUID id = errorReportSummary.getId();
 
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 

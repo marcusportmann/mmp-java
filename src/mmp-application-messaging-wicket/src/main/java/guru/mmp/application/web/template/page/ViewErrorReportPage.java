@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -61,9 +62,10 @@ public class ViewErrorReportPage extends TemplateWebPage
    * Constructs a new <code>ViewErrorReportPage</code>.
    *
    * @param previousPage the previous page
-   * @param id           the ID uniquely identifying the error report
+   * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                     error report
    */
-  public ViewErrorReportPage(PageReference previousPage, String id)
+  public ViewErrorReportPage(PageReference previousPage, UUID id)
   {
     super("View Error Report", "Viewing the error report: " + id);
 
@@ -92,7 +94,7 @@ public class ViewErrorReportPage extends TemplateWebPage
       form.add(new Label("applicationId", errorReport.getApplicationId()));
       form.add(new Label("applicationVersion",
           String.valueOf(errorReport.getApplicationVersion())));
-      form.add(new Label("device", errorReport.getDevice()));
+      form.add(new Label("deviceId", errorReport.getDeviceId()));
       form.add(new Label("created", sdf.format(errorReport.getCreated())));
       form.add(new Label("who", errorReport.getWho()));
       form.add(new Label("description", errorReport.getDescription()));
