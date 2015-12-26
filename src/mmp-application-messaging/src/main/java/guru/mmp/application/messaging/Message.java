@@ -106,12 +106,6 @@ public class Message
   private String lockName;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * message is associated with.
-   */
-  private UUID organisationId;
-
-  /**
    * The date and time the message was persisted.
    */
   private Date persisted;
@@ -150,7 +144,7 @@ public class Message
   /**
    * The username identifying the user associated with the message.
    */
-  private String user;
+  private String username;
 
   /**
    * Constructs a new <code>Message</code> and populates it from the message information stored
@@ -166,8 +160,7 @@ public class Message
     Element rootElement = document.getRootElement();
 
     this.id = UUID.fromString(rootElement.getAttributeValue("id"));
-    this.user = rootElement.getAttributeValue("user");
-    this.organisationId = UUID.fromString(rootElement.getAttributeValue("organisationId"));
+    this.username = rootElement.getAttributeValue("username");
     this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
     this.typeId = UUID.fromString(rootElement.getAttributeValue("typeId"));
     this.correlationId = UUID.fromString(rootElement.getAttributeValue("correlationId"));
@@ -196,9 +189,7 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param user           the username identifying the user associated with the message
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the message is associated with
+   * @param username       the username identifying the user associated with the message
    * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       device the message originated from
    * @param typeId         the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -207,12 +198,11 @@ public class Message
    * @param priority       the message priority
    * @param data           the data for the message which is NOT encrypted
    */
-  public Message(String user, UUID organisationId, UUID deviceId, UUID typeId, UUID correlationId,
+  public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
       Priority priority, byte[] data)
   {
     this.id = UUID.randomUUID();
-    this.user = user;
-    this.organisationId = organisationId;
+    this.username = username;
     this.deviceId = deviceId;
     this.typeId = typeId;
     this.correlationId = correlationId;
@@ -229,9 +219,7 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param user           the username identifying the user associated with the message
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the message is associated with
+   * @param username       the username identifying the user associated with the message
    * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       device the message originated from
    * @param typeId         the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -242,12 +230,11 @@ public class Message
    * @param dataHash       the hash of the unencrypted data for the message
    * @param encryptionIV   the base-64 encoded initialisation vector for the encryption scheme
    */
-  public Message(String user, UUID organisationId, UUID deviceId, UUID typeId, UUID correlationId,
+  public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
       Priority priority, byte[] data, String dataHash, String encryptionIV)
   {
     this.id = UUID.randomUUID();
-    this.user = user;
-    this.organisationId = organisationId;
+    this.username = username;
     this.deviceId = deviceId;
     this.typeId = typeId;
     this.correlationId = correlationId;
@@ -273,9 +260,7 @@ public class Message
    *
    * @param id               the Universally Unique Identifier (UUID) used to uniquely identify the
    *                         message
-   * @param user             the username identifying the user associated with the message
-   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         organisation the message is associated with
+   * @param username         the username identifying the user associated with the message
    * @param deviceId         the Universally Unique Identifier (UUID) used to uniquely identify the
    *                         device the message originated from
    * @param typeId           the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -296,14 +281,13 @@ public class Message
    * @param dataHash         the hash of the unencrypted data for the message
    * @param encryptionIV     the base-64 encoded initialisation vector for the encryption scheme
    */
-  public Message(UUID id, String user, UUID organisationId, UUID deviceId, UUID typeId,
-      UUID correlationId, Priority priority, Status status, Date created, Date persisted,
-      Date updated, int sendAttempts, int processAttempts, int downloadAttempts, String lockName,
+  public Message(UUID id, String username, UUID deviceId, UUID typeId, UUID correlationId,
+      Priority priority, Status status, Date created, Date persisted, Date updated,
+      int sendAttempts, int processAttempts, int downloadAttempts, String lockName,
       Date lastProcessed, byte[] data, String dataHash, String encryptionIV)
   {
     this.id = id;
-    this.user = user;
-    this.organisationId = organisationId;
+    this.username = username;
     this.deviceId = deviceId;
     this.typeId = typeId;
     this.correlationId = correlationId;
@@ -512,16 +496,15 @@ public class Message
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("Message")
-        && !((!rootElement.hasAttribute("id")) || (!rootElement.hasAttribute("user"))
-          || (!rootElement.hasAttribute("organisationId"))
-            || (!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute("priority"))
-              || (!rootElement.hasAttribute("typeId"))
-                || (!rootElement.hasAttribute("correlationId"))
-                  || (!rootElement.hasAttribute("created"))
-                    || (!rootElement.hasAttribute("sendAttempts"))
-                      || (!rootElement.hasAttribute("dataHash"))
-                        || (!rootElement.hasAttribute("encryptionScheme"))
-                          || (!rootElement.hasAttribute("encryptionIV")));
+        && !((!rootElement.hasAttribute("id")) || (!rootElement.hasAttribute("username"))
+          || (!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute("priority"))
+            || (!rootElement.hasAttribute("typeId"))
+              || (!rootElement.hasAttribute("correlationId"))
+                || (!rootElement.hasAttribute("created"))
+                  || (!rootElement.hasAttribute("sendAttempts"))
+                    || (!rootElement.hasAttribute("dataHash"))
+                      || (!rootElement.hasAttribute("encryptionScheme"))
+                        || (!rootElement.hasAttribute("encryptionIV")));
   }
 
   /**
@@ -629,18 +612,6 @@ public class Message
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   * the message is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *         the message is associated with
-   */
-  public UUID getOrganisationId()
-  {
-    return organisationId;
-  }
-
-  /**
    * Returns the date and time the message was persisted.
    *
    * @return the date and time the message was persisted
@@ -718,9 +689,9 @@ public class Message
    *
    * @return the username identifying the user associated with the message
    */
-  public String getUser()
+  public String getUsername()
   {
-    return user;
+    return username;
   }
 
   /**
@@ -864,18 +835,6 @@ public class Message
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * message is associated with.
-   *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the message is associated with
-   */
-  public void setOrganisationId(UUID organisationId)
-  {
-    this.organisationId = organisationId;
-  }
-
-  /**
    * Set the date and time the message was persisted.
    *
    * @param persisted the date and time the message was persisted
@@ -952,11 +911,11 @@ public class Message
   /**
    * Set the username identifying the user associated with the message.
    *
-   * @param user the username identifying the user associated with the message
+   * @param username the username identifying the user associated with the message
    */
-  public void setUser(String user)
+  public void setUsername(String username)
   {
-    this.user = user;
+    this.username = username;
   }
 
   /**
@@ -970,8 +929,7 @@ public class Message
     StringBuilder buffer = new StringBuilder("<Message");
 
     buffer.append(" id=\"").append(id).append("\"");
-    buffer.append(" user=\"").append(user).append("\"");
-    buffer.append(" organisationId=\"").append(organisationId).append("\"");
+    buffer.append(" username=\"").append(username).append("\"");
     buffer.append(" deviceId=\"").append(deviceId).append("\"");
     buffer.append(" typeId=\"").append(typeId).append("\"");
     buffer.append(" correlationId=\"").append(correlationId).append("\"");
@@ -1044,8 +1002,7 @@ public class Message
     Element rootElement = new Element("Message");
 
     rootElement.setAttribute("id", id.toString());
-    rootElement.setAttribute("user", user);
-    rootElement.setAttribute("organisationId", organisationId.toString());
+    rootElement.setAttribute("username", username);
     rootElement.setAttribute("deviceId", deviceId.toString());
     rootElement.setAttribute("typeId", typeId.toString());
     rootElement.setAttribute("correlationId", correlationId.toString());

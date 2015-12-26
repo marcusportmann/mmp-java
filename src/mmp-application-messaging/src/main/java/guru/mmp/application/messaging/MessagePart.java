@@ -118,7 +118,7 @@ public class MessagePart
   /**
    * The username identifying the user associated with the original message.
    */
-  private String messageUser;
+  private String messageUsername;
 
   /**
    * The number of the message part in the set of message parts for the original message.
@@ -167,9 +167,7 @@ public class MessagePart
     this.status = Status.INITIALISED;
 
     this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
-    this.messageUser = rootElement.getAttributeValue("messageUser");
-    this.messageOrganisationId =
-      UUID.fromString(rootElement.getAttributeValue("messageOrganisationId"));
+    this.messageUsername = rootElement.getAttributeValue("messageUsername");
     this.messageDeviceId = UUID.fromString(rootElement.getAttributeValue("messageDeviceId"));
     this.messageTypeId = UUID.fromString(rootElement.getAttributeValue("messageTypeId"));
     this.messageCorrelationId =
@@ -199,35 +197,32 @@ public class MessagePart
   /**
    * Constructs a new <code>MessagePart</code>.
    *
-   * @param partNo                the number of the message part in the set of message parts for
-   *                              the original message
-   * @param totalParts            the total number of parts in the set of message parts for the
-   *                              original message
-   * @param messageId             the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the original message
-   * @param messageUser           the username identifying the user associated with the original
-   *                              message
-   * @param messageOrganisationId the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the organisation the original message was associated
-   *                              with
-   * @param messageDeviceId       the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the device the original message originated from
-   * @param messageTypeId         the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the type of the original message
-   * @param messageCorrelationId  the Universally Unique Identifier (UUID) used to correlate the
-   *                              original message
-   * @param messagePriority       the priority for the original message
-   * @param messageCreated        the date and time the original message was created
-   * @param messageDataHash       the hash of the unencrypted data for the original message
-   * @param messageEncryptionIV   the base-64 encoded initialisation vector for the encryption
-   *                              scheme for the original message
-   * @param messageChecksum       the checksum for the original message
-   * @param data                  the binary data for the message part
+   * @param partNo               the number of the message part in the set of message parts for
+   *                             the original message
+   * @param totalParts           the total number of parts in the set of message parts for the
+   *                             original message
+   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the original message
+   * @param messageUsername      the username identifying the user associated with the original
+   *                             message
+   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the device the original message originated from
+   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the type of the original message
+   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
+   *                             original message
+   * @param messagePriority      the priority for the original message
+   * @param messageCreated       the date and time the original message was created
+   * @param messageDataHash      the hash of the unencrypted data for the original message
+   * @param messageEncryptionIV  the base-64 encoded initialisation vector for the encryption
+   *                             scheme for the original message
+   * @param messageChecksum      the checksum for the original message
+   * @param data                 the binary data for the message part
    */
-  public MessagePart(int partNo, int totalParts, UUID messageId, String messageUser,
-      UUID messageOrganisationId, UUID messageDeviceId, UUID messageTypeId,
-      UUID messageCorrelationId, Message.Priority messagePriority, Date messageCreated,
-      String messageDataHash, String messageEncryptionIV, String messageChecksum, byte[] data)
+  public MessagePart(int partNo, int totalParts, UUID messageId, String messageUsername,
+      UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
+      Message.Priority messagePriority, Date messageCreated, String messageDataHash,
+      String messageEncryptionIV, String messageChecksum, byte[] data)
   {
     this.id = UUID.randomUUID();
     this.partNo = partNo;
@@ -235,8 +230,7 @@ public class MessagePart
     this.sendAttempts = 0;
     this.status = Status.INITIALISED;
     this.messageId = messageId;
-    this.messageUser = messageUser;
-    this.messageOrganisationId = messageOrganisationId;
+    this.messageUsername = messageUsername;
     this.messageDeviceId = messageDeviceId;
     this.messageTypeId = messageTypeId;
     this.messageCorrelationId = messageCorrelationId;
@@ -251,48 +245,44 @@ public class MessagePart
   /**
    * Constructs a new <code>MessagePart</code>.
    *
-   * @param id                    the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the message part
-   * @param partNo                the number of the message part in the set of message parts for
-   *                              the original message
-   * @param totalParts            total number of parts in the set of message parts for the
-   *                              original message
-   * @param sendAttempts          the number of times that the sending of the message part was
-   *                              attempted
-   * @param downloadAttempts      the number of times that downloading of the message part was
-   *                              attempted
-   * @param status                the message part status e.g. Initialised, Sending, etc
-   * @param persisted             the date and time the message part was persisted
-   * @param updated               the date and time the message part was last updated
-   * @param messageId             the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the original message
-   * @param messageUser           the username identifying the user associated with the original
-   *                              message
-   * @param messageOrganisationId the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the organisation the original message was associated
-   *                              with
-   * @param messageDeviceId       the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the device the original message originated from
-   * @param messageTypeId         the Universally Unique Identifier (UUID) used to uniquely
-   *                              identify the type of the original message
-   * @param messageCorrelationId  the Universally Unique Identifier (UUID) used to correlate the
-   *                              original message
-   * @param messagePriority       the priority for the original message
-   * @param messageCreated        the date and time the original message was created
-   * @param messageDataHash       the hash of the unencrypted data for the original message
-   * @param messageEncryptionIV   the base-64 encoded initialisation vector for the encryption
-   *                              scheme for the original message
-   * @param messageChecksum       the checksum for the original message
-   * @param lockName              the name of the entity that has locked the message part for
-   *                              processing
-   * @param data                  the binary data for the message part
+   * @param id                   the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the message part
+   * @param partNo               the number of the message part in the set of message parts for
+   *                             the original message
+   * @param totalParts           total number of parts in the set of message parts for the
+   *                             original message
+   * @param sendAttempts         the number of times that the sending of the message part was
+   *                             attempted
+   * @param downloadAttempts     the number of times that downloading of the message part was
+   *                             attempted
+   * @param status               the message part status e.g. Initialised, Sending, etc
+   * @param persisted            the date and time the message part was persisted
+   * @param updated              the date and time the message part was last updated
+   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the original message
+   * @param messageUsername      the username identifying the user associated with the original
+   *                             message
+   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the device the original message originated from
+   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the type of the original message
+   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
+   *                             original message
+   * @param messagePriority      the priority for the original message
+   * @param messageCreated       the date and time the original message was created
+   * @param messageDataHash      the hash of the unencrypted data for the original message
+   * @param messageEncryptionIV  the base-64 encoded initialisation vector for the encryption
+   *                             scheme for the original message
+   * @param messageChecksum      the checksum for the original message
+   * @param lockName             the name of the entity that has locked the message part for
+   *                             processing
+   * @param data                 the binary data for the message part
    */
   public MessagePart(UUID id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
-      Status status, Date persisted, Date updated, UUID messageId, String messageUser,
-      UUID messageOrganisationId, UUID messageDeviceId, UUID messageTypeId,
-      UUID messageCorrelationId, Message.Priority messagePriority, Date messageCreated,
-      String messageDataHash, String messageEncryptionIV, String messageChecksum, String lockName,
-      byte[] data)
+      Status status, Date persisted, Date updated, UUID messageId, String messageUsername,
+      UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
+      Message.Priority messagePriority, Date messageCreated, String messageDataHash,
+      String messageEncryptionIV, String messageChecksum, String lockName, byte[] data)
   {
     this.id = id;
     this.partNo = partNo;
@@ -303,8 +293,7 @@ public class MessagePart
     this.persisted = persisted;
     this.updated = updated;
     this.messageId = messageId;
-    this.messageUser = messageUser;
-    this.messageOrganisationId = messageOrganisationId;
+    this.messageUsername = messageUsername;
     this.messageDeviceId = messageDeviceId;
     this.messageTypeId = messageTypeId;
     this.messageCorrelationId = messageCorrelationId;
@@ -429,16 +418,15 @@ public class MessagePart
           || (!rootElement.hasAttribute("totalParts"))
             || (!rootElement.hasAttribute("sendAttempts"))
               || (!rootElement.hasAttribute("messageId"))
-                || (!rootElement.hasAttribute("messageUser"))
-                  || (!rootElement.hasAttribute("messageOrganisationId"))
-                    || (!rootElement.hasAttribute("messageDeviceId"))
-                      || (!rootElement.hasAttribute("messageTypeId"))
-                        || (!rootElement.hasAttribute("messageCorrelationId"))
-                          || (!rootElement.hasAttribute("messagePriority"))
-                            || (!rootElement.hasAttribute("messageCreated"))
-                              || (!rootElement.hasAttribute("messageDataHash"))
-                                || (!rootElement.hasAttribute("messageEncryptionIV"))
-                                  || (!rootElement.hasAttribute("messageChecksum")));
+                || (!rootElement.hasAttribute("messageUsername"))
+                  || (!rootElement.hasAttribute("messageDeviceId"))
+                    || (!rootElement.hasAttribute("messageTypeId"))
+                      || (!rootElement.hasAttribute("messageCorrelationId"))
+                        || (!rootElement.hasAttribute("messagePriority"))
+                          || (!rootElement.hasAttribute("messageCreated"))
+                            || (!rootElement.hasAttribute("messageDataHash"))
+                              || (!rootElement.hasAttribute("messageEncryptionIV"))
+                                || (!rootElement.hasAttribute("messageChecksum")));
   }
 
   /**
@@ -557,18 +545,6 @@ public class MessagePart
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   * the original message was associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *         the original message was associated with
-   */
-  public UUID getMessageOrganisationId()
-  {
-    return messageOrganisationId;
-  }
-
-  /**
    * Returns the priority for the original message.
    *
    * @return the priority for the original message
@@ -595,9 +571,9 @@ public class MessagePart
    *
    * @return the username identifying the user associated with the original message
    */
-  public String getMessageUser()
+  public String getMessageUsername()
   {
-    return messageUser;
+    return messageUsername;
   }
 
   /**
@@ -777,18 +753,6 @@ public class MessagePart
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * original message was associated with.
-   *
-   * @param messageOrganisationId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                              the organisation the original message was associated with
-   */
-  public void setMessageOrganisationId(UUID messageOrganisationId)
-  {
-    this.messageOrganisationId = messageOrganisationId;
-  }
-
-  /**
    * Set the priority for the original message.
    *
    * @param messagePriority the priority for the original message
@@ -813,11 +777,11 @@ public class MessagePart
   /**
    * Set the username identifying the user associated with the original message.
    *
-   * @param messageUser the username identifying the user associated with the original message
+   * @param messageUsername the username identifying the user associated with the original message
    */
-  public void setMessageUser(String messageUser)
+  public void setMessageUsername(String messageUsername)
   {
-    this.messageUser = messageUser;
+    this.messageUsername = messageUsername;
   }
 
   /**
@@ -920,8 +884,7 @@ public class MessagePart
     }
 
     buffer.append(" messageId=\"").append(messageId).append("\"");
-    buffer.append(" messageUser=\"").append(messageUser).append("\"");
-    buffer.append(" messageOrganisationId=\"").append(messageOrganisationId).append("\"");
+    buffer.append(" messageUsername=\"").append(messageUsername).append("\"");
     buffer.append(" messageDeviceId=\"").append(messageDeviceId).append("\"");
     buffer.append(" messageTypeId=\"").append(messageTypeId).append("\"");
     buffer.append(" messageCorrelationId=\"").append(messageCorrelationId).append("\"");
@@ -950,8 +913,7 @@ public class MessagePart
     rootElement.setAttribute("totalParts", Integer.toString(totalParts));
     rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
     rootElement.setAttribute("messageId", messageId.toString());
-    rootElement.setAttribute("messageUser", messageUser);
-    rootElement.setAttribute("messageOrganisationId", messageOrganisationId.toString());
+    rootElement.setAttribute("messageUsername", messageUsername);
     rootElement.setAttribute("messageDeviceId", messageDeviceId.toString());
     rootElement.setAttribute("messageTypeId", messageTypeId.toString());
     rootElement.setAttribute("messageCorrelationId", messageCorrelationId.toString());
