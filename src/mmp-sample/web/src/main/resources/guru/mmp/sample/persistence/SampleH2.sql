@@ -30,7 +30,7 @@ COMMENT ON COLUMN SAMPLE.DATA.VALUE
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO MMP.ORGANISATIONS (ID, CODE, NAME, DESCRIPTION) VALUES
+INSERT INTO MMP.ORGANISATIONS (ID, NAME, DESCRIPTION) VALUES
   ('204e5b8f-48e7-4354-bd15-753e6543b64d', 'Sample', 'Sample');
 
 INSERT INTO MMP.USER_DIRECTORIES (ID, TYPE_ID, NAME, DESCRIPTION, CONFIGURATION) VALUES

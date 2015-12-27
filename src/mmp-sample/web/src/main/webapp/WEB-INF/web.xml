@@ -86,18 +86,6 @@
   </servlet-mapping>
 
   <!-- ========================================================================================= -->
-  <!--                                  Test Messaging Servlet                                   -->
-  <!-- ========================================================================================= -->
-  <servlet>
-    <servlet-name>TestMessagingServlet</servlet-name>
-    <servlet-class>guru.mmp.application.web.servlet.TestMessagingServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>TestMessagingServlet</servlet-name>
-    <url-pattern>/servlet/TestMessagingServlet</url-pattern>
-  </servlet-mapping>
-
-  <!-- ========================================================================================= -->
   <!--                                    View Report Servlet                                    -->
   <!-- ========================================================================================= -->
   <servlet>

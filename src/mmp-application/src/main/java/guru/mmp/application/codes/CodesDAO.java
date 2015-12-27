@@ -962,7 +962,7 @@ public class CodesDAO
     // createCodeCategorySQL
     createCodeCategorySQL = "INSERT INTO " + schemaPrefix + "CODE_CATEGORIES"
         + " (ID, CATEGORY_TYPE, NAME, DESCRIPTION, CODE_DATA, ENDPOINT, IS_ENDPOINT_SECURE,"
-        + " IS_CACHEABLE, CACHE_EXPIRY, UPDATED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        + " IS_CACHEABLE, CACHE_EXPIRY, UPDATED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createCodeSQL
     createCodeSQL = "INSERT INTO " + schemaPrefix + "CODES"
@@ -989,7 +989,7 @@ public class CodesDAO
     // getCodeCategoriesSQL
     getCodeCategoriesSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION, CC.CODE_DATA,"
         + " CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
-        + schemaPrefix + "CODE_CATEGORIES ORDER BY CC.NAME";
+        + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
 
     // getCodeCategoriesNoDataSQL
     getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION,"

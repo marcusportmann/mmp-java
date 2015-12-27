@@ -459,7 +459,7 @@ public class ReportingDAO
   {
     // createReportDefinitionSQL
     createReportDefinitionSQL = "INSERT INTO " + schemaPrefix
-        + "REPORT_DEFINITIONS (ID, NAME, TEMPLATE) VALUES (?, ?, ?, ?)";
+        + "REPORT_DEFINITIONS (ID, NAME, TEMPLATE) VALUES (?, ?, ?)";
 
     // deleteReportDefinitionSQL
     deleteReportDefinitionSQL = "DELETE FROM " + schemaPrefix
