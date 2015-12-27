@@ -104,7 +104,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
 
       // The code category data view
       CodeCategoryDataProvider dataProvider =
-        new CodeCategoryDataProvider(session.getOrganisation().getId(), false);
+        new CodeCategoryDataProvider(false);
 
       DataView<CodeCategory> dataView = new DataView<CodeCategory>("codeCategory", dataProvider)
       {

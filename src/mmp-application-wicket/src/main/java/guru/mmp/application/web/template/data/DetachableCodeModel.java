@@ -23,9 +23,11 @@ import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-import javax.inject.Inject;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>DetachableCodeModel</code> class provides a detachable model
@@ -36,6 +38,12 @@ import javax.inject.Inject;
 public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the code category the code
+   * is associated with.
+   */
+  private UUID categoryId;
 
   /* Codes Service */
   @Inject
@@ -53,7 +61,7 @@ public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
    */
   public DetachableCodeModel(Code code)
   {
-    this(code.getId());
+    this(code.getCategoryId(), code.getId());
 
     setObject(code);
   }
@@ -61,10 +69,13 @@ public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
   /**
    * Constructs a new <code>DetachableCodeModel</code>.
    *
-   * @param id the ID used to uniquely identify the code
+   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the code
+   *                   category the code is associated with
+   * @param id         the ID used to uniquely identify the code
    */
-  public DetachableCodeModel(String id)
+  public DetachableCodeModel(UUID categoryId, String id)
   {
+    this.categoryId = categoryId;
     this.id = id;
   }
 
@@ -84,11 +95,12 @@ public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
   {
     try
     {
-      return codesService.getCode(id);
+      return codesService.getCode(categoryId, id);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the code (" + id + ")", e);
+      throw new WebApplicationException("Failed to load the code (" + id
+          + ") for the code category (" + categoryId + ")", e);
     }
   }
 

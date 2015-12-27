@@ -9,23 +9,23 @@
 --
 --  Execute the following command to create the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/createdb  --template=template1 --encoding=UTF8 sampledb'
---    CentOS (as root): sudo su postgres -c 'createdb --template=template1 --encoding=UTF8 sampledb'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/createdb  --template=template1 --encoding=UTF8 dbname'
+--    CentOS (as root): sudo su postgres -c 'createdb --template=template1 --encoding=UTF8 dbname'
 --
 --  Execute the following command to initialise the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/psql -d sampledb -f SamplePostgres.sql'
---    CentOS (as root): su postgres -c 'psql -d sampledb -f ApplicationPostgres.sql'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/psql -d dbname -f ApplicationPostgres.sql'
+--    CentOS (as root): su postgres -c 'psql -d dbname -f ApplicationPostgres.sql'
 --
 --  Execute the following command to delete the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/dropdb sampledb'
---    CentOS (as root): su postgres -c 'dropdb sampledb'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/dropdb dbname'
+--    CentOS (as root): su postgres -c 'dropdb dbname'
 --
 --  Execute the following command to clean-up unreferenced large objects on the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/vacuumlo sampledb'
---    CentOS (as root): su postgres -c 'vacuumlo sampledb'
+--    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/vacuumlo dbname'
+--    CentOS (as root): su postgres -c 'vacuumlo dbname'
 --
 -- -------------------------------------------------------------------------------------------------
 set client_min_messages='warning';
@@ -77,16 +77,16 @@ DROP SCHEMA IF EXISTS MMP CASCADE;
 -- -------------------------------------------------------------------------------------------------
 -- DROP ROLES
 -- -------------------------------------------------------------------------------------------------
-DROP OWNED BY sampledb CASCADE;
-DROP ROLE IF EXISTS sampledb;
+DROP OWNED BY dbuser CASCADE;
+DROP ROLE IF EXISTS dbuser;
 
 
 
 -- -------------------------------------------------------------------------------------------------
 -- CREATE ROLES
 -- -------------------------------------------------------------------------------------------------
-CREATE ROLE sampledb WITH LOGIN PASSWORD 'Password1';
-ALTER ROLE sampledb WITH LOGIN;
+CREATE ROLE dbuser WITH LOGIN PASSWORD 'Password1';
+ALTER ROLE dbuser WITH LOGIN;
 
 
 
@@ -681,7 +681,6 @@ COMMENT ON COLUMN MMP.JOB_PARAMETERS.VALUE
 
 CREATE TABLE MMP.CODE_CATEGORIES (
   ID                  UUID NOT NULL,
-  ORGANISATION_ID     UUID NOT NULL,
   CATEGORY_TYPE       INTEGER NOT NULL,
   NAME                VARCHAR(256) NOT NULL,
   DESCRIPTION         VARCHAR(512) NOT NULL,
@@ -692,19 +691,11 @@ CREATE TABLE MMP.CODE_CATEGORIES (
   CACHE_EXPIRY        INTEGER,
   UPDATED             TIMESTAMP,
 
-  PRIMARY KEY (ID),
-  CONSTRAINT MMP_CODE_CATEGORIES_ORGANISATION_ID_FK FOREIGN KEY (ORGANISATION_ID) REFERENCES MMP.ORGANISATIONS(ID) ON DELETE CASCADE
+  PRIMARY KEY (ID)
 );
-
-CREATE INDEX MMP_CODE_CATEGORIES_ORGANISATION_ID_IX
-  ON MMP.CODE_CATEGORIES
-  (ORGANISATION_ID);
 
 COMMENT ON COLUMN MMP.CODE_CATEGORIES.ID
   IS 'The Universally Unique Identifier (UUID) used to uniquely identify the code category';
-
-COMMENT ON COLUMN MMP.CODE_CATEGORIES.ORGANISATION_ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the code category is associated with';
 
 COMMENT ON COLUMN MMP.CODE_CATEGORIES.CATEGORY_TYPE
   IS 'The type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc';
@@ -1117,33 +1108,24 @@ COMMENT ON COLUMN MMP.ARCHIVED_MESSAGES.DATA
 
 
 CREATE TABLE MMP.PACKAGES (
-  ID               UUID NOT NULL,
-  VERSION          INTEGER NOT NULL,
-  ORGANISATION_ID  UUID NOT NULL,
-  NAME             VARCHAR(255) NOT NULL,
-  IS_CURRENT       BOOLEAN NOT NULL,
-  HASH             VARCHAR(44) NOT NULL,
-  SIZE             INTEGER NOT NULL,
-  CREATED          TIMESTAMP NOT NULL,
-  CREATED_BY       VARCHAR(100) NOT NULL,
-  DATA             BYTEA NOT NULL,
+  ID          UUID NOT NULL,
+  VERSION     INTEGER NOT NULL,
+  NAME        VARCHAR(255) NOT NULL,
+  IS_CURRENT  BOOLEAN NOT NULL,
+  HASH        VARCHAR(44) NOT NULL,
+  SIZE        INTEGER NOT NULL,
+  CREATED     TIMESTAMP NOT NULL,
+  CREATED_BY  VARCHAR(100) NOT NULL,
+  DATA        BYTEA NOT NULL,
 
-  PRIMARY KEY (ID, VERSION),
-  CONSTRAINT MMP_PACKAGES_ORGANISATION_FK FOREIGN KEY (ORGANISATION_ID) REFERENCES MMP.ORGANISATIONS(ID)
+  PRIMARY KEY (ID, VERSION)
 );
-
-CREATE INDEX MMP_PACKAGES_ORGANISATION_ID_IX
-  ON MMP.PACKAGES
-  (ORGANISATION_ID);
 
 COMMENT ON COLUMN MMP.PACKAGES.ID
   IS 'The Universally Unique Identifier (UUID) used to identify the package';
 
 COMMENT ON COLUMN MMP.PACKAGES.VERSION
   IS 'The version of the package';
-
-COMMENT ON COLUMN MMP.PACKAGES.ORGANISATION_ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the package is associated with';
 
 COMMENT ON COLUMN MMP.PACKAGES.NAME
   IS 'The name of the package';
@@ -1228,24 +1210,15 @@ COMMENT ON COLUMN MMP.ERROR_REPORTS.DATA
 
 
 CREATE TABLE MMP.REPORT_DEFINITIONS (
-  ID               UUID NOT NULL,
-  ORGANISATION_ID  UUID NOT NULL,
-  NAME             VARCHAR(255) NOT NULL,
-  TEMPLATE         BYTEA NULL,
+  ID        UUID NOT NULL,
+  NAME      VARCHAR(255) NOT NULL,
+  TEMPLATE  BYTEA NULL,
 
-  PRIMARY KEY (ID),
-  CONSTRAINT MMP_REPORT_DEFINITIONS_ORGANISATION_FK FOREIGN KEY (ORGANISATION_ID) REFERENCES MMP.ORGANISATIONS(ID)
+  PRIMARY KEY (ID)
 );
-
-CREATE INDEX MMP_REPORT_DEFINITIONS_ORGANISATION_ID_IX
-  ON MMP.REPORT_DEFINITIONS
-  (ORGANISATION_ID);
 
 COMMENT ON COLUMN MMP.REPORT_DEFINITIONS.ID
   IS 'The Universally Unique Identifier (UUID) used to uniquely identify the report definition';
-
-COMMENT ON COLUMN MMP.REPORT_DEFINITIONS.ORGANISATION_ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the report definition is associated with';
 
 COMMENT ON COLUMN MMP.REPORT_DEFINITIONS.NAME
   IS 'The name of the report definition';
@@ -1296,28 +1269,19 @@ COMMENT ON COLUMN MMP.SMS.LAST_PROCESSED
 
 
 CREATE TABLE MMP.PROCESS_DEFINITIONS (
-  ID               UUID NOT NULL,
-  VERSION          INTEGER NOT NULL,
-  ORGANISATION_ID  UUID NOT NULL,
-  NAME             VARCHAR(255) NOT NULL,
-  DATA             BYTEA NULL,
+  ID       UUID NOT NULL,
+  VERSION  INTEGER NOT NULL,
+  NAME     VARCHAR(255) NOT NULL,
+  DATA     BYTEA NULL,
 
-  PRIMARY KEY (ID, VERSION),
-  CONSTRAINT MMP_PROCESS_DEFINITIONS_ORGANISATION_FK FOREIGN KEY (ORGANISATION_ID) REFERENCES MMP.ORGANISATIONS(ID)
+  PRIMARY KEY (ID, VERSION)
 );
-
-CREATE INDEX MMP_PROCESS_DEFINITIONS_ORGANISATION_ID_IX
-  ON MMP.PROCESS_DEFINITIONS
-  (ORGANISATION_ID);
 
 COMMENT ON COLUMN MMP.PROCESS_DEFINITIONS.ID
   IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process definition';
 
 COMMENT ON COLUMN MMP.PROCESS_DEFINITIONS.VERSION
   IS 'The version of the process definition';
-
-COMMENT ON COLUMN MMP.PROCESS_DEFINITIONS.ORGANISATION_ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the process definition is associated with';
 
 COMMENT ON COLUMN MMP.PROCESS_DEFINITIONS.NAME
   IS 'The name of the process definition';
@@ -1330,27 +1294,6 @@ COMMENT ON COLUMN MMP.PROCESS_DEFINITIONS.DATA
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.OrganisationId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.UserDirectoryId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.InternalUserId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.InternalUserPasswordHistoryId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.GroupId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.ExternalGroupId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.FunctionId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.RoleId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.ScheduledTaskParameterId', 100000);
-INSERT INTO MMP.IDGENERATOR (NAME, CURRENT) VALUES
-  ('Application.CodeId', 10000000);
-
 INSERT INTO MMP.ORGANISATIONS (ID, NAME, DESCRIPTION) VALUES
   ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 'MMP');
 
@@ -1536,38 +1479,38 @@ INSERT INTO MMP.MESSAGE_STATUSES (CODE, NAME) VALUES (10, 'Processed');
 -- -------------------------------------------------------------------------------------------------
 -- SET PERMISSIONS
 -- -------------------------------------------------------------------------------------------------
-GRANT ALL ON SCHEMA MMP TO sampledb;
+GRANT ALL ON SCHEMA MMP TO dbuser;
 
-GRANT ALL ON TABLE MMP.IDGENERATOR TO sampledb;
-GRANT ALL ON TABLE MMP.REGISTRY TO sampledb;
-GRANT ALL ON TABLE MMP.SERVICE_REGISTRY TO sampledb;
-GRANT ALL ON TABLE MMP.ORGANISATIONS TO sampledb;
-GRANT ALL ON TABLE MMP.USER_DIRECTORY_TYPES TO sampledb;
-GRANT ALL ON TABLE MMP.USER_DIRECTORIES TO sampledb;
-GRANT ALL ON TABLE MMP.USER_DIRECTORY_TO_ORGANISATION_MAP TO sampledb;
-GRANT ALL ON TABLE MMP.INTERNAL_USERS TO sampledb;
-GRANT ALL ON TABLE MMP.INTERNAL_USERS_PASSWORD_HISTORY TO sampledb;
-GRANT ALL ON TABLE MMP.INTERNAL_GROUPS TO sampledb;
-GRANT ALL ON TABLE MMP.INTERNAL_USER_TO_INTERNAL_GROUP_MAP TO sampledb;
-GRANT ALL ON TABLE MMP.GROUPS TO sampledb;
-GRANT ALL ON TABLE MMP.FUNCTIONS TO sampledb;
-GRANT ALL ON TABLE MMP.ROLES TO sampledb;
-GRANT ALL ON TABLE MMP.FUNCTION_TO_ROLE_MAP TO sampledb;
-GRANT ALL ON TABLE MMP.ROLE_TO_GROUP_MAP TO sampledb;
-GRANT ALL ON TABLE MMP.JOBS TO sampledb;
-GRANT ALL ON TABLE MMP.JOB_PARAMETERS TO sampledb;
-GRANT ALL ON TABLE MMP.CODE_CATEGORIES TO sampledb;
-GRANT ALL ON TABLE MMP.CODES TO sampledb;
-GRANT ALL ON TABLE MMP.CACHED_CODE_CATEGORIES TO sampledb;
-GRANT ALL ON TABLE MMP.CACHED_CODES TO sampledb;
-GRANT ALL ON TABLE MMP.MESSAGES TO sampledb;
-GRANT ALL ON TABLE MMP.MESSAGE_PARTS TO sampledb;
-GRANT ALL ON TABLE MMP.ARCHIVED_MESSAGES TO sampledb;
-GRANT ALL ON TABLE MMP.MESSAGE_TYPES TO sampledb;
-GRANT ALL ON TABLE MMP.MESSAGE_STATUSES TO sampledb;
-GRANT ALL ON TABLE MMP.PACKAGES TO sampledb;
-GRANT ALL ON TABLE MMP.ERROR_REPORTS TO sampledb;
-GRANT ALL ON TABLE MMP.REPORT_DEFINITIONS TO sampledb;
-GRANT ALL ON TABLE MMP.SMS TO sampledb;
+GRANT ALL ON TABLE MMP.IDGENERATOR TO dbuser;
+GRANT ALL ON TABLE MMP.REGISTRY TO dbuser;
+GRANT ALL ON TABLE MMP.SERVICE_REGISTRY TO dbuser;
+GRANT ALL ON TABLE MMP.ORGANISATIONS TO dbuser;
+GRANT ALL ON TABLE MMP.USER_DIRECTORY_TYPES TO dbuser;
+GRANT ALL ON TABLE MMP.USER_DIRECTORIES TO dbuser;
+GRANT ALL ON TABLE MMP.USER_DIRECTORY_TO_ORGANISATION_MAP TO dbuser;
+GRANT ALL ON TABLE MMP.INTERNAL_USERS TO dbuser;
+GRANT ALL ON TABLE MMP.INTERNAL_USERS_PASSWORD_HISTORY TO dbuser;
+GRANT ALL ON TABLE MMP.INTERNAL_GROUPS TO dbuser;
+GRANT ALL ON TABLE MMP.INTERNAL_USER_TO_INTERNAL_GROUP_MAP TO dbuser;
+GRANT ALL ON TABLE MMP.GROUPS TO dbuser;
+GRANT ALL ON TABLE MMP.FUNCTIONS TO dbuser;
+GRANT ALL ON TABLE MMP.ROLES TO dbuser;
+GRANT ALL ON TABLE MMP.FUNCTION_TO_ROLE_MAP TO dbuser;
+GRANT ALL ON TABLE MMP.ROLE_TO_GROUP_MAP TO dbuser;
+GRANT ALL ON TABLE MMP.JOBS TO dbuser;
+GRANT ALL ON TABLE MMP.JOB_PARAMETERS TO dbuser;
+GRANT ALL ON TABLE MMP.CODE_CATEGORIES TO dbuser;
+GRANT ALL ON TABLE MMP.CODES TO dbuser;
+GRANT ALL ON TABLE MMP.CACHED_CODE_CATEGORIES TO dbuser;
+GRANT ALL ON TABLE MMP.CACHED_CODES TO dbuser;
+GRANT ALL ON TABLE MMP.MESSAGES TO dbuser;
+GRANT ALL ON TABLE MMP.MESSAGE_PARTS TO dbuser;
+GRANT ALL ON TABLE MMP.ARCHIVED_MESSAGES TO dbuser;
+GRANT ALL ON TABLE MMP.MESSAGE_TYPES TO dbuser;
+GRANT ALL ON TABLE MMP.MESSAGE_STATUSES TO dbuser;
+GRANT ALL ON TABLE MMP.PACKAGES TO dbuser;
+GRANT ALL ON TABLE MMP.ERROR_REPORTS TO dbuser;
+GRANT ALL ON TABLE MMP.REPORT_DEFINITIONS TO dbuser;
+GRANT ALL ON TABLE MMP.SMS TO dbuser;
 
 

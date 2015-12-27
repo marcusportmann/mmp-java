@@ -21,22 +21,17 @@ package guru.mmp.application.reporting;
 import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DataAccessObject;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingDAO</code> class implements the persistence operations for the
@@ -56,11 +51,11 @@ public class ReportingDAO
    */
   private DataSource dataSource;
   private String deleteReportDefinitionSQL;
-  private String getNumberOfReportDefinitionsForOrganisationSQL;
+  private String getNumberOfReportDefinitionsSQL;
   private String getReportDefinitionByIdSQL;
-  private String getReportDefinitionSummariesForOrganisationSQL;
+  private String getReportDefinitionSummariesSQL;
   private String getReportDefinitionSummaryByIdSQL;
-  private String getReportDefinitionsForOrganisationSQL;
+  private String getReportDefinitionsSQL;
   private String reportDefinitionExistsSQL;
   private String updateReportDefinitionSQL;
 
@@ -84,9 +79,8 @@ public class ReportingDAO
       PreparedStatement statement = connection.prepareStatement(createReportDefinitionSQL))
     {
       statement.setObject(1, reportDefinition.getId());
-      statement.setObject(2, reportDefinition.getOrganisationId());
-      statement.setString(3, reportDefinition.getName());
-      statement.setBytes(4, reportDefinition.getTemplate());
+      statement.setString(2, reportDefinition.getName());
+      statement.setBytes(3, reportDefinition.getTemplate());
 
       if (statement.executeUpdate() != 1)
       {
@@ -141,24 +135,18 @@ public class ReportingDAO
   }
 
   /**
-   * Returns the number of report definitions for the organisation.
+   * Returns the number of report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the number of report definitions for the organisation
+   * @return the number of report definitions
    *
    * @throws DAOException
    */
-  public int getNumberOfReportDefinitionsForOrganisation(UUID organisationId)
+  public int getNumberOfReportDefinitions()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getNumberOfReportDefinitionsForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getNumberOfReportDefinitionsSQL))
     {
-      statement.setObject(1, organisationId);
-
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
@@ -169,15 +157,14 @@ public class ReportingDAO
         {
           throw new DAOException(
               "No results were returned as a result of executing the SQL statement ("
-              + getNumberOfReportDefinitionsForOrganisationSQL + ")");
+              + getNumberOfReportDefinitionsSQL + ")");
         }
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(
-          "Failed to retrieve the number of report definitions for the organisation ("
-          + organisationId + ") from the database", e);
+          "Failed to retrieve the number of report definitions from the database", e);
     }
   }
 
@@ -220,25 +207,18 @@ public class ReportingDAO
   }
 
   /**
-   * Returns the summaries for all the report definitions for the organisation.
+   * Returns the summaries for all the report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the summaries for all the report definitions for the organisation
+   * @return the summaries for all the report definitions
    *
    * @throws DAOException
    */
-  public List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(
-      UUID organisationId)
+  public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getReportDefinitionSummariesForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getReportDefinitionSummariesSQL))
     {
-      statement.setObject(1, organisationId);
-
       List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
 
       try (ResultSet rs = statement.executeQuery())
@@ -254,8 +234,7 @@ public class ReportingDAO
     catch (Throwable e)
     {
       throw new DAOException(
-          "Failed to retrieve the summaries for the report definitions for the organisation ("
-          + organisationId + ") from the database", e);
+          "Failed to retrieve the summaries for the report definitions from the database", e);
     }
   }
 
@@ -298,24 +277,18 @@ public class ReportingDAO
   }
 
   /**
-   * Returns all the report definitions for the organisation.
+   * Returns all the report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return all the report definitions for the organisation
+   * @return all the report definitions
    *
    * @throws DAOException
    */
-  public List<ReportDefinition> getReportDefinitionsForOrganisation(UUID organisationId)
+  public List<ReportDefinition> getReportDefinitions()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getReportDefinitionsForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getReportDefinitionsSQL))
     {
-      statement.setObject(1, organisationId);
-
       List<ReportDefinition> reportDefinitions = new ArrayList<>();
 
       try (ResultSet rs = statement.executeQuery())
@@ -330,8 +303,7 @@ public class ReportingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the report definitions for the organisation ("
-          + organisationId + ") from the database", e);
+      throw new DAOException("Failed to retrieve the report definitions from the database", e);
     }
   }
 
@@ -448,14 +420,12 @@ public class ReportingDAO
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
    *                         information for the report definition
-   * @param updatedBy        the username identifying the user that updated the report definition
    *
    * @return the updated report definition
    *
    * @throws DAOException
    */
-  public ReportDefinition updateReportDefinition(ReportDefinition reportDefinition,
-      String updatedBy)
+  public ReportDefinition updateReportDefinition(ReportDefinition reportDefinition)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -489,32 +459,31 @@ public class ReportingDAO
   {
     // createReportDefinitionSQL
     createReportDefinitionSQL = "INSERT INTO " + schemaPrefix
-        + "REPORT_DEFINITIONS (ID, ORGANISATION_ID, NAME, TEMPLATE) VALUES (?, ?, ?, ?)";
+        + "REPORT_DEFINITIONS (ID, NAME, TEMPLATE) VALUES (?, ?, ?, ?)";
 
     // deleteReportDefinitionSQL
     deleteReportDefinitionSQL = "DELETE FROM " + schemaPrefix
         + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
 
-    // getNumberOfReportDefinitionsForOrganisationSQL
-    getNumberOfReportDefinitionsForOrganisationSQL = "SELECT COUNT(RD.ID)" + " FROM "
-        + schemaPrefix + "REPORT_DEFINITIONS RD WHERE RD.ORGANISATION_ID=?";
+    // getNumberOfReportDefinitionsSQL
+    getNumberOfReportDefinitionsSQL = "SELECT COUNT(RD.ID)" + " FROM " + schemaPrefix
+        + "REPORT_DEFINITIONS RD";
 
     // getReportDefinitionByIdSQL
-    getReportDefinitionByIdSQL = "SELECT RD.ID, RD.ORGANISATION_ID, RD.NAME, RD.TEMPLATE FROM "
-        + schemaPrefix + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
+    getReportDefinitionByIdSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM " + schemaPrefix
+        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
 
-    // getReportDefinitionSummariesForOrganisationSQL
-    getReportDefinitionSummariesForOrganisationSQL = "SELECT RD.ID, RD.ORGANISATION_ID, RD.NAME"
-        + " FROM " + schemaPrefix + "REPORT_DEFINITIONS RD WHERE RD.ORGANISATION=?";
+    // getReportDefinitionSummariesSQL
+    getReportDefinitionSummariesSQL = "SELECT RD.ID, RD.NAME" + " FROM " + schemaPrefix
+        + "REPORT_DEFINITIONS RD";
 
     // getReportDefinitionSummaryByIdSQL
-    getReportDefinitionSummaryByIdSQL = "SELECT RD.ID, RD.ORGANISATION_ID, RD.NAME FROM "
-        + schemaPrefix + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
+    getReportDefinitionSummaryByIdSQL = "SELECT RD.ID, RD.NAME FROM " + schemaPrefix
+        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
 
-    // getReportDefinitionsForOrganisationSQL
-    getReportDefinitionsForOrganisationSQL =
-      "SELECT RD.ID, RD.ORGANISATION_ID, RD.NAME, RD.TEMPLATE FROM " + schemaPrefix
-      + "REPORT_DEFINITIONS RD WHERE RD.ORGANISATION_ID=?";
+    // getReportDefinitionsSQL
+    getReportDefinitionsSQL = "SELECT RD.ID, RD.ORGANISATION_ID, RD.NAME, RD.TEMPLATE FROM "
+        + schemaPrefix + "REPORT_DEFINITIONS RD";
 
     // reportDefinitionExistsSQL
     reportDefinitionExistsSQL = "SELECT COUNT(RD.ID) FROM " + schemaPrefix
@@ -528,14 +497,12 @@ public class ReportingDAO
   private ReportDefinition getReportDefinition(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinition((UUID) rs.getObject(1), (UUID) rs.getObject(2), rs.getString(3),
-        rs.getBytes(4));
+    return new ReportDefinition((UUID) rs.getObject(1), rs.getString(2), rs.getBytes(3));
   }
 
   private ReportDefinitionSummary getReportDefinitionSummary(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinitionSummary((UUID) rs.getObject(1), (UUID) rs.getObject(2),
-        rs.getString(3));
+    return new ReportDefinitionSummary((UUID) rs.getObject(1), rs.getString(3));
   }
 }

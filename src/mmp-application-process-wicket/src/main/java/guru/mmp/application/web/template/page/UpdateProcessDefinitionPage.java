@@ -102,8 +102,6 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
 
             WebSession session = getWebApplicationSession();
 
-            processDefinition.setOrganisationId(session.getOrganisation().getId());
-
             fileUpload = processDefinitionInputPanel.getFileUpload();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -118,7 +116,7 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
 
             processDefinition.setData(baos.toByteArray());
 
-            processService.createProcessDefinition(processDefinition, session.getUsername());
+            processService.createProcessDefinition(processDefinition);
 
             setResponsePage(previousPage.getPage());
           }

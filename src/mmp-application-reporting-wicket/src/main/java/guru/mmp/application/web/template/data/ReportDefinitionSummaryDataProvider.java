@@ -45,33 +45,14 @@ public class ReportDefinitionSummaryDataProvider
 {
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
-   */
-  private UUID organisationId;
-
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
 
   /**
    * Constructs a new <code>ReportDefinitionSummaryDataProvider</code>.
-   *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
    */
-  public ReportDefinitionSummaryDataProvider(UUID organisationId)
-  {
-    this.organisationId = organisationId;
-  }
-
-  /**
-   * Constructs a new <code>ReportDefinitionSummaryDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected ReportDefinitionSummaryDataProvider() {}
+  public ReportDefinitionSummaryDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -95,7 +76,7 @@ public class ReportDefinitionSummaryDataProvider
     try
     {
       List<ReportDefinitionSummary> allReportDefinitionSummaries =
-        reportingService.getReportDefinitionSummariesForOrganisation(organisationId);
+        reportingService.getReportDefinitionSummaries();
 
       List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
 
@@ -141,7 +122,7 @@ public class ReportDefinitionSummaryDataProvider
   {
     try
     {
-      return reportingService.getNumberOfReportDefinitionsForOrganisation(organisationId);
+      return reportingService.getNumberOfReportDefinitions();
     }
     catch (Throwable e)
     {

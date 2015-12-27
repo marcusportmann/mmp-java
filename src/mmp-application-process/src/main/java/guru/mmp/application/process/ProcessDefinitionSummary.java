@@ -44,12 +44,6 @@ public class ProcessDefinitionSummary
   private String name;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the process
-   * definition is associated with
-   */
-  private UUID organisationId;
-
-  /**
    * The version of the process definition.
    */
   private int version;
@@ -57,18 +51,15 @@ public class ProcessDefinitionSummary
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
    *
-   * @param id             the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       process definition
-   * @param version        the version of the process definition
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   * @param name           the name of the process definition
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *                definition
+   * @param version the version of the process definition
+   * @param name    the name of the process definition
    */
-  public ProcessDefinitionSummary(UUID id, int version, UUID organisationId, String name)
+  public ProcessDefinitionSummary(UUID id, int version, String name)
   {
     this.id = id;
     this.version = version;
-    this.organisationId = organisationId;
     this.name = name;
   }
 
@@ -101,18 +92,6 @@ public class ProcessDefinitionSummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * process definition is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   *         process definition is associated with
-   */
-  public UUID getOrganisationId()
-  {
-    return organisationId;
-  }
-
-  /**
    * Returns the version of the process definition.
    *
    * @return the version of the process definition
@@ -140,7 +119,6 @@ public class ProcessDefinitionSummary
   @Override
   public String toString()
   {
-    return "ProcessDefinitionSummary {" + "id=\"" + getId() + "\", " + "organisationId=\""
-        + getOrganisationId() + "\", " + "name=\"" + getName() + "\"}";
+    return "ProcessDefinitionSummary {" + "id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

@@ -18,8 +18,6 @@ package guru.mmp.application.codes;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOException;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -114,11 +112,13 @@ public interface ICodesService
   /**
    * Delete the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @throws CodesServiceException
    */
-  void deleteCode(String id)
+  void deleteCode(UUID codeCategoryId, String id)
     throws CodesServiceException;
 
   /**
@@ -149,33 +149,35 @@ public interface ICodesService
   /**
    * Retrieve the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @return the code or <code>null</code> if the code could not be found
    *
    * @throws CodesServiceException
    */
-  Code getCode(String id)
+  Code getCode(UUID codeCategoryId, String id)
     throws CodesServiceException;
 
   /**
-   * Returns all the code categories for the organisation.
+   * Returns all the code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
    * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    *
-   * @return all the code categories for the organisation
+   * @return all the code categories
    *
    * @throws CodesServiceException
    */
-  List<CodeCategory> getCodeCategoriesForOrganisation(UUID organisationId, boolean retrieveCodes)
+  List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
    * Retrieve the code category.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      code category
+   * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return the code category or <code>null</code> if the code category could not be found
    *
@@ -256,16 +258,13 @@ public interface ICodesService
     throws CodesServiceException;
 
   /**
-   * Returns the number of code categories for the organisation.
+   * Returns the number of code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the number of code categories for the organisation
+   * @return the number of code categories
    *
    * @throws CodesServiceException
    */
-  int getNumberOfCodeCategoriesForOrganisation(UUID organisationId)
+  int getNumberOfCodeCategories()
     throws CodesServiceException;
 
   /**
@@ -340,29 +339,24 @@ public interface ICodesService
    *
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the updated
    *                           information for the cached code category
-   * @param updatedBy          the username identifying the user that updated the cached code
-   *                           category
    *
    * @return the updated cached code category
    *
    * @throws CodesServiceException
    */
-  @SuppressWarnings("unused")
-  CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory,
-      String updatedBy)
+  CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws CodesServiceException;
 
   /**
    * Update the existing code.
    *
-   * @param code      the <code>Code</code> instance containing the updated information for the code
-   * @param updatedBy the username identifying the user that updated the code
+   * @param code the <code>Code</code> instance containing the updated information for the code
    *
    * @return the updated code
    *
    * @throws CodesServiceException
    */
-  Code updateCode(Code code, String updatedBy)
+  Code updateCode(Code code)
     throws CodesServiceException;
 
   /**
@@ -370,12 +364,11 @@ public interface ICodesService
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
    *                     for the code category
-   * @param updatedBy    the username identifying the user that updated the code category
    *
    * @return the updated code category
    *
    * @throws CodesServiceException
    */
-  CodeCategory updateCodeCategory(CodeCategory codeCategory, String updatedBy)
+  CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException;
 }

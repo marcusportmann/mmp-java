@@ -101,11 +101,11 @@ public class SampleApplicationListener
 
       ReportDefinition sampleReportDefinition =
         new ReportDefinition(UUID.fromString("2a4b74e8-7f03-416f-b058-b35bb06944ef"),
-          SecurityService.DEFAULT_ORGANISATION_ID, "Sample Report", sampleReportDefinitionData);
+          "Sample Report", sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {
-        reportingService.saveReportDefinition(sampleReportDefinition, "Administrator");
+        reportingService.saveReportDefinition(sampleReportDefinition);
         logger.info("Saved the \"Sample Report\" report definition");
       }
 

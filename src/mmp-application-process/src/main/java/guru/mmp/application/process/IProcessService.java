@@ -39,11 +39,10 @@ public interface IProcessService
    *
    * @param processDefinition the <code>ProcessDefinition</code> instance containing the information
    *                          for the new process definition
-   * @param createdBy         the username identifying the user that created the process definition
    *
    * @throws ProcessServiceException
    */
-  void createProcessDefinition(ProcessDefinition processDefinition, String createdBy)
+  void createProcessDefinition(ProcessDefinition processDefinition)
     throws ProcessServiceException;
 
   /**
@@ -68,32 +67,23 @@ public interface IProcessService
     throws ProcessServiceException;
 
   /**
-   * Returns the summaries for the current versions of all the process definitions associated with
-   * the organisation.
+   * Returns the summaries for the current versions of all the process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definitions are associated with
-   *
-   * @return the summaries for the current versions of all the process definitions associated with
-   *         the organisation
+   * @return the summaries for the current versions of all the process definitions
    *
    * @throws ProcessServiceException
    */
-  List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
-      UUID organisationId)
+  List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummaries()
     throws ProcessServiceException;
 
   /**
-   * Returns the current versions of all the process definitions associated with the organisation.
+   * Returns the current versions of all the process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   *
-   * @return the current versions of all the process definitions associated with the organisation
+   * @return the current versions of all the process definitions
    *
    * @throws ProcessServiceException
    */
-  List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(UUID organisationId)
+  List<ProcessDefinition> getCurrentProcessDefinitions()
     throws ProcessServiceException;
 
   /**
@@ -110,16 +100,13 @@ public interface IProcessService
     throws ProcessServiceException;
 
   /**
-   * Returns the number of process definitions associated with the organisation.
+   * Returns the number of process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definitions are associated with
-   *
-   * @return the number of process definitions associated with the organisation
+   * @return the number of process definitions
    *
    * @throws ProcessServiceException
    */
-  int getNumberOfProcessDefinitionsForOrganisation(UUID organisationId)
+  int getNumberOfProcessDefinitions()
     throws ProcessServiceException;
 
   /**

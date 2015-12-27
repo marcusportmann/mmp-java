@@ -19,7 +19,6 @@ package guru.mmp.application.reporting;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
-
 import java.util.UUID;
 
 /**
@@ -44,24 +43,15 @@ public class ReportDefinitionSummary
   private String name;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the report
-   * definition is associated with.
-   */
-  private UUID organisationId;
-
-  /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id             the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       report definition
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the report definition is associated with
-   * @param name           the name of the report definition
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *             definition
+   * @param name the name of the report definition
    */
-  public ReportDefinitionSummary(UUID id, UUID organisationId, String name)
+  public ReportDefinitionSummary(UUID id, String name)
   {
     this.id = id;
-    this.organisationId = organisationId;
     this.name = name;
   }
 
@@ -94,18 +84,6 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   * the report definition is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *         the report definition is associated with
-   */
-  public UUID getOrganisationId()
-  {
-    return organisationId;
-  }
-
-  /**
    * Returns a string representation of the object.
    *
    * @return a string representation of the object
@@ -113,7 +91,6 @@ public class ReportDefinitionSummary
   @Override
   public String toString()
   {
-    return "ReportDefinitionSummary {" + "id=\"" + getId() + "\", " + "organisationId=\""
-        + getOrganisationId() + "\", " + "name=\"" + getName() + "\"}";
+    return "ReportDefinitionSummary {" + "id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

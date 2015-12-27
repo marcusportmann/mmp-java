@@ -61,15 +61,15 @@ public class ProcessDAO
   private DataSource dataSource;
   private String deleteProcessDefinitionSQL;
   private String deleteProcessInstanceSQL;
-  private String getCurrentProcessDefinitionSummariesForOrganisationSQL;
-  private String getCurrentProcessDefinitionsForOrganisationSQL;
+  private String getCurrentProcessDefinitionSummariesSQL;
+  private String getCurrentProcessDefinitionsSQL;
   private String getNextProcessInstanceScheduledForExecutionSQL;
-  private String getNumberOfProcessDefinitionsForOrganisationSQL;
-  private String getNumberOfProcessInstancesForOrganisationSQL;
+  private String getNumberOfProcessDefinitionSQL;
+  private String getNumberOfProcessInstancesSQL;
   private String getProcessDefinitionByIdAndVersionSQL;
   private String getProcessDefinitionSummaryByIdAndVersionSQL;
   private String getProcessInstanceByIdSQL;
-  private String getProcessInstanceSummariesForOrganisationSQL;
+  private String getProcessInstanceSummariesSQL;
   private String getProcessInstanceSummaryByIdSQL;
   private String lockProcessInstanceSQL;
   private String processDefinitionExistsSQL;
@@ -81,71 +81,7 @@ public class ProcessDAO
   /**
    * Constructs a new <code>ProcessDAO</code>.
    */
-  @SuppressWarnings("unused")
   public ProcessDAO() {}
-
-  /**
-   * Constructs a new <code>ProcessDAO</code>.
-   *
-   * @param dataSource the data source to use
-   *
-   * @throws DAOException
-   */
-  @SuppressWarnings("unused")
-  public ProcessDAO(DataSource dataSource)
-    throws DAOException
-  {
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object:" + " The specified data source is NULL");
-    }
-
-    this.dataSource = dataSource;
-
-    init();
-  }
-
-  /**
-   * Constructs a new <code>ProcessDAO</code>.
-   *
-   * @param dataSourceJndiName the JNDI name of the data source used to access the database
-   *
-   * @throws DAOException
-   */
-  @SuppressWarnings("unused")
-  public ProcessDAO(String dataSourceJndiName)
-    throws DAOException
-  {
-    try
-    {
-      InitialContext ic = new InitialContext();
-
-      try
-      {
-        this.dataSource = (DataSource) ic.lookup(dataSourceJndiName);
-      }
-      finally
-      {
-        try
-        {
-          ic.close();
-        }
-        catch (Throwable e)
-        {
-          // Do nothing
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object: Failed to lookup the data source (" + dataSourceJndiName
-          + ") using JNDI: " + e.getMessage(), e);
-    }
-
-    init();
-  }
 
   /**
    * Create the new process definition.
@@ -163,9 +99,8 @@ public class ProcessDAO
     {
       statement.setObject(1, processDefinition.getId());
       statement.setInt(2, processDefinition.getVersion());
-      statement.setObject(3, processDefinition.getOrganisationId());
-      statement.setString(4, processDefinition.getName());
-      statement.setBytes(5, processDefinition.getData());
+      statement.setString(3, processDefinition.getName());
+      statement.setBytes(4, processDefinition.getData());
 
       if (statement.executeUpdate() != 1)
       {
@@ -282,27 +217,19 @@ public class ProcessDAO
   }
 
   /**
-   * Returns the summaries for the current versions of all the process definitions associated with
-   * the organisation.
+   * Returns the summaries for the current versions of all the process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definitions are associated with
-   *
-   * @return the summaries for the current versions of all the process definitions associated with
-   *         the organisation
+   * @return the summaries for the current versions of all the process definitions
    *
    * @throws DAOException
    */
-  public List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
-      UUID organisationId)
+  public List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummaries()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement =
-          connection.prepareStatement(getCurrentProcessDefinitionSummariesForOrganisationSQL))
+          connection.prepareStatement(getCurrentProcessDefinitionSummariesSQL))
     {
-      statement.setObject(1, organisationId);
-
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
       try (ResultSet rs = statement.executeQuery())
@@ -318,30 +245,23 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the summaries for the current versions of the"
-          + " process definitions for the organisation (" + organisationId
-          + ") from the database", e);
+          + " process definitions from the database", e);
     }
   }
 
   /**
-   * Returns the current versions of all the process definitions associated with the organisation.
+   * Returns the current versions of all the process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   *
-   * @return the current versions of all the process definitions associated with the organisation
+   * @return the current versions of all the process definitions
    *
    * @throws DAOException
    */
-  public List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(UUID organisationId)
+  public List<ProcessDefinition> getCurrentProcessDefinitions()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getCurrentProcessDefinitionsForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getCurrentProcessDefinitionsSQL))
     {
-      statement.setObject(1, organisationId);
-
       List<ProcessDefinition> processDefinitions = new ArrayList<>();
 
       try (ResultSet rs = statement.executeQuery())
@@ -357,7 +277,7 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException("Failed to retrieve the current versions of the process definitions"
-          + " for the organisation (" + organisationId + ") from the database", e);
+          + " from the database", e);
     }
   }
 
@@ -466,24 +386,18 @@ public class ProcessDAO
   }
 
   /**
-   * Returns the number of process definitions associated with the organisation.
+   * Returns the number of process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definitions are associated with
-   *
-   * @return the number of process definitions associated with the organisation
+   * @return the number of process definitions
    *
    * @throws DAOException
    */
-  public int getNumberOfProcessDefinitionsForOrganisation(UUID organisationId)
+  public int getNumberOfProcessDefinitions()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getNumberOfProcessDefinitionsForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getNumberOfProcessDefinitionSQL))
     {
-      statement.setObject(1, organisationId);
-
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
@@ -494,37 +408,30 @@ public class ProcessDAO
         {
           throw new DAOException(
               "No results were returned as a result of executing the SQL statement ("
-              + getNumberOfProcessDefinitionsForOrganisationSQL + ")");
+              + getNumberOfProcessDefinitionSQL + ")");
         }
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(
-          "Failed to retrieve the number of process definitions for the organisation ("
-          + organisationId + ") from the database", e);
+          "Failed to retrieve the number of process definitions from the database", e);
     }
   }
 
   /**
-   * Returns the number of process instances associated with the organisation.
+   * Returns the number of process instances.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   *
-   * @return the number of process instances associated with the organisation
+   * @return the number of process instances
    *
    * @throws DAOException
    */
-  public int getNumberOfProcessInstancesForOrganisation(UUID organisationId)
+  public int getNumberOfProcessInstances()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getNumberOfProcessInstancesForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getNumberOfProcessInstancesSQL))
     {
-      statement.setObject(1, organisationId);
-
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
@@ -535,27 +442,26 @@ public class ProcessDAO
         {
           throw new DAOException(
               "No results were returned as a result of executing the SQL statement ("
-              + getNumberOfProcessInstancesForOrganisationSQL + ")");
+              + getNumberOfProcessInstancesSQL + ")");
         }
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(
-          "Failed to retrieve the number of process instances for the organisation ("
-          + organisationId + ") from the database", e);
+          "Failed to retrieve the number of process instances from the database", e);
     }
   }
 
   /**
    * Retrieve the process definition and version.
    *
-   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                process definition
+   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *                definition
    * @param version the version of the process definition
    *
    * @return the process definition and version or <code>null</code> if the process definition
-   * could not be found
+   *         could not be found
    *
    * @throws DAOException
    */
@@ -667,25 +573,18 @@ public class ProcessDAO
   }
 
   /**
-   * Returns the summaries for the all the process instances associated with the organisation.
+   * Returns the summaries for the all the process instances.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   *
-   * @return the summaries for the all the process instances associated with the organisation
+   * @return the summaries for the all the process instances
    *
    * @throws DAOException
    */
-  public List<ProcessInstanceSummary> getProcessInstanceSummariesForOrganisation(
-      UUID organisationId)
+  public List<ProcessInstanceSummary> getProcessInstanceSummaries()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getProcessInstanceSummariesForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getProcessInstanceSummariesSQL))
     {
-      statement.setObject(1, organisationId);
-
       List<ProcessInstanceSummary> processInstanceSummaries = new ArrayList<>();
 
       try (ResultSet rs = statement.executeQuery())
@@ -701,8 +600,7 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(
-          "Failed to retrieve the summaries for the process instances for the organisation ("
-          + organisationId + ") from the database", e);
+          "Failed to retrieve the summaries for the process instances from the database", e);
     }
   }
 
@@ -997,7 +895,7 @@ public class ProcessDAO
   {
     // createProcessDefinitionSQL
     createProcessDefinitionSQL = "INSERT INTO " + schemaPrefix
-        + "PROCESS_DEFINITIONS (ID, VERSION, ORGANISATION_ID, NAME, DATA) VALUES (?, ?, ?, ?, ?)";
+        + "PROCESS_DEFINITIONS (ID, VERSION, NAME, DATA) VALUES (?, ?, ?, ?)";
 
     // createProcessInstanceSQL
     createProcessInstanceSQL = "INSERT INTO " + schemaPrefix
@@ -1011,21 +909,19 @@ public class ProcessDAO
     // deleteProcessInstanceSQL
     deleteProcessInstanceSQL = "DELETE FROM " + schemaPrefix + "PROCESS_INSTANCES PI WHERE PI.ID=?";
 
-    // getCurrentProcessDefinitionsForOrganisationSQL
-    getCurrentProcessDefinitionsForOrganisationSQL =
-      "SELECT PD.ID, PD.VERSION, PD.ORGANISATION_ID, PD.NAME, PD.DATA FROM " + schemaPrefix
-      + "PROCESS_DEFINITIONS PD "
-      + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX(VERSION) AS CURRENT_VERSION FROM " + schemaPrefix
-      + "PROCESS_DEFINITIONS WHERE ORGANISATION_ID=? GROUP BY CURRENT_ID) PDC"
-      + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
+    // getCurrentProcessDefinitionsSQL
+    getCurrentProcessDefinitionsSQL = "SELECT PD.ID, PD.VERSION, PD.NAME, PD.DATA FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD "
+        + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX(VERSION) AS CURRENT_VERSION FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS GROUP BY CURRENT_ID) PDC"
+        + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
 
-    // getCurrentProcessDefinitionSummariesForOrganisationSQL
-    getCurrentProcessDefinitionSummariesForOrganisationSQL =
-      "SELECT PD.ID, PD.VERSION, PD.ORGANISATION_ID, PD.NAME FROM " + schemaPrefix
-      + "PROCESS_DEFINITIONS PD "
-      + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX(VERSION) AS CURRENT_VERSION FROM " + schemaPrefix
-      + "PROCESS_DEFINITIONS WHERE ORGANISATION_ID=? GROUP BY CURRENT_ID) PDC"
-      + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
+    // getCurrentProcessDefinitionSummariesSQL
+    getCurrentProcessDefinitionSummariesSQL = "SELECT PD.ID, PD.VERSION, PD.NAME FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD "
+        + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX(VERSION) AS CURRENT_VERSION FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS GROUP BY CURRENT_ID) PDC"
+        + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
 
     // getNextProcessInstanceScheduledForExecutionSQL
     getNextProcessInstanceScheduledForExecutionSQL =
@@ -1034,36 +930,35 @@ public class ProcessDAO
       + "PROCESS_INSTANCES PI WHERE PI.STATUS=? AND PI.NEXT_EXECUTION <= ?"
       + " FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
-    // getNumberOfProcessDefinitionsForOrganisationSQL
-    getNumberOfProcessDefinitionsForOrganisationSQL = "SELECT COUNT(DISTINCT PD.ID) FROM "
-        + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PD.ORGANISATION_ID=?";
+    // getNumberOfProcessDefinitionSQL
+    getNumberOfProcessDefinitionSQL = "SELECT COUNT(DISTINCT PD.ID) FROM " + schemaPrefix
+        + "PROCESS_DEFINITIONS PD";
 
-    // getNumberOfProcessInstancesForOrganisationSQL
-    getNumberOfProcessInstancesForOrganisationSQL = "SELECT COUNT(PI.ID)" + " FROM " + schemaPrefix
+    // getNumberOfProcessInstancesSQL
+    getNumberOfProcessInstancesSQL = "SELECT COUNT(PI.ID)" + " FROM " + schemaPrefix
         + "PROCESS_INSTANCES PI, " + schemaPrefix
         + "PROCESS_DEFINITIONS PD WHERE PI.DEFINITION_ID = PD.ID"
-        + " AND PI.DEFINITION_VERSION = PD.VERSION AND PD.ORGANISATION_ID = ?";
+        + " AND PI.DEFINITION_VERSION = PD.VERSION";
 
     // getProcessDefinitionByIdAndVersionSQL
-    getProcessDefinitionByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.ORGANISATION_ID, "
-        + "PD.NAME, PD.DATA FROM " + schemaPrefix
-        + "PROCESS_DEFINITIONS PD WHERE PD.ID=? AND PD.VERSION = ?";
+    getProcessDefinitionByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.NAME, PD.DATA FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PD.ID=? AND PD.VERSION = ?";
 
     // getProcessDefinitionSummaryByIdAndVersionSQL
-    getProcessDefinitionSummaryByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.ORGANISATION_ID,"
-        + " PD.NAME FROM " + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE ID=? AND VERSION=?";
+    getProcessDefinitionSummaryByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.NAME FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE ID=? AND VERSION=?";
 
     // getProcessInstanceByIdSQL
     getProcessInstanceByIdSQL = "SELECT PI.ID, PI.DEFINITION_ID, PI.DEFINITION_VERSION, PI.DATA, "
         + "PI.STATUS, PI.NEXT_EXECUTION, PI.LOCK_NAME FROM " + schemaPrefix
         + "PROCESS_INSTANCES PI WHERE PI.ID=?";
 
-    // getProcessInstanceSummariesForOrganisationSQL
-    getProcessInstanceSummariesForOrganisationSQL = "SELECT PI.ID, PI.DEFINITION_ID,"
+    // getProcessInstanceSummariesSQL
+    getProcessInstanceSummariesSQL = "SELECT PI.ID, PI.DEFINITION_ID,"
         + " PI.DEFINITION_VERSION, PD.NAME AS NAME, PI.STATUS,"
         + " PI.NEXT_EXECUTION, PI.LOCK_NAME FROM " + schemaPrefix + "PROCESS_INSTANCES PI, "
         + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PI.DEFINITION_ID = PD.ID"
-        + " AND PI.DEFINITION_VERSION = PD.VERSION AND PD.ORGANISATION_ID = ?";
+        + " AND PI.DEFINITION_VERSION = PD.VERSION";
 
     // getProcessInstanceSummaryByIdSQL
     getProcessInstanceSummaryByIdSQL = "SELECT PI.ID, PI.DEFINITION_ID,"
@@ -1100,22 +995,22 @@ public class ProcessDAO
   private ProcessDefinition getProcessDefinition(ResultSet rs)
     throws SQLException
   {
-    return new ProcessDefinition((UUID)rs.getObject(1), rs.getInt(2), (UUID)rs.getObject(3), rs.getString(4),
-        rs.getBytes(5));
+    return new ProcessDefinition((UUID) rs.getObject(1), rs.getInt(2), rs.getString(3),
+        rs.getBytes(4));
   }
 
   private ProcessDefinitionSummary getProcessDefinitionSummary(ResultSet rs)
     throws SQLException
   {
-    return new ProcessDefinitionSummary((UUID)rs.getObject(1), rs.getInt(2), (UUID)rs.getObject(3),
-        rs.getString(4));
+    return new ProcessDefinitionSummary((UUID) rs.getObject(1), rs.getInt(2), rs.getString(3));
   }
 
   private ProcessInstance getProcessInstance(ResultSet rs)
     throws SQLException
   {
-    return new ProcessInstance((UUID)rs.getObject(1), (UUID)rs.getObject(2), rs.getInt(3), rs.getBytes(4),
-        ProcessInstance.Status.fromCode(rs.getInt(5)), rs.getTimestamp(6), rs.getString(7));
+    return new ProcessInstance((UUID) rs.getObject(1), (UUID) rs.getObject(2), rs.getInt(3),
+        rs.getBytes(4), ProcessInstance.Status.fromCode(rs.getInt(5)), rs.getTimestamp(6),
+        rs.getString(7));
   }
 
   private ProcessInstanceSummary getProcessInstanceSummary(ResultSet rs)

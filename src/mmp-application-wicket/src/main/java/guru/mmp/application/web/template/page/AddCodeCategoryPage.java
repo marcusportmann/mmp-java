@@ -92,7 +92,6 @@ public class AddCodeCategoryPage extends TemplateWebPage
 
             CodeCategory codeCategory = addForm.getModelObject();
 
-            codeCategory.setOrganisationId(session.getOrganisation().getId());
             codeCategory.setUpdated(created);
 
             if (codeCategory.getCategoryType() != CodeCategoryType.LOCAL_CUSTOM)

@@ -20,10 +20,10 @@ package guru.mmp.application.codes;
 
 import guru.mmp.common.persistence.DAOException;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ICodesDAO</code> interface defines the codes-related persistence operations.
@@ -111,11 +111,13 @@ public interface ICodesDAO
   /**
    * Delete the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @throws DAOException
    */
-  void deleteCode(String id)
+  void deleteCode(UUID codeCategoryId, String id)
     throws DAOException;
 
   /**
@@ -158,27 +160,27 @@ public interface ICodesDAO
   /**
    * Retrieve the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @return the code or <code>null</code> if the code could not be found
    *
    * @throws DAOException
    */
-  Code getCode(String id)
+  Code getCode(UUID codeCategoryId, String id)
     throws DAOException;
 
   /**
-   * Returns all the code categories for the organisation.
+   * Returns all the code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
    * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    *
-   * @return all the code categories for the organisation
+   * @return all the code categories
    *
    * @throws DAOException
    */
-  List<CodeCategory> getCodeCategoriesForOrganisation(UUID organisationId, boolean retrieveCodes)
+  List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws DAOException;
 
   /**
@@ -206,16 +208,13 @@ public interface ICodesDAO
     throws DAOException;
 
   /**
-   * Returns the number of code categories for the organisation.
+   * Returns the number of code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the number of code categories for the organisation
+   * @return the number of code categories
    *
    * @throws DAOException
    */
-  int getNumberOfCodeCategoriesForOrganisation(UUID organisationId)
+  int getNumberOfCodeCategories()
     throws DAOException;
 
   /**

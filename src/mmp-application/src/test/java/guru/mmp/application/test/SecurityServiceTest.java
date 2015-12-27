@@ -993,7 +993,7 @@ public class SecurityServiceTest
     Function function = new Function();
 
     function.setId(UUID.randomUUID());
-    function.setCode("Test Function " + functionCount);
+    function.setCode("Test Function Code " + functionCount);
     function.setName("Test Function Name " + functionCount);
     function.setDescription("Test Function Description " + functionCount);
 
@@ -1029,7 +1029,7 @@ public class SecurityServiceTest
 
     User user = new User();
 
-    user.setUsername("Test Username " + userCount);
+    user.setUsername("Test User Username " + userCount);
     user.setPassword("Test User Password " + userCount);
     user.setEmail("Test User E-Mail " + userCount);
     user.setDescription("Test User Description " + userCount);

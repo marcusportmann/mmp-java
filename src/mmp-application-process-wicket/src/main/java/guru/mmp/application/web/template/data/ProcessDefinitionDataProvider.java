@@ -44,34 +44,16 @@ public class ProcessDefinitionDataProvider extends InjectableDataProvider<Proces
 {
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the process
-   * definitions are associated with.
-   */
-  private UUID organisationId;
-
   /* Process Service */
   @Inject
   private IProcessService processService;
 
   /**
    * Constructs a new <code>ProcessDefinitionDataProvider</code>.
-   *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definitions are associated with
    */
-  public ProcessDefinitionDataProvider(UUID organisationId)
+  public ProcessDefinitionDataProvider()
   {
-    this.organisationId = organisationId;
   }
-
-  /**
-   * Constructs a new <code>ProcessDefinitionDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected ProcessDefinitionDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -95,7 +77,7 @@ public class ProcessDefinitionDataProvider extends InjectableDataProvider<Proces
     try
     {
       List<ProcessDefinition> allProcessDefinitions =
-        processService.getCurrentProcessDefinitionsForOrganisation(organisationId);
+        processService.getCurrentProcessDefinitions();
 
       List<ProcessDefinition> processDefinitions = new ArrayList<>();
 
@@ -140,7 +122,7 @@ public class ProcessDefinitionDataProvider extends InjectableDataProvider<Proces
   {
     try
     {
-      return processService.getNumberOfProcessDefinitionsForOrganisation(organisationId);
+      return processService.getNumberOfProcessDefinitions();
     }
     catch (Throwable e)
     {

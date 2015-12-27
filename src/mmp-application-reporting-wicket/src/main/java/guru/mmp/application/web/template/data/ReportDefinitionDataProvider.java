@@ -30,7 +30,6 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -45,33 +44,14 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
 {
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the report
-   * definitions are associated with.
-   */
-  private UUID organisationId;
-
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
 
   /**
    * Constructs a new <code>ReportDefinitionDataProvider</code>.
-   *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the report definitions are associated with
    */
-  public ReportDefinitionDataProvider(UUID organisationId)
-  {
-    this.organisationId = organisationId;
-  }
-
-  /**
-   * Constructs a new <code>ReportDefinitionDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  protected ReportDefinitionDataProvider() {}
+  public ReportDefinitionDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -94,8 +74,7 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
   {
     try
     {
-      List<ReportDefinition> allReportDefinitions =
-        reportingService.getReportDefinitionsForOrganisation(organisationId);
+      List<ReportDefinition> allReportDefinitions = reportingService.getReportDefinitions();
 
       List<ReportDefinition> reportDefinitions = new ArrayList<>();
 
@@ -140,7 +119,7 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
   {
     try
     {
-      return reportingService.getNumberOfReportDefinitionsForOrganisation(organisationId);
+      return reportingService.getNumberOfReportDefinitions();
     }
     catch (Throwable e)
     {

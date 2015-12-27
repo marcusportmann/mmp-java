@@ -77,32 +77,23 @@ public interface IProcessDAO
     throws DAOException;
 
   /**
-   * Returns the summaries for the current versions of all the process definitions associated with
-   * the organisation.
+   * Returns the summaries for the current versions of all the process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definitions are associated with
-   *
-   * @return the summaries for the current versions of all the process definitions associated with
-   *         the organisation
+   * @return the summaries for the current versions of all the process definitions
    *
    * @throws DAOException
    */
-  List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummariesForOrganisation(
-      UUID organisationId)
+  List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummaries()
     throws DAOException;
 
   /**
-   * Returns the current versions of all the process definitions associated with the organisation.
+   * Returns the current versions of all the process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   *
-   * @return the current versions of all the process definitions associated with the organisation
+   * @return the current versions of all the process definitions
    *
    * @throws DAOException
    */
-  List<ProcessDefinition> getCurrentProcessDefinitionsForOrganisation(UUID organisationId)
+  List<ProcessDefinition> getCurrentProcessDefinitions()
     throws DAOException;
 
   /**
@@ -122,29 +113,23 @@ public interface IProcessDAO
     throws DAOException;
 
   /**
-   * Returns the number of process definitions associated with the organisation.
+   * Returns the number of process definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definitions are associated with
-   *
-   * @return the number of process definitions associated with the organisation
+   * @return the number of process definitions
    *
    * @throws DAOException
    */
-  int getNumberOfProcessDefinitionsForOrganisation(UUID organisationId)
+  int getNumberOfProcessDefinitions()
     throws DAOException;
 
   /**
-   * Returns the number of process instances associated with the organisation.
+   * Returns the number of process instances.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   *
-   * @return the number of process instances associated with the organisation
+   * @return the number of process instances
    *
    * @throws DAOException
    */
-  int getNumberOfProcessInstancesForOrganisation(UUID organisationId)
+  int getNumberOfProcessInstances()
     throws DAOException;
 
   /**
@@ -155,7 +140,7 @@ public interface IProcessDAO
    * @param version the version of the process definition
    *
    * @return the process definition and version or <code>null</code> if the process definition
-   * could not be found
+   *         could not be found
    *
    * @throws DAOException
    */
@@ -191,16 +176,13 @@ public interface IProcessDAO
     throws DAOException;
 
   /**
-   * Returns the summaries for the all the process instances associated with the organisation.
+   * Returns the summaries for the all the process instances.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
-   *
-   * @return the summaries for the all the process instances associated with the organisation
+   * @return the summaries for the all the process instances
    *
    * @throws DAOException
    */
-  List<ProcessInstanceSummary> getProcessInstanceSummariesForOrganisation(UUID organisationId)
+  List<ProcessInstanceSummary> getProcessInstanceSummaries()
     throws DAOException;
 
   /**

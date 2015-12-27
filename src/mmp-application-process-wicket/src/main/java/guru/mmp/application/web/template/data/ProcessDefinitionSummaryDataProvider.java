@@ -30,7 +30,6 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -46,34 +45,14 @@ public class ProcessDefinitionSummaryDataProvider
 {
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * process definition is associated with.
-   */
-  private UUID organisationId;
-
   /* Process Service */
   @Inject
   private IProcessService processService;
 
   /**
    * Constructs a new <code>ProcessDefinitionSummaryDataProvider</code>.
-   *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the process definition is associated with
    */
-  public ProcessDefinitionSummaryDataProvider(UUID organisationId)
-  {
-    this.organisationId = organisationId;
-  }
-
-  /**
-   * Constructs a new <code>ProcessDefinitionSummaryDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected ProcessDefinitionSummaryDataProvider() {}
+  public ProcessDefinitionSummaryDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -97,7 +76,7 @@ public class ProcessDefinitionSummaryDataProvider
     try
     {
       List<ProcessDefinitionSummary> allProcessDefinitionSummaries =
-        processService.getCurrentProcessDefinitionSummariesForOrganisation(organisationId);
+        processService.getCurrentProcessDefinitionSummaries();
 
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
@@ -143,7 +122,7 @@ public class ProcessDefinitionSummaryDataProvider
   {
     try
     {
-      return processService.getNumberOfProcessDefinitionsForOrganisation(organisationId);
+      return processService.getNumberOfProcessDefinitions();
     }
     catch (Throwable e)
     {

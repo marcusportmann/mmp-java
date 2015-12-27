@@ -45,8 +45,9 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.inject.Inject;
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ProcessDefinitionAdministrationPage</code> class implements the
@@ -105,7 +106,7 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
       tableContainer.add(addLink);
 
       ProcessDefinitionSummaryDataProvider dataProvider =
-        new ProcessDefinitionSummaryDataProvider(session.getOrganisation().getId());
+        new ProcessDefinitionSummaryDataProvider();
 
       // The process definition data view
       DataView<ProcessDefinitionSummary> dataView =

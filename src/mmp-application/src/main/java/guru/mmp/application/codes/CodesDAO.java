@@ -22,29 +22,22 @@ import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.io.UnsupportedEncodingException;
-
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesDAO</code> class implements the codes-related persistence operations.
@@ -76,13 +69,13 @@ public class CodesDAO
   private String getCachedCodeCategoryCachedSQL;
   private String getCachedCodeCategorySQL;
   private String getCachedCodesForCachedCodeCategorySQL;
-  private String getCodeCategoriesForOrganisationSQL;
-  private String getCodeCategoriesNoDataForOrganisationSQL;
+  private String getCodeCategoriesNoDataSQL;
+  private String getCodeCategoriesSQL;
   private String getCodeCategoryCacheExpirySQL;
   private String getCodeCategorySQL;
   private String getCodeSQL;
   private String getCodesForCodeCategorySQL;
-  private String getNumberOfCodeCategoriesForOrganisationSQL;
+  private String getNumberOfCodeCategoriesSQL;
   private String getNumberOfCodesForCodeCategorySQL;
 
   /**
@@ -285,33 +278,36 @@ public class CodesDAO
       PreparedStatement statement = connection.prepareStatement(createCodeCategorySQL))
     {
       statement.setObject(1, codeCategory.getId());
-      statement.setObject(2, codeCategory.getOrganisationId());
-      statement.setInt(3, codeCategory.getCategoryType().getCode());
-      statement.setString(4, codeCategory.getName());
-      statement.setString(5, codeCategory.getDescription());
-      statement.setBytes(6, (codeCategory.getCodeData() != null)
+      statement.setInt(2, codeCategory.getCategoryType().getCode());
+      statement.setString(3, codeCategory.getName());
+      statement.setString(4, codeCategory.getDescription());
+      statement.setBytes(5, (codeCategory.getCodeData() != null)
           ? codeCategory.getCodeData().getBytes("UTF-8")
           : null);
-      statement.setString(7, codeCategory.getEndPoint());
-      statement.setBoolean(8, codeCategory.getIsEndPointSecure());
-      statement.setBoolean(9, codeCategory.getIsCacheable());
+      statement.setString(6, codeCategory.getEndPoint());
+      statement.setBoolean(7, codeCategory.getIsEndPointSecure());
+      statement.setBoolean(8, codeCategory.getIsCacheable());
 
       if (codeCategory.getCacheExpiry() == null)
       {
-        statement.setNull(10, java.sql.Types.INTEGER);
+        statement.setNull(9, java.sql.Types.INTEGER);
       }
       else
       {
-        statement.setInt(10, codeCategory.getCacheExpiry());
+        statement.setInt(9, codeCategory.getCacheExpiry());
       }
 
-      statement.setTimestamp(11, new Timestamp(System.currentTimeMillis()));
+      Timestamp updated = new Timestamp(System.currentTimeMillis());
+
+      statement.setTimestamp(10, updated);
 
       if (statement.executeUpdate() != 1)
       {
         throw new DAOException("No rows were affected as a result of executing the SQL statement ("
             + createCodeCategorySQL + ")");
       }
+
+      codeCategory.setUpdated(updated);
     }
     catch (Throwable e)
     {
@@ -352,17 +348,20 @@ public class CodesDAO
   /**
    * Delete the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @throws DAOException
    */
-  public void deleteCode(String id)
+  public void deleteCode(UUID codeCategoryId, String id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCodeSQL))
     {
-      statement.setString(1, id);
+      statement.setObject(1, codeCategoryId);
+      statement.setString(2, id);
 
       if (statement.executeUpdate() != 1)
       {
@@ -372,7 +371,8 @@ public class CodesDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to delete the code (" + id + ") in the database", e);
+      throw new DAOException("Failed to delete the code (" + id + ") for the code category ("
+          + codeCategoryId + ") in the database", e);
     }
   }
 
@@ -482,19 +482,22 @@ public class CodesDAO
   /**
    * Retrieve the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @return the code or <code>null</code> if the code could not be found
    *
    * @throws DAOException
    */
-  public Code getCode(String id)
+  public Code getCode(UUID codeCategoryId, String id)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeSQL))
     {
-      statement.setString(1, id);
+      statement.setObject(1, codeCategoryId);
+      statement.setString(2, id);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -515,27 +518,22 @@ public class CodesDAO
   }
 
   /**
-   * Returns all the code categories for with the organisation.
+   * Returns all the code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
    * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    *
-   * @return all the code categories for the organisation
+   * @return all the code categories
    *
    * @throws DAOException
    */
-  public List<CodeCategory> getCodeCategoriesForOrganisation(UUID organisationId,
-      boolean retrieveCodes)
+  public List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(retrieveCodes
-          ? getCodeCategoriesForOrganisationSQL
-          : getCodeCategoriesNoDataForOrganisationSQL))
+          ? getCodeCategoriesSQL
+          : getCodeCategoriesNoDataSQL))
     {
-      statement.setObject(1, organisationId);
-
       try (ResultSet rs = statement.executeQuery())
       {
         List<CodeCategory> codeCategories = new ArrayList<>();
@@ -544,7 +542,14 @@ public class CodesDAO
         {
           if (retrieveCodes)
           {
-            codeCategories.add(getCodeCategory(rs));
+            CodeCategory codeCategory = getCodeCategory(rs);
+
+            if (codeCategory.getCategoryType().equals(CodeCategoryType.LOCAL_STANDARD))
+            {
+              codeCategory.setCodes(getCodesForCodeCategory(connection, codeCategory.getId()));
+            }
+
+            codeCategories.add(codeCategory);
           }
           else
           {
@@ -557,8 +562,7 @@ public class CodesDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the code categories for the organisation ("
-          + organisationId + ") from the database", e);
+      throw new DAOException("Failed to retrieve the code categories from the database", e);
     }
   }
 
@@ -610,22 +614,9 @@ public class CodesDAO
   public List<Code> getCodesForCodeCategory(UUID id)
     throws DAOException
   {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
+    try (Connection connection = dataSource.getConnection())
     {
-      statement.setObject(1, id);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Code> codes = new ArrayList<>();
-
-        while (rs.next())
-        {
-          codes.add(getCode(rs));
-        }
-
-        return codes;
-      }
+      return getCodesForCodeCategory(connection, id);
     }
     catch (Throwable e)
     {
@@ -635,24 +626,18 @@ public class CodesDAO
   }
 
   /**
-   * Returns the number of code categories for the organisation.
+   * Returns the number of code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the number of code categories for the organisation
+   * @return the number of code categories
    *
    * @throws DAOException
    */
-  public int getNumberOfCodeCategoriesForOrganisation(UUID organisationId)
+  public int getNumberOfCodeCategories()
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getNumberOfCodeCategoriesForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getNumberOfCodeCategoriesSQL))
     {
-      statement.setObject(1, organisationId);
-
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
@@ -663,14 +648,13 @@ public class CodesDAO
         {
           throw new DAOException(
               "No results were returned as a result of executing the SQL statement ("
-              + getNumberOfCodeCategoriesForOrganisationSQL + ")");
+              + getNumberOfCodeCategoriesSQL + ")");
         }
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the number of code categories for the"
-          + " organisation (" + organisationId + ") in the database", e);
+      throw new DAOException("Failed to retrieve the number of code categories in the database", e);
     }
   }
 
@@ -876,11 +860,10 @@ public class CodesDAO
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeSQL))
     {
-      statement.setObject(1, code.getCategoryId());
-      statement.setString(2, code.getName());
-      statement.setString(3, code.getDescription());
-      statement.setString(4, code.getValue());
-      statement.setString(5, code.getId());
+      statement.setString(1, code.getName());
+      statement.setString(2, code.getDescription());
+      statement.setString(3, code.getValue());
+      statement.setString(4, code.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -914,28 +897,27 @@ public class CodesDAO
     {
       Date updated = new Date();
 
-      statement.setObject(1, codeCategory.getOrganisationId());
-      statement.setInt(2, codeCategory.getCategoryType().getCode());
-      statement.setString(3, codeCategory.getName());
-      statement.setString(4, codeCategory.getDescription());
-      statement.setBytes(5, (codeCategory.getCodeData() != null)
+      statement.setInt(1, codeCategory.getCategoryType().getCode());
+      statement.setString(2, codeCategory.getName());
+      statement.setString(3, codeCategory.getDescription());
+      statement.setBytes(4, (codeCategory.getCodeData() != null)
           ? codeCategory.getCodeData().getBytes("UTF-8")
           : null);
-      statement.setString(6, codeCategory.getEndPoint());
-      statement.setBoolean(7, codeCategory.getIsEndPointSecure());
-      statement.setBoolean(8, codeCategory.getIsCacheable());
+      statement.setString(5, codeCategory.getEndPoint());
+      statement.setBoolean(6, codeCategory.getIsEndPointSecure());
+      statement.setBoolean(7, codeCategory.getIsCacheable());
 
       if (codeCategory.getCacheExpiry() == null)
       {
-        statement.setNull(9, java.sql.Types.INTEGER);
+        statement.setNull(8, java.sql.Types.INTEGER);
       }
       else
       {
-        statement.setInt(9, codeCategory.getCacheExpiry());
+        statement.setInt(8, codeCategory.getCacheExpiry());
       }
 
-      statement.setTimestamp(10, new Timestamp(updated.getTime()));
-      statement.setObject(11, codeCategory.getId());
+      statement.setTimestamp(9, new Timestamp(updated.getTime()));
+      statement.setObject(10, codeCategory.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -979,9 +961,8 @@ public class CodesDAO
 
     // createCodeCategorySQL
     createCodeCategorySQL = "INSERT INTO " + schemaPrefix + "CODE_CATEGORIES"
-        + " (ID, ORGANISATION_ID, CATEGORY_TYPE, NAME, DESCRIPTION, CODE_DATA, ENDPOINT,"
-        + " IS_ENDPOINT_SECURE, IS_CACHEABLE, CACHE_EXPIRY, UPDATED)"
-        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        + " (ID, CATEGORY_TYPE, NAME, DESCRIPTION, CODE_DATA, ENDPOINT, IS_ENDPOINT_SECURE,"
+        + " IS_CACHEABLE, CACHE_EXPIRY, UPDATED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createCodeSQL
     createCodeSQL = "INSERT INTO " + schemaPrefix + "CODES"
@@ -995,7 +976,7 @@ public class CodesDAO
     deleteCodeCategorySQL = "DELETE FROM " + schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // deleteCodeSQL
-    deleteCodeSQL = "DELETE FROM " + schemaPrefix + "CODES C WHERE C.ID=?";
+    deleteCodeSQL = "DELETE FROM " + schemaPrefix + "CODES C WHERE C.CATEGORY_ID=? AND C.ID=?";
 
     // getCachedCodeCategoryCachedSQL
     getCachedCodeCategoryCachedSQL = "SELECT CCC.CACHED FROM " + schemaPrefix
@@ -1005,26 +986,24 @@ public class CodesDAO
     getCachedCodeCategorySQL = "SELECT CCC.ID, CCC.CODE_DATA, CCC.LAST_UPDATED, CCC.CACHED FROM "
         + schemaPrefix + "CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
 
-    // getCodeCategoriesForOrganisationSQL
-    getCodeCategoriesForOrganisationSQL = "SELECT CC.ID, CC.ORGANISATION_ID, CC.CATEGORY_TYPE,"
-        + " CC.NAME, CC.DESCRIPTION, CC.CODE_DATA, CC.ENDPOINT, CC.IS_ENDPOINT_SECURE,"
-        + " CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM " + schemaPrefix
-        + "CODE_CATEGORIES CC WHERE CC.ORGANISATION=? ORDER BY CC.NAME";
+    // getCodeCategoriesSQL
+    getCodeCategoriesSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION, CC.CODE_DATA,"
+        + " CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+        + schemaPrefix + "CODE_CATEGORIES ORDER BY CC.NAME";
 
-    // getCodeCategoriesNoDataForOrganisationSQL
-    getCodeCategoriesNoDataForOrganisationSQL = "SELECT CC.ID, CC.ORGANISATION_ID,"
-        + " CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION, CC.ENDPOINT, CC.IS_ENDPOINT_SECURE,"
-        + " CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM " + schemaPrefix
-        + "CODE_CATEGORIES CC WHERE CC.ORGANISATION=? ORDER BY CC.NAME";
+    // getCodeCategoriesNoDataSQL
+    getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION,"
+        + " CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+        + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
 
     // getCodeCategoryCacheExpirySQL
     getCodeCategoryCacheExpirySQL = "SELECT CC.CACHE_EXPIRY FROM " + schemaPrefix
         + "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // getCodeCategorySQL
-    getCodeCategorySQL = "SELECT CC.ID, CC.ORGANISATION_ID, CC.CATEGORY_TYPE, CC.NAME,"
-        + " CC.DESCRIPTION, CC.CODE_DATA, CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE,"
-        + " CC.CACHE_EXPIRY, CC.UPDATED FROM " + schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
+    getCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION, CC.CODE_DATA,"
+        + " CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+        + schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // getCodesForCodeCategorySQL
     getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.DESCRIPTION, C.VALUE"
@@ -1037,15 +1016,15 @@ public class CodesDAO
 
     // getCodeSQL
     getCodeSQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.DESCRIPTION, C.VALUE FROM " + schemaPrefix
-        + "CODES C WHERE C.ID=?";
+        + "CODES C WHERE C.CATEGORY_ID=? AND C.ID=?";
 
     // getNumberOfCodesForCodeCategorySQL
     getNumberOfCodesForCodeCategorySQL = "SELECT COUNT(C.ID) FROM " + schemaPrefix + "CODES C"
         + " WHERE C.CATEGORY_ID=?";
 
-    // getNumberOfCodeCategoriesForOrganisationSQL
-    getNumberOfCodeCategoriesForOrganisationSQL = "SELECT COUNT(CC.ID) FROM " + schemaPrefix
-        + "CODE_CATEGORIES CC WHERE CC.ORGANISATION=?";
+    // getNumberOfCodeCategoriesSQL
+    getNumberOfCodeCategoriesSQL = "SELECT COUNT(CC.ID) FROM " + schemaPrefix
+        + "CODE_CATEGORIES CC";
 
     // updateCachedCodeCategorySQL
     updateCachedCodeCategorySQL = "UPDATE " + schemaPrefix + "CACHED_CODE_CATEGORIES CCC"
@@ -1053,13 +1032,13 @@ public class CodesDAO
 
     // updateCodeCategorySQL
     updateCodeCategorySQL = "UPDATE " + schemaPrefix + "CODE_CATEGORIES CC"
-        + " SET CC.ORGANISATION_ID=?, CC.CATEGORY_TYPE=?, CC.NAME=?, CC.DESCRIPTION=?,"
-        + " CC.CODE_DATA=?, CC.ENDPOINT=?, CC.IS_ENDPOINT_SECURE=?, CC.IS_CACHEABLE=?,"
-        + " CC.CACHE_EXPIRY=?, CC.UPDATED=? WHERE CC.ID=?";
+        + " SET CC.CATEGORY_TYPE=?, CC.NAME=?, CC.DESCRIPTION=?, CC.CODE_DATA=?, CC.ENDPOINT=?,"
+        + " CC.IS_ENDPOINT_SECURE=?, CC.IS_CACHEABLE=?, CC.CACHE_EXPIRY=?, CC.UPDATED=?"
+        + " WHERE CC.ID=?";
 
     // updateCodeSQL
     updateCodeSQL = "UPDATE " + schemaPrefix + "CODES C"
-        + " SET C.CATEGORY_ID=?, C.NAME=?, C.DESCRIPTION=?, C.VALUE=? WHERE C.ID=?";
+        + " SET C.NAME=?, C.DESCRIPTION=?, C.VALUE=? WHERE C.ID=?";
   }
 
   private CachedCodeCategory getCachedCodeCategory(ResultSet rs)
@@ -1107,17 +1086,16 @@ public class CodesDAO
   private CodeCategory getCodeCategory(ResultSet rs)
     throws SQLException, UnsupportedEncodingException
   {
-    int cacheExpiry = rs.getInt(10);
+    int cacheExpiry = rs.getInt(9);
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
-    return new CodeCategory((UUID) rs.getObject(1), (UUID) rs.getObject(2),
-        CodeCategoryType.fromCode(rs.getInt(3)), rs.getString(4), rs.getString(5),
-        (rs.getBytes(6) != null)
-        ? new String(rs.getBytes(6), "UTF-8")
-        : null, rs.getString(7), rs.getBoolean(8), rs.getBoolean(9), cacheExpiryIsNull
+    return new CodeCategory((UUID) rs.getObject(1), CodeCategoryType.fromCode(rs.getInt(2)),
+        rs.getString(3), rs.getString(4), (rs.getBytes(5) != null)
+        ? new String(rs.getBytes(5), "UTF-8")
+        : null, rs.getString(6), rs.getBoolean(7), rs.getBoolean(8), cacheExpiryIsNull
         ? null
-        : cacheExpiry, rs.getTimestamp(11));
+        : cacheExpiry, rs.getTimestamp(10));
   }
 
   private Integer getCodeCategoryCacheExpiry(Connection connection, UUID id)
@@ -1160,14 +1138,35 @@ public class CodesDAO
   private CodeCategory getCodeCategoryNoData(ResultSet rs)
     throws SQLException
   {
-    int cacheExpiry = rs.getInt(9);
+    int cacheExpiry = rs.getInt(8);
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
-    return new CodeCategory((UUID) rs.getObject(1), (UUID) rs.getObject(2),
-        CodeCategoryType.fromCode(rs.getInt(3)), rs.getString(4), rs.getString(5), rs.getString(6),
-        rs.getBoolean(7), rs.getBoolean(8), cacheExpiryIsNull
+    return new CodeCategory((UUID) rs.getObject(1), CodeCategoryType.fromCode(rs.getInt(2)),
+        rs.getString(3), rs.getString(4), rs.getString(5), rs.getBoolean(6), rs.getBoolean(7),
+        cacheExpiryIsNull
         ? null
-        : cacheExpiry, rs.getTimestamp(10));
+        : cacheExpiry, rs.getTimestamp(9));
+  }
+
+  private List<Code> getCodesForCodeCategory(Connection connection, UUID id)
+    throws SQLException
+  {
+    try (PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
+    {
+      statement.setObject(1, id);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<Code> codes = new ArrayList<>();
+
+        while (rs.next())
+        {
+          codes.add(getCode(rs));
+        }
+
+        return codes;
+      }
+    }
   }
 }

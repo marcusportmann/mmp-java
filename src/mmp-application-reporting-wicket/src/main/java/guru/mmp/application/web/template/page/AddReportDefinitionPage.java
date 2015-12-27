@@ -97,8 +97,6 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
             WebSession session = getWebApplicationSession();
 
-            reportDefinition.setOrganisationId(session.getOrganisation().getId());
-
             fileUpload = reportDefinitionInputPanel.getFileUpload();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -113,7 +111,7 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
             reportDefinition.setTemplate(baos.toByteArray());
 
-            reportingService.saveReportDefinition(reportDefinition, session.getUsername());
+            reportingService.saveReportDefinition(reportDefinition);
 
             setResponsePage(previousPage.getPage());
           }

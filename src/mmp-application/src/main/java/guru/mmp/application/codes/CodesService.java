@@ -24,34 +24,25 @@ import guru.mmp.common.util.DateUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.lang.reflect.Constructor;
-
-import java.net.URL;
-
-import java.util.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.util.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesService</code> class provides the Codes Service implementation.
@@ -246,20 +237,23 @@ public class CodesService
   /**
    * Delete the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @throws CodesServiceException
    */
-  public void deleteCode(String id)
+  public void deleteCode(UUID codeCategoryId, String id)
     throws CodesServiceException
   {
     try
     {
-      codesDAO.deleteCode(id);
+      codesDAO.deleteCode(codeCategoryId, id);
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException("Failed to delete the code (" + id + ")", e);
+      throw new CodesServiceException("Failed to delete the code (" + id
+          + ") for the code category (" + codeCategoryId + ")", e);
     }
   }
 
@@ -346,55 +340,56 @@ public class CodesService
   /**
    * Retrieve the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       code category
+   * @param id             the ID uniquely identifying the code
    *
    * @return the code or <code>null</code> if the code could not be found
    *
    * @throws CodesServiceException
    */
-  public Code getCode(String id)
+  public Code getCode(UUID codeCategoryId, String id)
     throws CodesServiceException
   {
     try
     {
-      return codesDAO.getCode(id);
+      return codesDAO.getCode(codeCategoryId, id);
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException("Failed to retrieve the code (" + id + ")", e);
+      throw new CodesServiceException("Failed to retrieve the code (" + id
+          + ") for the code category (" + codeCategoryId + ")", e);
     }
   }
 
   /**
-   * Returns all the code categories for the organisation.
+   * Returns all the code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
    * @param retrieveCodes  retrieve the codes and/or code data for the code categories
    *
-   * @return all the code categories for the organisation
+   * @return all the code categories
    *
    * @throws CodesServiceException
    */
-  public List<CodeCategory> getCodeCategoriesForOrganisation(UUID organisationId,
-      boolean retrieveCodes)
+  public List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws CodesServiceException
   {
     try
     {
-      return codesDAO.getCodeCategoriesForOrganisation(organisationId, retrieveCodes);
+      return codesDAO.getCodeCategories(retrieveCodes);
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-          "Failed to retrieve the code categories for the organisation (" + organisationId + ")", e);
+      throw new CodesServiceException("Failed to retrieve the code categories", e);
     }
   }
 
   /**
    * Retrieve the code category.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      code category
+   * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return the code category or <code>null</code> if the code category could not be found
    *
@@ -440,7 +435,7 @@ public class CodesService
    * @throws CodesServiceException
    */
   public CodeCategory getCodeCategoryWithParameters(UUID id, Map<String, String> parameters,
-    boolean retrieveCodes)
+      boolean retrieveCodes)
     throws CodesServiceException
   {
     try
@@ -571,33 +566,28 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException("Failed to retrieve the codes for the code category ("
-          + id + ")", e);
+      throw new CodesServiceException("Failed to retrieve the codes for the code category (" + id
+          + ")", e);
     }
   }
 
   /**
-   * Returns the number of code categories for the organisation.
+   * Returns the number of code categories.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the number of code categories for the organisation
+   * @return the number of code categories
    *
    * @throws CodesServiceException
    */
-  public int getNumberOfCodeCategoriesForOrganisation(UUID organisationId)
+  public int getNumberOfCodeCategories()
     throws CodesServiceException
   {
     try
     {
-      return codesDAO.getNumberOfCodeCategoriesForOrganisation(organisationId);
+      return codesDAO.getNumberOfCodeCategories();
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-          "Failed to retrieve the number of code categories for the organisation (" + organisationId
-          + ")", e);
+      throw new CodesServiceException("Failed to retrieve the number of code categories", e);
     }
   }
 
@@ -620,8 +610,7 @@ public class CodesService
     catch (Throwable e)
     {
       throw new CodesServiceException(
-          "Failed to retrieve the number of codes for the code category (" + id + ")",
-          e);
+          "Failed to retrieve the number of codes for the code category (" + id + ")", e);
     }
   }
 
@@ -808,15 +797,12 @@ public class CodesService
    *
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the updated
    *                           information for the cached code category
-   * @param updatedBy          the username identifying the user that updated the cached code
-   *                           category
    *
    * @return the updated cached code category
    *
    * @throws CodesServiceException
    */
-  public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory,
-      String updatedBy)
+  public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws CodesServiceException
   {
     try
@@ -833,14 +819,13 @@ public class CodesService
   /**
    * Update the existing code.
    *
-   * @param code      the <code>Code</code> instance containing the updated information for the code
-   * @param updatedBy the username identifying the user that updated the code
+   * @param code the <code>Code</code> instance containing the updated information for the code
    *
    * @return the updated code
    *
    * @throws CodesServiceException
    */
-  public Code updateCode(Code code, String updatedBy)
+  public Code updateCode(Code code)
     throws CodesServiceException
   {
     try
@@ -858,13 +843,12 @@ public class CodesService
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
    *                     for the code category
-   * @param updatedBy    the username identifying the user that updated the code category
    *
    * @return the updated code category
    *
    * @throws CodesServiceException
    */
-  public CodeCategory updateCodeCategory(CodeCategory codeCategory, String updatedBy)
+  public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException
   {
     try
@@ -954,8 +938,8 @@ public class CodesService
           codeCategory.getEndPoint());
 
       guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory =
-        codesService.getCodeCategory(codeCategory.getId().toString(), DateUtil.toCalendar(lastRetrieved),
-          returnCodesIfCurrent);
+        codesService.getCodeCategory(codeCategory.getId().toString(),
+          DateUtil.toCalendar(lastRetrieved), returnCodesIfCurrent);
 
       codeCategory.setUpdated(DateUtil.toDate(remoteCodeCategory.getLastUpdated()));
 

@@ -46,11 +46,6 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   private ICodesService codesService;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
-   */
-  private UUID organisationId;
-
-  /**
    * Whether the codes and/or code data for the code categories should be retrieved.
    */
   private boolean retrieveCodes;
@@ -58,13 +53,10 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   /**
    * Constructs a new <code>CodeCategoryDataProvider</code>.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   * @param retrieveCodes  retrieve the codes and/or code data for the code categories
+   * @param retrieveCodes retrieve the codes and/or code data for the code categories
    */
-  public CodeCategoryDataProvider(UUID organisationId, boolean retrieveCodes)
+  public CodeCategoryDataProvider(boolean retrieveCodes)
   {
-    this.organisationId = organisationId;
     this.retrieveCodes = retrieveCodes;
   }
 
@@ -98,7 +90,7 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
     try
     {
       List<CodeCategory> allCodeCategories =
-        codesService.getCodeCategoriesForOrganisation(organisationId, retrieveCodes);
+        codesService.getCodeCategories(retrieveCodes);
 
       return allCodeCategories.subList((int) first,
           (int) Math.min(first + count, allCodeCategories.size())).iterator();
@@ -135,7 +127,7 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   {
     try
     {
-      return codesService.getNumberOfCodeCategoriesForOrganisation(organisationId);
+      return codesService.getNumberOfCodeCategories();
     }
     catch (Throwable e)
     {

@@ -19,35 +19,25 @@ package guru.mmp.application.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.util.StringUtil;
-
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-
-import java.sql.Connection;
-
-import java.util.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
 import javax.naming.InitialContext;
+import java.io.ByteArrayInputStream;
+import java.sql.Connection;
+import java.util.*;
 
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -267,27 +257,22 @@ public class ReportingService
   }
 
   /**
-   * Returns the number of report definitions for the organisation.
+   * Returns the number of report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the number of report definitions for the organisation
+   * @return the number of report definitions
    *
    * @throws ReportingServiceException
    */
-  public int getNumberOfReportDefinitionsForOrganisation(UUID organisationId)
+  public int getNumberOfReportDefinitions()
     throws ReportingServiceException
   {
     try
     {
-      return reportingDAO.getNumberOfReportDefinitionsForOrganisation(organisationId);
+      return reportingDAO.getNumberOfReportDefinitions();
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-          "Failed to retrieve the number of report definitions for the organisation ("
-          + organisationId + ")", e);
+      throw new ReportingServiceException("Failed to retrieve the number of report definitions", e);
     }
   }
 
@@ -316,28 +301,23 @@ public class ReportingService
   }
 
   /**
-   * Returns the summaries for all the report definitions for the organisation.
+   * Returns the summaries for all the report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the summaries for all the report definitions for the organisation
+   * @return the summaries for all the report definitions
    *
    * @throws ReportingServiceException
    */
-  public List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(
-      UUID organisationId)
+  public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException
   {
     try
     {
-      return reportingDAO.getReportDefinitionSummariesForOrganisation(organisationId);
+      return reportingDAO.getReportDefinitionSummaries();
     }
     catch (Throwable e)
     {
       throw new ReportingServiceException(
-          "Failed to retrieve the summaries for all the report definitions for the organisation ("
-          + organisationId + ")", e);
+          "Failed to retrieve the summaries for all the report definitions", e);
     }
   }
 
@@ -367,27 +347,22 @@ public class ReportingService
   }
 
   /**
-   * Returns all the report definitions for the organisation.
+   * Returns all the report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return all the report definitions for the organisation
+   * @return all the report definitions
    *
    * @throws ReportingServiceException
    */
-  public List<ReportDefinition> getReportDefinitionsForOrganisation(UUID organisationId)
+  public List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException
   {
     try
     {
-      return reportingDAO.getReportDefinitionsForOrganisation(organisationId);
+      return reportingDAO.getReportDefinitions();
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-          "Failed to retrieve all the report definitions for the organisation (" + organisationId
-          + ")", e);
+      throw new ReportingServiceException("Failed to retrieve all the report definitions", e);
     }
   }
 
@@ -446,20 +421,19 @@ public class ReportingService
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
    *                         for the report definition
-   * @param savedBy          the username identifying the user that saved the report definition
    *
    * @return the saved report definition
    *
    * @throws ReportingServiceException
    */
-  public ReportDefinition saveReportDefinition(ReportDefinition reportDefinition, String savedBy)
+  public ReportDefinition saveReportDefinition(ReportDefinition reportDefinition)
     throws ReportingServiceException
   {
     try
     {
       if (reportingDAO.reportDefinitionExists(reportDefinition.getId()))
       {
-        reportDefinition = reportingDAO.updateReportDefinition(reportDefinition, savedBy);
+        reportDefinition = reportingDAO.updateReportDefinition(reportDefinition);
       }
       else
       {

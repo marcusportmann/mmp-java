@@ -192,6 +192,7 @@ public class CodeAdministrationPage extends TemplateWebPage
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
+    private UUID categoryId;
     private String id;
     private Label nameLabel;
 
@@ -218,7 +219,7 @@ public class CodeAdministrationPage extends TemplateWebPage
         {
           try
           {
-            codesService.deleteCode(id);
+            codesService.deleteCode(categoryId, id);
 
             target.add(tableContainer);
 
@@ -227,7 +228,7 @@ public class CodeAdministrationPage extends TemplateWebPage
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the code (" + id + "): " + e.getMessage(), e);
+            logger.error("Failed to remove the code (" + id + ") for the code category (" + categoryId + "): " + e.getMessage(), e);
 
             CodeAdministrationPage.this.error("Failed to remove the code "
                 + nameLabel.getDefaultModelObjectAsString());
@@ -253,6 +254,7 @@ public class CodeAdministrationPage extends TemplateWebPage
       if (code != null)
       {
         id = code.getId();
+        categoryId = code.getCategoryId();
         nameLabel.setDefaultModelObject(code.getName());
 
         target.add(nameLabel);

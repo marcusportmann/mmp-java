@@ -85,7 +85,7 @@ public class UpdateCodePage extends TemplateWebPage
 
             Code code = updateForm.getModelObject();
 
-            codesService.updateCode(code, session.getUsername());
+            codesService.updateCode(code);
 
             setResponsePage(previousPage.getPage());
           }

@@ -106,7 +106,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
               codeCategory.setCacheExpiry(null);
             }
 
-            codesService.updateCodeCategory(codeCategory, session.getUsername());
+            codesService.updateCodeCategory(codeCategory);
 
             setResponsePage(previousPage.getPage());
           }

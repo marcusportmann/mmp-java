@@ -17,8 +17,8 @@
 package guru.mmp.application.reporting;
 
 /**
- * The <code>ReportingServiceException</code> exception is thrown to indicate an error condition when
- * working with the Reporting Service.
+ * The <code>ReportingServiceException</code> exception is thrown to indicate an error condition
+ * when working with the Reporting Service.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *

@@ -19,7 +19,6 @@ package guru.mmp.application.reporting;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
-
 import java.util.UUID;
 
 /**
@@ -43,12 +42,6 @@ public class ReportDefinition
   private String name;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the report
-   * definition is associated with.
-   */
-  private UUID organisationId;
-
-  /**
    * The JasperReports template for the report definition.
    */
   private byte[] template;
@@ -61,15 +54,12 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the report definition is associated with
-   * @param name           the name of the report definition
-   * @param template       the JasperReports template for the report definition
+   * @param name     the name of the report definition
+   * @param template the JasperReports template for the report definition
    */
-  public ReportDefinition(UUID organisationId, String name, byte[] template)
+  public ReportDefinition(String name, byte[] template)
   {
     this.id = UUID.randomUUID();
-    this.organisationId = organisationId;
     this.name = name;
     this.template = template;
   }
@@ -77,17 +67,14 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param id             the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       report definition
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the report definition is associated with
-   * @param name           the name of the report definition
-   * @param template       the JasperReports template for the report definition
+   * @param id       the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *                 definition
+   * @param name     the name of the report definition
+   * @param template the JasperReports template for the report definition
    */
-  public ReportDefinition(UUID id, UUID organisationId, String name, byte[] template)
+  public ReportDefinition(UUID id, String name, byte[] template)
   {
     this.id = id;
-    this.organisationId = organisationId;
     this.name = name;
     this.template = template;
   }
@@ -112,18 +99,6 @@ public class ReportDefinition
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   * the report definition is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *         the report definition is associated with
-   */
-  public UUID getOrganisationId()
-  {
-    return organisationId;
   }
 
   /**
@@ -158,18 +133,6 @@ public class ReportDefinition
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * report definition is associated with.
-   *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the report definition is associated with
-   */
-  public void setOrganisationId(UUID organisationId)
-  {
-    this.organisationId = organisationId;
-  }
-
-  /**
    * Set the JasperReports template for the report definition.
    *
    * @param template the JasperReports template for the report definition
@@ -187,7 +150,6 @@ public class ReportDefinition
   @Override
   public String toString()
   {
-    return "ReportDefinition {" + "id=\"" + getId() + "\", " + "organisationId=\""
-        + getOrganisationId() + "\", " + "name=\"" + getName() + "\"}";
+    return "ReportDefinition {" + "id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

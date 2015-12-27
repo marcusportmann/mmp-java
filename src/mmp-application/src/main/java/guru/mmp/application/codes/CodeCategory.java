@@ -19,7 +19,6 @@ package guru.mmp.application.codes;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -85,12 +84,6 @@ public class CodeCategory
   private String name;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the code
-   * category is associated with.
-   */
-  private UUID organisationId;
-
-  /**
    * The date and time the code category was updated.
    */
   private Date updated;
@@ -105,8 +98,6 @@ public class CodeCategory
    *
    * @param id               the Universally Unique Identifier (UUID) used to uniquely identify the
    *                         code category
-   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         organisation the code category is associated with
    * @param categoryType     the type of code category e.g. Local, RemoteHTTPService,
    *                         RemoteWebService, etc
    * @param name             the name of the code category
@@ -118,12 +109,11 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(UUID id, UUID organisationId, CodeCategoryType categoryType, String name,
-      String description, String endPoint, boolean isEndPointSecure, boolean isCacheable,
-      Integer cacheExpiry, Date updated)
+  public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String description,
+      String endPoint, boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry,
+      Date updated)
   {
     this.id = id;
-    this.organisationId = organisationId;
     this.categoryType = categoryType;
     this.name = name;
     this.description = description;
@@ -140,8 +130,6 @@ public class CodeCategory
    *
    * @param id               the Universally Unique Identifier (UUID) used to uniquely identify the
    *                         code category
-   * @param organisationId   the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         organisation the code category is associated with
    * @param categoryType     the type of code category e.g. Local, RemoteHTTPService,
    *                         RemoteWebService, etc
    * @param name             the name of the code category
@@ -154,12 +142,11 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(UUID id, UUID organisationId, CodeCategoryType categoryType, String name,
-      String description, String codeData, String endPoint, boolean isEndPointSecure,
-      boolean isCacheable, Integer cacheExpiry, Date updated)
+  public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String description,
+      String codeData, String endPoint, boolean isEndPointSecure, boolean isCacheable,
+      Integer cacheExpiry, Date updated)
   {
     this.id = id;
-    this.organisationId = organisationId;
     this.categoryType = categoryType;
     this.name = name;
     this.description = description;
@@ -277,18 +264,6 @@ public class CodeCategory
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   * the code category is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *         the code category is associated with
-   */
-  public UUID getOrganisationId()
-  {
-    return organisationId;
-  }
-
-  /**
    * Returns the date and time the code category was updated.
    *
    * @return the date and time the code category was updated
@@ -401,18 +376,6 @@ public class CodeCategory
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * code category is associated with.
-   *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation the code category is associated with
-   */
-  public void setOrganisationId(UUID organisationId)
-  {
-    this.organisationId = organisationId;
   }
 
   /**

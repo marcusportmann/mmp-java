@@ -105,7 +105,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
       tableContainer.add(addLink);
 
       ReportDefinitionSummaryDataProvider dataProvider =
-        new ReportDefinitionSummaryDataProvider(session.getOrganisation().getId());
+        new ReportDefinitionSummaryDataProvider();
 
       // The report definition data view
       DataView<ReportDefinitionSummary> dataView =

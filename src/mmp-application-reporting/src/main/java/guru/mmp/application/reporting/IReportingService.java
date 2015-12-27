@@ -20,13 +20,12 @@ package guru.mmp.application.reporting;
 
 import org.w3c.dom.Document;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.sql.Connection;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IReportingService</code> interface defines the functionality that must be provided by
@@ -105,16 +104,13 @@ public interface IReportingService
   String getLocalReportFolderPath();
 
   /**
-   * Returns the number of report definitions for the organisation.
+   * Returns the number of report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the number of report definitions for the organisation
+   * @return the number of report definitions
    *
    * @throws ReportingServiceException
    */
-  int getNumberOfReportDefinitionsForOrganisation(UUID organisationId)
+  int getNumberOfReportDefinitions()
     throws ReportingServiceException;
 
   /**
@@ -131,16 +127,13 @@ public interface IReportingService
     throws ReportingServiceException;
 
   /**
-   * Returns the summaries for all the report definitions for the organisation.
+   * Returns the summaries for all the report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return the summaries for all the report definitions for the organisation
+   * @return the summaries for all the report definitions
    *
    * @throws ReportingServiceException
    */
-  List<ReportDefinitionSummary> getReportDefinitionSummariesForOrganisation(UUID organisationId)
+  List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException;
 
   /**
@@ -158,16 +151,13 @@ public interface IReportingService
     throws ReportingServiceException;
 
   /**
-   * Returns all the report definitions for the organisation.
+   * Returns all the report definitions.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
-   *
-   * @return all the report definitions for the organisation
+   * @return all the report definitions
    *
    * @throws ReportingServiceException
    */
-  List<ReportDefinition> getReportDefinitionsForOrganisation(UUID organisationId)
+  List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException;
 
   /**
@@ -191,13 +181,12 @@ public interface IReportingService
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
    *                         for the report definition
-   * @param savedBy          the username identifying the user that saved the report definition
    *
    * @return the saved report definition
    *
    * @throws ReportingServiceException
    */
-  ReportDefinition saveReportDefinition(ReportDefinition reportDefinition, String savedBy)
+  ReportDefinition saveReportDefinition(ReportDefinition reportDefinition)
     throws ReportingServiceException;
 
   /**

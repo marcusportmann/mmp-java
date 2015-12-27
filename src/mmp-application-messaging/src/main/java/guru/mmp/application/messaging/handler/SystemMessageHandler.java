@@ -374,34 +374,6 @@ public class SystemMessageHandler extends MessageHandler
 
         if (codeCategory != null)
         {
-          if ((codeCategory.getOrganisationId() != null)
-            && (!codeCategory.getOrganisationId().equals(
-            SecurityService.DEFAULT_ORGANISATION_ID)))
-          {
-            UUID userDirectoryId =
-              securityService.getUserDirectoryIdForUser(requestMessage.getUsername());
-
-            List<UUID> organisationIds =
-              securityService.getOrganisationIdsForUserDirectory(userDirectoryId);
-
-            if (!organisationIds.contains(codeCategory.getOrganisationId()))
-            {
-              logger.warn("The user (" + requestMessage.getUsername()
-                + ") has insufficient access to retrieve the code category ("
-                + codeCategory.getId() + ") associated with organisation ("
-                + codeCategory.getOrganisationId() + ")");
-
-              responseData = new GetCodeCategoryResponseData(
-                GetCodeCategoryResponseData.ERROR_CODE_ACCESS_DENIED,
-                "The user (" + requestMessage.getUsername()
-                  + ") has insufficient access to retrieve the code category ("
-                  + codeCategory.getId() + ") associated with organisation ("
-                  + codeCategory.getOrganisationId() + ")");
-
-              return messageTranslator.toMessage(responseData);
-            }
-          }
-
           if ((codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD)
               || (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_CUSTOM))
           {
@@ -496,34 +468,6 @@ public class SystemMessageHandler extends MessageHandler
 
         if (codeCategory != null)
         {
-          if ((codeCategory.getOrganisationId() != null)
-              && (!codeCategory.getOrganisationId().equals(
-                SecurityService.DEFAULT_ORGANISATION_ID)))
-          {
-            UUID userDirectoryId =
-              securityService.getUserDirectoryIdForUser(requestMessage.getUsername());
-
-            List<UUID> organisationIds =
-              securityService.getOrganisationIdsForUserDirectory(userDirectoryId);
-
-            if (!organisationIds.contains(codeCategory.getOrganisationId()))
-            {
-              logger.warn("The user (" + requestMessage.getUsername()
-                  + ") has insufficient access to retrieve the code category ("
-                  + codeCategory.getId() + ") associated with organisation ("
-                  + codeCategory.getOrganisationId() + ")");
-
-              responseData = new GetCodeCategoryWithParametersResponseData(
-                  GetCodeCategoryWithParametersResponseData.ERROR_CODE_ACCESS_DENIED,
-                  "The user (" + requestMessage.getUsername()
-                  + ") has insufficient access to retrieve the code category ("
-                  + codeCategory.getId() + ") associated with organisation ("
-                  + codeCategory.getOrganisationId() + ")");
-
-              return messageTranslator.toMessage(responseData);
-            }
-          }
-
           if ((codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD)
               || (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_CUSTOM))
           {
