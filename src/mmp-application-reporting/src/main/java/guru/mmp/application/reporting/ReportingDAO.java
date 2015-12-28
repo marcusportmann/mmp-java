@@ -482,7 +482,7 @@ public class ReportingDAO
         + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
 
     // getReportDefinitionsSQL
-    getReportDefinitionsSQL = "SELECT RD.ID, RD.ORGANISATION_ID, RD.NAME, RD.TEMPLATE FROM "
+    getReportDefinitionsSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM "
         + schemaPrefix + "REPORT_DEFINITIONS RD";
 
     // reportDefinitionExistsSQL
@@ -503,6 +503,6 @@ public class ReportingDAO
   private ReportDefinitionSummary getReportDefinitionSummary(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinitionSummary((UUID) rs.getObject(1), rs.getString(3));
+    return new ReportDefinitionSummary((UUID) rs.getObject(1), rs.getString(2));
   }
 }

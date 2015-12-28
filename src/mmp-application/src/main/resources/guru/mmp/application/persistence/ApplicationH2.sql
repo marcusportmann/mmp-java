@@ -1256,25 +1256,6 @@ COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.DATA
 
 
 
-CREATE TABLE MMP.TEST_DATA (
-  ID     BIGINT NOT NULL,
-  NAME   VARCHAR(100) NOT NULL,
-  VALUE  VARCHAR(100) NOT NULL,
-
-  PRIMARY KEY (ID)
-);
-
-COMMENT ON COLUMN MMP.TEST_DATA.ID
-  IS 'The ID used to uniquely identify the data';
-
-COMMENT ON COLUMN MMP.TEST_DATA.NAME
-  IS 'The name for the data';
-
-COMMENT ON COLUMN MMP.TEST_DATA.VALUE
-  IS 'The value for the data';
-
-
-
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------

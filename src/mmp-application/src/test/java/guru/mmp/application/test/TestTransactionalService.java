@@ -225,7 +225,7 @@ public class TestTransactionalService
     throws SQLException
   {
     // createTestDataSQL
-    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA"
+    createTestDataSQL = "INSERT INTO " + schemaPrefix + "FTEST_DATA"
         + " (ID, NAME, VALUE) VALUES (?, ?, ?)";
 
     // getTestDataSQL
