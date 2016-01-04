@@ -73,7 +73,7 @@ public class UserDirectory
 
     buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     buffer.append(
-        "<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\"><user-directory>");
+        "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
 
     for (String parameterName : parameters.keySet())
     {
@@ -84,7 +84,7 @@ public class UserDirectory
       buffer.append("</parameter>");
     }
 
-    buffer.append("</user-directory>");
+    buffer.append("</userDirectory>");
 
     return buffer.toString();
   }

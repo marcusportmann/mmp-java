@@ -943,9 +943,9 @@ public class ApplicationSecurityContext
       Document document = builder.parse(inputSource);
       Element rootElement = document.getDocumentElement();
 
-      this.keyStoreName = XmlUtils.getChildElementText(rootElement, "keystore-name");
-      this.keyStoreAlias = XmlUtils.getChildElementText(rootElement, "keystore-alias");
-      this.keyStorePassword = XmlUtils.getChildElementText(rootElement, "keystore-password");
+      this.keyStoreName = XmlUtils.getChildElementText(rootElement, "keyStoreName");
+      this.keyStoreAlias = XmlUtils.getChildElementText(rootElement, "keyStoreAlias");
+      this.keyStorePassword = XmlUtils.getChildElementText(rootElement, "keyStorePassword");
     }
     catch (Throwable e)
     {

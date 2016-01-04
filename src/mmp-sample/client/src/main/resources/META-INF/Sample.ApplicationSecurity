@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE application-security SYSTEM "ApplicationSecurity.dtd">
+<!DOCTYPE applicationSecurity SYSTEM "ApplicationSecurity.dtd">
 
-<application-security>
-  <keystore-name>Sample.jks</keystore-name>
-  <keystore-alias>Sample</keystore-alias>
-  <keystore-password>Password1</keystore-password>
-</application-security>
+<applicationSecurity>
+  <keyStoreName>Sample.jks</keyStoreName>
+  <keyStoreAlias>Sample</keyStoreAlias>
+  <keyStorePassword>Password1</keyStorePassword>
+</applicationSecurity>
 
 

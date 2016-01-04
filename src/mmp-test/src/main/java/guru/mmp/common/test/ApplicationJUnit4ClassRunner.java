@@ -101,7 +101,9 @@ public class ApplicationJUnit4ClassRunner
 
         ic.createSubcontext("jboss");
 
-        ic.bind("app/env/RegistryPathPrefix", "/ApplicationTest");
+        ic.bind("app/AppName", "Test");
+
+        ic.bind("app/env/RegistryPathPrefix", "/Test");
 
         // Initialise the JTA user transaction and transaction manager
         Enhancer transactionManagerEnhancer = new Enhancer();

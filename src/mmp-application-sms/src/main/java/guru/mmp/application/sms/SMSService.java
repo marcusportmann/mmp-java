@@ -649,15 +649,28 @@ public class SMSService
        */
       else
       {
+        Class<?> clazz = null;
+
         try
         {
-          instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
+          clazz = Thread.currentThread().getContextClassLoader().loadClass(
+            "com.ibm.websphere.management.configservice.ConfigService");
         }
-        catch (Throwable e)
+        catch (Throwable ignored)
+        {}
+
+        if (clazz != null)
         {
-          logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
+          try
+          {
+            instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
+          }
+          catch (Throwable e)
+          {
+            logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
               + " while constructing the SMS Service instance name", e);
-          instanceName = instanceName + "::Unknown";
+            instanceName = instanceName + "::Unknown";
+          }
         }
       }
     }

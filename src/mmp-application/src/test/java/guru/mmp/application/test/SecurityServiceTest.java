@@ -1056,12 +1056,12 @@ public class SecurityServiceTest
     userDirectory.setDescription("Test User Directory Description " + userDirectoryCount);
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-      + "<!DOCTYPE user-directory SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<user-directory>"
+      + "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>"
       + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
       + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
       + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
       + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
-      + "</user-directory>";
+      + "</userDirectory>";
 
     userDirectory.setConfiguration(buffer);
 
