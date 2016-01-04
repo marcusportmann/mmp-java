@@ -76,6 +76,8 @@ public class ReportingServiceTest
     {
       reportingService.createReportPDF(reportDefinition.getId(), parameters, connection);
     }
+
+    reportingService.deleteReportDefinition(reportDefinition.getId());
   }
 
   /**
