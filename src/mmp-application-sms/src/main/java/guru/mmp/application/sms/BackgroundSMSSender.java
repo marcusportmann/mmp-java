@@ -16,8 +16,6 @@
 
 package guru.mmp.application.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.*;
 import javax.inject.Inject;
 import java.util.concurrent.Future;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundSMSSender</code> class implements the Background SMS Sender.
@@ -71,8 +67,8 @@ public class BackgroundSMSSender
     }
     else
     {
-      logger.error("Failed to initialise the Background SMS Sender:"
-          + " The SMS Service was NOT injected");
+      logger.error(
+        "Failed to initialise the Background SMS Sender: The SMS Service was NOT injected");
     }
   }
 
@@ -87,8 +83,8 @@ public class BackgroundSMSSender
     // If CDI injection was not completed successfully for the bean then stop here
     if (smsService == null)
     {
-      logger.error("Failed to send the SMSs queued for sending:"
-          + " The SMSService was NOT injected");
+      logger.error(
+        "Failed to send the SMSs queued for sending: The SMSService was NOT injected");
 
       return new AsyncResult<>(false);
     }
@@ -140,7 +136,7 @@ public class BackgroundSMSSender
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Sending the queued SMS (" + sms.getId() + ")");
+          logger.debug(String.format("Sending the queued SMS (%d)", sms.getId()));
         }
 
         if (smsService.sendSMSSynchronously(sms.getId(), sms.getMobileNumber(), sms.getMessage()))
@@ -156,7 +152,7 @@ public class BackgroundSMSSender
       }
       catch (Throwable e)
       {
-        logger.error("Failed to send the queued SMS (" + sms.getId() + ")", e);
+        logger.error(String.format("Failed to send the queued SMS (%d)", sms.getId()), e);
 
         // Increment the send attempts for the SMS
         try
@@ -165,8 +161,9 @@ public class BackgroundSMSSender
         }
         catch (Throwable f)
         {
-          logger.error("Failed to increment the send attempts for the queued SMS (" + sms.getId()
-              + ")", f);
+          logger.error(
+            String.format("Failed to increment the send attempts for the queued SMS (%d)",
+              sms.getId()), f);
         }
 
         try
@@ -178,8 +175,10 @@ public class BackgroundSMSSender
            */
           if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts())
           {
-            logger.warn("The queued SMS (" + sms.getId() + ") has exceeded the maximum "
-                + " number of send attempts and will be marked as \"Failed\"");
+            logger.warn(String.format(
+              "The queued SMS (%d) has exceeded the maximum  number of send attempts and will be " +
+                "marked as \"Failed\"",
+              sms.getId()));
 
             smsService.unlockSMS(sms.getId(), SMS.Status.FAILED);
           }
@@ -190,8 +189,8 @@ public class BackgroundSMSSender
         }
         catch (Throwable f)
         {
-          logger.error("Failed to unlock and set the status for the queued SMS (" + sms.getId()
-              + ")", f);
+          logger.error(String.format("Failed to unlock and set the status for the queued SMS (%d)",
+            sms.getId()), f);
         }
       }
     }

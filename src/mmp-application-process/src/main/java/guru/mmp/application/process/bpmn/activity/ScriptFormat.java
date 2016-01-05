@@ -27,13 +27,8 @@ public enum ScriptFormat
   JAVA("http://www.java.com/java", "Java"), MVEL("http://www.mvel.org/2.0", "MVEL");
 
   private String mimeType;
-  private String name;
 
-  ScriptFormat(String mimeType, String name)
-  {
-    this.mimeType = mimeType;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the Script Format given by the specified mime type.
@@ -72,6 +67,12 @@ public enum ScriptFormat
 
         throw new RuntimeException("Invalid mime type for Script Format (" + mimeType + ")");
     }
+  }
+
+  ScriptFormat(String mimeType, String name)
+  {
+    this.mimeType = mimeType;
+    this.name = name;
   }
 
   /**

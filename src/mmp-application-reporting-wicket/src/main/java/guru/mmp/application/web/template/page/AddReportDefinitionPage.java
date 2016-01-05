@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -40,8 +38,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>AddReportDefinitionPage</code> class implements the "Add Report Definition"
  * page for the Web Application Template.
@@ -49,12 +45,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_ADD_REPORT_DEFINITION)
-public class AddReportDefinitionPage extends TemplateWebPage
+public class AddReportDefinitionPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddReportDefinitionPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
   @Inject
@@ -76,8 +73,8 @@ public class AddReportDefinitionPage extends TemplateWebPage
 
       addForm.getModelObject().setId(UUID.randomUUID());
 
-      ReportDefinitionInputPanel reportDefinitionInputPanel =
-        new ReportDefinitionInputPanel("reportDefinition", false);
+      ReportDefinitionInputPanel reportDefinitionInputPanel = new ReportDefinitionInputPanel(
+        "reportDefinition", false);
 
       addForm.add(reportDefinitionInputPanel);
 
@@ -133,8 +130,8 @@ public class AddReportDefinitionPage extends TemplateWebPage
             }
             catch (Throwable e)
             {
-              logger.error("Failed to delete the uploaded file (" + fileUpload.getClientFileName()
-                  + ")", e);
+              logger.error(String.format("Failed to delete the uploaded file (%s)",
+                fileUpload.getClientFileName()), e);
             }
           }
         }

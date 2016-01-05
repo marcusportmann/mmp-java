@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -28,27 +26,28 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
  * The <code>FormDialog</code> class provides a modal dialog box with a form which appears over
  * other content.
- *
+ * <p/>
  * The dialog can be opened or closed by straight JavaScript or by a Wicket AjaxRequestTarget.
- *
+ * <p/>
  * It can optionally be closed by clicking outside the dialog.
  *
- * @author Marcus Portmann
- *
  * @param <T> the model type
+ *
+ * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class FormDialog<T> extends Dialog
+public abstract class FormDialog<T>
+  extends Dialog
 {
   private static final long serialVersionUID = 1000000;
+
   private Alerts alerts;
+
   private Form<T> form;
 
   /**
@@ -76,14 +75,6 @@ public abstract class FormDialog<T> extends Dialog
     AjaxSubmitLink submitLink = new AjaxSubmitLink("submitLink", getForm())
     {
       @Override
-      protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-      {
-        resetFeedbackMessages(target);
-
-        FormDialog.this.onSubmit(target, FormDialog.this.getForm());
-      }
-
-      @Override
       protected void onError(AjaxRequestTarget target, Form<?> form)
       {
         super.onError(target, form);
@@ -103,6 +94,14 @@ public abstract class FormDialog<T> extends Dialog
             }
           });
         }
+      }
+
+      @Override
+      protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+      {
+        resetFeedbackMessages(target);
+
+        FormDialog.this.onSubmit(target, FormDialog.this.getForm());
       }
     };
     submitLink.setDefaultFormProcessing(true);

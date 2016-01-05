@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.navigation;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.page.AnonymousOnlyWebPage;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
 import guru.mmp.application.web.page.WebPage;
@@ -29,22 +27,26 @@ import org.apache.wicket.util.string.StringValue;
 import java.io.Serializable;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>NavigationLink</code> class stores the information for a navigation link that forms
  * part of a web application's navigation hierarchy and links to a specific Wicket-based web page.
  *
  * @author Marcus Portmann
  */
-public class NavigationLink extends NavigationItem
+public class NavigationLink
+  extends NavigationItem
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String functionCode;
+
   private boolean isAnonymousOnly;
+
   private boolean isSecure;
+
   private Class<? extends Page> pageClass;
+
   private PageParameters pageParameters;
 
   /**
@@ -74,7 +76,7 @@ public class NavigationLink extends NavigationItem
    * Constructs a new <code>NavigationLink</code>.
    *
    * @param name      the name of the navigation link
-   * @param iconClass      the CSS class for the icon for the navigation item
+   * @param iconClass the CSS class for the icon for the navigation item
    * @param pageClass the class for the Wicket <code>Page</code> associated with the link
    */
   public NavigationLink(String name, String iconClass, Class<? extends Page> pageClass)
@@ -90,8 +92,8 @@ public class NavigationLink extends NavigationItem
    * @param pageClass      the class for the Wicket <code>Page</code> associated with the link
    * @param pageParameters the parameters for the page associated with the link
    */
-  public NavigationLink(String name, String iconClass, Class<? extends Page> pageClass,
-      PageParameters pageParameters)
+  public NavigationLink(
+    String name, String iconClass, Class<? extends Page> pageClass, PageParameters pageParameters)
   {
     super(name, iconClass);
     this.pageClass = pageClass;
@@ -106,8 +108,8 @@ public class NavigationLink extends NavigationItem
     }
     else
     {
-      SecureAnonymousWebPage secureAnonymousWebPage =
-        pageClass.getAnnotation(SecureAnonymousWebPage.class);
+      SecureAnonymousWebPage secureAnonymousWebPage = pageClass.getAnnotation(
+        SecureAnonymousWebPage.class);
 
       if (secureAnonymousWebPage != null)
       {
@@ -119,8 +121,8 @@ public class NavigationLink extends NavigationItem
         this.functionCode = WebPage.FUNCTION_CODE_ANONYMOUS_ACCESS;
         this.isSecure = false;
 
-        AnonymousOnlyWebPage anonymousOnlyWebPage =
-          pageClass.getAnnotation(AnonymousOnlyWebPage.class);
+        AnonymousOnlyWebPage anonymousOnlyWebPage = pageClass.getAnnotation(
+          AnonymousOnlyWebPage.class);
 
         if (anonymousOnlyWebPage != null)
         {
@@ -136,8 +138,8 @@ public class NavigationLink extends NavigationItem
    * with a particular function.
    *
    * @return the function code uniquely identifying the function associated with the page class
-   *         for the link e.g. Security.CreateUser or <code>null</code> if the page class is not
-   *         associated with a particular function
+   * for the link e.g. Security.CreateUser or <code>null</code> if the page class is not
+   * associated with a particular function
    */
   public String getFunctionCode()
   {
@@ -169,7 +171,7 @@ public class NavigationLink extends NavigationItem
    * users (users who have not authenticated) or <code>false</code> otherwise.
    *
    * @return <code>true<code> if the page associated with the link is only accessible to anonymous
-   *         users (users who have not authenticated) or <code>false</code> otherwise
+   * users (users who have not authenticated) or <code>false</code> otherwise
    */
   public boolean isAnonymousOnly()
   {
@@ -183,7 +185,7 @@ public class NavigationLink extends NavigationItem
    * @param page the page
    *
    * @return <code>true</code> if the page is in the navigation item's hierarchy or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean isPageInNavigationHierarchy(Page page)
   {
@@ -212,7 +214,7 @@ public class NavigationLink extends NavigationItem
         for (int i = 0; i < pageParameterValues.size(); i++)
         {
           if (!pageParameterValues.get(i).toString().equals(
-              tmpPageParameterValues.get(i).toString()))
+            tmpPageParameterValues.get(i).toString()))
           {
             return false;
           }

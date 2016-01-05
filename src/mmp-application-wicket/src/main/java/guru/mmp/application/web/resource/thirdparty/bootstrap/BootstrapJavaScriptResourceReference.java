@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.bootstrap;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -27,35 +25,30 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>BootstrapJavaScriptResourceReference</code> class implements the JavaScript resource
  * reference for the Bootstrap thirdparty resource bundled with the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class BootstrapJavaScriptResourceReference extends JavaScriptResourceReference
+public class BootstrapJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new BootstrapJavaScriptResourceReference());
-  private static final BootstrapJavaScriptResourceReference INSTANCE =
-    new BootstrapJavaScriptResourceReference();
+  private static final BootstrapJavaScriptResourceReference INSTANCE = new
+    BootstrapJavaScriptResourceReference();
 
-  private BootstrapJavaScriptResourceReference()
-  {
-    super(BootstrapJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "js/bootstrap.js"
-        : "js/bootstrap.min.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new BootstrapJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the Bootstrap
    * thirdparty resource bundled with the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the Bootstrap
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static BootstrapJavaScriptResourceReference get()
   {
@@ -70,6 +63,12 @@ public class BootstrapJavaScriptResourceReference extends JavaScriptResourceRefe
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private BootstrapJavaScriptResourceReference()
+  {
+    super(BootstrapJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "js/bootstrap.js" : "js/bootstrap.min.js");
   }
 
   /**

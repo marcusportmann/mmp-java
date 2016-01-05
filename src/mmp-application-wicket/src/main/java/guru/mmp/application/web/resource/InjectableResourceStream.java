@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.protocol.http.WebApplication;
 
 /**
@@ -27,7 +25,8 @@ import org.apache.wicket.protocol.http.WebApplication;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class InjectableResourceStream extends ResourceStream
+public abstract class InjectableResourceStream
+  extends ResourceStream
 {
   private static final long serialVersionUID = 1000000;
 
@@ -36,8 +35,9 @@ public abstract class InjectableResourceStream extends ResourceStream
    */
   public InjectableResourceStream()
   {
-    guru.mmp.application.web.WebApplication webApplication =
-      guru.mmp.application.web.WebApplication.class.cast(WebApplication.get());
+    guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
+      .WebApplication.class.cast(
+      WebApplication.get());
 
     webApplication.getWebApplicationInjector().inject(this);
   }

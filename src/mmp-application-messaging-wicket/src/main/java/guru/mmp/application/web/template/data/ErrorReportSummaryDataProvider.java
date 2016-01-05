@@ -16,21 +16,15 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.ErrorReportSummary;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * The <code>ErrorReportSummaryDataProvider</code> class provides an
@@ -40,7 +34,8 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ErrorReportSummaryDataProvider extends InjectableDataProvider<ErrorReportSummary>
+public class ErrorReportSummaryDataProvider
+  extends InjectableDataProvider<ErrorReportSummary>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -80,40 +75,41 @@ public class ErrorReportSummaryDataProvider extends InjectableDataProvider<Error
    * Retrieves the summaries for the most recent error reports from the database starting
    * with index <code>first</code> and ending with <code>first+count</code>.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
-   *
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
    * @return the summaries for the most recent error reports from the database starting with
-   *         index <code>first</code> and ending with <code>first+count</code>
+   * index <code>first</code> and ending with <code>first+count</code>
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
   public Iterator<ErrorReportSummary> iterator(long first, long count)
   {
     try
     {
-      List<ErrorReportSummary> allErrorReportSummaries =
-        messagingService.getMostRecentErrorReportSummaries(maximumNumberOfEntries);
+      List<ErrorReportSummary> allErrorReportSummaries = messagingService
+        .getMostRecentErrorReportSummaries(
+        maximumNumberOfEntries);
 
       return allErrorReportSummaries.subList((int) first,
-          (int) Math.min(first + count, allErrorReportSummaries.size())).iterator();
+        (int) Math.min(first + count, allErrorReportSummaries.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(
-          "Failed to load the summaries for the error reports from index (" + first + ") to ("
-          + (first + count) + ")", e);
+        String.format("Failed to load the summaries for the error reports from index (%d) to (%d)",
+          first, first + count), e);
     }
   }
 
   /**
    * Wraps the retrieved <code>ErrorReportSummary</code> POJO with a Wicket model.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
-   *
    * @param errorReportSummary the <code>ErrorReportSummary</code> instance to wrap
    *
    * @return the Wicket model wrapping the <code>ErrorReportSummary</code> instance
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    */
   public IModel<ErrorReportSummary> model(ErrorReportSummary errorReportSummary)
   {
@@ -123,9 +119,9 @@ public class ErrorReportSummaryDataProvider extends InjectableDataProvider<Error
   /**
    * Returns the total number of summaries for the error reports.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
-   *
    * @return the total number of summaries for the error reports
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    */
   public long size()
   {
@@ -145,8 +141,8 @@ public class ErrorReportSummaryDataProvider extends InjectableDataProvider<Error
     catch (Throwable e)
     {
       throw new WebApplicationException(
-          "Failed to retrieve the total number of summaries for the error"
-          + " reports in the database", e);
+        "Failed to retrieve the total number of summaries for the error reports in the database",
+        e);
     }
   }
 }

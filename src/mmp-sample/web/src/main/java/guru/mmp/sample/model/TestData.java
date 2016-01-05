@@ -66,56 +66,6 @@ public class TestData
   }
 
   /**
-   * Returns the name.
-   *
-   * @return the name
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Return the note.
-   *
-   * @return the note
-   */
-  public String getNote()
-  {
-    return note;
-  }
-
-  /**
-   * Returns the password.
-   *
-   * @return the password
-   */
-  public String getPassword()
-  {
-    return password;
-  }
-
-  /**
-   * Returns the role.
-   *
-   * @return the role
-   */
-  public String getRole()
-  {
-    return role;
-  }
-
-  /**
-   * Returns the title.
-   *
-   * @return the title
-   */
-  public String getTitle()
-  {
-    return title;
-  }
-
-  /**
    * Set is active.
    *
    * @param isActive is active
@@ -123,6 +73,16 @@ public class TestData
   public void setIsActive(boolean isActive)
   {
     this.isActive = isActive;
+  }
+
+  /**
+   * Returns the name.
+   *
+   * @return the name
+   */
+  public String getName()
+  {
+    return name;
   }
 
   /**
@@ -136,6 +96,16 @@ public class TestData
   }
 
   /**
+   * Return the note.
+   *
+   * @return the note
+   */
+  public String getNote()
+  {
+    return note;
+  }
+
+  /**
    * Set the note.
    *
    * @param note the note
@@ -143,6 +113,16 @@ public class TestData
   public void setNote(String note)
   {
     this.note = note;
+  }
+
+  /**
+   * Returns the password.
+   *
+   * @return the password
+   */
+  public String getPassword()
+  {
+    return password;
   }
 
   /**
@@ -156,6 +136,16 @@ public class TestData
   }
 
   /**
+   * Returns the role.
+   *
+   * @return the role
+   */
+  public String getRole()
+  {
+    return role;
+  }
+
+  /**
    * Set the role.
    *
    * @param role the role
@@ -163,6 +153,16 @@ public class TestData
   public void setRole(String role)
   {
     this.role = role;
+  }
+
+  /**
+   * Returns the title.
+   *
+   * @return the title
+   */
+  public String getTitle()
+  {
+    return title;
   }
 
   /**

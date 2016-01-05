@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -30,14 +28,12 @@ import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>ReceiveTask</code> class represents a Receive Task that forms part of a Process.
- * <p>
+ * <p/>
  * This task waits for the arrival of a message from an external participant. Once received, the
  * task is completed.
- * <p>
+ * <p/>
  * <b>Receive Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="receiveTask" type="tReceiveTask" substitutionGroup="flowElement"/&gt;
@@ -56,7 +52,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ReceiveTask extends Task
+public final class ReceiveTask
+  extends Task
 {
   /**
    * The technology that the Receive Task will use to send and receive messages.
@@ -137,7 +134,7 @@ public final class ReceiveTask extends Task
    * Returns whether the Receive Task be used as the instantiation mechanism for the process.
    *
    * @return <code>true</code> if the Receive Task be used as the instantiation mechanism for the
-   *         process or <code>false</code> otherwise
+   * process or <code>false</code> otherwise
    */
   public boolean getInstantiate()
   {

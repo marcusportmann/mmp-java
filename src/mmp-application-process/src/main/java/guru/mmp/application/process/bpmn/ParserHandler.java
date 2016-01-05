@@ -16,7 +16,7 @@
 //
 //package guru.mmp.application.process.bpmn;
 //
-////~--- non-JDK imports --------------------------------------------------------
+//
 //
 //import guru.mmp.application.process.bpmn.activity.*;
 //import guru.mmp.application.process.bpmn.event.EndEvent;
@@ -29,7 +29,7 @@
 //import org.xml.sax.SAXParseException;
 //import org.xml.sax.helpers.DefaultHandler;
 //
-////~--- JDK imports ------------------------------------------------------------
+//
 //
 //import java.util.ArrayList;
 //import java.util.List;
@@ -97,7 +97,8 @@
 //  /**
 //   * Receive notification of the end of an element.
 //   *
-//   * @param uri       the Namespace URI, or the empty string if the element has no Namespace URI or
+//   * @param uri       the Namespace URI, or the empty string if the element has no Namespace
+// URI or
 //   *                  if Namespace processing is not being performed.
 //   * @param localName the local name (without prefix), or the empty string if Namespace processing
 //   *                  is not being performed
@@ -337,11 +338,14 @@
 //   *
 //   * @param uri        the Namespace URI, or the empty string if the element has no Namespace URI
 //   *                   or if Namespace processing is not being performed
-//   * @param localName  the local name (without prefix), or the empty string if Namespace processing
+//   * @param localName  the local name (without prefix), or the empty string if Namespace
+// processing
 //   *                   is not being performed
-//   * @param qName      the qualified name (with prefix), or the empty string if qualified names are
+//   * @param qName      the qualified name (with prefix), or the empty string if qualified names
+// are
 //   *                   not available
-//   * @param attributes The attributes attached to the element. If there are no attributes, it shall
+//   * @param attributes The attributes attached to the element. If there are no attributes, it
+// shall
 //   *                   be an empty Attributes object.
 //   *
 //   * @throws SAXException

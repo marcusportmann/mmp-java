@@ -16,14 +16,10 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.PropertyModel;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
@@ -33,10 +29,12 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class ProcessDefinitionInputPanel extends InputPanel
+public class ProcessDefinitionInputPanel
+  extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
-  @SuppressWarnings({ "unused", "MismatchedQueryAndUpdateOfCollection" })
+
+  @SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
   private List<FileUpload> fileUploads;
 
   /**

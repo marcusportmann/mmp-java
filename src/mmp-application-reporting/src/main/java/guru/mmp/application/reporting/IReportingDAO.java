@@ -16,15 +16,11 @@
 
 package guru.mmp.application.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DAOException;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IReportingDAO</code> interface defines the persistence operations for the
@@ -103,7 +99,7 @@ public interface IReportingDAO
    *           definition
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
-   *         could not be found
+   * could not be found
    *
    * @throws DAOException
    */

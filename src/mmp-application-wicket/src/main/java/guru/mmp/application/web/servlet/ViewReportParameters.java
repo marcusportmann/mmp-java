@@ -16,15 +16,11 @@
 
 package guru.mmp.application.web.servlet;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.reporting.ReportType;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ViewReportParameters</code> class holds the information describing what report should
@@ -80,8 +76,9 @@ public class ViewReportParameters
    *                           the web project or the ID of the report stored in the database
    * @param reportParameters   the report parameters
    */
-  public ViewReportParameters(String reportName, ReportType reportType, String reportFileNameOrId,
-      Map<String, Object> reportParameters)
+  public ViewReportParameters(
+    String reportName, ReportType reportType, String reportFileNameOrId,
+    Map<String, Object> reportParameters)
   {
     this.id = "ReportParameters-" + UUID.randomUUID().toString();
     this.reportName = reportName;
@@ -105,7 +102,7 @@ public class ViewReportParameters
    * or the ID of the report stored in the database.
    *
    * @return the name of the local report file under the WEB-INF/report folder for the web project
-   *         or the ID of the report stored in the database
+   * or the ID of the report stored in the database
    */
   public String getReportFileNameOrId()
   {
@@ -123,40 +120,6 @@ public class ViewReportParameters
   }
 
   /**
-   * Returns the report parameters.
-   *
-   * @return the report parameters
-   */
-  public Map<String, Object> getReportParameters()
-  {
-    return reportParameters;
-  }
-
-  /**
-   * Returns the type of report being rendered i.e. a local report under the WEB-INF/report folder
-   * for the web project or a report stored in the database.
-   *
-   * @return the type of report being rendered i.e. a local report under the WEB-INF/report folder
-   *         for the web project or a report stored in the database
-   */
-  public ReportType getReportType()
-  {
-    return reportType;
-  }
-
-  /**
-   * Set the name of the local report file under the WEB-INF/report folder for the web project or
-   * the ID of the report stored in the database.
-   *
-   * @param reportFileNameOrId the name of the local report file under the WEB-INF/report folder for
-   *                           the web project or the ID of the report stored in the database
-   */
-  public void setReportFileNameOrIdx(String reportFileNameOrId)
-  {
-    this.reportFileNameOrId = reportFileNameOrId;
-  }
-
-  /**
    * Set the name of the report.
    *
    * @param reportName the name of the report
@@ -164,6 +127,16 @@ public class ViewReportParameters
   public void setReportName(String reportName)
   {
     this.reportName = reportName;
+  }
+
+  /**
+   * Returns the report parameters.
+   *
+   * @return the report parameters
+   */
+  public Map<String, Object> getReportParameters()
+  {
+    return reportParameters;
   }
 
   /**
@@ -177,6 +150,18 @@ public class ViewReportParameters
   }
 
   /**
+   * Returns the type of report being rendered i.e. a local report under the WEB-INF/report folder
+   * for the web project or a report stored in the database.
+   *
+   * @return the type of report being rendered i.e. a local report under the WEB-INF/report folder
+   * for the web project or a report stored in the database
+   */
+  public ReportType getReportType()
+  {
+    return reportType;
+  }
+
+  /**
    * Set the type of report being rendered i.e. a local report under the WEB-INF/report folder for
    * the web project or a report stored in the database.
    *
@@ -186,5 +171,17 @@ public class ViewReportParameters
   public void setReportType(ReportType reportType)
   {
     this.reportType = reportType;
+  }
+
+  /**
+   * Set the name of the local report file under the WEB-INF/report folder for the web project or
+   * the ID of the report stored in the database.
+   *
+   * @param reportFileNameOrId the name of the local report file under the WEB-INF/report folder for
+   *                           the web project or the ID of the report stored in the database
+   */
+  public void setReportFileNameOrIdx(String reportFileNameOrId)
+  {
+    this.reportFileNameOrId = reportFileNameOrId;
   }
 }

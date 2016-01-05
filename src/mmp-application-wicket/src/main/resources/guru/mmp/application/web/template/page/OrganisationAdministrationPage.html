@@ -80,6 +80,13 @@
                 <div class="table-header-left">
                   <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add Organisation</a>
                 </div>
+                <div class="table-header-right">
+                  <form wicket:id="filterForm" class="table-filter-form">
+                    <input wicket:id="filter" type="text" name="filter"/>
+                    <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm">
+                      <i class="fa fa-filter"> Filter</i></button>
+                  </form>
+                </div>
               </div>
 
               <table class="table table-bordered table-striped table-condensed table-actions">
@@ -92,7 +99,7 @@
                 </thead>
                 <tbody>
                   <tr wicket:id="organisation">
-                    <td><span wicket:id="code">[Code]</span></td>
+                    <td><span wicket:id="id">[ID]</span></td>
                     <td><span wicket:id="name">[Name]</span></td>
                     <td class="two-actions">
                       <a wicket:id="updateLink" href="#" class="btn btn-xs btn-action tooltips" title="Update Organisation"><i class="fa fa-edit"></i></a>

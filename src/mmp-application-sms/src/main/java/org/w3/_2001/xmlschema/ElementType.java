@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.*;
@@ -13,27 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- *    The element element can be used either
- *    at the top level to define an element-type binding globally,
- *    or within a content model to either reference a globally-defined
- *    element or type or declare an element-type binding locally.
- *    The ref form is not allowed at the top level.
- *
+ * The element element can be used either
+ * at the top level to define an element-type binding globally,
+ * or within a content model to either reference a globally-defined
+ * element or type or declare an element-type binding locally.
+ * The ref form is not allowed at the top level.
+ * <p/>
  * <p>Java class for element complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="element">
  *   &lt;complexContent>
  *     &lt;extension base="{http://www.w3.org/2001/XMLSchema}annotated">
  *       &lt;sequence>
  *         &lt;choice minOccurs="0">
- *           &lt;element name="simpleType" type="{http://www.w3.org/2001/XMLSchema}localSimpleType"/>
- *           &lt;element name="complexType" type="{http://www.w3.org/2001/XMLSchema}localComplexType"/>
+ *           &lt;element name="simpleType" type="{http://www.w3
+ *           .org/2001/XMLSchema}localSimpleType"/>
+ *           &lt;element name="complexType" type="{http://www.w3
+ *           .org/2001/XMLSchema}localComplexType"/>
  *         &lt;/choice>
- *         &lt;group ref="{http://www.w3.org/2001/XMLSchema}identityConstraint" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;group ref="{http://www.w3.org/2001/XMLSchema}identityConstraint"
+ *         maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attGroup ref="{http://www.w3.org/2001/XMLSchema}occurs"/>
  *       &lt;attGroup ref="{http://www.w3.org/2001/XMLSchema}defRef"/>
@@ -41,8 +40,10 @@ import java.util.List;
  *       &lt;attribute name="substitutionGroup" type="{http://www.w3.org/2001/XMLSchema}QName" />
  *       &lt;attribute name="default" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fixed" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="nillable" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
- *       &lt;attribute name="abstract" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
+ *       &lt;attribute name="nillable" type="{http://www.w3.org/2001/XMLSchema}boolean"
+ *       default="false" />
+ *       &lt;attribute name="abstract" type="{http://www.w3.org/2001/XMLSchema}boolean"
+ *       default="false" />
  *       &lt;attribute name="final" type="{http://www.w3.org/2001/XMLSchema}derivationSet" />
  *       &lt;attribute name="block" type="{http://www.w3.org/2001/XMLSchema}blockSet" />
  *       &lt;attribute name="form" type="{http://www.w3.org/2001/XMLSchema}formChoice" />
@@ -51,78 +52,90 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "element",
-    propOrder = { "complexType", "simpleType", "uniquesAndKeiesAndKeyreves" })
-@XmlSeeAlso({ LocalElement.class, Element.class })
-public abstract class ElementType extends Annotated
+  propOrder = {"complexType", "simpleType", "uniquesAndKeiesAndKeyreves"})
+@XmlSeeAlso({LocalElement.class, Element.class})
+public abstract class ElementType
+  extends Annotated
 {
   @XmlAttribute(name = "abstract")
   protected Boolean _abstract;
+
   @XmlAttribute(name = "default")
   protected String _default;
+
   @XmlAttribute(name = "block")
   @XmlSchemaType(name = "blockSet")
   protected List<String> blocks;
+
   protected LocalComplexType complexType;
+
   @XmlAttribute(name = "final")
   @XmlSchemaType(name = "derivationSet")
   protected List<String> finals;
+
   @XmlAttribute(name = "fixed")
   protected String fixed;
+
   @XmlAttribute(name = "form")
   protected FormChoice form;
+
   @XmlAttribute(name = "maxOccurs")
   @XmlSchemaType(name = "allNNI")
   protected String maxOccurs;
+
   @XmlAttribute(name = "minOccurs")
   @XmlSchemaType(name = "nonNegativeInteger")
   protected BigInteger minOccurs;
+
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
+
   @XmlAttribute(name = "nillable")
   protected Boolean nillable;
+
   @XmlAttribute(name = "ref")
   protected QName ref;
+
   protected LocalSimpleType simpleType;
+
   @XmlAttribute(name = "substitutionGroup")
   protected QName substitutionGroup;
+
   @XmlAttribute(name = "type")
   protected QName type;
-  @XmlElementRefs({ @XmlElementRef(name = "key", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false) ,
-      @XmlElementRef(name = "unique", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false) ,
-      @XmlElementRef(name = "keyref", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = Keyref.class, required = false) })
+
+  @XmlElementRefs({@XmlElementRef(name = "key", namespace = "http://www.w3.org/2001/XMLSchema",
+    type = JAXBElement.class, required = false),
+    @XmlElementRef(name = "unique", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false),
+    @XmlElementRef(name = "keyref", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = Keyref.class, required = false)})
   protected List<Object> uniquesAndKeiesAndKeyreves;
 
   /**
    * Gets the value of the blocks property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the blocks property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getBlocks().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link String }
-   *
-   *
    *
    * @return
    */
@@ -139,10 +152,8 @@ public abstract class ElementType extends Annotated
   /**
    * Gets the value of the complexType property.
    *
-   * @return
-   *     possible object is
-   *     {@link LocalComplexType }
-   *
+   * @return possible object is
+   * {@link LocalComplexType }
    */
   public LocalComplexType getComplexType()
   {
@@ -150,12 +161,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the complexType property.
+   *
+   * @param value allowed object is
+   *              {@link LocalComplexType }
+   */
+  public void setComplexType(LocalComplexType value)
+  {
+    this.complexType = value;
+  }
+
+  /**
    * Gets the value of the default property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getDefault()
   {
@@ -163,26 +183,35 @@ public abstract class ElementType extends Annotated
   }
 
   /**
-   * Gets the value of the finals property.
+   * Sets the value of the default property.
    *
-   * <p>
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefault(String value)
+  {
+    this._default = value;
+  }
+
+  /**
+   * Gets the value of the finals property.
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the finals property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getFinals().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link String }
-   *
-   *
    *
    * @return
    */
@@ -199,10 +228,8 @@ public abstract class ElementType extends Annotated
   /**
    * Gets the value of the fixed property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getFixed()
   {
@@ -210,12 +237,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the fixed property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFixed(String value)
+  {
+    this.fixed = value;
+  }
+
+  /**
    * Gets the value of the form property.
    *
-   * @return
-   *     possible object is
-   *     {@link FormChoice }
-   *
+   * @return possible object is
+   * {@link FormChoice }
    */
   public FormChoice getForm()
   {
@@ -223,12 +259,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the form property.
+   *
+   * @param value allowed object is
+   *              {@link FormChoice }
+   */
+  public void setForm(FormChoice value)
+  {
+    this.form = value;
+  }
+
+  /**
    * Gets the value of the maxOccurs property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getMaxOccurs()
   {
@@ -243,12 +288,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the maxOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMaxOccurs(String value)
+  {
+    this.maxOccurs = value;
+  }
+
+  /**
    * Gets the value of the minOccurs property.
    *
-   * @return
-   *     possible object is
-   *     {@link BigInteger }
-   *
+   * @return possible object is
+   * {@link BigInteger }
    */
   public BigInteger getMinOccurs()
   {
@@ -263,12 +317,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the minOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setMinOccurs(BigInteger value)
+  {
+    this.minOccurs = value;
+  }
+
+  /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getName()
   {
@@ -276,12 +339,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
+  }
+
+  /**
    * Gets the value of the ref property.
    *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
+   * @return possible object is
+   * {@link QName }
    */
   public QName getRef()
   {
@@ -289,12 +361,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the ref property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setRef(QName value)
+  {
+    this.ref = value;
+  }
+
+  /**
    * Gets the value of the simpleType property.
    *
-   * @return
-   *     possible object is
-   *     {@link LocalSimpleType }
-   *
+   * @return possible object is
+   * {@link LocalSimpleType }
    */
   public LocalSimpleType getSimpleType()
   {
@@ -302,12 +383,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the simpleType property.
+   *
+   * @param value allowed object is
+   *              {@link LocalSimpleType }
+   */
+  public void setSimpleType(LocalSimpleType value)
+  {
+    this.simpleType = value;
+  }
+
+  /**
    * Gets the value of the substitutionGroup property.
    *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
+   * @return possible object is
+   * {@link QName }
    */
   public QName getSubstitutionGroup()
   {
@@ -315,12 +405,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the substitutionGroup property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setSubstitutionGroup(QName value)
+  {
+    this.substitutionGroup = value;
+  }
+
+  /**
    * Gets the value of the type property.
    *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
+   * @return possible object is
+   * {@link QName }
    */
   public QName getType()
   {
@@ -328,28 +427,37 @@ public abstract class ElementType extends Annotated
   }
 
   /**
-   * Gets the value of the uniquesAndKeiesAndKeyreves property.
+   * Sets the value of the type property.
    *
-   * <p>
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setType(QName value)
+  {
+    this.type = value;
+  }
+
+  /**
+   * Gets the value of the uniquesAndKeiesAndKeyreves property.
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the uniquesAndKeiesAndKeyreves property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getUniquesAndKeiesAndKeyreves().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link JAXBElement }{@code <}{@link Keybase }{@code >}
    * {@link Keyref }
    * {@link JAXBElement }{@code <}{@link Keybase }{@code >}
-   *
-   *
    *
    * @return
    */
@@ -366,10 +474,8 @@ public abstract class ElementType extends Annotated
   /**
    * Gets the value of the abstract property.
    *
-   * @return
-   *     possible object is
-   *     {@link Boolean }
-   *
+   * @return possible object is
+   * {@link Boolean }
    */
   public boolean isAbstract()
   {
@@ -384,12 +490,21 @@ public abstract class ElementType extends Annotated
   }
 
   /**
+   * Sets the value of the abstract property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAbstract(Boolean value)
+  {
+    this._abstract = value;
+  }
+
+  /**
    * Gets the value of the nillable property.
    *
-   * @return
-   *     possible object is
-   *     {@link Boolean }
-   *
+   * @return possible object is
+   * {@link Boolean }
    */
   public boolean isNillable()
   {
@@ -404,171 +519,13 @@ public abstract class ElementType extends Annotated
   }
 
   /**
-   * Sets the value of the abstract property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link Boolean }
-   *
-   */
-  public void setAbstract(Boolean value)
-  {
-    this._abstract = value;
-  }
-
-  /**
-   * Sets the value of the complexType property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link LocalComplexType }
-   *
-   */
-  public void setComplexType(LocalComplexType value)
-  {
-    this.complexType = value;
-  }
-
-  /**
-   * Sets the value of the default property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setDefault(String value)
-  {
-    this._default = value;
-  }
-
-  /**
-   * Sets the value of the fixed property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setFixed(String value)
-  {
-    this.fixed = value;
-  }
-
-  /**
-   * Sets the value of the form property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link FormChoice }
-   *
-   */
-  public void setForm(FormChoice value)
-  {
-    this.form = value;
-  }
-
-  /**
-   * Sets the value of the maxOccurs property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setMaxOccurs(String value)
-  {
-    this.maxOccurs = value;
-  }
-
-  /**
-   * Sets the value of the minOccurs property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link BigInteger }
-   *
-   */
-  public void setMinOccurs(BigInteger value)
-  {
-    this.minOccurs = value;
-  }
-
-  /**
-   * Sets the value of the name property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
    * Sets the value of the nillable property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Boolean }
-   *
+   * @param value allowed object is
+   *              {@link Boolean }
    */
   public void setNillable(Boolean value)
   {
     this.nillable = value;
-  }
-
-  /**
-   * Sets the value of the ref property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
-   */
-  public void setRef(QName value)
-  {
-    this.ref = value;
-  }
-
-  /**
-   * Sets the value of the simpleType property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link LocalSimpleType }
-   *
-   */
-  public void setSimpleType(LocalSimpleType value)
-  {
-    this.simpleType = value;
-  }
-
-  /**
-   * Sets the value of the substitutionGroup property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
-   */
-  public void setSubstitutionGroup(QName value)
-  {
-    this.substitutionGroup = value;
-  }
-
-  /**
-   * Sets the value of the type property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
-   */
-  public void setType(QName value)
-  {
-    this.type = value;
   }
 }

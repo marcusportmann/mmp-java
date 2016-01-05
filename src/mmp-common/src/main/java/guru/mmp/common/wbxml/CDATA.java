@@ -16,8 +16,6 @@
 
 package guru.mmp.common.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -35,6 +33,7 @@ public class CDATA
   implements Serializable, Content
 {
   private static final long serialVersionUID = 1000000;
+
   private String text;
 
   /**
@@ -66,6 +65,16 @@ public class CDATA
   }
 
   /**
+   * Set the text content for the <code>CDATA</code> instance.
+   *
+   * @param text the text content for the <code>CDATA</code> instance
+   */
+  public void setText(String text)
+  {
+    this.text = text;
+  }
+
+  /**
    * Print the content using the specified indent level.
    *
    * @param indent the indent level
@@ -94,19 +103,9 @@ public class CDATA
   }
 
   /**
-   * Set the text content for the <code>CDATA</code> instance.
-   *
-   * @param text the text content for the <code>CDATA</code> instance
-   */
-  public void setText(String text)
-  {
-    this.text = text;
-  }
-
-  /**
-   * @see Object#toString()
-   *
    * @return the string representation of the <code>CDATA</code> instance
+   *
+   * @see Object#toString()
    */
   @Override
   public String toString()

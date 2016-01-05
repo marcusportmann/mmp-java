@@ -16,29 +16,24 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
-
 import org.w3c.dom.Element;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
 /**
  * The <code>StartEvent</code> class represents a Start Event that forms part of a Process.
- * <p>
+ * <p/>
  * A start event indicates the start of a process. Start events generate a token when they are
  * triggered. The token then moves down through the event's outgoing sequence flow.
- * <p>
+ * <p/>
  * Start events can only have one outgoing sequence flow and they cannot have incoming sequence
  * flows.
- * <p>
+ * <p/>
  * <b>Start Event</b> XML schema:
  * <pre>
  * &lt;xsd:element name="startEvent" type="tStartEvent" substitutionGroup="flowElement"/&gt;
@@ -54,7 +49,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class StartEvent extends CatchEvent
+public final class StartEvent
+  extends CatchEvent
 {
   /**
    * Is the start event interrupting i.e. does the activity that triggered the event terminate
@@ -75,9 +71,8 @@ public final class StartEvent extends CatchEvent
 
     try
     {
-      this.isInterrupting = StringUtil
-        .isNullOrEmpty(element.getAttribute("isInterrupting")) || Boolean
-        .parseBoolean(element.getAttribute("isInterrupting"));
+      this.isInterrupting = StringUtil.isNullOrEmpty(element.getAttribute("isInterrupting")) ||
+        Boolean.parseBoolean(element.getAttribute("isInterrupting"));
     }
     catch (Throwable e)
     {
@@ -100,7 +95,7 @@ public final class StartEvent extends CatchEvent
 
   /**
    * Is the Start Event interrupting?
-   * <p>
+   * <p/>
    * Does the activity that triggered the Start Event terminate and the flow of the process continue
    * from the event (interrupting) or does the activity continue and the flow at the event execute
    * in parallel (non-interrupting)?

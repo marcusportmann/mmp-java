@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -77,7 +75,7 @@ public class Location
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the obj argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
   public boolean equals(Object obj)
@@ -99,9 +97,8 @@ public class Location
 
     Location other = (Location) obj;
 
-    return (latitude == other.latitude) && (longitude == other.longitude)
-        && (precision == other.precision);
-
+    return (latitude == other.latitude) && (longitude == other.longitude) &&
+      (precision == other.precision);
   }
 
   /**
@@ -115,37 +112,6 @@ public class Location
   }
 
   /**
-   * Returns the longitude for the GPS location.
-   *
-   * @return the longitude for the GPS location
-   */
-  public double getLongitude()
-  {
-    return longitude;
-  }
-
-  /**
-   * Returns the precision for the GPS location.
-   *
-   * @return the precision for the GPS location
-   */
-  public double getPrecision()
-  {
-    return precision;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return ((int) (longitude + latitude + precision));
-  }
-
-  /**
    * Set the latitude for the GPS location.
    *
    * @param latitude the latitude for the GPS location
@@ -153,6 +119,16 @@ public class Location
   public void setLatitude(double latitude)
   {
     this.latitude = latitude;
+  }
+
+  /**
+   * Returns the longitude for the GPS location.
+   *
+   * @return the longitude for the GPS location
+   */
+  public double getLongitude()
+  {
+    return longitude;
   }
 
   /**
@@ -166,6 +142,16 @@ public class Location
   }
 
   /**
+   * Returns the precision for the GPS location.
+   *
+   * @return the precision for the GPS location
+   */
+  public double getPrecision()
+  {
+    return precision;
+  }
+
+  /**
    * Set the precision for the GPS location.
    *
    * @param precision the precision for the GPS location
@@ -173,5 +159,16 @@ public class Location
   public void setPrecision(double precision)
   {
     this.precision = precision;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return ((int) (longitude + latitude + precision));
   }
 }

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.UUID;
 
 /**
@@ -29,15 +27,17 @@ public class Organisation
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String description;
+
   private UUID id;
+
   private String name;
 
   /**
    * Constructs a new <code>Organisation</code>.
    */
-  public Organisation()
-  {}
+  public Organisation() {}
 
   /**
    * Returns the description for the organisation.
@@ -47,26 +47,6 @@ public class Organisation
   public String getDescription()
   {
     return description;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the name of the organisation.
-   *
-   * @return the name of the organisation
-   */
-  public String getName()
-  {
-    return name;
   }
 
   /**
@@ -80,6 +60,16 @@ public class Organisation
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
@@ -87,6 +77,16 @@ public class Organisation
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns the name of the organisation.
+   *
+   * @return the name of the organisation
+   */
+  public String getName()
+  {
+    return name;
   }
 
   /**

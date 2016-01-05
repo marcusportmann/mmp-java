@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -27,9 +25,6 @@ import org.apache.wicket.model.IModel;
 import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryDataProvider</code> class provides an <code>IDataProvider</code>
@@ -37,7 +32,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategory>
+public class CodeCategoryDataProvider
+  extends InjectableDataProvider<CodeCategory>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -77,39 +73,39 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
    * Retrieves the matching code categories from the database starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
-   *
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
    * @return the code categories retrieved from the database starting with
-   *         index <code>first</code> and ending with <code>first+count</code>
+   * index <code>first</code> and ending with <code>first+count</code>
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
   public Iterator<CodeCategory> iterator(long first, long count)
   {
     try
     {
-      List<CodeCategory> allCodeCategories =
-        codesService.getCodeCategories(retrieveCodes);
+      List<CodeCategory> allCodeCategories = codesService.getCodeCategories(retrieveCodes);
 
       return allCodeCategories.subList((int) first,
-          (int) Math.min(first + count, allCodeCategories.size())).iterator();
+        (int) Math.min(first + count, allCodeCategories.size())).iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the code categories from index (" + first
-          + ") to (" + (first + count) + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to load the code categories from index (%d) to (%d)", first,
+          first + count), e);
     }
   }
 
   /**
    * Wraps the retrieved <code>CodeCategory</code> POJO with a Wicket model.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
-   *
    * @param codeCategory the <code>CodeCategory</code> instance to wrap
    *
    * @return the Wicket model wrapping the <code>CodeCategory</code> instance
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    */
   public IModel<CodeCategory> model(CodeCategory codeCategory)
   {
@@ -119,9 +115,9 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
   /**
    * Returns the total number of code categories.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
-   *
    * @return the total number of code categories
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    */
   public long size()
   {

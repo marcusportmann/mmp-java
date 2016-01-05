@@ -26,6 +26,8 @@ package guru.mmp.sample.web;
 @SuppressWarnings("unused")
 public class SampleSecurity
 {
-  /** The Sample.SampleFunction function code */
+  /**
+   * The Sample.SampleFunction function code
+   */
   public static final String FUNCTION_CODE_SAMPLE_FUNCTION = "Sample.SampleFunction";
 }

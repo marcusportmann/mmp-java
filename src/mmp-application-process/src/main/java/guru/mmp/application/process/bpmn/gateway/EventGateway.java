@@ -16,14 +16,10 @@
 
 package guru.mmp.application.process.bpmn.gateway;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import org.w3c.dom.Element;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +30,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public final class EventGateway extends Gateway
+public final class EventGateway
+  extends Gateway
 {
   /**
    * Constructs a new <code>EventGateway</code>.

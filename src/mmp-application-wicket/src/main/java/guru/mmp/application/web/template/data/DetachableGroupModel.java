@@ -16,15 +16,11 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.Group;
 import guru.mmp.application.security.GroupNotFoundException;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -35,7 +31,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class DetachableGroupModel extends InjectableLoadableDetachableModel<Group>
+public class DetachableGroupModel
+  extends InjectableLoadableDetachableModel<Group>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -102,7 +99,8 @@ public class DetachableGroupModel extends InjectableLoadableDetachableModel<Grou
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the group (" + groupName + ")", e);
+      throw new WebApplicationException(String.format("Failed to load the group (%s)", groupName),
+        e);
     }
   }
 

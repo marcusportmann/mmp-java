@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -26,8 +24,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TemplateCoreJavaScriptResourceReference</code> class implements the
  * JavaScript resource reference for the template-core.js resource that forms part of the
@@ -35,27 +31,24 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateCoreJavaScriptResourceReference extends JavaScriptResourceReference
+public class TemplateCoreJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new TemplateCoreJavaScriptResourceReference());
-  private static final TemplateCoreJavaScriptResourceReference INSTANCE =
-    new TemplateCoreJavaScriptResourceReference();
+  private static final TemplateCoreJavaScriptResourceReference INSTANCE = new
+    TemplateCoreJavaScriptResourceReference();
 
-  private TemplateCoreJavaScriptResourceReference()
-  {
-    super(TemplateCoreJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "js/template-core.js"
-        : "js/template-core.min.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new TemplateCoreJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the
    * template-custom.js resource that forms part of the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the
-   *         template-custom.js resource that forms part of the Web Application Template
+   * template-custom.js resource that forms part of the Web Application Template
    */
   public static TemplateCoreJavaScriptResourceReference get()
   {
@@ -70,6 +63,12 @@ public class TemplateCoreJavaScriptResourceReference extends JavaScriptResourceR
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private TemplateCoreJavaScriptResourceReference()
+  {
+    super(TemplateCoreJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "js/template-core.js" : "js/template-core.min.js");
   }
 
   /**

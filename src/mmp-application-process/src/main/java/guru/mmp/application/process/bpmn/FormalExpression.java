@@ -16,32 +16,28 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.namespace.QName;
 
 /**
  * The <code>FormalExpression</code> class represents a FormalExpression that forms part of a
  * Process.
- * <p>
+ * <p/>
  * The FormalExpression class is used to specify an executable Expression using a specified
  * Expression language. A natural-language description of the Expression can also be specified,
  * in addition to the formal specification.
- * <p>
+ * <p/>
  * The default Expression language for all Expressions is specified in the Definitions element,
  * using the expressionLanguage attribute. It can also be overridden on each individual
  * FormalExpression using the same attribute.
- * <p>
+ * <p/>
  * <b>FormalExpression</b> XML schema:
  * <pre>
- * &lt;xsd:element name="formalExpression" type="tFormalExpression" substitutionGroup="expression"/&gt;
+ * &lt;xsd:element name="formalExpression" type="tFormalExpression"
+ * substitutionGroup="expression"/&gt;
  * &lt;xsd:complexType name="tFormalExpression"&gt;
  *   &lt;xsd:complexContent&gt;
  *     &lt;xsd:extension base="tExpression"&gt;
@@ -55,7 +51,8 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class FormalExpression extends Expression
+public final class FormalExpression
+  extends Expression
 {
   /**
    * The reference to the type of object that this Expression returns when evaluated e.g.
@@ -65,7 +62,7 @@ public final class FormalExpression extends Expression
 
   /**
    * The URI giving the language for the Expression.
-   * <p>
+   * <p/>
    * This overrides the Expression language specified in the Definitions.
    */
   private String language;
@@ -82,7 +79,7 @@ public final class FormalExpression extends Expression
     try
     {
       this.evaluatesToTypeRef = XmlUtils.getQName(element,
-          StringUtil.notNull(element.getAttribute("evaluatesToTypeRef")));
+        StringUtil.notNull(element.getAttribute("evaluatesToTypeRef")));
 
       if (!StringUtil.isNullOrEmpty(element.getAttribute("language")))
       {
@@ -100,7 +97,7 @@ public final class FormalExpression extends Expression
    * conditional Expressions with a reference of xsd:boolean evaluate to a boolean.
    *
    * @return the reference to the type of object that this Expression returns when evaluated e.g.
-   *         conditional Expressions with a reference of xsd:boolean evaluate to a boolean.
+   * conditional Expressions with a reference of xsd:boolean evaluate to a boolean.
    */
   public QName getEvaluatesToTypeRef()
   {
@@ -109,7 +106,7 @@ public final class FormalExpression extends Expression
 
   /**
    * Returns the URI giving the language for the Expression.
-   * <p>
+   * <p/>
    * This overrides the Expression language specified in the Definitions.
    *
    * @return the URI giving the language for the Expression

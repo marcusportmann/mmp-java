@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -34,15 +32,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>WebApplication</code> class provides a base class for all "application specific"
  * Wicket web application classes.
  *
  * @author Marcus Portmann
  */
-public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
+public abstract class WebApplication
+  extends org.apache.wicket.protocol.http.WebApplication
 {
   /* Logger */
   @SuppressWarnings("unused")
@@ -92,6 +89,16 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   }
 
   /**
+   * Set the web application injector.
+   *
+   * @param webApplicationInjector the web application injector
+   */
+  public void setWebApplicationInjector(WebApplicationInjector webApplicationInjector)
+  {
+    this.webApplicationInjector = webApplicationInjector;
+  }
+
+  /**
    * Creates a new session.
    *
    * @param request  the request that will create this session
@@ -109,16 +116,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     return session;
   }
 
-  /**
-   * Set the web application injector.
-   *
-   * @param webApplicationInjector the web application injector
-   */
-  public void setWebApplicationInjector(WebApplicationInjector webApplicationInjector)
-  {
-    this.webApplicationInjector = webApplicationInjector;
-  }
-
   @Override
   protected void init()
   {
@@ -129,8 +126,8 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     // Override the version of the jQuery library that ships with Wicket
     getJavaScriptLibrarySettings().setJQueryReference(JQueryJavaScriptResourceReference.get());
 
-    if ((System.getProperty("was.install.root") != null)
-        || (System.getProperty("wlp.user.dir") != null))
+    if ((System.getProperty("was.install.root") != null) || (System.getProperty("wlp.user.dir") !=
+      null))
     {
       setRequestCycleProvider(new WebSphereAbsoluteUrlRequestCycleProvider());
     }

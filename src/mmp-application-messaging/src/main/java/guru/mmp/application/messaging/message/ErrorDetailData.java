@@ -26,6 +26,7 @@ package guru.mmp.application.messaging.message;
 public class ErrorDetailData
 {
   private String code;
+
   private String message;
 
   /**
@@ -51,16 +52,6 @@ public class ErrorDetailData
   }
 
   /**
-   * Returns the error message for the error.
-   *
-   * @return the error message for the error
-   */
-  public String getMessage()
-  {
-    return message;
-  }
-
-  /**
    * Set the error code for the error.
    *
    * @param code the error code for the error
@@ -68,6 +59,16 @@ public class ErrorDetailData
   public void setCode(String code)
   {
     this.code = code;
+  }
+
+  /**
+   * Returns the error message for the error.
+   *
+   * @return the error message for the error
+   */
+  public String getMessage()
+  {
+    return message;
   }
 
   /**

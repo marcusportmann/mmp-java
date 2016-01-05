@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -25,14 +23,12 @@ import org.w3c.dom.Element;
 
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>Task</code> class provides the base class that all Task subclasses should be
  * derived from.
- * <p>
+ * <p/>
  * A Task represents a single action.
- * <p>
+ * <p/>
  * <b>Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="task" type="tTask" substitutionGroup="flowElement"/&gt;
@@ -45,7 +41,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class Task extends Activity
+public abstract class Task
+  extends Activity
 {
   /**
    * Constructs a new <code>Task</code>.

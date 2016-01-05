@@ -16,8 +16,6 @@
 
 package guru.mmp.application.batch;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
 
 /**
@@ -70,7 +68,7 @@ class IntArrayValueMatcher
    * @param value the value
    *
    * @return <code>true</code> if the given value matches the rules of the
-   *         <code>ValueMatcher</code>, <code>false</code> otherwise
+   * <code>ValueMatcher</code>, <code>false</code> otherwise
    */
   public boolean match(int value)
   {

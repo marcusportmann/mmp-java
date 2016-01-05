@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.selectboxit;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -27,8 +25,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>JQuerySelectBoxItJavaScriptResourceReference</code> class implements the
  * JavaScript resource reference for the jQuery Select Box It thirdparty resource bundled
@@ -36,27 +32,24 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class JQuerySelectBoxItJavaScriptResourceReference extends JavaScriptResourceReference
+public class JQuerySelectBoxItJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new JQuerySelectBoxItJavaScriptResourceReference());
-  private static final JQuerySelectBoxItJavaScriptResourceReference INSTANCE =
-    new JQuerySelectBoxItJavaScriptResourceReference();
+  private static final JQuerySelectBoxItJavaScriptResourceReference INSTANCE = new
+    JQuerySelectBoxItJavaScriptResourceReference();
 
-  private JQuerySelectBoxItJavaScriptResourceReference()
-  {
-    super(JQuerySelectBoxItJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "jquery.selectBoxIt.js"
-        : "jquery.selectBoxIt.min.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new JQuerySelectBoxItJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the jQuery Select Box It
    * thirdparty resource bundled with the Web Application Template
    *
    * @return the single instance of the JavaScript resource reference for the jQuery Select Box It
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static JQuerySelectBoxItJavaScriptResourceReference get()
   {
@@ -71,6 +64,12 @@ public class JQuerySelectBoxItJavaScriptResourceReference extends JavaScriptReso
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private JQuerySelectBoxItJavaScriptResourceReference()
+  {
+    super(JQuerySelectBoxItJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "jquery.selectBoxIt.js" : "jquery.selectBoxIt.min.js");
   }
 
   /**

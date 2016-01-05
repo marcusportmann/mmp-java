@@ -16,8 +16,6 @@
 
 package guru.mmp.common.service.ws;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -61,6 +59,7 @@ public class ServiceRegistryEntry
    * security model.
    */
   public static final int SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE = 1;
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -128,8 +127,9 @@ public class ServiceRegistryEntry
    * @param serviceClass        the fully qualified name of the Java web service client class
    * @param wsdlLocation        the location of the WSDL defining the web service on the classpath
    */
-  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
-      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation)
+  public ServiceRegistryEntry(
+    String name, int securityType, boolean requiresUserToken, boolean supportsCompression,
+    String endpoint, String serviceClass, String wsdlLocation)
   {
     this.name = name;
     this.securityType = securityType;
@@ -158,9 +158,9 @@ public class ServiceRegistryEntry
    * @param password            the password to use when accessing a web service with
    *                            username-password security enabled
    */
-  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
-      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation,
-      String username, String password)
+  public ServiceRegistryEntry(
+    String name, int securityType, boolean requiresUserToken, boolean supportsCompression,
+    String endpoint, String serviceClass, String wsdlLocation, String username, String password)
   {
     this.name = name;
     this.securityType = securityType;
@@ -184,96 +184,6 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Returns the name used to uniquely identify the web service.
-   *
-   * @return the name used to uniquely identify the web service
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the password to use when accessing a web service with username-password security
-   * enabled.
-   *
-   * @return the password to use when accessing a web service with username-password security
-   *         enabled
-   */
-  public String getPassword()
-  {
-    return password;
-  }
-
-  /**
-   * Returns <code>true</code> if the web service requires a user security token or
-   * <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if the web service requires a user security token or
-   *         <code>false</code> otherwise
-   */
-  public boolean getRequiresSecurityToken()
-  {
-    return requiresUserToken;
-  }
-
-  /**
-   * Returns the type of security model implemented by the web service i.e. 0 = None,
-   * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password.
-   *
-   * @return the type of security model implemented by the web service i.e. 0 = None,
-   *         1 = WS-Security, 2 = Client SSL, 3 = Username-Password
-   */
-  public int getSecurityType()
-  {
-    return securityType;
-  }
-
-  /**
-   * Returns the fully qualified name of the Java web service client class.
-   *
-   * @return the fully qualified name of the Java web service client class
-   */
-  public String getServiceClass()
-  {
-    return serviceClass;
-  }
-
-  /**
-   * Returns <code>true</code> if the web service supports compression or <code>false</code>
-   * otherwise.
-   *
-   * @return <code>true</code> if the web service supports compression or <code>false</code>
-   *         otherwise
-   */
-  public boolean getSupportsCompression()
-  {
-    return supportsCompression;
-  }
-
-  /**
-   * Returns the username to use when accessing a web service with username-password security
-   * enabled.
-   *
-   * @return the username to use when accessing a web service with username-password security
-   *         enabled
-   */
-  public String getUsername()
-  {
-    return username;
-  }
-
-  /**
-   * Returns the location of the WSDL defining the web service on the classpath.
-   *
-   * @return the location of the WSDL defining the web service on the classpath
-   */
-  public String getWsdlLocation()
-  {
-    return wsdlLocation;
-  }
-
-  /**
    * Set the endpoint for the web service.
    *
    * @param endpoint the endpoint for the web service
@@ -284,6 +194,16 @@ public class ServiceRegistryEntry
   }
 
   /**
+   * Returns the name used to uniquely identify the web service.
+   *
+   * @return the name used to uniquely identify the web service
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
    * Set the name used to uniquely identify the web service.
    *
    * @param name the name used to uniquely identify the web service
@@ -291,6 +211,18 @@ public class ServiceRegistryEntry
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the password to use when accessing a web service with username-password security
+   * enabled.
+   *
+   * @return the password to use when accessing a web service with username-password security
+   * enabled
+   */
+  public String getPassword()
+  {
+    return password;
   }
 
   /**
@@ -305,6 +237,18 @@ public class ServiceRegistryEntry
   }
 
   /**
+   * Returns <code>true</code> if the web service requires a user security token or
+   * <code>false</code> otherwise.
+   *
+   * @return <code>true</code> if the web service requires a user security token or
+   * <code>false</code> otherwise
+   */
+  public boolean getRequiresSecurityToken()
+  {
+    return requiresUserToken;
+  }
+
+  /**
    * See whether the web service requires a user security token.
    *
    * @param requiresSecurityToken <code>true</code> if the web service requires a user security
@@ -313,6 +257,18 @@ public class ServiceRegistryEntry
   public void setRequiresSecurityToken(boolean requiresSecurityToken)
   {
     this.requiresUserToken = requiresSecurityToken;
+  }
+
+  /**
+   * Returns the type of security model implemented by the web service i.e. 0 = None,
+   * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password.
+   *
+   * @return the type of security model implemented by the web service i.e. 0 = None,
+   * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password
+   */
+  public int getSecurityType()
+  {
+    return securityType;
   }
 
   /**
@@ -328,6 +284,16 @@ public class ServiceRegistryEntry
   }
 
   /**
+   * Returns the fully qualified name of the Java web service client class.
+   *
+   * @return the fully qualified name of the Java web service client class
+   */
+  public String getServiceClass()
+  {
+    return serviceClass;
+  }
+
+  /**
    * Set the fully qualified name of the Java web service client class.
    *
    * @param serviceClass the fully qualified name of the Java web service client class
@@ -335,6 +301,18 @@ public class ServiceRegistryEntry
   public void setServiceClass(String serviceClass)
   {
     this.serviceClass = serviceClass;
+  }
+
+  /**
+   * Returns <code>true</code> if the web service supports compression or <code>false</code>
+   * otherwise.
+   *
+   * @return <code>true</code> if the web service supports compression or <code>false</code>
+   * otherwise
+   */
+  public boolean getSupportsCompression()
+  {
+    return supportsCompression;
   }
 
   /**
@@ -349,6 +327,18 @@ public class ServiceRegistryEntry
   }
 
   /**
+   * Returns the username to use when accessing a web service with username-password security
+   * enabled.
+   *
+   * @return the username to use when accessing a web service with username-password security
+   * enabled
+   */
+  public String getUsername()
+  {
+    return username;
+  }
+
+  /**
    * Set the username to use when accessing a web service with username-password security enabled.
    *
    * @param username the username to use when accessing a web service with username-password
@@ -357,6 +347,16 @@ public class ServiceRegistryEntry
   public void setUsername(String username)
   {
     this.username = username;
+  }
+
+  /**
+   * Returns the location of the WSDL defining the web service on the classpath.
+   *
+   * @return the location of the WSDL defining the web service on the classpath
+   */
+  public String getWsdlLocation()
+  {
+    return wsdlLocation;
   }
 
   /**

@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -9,9 +6,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for formChoice.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * <p/>
  * <pre>
  * &lt;simpleType name="formChoice">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}NMTOKEN">
@@ -20,7 +17,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- *
  */
 @XmlType(name = "formChoice")
 @XmlEnum
@@ -32,11 +28,6 @@ public enum FormChoice
   UNQUALIFIED("unqualified");
 
   private final String value;
-
-  FormChoice(String v)
-  {
-    value = v;
-  }
 
   /**
    * Method description
@@ -56,6 +47,11 @@ public enum FormChoice
     }
 
     throw new IllegalArgumentException(v);
+  }
+
+  FormChoice(String v)
+  {
+    value = v;
   }
 
   /**

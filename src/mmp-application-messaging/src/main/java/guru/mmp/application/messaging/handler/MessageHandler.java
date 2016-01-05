@@ -16,11 +16,7 @@
 
 package guru.mmp.application.messaging.handler;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -89,7 +85,7 @@ public abstract class MessageHandler
    * @param message the message to check for asynchronous processing
    *
    * @return <code>true</code> if the message handler is able to process the specified message
-   *         asynchronously or <code>false</code> otherwise
+   * asynchronously or <code>false</code> otherwise
    */
   public boolean supportsAsynchronousProcessing(Message message)
   {
@@ -104,7 +100,7 @@ public abstract class MessageHandler
    *                      message type
    *
    * @return <code>true</code> if the message handler is able to process a message with the
-   *         specified type asynchronously or <code>false</code> otherwise
+   * specified type asynchronously or <code>false</code> otherwise
    */
   public boolean supportsAsynchronousProcessing(UUID messageTypeId)
   {
@@ -118,7 +114,7 @@ public abstract class MessageHandler
    * @param message the message to check for asynchronous processing
    *
    * @return <code>true</code> if the message handler is able to process the specified message
-   *         synchronously or <code>false</code> otherwise
+   * synchronously or <code>false</code> otherwise
    */
   public boolean supportsSynchronousProcessing(Message message)
   {
@@ -133,7 +129,7 @@ public abstract class MessageHandler
    *                      message type
    *
    * @return <code>true</code> if the message handler is able to process a message with the
-   *         specified type synchronously or <code>false</code> otherwise
+   * specified type synchronously or <code>false</code> otherwise
    */
   public boolean supportsSynchronousProcessing(UUID messageTypeId)
   {

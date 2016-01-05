@@ -16,8 +16,6 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.UUID;
 
 /**
@@ -30,16 +28,19 @@ public class Function
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String code;
+
   private String description;
+
   private UUID id;
+
   private String name;
 
   /**
    * Constructs a new <code>Function</code>.
    */
-  public Function()
-  {}
+  public Function() {}
 
   /**
    * Returns the code for the function.
@@ -49,36 +50,6 @@ public class Function
   public String getCode()
   {
     return code;
-  }
-
-  /**
-   * Returns the description for the function.
-   *
-   * @return the description for the function
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the function.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the function
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the name of the function.
-   *
-   * @return the name of the function
-   */
-  public String getName()
-  {
-    return name;
   }
 
   /**
@@ -92,6 +63,16 @@ public class Function
   }
 
   /**
+   * Returns the description for the function.
+   *
+   * @return the description for the function
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
    * Set the description for the function.
    *
    * @param description the description for the function
@@ -102,6 +83,16 @@ public class Function
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the function.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the function
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the function.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the function
@@ -109,6 +100,16 @@ public class Function
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns the name of the function.
+   *
+   * @return the name of the function
+   */
+  public String getName()
+  {
+    return name;
   }
 
   /**

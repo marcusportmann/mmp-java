@@ -16,8 +16,6 @@
 
 package guru.mmp.application.codes;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -94,46 +92,6 @@ public class Code
   }
 
   /**
-   * Returns the description for the code.
-   *
-   * @return the description for the code
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Returns the ID used to uniquely identify the code.
-   *
-   * @return the ID used to uniquely identify the code
-   */
-  public String getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the name of the code.
-   *
-   * @return the name of the code
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the value for the code.
-   *
-   * @return the value for the code
-   */
-  public String getValue()
-  {
-    return this.value;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category the
    * code is associated with.
    *
@@ -143,6 +101,16 @@ public class Code
   public void setCategoryId(UUID categoryId)
   {
     this.categoryId = categoryId;
+  }
+
+  /**
+   * Returns the description for the code.
+   *
+   * @return the description for the code
+   */
+  public String getDescription()
+  {
+    return description;
   }
 
   /**
@@ -156,6 +124,16 @@ public class Code
   }
 
   /**
+   * Returns the ID used to uniquely identify the code.
+   *
+   * @return the ID used to uniquely identify the code
+   */
+  public String getId()
+  {
+    return id;
+  }
+
+  /**
    * Set the ID used to uniquely identify the code.
    *
    * @param id the ID used to uniquely identify the code
@@ -166,6 +144,16 @@ public class Code
   }
 
   /**
+   * Returns the name of the code.
+   *
+   * @return the name of the code
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
    * Set the name of the code.
    *
    * @param name the name of the code
@@ -173,6 +161,16 @@ public class Code
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the value for the code.
+   *
+   * @return the value for the code
+   */
+  public String getValue()
+  {
+    return this.value;
   }
 
   /**

@@ -16,8 +16,6 @@
 
 package guru.mmp.sample.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
@@ -31,7 +29,6 @@ import guru.mmp.sample.web.page.forms.TestFormPage;
 import guru.mmp.sample.web.page.tables.BasicTablesPage;
 import guru.mmp.sample.web.page.tables.ResponsiveTablePage;
 import guru.mmp.sample.web.page.ui.*;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -41,7 +38,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
-public class SampleApplication extends TemplateWebApplication
+public class SampleApplication
+  extends TemplateWebApplication
 {
   /**
    * Constructs a new <code>SampleApplication</code>.
@@ -95,25 +93,24 @@ public class SampleApplication extends TemplateWebApplication
 
     NavigationGroup administrationGroup = new NavigationGroup("Administration", "fa fa-gear");
 
-    administrationGroup.addItem(new NavigationLink("Organisations", "fa fa-globe",
-        OrganisationAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Codes", "fa fa-list",
-        CodeCategoryAdministrationPage.class));
+    administrationGroup.addItem(
+      new NavigationLink("Organisations", "fa fa-globe", OrganisationAdministrationPage.class));
+    administrationGroup.addItem(
+      new NavigationLink("Codes", "fa fa-list", CodeCategoryAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
-        ReportDefinitionAdministrationPage.class));
+      ReportDefinitionAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Process Definitions", "fa fa-gears",
-        ProcessDefinitionAdministrationPage.class));
+      ProcessDefinitionAdministrationPage.class));
 
     NavigationGroup securityGroup = new NavigationGroup("Security", "fa fa-shield");
 
 //    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
 //        SecurityAdministrationPage.class));
-    securityGroup.addItem(new NavigationLink("Groups", "fa fa-group",
-      GroupAdministrationPage.class));
-    securityGroup.addItem(new NavigationLink("Users", "fa fa-user",
-      UserAdministrationPage.class));
-    securityGroup.addItem(new NavigationLink("User Directories", "fa fa-users",
-      UserDirectoryAdministrationPage.class));
+    securityGroup.addItem(
+      new NavigationLink("Groups", "fa fa-group", GroupAdministrationPage.class));
+    securityGroup.addItem(new NavigationLink("Users", "fa fa-user", UserAdministrationPage.class));
+    securityGroup.addItem(
+      new NavigationLink("User Directories", "fa fa-users", UserDirectoryAdministrationPage.class));
 
     administrationGroup.addItem(securityGroup);
 
@@ -130,8 +127,8 @@ public class SampleApplication extends TemplateWebApplication
     uiElementsGroup.addItem(new NavigationLink("Pagination", PaginationPage.class));
     uiElementsGroup.addItem(new NavigationLink("Panels", PanelsPage.class));
     uiElementsGroup.addItem(new NavigationLink("Progress Bars", ProgressBarsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Tabs &amp; Accordions",
-        TabsAndAccordionsPage.class));
+    uiElementsGroup.addItem(
+      new NavigationLink("Tabs &amp; Accordions", TabsAndAccordionsPage.class));
     uiElementsGroup.addItem(new NavigationLink("Typography", TypographyPage.class));
 
     root.addItem(uiElementsGroup);
@@ -150,6 +147,5 @@ public class SampleApplication extends TemplateWebApplication
     tablesGroup.addItem(new NavigationLink("Responsive Table", ResponsiveTablePage.class));
 
     root.addItem(tablesGroup);
-
   }
 }

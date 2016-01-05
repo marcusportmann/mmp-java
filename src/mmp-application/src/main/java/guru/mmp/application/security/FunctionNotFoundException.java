@@ -25,7 +25,8 @@ package guru.mmp.application.security;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class FunctionNotFoundException extends Exception
+public class FunctionNotFoundException
+  extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

@@ -16,13 +16,12 @@
 
 package guru.mmp.common.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.ls.LSInput;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * The <code>XmlSchemaClasspathInputSource</code> class provides an implementation of the
@@ -79,8 +78,8 @@ public class XmlSchemaClasspathInputSource
    *                      URI
    * @param classpathName the name of the resource on the classpath for this input source
    */
-  public XmlSchemaClasspathInputSource(String namespaceURI, String publicId, String systemId,
-      String baseURI, String classpathName)
+  public XmlSchemaClasspathInputSource(
+    String namespaceURI, String publicId, String systemId, String baseURI, String classpathName)
   {
     this.namespaceURI = namespaceURI;
     this.publicId = publicId;
@@ -90,8 +89,8 @@ public class XmlSchemaClasspathInputSource
 
     try
     {
-      try (InputStream is =
-          Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathName))
+      try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(
+        classpathName))
       {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -108,8 +107,8 @@ public class XmlSchemaClasspathInputSource
     }
     catch (Throwable e)
     {
-      throw new XmlSchemaException("Failed to read the classpath resource (" + classpathName
-          + ") for the input source", e);
+      throw new XmlSchemaException(
+        "Failed to read the classpath resource (" + classpathName + ") for the input source", e);
     }
   }
 
@@ -125,93 +124,6 @@ public class XmlSchemaClasspathInputSource
   }
 
   /**
-   * Returns the <code>InputStream</code> for the input source.
-   *
-   * @return the <code>InputStream</code> for the input source
-   */
-  @Override
-  public InputStream getByteStream()
-  {
-    return new ByteArrayInputStream(data);
-  }
-
-  /**
-   * Returns <code>true</code> if the input source is certified or <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if the input source is certified or <code>false</code> otherwise
-   */
-  @Override
-  public boolean getCertifiedText()
-  {
-    return certifiedText;
-  }
-
-  /**
-   * Returns the character stream for the input source.
-   *
-   * @return the character stream for the input source
-   */
-  @Override
-  public Reader getCharacterStream()
-  {
-    return null;
-  }
-
-  /**
-   * Returns the character encoding for the input source.
-   *
-   * @return the character encoding for the input source
-   */
-  @Override
-  public String getEncoding()
-  {
-    return encoding;
-  }
-
-  /**
-   * Returns the namespace for this input source.
-   *
-   * @return the namespace for this input source
-   */
-  public String getNamespaceURI()
-  {
-    return namespaceURI;
-  }
-
-  /**
-   * Returns the public identifier for this input source.
-   *
-   * @return the public identifier for this input source
-   */
-  @Override
-  public String getPublicId()
-  {
-    return publicId;
-  }
-
-  /**
-   * Returns the <code>String</code> data for the input source
-   *
-   * @return the <code>String</code> data for the input source
-   */
-  @Override
-  public String getStringData()
-  {
-    return null;
-  }
-
-  /**
-   * Returns the system identifier for this input source.
-   *
-   * @return the system identifier for this input source
-   */
-  @Override
-  public String getSystemId()
-  {
-    return systemId;
-  }
-
-  /**
    * Set the base URI to be used for resolving a relative systemId to an absolute URI.
    *
    * @param baseURI the base URI to be used for resolving a relative systemId to an absolute URI
@@ -220,6 +132,17 @@ public class XmlSchemaClasspathInputSource
   public void setBaseURI(String baseURI)
   {
     this.baseURI = baseURI;
+  }
+
+  /**
+   * Returns the <code>InputStream</code> for the input source.
+   *
+   * @return the <code>InputStream</code> for the input source
+   */
+  @Override
+  public InputStream getByteStream()
+  {
+    return new ByteArrayInputStream(data);
   }
 
   /**
@@ -247,8 +170,19 @@ public class XmlSchemaClasspathInputSource
     catch (Throwable e)
     {
       throw new XmlSchemaException(
-          "Failed to read the data from the byte stream for the input source", e);
+        "Failed to read the data from the byte stream for the input source", e);
     }
+  }
+
+  /**
+   * Returns <code>true</code> if the input source is certified or <code>false</code> otherwise.
+   *
+   * @return <code>true</code> if the input source is certified or <code>false</code> otherwise
+   */
+  @Override
+  public boolean getCertifiedText()
+  {
+    return certifiedText;
   }
 
   /**
@@ -264,6 +198,17 @@ public class XmlSchemaClasspathInputSource
   }
 
   /**
+   * Returns the character stream for the input source.
+   *
+   * @return the character stream for the input source
+   */
+  @Override
+  public Reader getCharacterStream()
+  {
+    return null;
+  }
+
+  /**
    * Set the character stream for the input source
    *
    * @param characterStream the character stream for the input source
@@ -272,7 +217,18 @@ public class XmlSchemaClasspathInputSource
   public void setCharacterStream(Reader characterStream)
   {
     throw new XmlSchemaException(
-        "Reading the data for the input source from a character stream is not supported");
+      "Reading the data for the input source from a character stream is not supported");
+  }
+
+  /**
+   * Returns the character encoding for the input source.
+   *
+   * @return the character encoding for the input source
+   */
+  @Override
+  public String getEncoding()
+  {
+    return encoding;
   }
 
   /**
@@ -287,6 +243,27 @@ public class XmlSchemaClasspathInputSource
   }
 
   /**
+   * Returns the namespace for this input source.
+   *
+   * @return the namespace for this input source
+   */
+  public String getNamespaceURI()
+  {
+    return namespaceURI;
+  }
+
+  /**
+   * Returns the public identifier for this input source.
+   *
+   * @return the public identifier for this input source
+   */
+  @Override
+  public String getPublicId()
+  {
+    return publicId;
+  }
+
+  /**
    * Set the public identifier for this input source.
    *
    * @param publicId the public identifier for this input source
@@ -298,6 +275,17 @@ public class XmlSchemaClasspathInputSource
   }
 
   /**
+   * Returns the <code>String</code> data for the input source
+   *
+   * @return the <code>String</code> data for the input source
+   */
+  @Override
+  public String getStringData()
+  {
+    return null;
+  }
+
+  /**
    * Set the <code>String</code> data for the input source.
    *
    * @param stringData the <code>String</code> data for the input source
@@ -306,7 +294,18 @@ public class XmlSchemaClasspathInputSource
   public void setStringData(String stringData)
   {
     throw new XmlSchemaException(
-        "Reading the data for the input source from a string is not supported");
+      "Reading the data for the input source from a string is not supported");
+  }
+
+  /**
+   * Returns the system identifier for this input source.
+   *
+   * @return the system identifier for this input source
+   */
+  @Override
+  public String getSystemId()
+  {
+    return systemId;
   }
 
   /**

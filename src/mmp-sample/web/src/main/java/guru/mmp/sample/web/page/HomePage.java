@@ -16,24 +16,15 @@
 
 package guru.mmp.sample.web.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.AnonymousOnlyWebPage;
-import guru.mmp.application.web.template.component.DropdownMenu;
 import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.PropertyModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * The <code>HomePage</code> class implements the "Home"
@@ -42,11 +33,14 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @AnonymousOnlyWebPage
-public class HomePage extends TemplateWebPage
+public class HomePage
+  extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
+
   @Inject
   private ISecurityService securityService;
+
   private UserDirectory userDirectory;
 
   /**

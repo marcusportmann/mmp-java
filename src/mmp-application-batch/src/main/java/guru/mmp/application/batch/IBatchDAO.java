@@ -16,11 +16,7 @@
 
 package guru.mmp.application.batch;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DAOException;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;
@@ -87,7 +83,7 @@ public interface IBatchDAO
    *                            for execution when it is retrieved
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
-   *         currently scheduled for execution
+   * currently scheduled for execution
    *
    * @throws DAOException
    */
@@ -167,7 +163,7 @@ public interface IBatchDAO
    * Schedule the next unscheduled job for execution.
    *
    * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
-   *         if there are no more unscheduled jobs to schedule
+   * if there are no more unscheduled jobs to schedule
    *
    * @throws DAOException
    */

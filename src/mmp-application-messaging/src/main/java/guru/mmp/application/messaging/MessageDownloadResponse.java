@@ -16,18 +16,13 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 import guru.mmp.common.wbxml.Parser;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +77,24 @@ public class MessageDownloadResponse
   private List<Message> messages;
 
   /**
+   * Returns <code>true</code> if the WBXML document contains valid message download response
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message download response
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessageDownloadResponse") &&
+      (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code") &&
+      rootElement.hasAttribute("detail");
+  }
+
+  /**
    * Constructs a new <code>MessageDownloadResponse</code> and populates it from the information
    * stored in the specified WBXML document.
    *
@@ -123,8 +136,9 @@ public class MessageDownloadResponse
       }
       catch (Throwable e)
       {
-        throw new MessagingException("Failed to parse the WBXML for a message associated with"
-            + " the message download response", e);
+        throw new MessagingException(
+          "Failed to parse the WBXML for a message associated with" + " the message download " +
+            "response", e);
       }
     }
   }
@@ -184,24 +198,6 @@ public class MessageDownloadResponse
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message download response
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message download response
-   *         information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessageDownloadResponse")
-        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code")
-        && rootElement.hasAttribute("detail");
-  }
-
-  /**
    * Returns the result code.
    *
    * @return the result code
@@ -212,52 +208,6 @@ public class MessageDownloadResponse
   }
 
   /**
-   * Return the user-friendly text description of the result of processing the message download
-   * request.
-   *
-   * @return the user-friendly text description of the result of processing the message download
-   *         request
-   */
-  public String getDetail()
-  {
-    return detail;
-  }
-
-  /**
-   * Return the flattened information for the exception that resulted from processing the message
-   * download request.
-   *
-   * @return the flattened information for the exception that resulted from processing the message
-   *         download request
-   */
-  public String getException()
-  {
-    return exception;
-  }
-
-  /**
-   * Returns the messages being downloaded.
-   *
-   * @return the messages being downloaded
-   */
-  public List<Message> getMessages()
-  {
-    return messages;
-  }
-
-  /**
-   * Returns the number of messages being downloaded.
-   *
-   * @return the number of messages being downloaded
-   */
-  public int getNumberOfMessages()
-  {
-    return (messages != null)
-        ? messages.size()
-        : 0;
-  }
-
-  /**
    * Set the result code.
    *
    * @param code the result code
@@ -265,6 +215,18 @@ public class MessageDownloadResponse
   public void setCode(long code)
   {
     this.code = code;
+  }
+
+  /**
+   * Return the user-friendly text description of the result of processing the message download
+   * request.
+   *
+   * @return the user-friendly text description of the result of processing the message download
+   * request
+   */
+  public String getDetail()
+  {
+    return detail;
   }
 
   /**
@@ -280,6 +242,18 @@ public class MessageDownloadResponse
   }
 
   /**
+   * Return the flattened information for the exception that resulted from processing the message
+   * download request.
+   *
+   * @return the flattened information for the exception that resulted from processing the message
+   * download request
+   */
+  public String getException()
+  {
+    return exception;
+  }
+
+  /**
    * Set the flattened information for the exception that resulted from processing the message
    * download request.
    *
@@ -292,6 +266,16 @@ public class MessageDownloadResponse
   }
 
   /**
+   * Returns the messages being downloaded.
+   *
+   * @return the messages being downloaded
+   */
+  public List<Message> getMessages()
+  {
+    return messages;
+  }
+
+  /**
    * Set the messages being downloaded.
    *
    * @param messages the messages being downloaded
@@ -299,6 +283,16 @@ public class MessageDownloadResponse
   public void setMessages(List<Message> messages)
   {
     this.messages = messages;
+  }
+
+  /**
+   * Returns the number of messages being downloaded.
+   *
+   * @return the number of messages being downloaded
+   */
+  public int getNumberOfMessages()
+  {
+    return (messages != null) ? messages.size() : 0;
   }
 
   /**

@@ -50,7 +50,7 @@ public interface ISMSService
    * The SMS will be locked to prevent duplicate sending.
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   *         currently queued for sending
+   * currently queued for sending
    *
    * @throws SMSServiceException
    */

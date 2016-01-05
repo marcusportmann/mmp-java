@@ -23,7 +23,8 @@ package guru.mmp.common.security.context;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ServiceSecurityContextException extends RuntimeException
+public class ServiceSecurityContextException
+  extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.rwdtable;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -30,26 +28,22 @@ import org.apache.wicket.request.resource.CssResourceReference;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class RWDTableCssResourceReference extends CssResourceReference
+public class RWDTableCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final RWDTableCssResourceReference INSTANCE = new RWDTableCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new RWDTableCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new RWDTableCssResourceReference());
 
-  private RWDTableCssResourceReference()
-  {
-    super(RWDTableCssResourceReference.class, Debug.inDebugMode()
-        ? "css/rwd-table.css"
-        : "css/rwd-table.min.css");
-  }
+  private static final RWDTableCssResourceReference INSTANCE = new RWDTableCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the thirdparty resource bundled
    * with the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the thirdparty resource bundled
-   *         with the Web Application Template
+   * with the Web Application Template
    */
   public static RWDTableCssResourceReference get()
   {
@@ -61,10 +55,16 @@ public class RWDTableCssResourceReference extends CssResourceReference
    * Template.
    *
    * @return the CSS header item for the thirdparty resource bundled with the Web Application
-   *         Template
+   * Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private RWDTableCssResourceReference()
+  {
+    super(RWDTableCssResourceReference.class,
+      Debug.inDebugMode() ? "css/rwd-table.css" : "css/rwd-table.min.css");
   }
 }

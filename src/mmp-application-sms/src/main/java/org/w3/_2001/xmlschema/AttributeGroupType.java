@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -12,9 +9,9 @@ import java.util.List;
 
 /**
  * <p>Java class for attributeGroup complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="attributeGroup">
  *   &lt;complexContent>
@@ -26,32 +23,32 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "attributeGroup", propOrder = { "attributesAndAttributeGroups", "anyAttribute" })
-@XmlSeeAlso({ AttributeGroupRef.class, AttributeGroup.class })
-public abstract class AttributeGroupType extends Annotated
+@XmlType(name = "attributeGroup", propOrder = {"attributesAndAttributeGroups", "anyAttribute"})
+@XmlSeeAlso({AttributeGroupRef.class, AttributeGroup.class})
+public abstract class AttributeGroupType
+  extends Annotated
 {
   protected Wildcard anyAttribute;
-  @XmlElements({ @XmlElement(name = "attribute", type = AttributeType.class) ,
-      @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class) })
+
+  @XmlElements({@XmlElement(name = "attribute", type = AttributeType.class),
+    @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class)})
   protected List<Annotated> attributesAndAttributeGroups;
+
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
+
   @XmlAttribute(name = "ref")
   protected QName ref;
 
   /**
    * Gets the value of the anyAttribute property.
    *
-   * @return
-   *     possible object is
-   *     {@link Wildcard }
-   *
+   * @return possible object is
+   * {@link Wildcard }
    */
   public Wildcard getAnyAttribute()
   {
@@ -59,27 +56,37 @@ public abstract class AttributeGroupType extends Annotated
   }
 
   /**
-   * Gets the value of the attributesAndAttributeGroups property.
+   * Sets the value of the anyAttribute property.
    *
-   * <p>
+   * @param value allowed object is
+   *              {@link Wildcard }
+   */
+  public void setAnyAttribute(Wildcard value)
+  {
+    this.anyAttribute = value;
+  }
+
+  /**
+   * Gets the value of the attributesAndAttributeGroups property.
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
-   * This is why there is not a <CODE>set</CODE> method for the attributesAndAttributeGroups property.
-   *
-   * <p>
+   * This is why there is not a <CODE>set</CODE> method for the attributesAndAttributeGroups
+   * property.
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getAttributesAndAttributeGroups().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link AttributeType }
    * {@link AttributeGroupRef }
-   *
-   *
    *
    * @return
    */
@@ -96,10 +103,8 @@ public abstract class AttributeGroupType extends Annotated
   /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getName()
   {
@@ -107,38 +112,10 @@ public abstract class AttributeGroupType extends Annotated
   }
 
   /**
-   * Gets the value of the ref property.
-   *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
-   */
-  public QName getRef()
-  {
-    return ref;
-  }
-
-  /**
-   * Sets the value of the anyAttribute property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link Wildcard }
-   *
-   */
-  public void setAnyAttribute(Wildcard value)
-  {
-    this.anyAttribute = value;
-  }
-
-  /**
    * Sets the value of the name property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setName(String value)
   {
@@ -146,12 +123,21 @@ public abstract class AttributeGroupType extends Annotated
   }
 
   /**
+   * Gets the value of the ref property.
+   *
+   * @return possible object is
+   * {@link QName }
+   */
+  public QName getRef()
+  {
+    return ref;
+  }
+
+  /**
    * Sets the value of the ref property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
+   * @param value allowed object is
+   *              {@link QName }
    */
   public void setRef(QName value)
   {

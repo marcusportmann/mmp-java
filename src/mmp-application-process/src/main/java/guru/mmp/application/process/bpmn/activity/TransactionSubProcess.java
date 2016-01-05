@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -27,38 +25,36 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TransactionSubProcess</code> class represents a Transaction Sub-Process that forms
  * part of a Process.
- *
+ * <p/>
  * Transaction Sub-Processes have the following properties:
  * <ul>
- *   <li>
- *     <b>Atomic</b>: Activities inside the Transaction Sub-Process are treated as a unit.
- *     Either all are performed or none.
- *   </li>
- *   <li>
- *     <b>Consistency</b>: The transaction leaves the process (or system) in a valid state.
- *   </li>
- *   <li>
- *     <b>Isolation</b>: The effects of one transaction might not be visible to other parts of the
- *     process (or system).
- *   </li>
- *   <li>
- *     <b>Durability</b>: Once a transaction has finished successfully, changes are persisted
- *     permanently.
- *   </li>
+ * <li>
+ * <b>Atomic</b>: Activities inside the Transaction Sub-Process are treated as a unit.
+ * Either all are performed or none.
+ * </li>
+ * <li>
+ * <b>Consistency</b>: The transaction leaves the process (or system) in a valid state.
+ * </li>
+ * <li>
+ * <b>Isolation</b>: The effects of one transaction might not be visible to other parts of the
+ * process (or system).
+ * </li>
+ * <li>
+ * <b>Durability</b>: Once a transaction has finished successfully, changes are persisted
+ * permanently.
+ * </li>
  * </ul>
- * <p>
+ * <p/>
  * Transactions have only three possible outcomes:
  * <ul>
- *   <li>Success</li>
- *   <li>Cancellation</li>
- *   <li>Exception (error)</li>
+ * <li>Success</li>
+ * <li>Cancellation</li>
+ * <li>Exception (error)</li>
  * </ul>
- * <p>
+ * <p/>
  * <b>Transaction Sub-Process</b> XML schema:
  * <pre>
  * &lt;xsd:element name="transaction" type="tTransaction" substitutionGroup="flowElement"/&gt;
@@ -74,7 +70,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class TransactionSubProcess extends SubProcess
+public final class TransactionSubProcess
+  extends SubProcess
 {
   /**
    * The transaction method for the Transaction Sub-Process.

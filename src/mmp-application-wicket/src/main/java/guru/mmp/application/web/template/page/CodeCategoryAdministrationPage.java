@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
@@ -45,8 +43,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>CodeCategoryAdministrationPage</code> class implements the
  * "Code Category Administration" page for the Web Application Template.
@@ -54,13 +50,14 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION)
-public class CodeCategoryAdministrationPage extends TemplateWebPage
+public class CodeCategoryAdministrationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
-  private static final Logger logger =
-    LoggerFactory.getLogger(CodeCategoryAdministrationPage.class);
+  private static final Logger logger = LoggerFactory.getLogger(
+    CodeCategoryAdministrationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
   @Inject
@@ -103,8 +100,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
       tableContainer.add(addLink);
 
       // The code category data view
-      CodeCategoryDataProvider dataProvider =
-        new CodeCategoryDataProvider(false);
+      CodeCategoryDataProvider dataProvider = new CodeCategoryDataProvider(false);
 
       DataView<CodeCategory> dataView = new DataView<CodeCategory>("codeCategory", dataProvider)
       {
@@ -115,7 +111,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
           item.add(new Label("categoryType",
-              new PropertyModel<String>(item.getModel(), "categoryType.name")));
+            new PropertyModel<String>(item.getModel(), "categoryType.name")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -152,6 +148,12 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
             private static final long serialVersionUID = 1000000;
 
             @Override
+            public boolean isVisible()
+            {
+              return item.getModelObject().getCategoryType() == CodeCategoryType.LOCAL_STANDARD;
+            }
+
+            @Override
             public void onClick()
             {
               CodeCategory codeCategory = item.getModelObject();
@@ -159,14 +161,8 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
               UUID codeCategoryId = codeCategory.getId();
               String codeCategoryName = codeCategory.getName();
 
-              setResponsePage(new CodeAdministrationPage(getPageReference(), codeCategoryId,
-                  codeCategoryName));
-            }
-
-            @Override
-            public boolean isVisible()
-            {
-              return item.getModelObject().getCategoryType() == CodeCategoryType.LOCAL_STANDARD;
+              setResponsePage(
+                new CodeAdministrationPage(getPageReference(), codeCategoryId, codeCategoryName));
             }
           };
 
@@ -182,7 +178,7 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to initialise the CodeCategoryAdministrationPage",
-          e);
+        e);
     }
   }
 
@@ -190,10 +186,13 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a code category to be confirmed.
    */
-  private class RemoveDialog extends Dialog
+  private class RemoveDialog
+    extends Dialog
   {
     private static final long serialVersionUID = 1000000;
+
     private UUID id;
+
     private Label nameLabel;
 
     /**
@@ -223,15 +222,16 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
 
             target.add(tableContainer);
 
-            CodeCategoryAdministrationPage.this.info("Successfully removed the code category "
-                + nameLabel.getDefaultModelObjectAsString());
+            CodeCategoryAdministrationPage.this.info("Successfully removed the code category " +
+              nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the code category (" + id + "): " + e.getMessage(), e);
+            logger.error(
+              String.format("Failed to remove the code category (%s): %s", id, e.getMessage()), e);
 
-            CodeCategoryAdministrationPage.this.error("Failed to remove the code category "
-                + nameLabel.getDefaultModelObjectAsString());
+            CodeCategoryAdministrationPage.this.error(
+              "Failed to remove the code category " + nameLabel.getDefaultModelObjectAsString());
           }
 
           target.add(getAlerts());

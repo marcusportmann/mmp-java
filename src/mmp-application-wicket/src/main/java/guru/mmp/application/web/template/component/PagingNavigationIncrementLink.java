@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
@@ -30,10 +28,13 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
  *
  * @author Marcus Portmann
  */
-public class PagingNavigationIncrementLink<T> extends Link<T>
+public class PagingNavigationIncrementLink<T>
+  extends Link<T>
 {
   private static final long serialVersionUID = 1000000;
+
   protected IPageable pageable;
+
   private int increment;
 
   /**
@@ -70,7 +71,7 @@ public class PagingNavigationIncrementLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise.
    *
    * @return <code>true</code> if the link refers to the first page of the underlying
-   *         <code>PageableListView</code> or <code>false</code> otherwise
+   * <code>PageableListView</code> or <code>false</code> otherwise
    */
   public boolean isFirst()
   {
@@ -82,7 +83,7 @@ public class PagingNavigationIncrementLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise
    *
    * @return <code>true</code> if the link refers to the first page of the underlying
-   *         <code>PageableListView</code> or <code>false</code> otherwise.
+   * <code>PageableListView</code> or <code>false</code> otherwise.
    */
   public boolean isLast()
   {

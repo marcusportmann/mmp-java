@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -10,15 +7,16 @@ import javax.xml.namespace.QName;
 
 /**
  * <p>Java class for attribute complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="attribute">
  *   &lt;complexContent>
  *     &lt;extension base="{http://www.w3.org/2001/XMLSchema}annotated">
  *       &lt;sequence>
- *         &lt;element name="simpleType" type="{http://www.w3.org/2001/XMLSchema}localSimpleType" minOccurs="0"/>
+ *         &lt;element name="simpleType" type="{http://www.w3.org/2001/XMLSchema}localSimpleType"
+ *         minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attGroup ref="{http://www.w3.org/2001/XMLSchema}defRef"/>
  *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}QName" />
@@ -39,29 +37,35 @@ import javax.xml.namespace.QName;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "attribute", propOrder = { "simpleType" })
-@XmlSeeAlso({ Attribute.class })
-public class AttributeType extends Annotated
+@XmlType(name = "attribute", propOrder = {"simpleType"})
+@XmlSeeAlso({Attribute.class})
+public class AttributeType
+  extends Annotated
 {
   @XmlAttribute(name = "default")
   protected String _default;
+
   @XmlAttribute(name = "fixed")
   protected String fixed;
+
   @XmlAttribute(name = "form")
   protected FormChoice form;
+
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
+
   @XmlAttribute(name = "ref")
   protected QName ref;
+
   protected LocalSimpleType simpleType;
+
   @XmlAttribute(name = "type")
   protected QName type;
+
   @XmlAttribute(name = "use")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   protected String use;
@@ -69,10 +73,8 @@ public class AttributeType extends Annotated
   /**
    * Gets the value of the default property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getDefault()
   {
@@ -80,12 +82,21 @@ public class AttributeType extends Annotated
   }
 
   /**
+   * Sets the value of the default property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefault(String value)
+  {
+    this._default = value;
+  }
+
+  /**
    * Gets the value of the fixed property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getFixed()
   {
@@ -93,12 +104,21 @@ public class AttributeType extends Annotated
   }
 
   /**
+   * Sets the value of the fixed property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFixed(String value)
+  {
+    this.fixed = value;
+  }
+
+  /**
    * Gets the value of the form property.
    *
-   * @return
-   *     possible object is
-   *     {@link FormChoice }
-   *
+   * @return possible object is
+   * {@link FormChoice }
    */
   public FormChoice getForm()
   {
@@ -106,12 +126,21 @@ public class AttributeType extends Annotated
   }
 
   /**
+   * Sets the value of the form property.
+   *
+   * @param value allowed object is
+   *              {@link FormChoice }
+   */
+  public void setForm(FormChoice value)
+  {
+    this.form = value;
+  }
+
+  /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getName()
   {
@@ -119,12 +148,21 @@ public class AttributeType extends Annotated
   }
 
   /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
+  }
+
+  /**
    * Gets the value of the ref property.
    *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
+   * @return possible object is
+   * {@link QName }
    */
   public QName getRef()
   {
@@ -132,12 +170,21 @@ public class AttributeType extends Annotated
   }
 
   /**
+   * Sets the value of the ref property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setRef(QName value)
+  {
+    this.ref = value;
+  }
+
+  /**
    * Gets the value of the simpleType property.
    *
-   * @return
-   *     possible object is
-   *     {@link LocalSimpleType }
-   *
+   * @return possible object is
+   * {@link LocalSimpleType }
    */
   public LocalSimpleType getSimpleType()
   {
@@ -145,12 +192,21 @@ public class AttributeType extends Annotated
   }
 
   /**
+   * Sets the value of the simpleType property.
+   *
+   * @param value allowed object is
+   *              {@link LocalSimpleType }
+   */
+  public void setSimpleType(LocalSimpleType value)
+  {
+    this.simpleType = value;
+  }
+
+  /**
    * Gets the value of the type property.
    *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
+   * @return possible object is
+   * {@link QName }
    */
   public QName getType()
   {
@@ -158,12 +214,21 @@ public class AttributeType extends Annotated
   }
 
   /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setType(QName value)
+  {
+    this.type = value;
+  }
+
+  /**
    * Gets the value of the use property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getUse()
   {
@@ -178,103 +243,10 @@ public class AttributeType extends Annotated
   }
 
   /**
-   * Sets the value of the default property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setDefault(String value)
-  {
-    this._default = value;
-  }
-
-  /**
-   * Sets the value of the fixed property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setFixed(String value)
-  {
-    this.fixed = value;
-  }
-
-  /**
-   * Sets the value of the form property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link FormChoice }
-   *
-   */
-  public void setForm(FormChoice value)
-  {
-    this.form = value;
-  }
-
-  /**
-   * Sets the value of the name property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
-   * Sets the value of the ref property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
-   */
-  public void setRef(QName value)
-  {
-    this.ref = value;
-  }
-
-  /**
-   * Sets the value of the simpleType property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link LocalSimpleType }
-   *
-   */
-  public void setSimpleType(LocalSimpleType value)
-  {
-    this.simpleType = value;
-  }
-
-  /**
-   * Sets the value of the type property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
-   */
-  public void setType(QName value)
-  {
-    this.type = value;
-  }
-
-  /**
    * Sets the value of the use property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setUse(String value)
   {

@@ -16,37 +16,28 @@
 
 package guru.mmp.application.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.common.exception.InvalidArgumentException;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.lang.reflect.Constructor;
-
-import java.sql.*;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
 import javax.naming.InitialContext;
-
 import javax.sql.DataSource;
+import java.lang.reflect.Constructor;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The <code>SecurityService</code> class provides the Security Service implementation.
@@ -58,65 +49,113 @@ import javax.sql.DataSource;
 public class SecurityService
   implements ISecurityService
 {
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
+   */
+  public static final UUID DEFAULT_ORGANISATION_ID = UUID.fromString(
+    "c1685b92-9fe5-453a-995b-89d8c0f29cb5");
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the LDAP user directory
-   * type.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
    */
-  public static final UUID LDAP_USER_DIRECTORY_TYPE_ID =
-    UUID.fromString("e5741a89-c87b-4406-8a60-2cc0b0a5fa3e");
+  public static final UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString(
+    "4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the internal user directory
    * type.
    */
-  public static final UUID INTERNAL_USER_DIRECTORY_TYPE_ID =
-    UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f");
+  public static final UUID INTERNAL_USER_DIRECTORY_TYPE_ID = UUID.fromString(
+    "b43fda33-d3b0-4f80-a39a-110b8e530f4f");
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the LDAP user directory
+   * type.
    */
-  public static final UUID DEFAULT_USER_DIRECTORY_ID =
-    UUID.fromString("4ef18395-423a-4df6-b7d7-6bcdd85956e4");
+  public static final UUID LDAP_USER_DIRECTORY_TYPE_ID = UUID.fromString(
+    "e5741a89-c87b-4406-8a60-2cc0b0a5fa3e");
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
+   * The maximum number of filtered organisations.
    */
-  public static final UUID DEFAULT_ORGANISATION_ID =
-    UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5");
+  public static final int MAX_FILTERED_ORGANISATIONS = 100;
+
+  /**
+   * The maximum number of filtered user directories.
+   */
+  public static final int MAX_FILTERED_USER_DIRECTORIES = 100;
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+
   private String addUserDirectoryToOrganisationSQL;
+
   private String createFunctionSQL;
+
   private String createOrganisationSQL;
+
   private String createUserDirectorySQL;
+
   private DataSource dataSource;
+
   private String deleteFunctionSQL;
+
   private String deleteOrganisationSQL;
+
   private String deleteUserDirectorySQL;
+
+  private String getFilteredOrganisationsSQL;
+
+  private String getFilteredUserDirectoriesSQL;
+
   private String getFunctionIdSQL;
+
   private String getFunctionSQL;
+
   private String getFunctionsSQL;
+
   private String getInternalUserDirectoryIdForUserSQL;
+
+  private String getNumberOfFilteredOrganisationsSQL;
+
+  private String getNumberOfFilteredUserDirectoriesSQL;
+
   private String getNumberOfOrganisationsSQL;
+
   private String getNumberOfUserDirectoriesSQL;
+
   private String getOrganisationIdsForUserDirectorySQL;
+
   private String getOrganisationSQL;
+
   private String getOrganisationsForUserDirectorySQL;
+
   private String getOrganisationsSQL;
+
   private String getUserDirectoriesForOrganisationSQL;
+
   private String getUserDirectoriesSQL;
+
   private String getUserDirectorySQL;
+
   private String getUserDirectoryTypesSQL;
+
   private String organisationExistsSQL;
+
+  private String organisationWithNameExistsSQL;
 
   /* Registry */
   @Inject
   private IRegistry registry;
+
   private String updateFunctionSQL;
+
   private String updateOrganisationSQL;
+
   private String updateUserDirectorySQL;
+
   private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+
   private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
@@ -139,7 +178,7 @@ public class SecurityService
    */
   public void addUserToGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-      SecurityException
+    SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -156,8 +195,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.addUserToGroup(username, groupName);
@@ -179,9 +218,9 @@ public class SecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
-      boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
-      PasswordChangeReason reason)
+  public void adminChangePassword(
+    UUID userDirectoryId, String username, String newPassword, boolean expirePassword,
+    boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
     // Validate parameters
@@ -199,12 +238,12 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.adminChangePassword(username, newPassword, expirePassword, lockUser,
-        resetPasswordHistory, reason);
+      resetPasswordHistory, reason);
   }
 
   /**
@@ -223,7 +262,7 @@ public class SecurityService
    */
   public UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, SecurityException
+    UserNotFoundException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -247,8 +286,9 @@ public class SecurityService
 
         if (internalUserDirectory == null)
         {
-          throw new SecurityException("The user directory ID (" + internalUserDirectoryId
-              + ") for the internal user (" + username + ") is invalid");
+          throw new SecurityException(
+            String.format("The user directory ID (%s) for the internal user (%s) is invalid",
+              internalUserDirectoryId, username));
         }
         else
         {
@@ -281,41 +321,40 @@ public class SecurityService
           }
         }
 
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
     }
     catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
-        | ExpiredPasswordException e)
+      | ExpiredPasswordException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to authenticate the user (" + username + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to authenticate the user (%s): %s", username, e.getMessage()), e);
     }
   }
 
   /**
    * Change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param username        the username identifying the user
-   * @param password        the password for the user that is used to authorise the operation
-   * @param newPassword     the new password
+   * @param username    the username identifying the user
+   * @param password    the password for the user that is used to authorise the operation
+   * @param newPassword the new password
    *
-   * @throws UserDirectoryNotFoundException
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *
    * @throws AuthenticationFailedException
    * @throws UserLockedException
    * @throws UserNotFoundException
    * @throws ExistingPasswordException
    * @throws SecurityException
    */
-  public void changePassword(UUID userDirectoryId, String username, String password,
-      String newPassword)
-    throws UserDirectoryNotFoundException, AuthenticationFailedException, UserLockedException,
-      UserNotFoundException, ExistingPasswordException, SecurityException
+  public UUID changePassword(String username, String password, String newPassword)
+    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+    ExistingPasswordException, SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -333,15 +372,67 @@ public class SecurityService
       throw new InvalidArgumentException("newPassword");
     }
 
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
+    try
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
-    }
+      // First check if this is an internal user and if so determine the user directory ID
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
-    userDirectory.changePassword(username, password, newPassword);
+      if (internalUserDirectoryId != null)
+      {
+        IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
+
+        if (internalUserDirectory == null)
+        {
+          throw new SecurityException(
+            String.format("The user directory ID (%s) for the internal user (%s) is invalid",
+              internalUserDirectoryId, username));
+        }
+        else
+        {
+          internalUserDirectory.changePassword(username, password, newPassword);
+
+          return internalUserDirectoryId;
+        }
+      }
+      else
+      {
+        /*
+         * Check all of the "external" user directories to see if one of them can change the
+         * password for this user.
+         */
+        for (UUID userDirectoryId : userDirectories.keySet())
+        {
+          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+          if (userDirectory != null)
+          {
+            if (!(userDirectory instanceof InternalUserDirectory))
+            {
+              if (userDirectory.isExistingUser(username))
+              {
+                userDirectory.changePassword(username, password, newPassword);
+
+                return userDirectoryId;
+              }
+            }
+          }
+        }
+
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
+      }
+    }
+    catch (AuthenticationFailedException | UserNotFoundException | UserLockedException |
+      ExistingPasswordException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+        String.format("Failed to change the password for the user (%s): %s", username,
+          e.getMessage()), e);
+    }
   }
 
   /**
@@ -377,8 +468,8 @@ public class SecurityService
     {
       if (getFunctionId(connection, function.getCode()) != null)
       {
-        throw new DuplicateFunctionException("A function with the code (" + function.getCode()
-            + ") already exists");
+        throw new DuplicateFunctionException(
+          String.format("A function with the code (%s) already exists", function.getCode()));
       }
 
       statement.setObject(1, function.getId());
@@ -389,8 +480,8 @@ public class SecurityService
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createFunctionSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            createFunctionSQL));
       }
     }
     catch (DuplicateFunctionException e)
@@ -399,8 +490,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the function (" + function.getCode() + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to create the function (%s): %s", function.getCode(), e.getMessage()),
+        e);
     }
   }
 
@@ -428,8 +520,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.createGroup(group);
@@ -442,7 +534,7 @@ public class SecurityService
    * @param createUserDirectory should a new internal user directory be created for the organisation
    *
    * @return the new internal user directory that was created for the organisation or
-   *         <code>null</code> if no user directory was created
+   * <code>null</code> if no user directory was created
    *
    * @throws DuplicateOrganisationException
    * @throws SecurityException
@@ -451,11 +543,6 @@ public class SecurityService
     throws DuplicateOrganisationException, SecurityException
   {
     // Validate parameters
-    if (isNullOrEmpty(organisation.getId()))
-    {
-      throw new InvalidArgumentException("organisation.id");
-    }
-
     if (isNullOrEmpty(organisation.getName()))
     {
       throw new InvalidArgumentException("organisation.name");
@@ -467,6 +554,8 @@ public class SecurityService
 
     try
     {
+      UUID organisationId = IDGenerator.nextUUID(dataSource);
+
       if (transactionManager.isTransactionActive())
       {
         existingTransaction = transactionManager.beginNew();
@@ -482,21 +571,22 @@ public class SecurityService
       {
         try (PreparedStatement statement = connection.prepareStatement(createOrganisationSQL))
         {
-          if (organisationExists(connection, organisation.getId()))
+          if (organisationWithNameExists(connection, organisation.getName()))
           {
-            throw new DuplicateOrganisationException("The organisation (" + organisation.getId()
-                + ") already exists");
+            throw new DuplicateOrganisationException(
+              String.format("An organisation with the name (%s) already exists",
+                organisation.getName()));
           }
 
-          statement.setObject(1, organisation.getId());
+          statement.setObject(1, organisationId);
           statement.setString(2, organisation.getName());
           statement.setString(3, organisation.getDescription());
 
           if (statement.executeUpdate() != 1)
           {
             throw new SecurityException(
-                "No rows were affected as a result of executing the SQL statement ("
-                + createOrganisationSQL + ")");
+              String.format("No rows were affected as a result of executing the SQL statement (%s)",
+                createOrganisationSQL));
           }
         }
 
@@ -514,45 +604,47 @@ public class SecurityService
 
             if (statement.executeUpdate() != 1)
             {
-              throw new SecurityException(
-                  "No rows were affected as a result of executing the SQL statement ("
-                  + createUserDirectorySQL + ")");
+              throw new SecurityException(String.format(
+                "No rows were affected as a result of executing the SQL statement (%s)",
+                createUserDirectorySQL));
             }
           }
 
           // Link the new user directory to the new organisation
-          try (PreparedStatement statement =
-              connection.prepareStatement(addUserDirectoryToOrganisationSQL))
+          try (PreparedStatement statement = connection.prepareStatement(
+            addUserDirectoryToOrganisationSQL))
           {
             statement.setObject(1, userDirectory.getId());
-            statement.setObject(2, organisation.getId());
+            statement.setObject(2, organisationId);
 
             if (statement.executeUpdate() != 1)
             {
-              throw new SecurityException(
-                  "No rows were affected as a result of executing the SQL statement ("
-                  + addUserDirectoryToOrganisationSQL + ")");
+              throw new SecurityException(String.format(
+                "No rows were affected as a result of executing the SQL statement (%s)",
+                addUserDirectoryToOrganisationSQL));
             }
           }
         }
 
         // Link the new organisation to the default user directory
-        try (PreparedStatement statement =
-            connection.prepareStatement(addUserDirectoryToOrganisationSQL))
+        try (PreparedStatement statement = connection.prepareStatement(
+          addUserDirectoryToOrganisationSQL))
         {
           statement.setObject(1, DEFAULT_USER_DIRECTORY_ID);
-          statement.setObject(2, organisation.getId());
+          statement.setObject(2, organisationId);
 
           if (statement.executeUpdate() != 1)
           {
             throw new SecurityException(
-                "No rows were affected as a result of executing the SQL statement ("
-                + addUserDirectoryToOrganisationSQL + ")");
+              String.format("No rows were affected as a result of executing the SQL statement (%s)",
+                addUserDirectoryToOrganisationSQL));
           }
         }
       }
 
       transactionManager.commit();
+
+      organisation.setId(organisationId);
 
       try
       {
@@ -573,8 +665,9 @@ public class SecurityService
       }
       catch (Throwable f)
       {
-        logger.error("Failed to rollback the transaction while creating the organisation ("
-            + organisation.getId() + ")", f);
+        logger.error(
+          String.format("Failed to rollback the transaction while creating the organisation (%s)",
+            organisation.getId()), f);
       }
 
       throw e;
@@ -587,12 +680,14 @@ public class SecurityService
       }
       catch (Throwable f)
       {
-        logger.error("Failed to rollback the transaction while creating the organisation ("
-            + organisation.getId() + ")", f);
+        logger.error(
+          String.format("Failed to rollback the transaction while creating the organisation (%s)",
+            organisation.getId()), f);
       }
 
-      throw new SecurityException("Failed to create the organisation (" + organisation.getId()
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to create the organisation (%s): %s", organisation.getId(),
+          e.getMessage()), e);
     }
     finally
     {
@@ -602,8 +697,9 @@ public class SecurityService
       }
       catch (Throwable e)
       {
-        logger.error("Failed to resume the original transaction while creating the organisation ("
-            + organisation.getId() + ")", e);
+        logger.error(
+          String.format("Failed to resume the transaction while creating the organisation (%s)",
+            organisation.getId()), e);
       }
     }
   }
@@ -621,8 +717,8 @@ public class SecurityService
    * @throws DuplicateUserException
    * @throws SecurityException
    */
-  public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
-      boolean userLocked)
+  public void createUser(
+    UUID userDirectoryId, User user, boolean expiredPassword, boolean userLocked)
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityException
   {
     // Validate parameters
@@ -635,8 +731,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.createUser(user, expiredPassword, userLocked);
@@ -677,8 +773,8 @@ public class SecurityService
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createUserDirectorySQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            createUserDirectorySQL));
       }
 
       userDirectory.setId(userDirectoryId);
@@ -694,8 +790,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the user directory (" + userDirectory.getName()
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to create the user directory (%s): %s", userDirectory.getName(),
+          e.getMessage()), e);
     }
   }
 
@@ -721,8 +818,8 @@ public class SecurityService
     {
       if (getFunctionId(connection, code) == null)
       {
-        throw new FunctionNotFoundException("A function with the code (" + code
-            + ") could not be found");
+        throw new FunctionNotFoundException(
+          String.format("A function with the code (%s) could not be found", code));
       }
 
       statement.setString(1, code);
@@ -730,8 +827,8 @@ public class SecurityService
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + deleteFunctionSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            deleteFunctionSQL));
       }
     }
     catch (FunctionNotFoundException e)
@@ -740,8 +837,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the function (" + code + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to delete the function (%s): %s", code, e.getMessage()), e);
     }
   }
 
@@ -759,7 +856,7 @@ public class SecurityService
    */
   public void deleteGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-      SecurityException
+    SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(groupName))
@@ -771,8 +868,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.deleteGroup(groupName);
@@ -800,7 +897,8 @@ public class SecurityService
     {
       if (!organisationExists(connection, id))
       {
-        throw new OrganisationNotFoundException("The organisation (" + id + ") could not be found");
+        throw new OrganisationNotFoundException(
+          String.format("The organisation (%s) could not be found", id));
       }
 
       statement.setObject(1, id);
@@ -808,8 +906,8 @@ public class SecurityService
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + deleteOrganisationSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            deleteOrganisationSQL));
       }
     }
     catch (OrganisationNotFoundException e)
@@ -818,8 +916,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the organisation (" + id + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to delete the organisation (%s): %s", id, e.getMessage()), e);
     }
   }
 
@@ -847,8 +945,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.deleteUser(username);
@@ -890,8 +988,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the user directory (" + id + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to delete the user directory (%s): %s", id, e.getMessage()), e);
     }
   }
 
@@ -921,22 +1019,100 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.findUsers(attributes);
   }
 
-///**
-// * Returns the <code>DataSource</code> for the <code>SecurityService</code>.
-// *
-// * @return the <code>DataSource</code> for the <code>SecurityService</code>
-// */
-//public DataSource getDataSource()
-//{
-//  return dataSource;
-//}
+  /**
+   * Retrieve the filtered list of organisations.
+   *
+   * @param filter the filter to apply to the organisations
+   *
+   * @return the filtered list of organisations
+   *
+   * @throws SecurityException
+   */
+  public List<Organisation> getFilteredOrganisations(String filter)
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+        StringUtil.isNullOrEmpty(filter) ? getOrganisationsSQL : getFilteredOrganisationsSQL))
+    {
+      statement.setMaxRows(MAX_FILTERED_ORGANISATIONS);
+
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
+
+        statement.setString(1, filterBuffer);
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<Organisation> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildOrganisationFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+        String.format("Failed to retrieve the filtered organisations: %s", e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Retrieve the filtered list of user directories.
+   *
+   * @param filter the filter to apply to the user directories
+   *
+   * @return the filtered list of user directories
+   *
+   * @throws SecurityException
+   */
+  public List<UserDirectory> getFilteredUserDirectories(String filter)
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+        StringUtil.isNullOrEmpty(filter) ? getUserDirectoriesSQL : getFilteredUserDirectoriesSQL))
+    {
+      statement.setMaxRows(MAX_FILTERED_USER_DIRECTORIES);
+
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
+
+        statement.setString(1, filterBuffer);
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectory> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildUserDirectoryFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+        String.format("Failed to retrieve the filtered user directories: %s", e.getMessage()), e);
+    }
+  }
 
   /**
    * Retrieve the filtered list of users.
@@ -957,8 +1133,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getFilteredUsers(filter);
@@ -998,8 +1174,8 @@ public class SecurityService
           }
           else
           {
-            throw new FunctionNotFoundException("A function with the code (" + code
-                + ") could not be found");
+            throw new FunctionNotFoundException(
+              String.format("A function with the code (%s) could not be found", code));
           }
         }
       }
@@ -1010,8 +1186,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the function (" + code + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the function (%s): %s", code, e.getMessage()), e);
     }
   }
 
@@ -1041,8 +1217,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getFunctionCodesForUser(username);
@@ -1075,7 +1251,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the functions: " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the functions: %s", e.getMessage()), e);
     }
   }
 
@@ -1105,8 +1282,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getGroup(groupName);
@@ -1138,8 +1315,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getGroupNamesForUser(username);
@@ -1163,8 +1340,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getGroups();
@@ -1196,11 +1373,105 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getGroupsForUser(username);
+  }
+
+  /**
+   * Retrieve the number of filtered organisations.
+   *
+   * @param filter the filter to apply to the organisations
+   *
+   * @return the number of filtered organisations
+   *
+   * @throws SecurityException
+   */
+  public int getNumberOfFilteredOrganisations(String filter)
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+        StringUtil.isNullOrEmpty(filter) ? getNumberOfOrganisationsSQL
+          : getNumberOfFilteredOrganisationsSQL))
+    {
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
+
+        statement.setString(1, filterBuffer);
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          int numberOfFilteredOrganisations = rs.getInt(1);
+
+          return ((numberOfFilteredOrganisations > MAX_FILTERED_ORGANISATIONS)
+            ? MAX_FILTERED_ORGANISATIONS : numberOfFilteredOrganisations);
+        }
+        else
+        {
+          return 0;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+        String.format("Failed to retrieve the number of filtered organisations: %s",
+          e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Retrieve the number of filtered user directories.
+   *
+   * @param filter the filter to apply to the user directories
+   *
+   * @return the number of filtered user directories
+   *
+   * @throws SecurityException
+   */
+  public int getNumberOfFilteredUserDirectories(String filter)
+    throws SecurityException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+        StringUtil.isNullOrEmpty(filter) ? getNumberOfUserDirectoriesSQL
+          : getNumberOfFilteredUserDirectoriesSQL))
+    {
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
+
+        statement.setString(1, filterBuffer);
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          int numberOfFilteredUserDirectories = rs.getInt(1);
+
+          return ((numberOfFilteredUserDirectories > MAX_FILTERED_USER_DIRECTORIES)
+            ? MAX_FILTERED_USER_DIRECTORIES : numberOfFilteredUserDirectories);
+        }
+        else
+        {
+          return 0;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+        String.format("Failed to retrieve the number of filtered user directories: %s",
+          e.getMessage()), e);
+    }
   }
 
   /**
@@ -1222,8 +1493,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getNumberOfFilteredUsers(filter);
@@ -1247,8 +1518,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getNumberOfGroups();
@@ -1281,8 +1552,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the number of organisations"
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the number of organisations: %s", e.getMessage()), e);
     }
   }
 
@@ -1313,8 +1584,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the number of user directories"
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the number of user directories: %s", e.getMessage()), e);
     }
   }
 
@@ -1336,8 +1607,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getNumberOfUsers();
@@ -1375,8 +1646,8 @@ public class SecurityService
         }
         else
         {
-          throw new OrganisationNotFoundException("The organisation (" + id
-              + ") could not be found");
+          throw new OrganisationNotFoundException(
+            String.format("The organisation (%s) could not be found", id));
         }
       }
     }
@@ -1386,8 +1657,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the organisation (" + id + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the organisation (%s): %s", id, e.getMessage()), e);
     }
   }
 
@@ -1399,7 +1670,7 @@ public class SecurityService
    *                        user directory
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
-   *         associated with the user directory
+   * associated with the user directory
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
@@ -1408,8 +1679,8 @@ public class SecurityService
     throws UserDirectoryNotFoundException, SecurityException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getOrganisationIdsForUserDirectorySQL))
+      PreparedStatement statement = connection.prepareStatement(
+        getOrganisationIdsForUserDirectorySQL))
     {
       statement.setObject(1, userDirectoryId);
 
@@ -1427,9 +1698,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-          "Failed to retrieve the IDs for the organisations associated with the user directory ("
-          + userDirectoryId + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the IDs for the organisations for the user directory (%s): %s",
+        userDirectoryId, e.getMessage()), e);
     }
   }
 
@@ -1460,7 +1731,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the organisations: " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the organisations: %s", e.getMessage()), e);
     }
   }
 
@@ -1479,8 +1751,8 @@ public class SecurityService
     throws UserDirectoryNotFoundException, SecurityException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getOrganisationsForUserDirectorySQL))
+      PreparedStatement statement = connection.prepareStatement(
+        getOrganisationsForUserDirectorySQL))
     {
       statement.setObject(1, userDirectoryId);
 
@@ -1498,21 +1770,11 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-          "Failed to retrieve the organisations associated with the user directory ("
-          + userDirectoryId + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the organisations associated with the user directory (%s): %s",
+        userDirectoryId, e.getMessage()), e);
     }
   }
-
-///**
-// * Returns the <code>Registry</code> for the <code>SecurityService</code>.
-// *
-// * @return the <code>Registry</code> for the <code>SecurityService</code>
-// */
-//public IRegistry getRegistry()
-//{
-//  return registry;
-//}
 
   /**
    * Retrieve the user.
@@ -1540,8 +1802,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getUser(username);
@@ -1574,7 +1836,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the user directories: " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the user directories: %s", e.getMessage()), e);
     }
   }
 
@@ -1593,8 +1856,8 @@ public class SecurityService
     throws OrganisationNotFoundException, SecurityException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getUserDirectoriesForOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(
+        getUserDirectoriesForOrganisationSQL))
     {
       statement.setObject(1, organisationId);
 
@@ -1612,9 +1875,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-          "Failed to retrieve the user directories associated with the organisation ("
-          + organisationId + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the user directories associated with the organisation (%s): %s",
+        organisationId, e.getMessage()), e);
     }
   }
 
@@ -1644,8 +1907,8 @@ public class SecurityService
         }
         else
         {
-          throw new UserDirectoryNotFoundException("The user directory (" + id
-              + ") could not be found");
+          throw new UserDirectoryNotFoundException(
+            String.format("The user directory (%s) could not be found", id));
         }
       }
     }
@@ -1655,8 +1918,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the user directory (" + id + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the user directory (%s): %s", id, e.getMessage()), e);
     }
   }
 
@@ -1667,8 +1930,8 @@ public class SecurityService
    * @param username the username identifying the user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         that the user with the specified username is associated with or <code>null</code> if
-   *         the user cannot be found
+   * that the user with the specified username is associated with or <code>null</code> if
+   * the user cannot be found
    *
    * @throws SecurityException
    */
@@ -1717,8 +1980,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the user directory ID for the user ("
-          + username + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the user directory ID for the user (%s): %s", username,
+          e.getMessage()), e);
     }
   }
 
@@ -1742,7 +2006,7 @@ public class SecurityService
         while (rs.next())
         {
           list.add(new UserDirectoryType((UUID) rs.getObject(1), rs.getString(2), rs.getString(3),
-              rs.getString(4)));
+            rs.getString(4)));
         }
 
         return list;
@@ -1750,8 +2014,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the user directory types: " + e.getMessage(),
-          e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the user directory types: %s", e.getMessage()), e);
     }
   }
 
@@ -1773,8 +2037,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.getUsers();
@@ -1790,7 +2054,9 @@ public class SecurityService
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored) {}
+    catch (Throwable ignored)
+    {
+    }
 
     if (dataSource == null)
     {
@@ -1798,14 +2064,16 @@ public class SecurityService
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (dataSource == null)
     {
-      throw new RuntimeException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new RuntimeException(
+        "Failed to retrieve the application data source using the JNDI names " +
+          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -1843,7 +2111,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Security Service: " + e.getMessage(), e);
+      throw new RuntimeException("Failed to initialise the Security Service", e);
     }
   }
 
@@ -1864,7 +2132,7 @@ public class SecurityService
    */
   public boolean isUserInGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-      SecurityException
+    SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -1881,8 +2149,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.isUserInGroup(username, groupName);
@@ -1904,8 +2172,9 @@ public class SecurityService
       {
         if (userDirectory.getType() == null)
         {
-          logger.error("Failed to load the user directory (" + userDirectory.getId()
-              + "): The user directory type (" + userDirectory.getTypeId() + ") was not loaded");
+          logger.error(String.format(
+            "Failed to load the user directory (%s): The user directory type (%s) was not loaded",
+            userDirectory.getId(), userDirectory.getTypeId()));
 
           continue;
         }
@@ -1914,36 +2183,37 @@ public class SecurityService
         {
           Class<?> clazz = userDirectory.getType().getUserDirectoryClass();
 
-          Class<? extends IUserDirectory> userDirectoryClass =
-            clazz.asSubclass(IUserDirectory.class);
+          Class<? extends IUserDirectory> userDirectoryClass = clazz.asSubclass(
+            IUserDirectory.class);
 
           if (userDirectoryClass == null)
           {
-            throw new SecurityException("The user directory class ("
-                + userDirectory.getType().getUserDirectoryClassName()
-                + ") does not implement the IUserDirectory interface");
+            throw new SecurityException(String.format(
+              "The user directory class (%s) does not implement the IUserDirectory interface",
+              userDirectory.getType().getUserDirectoryClassName()));
           }
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
-            userDirectoryClass.getConstructor(UUID.class, Map.class);
+            userDirectoryClass.getConstructor(
+            UUID.class, Map.class);
 
           if (userDirectoryClassConstructor == null)
           {
-            throw new SecurityException("The user directory class ("
-                + userDirectory.getType().getUserDirectoryClassName()
-                + ") does not provide a valid constructor (long, Map<String,String>)");
+            throw new SecurityException(String.format(
+              "The user directory class (%s) does not provide a valid constructor (long, " +
+                "Map<String,String>)", userDirectory.getType().getUserDirectoryClassName()));
           }
 
-          IUserDirectory userDirectoryInstance =
-            userDirectoryClassConstructor.newInstance(userDirectory.getId(),
-              userDirectory.getParameters());
+          IUserDirectory userDirectoryInstance = userDirectoryClassConstructor.newInstance(
+            userDirectory.getId(), userDirectory.getParameters());
 
           reloadedUserDirectories.put(userDirectory.getId(), userDirectoryInstance);
         }
         catch (Throwable e)
         {
-          throw new SecurityException("Failed to initialise the user directory ("
-              + userDirectory.getId() + ")(" + userDirectory.getName() + ")", e);
+          throw new SecurityException(
+            String.format("Failed to initialise the user directory (%s)(%s)", userDirectory.getId(),
+              userDirectory.getName()), e);
         }
       }
 
@@ -1975,8 +2245,9 @@ public class SecurityService
         }
         catch (Throwable e)
         {
-          logger.error("Failed to load the user directory type (" + userDirectoryType.getId()
-              + "): Failed to retrieve the user directory class for the user directory type", e);
+          logger.error(String.format("Failed to load the user directory type (%s): " +
+              "Failed to retrieve the user directory class for the user directory type",
+            userDirectoryType.getId()), e);
 
           continue;
         }
@@ -2007,7 +2278,7 @@ public class SecurityService
    */
   public void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-      SecurityException
+    SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(username))
@@ -2024,8 +2295,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.removeUserFromGroup(username, groupName);
@@ -2046,7 +2317,7 @@ public class SecurityService
    */
   public void renameGroup(UUID userDirectoryId, String groupName, String newGroupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-      SecurityException
+    SecurityException
   {
     // Validate parameters
     if (isNullOrEmpty(groupName))
@@ -2063,32 +2334,12 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.renameGroup(groupName, newGroupName);
   }
-
-///**
-// * Set the <code>DataSource</code> for the <code>SecurityService</code>.
-// *
-// * @param dataSource the <code>DataSource</code> for the <code>SecurityService</code>
-// */
-//public void setDataSource(DataSource dataSource)
-//{
-//  this.dataSource = dataSource;
-//}
-
-///**
-// * Set the <code>Registry</code> for the <code>SecurityService</code>.
-// *
-// * @param registry the <code>Registry</code> for the <code>SecurityService</code>
-// */
-//public void setRegistry(IRegistry registry)
-//{
-//  this.registry = registry;
-//}
 
   /**
    * Does the user directory support administering groups.
@@ -2097,7 +2348,7 @@ public class SecurityService
    *                        user directory
    *
    * @return <code>true</code> if the directory supports administering groups or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws UserDirectoryNotFoundException
    */
@@ -2108,8 +2359,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.supportsGroupAdministration();
@@ -2122,7 +2373,7 @@ public class SecurityService
    *                        user directory
    *
    * @return <code>true</code> if the directory supports administering users or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws UserDirectoryNotFoundException
    */
@@ -2133,8 +2384,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     return userDirectory.supportsUserAdministration();
@@ -2172,8 +2423,8 @@ public class SecurityService
     {
       if (getFunctionId(connection, function.getCode()) == null)
       {
-        throw new FunctionNotFoundException("A function with the code (" + function.getCode()
-            + ") could not be found");
+        throw new FunctionNotFoundException(
+          String.format("A function with the code (%s) could not be found", function.getCode()));
       }
 
       statement.setString(1, function.getName());
@@ -2183,8 +2434,8 @@ public class SecurityService
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + updateFunctionSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            updateFunctionSQL));
       }
     }
     catch (FunctionNotFoundException e)
@@ -2193,8 +2444,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to update the function (" + function.getCode() + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to update the function (%s): %s", function.getCode(), e.getMessage()),
+        e);
     }
   }
 
@@ -2222,8 +2474,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.updateGroup(group);
@@ -2255,8 +2507,9 @@ public class SecurityService
     {
       if (!organisationExists(connection, organisation.getId()))
       {
-        throw new OrganisationNotFoundException("An organisation with the ID ("
-            + organisation.getId() + ") could not be found");
+        throw new OrganisationNotFoundException(
+          String.format("An organisation with the ID (%s) could not be found",
+            organisation.getId()));
       }
 
       statement.setString(1, organisation.getName());
@@ -2266,8 +2519,8 @@ public class SecurityService
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + updateOrganisationSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            updateOrganisationSQL));
       }
     }
     catch (OrganisationNotFoundException e)
@@ -2276,8 +2529,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to update the organisation (" + organisation.getId()
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to update the organisation (%s): %s", organisation.getId(),
+          e.getMessage()), e);
     }
   }
 
@@ -2307,8 +2561,8 @@ public class SecurityService
 
     if (userDirectory == null)
     {
-      throw new UserDirectoryNotFoundException("The user directory ID (" + userDirectoryId
-          + ") is invalid");
+      throw new UserDirectoryNotFoundException(
+        String.format("The user directory ID (%s) is invalid", userDirectoryId));
     }
 
     userDirectory.updateUser(user, expirePassword, lockUser);
@@ -2347,14 +2601,15 @@ public class SecurityService
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + updateUserDirectorySQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            updateUserDirectorySQL));
       }
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to update the user directory (" + userDirectory.getName()
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to update the user directory (%s): %s", userDirectory.getName(),
+          e.getMessage()), e);
     }
   }
 
@@ -2415,20 +2670,20 @@ public class SecurityService
     throws SQLException
   {
     // addUserDirectoryToOrganisationSQL
-    addUserDirectoryToOrganisationSQL = "INSERT INTO " + schemaPrefix
-        + "USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES (?, ?)";
+    addUserDirectoryToOrganisationSQL = "INSERT INTO " + schemaPrefix +
+      "USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES (?, ?)";
 
     // createFunctionSQL
-    createFunctionSQL = "INSERT INTO " + schemaPrefix + "FUNCTIONS"
-        + " (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
+    createFunctionSQL = "INSERT INTO " + schemaPrefix + "FUNCTIONS" + " (ID, CODE, NAME, " +
+      "DESCRIPTION) VALUES (?, ?, ?, ?)";
 
     // createOrganisationSQL
-    createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS"
-        + " (ID, NAME, DESCRIPTION) VALUES (?, ?, ?)";
+    createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS" + " (ID, NAME, " +
+      "DESCRIPTION) VALUES (?, ?, ?)";
 
     // createUserDirectorySQL
-    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES"
-        + " (ID, TYPE_ID, NAME, DESCRIPTION, CONFIGURATION) VALUES (?, ?, ?, ?, ?)";
+    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES" + " (ID, TYPE_ID," +
+      " NAME, DESCRIPTION, CONFIGURATION) VALUES (?, ?, ?, ?, ?)";
 
     // deleteFunctionSQL
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
@@ -2439,80 +2694,102 @@ public class SecurityService
     // deleteUserDirectorySQL
     deleteUserDirectorySQL = "DELETE FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
 
+    // getFilteredUserDirectoriesSQL
+    getFilteredUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION," + " UD" +
+      ".CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD" + " WHERE (UPPER(UD.NAME) " +
+      "LIKE ?) ORDER BY UD.NAME ";
+
+    // getFilteredOrganisationsSQL
+    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix +
+      "ORGANISATIONS O WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
+
     // getFunctionIdSQL
     getFunctionIdSQL = "SELECT F.ID FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
 
     // getFunctionSQL
-    getFunctionSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS F WHERE F.CODE=?";
+    getFunctionSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix +
+      "FUNCTIONS F WHERE F.CODE=?";
 
     // getFunctionsSQL
-    getFunctionsSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS F";
+    getFunctionsSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix +
+      "FUNCTIONS F";
 
     // getInternalUserDirectoryIdForUserSQL
-    getInternalUserDirectoryIdForUserSQL = "SELECT IU.USER_DIRECTORY_ID FROM " + schemaPrefix
-        + "INTERNAL_USERS IU WHERE UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalUserDirectoryIdForUserSQL = "SELECT IU.USER_DIRECTORY_ID FROM " + schemaPrefix +
+      "INTERNAL_USERS IU WHERE UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+
+    // getNumberOfFilteredOrganisationsSQL
+    getNumberOfFilteredOrganisationsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix +
+      "ORGANISATIONS O WHERE (UPPER(O.NAME) LIKE ?)";
+
+    // getNumberOfFilteredUserDirectoriesSQL
+    getNumberOfFilteredUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix +
+      "USER_DIRECTORIES UD WHERE (UPPER(UD.NAME) LIKE ?)";
 
     // getNumberOfOrganisationsSQL
     getNumberOfOrganisationsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O";
 
     // getNumberOfUserDirectoriesSQL
-    getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix
-        + "USER_DIRECTORIES UD";
+    getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix +
+      "USER_DIRECTORIES UD";
 
     // getOrganisationIdsForUserDirectorySQL
-    getOrganisationIdsForUserDirectorySQL = "SELECT UDTOM.ORGANISATION_ID FROM " + schemaPrefix
-        + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM WHERE UDTOM.USER_DIRECTORY_ID=?";
+    getOrganisationIdsForUserDirectorySQL = "SELECT UDTOM.ORGANISATION_ID FROM " + schemaPrefix +
+      "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM WHERE UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationsForUserDirectorySQL
-    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS O INNER JOIN " + schemaPrefix
-        + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID"
-        + " WHERE UDTOM.USER_DIRECTORY_ID=?";
+    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " +
+      schemaPrefix + "ORGANISATIONS O INNER JOIN " + schemaPrefix +
+      "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID" + " WHERE " +
+      "UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationSQL
-    getOrganisationSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS O WHERE O.ID=?";
+    getOrganisationSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix +
+      "ORGANISATIONS O WHERE O.ID=?";
 
     // getOrganisationsSQL
-    getOrganisationsSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix
-        + "ORGANISATIONS O ORDER BY O.NAME";
+    getOrganisationsSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix +
+      "ORGANISATIONS O ORDER BY O.NAME";
 
     // getUserDirectoriesForOrganisationSQL
-    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION,"
-        + " UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
-        + schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM"
-        + " ON UD.ID = UDTOM.USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O"
-        + " ON UDTOM.ORGANISATION_ID = O.ID WHERE O.ID=?";
+    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION," +
+      " UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN " +
+      schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM" + " ON UD.ID = UDTOM" +
+      ".USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O" + " ON UDTOM" +
+      ".ORGANISATION_ID = O.ID WHERE O.ID=?";
 
     // getUserDirectoriesSQL
-    getUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION"
-        + " FROM " + schemaPrefix + "USER_DIRECTORIES UD";
+    getUserDirectoriesSQL =
+      "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION" + " FROM " +
+        schemaPrefix + "USER_DIRECTORIES UD";
 
     // getUserDirectorySQL
-    getUserDirectorySQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION"
-        + " FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
+    getUserDirectorySQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION" +
+      " FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
 
     // getUserDirectoryTypesSQL
-    getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS,"
-        + " UDT.ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
+    getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS," + " UDT" +
+      ".ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
 
     // organisationExistsSQL
-    organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O"
-        + " WHERE O.ID=?";
+    organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O" + " " +
+      "WHERE O.ID=?";
+
+    // organisationWithNameExistsSQL
+    organisationWithNameExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O" +
+      " WHERE (UPPER(O.NAME) LIKE ?)";
 
     // updateFunctionSQL
-    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F"
-        + " SET F.NAME=?, F.DESCRIPTION=? WHERE F.CODE=?";
+    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F" + " SET F.NAME=?, F" +
+      ".DESCRIPTION=? WHERE F.CODE=?";
 
     // updateOrganisationSQL
-    updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O"
-        + " SET O.NAME=?, O.DESCRIPTION=? WHERE O.ID=?";
+    updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O" + " SET O.NAME=?, O" +
+      ".DESCRIPTION=? WHERE O.ID=?";
 
     // updateUserDirectorySQL
-    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD"
-        + " SET UD.NAME=?, UD.DESCRIPTION=?, UD.CONFIGURATION=? WHERE UD.ID=?";
+    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD" + " SET UD.NAME=?, " +
+      "UD.DESCRIPTION=?, UD.CONFIGURATION=? WHERE UD.ID=?";
   }
 
   /**
@@ -2549,7 +2826,7 @@ public class SecurityService
    * @param code       the code uniquely identifying the function
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the function or
-   *         <code>null</code> if a function with the specified code cannot be found
+   * <code>null</code> if a function with the specified code cannot be found
    *
    * @throws SQLException
    */
@@ -2581,8 +2858,8 @@ public class SecurityService
    * @param username the username uniquely identifying the internal user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
-   *         directory the internal user with the specified username is associated with or
-   *         <code>null</code> if an internal user with the specified username could not be found
+   * directory the internal user with the specified username is associated with or
+   * <code>null</code> if an internal user with the specified username could not be found
    *
    * @throws SecurityException
    */
@@ -2590,8 +2867,8 @@ public class SecurityService
     throws SecurityException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(getInternalUserDirectoryIdForUserSQL))
+      PreparedStatement statement = connection.prepareStatement(
+        getInternalUserDirectoryIdForUserSQL))
     {
       statement.setString(1, username);
 
@@ -2609,9 +2886,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-          "Failed to retrieve the ID for the internal user directory for the internal user ("
-          + username + ")", e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the ID for the internal user directory for the internal user (%s)",
+        username), e);
     }
   }
 
@@ -2667,13 +2944,13 @@ public class SecurityService
     userDirectory.setName(organisation.getName() + " User Directory");
     userDirectory.setDescription(organisation.getDescription() + " User Directory");
 
-    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-      + "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>"
-      + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
-      + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
-      + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
-      + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
-      + "</userDirectory>";
+    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE userDirectory " +
+      "SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>" +
+      "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>" +
+      "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>" +
+      "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>" +
+      "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>" +
+      "</userDirectory>";
 
     userDirectory.setConfiguration(buffer);
 
@@ -2712,8 +2989,47 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to check whether the organisation (" + id + ") exists",
-          e);
+      throw new SecurityException(
+        String.format("Failed to check whether the organisation (%s) exists", id), e);
+    }
+  }
+
+  /**
+   * Returns <code>true</code> if an organisation with the specified name exists or
+   * <code>false</code> otherwise.
+   *
+   * @param connection the existing database connection to use
+   * @param name       the organisation name
+   *
+   * @return <code>true</code> if an organisation with the specified name exists or
+   * <code>false</code> otherwise
+   *
+   * @throws SecurityException
+   */
+  private boolean organisationWithNameExists(Connection connection, String name)
+    throws SecurityException
+  {
+    try (PreparedStatement statement = connection.prepareStatement(organisationWithNameExistsSQL))
+    {
+      statement.setString(1, name.toUpperCase());
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return (rs.getInt(1) > 0);
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(
+        String.format("Failed to check whether an organisation with the name (%s) exists", name),
+        e);
     }
   }
 }

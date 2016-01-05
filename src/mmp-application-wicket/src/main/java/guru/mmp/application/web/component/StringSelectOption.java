@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.component;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -59,15 +57,13 @@ public class StringSelectOption
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the <code>obj</code> argument;
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean equals(Object obj)
   {
-    return (obj != null)
-        && ((obj == this)
-          || ((obj instanceof StringSelectOption)
-            && ((StringSelectOption) obj).value.equals(value)));
+    return (obj != null) && ((obj == this) ||
+      ((obj instanceof StringSelectOption) && ((StringSelectOption) obj).value.equals(value)));
   }
 
   /**
@@ -81,16 +77,6 @@ public class StringSelectOption
   }
 
   /**
-   * Returns the value for the select option.
-   *
-   * @return the value for the select option
-   */
-  public String getValue()
-  {
-    return value;
-  }
-
-  /**
    * Set the user-friendly name for the select option.
    *
    * @param name the user-friendly name for the select option
@@ -98,6 +84,16 @@ public class StringSelectOption
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the value for the select option.
+   *
+   * @return the value for the select option
+   */
+  public String getValue()
+  {
+    return value;
   }
 
   /**

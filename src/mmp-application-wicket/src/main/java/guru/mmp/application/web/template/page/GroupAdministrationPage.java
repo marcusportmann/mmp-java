@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
@@ -27,9 +25,7 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.DropdownMenu;
 import guru.mmp.application.web.template.component.PagingNavigator;
-import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.data.GroupDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,16 +36,12 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * The <code>GroupAdministrationPage</code> class implements the
@@ -58,12 +50,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_GROUP_ADMINISTRATION)
-public class GroupAdministrationPage extends TemplateWebPage
+public class GroupAdministrationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(GroupAdministrationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
@@ -121,9 +114,9 @@ public class GroupAdministrationPage extends TemplateWebPage
       GroupDataProvider dataProvider = new GroupDataProvider(userDirectory.getId());
 
       // The "userDirectoryDropdownMenu" dropdown button
-      DropdownMenu<UserDirectory> userDirectoryDropdownMenu =
-        new DropdownMenu<UserDirectory>("userDirectoryDropdownMenu",
-          new PropertyModel<>(this, "userDirectory"), userDirectories, "fa fa-users")
+      DropdownMenu<UserDirectory> userDirectoryDropdownMenu = new DropdownMenu<UserDirectory>(
+        "userDirectoryDropdownMenu", new PropertyModel<>(this, "userDirectory"), userDirectories,
+        "fa fa-users")
       {
         @Override
         protected String getDisplayValue(UserDirectory menuItem)
@@ -154,8 +147,8 @@ public class GroupAdministrationPage extends TemplateWebPage
         protected void populateItem(Item<Group> item)
         {
           item.add(new Label("groupName", new PropertyModel<String>(item.getModel(), "groupName")));
-          item.add(new Label("description",
-              new PropertyModel<String>(item.getModel(), "description")));
+          item.add(
+            new Label("description", new PropertyModel<String>(item.getModel(), "description")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -212,15 +205,15 @@ public class GroupAdministrationPage extends TemplateWebPage
   {
     WebSession session = getWebApplicationSession();
 
-    List<UserDirectory> allUserDirectories =
-      securityService.getUserDirectoriesForOrganisation(session.getOrganisation().getId());
+    List<UserDirectory> allUserDirectories = securityService.getUserDirectoriesForOrganisation(
+      session.getOrganisation().getId());
 
     List<UserDirectory> userDirectories = new ArrayList<>();
 
     for (UserDirectory userDirectory : allUserDirectories)
     {
-      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)
-          && (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID))))
+      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID) &&
+        (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID))))
       {
         // Do nothing
       }
@@ -237,10 +230,13 @@ public class GroupAdministrationPage extends TemplateWebPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a group to be confirmed.
    */
-  private class RemoveDialog extends Dialog
+  private class RemoveDialog
+    extends Dialog
   {
     private static final long serialVersionUID = 1000000;
+
     private String groupName;
+
     private Label nameLabel;
 
     /**
@@ -270,20 +266,22 @@ public class GroupAdministrationPage extends TemplateWebPage
 
             target.add(tableContainer);
 
-            GroupAdministrationPage.this.info("Successfully removed the group "
-                + nameLabel.getDefaultModelObjectAsString());
+            GroupAdministrationPage.this.info(
+              "Successfully removed the group " + nameLabel.getDefaultModelObjectAsString());
           }
           catch (ExistingGroupMembersException e)
           {
-            GroupAdministrationPage.this.error("Failed to remove the group "
-                + nameLabel.getDefaultModelObjectAsString() + " with existing users");
+            GroupAdministrationPage.this.error(
+              "Failed to remove the group " + nameLabel.getDefaultModelObjectAsString() + " " +
+                "with existing users");
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the group (" + groupName + "): " + e.getMessage(), e);
+            logger.error(
+              String.format("Failed to remove the group (%s): %s", groupName, e.getMessage()), e);
 
-            GroupAdministrationPage.this.error("Failed to remove the group "
-                + nameLabel.getDefaultModelObjectAsString());
+            GroupAdministrationPage.this.error(
+              "Failed to remove the group " + nameLabel.getDefaultModelObjectAsString());
           }
 
           target.add(getAlerts());

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.codes;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +137,7 @@ public interface ICodesService
    * @param retrieveCodes retrieve the codes and/or code data for the cached code category
    *
    * @return the cached code category or <code>null</code> if the cached code category could not be
-   *         found
+   * found
    *
    * @throws CodesServiceException
    */
@@ -163,7 +161,7 @@ public interface ICodesService
   /**
    * Returns all the code categories.
    *
-   * @param retrieveCodes  retrieve the codes and/or code data for the code categories
+   * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return all the code categories
    *
@@ -195,12 +193,12 @@ public interface ICodesService
    * @param retrieveCodes retrieve the codes and/or code data for the code category
    *
    * @return the code category or <code>null</code> if the code category
-   *         could not be found
+   * could not be found
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeCategoryWithParameters(UUID id, Map<String, String> parameters,
-      boolean retrieveCodes)
+  CodeCategory getCodeCategoryWithParameters(
+    UUID id, Map<String, String> parameters, boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
@@ -215,12 +213,12 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
-      boolean returnCodesIfCurrent)
+  CodeCategory getCodeProviderCodeCategory(
+    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -237,12 +235,13 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
+   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory,
-      Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+  CodeCategory getCodeProviderCodeCategoryWithParameters(
+    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
+    boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -291,12 +290,12 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
-   *         code data
+   * code data
    *
    * @throws CodesServiceException
    */
-  CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
-      boolean returnCodesIfCurrent)
+  CodeCategory getRemoteCodeCategory(
+    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -312,12 +311,13 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
-   *         code data
+   * code data
    *
    * @throws CodesServiceException
    */
-  CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory,
-      Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
+  CodeCategory getRemoteCodeCategoryWithParameters(
+    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
+    boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -327,7 +327,7 @@ public interface ICodesService
    *           category
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws CodesServiceException
    */

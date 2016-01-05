@@ -16,12 +16,9 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.CodesServiceException;
 import guru.mmp.application.web.WebApplicationException;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,8 +27,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.string.Strings;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +37,25 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class CodeCategoryInputPanel extends InputPanel
+public class CodeCategoryInputPanel
+  extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
+
   private TextField<Integer> cacheExpiryField;
+
   private DropDownChoice<CodeCategoryType> categoryTypeField;
+
   private WebMarkupContainer codeDataContainer;
+
   private TextArea<String> codeDataField;
+
   private WebMarkupContainer endPointContainer;
+
   private TextField<String> endPointField;
+
   private CheckBox isCacheableField;
+
   private CheckBox isEndPointSecureField;
 
   /**
@@ -84,11 +88,11 @@ public class CodeCategoryInputPanel extends InputPanel
       add(descriptionField);
 
       // The "categoryType" field
-      CodeCategoryTypeChoiceRenderer codeCategoryTypeChoiceRenderer =
-        new CodeCategoryTypeChoiceRenderer();
+      CodeCategoryTypeChoiceRenderer codeCategoryTypeChoiceRenderer = new
+        CodeCategoryTypeChoiceRenderer();
 
       categoryTypeField = new DropDownChoiceWithFeedback<>("categoryType",
-          getCodeCategoryTypeOptions(), codeCategoryTypeChoiceRenderer);
+        getCodeCategoryTypeOptions(), codeCategoryTypeChoiceRenderer);
 
       categoryTypeField.add(new AjaxFormComponentUpdatingBehavior("change")
       {
@@ -168,7 +172,7 @@ public class CodeCategoryInputPanel extends InputPanel
         super.onConfigure();
 
         setVisible(
-            CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
+          CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
       }
     };
 
@@ -185,7 +189,7 @@ public class CodeCategoryInputPanel extends InputPanel
         super.onConfigure();
 
         setRequired(
-            CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
+          CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
       }
     };
     codeDataContainer.add(codeDataField);
@@ -202,9 +206,10 @@ public class CodeCategoryInputPanel extends InputPanel
       {
         super.onConfigure();
 
-        setVisible(CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString()
-          .equals(categoryTypeField.getValue()) || CodeCategoryType.REMOTE_WEB_SERVICE
-          .getCodeAsString().equals(categoryTypeField.getValue()));
+        setVisible(CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString().equals(
+          categoryTypeField.getValue()) ||
+          CodeCategoryType.REMOTE_WEB_SERVICE.getCodeAsString().equals(
+            categoryTypeField.getValue()));
       }
     };
 
@@ -220,9 +225,10 @@ public class CodeCategoryInputPanel extends InputPanel
       {
         super.onConfigure();
 
-        setRequired((CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString()
-          .equals(categoryTypeField.getValue()) || CodeCategoryType.REMOTE_WEB_SERVICE
-          .getCodeAsString().equals(categoryTypeField.getValue())));
+        setRequired((CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString().equals(
+          categoryTypeField.getValue()) ||
+          CodeCategoryType.REMOTE_WEB_SERVICE.getCodeAsString().equals(
+            categoryTypeField.getValue())));
       }
     };
     endPointContainer.add(endPointField);

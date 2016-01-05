@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.daterangepicker;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -29,27 +27,23 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
-public class DateRangePickerCssResourceReference extends CssResourceReference
+public class DateRangePickerCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final DateRangePickerCssResourceReference INSTANCE =
-    new DateRangePickerCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new DateRangePickerCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new DateRangePickerCssResourceReference());
 
-  private DateRangePickerCssResourceReference()
-  {
-    super(DateRangePickerCssResourceReference.class, Debug.inDebugMode()
-        ? "daterangepicker-bs3.css"
-        : "daterangepicker-bs3.css");
-  }
+  private static final DateRangePickerCssResourceReference INSTANCE = new
+    DateRangePickerCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the thirdparty resource bundled
    * with the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the thirdparty resource bundled
-   *         with the Web Application Template
+   * with the Web Application Template
    */
   public static DateRangePickerCssResourceReference get()
   {
@@ -61,10 +55,16 @@ public class DateRangePickerCssResourceReference extends CssResourceReference
    * Template.
    *
    * @return the CSS header item for the thirdparty resource bundled with the Web Application
-   *         Template
+   * Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private DateRangePickerCssResourceReference()
+  {
+    super(DateRangePickerCssResourceReference.class,
+      Debug.inDebugMode() ? "daterangepicker-bs3.css" : "daterangepicker-bs3.css");
   }
 }

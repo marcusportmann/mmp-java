@@ -16,25 +16,19 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.namespace.QName;
 
 /**
  * The <code>FlowNode</code> class provides the base class that all FlowNodes that form part of a
  * Process should be derived from.
- * <p>
+ * <p/>
  * <b>FlowNode</b> XML schema:
  * <pre>
  * &lt;xsd:element name="flowNode" type="tFlowNode"/&gt;
@@ -52,7 +46,8 @@ import javax.xml.namespace.QName;
  *
  * @author Marcus Portmann
  */
-public abstract class FlowNode extends FlowElement
+public abstract class FlowNode
+  extends FlowElement
 {
   /**
    * The IDs uniquely identifying the incoming FlowElements for the FlowNode.
@@ -108,8 +103,8 @@ public abstract class FlowNode extends FlowElement
 
             default:
             {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
             }
           }
         }

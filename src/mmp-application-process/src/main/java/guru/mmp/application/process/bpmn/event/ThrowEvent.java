@@ -16,18 +16,13 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +30,7 @@ import java.util.List;
 /**
  * The <code>ThrowEvent</code> class provides the base class that all Throw Event subclasses should
  * be derived from.
- * <p>
+ * <p/>
  * <b>Throw Event</b> XML schema:
  * <pre>
  * &lt;xsd:element name="throwEvent" type="tThrowEvent"/&gt;
@@ -57,7 +52,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class ThrowEvent extends Event
+public abstract class ThrowEvent
+  extends Event
 {
   /**
    * Constructs a new <code>ThrowEvent</code>.

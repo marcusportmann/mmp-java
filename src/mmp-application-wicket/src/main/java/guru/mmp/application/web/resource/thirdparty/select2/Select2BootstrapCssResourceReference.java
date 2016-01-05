@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.select2;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -29,27 +27,23 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
-public class Select2BootstrapCssResourceReference extends CssResourceReference
+public class Select2BootstrapCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final Select2BootstrapCssResourceReference INSTANCE =
-    new Select2BootstrapCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new Select2BootstrapCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new Select2BootstrapCssResourceReference());
 
-  private Select2BootstrapCssResourceReference()
-  {
-    super(Select2BootstrapCssResourceReference.class, Debug.inDebugMode()
-        ? "select2-bootstrap.css"
-        : "select2-bootstrap.css");
-  }
+  private static final Select2BootstrapCssResourceReference INSTANCE = new
+    Select2BootstrapCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the thirdparty resource bundled
    * with the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the thirdparty resource bundled
-   *         with the Web Application Template
+   * with the Web Application Template
    */
   public static Select2BootstrapCssResourceReference get()
   {
@@ -61,10 +55,16 @@ public class Select2BootstrapCssResourceReference extends CssResourceReference
    * Template.
    *
    * @return the CSS header item for the thirdparty resource bundled with the Web Application
-   *         Template
+   * Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private Select2BootstrapCssResourceReference()
+  {
+    super(Select2BootstrapCssResourceReference.class,
+      Debug.inDebugMode() ? "select2-bootstrap.css" : "select2-bootstrap.css");
   }
 }

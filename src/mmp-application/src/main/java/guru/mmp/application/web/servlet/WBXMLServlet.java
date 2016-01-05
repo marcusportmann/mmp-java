@@ -16,20 +16,11 @@
 
 package guru.mmp.application.web.servlet;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Encoder;
 import guru.mmp.common.wbxml.Parser;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -38,6 +29,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * The <code>WBXMLServlet</code> servlet acts as an endpoint that remote clients can use to send
@@ -45,16 +39,18 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Marcus Portmann
  */
-public class WBXMLServlet extends HttpServlet
+public class WBXMLServlet
+  extends HttpServlet
 {
   /**
    * The HTTP content-type used when receiving and sending WBXML.
    */
   public static final String WBXML_CONTENT_TYPE = "application/wbxml";
-  private static final long serialVersionUID = 1000000;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WBXMLServlet.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Initialise the servlet.
@@ -82,12 +78,12 @@ public class WBXMLServlet extends HttpServlet
     throws ServletException, IOException
   {
     // Check the format of the request data
-    if ((request.getContentType() == null)
-        || (!request.getContentType().equals(WBXML_CONTENT_TYPE)))
+    if ((request.getContentType() == null) || (!request.getContentType().equals(
+      WBXML_CONTENT_TYPE)))
     {
       response.sendError(500,
-          "Invalid content type (" + request.getContentType() + ") expecting ("
-          + WBXML_CONTENT_TYPE + ")");
+        "Invalid content type (" + request.getContentType() + ") expecting (" +
+          WBXML_CONTENT_TYPE + ")");
 
       return;
     }
@@ -158,9 +154,10 @@ public class WBXMLServlet extends HttpServlet
         {
           in.close();
         }
-
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     try
@@ -171,8 +168,8 @@ public class WBXMLServlet extends HttpServlet
     }
     catch (Throwable e)
     {
-      throw new ServletException("Failed to parse the WBXML request document from the HTTP"
-          + " servlet request", e);
+      throw new ServletException(
+        "Failed to parse the WBXML request document from the HTTP" + " servlet request", e);
     }
   }
 
@@ -195,11 +192,11 @@ public class WBXMLServlet extends HttpServlet
       pw.println("<head>");
       pw.println("  <style>");
       pw.println(
-          "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
+        "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
       pw.println(
-          "    h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
-      pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green;"
-          + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
+        "    h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
+      pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green; " +
+        "thirdparty-weight: bold; thirdparty-size: 9pt;}");
       pw.println("    .className {color: 808080;}");
       pw.println("  </style>");
       pw.println("</head>");
@@ -211,7 +208,9 @@ public class WBXMLServlet extends HttpServlet
       pw.println("</body>");
       pw.println("</html>");
     }
-    catch (IOException ignored) {}
+    catch (IOException ignored)
+    {
+    }
   }
 
   /**
@@ -235,41 +234,9 @@ public class WBXMLServlet extends HttpServlet
     }
     catch (Throwable e)
     {
-      logger.error("Failed to write the binary data for the WBXML response document to the HTTP"
-          + " servlet response", e);
+      logger.error(
+        "Failed to write the binary data for the WBXML response document to the HTTP servlet " +
+          "response", e);
     }
   }
 }
-
-
-
-/*
- *     Element innerElement = new Element("inner");
-    innerElement.setAttribute("innerName1", "innerValue1");
-    innerElement.setAttribute("innerName2", "innerValue2");
-    innerElement.addContent("Inner Text");
-
-    Element outerElement = new Element("outer");
-    outerElement.setAttribute("outerName1", "outerValue1");
-    outerElement.setAttribute("outerName2", "outerValue2");
-    outerElement.addContent(innerElement);
-    outerElement.addContent("Outer Text");
-
-    Document testDocument = new Document(outerElement);
-
-    Encoder testEncoder = new Encoder(testDocument);
-
-    byte[] data = testEncoder.getData();
-
-
-    for (int i = 0; i < data.length; i++)
-    {
-      if (i < (data.length - 1))
-        System.out.print("" + (int)data[i] + ", ");
-      else
-        System.out.print("" + (int)data[i]);
-    }
-
-    System.out.println();
-
-*/

@@ -16,31 +16,38 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * The Pager class provides a generic pager for a list of items.
  *
- * @author Marcus Portmann
- *
  * @param <T>
+ *
+ * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 public class Pager<T>
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private int currentPage;
+
   private int firstPage;
+
   private List<T> items;
+
   private int itemsPerPage;
+
   private int pageFirstItemIndex;
+
   private int pageLastItemIndex;
+
   private int pagesPerGroup;
+
   private int totalItems;
+
   private int totalPages;
 
   /**
@@ -83,6 +90,29 @@ public class Pager<T>
   public int getCurrentPage()
   {
     return currentPage;
+  }
+
+  /**
+   * Set the current page.
+   *
+   * @param currentPage the current page
+   */
+  public void setCurrentPage(int currentPage)
+  {
+    this.currentPage = currentPage;
+
+    if (this.currentPage > totalPages)
+    {
+      this.currentPage = totalPages;
+    }
+
+    pageFirstItemIndex = ((this.currentPage - 1) * itemsPerPage) + 1;
+    pageLastItemIndex = pageFirstItemIndex + (itemsPerPage - 1);
+
+    if (pageLastItemIndex > totalItems)
+    {
+      pageLastItemIndex = totalItems;
+    }
   }
 
   /**
@@ -266,29 +296,6 @@ public class Pager<T>
     firstPage -= pagesPerGroup;
     currentPage = firstPage;
     pageFirstItemIndex = ((currentPage - 1) * itemsPerPage) + 1;
-    pageLastItemIndex = pageFirstItemIndex + (itemsPerPage - 1);
-
-    if (pageLastItemIndex > totalItems)
-    {
-      pageLastItemIndex = totalItems;
-    }
-  }
-
-  /**
-   * Set the current page.
-   *
-   * @param currentPage the current page
-   */
-  public void setCurrentPage(int currentPage)
-  {
-    this.currentPage = currentPage;
-
-    if (this.currentPage > totalPages)
-    {
-      this.currentPage = totalPages;
-    }
-
-    pageFirstItemIndex = ((this.currentPage - 1) * itemsPerPage) + 1;
     pageLastItemIndex = pageFirstItemIndex + (itemsPerPage - 1);
 
     if (pageLastItemIndex > totalItems)

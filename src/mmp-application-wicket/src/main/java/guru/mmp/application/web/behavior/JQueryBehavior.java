@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.behavior;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
 import org.apache.wicket.Application;
@@ -35,7 +33,8 @@ import org.apache.wicket.markup.head.StringHeaderItem;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class JQueryBehavior extends AbstractDefaultAjaxBehavior
+public class JQueryBehavior
+  extends AbstractDefaultAjaxBehavior
 {
   private static final long serialVersionUID = 1000000;
 
@@ -52,9 +51,8 @@ public class JQueryBehavior extends AbstractDefaultAjaxBehavior
     {
       super.renderHead(component, response);
 
-      response.render(
-          JavaScriptHeaderItem.forReference(
-            Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
+      response.render(JavaScriptHeaderItem.forReference(
+        Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
       response.render(JavaScriptHeaderItem.forReference(JQueryUIJavaScriptResourceReference.get()));
 
       CharSequence script = getOnReadyScript();
@@ -72,7 +70,7 @@ public class JQueryBehavior extends AbstractDefaultAjaxBehavior
     catch (Throwable e)
     {
       throw new WebApplicationException(
-          "Failed the add the jQuery and jQuery UI JavaScript header items to the response", e);
+        "Failed the add the jQuery and jQuery UI JavaScript header items to the response", e);
     }
   }
 

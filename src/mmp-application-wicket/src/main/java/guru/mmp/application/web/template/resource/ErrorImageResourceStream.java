@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.resource.ResourceStream;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
@@ -27,18 +25,19 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>ErrorImageResourceStream</code> class provides an <code>IResourceStream</code>
  * implementation that allows the retrieval of an error image as a streamed resource.
  *
  * @author Marcus Portmann
  */
-public class ErrorImageResourceStream extends ResourceStream
+public class ErrorImageResourceStream
+  extends ResourceStream
 {
-  private static byte[] errorImageData;
   private static final long serialVersionUID = 1000000;
+
+  private static byte[] errorImageData;
+
   private InputStream errorImageInputStream;
 
   /**
@@ -61,7 +60,9 @@ public class ErrorImageResourceStream extends ResourceStream
       {
         errorImageInputStream.close();
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
 
       errorImageInputStream = null;
     }
@@ -92,7 +93,6 @@ public class ErrorImageResourceStream extends ResourceStream
     errorImageInputStream = new ByteArrayInputStream(getErrorImageData());
 
     return errorImageInputStream;
-
   }
 
   /**
@@ -121,8 +121,8 @@ public class ErrorImageResourceStream extends ResourceStream
   {
     if (errorImageData == null)
     {
-      errorImageData =
-        getClasspathResource("guru/mmp/application/web/template/resource/theme/mmp/error.png");
+      errorImageData = getClasspathResource(
+        "guru/mmp/application/web/template/resource/theme/mmp/error.png");
     }
 
     return errorImageData;

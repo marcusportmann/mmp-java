@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
@@ -27,7 +25,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -41,17 +38,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import javax.inject.Inject;
 
 /**
  * The <code>UserGroupsPage</code> class implements the
@@ -60,12 +53,14 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_GROUPS)
-public class UserGroupsPage extends TemplateWebPage
+public class UserGroupsPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserGroupsPage.class);
+
+  private static final long serialVersionUID = 1000000;
+
   @SuppressWarnings("unused")
   private String groupName;
 
@@ -127,20 +122,21 @@ public class UserGroupsPage extends TemplateWebPage
           {
             securityService.addUserToGroup(userDirectoryId, username, groupName);
 
-            logger.info("User (" + session.getUsername() + ") added the user (" + username
-                + ") to the group (" + groupName + ") for the user directory (" + userDirectoryId
-                + ")");
+            logger.info(String.format(
+              "User (%s) added the user (%s) to the group (%s) for the user directory (%s)",
+              session.getUsername(), username, groupName, userDirectoryId));
 
             groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
             groupNameField.setModelObject(null);
           }
           catch (Throwable e)
           {
-            logger.error("Failed to add the user (" + username + ") to the group (" + groupName
-                + ") for the user directory (" + userDirectoryId + "): " + e.getMessage(), e);
+            logger.error(String.format(
+              "Failed to add the user (%s) to the group (%s) for the user directory (%s): %s",
+              username, groupName, userDirectoryId, e.getMessage()), e);
 
-            UserGroupsPage.this.error("Failed to add the user " + username + " to the group "
-                + groupName);
+            UserGroupsPage.this.error(
+              String.format("Failed to add the user %s to the group %s", username, groupName));
           }
         }
       };
@@ -185,11 +181,11 @@ public class UserGroupsPage extends TemplateWebPage
               try
               {
                 securityService.removeUserFromGroup(userDirectoryId, username,
-                    group.getGroupName());
+                  group.getGroupName());
 
-                logger.info("User (" + session.getUsername() + ") removed the user (" + username
-                    + ") from the group (" + group.getGroupName() + ") for the user directory ("
-                    + userDirectoryId + ")");
+                logger.info(String.format(
+                  "User (%s) removed the user (%s) from the group (%s) for the user directory (%s)",
+                  session.getUsername(), username, group.getGroupName(), userDirectoryId));
 
                 groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
                 groupNameField.setModelObject(null);
@@ -198,12 +194,13 @@ public class UserGroupsPage extends TemplateWebPage
               }
               catch (Throwable e)
               {
-                logger.error("Failed to remove the user (" + username + ") from the group ("
-                    + group.getGroupName() + ") for the user directory (" + userDirectoryId + "): "
-                    + e.getMessage(), e);
+                logger.error(String.format(
+                  "Failed to remove the user (%s) from the group (%s) for the user directory (%s)" +
+                    ": %s", username, group.getGroupName(), userDirectoryId, e.getMessage()), e);
 
-                UserGroupsPage.this.error("Failed to remove the user " + username
-                    + " from the group " + group.getGroupName());
+                UserGroupsPage.this.error(
+                  String.format("Failed to remove the user %s from the group %s", username,
+                    group.getGroupName()));
               }
             }
           };

@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +25,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DataAccessObject</code> class is the common base class which all data access objects
@@ -76,7 +72,9 @@ public abstract class DataAccessObject
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored) {}
+    catch (Throwable ignored)
+    {
+    }
 
     if (dataSource == null)
     {
@@ -84,21 +82,25 @@ public abstract class DataAccessObject
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new DAOException(
+        "Failed to retrieve the application data source using the JNDI names " +
+          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
     {
       schema = InitialContext.doLookup("java:app/env/ApplicationDatabaseSchema");
     }
-    catch (Throwable ignored) {}
+    catch (Throwable ignored)
+    {
+    }
 
     if (schema == null)
     {
@@ -106,14 +108,18 @@ public abstract class DataAccessObject
       {
         schema = InitialContext.doLookup("java:comp/env/ApplicationDatabaseSchema");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (StringUtil.isNullOrEmpty(schema))
     {
-      logger.info("The application database schema was not set using the JNDI environment entry"
-          + " (java:app/env/ApplicationDatabaseSchema) or (java:comp/env/ApplicationDatabaseSchema)"
-          + " using the default schema (" + DEFAULT_DATABASE_SCHEMA + ")");
+      logger.info(
+        "The application database schema was not set using the JNDI environment entry" + " " +
+          "(java:app/env/ApplicationDatabaseSchema) or " +
+          "(java:comp/env/ApplicationDatabaseSchema)" + " using the default schema (" +
+          DEFAULT_DATABASE_SCHEMA + ")");
 
       schema = DEFAULT_DATABASE_SCHEMA;
     }
@@ -130,8 +136,9 @@ public abstract class DataAccessObject
   {
     if (dataSource == null)
     {
-      throw new DAOException("Unable to initialise the " + getClass().getName()
-          + " data access object using a <code>null</code> data source");
+      throw new DAOException(
+        "Unable to initialise the " + getClass().getName() + " data access object using a " +
+          "<code>null</code> data source");
     }
 
     this.dataSource = dataSource;
@@ -150,14 +157,16 @@ public abstract class DataAccessObject
   {
     if (dataSource == null)
     {
-      throw new DAOException("Unable to initialise the " + getClass().getName()
-          + " data access object using a <code>null</code> data source");
+      throw new DAOException(
+        "Unable to initialise the " + getClass().getName() + " data access object using a " +
+          "<code>null</code> data source");
     }
 
     if (StringUtil.isNullOrEmpty(schema))
     {
-      throw new DAOException("Unable to initialise the " + getClass().getName()
-          + " data access object using a <code>null</code> or empty schema name");
+      throw new DAOException(
+        "Unable to initialise the " + getClass().getName() + " data access object using a " +
+          "<code>null</code> or empty schema name");
     }
 
     this.dataSource = dataSource;
@@ -175,8 +184,9 @@ public abstract class DataAccessObject
   {
     if (StringUtil.isNullOrEmpty(schema))
     {
-      throw new DAOException("Unable to initialise the " + getClass().getName()
-          + " data access object using a <code>null</code> or empty schema name");
+      throw new DAOException(
+        "Unable to initialise the " + getClass().getName() + " data access object using a " +
+          "<code>null</code> or empty schema name");
     }
 
     try
@@ -201,9 +211,9 @@ public abstract class DataAccessObject
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object: Failed to lookup the data source (" + dataSourceJndiName
-          + ") using JNDI: " + e.getMessage(), e);
+      throw new DAOException(
+        "Failed to initialise the " + getClass().getName() + " data access object: Failed to " +
+          "lookup the data source (" + dataSourceJndiName + ") using JNDI: " + e.getMessage(), e);
     }
 
     init();
@@ -222,8 +232,8 @@ public abstract class DataAccessObject
    *
    * @throws SQLException
    */
-  protected abstract void buildStatements(String schema, String schemaSeparator,
-      String schemaPrefix, String idQuote)
+  protected abstract void buildStatements(
+    String schema, String schemaSeparator, String schemaPrefix, String idQuote)
     throws SQLException;
 
   /**
@@ -252,7 +262,7 @@ public abstract class DataAccessObject
    * the DAO.
    *
    * @return the name of the database schema that contains the database objects referenced by
-   *         the DAO
+   * the DAO
    */
   protected String getSchema()
   {
@@ -299,8 +309,9 @@ public abstract class DataAccessObject
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object: " + e.getMessage(), e);
+      throw new DAOException(
+        "Failed to initialise the " + getClass().getName() + " data access object: " +
+          e.getMessage(), e);
     }
 
     idGenerator = new IDGenerator(dataSource, schema);

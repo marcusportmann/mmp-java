@@ -16,11 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,7 +25,7 @@ import org.w3c.dom.NodeList;
 /**
  * The <code>TimerEventDefinition</code> class represents a Timer Event Definition that
  * forms part of a Process.
- * <p>
+ * <p/>
  * <b>Timer Event Definition</b> XML schema:
  * <pre>
  * &lt;xsd:element name="timerEventDefinition" type="tTimerEventDefinition"
@@ -48,7 +45,8 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
-public final class TimerEventDefinition extends EventDefinition
+public final class TimerEventDefinition
+  extends EventDefinition
 {
   /**
    * Constructs a new <code>TimerEventDefinition</code>.
@@ -97,8 +95,8 @@ public final class TimerEventDefinition extends EventDefinition
 
             default:
             {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
             }
           }
         }

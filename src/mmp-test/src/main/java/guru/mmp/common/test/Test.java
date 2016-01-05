@@ -22,4 +22,6 @@ package guru.mmp.common.test;
  *
  * @author Marcus Portmann
  */
-public abstract class Test {}
+public abstract class Test
+{
+}

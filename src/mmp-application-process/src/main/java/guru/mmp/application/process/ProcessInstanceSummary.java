@@ -16,12 +16,8 @@
 
 package guru.mmp.application.process;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * The <code>ProcessInstanceSummary</code> class holds the summary information for a process
@@ -89,8 +85,9 @@ public class ProcessInstanceSummary
    * @param lockName          the name of the entity that has locked the process instance for
    *                          execution
    */
-  public ProcessInstanceSummary(String id, String definitionId, int definitionVersion,
-      String definitionName, ProcessInstance.Status status, Date nextExecution, String lockName)
+  public ProcessInstanceSummary(
+    String id, String definitionId, int definitionVersion, String definitionName,
+    ProcessInstance.Status status, Date nextExecution, String lockName)
   {
     this.id = id;
     this.definitionId = definitionId;
@@ -106,7 +103,7 @@ public class ProcessInstanceSummary
    * definition for the process instance.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *         definition for the process instance
+   * definition for the process instance
    */
   public String getDefinitionId()
   {
@@ -138,7 +135,7 @@ public class ProcessInstanceSummary
    * instance.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *         instance
+   * instance
    */
   public String getId()
   {
@@ -183,7 +180,8 @@ public class ProcessInstanceSummary
   @Override
   public String toString()
   {
-    return "ProcessInstanceSummary {" + "id=\"" + getId() + "\", " + "definitionId=\""
-        + getDefinitionId() + "\", " + "definitionVersion=\"" + getDefinitionVersion() + "\"}";
+    return String.format(
+      "ProcessInstanceSummary {id=\"%s\", definitionId=\"%s\", definitionVersion=\"%d\"}", getId(),
+      getDefinitionId(), getDefinitionVersion());
   }
 }

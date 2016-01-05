@@ -19,7 +19,7 @@ package guru.mmp.application.process.bpmn.activity;
 /**
  * The <code>TransactionMethod</code> enumeration defines the transaction methods for a
  * BPMN transaction sub-process.
- * <p>
+ * <p/>
  * <b>Transaction Sub-Process</b> XML schema:
  * <pre>
  * &lt;xsd:simpleType name="tTransactionMethod"&gt;
@@ -38,13 +38,8 @@ public enum TransactionMethod
   COMPENSATE("Compensate", "Compensate"), IMAGE("Image", "Image"), STORE("Store", "Store");
 
   private String id;
-  private String name;
 
-  TransactionMethod(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the transaction method given by the specified ID.
@@ -69,6 +64,12 @@ public enum TransactionMethod
       default:
         throw new RuntimeException("Invalid ID for transaction method (" + id + ")");
     }
+  }
+
+  TransactionMethod(String id, String name)
+  {
+    this.id = id;
+    this.name = name;
   }
 
   /**
@@ -96,7 +97,7 @@ public enum TransactionMethod
    * enumeration value.
    *
    * @return the string representation of the <code>TransactionMethod</code>
-   *         enumeration value
+   * enumeration value
    */
   public String toString()
   {

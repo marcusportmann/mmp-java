@@ -5,5 +5,5 @@ package guru.mmp.application.process.bpmn;
  */
 public class Signal
 {
-  
+
 }

@@ -25,7 +25,8 @@ package guru.mmp.application.messaging.handler;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class MessageHandlerException extends Exception
+public class MessageHandlerException
+  extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
@@ -41,7 +42,8 @@ public class MessageHandlerException extends Exception
   /**
    * Constructs a new <code>MessageHandlerException</code> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet()</code> method.
+   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet
+   *                ()</code> method.
    */
   public MessageHandlerException(String message)
   {
@@ -64,7 +66,8 @@ public class MessageHandlerException extends Exception
   /**
    * Constructs a new <code>MessageHandlerException</code> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet()</code> method.
+   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet
+   *                ()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */

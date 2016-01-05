@@ -16,14 +16,11 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplication;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationState;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -35,10 +32,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.inject.Inject;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -47,9 +41,11 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Marcus Portmann
  */
-public class UserMenu extends Component
+public class UserMenu
+  extends Component
 {
   private static final long serialVersionUID = 1000000;
+
   private boolean isMultipleOrganisationSupportEnabled;
 
   /* Security Service */
@@ -57,9 +53,9 @@ public class UserMenu extends Component
   private ISecurityService securityService;
 
   /**
-   * @see org.apache.wicket.Component#Component(String)
-   *
    * @param id the non-null id of this component
+   *
+   * @see org.apache.wicket.Component#Component(String)
    */
   public UserMenu(String id)
   {
@@ -69,8 +65,8 @@ public class UserMenu extends Component
 
     if (application instanceof TemplateWebApplication)
     {
-      isMultipleOrganisationSupportEnabled =
-        ((TemplateWebApplication) application).isMultipleOrganisationSupportEnabled();
+      isMultipleOrganisationSupportEnabled = ((TemplateWebApplication) application)
+        .isMultipleOrganisationSupportEnabled();
     }
   }
 
@@ -103,9 +99,8 @@ public class UserMenu extends Component
 
         WebApplication webApplication = (WebApplication) getApplication();
 
-        String requestURI =
-          ((HttpServletRequest) (RequestCycle.get().getRequest()).getContainerRequest())
-            .getRequestURI();
+        String requestURI = ((HttpServletRequest) (RequestCycle.get().getRequest())
+          .getContainerRequest()).getRequestURI();
 
         if (!webSession.isUserLoggedIn())
         {

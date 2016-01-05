@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.select2;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -28,26 +26,22 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
-public class Select2CssResourceReference extends CssResourceReference
+public class Select2CssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final Select2CssResourceReference INSTANCE = new Select2CssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new Select2CssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new Select2CssResourceReference());
 
-  private Select2CssResourceReference()
-  {
-    super(Select2CssResourceReference.class, Debug.inDebugMode()
-        ? "select2.css"
-        : "select2.min.css");
-  }
+  private static final Select2CssResourceReference INSTANCE = new Select2CssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the thirdparty resource bundled
    * with the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the thirdparty resource bundled
-   *         with the Web Application Template
+   * with the Web Application Template
    */
   public static Select2CssResourceReference get()
   {
@@ -59,10 +53,16 @@ public class Select2CssResourceReference extends CssResourceReference
    * Template.
    *
    * @return the CSS header item for the thirdparty resource bundled with the Web Application
-   *         Template
+   * Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private Select2CssResourceReference()
+  {
+    super(Select2CssResourceReference.class,
+      Debug.inDebugMode() ? "select2.css" : "select2.min.css");
   }
 }

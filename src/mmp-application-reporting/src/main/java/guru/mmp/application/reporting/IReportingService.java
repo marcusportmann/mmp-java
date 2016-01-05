@@ -16,16 +16,12 @@
 
 package guru.mmp.application.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Document;
 
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IReportingService</code> interface defines the functionality that must be provided by
@@ -104,6 +100,14 @@ public interface IReportingService
   String getLocalReportFolderPath();
 
   /**
+   * Set the real path to the folder where the local Jasper reports are stored.
+   *
+   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
+   *                              stored
+   */
+  void setLocalReportFolderPath(String localReportFolderPath);
+
+  /**
    * Returns the number of report definitions.
    *
    * @return the number of report definitions
@@ -143,7 +147,7 @@ public interface IReportingService
    *           definition
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
-   *         could not be found
+   * could not be found
    *
    * @throws ReportingServiceException
    */
@@ -188,12 +192,4 @@ public interface IReportingService
    */
   ReportDefinition saveReportDefinition(ReportDefinition reportDefinition)
     throws ReportingServiceException;
-
-  /**
-   * Set the real path to the folder where the local Jasper reports are stored.
-   *
-   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
-   *                              stored
-   */
-  void setLocalReportFolderPath(String localReportFolderPath);
 }

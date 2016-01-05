@@ -16,33 +16,21 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.request.Response;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
 
 /**
  * The <code>Dialog</code> class provides a modal dialog box which appears over other content.
- *
+ * <p/>
  * The dialog can be opened or closed by straight JavaScript or by a Wicket AjaxRequestTarget.
- *
+ * <p/>
  * It can optionally be closed by clicking outside the dialog.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class Dialog extends WebMarkupContainer
+public abstract class Dialog
+  extends WebMarkupContainer
 {
   private static final long serialVersionUID = 1000000;
 

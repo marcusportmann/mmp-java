@@ -16,21 +16,25 @@
 
 package guru.mmp.sample.web.page.forms;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.application.web.resource.thirdparty.datepicker.BootstrapDatePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect.JQueryMultiSelectJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.datepicker
+  .BootstrapDatePickerJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.daterangepicker
+  .DateRangePickerCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.daterangepicker
+  .DateRangePickerJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.multiselect
+  .JQueryMultiSelectCssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.multiselect
+  .JQueryMultiSelectJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.selectboxit.JQuerySelectBoxItJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.timepicker.BootstrapTimePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker.DateRangePickerJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
+import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.selectboxit
+  .JQuerySelectBoxItJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.timepicker
+  .BootstrapTimePickerJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScriptResourceReference;
 import guru.mmp.application.web.template.page.TemplateWebPage;
-
 import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
@@ -39,7 +43,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
  *
  * @author Marcus Portmann
  */
-public class AdvancedElementsPage extends TemplateWebPage
+public class AdvancedElementsPage
+  extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
@@ -54,7 +59,7 @@ public class AdvancedElementsPage extends TemplateWebPage
   /**
    * Render to the web response whatever the component wants to contribute to the head section.
    *
-   * @param response  the header response
+   * @param response the header response
    */
   @Override
   public void renderHead(IHeaderResponse response)

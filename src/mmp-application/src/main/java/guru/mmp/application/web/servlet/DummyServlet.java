@@ -16,31 +16,27 @@
 
 package guru.mmp.application.web.servlet;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * The <code>DummyServlet</code> servlet.
  *
  * @author Marcus Portmann
  */
-public class DummyServlet extends HttpServlet
+public class DummyServlet
+  extends HttpServlet
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(DummyServlet.class);
+
+  private static final long serialVersionUID = 1000000;
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)

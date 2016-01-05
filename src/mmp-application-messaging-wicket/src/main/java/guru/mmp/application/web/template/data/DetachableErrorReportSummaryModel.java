@@ -16,18 +16,13 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.ErrorReportSummary;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>DetachableErrorReportSummaryModel</code> class provides a detachable model
@@ -92,8 +87,8 @@ public class DetachableErrorReportSummaryModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the summary for the error report (" + id
-          + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to load the summary for the error report (%s)", id), e);
     }
   }
 

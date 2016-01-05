@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,21 +29,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>WebApplicationServlet</code> servlet provides a servlet-based alternative to
  * the <code>WebApplicationFilter</code> filter.
  *
  * @author Marcus Portmann
  */
-public class WebApplicationServlet extends HttpServlet
+public class WebApplicationServlet
+  extends HttpServlet
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(WebApplicationServlet.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* The filter where all the processing is done. */
   protected transient WebApplicationFilter webApplicationFilter;
@@ -88,29 +85,21 @@ public class WebApplicationServlet extends HttpServlet
     }
     catch (Throwable e)
     {
-      throw new ServletException("Failed to initialise the WebApplicationServlet: "
-          + "Failed to perform CDI injection on the WebApplicationFilter", e);
+      throw new ServletException(
+        "Failed to initialise the WebApplicationServlet: " + "Failed to perform CDI injection " +
+          "on the WebApplicationFilter", e);
     }
 
     // Initialise the WebApplicationFilter
     webApplicationFilter.init(true, new FilterConfig()
     {
       /**
-       * @see javax.servlet.FilterConfig#getServletContext()
+       * @see javax.servlet.FilterConfig#getFilterName()
        */
       @Override
-      public ServletContext getServletContext()
+      public String getFilterName()
       {
-        return WebApplicationServlet.this.getServletContext();
-      }
-
-      /**
-       * @see javax.servlet.FilterConfig#getInitParameterNames()
-       */
-      @Override
-      public Enumeration<String> getInitParameterNames()
-      {
-        return WebApplicationServlet.this.getInitParameterNames();
+        return WebApplicationServlet.this.getServletName();
       }
 
       /**
@@ -123,12 +112,21 @@ public class WebApplicationServlet extends HttpServlet
       }
 
       /**
-       * @see javax.servlet.FilterConfig#getFilterName()
+       * @see javax.servlet.FilterConfig#getInitParameterNames()
        */
       @Override
-      public String getFilterName()
+      public Enumeration<String> getInitParameterNames()
       {
-        return WebApplicationServlet.this.getServletName();
+        return WebApplicationServlet.this.getInitParameterNames();
+      }
+
+      /**
+       * @see javax.servlet.FilterConfig#getServletContext()
+       */
+      @Override
+      public ServletContext getServletContext()
+      {
+        return WebApplicationServlet.this.getServletContext();
       }
     });
   }

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -39,7 +35,8 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SubmitErrorReportResponseData extends WbxmlMessageData
+public class SubmitErrorReportResponseData
+  extends WbxmlMessageData
 {
   /**
    * The message returned when a submitted error report is successfully processed.
@@ -49,8 +46,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Submit Error Report Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
 
   /**
    * The error code indicating the result of processing the submitted error report where a code
@@ -102,7 +99,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -118,8 +115,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
       return false;
     }
 
-    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage"))
-        || (!rootElement.hasChild("ErrorReportId")))
+    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage")) ||
+      (!rootElement.hasChild("ErrorReportId")))
     {
       return false;
     }
@@ -136,33 +133,11 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * code of '0' indicates success and a non-zero code indicates an error condition.
    *
    * @return the error code indicating the result of processing the submitted error report where a
-   *         code of '0' indicates success and a non-zero code indicates an error condition
+   * code of '0' indicates success and a non-zero code indicates an error condition
    */
   public int getErrorCode()
   {
     return errorCode;
-  }
-
-  /**
-   * Returns the error message describing the result of processing the submitted error report.
-   *
-   * @return the error message describing the result of processing the submitted error report
-   */
-  public String getErrorMessage()
-  {
-    return errorMessage;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   * that was submitted for processing.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   *         that was submitted for processing
-   */
-  public UUID getErrorReportId()
-  {
-    return errorReportId;
   }
 
   /**
@@ -179,6 +154,16 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   }
 
   /**
+   * Returns the error message describing the result of processing the submitted error report.
+   *
+   * @return the error message describing the result of processing the submitted error report
+   */
+  public String getErrorMessage()
+  {
+    return errorMessage;
+  }
+
+  /**
    * Set the error message describing the result of processing the submitted error report.
    *
    * @param errorMessage the error message describing the result of processing the submitted error
@@ -187,6 +172,18 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   public void setErrorMessage(String errorMessage)
   {
     this.errorMessage = errorMessage;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * that was submitted for processing.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * that was submitted for processing
+   */
+  public UUID getErrorReportId()
+  {
+    return errorReportId;
   }
 
   /**
@@ -206,7 +203,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */
@@ -234,8 +231,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   @Override
   public String toString()
   {
-    return "SubmitErrorReportResponseData {" + "errorReportId=\"" + errorReportId + "\", "
-        + "errorCode=\"" + errorCode + "\", " + "errorMessage=\""
-        + StringUtil.notNull(errorMessage) + "\"" + "}";
+    return "SubmitErrorReportResponseData {" + "errorReportId=\"" + errorReportId + "\", " +
+      "errorCode=\"" + errorCode + "\", " + "errorMessage=\"" + StringUtil.notNull(errorMessage) +
+      "\"" + "}";
   }
 }

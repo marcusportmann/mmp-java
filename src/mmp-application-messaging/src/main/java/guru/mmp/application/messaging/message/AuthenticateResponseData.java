@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -26,8 +24,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.*;
 
@@ -39,7 +35,8 @@ import java.util.*;
  *
  * @author Marcus Portmann
  */
-public class AuthenticateResponseData extends WbxmlMessageData
+public class AuthenticateResponseData
+  extends WbxmlMessageData
 {
   /**
    * The error code returned when an unknown error occurs during authentication.
@@ -54,8 +51,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Authenticate Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("82223035-1726-407f-8703-3977708e792c");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "82223035-1726-407f-8703-3977708e792c");
 
   /**
    * The error code indicating the result of processing the authentication where a code of '0'
@@ -129,8 +126,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
    *                          data passed as part of a message
    * @param userProperties    the properties returned for the authenticated user
    */
-  public AuthenticateResponseData(List<Organisation> organisations, byte[] userEncryptionKey,
-      Map<String, Object> userProperties)
+  public AuthenticateResponseData(
+    List<Organisation> organisations, byte[] userEncryptionKey, Map<String, Object> userProperties)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
@@ -153,7 +150,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -169,9 +166,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
       return false;
     }
 
-    if ((!rootElement.hasChild("UserEncryptionKey")) || (!rootElement.hasChild("ErrorCode"))
-        || (!rootElement.hasChild("ErrorMessage"))
-        || (!rootElement.hasChild("UserEncryptionScheme")))
+    if ((!rootElement.hasChild("UserEncryptionKey")) || (!rootElement.hasChild("ErrorCode")) ||
+      (!rootElement.hasChild("ErrorMessage")) || (!rootElement.hasChild("UserEncryptionScheme")))
     {
       return false;
     }
@@ -224,8 +220,9 @@ public class AuthenticateResponseData extends WbxmlMessageData
           }
           else
           {
-            throw new MessagingException("Failed to read the user property (" + userPropertyName
-                + ") with unknown type (" + userPropertyType + ") from the message data");
+            throw new MessagingException(
+              "Failed to read the user property (" + userPropertyName + ") with unknown type (" +
+                userPropertyType + ") from the message data");
           }
         }
         catch (Throwable e)
@@ -243,53 +240,11 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * '0' indicates success and a non-zero code indicates an error condition.
    *
    * @return the error code indicating the result of processing the registration where a code of
-   *         '0' indicates success and a non-zero code indicates an error condition
+   * '0' indicates success and a non-zero code indicates an error condition
    */
   public int getErrorCode()
   {
     return errorCode;
-  }
-
-  /**
-   * Returns the error message describing the result of processing the registration.
-   *
-   * @return the error message describing the result of processing the registration
-   */
-  public String getErrorMessage()
-  {
-    return errorMessage;
-  }
-
-  /**
-   * Returns the list of organisations the authenticated user is associated with.
-   *
-   * @return the list of organisations the authenticated user is associated with
-   */
-  public List<OrganisationData> getOrganisations()
-  {
-    return organisations;
-  }
-
-  /**
-   * Returns the encryption key used to encrypt data on the user's device and any data passed
-   * as part of a message.
-   *
-   * @return the encryption key used to encrypt data on the user's device and data passed as
-   *         part of a message
-   */
-  public byte[] getUserEncryptionKey()
-  {
-    return userEncryptionKey;
-  }
-
-  /**
-   * Returns the properties returned for the authenticated user.
-   *
-   * @return the properties returned for the authenticated user
-   */
-  public Map<String, Object> getUserProperties()
-  {
-    return userProperties;
   }
 
   /**
@@ -306,6 +261,16 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
+   * Returns the error message describing the result of processing the registration.
+   *
+   * @return the error message describing the result of processing the registration
+   */
+  public String getErrorMessage()
+  {
+    return errorMessage;
+  }
+
+  /**
    * Set the error message describing the result of processing the registration.
    *
    * @param errorMessage the error message describing the result of processing the registration
@@ -313,6 +278,16 @@ public class AuthenticateResponseData extends WbxmlMessageData
   public void setErrorMessage(String errorMessage)
   {
     this.errorMessage = errorMessage;
+  }
+
+  /**
+   * Returns the list of organisations the authenticated user is associated with.
+   *
+   * @return the list of organisations the authenticated user is associated with
+   */
+  public List<OrganisationData> getOrganisations()
+  {
+    return organisations;
   }
 
   /**
@@ -326,6 +301,18 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
+   * Returns the encryption key used to encrypt data on the user's device and any data passed
+   * as part of a message.
+   *
+   * @return the encryption key used to encrypt data on the user's device and data passed as
+   * part of a message
+   */
+  public byte[] getUserEncryptionKey()
+  {
+    return userEncryptionKey;
+  }
+
+  /**
    * Set the encryption key used to encrypt data on the user's device and any data passed as
    * part of a message.
    *
@@ -335,6 +322,16 @@ public class AuthenticateResponseData extends WbxmlMessageData
   public void setUserEncryptionKey(byte[] userEncryptionKey)
   {
     this.userEncryptionKey = userEncryptionKey;
+  }
+
+  /**
+   * Returns the properties returned for the authenticated user.
+   *
+   * @return the properties returned for the authenticated user
+   */
+  public Map<String, Object> getUserProperties()
+  {
+    return userProperties;
   }
 
   /**
@@ -352,7 +349,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */

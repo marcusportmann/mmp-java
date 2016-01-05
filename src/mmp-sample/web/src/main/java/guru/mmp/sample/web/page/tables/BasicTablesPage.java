@@ -16,10 +16,7 @@
 
 package guru.mmp.sample.web.page.tables;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.page.TemplateWebPage;
-
 import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
@@ -28,7 +25,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
  *
  * @author Marcus Portmann
  */
-public class BasicTablesPage extends TemplateWebPage
+public class BasicTablesPage
+  extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
@@ -43,7 +41,7 @@ public class BasicTablesPage extends TemplateWebPage
   /**
    * Render to the web response whatever the component wants to contribute to the head section.
    *
-   * @param response  the header response
+   * @param response the header response
    */
   @Override
   public void renderHead(IHeaderResponse response)

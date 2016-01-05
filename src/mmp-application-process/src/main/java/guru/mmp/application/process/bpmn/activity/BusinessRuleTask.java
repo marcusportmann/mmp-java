@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -27,15 +25,13 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>BusinessRuleTask</code> class represents a Business Rule Task that forms part of a
  * Process.
- * <p>
+ * <p/>
  * This task represents work executed at run-time in a business rule engine, generally a complex
  * decision.
- * <p>
+ * <p/>
  * <b>Business Rule Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="businessRuleTask" type="tBusinessRuleTask"
@@ -51,7 +47,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public final class BusinessRuleTask extends Task
+public final class BusinessRuleTask
+  extends Task
 {
   /**
    * The technology that the Business Rule Task will use to send and receive messages.

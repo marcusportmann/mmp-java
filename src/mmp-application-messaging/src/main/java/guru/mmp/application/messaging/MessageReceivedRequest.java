@@ -16,13 +16,9 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -46,6 +42,24 @@ public class MessageReceivedRequest
    * successfully downloaded.
    */
   private UUID messageId;
+
+  /**
+   * Returns <code>true</code> if the WBXML document contains valid message received request
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message received request
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessageReceivedRequest") &&
+      (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("device") &&
+      rootElement.hasAttribute("messageId");
+  }
 
   /**
    * Constructs a new <code>MessageReceivedRequest</code> and populates it from the information
@@ -76,29 +90,11 @@ public class MessageReceivedRequest
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message received request
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message received request
-   *         information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessageReceivedRequest")
-        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("device")
-        && rootElement.hasAttribute("messageId");
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
    * message received request originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         message received request originated from
+   * message received request originated from
    */
   public UUID getDeviceId()
   {
@@ -110,23 +106,11 @@ public class MessageReceivedRequest
    * successfully downloaded.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the message that was
-   *         successfully downloaded
+   * successfully downloaded
    */
   public UUID getMessageId()
   {
     return messageId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * received request originated from.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message received request originated from
-   */
-  public void setDevice(UUID deviceId)
-  {
-    this.deviceId = deviceId;
   }
 
   /**
@@ -142,6 +126,18 @@ public class MessageReceivedRequest
   }
 
   /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * received request originated from.
+   *
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message received request originated from
+   */
+  public void setDevice(UUID deviceId)
+  {
+    this.deviceId = deviceId;
+  }
+
+  /**
    * Returns the String representation of the message received request.
    *
    * @return the String representation of the message received request.
@@ -149,8 +145,8 @@ public class MessageReceivedRequest
   @Override
   public String toString()
   {
-    return "<MessageReceivedRequest" + " deviceId=\"" + deviceId + "\"" + " messageId=\""
-        + messageId + "\"" + "/>";
+    return String.format("<MessageReceivedRequest deviceId=\"%s\" messageId=\"%s\"/>", deviceId,
+      messageId);
   }
 
   /**

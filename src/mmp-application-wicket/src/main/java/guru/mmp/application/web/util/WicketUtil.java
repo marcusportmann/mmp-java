@@ -23,4 +23,6 @@ package guru.mmp.application.web.util;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class WicketUtil {}
+public class WicketUtil
+{
+}

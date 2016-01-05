@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -9,9 +6,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,22 +21,23 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "notation")
-public class Notation extends Annotated
+public class Notation
+  extends Annotated
 {
   @XmlAttribute(name = "public")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "public")
   protected String _public;
+
   @XmlAttribute(name = "name", required = true)
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
+
   @XmlAttribute(name = "system")
   @XmlSchemaType(name = "anyURI")
   protected String system;
@@ -47,10 +45,8 @@ public class Notation extends Annotated
   /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getName()
   {
@@ -58,38 +54,10 @@ public class Notation extends Annotated
   }
 
   /**
-   * Gets the value of the public property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getPublic()
-  {
-    return _public;
-  }
-
-  /**
-   * Gets the value of the system property.
-   *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
-   */
-  public String getSystem()
-  {
-    return system;
-  }
-
-  /**
    * Sets the value of the name property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setName(String value)
   {
@@ -97,12 +65,21 @@ public class Notation extends Annotated
   }
 
   /**
+   * Gets the value of the public property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getPublic()
+  {
+    return _public;
+  }
+
+  /**
    * Sets the value of the public property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setPublic(String value)
   {
@@ -110,12 +87,21 @@ public class Notation extends Annotated
   }
 
   /**
+   * Gets the value of the system property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSystem()
+  {
+    return system;
+  }
+
+  /**
    * Sets the value of the system property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setSystem(String value)
   {

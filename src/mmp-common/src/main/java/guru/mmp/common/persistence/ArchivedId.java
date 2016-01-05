@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
@@ -79,7 +77,7 @@ public class ArchivedId
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the obj argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
   public boolean equals(Object obj)
@@ -139,31 +137,6 @@ public class ArchivedId
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) component of the archived ID.
-   *
-   * @return the Universally Unique Identifier (UUID) component of the archived ID
-   */
-  public String getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return ((id == null)
-        ? 0
-        : id.hashCode()) + ((archived == null)
-        ? 0
-        : archived.hashCode());
-  }
-
-  /**
    * Set the archived date component of the archived ID.
    *
    * @param archived the archived date component of the archived ID
@@ -174,6 +147,16 @@ public class ArchivedId
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) component of the archived ID.
+   *
+   * @return the Universally Unique Identifier (UUID) component of the archived ID
+   */
+  public String getId()
+  {
+    return id;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) component of the archived ID.
    *
    * @param id the Universally Unique Identifier (UUID) component of the archived ID
@@ -181,5 +164,16 @@ public class ArchivedId
   public void setId(String id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return ((id == null) ? 0 : id.hashCode()) + ((archived == null) ? 0 : archived.hashCode());
   }
 }

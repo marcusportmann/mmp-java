@@ -16,13 +16,9 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -46,6 +42,24 @@ public class MessagePartReceivedRequest
    * successfully downloaded.
    */
   private UUID messagePartId;
+
+  /**
+   * Returns <code>true</code> if the WBXML document contains valid message part received request
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message part received request
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessagePartReceivedRequest") &&
+      (rootElement.getAttributes().size() == 2) && !((!rootElement.hasAttribute("device")) ||
+      (!rootElement.hasAttribute("messagePartId")));
+  }
 
   /**
    * Constructs a new <code>MessagePartReceivedRequest</code> and populates it from the information
@@ -76,29 +90,11 @@ public class MessagePartReceivedRequest
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message part received request
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message part received request
-   *         information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessagePartReceivedRequest")
-        && (rootElement.getAttributes().size() == 2)
-        && !((!rootElement.hasAttribute("device")) || (!rootElement.hasAttribute("messagePartId")));
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
    * message part received request originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         message part received request originated from
+   * message part received request originated from
    */
   public UUID getDeviceId()
   {
@@ -110,23 +106,11 @@ public class MessagePartReceivedRequest
    * that was successfully downloaded.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the message part
-   *         that was successfully downloaded
+   * that was successfully downloaded
    */
   public UUID getMessagePartId()
   {
     return messagePartId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * part received request originated from.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message part received request originated from
-   */
-  public void setDevice(UUID deviceId)
-  {
-    this.deviceId = deviceId;
   }
 
   /**
@@ -142,6 +126,18 @@ public class MessagePartReceivedRequest
   }
 
   /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * part received request originated from.
+   *
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message part received request originated from
+   */
+  public void setDevice(UUID deviceId)
+  {
+    this.deviceId = deviceId;
+  }
+
+  /**
    * Returns the String representation of the message part received request.
    *
    * @return the String representation of the message part received request.
@@ -149,8 +145,8 @@ public class MessagePartReceivedRequest
   @Override
   public String toString()
   {
-    return "<MessagePartReceivedRequest" + " deviceId=\"" + deviceId + "\"" + " messagePartId=\""
-        + messagePartId + "\"" + "/>";
+    return String.format("<MessagePartReceivedRequest deviceId=\"%s\" messagePartId=\"%s\"/>",
+      deviceId, messagePartId);
   }
 
   /**

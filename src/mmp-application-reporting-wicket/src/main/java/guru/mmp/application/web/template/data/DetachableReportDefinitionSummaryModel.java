@@ -16,14 +16,10 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -91,8 +87,8 @@ public class DetachableReportDefinitionSummaryModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the summary for the report definition ("
-          + id + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to load the summary for the report definition (%s)", id), e);
     }
   }
 

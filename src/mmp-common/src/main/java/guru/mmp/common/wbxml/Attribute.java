@@ -16,8 +16,6 @@
 
 package guru.mmp.common.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -29,7 +27,9 @@ public class Attribute
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String name;
+
   private String value;
 
   /**
@@ -64,16 +64,6 @@ public class Attribute
   }
 
   /**
-   * Returns the value of the attribute.
-   *
-   * @return the value of the attribute
-   */
-  public String getValue()
-  {
-    return value;
-  }
-
-  /**
    * Set the name of the attribute.
    *
    * @param name the name of the attribute
@@ -81,6 +71,16 @@ public class Attribute
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the value of the attribute.
+   *
+   * @return the value of the attribute
+   */
+  public String getValue()
+  {
+    return value;
   }
 
   /**

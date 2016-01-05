@@ -16,10 +16,7 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -33,23 +30,25 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
 
 /**
  * The <code>DropdownMenu</code> class provides a Wicket component that renders a dropdown menu.
  *
- * @author Marcus Portmann
- *
  * @param <T>
+ *
+ * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class DropdownMenu<T> extends Panel
+public abstract class DropdownMenu<T>
+  extends Panel
 {
   private static final long serialVersionUID = 1000000;
+
   private String dropDownMenuText;
+
   private String iconClass;
+
   private IModel<? extends List<? extends T>> menuItems;
 
   /**
@@ -84,8 +83,8 @@ public abstract class DropdownMenu<T> extends Panel
    * @param menuItems the model providing the list of all rendered menuItems
    * @param iconClass the CSS class for the icon for the dropdown
    */
-  public DropdownMenu(String id, IModel<T> model, IModel<? extends List<? extends T>> menuItems,
-      String iconClass)
+  public DropdownMenu(
+    String id, IModel<T> model, IModel<? extends List<? extends T>> menuItems, String iconClass)
   {
     super(id, model);
 
@@ -149,7 +148,7 @@ public abstract class DropdownMenu<T> extends Panel
         };
 
         dropdownMenuItemLink.add(new Label("dropdownMenuItemText",
-            new Model<>(getDisplayValue(menuItems.getObject().get(loopItemIndex)))));
+          new Model<>(getDisplayValue(menuItems.getObject().get(loopItemIndex)))));
 
         loopItem.add(dropdownMenuItemLink);
       }

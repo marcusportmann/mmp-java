@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.cdi.CDIProxyTargetLocator;
 import org.apache.wicket.Component;
 import org.apache.wicket.application.IComponentInstantiationListener;
@@ -31,8 +29,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebApplicationInjector</code> class provides CDI-based injection for a Wicket
@@ -109,7 +105,7 @@ public class WebApplicationInjector
               }
 
               injectedFields.add(new InjectedField(field, field.getType(),
-                  annotations.toArray(new Annotation[annotations.size()])));
+                annotations.toArray(new Annotation[annotations.size()])));
 
 //            logger.info("Found injected field (" + field.getName() + ") with type ("
 //              + field.getType().getName() + ") on class (" + object.getClass() + ")");
@@ -149,12 +145,11 @@ public class WebApplicationInjector
       }
       catch (Throwable e)
       {
-        throw new WebApplicationException("Failed to inject the field ("
-            + injectedField.field.getName() + ") for the object with class ("
-            + object.getClass().getName() + ")", e);
+        throw new WebApplicationException(
+          String.format("Failed to inject the field (%s) for the object with class (%s)",
+            injectedField.field.getName(), object.getClass().getName()), e);
       }
     }
-
   }
 
   /**
@@ -172,13 +167,19 @@ public class WebApplicationInjector
    */
   private class InjectedField
   {
-    /** The qualifier annotations. */
+    /**
+     * The qualifier annotations.
+     */
     public Annotation[] annotations;
 
-    /** The field. */
+    /**
+     * The field.
+     */
     public Field field;
 
-    /** The type of the injected field. */
+    /**
+     * The type of the injected field.
+     */
     public Class<?> type;
 
     /**
@@ -196,8 +197,6 @@ public class WebApplicationInjector
     }
   }
 }
-
-
 
 //EJB ejbAnnotation = field.getAnnotation(EJB.class);
 //

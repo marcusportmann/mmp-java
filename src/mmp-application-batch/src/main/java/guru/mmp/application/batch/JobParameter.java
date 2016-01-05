@@ -16,8 +16,6 @@
 
 package guru.mmp.application.batch;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -37,15 +35,15 @@ public class JobParameter
   private long id;
 
   /**
-   * The name of the job parameter.
-   */
-  private String name;
-
-  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter
    * is associated with.
    */
   private String jobId;
+
+  /**
+   * The name of the job parameter.
+   */
+  private String name;
 
   /**
    * The value of the job parameter.
@@ -80,38 +78,6 @@ public class JobParameter
   }
 
   /**
-   * Returns the name of the job parameter.
-   *
-   * @return the name of the job parameter
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   *         parameter is associated with
-   */
-  public String getJobId()
-  {
-    return jobId;
-  }
-
-  /**
-   * Returns the value of the job parameter.
-   *
-   * @return the value of the job parameter
-   */
-  public String getValue()
-  {
-    return value;
-  }
-
-  /**
    * Set the ID uniquely identifying the job parameter.
    *
    * @param id the ID uniquely identifying the job parameter
@@ -119,6 +85,40 @@ public class JobParameter
   public void setId(long id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   * parameter is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   * parameter is associated with
+   */
+  public String getJobId()
+  {
+    return jobId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   * parameter is associated with.
+   *
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
+   *              job parameter is associated with
+   */
+  public void setJobId(String jobId)
+  {
+    this.jobId = jobId;
+  }
+
+  /**
+   * Returns the name of the job parameter.
+   *
+   * @return the name of the job parameter
+   */
+  public String getName()
+  {
+    return name;
   }
 
   /**
@@ -132,15 +132,13 @@ public class JobParameter
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with.
+   * Returns the value of the job parameter.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
-   *              job parameter is associated with
+   * @return the value of the job parameter
    */
-  public void setJobId(String jobId)
+  public String getValue()
   {
-    this.jobId = jobId;
+    return value;
   }
 
   /**

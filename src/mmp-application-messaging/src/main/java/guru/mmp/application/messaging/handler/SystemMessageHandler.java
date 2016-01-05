@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.handler;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
@@ -27,19 +25,18 @@ import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessageTranslator;
 import guru.mmp.application.messaging.message.*;
 import guru.mmp.application.registry.IRegistry;
-import guru.mmp.application.security.*;
+import guru.mmp.application.security.AuthenticationFailedException;
+import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.Organisation;
+import guru.mmp.application.security.UserNotFoundException;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.ExceptionUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
-
-import javax.inject.Inject;
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the
@@ -47,7 +44,8 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-public class SystemMessageHandler extends MessageHandler
+public class SystemMessageHandler
+  extends MessageHandler
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SystemMessageHandler.class);
@@ -147,9 +145,10 @@ public class SystemMessageHandler extends MessageHandler
       return processGetCodeCategoryWithParametersRequestMessage(message);
     }
 
-    throw new MessageHandlerException("Failed to process the unrecognised message ("
-        + message.getId() + ") with type (" + message.getTypeId() + ") from user ("
-        + message.getUsername() + ") and device (" + message.getDeviceId() + ")");
+    throw new MessageHandlerException(String.format(
+      "Failed to process the unrecognised message (%s) with type (%s) from the user (%s) and " +
+        "device (%s)", message.getId(), message.getTypeId(), message.getUsername(),
+      message.getDeviceId()));
   }
 
 //private GetCodeCategoryResponseData getRemoteWebServiceCodeCategory(CodeCategory codeCategory,
@@ -223,8 +222,8 @@ public class SystemMessageHandler extends MessageHandler
       AnotherTestRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new AnotherTestRequestData());
 
-      AnotherTestResponseData responseData =
-        new AnotherTestResponseData(requestData.getTestValue());
+      AnotherTestResponseData responseData = new AnotherTestResponseData(
+        requestData.getTestValue());
 
       Message responseMessage = messageTranslator.toMessage(responseData,
         requestMessage.getCorrelationId());
@@ -235,8 +234,8 @@ public class SystemMessageHandler extends MessageHandler
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
@@ -259,41 +258,43 @@ public class SystemMessageHandler extends MessageHandler
         UUID userDirectoryId = securityService.authenticate(requestData.getUsername(),
           requestData.getPassword());
 
-        List<Organisation> organisations =
-          securityService.getOrganisationsForUserDirectory(userDirectoryId);
+        List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(
+          userDirectoryId);
 
-        byte[] userEncryptionKey =
-          messagingService.deriveUserDeviceEncryptionKey(requestData.getUsername(),
-            requestData.getDeviceId());
+        byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
+          requestData.getUsername(), requestData.getDeviceId());
 
         if (logger.isDebugEnabled())
         {
-          logger.debug("Generated the encryption key ("
-              + Base64.encodeBytes(userEncryptionKey, false) + ") for the user ("
-              + requestData.getUsername() + ") and the device (" + requestData.getDeviceId() + ")");
+          logger.debug(
+            String.format("Generated the encryption key (%s) for the user (%s) and the device (%s)",
+              Base64.encodeBytes(userEncryptionKey, false), requestData.getUsername(),
+              requestData.getDeviceId()));
         }
         else
         {
-          logger.info("Generated the encryption key for the user (" + requestData.getUsername()
-              + ") and the device (" + requestData.getDeviceId() + ")");
+          logger.info(
+            String.format("Generated the encryption key for the user (%s) and the device (%s)",
+              requestData.getUsername(), requestData.getDeviceId()));
         }
 
         responseData = new AuthenticateResponseData(organisations, userEncryptionKey);
       }
       catch (AuthenticationFailedException | UserNotFoundException e)
       {
-        responseData =
-          new AuthenticateResponseData(AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to authenticate the user (" + requestData.getUsername() + ")");
+        responseData = new AuthenticateResponseData(
+          AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
+          String.format("Failed to authenticate the user (%s)", requestData.getUsername()));
       }
       catch (Throwable e)
       {
-        logger.error("Failed to authenticate the user (" + requestData.getUsername() + ")", e);
+        logger.error(
+          String.format("Failed to authenticate the user (%s)", requestData.getUsername()), e);
 
-        responseData =
-          new AuthenticateResponseData(AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to authenticate the user (" + requestData.getUsername() + "): "
-            + e.getMessage());
+        responseData = new AuthenticateResponseData(
+          AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
+          String.format("Failed to authenticate the user (%s): %s", requestData.getUsername(),
+            e.getMessage()));
       }
 
       Message responseMessage = messageTranslator.toMessage(responseData);
@@ -304,8 +305,8 @@ public class SystemMessageHandler extends MessageHandler
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
@@ -317,14 +318,14 @@ public class SystemMessageHandler extends MessageHandler
     try
     {
       messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
+        requestMessage.getDeviceId());
 
       CheckUserExistsRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new CheckUserExistsRequestData());
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Checking if the user (" + requestData.getUsername() + ") exists");
+        logger.debug(String.format("Checking if the user (%s) exists", requestData.getUsername()));
       }
 
       if (securityService.getUserDirectoryIdForUser(requestData.getUsername()) != null)
@@ -350,8 +351,8 @@ public class SystemMessageHandler extends MessageHandler
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
@@ -374,8 +375,8 @@ public class SystemMessageHandler extends MessageHandler
 
         if (codeCategory != null)
         {
-          if ((codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD)
-              || (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_CUSTOM))
+          if ((codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD) ||
+            (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_CUSTOM))
           {
             CodeCategoryData codeCategoryData = new CodeCategoryData(codeCategory);
 
@@ -401,16 +402,15 @@ public class SystemMessageHandler extends MessageHandler
           }
           else if (codeCategory.getCategoryType() == CodeCategoryType.CODE_PROVIDER)
           {
-            CodeCategory codeProviderCodeCategory =
-              codesService.getCodeProviderCodeCategory(codeCategory,
-                requestData.getLastRetrieved(), requestData.getReturnCodesIfCurrent());
+            CodeCategory codeProviderCodeCategory = codesService.getCodeProviderCodeCategory(
+              codeCategory, requestData.getLastRetrieved(), requestData.getReturnCodesIfCurrent());
 
             if (codeProviderCodeCategory == null)
             {
               responseData = new GetCodeCategoryResponseData(
-                  GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR,
-                  "Failed to retrieve the code provider code category (" + requestData.getId()
-                  + "): The code provider code category could not be found");
+                GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR, String.format(
+                "Failed to retrieve the code provider code category (%s): " +
+                  "The code provider code category could not be found", requestData.getId()));
             }
             else
             {
@@ -422,28 +422,29 @@ public class SystemMessageHandler extends MessageHandler
         }
         else
         {
-          responseData =
-            new GetCodeCategoryResponseData(GetCodeCategoryResponseData.ERROR_CODE_UNKNOWN_ERROR,
-              "Failed to retrieve the code category (" + requestData.getId()
-              + "): The code category could not be found");
+          responseData = new GetCodeCategoryResponseData(
+            GetCodeCategoryResponseData.ERROR_CODE_UNKNOWN_ERROR, String.format(
+            "Failed to retrieve the code category (%s): The code category could not be found",
+            requestData.getId()));
         }
       }
       catch (Throwable e)
       {
-        logger.error("Failed to retrieve the code category (" + requestData.getId() + ")", e);
+        logger.error(
+          String.format("Failed to retrieve the code category (%s)", requestData.getId()), e);
 
-        responseData =
-          new GetCodeCategoryResponseData(GetCodeCategoryResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to retrieve the code category (" + requestData.getId() + "): "
-            + ExceptionUtil.getNestedMessages(e));
+        responseData = new GetCodeCategoryResponseData(
+          GetCodeCategoryResponseData.ERROR_CODE_UNKNOWN_ERROR,
+          String.format("Failed to retrieve the code category (%s): %s", requestData.getId(),
+            ExceptionUtil.getNestedMessages(e)));
       }
 
       return messageTranslator.toMessage(responseData);
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
@@ -455,9 +456,8 @@ public class SystemMessageHandler extends MessageHandler
       MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
         requestMessage.getDeviceId());
 
-      GetCodeCategoryWithParametersRequestData requestData =
-        messageTranslator.fromMessage(requestMessage,
-          new GetCodeCategoryWithParametersRequestData());
+      GetCodeCategoryWithParametersRequestData requestData = messageTranslator.fromMessage(
+        requestMessage, new GetCodeCategoryWithParametersRequestData());
 
       GetCodeCategoryWithParametersResponseData responseData = null;
 
@@ -468,8 +468,8 @@ public class SystemMessageHandler extends MessageHandler
 
         if (codeCategory != null)
         {
-          if ((codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD)
-              || (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_CUSTOM))
+          if ((codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD) ||
+            (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_CUSTOM))
           {
             CodeCategoryData codeCategoryData = new CodeCategoryData(codeCategory);
 
@@ -477,10 +477,9 @@ public class SystemMessageHandler extends MessageHandler
           }
           else if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_HTTP_SERVICE)
           {
-            CodeCategory remoteCodeCategory =
-              codesService.getRemoteCodeCategoryWithParameters(codeCategory,
-                requestData.getParameters(), requestData.getLastRetrieved(),
-                requestData.getReturnCodesIfCurrent());
+            CodeCategory remoteCodeCategory = codesService.getRemoteCodeCategoryWithParameters(
+              codeCategory, requestData.getParameters(), requestData.getLastRetrieved(),
+              requestData.getReturnCodesIfCurrent());
 
             CodeCategoryData codeCategoryData = new CodeCategoryData(remoteCodeCategory);
 
@@ -488,10 +487,9 @@ public class SystemMessageHandler extends MessageHandler
           }
           else if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_WEB_SERVICE)
           {
-            CodeCategory remoteCodeCategory =
-              codesService.getRemoteCodeCategoryWithParameters(codeCategory,
-                requestData.getParameters(), requestData.getLastRetrieved(),
-                requestData.getReturnCodesIfCurrent());
+            CodeCategory remoteCodeCategory = codesService.getRemoteCodeCategoryWithParameters(
+              codeCategory, requestData.getParameters(), requestData.getLastRetrieved(),
+              requestData.getReturnCodesIfCurrent());
 
             CodeCategoryData codeCategoryData = new CodeCategoryData(remoteCodeCategory);
 
@@ -499,17 +497,18 @@ public class SystemMessageHandler extends MessageHandler
           }
           else if (codeCategory.getCategoryType() == CodeCategoryType.CODE_PROVIDER)
           {
-            CodeCategory codeProviderCodeCategory =
-              codesService.getCodeProviderCodeCategoryWithParameters(codeCategory,
-                requestData.getParameters(), requestData.getLastRetrieved(),
-                requestData.getReturnCodesIfCurrent());
+            CodeCategory codeProviderCodeCategory = codesService
+              .getCodeProviderCodeCategoryWithParameters(
+              codeCategory, requestData.getParameters(), requestData.getLastRetrieved(),
+              requestData.getReturnCodesIfCurrent());
 
             if (codeProviderCodeCategory == null)
             {
               responseData = new GetCodeCategoryWithParametersResponseData(
-                  GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR,
-                  "Failed to retrieve the code provider code category (" + requestData.getId()
-                  + ") with parameters: The code provider code category could not be found");
+                GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR, String.format(
+                "Failed to retrieve the code provider code category (%s) with parameters: The " +
+                  "code provider code category could not be found",
+                requestData.getId()));
             }
             else
             {
@@ -522,27 +521,29 @@ public class SystemMessageHandler extends MessageHandler
         else
         {
           responseData = new GetCodeCategoryWithParametersResponseData(
-              GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR,
-              "Failed to retrieve the code category (" + requestData.getId()
-              + ") with parameters: The code category could not be found");
+            GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR, String.format(
+            "Failed to retrieve the code category (%s) with parameters: The code category could " +
+              "not be found",
+            requestData.getId()));
         }
       }
       catch (Throwable e)
       {
-        logger.error("Failed to retrieve the code category (" + requestData.getId() + ")", e);
+        logger.error(
+          String.format("Failed to retrieve the code category (%s)", requestData.getId()), e);
 
         responseData = new GetCodeCategoryWithParametersResponseData(
-            GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR,
-            "Failed to retrieve the code category (" + requestData.getId() + ") with parameters: "
-            + ExceptionUtil.getNestedMessages(e));
+          GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR,
+          String.format("Failed to retrieve the code category (%s) with parameters: %s",
+            requestData.getId(), ExceptionUtil.getNestedMessages(e)));
       }
 
       return messageTranslator.toMessage(responseData);
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
@@ -557,8 +558,8 @@ public class SystemMessageHandler extends MessageHandler
       // MessagePartDownloadTestRequestData requestData =
       // messageTranslator.fromMessage(requestMessage, new MessagePartDownloadTestRequestData());
 
-      MessagePartDownloadTestResponseData responseData =
-        new MessagePartDownloadTestResponseData(new byte[128 * 1024]);
+      MessagePartDownloadTestResponseData responseData = new MessagePartDownloadTestResponseData(
+        new byte[128 * 1024]);
 
       Message responseMessage = messageTranslator.toMessage(responseData);
 
@@ -568,8 +569,8 @@ public class SystemMessageHandler extends MessageHandler
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
@@ -584,11 +585,10 @@ public class SystemMessageHandler extends MessageHandler
       SubmitErrorReportRequestData requestData = messageTranslator.fromMessage(requestMessage,
         new SubmitErrorReportRequestData());
 
-      ErrorReport errorReport = new ErrorReport(requestData.getId(),
-        requestData.getApplicationId(), requestData.getApplicationVersion(),
-        requestData.getDescription(), requestData.getDetail(), requestData.getFeedback(),
-        requestData.getWhen(), requestData.getWho(), requestData.getDeviceId(),
-        requestData.getData());
+      ErrorReport errorReport = new ErrorReport(requestData.getId(), requestData.getApplicationId(),
+        requestData.getApplicationVersion(), requestData.getDescription(), requestData.getDetail(),
+        requestData.getFeedback(), requestData.getWhen(), requestData.getWho(),
+        requestData.getDeviceId(), requestData.getData());
 
       messagingService.createErrorReport(errorReport);
 
@@ -599,8 +599,8 @@ public class SystemMessageHandler extends MessageHandler
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
@@ -627,8 +627,8 @@ public class SystemMessageHandler extends MessageHandler
     }
     catch (Throwable e)
     {
-      throw new MessageHandlerException("Failed to process the message ("
-          + requestMessage.getTypeId() + ")", e);
+      throw new MessageHandlerException(
+        String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 }

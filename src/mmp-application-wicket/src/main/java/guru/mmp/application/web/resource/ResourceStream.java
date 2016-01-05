@@ -16,16 +16,12 @@
 
 package guru.mmp.application.web.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.wicket.util.resource.IResourceStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Locale;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ResourceStream</code> class provides a base class for all resource steams.
@@ -36,8 +32,11 @@ public abstract class ResourceStream
   implements IResourceStream
 {
   private static final long serialVersionUID = 1000000;
+
   private Locale locale;
+
   private String style;
+
   private String variation;
 
   /**
@@ -56,26 +55,6 @@ public abstract class ResourceStream
   }
 
   /**
-   * Returns the style for the resource stream.
-   *
-   * @return the style for the resource stream
-   */
-  public String getStyle()
-  {
-    return style;
-  }
-
-  /**
-   * Returns the variation for the resource stream.
-   *
-   * @return the variation for the resource stream
-   */
-  public String getVariation()
-  {
-    return variation;
-  }
-
-  /**
    * Set the locale for the resource stream.
    *
    * @param locale the locale for the resource stream
@@ -86,6 +65,16 @@ public abstract class ResourceStream
   }
 
   /**
+   * Returns the style for the resource stream.
+   *
+   * @return the style for the resource stream
+   */
+  public String getStyle()
+  {
+    return style;
+  }
+
+  /**
    * Set the style for the resource stream.
    *
    * @param style the style for the resource stream
@@ -93,6 +82,16 @@ public abstract class ResourceStream
   public void setStyle(String style)
   {
     this.style = style;
+  }
+
+  /**
+   * Returns the variation for the resource stream.
+   *
+   * @return the variation for the resource stream
+   */
+  public String getVariation()
+  {
+    return variation;
   }
 
   /**
@@ -127,7 +126,8 @@ public abstract class ResourceStream
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to read the classpath resource (" + path + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to read the classpath resource (%s)", path), e);
     }
     finally
     {

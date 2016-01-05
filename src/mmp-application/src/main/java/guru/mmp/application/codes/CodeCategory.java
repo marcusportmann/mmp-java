@@ -16,8 +16,6 @@
 
 package guru.mmp.application.codes;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -109,9 +107,9 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String description,
-      String endPoint, boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry,
-      Date updated)
+  public CodeCategory(
+    UUID id, CodeCategoryType categoryType, String name, String description, String endPoint,
+    boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry, Date updated)
   {
     this.id = id;
     this.categoryType = categoryType;
@@ -142,9 +140,10 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String description,
-      String codeData, String endPoint, boolean isEndPointSecure, boolean isCacheable,
-      Integer cacheExpiry, Date updated)
+  public CodeCategory(
+    UUID id, CodeCategoryType categoryType, String name, String description, String codeData,
+    String endPoint, boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry,
+    Date updated)
   {
     this.id = id;
     this.categoryType = categoryType;
@@ -163,114 +162,11 @@ public class CodeCategory
    * expire.
    *
    * @return the the time in seconds after which the cached code data for the remote code category
-   *         will expire
+   * will expire
    */
   public Integer getCacheExpiry()
   {
     return cacheExpiry;
-  }
-
-  /**
-   * Returns the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc.
-   *
-   * @return the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc
-   */
-  public CodeCategoryType getCategoryType()
-  {
-    return categoryType;
-  }
-
-  /**
-   * Returns the custom code data for the code category.
-   *
-   * @return the custom code data for the code category
-   */
-  public String getCodeData()
-  {
-    return codeData;
-  }
-
-  /**
-   * Returns the codes for the code category.
-   *
-   * @return the codes for the code category
-   */
-  public List<Code> getCodes()
-  {
-    return codes;
-  }
-
-  /**
-   * Returns the description for the code category.
-   *
-   * @return the description for the code category
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Returns the endpoint if this is a remote code category.
-   *
-   * @return the endpoint if this is a remote code category
-   */
-  public String getEndPoint()
-  {
-    return endPoint;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns whether the code data retrieved for the remote code category is cacheable.
-   *
-   * @return <code>true</code> if the code data retrieved for the remote code category is cacheable
-   *         or <code>false</code> otherwise
-   */
-  public boolean getIsCacheable()
-  {
-    return isCacheable;
-  }
-
-  /**
-   * Returns <code>true</code> if the endpoint for the remote code category is secure or
-   * <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if the endpoint for the remote code category is secure or
-   *         <code>false</code> otherwise
-   */
-  public boolean getIsEndPointSecure()
-  {
-    return isEndPointSecure;
-  }
-
-  /**
-   * Returns the name of the code category.
-   *
-   * @return the name of the code category
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the date and time the code category was updated.
-   *
-   * @return the date and time the code category was updated
-   */
-  public Date getUpdated()
-  {
-    return updated;
   }
 
   /**
@@ -286,6 +182,16 @@ public class CodeCategory
   }
 
   /**
+   * Returns the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc.
+   *
+   * @return the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc
+   */
+  public CodeCategoryType getCategoryType()
+  {
+    return categoryType;
+  }
+
+  /**
    * Set the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc.
    *
    * @param categoryType the type of code category e.g. Local, RemoteHTTPService, RemoteWebService,
@@ -295,6 +201,16 @@ public class CodeCategory
   public void setCategoryType(CodeCategoryType categoryType)
   {
     this.categoryType = categoryType;
+  }
+
+  /**
+   * Returns the custom code data for the code category.
+   *
+   * @return the custom code data for the code category
+   */
+  public String getCodeData()
+  {
+    return codeData;
   }
 
   /**
@@ -308,6 +224,16 @@ public class CodeCategory
   }
 
   /**
+   * Returns the codes for the code category.
+   *
+   * @return the codes for the code category
+   */
+  public List<Code> getCodes()
+  {
+    return codes;
+  }
+
+  /**
    * Set the codes for the code category.
    *
    * @param codes the codes for the code category
@@ -315,6 +241,16 @@ public class CodeCategory
   public void setCodes(List<Code> codes)
   {
     this.codes = codes;
+  }
+
+  /**
+   * Returns the description for the code category.
+   *
+   * @return the description for the code category
+   */
+  public String getDescription()
+  {
+    return description;
   }
 
   /**
@@ -328,6 +264,16 @@ public class CodeCategory
   }
 
   /**
+   * Returns the endpoint if this is a remote code category.
+   *
+   * @return the endpoint if this is a remote code category
+   */
+  public String getEndPoint()
+  {
+    return endPoint;
+  }
+
+  /**
    * Set the endpoint if this is a remote code category.
    *
    * @param endPoint the endpoint if this is a remote code category
@@ -335,6 +281,16 @@ public class CodeCategory
   public void setEndPoint(String endPoint)
   {
     this.endPoint = endPoint;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   */
+  public UUID getId()
+  {
+    return id;
   }
 
   /**
@@ -348,6 +304,17 @@ public class CodeCategory
   }
 
   /**
+   * Returns whether the code data retrieved for the remote code category is cacheable.
+   *
+   * @return <code>true</code> if the code data retrieved for the remote code category is cacheable
+   * or <code>false</code> otherwise
+   */
+  public boolean getIsCacheable()
+  {
+    return isCacheable;
+  }
+
+  /**
    * Set whether the code data retrieved for the remote code category is cacheable.
    *
    * @param isCacheable is the code data retrieved for the remote code category cacheable
@@ -355,6 +322,18 @@ public class CodeCategory
   public void setIsCacheable(boolean isCacheable)
   {
     this.isCacheable = isCacheable;
+  }
+
+  /**
+   * Returns <code>true</code> if the endpoint for the remote code category is secure or
+   * <code>false</code> otherwise.
+   *
+   * @return <code>true</code> if the endpoint for the remote code category is secure or
+   * <code>false</code> otherwise
+   */
+  public boolean getIsEndPointSecure()
+  {
+    return isEndPointSecure;
   }
 
   /**
@@ -369,6 +348,16 @@ public class CodeCategory
   }
 
   /**
+   * Returns the name of the code category.
+   *
+   * @return the name of the code category
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
    * Set the name of the code category.
    *
    * @param name the name of the code category
@@ -376,6 +365,16 @@ public class CodeCategory
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the date and time the code category was updated.
+   *
+   * @return the date and time the code category was updated
+   */
+  public Date getUpdated()
+  {
+    return updated;
   }
 
   /**

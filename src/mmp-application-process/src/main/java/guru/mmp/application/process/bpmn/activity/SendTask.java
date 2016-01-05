@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -30,14 +28,12 @@ import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>SendTask</code> class represents a Send Task that forms part of a Process.
- * <p>
+ * <p/>
  * This task represents sending a message to an external participant. Once sent, the task is
  * completed. A message can only be sent between different roles.
- * <p>
+ * <p/>
  * <b>Send Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="sendTask" type="tSendTask" substitutionGroup="flowElement"/&gt;
@@ -55,7 +51,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class SendTask extends Task
+public final class SendTask
+  extends Task
 {
   /**
    * The technology that the Send Task will use to send and receive messages.

@@ -16,24 +16,14 @@
 
 package guru.mmp.common.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.xml.sax.SAXParseException;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
-
 /**
  * The <code>XmlSchemaException</code> exception is thrown to indicate an error condition when
  * working with an XML schema.
  *
  * @author Marcus Portmann
  */
-public class XmlSchemaException extends RuntimeException
+public class XmlSchemaException
+  extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

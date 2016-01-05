@@ -16,15 +16,11 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.ISO8601;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.Date;
 import java.util.UUID;
@@ -147,6 +143,28 @@ public class Message
   private String username;
 
   /**
+   * Returns <code>true</code> if the WBXML document contains valid message information or
+   * <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message information or
+   * <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("Message") && !((!rootElement.hasAttribute("id")) ||
+      (!rootElement.hasAttribute("username")) || (!rootElement.hasAttribute("deviceId")) ||
+      (!rootElement.hasAttribute("priority")) || (!rootElement.hasAttribute("typeId")) ||
+      (!rootElement.hasAttribute("correlationId")) || (!rootElement.hasAttribute("created")) ||
+      (!rootElement.hasAttribute("sendAttempts")) || (!rootElement.hasAttribute("dataHash")) ||
+      (!rootElement.hasAttribute("encryptionScheme")) || (!rootElement.hasAttribute(
+      "encryptionIV")));
+  }
+
+  /**
    * Constructs a new <code>Message</code> and populates it from the message information stored
    * in the specified WBXML document.
    *
@@ -177,8 +195,9 @@ public class Message
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to parse the created ISO8601 timestamp ("
-          + createdAttributeValue + ") for the message", e);
+      throw new MessagingException(
+        String.format("Failed to parse the created ISO8601 timestamp (%s) for the message (%s)",
+          createdAttributeValue, id), e);
     }
 
     this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
@@ -189,17 +208,17 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username       the username identifying the user associated with the message
-   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       device the message originated from
-   * @param typeId         the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       type of message
-   * @param correlationId  the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority       the message priority
-   * @param data           the data for the message which is NOT encrypted
+   * @param username      the username identifying the user associated with the message
+   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      device the message originated from
+   * @param typeId        the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      type of message
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param priority      the message priority
+   * @param data          the data for the message which is NOT encrypted
    */
-  public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
-      Priority priority, byte[] data)
+  public Message(
+    String username, UUID deviceId, UUID typeId, UUID correlationId, Priority priority, byte[] data)
   {
     this.id = UUID.randomUUID();
     this.username = username;
@@ -219,19 +238,20 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username       the username identifying the user associated with the message
-   * @param deviceId       the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       device the message originated from
-   * @param typeId         the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       type of message
-   * @param correlationId  the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority       the message priority
-   * @param data           the data for the message which may be encrypted
-   * @param dataHash       the hash of the unencrypted data for the message
-   * @param encryptionIV   the base-64 encoded initialisation vector for the encryption scheme
+   * @param username      the username identifying the user associated with the message
+   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      device the message originated from
+   * @param typeId        the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      type of message
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param priority      the message priority
+   * @param data          the data for the message which may be encrypted
+   * @param dataHash      the hash of the unencrypted data for the message
+   * @param encryptionIV  the base-64 encoded initialisation vector for the encryption scheme
    */
-  public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
-      Priority priority, byte[] data, String dataHash, String encryptionIV)
+  public Message(
+    String username, UUID deviceId, UUID typeId, UUID correlationId, Priority priority, byte[] data,
+    String dataHash, String encryptionIV)
   {
     this.id = UUID.randomUUID();
     this.username = username;
@@ -244,8 +264,8 @@ public class Message
 
     if (dataHash.length() == 0)
     {
-      throw new RuntimeException("Unable to initialise a message with encrypted data using a"
-          + " blank data hash");
+      throw new RuntimeException(
+        "Unable to initialise a message with encrypted data using a blank data hash");
     }
 
     this.encryptionIV = encryptionIV;
@@ -281,10 +301,11 @@ public class Message
    * @param dataHash         the hash of the unencrypted data for the message
    * @param encryptionIV     the base-64 encoded initialisation vector for the encryption scheme
    */
-  public Message(UUID id, String username, UUID deviceId, UUID typeId, UUID correlationId,
-      Priority priority, Status status, Date created, Date persisted, Date updated,
-      int sendAttempts, int processAttempts, int downloadAttempts, String lockName,
-      Date lastProcessed, byte[] data, String dataHash, String encryptionIV)
+  public Message(
+    UUID id, String username, UUID deviceId, UUID typeId, UUID correlationId, Priority priority,
+    Status status, Date created, Date persisted, Date updated, int sendAttempts,
+    int processAttempts, int downloadAttempts, String lockName, Date lastProcessed, byte[] data,
+    String dataHash, String encryptionIV)
   {
     this.id = id;
     this.username = username;
@@ -307,207 +328,6 @@ public class Message
   }
 
   /**
-   * The enumeration giving the possible priorities for a message.
-   */
-  public enum Priority
-  {
-    LOW(1, "Low"), MEDIUM(5, "Medium"), HIGH(10, "High");
-
-    /**
-     * The code identifying the priority.
-     */
-    private int code;
-
-    /**
-     * The name of the priority.
-     */
-    private String name;
-
-    Priority(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the priority given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the priority
-     *
-     * @return the priority given by the specified numeric code value
-     */
-    public static Priority fromCode(int code)
-    {
-      switch (code)
-      {
-        case 1:
-          return Priority.LOW;
-
-        case 5:
-          return Priority.MEDIUM;
-
-        case 10:
-          return Priority.HIGH;
-
-        default:
-          return Priority.MEDIUM;
-      }
-    }
-
-    /**
-     * Returns the code identifying the priority.
-     *
-     * @return the code identifying the priority
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the name of the priority.
-     *
-     * @return the name of the priority
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the <code>Priority</code> enumeration value.
-     *
-     * @return the string representation of the <code>Priority</code> enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
-  }
-
-  /**
-   * The enumeration giving the possible statuses for a message.
-   */
-  public enum Status
-  {
-    INITIALISED(0, "Initialised"), QUEUED_FOR_SENDING(1, "QueuedForSending"),
-    QUEUED_FOR_PROCESSING(2, "QueuedForProcessing"), ABORTED(3, "Aborted"), FAILED(4, "Failed"),
-    PROCESSING(5, "Processing"), SENDING(6, "Sending"),
-    QUEUED_FOR_DOWNLOAD(7, "QueuedForDownload"), DOWNLOADING(8, "Downloading"),
-    PROCESSED(10, "Processed"), UNKNOWN(-1, "Unknown");
-
-    private int code;
-    private String name;
-
-    Status(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the status given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the status
-     *
-     * @return the status given by the specified numeric code value
-     */
-    public static Status fromCode(int code)
-    {
-      switch (code)
-      {
-        case 0:
-          return Status.INITIALISED;
-
-        case 1:
-          return Status.QUEUED_FOR_SENDING;
-
-        case 2:
-          return Status.QUEUED_FOR_PROCESSING;
-
-        case 3:
-          return Status.ABORTED;
-
-        case 4:
-          return Status.FAILED;
-
-        case 5:
-          return Status.PROCESSING;
-
-        case 6:
-          return Status.SENDING;
-
-        case 7:
-          return Status.QUEUED_FOR_DOWNLOAD;
-
-        case 8:
-          return Status.DOWNLOADING;
-
-        case 10:
-          return Status.PROCESSED;
-
-        default:
-          return Status.UNKNOWN;
-      }
-    }
-
-    /**
-     * Returns the numeric code value identifying the status.
-     *
-     * @return the numeric code value identifying the status
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the name of the status.
-     *
-     * @return the name of the status
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the status enumeration value.
-     *
-     * @return the string representation of the status enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if the WBXML document contains valid message information or
-   * <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message information or
-   *         <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("Message")
-        && !((!rootElement.hasAttribute("id")) || (!rootElement.hasAttribute("username"))
-          || (!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute("priority"))
-            || (!rootElement.hasAttribute("typeId"))
-              || (!rootElement.hasAttribute("correlationId"))
-                || (!rootElement.hasAttribute("created"))
-                  || (!rootElement.hasAttribute("sendAttempts"))
-                    || (!rootElement.hasAttribute("dataHash"))
-                      || (!rootElement.hasAttribute("encryptionScheme"))
-                        || (!rootElement.hasAttribute("encryptionIV")));
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to correlate the message.
    *
    * @return the Universally Unique Identifier (UUID) used to correlate the message
@@ -515,6 +335,16 @@ public class Message
   public UUID getCorrelationId()
   {
     return correlationId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to correlate the message.
+   *
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   */
+  public void setCorrelationId(UUID correlationId)
+  {
+    this.correlationId = correlationId;
   }
 
   /**
@@ -528,6 +358,16 @@ public class Message
   }
 
   /**
+   * Set the date and time the message was created.
+   *
+   * @param created the date and time the message was created
+   */
+  public void setCreated(Date created)
+  {
+    this.created = created;
+  }
+
+  /**
    * Returns the data for the message which may be encrypted.
    *
    * @return the data for the message which may be encrypted
@@ -535,6 +375,16 @@ public class Message
   public byte[] getData()
   {
     return data;
+  }
+
+  /**
+   * Set the data for the message which may be encrypted.
+   *
+   * @param data the data for the message which may be encrypted
+   */
+  public void setData(byte[] data)
+  {
+    this.data = data;
   }
 
   /**
@@ -548,11 +398,21 @@ public class Message
   }
 
   /**
+   * Set the hash of the unencrypted data for the message.
+   *
+   * @param dataHash the hash of the unencrypted data for the message
+   */
+  public void setDataHash(String dataHash)
+  {
+    this.dataHash = dataHash;
+  }
+
+  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
    * originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         message originated from
+   * message originated from
    */
   public UUID getDeviceId()
   {
@@ -570,207 +430,6 @@ public class Message
   }
 
   /**
-   * Returns the base-64 encoded initialisation vector for the encryption scheme for the message.
-   *
-   * @return the base-64 encoded initialisation vector for the encryption scheme for the message
-   */
-  public String getEncryptionIV()
-  {
-    return encryptionIV;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the date and time the last attempt was made to process the message.
-   *
-   * @return the date and time the last attempt was made to process the message
-   */
-  public Date getLastProcessed()
-  {
-    return lastProcessed;
-  }
-
-  /**
-   * Returns the name of the entity that has locked this message for processing or
-   * <code>null</code> if the message is not being processed.
-   *
-   * @return the name of the entity that has locked this message for processing or
-   *         <code>null</code> if the message is not being processed
-   */
-  public String getLockName()
-  {
-    return lockName;
-  }
-
-  /**
-   * Returns the date and time the message was persisted.
-   *
-   * @return the date and time the message was persisted
-   */
-  public Date getPersisted()
-  {
-    return persisted;
-  }
-
-  /**
-   * Returns the message priority.
-   *
-   * "Out of Order" processing is usually applied to messages so that messages with a higher
-   * priority value are processed before messages with a lower priority value.
-   *
-   * @return the message priority
-   */
-  public Priority getPriority()
-  {
-    return priority;
-  }
-
-  /**
-   * Returns the number of times that the processing of the message was attempted.
-   *
-   * @return the number of times that the processing of the message was attempted
-   */
-  public int getProcessAttempts()
-  {
-    return processAttempts;
-  }
-
-  /**
-   * Returns the number of times that the sending of the message was attempted.
-   *
-   * @return the number of times that the sending of the message was attempted
-   */
-  public int getSendAttempts()
-  {
-    return sendAttempts;
-  }
-
-  /**
-   * Returns the message status e.g. Initialised, Sending, etc.
-   *
-   * @return the message status e.g. Initialised, Sending, etc
-   */
-  public Status getStatus()
-  {
-    return status;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of message.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of message
-   */
-  public UUID getTypeId()
-  {
-    return typeId;
-  }
-
-  /**
-   * Returns the date and time the message was updated.
-   *
-   * @return the date and time the message was updated
-   */
-  public Date getUpdated()
-  {
-    return updated;
-  }
-
-  /**
-   * Returns the username identifying the user associated with the message.
-   *
-   * @return the username identifying the user associated with the message
-   */
-  public String getUsername()
-  {
-    return username;
-  }
-
-  /**
-   * Returns <code>true</code> if the data for the message is encrypted or <code>false</code>
-   * otherwise.
-   *
-   * @return <code>true</code> if the data for the message is encrypted or <code>false</code>
-   *         otherwise
-   */
-  public boolean isEncrypted()
-  {
-    return (!StringUtil.isNullOrEmpty(dataHash));
-  }
-
-  /**
-   * Returns <code>true</code> if encryption is disabled for the message or <code>false</code>
-   * otherwise.
-   *
-   * @return <code>true</code> if encryption is disabled for the message or <code>false</code>
-   *         otherwise
-   */
-  public boolean isEncryptionDisabled()
-  {
-    return isEncryptionDisabled;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the message.
-   *
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   */
-  public void setCorrelationId(UUID correlationId)
-  {
-    this.correlationId = correlationId;
-  }
-
-  /**
-   * Set the date and time the message was created.
-   *
-   * @param created the date and time the message was created
-   */
-  public void setCreated(Date created)
-  {
-    this.created = created;
-  }
-
-  /**
-   * Set the data for the message which may be encrypted.
-   *
-   * @param data the data for the message which may be encrypted
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
-  }
-
-  /**
-   * Set the hash of the unencrypted data for the message.
-   *
-   * @param dataHash the hash of the unencrypted data for the message
-   */
-  public void setDataHash(String dataHash)
-  {
-    this.dataHash = dataHash;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * originated from.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message originated from
-   */
-  public void setDevice(UUID deviceId)
-  {
-    this.deviceId = deviceId;
-  }
-
-  /**
    * Set the number of times that downloading of the message was attempted.
    *
    * @param downloadAttempts the number of times that downloading of the message was attempted
@@ -778,6 +437,16 @@ public class Message
   public void setDownloadAttempts(int downloadAttempts)
   {
     this.downloadAttempts = downloadAttempts;
+  }
+
+  /**
+   * Returns the base-64 encoded initialisation vector for the encryption scheme for the message.
+   *
+   * @return the base-64 encoded initialisation vector for the encryption scheme for the message
+   */
+  public String getEncryptionIV()
+  {
+    return encryptionIV;
   }
 
   /**
@@ -792,6 +461,16 @@ public class Message
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the message.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
@@ -802,14 +481,13 @@ public class Message
   }
 
   /**
-   * Set whether encryption is disabled for the message.
+   * Returns the date and time the last attempt was made to process the message.
    *
-   * @param isEncryptionDisabled <code>true</code> if encryption is disabled for the message or
-   *                             <code>false</code> otherwise
+   * @return the date and time the last attempt was made to process the message
    */
-  public void setIsEncryptionDisabled(boolean isEncryptionDisabled)
+  public Date getLastProcessed()
   {
-    this.isEncryptionDisabled = isEncryptionDisabled;
+    return lastProcessed;
   }
 
   /**
@@ -820,6 +498,18 @@ public class Message
   public void setLastProcessed(Date lastProcessed)
   {
     this.lastProcessed = lastProcessed;
+  }
+
+  /**
+   * Returns the name of the entity that has locked this message for processing or
+   * <code>null</code> if the message is not being processed.
+   *
+   * @return the name of the entity that has locked this message for processing or
+   * <code>null</code> if the message is not being processed
+   */
+  public String getLockName()
+  {
+    return lockName;
   }
 
   /**
@@ -835,6 +525,16 @@ public class Message
   }
 
   /**
+   * Returns the date and time the message was persisted.
+   *
+   * @return the date and time the message was persisted
+   */
+  public Date getPersisted()
+  {
+    return persisted;
+  }
+
+  /**
    * Set the date and time the message was persisted.
    *
    * @param persisted the date and time the message was persisted
@@ -845,8 +545,21 @@ public class Message
   }
 
   /**
-   * Set the message priority.
+   * Returns the message priority.
+   * <p/>
+   * "Out of Order" processing is usually applied to messages so that messages with a higher
+   * priority value are processed before messages with a lower priority value.
    *
+   * @return the message priority
+   */
+  public Priority getPriority()
+  {
+    return priority;
+  }
+
+  /**
+   * Set the message priority.
+   * <p/>
    * "Out of Order" processing is usually applied to messages so that messages with a higher
    * priority value are processed before messages with a lower priority value.
    *
@@ -855,6 +568,16 @@ public class Message
   public void setPriority(Priority priority)
   {
     this.priority = priority;
+  }
+
+  /**
+   * Returns the number of times that the processing of the message was attempted.
+   *
+   * @return the number of times that the processing of the message was attempted
+   */
+  public int getProcessAttempts()
+  {
+    return processAttempts;
   }
 
   /**
@@ -868,6 +591,16 @@ public class Message
   }
 
   /**
+   * Returns the number of times that the sending of the message was attempted.
+   *
+   * @return the number of times that the sending of the message was attempted
+   */
+  public int getSendAttempts()
+  {
+    return sendAttempts;
+  }
+
+  /**
    * Set the number of times that the sending of the message was attempted.
    *
    * @param sendAttempts the number of times that the sending of the message was attempted
@@ -878,6 +611,16 @@ public class Message
   }
 
   /**
+   * Returns the message status e.g. Initialised, Sending, etc.
+   *
+   * @return the message status e.g. Initialised, Sending, etc
+   */
+  public Status getStatus()
+  {
+    return status;
+  }
+
+  /**
    * Set the message status e.g. Initialised, Sending, etc.
    *
    * @param status the message status e.g. Initialised, Sending, etc
@@ -885,6 +628,16 @@ public class Message
   public void setStatus(Status status)
   {
     this.status = status;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of message.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of message
+   */
+  public UUID getTypeId()
+  {
+    return typeId;
   }
 
   /**
@@ -899,6 +652,16 @@ public class Message
   }
 
   /**
+   * Returns the date and time the message was updated.
+   *
+   * @return the date and time the message was updated
+   */
+  public Date getUpdated()
+  {
+    return updated;
+  }
+
+  /**
    * Set the date and time the message was updated.
    *
    * @param updated the date and time the message was updated
@@ -909,6 +672,16 @@ public class Message
   }
 
   /**
+   * Returns the username identifying the user associated with the message.
+   *
+   * @return the username identifying the user associated with the message
+   */
+  public String getUsername()
+  {
+    return username;
+  }
+
+  /**
    * Set the username identifying the user associated with the message.
    *
    * @param username the username identifying the user associated with the message
@@ -916,6 +689,53 @@ public class Message
   public void setUsername(String username)
   {
     this.username = username;
+  }
+
+  /**
+   * Returns <code>true</code> if the data for the message is encrypted or <code>false</code>
+   * otherwise.
+   *
+   * @return <code>true</code> if the data for the message is encrypted or <code>false</code>
+   * otherwise
+   */
+  public boolean isEncrypted()
+  {
+    return (!StringUtil.isNullOrEmpty(dataHash));
+  }
+
+  /**
+   * Returns <code>true</code> if encryption is disabled for the message or <code>false</code>
+   * otherwise.
+   *
+   * @return <code>true</code> if encryption is disabled for the message or <code>false</code>
+   * otherwise
+   */
+  public boolean isEncryptionDisabled()
+  {
+    return isEncryptionDisabled;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * originated from.
+   *
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message originated from
+   */
+  public void setDevice(UUID deviceId)
+  {
+    this.deviceId = deviceId;
+  }
+
+  /**
+   * Set whether encryption is disabled for the message.
+   *
+   * @param isEncryptionDisabled <code>true</code> if encryption is disabled for the message or
+   *                             <code>false</code> otherwise
+   */
+  public void setIsEncryptionDisabled(boolean isEncryptionDisabled)
+  {
+    this.isEncryptionDisabled = isEncryptionDisabled;
   }
 
   /**
@@ -1026,5 +846,182 @@ public class Message
     Encoder encoder = new Encoder(new Document(rootElement));
 
     return encoder.getData();
+  }
+
+  /**
+   * The enumeration giving the possible priorities for a message.
+   */
+  public enum Priority
+  {
+    LOW(1, "Low"), MEDIUM(5, "Medium"), HIGH(10, "High");
+
+    /**
+     * The code identifying the priority.
+     */
+    private int code;
+
+    /**
+     * The name of the priority.
+     */
+    private String name;
+
+    /**
+     * Returns the priority given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the priority
+     *
+     * @return the priority given by the specified numeric code value
+     */
+    public static Priority fromCode(int code)
+    {
+      switch (code)
+      {
+        case 1:
+          return Priority.LOW;
+
+        case 5:
+          return Priority.MEDIUM;
+
+        case 10:
+          return Priority.HIGH;
+
+        default:
+          return Priority.MEDIUM;
+      }
+    }
+
+    Priority(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the code identifying the priority.
+     *
+     * @return the code identifying the priority
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the name of the priority.
+     *
+     * @return the name of the priority
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the <code>Priority</code> enumeration value.
+     *
+     * @return the string representation of the <code>Priority</code> enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
+  }
+
+  /**
+   * The enumeration giving the possible statuses for a message.
+   */
+  public enum Status
+  {
+    INITIALISED(0, "Initialised"), QUEUED_FOR_SENDING(1, "QueuedForSending"),
+    QUEUED_FOR_PROCESSING(2, "QueuedForProcessing"), ABORTED(3, "Aborted"), FAILED(4, "Failed"),
+    PROCESSING(5, "Processing"), SENDING(6, "Sending"),
+    QUEUED_FOR_DOWNLOAD(7, "QueuedForDownload"), DOWNLOADING(8, "Downloading"),
+    PROCESSED(10, "Processed"), UNKNOWN(-1, "Unknown");
+
+    private int code;
+
+    private String name;
+
+    /**
+     * Returns the status given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the status
+     *
+     * @return the status given by the specified numeric code value
+     */
+    public static Status fromCode(int code)
+    {
+      switch (code)
+      {
+        case 0:
+          return Status.INITIALISED;
+
+        case 1:
+          return Status.QUEUED_FOR_SENDING;
+
+        case 2:
+          return Status.QUEUED_FOR_PROCESSING;
+
+        case 3:
+          return Status.ABORTED;
+
+        case 4:
+          return Status.FAILED;
+
+        case 5:
+          return Status.PROCESSING;
+
+        case 6:
+          return Status.SENDING;
+
+        case 7:
+          return Status.QUEUED_FOR_DOWNLOAD;
+
+        case 8:
+          return Status.DOWNLOADING;
+
+        case 10:
+          return Status.PROCESSED;
+
+        default:
+          return Status.UNKNOWN;
+      }
+    }
+
+    Status(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the numeric code value identifying the status.
+     *
+     * @return the numeric code value identifying the status
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the name of the status.
+     *
+     * @return the name of the status
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the status enumeration value.
+     *
+     * @return the string representation of the status enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
   }
 }

@@ -16,15 +16,11 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.security.UserDirectoryNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -35,7 +31,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class DetachableUserDirectoryModel extends InjectableLoadableDetachableModel<UserDirectory>
+public class DetachableUserDirectoryModel
+  extends InjectableLoadableDetachableModel<UserDirectory>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -94,7 +91,8 @@ public class DetachableUserDirectoryModel extends InjectableLoadableDetachableMo
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the user directory (" + id + ")", e);
+      throw new WebApplicationException(String.format("Failed to load the user directory (%s)", id),
+        e);
     }
   }
 

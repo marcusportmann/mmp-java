@@ -16,8 +16,6 @@
 
 package guru.mmp.sharepoint;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import com.microsoft.schemas.sharepoint.soap.ListsSoap;
 import com.microsoft.schemas.sharepoint.soap.UpdateListItems;
 import com.microsoft.schemas.sharepoint.soap.UpdateListItems.Updates;
@@ -27,8 +25,6 @@ import org.w3c.dom.NodeList;
 
 import java.util.List;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SharePointHelper</code> class provides utility methods to assist in working with
@@ -40,8 +36,9 @@ import java.util.Map;
 public class SharePointHelper
 {
   private static final String SHAREPOINT_ROWSET_SCHEMA_NAMESPACE = "#RowsetSchema";
+
   private static final String SHAREPOINT_SOAP_NAMESPACE =
-    "http://schemas.microsoft.com/sharepoint/soap/";
+    "http://schemas.microsoft" + ".com/sharepoint/soap/";
 
   /**
    * Add an attachment to a SharePoint list item.
@@ -55,8 +52,9 @@ public class SharePointHelper
    *
    * @throws SharePointException
    */
-  public static void addAttachmentToListItem(ListsSoap listsService, String listName,
-      String itemId, String attachmentName, byte[] attachmentData)
+  public static void addAttachmentToListItem(
+    ListsSoap listsService, String listName, String itemId, String attachmentName,
+    byte[] attachmentData)
     throws SharePointException
 
   {
@@ -84,15 +82,16 @@ public class SharePointHelper
    *
    * @throws SharePointException
    */
-  public static String createListItem(ListsSoap listsService, String listName,
-      Map<String, String> fields)
+  public static String createListItem(
+    ListsSoap listsService, String listName, Map<String, String> fields)
     throws SharePointException
   {
     try
     {
       // Create the SharePoint list modification request to create a new list item
       SharePointListModificationRequest listModificationRequest =
-        SharePointListModificationRequest.createNewListItemRequest(fields);
+        SharePointListModificationRequest.createNewListItemRequest(
+        fields);
 
       // Add the SharePoint list modification request to the list of updates
       Updates updates = new UpdateListItems.Updates();
@@ -116,8 +115,8 @@ public class SharePointHelper
 
             if (resultsElement.getLocalName().equals("Results"))
             {
-              NodeList resultElements =
-                resultsElement.getElementsByTagNameNS(SHAREPOINT_SOAP_NAMESPACE, "Result");
+              NodeList resultElements = resultsElement.getElementsByTagNameNS(
+                SHAREPOINT_SOAP_NAMESPACE, "Result");
 
               if (resultElements.getLength() > 0)
               {
@@ -130,9 +129,8 @@ public class SharePointHelper
 
                 if (errorCode == 0)
                 {
-                  NodeList rowElements =
-                    resultsElement.getElementsByTagNameNS(SHAREPOINT_ROWSET_SCHEMA_NAMESPACE,
-                      "row");
+                  NodeList rowElements = resultsElement.getElementsByTagNameNS(
+                    SHAREPOINT_ROWSET_SCHEMA_NAMESPACE, "row");
 
                   if (rowElements.getLength() > 0)
                   {

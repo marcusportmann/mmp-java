@@ -16,8 +16,6 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.UUID;
 
 /**
@@ -29,9 +27,13 @@ public class Group
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String description;
+
   private String groupName;
+
   private UUID id;
+
   private UUID userDirectoryId;
 
   /**
@@ -60,38 +62,6 @@ public class Group
   }
 
   /**
-   * Returns the name of the group uniquely identifying the group.
-   *
-   * @return the name of the group uniquely identifying the group
-   */
-  public String getGroupName()
-  {
-    return groupName;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the group.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the group is associated with
-   */
-  public UUID getUserDirectoryId()
-  {
-    return userDirectoryId;
-  }
-
-  /**
    * Set the description for the group.
    *
    * @param description the description for the group
@@ -99,6 +69,16 @@ public class Group
   public void setDescription(String description)
   {
     this.description = description;
+  }
+
+  /**
+   * Returns the name of the group uniquely identifying the group.
+   *
+   * @return the name of the group uniquely identifying the group
+   */
+  public String getGroupName()
+  {
+    return groupName;
   }
 
   /**
@@ -112,6 +92,16 @@ public class Group
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the group.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
@@ -119,6 +109,18 @@ public class Group
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with
+   */
+  public UUID getUserDirectoryId()
+  {
+    return userDirectoryId;
   }
 
   /**

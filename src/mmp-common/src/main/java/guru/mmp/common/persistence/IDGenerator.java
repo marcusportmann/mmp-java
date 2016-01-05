@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +23,6 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IDGenerator</code> class provides unique IDs for the entity types in the database.
@@ -50,11 +46,48 @@ public class IDGenerator
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(IDGenerator.class);
+
   private DataSource dataSource;
+
   private String getCurrentIdSQL;
+
   private String insertIdSQL;
+
   private String schema;
+
   private String updateIdSQL;
+
+  /**
+   * Returns the next <code>UUID</code>.
+   *
+   * @param dataSource the data source used to generate the next UUID
+   *
+   * @return the next <code>UUID</code>
+   */
+  public static UUID nextUUID(DataSource dataSource)
+  {
+    // TODO: Save the results of checking if we are using a PostgreSQL database
+
+    /*
+     * First check whether this is a PostgreSQL database and we should be using a stored procedure
+     * to retrieve the next UUID.
+     */
+    try (Connection connection = dataSource.getConnection())
+    {
+      DatabaseMetaData metaData = connection.getMetaData();
+
+      if (metaData.getDatabaseProductName().equals("PostgreSQL"))
+      {
+
+      }
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to retrieve the next UUID", e);
+    }
+
+    return UUID.randomUUID();
+  }
 
   /**
    * Constructs a new <code>IDGenerator</code>.
@@ -84,39 +117,6 @@ public class IDGenerator
     }
 
     init();
-  }
-
-  /**
-   * Returns the next <code>UUID</code>.
-   *
-   * @param dataSource the data source used to generate the next UUID
-   *
-   * @return the next <code>UUID</code>
-   */
-  public static UUID nextUUID(DataSource dataSource)
-  {
-    // TODO: Save the results of checking if we are using a PostgreSQL database
-
-    /*
-     * First check whether this is a PostgreSQL database and we should be using a stored procedure
-     * to retrieve the next UUID.
-     */
-    try (Connection connection = dataSource.getConnection())
-    {
-      DatabaseMetaData metaData = connection.getMetaData();
-
-      if (metaData.getDatabaseProductName().equals("PostgreSQL"))
-      {
-
-
-      }
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to retrieve the next UUID", e);
-    }
-
-    return UUID.randomUUID();
   }
 
   /**
@@ -185,12 +185,14 @@ public class IDGenerator
       }
       catch (Throwable f)
       {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the new ID for the entity of type (" + type + ") from the IDGENERATOR table", f);
+        logger.error(String.format(
+          "Failed to rollback the transaction while retrieving the new ID for the entity of type " +
+            "(%s) from the IDGENERATOR table", type), f);
       }
 
-      throw new IDGeneratorException("Failed to retrieve the new ID for the entity of type ("
-          + type + ") from the IDGENERATOR table: " + e.getMessage(), e);
+      throw new IDGeneratorException(String.format(
+        "Failed to retrieve the new ID for the entity of type (%s) from the IDGENERATOR table: %s",
+        type, e.getMessage()), e);
     }
     finally
     {
@@ -203,8 +205,9 @@ public class IDGenerator
       }
       catch (Throwable e)
       {
-        logger.error("Failed to resume the original transaction while retrieving"
-            + " the new ID for the entity of type (" + type + ") from the IDGENERATOR table", e);
+        logger.error(String.format(
+          "Failed to resume the original transaction while retrieving the new ID for the entity " +
+            "of type (%s) from the IDGENERATOR table", type), e);
       }
     }
   }
@@ -218,8 +221,8 @@ public class IDGenerator
   protected void buildStatements(String schemaPrefix)
   {
     // getCurrentIdSQL
-    getCurrentIdSQL = "SELECT CURRENT FROM " + schemaPrefix + "IDGENERATOR"
-        + " WHERE NAME=? FOR UPDATE";
+    getCurrentIdSQL = "SELECT CURRENT FROM " + schemaPrefix + "IDGENERATOR" + " WHERE NAME=? FOR " +
+      "UPDATE";
 
     // insertIdSQL
     insertIdSQL = "INSERT INTO " + schemaPrefix + "IDGENERATOR" + " (CURRENT, NAME) VALUES (?, ?)";
@@ -316,8 +319,9 @@ public class IDGenerator
 
       if (statement.executeUpdate() == 0)
       {
-        throw new SQLException("No rows were affected while inserting the IDGENERATOR table"
-            + " row for the type (" + type + ")");
+        throw new SQLException(
+          "No rows were affected while inserting the IDGENERATOR table" + " row for the type (" +
+            type + ")");
       }
     }
   }
@@ -332,8 +336,9 @@ public class IDGenerator
 
       if (statement.executeUpdate() == 0)
       {
-        throw new SQLException("No rows were affected while updating the IDGENERATOR table"
-            + " row for the type (" + type + ")");
+        throw new SQLException(
+          "No rows were affected while updating the IDGENERATOR table" + " row for the type (" +
+            type + ")");
       }
     }
   }

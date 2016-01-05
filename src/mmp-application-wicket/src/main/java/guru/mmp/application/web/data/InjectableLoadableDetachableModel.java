@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -30,7 +28,8 @@ import org.apache.wicket.protocol.http.WebApplication;
  *
  * @author Marcus Portmann
  */
-public abstract class InjectableLoadableDetachableModel<T> extends LoadableDetachableModel<T>
+public abstract class InjectableLoadableDetachableModel<T>
+  extends LoadableDetachableModel<T>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -39,8 +38,9 @@ public abstract class InjectableLoadableDetachableModel<T> extends LoadableDetac
    */
   public InjectableLoadableDetachableModel()
   {
-    guru.mmp.application.web.WebApplication webApplication =
-      guru.mmp.application.web.WebApplication.class.cast(WebApplication.get());
+    guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
+      .WebApplication.class.cast(
+      WebApplication.get());
 
     webApplication.getWebApplicationInjector().inject(this);
   }

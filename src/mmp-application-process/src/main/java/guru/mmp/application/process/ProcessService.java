@@ -16,24 +16,16 @@
 
 package guru.mmp.application.process;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import guru.mmp.application.util.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-import java.util.UUID;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
-import javax.naming.InitialContext;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>ProcessService</code> class provides the Process Service implementation.
@@ -49,7 +41,7 @@ public class ProcessService
   private static final Logger logger = LoggerFactory.getLogger(ProcessService.class);
 
   /* The name of the Process Service instance. */
-  private String instanceName;
+  private String instanceName = ServiceUtil.getServiceInstanceName("Process Service");
 
   /* The DAO providing persistence capabilities for the process infrastructure. */
   @Inject
@@ -64,7 +56,7 @@ public class ProcessService
    * Create the new process definition.
    *
    * @param processDefinition the <code>ProcessDefinition</code> instance containing the information
-   *                         for the new process definition
+   *                          for the new process definition
    *
    * @throws ProcessServiceException
    */
@@ -73,9 +65,9 @@ public class ProcessService
   {
     if (processDefinitionExists(processDefinition.getId(), processDefinition.getVersion()))
     {
-      throw new ProcessServiceException("A process definition with ID ("
-          + processDefinition.getId() + ") and version (" + processDefinition.getVersion()
-          + ") already exists");
+      throw new ProcessServiceException(
+        String.format("A process definition with ID (%s) and version (%d) already exists",
+          processDefinition.getId(), processDefinition.getVersion()));
     }
 
     try
@@ -84,9 +76,9 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to create the process definition with ID ("
-          + processDefinition.getId() + ") and version (" + processDefinition.getVersion()
-          + ")", e);
+      throw new ProcessServiceException(
+        String.format("Failed to create the process definition with ID (%s) and version (%d)",
+          processDefinition.getId(), processDefinition.getVersion()), e);
     }
   }
 
@@ -108,7 +100,8 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-          "Failed to delete all versions of the process definition with ID (" + id + ")", e);
+        String.format("Failed to delete all versions of the process definition with ID (%s)", id),
+        e);
     }
   }
 
@@ -129,10 +122,9 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to execute the process instance ("
-          + processInstance.getId() + ")", e);
+      throw new ProcessServiceException(
+        "Failed to execute the process instance (" + processInstance.getId() + ")", e);
     }
-
   }
 
   /**
@@ -152,8 +144,7 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-          "Failed to retrieve the summaries for the current versions of the process definitions",
-          e);
+        "Failed to retrieve the summaries for the current versions of the process definitions", e);
     }
   }
 
@@ -174,7 +165,7 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-          "Failed to retrieve the current versions of the process definitions", e);
+        "Failed to retrieve the current versions of the process definitions", e);
     }
   }
 
@@ -184,7 +175,7 @@ public class ProcessService
    * The process instance will be locked to prevent duplicate processing.
    *
    * @return the next process instance that is scheduled for execution or <code>null</code> if no
-   *         process instances are currently scheduled for execution
+   * process instances are currently scheduled for execution
    *
    * @throws ProcessServiceException
    */
@@ -193,12 +184,12 @@ public class ProcessService
   {
     try
     {
-      return processDAO.getNextProcessInstanceScheduledForExecution(getInstanceName());
+      return processDAO.getNextProcessInstanceScheduledForExecution(instanceName);
     }
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-          "Failed to retrieve the next process instance that has been scheduled for execution", e);
+        "Failed to retrieve the next process instance that has been scheduled for execution", e);
     }
   }
 
@@ -243,8 +234,9 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to retrieve the process definition with ID (" + id
-          + ") and version (" + version + ")", e);
+      throw new ProcessServiceException(
+        String.format("Failed to retrieve the process definition with ID (%s) and version (%d)", id,
+          version), e);
     }
   }
 
@@ -256,7 +248,7 @@ public class ProcessService
    * @param version the version of the process definition
    *
    * @return the summary for the process definition and version or <code>null</code> if the process
-   *         definition could not be found
+   * definition could not be found
    *
    * @throws ProcessServiceException
    */
@@ -269,22 +261,19 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException(
-          "Failed to retrieve the summary for the process definition with ID (" + id
-          + ") and version (" + version + ")", e);
+      throw new ProcessServiceException(String.format(
+        "Failed to retrieve the summary for the process definition with ID (%s) and version (%d)",
+        id, version), e);
     }
   }
 
   /**
    * Initialise the Process Service instance.
-   *
-   * @throws ProcessServiceException
    */
   @PostConstruct
   public void init()
-    throws ProcessServiceException
   {
-    logger.info("Initialising the Process Service instance (" + getInstanceName() + ")");
+    logger.info(String.format("Initialising the Process Service instance (%s)", instanceName));
 
     try
     {
@@ -293,8 +282,7 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to initialise the Process Service: "
-          + e.getMessage());
+      throw new RuntimeException("Failed to initialise the Process Service", e);
     }
   }
 
@@ -318,8 +306,9 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to check whether the process definition with ID ("
-          + id + ") and version (" + version + ") exists", e);
+      throw new ProcessServiceException(String.format(
+        "Failed to check whether the process definition with ID (%s) and version (%d) exists", id,
+        version), e);
     }
   }
 
@@ -333,19 +322,19 @@ public class ProcessService
    *
    * @throws ProcessServiceException
    */
-  public int resetProcessInstanceLocks(ProcessInstance.Status status,
-      ProcessInstance.Status newStatus)
+  public int resetProcessInstanceLocks(
+    ProcessInstance.Status status, ProcessInstance.Status newStatus)
     throws ProcessServiceException
   {
     try
     {
-      return processDAO.resetProcessInstanceLocks(getInstanceName(), status, newStatus);
+      return processDAO.resetProcessInstanceLocks(instanceName, status, newStatus);
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to reset the locks for the process instances with "
-          + "the status (" + status + ") that have been locked using the lock name ("
-          + getInstanceName() + ")", e);
+      throw new ProcessServiceException(String.format(
+        "Failed to reset the locks for the process instances with the status (%s) that have been " +
+          "locked using the lock name (%s)", status, instanceName), e);
     }
   }
 
@@ -368,8 +357,8 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-          "Failed to unlock and set the status for the process instance (" + id + ") to (" + status
-          + ")", e);
+        String.format("Failed to unlock and set the status for the process instance (%s) to (%s)",
+          id, status), e);
     }
   }
 
@@ -391,116 +380,9 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException("Failed to update the data for the process instance (" + id
-          + ")", e);
+      throw new ProcessServiceException(
+        String.format("Failed to update the data for the process instance (%s)", id), e);
     }
-  }
-
-  /**
-   * Retrieves the name of the Process Service instance.
-   */
-  private String getInstanceName()
-  {
-    if (instanceName == null)
-    {
-      String applicationName = null;
-
-      try
-      {
-        applicationName = InitialContext.doLookup("java:app/AppName");
-      }
-      catch (Throwable ignored) {}
-
-      if (applicationName == null)
-      {
-        try
-        {
-          applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
-        }
-        catch (Throwable ignored) {}
-      }
-
-      if (applicationName == null)
-      {
-        logger.error("Failed to retrieve the application name from JNDI using the names ("
-            + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the Process Service instance name");
-
-        applicationName = "Unknown";
-      }
-
-      instanceName = applicationName + "::";
-
-      try
-      {
-        java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
-
-        instanceName += localMachine.getHostName().toLowerCase();
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to retrieve the server hostname while constructing the Process"
-            + " Service instance name", e);
-        instanceName = "Unknown";
-      }
-
-      // Check if we are running under JBoss and if so retrieve the server name
-      if (System.getProperty("jboss.server.name") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("jboss.server.name");
-      }
-
-      // Check if we are running under Glassfish and if so retrieve the server name
-      else if (System.getProperty("glassfish.version") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("com.sun.aas.instanceName");
-      }
-
-      // Check if we are running under WebSphere Application Server Community Edition (Geronimo)
-      else if (System.getProperty("org.apache.geronimo.server.dir") != null)
-      {
-        instanceName = instanceName + "::Geronimo";
-      }
-
-      // Check if we are running under WebSphere Application Server Liberty Profile
-      else if (System.getProperty("wlp.user.dir") != null)
-      {
-        instanceName = instanceName + "::WLP";
-      }
-
-      /*
-       * Check if we are running under WebSphere and if so execute the code below to retrieve the
-       * server name.
-       */
-      else
-      {
-        Class<?> clazz = null;
-
-        try
-        {
-          clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.ibm.websphere.management.configservice.ConfigService");
-        }
-        catch (Throwable ignored)
-        {}
-
-        if (clazz != null)
-        {
-          try
-          {
-            instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
-          }
-          catch (Throwable e)
-          {
-            logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the Process Service instance name", e);
-            instanceName = instanceName + "::Unknown";
-          }
-        }
-      }
-    }
-
-    return instanceName;
   }
 
   /**

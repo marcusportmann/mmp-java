@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +44,7 @@ public interface IMessagingService
    * @param message the message to process
    *
    * @return <code>true</code> if the message processor is capable of processing the specified
-   *         message or <code>false</code> otherwise
+   * message or <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -60,7 +58,7 @@ public interface IMessagingService
    * @param messagePart the message part to queue for assembly
    *
    * @return <code>true</code> if the message processor is capable of queueing the specified
-   *         message part for assembly or <code>false</code> otherwise
+   * message part for assembly or <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -84,7 +82,7 @@ public interface IMessagingService
    * @param message the message to decrypt
    *
    * @return <code>true</code> if the message data was decrypted successfully or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws MessagingException
    */
@@ -140,7 +138,7 @@ public interface IMessagingService
    * @param message the message to encrypt
    *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws MessagingException
    */
@@ -165,7 +163,7 @@ public interface IMessagingService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   *         found
+   * found
    *
    * @throws MessagingException
    */
@@ -185,7 +183,7 @@ public interface IMessagingService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @return the message or <code>null</code> if the message could not
-   *         be found
+   * be found
    *
    * @throws MessagingException
    */
@@ -213,7 +211,7 @@ public interface IMessagingService
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
-   *         device
+   * device
    *
    * @throws MessagingException
    */
@@ -246,7 +244,7 @@ public interface IMessagingService
    * The message will be locked to prevent duplicate processing.
    *
    * @return the next message that has been queued for processing or <code>null</code> if no
-   *         messages are currently queued for processing
+   * messages are currently queued for processing
    *
    * @throws MessagingException
    */
@@ -279,7 +277,7 @@ public interface IMessagingService
    * @param message the message
    *
    * @return <code>true</code> if a message with the specified type information should be archived
-   *         or <code>false</code> otherwise
+   * or <code>false</code> otherwise
    */
   boolean isArchivableMessage(Message message);
 
@@ -289,7 +287,7 @@ public interface IMessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message can be processed asynchronously or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   boolean isAsynchronousMessage(Message message);
 
@@ -299,7 +297,7 @@ public interface IMessagingService
    * @param message the message to check
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws MessagingException
    */
@@ -312,7 +310,7 @@ public interface IMessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message can be processed synchronously or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   boolean isSynchronousMessage(Message message);
 

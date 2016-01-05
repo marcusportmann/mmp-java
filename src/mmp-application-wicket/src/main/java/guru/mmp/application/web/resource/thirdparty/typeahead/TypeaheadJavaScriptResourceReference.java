@@ -16,10 +16,9 @@
 
 package guru.mmp.application.web.resource.thirdparty.typeahead;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.thirdparty.handlebars.HandlebarsJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.handlebars
+  .HandlebarsJavaScriptResourceReference;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -27,35 +26,30 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TypeaheadJavaScriptResourceReference</code> class implements the JavaScript resource
  * reference for the Typeahead thirdparty resource bundled with the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class TypeaheadJavaScriptResourceReference extends JavaScriptResourceReference
+public class TypeaheadJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new TypeaheadJavaScriptResourceReference());
-  private static final TypeaheadJavaScriptResourceReference INSTANCE =
-    new TypeaheadJavaScriptResourceReference();
+  private static final TypeaheadJavaScriptResourceReference INSTANCE = new
+    TypeaheadJavaScriptResourceReference();
 
-  private TypeaheadJavaScriptResourceReference()
-  {
-    super(TypeaheadJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "typeahead.bundle.js"
-        : "typeahead.bundle.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new TypeaheadJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the Typeahead
    * thirdparty resource bundled with the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the Typeahead
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static TypeaheadJavaScriptResourceReference get()
   {
@@ -70,6 +64,12 @@ public class TypeaheadJavaScriptResourceReference extends JavaScriptResourceRefe
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private TypeaheadJavaScriptResourceReference()
+  {
+    super(TypeaheadJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "typeahead.bundle.js" : "typeahead.bundle.js");
   }
 
   /**

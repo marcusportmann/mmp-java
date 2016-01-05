@@ -16,20 +16,13 @@
 
 package guru.mmp.application.batch;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.concurrent.Future;
-
 import javax.annotation.PostConstruct;
-
 import javax.ejb.*;
-
 import javax.inject.Inject;
+import java.util.concurrent.Future;
 
 /**
  * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.
@@ -52,7 +45,7 @@ public class BackgroundJobExecutor
    * Execute all the jobs scheduled for execution.
    *
    * @return <code>true</code> if the jobs were executed successfully or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Asynchronous
   public Future<Boolean> execute()
@@ -60,7 +53,7 @@ public class BackgroundJobExecutor
     // If CDI injection was not completed successfully for the bean then stop here
     if (batchService == null)
     {
-      logger.error("Failed to execute the jobs:" + " The Batch Service was NOT injected");
+      logger.error("Failed to execute the jobs: The Batch Service was NOT injected");
 
       return new AsyncResult<>(false);
     }
@@ -102,12 +95,11 @@ public class BackgroundJobExecutor
       {
         logger.error("Failed to reset the locks for the jobs being executed", e);
       }
-
     }
     else
     {
-      logger.error("Failed to initialise the Background Job Executor:"
-          + " The Batch Service was NOT injected");
+      logger.error("Failed to initialise the Background Job Executor: " +
+        "The Batch Service was NOT injected");
     }
   }
 
@@ -130,7 +122,9 @@ public class BackgroundJobExecutor
           }
 
           // Schedule any unscheduled jobs
-          while (batchService.scheduleNextUnscheduledJobForExecution()) {}
+          while (batchService.scheduleNextUnscheduledJobForExecution())
+          {
+          }
 
           return;
         }
@@ -147,7 +141,7 @@ public class BackgroundJobExecutor
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Executing the job (" + job.getId() + ")");
+          logger.debug(String.format("Executing the job (%s)", job.getId()));
         }
 
         batchService.executeJob(job);
@@ -163,14 +157,16 @@ public class BackgroundJobExecutor
           }
           catch (Throwable f)
           {
-            logger.error("Failed to unlock and set the status for the job (" + job.getId()
-                + ") to \"Scheduled\"", f);
+            logger.error(
+              String.format("Failed to unlock and set the status for the job (%s) to \"Scheduled\"",
+                job.getId()), f);
           }
         }
         catch (Throwable e)
         {
-          logger.warn("The job (" + job.getId()
-              + ") could not be rescheduled and will be marked as \"Failed\"");
+          logger.warn(
+            String.format("The job (%s) could not be rescheduled and will be marked as \"Failed\"",
+              job.getId()));
 
           try
           {
@@ -178,14 +174,15 @@ public class BackgroundJobExecutor
           }
           catch (Throwable f)
           {
-            logger.error("Failed to unlock and set the status for the job (" + job.getId()
-                + ") to \"Failed\"", f);
+            logger.error(
+              String.format("Failed to unlock and set the status for the job (%s) to \"Failed\"",
+                job.getId()), f);
           }
         }
       }
       catch (Throwable e)
       {
-        logger.error("Failed to execute the job (" + job.getId() + ")", e);
+        logger.error(String.format("Failed to execute the job (%s)", job.getId()), e);
 
         // Increment the execution attempts for the job
         try
@@ -196,8 +193,8 @@ public class BackgroundJobExecutor
         }
         catch (Throwable f)
         {
-          logger.error("Failed to increment the execution attempts for the job (" + job.getId()
-              + ")", f);
+          logger.error(String.format("Failed to increment the execution attempts for the job (%s)",
+            job.getId()), f);
         }
 
         try
@@ -209,8 +206,9 @@ public class BackgroundJobExecutor
            */
           if (job.getExecutionAttempts() >= batchService.getMaximumJobExecutionAttempts())
           {
-            logger.warn("The job (" + job.getId() + ") has exceeded the maximum "
-                + " number of execution attempts and will be marked as \"Failed\"");
+            logger.warn(String.format(
+              "The job (%s) has exceeded the maximum  number of execution attempts and will be " +
+                "marked as \"Failed\"", job.getId()));
 
             batchService.unlockJob(job.getId(), Job.Status.FAILED);
           }
@@ -221,7 +219,8 @@ public class BackgroundJobExecutor
         }
         catch (Throwable f)
         {
-          logger.error("Failed to unlock and set the status for the job (" + job.getId() + ")", f);
+          logger.error(
+            String.format("Failed to unlock and set the status for the job (%s)", job.getId()), f);
         }
       }
     }

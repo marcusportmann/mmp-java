@@ -16,8 +16,6 @@
 
 package guru.mmp.application.codes;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -92,48 +90,6 @@ public class CachedCodeCategory
   }
 
   /**
-   * Returns the custom code data for the cached code category.
-   *
-   * @return the custom code data for the cached code category
-   */
-  public String getCodeData()
-  {
-    return codeData;
-  }
-
-  /**
-   * Returns the codes for the cached code category.
-   *
-   * @return the codes for the cached code category
-   */
-  public List<Code> getCodes()
-  {
-    return codes;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the cached code
-   * category.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the cached code
-   *         category
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the date and time the cached code category was last updated.
-   *
-   * @return the date and time the cached code category was last updated
-   */
-  public Date getLastUpdated()
-  {
-    return lastUpdated;
-  }
-
-  /**
    * Set the date and time the code category was cached.
    *
    * @param cached the date and time the code category was cached
@@ -141,6 +97,16 @@ public class CachedCodeCategory
   public void setCached(Date cached)
   {
     this.cached = cached;
+  }
+
+  /**
+   * Returns the custom code data for the cached code category.
+   *
+   * @return the custom code data for the cached code category
+   */
+  public String getCodeData()
+  {
+    return codeData;
   }
 
   /**
@@ -155,6 +121,16 @@ public class CachedCodeCategory
   }
 
   /**
+   * Returns the codes for the cached code category.
+   *
+   * @return the codes for the cached code category
+   */
+  public List<Code> getCodes()
+  {
+    return codes;
+  }
+
+  /**
    * Set the codes for the cached code category.
    *
    * @param codes the codes for the cached code category
@@ -162,6 +138,18 @@ public class CachedCodeCategory
   public void setCodes(List<Code> codes)
   {
     this.codes = codes;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   * category.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the cached code
+   * category
+   */
+  public UUID getId()
+  {
+    return id;
   }
 
   /**
@@ -174,6 +162,16 @@ public class CachedCodeCategory
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns the date and time the cached code category was last updated.
+   *
+   * @return the date and time the cached code category was last updated
+   */
+  public Date getLastUpdated()
+  {
+    return lastUpdated;
   }
 
   /**

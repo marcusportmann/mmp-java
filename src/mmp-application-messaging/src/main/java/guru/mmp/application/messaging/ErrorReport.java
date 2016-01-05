@@ -16,10 +16,7 @@
 
 package guru.mmp.application.messaging;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -104,8 +101,9 @@ public class ErrorReport
    *                           the device the error report originated from
    * @param data               the data associated with the error report e.g. the application XML
    */
-  public ErrorReport(UUID id, UUID applicationId, int applicationVersion, String description,
-      String detail, String feedback, Date created, String who, UUID deviceId, byte[] data)
+  public ErrorReport(
+    UUID id, UUID applicationId, int applicationVersion, String description, String detail,
+    String feedback, Date created, String who, UUID deviceId, byte[] data)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -124,103 +122,11 @@ public class ErrorReport
    * that generated the error report.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the application
-   *         that generated the error report
+   * that generated the error report
    */
   public UUID getApplicationId()
   {
     return applicationId;
-  }
-
-  /**
-   * Returns the version of the application that generated the error report.
-   *
-   * @return the version of the application that generated the error report
-   */
-  public int getApplicationVersion()
-  {
-    return applicationVersion;
-  }
-
-  /**
-   * Returns the date and time the error report was created.
-   *
-   * @return the date and time the error report was created
-   */
-  public Date getCreated()
-  {
-    return created;
-  }
-
-  /**
-   * Returns the data associated with the error report e.g. the application XML.
-   *
-   * @return the data associated with the error report e.g. the application XML
-   */
-  public byte[] getData()
-  {
-    return data;
-  }
-
-  /**
-   * Returns the description of the error.
-   *
-   * @return the description of the error
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Returns the error detail e.g. a stack trace.
-   *
-   * @return the error detail e.g. a stack trace
-   */
-  public String getDetail()
-  {
-    return detail;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the error
-   * report originated from.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the error
-   *         report originated from
-   */
-  public UUID getDeviceId()
-  {
-    return deviceId;
-  }
-
-  /**
-   * Returns the feedback provided by the user for the error.
-   *
-   * @return the feedback provided by the user for the error
-   */
-  public String getFeedback()
-  {
-    return feedback;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the username identifying the user associated with the error report.
-   *
-   * @return the username identifying the user associated with the error report
-   */
-  public String getWho()
-  {
-    return who;
   }
 
   /**
@@ -236,6 +142,16 @@ public class ErrorReport
   }
 
   /**
+   * Returns the version of the application that generated the error report.
+   *
+   * @return the version of the application that generated the error report
+   */
+  public int getApplicationVersion()
+  {
+    return applicationVersion;
+  }
+
+  /**
    * Set the version of the application that generated the error report.
    *
    * @param applicationVersion the version of the application that generated the error report
@@ -243,6 +159,16 @@ public class ErrorReport
   public void setApplicationVersion(int applicationVersion)
   {
     this.applicationVersion = applicationVersion;
+  }
+
+  /**
+   * Returns the date and time the error report was created.
+   *
+   * @return the date and time the error report was created
+   */
+  public Date getCreated()
+  {
+    return created;
   }
 
   /**
@@ -256,6 +182,16 @@ public class ErrorReport
   }
 
   /**
+   * Returns the data associated with the error report e.g. the application XML.
+   *
+   * @return the data associated with the error report e.g. the application XML
+   */
+  public byte[] getData()
+  {
+    return data;
+  }
+
+  /**
    * Set the data associated with the error report e.g. the application XML.
    *
    * @param data the data associated with the error report e.g. the application XML
@@ -263,6 +199,16 @@ public class ErrorReport
   public void setData(byte[] data)
   {
     this.data = data;
+  }
+
+  /**
+   * Returns the description of the error.
+   *
+   * @return the description of the error
+   */
+  public String getDescription()
+  {
+    return description;
   }
 
   /**
@@ -276,6 +222,16 @@ public class ErrorReport
   }
 
   /**
+   * Returns the error detail e.g. a stack trace.
+   *
+   * @return the error detail e.g. a stack trace
+   */
+  public String getDetail()
+  {
+    return detail;
+  }
+
+  /**
    * Set the error detail e.g. a stack trace.
    *
    * @param detail the error detail e.g. a stack trace
@@ -283,6 +239,18 @@ public class ErrorReport
   public void setDetail(String detail)
   {
     this.detail = detail;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   * report originated from.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   * report originated from
+   */
+  public UUID getDeviceId()
+  {
+    return deviceId;
   }
 
   /**
@@ -298,6 +266,16 @@ public class ErrorReport
   }
 
   /**
+   * Returns the feedback provided by the user for the error.
+   *
+   * @return the feedback provided by the user for the error
+   */
+  public String getFeedback()
+  {
+    return feedback;
+  }
+
+  /**
    * Set the feedback provided by the user for the error.
    *
    * @param feedback the feedback provided by the user for the error
@@ -308,6 +286,16 @@ public class ErrorReport
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the error report.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
@@ -315,6 +303,16 @@ public class ErrorReport
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns the username identifying the user associated with the error report.
+   *
+   * @return the username identifying the user associated with the error report
+   */
+  public String getWho()
+  {
+    return who;
   }
 
   /**

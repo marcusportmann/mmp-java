@@ -16,44 +16,38 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.*;
 import guru.mmp.common.util.StringUtil;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.xml.namespace.QName;
-
 /**
  * The <code>SubProcess</code> class represents a Sub-Process that forms part of a Process.
- * <p>
+ * <p/>
  * A Sub-Process has parts that are modeled in a child-level process, a process with its own
  * activity flow and start and end states.
- * <p>
+ * <p/>
  * A Sub-Process can be triggered by an event making it an event Sub-Process. An event Sub-Process
  * is not part of the normal flow of the Process. Instead, it is triggered by one of the following
  * events:
  * <ul>
- *   <li>Message</li>
- *   <li>Timer</li>
- *   <li>Multiple</li>
- *   <li>Multiple-Parallel</li>
- *   <li>Conditional</li>
- *   <li>Signal</li>
- *   <li>Escalation</li>
+ * <li>Message</li>
+ * <li>Timer</li>
+ * <li>Multiple</li>
+ * <li>Multiple-Parallel</li>
+ * <li>Conditional</li>
+ * <li>Signal</li>
+ * <li>Escalation</li>
  * </ul>
- * <p>
+ * <p/>
  * <b>Sub-Process</b> XML schema:
  * <pre>
  * &lt;xsd:element name="subProcess" type="tSubProcess" substitutionGroup="flowElement"/&gt;
@@ -74,7 +68,8 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SubProcess extends Activity
+public class SubProcess
+  extends Activity
 {
   /**
    * The FlowElements for the Sub-Process.
@@ -98,8 +93,8 @@ public class SubProcess extends Activity
 
     try
     {
-      this.triggeredByEvent = !StringUtil.isNullOrEmpty(element.getAttribute("triggeredByEvent"))
-          && Boolean.parseBoolean(element.getAttribute("triggeredByEvent"));
+      this.triggeredByEvent = !StringUtil.isNullOrEmpty(element.getAttribute("triggeredByEvent")) &&
+        Boolean.parseBoolean(element.getAttribute("triggeredByEvent"));
 
       NodeList childElements = element.getChildNodes();
 
@@ -189,8 +184,8 @@ public class SubProcess extends Activity
 
             default:
             {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
             }
           }
         }
@@ -230,7 +225,7 @@ public class SubProcess extends Activity
    * @param id the ID uniquely identifying the flow element
    *
    * @return the flow element or <code>null</code> if the flow element could
-   *         not be found
+   * not be found
    */
   public FlowElement getFlowElement(QName id)
   {
@@ -251,7 +246,7 @@ public class SubProcess extends Activity
    * Returns whether the Sub-Process is triggered by an event.
    *
    * @return <code>true</code> if the Sub-Process is triggered by an event or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public boolean isTriggeredByEvent()
   {

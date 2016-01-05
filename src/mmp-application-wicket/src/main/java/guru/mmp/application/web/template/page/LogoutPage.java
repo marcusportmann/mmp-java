@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationState;
 import org.slf4j.Logger;
@@ -29,12 +27,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-public class LogoutPage extends TemplateWebPage
+public class LogoutPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LogoutPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Constructs a new <code>LogoutPage</code>.

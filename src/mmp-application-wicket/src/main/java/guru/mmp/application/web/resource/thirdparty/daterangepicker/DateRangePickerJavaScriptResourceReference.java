@@ -16,10 +16,7 @@
 
 package guru.mmp.application.web.resource.thirdparty.daterangepicker;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
-
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
@@ -30,27 +27,24 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @author Marcus Portmann
  */
-public class DateRangePickerJavaScriptResourceReference extends JavaScriptResourceReference
+public class DateRangePickerJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new DateRangePickerJavaScriptResourceReference());
-  private static final DateRangePickerJavaScriptResourceReference INSTANCE =
-    new DateRangePickerJavaScriptResourceReference();
+  private static final DateRangePickerJavaScriptResourceReference INSTANCE = new
+    DateRangePickerJavaScriptResourceReference();
 
-  private DateRangePickerJavaScriptResourceReference()
-  {
-    super(DateRangePickerJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "daterangepicker.js"
-        : "daterangepicker.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new DateRangePickerJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the Date Range Picker
    * thirdparty resource bundled with the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the Date Range Picker
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static DateRangePickerJavaScriptResourceReference get()
   {
@@ -65,5 +59,11 @@ public class DateRangePickerJavaScriptResourceReference extends JavaScriptResour
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private DateRangePickerJavaScriptResourceReference()
+  {
+    super(DateRangePickerJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "daterangepicker.js" : "daterangepicker.js");
   }
 }

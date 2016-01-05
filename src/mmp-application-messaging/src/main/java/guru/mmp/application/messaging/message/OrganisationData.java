@@ -16,16 +16,11 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.Organisation;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
 
 /**
@@ -100,6 +95,16 @@ public class OrganisationData
   }
 
   /**
+   * Set the description for the organisation.
+   *
+   * @param description the description for the organisation
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
@@ -110,26 +115,6 @@ public class OrganisationData
   }
 
   /**
-   * Returns the name of the organisation.
-   *
-   * @return the name of the organisation
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   *  Set the description for the organisation.
-   *
-   *  @param description the description for the organisation
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
@@ -137,6 +122,16 @@ public class OrganisationData
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  /**
+   * Returns the name of the organisation.
+   *
+   * @return the name of the organisation
+   */
+  public String getName()
+  {
+    return name;
   }
 
   /**

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.Group;
 import guru.mmp.application.security.GroupNotFoundException;
 import guru.mmp.application.security.ISecurityService;
@@ -36,8 +34,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>AddGroupPage</code> class implements the
  * "Add Group" page for the Web Application Template.
@@ -45,12 +41,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_GROUP)
-public class AddGroupPage extends TemplateWebPage
+public class AddGroupPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddGroupPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject

@@ -16,18 +16,12 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.servlet.ViewReportParameters;
-
 import org.apache.wicket.request.Request;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,23 +32,34 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class WebSession extends org.apache.wicket.protocol.http.WebSession
+public class WebSession
+  extends org.apache.wicket.protocol.http.WebSession
 {
-  private static final long serialVersionUID = 1000000;
-
-  /** The empty list of group names for anonymous users. */
-  public static final List<String> NO_GROUP_NAMES = new ArrayList<>();
-
-  /** The empty list of function codes for anonymous users. */
+  /**
+   * The empty list of function codes for anonymous users.
+   */
   public static final List<String> NO_FUNCTION_CODES = new ArrayList<>();
 
-  /** The active <code>ViewReportParameters</code> instances for reports being viewed. */
+  /**
+   * The empty list of group names for anonymous users.
+   */
+  public static final List<String> NO_GROUP_NAMES = new ArrayList<>();
+
+  private static final long serialVersionUID = 1000000;
+
+  /**
+   * The active <code>ViewReportParameters</code> instances for reports being viewed.
+   */
   private Map<String, ViewReportParameters> activeViewReportParameters = new ConcurrentHashMap<>();
 
-  /** The function codes identifying the functionality assigned to the logged in user. */
+  /**
+   * The function codes identifying the functionality assigned to the logged in user.
+   */
   private Map<String, String> functionCodes;
 
-  /** The names of the groups the logged in user is a member of. */
+  /**
+   * The names of the groups the logged in user is a member of.
+   */
   private List<String> groupNames;
 
   /**
@@ -62,13 +67,19 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    */
   private Organisation organisation;
 
-  /** The Universally Unique Identifier (UUID) used to uniquely identify the user directory. */
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   */
   private UUID userDirectoryId;
 
-  /** The user properties for the logged in user associated with the web session. */
+  /**
+   * The user properties for the logged in user associated with the web session.
+   */
   private Map<String, Serializable> userProperties;
 
-  /** The username for the logged in user associated with the web session. */
+  /**
+   * The username for the logged in user associated with the web session.
+   */
   private String username;
 
   /**
@@ -109,6 +120,22 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
+   * Set the function codes identifying the functionality assigned to the logged in user.
+   *
+   * @param functionCodes the function codes identifying the functionality assigned to the logged
+   *                      in user
+   */
+  public void setFunctionCodes(List<String> functionCodes)
+  {
+    this.functionCodes = new HashMap<>();
+
+    for (String functionCode : functionCodes)
+    {
+      this.functionCodes.put(functionCode, functionCode);
+    }
+  }
+
+  /**
    * Returns the names of the groups the logged in user is a member of.
    *
    * @return the names of the groups the logged in user is a member of
@@ -126,6 +153,16 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
+   * Set the names of the groups the logged in user is a member of.
+   *
+   * @param groupNames the names of the groups the logged in user is a member of
+   */
+  public void setGroupNames(List<String> groupNames)
+  {
+    this.groupNames = groupNames;
+  }
+
+  /**
    * Returns the organisation for the user associated with the web session.
    *
    * @return the organisation for the user associated with the web session
@@ -136,15 +173,36 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   }
 
   /**
+   * The organisation for the user associated with the web session.
+   *
+   * @param organisation the organisation for the user associated with the web session
+   */
+  public void setOrganisation(Organisation organisation)
+  {
+    this.organisation = organisation;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * the user is associated with or <code>null</code> if this is an 'anonymous' web session.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the user is associated with or <code>null</code> if this is an 'anonymous' web session
+   * the user is associated with or <code>null</code> if this is an 'anonymous' web session
    */
   public UUID getUserDirectoryId()
   {
     return userDirectoryId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                        the user directory
+   */
+  public void setUserDirectoryId(UUID userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
   }
 
   /**
@@ -176,8 +234,8 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param name the name of the user property
    *
    * @return the <code>String</code> value for the user property with the specified name for the
-   *         logged in user associated with the web session or <code>null</code> if the user
-   *         property does not exist
+   * logged in user associated with the web session or <code>null</code> if the user
+   * property does not exist
    */
   public String getUserPropertyAsString(String name)
   {
@@ -198,11 +256,21 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * <code>null</code> if this is an 'anonymous' web session.
    *
    * @return the username for the logged in user associated with the web session or
-   *         <code>null</code> if this is an 'anonymous' web session
+   * <code>null</code> if this is an 'anonymous' web session
    */
   public String getUsername()
   {
     return username;
+  }
+
+  /**
+   * Set the username for the logged in user associated with the web session.
+   *
+   * @param username the username for the logged in user associated with the web session
+   */
+  public void setUsername(String username)
+  {
+    this.username = username;
   }
 
   /**
@@ -211,11 +279,11 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * be found.
    *
    * @param id the ID uniquely identifying the <code>ViewReportParameters</code> instance stored
-   *        in the user's web session
+   *           in the user's web session
    *
    * @return the <code>ViewReportParameters</code> instance stored in the
-   *         user's web session or <code>null</code> if the <code>ViewReportParameters</code>
-   *         instance could not found
+   * user's web session or <code>null</code> if the <code>ViewReportParameters</code>
+   * instance could not found
    */
   public ViewReportParameters getViewReportParameters(String id)
   {
@@ -231,7 +299,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param functionCode the function code uniquely identifying the function
    *
    * @return <code>true</code> if the logged in user has access to the function or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean hasAcccessToFunction(String functionCode)
   {
@@ -241,7 +309,6 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
     }
 
     return (functionCodes != null) && functionCodes.containsKey(functionCode);
-
   }
 
   /**
@@ -251,7 +318,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param name the name of the user property
    *
    * @return <code>true</code> if the logged in user associated with the web session has a user
-   *         property with the specified name or <code>false</code> otherwise
+   * property with the specified name or <code>false</code> otherwise
    */
   public boolean hasUserProperty(String name)
   {
@@ -285,7 +352,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param groupName the name of the group uniquely identifying the group
    *
    * @return <code>true</code> if the user associated with the web session is a member of the group
-   *         given by the specified group name or <code>false</code> otherwise
+   * given by the specified group name or <code>false</code> otherwise
    */
   public boolean isUserInGroup(String groupName)
   {
@@ -330,57 +397,11 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * user's web session.
    *
    * @param id the ID uniquely identifying the <code>ViewReportParameters</code> instance stored
-   *        in the user's web session
+   *           in the user's web session
    */
   public void removeViewReportParameters(String id)
   {
     activeViewReportParameters.remove(id);
-  }
-
-  /**
-   * Set the function codes identifying the functionality assigned to the logged in user.
-   *
-   * @param functionCodes the function codes identifying the functionality assigned to the logged
-   *                      in user
-   */
-  public void setFunctionCodes(List<String> functionCodes)
-  {
-    this.functionCodes = new HashMap<>();
-
-    for (String functionCode : functionCodes)
-    {
-      this.functionCodes.put(functionCode, functionCode);
-    }
-  }
-
-  /**
-   * Set the names of the groups the logged in user is a member of.
-   *
-   * @param groupNames the names of the groups the logged in user is a member of
-   */
-  public void setGroupNames(List<String> groupNames)
-  {
-    this.groupNames = groupNames;
-  }
-
-  /**
-   * The organisation for the user associated with the web session.
-   *
-   * @param organisation the organisation for the user associated with the web session
-   */
-  public void setOrganisation(Organisation organisation)
-  {
-    this.organisation = organisation;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   */
-  public void setUserDirectoryId(UUID userDirectoryId)
-  {
-    this.userDirectoryId = userDirectoryId;
   }
 
   /**
@@ -404,15 +425,5 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
     }
 
     userProperties.put(name, value);
-  }
-
-  /**
-   * Set the username for the logged in user associated with the web session.
-   *
-   * @param username the username for the logged in user associated with the web session
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 }

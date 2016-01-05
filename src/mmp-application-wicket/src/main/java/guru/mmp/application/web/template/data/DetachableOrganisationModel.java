@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.OrganisationNotFoundException;
@@ -27,15 +25,14 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>DetachableOrganisationModel</code> class provides a detachable model
  * implementation for the <code>Organisation</code> model class.
  *
  * @author Marcus Portmann
  */
-public class DetachableOrganisationModel extends InjectableLoadableDetachableModel<Organisation>
+public class DetachableOrganisationModel
+  extends InjectableLoadableDetachableModel<Organisation>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -94,7 +91,8 @@ public class DetachableOrganisationModel extends InjectableLoadableDetachableMod
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the organisation (" + id + ")", e);
+      throw new WebApplicationException(String.format("Failed to load the organisation (%s)", id),
+        e);
     }
   }
 

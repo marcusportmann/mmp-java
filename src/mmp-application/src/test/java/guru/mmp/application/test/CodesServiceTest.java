@@ -16,25 +16,22 @@
 
 package guru.mmp.application.test;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.*;
-
-import javax.inject.Inject;
 
 /**
  * The <code>CodesServiceTest</code> class contains the implementation of the JUnit
@@ -46,9 +43,105 @@ import javax.inject.Inject;
 public class CodesServiceTest
 {
   private static int codeCategoryCount;
+
   private static int codeCount;
+
   @Inject
   private ICodesService codesService;
+
+  private static synchronized Code getTestCodeDetails(UUID codeCategoryId)
+  {
+    codeCount++;
+
+    Code code = new Code();
+    code.setId("Test Code Id " + codeCount);
+    code.setCategoryId(codeCategoryId);
+    code.setName("Test Code Name " + codeCount);
+    code.setDescription("Test Code Description " + codeCount);
+    code.setValue("Test Code Value " + codeCount);
+
+    return code;
+  }
+
+  private static synchronized CodeCategory getTestLocalCustomCodeCategoryDetails()
+  {
+    codeCategoryCount++;
+
+    CodeCategory codeCategory = new CodeCategory();
+
+    codeCategory.setId(UUID.randomUUID());
+    codeCategory.setCategoryType(CodeCategoryType.LOCAL_CUSTOM);
+    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
+    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
+    codeCategory.setCodeData("THIS IS THE CODE DATA");
+    codeCategory.setEndPoint(null);
+    codeCategory.setIsEndPointSecure(false);
+    codeCategory.setIsCacheable(false);
+    codeCategory.setCacheExpiry(null);
+    codeCategory.setUpdated(null);
+
+    return codeCategory;
+  }
+
+  private static synchronized CodeCategory getTestLocalStandardCodeCategoryDetails()
+  {
+    codeCategoryCount++;
+
+    CodeCategory codeCategory = new CodeCategory();
+
+    codeCategory.setId(UUID.randomUUID());
+    codeCategory.setCategoryType(CodeCategoryType.LOCAL_STANDARD);
+    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
+    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
+    codeCategory.setCodeData(null);
+    codeCategory.setEndPoint(null);
+    codeCategory.setIsEndPointSecure(false);
+    codeCategory.setIsCacheable(false);
+    codeCategory.setCacheExpiry(null);
+    codeCategory.setUpdated(null);
+
+    return codeCategory;
+  }
+
+  private static synchronized CodeCategory getTestRemoteHttpServiceCodeCategoryDetails()
+  {
+    codeCategoryCount++;
+
+    CodeCategory codeCategory = new CodeCategory();
+
+    codeCategory.setId(UUID.randomUUID());
+    codeCategory.setCategoryType(CodeCategoryType.REMOTE_HTTP_SERVICE);
+    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
+    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
+    codeCategory.setCodeData(null);
+    codeCategory.setEndPoint("This is the end point");
+    codeCategory.setIsEndPointSecure(true);
+    codeCategory.setIsCacheable(true);
+    codeCategory.setCacheExpiry(60 * 60 * 24 * 7);
+    codeCategory.setUpdated(null);
+
+    return codeCategory;
+  }
+
+  private static synchronized CodeCategory getTestRemoteWebServiceCodeCategoryDetails()
+  {
+    codeCategoryCount++;
+
+    CodeCategory codeCategory = new CodeCategory();
+
+    codeCategory.setId(UUID.randomUUID());
+    codeCategory.setCategoryType(CodeCategoryType.REMOTE_WEB_SERVICE);
+    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
+    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
+    codeCategory.setCodeData(null);
+    codeCategory.setEndPoint("This is the end point");
+    codeCategory.setIsEndPointSecure(true);
+    codeCategory.setIsCacheable(true);
+    codeCategory.setCacheExpiry(60 * 60 * 24 * 7);
+    codeCategory.setUpdated(null);
+
+    return codeCategory;
+  }
 
   /**
    * Test the code functionality.
@@ -91,8 +184,8 @@ public class CodesServiceTest
 
     if (retrievedCode != null)
     {
-      fail("Retrieved the code (" + code.getId() + ") for the code category ("
-          + codeCategory.getId() + ") that should have been deleted");
+      fail("Retrieved the code (" + code.getId() + ") for the code category (" +
+        codeCategory.getId() + ") that should have been deleted");
     }
   }
 
@@ -112,14 +205,14 @@ public class CodesServiceTest
     List<CodeCategory> retrievedCodeCategories = codesService.getCodeCategories(false);
 
     assertEquals("The correct number of code categories (1) was not retrieved", 1,
-        retrievedCodeCategories.size());
+      retrievedCodeCategories.size());
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0), false);
 
     retrievedCodeCategories = codesService.getCodeCategories(true);
 
     assertEquals("The correct number of code categories (1) was not retrieved", 1,
-        retrievedCodeCategories.size());
+      retrievedCodeCategories.size());
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0), true);
   }
@@ -217,8 +310,8 @@ public class CodesServiceTest
 
     if (retrievedCodeCategory != null)
     {
-      fail("Retrieved the code category (" + codeCategory.getId()
-          + ") that should have been deleted");
+      fail("Retrieved the code category (" + codeCategory.getId() + ") that should have been " +
+        "deleted");
     }
   }
 
@@ -254,148 +347,54 @@ public class CodesServiceTest
     int numberOfCodes = codesService.getNumberOfCodesForCodeCategory(codeCategory.getId());
 
     assertEquals("The correct number of codes (" + codes.size() + ") was not retrieved",
-        codes.size(), numberOfCodes);
+      codes.size(), numberOfCodes);
 
     List<Code> retrievedCodes = codesService.getCodesForCodeCategory(codeCategory.getId());
 
     compareCodes(codes, retrievedCodes);
   }
 
-  private static synchronized Code getTestCodeDetails(UUID codeCategoryId)
-  {
-    codeCount++;
-
-    Code code = new Code();
-    code.setId("Test Code Id " + codeCount);
-    code.setCategoryId(codeCategoryId);
-    code.setName("Test Code Name " + codeCount);
-    code.setDescription("Test Code Description " + codeCount);
-    code.setValue("Test Code Value " + codeCount);
-
-    return code;
-  }
-
-  private static synchronized CodeCategory getTestLocalCustomCodeCategoryDetails()
-  {
-    codeCategoryCount++;
-
-    CodeCategory codeCategory = new CodeCategory();
-
-    codeCategory.setId(UUID.randomUUID());
-    codeCategory.setCategoryType(CodeCategoryType.LOCAL_CUSTOM);
-    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
-    codeCategory.setCodeData("THIS IS THE CODE DATA");
-    codeCategory.setEndPoint(null);
-    codeCategory.setIsEndPointSecure(false);
-    codeCategory.setIsCacheable(false);
-    codeCategory.setCacheExpiry(null);
-    codeCategory.setUpdated(null);
-
-    return codeCategory;
-  }
-
-  private static synchronized CodeCategory getTestLocalStandardCodeCategoryDetails()
-  {
-    codeCategoryCount++;
-
-    CodeCategory codeCategory = new CodeCategory();
-
-    codeCategory.setId(UUID.randomUUID());
-    codeCategory.setCategoryType(CodeCategoryType.LOCAL_STANDARD);
-    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
-    codeCategory.setCodeData(null);
-    codeCategory.setEndPoint(null);
-    codeCategory.setIsEndPointSecure(false);
-    codeCategory.setIsCacheable(false);
-    codeCategory.setCacheExpiry(null);
-    codeCategory.setUpdated(null);
-
-    return codeCategory;
-  }
-
-  private static synchronized CodeCategory getTestRemoteHttpServiceCodeCategoryDetails()
-  {
-    codeCategoryCount++;
-
-    CodeCategory codeCategory = new CodeCategory();
-
-    codeCategory.setId(UUID.randomUUID());
-    codeCategory.setCategoryType(CodeCategoryType.REMOTE_HTTP_SERVICE);
-    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
-    codeCategory.setCodeData(null);
-    codeCategory.setEndPoint("This is the end point");
-    codeCategory.setIsEndPointSecure(true);
-    codeCategory.setIsCacheable(true);
-    codeCategory.setCacheExpiry(60 * 60 * 24 * 7);
-    codeCategory.setUpdated(null);
-
-    return codeCategory;
-  }
-
-  private static synchronized CodeCategory getTestRemoteWebServiceCodeCategoryDetails()
-  {
-    codeCategoryCount++;
-
-    CodeCategory codeCategory = new CodeCategory();
-
-    codeCategory.setId(UUID.randomUUID());
-    codeCategory.setCategoryType(CodeCategoryType.REMOTE_WEB_SERVICE);
-    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
-    codeCategory.setCodeData(null);
-    codeCategory.setEndPoint("This is the end point");
-    codeCategory.setIsEndPointSecure(true);
-    codeCategory.setIsCacheable(true);
-    codeCategory.setCacheExpiry(60 * 60 * 24 * 7);
-    codeCategory.setUpdated(null);
-
-    return codeCategory;
-  }
-
-  private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2,
-      boolean checkCodeData)
+  private void compareCodeCategories(
+    CodeCategory codeCategory1, CodeCategory codeCategory2, boolean checkCodeData)
   {
     assertEquals("The ID values for the two code categories do not match", codeCategory1.getId(),
-        codeCategory2.getId());
+      codeCategory2.getId());
     assertEquals("The category type values for the two code categories do not match",
-        codeCategory1.getCategoryType(), codeCategory2.getCategoryType());
+      codeCategory1.getCategoryType(), codeCategory2.getCategoryType());
     assertEquals("The name values for the two code categories do not match",
-        codeCategory1.getName(), codeCategory2.getName());
+      codeCategory1.getName(), codeCategory2.getName());
     assertEquals("The description values for the two code categories do not match",
-        codeCategory1.getDescription(), codeCategory2.getDescription());
+      codeCategory1.getDescription(), codeCategory2.getDescription());
 
     if (checkCodeData)
     {
       assertEquals("The code data values for the two code categories do not match",
-          codeCategory1.getCodeData(), codeCategory2.getCodeData());
+        codeCategory1.getCodeData(), codeCategory2.getCodeData());
     }
 
     assertEquals("The end point values for the two code categories do not match",
-        codeCategory1.getEndPoint(), codeCategory2.getEndPoint());
+      codeCategory1.getEndPoint(), codeCategory2.getEndPoint());
     assertEquals("The is end point secure values for the two code categories do not match",
-        codeCategory1.getIsEndPointSecure(), codeCategory2.getIsEndPointSecure());
+      codeCategory1.getIsEndPointSecure(), codeCategory2.getIsEndPointSecure());
     assertEquals("The is cacheable values for the two code categories do not match",
-        codeCategory1.getIsCacheable(), codeCategory2.getIsCacheable());
+      codeCategory1.getIsCacheable(), codeCategory2.getIsCacheable());
     assertEquals("The cache expiry values for the two code categories do not match",
-        codeCategory1.getCacheExpiry(), codeCategory2.getCacheExpiry());
+      codeCategory1.getCacheExpiry(), codeCategory2.getCacheExpiry());
     assertEquals("The updated values for the two code categories do not match",
-        codeCategory1.getUpdated(), codeCategory2.getUpdated());
+      codeCategory1.getUpdated(), codeCategory2.getUpdated());
   }
 
   private void compareCodes(Code code1, Code code2)
   {
     assertEquals("The ID values for the two codes do not match", code1.getId(), code2.getId());
     assertEquals("The category ID values for the two codes do not match", code1.getCategoryId(),
-        code2.getCategoryId());
+      code2.getCategoryId());
     assertEquals("The name values for the two codes do not match", code1.getName(),
-        code2.getName());
+      code2.getName());
     assertEquals("The description values for the two codes do not match", code1.getDescription(),
-        code2.getDescription());
+      code2.getDescription());
     assertEquals("The value values for the two codes do not match", code1.getValue(),
-        code2.getValue());
+      code2.getValue());
   }
 
   private void compareCodes(List<Code> codes1, List<Code> codes2)

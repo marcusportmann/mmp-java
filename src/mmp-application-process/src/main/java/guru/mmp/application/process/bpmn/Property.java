@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
 
 /**
  * The <code>Property</code> class represents a Property for a BPMN element.
- * <p>
+ * <p/>
  * <b>Property</b> XML schema:
  * <pre>
  *

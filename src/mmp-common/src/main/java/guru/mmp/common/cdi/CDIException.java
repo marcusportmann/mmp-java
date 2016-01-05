@@ -23,7 +23,8 @@ package guru.mmp.common.cdi;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class CDIException extends RuntimeException
+public class CDIException
+  extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

@@ -16,7 +16,7 @@
 //
 //package guru.mmp.application.web.servlet;
 //
-////~--- non-JDK imports --------------------------------------------------------
+//
 //
 //import guru.mmp.application.messaging.*;
 //import guru.mmp.application.messaging.message.*;
@@ -40,7 +40,7 @@
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //
-////~--- JDK imports ------------------------------------------------------------
+//
 //
 //import java.io.ByteArrayOutputStream;
 //import java.io.IOException;
@@ -128,7 +128,8 @@
 //       * Send registration request to obtain user encryption key.
 //       */
 //      {
-//        logger.info("Registering as the user (" + TEST_USER + ") with device ID (" + device + ")");
+//        logger.info("Registering as the user (" + TEST_USER + ") with device ID (" + device +
+// ")");
 //
 //        pw.println("<li>Registering as the user (" + TEST_USER + ") with device ID (" + device
 //            + ")</li>");
@@ -228,7 +229,8 @@
 //
 //          pw.println("<li>Queueing the <i>AnotherTestRequest</i> message for processing</li>");
 //
-//          MessageTranslator messageTranslator = new MessageTranslator(TEST_USER, TEST_ORGANISATION,
+//          MessageTranslator messageTranslator = new MessageTranslator(TEST_USER,
+// TEST_ORGANISATION,
 //            device, EncryptionScheme.AES_CFB, userEncryptionKey);
 //
 //          AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value");
@@ -279,7 +281,8 @@
 //            if (messageDownloadResponse.getCode() != 0)
 //            {
 //              throw new RuntimeException("Failed to send the MessageDownloadRequest: ["
-//                  + messageDownloadResponse.getCode() + "] " + messageDownloadResponse.getDetail());
+//                  + messageDownloadResponse.getCode() + "] " + messageDownloadResponse
+// .getDetail());
 //            }
 //            else
 //            {
@@ -377,7 +380,8 @@
 //            if (messageDownloadResponse.getCode() != 0)
 //            {
 //              throw new RuntimeException("Failed to send the MessageDownloadRequest: ["
-//                  + messageDownloadResponse.getCode() + "] " + messageDownloadResponse.getDetail());
+//                  + messageDownloadResponse.getCode() + "] " + messageDownloadResponse
+// .getDetail());
 //            }
 //            else
 //            {
@@ -433,7 +437,8 @@
 //
 //          pw.println("<li>Sending the <i>MessagePartDownloadTestRequest</i> message</li>");
 //
-//          MessageTranslator messageTranslator = new MessageTranslator(TEST_USER, TEST_ORGANISATION,
+//          MessageTranslator messageTranslator = new MessageTranslator(TEST_USER,
+// TEST_ORGANISATION,
 //            device, EncryptionScheme.AES_CFB, userEncryptionKey);
 //
 //          MessagePartDownloadTestRequestData requestData =
@@ -560,7 +565,8 @@
 //        {
 //          Message responseMessage = messageResult.getMessage();
 //
-//          GetCodeCategoryResponseData responseData = messageTranslator.fromMessage(responseMessage,
+//          GetCodeCategoryResponseData responseData = messageTranslator.fromMessage
+// (responseMessage,
 //            new GetCodeCategoryResponseData());
 //
 //          logger.info("Successfully received the GetCodeCategoryResponse message with code ("
@@ -698,7 +704,8 @@
 //    pw.println("  <head>");
 //    pw.println("    <style>");
 //    pw.println(
-//        "      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
+//        "      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size:
+// 8pt;}");
 //    pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
 //        + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
 //    pw.println("      .className {color: 808080;}");
@@ -843,7 +850,8 @@
 //      String device)
 //    throws Exception
 //  {
-//    MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest(device);
+//    MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest
+// (device);
 //
 //    byte[] data = invokeMessageServlet(messagingEndpoint, messagePartDownloadRequest.toWBXML());
 //

@@ -16,26 +16,20 @@
 
 package guru.mmp.common.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * The <code>XmlUtils</code> class provides utility methods for working with XML documents.
@@ -114,7 +108,7 @@ public class XmlUtils
    * @param name    the name of the child element to return
    *
    * @return the child element or <code>null</code> if a child element with the specified name
-   *         could not be found
+   * could not be found
    */
   public static Element getChildElement(Element element, String name)
   {
@@ -146,7 +140,7 @@ public class XmlUtils
    * @param name    the name of the child element to return
    *
    * @return the boolean value of the text content for the child element or <code>null</code> if a
-   *         child element with the specified name could not be found
+   * child element with the specified name could not be found
    */
   public static Boolean getChildElementBoolean(Element element, String name)
   {
@@ -168,8 +162,9 @@ public class XmlUtils
           }
           catch (Throwable e)
           {
-            throw new RuntimeException("Failed to parse the invalid boolean value ("
-                + childElement.getTextContent() + ")");
+            throw new RuntimeException(
+              "Failed to parse the invalid boolean value (" + childElement.getTextContent() +
+                ")");
           }
         }
       }
@@ -186,7 +181,7 @@ public class XmlUtils
    * @param name    the name of the child element to return
    *
    * @return the text content for the child element or <code>null</code> if a child element with
-   *         the specified name could not be found
+   * the specified name could not be found
    */
   public static String getChildElementText(Element element, String name)
   {
@@ -272,8 +267,7 @@ public class XmlUtils
     else if (nameParts.length == 2)
     {
       String namespaceURI = nameParts[0].equals(XMLConstants.DEFAULT_NS_PREFIX)
-          ? document.lookupNamespaceURI(null)
-          : document.lookupNamespaceURI(nameParts[0]);
+        ? document.lookupNamespaceURI(null) : document.lookupNamespaceURI(nameParts[0]);
 
       return new QName(namespaceURI, nameParts[1], nameParts[0]);
     }
@@ -306,7 +300,7 @@ public class XmlUtils
    * @param name    the name of the child element
    *
    * @return <code>true</code> if the specified element has a child with the specified name or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public static boolean hasChildElement(Element element, String name)
   {

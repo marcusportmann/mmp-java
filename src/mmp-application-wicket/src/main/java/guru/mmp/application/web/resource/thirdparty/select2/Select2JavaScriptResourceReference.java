@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.select2;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -27,35 +25,30 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>Select2JavaScriptResourceReference</code> class implements the JavaScript resource
  * reference for the Select2 thirdparty resource bundled with the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class Select2JavaScriptResourceReference extends JavaScriptResourceReference
+public class Select2JavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new Select2JavaScriptResourceReference());
-  private static final Select2JavaScriptResourceReference INSTANCE =
-    new Select2JavaScriptResourceReference();
+  private static final Select2JavaScriptResourceReference INSTANCE = new
+    Select2JavaScriptResourceReference();
 
-  private Select2JavaScriptResourceReference()
-  {
-    super(Select2JavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "select2.js"
-        : "select2.min.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new Select2JavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the Select2
    * thirdparty resource bundled with the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the Select2
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static Select2JavaScriptResourceReference get()
   {
@@ -70,6 +63,12 @@ public class Select2JavaScriptResourceReference extends JavaScriptResourceRefere
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private Select2JavaScriptResourceReference()
+  {
+    super(Select2JavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "select2.js" : "select2.min.js");
   }
 
   /**

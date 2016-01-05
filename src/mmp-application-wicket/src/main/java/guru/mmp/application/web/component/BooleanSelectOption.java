@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.component;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -60,15 +58,13 @@ public class BooleanSelectOption
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the <code>obj</code> argument;
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean equals(Object obj)
   {
-    return (obj != null)
-        && ((obj == this)
-          || ((obj instanceof BooleanSelectOption)
-            && (((BooleanSelectOption) obj).value == value)));
+    return (obj != null) && ((obj == this) ||
+      ((obj instanceof BooleanSelectOption) && (((BooleanSelectOption) obj).value == value)));
   }
 
   /**
@@ -82,16 +78,6 @@ public class BooleanSelectOption
   }
 
   /**
-   * Returns the value for the select option.
-   *
-   * @return the value for the select option
-   */
-  public boolean getValue()
-  {
-    return value;
-  }
-
-  /**
    * Set the user-friendly name for the select option.
    *
    * @param name the user-friendly name for the select option
@@ -99,6 +85,16 @@ public class BooleanSelectOption
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the value for the select option.
+   *
+   * @return the value for the select option
+   */
+  public boolean getValue()
+  {
+    return value;
   }
 
   /**

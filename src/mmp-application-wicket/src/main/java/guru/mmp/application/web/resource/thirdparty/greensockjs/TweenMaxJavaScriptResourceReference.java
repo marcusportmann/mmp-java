@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.greensockjs;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -28,27 +26,24 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @author Marcus Portmann
  */
-public class TweenMaxJavaScriptResourceReference extends JavaScriptResourceReference
+public class TweenMaxJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new TweenMaxJavaScriptResourceReference());
-  private static final TweenMaxJavaScriptResourceReference INSTANCE =
-    new TweenMaxJavaScriptResourceReference();
+  private static final TweenMaxJavaScriptResourceReference INSTANCE = new
+    TweenMaxJavaScriptResourceReference();
 
-  private TweenMaxJavaScriptResourceReference()
-  {
-    super(TweenMaxJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "TweenMax.js"
-        : "TweenMax.min.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new TweenMaxJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the TweenMax
    * thirdparty resource bundled with the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the TweenMax
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static TweenMaxJavaScriptResourceReference get()
   {
@@ -63,5 +58,11 @@ public class TweenMaxJavaScriptResourceReference extends JavaScriptResourceRefer
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private TweenMaxJavaScriptResourceReference()
+  {
+    super(TweenMaxJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "TweenMax.js" : "TweenMax.min.js");
   }
 }

@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -9,9 +6,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for typeDerivationControl.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * <p/>
  * <pre>
  * &lt;simpleType name="typeDerivationControl">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}derivationControl">
@@ -22,7 +19,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- *
  */
 @XmlType(name = "typeDerivationControl")
 @XmlEnum(DerivationControl.class)
@@ -38,11 +34,6 @@ public enum TypeDerivationControl
   UNION(DerivationControl.UNION);
 
   private final DerivationControl value;
-
-  TypeDerivationControl(DerivationControl v)
-  {
-    value = v;
-  }
 
   /**
    * Method description
@@ -62,6 +53,11 @@ public enum TypeDerivationControl
     }
 
     throw new IllegalArgumentException(v.toString());
+  }
+
+  TypeDerivationControl(DerivationControl v)
+  {
+    value = v;
   }
 
   /**

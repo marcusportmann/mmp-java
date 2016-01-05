@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.cdi;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.proxy.IProxyTargetLocator;
 
@@ -27,8 +25,6 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import java.lang.annotation.Annotation;
 import java.util.Set;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CDIProxyTargetLocator</code> class provides a <code>IProxyTargetLocator</code>
@@ -79,16 +75,18 @@ public class CDIProxyTargetLocator
     }
     catch (Throwable e)
     {
-      throw new WicketRuntimeException("Failed to locate the proxy target:"
-          + " Failed to resolve the CDI bean (" + type.getName() + ") with qualifiers ("
-          + getQualifiersAsString() + "): Failed to retrieve the CDI BeanManager from JNDI", e);
+      throw new WicketRuntimeException(String.format(
+        "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
+          "(%s): Failed to retrieve the CDI BeanManager from JNDI",
+        type.getName(), getQualifiersAsString()), e);
     }
 
     if (beanManager == null)
     {
-      throw new WicketRuntimeException("Failed to locate the proxy target:"
-          + " Failed to resolve the CDI bean (" + type.getName() + ") with qualifiers ("
-          + getQualifiersAsString() + "): Failed to retrieve the CDI BeanManager from JNDI");
+      throw new WicketRuntimeException(String.format(
+        "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
+          "(%s): Failed to retrieve the CDI BeanManager from JNDI",
+        type.getName(), getQualifiersAsString()));
     }
 
     CreationalContext<Object> creationalContext;
@@ -99,8 +97,8 @@ public class CDIProxyTargetLocator
     }
     catch (Throwable e)
     {
-      throw new WicketRuntimeException("Failed to locate the proxy target:"
-          + " Failed to create the CDI CreationalContext", e);
+      throw new WicketRuntimeException(
+        "Failed to locate the proxy target: Failed to create the CDI CreationalContext", e);
     }
 
     Set<Bean<?>> beans = beanManager.getBeans(type, qualifiers);
@@ -111,9 +109,10 @@ public class CDIProxyTargetLocator
     }
     else if (beans.size() == 0)
     {
-      throw new WicketRuntimeException("Failed to locate the proxy target:"
-          + " Failed to resolve the CDI bean (" + type.getName() + ") with qualifiers ("
-          + getQualifiersAsString() + "): No matching bean found");
+      throw new WicketRuntimeException(String.format(
+        "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
+          "(%s): No matching bean found",
+        type.getName(), getQualifiersAsString()));
     }
 
 //  for (Bean<?> bean : beans)
@@ -121,13 +120,13 @@ public class CDIProxyTargetLocator
 //    System.err.println("  --------> bean.getName() = " + bean.getName());
 //    System.err.println("  --------> getClass() = " + bean.getClass());
 //    System.err.println("  --------> getBeanClass() = " + bean.getBeanClass());
-//    
+//
 //    for (java.lang.reflect.Type type : bean.getTypes())
 //    {
 //      System.err.println("   --------> " + type.toString());
 //    }
-//    
-//    
+//
+//
 //    for (Class<? extends Annotation> annotation : bean.getStereotypes())
 //    {
 //      System.err.println("   --------> " + annotation.getName());
@@ -146,10 +145,10 @@ public class CDIProxyTargetLocator
       buffer.append(bean.toString());
     }
 
-    throw new WicketRuntimeException("Failed to locate the proxy target:"
-        + " Failed to resolve the CDI bean (" + type.getName() + ") with qualifiers ("
-        + getQualifiersAsString() + "): Unable to determine which bean to use from ["
-        + buffer.toString() + "]");
+    throw new WicketRuntimeException(String.format(
+      "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
+        "(%s): Unable to determine which bean to use from [%s]",
+      type.getName(), getQualifiersAsString(), buffer.toString()));
   }
 
   private String getQualifiersAsString()

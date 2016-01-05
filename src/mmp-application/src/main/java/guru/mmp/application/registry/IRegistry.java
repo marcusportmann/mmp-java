@@ -16,11 +16,8 @@
 
 package guru.mmp.application.registry;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.math.BigDecimal;
-
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 
 /**
  * The <code>IRegistry</code> interface defines the functionality provided by a "Registry" which is
@@ -39,7 +36,7 @@ public interface IRegistry
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
    *
-   * @return true if the binary value exists or false otherwise
+   * @return <code>true</code> if the binary value exists or <code>false</code> otherwise
    *
    * @throws RegistryException
    */
@@ -52,7 +49,7 @@ public interface IRegistry
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
    *
-   * @return true if the decimal value exists or false otherwise
+   * @return <code>true</code> if the decimal value exists or <code>false</code> otherwise
    *
    * @throws RegistryException
    */
@@ -86,8 +83,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  byte[] getBinaryValue(String path, String name, byte[] defaultValue, byte[] encryptionKey,
-      byte[] encryptionIV)
+  byte[] getBinaryValue(
+    String path, String name, byte[] defaultValue, byte[] encryptionKey, byte[] encryptionIV)
     throws RegistryException;
 
   /**
@@ -152,8 +149,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  String getStringValue(String path, String name, String defaultValue, byte[] encryptionKey,
-      byte[] encryptionIV)
+  String getStringValue(
+    String path, String name, String defaultValue, byte[] encryptionKey, byte[] encryptionIV)
     throws RegistryException;
 
   /**
@@ -162,7 +159,7 @@ public interface IRegistry
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
    *
-   * @return true if the integer value exists or false otherwise
+   * @return <code>true</code> if the integer value exists or <code>false</code> otherwise
    *
    * @throws RegistryException
    */
@@ -176,7 +173,7 @@ public interface IRegistry
    * @param name the name of the value
    *
    * @return <code>true</code> if the value with the specified name was found and removed or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws RegistryException
    */
@@ -212,8 +209,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  void setBinaryValue(String path, String name, byte[] value, byte[] encryptionKey,
-      byte[] encryptionIV)
+  void setBinaryValue(
+    String path, String name, byte[] value, byte[] encryptionKey, byte[] encryptionIV)
     throws RegistryException;
 
   /**
@@ -275,8 +272,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  void setStringValue(String path, String name, String value, byte[] encryptionKey,
-      byte[] encryptionIV)
+  void setStringValue(
+    String path, String name, String value, byte[] encryptionKey, byte[] encryptionIV)
     throws RegistryException;
 
   /**
@@ -285,7 +282,7 @@ public interface IRegistry
    * @param path the path for the registry key e.g. /XYZApp/Section/SubSection
    * @param name the name of the registry value
    *
-   * @return true if the string value exists or false otherwise
+   * @return <code>true</code> if the string value exists or <code>false</code> otherwise
    *
    * @throws RegistryException
    */

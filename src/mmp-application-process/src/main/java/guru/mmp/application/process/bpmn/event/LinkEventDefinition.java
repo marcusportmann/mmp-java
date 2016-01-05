@@ -16,28 +16,22 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.namespace.QName;
 
 /**
  * The <code>LinkEventDefinition</code> class represents a Link Event Definition that forms part
  * of a Process.
- * <p>
+ * <p/>
  * <b>Link Event Definition</b> XML schema:
  * <pre>
  * &lt;xsd:element name="linkEventDefinition" type="tLinkEventDefinition"
@@ -58,7 +52,8 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class LinkEventDefinition extends EventDefinition
+public final class LinkEventDefinition
+  extends EventDefinition
 {
   /**
    * The name of the link that triggered the event.
@@ -119,8 +114,8 @@ public final class LinkEventDefinition extends EventDefinition
 
             default:
             {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
             }
           }
         }
@@ -147,7 +142,7 @@ public final class LinkEventDefinition extends EventDefinition
    * this Link Event Definition represents a 'throw' or 'source' Link Event Definition.
    *
    * @return the references to the corresponding 'catch' or 'target' Link Event Definition(s), when
-   *         this Link Event Definition represents a 'throw' or 'source' Link Event Definition
+   * this Link Event Definition represents a 'throw' or 'source' Link Event Definition
    */
   public List<QName> getSourceRefs()
   {
@@ -159,7 +154,7 @@ public final class LinkEventDefinition extends EventDefinition
    * this Link Event Definition represents a 'catch' or 'target' Link Event Definition.
    *
    * @return the reference to the corresponding 'throw' or 'source' Link Event Definition, when
-   *         this Link Event Definition represents a 'catch' or 'target' Link Event Definition
+   * this Link Event Definition represents a 'catch' or 'target' Link Event Definition
    */
   public QName getTargetRef()
   {

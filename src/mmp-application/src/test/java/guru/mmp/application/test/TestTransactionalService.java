@@ -16,26 +16,16 @@
 
 package guru.mmp.application.test;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.NewTransaction;
 import guru.mmp.common.persistence.Transactional;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.sql.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.naming.InitialContext;
-
 import javax.sql.DataSource;
-import javax.sql.XAConnection;
-import javax.sql.XADataSource;
+import java.sql.*;
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -49,7 +39,9 @@ public class TestTransactionalService
   implements ITestTransactionalService
 {
   private String createTestDataSQL;
+
   private DataSource dataSource;
+
   private String getTestDataSQL;
 
   /**
@@ -73,8 +65,8 @@ public class TestTransactionalService
       if (statement.executeUpdate() != 1)
       {
         throw new RuntimeException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createTestDataSQL + ")");
+          "No rows were affected as a result of executing the SQL statement (" +
+            createTestDataSQL + ")");
       }
     }
     catch (Throwable e)
@@ -105,14 +97,14 @@ public class TestTransactionalService
       if (statement.executeUpdate() != 1)
       {
         throw new RuntimeException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createTestDataSQL + ")");
+          "No rows were affected as a result of executing the SQL statement (" +
+            createTestDataSQL + ")");
       }
     }
     catch (Throwable e)
     {
       throw new TestTransactionalServiceException(
-          "Failed to create the test data in a new transaction", e);
+        "Failed to create the test data in a new transaction", e);
     }
   }
 
@@ -148,24 +140,23 @@ public class TestTransactionalService
     catch (Throwable e)
     {
       throw new TestTransactionalServiceException(
-          "Failed to create the test data in a new transaction", e);
+        "Failed to create the test data in a new transaction", e);
     }
   }
 
   /**
    * Initialise the Test Transactional Service instance.
-   *
-   * @throws TestTransactionalServiceException
    */
   @PostConstruct
   public void init()
-    throws TestTransactionalServiceException
   {
     try
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored) {}
+    catch (Throwable ignored)
+    {
+    }
 
     if (dataSource == null)
     {
@@ -173,14 +164,16 @@ public class TestTransactionalService
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (dataSource == null)
     {
-      throw new TestTransactionalServiceException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new RuntimeException(
+        "Failed to retrieve the application data source using the JNDI names " +
+          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -209,8 +202,7 @@ public class TestTransactionalService
     }
     catch (Throwable e)
     {
-      throw new TestTransactionalServiceException(
-          "Failed to initialise the Test Transactional Service: " + e.getMessage(), e);
+      throw new RuntimeException("Failed to initialise the Test Transactional Service", e);
     }
   }
 
@@ -225,8 +217,8 @@ public class TestTransactionalService
     throws SQLException
   {
     // createTestDataSQL
-    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA"
-        + " (ID, NAME, VALUE) VALUES (?, ?, ?)";
+    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA" + " (ID, NAME, VALUE) VALUES " +
+      "(?, ?, ?)";
 
     // getTestDataSQL
     getTestDataSQL = "SELECT ID, NAME, VALUE FROM " + schemaPrefix + "TEST_DATA WHERE ID=?";

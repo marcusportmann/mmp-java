@@ -20,9 +20,6 @@ import guru.mmp.application.process.bpmn.Parser;
 import guru.mmp.common.util.ResourceUtil;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
 /**
  * The <code>BPMNParserTests</code> implements the unit tests for the BPMN parsing capability.
  */
@@ -40,8 +37,6 @@ public class BPMNParserTests
       Parser parser = new Parser();
 
       parser.parse(processDefinitionData);
-
-
     }
     catch (Throwable e)
     {

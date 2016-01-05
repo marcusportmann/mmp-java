@@ -16,45 +16,34 @@
 
 package guru.mmp.common.security.context;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.InputStream;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-
 import java.util.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>ApplicationSecurityContext</code> class implements the singleton that holds the
  * security information for an application. This information includes the path to the
  * key store that holds the application's private/public key pair, the alias of the public/private
  * key pair in the key store and the password used to retrieve the public/private key.
- *
+ * <p/>
  * The <code>ApplicationSecurityContext</code> MUST be initialised BEFORE any secured operations
  * are performed by the application e.g. secure web service operations are invoked, secure CORBA
  * services are invoked, etc.
@@ -135,7 +124,7 @@ public class ApplicationSecurityContext
    *                        configuration file for the application
    *
    * @return <code>true</code> if the configuration information exists or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public boolean exists(String applicationName)
   {
@@ -159,8 +148,9 @@ public class ApplicationSecurityContext
 
     if (wasInstallRoot != null)
     {
-      String configurationFilePath = wasInstallRoot + File.separator + "certificates"
-        + File.separator + applicationName + ".ApplicationSecurity";
+      String configurationFilePath =
+        wasInstallRoot + File.separator + "certificates" + File.separator + applicationName +
+          ".ApplicationSecurity";
       File configurationFile = new File(configurationFilePath);
 
       if (configurationFile.exists())
@@ -173,8 +163,9 @@ public class ApplicationSecurityContext
 
     if (jbossServerBaseDir != null)
     {
-      String configurationFilePath = jbossServerBaseDir + File.separator + "certificates"
-        + File.separator + applicationName + ".ApplicationSecurity";
+      String configurationFilePath =
+        jbossServerBaseDir + File.separator + "certificates" + File.separator + applicationName +
+          ".ApplicationSecurity";
       File configurationFile = new File(configurationFilePath);
 
       if (configurationFile.exists())
@@ -187,8 +178,9 @@ public class ApplicationSecurityContext
 
     if (catalinaHome != null)
     {
-      String configurationFilePath = catalinaHome + File.separator + "certificates"
-        + File.separator + applicationName + ".ApplicationSecurity";
+      String configurationFilePath =
+        catalinaHome + File.separator + "certificates" + File.separator + applicationName +
+          ".ApplicationSecurity";
       File configurationFile = new File(configurationFilePath);
 
       if (configurationFile.exists())
@@ -201,8 +193,9 @@ public class ApplicationSecurityContext
 
     if (geronimoServerDir != null)
     {
-      String configurationFilePath = geronimoServerDir + File.separator + "certificates"
-        + File.separator + applicationName + ".ApplicationSecurity";
+      String configurationFilePath =
+        geronimoServerDir + File.separator + "certificates" + File.separator + applicationName +
+          ".ApplicationSecurity";
       File configurationFile = new File(configurationFilePath);
 
       if (configurationFile.exists())
@@ -215,8 +208,9 @@ public class ApplicationSecurityContext
 
     if (wlpUserDir != null)
     {
-      String configurationFilePath = wlpUserDir + File.separator + "certificates" + File.separator
-        + applicationName + ".ApplicationSecurity";
+      String configurationFilePath =
+        wlpUserDir + File.separator + "certificates" + File.separator + applicationName +
+          ".ApplicationSecurity";
       File configurationFile = new File(configurationFilePath);
 
       if (configurationFile.exists())
@@ -231,8 +225,8 @@ public class ApplicationSecurityContext
 
     if (configurationFileUrl == null)
     {
-      configurationFileUrl = classLoader.getResource("META-INF/" + applicationName
-          + ".ApplicationSecurity");
+      configurationFileUrl = classLoader.getResource(
+        "META-INF/" + applicationName + ".ApplicationSecurity");
     }
 
     return configurationFileUrl != null;
@@ -253,7 +247,7 @@ public class ApplicationSecurityContext
    * retrieved from the application's key store.
    *
    * @return the DN for the application specified in the certificate for the application
-   *         retrieved from the application's key store
+   * retrieved from the application's key store
    */
   public String getApplicationDN()
   {
@@ -315,7 +309,7 @@ public class ApplicationSecurityContext
    * key store.
    *
    * @return the password used to retrieve the application's private/public key pair from the
-   *         key store
+   * key store
    */
   public String getKeyStorePassword()
   {
@@ -357,8 +351,9 @@ public class ApplicationSecurityContext
 
       if (wasInstallRoot != null)
       {
-        String configurationFilePath = wasInstallRoot + File.separator + "certificates"
-          + File.separator + applicationName + ".ApplicationSecurity";
+        String configurationFilePath =
+          wasInstallRoot + File.separator + "certificates" + File.separator + applicationName +
+            ".ApplicationSecurity";
         File configurationFile = new File(configurationFilePath);
 
         if (configurationFile.exists())
@@ -370,17 +365,18 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
-                + configurationFilePath + ")", e);
+            throw new ApplicationSecurityContextException(
+              "Failed to load the security" + " configuration for the application (" +
+                applicationName + ") from the file (" + configurationFilePath + ")", e);
           }
         }
         else
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("The application security configuration file (" + configurationFilePath
-                + ") for the application (" + applicationName + ") does not exist");
+            logger.debug(
+              "The application security configuration file (" + configurationFilePath + ") for " +
+                "the application (" + applicationName + ") does not exist");
           }
         }
       }
@@ -392,8 +388,8 @@ public class ApplicationSecurityContext
 
       if (jbossServerBaseDir != null)
       {
-        String configurationFilePath = jbossServerBaseDir + File.separator + "certificates"
-          + File.separator + applicationName + ".ApplicationSecurity";
+        String configurationFilePath = jbossServerBaseDir + File.separator + "certificates" +
+          File.separator + applicationName + ".ApplicationSecurity";
         File configurationFile = new File(configurationFilePath);
 
         if (configurationFile.exists())
@@ -405,17 +401,18 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
-                + configurationFilePath + ")", e);
+            throw new ApplicationSecurityContextException(
+              "Failed to load the security" + " configuration for the application (" +
+                applicationName + ") from the file (" + configurationFilePath + ")", e);
           }
         }
         else
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("The application security configuration file (" + configurationFilePath
-                + ") for the application (" + applicationName + ") does not exist");
+            logger.debug(
+              "The application security configuration file (" + configurationFilePath + ") for " +
+                "the application (" + applicationName + ") does not exist");
           }
         }
       }
@@ -427,8 +424,9 @@ public class ApplicationSecurityContext
 
       if (catalinaHome != null)
       {
-        String configurationFilePath = catalinaHome + File.separator + "certificates"
-          + File.separator + applicationName + ".ApplicationSecurity";
+        String configurationFilePath =
+          catalinaHome + File.separator + "certificates" + File.separator + applicationName +
+            ".ApplicationSecurity";
         File configurationFile = new File(configurationFilePath);
 
         if (configurationFile.exists())
@@ -440,17 +438,18 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
-                + configurationFilePath + ")", e);
+            throw new ApplicationSecurityContextException(
+              "Failed to load the security" + " configuration for the application (" +
+                applicationName + ") from the file (" + configurationFilePath + ")", e);
           }
         }
         else
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("The application security configuration file (" + configurationFilePath
-                + ") for the application (" + applicationName + ") does not exist");
+            logger.debug(
+              "The application security configuration file (" + configurationFilePath + ") for " +
+                "the application (" + applicationName + ") does not exist");
           }
         }
       }
@@ -462,8 +461,9 @@ public class ApplicationSecurityContext
 
       if (geronimoServerDir != null)
       {
-        String configurationFilePath = geronimoServerDir + File.separator + "certificates"
-          + File.separator + applicationName + ".ApplicationSecurity";
+        String configurationFilePath =
+          geronimoServerDir + File.separator + "certificates" + File.separator + applicationName +
+            ".ApplicationSecurity";
         File configurationFile = new File(configurationFilePath);
 
         if (configurationFile.exists())
@@ -475,17 +475,18 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
-                + configurationFilePath + ")", e);
+            throw new ApplicationSecurityContextException(
+              "Failed to load the security" + " configuration for the application (" +
+                applicationName + ") from the file (" + configurationFilePath + ")", e);
           }
         }
         else
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("The application security configuration file (" + configurationFilePath
-                + ") for the application (" + applicationName + ") does not exist");
+            logger.debug(
+              "The application security configuration file (" + configurationFilePath + ") for " +
+                "the application (" + applicationName + ") does not exist");
           }
         }
       }
@@ -497,8 +498,9 @@ public class ApplicationSecurityContext
 
       if (wlpUserDir != null)
       {
-        String configurationFilePath = wlpUserDir + File.separator + "certificates"
-          + File.separator + applicationName + ".ApplicationSecurity";
+        String configurationFilePath =
+          wlpUserDir + File.separator + "certificates" + File.separator + applicationName +
+            ".ApplicationSecurity";
         File configurationFile = new File(configurationFilePath);
 
         if (configurationFile.exists())
@@ -510,17 +512,18 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
-                + configurationFilePath + ")", e);
+            throw new ApplicationSecurityContextException(
+              "Failed to load the security" + " configuration for the application (" +
+                applicationName + ") from the file (" + configurationFilePath + ")", e);
           }
         }
         else
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("The application security configuration file (" + configurationFilePath
-                + ") for the application (" + applicationName + ") does not exist");
+            logger.debug(
+              "The application security configuration file (" + configurationFilePath + ") for " +
+                "the application (" + applicationName + ") does not exist");
           }
         }
       }
@@ -534,8 +537,8 @@ public class ApplicationSecurityContext
 
       if (configurationFileUrl == null)
       {
-        configurationFileUrl = classLoader.getResource("META-INF/" + applicationName
-            + ".ApplicationSecurity");
+        configurationFileUrl = classLoader.getResource(
+          "META-INF/" + applicationName + ".ApplicationSecurity");
       }
 
       if (configurationFileUrl != null)
@@ -586,9 +589,9 @@ public class ApplicationSecurityContext
     }
     else
     {
-      throw new ApplicationSecurityContextException("Failed to initialise the application"
-          + " security context: Unable to determine the key store type for the application"
-          + " key store (" + keyStoreName + ")");
+      throw new ApplicationSecurityContextException(
+        "Failed to initialise the application" + " security context: Unable to determine the " +
+          "key store type for the application" + " key store (" + keyStoreName + ")");
     }
 
     /*
@@ -601,8 +604,8 @@ public class ApplicationSecurityContext
 
       if (wasInstallRoot != null)
       {
-        String keyStorePath = wasInstallRoot + File.separator + "certificates" + File.separator
-          + keyStoreName;
+        String keyStorePath = wasInstallRoot + File.separator + "certificates" + File.separator +
+          keyStoreName;
         File keyStoreFile = new File(keyStorePath);
 
         if (keyStoreFile.exists())
@@ -610,13 +613,13 @@ public class ApplicationSecurityContext
           try
           {
             this.keyStore = loadApplicationKeyStore(keyStoreFile.toURI().toURL(), keyStoreName,
-                keyStorePassword, keyStorePath, null, keyStoreType);
+              keyStorePassword, keyStorePath, null, keyStoreType);
             keyStoreLoaded = true;
           }
           catch (Throwable e)
           {
-            throw new ApplicationSecurityContextException("Failed to initialise the application"
-                + " security context: " + e.getMessage(), e);
+            throw new ApplicationSecurityContextException(
+              "Failed to initialise the application" + " security context: " + e.getMessage(), e);
           }
         }
         else
@@ -639,8 +642,8 @@ public class ApplicationSecurityContext
 
       if (jbossServerBaseDir != null)
       {
-        String keyStorePath = jbossServerBaseDir + File.separator + "certificates" + File.separator
-          + keyStoreName;
+        String keyStorePath =
+          jbossServerBaseDir + File.separator + "certificates" + File.separator + keyStoreName;
         File keyStoreFile = new File(keyStorePath);
 
         if (keyStoreFile.exists())
@@ -648,13 +651,13 @@ public class ApplicationSecurityContext
           try
           {
             this.keyStore = loadApplicationKeyStore(keyStoreFile.toURI().toURL(), keyStoreName,
-                keyStorePassword, keyStorePath, null, keyStoreType);
+              keyStorePassword, keyStorePath, null, keyStoreType);
             keyStoreLoaded = true;
           }
           catch (Throwable e)
           {
-            throw new ApplicationSecurityContextException("Failed to initialise the application"
-                + " security context: " + e.getMessage(), e);
+            throw new ApplicationSecurityContextException(
+              "Failed to initialise the application" + " security context: " + e.getMessage(), e);
           }
         }
         else
@@ -677,8 +680,8 @@ public class ApplicationSecurityContext
 
       if (catalinaHome != null)
       {
-        String keyStorePath = catalinaHome + File.separator + "certificates" + File.separator
-          + keyStoreName;
+        String keyStorePath = catalinaHome + File.separator + "certificates" + File.separator +
+          keyStoreName;
         File keyStoreFile = new File(keyStorePath);
 
         if (keyStoreFile.exists())
@@ -686,13 +689,13 @@ public class ApplicationSecurityContext
           try
           {
             this.keyStore = loadApplicationKeyStore(keyStoreFile.toURI().toURL(), keyStoreName,
-                keyStorePassword, keyStorePath, null, keyStoreType);
+              keyStorePassword, keyStorePath, null, keyStoreType);
             keyStoreLoaded = true;
           }
           catch (Throwable e)
           {
-            throw new ApplicationSecurityContextException("Failed to initialise the application"
-                + " security context: " + e.getMessage(), e);
+            throw new ApplicationSecurityContextException(
+              "Failed to initialise the application" + " security context: " + e.getMessage(), e);
           }
         }
         else
@@ -721,13 +724,13 @@ public class ApplicationSecurityContext
         try
         {
           this.keyStore = loadApplicationKeyStore(keyStoreUrl, keyStoreName, keyStorePassword,
-              keyStoreUrl.toString(), null, keyStoreType);
+            keyStoreUrl.toString(), null, keyStoreType);
           keyStoreLoaded = true;
         }
         catch (Throwable e)
         {
-          throw new ApplicationSecurityContextException("Failed to initialise the application"
-              + " security context", e);
+          throw new ApplicationSecurityContextException(
+            "Failed to initialise the application" + " security context", e);
         }
       }
     }
@@ -735,13 +738,15 @@ public class ApplicationSecurityContext
     // If we could not retrieve the keystore for the application using any of the methods above
     if (!keyStoreLoaded)
     {
-      throw new ApplicationSecurityContextException("Failed to initialise the application"
-          + " security context: Unable to find the application key store (" + keyStoreName + ")");
+      throw new ApplicationSecurityContextException(
+        "Failed to initialise the application" + " security context: Unable to find the " +
+          "application key store (" + keyStoreName + ")");
     }
     else
     {
-      logger.info("Successfully initialised the application security context using the key store ("
-          + keyStoreName + ")");
+      logger.info(
+        "Successfully initialised the application security context using the key store (" +
+          keyStoreName + ")");
     }
 
     this.initialised = true;
@@ -766,9 +771,10 @@ public class ApplicationSecurityContext
    *
    * @throws ApplicationSecurityContextException
    */
-  public void init(String keyStoreName, KeyStore keyStore, String keyStorePassword,
-      String keyStoreAlias, X509Certificate applicationCertificate, Key applicationPrivateKey,
-      Map<String, Certificate> keyStoreCertificates)
+  public void init(
+    String keyStoreName, KeyStore keyStore, String keyStorePassword, String keyStoreAlias,
+    X509Certificate applicationCertificate, Key applicationPrivateKey,
+    Map<String, Certificate> keyStoreCertificates)
     throws ApplicationSecurityContextException
   {
     this.keyStoreName = keyStoreName;
@@ -787,7 +793,7 @@ public class ApplicationSecurityContext
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the application security context has been initialised or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean isInitialised()
   {
@@ -808,16 +814,17 @@ public class ApplicationSecurityContext
    *
    * @throws GeneralSecurityException
    */
-  private KeyStore loadApplicationKeyStore(URL keyStoreUrl, String keyStoreName,
-      String keyStorePassword, String keyStorePath, String provider, String type)
+  private KeyStore loadApplicationKeyStore(
+    URL keyStoreUrl, String keyStoreName, String keyStorePassword, String keyStorePath,
+    String provider, String type)
     throws GeneralSecurityException
   {
     KeyStore ks;
 
     if (logger.isDebugEnabled())
     {
-      logger.debug("Loading the application key (" + keyStoreAlias + ") from the keystore ("
-          + keyStorePath + ")");
+      logger.debug("Loading the application key (" + keyStoreAlias + ") from the keystore (" +
+        keyStorePath + ")");
     }
 
     InputStream input = null;
@@ -834,17 +841,17 @@ public class ApplicationSecurityContext
       }
 
       input = keyStoreUrl.openStream();
-      ks.load(input, ((keyStorePassword == null) || (keyStorePassword.length() == 0))
-          ? new char[0]
-          : keyStorePassword.toCharArray());
+      ks.load(input, ((keyStorePassword == null) || (keyStorePassword.length() == 0)) ? new char[0]
+        : keyStorePassword.toCharArray());
 
       // Attempt to retrieve the private key for the application from the key store
       applicationPrivateKey = ks.getKey(keyStoreAlias, keyStorePassword.toCharArray());
 
       if (applicationPrivateKey == null)
       {
-        throw new GeneralSecurityException("A private key for the application with alias ("
-            + keyStoreAlias + ") could not be found in the key store (" + keyStorePath + ")");
+        throw new GeneralSecurityException(
+          "A private key for the application with alias (" + keyStoreAlias + ") could not be " +
+            "found in the key store (" + keyStorePath + ")");
       }
 
       // Attempt to retrieve the certificate for the application from the key store
@@ -852,14 +859,16 @@ public class ApplicationSecurityContext
 
       if (tmpCertificate == null)
       {
-        throw new GeneralSecurityException("A certificate for the application with alias ("
-            + keyStoreAlias + ") could not be found in the key store (" + keyStorePath + ")");
+        throw new GeneralSecurityException(
+          "A certificate for the application with alias (" + keyStoreAlias + ") could not be " +
+            "found in the key store (" + keyStorePath + ")");
       }
 
       if (!(tmpCertificate instanceof X509Certificate))
       {
-        throw new GeneralSecurityException("The certificate for the application with alias ("
-            + keyStoreAlias + ") is not an X509 certificate");
+        throw new GeneralSecurityException(
+          "The certificate for the application with alias (" + keyStoreAlias + ") is not an " +
+            "X509 certificate");
       }
 
       applicationCertificate = (X509Certificate) tmpCertificate;
@@ -889,8 +898,8 @@ public class ApplicationSecurityContext
     }
     catch (Throwable e)
     {
-      throw new GeneralSecurityException("Failed to load and query the application key store ("
-          + keyStoreName + ")", e);
+      throw new GeneralSecurityException(
+        "Failed to load and query the application key store (" + keyStoreName + ")", e);
     }
     finally
     {
@@ -901,7 +910,9 @@ public class ApplicationSecurityContext
           input.close();
         }
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
   }
 
@@ -920,8 +931,9 @@ public class ApplicationSecurityContext
   {
     if (logger.isDebugEnabled())
     {
-      logger.debug("Reading the application security configuration information for the"
-          + " application (" + applicationName + ") from the file (" + url.toString() + ")");
+      logger.debug(
+        "Reading the application security configuration information for the" + " application (" +
+          applicationName + ") from the file (" + url.toString() + ")");
     }
 
     try
@@ -934,8 +946,8 @@ public class ApplicationSecurityContext
       // builderFactory.setNamespaceAware(true);
       DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
-      builder.setEntityResolver(new DtdJarResolver("ApplicationSecurity.dtd",
-          "META-INF/ApplicationSecurity.dtd"));
+      builder.setEntityResolver(
+        new DtdJarResolver("ApplicationSecurity.dtd", "META-INF/ApplicationSecurity.dtd"));
       builder.setErrorHandler(new XmlParserErrorHandler());
 
       // Parse the XML application security configuration file using the document builder
@@ -949,9 +961,9 @@ public class ApplicationSecurityContext
     }
     catch (Throwable e)
     {
-      throw new ApplicationSecurityContextException("Failed to load the application security"
-          + " configuration for the application (" + applicationName + ") from the file ("
-          + url.toString() + ")", e);
+      throw new ApplicationSecurityContextException(
+        "Failed to load the application security" + " configuration for the application (" +
+          applicationName + ") from the file (" + url.toString() + ")", e);
     }
   }
 }

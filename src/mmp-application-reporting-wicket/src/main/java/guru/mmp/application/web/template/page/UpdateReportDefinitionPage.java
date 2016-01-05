@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -25,24 +23,19 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.component.ReportDefinitionInputPanel;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
-import javax.inject.Inject;
 
 /**
  * The <code>UpdateReportDefinitionPage</code> class implements the
@@ -51,12 +44,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_UPDATE_REPORT_DEFINITION)
-public class UpdateReportDefinitionPage extends TemplateWebPage
+public class UpdateReportDefinitionPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateReportDefinitionPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
   @Inject
@@ -68,8 +62,8 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
    * @param previousPage          the previous page
    * @param reportDefinitionModel the model for the report definition
    */
-  public UpdateReportDefinitionPage(PageReference previousPage,
-      IModel<ReportDefinition> reportDefinitionModel)
+  public UpdateReportDefinitionPage(
+    PageReference previousPage, IModel<ReportDefinition> reportDefinitionModel)
   {
     super("Update Report Definition");
 
@@ -78,8 +72,8 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
       Form<ReportDefinition> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(reportDefinitionModel));
 
-      ReportDefinitionInputPanel reportDefinitionInputPanel =
-        new ReportDefinitionInputPanel("reportDefinition", true);
+      ReportDefinitionInputPanel reportDefinitionInputPanel = new ReportDefinitionInputPanel(
+        "reportDefinition", true);
 
       updateForm.add(reportDefinitionInputPanel);
 
@@ -135,8 +129,8 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
             }
             catch (Throwable e)
             {
-              logger.error("Failed to delete the uploaded file (" + fileUpload.getClientFileName()
-                  + ")", e);
+              logger.error(String.format("Failed to delete the uploaded file (%s)",
+                fileUpload.getClientFileName()), e);
             }
           }
         }

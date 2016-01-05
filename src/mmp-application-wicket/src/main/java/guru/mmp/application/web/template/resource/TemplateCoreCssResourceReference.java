@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -26,8 +24,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TemplateCoreCssResourceReference</code> class implements the CSS resource
  * reference for the template-core.css CSS file that forms part of the
@@ -35,27 +31,23 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateCoreCssResourceReference extends CssResourceReference
+public class TemplateCoreCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final TemplateCoreCssResourceReference INSTANCE =
-    new TemplateCoreCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new TemplateCoreCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new TemplateCoreCssResourceReference());
 
-  private TemplateCoreCssResourceReference()
-  {
-    super(TemplateCoreCssResourceReference.class, Debug.inDebugMode()
-        ? "css/template-core.css"
-        : "css/template-core.min.css");
-  }
+  private static final TemplateCoreCssResourceReference INSTANCE = new
+    TemplateCoreCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the template-core.css
    * CSS file that forms part of the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the template-core.css
-   *         CSS file that forms part of the Web Application Template
+   * CSS file that forms part of the Web Application Template
    */
   public static TemplateCoreCssResourceReference get()
   {
@@ -67,11 +59,17 @@ public class TemplateCoreCssResourceReference extends CssResourceReference
    * Web Application Template.
    *
    * @return the CSS header item for the template-core.css CSS file that forms part of the
-   *         Web Application Template
+   * Web Application Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private TemplateCoreCssResourceReference()
+  {
+    super(TemplateCoreCssResourceReference.class,
+      Debug.inDebugMode() ? "css/template-core.css" : "css/template-core.min.css");
   }
 
   /**

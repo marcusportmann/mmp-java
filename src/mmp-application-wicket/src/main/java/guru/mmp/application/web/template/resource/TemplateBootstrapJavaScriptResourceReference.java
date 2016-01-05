@@ -16,10 +16,9 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenLiteJavaScriptResourceReference;
+import guru.mmp.application.web.resource.thirdparty.greensockjs
+  .TweenLiteJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
 import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
@@ -31,8 +30,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TemplateBootstrapJavaScriptResourceReference</code> class implements the
  * JavaScript resource reference for the template-bootstrap.js resource that forms part of the
@@ -40,27 +37,24 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateBootstrapJavaScriptResourceReference extends JavaScriptResourceReference
+public class TemplateBootstrapJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new TemplateBootstrapJavaScriptResourceReference());
-  private static final TemplateBootstrapJavaScriptResourceReference INSTANCE =
-    new TemplateBootstrapJavaScriptResourceReference();
+  private static final TemplateBootstrapJavaScriptResourceReference INSTANCE = new
+    TemplateBootstrapJavaScriptResourceReference();
 
-  private TemplateBootstrapJavaScriptResourceReference()
-  {
-    super(TemplateBootstrapJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "js/template-bootstrap.js"
-        : "js/template-bootstrap.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new TemplateBootstrapJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the
    * template-bootstrap.js resource that forms part of the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the
-   *         template-bootstrap.js resource that forms part of the Web Application Template
+   * template-bootstrap.js resource that forms part of the Web Application Template
    */
   public static TemplateBootstrapJavaScriptResourceReference get()
   {
@@ -75,6 +69,12 @@ public class TemplateBootstrapJavaScriptResourceReference extends JavaScriptReso
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private TemplateBootstrapJavaScriptResourceReference()
+  {
+    super(TemplateBootstrapJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "js/template-bootstrap.js" : "js/template-bootstrap.js");
   }
 
   /**

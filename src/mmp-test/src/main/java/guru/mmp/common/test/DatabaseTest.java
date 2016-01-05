@@ -16,48 +16,25 @@
 
 package guru.mmp.common.test;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
-
 import guru.mmp.common.persistence.DAOUtil;
-
 import net.sf.cglib.proxy.Enhancer;
-
 import org.h2.jdbcx.JdbcDataSource;
-
 import org.junit.BeforeClass;
-
-import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import java.lang.reflect.Method;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
-
 import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
@@ -65,7 +42,8 @@ import javax.transaction.UserTransaction;
  *
  * @author Marcus Portmann
  */
-public abstract class DatabaseTest extends JNDITest
+public abstract class DatabaseTest
+  extends JNDITest
 {
   /**
    * Initialise the in-memory database and return a data source that can be used to interact with
@@ -93,8 +71,9 @@ public abstract class DatabaseTest extends JNDITest
 
       JdbcDataSource jdbcDataSource = new JdbcDataSource();
 
-      jdbcDataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
-          + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+      jdbcDataSource.setURL(
+        "jdbc:h2:mem:" + Thread.currentThread().getName() + ";MODE=DB2;DB_CLOSE_DELAY=-1;" +
+          "DB_CLOSE_ON_EXIT=FALSE");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
       {
@@ -163,8 +142,8 @@ public abstract class DatabaseTest extends JNDITest
 
       AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
 
-      atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
-          + "-ApplicationDataSource");
+      atomikosDataSourceBean.setUniqueResourceName(
+        Thread.currentThread().getName() + "-ApplicationDataSource");
 
       atomikosDataSourceBean.setXaDataSource((XADataSource) jdbcDataSource);
 
@@ -215,7 +194,7 @@ public abstract class DatabaseTest extends JNDITest
     try
     {
       System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-          "org.apache.naming.java.javaURLContextFactory");
+        "org.apache.naming.java.javaURLContextFactory");
       System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 
       InitialContext ic = new InitialContext();
@@ -225,8 +204,8 @@ public abstract class DatabaseTest extends JNDITest
       transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
       transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
 
-      TransactionManager transactionManager =
-        (TransactionManager) transactionManagerEnhancer.create();
+      TransactionManager transactionManager = (TransactionManager) transactionManagerEnhancer
+        .create();
 
       ic.bind("comp/TransactionManager", transactionManager);
       ic.bind("jboss/TransactionManager", transactionManager);

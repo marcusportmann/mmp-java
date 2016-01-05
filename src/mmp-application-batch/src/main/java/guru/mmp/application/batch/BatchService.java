@@ -16,29 +16,20 @@
 
 package guru.mmp.application.batch;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.registry.IRegistry;
+import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.cdi.CDIUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.inject.Inject;
-
-import javax.naming.InitialContext;
 
 /**
  * The <code>BatchService</code> class provides the Batch Service implementation.
@@ -54,7 +45,7 @@ public class BatchService
   private static final Logger logger = LoggerFactory.getLogger(BatchService.class);
 
   /* The name of the Batch Service instance. */
-  private String instanceName;
+  private String instanceName = ServiceUtil.getServiceInstanceName("Batch Service");
 
   /* Job DAO */
   @Inject
@@ -118,8 +109,9 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to execute the job (" + job.getName() + ") with ID ("
-          + job.getId() + "): Failed to load the job class (" + job.getJobClass() + ")", e);
+      throw new BatchServiceException(String.format(
+        "Failed to execute the job (%s) with ID (%s): Failed to load the job class (%s)",
+        job.getName(), job.getId(), job.getJobClass()), e);
     }
 
     // Initialise the job
@@ -133,8 +125,9 @@ public class BatchService
       // Check if the job is a valid job
       if (!(jobObject instanceof IJob))
       {
-        throw new BatchServiceException("The job class (" + job.getJobClass()
-            + ") does not implement the guru.mmp.application.batch.IJob interface");
+        throw new BatchServiceException(String.format(
+          "The job class (%s) does not implement the guru.mmp.application.batch.IJob interface",
+          job.getJobClass()));
       }
 
       jobImplementation = (IJob) jobObject;
@@ -144,8 +137,9 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to initialise the job (" + job.getName()
-          + ") with ID (" + job.getId() + ")", e);
+      throw new BatchServiceException(
+        String.format("Failed to initialise the job (%s) with ID (%s)", job.getName(), job.getId()),
+        e);
     }
 
     // Execute the job
@@ -169,8 +163,9 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to execute the job (" + job.getName() + ") with ID ("
-          + job.getId() + ")", e);
+      throw new BatchServiceException(
+        String.format("Failed to execute the job (%s) with ID (%s)", job.getName(), job.getId()),
+        e);
     }
   }
 
@@ -192,7 +187,7 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to retrieve the job (" + id + ")", e);
+      throw new BatchServiceException(String.format("Failed to retrieve the job (%s)", id), e);
     }
   }
 
@@ -214,8 +209,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to retrieve the parameters for the job (" + id + ")",
-          e);
+      throw new BatchServiceException(
+        String.format("Failed to retrieve the parameters for the job (%s)", id), e);
     }
   }
 
@@ -255,7 +250,7 @@ public class BatchService
    * The job will be locked to prevent duplicate processing.
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
-   *         currently scheduled for execution
+   * currently scheduled for execution
    *
    * @throws BatchServiceException
    */
@@ -264,12 +259,12 @@ public class BatchService
   {
     try
     {
-      return jobDAO.getNextJobScheduledForExecution(jobExecutionRetryDelay, getInstanceName());
+      return jobDAO.getNextJobScheduledForExecution(jobExecutionRetryDelay, instanceName);
     }
     catch (Throwable e)
     {
       throw new BatchServiceException(
-          "Failed to retrieve the next job that has been scheduled for execution", e);
+        "Failed to retrieve the next job that has been scheduled for execution", e);
     }
   }
 
@@ -309,8 +304,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to increment the execution attempts for the job ("
-          + id + ")", e);
+      throw new BatchServiceException(
+        String.format("Failed to increment the execution attempts for the job (%s)", id), e);
     }
   }
 
@@ -320,7 +315,7 @@ public class BatchService
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the Batch Service instance (" + getInstanceName() + ")");
+    logger.info(String.format("Initialising the Batch Service instance (%s)", instanceName));
 
     try
     {
@@ -352,7 +347,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to reschedule the job (" + id + ") for execution", e);
+      throw new BatchServiceException(
+        String.format("Failed to reschedule the job (%s) for execution", id), e);
     }
   }
 
@@ -371,13 +367,13 @@ public class BatchService
   {
     try
     {
-      return jobDAO.resetJobLocks(getInstanceName(), status, newStatus);
+      return jobDAO.resetJobLocks(instanceName, status, newStatus);
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to reset the locks for the jobs with the "
-          + "status (" + status + ") that have been locked using the lock name ("
-          + getInstanceName() + ")", e);
+      throw new BatchServiceException(String.format(
+        "Failed to reset the locks for the jobs with the status (%s) that have been locked using " +
+          "the lock name (%s)", status, instanceName), e);
     }
   }
 
@@ -385,7 +381,7 @@ public class BatchService
    * Schedule the next unscheduled job for execution.
    *
    * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
-   *         if there are no more unscheduled jobs to schedule
+   * if there are no more unscheduled jobs to schedule
    *
    * @throws BatchServiceException
    */
@@ -399,7 +395,7 @@ public class BatchService
     catch (Throwable e)
     {
       throw new BatchServiceException("Failed to schedule the next unscheduled job for execution",
-          e);
+        e);
     }
   }
 
@@ -420,116 +416,10 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed to unlock and set the status for the job (" + id
-          + ") to (" + status + ")", e);
+      throw new BatchServiceException(
+        String.format("Failed to unlock and set the status for the job (%s) to (%s)", id, status),
+        e);
     }
-  }
-
-  /**
-   * Retrieves the name of the Batch Service instance.
-   */
-  private String getInstanceName()
-  {
-    if (instanceName == null)
-    {
-      String applicationName = null;
-
-      try
-      {
-        applicationName = InitialContext.doLookup("java:app/AppName");
-      }
-      catch (Throwable ignored) {}
-
-      if (applicationName == null)
-      {
-        try
-        {
-          applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
-        }
-        catch (Throwable ignored) {}
-      }
-
-      if (applicationName == null)
-      {
-        logger.error("Failed to retrieve the application name from JNDI using the names ("
-            + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the Batch Service instance name");
-
-        applicationName = "Unknown";
-      }
-
-      instanceName = applicationName + "::";
-
-      try
-      {
-        java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
-
-        instanceName += localMachine.getHostName().toLowerCase();
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to retrieve the server hostname while constructing the Job "
-            + "Service instance name", e);
-        instanceName = "Unknown";
-      }
-
-      // Check if we are running under JBoss and if so retrieve the server name
-      if (System.getProperty("jboss.server.name") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("jboss.server.name");
-      }
-
-      // Check if we are running under Glassfish and if so retrieve the server name
-      else if (System.getProperty("glassfish.version") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("com.sun.aas.instanceName");
-      }
-
-      // Check if we are running under WebSphere Application Server Community Edition (Geronimo)
-      else if (System.getProperty("org.apache.geronimo.server.dir") != null)
-      {
-        instanceName = instanceName + "::Geronimo";
-      }
-
-      // Check if we are running under WebSphere Application Server Liberty Profile
-      else if (System.getProperty("wlp.user.dir") != null)
-      {
-        instanceName = instanceName + "::WLP";
-      }
-
-      /*
-       * Check if we are running under WebSphere and if so execute the code below to retrieve the
-       *  server name.
-       */
-      else
-      {
-        Class<?> clazz = null;
-
-        try
-        {
-          clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.ibm.websphere.management.configservice.ConfigService");
-        }
-        catch (Throwable ignored)
-        {}
-
-        if (clazz != null)
-        {
-          try
-          {
-            instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
-          }
-          catch (Throwable e)
-          {
-            logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the Batch Service instance name", e);
-            instanceName = instanceName + "::Unknown";
-          }
-        }
-      }
-    }
-
-    return instanceName;
   }
 
   /**
@@ -554,15 +444,15 @@ public class BatchService
       }
 
       jobExecutionRetryDelay = registry.getIntegerValue("/Services/BatchService",
-          "JobExecutionRetryDelay", 600000);
+        "JobExecutionRetryDelay", 600000);
 
       maximumJobExecutionAttempts = registry.getIntegerValue("/Services/BatchService",
-          "MaximumJobExecutionAttempts", 6 * 24);
+        "MaximumJobExecutionAttempts", 6 * 24);
     }
     catch (Throwable e)
     {
       throw new BatchServiceException(
-          "Failed to initialise the configuration for the Batch Service", e);
+        "Failed to initialise the configuration for the Batch Service", e);
     }
   }
 
@@ -575,8 +465,9 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException("Failed in inject the job class (" + job.getJobClass()
-          + ") for the job (" + job.getName() + ") with ID (" + job.getId() + ")", e);
+      throw new BatchServiceException(
+        String.format("Failed in inject the job class (%s) for the job (%s) with ID (%s)",
+          job.getJobClass(), job.getName(), job.getId()), e);
     }
   }
 }

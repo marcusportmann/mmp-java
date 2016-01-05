@@ -16,13 +16,10 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.Expression;
 import guru.mmp.application.process.bpmn.FormalExpression;
 import guru.mmp.application.process.bpmn.ParserException;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,7 +27,7 @@ import org.w3c.dom.NodeList;
 /**
  * The <code>ConditionalEventDefinition</code> class represents a Conditional Event Definition that
  * forms part of a Process.
- * <p>
+ * <p/>
  * <b>Conditional Event Definition</b> XML schema:
  * <pre>
  * &lt;xsd:element name="conditionalEventDefinition" type="tConditionalEventDefinition"
@@ -49,11 +46,12 @@ import org.w3c.dom.NodeList;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ConditionalEventDefinition extends EventDefinition
+public final class ConditionalEventDefinition
+  extends EventDefinition
 {
   /**
    * The condition.
-   * <p>
+   * <p/>
    * The condition Expression might be underspecified and provided in the form of natural language.
    * For executable Processes (isExecutable = true), if the trigger is Conditional, then a
    * FormalExpression MUST be entered.
@@ -92,7 +90,8 @@ public final class ConditionalEventDefinition extends EventDefinition
               }
               else
               {
-                // TODO: Handle an underspecified expression possibly in the form of a natural language
+                // TODO: Handle an underspecified expression possibly in the form of a natural
+                // language
               }
 
               break;
@@ -109,7 +108,7 @@ public final class ConditionalEventDefinition extends EventDefinition
 
   /**
    * Returns the condition.
-   * <p>
+   * <p/>
    * The condition Expression might be underspecified and provided in the form of natural language.
    * For executable Processes (isExecutable = true), if the trigger is Conditional, then a
    * FormalExpression MUST be entered.

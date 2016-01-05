@@ -16,26 +16,21 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
 import org.w3c.dom.Element;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
 /**
  * The <code>EndEvent</code> class represents an End Event that forms part of a Process.
- * <p>
+ * <p/>
  * End Events finish a particular path of the Process (or the whole Process) and generate a result
  * (a message for example).
- * <p>
+ * <p/>
  * End Events have one or more incoming flows but no outgoing flows.
- * <p>
+ * <p/>
  * <b>End Event</b> XML schema:
  * <pre>
  * &lt;xsd:element name="endEvent" type="tEndEvent" substitutionGroup="flowElement"/&gt;
@@ -47,10 +42,12 @@ import java.util.List;
  *   &lt;/xsd:complexContent&gt;
  * &lt;/xsd:complexType&gt;
  * </pre>
+ *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class EndEvent extends ThrowEvent
+public final class EndEvent
+  extends ThrowEvent
 {
   /**
    * Constructs a new <code>EndEvent</code>.

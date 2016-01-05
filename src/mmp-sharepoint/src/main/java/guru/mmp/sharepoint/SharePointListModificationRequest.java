@@ -16,8 +16,6 @@
 
 package guru.mmp.sharepoint;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
@@ -25,8 +23,6 @@ import org.w3c.dom.Text;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SharePointListModificationRequest</code> class represents a request to modify a
@@ -52,6 +48,38 @@ public class SharePointListModificationRequest
    * The "Method" element in the XML document that describes the list modification request.
    */
   private Element methodElement;
+
+  /**
+   * Creates a <code>SharePointListModificationRequest</code> to create a new SharePoint list item.
+   * <p/>
+   *
+   * @param fields The fields for the new list item specified in the form of the name of each
+   *               column to be populated in the SharePoint list and the value for that column.
+   *
+   * @return the <code>SharePointListModificationRequest</code> to create the new SharePoint list
+   * item
+   */
+  public static SharePointListModificationRequest createNewListItemRequest(
+    Map<String, String> fields)
+  {
+    SharePointListModificationRequest request = new SharePointListModificationRequest(
+      RequestType.NEW);
+
+    for (Map.Entry<String, String> field : fields.entrySet())
+    {
+      Element fieldElement = request.getDocument().createElement("Field");
+
+      fieldElement.setAttribute("Name", field.getKey());
+
+      Text attributeValue = request.getDocument().createTextNode(field.getValue());
+
+      fieldElement.appendChild(attributeValue);
+
+      request.getMethodElement().appendChild(fieldElement);
+    }
+
+    return request;
+  }
 
   /**
    * Constructs a new <code>SharePointListModificationRequest</code>.
@@ -90,6 +118,26 @@ public class SharePointListModificationRequest
   }
 
   /**
+   * Returns the XML document that describes the list modification request.
+   *
+   * @return the XML document that describes the list modification request
+   */
+  public Document getDocument()
+  {
+    return document;
+  }
+
+  /**
+   * Returns the "Method" element in the XML document that describes the list modification request.
+   *
+   * @return the "Method" element in the XML document that describes the list modification request.
+   */
+  public Element getMethodElement()
+  {
+    return methodElement;
+  }
+
+  /**
    * The enumeration giving the possible list modification request types.
    */
   public enum RequestType
@@ -122,57 +170,5 @@ public class SharePointListModificationRequest
     {
       return name;
     }
-  }
-
-  /**
-   * Creates a <code>SharePointListModificationRequest</code> to create a new SharePoint list item.
-   * <p/>
-   *
-   * @param fields The fields for the new list item specified in the form of the name of each
-   *               column to be populated in the SharePoint list and the value for that column.
-   *
-   * @return the <code>SharePointListModificationRequest</code> to create the new SharePoint list
-   *         item
-   */
-  public static SharePointListModificationRequest createNewListItemRequest(Map<String,
-      String> fields)
-  {
-    SharePointListModificationRequest request =
-      new SharePointListModificationRequest(RequestType.NEW);
-
-    for (Map.Entry<String, String> field : fields.entrySet())
-    {
-      Element fieldElement = request.getDocument().createElement("Field");
-
-      fieldElement.setAttribute("Name", field.getKey());
-
-      Text attributeValue = request.getDocument().createTextNode(field.getValue());
-
-      fieldElement.appendChild(attributeValue);
-
-      request.getMethodElement().appendChild(fieldElement);
-    }
-
-    return request;
-  }
-
-  /**
-   * Returns the XML document that describes the list modification request.
-   *
-   * @return the XML document that describes the list modification request
-   */
-  public Document getDocument()
-  {
-    return document;
-  }
-
-  /**
-   * Returns the "Method" element in the XML document that describes the list modification request.
-   *
-   * @return the "Method" element in the XML document that describes the list modification request.
-   */
-  public Element getMethodElement()
-  {
-    return methodElement;
   }
 }

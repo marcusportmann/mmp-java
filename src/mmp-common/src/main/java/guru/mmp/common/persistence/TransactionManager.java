@@ -16,14 +16,10 @@
 
 package guru.mmp.common.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.transaction.*;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The TransactionManager class provides utility methods for managing transactions in a J2EE
@@ -36,29 +32,10 @@ public final class TransactionManager
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TransactionManager.class);
+
   private static TransactionManager singleton;
+
   private javax.transaction.TransactionManager transactionManager;
-
-  /**
-   * Private default constructor to enforce singleton pattern.
-   */
-  private TransactionManager()
-  {
-    try
-    {
-      transactionManager = TransactionManagerFactory.getTransactionManager();
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to retrieve the JTA TransactionManager: " + e.getMessage(), e);
-    }
-
-    if (transactionManager == null)
-    {
-      logger.warn("Failed to retrieve the JTA TransactionManager:"
-          + " Transactional database access is not available");
-    }
-  }
 
   /**
    * Returns the <code>TransactionManager</code> singleton.
@@ -76,10 +53,31 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#begin()
-   *
+   * Private default constructor to enforce singleton pattern.
+   */
+  private TransactionManager()
+  {
+    try
+    {
+      transactionManager = TransactionManagerFactory.getTransactionManager();
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to retrieve the JTA TransactionManager: " + e.getMessage(), e);
+    }
+
+    if (transactionManager == null)
+    {
+      logger.warn(
+        "Failed to retrieve the JTA TransactionManager:" + " Transactional database access is " +
+          "not available");
+    }
+  }
+
+  /**
    * @throws NotSupportedException
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#begin()
    */
   public void begin()
     throws NotSupportedException, SystemException
@@ -96,8 +94,8 @@ public final class TransactionManager
    * <code>resume</code> method.
    *
    * @return The transaction that was active before invocation of this method or <code>null</code>
-   *         if no transaction was active. The return value from this method <b>MUST </b> be passed
-   *         to the <code>resume</code> method or the suspended transaction will be lost.
+   * if no transaction was active. The return value from this method <b>MUST </b> be passed
+   * to the <code>resume</code> method or the suspended transaction will be lost.
    *
    * @throws SystemException
    * @throws NotSupportedException
@@ -118,18 +116,17 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#commit()
-   *
    * @throws HeuristicMixedException
    * @throws HeuristicRollbackException
    * @throws IllegalStateException
    * @throws RollbackException
    * @throws SecurityException
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#commit()
    */
   public void commit()
     throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-      SecurityException, IllegalStateException, SystemException
+    SecurityException, IllegalStateException, SystemException
   {
     if (isEnabled())
     {
@@ -138,11 +135,10 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#getStatus()
-   *
    * @return the transaction status
    *
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#getStatus()
    */
   public int getStatus()
     throws SystemException
@@ -158,11 +154,10 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#getTransaction()
-   *
    * @return the current transaction
    *
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#getTransaction()
    */
   public Transaction getTransaction()
     throws SystemException
@@ -223,7 +218,6 @@ public final class TransactionManager
    *
    * @throws InvalidTransactionException
    * @throws SystemException
-   *
    * @see javax.transaction.TransactionManager#resume(Transaction)
    */
   public void resume(Transaction transaction)
@@ -239,9 +233,8 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#rollback()
-   *
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#rollback()
    */
   public void rollback()
     throws SystemException
@@ -253,10 +246,9 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#setRollbackOnly()
-   *
    * @throws IllegalStateException
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#setRollbackOnly()
    */
   public void setRollbackOnly()
     throws IllegalStateException, SystemException
@@ -268,11 +260,10 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#setTransactionTimeout(int)
-   *
    * @param seconds the transaction timeout in seconds
    *
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#setTransactionTimeout(int)
    */
   public void setTransactionTimeout(int seconds)
     throws SystemException
@@ -284,11 +275,10 @@ public final class TransactionManager
   }
 
   /**
-   * @see javax.transaction.TransactionManager#suspend()
-   *
    * @return the suspended transaction or <code>null</code> if transactions are not supported
    *
    * @throws SystemException
+   * @see javax.transaction.TransactionManager#suspend()
    */
   public Transaction suspend()
     throws SystemException

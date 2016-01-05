@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -28,10 +26,13 @@ import org.apache.wicket.markup.html.panel.Panel;
  *
  * @author Marcus Portmann
  */
-public class PagingNavigator extends Panel
+public class PagingNavigator
+  extends Panel
 {
   private static final long serialVersionUID = 1000000;
+
   private boolean isVisible;
+
   private IPageable pageable;
 
   /**
@@ -48,9 +49,9 @@ public class PagingNavigator extends Panel
   }
 
   /**
-   * @see org.apache.wicket.Component#isVisible()
-   *
    * @return <code>true</code> if the component is visible or <code>false</code> otherwise
+   *
+   * @see org.apache.wicket.Component#isVisible()
    */
   @Override
   public boolean isVisible()
@@ -60,7 +61,7 @@ public class PagingNavigator extends Panel
 
   /**
    * Create a new <code>PagingNavigation</code> instance.
-   *
+   * <p/>
    * May be subclassed to make use of specialized <code>PagingNavigation</code>.
    *
    * @param id       the id of the navigation component
@@ -75,7 +76,7 @@ public class PagingNavigator extends Panel
 
   /**
    * Create a new increment link.
-   *
+   * <p/>
    * May be sub-classed to make use of specialized links, e.g. Ajaxian links.
    *
    * @param id        the link id
@@ -84,15 +85,15 @@ public class PagingNavigator extends Panel
    *
    * @return the increment link
    */
-  protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable,
-      int increment)
+  protected AbstractLink newPagingNavigationIncrementLink(
+    String id, IPageable pageable, int increment)
   {
     return new PagingNavigationIncrementLink<Void>(id, pageable, increment);
   }
 
   /**
    * Create a new page number link.
-   *
+   * <p/>
    * May be sub-classed to make use of specialized links, e.g. Ajax-based links.
    *
    * @param id         the link id

@@ -16,8 +16,6 @@
 
 package guru.mmp.common.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
@@ -31,7 +29,9 @@ public class DtdJarResolver
   implements EntityResolver
 {
   private String dtdPath;
+
   private String publicId;
+
   private String systemId;
 
   /**
@@ -92,6 +92,6 @@ public class DtdJarResolver
   public InputSource resolveEntity(String publicId, String systemId)
   {
     return new InputSource(
-        Thread.currentThread().getContextClassLoader().getResourceAsStream(dtdPath));
+      Thread.currentThread().getContextClassLoader().getResourceAsStream(dtdPath));
   }
 }

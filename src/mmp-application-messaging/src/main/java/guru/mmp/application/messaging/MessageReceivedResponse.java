@@ -16,16 +16,12 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageReceivedResponse</code> class represents the response to a request sent by the
@@ -70,6 +66,24 @@ public class MessageReceivedResponse
    * request.
    */
   private String exception;
+
+  /**
+   * Returns <code>true</code> if the WBXML document contains valid message received response
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message received response
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessageReceivedResponse") &&
+      (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code") &&
+      rootElement.hasAttribute("detail");
+  }
 
   /**
    * Constructs a new <code>MessageReceivedResponse</code> and populates it from the information
@@ -129,27 +143,10 @@ public class MessageReceivedResponse
       }
       catch (Throwable e)
       {
-        exception = "Unable to dump the stack for the exception (" + cause + "): " + e.getMessage();
+        exception = String.format("Unable to dump the stack for the exception (%s): %s", cause,
+          e.getMessage());
       }
     }
-  }
-
-  /**
-   * Returns <code>true</code> if the WBXML document contains valid message received response
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message received response
-   *         information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessageReceivedResponse")
-        && (rootElement.getAttributes().size() == 2)
-        && rootElement.hasAttribute("code") && rootElement.hasAttribute("detail");
   }
 
   /**
@@ -163,30 +160,6 @@ public class MessageReceivedResponse
   }
 
   /**
-   * Return the user-friendly text description of the result of processing the message received
-   * request.
-   *
-   * @return the user-friendly text description of the result of processing the message received
-   *         request
-   */
-  public String getDetail()
-  {
-    return detail;
-  }
-
-  /**
-   * Return the flattened information for the exception that resulted from processing the message
-   * received request.
-   *
-   * @return the flattened information for the exception that resulted from processing the message
-   *         received request
-   */
-  public String getException()
-  {
-    return exception;
-  }
-
-  /**
    * Set the result code.
    *
    * @param code the result code
@@ -194,6 +167,18 @@ public class MessageReceivedResponse
   public void setCode(long code)
   {
     this.code = code;
+  }
+
+  /**
+   * Return the user-friendly text description of the result of processing the message received
+   * request.
+   *
+   * @return the user-friendly text description of the result of processing the message received
+   * request
+   */
+  public String getDetail()
+  {
+    return detail;
   }
 
   /**
@@ -206,6 +191,18 @@ public class MessageReceivedResponse
   public void setDetail(String detail)
   {
     this.detail = detail;
+  }
+
+  /**
+   * Return the flattened information for the exception that resulted from processing the message
+   * received request.
+   *
+   * @return the flattened information for the exception that resulted from processing the message
+   * received request
+   */
+  public String getException()
+  {
+    return exception;
   }
 
   /**
@@ -228,8 +225,7 @@ public class MessageReceivedResponse
   @Override
   public String toString()
   {
-    return "<MessageReceivedResponse" + " code=\"" + code + "\"" + " detail=\"" + detail + "\""
-        + "/>";
+    return String.format("<MessageReceivedResponse code=\"%d\" detail=\"%s\"/>", code, detail);
   }
 
   /**

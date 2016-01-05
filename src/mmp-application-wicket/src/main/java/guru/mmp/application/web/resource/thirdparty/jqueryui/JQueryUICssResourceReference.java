@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.jqueryui;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -29,26 +27,22 @@ import org.apache.wicket.request.resource.CssResourceReference;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class JQueryUICssResourceReference extends CssResourceReference
+public class JQueryUICssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JQueryUICssResourceReference INSTANCE = new JQueryUICssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new JQueryUICssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new JQueryUICssResourceReference());
 
-  private JQueryUICssResourceReference()
-  {
-    super(JQueryUICssResourceReference.class, Debug.inDebugMode()
-        ? "jquery-ui.css"
-        : "jquery-ui.min.css");
-  }
+  private static final JQueryUICssResourceReference INSTANCE = new JQueryUICssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the thirdparty resource bundled
    * with the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the thirdparty resource bundled
-   *         with the Web Application Template
+   * with the Web Application Template
    */
   public static JQueryUICssResourceReference get()
   {
@@ -60,10 +54,16 @@ public class JQueryUICssResourceReference extends CssResourceReference
    * Template.
    *
    * @return the CSS header item for the thirdparty resource bundled with the Web Application
-   *         Template
+   * Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private JQueryUICssResourceReference()
+  {
+    super(JQueryUICssResourceReference.class,
+      Debug.inDebugMode() ? "jquery-ui.css" : "jquery-ui.min.css");
   }
 }

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.PasswordChangeReason;
 import guru.mmp.application.security.User;
@@ -27,7 +25,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.validation.PasswordPolicyValidator;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -39,11 +36,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
 
@@ -54,12 +48,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_RESET_USER_PASSWORD)
-public class ResetUserPasswordPage extends TemplateWebPage
+public class ResetUserPasswordPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ResetUserPasswordPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Should the user's password be expired */
   @SuppressWarnings("unused")
@@ -120,8 +115,8 @@ public class ResetUserPasswordPage extends TemplateWebPage
       resetForm.add(passwordField);
 
       // The "confirmPassword" field
-      PasswordTextFieldWithFeedback confirmPasswordField =
-        new PasswordTextFieldWithFeedback("confirmPassword", Model.of(""));
+      PasswordTextFieldWithFeedback confirmPasswordField = new PasswordTextFieldWithFeedback(
+        "confirmPassword", Model.of(""));
       confirmPasswordField.setRequired(true);
       resetForm.add(confirmPasswordField);
 
@@ -152,8 +147,8 @@ public class ResetUserPasswordPage extends TemplateWebPage
             User user = userModel.getObject();
 
             securityService.adminChangePassword(user.getUserDirectoryId(), user.getUsername(),
-                user.getPassword(), expiredPassword, userLocked, false,
-                PasswordChangeReason.ADMINISTRATIVE);
+              user.getPassword(), expiredPassword, userLocked, false,
+              PasswordChangeReason.ADMINISTRATIVE);
 
             setResponsePage(previousPage.getPage());
           }

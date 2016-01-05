@@ -16,10 +16,7 @@
 
 package guru.mmp.application.process;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -88,8 +85,9 @@ public class ProcessInstance
    * @param lockName          the name of the entity that has locked the process instance for
    *                          execution
    */
-  public ProcessInstance(UUID id, UUID definitionId, int definitionVersion, byte[] data,
-      Status status, Date nextExecution, String lockName)
+  public ProcessInstance(
+    UUID id, UUID definitionId, int definitionVersion, byte[] data, Status status,
+    Date nextExecution, String lockName)
   {
     this.id = id;
     this.definitionId = definitionId;
@@ -101,6 +99,166 @@ public class ProcessInstance
   }
 
   /**
+   * Returns the data giving the current execution state for the process instance.
+   *
+   * @return the data giving the current execution state for the process instance
+   */
+  public byte[] getData()
+  {
+    return data;
+  }
+
+  /**
+   * Set the data giving the current execution state for the process instance.
+   *
+   * @param data the data giving the current execution state for the process instance
+   */
+  public void setData(byte[] data)
+  {
+    this.data = data;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
+   * definition for the process instance.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
+   * definition for the process instance
+   */
+  public UUID getDefinitionId()
+  {
+    return definitionId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process definition
+   * for the process instance.
+   *
+   * @param definitionId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                     process definition for the process instance
+   */
+  public void setDefinitionId(UUID definitionId)
+  {
+    this.definitionId = definitionId;
+  }
+
+  /**
+   * Returns the version of the process definition for the process instance.
+   *
+   * @return the version of the process definition for the process instance
+   */
+  public int getDefinitionVersion()
+  {
+    return definitionVersion;
+  }
+
+  /**
+   * Set the version of the process definition for the process instance.
+   *
+   * @param definitionVersion the version of the process definition for the process instance
+   */
+  public void setDefinitionVersion(int definitionVersion)
+  {
+    this.definitionVersion = definitionVersion;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
+   * instance.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
+   * instance
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process instance.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           instance
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Returns the name of the entity that has locked the process instance for execution.
+   *
+   * @return the name of the entity that has locked the process instance for execution
+   */
+  public String getLockName()
+  {
+    return lockName;
+  }
+
+  /**
+   * Set the name of the entity that has locked the process instance for execution.
+   *
+   * @param lockName the name of the entity that has locked the process instance for execution
+   */
+  public void setLockName(String lockName)
+  {
+    this.lockName = lockName;
+  }
+
+  /**
+   * Returns the date and time when the process instance will next be executed.
+   *
+   * @return the date and time when the process instance will next be executed
+   */
+  public Date getNextExecution()
+  {
+    return nextExecution;
+  }
+
+  /**
+   * Set the date and time when the process instance will next be executed.
+   *
+   * @param nextExecution the date and time when the process instance will next be executed
+   */
+  public void setNextExecution(Date nextExecution)
+  {
+    this.nextExecution = nextExecution;
+  }
+
+  /**
+   * Returns the status of the process instance.
+   *
+   * @return the status of the process instance
+   */
+  public Status getStatus()
+  {
+    return status;
+  }
+
+  /**
+   * Set the status of the process instance.
+   *
+   * @param status the status of the process instance
+   */
+  public void setStatus(Status status)
+  {
+    this.status = status;
+  }
+
+  /**
+   * Returns a string representation of the object.
+   *
+   * @return a string representation of the object
+   */
+  @Override
+  public String toString()
+  {
+    return String.format(
+      "ProcessInstance {id=\"%s\", definitionId=\"%s\", definitionVersion=\"%d\"}", getId(),
+      getDefinitionId(), getDefinitionVersion());
+  }
+
+  /**
    * The enumeration giving the possible statuses for a process instance.
    */
   public enum Status
@@ -109,13 +267,8 @@ public class ProcessInstance
     COMPLETED(3, "Completed"), FAILED(4, "Failed"), ANY(-1, "Any");
 
     private int code;
-    private String name;
 
-    Status(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
+    private String name;
 
     /**
      * Returns the status given by the specified numeric code value.
@@ -146,6 +299,12 @@ public class ProcessInstance
         default:
           return Status.UNKNOWN;
       }
+    }
+
+    Status(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
     }
 
     /**
@@ -187,164 +346,5 @@ public class ProcessInstance
     {
       return name;
     }
-  }
-
-  /**
-   * Returns the data giving the current execution state for the process instance.
-   *
-   * @return the data giving the current execution state for the process instance
-   */
-  public byte[] getData()
-  {
-    return data;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
-   * definition for the process instance.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *         definition for the process instance
-   */
-  public UUID getDefinitionId()
-  {
-    return definitionId;
-  }
-
-  /**
-   * Returns the version of the process definition for the process instance.
-   *
-   * @return the version of the process definition for the process instance
-   */
-  public int getDefinitionVersion()
-  {
-    return definitionVersion;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
-   * instance.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *         instance
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the name of the entity that has locked the process instance for execution.
-   *
-   * @return the name of the entity that has locked the process instance for execution
-   */
-  public String getLockName()
-  {
-    return lockName;
-  }
-
-  /**
-   * Returns the date and time when the process instance will next be executed.
-   *
-   * @return the date and time when the process instance will next be executed
-   */
-  public Date getNextExecution()
-  {
-    return nextExecution;
-  }
-
-  /**
-   * Returns the status of the process instance.
-   *
-   * @return the status of the process instance
-   */
-  public Status getStatus()
-  {
-    return status;
-  }
-
-  /**
-   * Set the data giving the current execution state for the process instance.
-   *
-   * @param data the data giving the current execution state for the process instance
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process definition
-   * for the process instance.
-   *
-   * @param definitionId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                     process definition for the process instance
-   */
-  public void setDefinitionId(UUID definitionId)
-  {
-    this.definitionId = definitionId;
-  }
-
-  /**
-   * Set the version of the process definition for the process instance.
-   *
-   * @param definitionVersion the version of the process definition for the process instance
-   */
-  public void setDefinitionVersion(int definitionVersion)
-  {
-    this.definitionVersion = definitionVersion;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process instance.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *           instance
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the entity that has locked the process instance for execution.
-   *
-   * @param lockName the name of the entity that has locked the process instance for execution
-   */
-  public void setLockName(String lockName)
-  {
-    this.lockName = lockName;
-  }
-
-  /**
-   * Set the date and time when the process instance will next be executed.
-   *
-   * @param nextExecution the date and time when the process instance will next be executed
-   */
-  public void setNextExecution(Date nextExecution)
-  {
-    this.nextExecution = nextExecution;
-  }
-
-  /**
-   * Set the status of the process instance.
-   *
-   * @param status the status of the process instance
-   */
-  public void setStatus(Status status)
-  {
-    this.status = status;
-  }
-
-  /**
-   * Returns a string representation of the object.
-   *
-   * @return a string representation of the object
-   */
-  @Override
-  public String toString()
-  {
-    return "ProcessInstance {" + "id=\"" + getId() + "\", " + "definitionId=\"" + getDefinitionId()
-        + "\", " + "definitionVersion=\"" + getDefinitionVersion() + "\"}";
   }
 }

@@ -1,16 +1,13 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import java.math.BigInteger;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,17 +18,17 @@ import java.math.BigInteger;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "any")
-public class Any extends Wildcard
+public class Any
+  extends Wildcard
 {
   @XmlAttribute(name = "maxOccurs")
   @XmlSchemaType(name = "allNNI")
   protected String maxOccurs;
+
   @XmlAttribute(name = "minOccurs")
   @XmlSchemaType(name = "nonNegativeInteger")
   protected BigInteger minOccurs;
@@ -39,10 +36,8 @@ public class Any extends Wildcard
   /**
    * Gets the value of the maxOccurs property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getMaxOccurs()
   {
@@ -57,12 +52,21 @@ public class Any extends Wildcard
   }
 
   /**
+   * Sets the value of the maxOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMaxOccurs(String value)
+  {
+    this.maxOccurs = value;
+  }
+
+  /**
    * Gets the value of the minOccurs property.
    *
-   * @return
-   *     possible object is
-   *     {@link BigInteger }
-   *
+   * @return possible object is
+   * {@link BigInteger }
    */
   public BigInteger getMinOccurs()
   {
@@ -77,25 +81,10 @@ public class Any extends Wildcard
   }
 
   /**
-   * Sets the value of the maxOccurs property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
-   */
-  public void setMaxOccurs(String value)
-  {
-    this.maxOccurs = value;
-  }
-
-  /**
    * Sets the value of the minOccurs property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link BigInteger }
-   *
+   * @param value allowed object is
+   *              {@link BigInteger }
    */
   public void setMinOccurs(BigInteger value)
   {

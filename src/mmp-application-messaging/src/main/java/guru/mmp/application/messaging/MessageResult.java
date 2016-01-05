@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
@@ -25,8 +23,6 @@ import guru.mmp.common.wbxml.Parser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageResult</code> class stores the results of the server-side Messaging
@@ -98,6 +94,24 @@ public class MessageResult
   private Message message;
 
   /**
+   * Returns <code>true</code> if the WBXML document contains valid message result information or
+   * <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message result information or
+   * <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element messageResultElement = document.getRootElement();
+
+    return messageResultElement.getName().equals("MessageResult") &&
+      (messageResultElement.getAttributes().size() == 2) && !((!messageResultElement.hasAttribute(
+      "code")) || (!messageResultElement.hasAttribute("detail")));
+  }
+
+  /**
    * Constructs a new <code>MessageResult</code>.
    *
    * @param document the WBXML document containing the message result information
@@ -133,8 +147,8 @@ public class MessageResult
       }
       catch (Throwable e)
       {
-        throw new MessagingException("Failed to parse the WBXML for the message associated with"
-            + " the message result", e);
+        throw new MessagingException(
+          "Failed to parse the WBXML for the message associated with" + " the message result", e);
       }
     }
   }
@@ -196,25 +210,6 @@ public class MessageResult
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message result information or
-   * <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message result information or
-   *         <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element messageResultElement = document.getRootElement();
-
-    return messageResultElement.getName().equals("MessageResult")
-        && (messageResultElement.getAttributes().size() == 2)
-        && !((!messageResultElement.hasAttribute("code"))
-          || (!messageResultElement.hasAttribute("detail")));
-  }
-
-  /**
    * Returns the result code.
    *
    * @return the result code
@@ -222,36 +217,6 @@ public class MessageResult
   public long getCode()
   {
     return code;
-  }
-
-  /**
-   * Returns the user-friendly text description of the result of processing the message.
-   *
-   * @return the user-friendly text description of the result of processing the message
-   */
-  public String getDetail()
-  {
-    return detail;
-  }
-
-  /**
-   * Returns the flattened information for the exception that resulted from processing the message.
-   *
-   * @return the flattened information for the exception that resulted from processing the message
-   */
-  public String getException()
-  {
-    return exception;
-  }
-
-  /**
-   * Returns the message associated with the message result e.g. a response message.
-   *
-   * @return the message associated with the message result e.g. a response message.
-   */
-  public Message getMessage()
-  {
-    return message;
   }
 
   /**
@@ -265,6 +230,16 @@ public class MessageResult
   }
 
   /**
+   * Returns the user-friendly text description of the result of processing the message.
+   *
+   * @return the user-friendly text description of the result of processing the message
+   */
+  public String getDetail()
+  {
+    return detail;
+  }
+
+  /**
    * Set the user-friendly text description of the result of processing the message.
    *
    * @param detail the user-friendly text description of the result of processing the message
@@ -272,6 +247,16 @@ public class MessageResult
   public void setDetail(String detail)
   {
     this.detail = detail;
+  }
+
+  /**
+   * Returns the flattened information for the exception that resulted from processing the message.
+   *
+   * @return the flattened information for the exception that resulted from processing the message
+   */
+  public String getException()
+  {
+    return exception;
   }
 
   /**
@@ -283,6 +268,16 @@ public class MessageResult
   public void setException(String exception)
   {
     this.exception = exception;
+  }
+
+  /**
+   * Returns the message associated with the message result e.g. a response message.
+   *
+   * @return the message associated with the message result e.g. a response message.
+   */
+  public Message getMessage()
+  {
+    return message;
   }
 
   /**

@@ -16,34 +16,29 @@
 
 package guru.mmp.application.web.servlet;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.naming.*;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * The <code>DumpNameSpaceServlet</code> servlet dumps the JNDI namespace.
  *
  * @author Marcus Portmann
  */
-public class DumpNamespaceServlet extends HttpServlet
+public class DumpNamespaceServlet
+  extends HttpServlet
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(DumpNamespaceServlet.class);
+
+  private static final long serialVersionUID = 1000000;
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -88,9 +83,10 @@ public class DumpNamespaceServlet extends HttpServlet
     }
     catch (Throwable e)
     {
-      pw.println("<span style=\"color: red; thirdparty-weight: bold; padding-left: 10px;"
-          + " padding-top: 10px; padding-bottom: 10px;\">[" + e.getClass().getName() + "] "
-          + e.getMessage() + "</span>");
+      pw.println(
+        "<span style=\"color: red; thirdparty-weight: bold; padding-left: 10px; padding-top: " +
+          "10px; padding-bottom: 10px;\">[" + e.getClass().getName() + "] " +
+          e.getMessage() + "</span>");
       logger.error("Failed to dump the JNDI tree: " + e.getMessage(), e);
     }
     finally
@@ -102,14 +98,16 @@ public class DumpNamespaceServlet extends HttpServlet
           ic.close();
         }
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     printHtmlFooter(pw);
   }
 
-  private void dumpNameSpace(TreeDumpStatus treeDumpStatus, Context context, String path,
-      PrintWriter pw, int depth)
+  private void dumpNameSpace(
+    TreeDumpStatus treeDumpStatus, Context context, String path, PrintWriter pw, int depth)
     throws NamingException
   {
     NamingEnumeration<NameClassPair> nameClassPairs;
@@ -124,8 +122,8 @@ public class DumpNamespaceServlet extends HttpServlet
     }
     catch (Throwable e)
     {
-      System.err.println("[ERROR] Failed to list the JNDI nodes for the context (" + path + "): "
-          + e.getMessage());
+      System.err.println("[ERROR] Failed to list the JNDI nodes for the context (" + path + "): " +
+        e.getMessage());
 
       return;
     }
@@ -141,10 +139,9 @@ public class DumpNamespaceServlet extends HttpServlet
 
         if (!(object instanceof javax.naming.Context))
         {
-          pw.println("<div style=\"padding-top: 2px; padding-bottom: 2px; padding-left: "
-              + ((depth * 20)) + "px;\">" + nameClassPair.getName()
-              + " <span class=\"className\">[" + nameClassPair.getClassName() + "] = " + object
-              + "</span></div><br>");
+          pw.println("<div style=\"padding-top: 2px; padding-bottom: 2px; padding-left: " +
+            ((depth * 20)) + "px;\">" + nameClassPair.getName() + " <span class=\"className\">[" +
+            nameClassPair.getClassName() + "] = " + object + "</span></div><br>");
         }
         else
         {
@@ -235,15 +232,15 @@ public class DumpNamespaceServlet extends HttpServlet
           if (processChildren)
           {
             pw.println(
-                "<div style=\"thirdparty-weight: bold; padding-top: 2px; padding-bottom: 2px;"
-                + " padding-left: " + ((depth * 20)) + "px;\">" + nameClassPair.getName()
-                + " <span class=\"className\">[" + nameClassPair.getClassName()
-                + "]</span></div><br>");
+              "<div style=\"thirdparty-weight: bold; padding-top: 2px; padding-bottom: 2px;" +
+                " padding-left: " + ((depth * 20)) + "px;\">" + nameClassPair.getName() + " " +
+                "<span class=\"className\">[" + nameClassPair.getClassName() +
+                "]</span></div><br>");
 
             if (path.length() > 0)
             {
               dumpNameSpace(treeDumpStatus, context, path + "/" + nameClassPair.getName(), pw,
-                  depth + 1);
+                depth + 1);
             }
             else
             {
@@ -252,19 +249,18 @@ public class DumpNamespaceServlet extends HttpServlet
           }
           else
           {
-            pw.println(
-                "<div style=\"color: #9f9f9f; padding-top: 2px; padding-bottom: 2px; padding-left: "
-                + ((depth * 20)) + "px;\">" + nameClassPair.getName() + " (Duplicate Reference)"
-                + "</div><br>");
-
+            pw.println("<div style=\"color: #9f9f9f; padding-top: 2px; padding-bottom: 2px; " +
+              "padding-left: " + ((depth * 20)) + "px;\">" + nameClassPair.getName() + " " +
+              "(Duplicate Reference)" + "</div><br>");
           }
         }
       }
       catch (Throwable e)
       {
-        pw.println("<div style=\"padding-top: 2px; padding-bottom: 2px; padding-left: "
-            + ((depth * 20)) + "px;\">" + nameClassPair.getName() + " <span class=\"className\">["
-            + nameClassPair.getClassName() + "]</span></div><br>");
+        pw.println(
+          "<div style=\"padding-top: 2px; padding-bottom: 2px; padding-left: " + ((depth * 20)) +
+            "px;\">" + nameClassPair.getName() + " <span class=\"className\">[" +
+            nameClassPair.getClassName() + "]</span></div><br>");
       }
     }
   }
@@ -283,9 +279,9 @@ public class DumpNamespaceServlet extends HttpServlet
     pw.println("<head>");
     pw.println("  <style>");
     pw.println(
-        "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;}");
-    pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green;"
-        + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
+      "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 10pt;}");
+    pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green; " +
+      "thirdparty-weight: bold; thirdparty-size: 9pt;}");
     pw.println("    .className {color: 808080;}");
     pw.println("  </style>");
     pw.println("</head>");

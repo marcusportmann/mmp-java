@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.markup.html.form.TextField;
 
 /**
@@ -26,7 +24,8 @@ import org.apache.wicket.markup.html.form.TextField;
  *
  * @author Marcus Portmann
  */
-public class CodeInputPanel extends InputPanel
+public class CodeInputPanel
+  extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
 

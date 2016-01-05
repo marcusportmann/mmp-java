@@ -16,10 +16,7 @@
 
 package guru.mmp.application.process;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
 
 /**
@@ -74,7 +71,7 @@ public class ProcessDefinitionSummary
    * definition.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *         definition
+   * definition
    */
   public UUID getId()
   {
@@ -119,6 +116,6 @@ public class ProcessDefinitionSummary
   @Override
   public String toString()
   {
-    return "ProcessDefinitionSummary {" + "id=\"" + getId() + "\", name=\"" + getName() + "\"}";
+    return String.format("ProcessDefinitionSummary {id=\"%s\", name=\"%s\"}", getId(), getName());
   }
 }

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.jquery;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -32,20 +30,17 @@ import org.apache.wicket.settings.JavaScriptLibrarySettings;
  *
  * @author Marcus Portmann
  */
-public class JQueryJavaScriptResourceReference extends JavaScriptResourceReference
+public class JQueryJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new JQueryJavaScriptResourceReference());
-  private static final JQueryJavaScriptResourceReference INSTANCE =
-    new JQueryJavaScriptResourceReference();
+  private static final JQueryJavaScriptResourceReference INSTANCE = new
+    JQueryJavaScriptResourceReference();
 
-  private JQueryJavaScriptResourceReference()
-  {
-    super(JQueryJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "jquery-1.11.3.js"
-        : "jquery-1.11.3.min.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new JQueryJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the jQuery
@@ -55,7 +50,7 @@ public class JQueryJavaScriptResourceReference extends JavaScriptResourceReferen
    * {@link JavaScriptLibrarySettings#getJQueryReference()} to prevent version conflicts.
    *
    * @return the single instance of the JavaScript resource reference for the jQuery
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static JQueryJavaScriptResourceReference get()
   {
@@ -70,5 +65,11 @@ public class JQueryJavaScriptResourceReference extends JavaScriptResourceReferen
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private JQueryJavaScriptResourceReference()
+  {
+    super(JQueryJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "jquery-1.11.3.js" : "jquery-1.11.3.min.js");
   }
 }

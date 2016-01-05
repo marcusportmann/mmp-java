@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
@@ -28,7 +26,6 @@ import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.ReportDefinitionSummaryDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -39,11 +36,8 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -55,11 +49,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
-public class ReportDefinitionAdministrationPage extends TemplateWebPage
+public class ReportDefinitionAdministrationPage
+  extends TemplateWebPage
 {
   /* Logger */
-  private static final Logger logger =
-    LoggerFactory.getLogger(ReportDefinitionAdministrationPage.class);
+  private static final Logger logger = LoggerFactory.getLogger(
+    ReportDefinitionAdministrationPage.class);
+
   private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
@@ -104,12 +100,11 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
       };
       tableContainer.add(addLink);
 
-      ReportDefinitionSummaryDataProvider dataProvider =
-        new ReportDefinitionSummaryDataProvider();
+      ReportDefinitionSummaryDataProvider dataProvider = new ReportDefinitionSummaryDataProvider();
 
       // The report definition data view
-      DataView<ReportDefinitionSummary> dataView =
-        new DataView<ReportDefinitionSummary>("reportDefinition", dataProvider)
+      DataView<ReportDefinitionSummary> dataView = new DataView<ReportDefinitionSummary>(
+        "reportDefinition", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
@@ -129,21 +124,21 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
 
               try
               {
-                ReportDefinition reportDefinition =
-                  reportingService.getReportDefinition(reportDefinitionSummary.getId());
+                ReportDefinition reportDefinition = reportingService.getReportDefinition(
+                  reportDefinitionSummary.getId());
 
-                UpdateReportDefinitionPage page =
-                  new UpdateReportDefinitionPage(getPageReference(), new Model<>(reportDefinition));
+                UpdateReportDefinitionPage page = new UpdateReportDefinitionPage(getPageReference(),
+                  new Model<>(reportDefinition));
 
                 setResponsePage(page);
               }
               catch (Throwable e)
               {
-                logger.error("Failed to retrieve the report definition ("
-                    + reportDefinitionSummary.getId() + ")", e);
+                logger.error(String.format("Failed to retrieve the report definition (%s)",
+                  reportDefinitionSummary.getId()), e);
 
-                error("Failed to retrieve the report definition ("
-                    + reportDefinitionSummary.getId() + ")");
+                error(String.format("Failed to retrieve the report definition (%s)",
+                  reportDefinitionSummary.getId()));
               }
             }
           };
@@ -182,7 +177,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
     catch (Throwable e)
     {
       throw new WebApplicationException(
-          "Failed to initialise the ReportDefinitionAdministrationPage", e);
+        "Failed to initialise the ReportDefinitionAdministrationPage", e);
     }
   }
 
@@ -190,10 +185,13 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a report definition to be confirmed.
    */
-  private class RemoveDialog extends Dialog
+  private class RemoveDialog
+    extends Dialog
   {
     private static final long serialVersionUID = 1000000;
+
     private UUID id;
+
     private Label nameLabel;
 
     /**
@@ -224,16 +222,18 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
             target.add(tableContainer);
 
             ReportDefinitionAdministrationPage.this.info(
-                "Successfully removed the report definition "
-                + nameLabel.getDefaultModelObjectAsString());
+              "Successfully removed the report definition " +
+                nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the report definition (" + id + "): " + e.getMessage(),
-                e);
+            logger.error(
+              String.format("Failed to remove the report definition (%s): %s", id, e.getMessage()),
+              e);
 
-            ReportDefinitionAdministrationPage.this.error("Failed to remove the report definition "
-                + nameLabel.getDefaultModelObjectAsString());
+            ReportDefinitionAdministrationPage.this.error(
+              "Failed to remove the report definition " +
+                nameLabel.getDefaultModelObjectAsString());
           }
 
           target.add(getAlerts());
@@ -244,9 +244,9 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
     }
 
     /**
-     * @see Dialog#hide(org.apache.wicket.ajax.AjaxRequestTarget)
-     *
      * @param target the AJAX request target
+     *
+     * @see Dialog#hide(org.apache.wicket.ajax.AjaxRequestTarget)
      */
     public void hide(AjaxRequestTarget target)
     {

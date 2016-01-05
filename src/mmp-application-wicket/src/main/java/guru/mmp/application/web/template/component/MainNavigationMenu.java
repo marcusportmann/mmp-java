@@ -16,14 +16,11 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.navigation.NavigationState;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.ComponentTag;
@@ -33,11 +30,8 @@ import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * The <code>MainNavigationMenu</code> class provides a Wicket component that renders the main
@@ -45,14 +39,15 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Marcus Portmann
  */
-public class MainNavigationMenu extends Component
+public class MainNavigationMenu
+  extends Component
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * @see org.apache.wicket.Component#Component(String)
-   *
    * @param id the non-null id of this component
+   *
+   * @see org.apache.wicket.Component#Component(String)
    */
   public MainNavigationMenu(String id)
   {
@@ -89,7 +84,7 @@ public class MainNavigationMenu extends Component
           if (navigationState.isLastPageAccessedInNavigationHierarchy(getPage()))
           {
             response.write(
-                navigationState.getLastPageAccessedInNavigationHierarchyMainNavigationHTML());
+              navigationState.getLastPageAccessedInNavigationHierarchyMainNavigationHTML());
 
             return;
           }
@@ -102,15 +97,14 @@ public class MainNavigationMenu extends Component
           if (!webSession.getNavigation().isPageInNavigationHierarchy(getPage()))
           {
             response.write(
-                navigationState.getLastPageAccessedInNavigationHierarchyMainNavigationHTML());
+              navigationState.getLastPageAccessedInNavigationHierarchyMainNavigationHTML());
 
             return;
           }
         }
 
-        String requestURI =
-          ((HttpServletRequest) (RequestCycle.get().getRequest()).getContainerRequest())
-            .getRequestURI();
+        String requestURI = ((HttpServletRequest) (RequestCycle.get().getRequest())
+          .getContainerRequest()).getRequestURI();
 
         StringBuilder buffer = new StringBuilder();
 
@@ -118,16 +112,16 @@ public class MainNavigationMenu extends Component
         renderNavigationGroup(requestURI, webSession.getNavigation(), 0, buffer);
 
         navigationState.setLastPageAccessedInNavigationHierarchyMainNavigationHTML(
-            buffer.toString());
+          buffer.toString());
 
         response.write(
-            navigationState.getLastPageAccessedInNavigationHierarchyMainNavigationHTML());
+          navigationState.getLastPageAccessedInNavigationHierarchyMainNavigationHTML());
       }
     }
   }
 
-  private void renderNavigationGroup(String requestURI, NavigationGroup navigationGroup, int depth,
-      StringBuilder buffer)
+  private void renderNavigationGroup(
+    String requestURI, NavigationGroup navigationGroup, int depth, StringBuilder buffer)
   {
     if (depth != 0)
     {
@@ -179,7 +173,7 @@ public class MainNavigationMenu extends Component
         }
 
         buffer.append("<span class=\"title\">").append(subNavigationGroup.getName()).append(
-            "</span>");
+          "</span>");
 
         buffer.append("</a>");
 

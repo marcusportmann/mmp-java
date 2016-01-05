@@ -16,13 +16,11 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>Interface</code> class represents an Interface associated with a Process.
- * <p>
+ * <p/>
  * <b>Interface</b> XML schema:
  * <pre>
  *

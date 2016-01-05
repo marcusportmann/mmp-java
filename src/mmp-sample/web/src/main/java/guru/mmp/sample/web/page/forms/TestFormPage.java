@@ -16,8 +16,6 @@
 
 package guru.mmp.sample.web.page.forms;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.resource.thirdparty.datepicker
   .BootstrapDatePickerJavaScriptResourceReference;
@@ -38,16 +36,12 @@ import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScrip
 import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 import guru.mmp.sample.model.TestData;
-
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +52,30 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TestFormPage extends TemplateWebPage
+public class TestFormPage
+  extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TestFormPage.class);
+
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * Returns the user title options e.g. Mr, Mrs, Ms, etc.
+   *
+   * @return the user title options e.g. Mr, Mrs, Ms, etc
+   */
+  public static List<String> getTitleOptions()
+  {
+    List<String> titleOptions = new ArrayList<>();
+
+    titleOptions.add("Mr");
+    titleOptions.add("Mrs");
+    titleOptions.add("Ms");
+    titleOptions.add("Dr");
+
+    return titleOptions;
+  }
 
   /**
    * Constructs a new <code>TestFormPage</code>.
@@ -157,26 +170,9 @@ public class TestFormPage extends TemplateWebPage
   }
 
   /**
-   * Returns the user title options e.g. Mr, Mrs, Ms, etc.
-   *
-   * @return the user title options e.g. Mr, Mrs, Ms, etc
-   */
-  public static List<String> getTitleOptions()
-  {
-    List<String> titleOptions = new ArrayList<>();
-
-    titleOptions.add("Mr");
-    titleOptions.add("Mrs");
-    titleOptions.add("Ms");
-    titleOptions.add("Dr");
-
-    return titleOptions;
-  }
-
-  /**
    * Render to the web response whatever the component wants to contribute to the head section.
    *
-   * @param response  the header response
+   * @param response the header response
    */
   @Override
   public void renderHead(IHeaderResponse response)

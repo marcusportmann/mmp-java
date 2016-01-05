@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
@@ -43,8 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>AddUserPage</code> class implements the
  * "Add User" page for the Web Application Template.
@@ -52,12 +48,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_USER)
-public class AddUserPage extends TemplateWebPage
+public class AddUserPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddUserPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Should the user be created with an expired password */
   @SuppressWarnings("unused")
@@ -74,6 +71,23 @@ public class AddUserPage extends TemplateWebPage
   /* Should the user be created with a locked password */
   @SuppressWarnings("unused")
   private boolean userLocked;
+
+  /**
+   * Returns the user title options e.g. Mr, Mrs, Ms, etc.
+   *
+   * @return the user title options e.g. Mr, Mrs, Ms, etc
+   */
+  public static List<String> getTitleOptions()
+  {
+    List<String> titleOptions = new ArrayList<>();
+
+    titleOptions.add("Mr");
+    titleOptions.add("Mrs");
+    titleOptions.add("Ms");
+    titleOptions.add("Dr");
+
+    return titleOptions;
+  }
 
   /**
    * Constructs a new <code>AddUserPage</code>.
@@ -146,8 +160,8 @@ public class AddUserPage extends TemplateWebPage
       addForm.add(passwordField);
 
       // The "confirmPassword" field
-      PasswordTextFieldWithFeedback confirmPasswordField =
-        new PasswordTextFieldWithFeedback("confirmPassword", Model.of(""));
+      PasswordTextFieldWithFeedback confirmPasswordField = new PasswordTextFieldWithFeedback(
+        "confirmPassword", Model.of(""));
       confirmPasswordField.setRequired(true);
       addForm.add(confirmPasswordField);
 
@@ -194,7 +208,9 @@ public class AddUserPage extends TemplateWebPage
 
               return;
             }
-            catch (UserNotFoundException ignored) {}
+            catch (UserNotFoundException ignored)
+            {
+            }
 
             securityService.createUser(userDirectoryId, user, expiredPassword, userLocked);
 
@@ -243,23 +259,6 @@ public class AddUserPage extends TemplateWebPage
    */
   @SuppressWarnings("unused")
   protected AddUserPage() {}
-
-  /**
-   * Returns the user title options e.g. Mr, Mrs, Ms, etc.
-   *
-   * @return the user title options e.g. Mr, Mrs, Ms, etc
-   */
-  public static List<String> getTitleOptions()
-  {
-    List<String> titleOptions = new ArrayList<>();
-
-    titleOptions.add("Mr");
-    titleOptions.add("Mrs");
-    titleOptions.add("Ms");
-    titleOptions.add("Dr");
-
-    return titleOptions;
-  }
 
   private List<String> getGroupOptions(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, guru.mmp.application.security.SecurityException

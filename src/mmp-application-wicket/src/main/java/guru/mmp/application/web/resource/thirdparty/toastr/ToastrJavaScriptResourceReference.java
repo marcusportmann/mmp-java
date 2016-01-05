@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.toastr;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -29,27 +27,24 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ToastrJavaScriptResourceReference extends JavaScriptResourceReference
+public class ToastrJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new ToastrJavaScriptResourceReference());
-  private static final ToastrJavaScriptResourceReference INSTANCE =
-    new ToastrJavaScriptResourceReference();
+  private static final ToastrJavaScriptResourceReference INSTANCE = new
+    ToastrJavaScriptResourceReference();
 
-  private ToastrJavaScriptResourceReference()
-  {
-    super(ToastrJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "toastr/toastr.js"
-        : "toastr/toastr.min.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new ToastrJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the Toastr
    * thirdparty resource bundled with the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the Toastr
-   *         thirdparty resource bundled with the Web Application Template
+   * thirdparty resource bundled with the Web Application Template
    */
   public static ToastrJavaScriptResourceReference get()
   {
@@ -64,5 +59,11 @@ public class ToastrJavaScriptResourceReference extends JavaScriptResourceReferen
   public static JavaScriptHeaderItem getJavaScriptHeaderItem()
   {
     return JAVA_SCRIPT_HEADER_ITEM;
+  }
+
+  private ToastrJavaScriptResourceReference()
+  {
+    super(ToastrJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "toastr/toastr.js" : "toastr/toastr.min.js");
   }
 }

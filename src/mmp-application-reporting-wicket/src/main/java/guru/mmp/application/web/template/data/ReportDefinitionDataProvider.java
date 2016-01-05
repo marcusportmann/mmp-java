@@ -16,22 +16,16 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * The <code>ReportDefinitionDataProvider</code> class provides an <code>IDataProvider</code>
@@ -40,7 +34,8 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportDefinition>
+public class ReportDefinitionDataProvider
+  extends InjectableDataProvider<ReportDefinition>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -62,13 +57,13 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
    * Retrieves the matching report definitions from the database starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
-   *
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
    * @return the report definitions retrieved from the database starting with
-   *         index <code>first</code> and ending with <code>first+count</code>
+   * index <code>first</code> and ending with <code>first+count</code>
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
   public Iterator<ReportDefinition> iterator(long first, long count)
   {
@@ -89,19 +84,20 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the report definitions from index ("
-          + first + ") to (" + (first + count) + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to load the report definitions from index (%d) to (%d)", first,
+          first + count), e);
     }
   }
 
   /**
    * Wraps the retrieved <code>ReportDefinition</code> POJO with a Wicket model.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
-   *
    * @param reportDefinition the <code>ReportDefinition</code> instance to wrap
    *
    * @return the Wicket model wrapping the <code>ReportDefinition</code> instance
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    */
   public IModel<ReportDefinition> model(ReportDefinition reportDefinition)
   {
@@ -111,9 +107,9 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
   /**
    * Returns the total number of report definitions.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
-   *
    * @return the total number of report definitions
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    */
   public long size()
   {

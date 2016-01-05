@@ -16,8 +16,6 @@
 
 package guru.mmp.application.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DAOException;
 
 /**
@@ -59,7 +57,7 @@ public interface ISMSDAO
    *                       processing when it is retrieved
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   *         currently queued for sending
+   * currently queued for sending
    *
    * @throws DAOException
    */

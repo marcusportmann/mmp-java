@@ -16,8 +16,6 @@
 
 package guru.mmp.common.model;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +30,9 @@ public class ValidationError
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private List<ValidationErrorDetail> details = new ArrayList<>();
+
   private String name;
 
   /**
@@ -196,16 +196,6 @@ public class ValidationError
   }
 
   /**
-   * Returns the name of the entity associated with this validation error.
-   *
-   * @return the name of the entity associated with this validation error
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
    * Set the validation error detail information for this validation error.
    *
    * @param details the validation error detail information
@@ -213,6 +203,16 @@ public class ValidationError
   public void setDetails(List<ValidationErrorDetail> details)
   {
     this.details = details;
+  }
+
+  /**
+   * Returns the name of the entity associated with this validation error.
+   *
+   * @return the name of the entity associated with this validation error
+   */
+  public String getName()
+  {
+    return name;
   }
 
   /**

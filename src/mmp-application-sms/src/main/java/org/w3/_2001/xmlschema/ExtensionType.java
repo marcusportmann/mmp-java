@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
@@ -10,9 +7,9 @@ import java.util.List;
 
 /**
  * <p>Java class for extensionType complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="extensionType">
  *   &lt;complexContent>
@@ -27,34 +24,37 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "extensionType",
-    propOrder = { "sequence", "choice", "all", "group", "attributesAndAttributeGroups",
-    "anyAttribute" })
-@XmlSeeAlso({ SimpleExtensionType.class })
-public class ExtensionType extends Annotated
+  propOrder = {"sequence", "choice", "all", "group", "attributesAndAttributeGroups",
+    "anyAttribute"})
+@XmlSeeAlso({SimpleExtensionType.class})
+public class ExtensionType
+  extends Annotated
 {
   protected All all;
+
   protected Wildcard anyAttribute;
-  @XmlElements({ @XmlElement(name = "attribute", type = AttributeType.class) ,
-      @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class) })
+
+  @XmlElements({@XmlElement(name = "attribute", type = AttributeType.class),
+    @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class)})
   protected List<Annotated> attributesAndAttributeGroups;
+
   @XmlAttribute(name = "base", required = true)
   protected QName base;
+
   protected ExplicitGroup choice;
+
   protected GroupRef group;
+
   protected ExplicitGroup sequence;
 
   /**
    * Gets the value of the all property.
    *
-   * @return
-   *     possible object is
-   *     {@link All }
-   *
+   * @return possible object is
+   * {@link All }
    */
   public All getAll()
   {
@@ -62,12 +62,21 @@ public class ExtensionType extends Annotated
   }
 
   /**
+   * Sets the value of the all property.
+   *
+   * @param value allowed object is
+   *              {@link All }
+   */
+  public void setAll(All value)
+  {
+    this.all = value;
+  }
+
+  /**
    * Gets the value of the anyAttribute property.
    *
-   * @return
-   *     possible object is
-   *     {@link Wildcard }
-   *
+   * @return possible object is
+   * {@link Wildcard }
    */
   public Wildcard getAnyAttribute()
   {
@@ -75,27 +84,37 @@ public class ExtensionType extends Annotated
   }
 
   /**
-   * Gets the value of the attributesAndAttributeGroups property.
+   * Sets the value of the anyAttribute property.
    *
-   * <p>
+   * @param value allowed object is
+   *              {@link Wildcard }
+   */
+  public void setAnyAttribute(Wildcard value)
+  {
+    this.anyAttribute = value;
+  }
+
+  /**
+   * Gets the value of the attributesAndAttributeGroups property.
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
-   * This is why there is not a <CODE>set</CODE> method for the attributesAndAttributeGroups property.
-   *
-   * <p>
+   * This is why there is not a <CODE>set</CODE> method for the attributesAndAttributeGroups
+   * property.
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getAttributesAndAttributeGroups().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link AttributeType }
    * {@link AttributeGroupRef }
-   *
-   *
    *
    * @return
    */
@@ -112,10 +131,8 @@ public class ExtensionType extends Annotated
   /**
    * Gets the value of the base property.
    *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
+   * @return possible object is
+   * {@link QName }
    */
   public QName getBase()
   {
@@ -123,77 +140,10 @@ public class ExtensionType extends Annotated
   }
 
   /**
-   * Gets the value of the choice property.
-   *
-   * @return
-   *     possible object is
-   *     {@link ExplicitGroup }
-   *
-   */
-  public ExplicitGroup getChoice()
-  {
-    return choice;
-  }
-
-  /**
-   * Gets the value of the group property.
-   *
-   * @return
-   *     possible object is
-   *     {@link GroupRef }
-   *
-   */
-  public GroupRef getGroup()
-  {
-    return group;
-  }
-
-  /**
-   * Gets the value of the sequence property.
-   *
-   * @return
-   *     possible object is
-   *     {@link ExplicitGroup }
-   *
-   */
-  public ExplicitGroup getSequence()
-  {
-    return sequence;
-  }
-
-  /**
-   * Sets the value of the all property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link All }
-   *
-   */
-  public void setAll(All value)
-  {
-    this.all = value;
-  }
-
-  /**
-   * Sets the value of the anyAttribute property.
-   *
-   * @param value
-   *     allowed object is
-   *     {@link Wildcard }
-   *
-   */
-  public void setAnyAttribute(Wildcard value)
-  {
-    this.anyAttribute = value;
-  }
-
-  /**
    * Sets the value of the base property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
+   * @param value allowed object is
+   *              {@link QName }
    */
   public void setBase(QName value)
   {
@@ -201,12 +151,21 @@ public class ExtensionType extends Annotated
   }
 
   /**
+   * Gets the value of the choice property.
+   *
+   * @return possible object is
+   * {@link ExplicitGroup }
+   */
+  public ExplicitGroup getChoice()
+  {
+    return choice;
+  }
+
+  /**
    * Sets the value of the choice property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link ExplicitGroup }
-   *
+   * @param value allowed object is
+   *              {@link ExplicitGroup }
    */
   public void setChoice(ExplicitGroup value)
   {
@@ -214,12 +173,21 @@ public class ExtensionType extends Annotated
   }
 
   /**
+   * Gets the value of the group property.
+   *
+   * @return possible object is
+   * {@link GroupRef }
+   */
+  public GroupRef getGroup()
+  {
+    return group;
+  }
+
+  /**
    * Sets the value of the group property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link GroupRef }
-   *
+   * @param value allowed object is
+   *              {@link GroupRef }
    */
   public void setGroup(GroupRef value)
   {
@@ -227,12 +195,21 @@ public class ExtensionType extends Annotated
   }
 
   /**
+   * Gets the value of the sequence property.
+   *
+   * @return possible object is
+   * {@link ExplicitGroup }
+   */
+  public ExplicitGroup getSequence()
+  {
+    return sequence;
+  }
+
+  /**
    * Sets the value of the sequence property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link ExplicitGroup }
-   *
+   * @param value allowed object is
+   *              {@link ExplicitGroup }
    */
   public void setSequence(ExplicitGroup value)
   {

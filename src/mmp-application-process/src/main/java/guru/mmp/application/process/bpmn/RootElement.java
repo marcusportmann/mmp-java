@@ -16,14 +16,12 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>RootElement</code> class provides the base class that all RootElements that form part
  * of a Process should be derived from.
- * <p>
+ * <p/>
  * <b>RootElement</b> XML schema:
  * <pre>
  * &lt;xsd:element name="rootElement" type="tRootElement"/&gt;
@@ -36,7 +34,8 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public abstract class RootElement extends BaseElement
+public abstract class RootElement
+  extends BaseElement
 {
   /**
    * Constructs a new <code>RootElement</code>.

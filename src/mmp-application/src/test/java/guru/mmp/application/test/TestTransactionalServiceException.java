@@ -24,7 +24,8 @@ package guru.mmp.application.test;
  *
  * @author Marcus Portmann
  */
-public class TestTransactionalServiceException extends Exception
+public class TestTransactionalServiceException
+  extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

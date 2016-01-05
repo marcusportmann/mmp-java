@@ -16,22 +16,17 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
-
 import org.w3c.dom.Element;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
 /**
  * The <code>ImplicitThrowEvent</code> class represents an Implicit Throw Event that forms part of
  * a Process.
- * <p>
+ * <p/>
  * <b>Implicit Throw Event</b> XML schema:
  * <pre>
  * &lt;xsd:element name="implicitThrowEvent" type="tImplicitThrowEvent"
@@ -46,7 +41,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ImplicitThrowEvent extends ThrowEvent
+public final class ImplicitThrowEvent
+  extends ThrowEvent
 {
   /**
    * Constructs a new <code>ImplicitThrowEvent</code>.

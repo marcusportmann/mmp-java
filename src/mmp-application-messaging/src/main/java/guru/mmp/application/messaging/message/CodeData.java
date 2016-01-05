@@ -16,16 +16,11 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
 
 /**
@@ -126,51 +121,11 @@ public class CodeData
    * code is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the category the
-   *         code is associated with
+   * code is associated with
    */
   public UUID getCategoryId()
   {
     return categoryId;
-  }
-
-  /**
-   * Returns the description for the code.
-   *
-   * @return the description for the code
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Returns the ID used to uniquely identify the code.
-   *
-   * @return the ID used to uniquely identify the code
-   */
-  public String getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the name of the code.
-   *
-   * @return the name of the code
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the value for the code.
-   *
-   * @return the value for the code
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**
@@ -186,6 +141,16 @@ public class CodeData
   }
 
   /**
+   * Returns the description for the code.
+   *
+   * @return the description for the code
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
    * Set the description for the code.
    *
    * @param description the description for the code
@@ -193,6 +158,16 @@ public class CodeData
   public void setDescription(String description)
   {
     this.description = description;
+  }
+
+  /**
+   * Returns the ID used to uniquely identify the code.
+   *
+   * @return the ID used to uniquely identify the code
+   */
+  public String getId()
+  {
+    return id;
   }
 
   /**
@@ -206,6 +181,16 @@ public class CodeData
   }
 
   /**
+   * Returns the name of the code.
+   *
+   * @return the name of the code
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
    * Set the name of the code.
    *
    * @param name the name of the code
@@ -213,6 +198,16 @@ public class CodeData
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the value for the code.
+   *
+   * @return the value for the code
+   */
+  public String getValue()
+  {
+    return value;
   }
 
   /**

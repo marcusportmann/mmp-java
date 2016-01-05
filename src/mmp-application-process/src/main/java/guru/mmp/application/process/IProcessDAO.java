@@ -16,11 +16,7 @@
 
 package guru.mmp.application.process;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DAOException;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +32,7 @@ public interface IProcessDAO
    * Create the new process definition.
    *
    * @param processDefinition the <code>ProcessDefinition</code> instance containing the information
-   *                         for the new process definition
+   *                          for the new process definition
    *
    * @throws DAOException
    */
@@ -105,7 +101,7 @@ public interface IProcessDAO
    *                 for execution when it is retrieved
    *
    * @return the next process instance that is scheduled for execution or <code>null</code> if no
-   *         process instances are currently scheduled for execution
+   * process instances are currently scheduled for execution
    *
    * @throws DAOException
    */
@@ -140,7 +136,7 @@ public interface IProcessDAO
    * @param version the version of the process definition
    *
    * @return the process definition and version or <code>null</code> if the process definition
-   *         could not be found
+   * could not be found
    *
    * @throws DAOException
    */
@@ -155,7 +151,7 @@ public interface IProcessDAO
    * @param version the version of the process definition
    *
    * @return the summary for the process definition and version or <code>null</code> if the process
-   *         definition could not be found
+   * definition could not be found
    *
    * @throws DAOException
    */
@@ -192,7 +188,7 @@ public interface IProcessDAO
    *           instance
    *
    * @return the summary for the process instance or <code>null</code> if the process definition
-   *         could not be found
+   * could not be found
    *
    * @throws DAOException
    */
@@ -238,8 +234,8 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  int resetProcessInstanceLocks(String lockName, ProcessInstance.Status status,
-      ProcessInstance.Status newStatus)
+  int resetProcessInstanceLocks(
+    String lockName, ProcessInstance.Status status, ProcessInstance.Status newStatus)
     throws DAOException;
 
   /**

@@ -16,19 +16,14 @@
 
 package guru.mmp.sample.web.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.reporting.ReportType;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.servlet.ViewReportParameters;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.page.TemplateWebPage;
-
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +35,8 @@ import java.util.Map;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_DASHBOARD)
-public class DashboardPage extends TemplateWebPage
+public class DashboardPage
+  extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
@@ -68,9 +64,8 @@ public class DashboardPage extends TemplateWebPage
 
         session.addViewReportParameters(viewReportParameters);
 
-        getRequestCycle().scheduleRequestHandlerAfterCurrent(
-            new RedirectRequestHandler(
-              "/servlet/ViewReportServlet?viewReportParametersId=" + viewReportParameters.getId()));
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(
+          "/servlet/ViewReportServlet?viewReportParametersId=" + viewReportParameters.getId()));
       }
     };
 

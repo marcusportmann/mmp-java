@@ -25,22 +25,32 @@ package guru.mmp.application.web.template;
  */
 public class TemplateReportingSecurity
 {
-  /** The Application.AddReportDefinition function code. */
+  /**
+   * The Application.AddReportDefinition function code.
+   */
   public static final String FUNCTION_CODE_ADD_REPORT_DEFINITION =
-    "Application.AddReportDefinition";
+    "Application" + ".AddReportDefinition";
 
-  /** The Application.RemoveReportDefinition function code. */
+  /**
+   * The Application.RemoveReportDefinition function code.
+   */
   public static final String FUNCTION_CODE_REMOVE_REPORT_DEFINITION =
-    "Application.RemoveReportDefinition";
+    "Application" + ".RemoveReportDefinition";
 
-  /** The Application.ReportDefinitionAdministration function code. */
+  /**
+   * The Application.ReportDefinitionAdministration function code.
+   */
   public static final String FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION =
-    "Application.ReportDefinitionAdministration";
+    "Application" + ".ReportDefinitionAdministration";
 
-  /** The Application.UpdateReportDefinition function code. */
+  /**
+   * The Application.UpdateReportDefinition function code.
+   */
   public static final String FUNCTION_CODE_UPDATE_REPORT_DEFINITION =
-    "Application.UpdateReportDefinition";
+    "Application" + ".UpdateReportDefinition";
 
-  /** The Application.ViewReport function code. */
+  /**
+   * The Application.ViewReport function code.
+   */
   public static final String FUNCTION_CODE_VIEW_REPORT = "Application.ViewReport";
 }

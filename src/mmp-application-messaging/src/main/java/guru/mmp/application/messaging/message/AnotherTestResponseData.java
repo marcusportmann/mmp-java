@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -38,13 +34,14 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class AnotherTestResponseData extends WbxmlMessageData
+public class AnotherTestResponseData
+  extends WbxmlMessageData
 {
   /**
    * The UUID for the "Another Test Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("a714a9c6-2914-4498-ab59-64be9991bf37");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "a714a9c6-2914-4498-ab59-64be9991bf37");
 
   /**
    * The test data.
@@ -97,7 +94,7 @@ public class AnotherTestResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -135,16 +132,6 @@ public class AnotherTestResponseData extends WbxmlMessageData
   }
 
   /**
-   * Returns the test value.
-   *
-   * @return the test value
-   */
-  public String getTestValue()
-  {
-    return testValue;
-  }
-
-  /**
    * Set the test data.
    *
    * @param testData the test data
@@ -152,6 +139,16 @@ public class AnotherTestResponseData extends WbxmlMessageData
   public void setTestData(byte[] testData)
   {
     this.testData = testData;
+  }
+
+  /**
+   * Returns the test value.
+   *
+   * @return the test value
+   */
+  public String getTestValue()
+  {
+    return testValue;
   }
 
   /**
@@ -169,7 +166,7 @@ public class AnotherTestResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */

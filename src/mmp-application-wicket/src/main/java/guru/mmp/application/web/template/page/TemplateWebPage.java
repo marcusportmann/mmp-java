@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
@@ -40,13 +38,19 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author Marcus Portmann
  */
-public abstract class TemplateWebPage extends WebPage
+public abstract class TemplateWebPage
+  extends WebPage
 {
-  private transient static CssReferenceHeaderItem applicationCssHeaderItem;
   private static final long serialVersionUID = 1000000;
+
+  private transient static CssReferenceHeaderItem applicationCssHeaderItem;
+
   private Alerts alerts;
+
   private String heading;
+
   private String subHeading;
+
   private String title;
 
   /**
@@ -62,8 +66,8 @@ public abstract class TemplateWebPage extends WebPage
   /**
    * Constructs a new <code>TemplateWebPage</code>.
    *
-   * @param heading      the page heading
-   * @param subHeading   the sub-heading for the page
+   * @param heading    the page heading
+   * @param subHeading the sub-heading for the page
    */
   public TemplateWebPage(String heading, String subHeading)
   {
@@ -140,6 +144,16 @@ public abstract class TemplateWebPage extends WebPage
   }
 
   /**
+   * Set the page heading.
+   *
+   * @param heading the heading to set
+   */
+  public void setHeading(String heading)
+  {
+    this.heading = heading;
+  }
+
+  /**
    * Returns the page sub-heading.
    *
    * @return the page sub-heading
@@ -151,6 +165,17 @@ public abstract class TemplateWebPage extends WebPage
   }
 
   /**
+   * Set the page sub-heading.
+   *
+   * @param subHeading the sub-heading to set
+   */
+  @SuppressWarnings("unused")
+  public void setSubHeading(String subHeading)
+  {
+    this.subHeading = subHeading;
+  }
+
+  /**
    * Returns the page title.
    *
    * @return the page title
@@ -158,6 +183,16 @@ public abstract class TemplateWebPage extends WebPage
   public String getTitle()
   {
     return title;
+  }
+
+  /**
+   * Set the page title.
+   *
+   * @param title the new page title
+   */
+  public void setTitle(String title)
+  {
+    this.title = title;
   }
 
   /**
@@ -190,43 +225,12 @@ public abstract class TemplateWebPage extends WebPage
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
   }
 
-  /**
-   * Set the page heading.
-   *
-   * @param heading the heading to set
-   */
-  public void setHeading(String heading)
-  {
-    this.heading = heading;
-  }
-
-  /**
-   * Set the page sub-heading.
-   *
-   * @param subHeading the sub-heading to set
-   */
-  @SuppressWarnings("unused")
-  public void setSubHeading(String subHeading)
-  {
-    this.subHeading = subHeading;
-  }
-
-  /**
-   * Set the page title.
-   *
-   * @param title the new page title
-   */
-  public void setTitle(String title)
-  {
-    this.title = title;
-  }
-
   private CssReferenceHeaderItem getApplicationCssHeaderItem()
   {
     if (applicationCssHeaderItem == null)
     {
-      applicationCssHeaderItem =
-        CssHeaderItem.forReference(getWebApplication().getApplicationCssResourceReference());
+      applicationCssHeaderItem = CssHeaderItem.forReference(
+        getWebApplication().getApplicationCssResourceReference());
     }
 
     return applicationCssHeaderItem;

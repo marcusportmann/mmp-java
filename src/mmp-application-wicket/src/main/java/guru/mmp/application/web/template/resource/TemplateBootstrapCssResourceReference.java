@@ -16,10 +16,7 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
-
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -30,27 +27,23 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
-public class TemplateBootstrapCssResourceReference extends CssResourceReference
+public class TemplateBootstrapCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final TemplateBootstrapCssResourceReference INSTANCE =
-    new TemplateBootstrapCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new TemplateBootstrapCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new TemplateBootstrapCssResourceReference());
 
-  private TemplateBootstrapCssResourceReference()
-  {
-    super(TemplateBootstrapCssResourceReference.class, Debug.inDebugMode()
-        ? "css/template-bootstrap.css"
-        : "css/template-bootstrap.min.css");
-  }
+  private static final TemplateBootstrapCssResourceReference INSTANCE = new
+    TemplateBootstrapCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the template-bootstrap.css
    * CSS file that forms part of the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the template-bootstrap.css
-   *         CSS file that forms part of the Web Application Template
+   * CSS file that forms part of the Web Application Template
    */
   public static TemplateBootstrapCssResourceReference get()
   {
@@ -62,10 +55,16 @@ public class TemplateBootstrapCssResourceReference extends CssResourceReference
    * Web Application Template.
    *
    * @return the CSS header item for the template-bootstrap.css CSS file that forms part of the
-   *         Web Application Template
+   * Web Application Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private TemplateBootstrapCssResourceReference()
+  {
+    super(TemplateBootstrapCssResourceReference.class,
+      Debug.inDebugMode() ? "css/template-bootstrap.css" : "css/template-bootstrap.min.css");
   }
 }

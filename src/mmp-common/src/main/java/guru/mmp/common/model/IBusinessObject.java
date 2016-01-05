@@ -23,4 +23,6 @@ package guru.mmp.common.model;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface IBusinessObject {}
+public interface IBusinessObject
+{
+}

@@ -23,7 +23,8 @@ package guru.mmp.common.util;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class Base64Exception extends RuntimeException
+public class Base64Exception
+  extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

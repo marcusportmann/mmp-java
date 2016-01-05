@@ -16,18 +16,13 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>DetachableProcessDefinitionModel</code> class provides a detachable model
@@ -99,8 +94,9 @@ public class DetachableProcessDefinitionModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the process definition with ID (" + id
-          + ") and version (" + version + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to load the process definition with ID (%s) and version (%d)", id,
+          version), e);
     }
   }
 

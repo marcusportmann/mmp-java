@@ -16,16 +16,12 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryTypeChoiceRenderer</code> class implements a <code>ChoiceRenderer</code>
@@ -79,8 +75,8 @@ public class CodeCategoryTypeChoiceRenderer
    *
    * @return a choice from the list that has this id
    */
-  public CodeCategoryType getObject(String id,
-      IModel<? extends List<? extends CodeCategoryType>> choices)
+  public CodeCategoryType getObject(
+    String id, IModel<? extends List<? extends CodeCategoryType>> choices)
   {
     int code = Integer.valueOf(id);
 
@@ -92,7 +88,7 @@ public class CodeCategoryTypeChoiceRenderer
       }
     }
 
-    throw new WebApplicationException("Failed to find the code category choice with ID (" + id
-        + ")");
+    throw new WebApplicationException(
+      String.format("Failed to find the code category choice with ID (%s)", id));
   }
 }

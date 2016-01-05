@@ -16,24 +16,18 @@
 
 package guru.mmp.application.test;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.batch.IBatchService;
 import guru.mmp.application.batch.Job;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
-
-import org.junit.*;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * The <code>BatchServiceTest</code> class contains the implementation of the JUnit tests for
@@ -45,8 +39,41 @@ import javax.inject.Inject;
 public class BatchServiceTest
 {
   private static int jobCount;
+
   @Inject
   private IBatchService batchService;
+
+  private static synchronized Job getTestJobDetails()
+  {
+    jobCount++;
+
+    Job job = new Job();
+    job.setId(UUID.randomUUID());
+    job.setName("Test Job Name " + jobCount);
+    job.setSchedulingPattern("5 * * * *");
+    job.setJobClass("guru.mmp.application.batch.TestJob");
+    job.setStatus(Job.Status.SCHEDULED);
+    job.setExecutionAttempts(0);
+    job.setLockName(null);
+    job.setLastExecuted(null);
+    job.setUpdated(null);
+
+    return job;
+  }
+
+  /**
+   * Test the execute job functionality.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void executeJobTest()
+    throws Exception
+  {
+    Job job = getTestJobDetails();
+
+    batchService.executeJob(job);
+  }
 
   /**
    * Test the job parameters functionality.
@@ -63,11 +90,9 @@ public class BatchServiceTest
 
     for (int i = 0; i < 10; i++)
     {
-     // batchService.createJobParameter(job.getId(), job.getName() + " Parameter " + i, job.getName() + " Value " + i);
+      // batchService.createJobParameter(job.getId(), job.getName() + " Parameter " + i, job
+      // .getName() + " Value " + i);
     }
-
-
-
   }
 
   /**
@@ -91,15 +116,15 @@ public class BatchServiceTest
 
     int numberOfJobs = batchService.getNumberOfJobs();
 
-    assertEquals("The correct number of jobs (" + (beforeRetrievedJobs.size() + 1)
-        + ") was not retrieved", beforeRetrievedJobs.size() + 1,
-      numberOfJobs);
+    assertEquals(
+      "The correct number of jobs (" + (beforeRetrievedJobs.size() + 1) + ") was not retrieved",
+      beforeRetrievedJobs.size() + 1, numberOfJobs);
 
     List<Job> afterRetrievedJobs = batchService.getJobs();
 
-    assertEquals("The correct number of jobs (" + (beforeRetrievedJobs.size() + 1)
-        + ") was not retrieved", beforeRetrievedJobs.size() + 1,
-      afterRetrievedJobs.size());
+    assertEquals(
+      "The correct number of jobs (" + (beforeRetrievedJobs.size() + 1) + ") was not retrieved",
+      beforeRetrievedJobs.size() + 1, afterRetrievedJobs.size());
 
     boolean foundJob = false;
 
@@ -124,59 +149,23 @@ public class BatchServiceTest
 
   }
 
-  /**
-   * Test the execute job functionality.
-   *
-   * @throws Exception
-   */
-  @Test
-  public void executeJobTest()
-    throws Exception
-  {
-    Job job = getTestJobDetails();
-
-    batchService.executeJob(job);
-  }
-
-  private static synchronized Job getTestJobDetails()
-  {
-    jobCount++;
-
-    Job job = new Job();
-    job.setId(UUID.randomUUID());
-    job.setName("Test Job Name " + jobCount);
-    job.setSchedulingPattern("5 * * * *");
-    job.setJobClass("guru.mmp.application.batch.TestJob");
-    job.setStatus(Job.Status.SCHEDULED);
-    job.setExecutionAttempts(0);
-    job.setLockName(null);
-    job.setLastExecuted(null);
-    job.setUpdated(null);
-
-
-
-    return job;
-  }
-
   private void compareJobs(Job job1, Job job2)
   {
-    assertEquals("The ID values for the two jobs do not match", job1.getId(),
-        job2.getId());
-    assertEquals("The name values for the two jobs do not match",
-        job1.getName(), job2.getName());
+    assertEquals("The ID values for the two jobs do not match", job1.getId(), job2.getId());
+    assertEquals("The name values for the two jobs do not match", job1.getName(), job2.getName());
     assertEquals("The scheduling pattern values for the two jobs do not match",
-        job1.getSchedulingPattern(), job2.getSchedulingPattern());
-    assertEquals("The job class values for the two jobs do not match",
-        job1.getJobClass(), job2.getJobClass());
-    assertEquals("The status values for the two jobs do not match",
-        job1.getStatus(), job2.getStatus());
+      job1.getSchedulingPattern(), job2.getSchedulingPattern());
+    assertEquals("The job class values for the two jobs do not match", job1.getJobClass(),
+      job2.getJobClass());
+    assertEquals("The status values for the two jobs do not match", job1.getStatus(),
+      job2.getStatus());
     assertEquals("The execution attempts values for the two jobs do not match",
-        job1.getExecutionAttempts(), job2.getExecutionAttempts());
-    assertEquals("The lock name values for the two jobs do not match",
-        job1.getLockName(), job2.getLockName());
-    assertEquals("The last executed values for the two jobs do not match",
-        job1.getLastExecuted(), job2.getLastExecuted());
-    assertEquals("The updated values for the two jobs do not match",
-        job1.getUpdated(), job2.getUpdated());
+      job1.getExecutionAttempts(), job2.getExecutionAttempts());
+    assertEquals("The lock name values for the two jobs do not match", job1.getLockName(),
+      job2.getLockName());
+    assertEquals("The last executed values for the two jobs do not match", job1.getLastExecuted(),
+      job2.getLastExecuted());
+    assertEquals("The updated values for the two jobs do not match", job1.getUpdated(),
+      job2.getUpdated());
   }
 }

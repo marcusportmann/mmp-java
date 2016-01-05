@@ -16,8 +16,6 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -27,20 +25,27 @@ import java.util.Date;
 /**
  * The <code>SerializedException</code> exception is an abstract base class for exceptions that
  * need to serialize their stack traces.
- *
+ * <p/>
  * The serialized stack trace can be retrieved using the <code>getDetail</code> method.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class SerializedException extends Exception
+public abstract class SerializedException
+  extends Exception
 {
   private static final String NO_ERROR_CODE = "NONE";
+
   private static final String NO_ERROR_MESSAGE = "NONE";
+
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
+
   private static final long serialVersionUID = 1000000;
+
   private String code;
+
   private String detail;
+
   private String when;
 
   /**
@@ -73,12 +78,8 @@ public abstract class SerializedException extends Exception
    */
   public SerializedException(Throwable cause)
   {
-    super((cause == null)
-        ? null
-        : cause.toString());
-    init(NO_ERROR_CODE, (cause == null)
-        ? null
-        : cause.toString(), cause);
+    super((cause == null) ? null : cause.toString());
+    init(NO_ERROR_CODE, (cause == null) ? null : cause.toString(), cause);
   }
 
   /**
@@ -127,9 +128,7 @@ public abstract class SerializedException extends Exception
    */
   public String getCode()
   {
-    return (code == null)
-        ? NO_ERROR_CODE
-        : code;
+    return (code == null) ? NO_ERROR_CODE : code;
   }
 
   /**

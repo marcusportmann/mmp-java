@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -29,15 +27,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>CodeDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves <code>Code</code> instances from the database.
  *
  * @author Marcus Portmann
  */
-public class CodeDataProvider extends InjectableDataProvider<Code>
+public class CodeDataProvider
+  extends InjectableDataProvider<Code>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -78,13 +75,13 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
    * Retrieves the matching codes from the database starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
-   *
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
    * @return the codes retrieved from the database starting with
-   *         index <code>first</code> and ending with <code>first+count</code>
+   * index <code>first</code> and ending with <code>first+count</code>
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
   public Iterator<Code> iterator(long first, long count)
   {
@@ -93,23 +90,23 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
       List<Code> allCodes = codesService.getCodesForCodeCategory(codeCategoryId);
 
       return allCodes.subList((int) first,
-          (int) Math.min(first + count, allCodes.size())).iterator();
+        (int) Math.min(first + count, allCodes.size())).iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the codes from index (" + first + ") to ("
-          + (first + count) + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to load the codes from index (%d) to (%d)", first, first + count), e);
     }
   }
 
   /**
    * Wraps the retrieved <code>Code</code> POJO with a Wicket model.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
-   *
    * @param code the <code>Code</code> instance to wrap
    *
    * @return the Wicket model wrapping the <code>Code</code> instance
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    */
   public IModel<Code> model(Code code)
   {
@@ -119,9 +116,9 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
   /**
    * Returns the total number of codes.
    *
-   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
-   *
    * @return the total number of codes
+   *
+   * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    */
   public long size()
   {

@@ -16,11 +16,8 @@
 
 package guru.mmp.common.service.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
@@ -29,29 +26,21 @@ import org.apache.ws.security.components.crypto.DERDecoder;
 import org.apache.ws.security.components.crypto.X509SubjectPublicKeyInfo;
 import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.WSSecurityUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
-import java.lang.reflect.Constructor;
-
-import java.math.BigInteger;
-
-import java.security.*;
-import java.security.cert.*;
-import java.security.cert.Certificate;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.x500.X500Principal;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.*;
+import java.security.cert.Certificate;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The <code>WebServiceClientCrypto</code> class implements the WSS4J crypto operations for
@@ -65,20 +54,22 @@ public class WebServiceClientCrypto
 {
   /**
    * The OID for the NameConstraints Extension to X.509
-   *
+   * <p/>
    * http://java.sun.com/j2se/1.4.2/docs/api
    * http://www.ietf.org/rfc/rfc3280.txt (s. 4.2.1.11)
    */
   public static final String NAME_CONSTRAINTS_OID = "2.5.29.30";
 
-  /** The OID for the SubjectKeyIdentifier Extension to X.509. */
+  /**
+   * The OID for the SubjectKeyIdentifier Extension to X.509.
+   */
   public static final String SKI_OID = "2.5.29.14";
-
-  /* The Bouncy Castle <code>X509Name</code> constructor. */
-  static Constructor<?> BouncyCastleX509NameConstructor = null;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebServiceClientCrypto.class);
+
+  /* The Bouncy Castle <code>X509Name</code> constructor. */
+  static Constructor<?> BouncyCastleX509NameConstructor = null;
 
   /**
    * The map of certificate DNs to certificate thumbprints for the certificates that have been
@@ -111,6 +102,7 @@ public class WebServiceClientCrypto
    * The crypto provider associated with this implementation.
    */
   private String cryptoProvider = null;
+
   private KeyStore keyStore = null;
 
   /**
@@ -137,8 +129,9 @@ public class WebServiceClientCrypto
    * @param properties  the properties used to configure the <code>Crypto</code implementation
    * @param classLoader the Java class loader
    */
-  public WebServiceClientCrypto(@SuppressWarnings("unused") Properties properties,
-      @SuppressWarnings("unused") ClassLoader classLoader)
+  public WebServiceClientCrypto(
+    @SuppressWarnings("unused") Properties properties,
+    @SuppressWarnings("unused") ClassLoader classLoader)
   {
     ApplicationSecurityContext applicationSecurityContext = ApplicationSecurityContext.getContext();
 
@@ -167,12 +160,12 @@ public class WebServiceClientCrypto
     catch (CertificateEncodingException e)
     {
       throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE, "encodeError",
-          null, e);
+        null, e);
     }
     catch (CertificateException e)
     {
       throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE, "parseError",
-          null, e);
+        null, e);
     }
   }
 
@@ -224,12 +217,12 @@ public class WebServiceClientCrypto
       catch (CertificateException e)
       {
         throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE,
-            "unsupportedCertType", null, e);
+          "unsupportedCertType", null, e);
       }
       catch (NoSuchProviderException e)
       {
         throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE,
-            "noSecProvider", null, e);
+          "noSecProvider", null, e);
       }
     }
 
@@ -259,7 +252,7 @@ public class WebServiceClientCrypto
     catch (CertificateException e)
     {
       throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE, "parseError",
-          null, e);
+        null, e);
     }
 
     List<?> certificates = path.getCertificates();
@@ -286,6 +279,17 @@ public class WebServiceClientCrypto
   }
 
   /**
+   * Set the crypto provider associated with this implementation.
+   *
+   * @param cryptoProvider the crypto provider associated with this implementation
+   */
+  @Override
+  public void setCryptoProvider(String cryptoProvider)
+  {
+    this.cryptoProvider = cryptoProvider;
+  }
+
+  /**
    * Retrieves the identifier name of the default certificate.
    * <p/>
    * This should be the certificate that is used for signature and encryption. This identifier
@@ -304,6 +308,22 @@ public class WebServiceClientCrypto
     ApplicationSecurityContext applicationSecurityContext = ApplicationSecurityContext.getContext();
 
     return applicationSecurityContext.getKeyStoreAlias();
+  }
+
+  /**
+   * Sets the identifier name of the default certificate.
+   * <p/>
+   * This should be the certificate that is used for signature and encryption. This identifier
+   * corresponds to the certificate that should be used whenever <code>KeyInfo</code> is not
+   * present in a signed or an encrypted message. The identifier is implementation specific, e.g.
+   * it could be the <code>KeyStore</code> alias.
+   *
+   * @param identifier the identifier name of the default certificate
+   */
+  @Override
+  public void setDefaultX509Identifier(String identifier)
+  {
+    // Do nothing the alias defined by the ApplicationSecurityContext cannot be overridden
   }
 
   /**
@@ -333,7 +353,7 @@ public class WebServiceClientCrypto
     if ((identifier == null) || (identifier.length() == 0))
     {
       throw new WSSecurityException(
-          "Failed to find the private key for a NULL or empty identifier");
+        "Failed to find the private key for a NULL or empty identifier");
     }
 
     try
@@ -360,9 +380,9 @@ public class WebServiceClientCrypto
         {
           if (!keyStore.isKeyEntry(keyStoreAlias))
           {
-            throw new WSSecurityException("Failed to find the private key with the alias ("
-                + identifier + "):" + " The key store entry with the alias (" + identifier
-                + ") is not a private key");
+            throw new WSSecurityException(
+              "Failed to find the private key with the alias (" + identifier + "):" + " The key" +
+                " store entry with the alias (" + identifier + ") is not a private key");
           }
           else
           {
@@ -370,9 +390,9 @@ public class WebServiceClientCrypto
 
             if (!(keyTmp instanceof PrivateKey))
             {
-              throw new WSSecurityException("Failed to find the private key with the alias ("
-                  + identifier + "):" + " The key store entry with the alias (" + identifier
-                  + ") is not a private key");
+              throw new WSSecurityException(
+                "Failed to find the private key with the alias (" + identifier + "):" + " The " +
+                  "key store entry with the alias (" + identifier + ") is not a private key");
             }
             else
             {
@@ -384,12 +404,12 @@ public class WebServiceClientCrypto
     }
     catch (Throwable e)
     {
-      throw new WSSecurityException("Failed to find the private key with the alias (" + identifier
-          + ") in the key store", e);
+      throw new WSSecurityException(
+        "Failed to find the private key with the alias (" + identifier + ") in the key store", e);
     }
 
-    throw new WSSecurityException("Failed to find the private key with the alias (" + identifier
-        + ") in the key store");
+    throw new WSSecurityException(
+      "Failed to find the private key with the alias (" + identifier + ") in the key store");
   }
 
   /**
@@ -412,20 +432,20 @@ public class WebServiceClientCrypto
     {
       if ((identifier == null) || !keyStore.isKeyEntry(identifier))
       {
-        throw new WSSecurityException("Failed to find the private key for the certificate ("
-            + certificate.getSubjectDN().getName() + ") in the key store");
+        throw new WSSecurityException("Failed to find the private key for the certificate (" +
+          certificate.getSubjectDN().getName() + ") in the key store");
       }
 
       String password = getPassword(identifier, callbackHandler);
-      Key keyTmp = keyStore.getKey(identifier, (password == null)
-          ? new char[] {}
-          : password.toCharArray());
+      Key keyTmp = keyStore.getKey(identifier,
+        (password == null) ? new char[]{} : password.toCharArray());
 
       if (!(keyTmp instanceof PrivateKey))
       {
-        throw new WSSecurityException("Failed to find the private key for the certificate ("
-            + certificate.getSubjectDN().getName() + ") in the key store: Key with alias ("
-            + identifier + ") is not a private key");
+        throw new WSSecurityException("Failed to find the private key for the certificate (" +
+          certificate.getSubjectDN().getName() + ") in the key store: Key with alias (" +
+          identifier + ") is not a " +
+          "private key");
       }
 
       return (PrivateKey) keyTmp;
@@ -433,7 +453,7 @@ public class WebServiceClientCrypto
     catch (Throwable e)
     {
       throw new WSSecurityException(WSSecurityException.FAILURE, "noPrivateKey",
-          new Object[] { e.getMessage() }, e);
+        new Object[]{e.getMessage()}, e);
     }
   }
 
@@ -474,9 +494,8 @@ public class WebServiceClientCrypto
       catch (WSSecurityException e)
       {
         throw new WSSecurityException(WSSecurityException.UNSUPPORTED_SECURITY_TOKEN,
-            "noSKIHandling",
-            new Object[] { "No SKI certificate extension and no SHA1 message digest available" },
-            e);
+          "noSKIHandling",
+          new Object[]{"No SKI certificate extension and no SHA1 message digest available"}, e);
       }
     }
 
@@ -500,7 +519,7 @@ public class WebServiceClientCrypto
    * argument.
    * <p/>
    * The supported types are as follows:
-   *
+   * <p/>
    * TYPE.ISSUER_SERIAL - A certificate (chain) is located by the issuer name and serial number
    * TYPE.THUMBPRINT_SHA1 - A certificate (chain) is located by the SHA1 of the (root) cert
    * TYPE.SKI_BYTES - A certificate (chain) is located by the SKI bytes of the (root) cert
@@ -612,7 +631,7 @@ public class WebServiceClientCrypto
     catch (CertificateException e)
     {
       throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE, "parseError",
-          null, e);
+        null, e);
     }
   }
 
@@ -633,33 +652,6 @@ public class WebServiceClientCrypto
     {
       certificateFactoryMap.put(provider, certFactory);
     }
-  }
-
-  /**
-   * Set the crypto provider associated with this implementation.
-   *
-   * @param cryptoProvider the crypto provider associated with this implementation
-   */
-  @Override
-  public void setCryptoProvider(String cryptoProvider)
-  {
-    this.cryptoProvider = cryptoProvider;
-  }
-
-  /**
-   * Sets the identifier name of the default certificate.
-   * <p/>
-   * This should be the certificate that is used for signature and encryption. This identifier
-   * corresponds to the certificate that should be used whenever <code>KeyInfo</code> is not
-   * present in a signed or an encrypted message. The identifier is implementation specific, e.g.
-   * it could be the <code>KeyStore</code> alias.
-   *
-   * @param identifier the identifier name of the default certificate
-   */
-  @Override
-  public void setDefaultX509Identifier(String identifier)
-  {
-    // Do nothing the alias defined by the ApplicationSecurityContext cannot be overridden
   }
 
   /**
@@ -727,8 +719,8 @@ public class WebServiceClientCrypto
 
     try
     {
-      String verifiedThumbprint =
-        verifiedCertificates.get(certificateChain[0].getSubjectDN().toString());
+      String verifiedThumbprint = verifiedCertificates.get(
+        certificateChain[0].getSubjectDN().toString());
 
       if (verifiedThumbprint != null)
       {
@@ -737,9 +729,9 @@ public class WebServiceClientCrypto
           if (logger.isInfoEnabled())
           {
             logger.info(
-                "Successfully verified the trust for the service certificate with subject ("
-                + certificateChain[0].getSubjectDN() + ") and thumbprint (" + verifiedThumbprint
-                + ")");
+              "Successfully verified the trust for the service certificate with subject (" +
+                certificateChain[0].getSubjectDN() + ") and thumbprint (" +
+                verifiedThumbprint + ")");
           }
 
           return true;
@@ -748,8 +740,8 @@ public class WebServiceClientCrypto
     }
     catch (Throwable e)
     {
-      logger.error("Failed to check whether the trust for the service certificate with subject ("
-          + certificateChain[0].getSubjectDN() + ") was verified previously", e);
+      logger.error("Failed to check whether the trust for the service certificate with subject (" +
+        certificateChain[0].getSubjectDN() + ") was verified previously", e);
     }
 
     try
@@ -803,14 +795,14 @@ public class WebServiceClientCrypto
       validator.validate(path, param);
 
       verifiedCertificates.put(certificateChain[0].getSubjectDN().toString(),
-          StringUtil.toHexString(certificateChain[0].getSignature()));
+        StringUtil.toHexString(certificateChain[0].getSignature()));
 
       return true;
     }
     catch (Throwable e)
     {
       throw new WSSecurityException(WSSecurityException.FAILURE, "certpath",
-          new Object[] { e.getMessage() }, e);
+        new Object[]{e.getMessage()}, e);
     }
   }
 
@@ -852,7 +844,7 @@ public class WebServiceClientCrypto
             continue;
           }
 
-          certs = new Certificate[] { cert };
+          certs = new Certificate[]{cert};
         }
         else
         {
@@ -876,7 +868,7 @@ public class WebServiceClientCrypto
       throw new WSSecurityException(WSSecurityException.FAILURE, "keystore", null, e);
     }
 
-    return new Certificate[] {};
+    return new Certificate[]{};
   }
 
   /**
@@ -911,7 +903,7 @@ public class WebServiceClientCrypto
             continue;
           }
 
-          certs = new Certificate[] { cert };
+          certs = new Certificate[]{cert};
         }
         else
         {
@@ -935,7 +927,7 @@ public class WebServiceClientCrypto
       throw new WSSecurityException(WSSecurityException.FAILURE, "keystore", null, e);
     }
 
-    return new Certificate[] {};
+    return new Certificate[]{};
   }
 
   private Certificate[] getCertificates(byte[] thumbprint, KeyStore store, MessageDigest sha)
@@ -959,7 +951,7 @@ public class WebServiceClientCrypto
             continue;
           }
 
-          certs = new Certificate[] { cert };
+          certs = new Certificate[]{cert};
         }
         else
         {
@@ -977,7 +969,7 @@ public class WebServiceClientCrypto
           catch (CertificateEncodingException e)
           {
             throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE,
-                "encodeError", null, e);
+              "encodeError", null, e);
           }
 
           byte[] data = sha.digest();
@@ -994,7 +986,7 @@ public class WebServiceClientCrypto
       throw new WSSecurityException(WSSecurityException.FAILURE, "keystore", null, e);
     }
 
-    return new Certificate[] {};
+    return new Certificate[]{};
   }
 
   /**
@@ -1028,7 +1020,7 @@ public class WebServiceClientCrypto
             continue;
           }
 
-          certs = new Certificate[] { cert };
+          certs = new Certificate[]{cert};
         }
         else
         {
@@ -1056,7 +1048,7 @@ public class WebServiceClientCrypto
       throw new WSSecurityException(WSSecurityException.FAILURE, "keystore", null, e);
     }
 
-    return new Certificate[] {};
+    return new Certificate[]{};
   }
 
   /**
@@ -1133,14 +1125,14 @@ public class WebServiceClientCrypto
 
     try
     {
-      Callback[] callbacks = new Callback[] { passwordCallback };
+      Callback[] callbacks = new Callback[]{passwordCallback};
 
       cb.handle(callbacks);
     }
     catch (Throwable e)
     {
       throw new WSSecurityException(WSSecurityException.FAILURE, "noPassword",
-          new Object[] { identifier }, e);
+        new Object[]{identifier}, e);
     }
 
     return passwordCallback.getPassword();
@@ -1219,7 +1211,7 @@ public class WebServiceClientCrypto
 
           if (cert != null)
           {
-            certs = new Certificate[] { cert };
+            certs = new Certificate[]{cert};
           }
         }
       }
@@ -1394,7 +1386,7 @@ public class WebServiceClientCrypto
    * @param keyStoreToSearch the key store to search
    *
    * @return <code>true</code> if the public key is found in the key store or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   private boolean isPublicKeyInKeyStore(PublicKey publicKey, KeyStore keyStoreToSearch)
   {

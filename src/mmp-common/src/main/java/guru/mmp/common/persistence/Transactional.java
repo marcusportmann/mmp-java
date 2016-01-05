@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.*;
 
@@ -32,5 +30,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
-public @interface Transactional {}
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface Transactional
+{
+}

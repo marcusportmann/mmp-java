@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.thirdparty.clip;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -29,26 +27,22 @@ import org.apache.wicket.request.resource.CssResourceReference;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ClipFontCssResourceReference extends CssResourceReference
+public class ClipFontCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final ClipFontCssResourceReference INSTANCE = new ClipFontCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new ClipFontCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new ClipFontCssResourceReference());
 
-  private ClipFontCssResourceReference()
-  {
-    super(ClipFontCssResourceReference.class, Debug.inDebugMode()
-        ? "css/clip.css"
-        : "css/clip.css");
-  }
+  private static final ClipFontCssResourceReference INSTANCE = new ClipFontCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the thirdparty resource bundled
    * with the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the thirdparty resource bundled
-   *         with the Web Application Template
+   * with the Web Application Template
    */
   public static ClipFontCssResourceReference get()
   {
@@ -60,10 +54,16 @@ public class ClipFontCssResourceReference extends CssResourceReference
    * Template.
    *
    * @return the CSS header item for the thirdparty resource bundled with the Web Application
-   *         Template
+   * Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private ClipFontCssResourceReference()
+  {
+    super(ClipFontCssResourceReference.class,
+      Debug.inDebugMode() ? "css/clip.css" : "css/clip.css");
   }
 }

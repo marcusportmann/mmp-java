@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebSession;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -37,14 +35,17 @@ import org.apache.wicket.request.cycle.RequestCycle;
  * A page is marked as secure and assigned an authorised function code by applying the
  * <code>WebPageSecurity</code> annotation.
  * </p>
- * @see guru.mmp.application.web.page.WebPageSecurity
  *
  * @author Marcus Portmann
+ * @see guru.mmp.application.web.page.WebPageSecurity
  */
 @SuppressWarnings("unused")
-public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
+public abstract class WebPage
+  extends org.apache.wicket.markup.html.WebPage
 {
-  /** The Application.AnonymousAccess function code applied to unsecured web pages. */
+  /**
+   * The Application.AnonymousAccess function code applied to unsecured web pages.
+   */
   public static final String FUNCTION_CODE_ANONYMOUS_ACCESS = "Application.AnonymousAccess";
 
   /**
@@ -52,9 +53,12 @@ public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
    * accessed any logged in user regardless of their role.
    */
   public static final String FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS =
-    "Application.SecureAnonymousAccess";
+    "Application" + ".SecureAnonymousAccess";
+
   private static final long serialVersionUID = 1000000;
+
   private String functionCode;
+
   private boolean isSecure;
 
   /**
@@ -72,8 +76,8 @@ public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
     }
     else
     {
-      SecureAnonymousWebPage secureAnonymousWebPage =
-        getClass().getAnnotation(SecureAnonymousWebPage.class);
+      SecureAnonymousWebPage secureAnonymousWebPage = getClass().getAnnotation(
+        SecureAnonymousWebPage.class);
 
       if (secureAnonymousWebPage != null)
       {

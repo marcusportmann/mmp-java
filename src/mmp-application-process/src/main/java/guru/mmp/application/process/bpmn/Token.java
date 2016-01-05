@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +28,13 @@ public class Token
 {
   /**
    * Execute the token.
-   * <p>
+   * <p/>
    * This will execute the FlowElement the token is associated with.
    *
    * @param context the execution context for the Process
    *
    * @return the list of tokens generated as a result of executing the FlowElement the token is
-   *         associated with
+   * associated with
    */
   public List<Token> execute(ProcessExecutionContext context)
   {

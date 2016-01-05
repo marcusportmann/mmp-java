@@ -16,18 +16,13 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.common.util.ISO8601;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -111,7 +106,7 @@ public class CodeCategoryData
       catch (Throwable e)
       {
         throw new RuntimeException(
-            "Failed to convert the binary code data for the code category to a UTF-8 string", e);
+          "Failed to convert the binary code data for the code category to a UTF-8 string", e);
       }
     }
     else
@@ -127,8 +122,8 @@ public class CodeCategoryData
    */
   public CodeCategoryData(Element element)
   {
-    this.codeDataType =
-      CodeDataType.fromCode(Integer.parseInt(element.getChildText("CodeDataType")));
+    this.codeDataType = CodeDataType.fromCode(
+      Integer.parseInt(element.getChildText("CodeDataType")));
     this.id = UUID.fromString(element.getChildText("Id"));
     this.name = element.getChildText("Name");
     this.description = element.getChildText("Description");
@@ -143,8 +138,9 @@ public class CodeCategoryData
       }
       catch (Throwable e)
       {
-        throw new RuntimeException("Failed to parse the LastUpdated ISO8601 timestamp ("
-            + lastUpdatedValue + ") for the code category data", e);
+        throw new RuntimeException(
+          "Failed to parse the LastUpdated ISO8601 timestamp (" + lastUpdatedValue + ") for the" +
+            " code category data", e);
       }
     }
     else
@@ -173,77 +169,6 @@ public class CodeCategoryData
   }
 
   /**
-   * The enumeration giving the possible code data types for a code category.
-   */
-  public enum CodeDataType
-  {
-    STANDARD(0, "Standard"), CUSTOM(1, "Custom");
-
-    private int code;
-    private String name;
-
-    CodeDataType(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the type of code data given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the type of code data
-     *
-     * @return the type of code data given by the specified numeric code value
-     */
-    public static CodeDataType fromCode(int code)
-    {
-      switch (code)
-      {
-        case 0:
-          return CodeDataType.STANDARD;
-
-        case 1:
-          return CodeDataType.CUSTOM;
-
-        default:
-          return CodeDataType.STANDARD;
-      }
-    }
-
-    /**
-     * Returns the numeric code value identifying the type of code data.
-     *
-     * @return the numeric code value identifying the type of code data
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the name of the type of code data.
-     *
-     * @return the name of the type of code data
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the <code>CodeDataType</code>
-     * enumeration value.
-     *
-     * @return the string representation of the <code>CodeDataType</code>
-     *         enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
-  }
-
-  /**
    * Returns the custom code data for the category if the code data type is "Custom".
    *
    * @return the custom code data for the category if the code data type is "Custom"
@@ -251,66 +176,6 @@ public class CodeCategoryData
   public byte[] getCodeData()
   {
     return codeData;
-  }
-
-  /**
-   * Returns the type of code data for the code category e.g. Standard, Custom, etc.
-   *
-   * @return the type of code data for the code category e.g. Standard, Custom, etc
-   */
-  public CodeDataType getCodeDataType()
-  {
-    return codeDataType;
-  }
-
-  /**
-   * Returns the codes for the code category if the code data type is "Standard".
-   *
-   * @return the codes for the code category if the code data type is "Standard"
-   */
-  public List<CodeData> getCodes()
-  {
-    return codes;
-  }
-
-  /**
-   * Returns the description for the code category.
-   *
-   * @return the description for the code category
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the date and time the code category was last updated.
-   *
-   * @return the date and time the code category was last updated
-   */
-  public Date getLastUpdated()
-  {
-    return lastUpdated;
-  }
-
-  /**
-   * Returns the name of the code category.
-   *
-   * @return the name of the code category
-   */
-  public String getName()
-  {
-    return name;
   }
 
   /**
@@ -324,6 +189,16 @@ public class CodeCategoryData
   }
 
   /**
+   * Returns the type of code data for the code category e.g. Standard, Custom, etc.
+   *
+   * @return the type of code data for the code category e.g. Standard, Custom, etc
+   */
+  public CodeDataType getCodeDataType()
+  {
+    return codeDataType;
+  }
+
+  /**
    * Set the type of code data for the code category e.g. Standard, Custom, etc.
    *
    * @param codeDataType the type of code data for the code category e.g. Standard, Custom, etc
@@ -331,6 +206,16 @@ public class CodeCategoryData
   public void setCodeDataType(CodeDataType codeDataType)
   {
     this.codeDataType = codeDataType;
+  }
+
+  /**
+   * Returns the codes for the code category if the code data type is "Standard".
+   *
+   * @return the codes for the code category if the code data type is "Standard"
+   */
+  public List<CodeData> getCodes()
+  {
+    return codes;
   }
 
   /**
@@ -344,6 +229,16 @@ public class CodeCategoryData
   }
 
   /**
+   * Returns the description for the code category.
+   *
+   * @return the description for the code category
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
    * Set the description for the code category.
    *
    * @param description the description for the code category
@@ -351,6 +246,16 @@ public class CodeCategoryData
   public void setDescription(String description)
   {
     this.description = description;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   */
+  public UUID getId()
+  {
+    return id;
   }
 
   /**
@@ -364,6 +269,16 @@ public class CodeCategoryData
   }
 
   /**
+   * Returns the date and time the code category was last updated.
+   *
+   * @return the date and time the code category was last updated
+   */
+  public Date getLastUpdated()
+  {
+    return lastUpdated;
+  }
+
+  /**
    * Set the date and time the code category was last updated.
    *
    * @param lastUpdated the date and time the code category was last updated
@@ -371,6 +286,16 @@ public class CodeCategoryData
   public void setLastUpdated(Date lastUpdated)
   {
     this.lastUpdated = lastUpdated;
+  }
+
+  /**
+   * Returns the name of the code category.
+   *
+   * @return the name of the code category
+   */
+  public String getName()
+  {
+    return name;
   }
 
   /**
@@ -392,14 +317,13 @@ public class CodeCategoryData
   {
     Element codeCategoryElement = new Element("CodeCategory");
 
-    codeCategoryElement.addContent(new Element("CodeDataType",
-        String.valueOf(codeDataType.getCode())));
+    codeCategoryElement.addContent(
+      new Element("CodeDataType", String.valueOf(codeDataType.getCode())));
     codeCategoryElement.addContent(new Element("Id", id.toString()));
     codeCategoryElement.addContent(new Element("Name", StringUtil.notNull(name)));
     codeCategoryElement.addContent(new Element("Description", StringUtil.notNull(description)));
-    codeCategoryElement.addContent(new Element("LastUpdated", (lastUpdated == null)
-        ? ISO8601.now()
-        : ISO8601.fromDate(lastUpdated)));
+    codeCategoryElement.addContent(new Element("LastUpdated",
+      (lastUpdated == null) ? ISO8601.now() : ISO8601.fromDate(lastUpdated)));
 
     if (codeData != null)
     {
@@ -436,9 +360,8 @@ public class CodeCategoryData
     buffer.append("name=\"").append(getName()).append("\", ");
     buffer.append("description=\"").append(getDescription()).append("\", ");
     buffer.append("lastUpdated=\"").append(ISO8601.fromDate(getLastUpdated())).append("\", ");
-    buffer.append("codeData=\"").append((getCodeData() != null)
-        ? getCodeData().length
-        : 0).append(" bytes of custom code data\"");
+    buffer.append("codeData=\"").append((getCodeData() != null) ? getCodeData().length : 0).append(
+      " bytes of custom code data\"");
 
     if ((getCodes() != null) && (getCodes().size() > 0))
     {
@@ -474,5 +397,77 @@ public class CodeCategoryData
     buffer.append("}");
 
     return buffer.toString();
+  }
+
+  /**
+   * The enumeration giving the possible code data types for a code category.
+   */
+  public enum CodeDataType
+  {
+    STANDARD(0, "Standard"), CUSTOM(1, "Custom");
+
+    private int code;
+
+    private String name;
+
+    /**
+     * Returns the type of code data given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the type of code data
+     *
+     * @return the type of code data given by the specified numeric code value
+     */
+    public static CodeDataType fromCode(int code)
+    {
+      switch (code)
+      {
+        case 0:
+          return CodeDataType.STANDARD;
+
+        case 1:
+          return CodeDataType.CUSTOM;
+
+        default:
+          return CodeDataType.STANDARD;
+      }
+    }
+
+    CodeDataType(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the numeric code value identifying the type of code data.
+     *
+     * @return the numeric code value identifying the type of code data
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the name of the type of code data.
+     *
+     * @return the name of the type of code data
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the <code>CodeDataType</code>
+     * enumeration value.
+     *
+     * @return the string representation of the <code>CodeDataType</code>
+     * enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
   }
 }

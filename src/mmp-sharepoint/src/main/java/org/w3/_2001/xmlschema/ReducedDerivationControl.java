@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -9,9 +6,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for reducedDerivationControl.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * <p/>
  * <pre>
  * &lt;simpleType name="reducedDerivationControl">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}derivationControl">
@@ -20,7 +17,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- *
  */
 @XmlType(name = "reducedDerivationControl")
 @XmlEnum(DerivationControl.class)
@@ -32,11 +28,6 @@ public enum ReducedDerivationControl
   RESTRICTION(DerivationControl.RESTRICTION);
 
   private final DerivationControl value;
-
-  ReducedDerivationControl(DerivationControl v)
-  {
-    value = v;
-  }
 
   /**
    * Method description
@@ -56,6 +47,11 @@ public enum ReducedDerivationControl
     }
 
     throw new IllegalArgumentException(v.toString());
+  }
+
+  ReducedDerivationControl(DerivationControl v)
+  {
+    value = v;
   }
 
   /**

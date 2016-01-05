@@ -16,13 +16,11 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>Expression</code> class represents a Expression that forms part of a Process.
- * <p>
+ * <p/>
  * <b>Expression</b> XML schema:
  * <pre>
  * &lt;xsd:element name="expression" type="tExpression"/&gt;
@@ -35,7 +33,8 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public abstract class Expression extends BaseElementWithMixedContent
+public abstract class Expression
+  extends BaseElementWithMixedContent
 {
   /**
    * Constructs a new <code>Expression</code>.

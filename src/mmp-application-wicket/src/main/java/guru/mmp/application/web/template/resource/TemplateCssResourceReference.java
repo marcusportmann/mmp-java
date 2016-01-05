@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.resource.thirdparty.fontawesome.FontAwesomeCssResourceReference;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -27,8 +25,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TemplateCssResourceReference</code> class implements the CSS resource
  * reference for the template.css CSS file that forms part of the
@@ -36,26 +32,22 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateCssResourceReference extends CssResourceReference
+public class TemplateCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final TemplateCssResourceReference INSTANCE = new TemplateCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new TemplateCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new TemplateCssResourceReference());
 
-  private TemplateCssResourceReference()
-  {
-    super(TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "css/template.css"
-        : "css/template.css");
-  }
+  private static final TemplateCssResourceReference INSTANCE = new TemplateCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the template.css
    * CSS file that forms part of the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the template.css
-   *         CSS file that forms part of the Web Application Template
+   * CSS file that forms part of the Web Application Template
    */
   public static TemplateCssResourceReference get()
   {
@@ -67,11 +59,17 @@ public class TemplateCssResourceReference extends CssResourceReference
    * Web Application Template.
    *
    * @return the CSS header item for the template.css CSS file that forms part of the
-   *         Web Application Template
+   * Web Application Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private TemplateCssResourceReference()
+  {
+    super(TemplateCssResourceReference.class,
+      Debug.inDebugMode() ? "css/template.css" : "css/template.css");
   }
 
   /**

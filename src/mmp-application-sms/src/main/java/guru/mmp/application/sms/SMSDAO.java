@@ -16,29 +16,20 @@
 
 package guru.mmp.application.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.sms.SMS.Status;
 import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.sql.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.naming.InitialContext;
-
 import javax.sql.DataSource;
+import java.sql.*;
 
 /**
  * The <code>SMSDAO</code> class implements the persistence operations for the SMS infrastructure.
@@ -52,20 +43,33 @@ public class SMSDAO
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSDAO.class);
+
   private String createSMSSQL;
 
-  /** The data source used to provide connections to the database. */
+  /**
+   * The data source used to provide connections to the database.
+   */
   private DataSource dataSource;
+
   private String deleteSMSSQL;
+
   private String getNextSMSForProcessingSQL;
+
   private String getSMSByIdSQL;
 
-  /** The ID generator used to generate unique numeric IDs for the DAO. */
+  /**
+   * The ID generator used to generate unique numeric IDs for the DAO.
+   */
   private IDGenerator idGenerator;
+
   private String incrementSMSSendAttemptsSQL;
+
   private String lockSMSSQL;
+
   private String resetSMSLocksSQL;
+
   private String setSMSStatusSQL;
+
   private String unlockSMSSQL;
 
   /**
@@ -96,8 +100,9 @@ public class SMSDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + createSMSSQL + ")");
+        throw new DAOException(
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            createSMSSQL));
       }
 
       sms.setId(id);
@@ -129,7 +134,7 @@ public class SMSDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to delete the SMS (" + id + ") in the database", e);
+      throw new DAOException(String.format("Failed to delete the SMS (%d) in the database", id), e);
     }
   }
 
@@ -143,7 +148,7 @@ public class SMSDAO
    *                       processing when it is retrieved
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   *         currently queued for sending
+   * currently queued for sending
    *
    * @throws DAOException
    */
@@ -192,9 +197,9 @@ public class SMSDAO
 
               if (updateStatement.executeUpdate() != 1)
               {
-                throw new DAOException(
-                    "No rows were affected as a result of executing the SQL statement" + " ("
-                    + lockSMSSQL + ")");
+                throw new DAOException(String.format(
+                  "No rows were affected as a result of executing the SQL statement (%s)",
+                  lockSMSSQL));
               }
             }
           }
@@ -213,12 +218,13 @@ public class SMSDAO
       }
       catch (Throwable f)
       {
-        logger.error("Failed to rollback the transaction while retrieving"
-            + " the next SMS that has been queued for sending from the database", f);
+        logger.error(
+          "Failed to rollback the transaction while retrieving the next SMS that has been queued " +
+            "for sending from the database", f);
       }
 
-      throw new DAOException("Failed to retrieve the next SMS that has been queued for sending"
-          + " from the database", e);
+      throw new DAOException(
+        "Failed to retrieve the next SMS that has been queued for sending from the database", e);
     }
     finally
     {
@@ -231,8 +237,9 @@ public class SMSDAO
       }
       catch (Throwable e)
       {
-        logger.error("Failed to resume the original transaction while retrieving"
-            + " the next SMS that has been queued for sending from the database", e);
+        logger.error(
+          "Failed to resume the original transaction while retrieving the next SMS that has been " +
+            "queued for sending from the database", e);
       }
     }
   }
@@ -268,7 +275,8 @@ public class SMSDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the SMS (" + id + ") from the database", e);
+      throw new DAOException(String.format("Failed to retrieve the SMS (%d) from the database", id),
+        e);
     }
   }
 
@@ -292,8 +300,9 @@ public class SMSDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + incrementSMSSendAttemptsSQL + ")");
+        throw new DAOException(
+          "No rows were affected as a result of executing the SQL statement (" +
+            incrementSMSSendAttemptsSQL + ")");
       }
 
       sms.setSendAttempts(sms.getSendAttempts() + 1);
@@ -301,8 +310,9 @@ public class SMSDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to increment the send attempts for the SMS (" + sms.getId()
-          + ") in the database", e);
+      throw new DAOException(
+        String.format("Failed to increment the send attempts for the SMS (%d) in the database",
+          sms.getId()), e);
     }
   }
 
@@ -316,7 +326,9 @@ public class SMSDAO
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored) {}
+    catch (Throwable ignored)
+    {
+    }
 
     if (dataSource == null)
     {
@@ -324,14 +336,16 @@ public class SMSDAO
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new DAOException(
+        "Failed to retrieve the application data source using the JNDI names " +
+          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -360,8 +374,9 @@ public class SMSDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object: " + e.getMessage(), e);
+      throw new DAOException(
+        String.format("Failed to initialise the %s data access object: %s", getClass().getName(),
+          e.getMessage()), e);
     }
 
     idGenerator = new IDGenerator(dataSource, DataAccessObject.DEFAULT_DATABASE_SCHEMA);
@@ -390,8 +405,9 @@ public class SMSDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to reset the locks for the SMSs with the status (" + status
-          + ") that have been locked using the lock name (" + lockName + ")", e);
+      throw new DAOException(String.format(
+        "Failed to reset the locks for the SMSs with the status (%s) that have been locked using " +
+          "the lock name (%s)", status, lockName), e);
     }
   }
 
@@ -414,14 +430,16 @@ public class SMSDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + setSMSStatusSQL + ")");
+        throw new DAOException(
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            setSMSStatusSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to set the status for the SMS (" + id + ") to ("
-          + status.toString() + ") in the database", e);
+      throw new DAOException(
+        String.format("Failed to set the status for the SMS (%d) to (%s) in the database", id,
+          status.toString()), e);
     }
   }
 
@@ -444,14 +462,16 @@ public class SMSDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + unlockSMSSQL + ")");
+        throw new DAOException(
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            unlockSMSSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to unlock and set the status for the SMS (" + id + ") to ("
-          + status.toString() + ") in the database", e);
+      throw new DAOException(String.format(
+        "Failed to unlock and set the status for the SMS (%d) to (%s) in the database", id,
+        status.toString()), e);
     }
   }
 
@@ -463,32 +483,31 @@ public class SMSDAO
   protected void buildStatements(String schemaPrefix)
   {
     // createSMSSQL
-    createSMSSQL = "INSERT INTO " + schemaPrefix + "SMS"
-        + " (ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS)" + " VALUES (?, ?, ?, ?, 0)";
+    createSMSSQL = "INSERT INTO " + schemaPrefix + "SMS" + " (ID, MOBILE_NUMBER, MESSAGE, STATUS," +
+      " SEND_ATTEMPTS)" + " VALUES (?, ?, ?, ?, 0)";
 
     // deleteSMSSQL
     deleteSMSSQL = "DELETE FROM " + schemaPrefix + "SMS WHERE ID=?";
 
     // getNextSMSForProcessingSQL
-    getNextSMSForProcessingSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS,"
-        + " LOCK_NAME, LAST_PROCESSED FROM " + schemaPrefix + "SMS"
-        + " WHERE STATUS=? AND (LAST_PROCESSED<? OR LAST_PROCESSED IS NULL)"
-        + " FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+    getNextSMSForProcessingSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS," + " " +
+      "LOCK_NAME, LAST_PROCESSED FROM " + schemaPrefix + "SMS" + " WHERE STATUS=? AND " +
+      "(LAST_PROCESSED<? OR LAST_PROCESSED IS NULL)" + " FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getSMSByIdSQL
-    getSMSByIdSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS, LOCK_NAME,"
-        + " LAST_PROCESSED FROM " + schemaPrefix + "SMS WHERE ID=?";
+    getSMSByIdSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS, LOCK_NAME," + " " +
+      "LAST_PROCESSED FROM " + schemaPrefix + "SMS WHERE ID=?";
 
     // incrementSMSSendAttemptsSQL
-    incrementSMSSendAttemptsSQL = "UPDATE " + schemaPrefix + "SMS"
-        + " SET SEND_ATTEMPTS=SEND_ATTEMPTS + 1, LAST_PROCESSED=? WHERE ID=?";
+    incrementSMSSendAttemptsSQL = "UPDATE " + schemaPrefix + "SMS" + " SET " +
+      "SEND_ATTEMPTS=SEND_ATTEMPTS + 1, LAST_PROCESSED=? WHERE ID=?";
 
     // lockSMSSQL
     lockSMSSQL = "UPDATE " + schemaPrefix + "SMS" + " SET STATUS=?, LOCK_NAME=? WHERE ID=?";
 
     // resetSMSLocksSQL
-    resetSMSLocksSQL = "UPDATE " + schemaPrefix + "SMS"
-        + " SET STATUS=?, LOCK_NAME=NULL WHERE LOCK_NAME=? AND STATUS=?";
+    resetSMSLocksSQL = "UPDATE " + schemaPrefix + "SMS" + " SET STATUS=?, LOCK_NAME=NULL WHERE " +
+      "LOCK_NAME=? AND STATUS=?";
 
     // setSMSStatusSQL
     setSMSStatusSQL = "UPDATE " + schemaPrefix + "SMS" + " SET STATUS=? WHERE ID=?";
@@ -501,6 +520,6 @@ public class SMSDAO
     throws SQLException
   {
     return new SMS(rs.getLong(1), rs.getString(2), rs.getString(3), Status.fromCode(rs.getInt(4)),
-        rs.getInt(5), rs.getString(6), rs.getTimestamp(7));
+      rs.getInt(5), rs.getString(6), rs.getTimestamp(7));
   }
 }

@@ -16,14 +16,9 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.UserDirectory;
-
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
 
@@ -33,7 +28,8 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
-public abstract class UserDirectoryAdministrationPanel extends Panel
+public abstract class UserDirectoryAdministrationPanel
+  extends Panel
 {
   /**
    * Constructs a new <code>UserDirectoryAdministrationPanel</code>.

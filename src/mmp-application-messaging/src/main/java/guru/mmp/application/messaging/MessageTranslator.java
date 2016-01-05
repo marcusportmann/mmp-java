@@ -16,22 +16,16 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.security.MessageDigest;
-
-import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
+import java.util.UUID;
 
 /**
  * The <code>MessageTranslator</code> class provides the facilities to create Messaging
@@ -42,8 +36,8 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class MessageTranslator
 {
-  private static ThreadLocal<MessageDigest> threadLocalMessageDigest =
-    new ThreadLocal<MessageDigest>()
+  private static ThreadLocal<MessageDigest> threadLocalMessageDigest = new
+    ThreadLocal<MessageDigest>()
   {
     @Override
     protected MessageDigest initialValue()
@@ -71,38 +65,9 @@ public class MessageTranslator
   private byte[] encryptionKey;
 
   /**
-   * The username uniquely identifying the user responsible for the message.
+   * The username uniquely identifying the username responsible for the message.
    */
-  private String user;
-
-  /**
-   * Constructs a new <code>MessageTranslator</code>.
-   *
-   * @param user     the username uniquely identifying the user responsible for the message
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message originated from
-   */
-  public MessageTranslator(String user, UUID deviceId)
-  {
-    this.user = user;
-    this.deviceId = deviceId;
-    this.encryptionKey = null;
-  }
-
-  /**
-   * Constructs a new <code>MessageTranslator</code>.
-   *
-   * @param user          the username uniquely identifying the user responsible for the message
-   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      device the message originated from
-   * @param encryptionKey the key used to encrypt or decrypt the message data
-   */
-  public MessageTranslator(String user, UUID deviceId, byte[] encryptionKey)
-  {
-    this.user = user;
-    this.deviceId = deviceId;
-    this.encryptionKey = encryptionKey;
-  }
+  private String username;
 
   /**
    * Decrypt the message data.
@@ -176,6 +141,35 @@ public class MessageTranslator
   }
 
   /**
+   * Constructs a new <code>MessageTranslator</code>.
+   *
+   * @param username the username uniquely identifying the username responsible for the message
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message originated from
+   */
+  public MessageTranslator(String username, UUID deviceId)
+  {
+    this.username = username;
+    this.deviceId = deviceId;
+    this.encryptionKey = null;
+  }
+
+  /**
+   * Constructs a new <code>MessageTranslator</code>.
+   *
+   * @param username      the username uniquely identifying the username responsible for the message
+   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      device the message originated from
+   * @param encryptionKey the key used to encrypt or decrypt the message data
+   */
+  public MessageTranslator(String username, UUID deviceId, byte[] encryptionKey)
+  {
+    this.username = username;
+    this.deviceId = deviceId;
+    this.encryptionKey = encryptionKey;
+  }
+
+  /**
    * Retrieve the WBXML-based message data from the message.
    *
    * @param message     the message
@@ -194,8 +188,8 @@ public class MessageTranslator
     // Decrypt the message if required
     if (message.isEncrypted())
     {
-      data = decryptMessageData(encryptionKey, StringUtil.isNullOrEmpty(message.getEncryptionIV())
-          ? new byte[0]
+      data = decryptMessageData(encryptionKey,
+        StringUtil.isNullOrEmpty(message.getEncryptionIV()) ? new byte[0]
           : Base64.decode(message.getEncryptionIV()), message.getData());
 
       // Retrieve the SHA-256 hash of the unencrypted message data
@@ -203,18 +197,18 @@ public class MessageTranslator
 
       if (!message.getDataHash().equals(dataHash))
       {
-        throw new MessagingException("Failed to decrypt the message data since the data hash for"
-            + " the message (" + message.getDataHash()
-            + ") does not match the hash for the message data (" + dataHash + ")");
+        throw new MessagingException(String.format(
+          "Failed to decrypt the message data since the data hash for the message (%s) does not " +
+            "match the hash for the message data (%s)", message.getDataHash(), dataHash));
       }
     }
 
     // Check that the message type for the message data and the specified message match
     if (!messageData.getMessageTypeId().equals(message.getTypeId()))
     {
-      throw new MessagingException("The message type for the message (" + message.getTypeId()
-          + ") does not match the message type for the message data ("
-          + messageData.getMessageTypeId() + ")");
+      throw new MessagingException(String.format(
+        "The message type for the message (%s) does not match the message type for the message " +
+          "data (%s)", message.getTypeId(), messageData.getMessageTypeId()));
     }
 
     /*
@@ -227,8 +221,59 @@ public class MessageTranslator
     }
     else
     {
-      throw new MessagingException("Failed to populate the instance of the message data class ("
-          + messageData.getClass().getName() + ") from the WBXML data for the message");
+      throw new MessagingException(String.format(
+        "Failed to populate the instance of the message data class (%s) from the WBXML data for " +
+          "the message", messageData.getClass().getName()));
+    }
+  }
+
+  /**
+   * Returns the message containing the WBXML-based message data.
+   *
+   * @param messageData   the WBXML-based message data
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   *
+   * @return the message that can be sent via the messaging infrastructure
+   *
+   * @throws MessagingException
+   */
+  public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
+    throws MessagingException
+  {
+    if (StringUtil.isNullOrEmpty(username))
+    {
+      throw new MessagingException(String.format(
+        "Failed to create the message with type (%s): A username has not been specified",
+        messageData.getMessageTypeId()));
+    }
+
+    if (deviceId == null)
+    {
+      throw new MessagingException(String.format(
+        "Failed to create the message with type (%s): A device ID has not been specified",
+        messageData.getMessageTypeId()));
+    }
+
+    byte[] data = messageData.toMessageData();
+
+    // Encrypt the message data
+    if (encryptionKey != null)
+    {
+      // Retrieve the SHA-256 hash of the unencrypted message data
+      String dataHash = getMessageDataHash(data);
+
+      byte[] encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
+
+      data = encryptMessageData(encryptionKey, encryptionIV, data);
+
+      return new Message(username, deviceId, messageData.getMessageTypeId(), correlationId,
+        messageData.getMessageTypePriority(), data, dataHash,
+        (encryptionIV.length == 0) ? "" : Base64.encodeBytes(encryptionIV));
+    }
+    else
+    {
+      return new Message(username, deviceId, messageData.getMessageTypeId(), correlationId,
+        messageData.getMessageTypePriority(), data);
     }
   }
 
@@ -245,55 +290,6 @@ public class MessageTranslator
     throws MessagingException
   {
     return toMessage(messageData, new UUID(0L, 0L));
-  }
-
-  /**
-   * Returns the message containing the WBXML-based message data.
-   *
-   * @param messageData   the WBXML-based message data
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   *
-   * @return the message that can be sent via the messaging infrastructure
-   *
-   * @throws MessagingException
-   */
-  public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
-    throws MessagingException
-  {
-    if (StringUtil.isNullOrEmpty(user))
-    {
-      throw new MessagingException("Failed to create the message with type ("
-          + messageData.getMessageTypeId() + "): A user has not been specified");
-    }
-
-    if (deviceId == null)
-    {
-      throw new MessagingException("Failed to create the message with type ("
-          + messageData.getMessageTypeId() + "): A device ID has not been specified");
-    }
-
-    byte[] data = messageData.toMessageData();
-
-    // Encrypt the message data
-    if (encryptionKey != null)
-    {
-      // Retrieve the SHA-256 hash of the unencrypted message data
-      String dataHash = getMessageDataHash(data);
-
-      byte[] encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
-
-      data = encryptMessageData(encryptionKey, encryptionIV, data);
-
-      return new Message(user, deviceId, messageData.getMessageTypeId(), correlationId,
-          messageData.getMessageTypePriority(), data, dataHash, (encryptionIV.length == 0)
-          ? ""
-          : Base64.encodeBytes(encryptionIV));
-    }
-    else
-    {
-      return new Message(user, deviceId, messageData.getMessageTypeId(), correlationId,
-          messageData.getMessageTypePriority(), data);
-    }
   }
 
   /**

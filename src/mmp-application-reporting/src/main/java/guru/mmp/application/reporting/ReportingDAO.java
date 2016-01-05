@@ -16,8 +16,6 @@
 
 package guru.mmp.application.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DataAccessObject;
 
@@ -30,8 +28,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingDAO</code> class implements the persistence operations for the
@@ -50,13 +46,21 @@ public class ReportingDAO
    * The data source used to provide connections to the application database.
    */
   private DataSource dataSource;
+
   private String deleteReportDefinitionSQL;
+
   private String getNumberOfReportDefinitionsSQL;
+
   private String getReportDefinitionByIdSQL;
+
   private String getReportDefinitionSummariesSQL;
+
   private String getReportDefinitionSummaryByIdSQL;
+
   private String getReportDefinitionsSQL;
+
   private String reportDefinitionExistsSQL;
+
   private String updateReportDefinitionSQL;
 
   /**
@@ -84,14 +88,16 @@ public class ReportingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + createReportDefinitionSQL + ")");
+        throw new DAOException(
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            createReportDefinitionSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to add the report definition (" + reportDefinition.getName()
-          + ") with ID (" + reportDefinition.getId() + ") to the database", e);
+      throw new DAOException(
+        String.format("Failed to add the report definition (%s) with ID (%s) to the database",
+          reportDefinition.getName(), reportDefinition.getId()), e);
     }
   }
 
@@ -113,14 +119,15 @@ public class ReportingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + deleteReportDefinitionSQL + ")");
+        throw new DAOException(
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            deleteReportDefinitionSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to delete the report definition (" + id + ") in the database",
-          e);
+      throw new DAOException(
+        String.format("Failed to delete the report definition (%s) in the database", id), e);
     }
   }
 
@@ -155,16 +162,16 @@ public class ReportingDAO
         }
         else
         {
-          throw new DAOException(
-              "No results were returned as a result of executing the SQL statement ("
-              + getNumberOfReportDefinitionsSQL + ")");
+          throw new DAOException(String.format(
+            "No results were returned as a result of executing the SQL statement (%s)",
+            getNumberOfReportDefinitionsSQL));
         }
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(
-          "Failed to retrieve the number of report definitions from the database", e);
+        "Failed to retrieve the number of report definitions from the database", e);
     }
   }
 
@@ -175,7 +182,7 @@ public class ReportingDAO
    *           report definition
    *
    * @return the report definition or <code>null</code> if the report
-   *         definition could not be found
+   * definition could not be found
    *
    * @throws DAOException
    */
@@ -201,8 +208,8 @@ public class ReportingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the report definition (" + id
-          + ") from the database", e);
+      throw new DAOException(
+        String.format("Failed to retrieve the report definition (%s) from the database", id), e);
     }
   }
 
@@ -234,7 +241,7 @@ public class ReportingDAO
     catch (Throwable e)
     {
       throw new DAOException(
-          "Failed to retrieve the summaries for the report definitions from the database", e);
+        "Failed to retrieve the summaries for the report definitions from the database", e);
     }
   }
 
@@ -245,7 +252,7 @@ public class ReportingDAO
    *           definition
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
-   *         could not be found
+   * could not be found
    *
    * @throws DAOException
    */
@@ -271,8 +278,8 @@ public class ReportingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the summary for the report definition (" + id
-          + ") from the database", e);
+      throw new DAOException(String.format(
+        "Failed to retrieve the summary for the report definition (%s) from the database", id), e);
     }
   }
 
@@ -317,7 +324,9 @@ public class ReportingDAO
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored) {}
+    catch (Throwable ignored)
+    {
+    }
 
     if (dataSource == null)
     {
@@ -325,14 +334,16 @@ public class ReportingDAO
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (dataSource == null)
     {
-      throw new DAOException("Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new DAOException(
+        "Failed to retrieve the application data source using the JNDI names " +
+          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
@@ -363,16 +374,17 @@ public class ReportingDAO
       }
 
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_DATABASE_SCHEMA + idQuote
-        + schemaSeparator;
+      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_DATABASE_SCHEMA + idQuote +
+        schemaSeparator;
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to initialise the " + getClass().getName()
-          + " data access object: " + e.getMessage(), e);
+      throw new DAOException(
+        String.format("Failed to initialise the %s data access object: %s", getClass().getName(),
+          e.getMessage()), e);
     }
   }
 
@@ -402,16 +414,17 @@ public class ReportingDAO
         }
         else
         {
-          throw new DAOException(
-              "No results were returned as a result of executing the SQL statement ("
-              + reportDefinitionExistsSQL + ")");
+          throw new DAOException(String.format(
+            "No results were returned as a result of executing the SQL statement (%s)",
+            reportDefinitionExistsSQL));
         }
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to check whether the report definition (" + id
-          + ") exists in the database", e);
+      throw new DAOException(
+        String.format("Failed to check whether the report definition (%s) exists in the database",
+          id), e);
     }
   }
 
@@ -437,16 +450,18 @@ public class ReportingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException("No rows were affected as a result of executing the SQL statement ("
-            + updateReportDefinitionSQL + ")");
+        throw new DAOException(
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            updateReportDefinitionSQL));
       }
 
       return reportDefinition;
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to update the report definition (" + reportDefinition.getId()
-          + ") in the database", e);
+      throw new DAOException(
+        String.format("Failed to update the report definition (%s) in the database",
+          reportDefinition.getId()), e);
     }
   }
 
@@ -458,40 +473,40 @@ public class ReportingDAO
   protected void buildStatements(String schemaPrefix)
   {
     // createReportDefinitionSQL
-    createReportDefinitionSQL = "INSERT INTO " + schemaPrefix
-        + "REPORT_DEFINITIONS (ID, NAME, TEMPLATE) VALUES (?, ?, ?)";
+    createReportDefinitionSQL = "INSERT INTO " + schemaPrefix + "REPORT_DEFINITIONS (ID, NAME, " +
+      "TEMPLATE) VALUES (?, ?, ?)";
 
     // deleteReportDefinitionSQL
-    deleteReportDefinitionSQL = "DELETE FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
+    deleteReportDefinitionSQL = "DELETE FROM " + schemaPrefix + "REPORT_DEFINITIONS RD WHERE RD" +
+      ".ID=?";
 
     // getNumberOfReportDefinitionsSQL
-    getNumberOfReportDefinitionsSQL = "SELECT COUNT(RD.ID)" + " FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD";
+    getNumberOfReportDefinitionsSQL = "SELECT COUNT(RD.ID)" + " FROM " + schemaPrefix +
+      "REPORT_DEFINITIONS RD";
 
     // getReportDefinitionByIdSQL
-    getReportDefinitionByIdSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
+    getReportDefinitionByIdSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM " + schemaPrefix +
+      "REPORT_DEFINITIONS RD WHERE RD.ID=?";
 
     // getReportDefinitionSummariesSQL
-    getReportDefinitionSummariesSQL = "SELECT RD.ID, RD.NAME" + " FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD";
+    getReportDefinitionSummariesSQL = "SELECT RD.ID, RD.NAME" + " FROM " + schemaPrefix +
+      "REPORT_DEFINITIONS RD";
 
     // getReportDefinitionSummaryByIdSQL
-    getReportDefinitionSummaryByIdSQL = "SELECT RD.ID, RD.NAME FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
+    getReportDefinitionSummaryByIdSQL = "SELECT RD.ID, RD.NAME FROM " + schemaPrefix +
+      "REPORT_DEFINITIONS RD WHERE RD.ID=?";
 
     // getReportDefinitionsSQL
-    getReportDefinitionsSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM "
-        + schemaPrefix + "REPORT_DEFINITIONS RD";
+    getReportDefinitionsSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM " + schemaPrefix +
+      "REPORT_DEFINITIONS RD";
 
     // reportDefinitionExistsSQL
-    reportDefinitionExistsSQL = "SELECT COUNT(RD.ID) FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
+    reportDefinitionExistsSQL = "SELECT COUNT(RD.ID) FROM " + schemaPrefix + "REPORT_DEFINITIONS " +
+      "RD WHERE RD.ID=?";
 
     // updateReportDefinitionSQL
-    updateReportDefinitionSQL = "UPDATE " + schemaPrefix
-        + "REPORT_DEFINITIONS RD SET RD.NAME=?, RD.TEMPLATE=? WHERE RD.ID=?";
+    updateReportDefinitionSQL = "UPDATE " + schemaPrefix + "REPORT_DEFINITIONS RD SET RD.NAME=?, " +
+      "RD.TEMPLATE=? WHERE RD.ID=?";
   }
 
   private ReportDefinition getReportDefinition(ResultSet rs)

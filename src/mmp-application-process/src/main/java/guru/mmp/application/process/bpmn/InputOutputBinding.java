@@ -16,14 +16,12 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>InputOutputBinding</code> class represents an InputOutputBinding that
  * forms part of a Process.
- * <p>
+ * <p/>
  * <b>InputOutputBinding</b> XML schema:
  * <pre>
  *

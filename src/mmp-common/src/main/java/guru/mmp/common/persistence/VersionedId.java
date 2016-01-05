@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -74,7 +72,7 @@ public class VersionedId
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the obj argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
   public boolean equals(Object obj)
@@ -127,29 +125,6 @@ public class VersionedId
   }
 
   /**
-   * Returns the version component of the versioned ID.
-   *
-   * @return the version component of the versioned ID
-   */
-  public int getVersion()
-  {
-    return version;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return ((id == null)
-        ? 0
-        : id.hashCode()) + version;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) component of the versioned ID.
    *
    * @param id the Universally Unique Identifier (UUID) component of the versioned ID
@@ -160,6 +135,16 @@ public class VersionedId
   }
 
   /**
+   * Returns the version component of the versioned ID.
+   *
+   * @return the version component of the versioned ID
+   */
+  public int getVersion()
+  {
+    return version;
+  }
+
+  /**
    * Set the version component of the versioned ID.
    *
    * @param version the version component of the versioned ID
@@ -167,5 +152,16 @@ public class VersionedId
   public void setVersion(int version)
   {
     this.version = version;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return ((id == null) ? 0 : id.hashCode()) + version;
   }
 }

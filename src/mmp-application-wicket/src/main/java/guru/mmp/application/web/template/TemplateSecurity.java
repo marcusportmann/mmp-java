@@ -26,93 +26,151 @@ package guru.mmp.application.web.template;
 @SuppressWarnings("unused")
 public class TemplateSecurity
 {
-  /** The unique ID for the <b>Administrators</b> group. */
+  /**
+   * The unique ID for the <b>Administrators</b> group.
+   */
   public static final int ADMINISTRATORS_GROUP_ID = 1;
 
-  /** The group name for the <b>Administrators</b> group. */
+  /**
+   * The group name for the <b>Administrators</b> group.
+   */
   public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
 
-  /** The Application.AddCode function code. */
+  /**
+   * The Application.AddCode function code.
+   */
   public static final String FUNCTION_CODE_ADD_CODE = "Application.AddCode";
 
-  /** The Application.AddCodeCategory function code. */
+  /**
+   * The Application.AddCodeCategory function code.
+   */
   public static final String FUNCTION_CODE_ADD_CODE_CATEGORY = "Application.AddCodeCategory";
 
-  /** The Application.AddGroup function code. */
+  /**
+   * The Application.AddGroup function code.
+   */
   public static final String FUNCTION_CODE_ADD_GROUP = "Application.AddGroup";
 
-  /** The Application.AddOrganisation function code. */
+  /**
+   * The Application.AddOrganisation function code.
+   */
   public static final String FUNCTION_CODE_ADD_ORGANISATION = "Application.AddOrganisation";
 
-  /** The Application.AddUser function code. */
+  /**
+   * The Application.AddUser function code.
+   */
   public static final String FUNCTION_CODE_ADD_USER = "Application.AddUser";
 
-  /** The Application.CodeAdministration function code. */
+  /**
+   * The Application.CodeAdministration function code.
+   */
   public static final String FUNCTION_CODE_CODE_ADMINISTRATION = "Application.CodeAdministration";
 
-  /** The Application.CodeCategoryAdministration function code. */
+  /**
+   * The Application.CodeCategoryAdministration function code.
+   */
   public static final String FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION =
-    "Application.CodeCategoryAdministration";
+    "Application" + ".CodeCategoryAdministration";
 
-  /** The Application.Dashboard function code. */
+  /**
+   * The Application.Dashboard function code.
+   */
   public static final String FUNCTION_CODE_DASHBOARD = "Application.Dashboard";
 
-  /** The Application.GroupAdministration function code. */
+  /**
+   * The Application.GroupAdministration function code.
+   */
   public static final String FUNCTION_CODE_GROUP_ADMINISTRATION = "Application.GroupAdministration";
 
-  /** The Application.OrganisationAdministration function code. */
+  /**
+   * The Application.OrganisationAdministration function code.
+   */
   public static final String FUNCTION_CODE_ORGANISATION_ADMINISTRATION =
-    "Application.OrganisationAdministration";
+    "Application" + ".OrganisationAdministration";
 
-  /** The Application.RemoveCode function code. */
+  /**
+   * The Application.RemoveCode function code.
+   */
   public static final String FUNCTION_CODE_REMOVE_CODE = "Application.RemoveCode";
 
-  /** The Application.RemoveCodeCategory function code. */
+  /**
+   * The Application.RemoveCodeCategory function code.
+   */
   public static final String FUNCTION_CODE_REMOVE_CODE_CATEGORY = "Application.RemoveCodeCategory";
 
-  /** The Application.RemoveGroup function code. */
+  /**
+   * The Application.RemoveGroup function code.
+   */
   public static final String FUNCTION_CODE_REMOVE_GROUP = "Application.RemoveGroup";
 
-  /** The Application.RemoveOrganisation function code. */
+  /**
+   * The Application.RemoveOrganisation function code.
+   */
   public static final String FUNCTION_CODE_REMOVE_ORGANISATION = "Application.RemoveOrganisation";
 
-  /** The Application.RemoveUser function code. */
+  /**
+   * The Application.RemoveUser function code.
+   */
   public static final String FUNCTION_CODE_REMOVE_USER = "Application.RemoveUser";
 
-  /** The Application.ResetUserPassword function code. */
+  /**
+   * The Application.ResetUserPassword function code.
+   */
   public static final String FUNCTION_CODE_RESET_USER_PASSWORD = "Application.ResetUserPassword";
 
-  /** The Application.SecureHome function code. */
+  /**
+   * The Application.SecureHome function code.
+   */
   public static final String FUNCTION_CODE_SECURE_HOME = "Application.SecureHome";
 
-  /** The Application.SecurityAdministration function code. */
+  /**
+   * The Application.SecurityAdministration function code.
+   */
   public static final String FUNCTION_CODE_SECURITY_ADMINISTRATION =
-    "Application.SecurityAdministration";
+    "Application" + ".SecurityAdministration";
 
-  /** The Application.UpdateCode function code. */
+  /**
+   * The Application.UpdateCode function code.
+   */
   public static final String FUNCTION_CODE_UPDATE_CODE = "Application.UpdateCode";
 
-  /** The Application.UpdateCodeCategory function code. */
+  /**
+   * The Application.UpdateCodeCategory function code.
+   */
   public static final String FUNCTION_CODE_UPDATE_CODE_CATEGORY = "Application.UpdateCodeCategory";
 
-  /** The Application.UpdateGroup function code. */
+  /**
+   * The Application.UpdateGroup function code.
+   */
   public static final String FUNCTION_CODE_UPDATE_GROUP = "Application.UpdateGroup";
 
-  /** The Application.UpdateOrganisation function code. */
+  /**
+   * The Application.UpdateOrganisation function code.
+   */
   public static final String FUNCTION_CODE_UPDATE_ORGANISATION = "Application.UpdateOrganisation";
 
-  /** The Application.UpdateUser function code. */
+  /**
+   * The Application.UpdateUser function code.
+   */
   public static final String FUNCTION_CODE_UPDATE_USER = "Application.UpdateUser";
 
-  /** The Application.UserAdministration function code. */
+  /**
+   * The Application.UserAdministration function code.
+   */
   public static final String FUNCTION_CODE_USER_ADMINISTRATION = "Application.UserAdministration";
 
-  /** The Application.UserGroups function code. */
+  /**
+   * The Application.UserGroups function code.
+   */
   public static final String FUNCTION_CODE_USER_GROUPS = "Application.UserGroups";
 
-  /** The unique ID for the <b>Organisation Administrators</b> group. */
+  /**
+   * The unique ID for the <b>Organisation Administrators</b> group.
+   */
   public static final int ORGANISATION_ADMINISTRATORS_GROUP_ID = 2;
 
-  /** The group name for the <b>Organisation Administrators</b> group. */
+  /**
+   * The group name for the <b>Organisation Administrators</b> group.
+   */
   public static final String ORGANISATION_ADMINISTRATORS_GROUP_NAME = "Organisation Administrators";
 }

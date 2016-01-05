@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.*;
 import javax.inject.Inject;
 import java.util.concurrent.Future;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundMessageProcessor</code> class implements the Background Message Processor.
@@ -64,7 +60,7 @@ public class BackgroundMessageProcessor
         logger.info("Resetting the message locks for the messages being processed");
 
         messagingService.resetMessageLocks(Message.Status.PROCESSING,
-            Message.Status.QUEUED_FOR_PROCESSING);
+          Message.Status.QUEUED_FOR_PROCESSING);
       }
       catch (Throwable e)
       {
@@ -73,8 +69,8 @@ public class BackgroundMessageProcessor
     }
     else
     {
-      logger.error("Failed to initialise the Background Message Processor:"
-          + " The Messaging Service was NOT injected");
+      logger.error("Failed to initialise the Background Message Processor: " +
+        "The Messaging Service was NOT injected");
     }
   }
 
@@ -89,8 +85,8 @@ public class BackgroundMessageProcessor
     // If CDI injection was not completed successfully for the bean then stop here
     if (messagingService == null)
     {
-      logger.error("Failed to process the messages queued for processing:"
-          + " The Messaging Service was NOT injected");
+      logger.error("Failed to process the messages queued for processing: " +
+        " The Messaging Service was NOT injected");
 
       return new AsyncResult<>(false);
     }
@@ -142,8 +138,8 @@ public class BackgroundMessageProcessor
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Processing the queued message (" + message.getId() + ")"
-              + System.getProperty("line.separator") + "  " + message.toString());
+          logger.debug(String.format("Processing the queued message (%s)%s  %s", message.getId(),
+            System.getProperty("line.separator"), message.toString()));
         }
 
         Message responseMessage = messagingService.processMessage(message);
@@ -158,7 +154,8 @@ public class BackgroundMessageProcessor
       }
       catch (Throwable e)
       {
-        logger.error("Failed to process the queued message (" + message.getId() + ")", e);
+        logger.error(String.format("Failed to process the queued message (%s)", message.getId()),
+          e);
 
         // Increment the processing attempts for the message
         try
@@ -169,8 +166,9 @@ public class BackgroundMessageProcessor
         }
         catch (Throwable f)
         {
-          logger.error("Failed to increment the processing attempts for the queued message ("
-              + message.getId() + ")", f);
+          logger.error(
+            String.format("Failed to increment the processing attempts for the queued message (%s)",
+              message.getId()), f);
         }
 
         try
@@ -182,8 +180,9 @@ public class BackgroundMessageProcessor
            */
           if (message.getProcessAttempts() >= messagingService.getMaximumProcessingAttempts())
           {
-            logger.warn("The queued message (" + message.getId() + ") has exceeded the maximum "
-                + "number of processing attempts and will be marked as \"Failed\"");
+            logger.warn(String.format(
+              "The queued message (%s) has exceeded the maximum number of processing attempts and" +
+                " will be marked as \"Failed\"", message.getId()));
 
             messagingService.unlockMessage(message, Message.Status.FAILED);
           }
@@ -194,8 +193,9 @@ public class BackgroundMessageProcessor
         }
         catch (Throwable f)
         {
-          logger.error("Failed to unlock and set the status for the queued message ("
-              + message.getId() + ")", f);
+          logger.error(
+            String.format("Failed to unlock and set the status for the queued message (%s)",
+              message.getId()), f);
         }
       }
     }

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.reporting;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -84,31 +82,11 @@ public class ReportDefinition
    * definition.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *         definition
+   * definition
    */
   public UUID getId()
   {
     return id;
-  }
-
-  /**
-   * Returns the name of the report definition.
-   *
-   * @return the name of the report definition
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the JasperReports template for the report definition.
-   *
-   * @return the JasperReports template for the report definition
-   */
-  public byte[] getTemplate()
-  {
-    return template;
   }
 
   /**
@@ -123,6 +101,16 @@ public class ReportDefinition
   }
 
   /**
+   * Returns the name of the report definition.
+   *
+   * @return the name of the report definition
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
    * Set the name of the report definition.
    *
    * @param name the name of the report definition
@@ -130,6 +118,16 @@ public class ReportDefinition
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the JasperReports template for the report definition.
+   *
+   * @return the JasperReports template for the report definition
+   */
+  public byte[] getTemplate()
+  {
+    return template;
   }
 
   /**

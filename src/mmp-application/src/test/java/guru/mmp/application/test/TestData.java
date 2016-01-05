@@ -22,7 +22,9 @@ package guru.mmp.application.test;
 public class TestData
 {
   private String id;
+
   private String name;
+
   private String value;
 
   /**
@@ -50,26 +52,6 @@ public class TestData
   }
 
   /**
-   * Returns the name.
-   *
-   * @return the name
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the value.
-   *
-   * @return the value
-   */
-  public String getValue()
-  {
-    return value;
-  }
-
-  /**
    * Set the ID.
    *
    * @param id the ID
@@ -80,6 +62,16 @@ public class TestData
   }
 
   /**
+   * Returns the name.
+   *
+   * @return the name
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
    * Set the name.
    *
    * @param name the name
@@ -87,6 +79,16 @@ public class TestData
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Returns the value.
+   *
+   * @return the value
+   */
+  public String getValue()
+  {
+    return value;
   }
 
   /**

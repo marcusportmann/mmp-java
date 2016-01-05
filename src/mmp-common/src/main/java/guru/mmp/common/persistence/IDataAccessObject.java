@@ -22,4 +22,6 @@ package guru.mmp.common.persistence;
  *
  * @author Marcus Portmann
  */
-public interface IDataAccessObject {}
+public interface IDataAccessObject
+{
+}

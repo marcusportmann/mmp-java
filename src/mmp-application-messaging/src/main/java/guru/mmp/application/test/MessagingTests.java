@@ -16,7 +16,7 @@
 //
 //package guru.mmp.application.test;
 //
-////~--- non-JDK imports --------------------------------------------------------
+//
 //
 //import guru.mmp.application.messaging.*;
 //import guru.mmp.common.crypto.EncryptionScheme;
@@ -36,7 +36,7 @@
 //import java.security.MessageDigest;
 //import java.util.Random;
 //
-////~--- JDK imports ------------------------------------------------------------
+//
 //
 ///**
 // * The <code>MessagingTests</code> class provides the base class for all classes that
@@ -280,7 +280,8 @@
 //  protected MessagePartDownloadResponse sendMessagePartDownloadRequest(String device)
 //    throws Exception
 //  {
-//    MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest(device);
+//    MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest
+// (device);
 //
 //    byte[] data = invokeMessageServlet(messagePartDownloadRequest.toWBXML());
 //

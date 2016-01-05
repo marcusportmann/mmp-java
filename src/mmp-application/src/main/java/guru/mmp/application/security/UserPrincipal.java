@@ -16,8 +16,6 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.security.Principal;
 
 /**
@@ -48,7 +46,7 @@ public class UserPrincipal
    * @param another the principal to compare with
    *
    * @return true if the object passed in matches the principal represented by the implementation
-   *         of the <code>Principal</code> interface
+   * of the <code>Principal</code> interface
    */
   @Override
   public boolean equals(Object another)
