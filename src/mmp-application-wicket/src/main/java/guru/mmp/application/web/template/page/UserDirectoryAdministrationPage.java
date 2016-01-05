@@ -89,7 +89,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
       RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
-      // The dialog used to confirm the removal of a user directory
+      // The dialog used to select the type of user directory being added
       AddDialog selectUserDirectoryTypeDialog = new AddDialog();
       add(selectUserDirectoryTypeDialog);
 

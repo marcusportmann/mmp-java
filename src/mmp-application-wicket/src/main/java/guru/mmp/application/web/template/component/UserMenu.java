@@ -142,7 +142,7 @@ public class UserMenu extends Component
           if (isMultipleOrganisationSupportEnabled)
           {
             buffer.append(" | ");
-            buffer.append(webSession.getOrganisation());
+            buffer.append(webSession.getOrganisation().getName());
           }
 
           buffer.append(" <i class=\"fa-angle-down\"></i></span></a>");

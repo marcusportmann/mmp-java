@@ -74,7 +74,7 @@ public class SelectOrganisationPage extends WebPage
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SelectOrganisationPage.class);
-  private StringSelectOption organisationId = null;
+  private StringSelectOption organisation = null;
 
   /* Security Service */
   @Inject
@@ -133,14 +133,14 @@ public class SelectOrganisationPage extends WebPage
                 session.getUsername());
 
             session.setOrganisation(
-                securityService.getOrganisation(UUID.fromString(organisationId.getValue())));
+                securityService.getOrganisation(UUID.fromString(organisation.getValue())));
             session.setGroupNames(groupNames);
             session.setFunctionCodes(functionCodes);
 
             if (logger.isDebugEnabled())
             {
               logger.debug("Successfully authenticated user (" + session.getUsername()
-                  + ") for organisation (" + organisationId.getName() + ") with groups ("
+                  + ") for organisation (" + organisation.getName() + ") with groups ("
                   + StringUtil.delimit(groupNames, ",") + ") and function codes ("
                   + StringUtil.delimit(functionCodes, ",") + ")");
             }
