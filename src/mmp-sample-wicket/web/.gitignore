@@ -1,0 +1,36 @@
+# Windows-specific files
+/**/Thumbs.db
+/**/desktop.ini
+
+# Mac-specific things (thanks to Michael Aaron Safyan)
+/**/.DS_Store
+
+# Editors temporary files 
+/**/*~
+
+# Build directories
+bin
+build
+target
+/**/WEB-INF/classes
+
+/**/*.BAK
+/**/*.Z
+/**/*.dylib
+/**/*.dll
+/**/*.ln
+/**/*.log
+/**/*.o
+/**/*.obj
+/**/*.olb
+/**/*.old
+/**/*.orig
+/**/*.rej
+/**/.#*
+/**/.del-*
+/**/.deployables
+/**/.make.state
+/**/.nse_depinfo
+/**/CVS.adm
+
+/target/
