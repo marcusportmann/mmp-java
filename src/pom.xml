@@ -18,6 +18,7 @@
     <module>mmp-common</module>
     <module>mmp-test</module>
     <module>mmp-application</module>
+    <module>mmp-application-angular</module>
     <module>mmp-application-wicket</module>
     <module>mmp-application-batch</module>
     <module>mmp-application-batch-wicket</module>
