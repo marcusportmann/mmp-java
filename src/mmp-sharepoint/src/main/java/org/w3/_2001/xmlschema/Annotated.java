@@ -57,17 +57,6 @@ public class Annotated
   }
 
   /**
-   * Sets the value of the annotation property.
-   *
-   * @param value allowed object is
-   *              {@link Annotation }
-   */
-  public void setAnnotation(Annotation value)
-  {
-    this.annotation = value;
-  }
-
-  /**
    * Gets the value of the id property.
    *
    * @return possible object is
@@ -76,6 +65,17 @@ public class Annotated
   public String getId()
   {
     return id;
+  }
+
+  /**
+   * Sets the value of the annotation property.
+   *
+   * @param value allowed object is
+   *              {@link Annotation }
+   */
+  public void setAnnotation(Annotation value)
+  {
+    this.annotation = value;
   }
 
   /**

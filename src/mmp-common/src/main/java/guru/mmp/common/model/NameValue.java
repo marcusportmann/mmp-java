@@ -490,16 +490,6 @@ public class NameValue
   }
 
   /**
-   * Set the binary value for the name-value pair.
-   *
-   * @param value the binary value for the name-value pair
-   */
-  public void setBinaryValue(byte[] value)
-  {
-    this.value = new BinaryBuffer(value);
-  }
-
-  /**
    * Returns the <code>BigDecimal</code> value for the <code>NameValue</code> instance.
    *
    * @return the <code>BigDecimal</code> value for the <code>NameValue</code> instance
@@ -532,16 +522,6 @@ public class NameValue
     throw new NameValueException(
       "Failed to retrieve the decimal value for the NameValue" + " object (" + name + ") which " +
         "contains a value of type " + getTypeName());
-  }
-
-  /**
-   * Set the <code>BigDecimal</code> value for the name-value pair.
-   *
-   * @param value the <code>BigDecimal</code> value for the name-value pair
-   */
-  public void setDecimalValue(BigDecimal value)
-  {
-    this.value = value;
   }
 
   /**
@@ -580,16 +560,6 @@ public class NameValue
   }
 
   /**
-   * Set the <code>double</code> value for the name-value pair.
-   *
-   * @param value the <code>double</code> value for the name-value pair
-   */
-  public void setDoubleValue(double value)
-  {
-    this.value = value;
-  }
-
-  /**
    * Returns the <code>long</code> value for the <code>NameValue</code> instance.
    *
    * @return the <code>long</code> value for the <code>NameValue</code> instance
@@ -625,16 +595,6 @@ public class NameValue
   }
 
   /**
-   * Set the <code>Long</code> value for the name-value pair.
-   *
-   * @param value the <code>long</code> value for the name-value pair
-   */
-  public void setLongValue(long value)
-  {
-    this.value = value;
-  }
-
-  /**
    * Returns the name for the <code>NameValue</code> instance.
    *
    * @return the name for the <code>NameValue</code> instance
@@ -642,16 +602,6 @@ public class NameValue
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Set the name for the name-value pair.
-   *
-   * @param name the name for the name-value pair
-   */
-  public void setName(String name)
-  {
-    this.name = name;
   }
 
   /**
@@ -681,16 +631,6 @@ public class NameValue
     throw new NameValueException(
       "Failed to retrieve the string value for the NameValue" + " object (" + name + ") which " +
         "contains a value of type " + getTypeName());
-  }
-
-  /**
-   * Set the <code>String</code> value for the name-value pair.
-   *
-   * @param value the <code>String</code> value for the name-value pair
-   */
-  public void setStringValue(String value)
-  {
-    this.value = value;
   }
 
   /**
@@ -764,9 +704,69 @@ public class NameValue
    *
    * @param value the binary value for the name-value pair
    */
+  public void setBinaryValue(byte[] value)
+  {
+    this.value = new BinaryBuffer(value);
+  }
+
+  /**
+   * Set the binary value for the name-value pair.
+   *
+   * @param value the binary value for the name-value pair
+   */
   public void setBinaryValue(BinaryBuffer value)
   {
     this.value = new BinaryBuffer(value);
+  }
+
+  /**
+   * Set the <code>BigDecimal</code> value for the name-value pair.
+   *
+   * @param value the <code>BigDecimal</code> value for the name-value pair
+   */
+  public void setDecimalValue(BigDecimal value)
+  {
+    this.value = value;
+  }
+
+  /**
+   * Set the <code>double</code> value for the name-value pair.
+   *
+   * @param value the <code>double</code> value for the name-value pair
+   */
+  public void setDoubleValue(double value)
+  {
+    this.value = value;
+  }
+
+  /**
+   * Set the <code>Long</code> value for the name-value pair.
+   *
+   * @param value the <code>long</code> value for the name-value pair
+   */
+  public void setLongValue(long value)
+  {
+    this.value = value;
+  }
+
+  /**
+   * Set the name for the name-value pair.
+   *
+   * @param name the name for the name-value pair
+   */
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+  /**
+   * Set the <code>String</code> value for the name-value pair.
+   *
+   * @param value the <code>String</code> value for the name-value pair
+   */
+  public void setStringValue(String value)
+  {
+    this.value = value;
   }
 
   /**

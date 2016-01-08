@@ -45,17 +45,6 @@ public class Import
   }
 
   /**
-   * Sets the value of the namespace property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setNamespace(String value)
-  {
-    this.namespace = value;
-  }
-
-  /**
    * Gets the value of the schemaLocation property.
    *
    * @return possible object is
@@ -64,6 +53,17 @@ public class Import
   public String getSchemaLocation()
   {
     return schemaLocation;
+  }
+
+  /**
+   * Sets the value of the namespace property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setNamespace(String value)
+  {
+    this.namespace = value;
   }
 
   /**

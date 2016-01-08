@@ -55,17 +55,6 @@ public class AddAttachment
   }
 
   /**
-   * Sets the value of the attachment property.
-   *
-   * @param value allowed object is
-   *              byte[]
-   */
-  public void setAttachment(byte[] value)
-  {
-    this.attachment = value;
-  }
-
-  /**
    * Gets the value of the fileName property.
    *
    * @return possible object is
@@ -74,17 +63,6 @@ public class AddAttachment
   public String getFileName()
   {
     return fileName;
-  }
-
-  /**
-   * Sets the value of the fileName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setFileName(String value)
-  {
-    this.fileName = value;
   }
 
   /**
@@ -99,17 +77,6 @@ public class AddAttachment
   }
 
   /**
-   * Sets the value of the listItemID property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListItemID(String value)
-  {
-    this.listItemID = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -118,6 +85,39 @@ public class AddAttachment
   public String getListName()
   {
     return listName;
+  }
+
+  /**
+   * Sets the value of the attachment property.
+   *
+   * @param value allowed object is
+   *              byte[]
+   */
+  public void setAttachment(byte[] value)
+  {
+    this.attachment = value;
+  }
+
+  /**
+   * Sets the value of the fileName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFileName(String value)
+  {
+    this.fileName = value;
+  }
+
+  /**
+   * Sets the value of the listItemID property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListItemID(String value)
+  {
+    this.listItemID = value;
   }
 
   /**

@@ -46,17 +46,6 @@ public class Facet
   }
 
   /**
-   * Sets the value of the value property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setValue(String value)
-  {
-    this.value = value;
-  }
-
-  /**
    * Gets the value of the fixed property.
    *
    * @return possible object is
@@ -83,5 +72,16 @@ public class Facet
   public void setFixed(Boolean value)
   {
     this.fixed = value;
+  }
+
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setValue(String value)
+  {
+    this.value = value;
   }
 }

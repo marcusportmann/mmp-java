@@ -90,6 +90,26 @@ public class ReportDefinition
   }
 
   /**
+   * Returns the name of the report definition.
+   *
+   * @return the name of the report definition
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Returns the JasperReports template for the report definition.
+   *
+   * @return the JasperReports template for the report definition
+   */
+  public byte[] getTemplate()
+  {
+    return template;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
@@ -101,16 +121,6 @@ public class ReportDefinition
   }
 
   /**
-   * Returns the name of the report definition.
-   *
-   * @return the name of the report definition
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
    * Set the name of the report definition.
    *
    * @param name the name of the report definition
@@ -118,16 +128,6 @@ public class ReportDefinition
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  /**
-   * Returns the JasperReports template for the report definition.
-   *
-   * @return the JasperReports template for the report definition
-   */
-  public byte[] getTemplate()
-  {
-    return template;
   }
 
   /**

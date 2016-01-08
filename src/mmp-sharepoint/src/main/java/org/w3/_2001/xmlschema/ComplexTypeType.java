@@ -86,17 +86,6 @@ public abstract class ComplexTypeType
   }
 
   /**
-   * Sets the value of the all property.
-   *
-   * @param value allowed object is
-   *              {@link All }
-   */
-  public void setAll(All value)
-  {
-    this.all = value;
-  }
-
-  /**
    * Gets the value of the anyAttribute property.
    *
    * @return possible object is
@@ -105,17 +94,6 @@ public abstract class ComplexTypeType
   public Wildcard getAnyAttribute()
   {
     return anyAttribute;
-  }
-
-  /**
-   * Sets the value of the anyAttribute property.
-   *
-   * @param value allowed object is
-   *              {@link Wildcard }
-   */
-  public void setAnyAttribute(Wildcard value)
-  {
-    this.anyAttribute = value;
   }
 
   /**
@@ -196,17 +174,6 @@ public abstract class ComplexTypeType
   }
 
   /**
-   * Sets the value of the choice property.
-   *
-   * @param value allowed object is
-   *              {@link ExplicitGroup }
-   */
-  public void setChoice(ExplicitGroup value)
-  {
-    this.choice = value;
-  }
-
-  /**
    * Gets the value of the complexContent property.
    *
    * @return possible object is
@@ -215,17 +182,6 @@ public abstract class ComplexTypeType
   public ComplexContent getComplexContent()
   {
     return complexContent;
-  }
-
-  /**
-   * Sets the value of the complexContent property.
-   *
-   * @param value allowed object is
-   *              {@link ComplexContent }
-   */
-  public void setComplexContent(ComplexContent value)
-  {
-    this.complexContent = value;
   }
 
   /**
@@ -272,17 +228,6 @@ public abstract class ComplexTypeType
   }
 
   /**
-   * Sets the value of the group property.
-   *
-   * @param value allowed object is
-   *              {@link GroupRef }
-   */
-  public void setGroup(GroupRef value)
-  {
-    this.group = value;
-  }
-
-  /**
    * Gets the value of the name property.
    *
    * @return possible object is
@@ -291,17 +236,6 @@ public abstract class ComplexTypeType
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
   }
 
   /**
@@ -316,17 +250,6 @@ public abstract class ComplexTypeType
   }
 
   /**
-   * Sets the value of the sequence property.
-   *
-   * @param value allowed object is
-   *              {@link ExplicitGroup }
-   */
-  public void setSequence(ExplicitGroup value)
-  {
-    this.sequence = value;
-  }
-
-  /**
    * Gets the value of the simpleContent property.
    *
    * @return possible object is
@@ -335,17 +258,6 @@ public abstract class ComplexTypeType
   public SimpleContent getSimpleContent()
   {
     return simpleContent;
-  }
-
-  /**
-   * Sets the value of the simpleContent property.
-   *
-   * @param value allowed object is
-   *              {@link SimpleContent }
-   */
-  public void setSimpleContent(SimpleContent value)
-  {
-    this.simpleContent = value;
   }
 
   /**
@@ -367,17 +279,6 @@ public abstract class ComplexTypeType
   }
 
   /**
-   * Sets the value of the abstract property.
-   *
-   * @param value allowed object is
-   *              {@link Boolean }
-   */
-  public void setAbstract(Boolean value)
-  {
-    this._abstract = value;
-  }
-
-  /**
    * Gets the value of the mixed property.
    *
    * @return possible object is
@@ -396,6 +297,72 @@ public abstract class ComplexTypeType
   }
 
   /**
+   * Sets the value of the abstract property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAbstract(Boolean value)
+  {
+    this._abstract = value;
+  }
+
+  /**
+   * Sets the value of the all property.
+   *
+   * @param value allowed object is
+   *              {@link All }
+   */
+  public void setAll(All value)
+  {
+    this.all = value;
+  }
+
+  /**
+   * Sets the value of the anyAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link Wildcard }
+   */
+  public void setAnyAttribute(Wildcard value)
+  {
+    this.anyAttribute = value;
+  }
+
+  /**
+   * Sets the value of the choice property.
+   *
+   * @param value allowed object is
+   *              {@link ExplicitGroup }
+   */
+  public void setChoice(ExplicitGroup value)
+  {
+    this.choice = value;
+  }
+
+  /**
+   * Sets the value of the complexContent property.
+   *
+   * @param value allowed object is
+   *              {@link ComplexContent }
+   */
+  public void setComplexContent(ComplexContent value)
+  {
+    this.complexContent = value;
+  }
+
+  /**
+   * Sets the value of the group property.
+   *
+   * @param value allowed object is
+   *              {@link GroupRef }
+   */
+  public void setGroup(GroupRef value)
+  {
+    this.group = value;
+  }
+
+  /**
    * Sets the value of the mixed property.
    *
    * @param value allowed object is
@@ -404,5 +371,38 @@ public abstract class ComplexTypeType
   public void setMixed(Boolean value)
   {
     this.mixed = value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
+  }
+
+  /**
+   * Sets the value of the sequence property.
+   *
+   * @param value allowed object is
+   *              {@link ExplicitGroup }
+   */
+  public void setSequence(ExplicitGroup value)
+  {
+    this.sequence = value;
+  }
+
+  /**
+   * Sets the value of the simpleContent property.
+   *
+   * @param value allowed object is
+   *              {@link SimpleContent }
+   */
+  public void setSimpleContent(SimpleContent value)
+  {
+    this.simpleContent = value;
   }
 }

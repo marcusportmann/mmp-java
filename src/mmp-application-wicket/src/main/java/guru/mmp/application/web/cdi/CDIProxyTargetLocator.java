@@ -77,16 +77,16 @@ public class CDIProxyTargetLocator
     {
       throw new WicketRuntimeException(String.format(
         "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-          "(%s): Failed to retrieve the CDI BeanManager from JNDI",
-        type.getName(), getQualifiersAsString()), e);
+          "(%s): Failed to retrieve the CDI BeanManager from JNDI", type.getName(),
+        getQualifiersAsString()), e);
     }
 
     if (beanManager == null)
     {
       throw new WicketRuntimeException(String.format(
         "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-          "(%s): Failed to retrieve the CDI BeanManager from JNDI",
-        type.getName(), getQualifiersAsString()));
+          "(%s): Failed to retrieve the CDI BeanManager from JNDI", type.getName(),
+        getQualifiersAsString()));
     }
 
     CreationalContext<Object> creationalContext;
@@ -111,8 +111,7 @@ public class CDIProxyTargetLocator
     {
       throw new WicketRuntimeException(String.format(
         "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-          "(%s): No matching bean found",
-        type.getName(), getQualifiersAsString()));
+          "(%s): No matching bean found", type.getName(), getQualifiersAsString()));
     }
 
 //  for (Bean<?> bean : beans)
@@ -147,8 +146,8 @@ public class CDIProxyTargetLocator
 
     throw new WicketRuntimeException(String.format(
       "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-        "(%s): Unable to determine which bean to use from [%s]",
-      type.getName(), getQualifiersAsString(), buffer.toString()));
+        "(%s): Unable to determine which bean to use from [%s]", type.getName(),
+      getQualifiersAsString(), buffer.toString()));
   }
 
   private String getQualifiersAsString()

@@ -206,16 +206,6 @@ public class MessagePartDownloadResponse
   }
 
   /**
-   * Set the result code.
-   *
-   * @param code the result code
-   */
-  public void setCode(long code)
-  {
-    this.code = code;
-  }
-
-  /**
    * Return the user-friendly text description of the result of processing the message part
    * download request.
    *
@@ -225,18 +215,6 @@ public class MessagePartDownloadResponse
   public String getDetail()
   {
     return detail;
-  }
-
-  /**
-   * Set the user-friendly text description of the result of processing the message part download
-   * request.
-   *
-   * @param detail the user-friendly text description of the result of processing the message part
-   *               download request
-   */
-  public void setDetail(String detail)
-  {
-    this.detail = detail;
   }
 
   /**
@@ -252,6 +230,38 @@ public class MessagePartDownloadResponse
   }
 
   /**
+   * Returns the message parts being downloaded.
+   *
+   * @return the message parts being downloaded
+   */
+  public List<MessagePart> getMessageParts()
+  {
+    return messageParts;
+  }
+
+  /**
+   * Set the result code.
+   *
+   * @param code the result code
+   */
+  public void setCode(long code)
+  {
+    this.code = code;
+  }
+
+  /**
+   * Set the user-friendly text description of the result of processing the message part download
+   * request.
+   *
+   * @param detail the user-friendly text description of the result of processing the message part
+   *               download request
+   */
+  public void setDetail(String detail)
+  {
+    this.detail = detail;
+  }
+
+  /**
    * Set the flattened information for the exception that resulted from processing the message part
    * download request.
    *
@@ -261,16 +271,6 @@ public class MessagePartDownloadResponse
   public void setException(String exception)
   {
     this.exception = exception;
-  }
-
-  /**
-   * Returns the message parts being downloaded.
-   *
-   * @return the message parts being downloaded
-   */
-  public List<MessagePart> getMessageParts()
-  {
-    return messageParts;
   }
 
   /**

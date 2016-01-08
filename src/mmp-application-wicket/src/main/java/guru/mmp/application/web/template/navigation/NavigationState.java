@@ -34,15 +34,27 @@ public class NavigationState
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The cached user menu HTML.
+   * The cached backend header HTML.
    */
-  private String cachedUserMenuHTML;
+  private String cachedBackendHeaderHTML;
+
+  /**
+   * The cached backend main navigation HTML for the last page that was accessed that was part of
+   * the
+   * navigation hierarchy.
+   */
+  private String cachedBackendMainNavigationHTML;
+
+  /**
+   * The cached backend user menu side overlay HTML.
+   */
+  private String cachedBackendUserMenuSideOverlayHTML;
 
   /**
    * The cached breadcrumbs HTML for the last page that was accessed that was part of the
    * navigation hierarchy.
    */
-  private String lastPageAccessedInNavigationHierarchyBreadcrumbsHTML;
+  private String cachedBreadcrumbsHTML;
 
   /**
    * The class for the last page that was accessed that was part of the navigation hierarchy.
@@ -50,34 +62,41 @@ public class NavigationState
   private Class<? extends Page> lastPageAccessedInNavigationHierarchyClass;
 
   /**
-   * The cached main navigation HTML for the last page that was accessed that was part of the
-   * navigation hierarchy.
-   */
-  private String lastPageAccessedInNavigationHierarchyMainNavigationHTML;
-
-  /**
    * The parameters for the last page that was accessed that was part of the navigation hierarchy.
    */
   private PageParameters lastPageAccessedInNavigationHierarchyParameters;
 
   /**
-   * Returns the cached user menu HTML.
+   * Returns the cached backend header HTML.
    *
-   * @return the cached user menu HTML
+   * @return the cached backend header HTML
    */
-  public String getCachedUserMenuHTML()
+  public String getCachedBackendHeaderHTML()
   {
-    return cachedUserMenuHTML;
+    return cachedBackendHeaderHTML;
   }
 
   /**
-   * Set the cached user menu HTML.
+   * Returns the cached backend main navigation HTML for the last page that was accessed that was
+   * part of the navigation hierarchy.
    *
-   * @param cachedUserMenuHTML the cached user menu HTML
+   * @return the cached backend main navigation HTML for the last page that was accessed that was
+   * part of
+   * the navigation hierarchy
    */
-  public void setCachedUserMenuHTML(String cachedUserMenuHTML)
+  public String getCachedBackendMainNavigationHTML()
   {
-    this.cachedUserMenuHTML = cachedUserMenuHTML;
+    return cachedBackendMainNavigationHTML;
+  }
+
+  /**
+   * Returns the cached backend user menu side overlay HTML.
+   *
+   * @return the cached backend user menu side overlay HTML
+   */
+  public String getCachedBackendUserMenuSideOverlayHTML()
+  {
+    return cachedBackendUserMenuSideOverlayHTML;
   }
 
   /**
@@ -87,45 +106,9 @@ public class NavigationState
    * @return the cached breadcrumbs HTML for the last page that was accessed that was part of the
    * navigation hierarchy
    */
-  public String getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML()
+  public String getCachedBreadcrumbsHTML()
   {
-    return lastPageAccessedInNavigationHierarchyBreadcrumbsHTML;
-  }
-
-  /**
-   * Set the cached breadcrumbs HTML for the last page that was accessed that was part of the
-   * navigation hierarchy.
-   *
-   * @param breadcrumbsHTML the cached breadcrumbs HTML for the last page that was accessed that
-   *                        was part of the navigation hierarchy
-   */
-  public void setLastPageAccessedInNavigationHierarchyBreadcrumbsHTML(String breadcrumbsHTML)
-  {
-    this.lastPageAccessedInNavigationHierarchyBreadcrumbsHTML = breadcrumbsHTML;
-  }
-
-  /**
-   * Returns the cached main navigation HTML for the last page that was accessed that was part of
-   * the navigation hierarchy.
-   *
-   * @return the cached main navigation HTML for the last page that was accessed that was part of
-   * the navigation hierarchy
-   */
-  public String getLastPageAccessedInNavigationHierarchyMainNavigationHTML()
-  {
-    return lastPageAccessedInNavigationHierarchyMainNavigationHTML;
-  }
-
-  /**
-   * Set the cached main navigation HTML for the last page that was accessed that was part of the
-   * navigation hierarchy.
-   *
-   * @param mainNavigationHTML the cached main navigation HTML for the last page that was accessed
-   *                           that was part of the navigation hierarchy
-   */
-  public void setLastPageAccessedInNavigationHierarchyMainNavigationHTML(String mainNavigationHTML)
-  {
-    this.lastPageAccessedInNavigationHierarchyMainNavigationHTML = mainNavigationHTML;
+    return cachedBreadcrumbsHTML;
   }
 
   /**
@@ -133,11 +116,12 @@ public class NavigationState
    */
   public void invalidate()
   {
-    cachedUserMenuHTML = null;
-    lastPageAccessedInNavigationHierarchyBreadcrumbsHTML = null;
+    cachedBackendUserMenuSideOverlayHTML = null;
+    cachedBreadcrumbsHTML = null;
     lastPageAccessedInNavigationHierarchyClass = null;
-    lastPageAccessedInNavigationHierarchyMainNavigationHTML = null;
+    cachedBackendMainNavigationHTML = null;
     lastPageAccessedInNavigationHierarchyParameters = null;
+    cachedBackendHeaderHTML = null;
   }
 
   /**
@@ -205,6 +189,50 @@ public class NavigationState
     }
 
     return true;
+  }
+
+  /**
+   * Set the cached backend header HTML.
+   *
+   * @param cachedBackendHeaderHTML the cached backend header HTML
+   */
+  public void setCachedBackendHeaderHTML(String cachedBackendHeaderHTML)
+  {
+    this.cachedBackendHeaderHTML = cachedBackendHeaderHTML;
+  }
+
+  /**
+   * Set the cached backend main navigation HTML for the last page that was accessed that was part
+   * of the navigation hierarchy.
+   *
+   * @param mainNavigationHTML the cached backend main navigation HTML for the last page that was
+   *                           accessed that was part of the navigation hierarchy
+   */
+  public void setCachedBackendMainNavigationHTML(String mainNavigationHTML)
+  {
+    this.cachedBackendMainNavigationHTML = mainNavigationHTML;
+  }
+
+  /**
+   * Set the cached backend user menu side overlay HTML.
+   *
+   * @param cachedBackendUserMenuSideOverlayHTML the cached backend user menu side overlay HTML
+   */
+  public void setCachedBackendUserMenuSideOverlayHTML(String cachedBackendUserMenuSideOverlayHTML)
+  {
+    this.cachedBackendUserMenuSideOverlayHTML = cachedBackendUserMenuSideOverlayHTML;
+  }
+
+  /**
+   * Set the cached breadcrumbs HTML for the last page that was accessed that was part of the
+   * navigation hierarchy.
+   *
+   * @param breadcrumbsHTML the cached breadcrumbs HTML for the last page that was accessed that
+   *                        was part of the navigation hierarchy
+   */
+  public void setCachedBreadcrumbsHTML(String breadcrumbsHTML)
+  {
+    this.cachedBreadcrumbsHTML = breadcrumbsHTML;
   }
 
   /**

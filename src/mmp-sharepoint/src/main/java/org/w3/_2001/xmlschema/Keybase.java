@@ -87,17 +87,6 @@ public class Keybase
   }
 
   /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
    * Gets the value of the selector property.
    *
    * @return possible object is
@@ -106,6 +95,17 @@ public class Keybase
   public Selector getSelector()
   {
     return selector;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
   }
 
   /**

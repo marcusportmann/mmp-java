@@ -309,11 +309,6 @@ public class Element
     return name;
   }
 
-  protected void setName(String name)
-  {
-    this.name = name;
-  }
-
   /**
    * Returns the binary data content for the element.
    *
@@ -337,34 +332,6 @@ public class Element
   }
 
   /**
-   * Set the binary data content for the element.
-   *
-   * @param data the binary data content for the element
-   */
-  public void setOpaque(byte[] data)
-  {
-    boolean hasRemoved = true;
-
-    while (hasRemoved)
-    {
-      hasRemoved = false;
-
-      for (int i = 0; i < content.size(); i++)
-      {
-        if (this.content.get(i) instanceof Opaque)
-        {
-          hasRemoved = true;
-          this.content.remove(i);
-
-          break;
-        }
-      }
-    }
-
-    content.add(new Opaque(data));
-  }
-
-  /**
    * Returns the text content for the element.
    *
    * @return the text content for the element
@@ -384,34 +351,6 @@ public class Element
     }
 
     return buffer.toString();
-  }
-
-  /**
-   * Set the text content for the element.
-   *
-   * @param text the text content for the element
-   */
-  public void setText(String text)
-  {
-    boolean hasRemoved = true;
-
-    while (hasRemoved)
-    {
-      hasRemoved = false;
-
-      for (int i = 0; i < content.size(); i++)
-      {
-        if (this.content.get(i) instanceof CDATA)
-        {
-          hasRemoved = true;
-          this.content.remove(i);
-
-          break;
-        }
-      }
-    }
-
-    content.add(new CDATA(text));
   }
 
   /**
@@ -589,6 +528,62 @@ public class Element
   }
 
   /**
+   * Set the binary data content for the element.
+   *
+   * @param data the binary data content for the element
+   */
+  public void setOpaque(byte[] data)
+  {
+    boolean hasRemoved = true;
+
+    while (hasRemoved)
+    {
+      hasRemoved = false;
+
+      for (int i = 0; i < content.size(); i++)
+      {
+        if (this.content.get(i) instanceof Opaque)
+        {
+          hasRemoved = true;
+          this.content.remove(i);
+
+          break;
+        }
+      }
+    }
+
+    content.add(new Opaque(data));
+  }
+
+  /**
+   * Set the text content for the element.
+   *
+   * @param text the text content for the element
+   */
+  public void setText(String text)
+  {
+    boolean hasRemoved = true;
+
+    while (hasRemoved)
+    {
+      hasRemoved = false;
+
+      for (int i = 0; i < content.size(); i++)
+      {
+        if (this.content.get(i) instanceof CDATA)
+        {
+          hasRemoved = true;
+          this.content.remove(i);
+
+          break;
+        }
+      }
+    }
+
+    content.add(new CDATA(text));
+  }
+
+  /**
    * Return the string representation of the element.
    *
    * @return the string representation of the element
@@ -612,5 +607,10 @@ public class Element
     {
       return super.toString();
     }
+  }
+
+  protected void setName(String name)
+  {
+    this.name = name;
   }
 }

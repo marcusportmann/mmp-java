@@ -54,17 +54,6 @@ public class CodesServiceFaultInfo
   }
 
   /**
-   * Sets the value of the detail property.
-   *
-   * @param value allowed object is
-   *              {@link JAXBElement }{@code <}{@link String }{@code >}
-   */
-  public void setDetail(JAXBElement<String> value)
-  {
-    this.detail = value;
-  }
-
-  /**
    * Gets the value of the message property.
    *
    * @return possible object is
@@ -73,6 +62,17 @@ public class CodesServiceFaultInfo
   public JAXBElement<String> getMessage()
   {
     return message;
+  }
+
+  /**
+   * Sets the value of the detail property.
+   *
+   * @param value allowed object is
+   *              {@link JAXBElement }{@code <}{@link String }{@code >}
+   */
+  public void setDetail(JAXBElement<String> value)
+  {
+    this.detail = value;
   }
 
   /**

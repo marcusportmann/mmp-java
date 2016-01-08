@@ -50,17 +50,6 @@ public class List
   }
 
   /**
-   * Sets the value of the itemType property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setItemType(QName value)
-  {
-    this.itemType = value;
-  }
-
-  /**
    * Gets the value of the simpleType property.
    *
    * @return possible object is
@@ -69,6 +58,17 @@ public class List
   public LocalSimpleType getSimpleType()
   {
     return simpleType;
+  }
+
+  /**
+   * Sets the value of the itemType property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setItemType(QName value)
+  {
+    this.itemType = value;
   }
 
   /**

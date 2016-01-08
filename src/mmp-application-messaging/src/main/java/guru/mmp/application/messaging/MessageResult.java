@@ -220,16 +220,6 @@ public class MessageResult
   }
 
   /**
-   * Set the result code.
-   *
-   * @param code the result code
-   */
-  public void setCode(long code)
-  {
-    this.code = code;
-  }
-
-  /**
    * Returns the user-friendly text description of the result of processing the message.
    *
    * @return the user-friendly text description of the result of processing the message
@@ -237,16 +227,6 @@ public class MessageResult
   public String getDetail()
   {
     return detail;
-  }
-
-  /**
-   * Set the user-friendly text description of the result of processing the message.
-   *
-   * @param detail the user-friendly text description of the result of processing the message
-   */
-  public void setDetail(String detail)
-  {
-    this.detail = detail;
   }
 
   /**
@@ -260,6 +240,36 @@ public class MessageResult
   }
 
   /**
+   * Returns the message associated with the message result e.g. a response message.
+   *
+   * @return the message associated with the message result e.g. a response message.
+   */
+  public Message getMessage()
+  {
+    return message;
+  }
+
+  /**
+   * Set the result code.
+   *
+   * @param code the result code
+   */
+  public void setCode(long code)
+  {
+    this.code = code;
+  }
+
+  /**
+   * Set the user-friendly text description of the result of processing the message.
+   *
+   * @param detail the user-friendly text description of the result of processing the message
+   */
+  public void setDetail(String detail)
+  {
+    this.detail = detail;
+  }
+
+  /**
    * Set the flattened information for the exception that resulted from processing the message.
    *
    * @param exception the flattened information for the exception that resulted from processing the
@@ -268,16 +278,6 @@ public class MessageResult
   public void setException(String exception)
   {
     this.exception = exception;
-  }
-
-  /**
-   * Returns the message associated with the message result e.g. a response message.
-   *
-   * @return the message associated with the message result e.g. a response message.
-   */
-  public Message getMessage()
-  {
-    return message;
   }
 
   /**

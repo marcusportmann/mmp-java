@@ -62,16 +62,6 @@ public class Group
   }
 
   /**
-   * Set the description for the group.
-   *
-   * @param description the description for the group
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
    * Returns the name of the group uniquely identifying the group.
    *
    * @return the name of the group uniquely identifying the group
@@ -79,16 +69,6 @@ public class Group
   public String getGroupName()
   {
     return groupName;
-  }
-
-  /**
-   * Set the name of the group uniquely identifying the group.
-   *
-   * @param groupName the name of the group uniquely identifying the group
-   */
-  public void setGroupName(String groupName)
-  {
-    this.groupName = groupName;
   }
 
   /**
@@ -102,16 +82,6 @@ public class Group
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * the group is associated with.
    *
@@ -121,6 +91,36 @@ public class Group
   public UUID getUserDirectoryId()
   {
     return userDirectoryId;
+  }
+
+  /**
+   * Set the description for the group.
+   *
+   * @param description the description for the group
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the name of the group uniquely identifying the group.
+   *
+   * @param groupName the name of the group uniquely identifying the group
+   */
+  public void setGroupName(String groupName)
+  {
+    this.groupName = groupName;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
   }
 
   /**

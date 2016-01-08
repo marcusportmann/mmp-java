@@ -52,17 +52,6 @@ public class Any
   }
 
   /**
-   * Sets the value of the maxOccurs property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setMaxOccurs(String value)
-  {
-    this.maxOccurs = value;
-  }
-
-  /**
    * Gets the value of the minOccurs property.
    *
    * @return possible object is
@@ -78,6 +67,17 @@ public class Any
     {
       return minOccurs;
     }
+  }
+
+  /**
+   * Sets the value of the maxOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMaxOccurs(String value)
+  {
+    this.maxOccurs = value;
   }
 
   /**

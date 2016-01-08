@@ -51,17 +51,6 @@ public class CheckOutFile
   }
 
   /**
-   * Sets the value of the checkoutToLocal property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setCheckoutToLocal(String value)
-  {
-    this.checkoutToLocal = value;
-  }
-
-  /**
    * Gets the value of the lastmodified property.
    *
    * @return possible object is
@@ -73,17 +62,6 @@ public class CheckOutFile
   }
 
   /**
-   * Sets the value of the lastmodified property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setLastmodified(String value)
-  {
-    this.lastmodified = value;
-  }
-
-  /**
    * Gets the value of the pageUrl property.
    *
    * @return possible object is
@@ -92,6 +70,28 @@ public class CheckOutFile
   public String getPageUrl()
   {
     return pageUrl;
+  }
+
+  /**
+   * Sets the value of the checkoutToLocal property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCheckoutToLocal(String value)
+  {
+    this.checkoutToLocal = value;
+  }
+
+  /**
+   * Sets the value of the lastmodified property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLastmodified(String value)
+  {
+    this.lastmodified = value;
   }
 
   /**

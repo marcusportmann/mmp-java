@@ -196,16 +196,6 @@ public class ValidationError
   }
 
   /**
-   * Set the validation error detail information for this validation error.
-   *
-   * @param details the validation error detail information
-   */
-  public void setDetails(List<ValidationErrorDetail> details)
-  {
-    this.details = details;
-  }
-
-  /**
    * Returns the name of the entity associated with this validation error.
    *
    * @return the name of the entity associated with this validation error
@@ -213,6 +203,16 @@ public class ValidationError
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Set the validation error detail information for this validation error.
+   *
+   * @param details the validation error detail information
+   */
+  public void setDetails(List<ValidationErrorDetail> details)
+  {
+    this.details = details;
   }
 
   /**

@@ -114,18 +114,6 @@ public class MessageReceivedRequest
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message that was
-   * successfully downloaded.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *                  that was successfully downloaded
-   */
-  public void setMessageId(UUID messageId)
-  {
-    this.messageId = messageId;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
    * received request originated from.
    *
@@ -135,6 +123,18 @@ public class MessageReceivedRequest
   public void setDevice(UUID deviceId)
   {
     this.deviceId = deviceId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message that was
+   * successfully downloaded.
+   *
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *                  that was successfully downloaded
+   */
+  public void setMessageId(UUID messageId)
+  {
+    this.messageId = messageId;
   }
 
   /**

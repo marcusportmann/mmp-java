@@ -50,17 +50,6 @@ public class ApplyContentTypeToList
   }
 
   /**
-   * Sets the value of the contentTypeId property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setContentTypeId(String value)
-  {
-    this.contentTypeId = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -72,17 +61,6 @@ public class ApplyContentTypeToList
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the webUrl property.
    *
    * @return possible object is
@@ -91,6 +69,28 @@ public class ApplyContentTypeToList
   public String getWebUrl()
   {
     return webUrl;
+  }
+
+  /**
+   * Sets the value of the contentTypeId property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setContentTypeId(String value)
+  {
+    this.contentTypeId = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
   }
 
   /**

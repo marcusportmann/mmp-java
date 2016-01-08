@@ -53,17 +53,6 @@ public class Parameter
   }
 
   /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
    * Gets the value of the value property.
    *
    * @return possible object is
@@ -72,6 +61,17 @@ public class Parameter
   public String getValue()
   {
     return value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
   }
 
   /**

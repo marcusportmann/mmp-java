@@ -82,17 +82,6 @@ public class AttributeType
   }
 
   /**
-   * Sets the value of the default property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setDefault(String value)
-  {
-    this._default = value;
-  }
-
-  /**
    * Gets the value of the fixed property.
    *
    * @return possible object is
@@ -101,17 +90,6 @@ public class AttributeType
   public String getFixed()
   {
     return fixed;
-  }
-
-  /**
-   * Sets the value of the fixed property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setFixed(String value)
-  {
-    this.fixed = value;
   }
 
   /**
@@ -126,17 +104,6 @@ public class AttributeType
   }
 
   /**
-   * Sets the value of the form property.
-   *
-   * @param value allowed object is
-   *              {@link FormChoice }
-   */
-  public void setForm(FormChoice value)
-  {
-    this.form = value;
-  }
-
-  /**
    * Gets the value of the name property.
    *
    * @return possible object is
@@ -145,17 +112,6 @@ public class AttributeType
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
   }
 
   /**
@@ -170,17 +126,6 @@ public class AttributeType
   }
 
   /**
-   * Sets the value of the ref property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setRef(QName value)
-  {
-    this.ref = value;
-  }
-
-  /**
    * Gets the value of the simpleType property.
    *
    * @return possible object is
@@ -192,17 +137,6 @@ public class AttributeType
   }
 
   /**
-   * Sets the value of the simpleType property.
-   *
-   * @param value allowed object is
-   *              {@link LocalSimpleType }
-   */
-  public void setSimpleType(LocalSimpleType value)
-  {
-    this.simpleType = value;
-  }
-
-  /**
    * Gets the value of the type property.
    *
    * @return possible object is
@@ -211,17 +145,6 @@ public class AttributeType
   public QName getType()
   {
     return type;
-  }
-
-  /**
-   * Sets the value of the type property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setType(QName value)
-  {
-    this.type = value;
   }
 
   /**
@@ -240,6 +163,83 @@ public class AttributeType
     {
       return use;
     }
+  }
+
+  /**
+   * Sets the value of the default property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefault(String value)
+  {
+    this._default = value;
+  }
+
+  /**
+   * Sets the value of the fixed property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFixed(String value)
+  {
+    this.fixed = value;
+  }
+
+  /**
+   * Sets the value of the form property.
+   *
+   * @param value allowed object is
+   *              {@link FormChoice }
+   */
+  public void setForm(FormChoice value)
+  {
+    this.form = value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
+  }
+
+  /**
+   * Sets the value of the ref property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setRef(QName value)
+  {
+    this.ref = value;
+  }
+
+  /**
+   * Sets the value of the simpleType property.
+   *
+   * @param value allowed object is
+   *              {@link LocalSimpleType }
+   */
+  public void setSimpleType(LocalSimpleType value)
+  {
+    this.simpleType = value;
+  }
+
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setType(QName value)
+  {
+    this.type = value;
   }
 
   /**

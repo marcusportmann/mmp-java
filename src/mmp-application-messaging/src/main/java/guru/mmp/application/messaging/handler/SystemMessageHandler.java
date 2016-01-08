@@ -507,8 +507,7 @@ public class SystemMessageHandler
               responseData = new GetCodeCategoryWithParametersResponseData(
                 GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR, String.format(
                 "Failed to retrieve the code provider code category (%s) with parameters: The " +
-                  "code provider code category could not be found",
-                requestData.getId()));
+                  "code provider code category could not be found", requestData.getId()));
             }
             else
             {
@@ -523,8 +522,7 @@ public class SystemMessageHandler
           responseData = new GetCodeCategoryWithParametersResponseData(
             GetCodeCategoryWithParametersResponseData.ERROR_CODE_UNKNOWN_ERROR, String.format(
             "Failed to retrieve the code category (%s) with parameters: The code category could " +
-              "not be found",
-            requestData.getId()));
+              "not be found", requestData.getId()));
         }
       }
       catch (Throwable e)

@@ -55,16 +55,6 @@ public abstract class ResourceStream
   }
 
   /**
-   * Set the locale for the resource stream.
-   *
-   * @param locale the locale for the resource stream
-   */
-  public void setLocale(Locale locale)
-  {
-    this.locale = locale;
-  }
-
-  /**
    * Returns the style for the resource stream.
    *
    * @return the style for the resource stream
@@ -75,16 +65,6 @@ public abstract class ResourceStream
   }
 
   /**
-   * Set the style for the resource stream.
-   *
-   * @param style the style for the resource stream
-   */
-  public void setStyle(String style)
-  {
-    this.style = style;
-  }
-
-  /**
    * Returns the variation for the resource stream.
    *
    * @return the variation for the resource stream
@@ -92,6 +72,26 @@ public abstract class ResourceStream
   public String getVariation()
   {
     return variation;
+  }
+
+  /**
+   * Set the locale for the resource stream.
+   *
+   * @param locale the locale for the resource stream
+   */
+  public void setLocale(Locale locale)
+  {
+    this.locale = locale;
+  }
+
+  /**
+   * Set the style for the resource stream.
+   *
+   * @param style the style for the resource stream
+   */
+  public void setStyle(String style)
+  {
+    this.style = style;
   }
 
   /**

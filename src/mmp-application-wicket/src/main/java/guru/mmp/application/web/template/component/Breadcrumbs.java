@@ -73,7 +73,7 @@ public class Breadcrumbs
         NavigationState navigationState = webSession.getNavigationState();
 
         // If we have cached breadcrumbs HTML then check if we can use it
-        if (navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML() != null)
+        if (navigationState.getCachedBreadcrumbsHTML() != null)
         {
           /*
            * If we are rendering the breadcrumbs for the last page accessed in the navigation
@@ -82,7 +82,7 @@ public class Breadcrumbs
           if (navigationState.isLastPageAccessedInNavigationHierarchy(getPage()))
           {
             response.write(
-              navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML());
+              navigationState.getCachedBreadcrumbsHTML());
 
             return;
           }
@@ -95,7 +95,7 @@ public class Breadcrumbs
           if (!webSession.getNavigation().isPageInNavigationHierarchy(getPage()))
           {
             response.write(
-              navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML());
+              navigationState.getCachedBreadcrumbsHTML());
 
             return;
           }
@@ -103,7 +103,7 @@ public class Breadcrumbs
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("<ol class=\"breadcrumb bc-1\">");
+        buffer.append("<ol class=\"breadcrumb push-10-t\">");
 
         Class<? extends Page> clazz;
 
@@ -136,9 +136,9 @@ public class Breadcrumbs
 
         navigationState.setLastPageAccessedInNavigationHierarchy(getPage());
 
-        navigationState.setLastPageAccessedInNavigationHierarchyBreadcrumbsHTML(buffer.toString());
+        navigationState.setCachedBreadcrumbsHTML(buffer.toString());
 
-        response.write(navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML());
+        response.write(navigationState.getCachedBreadcrumbsHTML());
       }
     }
   }

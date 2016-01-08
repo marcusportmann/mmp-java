@@ -71,17 +71,6 @@ public class GetListItemChanges
   }
 
   /**
-   * Sets the value of the contains property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChanges.Contains }
-   */
-  public void setContains(GetListItemChanges.Contains value)
-  {
-    this.contains = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -90,17 +79,6 @@ public class GetListItemChanges
   public String getListName()
   {
     return listName;
-  }
-
-  /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
   }
 
   /**
@@ -115,17 +93,6 @@ public class GetListItemChanges
   }
 
   /**
-   * Sets the value of the since property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setSince(String value)
-  {
-    this.since = value;
-  }
-
-  /**
    * Gets the value of the viewFields property.
    *
    * @return possible object is
@@ -134,6 +101,39 @@ public class GetListItemChanges
   public GetListItemChanges.ViewFields getViewFields()
   {
     return viewFields;
+  }
+
+  /**
+   * Sets the value of the contains property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChanges.Contains }
+   */
+  public void setContains(GetListItemChanges.Contains value)
+  {
+    this.contains = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the since property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSince(String value)
+  {
+    this.since = value;
   }
 
   /**

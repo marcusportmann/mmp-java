@@ -69,16 +69,6 @@ public class FilteredUserDirectoryDataProvider
   }
 
   /**
-   * Set the filter used to limit the matching user directories.
-   *
-   * @param filter the filter used to limit the matching user directories
-   */
-  public void setFilter(String filter)
-  {
-    this.filter = filter;
-  }
-
-  /**
    * Retrieves the matching user directories from the database starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
@@ -127,6 +117,16 @@ public class FilteredUserDirectoryDataProvider
   public IModel<UserDirectory> model(UserDirectory userDirectory)
   {
     return new DetachableUserDirectoryModel(userDirectory);
+  }
+
+  /**
+   * Set the filter used to limit the matching user directories.
+   *
+   * @param filter the filter used to limit the matching user directories
+   */
+  public void setFilter(String filter)
+  {
+    this.filter = filter;
   }
 
   /**

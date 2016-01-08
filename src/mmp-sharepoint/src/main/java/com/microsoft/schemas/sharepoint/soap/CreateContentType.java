@@ -81,17 +81,6 @@ public class CreateContentType
   }
 
   /**
-   * Sets the value of the addToView property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setAddToView(String value)
-  {
-    this.addToView = value;
-  }
-
-  /**
    * Gets the value of the contentTypeProperties property.
    *
    * @return possible object is
@@ -100,17 +89,6 @@ public class CreateContentType
   public CreateContentType.ContentTypeProperties getContentTypeProperties()
   {
     return contentTypeProperties;
-  }
-
-  /**
-   * Sets the value of the contentTypeProperties property.
-   *
-   * @param value allowed object is
-   *              {@link CreateContentType.ContentTypeProperties }
-   */
-  public void setContentTypeProperties(CreateContentType.ContentTypeProperties value)
-  {
-    this.contentTypeProperties = value;
   }
 
   /**
@@ -125,17 +103,6 @@ public class CreateContentType
   }
 
   /**
-   * Sets the value of the displayName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setDisplayName(String value)
-  {
-    this.displayName = value;
-  }
-
-  /**
    * Gets the value of the fields property.
    *
    * @return possible object is
@@ -144,17 +111,6 @@ public class CreateContentType
   public CreateContentType.Fields getFields()
   {
     return fields;
-  }
-
-  /**
-   * Sets the value of the fields property.
-   *
-   * @param value allowed object is
-   *              {@link CreateContentType.Fields }
-   */
-  public void setFields(CreateContentType.Fields value)
-  {
-    this.fields = value;
   }
 
   /**
@@ -169,17 +125,6 @@ public class CreateContentType
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the parentType property.
    *
    * @return possible object is
@@ -188,6 +133,61 @@ public class CreateContentType
   public String getParentType()
   {
     return parentType;
+  }
+
+  /**
+   * Sets the value of the addToView property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAddToView(String value)
+  {
+    this.addToView = value;
+  }
+
+  /**
+   * Sets the value of the contentTypeProperties property.
+   *
+   * @param value allowed object is
+   *              {@link CreateContentType.ContentTypeProperties }
+   */
+  public void setContentTypeProperties(CreateContentType.ContentTypeProperties value)
+  {
+    this.contentTypeProperties = value;
+  }
+
+  /**
+   * Sets the value of the displayName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDisplayName(String value)
+  {
+    this.displayName = value;
+  }
+
+  /**
+   * Sets the value of the fields property.
+   *
+   * @param value allowed object is
+   *              {@link CreateContentType.Fields }
+   */
+  public void setFields(CreateContentType.Fields value)
+  {
+    this.fields = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
   }
 
   /**

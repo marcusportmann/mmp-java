@@ -67,17 +67,6 @@ public class GetCodeCategoryWithParameters
   }
 
   /**
-   * Sets the value of the id property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setId(String value)
-  {
-    this.id = value;
-  }
-
-  /**
    * Gets the value of the lastRetrieved property.
    *
    * @return possible object is
@@ -86,17 +75,6 @@ public class GetCodeCategoryWithParameters
   public Calendar getLastRetrieved()
   {
     return lastRetrieved;
-  }
-
-  /**
-   * Sets the value of the lastRetrieved property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setLastRetrieved(Calendar value)
-  {
-    this.lastRetrieved = value;
   }
 
   /**
@@ -134,6 +112,28 @@ public class GetCodeCategoryWithParameters
   public boolean isReturnCodesIfCurrent()
   {
     return returnCodesIfCurrent;
+  }
+
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value)
+  {
+    this.id = value;
+  }
+
+  /**
+   * Sets the value of the lastRetrieved property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLastRetrieved(Calendar value)
+  {
+    this.lastRetrieved = value;
   }
 
   /**

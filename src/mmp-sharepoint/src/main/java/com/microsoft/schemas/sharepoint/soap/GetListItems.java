@@ -93,17 +93,6 @@ public class GetListItems
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the query property.
    *
    * @return possible object is
@@ -112,17 +101,6 @@ public class GetListItems
   public GetListItems.Query getQuery()
   {
     return query;
-  }
-
-  /**
-   * Sets the value of the query property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItems.Query }
-   */
-  public void setQuery(GetListItems.Query value)
-  {
-    this.query = value;
   }
 
   /**
@@ -137,17 +115,6 @@ public class GetListItems
   }
 
   /**
-   * Sets the value of the queryOptions property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItems.QueryOptions }
-   */
-  public void setQueryOptions(GetListItems.QueryOptions value)
-  {
-    this.queryOptions = value;
-  }
-
-  /**
    * Gets the value of the rowLimit property.
    *
    * @return possible object is
@@ -156,17 +123,6 @@ public class GetListItems
   public String getRowLimit()
   {
     return rowLimit;
-  }
-
-  /**
-   * Sets the value of the rowLimit property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setRowLimit(String value)
-  {
-    this.rowLimit = value;
   }
 
   /**
@@ -181,17 +137,6 @@ public class GetListItems
   }
 
   /**
-   * Sets the value of the viewFields property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItems.ViewFields }
-   */
-  public void setViewFields(GetListItems.ViewFields value)
-  {
-    this.viewFields = value;
-  }
-
-  /**
    * Gets the value of the viewName property.
    *
    * @return possible object is
@@ -203,17 +148,6 @@ public class GetListItems
   }
 
   /**
-   * Sets the value of the viewName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setViewName(String value)
-  {
-    this.viewName = value;
-  }
-
-  /**
    * Gets the value of the webID property.
    *
    * @return possible object is
@@ -222,6 +156,72 @@ public class GetListItems
   public String getWebID()
   {
     return webID;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the query property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItems.Query }
+   */
+  public void setQuery(GetListItems.Query value)
+  {
+    this.query = value;
+  }
+
+  /**
+   * Sets the value of the queryOptions property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItems.QueryOptions }
+   */
+  public void setQueryOptions(GetListItems.QueryOptions value)
+  {
+    this.queryOptions = value;
+  }
+
+  /**
+   * Sets the value of the rowLimit property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRowLimit(String value)
+  {
+    this.rowLimit = value;
+  }
+
+  /**
+   * Sets the value of the viewFields property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItems.ViewFields }
+   */
+  public void setViewFields(GetListItems.ViewFields value)
+  {
+    this.viewFields = value;
+  }
+
+  /**
+   * Sets the value of the viewName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setViewName(String value)
+  {
+    this.viewName = value;
   }
 
   /**

@@ -77,16 +77,6 @@ public class StringSelectOption
   }
 
   /**
-   * Set the user-friendly name for the select option.
-   *
-   * @param name the user-friendly name for the select option
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
    * Returns the value for the select option.
    *
    * @return the value for the select option
@@ -94,6 +84,16 @@ public class StringSelectOption
   public String getValue()
   {
     return value;
+  }
+
+  /**
+   * Set the user-friendly name for the select option.
+   *
+   * @param name the user-friendly name for the select option
+   */
+  public void setName(String name)
+  {
+    this.name = name;
   }
 
   /**

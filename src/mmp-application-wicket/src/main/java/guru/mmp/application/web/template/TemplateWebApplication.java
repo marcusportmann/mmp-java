@@ -16,19 +16,11 @@
 
 package guru.mmp.application.web.template;
 
-import guru.mmp.application.web.resource.thirdparty.greensockjs
-  .TweenLiteJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.page.LoginPage;
 import guru.mmp.application.web.template.page.LogoutPage;
-import guru.mmp.application.web.template.resource.TemplateBootstrapJavaScriptResourceReference;
-import guru.mmp.application.web.template.resource.TemplateCombinedJavaScriptResourceReference;
-import guru.mmp.application.web.template.resource.TemplateCoreJavaScriptResourceReference;
-import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
@@ -180,13 +172,11 @@ public abstract class TemplateWebApplication
         "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
         TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
 */
+/*
     // Initialise the template-web-application.js resource bundle for the Web Application Template
     getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
-      "js/template-web-application.js", MomentJavaScriptResourceReference.get(),
-      TweenLiteJavaScriptResourceReference.get(), RWDTableJavaScriptResourceReference.get(),
-      TemplateBootstrapJavaScriptResourceReference.get(),
-      TemplateCombinedJavaScriptResourceReference.get(),
-      TemplateCoreJavaScriptResourceReference.get(), TemplateJavaScriptResourceReference.get());
+      "js/template-web-application.js", TemplateJavaScriptResourceReference.get());
+*/
 
     // Check it multiple organisation support is enabled
     if (!StringUtil.isNullOrEmpty(

@@ -56,17 +56,6 @@ public class UpdateListItems
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the updates property.
    *
    * @return possible object is
@@ -75,6 +64,17 @@ public class UpdateListItems
   public UpdateListItems.Updates getUpdates()
   {
     return updates;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
   }
 
   /**

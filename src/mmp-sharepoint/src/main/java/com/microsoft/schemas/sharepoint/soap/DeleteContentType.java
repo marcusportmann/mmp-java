@@ -47,17 +47,6 @@ public class DeleteContentType
   }
 
   /**
-   * Sets the value of the contentTypeId property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setContentTypeId(String value)
-  {
-    this.contentTypeId = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -66,6 +55,17 @@ public class DeleteContentType
   public String getListName()
   {
     return listName;
+  }
+
+  /**
+   * Sets the value of the contentTypeId property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setContentTypeId(String value)
+  {
+    this.contentTypeId = value;
   }
 
   /**

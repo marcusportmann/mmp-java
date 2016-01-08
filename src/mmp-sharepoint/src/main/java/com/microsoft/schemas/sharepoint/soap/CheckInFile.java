@@ -49,17 +49,6 @@ public class CheckInFile
   }
 
   /**
-   * Sets the value of the checkinType property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setCheckinType(String value)
-  {
-    this.checkinType = value;
-  }
-
-  /**
    * Gets the value of the comment property.
    *
    * @return possible object is
@@ -71,17 +60,6 @@ public class CheckInFile
   }
 
   /**
-   * Sets the value of the comment property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setComment(String value)
-  {
-    this.comment = value;
-  }
-
-  /**
    * Gets the value of the pageUrl property.
    *
    * @return possible object is
@@ -90,6 +68,28 @@ public class CheckInFile
   public String getPageUrl()
   {
     return pageUrl;
+  }
+
+  /**
+   * Sets the value of the checkinType property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCheckinType(String value)
+  {
+    this.checkinType = value;
+  }
+
+  /**
+   * Sets the value of the comment property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setComment(String value)
+  {
+    this.comment = value;
   }
 
   /**

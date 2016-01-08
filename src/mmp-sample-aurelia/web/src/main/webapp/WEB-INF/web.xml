@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://java.sun.com/xml/ns/javaee" 
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+  <!-- ========================================================================================= -->
+  <!--                                 Application Configuration                                 -->
+  <!-- ========================================================================================= -->
+  <context-param>
+    <description>Is Multiple Organisation Support Enabled</description>
+    <param-name>multipleOrganisationSupportEnabled</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <resource-ref>
+    <description>Application Data Source Reference</description>
+    <res-ref-name>java:app/jdbc/ApplicationDataSource</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>      
+    <res-sharing-scope>Shareable</res-sharing-scope>
+    <lookup-name>java:jboss/datasources/SampleDS</lookup-name>
+  </resource-ref>
+  <env-entry>
+    <description>Application Database Schema</description>
+    <env-entry-name>java:app/env/ApplicationDatabaseSchema</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value></env-entry-value>
+  </env-entry>
+  <!--
+  <env-entry>
+    <description>Application Class</description>
+    <env-entry-name>java:app/env/ApplicationClass</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>guru.mmp.sample.web.SampleApplication</env-entry-value>
+  </env-entry>
+  -->
+  <env-entry>
+    <description>Application Registry Path Prefix</description>
+    <env-entry-name>java:app/env/RegistryPathPrefix</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>/Sample</env-entry-value>
+  </env-entry>
+  <!--
+  <listener>
+    <description>Application Listener</description>
+    <listener-class>guru.mmp.application.web.WebApplicationListener</listener-class>
+  </listener>
+  <listener>
+    <description>Sample Application Listener</description>
+    <listener-class>guru.mmp.sample.web.SampleApplicationListener</listener-class>
+  </listener>
+  <filter>
+    <description>Application Filter</description>
+    <filter-name>ApplicationFilter</filter-name>
+    <filter-class>guru.mmp.application.web.WebApplicationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ApplicationFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  -->
+
+  <!-- ========================================================================================= -->
+  <!--                                  Dump Namespace Servlet                                   -->
+  <!-- ========================================================================================= -->
+  <!--
+  <servlet>
+    <servlet-name>DumpNamespaceServlet</servlet-name>
+    <servlet-class>guru.mmp.application.web.servlet.DumpNamespaceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DumpNamespaceServlet</servlet-name>
+    <url-pattern>/servlet/DumpNamespaceServlet</url-pattern>
+  </servlet-mapping>
+  -->
+
+  <!-- ========================================================================================= -->
+  <!--                                     Messaging Servlet                                     -->
+  <!-- ========================================================================================= -->
+  <!--
+  <servlet>
+    <description>Messaging Servlet</description>
+    <servlet-name>MessagingServlet</servlet-name>
+    <servlet-class>guru.mmp.application.web.servlet.MessagingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MessagingServlet</servlet-name>
+    <url-pattern>/servlet/MessagingServlet</url-pattern>
+  </servlet-mapping>
+  -->
+
+  <!-- ========================================================================================= -->
+  <!--                                    View Report Servlet                                    -->
+  <!-- ========================================================================================= -->
+  <!--
+  <servlet>
+    <servlet-name>ViewReportServlet</servlet-name>
+    <servlet-class>guru.mmp.application.web.servlet.ViewReportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewReportServlet</servlet-name>
+    <url-pattern>/servlet/ViewReportServlet</url-pattern>
+  </servlet-mapping>
+  -->
+
+  <display-name>mmp-sample-aurelia-web</display-name>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+
+</web-app>
+
+
+

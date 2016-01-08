@@ -50,16 +50,6 @@ public class Organisation
   }
 
   /**
-   * Set the description for the organisation.
-   *
-   * @param description the description for the organisation
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
@@ -70,16 +60,6 @@ public class Organisation
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the name of the organisation.
    *
    * @return the name of the organisation
@@ -87,6 +67,26 @@ public class Organisation
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Set the description for the organisation.
+   *
+   * @param description the description for the organisation
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
   }
 
   /**

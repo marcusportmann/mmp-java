@@ -88,17 +88,6 @@ public abstract class SimpleTypeType
   }
 
   /**
-   * Sets the value of the list property.
-   *
-   * @param value allowed object is
-   *              {@link org.w3._2001.xmlschema.List }
-   */
-  public void setList(org.w3._2001.xmlschema.List value)
-  {
-    this.list = value;
-  }
-
-  /**
    * Gets the value of the name property.
    *
    * @return possible object is
@@ -107,17 +96,6 @@ public abstract class SimpleTypeType
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
   }
 
   /**
@@ -132,17 +110,6 @@ public abstract class SimpleTypeType
   }
 
   /**
-   * Sets the value of the restriction property.
-   *
-   * @param value allowed object is
-   *              {@link Restriction }
-   */
-  public void setRestriction(Restriction value)
-  {
-    this.restriction = value;
-  }
-
-  /**
    * Gets the value of the union property.
    *
    * @return possible object is
@@ -151,6 +118,39 @@ public abstract class SimpleTypeType
   public Union getUnion()
   {
     return union;
+  }
+
+  /**
+   * Sets the value of the list property.
+   *
+   * @param value allowed object is
+   *              {@link org.w3._2001.xmlschema.List }
+   */
+  public void setList(org.w3._2001.xmlschema.List value)
+  {
+    this.list = value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
+  }
+
+  /**
+   * Sets the value of the restriction property.
+   *
+   * @param value allowed object is
+   *              {@link Restriction }
+   */
+  public void setRestriction(Restriction value)
+  {
+    this.restriction = value;
   }
 
   /**

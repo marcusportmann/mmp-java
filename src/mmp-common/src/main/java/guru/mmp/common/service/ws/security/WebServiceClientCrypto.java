@@ -279,17 +279,6 @@ public class WebServiceClientCrypto
   }
 
   /**
-   * Set the crypto provider associated with this implementation.
-   *
-   * @param cryptoProvider the crypto provider associated with this implementation
-   */
-  @Override
-  public void setCryptoProvider(String cryptoProvider)
-  {
-    this.cryptoProvider = cryptoProvider;
-  }
-
-  /**
    * Retrieves the identifier name of the default certificate.
    * <p/>
    * This should be the certificate that is used for signature and encryption. This identifier
@@ -308,22 +297,6 @@ public class WebServiceClientCrypto
     ApplicationSecurityContext applicationSecurityContext = ApplicationSecurityContext.getContext();
 
     return applicationSecurityContext.getKeyStoreAlias();
-  }
-
-  /**
-   * Sets the identifier name of the default certificate.
-   * <p/>
-   * This should be the certificate that is used for signature and encryption. This identifier
-   * corresponds to the certificate that should be used whenever <code>KeyInfo</code> is not
-   * present in a signed or an encrypted message. The identifier is implementation specific, e.g.
-   * it could be the <code>KeyStore</code> alias.
-   *
-   * @param identifier the identifier name of the default certificate
-   */
-  @Override
-  public void setDefaultX509Identifier(String identifier)
-  {
-    // Do nothing the alias defined by the ApplicationSecurityContext cannot be overridden
   }
 
   /**
@@ -652,6 +625,33 @@ public class WebServiceClientCrypto
     {
       certificateFactoryMap.put(provider, certFactory);
     }
+  }
+
+  /**
+   * Set the crypto provider associated with this implementation.
+   *
+   * @param cryptoProvider the crypto provider associated with this implementation
+   */
+  @Override
+  public void setCryptoProvider(String cryptoProvider)
+  {
+    this.cryptoProvider = cryptoProvider;
+  }
+
+  /**
+   * Sets the identifier name of the default certificate.
+   * <p/>
+   * This should be the certificate that is used for signature and encryption. This identifier
+   * corresponds to the certificate that should be used whenever <code>KeyInfo</code> is not
+   * present in a signed or an encrypted message. The identifier is implementation specific, e.g.
+   * it could be the <code>KeyStore</code> alias.
+   *
+   * @param identifier the identifier name of the default certificate
+   */
+  @Override
+  public void setDefaultX509Identifier(String identifier)
+  {
+    // Do nothing the alias defined by the ApplicationSecurityContext cannot be overridden
   }
 
   /**

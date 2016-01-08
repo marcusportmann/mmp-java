@@ -114,18 +114,6 @@ public class MessagePartReceivedRequest
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message part that
-   * was successfully downloaded.
-   *
-   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message part that was successfully downloaded
-   */
-  public void setMessagePartId(UUID messagePartId)
-  {
-    this.messagePartId = messagePartId;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
    * part received request originated from.
    *
@@ -135,6 +123,18 @@ public class MessagePartReceivedRequest
   public void setDevice(UUID deviceId)
   {
     this.deviceId = deviceId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message part that
+   * was successfully downloaded.
+   *
+   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message part that was successfully downloaded
+   */
+  public void setMessagePartId(UUID messagePartId)
+  {
+    this.messagePartId = messagePartId;
   }
 
   /**

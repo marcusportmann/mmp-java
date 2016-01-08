@@ -92,18 +92,6 @@ public class Code
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category the
-   * code is associated with.
-   *
-   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the code
-   *                   category the code is associated with
-   */
-  public void setCategoryId(UUID categoryId)
-  {
-    this.categoryId = categoryId;
-  }
-
-  /**
    * Returns the description for the code.
    *
    * @return the description for the code
@@ -111,16 +99,6 @@ public class Code
   public String getDescription()
   {
     return description;
-  }
-
-  /**
-   * Set the description for the code.
-   *
-   * @param description the description for the code
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**
@@ -134,16 +112,6 @@ public class Code
   }
 
   /**
-   * Set the ID used to uniquely identify the code.
-   *
-   * @param id the ID used to uniquely identify the code
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the name of the code.
    *
    * @return the name of the code
@@ -154,16 +122,6 @@ public class Code
   }
 
   /**
-   * Set the name of the code.
-   *
-   * @param name the name of the code
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
    * Returns the value for the code.
    *
    * @return the value for the code
@@ -171,6 +129,48 @@ public class Code
   public String getValue()
   {
     return this.value;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category the
+   * code is associated with.
+   *
+   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the code
+   *                   category the code is associated with
+   */
+  public void setCategoryId(UUID categoryId)
+  {
+    this.categoryId = categoryId;
+  }
+
+  /**
+   * Set the description for the code.
+   *
+   * @param description the description for the code
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the code.
+   *
+   * @param id the ID used to uniquely identify the code
+   */
+  public void setId(String id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the code.
+   *
+   * @param name the name of the code
+   */
+  public void setName(String name)
+  {
+    this.name = name;
   }
 
   /**

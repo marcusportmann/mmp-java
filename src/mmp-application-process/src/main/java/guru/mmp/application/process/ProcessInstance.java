@@ -109,16 +109,6 @@ public class ProcessInstance
   }
 
   /**
-   * Set the data giving the current execution state for the process instance.
-   *
-   * @param data the data giving the current execution state for the process instance
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
    * definition for the process instance.
    *
@@ -131,18 +121,6 @@ public class ProcessInstance
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process definition
-   * for the process instance.
-   *
-   * @param definitionId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                     process definition for the process instance
-   */
-  public void setDefinitionId(UUID definitionId)
-  {
-    this.definitionId = definitionId;
-  }
-
-  /**
    * Returns the version of the process definition for the process instance.
    *
    * @return the version of the process definition for the process instance
@@ -150,16 +128,6 @@ public class ProcessInstance
   public int getDefinitionVersion()
   {
     return definitionVersion;
-  }
-
-  /**
-   * Set the version of the process definition for the process instance.
-   *
-   * @param definitionVersion the version of the process definition for the process instance
-   */
-  public void setDefinitionVersion(int definitionVersion)
-  {
-    this.definitionVersion = definitionVersion;
   }
 
   /**
@@ -175,17 +143,6 @@ public class ProcessInstance
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process instance.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *           instance
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the name of the entity that has locked the process instance for execution.
    *
    * @return the name of the entity that has locked the process instance for execution
@@ -193,16 +150,6 @@ public class ProcessInstance
   public String getLockName()
   {
     return lockName;
-  }
-
-  /**
-   * Set the name of the entity that has locked the process instance for execution.
-   *
-   * @param lockName the name of the entity that has locked the process instance for execution
-   */
-  public void setLockName(String lockName)
-  {
-    this.lockName = lockName;
   }
 
   /**
@@ -216,16 +163,6 @@ public class ProcessInstance
   }
 
   /**
-   * Set the date and time when the process instance will next be executed.
-   *
-   * @param nextExecution the date and time when the process instance will next be executed
-   */
-  public void setNextExecution(Date nextExecution)
-  {
-    this.nextExecution = nextExecution;
-  }
-
-  /**
    * Returns the status of the process instance.
    *
    * @return the status of the process instance
@@ -233,6 +170,69 @@ public class ProcessInstance
   public Status getStatus()
   {
     return status;
+  }
+
+  /**
+   * Set the data giving the current execution state for the process instance.
+   *
+   * @param data the data giving the current execution state for the process instance
+   */
+  public void setData(byte[] data)
+  {
+    this.data = data;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process definition
+   * for the process instance.
+   *
+   * @param definitionId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                     process definition for the process instance
+   */
+  public void setDefinitionId(UUID definitionId)
+  {
+    this.definitionId = definitionId;
+  }
+
+  /**
+   * Set the version of the process definition for the process instance.
+   *
+   * @param definitionVersion the version of the process definition for the process instance
+   */
+  public void setDefinitionVersion(int definitionVersion)
+  {
+    this.definitionVersion = definitionVersion;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the process instance.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
+   *           instance
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the entity that has locked the process instance for execution.
+   *
+   * @param lockName the name of the entity that has locked the process instance for execution
+   */
+  public void setLockName(String lockName)
+  {
+    this.lockName = lockName;
+  }
+
+  /**
+   * Set the date and time when the process instance will next be executed.
+   *
+   * @param nextExecution the date and time when the process instance will next be executed
+   */
+  public void setNextExecution(Date nextExecution)
+  {
+    this.nextExecution = nextExecution;
   }
 
   /**

@@ -62,17 +62,6 @@ public class ExtensionType
   }
 
   /**
-   * Sets the value of the all property.
-   *
-   * @param value allowed object is
-   *              {@link All }
-   */
-  public void setAll(All value)
-  {
-    this.all = value;
-  }
-
-  /**
    * Gets the value of the anyAttribute property.
    *
    * @return possible object is
@@ -81,17 +70,6 @@ public class ExtensionType
   public Wildcard getAnyAttribute()
   {
     return anyAttribute;
-  }
-
-  /**
-   * Sets the value of the anyAttribute property.
-   *
-   * @param value allowed object is
-   *              {@link Wildcard }
-   */
-  public void setAnyAttribute(Wildcard value)
-  {
-    this.anyAttribute = value;
   }
 
   /**
@@ -140,17 +118,6 @@ public class ExtensionType
   }
 
   /**
-   * Sets the value of the base property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setBase(QName value)
-  {
-    this.base = value;
-  }
-
-  /**
    * Gets the value of the choice property.
    *
    * @return possible object is
@@ -159,17 +126,6 @@ public class ExtensionType
   public ExplicitGroup getChoice()
   {
     return choice;
-  }
-
-  /**
-   * Sets the value of the choice property.
-   *
-   * @param value allowed object is
-   *              {@link ExplicitGroup }
-   */
-  public void setChoice(ExplicitGroup value)
-  {
-    this.choice = value;
   }
 
   /**
@@ -184,17 +140,6 @@ public class ExtensionType
   }
 
   /**
-   * Sets the value of the group property.
-   *
-   * @param value allowed object is
-   *              {@link GroupRef }
-   */
-  public void setGroup(GroupRef value)
-  {
-    this.group = value;
-  }
-
-  /**
    * Gets the value of the sequence property.
    *
    * @return possible object is
@@ -203,6 +148,61 @@ public class ExtensionType
   public ExplicitGroup getSequence()
   {
     return sequence;
+  }
+
+  /**
+   * Sets the value of the all property.
+   *
+   * @param value allowed object is
+   *              {@link All }
+   */
+  public void setAll(All value)
+  {
+    this.all = value;
+  }
+
+  /**
+   * Sets the value of the anyAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link Wildcard }
+   */
+  public void setAnyAttribute(Wildcard value)
+  {
+    this.anyAttribute = value;
+  }
+
+  /**
+   * Sets the value of the base property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setBase(QName value)
+  {
+    this.base = value;
+  }
+
+  /**
+   * Sets the value of the choice property.
+   *
+   * @param value allowed object is
+   *              {@link ExplicitGroup }
+   */
+  public void setChoice(ExplicitGroup value)
+  {
+    this.choice = value;
+  }
+
+  /**
+   * Sets the value of the group property.
+   *
+   * @param value allowed object is
+   *              {@link GroupRef }
+   */
+  public void setGroup(GroupRef value)
+  {
+    this.group = value;
   }
 
   /**

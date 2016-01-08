@@ -48,17 +48,6 @@ public class ComplexContent
   }
 
   /**
-   * Sets the value of the extension property.
-   *
-   * @param value allowed object is
-   *              {@link ExtensionType }
-   */
-  public void setExtension(ExtensionType value)
-  {
-    this.extension = value;
-  }
-
-  /**
    * Gets the value of the restriction property.
    *
    * @return possible object is
@@ -67,17 +56,6 @@ public class ComplexContent
   public ComplexRestrictionType getRestriction()
   {
     return restriction;
-  }
-
-  /**
-   * Sets the value of the restriction property.
-   *
-   * @param value allowed object is
-   *              {@link ComplexRestrictionType }
-   */
-  public void setRestriction(ComplexRestrictionType value)
-  {
-    this.restriction = value;
   }
 
   /**
@@ -92,6 +70,17 @@ public class ComplexContent
   }
 
   /**
+   * Sets the value of the extension property.
+   *
+   * @param value allowed object is
+   *              {@link ExtensionType }
+   */
+  public void setExtension(ExtensionType value)
+  {
+    this.extension = value;
+  }
+
+  /**
    * Sets the value of the mixed property.
    *
    * @param value allowed object is
@@ -100,5 +89,16 @@ public class ComplexContent
   public void setMixed(Boolean value)
   {
     this.mixed = value;
+  }
+
+  /**
+   * Sets the value of the restriction property.
+   *
+   * @param value allowed object is
+   *              {@link ComplexRestrictionType }
+   */
+  public void setRestriction(ComplexRestrictionType value)
+  {
+    this.restriction = value;
   }
 }

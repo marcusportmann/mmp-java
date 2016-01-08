@@ -112,16 +112,6 @@ public class Location
   }
 
   /**
-   * Set the latitude for the GPS location.
-   *
-   * @param latitude the latitude for the GPS location
-   */
-  public void setLatitude(double latitude)
-  {
-    this.latitude = latitude;
-  }
-
-  /**
    * Returns the longitude for the GPS location.
    *
    * @return the longitude for the GPS location
@@ -129,16 +119,6 @@ public class Location
   public double getLongitude()
   {
     return longitude;
-  }
-
-  /**
-   * Set the longitude for the GPS location.
-   *
-   * @param longitude the longitude for the GPS location
-   */
-  public void setLongitude(double longitude)
-  {
-    this.longitude = longitude;
   }
 
   /**
@@ -152,16 +132,6 @@ public class Location
   }
 
   /**
-   * Set the precision for the GPS location.
-   *
-   * @param precision the precision for the GPS location
-   */
-  public void setPrecision(double precision)
-  {
-    this.precision = precision;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -170,5 +140,35 @@ public class Location
   public int hashCode()
   {
     return ((int) (longitude + latitude + precision));
+  }
+
+  /**
+   * Set the latitude for the GPS location.
+   *
+   * @param latitude the latitude for the GPS location
+   */
+  public void setLatitude(double latitude)
+  {
+    this.latitude = latitude;
+  }
+
+  /**
+   * Set the longitude for the GPS location.
+   *
+   * @param longitude the longitude for the GPS location
+   */
+  public void setLongitude(double longitude)
+  {
+    this.longitude = longitude;
+  }
+
+  /**
+   * Set the precision for the GPS location.
+   *
+   * @param precision the precision for the GPS location
+   */
+  public void setPrecision(double precision)
+  {
+    this.precision = precision;
   }
 }

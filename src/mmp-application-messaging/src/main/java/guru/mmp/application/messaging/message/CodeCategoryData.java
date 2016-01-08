@@ -179,16 +179,6 @@ public class CodeCategoryData
   }
 
   /**
-   * Set the custom code data for the category if the code data type is "Custom".
-   *
-   * @param codeData the custom code data for the category if the code data type is "Custom"
-   */
-  public void setCodeData(byte[] codeData)
-  {
-    this.codeData = codeData;
-  }
-
-  /**
    * Returns the type of code data for the code category e.g. Standard, Custom, etc.
    *
    * @return the type of code data for the code category e.g. Standard, Custom, etc
@@ -196,16 +186,6 @@ public class CodeCategoryData
   public CodeDataType getCodeDataType()
   {
     return codeDataType;
-  }
-
-  /**
-   * Set the type of code data for the code category e.g. Standard, Custom, etc.
-   *
-   * @param codeDataType the type of code data for the code category e.g. Standard, Custom, etc
-   */
-  public void setCodeDataType(CodeDataType codeDataType)
-  {
-    this.codeDataType = codeDataType;
   }
 
   /**
@@ -219,16 +199,6 @@ public class CodeCategoryData
   }
 
   /**
-   * Set the codes for the code category if the code data type is "Standard".
-   *
-   * @param codes the codes for the code category if the code data type is "Standard"
-   */
-  public void setCodes(List<CodeData> codes)
-  {
-    this.codes = codes;
-  }
-
-  /**
    * Returns the description for the code category.
    *
    * @return the description for the code category
@@ -236,16 +206,6 @@ public class CodeCategoryData
   public String getDescription()
   {
     return description;
-  }
-
-  /**
-   * Set the description for the code category.
-   *
-   * @param description the description for the code category
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**
@@ -259,16 +219,6 @@ public class CodeCategoryData
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the date and time the code category was last updated.
    *
    * @return the date and time the code category was last updated
@@ -279,16 +229,6 @@ public class CodeCategoryData
   }
 
   /**
-   * Set the date and time the code category was last updated.
-   *
-   * @param lastUpdated the date and time the code category was last updated
-   */
-  public void setLastUpdated(Date lastUpdated)
-  {
-    this.lastUpdated = lastUpdated;
-  }
-
-  /**
    * Returns the name of the code category.
    *
    * @return the name of the code category
@@ -296,6 +236,66 @@ public class CodeCategoryData
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Set the custom code data for the category if the code data type is "Custom".
+   *
+   * @param codeData the custom code data for the category if the code data type is "Custom"
+   */
+  public void setCodeData(byte[] codeData)
+  {
+    this.codeData = codeData;
+  }
+
+  /**
+   * Set the type of code data for the code category e.g. Standard, Custom, etc.
+   *
+   * @param codeDataType the type of code data for the code category e.g. Standard, Custom, etc
+   */
+  public void setCodeDataType(CodeDataType codeDataType)
+  {
+    this.codeDataType = codeDataType;
+  }
+
+  /**
+   * Set the codes for the code category if the code data type is "Standard".
+   *
+   * @param codes the codes for the code category if the code data type is "Standard"
+   */
+  public void setCodes(List<CodeData> codes)
+  {
+    this.codes = codes;
+  }
+
+  /**
+   * Set the description for the code category.
+   *
+   * @param description the description for the code category
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the date and time the code category was last updated.
+   *
+   * @param lastUpdated the date and time the code category was last updated
+   */
+  public void setLastUpdated(Date lastUpdated)
+  {
+    this.lastUpdated = lastUpdated;
   }
 
   /**

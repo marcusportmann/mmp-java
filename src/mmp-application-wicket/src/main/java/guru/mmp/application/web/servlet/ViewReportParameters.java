@@ -120,16 +120,6 @@ public class ViewReportParameters
   }
 
   /**
-   * Set the name of the report.
-   *
-   * @param reportName the name of the report
-   */
-  public void setReportName(String reportName)
-  {
-    this.reportName = reportName;
-  }
-
-  /**
    * Returns the report parameters.
    *
    * @return the report parameters
@@ -137,16 +127,6 @@ public class ViewReportParameters
   public Map<String, Object> getReportParameters()
   {
     return reportParameters;
-  }
-
-  /**
-   * Set the report parameters.
-   *
-   * @param reportParameters the report parameters
-   */
-  public void setReportParameters(Map<String, Object> reportParameters)
-  {
-    this.reportParameters = reportParameters;
   }
 
   /**
@@ -162,18 +142,6 @@ public class ViewReportParameters
   }
 
   /**
-   * Set the type of report being rendered i.e. a local report under the WEB-INF/report folder for
-   * the web project or a report stored in the database.
-   *
-   * @param reportType the type of report being rendered i.e. a local report under the
-   *                   WEB-INF/report folder for the web project or a report stored in the database
-   */
-  public void setReportType(ReportType reportType)
-  {
-    this.reportType = reportType;
-  }
-
-  /**
    * Set the name of the local report file under the WEB-INF/report folder for the web project or
    * the ID of the report stored in the database.
    *
@@ -183,5 +151,37 @@ public class ViewReportParameters
   public void setReportFileNameOrIdx(String reportFileNameOrId)
   {
     this.reportFileNameOrId = reportFileNameOrId;
+  }
+
+  /**
+   * Set the name of the report.
+   *
+   * @param reportName the name of the report
+   */
+  public void setReportName(String reportName)
+  {
+    this.reportName = reportName;
+  }
+
+  /**
+   * Set the report parameters.
+   *
+   * @param reportParameters the report parameters
+   */
+  public void setReportParameters(Map<String, Object> reportParameters)
+  {
+    this.reportParameters = reportParameters;
+  }
+
+  /**
+   * Set the type of report being rendered i.e. a local report under the WEB-INF/report folder for
+   * the web project or a report stored in the database.
+   *
+   * @param reportType the type of report being rendered i.e. a local report under the
+   *                   WEB-INF/report folder for the web project or a report stored in the database
+   */
+  public void setReportType(ReportType reportType)
+  {
+    this.reportType = reportType;
   }
 }

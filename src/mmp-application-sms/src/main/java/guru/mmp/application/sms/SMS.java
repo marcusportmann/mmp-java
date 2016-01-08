@@ -131,16 +131,6 @@ public class SMS
   }
 
   /**
-   * Set the ID used to uniquely identify the SMS.
-   *
-   * @param id the ID used to uniquely identify the SMS
-   */
-  public void setId(long id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the date and time the last attempt was made to send the SMS.
    *
    * @return the date and time the last attempt was made to send the SMS
@@ -148,16 +138,6 @@ public class SMS
   public Date getLastProcessed()
   {
     return lastProcessed;
-  }
-
-  /**
-   * Set the date and time the last attempt was made to send the SMS.
-   *
-   * @param lastProcessed the date and time the last attempt was made to send the SMS
-   */
-  public void setLastProcessed(Date lastProcessed)
-  {
-    this.lastProcessed = lastProcessed;
   }
 
   /**
@@ -171,16 +151,6 @@ public class SMS
   }
 
   /**
-   * Set the name of the entity that has locked the SMS for sending.
-   *
-   * @param lockName the name of the entity that has locked the SMS for sending
-   */
-  public void setLockName(String lockName)
-  {
-    this.lockName = lockName;
-  }
-
-  /**
    * Returns the message to send.
    *
    * @return the message to send
@@ -188,16 +158,6 @@ public class SMS
   public String getMessage()
   {
     return message;
-  }
-
-  /**
-   * Set the message to send.
-   *
-   * @param message the message to send
-   */
-  public void setMessage(String message)
-  {
-    this.message = message;
   }
 
   /**
@@ -211,16 +171,6 @@ public class SMS
   }
 
   /**
-   * Set the mobile number to send the SMS to.
-   *
-   * @param mobileNumber the mobile number to send the SMS to
-   */
-  public void setMobileNumber(String mobileNumber)
-  {
-    this.mobileNumber = mobileNumber;
-  }
-
-  /**
    * Returns the number of times that the sending of the SMS was attempted.
    *
    * @return the number of times that the sending of the SMS was attempted
@@ -231,16 +181,6 @@ public class SMS
   }
 
   /**
-   * Set the number of times that the sending of the SMS was attempted.
-   *
-   * @param sendAttempts the number of times that the sending of the SMS was attempted
-   */
-  public void setSendAttempts(int sendAttempts)
-  {
-    this.sendAttempts = sendAttempts;
-  }
-
-  /**
    * Returns the status of the SMS.
    *
    * @return the status of the SMS
@@ -248,6 +188,66 @@ public class SMS
   public Status getStatus()
   {
     return status;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the SMS.
+   *
+   * @param id the ID used to uniquely identify the SMS
+   */
+  public void setId(long id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the date and time the last attempt was made to send the SMS.
+   *
+   * @param lastProcessed the date and time the last attempt was made to send the SMS
+   */
+  public void setLastProcessed(Date lastProcessed)
+  {
+    this.lastProcessed = lastProcessed;
+  }
+
+  /**
+   * Set the name of the entity that has locked the SMS for sending.
+   *
+   * @param lockName the name of the entity that has locked the SMS for sending
+   */
+  public void setLockName(String lockName)
+  {
+    this.lockName = lockName;
+  }
+
+  /**
+   * Set the message to send.
+   *
+   * @param message the message to send
+   */
+  public void setMessage(String message)
+  {
+    this.message = message;
+  }
+
+  /**
+   * Set the mobile number to send the SMS to.
+   *
+   * @param mobileNumber the mobile number to send the SMS to
+   */
+  public void setMobileNumber(String mobileNumber)
+  {
+    this.mobileNumber = mobileNumber;
+  }
+
+  /**
+   * Set the number of times that the sending of the SMS was attempted.
+   *
+   * @param sendAttempts the number of times that the sending of the SMS was attempted
+   */
+  public void setSendAttempts(int sendAttempts)
+  {
+    this.sendAttempts = sendAttempts;
   }
 
   /**

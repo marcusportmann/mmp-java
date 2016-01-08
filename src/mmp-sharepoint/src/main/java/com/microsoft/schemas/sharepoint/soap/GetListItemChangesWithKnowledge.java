@@ -120,17 +120,6 @@ public class GetListItemChangesWithKnowledge
   }
 
   /**
-   * Sets the value of the contains property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesWithKnowledge.Contains }
-   */
-  public void setContains(GetListItemChangesWithKnowledge.Contains value)
-  {
-    this.contains = value;
-  }
-
-  /**
    * Gets the value of the knowledge property.
    *
    * @return possible object is
@@ -139,17 +128,6 @@ public class GetListItemChangesWithKnowledge
   public GetListItemChangesWithKnowledge.Knowledge getKnowledge()
   {
     return knowledge;
-  }
-
-  /**
-   * Sets the value of the knowledge property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesWithKnowledge.Knowledge }
-   */
-  public void setKnowledge(GetListItemChangesWithKnowledge.Knowledge value)
-  {
-    this.knowledge = value;
   }
 
   /**
@@ -164,17 +142,6 @@ public class GetListItemChangesWithKnowledge
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the query property.
    *
    * @return possible object is
@@ -183,17 +150,6 @@ public class GetListItemChangesWithKnowledge
   public GetListItemChangesWithKnowledge.Query getQuery()
   {
     return query;
-  }
-
-  /**
-   * Sets the value of the query property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesWithKnowledge.Query }
-   */
-  public void setQuery(GetListItemChangesWithKnowledge.Query value)
-  {
-    this.query = value;
   }
 
   /**
@@ -208,17 +164,6 @@ public class GetListItemChangesWithKnowledge
   }
 
   /**
-   * Sets the value of the queryOptions property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesWithKnowledge.QueryOptions }
-   */
-  public void setQueryOptions(GetListItemChangesWithKnowledge.QueryOptions value)
-  {
-    this.queryOptions = value;
-  }
-
-  /**
    * Gets the value of the rowLimit property.
    *
    * @return possible object is
@@ -227,17 +172,6 @@ public class GetListItemChangesWithKnowledge
   public String getRowLimit()
   {
     return rowLimit;
-  }
-
-  /**
-   * Sets the value of the rowLimit property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setRowLimit(String value)
-  {
-    this.rowLimit = value;
   }
 
   /**
@@ -252,17 +186,6 @@ public class GetListItemChangesWithKnowledge
   }
 
   /**
-   * Sets the value of the syncScope property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setSyncScope(String value)
-  {
-    this.syncScope = value;
-  }
-
-  /**
    * Gets the value of the viewFields property.
    *
    * @return possible object is
@@ -274,17 +197,6 @@ public class GetListItemChangesWithKnowledge
   }
 
   /**
-   * Sets the value of the viewFields property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesWithKnowledge.ViewFields }
-   */
-  public void setViewFields(GetListItemChangesWithKnowledge.ViewFields value)
-  {
-    this.viewFields = value;
-  }
-
-  /**
    * Gets the value of the viewName property.
    *
    * @return possible object is
@@ -293,6 +205,94 @@ public class GetListItemChangesWithKnowledge
   public String getViewName()
   {
     return viewName;
+  }
+
+  /**
+   * Sets the value of the contains property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesWithKnowledge.Contains }
+   */
+  public void setContains(GetListItemChangesWithKnowledge.Contains value)
+  {
+    this.contains = value;
+  }
+
+  /**
+   * Sets the value of the knowledge property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesWithKnowledge.Knowledge }
+   */
+  public void setKnowledge(GetListItemChangesWithKnowledge.Knowledge value)
+  {
+    this.knowledge = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the query property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesWithKnowledge.Query }
+   */
+  public void setQuery(GetListItemChangesWithKnowledge.Query value)
+  {
+    this.query = value;
+  }
+
+  /**
+   * Sets the value of the queryOptions property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesWithKnowledge.QueryOptions }
+   */
+  public void setQueryOptions(GetListItemChangesWithKnowledge.QueryOptions value)
+  {
+    this.queryOptions = value;
+  }
+
+  /**
+   * Sets the value of the rowLimit property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRowLimit(String value)
+  {
+    this.rowLimit = value;
+  }
+
+  /**
+   * Sets the value of the syncScope property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSyncScope(String value)
+  {
+    this.syncScope = value;
+  }
+
+  /**
+   * Sets the value of the viewFields property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesWithKnowledge.ViewFields }
+   */
+  public void setViewFields(GetListItemChangesWithKnowledge.ViewFields value)
+  {
+    this.viewFields = value;
   }
 
   /**

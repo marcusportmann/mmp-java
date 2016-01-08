@@ -108,16 +108,6 @@ public class MessageHandlerConfig
   }
 
   /**
-   * Set the name of the message handler.
-   *
-   * @param name the name of the message handler
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
    * Returns <code>true</code> if messages of the specified message type should be archived or
    * <code>false</code> otherwise.
    *
@@ -138,6 +128,16 @@ public class MessageHandlerConfig
     }
 
     return false;
+  }
+
+  /**
+   * Set the name of the message handler.
+   *
+   * @param name the name of the message handler
+   */
+  public void setName(String name)
+  {
+    this.name = name;
   }
 
   /**

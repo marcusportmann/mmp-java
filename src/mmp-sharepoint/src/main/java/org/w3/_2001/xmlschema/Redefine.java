@@ -100,17 +100,6 @@ public class Redefine
   }
 
   /**
-   * Sets the value of the id property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setId(String value)
-  {
-    this.id = value;
-  }
-
-  /**
    * Gets the value of the schemaLocation property.
    *
    * @return possible object is
@@ -119,6 +108,17 @@ public class Redefine
   public String getSchemaLocation()
   {
     return schemaLocation;
+  }
+
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value)
+  {
+    this.id = value;
   }
 
   /**

@@ -170,18 +170,6 @@ public class CodeCategory
   }
 
   /**
-   * Set the time in seconds after which the cached code data for the remote code category will
-   * expire.
-   *
-   * @param cacheExpiry the time in seconds after which the cached code data for the remote code
-   *                    category will expire
-   */
-  public void setCacheExpiry(Integer cacheExpiry)
-  {
-    this.cacheExpiry = cacheExpiry;
-  }
-
-  /**
    * Returns the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc.
    *
    * @return the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc
@@ -189,18 +177,6 @@ public class CodeCategory
   public CodeCategoryType getCategoryType()
   {
     return categoryType;
-  }
-
-  /**
-   * Set the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc.
-   *
-   * @param categoryType the type of code category e.g. Local, RemoteHTTPService, RemoteWebService,
-   *                     etc
-   */
-  @SuppressWarnings("unused")
-  public void setCategoryType(CodeCategoryType categoryType)
-  {
-    this.categoryType = categoryType;
   }
 
   /**
@@ -214,16 +190,6 @@ public class CodeCategory
   }
 
   /**
-   * Set the custom code data for the code category.
-   *
-   * @param codeData the custom code data for the code category
-   */
-  public void setCodeData(String codeData)
-  {
-    this.codeData = codeData;
-  }
-
-  /**
    * Returns the codes for the code category.
    *
    * @return the codes for the code category
@@ -231,16 +197,6 @@ public class CodeCategory
   public List<Code> getCodes()
   {
     return codes;
-  }
-
-  /**
-   * Set the codes for the code category.
-   *
-   * @param codes the codes for the code category
-   */
-  public void setCodes(List<Code> codes)
-  {
-    this.codes = codes;
   }
 
   /**
@@ -254,16 +210,6 @@ public class CodeCategory
   }
 
   /**
-   * Set the description for the code category.
-   *
-   * @param description the description for the code category
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
    * Returns the endpoint if this is a remote code category.
    *
    * @return the endpoint if this is a remote code category
@@ -271,16 +217,6 @@ public class CodeCategory
   public String getEndPoint()
   {
     return endPoint;
-  }
-
-  /**
-   * Set the endpoint if this is a remote code category.
-   *
-   * @param endPoint the endpoint if this is a remote code category
-   */
-  public void setEndPoint(String endPoint)
-  {
-    this.endPoint = endPoint;
   }
 
   /**
@@ -294,16 +230,6 @@ public class CodeCategory
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns whether the code data retrieved for the remote code category is cacheable.
    *
    * @return <code>true</code> if the code data retrieved for the remote code category is cacheable
@@ -312,16 +238,6 @@ public class CodeCategory
   public boolean getIsCacheable()
   {
     return isCacheable;
-  }
-
-  /**
-   * Set whether the code data retrieved for the remote code category is cacheable.
-   *
-   * @param isCacheable is the code data retrieved for the remote code category cacheable
-   */
-  public void setIsCacheable(boolean isCacheable)
-  {
-    this.isCacheable = isCacheable;
   }
 
   /**
@@ -337,6 +253,110 @@ public class CodeCategory
   }
 
   /**
+   * Returns the name of the code category.
+   *
+   * @return the name of the code category
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Returns the date and time the code category was updated.
+   *
+   * @return the date and time the code category was updated
+   */
+  public Date getUpdated()
+  {
+    return updated;
+  }
+
+  /**
+   * Set the time in seconds after which the cached code data for the remote code category will
+   * expire.
+   *
+   * @param cacheExpiry the time in seconds after which the cached code data for the remote code
+   *                    category will expire
+   */
+  public void setCacheExpiry(Integer cacheExpiry)
+  {
+    this.cacheExpiry = cacheExpiry;
+  }
+
+  /**
+   * Set the type of code category e.g. Local, RemoteHTTPService, RemoteWebService, etc.
+   *
+   * @param categoryType the type of code category e.g. Local, RemoteHTTPService, RemoteWebService,
+   *                     etc
+   */
+  @SuppressWarnings("unused")
+  public void setCategoryType(CodeCategoryType categoryType)
+  {
+    this.categoryType = categoryType;
+  }
+
+  /**
+   * Set the custom code data for the code category.
+   *
+   * @param codeData the custom code data for the code category
+   */
+  public void setCodeData(String codeData)
+  {
+    this.codeData = codeData;
+  }
+
+  /**
+   * Set the codes for the code category.
+   *
+   * @param codes the codes for the code category
+   */
+  public void setCodes(List<Code> codes)
+  {
+    this.codes = codes;
+  }
+
+  /**
+   * Set the description for the code category.
+   *
+   * @param description the description for the code category
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the endpoint if this is a remote code category.
+   *
+   * @param endPoint the endpoint if this is a remote code category
+   */
+  public void setEndPoint(String endPoint)
+  {
+    this.endPoint = endPoint;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set whether the code data retrieved for the remote code category is cacheable.
+   *
+   * @param isCacheable is the code data retrieved for the remote code category cacheable
+   */
+  public void setIsCacheable(boolean isCacheable)
+  {
+    this.isCacheable = isCacheable;
+  }
+
+  /**
    * Set whether the endpoint for the remote code category is secure.
    *
    * @param isEndPointSecure <code>true</code> if the endpoint for the remote code category is
@@ -348,16 +368,6 @@ public class CodeCategory
   }
 
   /**
-   * Returns the name of the code category.
-   *
-   * @return the name of the code category
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
    * Set the name of the code category.
    *
    * @param name the name of the code category
@@ -365,16 +375,6 @@ public class CodeCategory
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  /**
-   * Returns the date and time the code category was updated.
-   *
-   * @return the date and time the code category was updated
-   */
-  public Date getUpdated()
-  {
-    return updated;
   }
 
   /**

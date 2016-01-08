@@ -47,17 +47,6 @@ public class AddDiscussionBoardItem
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the message property.
    *
    * @return possible object is
@@ -66,6 +55,17 @@ public class AddDiscussionBoardItem
   public byte[] getMessage()
   {
     return message;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
   }
 
   /**

@@ -17,22 +17,6 @@
 package guru.mmp.sample.web.page.forms;
 
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.resource.thirdparty.datepicker
-  .BootstrapDatePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker
-  .DateRangePickerCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.daterangepicker
-  .DateRangePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect
-  .JQueryMultiSelectCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.multiselect
-  .JQueryMultiSelectJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.timepicker
-  .BootstrapTimePickerJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.typeahead.TypeaheadJavaScriptResourceReference;
 import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.page.TemplateWebPage;
 import guru.mmp.sample.model.TestData;
@@ -59,6 +43,22 @@ public class TestFormPage
   private static final Logger logger = LoggerFactory.getLogger(TestFormPage.class);
 
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * Returns the favourite pet options e.g. Dog, Cat, etc.
+   *
+   * @return the the favourite pet options e.g. Dog, Cat, etc
+   */
+  public static List<String> getFavouritePetOptions()
+  {
+    List<String> favouritePetOptions = new ArrayList<>();
+
+    favouritePetOptions.add("Dog");
+    favouritePetOptions.add("Cat");
+    favouritePetOptions.add("Hamster");
+
+    return favouritePetOptions;
+  }
 
   /**
    * Returns the user title options e.g. Mr, Mrs, Ms, etc.
@@ -89,10 +89,15 @@ public class TestFormPage
       Form<TestData> testForm = new Form<>("testForm",
         new CompoundPropertyModel<>(new Model<>(new TestData())));
 
-      // The "name" field
-      TextField<String> nameField = new TextFieldWithFeedback<>("name");
-      nameField.setRequired(true);
-      testForm.add(nameField);
+      // The "firstNames" field
+      TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
+      firstNamesField.setRequired(true);
+      testForm.add(firstNamesField);
+
+      // The "lastName" field
+      TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName");
+      lastNameField.setRequired(true);
+      testForm.add(lastNameField);
 
       // The "title" field
       DropDownChoice<String> titleField = new DropDownChoiceWithFeedback<>("title",
@@ -100,15 +105,26 @@ public class TestFormPage
       titleField.setRequired(true);
       testForm.add(titleField);
 
+      // The "favouritePet" field
+      DropDownChoice<String> favouritePetField = new DropDownChoiceWithFeedback<>("favouritePet",
+        getFavouritePetOptions());
+      favouritePetField.setRequired(true);
+      testForm.add(favouritePetField);
+
       // The "password" field
       TextField<String> passwordField = new PasswordTextFieldWithFeedback("password");
       passwordField.setRequired(true);
       testForm.add(passwordField);
 
+      // The "confirmPassword" field
+      TextField<String> confirmPasswordField = new PasswordTextFieldWithFeedback("confirmPassword");
+      confirmPasswordField.setRequired(true);
+      testForm.add(confirmPasswordField);
+
       // The "notes" field
-      TextArea<String> noteField = new TextAreaWithFeedback<>("note");
-      noteField.setRequired(true);
-      testForm.add(noteField);
+      TextArea<String> notesField = new TextAreaWithFeedback<>("notes");
+      notesField.setRequired(true);
+      testForm.add(notesField);
 
       // The "role" field
       RadioGroup<String> roleField = new RadioGroupWithFeedback<>("role");
@@ -178,18 +194,5 @@ public class TestFormPage
   public void renderHead(IHeaderResponse response)
   {
     super.renderHead(response);
-
-    response.render(DateRangePickerCssResourceReference.getCssHeaderItem());
-    response.render(Select2CssResourceReference.getCssHeaderItem());
-    response.render(Select2BootstrapCssResourceReference.getCssHeaderItem());
-    response.render(JQueryMultiSelectCssResourceReference.getCssHeaderItem());
-
-    response.render(BootstrapDatePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
-    response.render(BootstrapTimePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
-    response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
-
-    response.render(DateRangePickerJavaScriptResourceReference.getJavaScriptHeaderItem());
-    response.render(JQueryMultiSelectJavaScriptResourceReference.getJavaScriptHeaderItem());
-    response.render(TypeaheadJavaScriptResourceReference.getJavaScriptHeaderItem());
   }
 }

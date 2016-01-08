@@ -22,6 +22,7 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.behavior.DefaultFocusBehavior;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
+import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
@@ -134,6 +135,7 @@ public class LoginPage
 
             session.setUserDirectoryId(user.getUserDirectoryId());
             session.setUsername(user.getUsername());
+            session.setUserFullName(user.getFirstNames() + user.getLastName());
 
             // Make session permanent after login
             if (session.isTemporary())
@@ -143,6 +145,12 @@ public class LoginPage
             else
             {
               session.dirty();  // for cluster replication
+            }
+
+            // Invalidate the cached navigation state
+            if (session instanceof TemplateWebSession)
+            {
+              ((TemplateWebSession)session).getNavigationState().invalidate();
             }
 
             // Check whether the user is associated with more than 1 organisation

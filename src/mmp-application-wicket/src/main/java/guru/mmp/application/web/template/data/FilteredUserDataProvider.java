@@ -89,16 +89,6 @@ public class FilteredUserDataProvider
   }
 
   /**
-   * Set the filter used to limit the matching users.
-   *
-   * @param filter the filter used to limit the matching users
-   */
-  public void setFilter(String filter)
-  {
-    this.filter = filter;
-  }
-
-  /**
    * Retrieves the matching users from the Security Service starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
@@ -153,6 +143,16 @@ public class FilteredUserDataProvider
   public IModel<User> model(User user)
   {
     return new DetachableUserModel(user);
+  }
+
+  /**
+   * Set the filter used to limit the matching users.
+   *
+   * @param filter the filter used to limit the matching users
+   */
+  public void setFilter(String filter)
+  {
+    this.filter = filter;
   }
 
   /**

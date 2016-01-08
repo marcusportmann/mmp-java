@@ -184,16 +184,6 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Set the endpoint for the web service.
-   *
-   * @param endpoint the endpoint for the web service
-   */
-  public void setEndpoint(String endpoint)
-  {
-    this.endpoint = endpoint;
-  }
-
-  /**
    * Returns the name used to uniquely identify the web service.
    *
    * @return the name used to uniquely identify the web service
@@ -201,16 +191,6 @@ public class ServiceRegistryEntry
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Set the name used to uniquely identify the web service.
-   *
-   * @param name the name used to uniquely identify the web service
-   */
-  public void setName(String name)
-  {
-    this.name = name;
   }
 
   /**
@@ -226,17 +206,6 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Set the password to use when accessing a web service with username-password security enabled.
-   *
-   * @param password the password to use when accessing a web service with username-password
-   *                 security enabled
-   */
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  /**
    * Returns <code>true</code> if the web service requires a user security token or
    * <code>false</code> otherwise.
    *
@@ -246,17 +215,6 @@ public class ServiceRegistryEntry
   public boolean getRequiresSecurityToken()
   {
     return requiresUserToken;
-  }
-
-  /**
-   * See whether the web service requires a user security token.
-   *
-   * @param requiresSecurityToken <code>true</code> if the web service requires a user security
-   *                              token or <code>false</code> otherwise
-   */
-  public void setRequiresSecurityToken(boolean requiresSecurityToken)
-  {
-    this.requiresUserToken = requiresSecurityToken;
   }
 
   /**
@@ -272,18 +230,6 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Set the type of security model implemented by the web service i.e. 0 = None, 1 = WS-Security,
-   * 2 = Client SSL, 3 = Username-Password.
-   *
-   * @param securityType the type of security model implemented by the web service i.e. 0 = None,
-   *                     1 = WS-Security, 2 = Client SSL, 3 = Username-Password
-   */
-  public void setSecurityType(int securityType)
-  {
-    this.securityType = securityType;
-  }
-
-  /**
    * Returns the fully qualified name of the Java web service client class.
    *
    * @return the fully qualified name of the Java web service client class
@@ -291,16 +237,6 @@ public class ServiceRegistryEntry
   public String getServiceClass()
   {
     return serviceClass;
-  }
-
-  /**
-   * Set the fully qualified name of the Java web service client class.
-   *
-   * @param serviceClass the fully qualified name of the Java web service client class
-   */
-  public void setServiceClass(String serviceClass)
-  {
-    this.serviceClass = serviceClass;
   }
 
   /**
@@ -316,17 +252,6 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Set whether the web service supports compression.
-   *
-   * @param supportsCompression <code>true</code> if the web service supports compression or
-   *                            <code>false</code> otherwise
-   */
-  public void setSupportsCompression(boolean supportsCompression)
-  {
-    this.supportsCompression = supportsCompression;
-  }
-
-  /**
    * Returns the username to use when accessing a web service with username-password security
    * enabled.
    *
@@ -339,6 +264,91 @@ public class ServiceRegistryEntry
   }
 
   /**
+   * Returns the location of the WSDL defining the web service on the classpath.
+   *
+   * @return the location of the WSDL defining the web service on the classpath
+   */
+  public String getWsdlLocation()
+  {
+    return wsdlLocation;
+  }
+
+  /**
+   * Set the endpoint for the web service.
+   *
+   * @param endpoint the endpoint for the web service
+   */
+  public void setEndpoint(String endpoint)
+  {
+    this.endpoint = endpoint;
+  }
+
+  /**
+   * Set the name used to uniquely identify the web service.
+   *
+   * @param name the name used to uniquely identify the web service
+   */
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+  /**
+   * Set the password to use when accessing a web service with username-password security enabled.
+   *
+   * @param password the password to use when accessing a web service with username-password
+   *                 security enabled
+   */
+  public void setPassword(String password)
+  {
+    this.password = password;
+  }
+
+  /**
+   * See whether the web service requires a user security token.
+   *
+   * @param requiresSecurityToken <code>true</code> if the web service requires a user security
+   *                              token or <code>false</code> otherwise
+   */
+  public void setRequiresSecurityToken(boolean requiresSecurityToken)
+  {
+    this.requiresUserToken = requiresSecurityToken;
+  }
+
+  /**
+   * Set the type of security model implemented by the web service i.e. 0 = None, 1 = WS-Security,
+   * 2 = Client SSL, 3 = Username-Password.
+   *
+   * @param securityType the type of security model implemented by the web service i.e. 0 = None,
+   *                     1 = WS-Security, 2 = Client SSL, 3 = Username-Password
+   */
+  public void setSecurityType(int securityType)
+  {
+    this.securityType = securityType;
+  }
+
+  /**
+   * Set the fully qualified name of the Java web service client class.
+   *
+   * @param serviceClass the fully qualified name of the Java web service client class
+   */
+  public void setServiceClass(String serviceClass)
+  {
+    this.serviceClass = serviceClass;
+  }
+
+  /**
+   * Set whether the web service supports compression.
+   *
+   * @param supportsCompression <code>true</code> if the web service supports compression or
+   *                            <code>false</code> otherwise
+   */
+  public void setSupportsCompression(boolean supportsCompression)
+  {
+    this.supportsCompression = supportsCompression;
+  }
+
+  /**
    * Set the username to use when accessing a web service with username-password security enabled.
    *
    * @param username the username to use when accessing a web service with username-password
@@ -347,16 +357,6 @@ public class ServiceRegistryEntry
   public void setUsername(String username)
   {
     this.username = username;
-  }
-
-  /**
-   * Returns the location of the WSDL defining the web service on the classpath.
-   *
-   * @return the location of the WSDL defining the web service on the classpath
-   */
-  public String getWsdlLocation()
-  {
-    return wsdlLocation;
   }
 
   /**

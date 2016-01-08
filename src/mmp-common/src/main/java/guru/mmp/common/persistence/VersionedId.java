@@ -125,16 +125,6 @@ public class VersionedId
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) component of the versioned ID.
-   *
-   * @param id the Universally Unique Identifier (UUID) component of the versioned ID
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the version component of the versioned ID.
    *
    * @return the version component of the versioned ID
@@ -142,16 +132,6 @@ public class VersionedId
   public int getVersion()
   {
     return version;
-  }
-
-  /**
-   * Set the version component of the versioned ID.
-   *
-   * @param version the version component of the versioned ID
-   */
-  public void setVersion(int version)
-  {
-    this.version = version;
   }
 
   /**
@@ -163,5 +143,25 @@ public class VersionedId
   public int hashCode()
   {
     return ((id == null) ? 0 : id.hashCode()) + version;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) component of the versioned ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) component of the versioned ID
+   */
+  public void setId(String id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the version component of the versioned ID.
+   *
+   * @param version the version component of the versioned ID
+   */
+  public void setVersion(int version)
+  {
+    this.version = version;
   }
 }

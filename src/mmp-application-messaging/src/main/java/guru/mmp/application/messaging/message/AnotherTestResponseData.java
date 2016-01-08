@@ -132,16 +132,6 @@ public class AnotherTestResponseData
   }
 
   /**
-   * Set the test data.
-   *
-   * @param testData the test data
-   */
-  public void setTestData(byte[] testData)
-  {
-    this.testData = testData;
-  }
-
-  /**
    * Returns the test value.
    *
    * @return the test value
@@ -149,6 +139,16 @@ public class AnotherTestResponseData
   public String getTestValue()
   {
     return testValue;
+  }
+
+  /**
+   * Set the test data.
+   *
+   * @param testData the test data
+   */
+  public void setTestData(byte[] testData)
+  {
+    this.testData = testData;
   }
 
   /**

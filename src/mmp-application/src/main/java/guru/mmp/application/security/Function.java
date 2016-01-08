@@ -53,16 +53,6 @@ public class Function
   }
 
   /**
-   * Set the code for the function.
-   *
-   * @param code the code for the function
-   */
-  public void setCode(String code)
-  {
-    this.code = code;
-  }
-
-  /**
    * Returns the description for the function.
    *
    * @return the description for the function
@@ -70,16 +60,6 @@ public class Function
   public String getDescription()
   {
     return description;
-  }
-
-  /**
-   * Set the description for the function.
-   *
-   * @param description the description for the function
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**
@@ -93,16 +73,6 @@ public class Function
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the function.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the function
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the name of the function.
    *
    * @return the name of the function
@@ -110,6 +80,36 @@ public class Function
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Set the code for the function.
+   *
+   * @param code the code for the function
+   */
+  public void setCode(String code)
+  {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the function.
+   *
+   * @param description the description for the function
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the function.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the function
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
   }
 
   /**

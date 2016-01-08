@@ -103,17 +103,6 @@ public class UpdateContentType
   }
 
   /**
-   * Sets the value of the addToView property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setAddToView(String value)
-  {
-    this.addToView = value;
-  }
-
-  /**
    * Gets the value of the contentTypeId property.
    *
    * @return possible object is
@@ -122,17 +111,6 @@ public class UpdateContentType
   public String getContentTypeId()
   {
     return contentTypeId;
-  }
-
-  /**
-   * Sets the value of the contentTypeId property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setContentTypeId(String value)
-  {
-    this.contentTypeId = value;
   }
 
   /**
@@ -147,17 +125,6 @@ public class UpdateContentType
   }
 
   /**
-   * Sets the value of the contentTypeProperties property.
-   *
-   * @param value allowed object is
-   *              {@link UpdateContentType.ContentTypeProperties }
-   */
-  public void setContentTypeProperties(UpdateContentType.ContentTypeProperties value)
-  {
-    this.contentTypeProperties = value;
-  }
-
-  /**
    * Gets the value of the deleteFields property.
    *
    * @return possible object is
@@ -166,17 +133,6 @@ public class UpdateContentType
   public UpdateContentType.DeleteFields getDeleteFields()
   {
     return deleteFields;
-  }
-
-  /**
-   * Sets the value of the deleteFields property.
-   *
-   * @param value allowed object is
-   *              {@link UpdateContentType.DeleteFields }
-   */
-  public void setDeleteFields(UpdateContentType.DeleteFields value)
-  {
-    this.deleteFields = value;
   }
 
   /**
@@ -191,17 +147,6 @@ public class UpdateContentType
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the newFields property.
    *
    * @return possible object is
@@ -213,17 +158,6 @@ public class UpdateContentType
   }
 
   /**
-   * Sets the value of the newFields property.
-   *
-   * @param value allowed object is
-   *              {@link UpdateContentType.NewFields }
-   */
-  public void setNewFields(UpdateContentType.NewFields value)
-  {
-    this.newFields = value;
-  }
-
-  /**
    * Gets the value of the updateFields property.
    *
    * @return possible object is
@@ -232,6 +166,72 @@ public class UpdateContentType
   public UpdateContentType.UpdateFields getUpdateFields()
   {
     return updateFields;
+  }
+
+  /**
+   * Sets the value of the addToView property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setAddToView(String value)
+  {
+    this.addToView = value;
+  }
+
+  /**
+   * Sets the value of the contentTypeId property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setContentTypeId(String value)
+  {
+    this.contentTypeId = value;
+  }
+
+  /**
+   * Sets the value of the contentTypeProperties property.
+   *
+   * @param value allowed object is
+   *              {@link UpdateContentType.ContentTypeProperties }
+   */
+  public void setContentTypeProperties(UpdateContentType.ContentTypeProperties value)
+  {
+    this.contentTypeProperties = value;
+  }
+
+  /**
+   * Sets the value of the deleteFields property.
+   *
+   * @param value allowed object is
+   *              {@link UpdateContentType.DeleteFields }
+   */
+  public void setDeleteFields(UpdateContentType.DeleteFields value)
+  {
+    this.deleteFields = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the newFields property.
+   *
+   * @param value allowed object is
+   *              {@link UpdateContentType.NewFields }
+   */
+  public void setNewFields(UpdateContentType.NewFields value)
+  {
+    this.newFields = value;
   }
 
   /**

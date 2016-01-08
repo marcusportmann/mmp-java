@@ -58,16 +58,6 @@ public class CodeProviderConfig
   }
 
   /**
-   * Set the fully qualified name of the class that implements the code provider.
-   *
-   * @param className the fully qualified name of the class that implements the code provider
-   */
-  public void setClassName(String className)
-  {
-    this.className = className;
-  }
-
-  /**
    * Returns the name of the code provider.
    *
    * @return the name of the code provider
@@ -75,6 +65,16 @@ public class CodeProviderConfig
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Set the fully qualified name of the class that implements the code provider.
+   *
+   * @param className the fully qualified name of the class that implements the code provider
+   */
+  public void setClassName(String className)
+  {
+    this.className = className;
   }
 
   /**

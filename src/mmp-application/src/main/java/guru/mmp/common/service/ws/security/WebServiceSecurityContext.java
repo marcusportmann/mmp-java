@@ -66,6 +66,15 @@ public class WebServiceSecurityContext
   }
 
   /**
+   * Reset the web service security context removing all the security information associated
+   * with the execution of a secure web service operation.
+   */
+  public void reset()
+  {
+    clientCertificate = null;
+  }
+
+  /**
    * Set the X509 certificate identifying the remote application that executed the secure web
    * service operation.
    *
@@ -75,14 +84,5 @@ public class WebServiceSecurityContext
   public void setClientCertificate(X509Certificate clientCertificate)
   {
     this.clientCertificate = clientCertificate;
-  }
-
-  /**
-   * Reset the web service security context removing all the security information associated
-   * with the execution of a secure web service operation.
-   */
-  public void reset()
-  {
-    clientCertificate = null;
   }
 }

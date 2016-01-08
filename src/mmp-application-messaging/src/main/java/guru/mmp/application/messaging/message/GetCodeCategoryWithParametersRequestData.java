@@ -186,18 +186,6 @@ public class GetCodeCategoryWithParametersRequestData
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the code category to
-   * retrieve.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the code category to
-   *           retrieve
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the date and time the code category was last retrieved.
    *
    * @return the date and time the code category was last retrieved
@@ -208,16 +196,6 @@ public class GetCodeCategoryWithParametersRequestData
   }
 
   /**
-   * Set the date and time the code category was last retrieved.
-   *
-   * @param lastRetrieved the date and time the code category was last retrieved
-   */
-  public void setLastRetrieved(Date lastRetrieved)
-  {
-    this.lastRetrieved = lastRetrieved;
-  }
-
-  /**
    * Returns the parameters.
    *
    * @return the parameters
@@ -225,16 +203,6 @@ public class GetCodeCategoryWithParametersRequestData
   public Map<String, String> getParameters()
   {
     return parameters;
-  }
-
-  /**
-   * Set the parameters.
-   *
-   * @param parameters the parameters
-   */
-  public void setParameters(Map<String, String> parameters)
-  {
-    this.parameters = parameters;
   }
 
   /**
@@ -250,6 +218,48 @@ public class GetCodeCategoryWithParametersRequestData
   }
 
   /**
+   * Remove the parameter.
+   *
+   * @param name the name of the parameter to remove
+   */
+  public void removeParameter(String name)
+  {
+    parameters.remove(name);
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the code category to
+   * retrieve.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the code category to
+   *           retrieve
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the date and time the code category was last retrieved.
+   *
+   * @param lastRetrieved the date and time the code category was last retrieved
+   */
+  public void setLastRetrieved(Date lastRetrieved)
+  {
+    this.lastRetrieved = lastRetrieved;
+  }
+
+  /**
+   * Set the parameters.
+   *
+   * @param parameters the parameters
+   */
+  public void setParameters(Map<String, String> parameters)
+  {
+    this.parameters = parameters;
+  }
+
+  /**
    * Set whether the codes for the code category should be returned if the code category is current.
    *
    * @param returnCodesIfCurrent <code>true</code> if the codes for the code category be returned
@@ -258,16 +268,6 @@ public class GetCodeCategoryWithParametersRequestData
   public void setReturnCodesIfCurrent(boolean returnCodesIfCurrent)
   {
     this.returnCodesIfCurrent = returnCodesIfCurrent;
-  }
-
-  /**
-   * Remove the parameter.
-   *
-   * @param name the name of the parameter to remove
-   */
-  public void removeParameter(String name)
-  {
-    parameters.remove(name);
   }
 
   /**

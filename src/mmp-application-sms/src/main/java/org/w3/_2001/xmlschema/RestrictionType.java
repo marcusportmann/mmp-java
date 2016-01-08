@@ -94,17 +94,6 @@ public class RestrictionType
   }
 
   /**
-   * Sets the value of the all property.
-   *
-   * @param value allowed object is
-   *              {@link All }
-   */
-  public void setAll(All value)
-  {
-    this.all = value;
-  }
-
-  /**
    * Gets the value of the anyAttribute property.
    *
    * @return possible object is
@@ -113,17 +102,6 @@ public class RestrictionType
   public Wildcard getAnyAttribute()
   {
     return anyAttribute;
-  }
-
-  /**
-   * Sets the value of the anyAttribute property.
-   *
-   * @param value allowed object is
-   *              {@link Wildcard }
-   */
-  public void setAnyAttribute(Wildcard value)
-  {
-    this.anyAttribute = value;
   }
 
   /**
@@ -172,17 +150,6 @@ public class RestrictionType
   }
 
   /**
-   * Sets the value of the base property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setBase(QName value)
-  {
-    this.base = value;
-  }
-
-  /**
    * Gets the value of the choice property.
    *
    * @return possible object is
@@ -194,17 +161,6 @@ public class RestrictionType
   }
 
   /**
-   * Sets the value of the choice property.
-   *
-   * @param value allowed object is
-   *              {@link ExplicitGroup }
-   */
-  public void setChoice(ExplicitGroup value)
-  {
-    this.choice = value;
-  }
-
-  /**
    * Gets the value of the group property.
    *
    * @return possible object is
@@ -213,17 +169,6 @@ public class RestrictionType
   public GroupRef getGroup()
   {
     return group;
-  }
-
-  /**
-   * Sets the value of the group property.
-   *
-   * @param value allowed object is
-   *              {@link GroupRef }
-   */
-  public void setGroup(GroupRef value)
-  {
-    this.group = value;
   }
 
   /**
@@ -282,17 +227,6 @@ public class RestrictionType
   }
 
   /**
-   * Sets the value of the sequence property.
-   *
-   * @param value allowed object is
-   *              {@link ExplicitGroup }
-   */
-  public void setSequence(ExplicitGroup value)
-  {
-    this.sequence = value;
-  }
-
-  /**
    * Gets the value of the simpleType property.
    *
    * @return possible object is
@@ -301,6 +235,72 @@ public class RestrictionType
   public LocalSimpleType getSimpleType()
   {
     return simpleType;
+  }
+
+  /**
+   * Sets the value of the all property.
+   *
+   * @param value allowed object is
+   *              {@link All }
+   */
+  public void setAll(All value)
+  {
+    this.all = value;
+  }
+
+  /**
+   * Sets the value of the anyAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link Wildcard }
+   */
+  public void setAnyAttribute(Wildcard value)
+  {
+    this.anyAttribute = value;
+  }
+
+  /**
+   * Sets the value of the base property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setBase(QName value)
+  {
+    this.base = value;
+  }
+
+  /**
+   * Sets the value of the choice property.
+   *
+   * @param value allowed object is
+   *              {@link ExplicitGroup }
+   */
+  public void setChoice(ExplicitGroup value)
+  {
+    this.choice = value;
+  }
+
+  /**
+   * Sets the value of the group property.
+   *
+   * @param value allowed object is
+   *              {@link GroupRef }
+   */
+  public void setGroup(GroupRef value)
+  {
+    this.group = value;
+  }
+
+  /**
+   * Sets the value of the sequence property.
+   *
+   * @param value allowed object is
+   *              {@link ExplicitGroup }
+   */
+  public void setSequence(ExplicitGroup value)
+  {
+    this.sequence = value;
   }
 
   /**

@@ -16,15 +16,16 @@
 
 package guru.mmp.application.web.behavior;
 
+import guru.mmp.application.Debug;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.resource.thirdparty.jqueryui.JQueryUIJavaScriptResourceReference;
-import org.apache.wicket.Application;
+import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.StringHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
  * The <code>JQueryBehavior</code> class implements the Wicket behavior that enables jQuery and
@@ -51,9 +52,16 @@ public class JQueryBehavior
     {
       super.renderHead(component, response);
 
+//      response.render(JavaScriptHeaderItem.forReference(
+//        Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
+
       response.render(JavaScriptHeaderItem.forReference(
-        Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
-      response.render(JavaScriptHeaderItem.forReference(JQueryUIJavaScriptResourceReference.get()));
+        new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
+          Debug.inDebugMode() ? "js/core/jquery.min.js" : "js/core/jquery.min.js")));
+
+      response.render(JavaScriptHeaderItem.forReference(
+        new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
+          Debug.inDebugMode() ? "js/jquery-ui/jquery-ui.js" : "js/jquery-ui/jquery-ui.min.js")));
 
       CharSequence script = getOnReadyScript();
 

@@ -248,19 +248,6 @@ public class AuthenticateResponseData
   }
 
   /**
-   * Set the error code indicating the result of processing the registration where a code of
-   * '0' indicates success and a non-zero code indicates an error condition.
-   *
-   * @param errorCode the error code indicating the result of processing the registration where
-   *                  a code of '0' indicates success and a non-zero code indicates an error
-   *                  condition
-   */
-  public void setErrorCode(int errorCode)
-  {
-    this.errorCode = errorCode;
-  }
-
-  /**
    * Returns the error message describing the result of processing the registration.
    *
    * @return the error message describing the result of processing the registration
@@ -271,16 +258,6 @@ public class AuthenticateResponseData
   }
 
   /**
-   * Set the error message describing the result of processing the registration.
-   *
-   * @param errorMessage the error message describing the result of processing the registration
-   */
-  public void setErrorMessage(String errorMessage)
-  {
-    this.errorMessage = errorMessage;
-  }
-
-  /**
    * Returns the list of organisations the authenticated user is associated with.
    *
    * @return the list of organisations the authenticated user is associated with
@@ -288,16 +265,6 @@ public class AuthenticateResponseData
   public List<OrganisationData> getOrganisations()
   {
     return organisations;
-  }
-
-  /**
-   * Set the list of organisations the authenticated user is associated with.
-   *
-   * @param organisations the list of organisations the authenticated user is associated with
-   */
-  public void setOrganisations(List<OrganisationData> organisations)
-  {
-    this.organisations = organisations;
   }
 
   /**
@@ -313,6 +280,49 @@ public class AuthenticateResponseData
   }
 
   /**
+   * Returns the properties returned for the authenticated user.
+   *
+   * @return the properties returned for the authenticated user
+   */
+  public Map<String, Object> getUserProperties()
+  {
+    return userProperties;
+  }
+
+  /**
+   * Set the error code indicating the result of processing the registration where a code of
+   * '0' indicates success and a non-zero code indicates an error condition.
+   *
+   * @param errorCode the error code indicating the result of processing the registration where
+   *                  a code of '0' indicates success and a non-zero code indicates an error
+   *                  condition
+   */
+  public void setErrorCode(int errorCode)
+  {
+    this.errorCode = errorCode;
+  }
+
+  /**
+   * Set the error message describing the result of processing the registration.
+   *
+   * @param errorMessage the error message describing the result of processing the registration
+   */
+  public void setErrorMessage(String errorMessage)
+  {
+    this.errorMessage = errorMessage;
+  }
+
+  /**
+   * Set the list of organisations the authenticated user is associated with.
+   *
+   * @param organisations the list of organisations the authenticated user is associated with
+   */
+  public void setOrganisations(List<OrganisationData> organisations)
+  {
+    this.organisations = organisations;
+  }
+
+  /**
    * Set the encryption key used to encrypt data on the user's device and any data passed as
    * part of a message.
    *
@@ -322,16 +332,6 @@ public class AuthenticateResponseData
   public void setUserEncryptionKey(byte[] userEncryptionKey)
   {
     this.userEncryptionKey = userEncryptionKey;
-  }
-
-  /**
-   * Returns the properties returned for the authenticated user.
-   *
-   * @return the properties returned for the authenticated user
-   */
-  public Map<String, Object> getUserProperties()
-  {
-    return userProperties;
   }
 
   /**

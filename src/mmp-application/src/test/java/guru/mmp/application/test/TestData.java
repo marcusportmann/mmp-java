@@ -52,16 +52,6 @@ public class TestData
   }
 
   /**
-   * Set the ID.
-   *
-   * @param id the ID
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the name.
    *
    * @return the name
@@ -72,16 +62,6 @@ public class TestData
   }
 
   /**
-   * Set the name.
-   *
-   * @param name the name
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
    * Returns the value.
    *
    * @return the value
@@ -89,6 +69,26 @@ public class TestData
   public String getValue()
   {
     return value;
+  }
+
+  /**
+   * Set the ID.
+   *
+   * @param id the ID
+   */
+  public void setId(String id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the name.
+   *
+   * @param name the name
+   */
+  public void setName(String name)
+  {
+    this.name = name;
   }
 
   /**

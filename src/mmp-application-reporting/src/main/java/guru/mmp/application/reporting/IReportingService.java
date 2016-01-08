@@ -100,14 +100,6 @@ public interface IReportingService
   String getLocalReportFolderPath();
 
   /**
-   * Set the real path to the folder where the local Jasper reports are stored.
-   *
-   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
-   *                              stored
-   */
-  void setLocalReportFolderPath(String localReportFolderPath);
-
-  /**
    * Returns the number of report definitions.
    *
    * @return the number of report definitions
@@ -192,4 +184,12 @@ public interface IReportingService
    */
   ReportDefinition saveReportDefinition(ReportDefinition reportDefinition)
     throws ReportingServiceException;
+
+  /**
+   * Set the real path to the folder where the local Jasper reports are stored.
+   *
+   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
+   *                              stored
+   */
+  void setLocalReportFolderPath(String localReportFolderPath);
 }

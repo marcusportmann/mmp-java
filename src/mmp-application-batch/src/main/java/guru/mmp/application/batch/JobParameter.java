@@ -78,16 +78,6 @@ public class JobParameter
   }
 
   /**
-   * Set the ID uniquely identifying the job parameter.
-   *
-   * @param id the ID uniquely identifying the job parameter
-   */
-  public void setId(long id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
    * parameter is associated with.
    *
@@ -97,6 +87,36 @@ public class JobParameter
   public String getJobId()
   {
     return jobId;
+  }
+
+  /**
+   * Returns the name of the job parameter.
+   *
+   * @return the name of the job parameter
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Returns the value of the job parameter.
+   *
+   * @return the value of the job parameter
+   */
+  public String getValue()
+  {
+    return value;
+  }
+
+  /**
+   * Set the ID uniquely identifying the job parameter.
+   *
+   * @param id the ID uniquely identifying the job parameter
+   */
+  public void setId(long id)
+  {
+    this.id = id;
   }
 
   /**
@@ -112,16 +132,6 @@ public class JobParameter
   }
 
   /**
-   * Returns the name of the job parameter.
-   *
-   * @return the name of the job parameter
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
    * Set the name of the job parameter.
    *
    * @param name the name of the job parameter
@@ -129,16 +139,6 @@ public class JobParameter
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  /**
-   * Returns the value of the job parameter.
-   *
-   * @return the value of the job parameter
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**

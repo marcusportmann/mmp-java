@@ -82,17 +82,6 @@ public class CodeCategory
   }
 
   /**
-   * Sets the value of the codeData property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setCodeData(String value)
-  {
-    this.codeData = value;
-  }
-
-  /**
    * Gets the value of the codeDataType property.
    *
    * @return possible object is
@@ -101,17 +90,6 @@ public class CodeCategory
   public CodeDataType getCodeDataType()
   {
     return codeDataType;
-  }
-
-  /**
-   * Sets the value of the codeDataType property.
-   *
-   * @param value allowed object is
-   *              {@link CodeDataType }
-   */
-  public void setCodeDataType(CodeDataType value)
-  {
-    this.codeDataType = value;
   }
 
   /**
@@ -155,17 +133,6 @@ public class CodeCategory
   }
 
   /**
-   * Sets the value of the description property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setDescription(String value)
-  {
-    this.description = value;
-  }
-
-  /**
    * Gets the value of the id property.
    *
    * @return possible object is
@@ -174,17 +141,6 @@ public class CodeCategory
   public String getId()
   {
     return id;
-  }
-
-  /**
-   * Sets the value of the id property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setId(String value)
-  {
-    this.id = value;
   }
 
   /**
@@ -199,17 +155,6 @@ public class CodeCategory
   }
 
   /**
-   * Sets the value of the lastUpdated property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setLastUpdated(Calendar value)
-  {
-    this.lastUpdated = value;
-  }
-
-  /**
    * Gets the value of the name property.
    *
    * @return possible object is
@@ -218,6 +163,61 @@ public class CodeCategory
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Sets the value of the codeData property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCodeData(String value)
+  {
+    this.codeData = value;
+  }
+
+  /**
+   * Sets the value of the codeDataType property.
+   *
+   * @param value allowed object is
+   *              {@link CodeDataType }
+   */
+  public void setCodeDataType(CodeDataType value)
+  {
+    this.codeDataType = value;
+  }
+
+  /**
+   * Sets the value of the description property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDescription(String value)
+  {
+    this.description = value;
+  }
+
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value)
+  {
+    this.id = value;
+  }
+
+  /**
+   * Sets the value of the lastUpdated property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLastUpdated(Calendar value)
+  {
+    this.lastUpdated = value;
   }
 
   /**

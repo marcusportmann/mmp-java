@@ -23,12 +23,7 @@ import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.page.*;
 import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
-import guru.mmp.sample.web.page.forms.AdvancedElementsPage;
-import guru.mmp.sample.web.page.forms.NativeElementsPage;
 import guru.mmp.sample.web.page.forms.TestFormPage;
-import guru.mmp.sample.web.page.tables.BasicTablesPage;
-import guru.mmp.sample.web.page.tables.ResponsiveTablePage;
-import guru.mmp.sample.web.page.ui.*;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -94,57 +89,43 @@ public class SampleApplication
     NavigationGroup administrationGroup = new NavigationGroup("Administration", "fa fa-gear");
 
     administrationGroup.addItem(
-      new NavigationLink("Organisations", "fa fa-globe", OrganisationAdministrationPage.class));
-    administrationGroup.addItem(
       new NavigationLink("Codes", "fa fa-list", CodeCategoryAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
-      ReportDefinitionAdministrationPage.class));
+    administrationGroup.addItem(
+      new NavigationLink("Organisations", "fa fa-globe", OrganisationAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Process Definitions", "fa fa-gears",
       ProcessDefinitionAdministrationPage.class));
-
-    NavigationGroup securityGroup = new NavigationGroup("Security", "fa fa-shield");
-
-//    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
-//        SecurityAdministrationPage.class));
-    securityGroup.addItem(
-      new NavigationLink("Groups", "fa fa-group", GroupAdministrationPage.class));
-    securityGroup.addItem(new NavigationLink("Users", "fa fa-user", UserAdministrationPage.class));
-    securityGroup.addItem(
+    // TODO: Add Roles here
+    administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
+      ReportDefinitionAdministrationPage.class));
+    administrationGroup.addItem(
       new NavigationLink("User Directories", "fa fa-users", UserDirectoryAdministrationPage.class));
-
-    administrationGroup.addItem(securityGroup);
 
     root.addItem(administrationGroup);
 
+    NavigationGroup securityGroup = new NavigationGroup("Security", "fa fa-shield");
+//    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
+//        SecurityAdministrationPage.class));
+    securityGroup.addItem(new NavigationLink("Users", "fa fa-user", UserAdministrationPage.class));
+    securityGroup.addItem(
+      new NavigationLink("Groups", "fa fa-group", GroupAdministrationPage.class));
+
+    root.addItem(securityGroup);
+
     NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "fa fa-sliders");
 
-    uiElementsGroup.addItem(new NavigationLink("Alerts", AlertsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Blockquotes", BlockquotesPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Breadcrumbs", BreadcrumbsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Buttons", ButtonsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Modals", ModalsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Other Elements", OtherElementsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Pagination", PaginationPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Panels", PanelsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Progress Bars", ProgressBarsPage.class));
-    uiElementsGroup.addItem(
-      new NavigationLink("Tabs &amp; Accordions", TabsAndAccordionsPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Typography", TypographyPage.class));
+//    uiElementsGroup.addItem(new NavigationLink("Alerts", AlertsPage.class));
 
     root.addItem(uiElementsGroup);
 
     NavigationGroup formsGroup = new NavigationGroup("Forms", "fa fa-pencil-square-o");
 
-    formsGroup.addItem(new NavigationLink("Advanced Elements", AdvancedElementsPage.class));
-    formsGroup.addItem(new NavigationLink("Native Elements", NativeElementsPage.class));
     formsGroup.addItem(new NavigationLink("Test Form", TestFormPage.class));
 
     root.addItem(formsGroup);
 
     NavigationGroup tablesGroup = new NavigationGroup("Tables", "fa fa-table");
 
-    tablesGroup.addItem(new NavigationLink("Basic Tables", BasicTablesPage.class));
-    tablesGroup.addItem(new NavigationLink("Responsive Table", ResponsiveTablePage.class));
+//    tablesGroup.addItem(new NavigationLink("Basic Tables", BasicTablesPage.class));
 
     root.addItem(tablesGroup);
   }

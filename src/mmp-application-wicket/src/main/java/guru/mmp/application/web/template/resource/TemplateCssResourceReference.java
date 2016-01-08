@@ -17,7 +17,6 @@
 package guru.mmp.application.web.template.resource;
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.thirdparty.fontawesome.FontAwesomeCssResourceReference;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -82,8 +81,29 @@ public class TemplateCssResourceReference
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(FontAwesomeCssResourceReference.getCssHeaderItem());
-    dependencies.add(TemplateCoreCssResourceReference.getCssHeaderItem());
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/bootstrap-datepicker/bootstrap-datepicker3.css"
+          : "js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"
+          : "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/select2/select2.css"
+          : "js/plugins/select2/select2.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/select2/select2-bootstrap.css"
+          : "js/plugins/select2/select2-bootstrap.min.css")));
+
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "css/bootstrap.min.css" : "css/bootstrap.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "css/oneui.min.css" : "css/oneui.min.css")));
 
     return dependencies;
   }

@@ -69,16 +69,6 @@ public class FilteredOrganisationDataProvider
   }
 
   /**
-   * Set the filter used to limit the matching organisations.
-   *
-   * @param filter the filter used to limit the matching organisations
-   */
-  public void setFilter(String filter)
-  {
-    this.filter = filter;
-  }
-
-  /**
    * Retrieves the matching organisations from the database starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
@@ -127,6 +117,16 @@ public class FilteredOrganisationDataProvider
   public IModel<Organisation> model(Organisation organisation)
   {
     return new DetachableOrganisationModel(organisation);
+  }
+
+  /**
+   * Set the filter used to limit the matching organisations.
+   *
+   * @param filter the filter used to limit the matching organisations
+   */
+  public void setFilter(String filter)
+  {
+    this.filter = filter;
   }
 
   /**

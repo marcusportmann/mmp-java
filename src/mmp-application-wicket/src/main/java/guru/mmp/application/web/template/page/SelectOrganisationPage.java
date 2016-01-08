@@ -25,9 +25,6 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.component.StringSelectOption;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
 import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2BootstrapCssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2CssResourceReference;
-import guru.mmp.application.web.resource.thirdparty.select2.Select2JavaScriptResourceReference;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
@@ -196,10 +193,6 @@ public class SelectOrganisationPage
 
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
-
-    response.render(Select2CssResourceReference.getCssHeaderItem());
-    response.render(Select2BootstrapCssResourceReference.getCssHeaderItem());
-    response.render(Select2JavaScriptResourceReference.getJavaScriptHeaderItem());
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()

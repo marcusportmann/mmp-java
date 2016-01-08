@@ -56,17 +56,6 @@ public class GetListContentTypesAndProperties
   }
 
   /**
-   * Sets the value of the contentTypeId property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setContentTypeId(String value)
-  {
-    this.contentTypeId = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -75,17 +64,6 @@ public class GetListContentTypesAndProperties
   public String getListName()
   {
     return listName;
-  }
-
-  /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
   }
 
   /**
@@ -100,17 +78,6 @@ public class GetListContentTypesAndProperties
   }
 
   /**
-   * Sets the value of the propertyPrefix property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setPropertyPrefix(String value)
-  {
-    this.propertyPrefix = value;
-  }
-
-  /**
    * Gets the value of the includeWebProperties property.
    *
    * @return possible object is
@@ -122,6 +89,17 @@ public class GetListContentTypesAndProperties
   }
 
   /**
+   * Sets the value of the contentTypeId property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setContentTypeId(String value)
+  {
+    this.contentTypeId = value;
+  }
+
+  /**
    * Sets the value of the includeWebProperties property.
    *
    * @param value allowed object is
@@ -130,5 +108,27 @@ public class GetListContentTypesAndProperties
   public void setIncludeWebProperties(Boolean value)
   {
     this.includeWebProperties = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the propertyPrefix property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPropertyPrefix(String value)
+  {
+    this.propertyPrefix = value;
   }
 }

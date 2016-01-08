@@ -87,6 +87,68 @@ public class UserDirectory
   }
 
   /**
+   * Returns the description for the user directory.
+   *
+   * @return the description for the user directory
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
+   * Returns the name of the user directory.
+   *
+   * @return the name of the user directory
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Returns the parameters for the user directory.
+   *
+   * @return the parameters for the user directory
+   */
+  public Map<String, String> getParameters()
+  {
+    return parameters;
+  }
+
+  /**
+   * Returns the user directory type.
+   *
+   * @return the user directory type
+   */
+  public UserDirectoryType getType()
+  {
+    return type;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * type.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * type
+   */
+  public UUID getTypeId()
+  {
+    return typeId;
+  }
+
+  /**
    * Set the XML configuration data for the user directory.
    *
    * @param configuration the XML configuration data for the user directory
@@ -135,16 +197,6 @@ public class UserDirectory
   }
 
   /**
-   * Returns the description for the user directory.
-   *
-   * @return the description for the user directory
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
    * Set the description for the user directory.
    *
    * @param description the description for the user directory
@@ -152,16 +204,6 @@ public class UserDirectory
   public void setDescription(String description)
   {
     this.description = description;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   */
-  public UUID getId()
-  {
-    return id;
   }
 
   /**
@@ -175,16 +217,6 @@ public class UserDirectory
   }
 
   /**
-   * Returns the name of the user directory.
-   *
-   * @return the name of the user directory
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
    * Set the name of the user directory.
    *
    * @param name the name of the user directory
@@ -192,16 +224,6 @@ public class UserDirectory
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  /**
-   * Returns the parameters for the user directory.
-   *
-   * @return the parameters for the user directory
-   */
-  public Map<String, String> getParameters()
-  {
-    return parameters;
   }
 
   /**
@@ -215,16 +237,6 @@ public class UserDirectory
   }
 
   /**
-   * Returns the user directory type.
-   *
-   * @return the user directory type
-   */
-  public UserDirectoryType getType()
-  {
-    return type;
-  }
-
-  /**
    * Set the user directory type.
    *
    * @param type the user directory type
@@ -232,18 +244,6 @@ public class UserDirectory
   public void setType(UserDirectoryType type)
   {
     this.type = type;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * type.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * type
-   */
-  public UUID getTypeId()
-  {
-    return typeId;
   }
 
   /**

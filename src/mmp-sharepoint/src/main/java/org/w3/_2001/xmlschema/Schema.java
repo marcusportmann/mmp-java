@@ -115,17 +115,6 @@ public class Schema
   }
 
   /**
-   * Sets the value of the attributeFormDefault property.
-   *
-   * @param value allowed object is
-   *              {@link FormChoice }
-   */
-  public void setAttributeFormDefault(FormChoice value)
-  {
-    this.attributeFormDefault = value;
-  }
-
-  /**
    * Gets the value of the blockDefaults property.
    * <p/>
    * <p/>
@@ -176,17 +165,6 @@ public class Schema
   }
 
   /**
-   * Sets the value of the elementFormDefault property.
-   *
-   * @param value allowed object is
-   *              {@link FormChoice }
-   */
-  public void setElementFormDefault(FormChoice value)
-  {
-    this.elementFormDefault = value;
-  }
-
-  /**
    * Gets the value of the finalDefaults property.
    * <p/>
    * <p/>
@@ -227,17 +205,6 @@ public class Schema
   public String getId()
   {
     return id;
-  }
-
-  /**
-   * Sets the value of the id property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setId(String value)
-  {
-    this.id = value;
   }
 
   /**
@@ -295,17 +262,6 @@ public class Schema
   }
 
   /**
-   * Sets the value of the lang property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setLang(String value)
-  {
-    this.lang = value;
-  }
-
-  /**
    * Gets the value of the targetNamespace property.
    *
    * @return possible object is
@@ -317,17 +273,6 @@ public class Schema
   }
 
   /**
-   * Sets the value of the targetNamespace property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setTargetNamespace(String value)
-  {
-    this.targetNamespace = value;
-  }
-
-  /**
    * Gets the value of the version property.
    *
    * @return possible object is
@@ -336,6 +281,61 @@ public class Schema
   public String getVersion()
   {
     return version;
+  }
+
+  /**
+   * Sets the value of the attributeFormDefault property.
+   *
+   * @param value allowed object is
+   *              {@link FormChoice }
+   */
+  public void setAttributeFormDefault(FormChoice value)
+  {
+    this.attributeFormDefault = value;
+  }
+
+  /**
+   * Sets the value of the elementFormDefault property.
+   *
+   * @param value allowed object is
+   *              {@link FormChoice }
+   */
+  public void setElementFormDefault(FormChoice value)
+  {
+    this.elementFormDefault = value;
+  }
+
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value)
+  {
+    this.id = value;
+  }
+
+  /**
+   * Sets the value of the lang property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLang(String value)
+  {
+    this.lang = value;
+  }
+
+  /**
+   * Sets the value of the targetNamespace property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTargetNamespace(String value)
+  {
+    this.targetNamespace = value;
   }
 
   /**

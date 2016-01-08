@@ -96,16 +96,6 @@ public class ProcessDefinition
   }
 
   /**
-   * Set the BPMN data for the process definition.
-   *
-   * @param data the BPMN data for the process definition
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process
    * definition.
    *
@@ -115,6 +105,36 @@ public class ProcessDefinition
   public UUID getId()
   {
     return id;
+  }
+
+  /**
+   * Returns the name of the process definition.
+   *
+   * @return the name of the process definition
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Returns the version of the process definition.
+   *
+   * @return the version of the process definition
+   */
+  public int getVersion()
+  {
+    return version;
+  }
+
+  /**
+   * Set the BPMN data for the process definition.
+   *
+   * @param data the BPMN data for the process definition
+   */
+  public void setData(byte[] data)
+  {
+    this.data = data;
   }
 
   /**
@@ -129,16 +149,6 @@ public class ProcessDefinition
   }
 
   /**
-   * Returns the name of the process definition.
-   *
-   * @return the name of the process definition
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
    * Set the name of the process definition.
    *
    * @param name the name of the process definition
@@ -146,16 +156,6 @@ public class ProcessDefinition
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  /**
-   * Returns the version of the process definition.
-   *
-   * @return the version of the process definition
-   */
-  public int getVersion()
-  {
-    return version;
   }
 
   /**

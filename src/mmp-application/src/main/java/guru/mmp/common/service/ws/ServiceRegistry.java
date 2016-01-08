@@ -70,16 +70,6 @@ public class ServiceRegistry
   }
 
   /**
-   * Set the <code>DataSource</code> for the <code>Service Registry</code>.
-   *
-   * @param dataSource the <code>DataSource</code> for the <code>Service Registry</code>
-   */
-  public void setDataSource(DataSource dataSource)
-  {
-    this.dataSource = dataSource;
-  }
-
-  /**
    * Returns the number of <code>ServiceRegistryEntry</code> instances containing the
    * configuration information for different web services in the database.
    *
@@ -322,6 +312,16 @@ public class ServiceRegistry
       throw new ServiceRegistryException(
         "Failed to initialise the Service Registry: " + e.getMessage());
     }
+  }
+
+  /**
+   * Set the <code>DataSource</code> for the <code>Service Registry</code>.
+   *
+   * @param dataSource the <code>DataSource</code> for the <code>Service Registry</code>
+   */
+  public void setDataSource(DataSource dataSource)
+  {
+    this.dataSource = dataSource;
   }
 
   /**

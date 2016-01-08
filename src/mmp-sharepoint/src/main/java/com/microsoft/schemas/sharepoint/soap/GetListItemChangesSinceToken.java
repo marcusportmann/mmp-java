@@ -107,17 +107,6 @@ public class GetListItemChangesSinceToken
   }
 
   /**
-   * Sets the value of the changeToken property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setChangeToken(String value)
-  {
-    this.changeToken = value;
-  }
-
-  /**
    * Gets the value of the contains property.
    *
    * @return possible object is
@@ -126,17 +115,6 @@ public class GetListItemChangesSinceToken
   public GetListItemChangesSinceToken.Contains getContains()
   {
     return contains;
-  }
-
-  /**
-   * Sets the value of the contains property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesSinceToken.Contains }
-   */
-  public void setContains(GetListItemChangesSinceToken.Contains value)
-  {
-    this.contains = value;
   }
 
   /**
@@ -151,17 +129,6 @@ public class GetListItemChangesSinceToken
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the query property.
    *
    * @return possible object is
@@ -170,17 +137,6 @@ public class GetListItemChangesSinceToken
   public GetListItemChangesSinceToken.Query getQuery()
   {
     return query;
-  }
-
-  /**
-   * Sets the value of the query property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesSinceToken.Query }
-   */
-  public void setQuery(GetListItemChangesSinceToken.Query value)
-  {
-    this.query = value;
   }
 
   /**
@@ -195,17 +151,6 @@ public class GetListItemChangesSinceToken
   }
 
   /**
-   * Sets the value of the queryOptions property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesSinceToken.QueryOptions }
-   */
-  public void setQueryOptions(GetListItemChangesSinceToken.QueryOptions value)
-  {
-    this.queryOptions = value;
-  }
-
-  /**
    * Gets the value of the rowLimit property.
    *
    * @return possible object is
@@ -214,17 +159,6 @@ public class GetListItemChangesSinceToken
   public String getRowLimit()
   {
     return rowLimit;
-  }
-
-  /**
-   * Sets the value of the rowLimit property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setRowLimit(String value)
-  {
-    this.rowLimit = value;
   }
 
   /**
@@ -239,17 +173,6 @@ public class GetListItemChangesSinceToken
   }
 
   /**
-   * Sets the value of the viewFields property.
-   *
-   * @param value allowed object is
-   *              {@link GetListItemChangesSinceToken.ViewFields }
-   */
-  public void setViewFields(GetListItemChangesSinceToken.ViewFields value)
-  {
-    this.viewFields = value;
-  }
-
-  /**
    * Gets the value of the viewName property.
    *
    * @return possible object is
@@ -258,6 +181,83 @@ public class GetListItemChangesSinceToken
   public String getViewName()
   {
     return viewName;
+  }
+
+  /**
+   * Sets the value of the changeToken property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setChangeToken(String value)
+  {
+    this.changeToken = value;
+  }
+
+  /**
+   * Sets the value of the contains property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesSinceToken.Contains }
+   */
+  public void setContains(GetListItemChangesSinceToken.Contains value)
+  {
+    this.contains = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the query property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesSinceToken.Query }
+   */
+  public void setQuery(GetListItemChangesSinceToken.Query value)
+  {
+    this.query = value;
+  }
+
+  /**
+   * Sets the value of the queryOptions property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesSinceToken.QueryOptions }
+   */
+  public void setQueryOptions(GetListItemChangesSinceToken.QueryOptions value)
+  {
+    this.queryOptions = value;
+  }
+
+  /**
+   * Sets the value of the rowLimit property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRowLimit(String value)
+  {
+    this.rowLimit = value;
+  }
+
+  /**
+   * Sets the value of the viewFields property.
+   *
+   * @param value allowed object is
+   *              {@link GetListItemChangesSinceToken.ViewFields }
+   */
+  public void setViewFields(GetListItemChangesSinceToken.ViewFields value)
+  {
+    this.viewFields = value;
   }
 
   /**

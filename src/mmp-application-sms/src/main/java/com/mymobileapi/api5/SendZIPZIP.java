@@ -51,17 +51,6 @@ public class SendZIPZIP
   }
 
   /**
-   * Sets the value of the data property.
-   *
-   * @param value allowed object is
-   *              byte[]
-   */
-  public void setData(byte[] value)
-  {
-    this.data = value;
-  }
-
-  /**
    * Gets the value of the password property.
    *
    * @return possible object is
@@ -73,17 +62,6 @@ public class SendZIPZIP
   }
 
   /**
-   * Sets the value of the password property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setPassword(String value)
-  {
-    this.password = value;
-  }
-
-  /**
    * Gets the value of the username property.
    *
    * @return possible object is
@@ -92,6 +70,28 @@ public class SendZIPZIP
   public String getUsername()
   {
     return username;
+  }
+
+  /**
+   * Sets the value of the data property.
+   *
+   * @param value allowed object is
+   *              byte[]
+   */
+  public void setData(byte[] value)
+  {
+    this.data = value;
+  }
+
+  /**
+   * Sets the value of the password property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPassword(String value)
+  {
+    this.password = value;
   }
 
   /**

@@ -43,19 +43,20 @@ public class FeedbackUtil
   /**
    * The JavaScript used to clear the feedback for a form component.
    */
-  private static final String CLEAR_FEEDBACK_JAVA_SCRIPT = "clear_form_control_feedback('%1$s');";
+  private static final String CLEAR_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT =
+    "clear_form_component_feedback('%1$s');";
 
   /**
    * The JavaScript used to display the feedback for a form component using the 'domready' event.
    */
-  private static final String DOM_READY_FEEDBACK_JAVA_SCRIPT =
-    "$(function()" + "{show_form_control_feedback('%1$s', '%2$s', '%3$s');});";
+  private static final String DOM_READY_SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT = "$(function()" +
+    "{show_form_component_feedback('%1$s', '%2$s', '%3$s');});";
 
   /**
    * The JavaScript used to display the feedback for a form component.
    */
-  private static final String FEEDBACK_JAVA_SCRIPT =
-    "show_form_control_feedback('%1$s', '%2$s', " + "'%3$s');";
+  private static final String SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT =
+    "show_form_component_feedback('%1$s', '%2$s', " + "'%3$s');";
 
   /**
    * Applies the appropriate CSS class to a component based on the type of feedback message
@@ -126,8 +127,8 @@ public class FeedbackUtil
         feedbackClass = "has-success";
       }
 
-      String javaScript = String.format(
-        isAjaxRequest ? FEEDBACK_JAVA_SCRIPT : DOM_READY_FEEDBACK_JAVA_SCRIPT, id, feedbackClass,
+      String javaScript = String.format(isAjaxRequest ? SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT
+          : DOM_READY_SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT, id, feedbackClass,
         JavaScriptUtils.escapeQuotes(feedbackMessage.getMessage().toString()));
 
       // Clear the feedback messages for the component
@@ -142,7 +143,7 @@ public class FeedbackUtil
     {
       if (isAjaxRequest)
       {
-        return String.format(CLEAR_FEEDBACK_JAVA_SCRIPT, id);
+        return String.format(CLEAR_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT, id);
       }
 
       return null;

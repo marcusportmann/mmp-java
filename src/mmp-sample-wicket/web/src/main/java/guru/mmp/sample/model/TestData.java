@@ -31,14 +31,29 @@ public class TestData
   public boolean isActive;
 
   /**
-   * The name.
+   * The password confirmation.
    */
-  private String name;
+  private String confirmPassword;
 
   /**
-   * The note.
+   * The favourite pet.
    */
-  private String note;
+  private String favouritePet;
+
+  /**
+   * The first name(s).
+   */
+  private String firstNames;
+
+  /**
+   * The last name.
+   */
+  private String lastName;
+
+  /**
+   * The notes.
+   */
+  private String notes;
 
   /**
    * The password.
@@ -56,6 +71,36 @@ public class TestData
   private String title;
 
   /**
+   * Returns the password confirmation.
+   *
+   * @return the password confirmation
+   */
+  public String getConfirmPassword()
+  {
+    return confirmPassword;
+  }
+
+  /**
+   * Returns the favourite pet.
+   *
+   * @return the favourite pet
+   */
+  public String getFavouritePet()
+  {
+    return favouritePet;
+  }
+
+  /**
+   * Returns the first name(s).
+   *
+   * @return the first name(s)
+   */
+  public String getFirstNames()
+  {
+    return firstNames;
+  }
+
+  /**
    * Returns is active.
    *
    * @return is active
@@ -66,53 +111,23 @@ public class TestData
   }
 
   /**
-   * Set is active.
+   * Returns the last name.
    *
-   * @param isActive is active
+   * @return the last name
    */
-  public void setIsActive(boolean isActive)
+  public String getLastName()
   {
-    this.isActive = isActive;
+    return lastName;
   }
 
   /**
-   * Returns the name.
+   * Return the notes.
    *
-   * @return the name
+   * @return the notes
    */
-  public String getName()
+  public String getNotes()
   {
-    return name;
-  }
-
-  /**
-   * Set the name.
-   *
-   * @param name the name
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Return the note.
-   *
-   * @return the note
-   */
-  public String getNote()
-  {
-    return note;
-  }
-
-  /**
-   * Set the note.
-   *
-   * @param note the note
-   */
-  public void setNote(String note)
-  {
-    this.note = note;
+    return notes;
   }
 
   /**
@@ -126,16 +141,6 @@ public class TestData
   }
 
   /**
-   * Set the password.
-   *
-   * @param password the password
-   */
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  /**
    * Returns the role.
    *
    * @return the role
@@ -146,16 +151,6 @@ public class TestData
   }
 
   /**
-   * Set the role.
-   *
-   * @param role the role
-   */
-  public void setRole(String role)
-  {
-    this.role = role;
-  }
-
-  /**
    * Returns the title.
    *
    * @return the title
@@ -163,6 +158,86 @@ public class TestData
   public String getTitle()
   {
     return title;
+  }
+
+  /**
+   * Set the password confirmation.
+   *
+   * @param confirmPassword the password confirmation
+   */
+  public void setConfirmPassword(String confirmPassword)
+  {
+    this.confirmPassword = confirmPassword;
+  }
+
+  /**
+   * Set the favourite pet.
+   *
+   * @param favouritePet the favourite pet
+   */
+  public void setFavouritePet(String favouritePet)
+  {
+    this.favouritePet = favouritePet;
+  }
+
+  /**
+   * Set the first name(s).
+   *
+   * @param firstNames the name
+   */
+  public void setFirstNames(String firstNames)
+  {
+    this.firstNames = firstNames;
+  }
+
+  /**
+   * Set is active.
+   *
+   * @param isActive is active
+   */
+  public void setIsActive(boolean isActive)
+  {
+    this.isActive = isActive;
+  }
+
+  /**
+   * Set the last name.
+   *
+   * @param lastName the last name
+   */
+  public void setLastName(String lastName)
+  {
+    this.lastName = lastName;
+  }
+
+  /**
+   * Set the notes.
+   *
+   * @param notes the notes
+   */
+  public void setNotes(String notes)
+  {
+    this.notes = notes;
+  }
+
+  /**
+   * Set the password.
+   *
+   * @param password the password
+   */
+  public void setPassword(String password)
+  {
+    this.password = password;
+  }
+
+  /**
+   * Set the role.
+   *
+   * @param role the role
+   */
+  public void setRole(String role)
+  {
+    this.role = role;
   }
 
   /**

@@ -142,16 +142,6 @@ public class AuthenticateRequestData
   }
 
   /**
-   * Set the password used to authenticate the user.
-   *
-   * @param password the password used to authenticate the user
-   */
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  /**
    * Returns the username identifying the user associated with the message.
    *
    * @return the username identifying the user associated with the message
@@ -159,16 +149,6 @@ public class AuthenticateRequestData
   public String getUsername()
   {
     return username;
-  }
-
-  /**
-   * Set the username identifying the user associated with the message.
-   *
-   * @param username the username identifying the user associated with the message
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 
   /**
@@ -181,6 +161,26 @@ public class AuthenticateRequestData
   public void setDevice(UUID deviceId)
   {
     this.deviceId = deviceId;
+  }
+
+  /**
+   * Set the password used to authenticate the user.
+   *
+   * @param password the password used to authenticate the user
+   */
+  public void setPassword(String password)
+  {
+    this.password = password;
+  }
+
+  /**
+   * Set the username identifying the user associated with the message.
+   *
+   * @param username the username identifying the user associated with the message
+   */
+  public void setUsername(String username)
+  {
+    this.username = username;
   }
 
   /**

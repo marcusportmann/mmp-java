@@ -129,6 +129,96 @@ public class Job
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job
+   */
+  public UUID getId()
+  {
+    return id;
+  }
+
+  /**
+   * Returns the fully qualified name of the Java class that implements the job.
+   *
+   * @return the fully qualified name of the Java class that implements the job
+   */
+  public String getJobClass()
+  {
+    return jobClass;
+  }
+
+  /**
+   * Returns date and time the job was last executed.
+   *
+   * @return the date and time the job was last executed
+   */
+  public Date getLastExecuted()
+  {
+    return lastExecuted;
+  }
+
+  /**
+   * Returns the name of the entity that has locked the job for execution.
+   *
+   * @return the name of the entity that has locked the job for execution
+   */
+  public String getLockName()
+  {
+    return lockName;
+  }
+
+  /**
+   * Returns the name of the job.
+   *
+   * @return the name of the job
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Returns the date and time when the job will next be executed.
+   *
+   * @return the date and time when the job will next be executed
+   */
+  public Date getNextExecution()
+  {
+    return nextExecution;
+  }
+
+  /**
+   * Returns the cron-style scheduling pattern for the job.
+   *
+   * @return the cron-style scheduling pattern for the job
+   */
+  public String getSchedulingPattern()
+  {
+    return schedulingPattern;
+  }
+
+  /**
+   * Returns the status of the job.
+   *
+   * @return the status of the job
+   */
+  public Status getStatus()
+  {
+    return status;
+  }
+
+  /**
+   * Returns the date and time the job was updated.
+   *
+   * @return the date and time the job was updated
+   */
+  public Date getUpdated()
+  {
+    return updated;
+  }
+
+  /**
    * Set the number of times the current execution of the job has been attempted.
    *
    * @param executionAttempts the number of times the current execution of the job has
@@ -137,16 +227,6 @@ public class Job
   public void setExecutionAttempts(int executionAttempts)
   {
     this.executionAttempts = executionAttempts;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job
-   */
-  public UUID getId()
-  {
-    return id;
   }
 
   /**
@@ -161,16 +241,6 @@ public class Job
   }
 
   /**
-   * Returns the fully qualified name of the Java class that implements the job.
-   *
-   * @return the fully qualified name of the Java class that implements the job
-   */
-  public String getJobClass()
-  {
-    return jobClass;
-  }
-
-  /**
    * Set the fully qualified name of the Java class that implements the job.
    *
    * @param jobClass the fully qualified name of the Java class that implements the job
@@ -178,16 +248,6 @@ public class Job
   public void setJobClass(String jobClass)
   {
     this.jobClass = jobClass;
-  }
-
-  /**
-   * Returns date and time the job was last executed.
-   *
-   * @return the date and time the job was last executed
-   */
-  public Date getLastExecuted()
-  {
-    return lastExecuted;
   }
 
   /**
@@ -201,16 +261,6 @@ public class Job
   }
 
   /**
-   * Returns the name of the entity that has locked the job for execution.
-   *
-   * @return the name of the entity that has locked the job for execution
-   */
-  public String getLockName()
-  {
-    return lockName;
-  }
-
-  /**
    * Set the name of the entity that has locked the job for execution.
    *
    * @param lockName the name of the entity that has locked the job for execution
@@ -218,16 +268,6 @@ public class Job
   public void setLockName(String lockName)
   {
     this.lockName = lockName;
-  }
-
-  /**
-   * Returns the name of the job.
-   *
-   * @return the name of the job
-   */
-  public String getName()
-  {
-    return name;
   }
 
   /**
@@ -241,16 +281,6 @@ public class Job
   }
 
   /**
-   * Returns the date and time when the job will next be executed.
-   *
-   * @return the date and time when the job will next be executed
-   */
-  public Date getNextExecution()
-  {
-    return nextExecution;
-  }
-
-  /**
    * Set the date and time when the job will next be executed.
    *
    * @param nextExecution the date and time when the job will next be executed
@@ -258,16 +288,6 @@ public class Job
   public void setNextExecution(Date nextExecution)
   {
     this.nextExecution = nextExecution;
-  }
-
-  /**
-   * Returns the cron-style scheduling pattern for the job.
-   *
-   * @return the cron-style scheduling pattern for the job
-   */
-  public String getSchedulingPattern()
-  {
-    return schedulingPattern;
   }
 
   /**
@@ -281,16 +301,6 @@ public class Job
   }
 
   /**
-   * Returns the status of the job.
-   *
-   * @return the status of the job
-   */
-  public Status getStatus()
-  {
-    return status;
-  }
-
-  /**
    * Set the status of the job.
    *
    * @param status the status of the job
@@ -298,16 +308,6 @@ public class Job
   public void setStatus(Status status)
   {
     this.status = status;
-  }
-
-  /**
-   * Returns the date and time the job was updated.
-   *
-   * @return the date and time the job was updated
-   */
-  public Date getUpdated()
-  {
-    return updated;
   }
 
   /**

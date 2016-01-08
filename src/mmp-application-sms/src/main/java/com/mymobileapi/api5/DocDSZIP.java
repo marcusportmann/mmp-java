@@ -62,17 +62,6 @@ public class DocDSZIP
   }
 
   /**
-   * Sets the value of the data property.
-   *
-   * @param value allowed object is
-   *              {@link DocDSZIP.Data }
-   */
-  public void setData(DocDSZIP.Data value)
-  {
-    this.data = value;
-  }
-
-  /**
    * Gets the value of the password property.
    *
    * @return possible object is
@@ -84,17 +73,6 @@ public class DocDSZIP
   }
 
   /**
-   * Sets the value of the password property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setPassword(String value)
-  {
-    this.password = value;
-  }
-
-  /**
    * Gets the value of the username property.
    *
    * @return possible object is
@@ -103,6 +81,28 @@ public class DocDSZIP
   public String getUsername()
   {
     return username;
+  }
+
+  /**
+   * Sets the value of the data property.
+   *
+   * @param value allowed object is
+   *              {@link DocDSZIP.Data }
+   */
+  public void setData(DocDSZIP.Data value)
+  {
+    this.data = value;
+  }
+
+  /**
+   * Sets the value of the password property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPassword(String value)
+  {
+    this.password = value;
   }
 
   /**

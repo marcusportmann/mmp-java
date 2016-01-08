@@ -51,17 +51,6 @@ public class AddListFromFeature
   }
 
   /**
-   * Sets the value of the description property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setDescription(String value)
-  {
-    this.description = value;
-  }
-
-  /**
    * Gets the value of the featureID property.
    *
    * @return possible object is
@@ -70,17 +59,6 @@ public class AddListFromFeature
   public String getFeatureID()
   {
     return featureID;
-  }
-
-  /**
-   * Sets the value of the featureID property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setFeatureID(String value)
-  {
-    this.featureID = value;
   }
 
   /**
@@ -95,6 +73,36 @@ public class AddListFromFeature
   }
 
   /**
+   * Gets the value of the templateID property.
+   */
+  public int getTemplateID()
+  {
+    return templateID;
+  }
+
+  /**
+   * Sets the value of the description property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDescription(String value)
+  {
+    this.description = value;
+  }
+
+  /**
+   * Sets the value of the featureID property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFeatureID(String value)
+  {
+    this.featureID = value;
+  }
+
+  /**
    * Sets the value of the listName property.
    *
    * @param value allowed object is
@@ -103,14 +111,6 @@ public class AddListFromFeature
   public void setListName(String value)
   {
     this.listName = value;
-  }
-
-  /**
-   * Gets the value of the templateID property.
-   */
-  public int getTemplateID()
-  {
-    return templateID;
   }
 
   /**

@@ -47,17 +47,6 @@ public class GetListAndView
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the viewName property.
    *
    * @return possible object is
@@ -66,6 +55,17 @@ public class GetListAndView
   public String getViewName()
   {
     return viewName;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
   }
 
   /**

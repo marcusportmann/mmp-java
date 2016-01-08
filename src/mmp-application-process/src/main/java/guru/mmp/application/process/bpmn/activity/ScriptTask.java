@@ -118,16 +118,6 @@ public final class ScriptTask
   }
 
   /**
-   * Set the script.
-   *
-   * @param script the script
-   */
-  public void setScript(String script)
-  {
-    this.script = script;
-  }
-
-  /**
    * Returns the script format.
    *
    * @return the script format
@@ -135,5 +125,15 @@ public final class ScriptTask
   public ScriptFormat getScriptFormat()
   {
     return scriptFormat;
+  }
+
+  /**
+   * Set the script.
+   *
+   * @param script the script
+   */
+  public void setScript(String script)
+  {
+    this.script = script;
   }
 }

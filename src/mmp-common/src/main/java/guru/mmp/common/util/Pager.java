@@ -93,29 +93,6 @@ public class Pager<T>
   }
 
   /**
-   * Set the current page.
-   *
-   * @param currentPage the current page
-   */
-  public void setCurrentPage(int currentPage)
-  {
-    this.currentPage = currentPage;
-
-    if (this.currentPage > totalPages)
-    {
-      this.currentPage = totalPages;
-    }
-
-    pageFirstItemIndex = ((this.currentPage - 1) * itemsPerPage) + 1;
-    pageLastItemIndex = pageFirstItemIndex + (itemsPerPage - 1);
-
-    if (pageLastItemIndex > totalItems)
-    {
-      pageLastItemIndex = totalItems;
-    }
-  }
-
-  /**
    * Retrieve the list of items on the current page.
    *
    * @return the list of items on the current page
@@ -296,6 +273,29 @@ public class Pager<T>
     firstPage -= pagesPerGroup;
     currentPage = firstPage;
     pageFirstItemIndex = ((currentPage - 1) * itemsPerPage) + 1;
+    pageLastItemIndex = pageFirstItemIndex + (itemsPerPage - 1);
+
+    if (pageLastItemIndex > totalItems)
+    {
+      pageLastItemIndex = totalItems;
+    }
+  }
+
+  /**
+   * Set the current page.
+   *
+   * @param currentPage the current page
+   */
+  public void setCurrentPage(int currentPage)
+  {
+    this.currentPage = currentPage;
+
+    if (this.currentPage > totalPages)
+    {
+      this.currentPage = totalPages;
+    }
+
+    pageFirstItemIndex = ((this.currentPage - 1) * itemsPerPage) + 1;
     pageLastItemIndex = pageFirstItemIndex + (itemsPerPage - 1);
 
     if (pageLastItemIndex > totalItems)

@@ -99,17 +99,6 @@ public class UpdateList
   }
 
   /**
-   * Sets the value of the deleteFields property.
-   *
-   * @param value allowed object is
-   *              {@link UpdateList.DeleteFields }
-   */
-  public void setDeleteFields(UpdateList.DeleteFields value)
-  {
-    this.deleteFields = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -118,17 +107,6 @@ public class UpdateList
   public String getListName()
   {
     return listName;
-  }
-
-  /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
   }
 
   /**
@@ -143,17 +121,6 @@ public class UpdateList
   }
 
   /**
-   * Sets the value of the listProperties property.
-   *
-   * @param value allowed object is
-   *              {@link UpdateList.ListProperties }
-   */
-  public void setListProperties(UpdateList.ListProperties value)
-  {
-    this.listProperties = value;
-  }
-
-  /**
    * Gets the value of the listVersion property.
    *
    * @return possible object is
@@ -162,17 +129,6 @@ public class UpdateList
   public String getListVersion()
   {
     return listVersion;
-  }
-
-  /**
-   * Sets the value of the listVersion property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListVersion(String value)
-  {
-    this.listVersion = value;
   }
 
   /**
@@ -187,17 +143,6 @@ public class UpdateList
   }
 
   /**
-   * Sets the value of the newFields property.
-   *
-   * @param value allowed object is
-   *              {@link UpdateList.NewFields }
-   */
-  public void setNewFields(UpdateList.NewFields value)
-  {
-    this.newFields = value;
-  }
-
-  /**
    * Gets the value of the updateFields property.
    *
    * @return possible object is
@@ -206,6 +151,61 @@ public class UpdateList
   public UpdateList.UpdateFields getUpdateFields()
   {
     return updateFields;
+  }
+
+  /**
+   * Sets the value of the deleteFields property.
+   *
+   * @param value allowed object is
+   *              {@link UpdateList.DeleteFields }
+   */
+  public void setDeleteFields(UpdateList.DeleteFields value)
+  {
+    this.deleteFields = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the listProperties property.
+   *
+   * @param value allowed object is
+   *              {@link UpdateList.ListProperties }
+   */
+  public void setListProperties(UpdateList.ListProperties value)
+  {
+    this.listProperties = value;
+  }
+
+  /**
+   * Sets the value of the listVersion property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListVersion(String value)
+  {
+    this.listVersion = value;
+  }
+
+  /**
+   * Sets the value of the newFields property.
+   *
+   * @param value allowed object is
+   *              {@link UpdateList.NewFields }
+   */
+  public void setNewFields(UpdateList.NewFields value)
+  {
+    this.newFields = value;
   }
 
   /**

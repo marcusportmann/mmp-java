@@ -16,7 +16,7 @@
 
 package guru.mmp.application.web;
 
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
@@ -89,16 +89,6 @@ public abstract class WebApplication
   }
 
   /**
-   * Set the web application injector.
-   *
-   * @param webApplicationInjector the web application injector
-   */
-  public void setWebApplicationInjector(WebApplicationInjector webApplicationInjector)
-  {
-    this.webApplicationInjector = webApplicationInjector;
-  }
-
-  /**
    * Creates a new session.
    *
    * @param request  the request that will create this session
@@ -116,6 +106,16 @@ public abstract class WebApplication
     return session;
   }
 
+  /**
+   * Set the web application injector.
+   *
+   * @param webApplicationInjector the web application injector
+   */
+  public void setWebApplicationInjector(WebApplicationInjector webApplicationInjector)
+  {
+    this.webApplicationInjector = webApplicationInjector;
+  }
+
   @Override
   protected void init()
   {
@@ -124,7 +124,7 @@ public abstract class WebApplication
     getSecuritySettings().setAuthorizationStrategy(new WebAuthorizationStrategy());
 
     // Override the version of the jQuery library that ships with Wicket
-    getJavaScriptLibrarySettings().setJQueryReference(JQueryJavaScriptResourceReference.get());
+    getJavaScriptLibrarySettings().setJQueryReference(TemplateJavaScriptResourceReference.get());
 
     if ((System.getProperty("was.install.root") != null) || (System.getProperty("wlp.user.dir") !=
       null))

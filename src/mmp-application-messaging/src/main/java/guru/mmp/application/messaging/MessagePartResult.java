@@ -167,16 +167,6 @@ public class MessagePartResult
   }
 
   /**
-   * Set the result code;
-   *
-   * @param code the result code
-   */
-  public void setCode(long code)
-  {
-    this.code = code;
-  }
-
-  /**
    * Returns the user-friendly text description of the result of uploading the message part.
    *
    * @return the user-friendly text description of the result of uploading the message part
@@ -184,16 +174,6 @@ public class MessagePartResult
   public String getDetail()
   {
     return detail;
-  }
-
-  /**
-   * Set the user-friendly text description of the result of uploading the message part.
-   *
-   * @param detail the user-friendly text description of the result of uploading the message part
-   */
-  public void setDetail(String detail)
-  {
-    this.detail = detail;
   }
 
   /**
@@ -206,6 +186,26 @@ public class MessagePartResult
   public String getException()
   {
     return exception;
+  }
+
+  /**
+   * Set the result code;
+   *
+   * @param code the result code
+   */
+  public void setCode(long code)
+  {
+    this.code = code;
+  }
+
+  /**
+   * Set the user-friendly text description of the result of uploading the message part.
+   *
+   * @param detail the user-friendly text description of the result of uploading the message part
+   */
+  public void setDetail(String detail)
+  {
+    this.detail = detail;
   }
 
   /**

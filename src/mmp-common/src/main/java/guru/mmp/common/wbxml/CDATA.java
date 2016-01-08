@@ -65,16 +65,6 @@ public class CDATA
   }
 
   /**
-   * Set the text content for the <code>CDATA</code> instance.
-   *
-   * @param text the text content for the <code>CDATA</code> instance
-   */
-  public void setText(String text)
-  {
-    this.text = text;
-  }
-
-  /**
    * Print the content using the specified indent level.
    *
    * @param indent the indent level
@@ -100,6 +90,16 @@ public class CDATA
      *  NOTE: don't close pout - it will close out (the underlying outputstream)
      * See API - PrintStream.close().
      */
+  }
+
+  /**
+   * Set the text content for the <code>CDATA</code> instance.
+   *
+   * @param text the text content for the <code>CDATA</code> instance
+   */
+  public void setText(String text)
+  {
+    this.text = text;
   }
 
   /**

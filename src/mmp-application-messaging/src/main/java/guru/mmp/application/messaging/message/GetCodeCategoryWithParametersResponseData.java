@@ -166,16 +166,6 @@ public class GetCodeCategoryWithParametersResponseData
   }
 
   /**
-   * Set the code category.
-   *
-   * @param codeCategory the code category
-   */
-  public void setCodeCategory(CodeCategoryData codeCategory)
-  {
-    this.codeCategory = codeCategory;
-  }
-
-  /**
    * Returns the error code indicating the result of retrieving the code category where a code of
    * '0' indicates success and a non-zero code indicates an error condition.
    *
@@ -188,6 +178,26 @@ public class GetCodeCategoryWithParametersResponseData
   }
 
   /**
+   * Returns the error message describing the result of retrieving the code category.
+   *
+   * @return the error message describing the result of retrieving the code category
+   */
+  public String getErrorMessage()
+  {
+    return errorMessage;
+  }
+
+  /**
+   * Set the code category.
+   *
+   * @param codeCategory the code category
+   */
+  public void setCodeCategory(CodeCategoryData codeCategory)
+  {
+    this.codeCategory = codeCategory;
+  }
+
+  /**
    * Set the error code indicating the result of retrieving the code category where a code of '0'
    * indicates success and a non-zero code indicates an error condition.
    *
@@ -197,16 +207,6 @@ public class GetCodeCategoryWithParametersResponseData
   public void setErrorCode(int errorCode)
   {
     this.errorCode = errorCode;
-  }
-
-  /**
-   * Returns the error message describing the result of retrieving the code category.
-   *
-   * @return the error message describing the result of retrieving the code category
-   */
-  public String getErrorMessage()
-  {
-    return errorMessage;
   }
 
   /**

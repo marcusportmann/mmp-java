@@ -141,6 +141,28 @@ public class SubmitErrorReportResponseData
   }
 
   /**
+   * Returns the error message describing the result of processing the submitted error report.
+   *
+   * @return the error message describing the result of processing the submitted error report
+   */
+  public String getErrorMessage()
+  {
+    return errorMessage;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * that was submitted for processing.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * that was submitted for processing
+   */
+  public UUID getErrorReportId()
+  {
+    return errorReportId;
+  }
+
+  /**
    * Set the error code indicating the result of processing the submitted error report where a code
    * of '0' indicates success and a non-zero code indicates an error condition.
    *
@@ -154,16 +176,6 @@ public class SubmitErrorReportResponseData
   }
 
   /**
-   * Returns the error message describing the result of processing the submitted error report.
-   *
-   * @return the error message describing the result of processing the submitted error report
-   */
-  public String getErrorMessage()
-  {
-    return errorMessage;
-  }
-
-  /**
    * Set the error message describing the result of processing the submitted error report.
    *
    * @param errorMessage the error message describing the result of processing the submitted error
@@ -172,18 +184,6 @@ public class SubmitErrorReportResponseData
   public void setErrorMessage(String errorMessage)
   {
     this.errorMessage = errorMessage;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   * that was submitted for processing.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   * that was submitted for processing
-   */
-  public UUID getErrorReportId()
-  {
-    return errorReportId;
   }
 
   /**

@@ -76,17 +76,6 @@ public class Restriction
   }
 
   /**
-   * Sets the value of the base property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setBase(QName value)
-  {
-    this.base = value;
-  }
-
-  /**
    * Gets the value of the minExclusivesAndMinInclusivesAndMaxExclusives property.
    * <p/>
    * <p/>
@@ -139,6 +128,17 @@ public class Restriction
   public LocalSimpleType getSimpleType()
   {
     return simpleType;
+  }
+
+  /**
+   * Sets the value of the base property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setBase(QName value)
+  {
+    this.base = value;
   }
 
   /**

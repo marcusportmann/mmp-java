@@ -51,17 +51,6 @@ public class GetVersionCollection
   }
 
   /**
-   * Sets the value of the strFieldName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setStrFieldName(String value)
-  {
-    this.strFieldName = value;
-  }
-
-  /**
    * Gets the value of the strlistID property.
    *
    * @return possible object is
@@ -73,17 +62,6 @@ public class GetVersionCollection
   }
 
   /**
-   * Sets the value of the strlistID property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setStrlistID(String value)
-  {
-    this.strlistID = value;
-  }
-
-  /**
    * Gets the value of the strlistItemID property.
    *
    * @return possible object is
@@ -92,6 +70,28 @@ public class GetVersionCollection
   public String getStrlistItemID()
   {
     return strlistItemID;
+  }
+
+  /**
+   * Sets the value of the strFieldName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStrFieldName(String value)
+  {
+    this.strFieldName = value;
+  }
+
+  /**
+   * Sets the value of the strlistID property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStrlistID(String value)
+  {
+    this.strlistID = value;
   }
 
   /**

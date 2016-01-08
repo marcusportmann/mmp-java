@@ -90,16 +90,6 @@ public class CachedCodeCategory
   }
 
   /**
-   * Set the date and time the code category was cached.
-   *
-   * @param cached the date and time the code category was cached
-   */
-  public void setCached(Date cached)
-  {
-    this.cached = cached;
-  }
-
-  /**
    * Returns the custom code data for the cached code category.
    *
    * @return the custom code data for the cached code category
@@ -110,17 +100,6 @@ public class CachedCodeCategory
   }
 
   /**
-   * Set the custom code data for the cached code category.
-   *
-   * @param codeData the custom code data for the cached code category
-   */
-  @SuppressWarnings("unused")
-  public void setCodeData(String codeData)
-  {
-    this.codeData = codeData;
-  }
-
-  /**
    * Returns the codes for the cached code category.
    *
    * @return the codes for the cached code category
@@ -128,16 +107,6 @@ public class CachedCodeCategory
   public List<Code> getCodes()
   {
     return codes;
-  }
-
-  /**
-   * Set the codes for the cached code category.
-   *
-   * @param codes the codes for the cached code category
-   */
-  public void setCodes(List<Code> codes)
-  {
-    this.codes = codes;
   }
 
   /**
@@ -153,6 +122,47 @@ public class CachedCodeCategory
   }
 
   /**
+   * Returns the date and time the cached code category was last updated.
+   *
+   * @return the date and time the cached code category was last updated
+   */
+  public Date getLastUpdated()
+  {
+    return lastUpdated;
+  }
+
+  /**
+   * Set the date and time the code category was cached.
+   *
+   * @param cached the date and time the code category was cached
+   */
+  public void setCached(Date cached)
+  {
+    this.cached = cached;
+  }
+
+  /**
+   * Set the custom code data for the cached code category.
+   *
+   * @param codeData the custom code data for the cached code category
+   */
+  @SuppressWarnings("unused")
+  public void setCodeData(String codeData)
+  {
+    this.codeData = codeData;
+  }
+
+  /**
+   * Set the codes for the cached code category.
+   *
+   * @param codes the codes for the cached code category
+   */
+  public void setCodes(List<Code> codes)
+  {
+    this.codes = codes;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the cached code
    * category.
    *
@@ -162,16 +172,6 @@ public class CachedCodeCategory
   public void setId(UUID id)
   {
     this.id = id;
-  }
-
-  /**
-   * Returns the date and time the cached code category was last updated.
-   *
-   * @return the date and time the cached code category was last updated
-   */
-  public Date getLastUpdated()
-  {
-    return lastUpdated;
   }
 
   /**

@@ -48,17 +48,6 @@ public class SimpleContent
   }
 
   /**
-   * Sets the value of the extension property.
-   *
-   * @param value allowed object is
-   *              {@link SimpleExtensionType }
-   */
-  public void setExtension(SimpleExtensionType value)
-  {
-    this.extension = value;
-  }
-
-  /**
    * Gets the value of the restriction property.
    *
    * @return possible object is
@@ -67,6 +56,17 @@ public class SimpleContent
   public SimpleRestrictionType getRestriction()
   {
     return restriction;
+  }
+
+  /**
+   * Sets the value of the extension property.
+   *
+   * @param value allowed object is
+   *              {@link SimpleExtensionType }
+   */
+  public void setExtension(SimpleExtensionType value)
+  {
+    this.extension = value;
   }
 
   /**

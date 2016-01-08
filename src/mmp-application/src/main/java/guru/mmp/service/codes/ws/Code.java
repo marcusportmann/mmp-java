@@ -61,17 +61,6 @@ public class Code
   }
 
   /**
-   * Sets the value of the description property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setDescription(String value)
-  {
-    this.description = value;
-  }
-
-  /**
    * Gets the value of the id property.
    *
    * @return possible object is
@@ -80,17 +69,6 @@ public class Code
   public String getId()
   {
     return id;
-  }
-
-  /**
-   * Sets the value of the id property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setId(String value)
-  {
-    this.id = value;
   }
 
   /**
@@ -105,17 +83,6 @@ public class Code
   }
 
   /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
    * Gets the value of the value property.
    *
    * @return possible object is
@@ -124,6 +91,39 @@ public class Code
   public String getValue()
   {
     return value;
+  }
+
+  /**
+   * Sets the value of the description property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDescription(String value)
+  {
+    this.description = value;
+  }
+
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setId(String value)
+  {
+    this.id = value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
   }
 
   /**

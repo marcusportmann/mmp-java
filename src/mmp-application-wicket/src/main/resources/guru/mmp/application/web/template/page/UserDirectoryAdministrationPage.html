@@ -101,7 +101,7 @@
             </div>
           </div>
 
-          <div wicket:id="tableContainer" class="panel panel-default">
+          <div wicket:id="tableContainer" class="table-container">
             <div class="table-header">
               <div class="table-header-left">
                 <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User Directory</a>
@@ -115,7 +115,7 @@
               </div>
             </div>
 
-            <table class="table table-bordered table-striped table-condensed table-actions">
+            <table class="table table-striped table-condensed table-actions">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -128,8 +128,10 @@
                   <td><span wicket:id="name">[Code]</span></td>
                   <td><span wicket:id="type">[Type]</span></td>
                   <td class="two-actions">
-                    <a wicket:id="updateLink" href="#" class="btn btn-xs btn-action tooltips" title="Update User Directory"><i class="fa fa-edit"></i></a>
-                    <a wicket:id="removeLink" href="#" class="btn btn-xs btn-action tooltips" title="Remove User Directory"><i class="fa fa-times fa fa-white"></i></a>
+                    <div class="btn-group">
+                      <a wicket:id="updateLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User Directory"><i class="fa fa-edit"></i></a>
+                      <a wicket:id="removeLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User Directory"><i class="fa fa-times fa fa-white"></i></a>
+                    </div>
                   </td>
                 </tr>
               </tbody>

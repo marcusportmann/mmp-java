@@ -52,16 +52,6 @@ public class ErrorDetailData
   }
 
   /**
-   * Set the error code for the error.
-   *
-   * @param code the error code for the error
-   */
-  public void setCode(String code)
-  {
-    this.code = code;
-  }
-
-  /**
    * Returns the error message for the error.
    *
    * @return the error message for the error
@@ -69,6 +59,16 @@ public class ErrorDetailData
   public String getMessage()
   {
     return message;
+  }
+
+  /**
+   * Set the error code for the error.
+   *
+   * @param code the error code for the error
+   */
+  public void setCode(String code)
+  {
+    this.code = code;
   }
 
   /**

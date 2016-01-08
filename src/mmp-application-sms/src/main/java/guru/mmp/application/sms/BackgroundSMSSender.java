@@ -83,8 +83,7 @@ public class BackgroundSMSSender
     // If CDI injection was not completed successfully for the bean then stop here
     if (smsService == null)
     {
-      logger.error(
-        "Failed to send the SMSs queued for sending: The SMSService was NOT injected");
+      logger.error("Failed to send the SMSs queued for sending: The SMSService was NOT injected");
 
       return new AsyncResult<>(false);
     }
@@ -177,8 +176,7 @@ public class BackgroundSMSSender
           {
             logger.warn(String.format(
               "The queued SMS (%d) has exceeded the maximum  number of send attempts and will be " +
-                "marked as \"Failed\"",
-              sms.getId()));
+                "marked as \"Failed\"", sms.getId()));
 
             smsService.unlockSMS(sms.getId(), SMS.Status.FAILED);
           }

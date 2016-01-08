@@ -154,18 +154,6 @@ public class GetCodeCategoryRequestData
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the code category to
-   * retrieve.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the code category to
-   *           retrieve
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the date and time the code category was last retrieved.
    *
    * @return the date and time the code category was last retrieved
@@ -173,16 +161,6 @@ public class GetCodeCategoryRequestData
   public Date getLastRetrieved()
   {
     return lastRetrieved;
-  }
-
-  /**
-   * Set the date and time the code category was last retrieved.
-   *
-   * @param lastRetrieved the date and time the code category was last retrieved
-   */
-  public void setLastRetrieved(Date lastRetrieved)
-  {
-    this.lastRetrieved = lastRetrieved;
   }
 
   /**
@@ -195,6 +173,28 @@ public class GetCodeCategoryRequestData
   public boolean getReturnCodesIfCurrent()
   {
     return returnCodesIfCurrent;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the code category to
+   * retrieve.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the code category to
+   *           retrieve
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the date and time the code category was last retrieved.
+   *
+   * @param lastRetrieved the date and time the code category was last retrieved
+   */
+  public void setLastRetrieved(Date lastRetrieved)
+  {
+    this.lastRetrieved = lastRetrieved;
   }
 
   /**

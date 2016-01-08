@@ -539,16 +539,6 @@ public class Attribute
   }
 
   /**
-   * Set the binary value for the attribute.
-   *
-   * @param value the binary value for the attribute
-   */
-  public void setBinaryValue(byte[] value)
-  {
-    this.value = new BinaryBuffer(value);
-  }
-
-  /**
    * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
@@ -584,16 +574,6 @@ public class Attribute
     throw new AttributeException(
       String.format("Failed to retrieve the decimal value for the attribute (%s) with type (%s)",
         name, getTypeName()));
-  }
-
-  /**
-   * Set the <code>BigDecimal</code> value for the attribute.
-   *
-   * @param value the <code>BigDecimal</code> value for the attribute
-   */
-  public void setDecimalValue(BigDecimal value)
-  {
-    this.value = value;
   }
 
   /**
@@ -635,16 +615,6 @@ public class Attribute
   }
 
   /**
-   * Set the <code>double</code> value for the attribute.
-   *
-   * @param value the <code>double</code> value for the attribute
-   */
-  public void setDoubleValue(double value)
-  {
-    this.value = value;
-  }
-
-  /**
    * Returns the <code>long</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance
@@ -683,16 +653,6 @@ public class Attribute
   }
 
   /**
-   * Set the <code>Long</code> value for the attribute.
-   *
-   * @param value the <code>long</code> value for the attribute
-   */
-  public void setLongValue(long value)
-  {
-    this.value = value;
-  }
-
-  /**
    * Returns the name for the <code>Attribute</code> instance.
    *
    * @return the name for the <code>Attribute</code> instance
@@ -700,16 +660,6 @@ public class Attribute
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Set the name for the attribute.
-   *
-   * @param name the name for the attribute
-   */
-  public void setName(String name)
-  {
-    this.name = name;
   }
 
   /**
@@ -742,16 +692,6 @@ public class Attribute
     throw new AttributeException(
       String.format("Failed to retrieve the string value for the attribute (%s) with type (%s)",
         name, getTypeName()));
-  }
-
-  /**
-   * Set the <code>String</code> value for the attribute.
-   *
-   * @param value the <code>String</code> value for the attribute
-   */
-  public void setStringValue(String value)
-  {
-    this.value = value;
   }
 
   /**
@@ -825,9 +765,69 @@ public class Attribute
    *
    * @param value the binary value for the attribute
    */
+  public void setBinaryValue(byte[] value)
+  {
+    this.value = new BinaryBuffer(value);
+  }
+
+  /**
+   * Set the binary value for the attribute.
+   *
+   * @param value the binary value for the attribute
+   */
   public void setBinaryValue(BinaryBuffer value)
   {
     this.value = new BinaryBuffer(value);
+  }
+
+  /**
+   * Set the <code>BigDecimal</code> value for the attribute.
+   *
+   * @param value the <code>BigDecimal</code> value for the attribute
+   */
+  public void setDecimalValue(BigDecimal value)
+  {
+    this.value = value;
+  }
+
+  /**
+   * Set the <code>double</code> value for the attribute.
+   *
+   * @param value the <code>double</code> value for the attribute
+   */
+  public void setDoubleValue(double value)
+  {
+    this.value = value;
+  }
+
+  /**
+   * Set the <code>Long</code> value for the attribute.
+   *
+   * @param value the <code>long</code> value for the attribute
+   */
+  public void setLongValue(long value)
+  {
+    this.value = value;
+  }
+
+  /**
+   * Set the name for the attribute.
+   *
+   * @param name the name for the attribute
+   */
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+  /**
+   * Set the <code>String</code> value for the attribute.
+   *
+   * @param value the <code>String</code> value for the attribute
+   */
+  public void setStringValue(String value)
+  {
+    this.value = value;
   }
 
   /**

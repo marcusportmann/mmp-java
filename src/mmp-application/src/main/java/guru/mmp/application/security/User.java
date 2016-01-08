@@ -78,16 +78,6 @@ public class User
   }
 
   /**
-   * Set the description for the user.
-   *
-   * @param description the description for the user
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
    * Returns the e-mail address for the user
    *
    * @return the e-mail address for the user
@@ -95,16 +85,6 @@ public class User
   public String getEmail()
   {
     return email;
-  }
-
-  /**
-   * Set the e-mail address for the user.
-   *
-   * @param email the e-mail address for the user
-   */
-  public void setEmail(String email)
-  {
-    this.email = email;
   }
 
   /**
@@ -118,16 +98,6 @@ public class User
   }
 
   /**
-   * Set the fax number for the user.
-   *
-   * @param faxNumber the fax number for the user
-   */
-  public void setFaxNumber(String faxNumber)
-  {
-    this.faxNumber = faxNumber;
-  }
-
-  /**
    * Returns the first name(s) for the user
    *
    * @return the first name(s) for the user
@@ -135,16 +105,6 @@ public class User
   public String getFirstNames()
   {
     return firstNames;
-  }
-
-  /**
-   * Set the first name(s) for the user.
-   *
-   * @param firstNames the first name(s) for the user
-   */
-  public void setFirstNames(String firstNames)
-  {
-    this.firstNames = firstNames;
   }
 
   /**
@@ -158,16 +118,6 @@ public class User
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
    * Returns the last name for the user
    *
    * @return the last name for the user
@@ -175,16 +125,6 @@ public class User
   public String getLastName()
   {
     return lastName;
-  }
-
-  /**
-   * Set the last name for the user.
-   *
-   * @param lastName the last name for the user
-   */
-  public void setLastName(String lastName)
-  {
-    this.lastName = lastName;
   }
 
   /**
@@ -198,16 +138,6 @@ public class User
   }
 
   /**
-   * Set the mobile number for the user.
-   *
-   * @param mobileNumber the mobile number for the user
-   */
-  public void setMobileNumber(String mobileNumber)
-  {
-    this.mobileNumber = mobileNumber;
-  }
-
-  /**
    * Returns the password hash for the user
    *
    * @return the password hash for the user
@@ -215,16 +145,6 @@ public class User
   public String getPassword()
   {
     return password;
-  }
-
-  /**
-   * Set the password for the user.
-   *
-   * @param password the password for the user
-   */
-  public void setPassword(String password)
-  {
-    this.password = password;
   }
 
   /**
@@ -240,16 +160,6 @@ public class User
   }
 
   /**
-   * Set the password attempts for the user.
-   *
-   * @param passwordAttempts the password attempts for the user
-   */
-  public void setPasswordAttempts(int passwordAttempts)
-  {
-    this.passwordAttempts = passwordAttempts;
-  }
-
-  /**
    * Returns the date and time the password for the user expires
    *
    * @return the date and time the password for the user expires
@@ -260,16 +170,6 @@ public class User
   }
 
   /**
-   * Set the password expiry for the user
-   *
-   * @param passwordExpiry the password expiry for the user
-   */
-  public void setPasswordExpiry(Date passwordExpiry)
-  {
-    this.passwordExpiry = passwordExpiry;
-  }
-
-  /**
    * Returns the phone number for the user
    *
    * @return the phone number for the user
@@ -277,16 +177,6 @@ public class User
   public String getPhoneNumber()
   {
     return phoneNumber;
-  }
-
-  /**
-   * Set the phone number for the user.
-   *
-   * @param phoneNumber the phone number for the user
-   */
-  public void setPhoneNumber(String phoneNumber)
-  {
-    this.phoneNumber = phoneNumber;
   }
 
   /**
@@ -314,16 +204,6 @@ public class User
   }
 
   /**
-   * Set the title for the user.
-   *
-   * @param title the title for the user
-   */
-  public void setTitle(String title)
-  {
-    this.title = title;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * the user is associated with.
    *
@@ -333,18 +213,6 @@ public class User
   public UUID getUserDirectoryId()
   {
     return userDirectoryId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * user is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the user is associated with
-   */
-  public void setUserDirectoryId(UUID userDirectoryId)
-  {
-    this.userDirectoryId = userDirectoryId;
   }
 
   /**
@@ -360,16 +228,6 @@ public class User
     }
 
     return username;
-  }
-
-  /**
-   * Set the username for the user.
-   *
-   * @param username the username for the user
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 
   /**
@@ -397,13 +255,113 @@ public class User
   }
 
   /**
-   * Set whether the user is read-only.
+   * Set the description for the user.
    *
-   * @param isReadOnly <code>true</code> if the user is read-only or <code>false</code> otherwise
+   * @param description the description for the user
    */
-  public void setReadOnly(boolean isReadOnly)
+  public void setDescription(String description)
   {
-    this.isReadOnly = isReadOnly;
+    this.description = description;
+  }
+
+  /**
+   * Set the e-mail address for the user.
+   *
+   * @param email the e-mail address for the user
+   */
+  public void setEmail(String email)
+  {
+    this.email = email;
+  }
+
+  /**
+   * Set the fax number for the user.
+   *
+   * @param faxNumber the fax number for the user
+   */
+  public void setFaxNumber(String faxNumber)
+  {
+    this.faxNumber = faxNumber;
+  }
+
+  /**
+   * Set the first name(s) for the user.
+   *
+   * @param firstNames the first name(s) for the user
+   */
+  public void setFirstNames(String firstNames)
+  {
+    this.firstNames = firstNames;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the last name for the user.
+   *
+   * @param lastName the last name for the user
+   */
+  public void setLastName(String lastName)
+  {
+    this.lastName = lastName;
+  }
+
+  /**
+   * Set the mobile number for the user.
+   *
+   * @param mobileNumber the mobile number for the user
+   */
+  public void setMobileNumber(String mobileNumber)
+  {
+    this.mobileNumber = mobileNumber;
+  }
+
+  /**
+   * Set the password for the user.
+   *
+   * @param password the password for the user
+   */
+  public void setPassword(String password)
+  {
+    this.password = password;
+  }
+
+  /**
+   * Set the password attempts for the user.
+   *
+   * @param passwordAttempts the password attempts for the user
+   */
+  public void setPasswordAttempts(int passwordAttempts)
+  {
+    this.passwordAttempts = passwordAttempts;
+  }
+
+  /**
+   * Set the password expiry for the user
+   *
+   * @param passwordExpiry the password expiry for the user
+   */
+  public void setPasswordExpiry(Date passwordExpiry)
+  {
+    this.passwordExpiry = passwordExpiry;
+  }
+
+  /**
+   * Set the phone number for the user.
+   *
+   * @param phoneNumber the phone number for the user
+   */
+  public void setPhoneNumber(String phoneNumber)
+  {
+    this.phoneNumber = phoneNumber;
   }
 
   /**
@@ -415,5 +373,47 @@ public class User
   public void setProperty(String name, String value)
   {
     properties.put(name, value);
+  }
+
+  /**
+   * Set whether the user is read-only.
+   *
+   * @param isReadOnly <code>true</code> if the user is read-only or <code>false</code> otherwise
+   */
+  public void setReadOnly(boolean isReadOnly)
+  {
+    this.isReadOnly = isReadOnly;
+  }
+
+  /**
+   * Set the title for the user.
+   *
+   * @param title the title for the user
+   */
+  public void setTitle(String title)
+  {
+    this.title = title;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * user is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the user is associated with
+   */
+  public void setUserDirectoryId(UUID userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Set the username for the user.
+   *
+   * @param username the username for the user
+   */
+  public void setUsername(String username)
+  {
+    this.username = username;
   }
 }

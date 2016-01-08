@@ -73,17 +73,6 @@ public class UpdateListItemsWithKnowledge
   }
 
   /**
-   * Sets the value of the knowledge property.
-   *
-   * @param value allowed object is
-   *              {@link UpdateListItemsWithKnowledge.Knowledge }
-   */
-  public void setKnowledge(UpdateListItemsWithKnowledge.Knowledge value)
-  {
-    this.knowledge = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -92,17 +81,6 @@ public class UpdateListItemsWithKnowledge
   public String getListName()
   {
     return listName;
-  }
-
-  /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
   }
 
   /**
@@ -117,17 +95,6 @@ public class UpdateListItemsWithKnowledge
   }
 
   /**
-   * Sets the value of the syncScope property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setSyncScope(String value)
-  {
-    this.syncScope = value;
-  }
-
-  /**
    * Gets the value of the updates property.
    *
    * @return possible object is
@@ -136,6 +103,39 @@ public class UpdateListItemsWithKnowledge
   public UpdateListItemsWithKnowledge.Updates getUpdates()
   {
     return updates;
+  }
+
+  /**
+   * Sets the value of the knowledge property.
+   *
+   * @param value allowed object is
+   *              {@link UpdateListItemsWithKnowledge.Knowledge }
+   */
+  public void setKnowledge(UpdateListItemsWithKnowledge.Knowledge value)
+  {
+    this.knowledge = value;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
+  }
+
+  /**
+   * Sets the value of the syncScope property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSyncScope(String value)
+  {
+    this.syncScope = value;
   }
 
   /**

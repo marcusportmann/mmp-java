@@ -54,17 +54,6 @@ public class Notation
   }
 
   /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
    * Gets the value of the public property.
    *
    * @return possible object is
@@ -76,17 +65,6 @@ public class Notation
   }
 
   /**
-   * Sets the value of the public property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setPublic(String value)
-  {
-    this._public = value;
-  }
-
-  /**
    * Gets the value of the system property.
    *
    * @return possible object is
@@ -95,6 +73,28 @@ public class Notation
   public String getSystem()
   {
     return system;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
+  }
+
+  /**
+   * Sets the value of the public property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPublic(String value)
+  {
+    this._public = value;
   }
 
   /**

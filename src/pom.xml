@@ -19,7 +19,6 @@
     <module>mmp-test</module>
     <module>mmp-application</module>
     <module>mmp-application-aurelia</module>
-    <module>mmp-application-angular</module>
     <module>mmp-application-wicket</module>
     <module>mmp-application-batch</module>
     <module>mmp-application-batch-wicket</module>
@@ -34,7 +33,7 @@
     <module>mmp-sharepoint</module>
     <module>mmp-corba</module>
     <module>mmp-sample-wicket</module>
-    <module>mmp-sample-angular</module>
+    <module>mmp-sample-aurelia</module>
   </modules>
 
 </project>

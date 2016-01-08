@@ -104,6 +104,16 @@ public class MessageDownloadRequest
   }
 
   /**
+   * Returns the username identifying the user whose messages should be downloaded.
+   *
+   * @return the username identifying the user whose messages should be downloaded
+   */
+  public String getUsername()
+  {
+    return username;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
    * download request originated from.
    *
@@ -113,16 +123,6 @@ public class MessageDownloadRequest
   public void setDeviceId(UUID deviceId)
   {
     this.deviceId = deviceId;
-  }
-
-  /**
-   * Returns the username identifying the user whose messages should be downloaded.
-   *
-   * @return the username identifying the user whose messages should be downloaded
-   */
-  public String getUsername()
-  {
-    return username;
   }
 
   /**

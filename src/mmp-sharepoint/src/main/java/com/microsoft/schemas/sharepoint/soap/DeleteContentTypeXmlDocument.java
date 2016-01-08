@@ -51,17 +51,6 @@ public class DeleteContentTypeXmlDocument
   }
 
   /**
-   * Sets the value of the contentTypeId property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setContentTypeId(String value)
-  {
-    this.contentTypeId = value;
-  }
-
-  /**
    * Gets the value of the documentUri property.
    *
    * @return possible object is
@@ -73,17 +62,6 @@ public class DeleteContentTypeXmlDocument
   }
 
   /**
-   * Sets the value of the documentUri property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setDocumentUri(String value)
-  {
-    this.documentUri = value;
-  }
-
-  /**
    * Gets the value of the listName property.
    *
    * @return possible object is
@@ -92,6 +70,28 @@ public class DeleteContentTypeXmlDocument
   public String getListName()
   {
     return listName;
+  }
+
+  /**
+   * Sets the value of the contentTypeId property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setContentTypeId(String value)
+  {
+    this.contentTypeId = value;
+  }
+
+  /**
+   * Sets the value of the documentUri property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDocumentUri(String value)
+  {
+    this.documentUri = value;
   }
 
   /**

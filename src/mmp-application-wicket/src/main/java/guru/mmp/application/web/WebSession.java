@@ -72,6 +72,8 @@ public class WebSession
    */
   private UUID userDirectoryId;
 
+  private String userFullName;
+
   /**
    * The user properties for the logged in user associated with the web session.
    */
@@ -120,22 +122,6 @@ public class WebSession
   }
 
   /**
-   * Set the function codes identifying the functionality assigned to the logged in user.
-   *
-   * @param functionCodes the function codes identifying the functionality assigned to the logged
-   *                      in user
-   */
-  public void setFunctionCodes(List<String> functionCodes)
-  {
-    this.functionCodes = new HashMap<>();
-
-    for (String functionCode : functionCodes)
-    {
-      this.functionCodes.put(functionCode, functionCode);
-    }
-  }
-
-  /**
    * Returns the names of the groups the logged in user is a member of.
    *
    * @return the names of the groups the logged in user is a member of
@@ -153,16 +139,6 @@ public class WebSession
   }
 
   /**
-   * Set the names of the groups the logged in user is a member of.
-   *
-   * @param groupNames the names of the groups the logged in user is a member of
-   */
-  public void setGroupNames(List<String> groupNames)
-  {
-    this.groupNames = groupNames;
-  }
-
-  /**
    * Returns the organisation for the user associated with the web session.
    *
    * @return the organisation for the user associated with the web session
@@ -170,16 +146,6 @@ public class WebSession
   public Organisation getOrganisation()
   {
     return organisation;
-  }
-
-  /**
-   * The organisation for the user associated with the web session.
-   *
-   * @param organisation the organisation for the user associated with the web session
-   */
-  public void setOrganisation(Organisation organisation)
-  {
-    this.organisation = organisation;
   }
 
   /**
@@ -195,14 +161,15 @@ public class WebSession
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the full name for the logged in user associated with the web session or
+   * <code>null</code> if this is an 'anonymous' web session.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                        the user directory
+   * @return the full name for the logged in user associated with the web session or
+   * <code>null</code> if this is an 'anonymous' web session
    */
-  public void setUserDirectoryId(UUID userDirectoryId)
+  public String getUserFullName()
   {
-    this.userDirectoryId = userDirectoryId;
+    return userFullName;
   }
 
   /**
@@ -261,16 +228,6 @@ public class WebSession
   public String getUsername()
   {
     return username;
-  }
-
-  /**
-   * Set the username for the logged in user associated with the web session.
-   *
-   * @param username the username for the logged in user associated with the web session
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 
   /**
@@ -405,6 +362,63 @@ public class WebSession
   }
 
   /**
+   * Set the function codes identifying the functionality assigned to the logged in user.
+   *
+   * @param functionCodes the function codes identifying the functionality assigned to the logged
+   *                      in user
+   */
+  public void setFunctionCodes(List<String> functionCodes)
+  {
+    this.functionCodes = new HashMap<>();
+
+    for (String functionCode : functionCodes)
+    {
+      this.functionCodes.put(functionCode, functionCode);
+    }
+  }
+
+  /**
+   * Set the names of the groups the logged in user is a member of.
+   *
+   * @param groupNames the names of the groups the logged in user is a member of
+   */
+  public void setGroupNames(List<String> groupNames)
+  {
+    this.groupNames = groupNames;
+  }
+
+  /**
+   * The organisation for the user associated with the web session.
+   *
+   * @param organisation the organisation for the user associated with the web session
+   */
+  public void setOrganisation(Organisation organisation)
+  {
+    this.organisation = organisation;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                        the user directory
+   */
+  public void setUserDirectoryId(UUID userDirectoryId)
+  {
+    this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Set the full name for the logged in user associated with the web session.
+   *
+   * @param userFullName the full name for the logged in user associated with the web session
+   */
+  public void setUserFullName(String userFullName)
+  {
+    this.userFullName = userFullName;
+  }
+
+  /**
    * Set the value for the user property with the specified name for the logged in user
    * associated with the web session.
    *
@@ -425,5 +439,15 @@ public class WebSession
     }
 
     userProperties.put(name, value);
+  }
+
+  /**
+   * Set the username for the logged in user associated with the web session.
+   *
+   * @param username the username for the logged in user associated with the web session
+   */
+  public void setUsername(String username)
+  {
+    this.username = username;
   }
 }

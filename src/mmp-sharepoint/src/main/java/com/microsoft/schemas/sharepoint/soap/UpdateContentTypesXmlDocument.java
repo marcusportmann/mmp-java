@@ -55,17 +55,6 @@ public class UpdateContentTypesXmlDocument
   }
 
   /**
-   * Sets the value of the listName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListName(String value)
-  {
-    this.listName = value;
-  }
-
-  /**
    * Gets the value of the newDocument property.
    *
    * @return possible object is
@@ -74,6 +63,17 @@ public class UpdateContentTypesXmlDocument
   public UpdateContentTypesXmlDocument.NewDocument getNewDocument()
   {
     return newDocument;
+  }
+
+  /**
+   * Sets the value of the listName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListName(String value)
+  {
+    this.listName = value;
   }
 
   /**

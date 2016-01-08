@@ -46,17 +46,6 @@ public class CreditsDS
   }
 
   /**
-   * Sets the value of the password property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setPassword(String value)
-  {
-    this.password = value;
-  }
-
-  /**
    * Gets the value of the username property.
    *
    * @return possible object is
@@ -65,6 +54,17 @@ public class CreditsDS
   public String getUsername()
   {
     return username;
+  }
+
+  /**
+   * Sets the value of the password property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setPassword(String value)
+  {
+    this.password = value;
   }
 
   /**

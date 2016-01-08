@@ -51,17 +51,6 @@ public class AddWikiPage
   }
 
   /**
-   * Sets the value of the listRelPageUrl property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setListRelPageUrl(String value)
-  {
-    this.listRelPageUrl = value;
-  }
-
-  /**
    * Gets the value of the strListName property.
    *
    * @return possible object is
@@ -73,17 +62,6 @@ public class AddWikiPage
   }
 
   /**
-   * Sets the value of the strListName property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setStrListName(String value)
-  {
-    this.strListName = value;
-  }
-
-  /**
    * Gets the value of the wikiContent property.
    *
    * @return possible object is
@@ -92,6 +70,28 @@ public class AddWikiPage
   public String getWikiContent()
   {
     return wikiContent;
+  }
+
+  /**
+   * Sets the value of the listRelPageUrl property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setListRelPageUrl(String value)
+  {
+    this.listRelPageUrl = value;
+  }
+
+  /**
+   * Sets the value of the strListName property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setStrListName(String value)
+  {
+    this.strListName = value;
   }
 
   /**

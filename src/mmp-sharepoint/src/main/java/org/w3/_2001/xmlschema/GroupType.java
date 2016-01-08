@@ -123,17 +123,6 @@ public abstract class GroupType
   }
 
   /**
-   * Sets the value of the maxOccurs property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setMaxOccurs(String value)
-  {
-    this.maxOccurs = value;
-  }
-
-  /**
    * Gets the value of the minOccurs property.
    *
    * @return possible object is
@@ -152,17 +141,6 @@ public abstract class GroupType
   }
 
   /**
-   * Sets the value of the minOccurs property.
-   *
-   * @param value allowed object is
-   *              {@link BigInteger }
-   */
-  public void setMinOccurs(BigInteger value)
-  {
-    this.minOccurs = value;
-  }
-
-  /**
    * Gets the value of the name property.
    *
    * @return possible object is
@@ -174,17 +152,6 @@ public abstract class GroupType
   }
 
   /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
    * Gets the value of the ref property.
    *
    * @return possible object is
@@ -193,6 +160,39 @@ public abstract class GroupType
   public QName getRef()
   {
     return ref;
+  }
+
+  /**
+   * Sets the value of the maxOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMaxOccurs(String value)
+  {
+    this.maxOccurs = value;
+  }
+
+  /**
+   * Sets the value of the minOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setMinOccurs(BigInteger value)
+  {
+    this.minOccurs = value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
   }
 
   /**

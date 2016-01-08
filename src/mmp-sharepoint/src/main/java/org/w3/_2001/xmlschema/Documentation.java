@@ -94,17 +94,6 @@ public class Documentation
   }
 
   /**
-   * Sets the value of the lang property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setLang(String value)
-  {
-    this.lang = value;
-  }
-
-  /**
    * Gets a map that contains attributes that aren't bound to any typed property on this class.
    * <p/>
    * <p/>
@@ -130,6 +119,17 @@ public class Documentation
   public String getSource()
   {
     return source;
+  }
+
+  /**
+   * Sets the value of the lang property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLang(String value)
+  {
+    this.lang = value;
   }
 
   /**

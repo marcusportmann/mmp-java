@@ -380,8 +380,7 @@ public class ProcessDAO
       {
         logger.error(
           "Failed to rollback the transaction while retrieving the next process instance that has" +
-            " been scheduled for execution from the database",
-          f);
+            " been scheduled for execution from the database", f);
       }
 
       throw new DAOException(

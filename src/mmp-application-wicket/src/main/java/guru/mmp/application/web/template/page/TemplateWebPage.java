@@ -19,10 +19,7 @@ package guru.mmp.application.web.template.page;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
-import guru.mmp.application.web.template.component.Alerts;
-import guru.mmp.application.web.template.component.Breadcrumbs;
-import guru.mmp.application.web.template.component.MainNavigationMenu;
-import guru.mmp.application.web.template.component.UserMenu;
+import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import org.apache.wicket.devutils.debugbar.DebugBar;
@@ -89,11 +86,14 @@ public abstract class TemplateWebPage
       titleLabel.setRenderBodyOnly(false);
       add(titleLabel);
 
-      // Setup the top navigation menu
-      add(new UserMenu("userMenu"));
+      // Setup the backend header
+      add(new BackendHeader("backendHeader"));
 
-      // Setup the main navigation menu
-      add(new MainNavigationMenu("mainNavigationMenu"));
+      // Setup the backend user menu side overlay
+      add(new BackendUserMenuSideOverlay("backendUserMenuSideOverlay"));
+
+      // Setup the backend main navigation
+      add(new BackendMainNavigation("backendMainNavigation"));
 
       // Setup the breadcrumbs
       add(new Breadcrumbs("breadcrumbs"));
@@ -144,16 +144,6 @@ public abstract class TemplateWebPage
   }
 
   /**
-   * Set the page heading.
-   *
-   * @param heading the heading to set
-   */
-  public void setHeading(String heading)
-  {
-    this.heading = heading;
-  }
-
-  /**
    * Returns the page sub-heading.
    *
    * @return the page sub-heading
@@ -165,17 +155,6 @@ public abstract class TemplateWebPage
   }
 
   /**
-   * Set the page sub-heading.
-   *
-   * @param subHeading the sub-heading to set
-   */
-  @SuppressWarnings("unused")
-  public void setSubHeading(String subHeading)
-  {
-    this.subHeading = subHeading;
-  }
-
-  /**
    * Returns the page title.
    *
    * @return the page title
@@ -183,16 +162,6 @@ public abstract class TemplateWebPage
   public String getTitle()
   {
     return title;
-  }
-
-  /**
-   * Set the page title.
-   *
-   * @param title the new page title
-   */
-  public void setTitle(String title)
-  {
-    this.title = title;
   }
 
   /**
@@ -223,6 +192,37 @@ public abstract class TemplateWebPage
 
     // Add the Web Application Template JavaScript header item
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
+  }
+
+  /**
+   * Set the page heading.
+   *
+   * @param heading the heading to set
+   */
+  public void setHeading(String heading)
+  {
+    this.heading = heading;
+  }
+
+  /**
+   * Set the page sub-heading.
+   *
+   * @param subHeading the sub-heading to set
+   */
+  @SuppressWarnings("unused")
+  public void setSubHeading(String subHeading)
+  {
+    this.subHeading = subHeading;
+  }
+
+  /**
+   * Set the page title.
+   *
+   * @param title the new page title
+   */
+  public void setTitle(String title)
+  {
+    this.title = title;
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()

@@ -161,17 +161,6 @@ public abstract class ElementType
   }
 
   /**
-   * Sets the value of the complexType property.
-   *
-   * @param value allowed object is
-   *              {@link LocalComplexType }
-   */
-  public void setComplexType(LocalComplexType value)
-  {
-    this.complexType = value;
-  }
-
-  /**
    * Gets the value of the default property.
    *
    * @return possible object is
@@ -180,17 +169,6 @@ public abstract class ElementType
   public String getDefault()
   {
     return _default;
-  }
-
-  /**
-   * Sets the value of the default property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setDefault(String value)
-  {
-    this._default = value;
   }
 
   /**
@@ -237,17 +215,6 @@ public abstract class ElementType
   }
 
   /**
-   * Sets the value of the fixed property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setFixed(String value)
-  {
-    this.fixed = value;
-  }
-
-  /**
    * Gets the value of the form property.
    *
    * @return possible object is
@@ -256,17 +223,6 @@ public abstract class ElementType
   public FormChoice getForm()
   {
     return form;
-  }
-
-  /**
-   * Sets the value of the form property.
-   *
-   * @param value allowed object is
-   *              {@link FormChoice }
-   */
-  public void setForm(FormChoice value)
-  {
-    this.form = value;
   }
 
   /**
@@ -288,17 +244,6 @@ public abstract class ElementType
   }
 
   /**
-   * Sets the value of the maxOccurs property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setMaxOccurs(String value)
-  {
-    this.maxOccurs = value;
-  }
-
-  /**
    * Gets the value of the minOccurs property.
    *
    * @return possible object is
@@ -317,17 +262,6 @@ public abstract class ElementType
   }
 
   /**
-   * Sets the value of the minOccurs property.
-   *
-   * @param value allowed object is
-   *              {@link BigInteger }
-   */
-  public void setMinOccurs(BigInteger value)
-  {
-    this.minOccurs = value;
-  }
-
-  /**
    * Gets the value of the name property.
    *
    * @return possible object is
@@ -336,17 +270,6 @@ public abstract class ElementType
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
   }
 
   /**
@@ -361,17 +284,6 @@ public abstract class ElementType
   }
 
   /**
-   * Sets the value of the ref property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setRef(QName value)
-  {
-    this.ref = value;
-  }
-
-  /**
    * Gets the value of the simpleType property.
    *
    * @return possible object is
@@ -380,17 +292,6 @@ public abstract class ElementType
   public LocalSimpleType getSimpleType()
   {
     return simpleType;
-  }
-
-  /**
-   * Sets the value of the simpleType property.
-   *
-   * @param value allowed object is
-   *              {@link LocalSimpleType }
-   */
-  public void setSimpleType(LocalSimpleType value)
-  {
-    this.simpleType = value;
   }
 
   /**
@@ -405,17 +306,6 @@ public abstract class ElementType
   }
 
   /**
-   * Sets the value of the substitutionGroup property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setSubstitutionGroup(QName value)
-  {
-    this.substitutionGroup = value;
-  }
-
-  /**
    * Gets the value of the type property.
    *
    * @return possible object is
@@ -424,17 +314,6 @@ public abstract class ElementType
   public QName getType()
   {
     return type;
-  }
-
-  /**
-   * Sets the value of the type property.
-   *
-   * @param value allowed object is
-   *              {@link QName }
-   */
-  public void setType(QName value)
-  {
-    this.type = value;
   }
 
   /**
@@ -490,17 +369,6 @@ public abstract class ElementType
   }
 
   /**
-   * Sets the value of the abstract property.
-   *
-   * @param value allowed object is
-   *              {@link Boolean }
-   */
-  public void setAbstract(Boolean value)
-  {
-    this._abstract = value;
-  }
-
-  /**
    * Gets the value of the nillable property.
    *
    * @return possible object is
@@ -519,6 +387,94 @@ public abstract class ElementType
   }
 
   /**
+   * Sets the value of the abstract property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setAbstract(Boolean value)
+  {
+    this._abstract = value;
+  }
+
+  /**
+   * Sets the value of the complexType property.
+   *
+   * @param value allowed object is
+   *              {@link LocalComplexType }
+   */
+  public void setComplexType(LocalComplexType value)
+  {
+    this.complexType = value;
+  }
+
+  /**
+   * Sets the value of the default property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setDefault(String value)
+  {
+    this._default = value;
+  }
+
+  /**
+   * Sets the value of the fixed property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setFixed(String value)
+  {
+    this.fixed = value;
+  }
+
+  /**
+   * Sets the value of the form property.
+   *
+   * @param value allowed object is
+   *              {@link FormChoice }
+   */
+  public void setForm(FormChoice value)
+  {
+    this.form = value;
+  }
+
+  /**
+   * Sets the value of the maxOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setMaxOccurs(String value)
+  {
+    this.maxOccurs = value;
+  }
+
+  /**
+   * Sets the value of the minOccurs property.
+   *
+   * @param value allowed object is
+   *              {@link BigInteger }
+   */
+  public void setMinOccurs(BigInteger value)
+  {
+    this.minOccurs = value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
+  }
+
+  /**
    * Sets the value of the nillable property.
    *
    * @param value allowed object is
@@ -527,5 +483,49 @@ public abstract class ElementType
   public void setNillable(Boolean value)
   {
     this.nillable = value;
+  }
+
+  /**
+   * Sets the value of the ref property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setRef(QName value)
+  {
+    this.ref = value;
+  }
+
+  /**
+   * Sets the value of the simpleType property.
+   *
+   * @param value allowed object is
+   *              {@link LocalSimpleType }
+   */
+  public void setSimpleType(LocalSimpleType value)
+  {
+    this.simpleType = value;
+  }
+
+  /**
+   * Sets the value of the substitutionGroup property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setSubstitutionGroup(QName value)
+  {
+    this.substitutionGroup = value;
+  }
+
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link QName }
+   */
+  public void setType(QName value)
+  {
+    this.type = value;
   }
 }

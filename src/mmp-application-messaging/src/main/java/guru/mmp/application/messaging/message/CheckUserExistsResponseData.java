@@ -164,16 +164,6 @@ public class CheckUserExistsResponseData
   }
 
   /**
-   * Set the error code.
-   *
-   * @param errorCode the error code
-   */
-  public void setErrorCode(int errorCode)
-  {
-    this.errorCode = errorCode;
-  }
-
-  /**
    * Returns the error message.
    *
    * @return the error message
@@ -184,16 +174,6 @@ public class CheckUserExistsResponseData
   }
 
   /**
-   * Set the error message.
-   *
-   * @param errorMessage the error message
-   */
-  public void setErrorMessage(String errorMessage)
-  {
-    this.errorMessage = errorMessage;
-  }
-
-  /**
    * Returns <code>true</code> if the user exists or <code>false</code> otherwise.
    *
    * @return <code>true</code> if the user exists or <code>false</code> otherwise
@@ -201,6 +181,26 @@ public class CheckUserExistsResponseData
   public boolean getUserExists()
   {
     return userExists;
+  }
+
+  /**
+   * Set the error code.
+   *
+   * @param errorCode the error code
+   */
+  public void setErrorCode(int errorCode)
+  {
+    this.errorCode = errorCode;
+  }
+
+  /**
+   * Set the error message.
+   *
+   * @param errorMessage the error message
+   */
+  public void setErrorMessage(String errorMessage)
+  {
+    this.errorMessage = errorMessage;
   }
 
   /**

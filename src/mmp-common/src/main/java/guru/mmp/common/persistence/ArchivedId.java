@@ -137,16 +137,6 @@ public class ArchivedId
   }
 
   /**
-   * Set the archived date component of the archived ID.
-   *
-   * @param archived the archived date component of the archived ID
-   */
-  public void setArchived(Date archived)
-  {
-    this.archived = archived;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) component of the archived ID.
    *
    * @return the Universally Unique Identifier (UUID) component of the archived ID
@@ -154,16 +144,6 @@ public class ArchivedId
   public String getId()
   {
     return id;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) component of the archived ID.
-   *
-   * @param id the Universally Unique Identifier (UUID) component of the archived ID
-   */
-  public void setId(String id)
-  {
-    this.id = id;
   }
 
   /**
@@ -175,5 +155,25 @@ public class ArchivedId
   public int hashCode()
   {
     return ((id == null) ? 0 : id.hashCode()) + ((archived == null) ? 0 : archived.hashCode());
+  }
+
+  /**
+   * Set the archived date component of the archived ID.
+   *
+   * @param archived the archived date component of the archived ID
+   */
+  public void setArchived(Date archived)
+  {
+    this.archived = archived;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) component of the archived ID.
+   *
+   * @param id the Universally Unique Identifier (UUID) component of the archived ID
+   */
+  public void setId(String id)
+  {
+    this.id = id;
   }
 }

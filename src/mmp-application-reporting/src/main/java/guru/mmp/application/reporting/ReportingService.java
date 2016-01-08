@@ -253,17 +253,6 @@ public class ReportingService
   }
 
   /**
-   * Set the real path to the folder where the local Jasper reports are stored.
-   *
-   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
-   *                              stored
-   */
-  public void setLocalReportFolderPath(String localReportFolderPath)
-  {
-    this.localReportFolderPath = localReportFolderPath;
-  }
-
-  /**
    * Returns the number of report definitions.
    *
    * @return the number of report definitions
@@ -452,6 +441,17 @@ public class ReportingService
         String.format("Failed to save the report definition with ID (%s)",
           reportDefinition.getId()), e);
     }
+  }
+
+  /**
+   * Set the real path to the folder where the local Jasper reports are stored.
+   *
+   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
+   *                              stored
+   */
+  public void setLocalReportFolderPath(String localReportFolderPath)
+  {
+    this.localReportFolderPath = localReportFolderPath;
   }
 
   /**

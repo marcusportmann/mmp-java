@@ -267,7 +267,8 @@ public class SchedulingPattern
 
     if (st1.countTokens() < 1)
     {
-      throw new InvalidSchedulingPatternException(String.format("Invalid pattern: \"%s\"", pattern));
+      throw new InvalidSchedulingPatternException(
+        String.format("Invalid pattern: \"%s\"", pattern));
     }
 
     while (st1.hasMoreTokens())

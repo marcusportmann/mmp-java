@@ -56,17 +56,6 @@ public abstract class AttributeGroupType
   }
 
   /**
-   * Sets the value of the anyAttribute property.
-   *
-   * @param value allowed object is
-   *              {@link Wildcard }
-   */
-  public void setAnyAttribute(Wildcard value)
-  {
-    this.anyAttribute = value;
-  }
-
-  /**
    * Gets the value of the attributesAndAttributeGroups property.
    * <p/>
    * <p/>
@@ -112,17 +101,6 @@ public abstract class AttributeGroupType
   }
 
   /**
-   * Sets the value of the name property.
-   *
-   * @param value allowed object is
-   *              {@link String }
-   */
-  public void setName(String value)
-  {
-    this.name = value;
-  }
-
-  /**
    * Gets the value of the ref property.
    *
    * @return possible object is
@@ -131,6 +109,28 @@ public abstract class AttributeGroupType
   public QName getRef()
   {
     return ref;
+  }
+
+  /**
+   * Sets the value of the anyAttribute property.
+   *
+   * @param value allowed object is
+   *              {@link Wildcard }
+   */
+  public void setAnyAttribute(Wildcard value)
+  {
+    this.anyAttribute = value;
+  }
+
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setName(String value)
+  {
+    this.name = value;
   }
 
   /**
