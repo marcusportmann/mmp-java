@@ -65,32 +65,87 @@ div.side-content ul.list.list-activity li.action i.fa
   margin: 0;
 }
 
-.table-header .btn, .table-header .filter-form > .btn
+.table-header > .btn
 {
   margin: 0;
 }
 
-.table-header .filter-form
+.table-header > .table-header-right > .table-filter-form
 {
   display: table-cell;
-  float: right;
-  vertical-align: middle;
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
 }
 
+.table-header > .table-header-right > .table-filter-form > input
+{
+  height: 30px;
+  margin: 0;
+  padding-left: 5px;
+}
+
+
+.table-header > .table-header-right > .table-filter-form > button
+{
+  background-color: #ffffff;
+  height: 30px;
+  margin: 0;
+  vertical-align: top;
+}
+
+
+
+
+
+/*
+.table-header .table-header-right #filterForm
+{
+  background-color: yellow;
+}
+
+.table-header .table-header-right .table-filter-form
+{
+  display: table-cell !important;
+  float: right;
+  vertical-align: middle;
+  border: 1px solid red;
+}
+*/
+
+/*
 .table-header .table-filter-form input
 {
   width: 200px;
-  height: 30px;
+  height: 50px;
   margin-right: 4px;
   padding-left: 4px;
+  display: inline-block;
 }
 
-div.table-header-left
+.table-header .table-filter-form button
+{
+  font-size: 12px;
+  background-color: #ffffff;
+  height: 30px;
+  border: 1px solid red;
+  display: inline-block;
+}
+*/
+
+/*
+.table-header .table-filter-form button i
+{
+  font-size: 8px;
+}
+*/
+
+.table-header .table-header-left
 {
   float: left;
 }
 
-div.table-header-right
+.table-header .table-header-right
 {
   float: right;
 }
@@ -241,4 +296,48 @@ table.table-actions > tbody > tr > td > div > a > i
   padding-top: 2px;
   padding-bottom: 2px;
 }
+
+.table-actions tbody > tr > td.one-action
+{
+  text-align: center;
+  white-space: nowrap;
+  width: 30px;
+}
+
+.table-actions tbody > tr > td.two-actions
+{
+  text-align: center;
+  width: 60px;
+  white-space: nowrap;
+}
+
+.table-actions tbody > tr > td.three-actions
+{
+  text-align: center;
+  width: 90px;
+  white-space: nowrap;
+}
+
+.table-actions tbody > tr > td.four-actions
+{
+  text-align: center;
+  width: 120px;
+  white-space: nowrap;
+}
+
+.table-actions thead > tr > th.stretch-column, .table-actions tbody > tr > td.stretch-column
+{
+  width: 100%;
+}
+
+.table-actions thead > tr > th
+{
+  white-space: nowrap;
+}
+
+.table-actions tbody > tr > td
+{
+  white-space: nowrap;
+}
+
 
