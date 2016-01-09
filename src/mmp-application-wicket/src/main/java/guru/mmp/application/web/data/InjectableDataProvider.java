@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -25,9 +23,9 @@ import org.apache.wicket.protocol.http.WebApplication;
  * The <code>InjectableDataProvider</code> class provides the <code>DataProvider</code> base class
  * that provides support for container-based dependency injection (CDI).
  *
- * @author Marcus Portmann
- *
  * @param <T>
+ *
+ * @author Marcus Portmann
  */
 public abstract class InjectableDataProvider<T>
   implements IDataProvider<T>
@@ -37,8 +35,9 @@ public abstract class InjectableDataProvider<T>
    */
   public InjectableDataProvider()
   {
-    guru.mmp.application.web.WebApplication webApplication =
-      guru.mmp.application.web.WebApplication.class.cast(WebApplication.get());
+    guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
+      .WebApplication.class.cast(
+      WebApplication.get());
 
     webApplication.getWebApplicationInjector().inject(this);
   }

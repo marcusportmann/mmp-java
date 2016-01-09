@@ -16,16 +16,12 @@
 
 package guru.mmp.application.web.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.wicket.util.resource.IResourceStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Locale;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ResourceStream</code> class provides a base class for all resource steams.
@@ -36,8 +32,11 @@ public abstract class ResourceStream
   implements IResourceStream
 {
   private static final long serialVersionUID = 1000000;
+
   private Locale locale;
+
   private String style;
+
   private String variation;
 
   /**
@@ -127,7 +126,8 @@ public abstract class ResourceStream
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to read the classpath resource (" + path + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to read the classpath resource (%s)", path), e);
     }
     finally
     {

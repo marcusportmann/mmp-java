@@ -16,14 +16,10 @@
 
 package guru.mmp.application.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DAOException;
 
 import java.util.List;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ICodesDAO</code> interface defines the codes-related persistence operations.
@@ -72,6 +68,7 @@ public interface ICodesDAO
    *
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the
    *                           information for the new code category
+   *
    * @throws DAOException
    */
   void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
@@ -92,6 +89,7 @@ public interface ICodesDAO
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
    *                     new code category
+   *
    * @throws DAOException
    */
   void createCodeCategory(CodeCategory codeCategory)
@@ -137,7 +135,7 @@ public interface ICodesDAO
    *           category
    *
    * @return the cached code category or <code>null</code> if the cached code category could not be
-   *         found
+   * found
    *
    * @throws DAOException
    */
@@ -174,7 +172,7 @@ public interface ICodesDAO
   /**
    * Returns all the code categories.
    *
-   * @param retrieveCodes  retrieve the codes and/or code data for the code categories
+   * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return all the code categories
    *
@@ -236,7 +234,7 @@ public interface ICodesDAO
    *           category
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws DAOException
    */

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.resource.jqplot;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
@@ -27,27 +25,28 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @author Marcus Portmann
  */
-public class JQPlotCssResourceReference extends JavaScriptResourceReference
+public class JQPlotCssResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
   private static final JQPlotCssResourceReference INSTANCE = new JQPlotCssResourceReference();
 
-  private JQPlotCssResourceReference()
-  {
-    super(JQPlotCssResourceReference.class, Debug.inDebugMode()
-        ? "jquery.jqplot.css"
-        : "jquery.jqplot.min.css");
-  }
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the resource reference for the jqPlot JavaScript library
    * bundled with the web application library.
    *
    * @return the single instance of the resource reference for the jqPlot JavaScript library
-   *         bundled with the web application library
+   * bundled with the web application library
    */
   public static JQPlotCssResourceReference get()
   {
     return INSTANCE;
+  }
+
+  private JQPlotCssResourceReference()
+  {
+    super(JQPlotCssResourceReference.class,
+      Debug.inDebugMode() ? "jquery.jqplot.css" : "jquery.jqplot.min.css");
   }
 }

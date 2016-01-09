@@ -16,8 +16,6 @@
 
 package guru.mmp.common.service.ws.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.security.cert.X509Certificate;
 
 /**
@@ -37,7 +35,6 @@ public class WebServiceSecurityContext
     {
       return new WebServiceSecurityContext();
     }
-
   };
 
   /**
@@ -61,7 +58,7 @@ public class WebServiceSecurityContext
    * service operation.
    *
    * @return the X509 certificate identifying the web service client that executed the secure web
-   *         service operation
+   * service operation
    */
   public X509Certificate getClientCertificate()
   {

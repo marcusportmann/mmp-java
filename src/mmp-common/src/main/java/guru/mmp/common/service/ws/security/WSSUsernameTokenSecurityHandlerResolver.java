@@ -16,8 +16,6 @@
 
 package guru.mmp.common.service.ws.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.handler.HandlerResolver;
 import javax.xml.ws.handler.PortInfo;

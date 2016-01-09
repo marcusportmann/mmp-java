@@ -16,14 +16,9 @@
 
 package guru.mmp.application.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.BinaryBuffer;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.math.BigDecimal;
-
 import java.util.List;
 
 /**
@@ -38,16 +33,417 @@ public class Attribute
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String name;
+
   private Object value;
 
   /**
-   * The enumeration defining the types of values that an <code>Attribute</code> instance can
-   * store.
+   * Returns the binary value for the <code>Attribute</code> instance with the specified name in the
+   * specified list.
+   *
+   * @param list the list of <code>Attribute</code> instances to search for the
+   *             <code>Attribute</code> with the specified name
+   * @param name the name for the attribute
+   *
+   * @return the binary value for the <code>Attribute</code> instance with the specified name in the
+   * specified list
+   *
+   * @throws AttributeException
    */
-  public enum ValueType
+  public static byte[] getBinaryValue(List<Attribute> list, String name)
+    throws AttributeException
   {
-    STRING_VALUE, LONG_VALUE, DOUBLE_VALUE, DECIMAL_VALUE, BINARY_VALUE, UNKNOWN_VALUE
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        if (attribute.value instanceof BinaryBuffer)
+        {
+          return BinaryBuffer.class.cast(attribute.value).getData();
+        }
+
+        throw new AttributeException(String.format(
+          "Failed to retrieve the binary value for the attribute (%s) with the incorrect type (%s)",
+          attribute.name, attribute.getTypeName()));
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to retrieve the binary value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list the list of <code>Attribute</code> instances to search for the
+   *             <code>Attribute</code> with the specified name
+   * @param name the name for the attribute
+   *
+   * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
+   * specified name in the specified list
+   *
+   * @throws AttributeException
+   */
+  public static BigDecimal getDecimalValue(List<Attribute> list, String name)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        if (attribute.value instanceof BigDecimal)
+        {
+          return BigDecimal.class.cast(attribute.value);
+        }
+        else if (attribute.value instanceof String)
+        {
+          try
+          {
+            return new BigDecimal(String.class.cast(attribute.value));
+          }
+          catch (Throwable ignored)
+          {
+          }
+        }
+        else if (attribute.value instanceof Double)
+        {
+          return BigDecimal.valueOf(Double.class.cast(attribute.value));
+        }
+        else if (attribute.value instanceof Long)
+        {
+          return BigDecimal.valueOf(Long.class.cast(attribute.value));
+        }
+
+        throw new AttributeException(String.format(
+          "Failed to retrieve the decimal value for the attribute (%s) with the incorrect type " +
+            "(%s)", attribute.name, attribute.getTypeName()));
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to retrieve the decimal value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Returns the <code>double</code> value for the <code>Attribute</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list the list of <code>Attribute</code> instances to search for the
+   *             <code>Attribute</code> with the specified name
+   * @param name the name for the attribute
+   *
+   * @return the <code>double</code> value for the <code>Attribute</code> instance with the
+   * specified name in the specified list
+   *
+   * @throws AttributeException
+   */
+  public static double getDoubleValue(List<Attribute> list, String name)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        if (attribute.value instanceof Double)
+        {
+          return Double.class.cast(attribute.value);
+        }
+        else if (attribute.value instanceof String)
+        {
+          try
+          {
+            return Double.valueOf(String.class.cast(attribute.value));
+          }
+          catch (Throwable ignored)
+          {
+          }
+        }
+        else if (attribute.value instanceof BigDecimal)
+        {
+          return BigDecimal.class.cast(attribute.value).doubleValue();
+        }
+        else if (attribute.value instanceof Long)
+        {
+          return Long.class.cast(attribute.value);
+        }
+
+        throw new AttributeException(String.format(
+          "Failed to retrieve the double value for the attribute (%s) with the incorrect type (%s)",
+          attribute.name, attribute.getTypeName()));
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to retrieve the double value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Returns the <code>long</code> value for the <code>Attribute</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list the list of <code>Attribute</code> instances to search for the
+   *             <code>Attribute</code> with the specified name
+   * @param name the name for the attribute
+   *
+   * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
+   * name in the specified list
+   *
+   * @throws AttributeException
+   */
+  public static long getLongValue(List<Attribute> list, String name)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        if (attribute.value instanceof Long)
+        {
+          return Long.class.cast(attribute.value);
+        }
+        else if (attribute.value instanceof String)
+        {
+          try
+          {
+            return Long.valueOf(String.class.cast(attribute.value));
+          }
+          catch (Throwable ignored)
+          {
+          }
+        }
+        else if (attribute.value instanceof BigDecimal)
+        {
+          return BigDecimal.class.cast(attribute.value).longValue();
+        }
+        else if (attribute.value instanceof Double)
+        {
+          return Double.class.cast(attribute.value).longValue();
+        }
+
+        throw new AttributeException(String.format(
+          "Failed to retrieve the long value for the attribute (%s) with the incorrect type (%s)",
+          attribute.name, attribute.getTypeName()));
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to retrieve the long value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>Attribute</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list the list of <code>Attribute</code> instances to search for the
+   *             <code>Attribute</code> with the specified name
+   * @param name the name for the attribute
+   *
+   * @return the <code>String</code> value for the <code>Attribute</code> instance with the
+   * specified name in the specified list
+   *
+   * @throws AttributeException
+   */
+  public static String getStringValue(List<Attribute> list, String name)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        if (attribute.value instanceof String)
+        {
+          return String.class.cast(attribute.value);
+        }
+        else if (attribute.value instanceof BigDecimal)
+        {
+          return attribute.value.toString();
+        }
+        else if (attribute.value instanceof Double)
+        {
+          return attribute.value.toString();
+        }
+        else if (attribute.value instanceof Long)
+        {
+          return attribute.value.toString();
+        }
+
+        throw new AttributeException(String.format(
+          "Failed to retrieve the string value for the attribute (%s) with the incorrect type (%s)",
+          attribute.name, attribute.getTypeName()));
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to retrieve the string value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Set the binary value for the <code>Attribute</code> instance with the specified name in the
+   * specified list.
+   *
+   * @param list  the list of <code>Attribute</code> instances to search for the
+   *              <code>Attribute</code> with the specified name
+   * @param name  the name for the attribute
+   * @param value the binary value for the attribute
+   *
+   * @throws AttributeException
+   */
+  public static void setBinaryValue(List<Attribute> list, String name, BinaryBuffer value)
+    throws AttributeException
+  {
+    setBinaryValue(list, name, value.getData());
+  }
+
+  /**
+   * Set the binary value for the <code>Attribute</code> instance with the specified name in the
+   * specified list.
+   *
+   * @param list  the list of <code>Attribute</code> instances to search for the
+   *              <code>Attribute</code> with the specified name
+   * @param name  the name for the attribute
+   * @param value the binary value for the attribute
+   *
+   * @throws AttributeException
+   */
+  public static void setBinaryValue(List<Attribute> list, String name, byte[] value)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        attribute.setBinaryValue(value);
+
+        return;
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to set the binary value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Set the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list  the list of <code>Attribute</code> instances to search for the
+   *              <code>Attribute</code> with the specified name
+   * @param name  the name for the attribute
+   * @param value the <code>BigDecimal</code> value for the attribute
+   *
+   * @throws AttributeException
+   */
+  public static void setDecimalValue(List<Attribute> list, String name, BigDecimal value)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        attribute.setDecimalValue(value);
+
+        return;
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to set the decimal value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Set the <code>double</code> value for the <code>Attribute</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list  the list of <code>Attribute</code> instances to search for the
+   *              <code>Attribute</code> with the specified name
+   * @param name  the name for the attribute
+   * @param value the <code>double</code> value for the attribute
+   *
+   * @throws AttributeException
+   */
+  public static void setDoubleValue(List<Attribute> list, String name, double value)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        attribute.setDoubleValue(value);
+
+        return;
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to set the double value for the attribute (%s): " +
+        "The attribute could not be found", name));
+  }
+
+  /**
+   * Set the <code>long</code> value for the <code>Attribute</code> instance with the specified name
+   * in the specified list.
+   *
+   * @param list  the list of <code>Attribute</code> instances to search for the
+   *              <code>Attribute</code> with the specified name
+   * @param name  the name for the attribute
+   * @param value the <code>long</code> value for the attribute
+   *
+   * @throws AttributeException
+   */
+  public static void setLongValue(List<Attribute> list, String name, long value)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        attribute.setLongValue(value);
+
+        return;
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to set the long value for the attribute (%s): " + "The attribute could not be found",
+      name));
+  }
+
+  /**
+   * Set the <code>String</code> value for the <code>Attribute</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list  the list of <code>Attribute</code> instances to search for the
+   *              <code>Attribute</code> with the specified name
+   * @param name  the name for the attribute
+   * @param value the <code>String</code> value for the attribute
+   *
+   * @throws AttributeException
+   */
+  public static void setStringValue(List<Attribute> list, String name, String value)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        attribute.setStringValue(value);
+
+        return;
+      }
+    }
+
+    throw new AttributeException(String.format(
+      "Failed to set the string value for the attribute (%s): " +
+        "The attribute could not be found", name));
   }
 
   /**
@@ -123,402 +519,6 @@ public class Attribute
   }
 
   /**
-   * Returns the binary value for the <code>Attribute</code> instance with the specified name in
-   * the specified list.
-   *
-   * @param list the list of <code>Attribute</code> instances to search for the
-   *             <code>Attribute</code> with the specified name
-   * @param name the name for the attribute
-   *
-   * @return the binary value for the <code>Attribute</code> instance with the specified name in
-   *         the specified list
-   *
-   * @throws AttributeException
-   */
-  public static byte[] getBinaryValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        if (attribute.value instanceof BinaryBuffer)
-        {
-          return BinaryBuffer.class.cast(attribute.value).getData();
-        }
-
-        throw new AttributeException("Failed to retrieve the \"binary\" value for the Attribute ("
-            + attribute.name + ") which contains a value of type \"" + attribute.getTypeName()
-            + "\"");
-      }
-    }
-
-    throw new AttributeException("Failed to retrieve the \"binary\" value for the Attribute ("
-        + name + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list the list of <code>Attribute</code> instances to search for the
-   *             <code>Attribute</code> with the specified name
-   * @param name the name for the attribute
-   *
-   * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
-   *         specified name in the specified list
-   *
-   * @throws AttributeException
-   */
-  public static BigDecimal getDecimalValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        if (attribute.value instanceof BigDecimal)
-        {
-          return BigDecimal.class.cast(attribute.value);
-        }
-        else if (attribute.value instanceof String)
-        {
-          try
-          {
-            return new BigDecimal(String.class.cast(attribute.value));
-          }
-          catch (Throwable ignored) {}
-        }
-        else if (attribute.value instanceof Double)
-        {
-          return BigDecimal.valueOf(Double.class.cast(attribute.value));
-        }
-        else if (attribute.value instanceof Long)
-        {
-          return BigDecimal.valueOf(Long.class.cast(attribute.value));
-        }
-
-        throw new AttributeException("Failed to retrieve the \"decimal\" value for the Attribute ("
-            + attribute.name + ") which contains a value of type \"" + attribute.getTypeName()
-            + "\"");
-      }
-    }
-
-    throw new AttributeException("Failed to retrieve the \"decimal\" value for the Attribute ("
-        + name + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Returns the <code>double</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list the list of <code>Attribute</code> instances to search for the
-   *             <code>Attribute</code> with the specified name
-   * @param name the name for the attribute
-   *
-   * @return the <code>double</code> value for the <code>Attribute</code> instance with the
-   *         specified name in the specified list
-   *
-   * @throws AttributeException
-   */
-  public static double getDoubleValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        if (attribute.value instanceof Double)
-        {
-          return Double.class.cast(attribute.value);
-        }
-        else if (attribute.value instanceof String)
-        {
-          try
-          {
-            return Double.valueOf(String.class.cast(attribute.value));
-          }
-          catch (Throwable ignored) {}
-        }
-        else if (attribute.value instanceof BigDecimal)
-        {
-          return BigDecimal.class.cast(attribute.value).doubleValue();
-        }
-        else if (attribute.value instanceof Long)
-        {
-          return Long.class.cast(attribute.value);
-        }
-
-        throw new AttributeException("Failed to retrieve the \"double\" value for the Attribute ("
-            + attribute.name + ") which contains a value of type \"" + attribute.getTypeName()
-            + "\"");
-      }
-    }
-
-    throw new AttributeException("Failed to retrieve the \"double\" value for the Attribute ("
-        + name + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Returns the <code>long</code> value for the <code>Attribute</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list the list of <code>Attribute</code> instances to search for the
-   *             <code>Attribute</code> with the specified name
-   * @param name the name for the attribute
-   *
-   * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
-   *         name in the specified list
-   *
-   * @throws AttributeException
-   */
-  public static long getLongValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        if (attribute.value instanceof Long)
-        {
-          return Long.class.cast(attribute.value);
-        }
-        else if (attribute.value instanceof String)
-        {
-          try
-          {
-            return Long.valueOf(String.class.cast(attribute.value));
-          }
-          catch (Throwable ignored) {}
-        }
-        else if (attribute.value instanceof BigDecimal)
-        {
-          return BigDecimal.class.cast(attribute.value).longValue();
-        }
-        else if (attribute.value instanceof Double)
-        {
-          return Double.class.cast(attribute.value).longValue();
-        }
-
-        throw new AttributeException("Failed to retrieve the \"long\" value for the Attribute ("
-            + attribute.name + ") which contains a value of type \"" + attribute.getTypeName()
-            + "\"");
-      }
-    }
-
-    throw new AttributeException("Failed to retrieve the \"long\" value for the Attribute (" + name
-        + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list the list of <code>Attribute</code> instances to search for the
-   *             <code>Attribute</code> with the specified name
-   * @param name the name for the attribute
-   *
-   * @return the <code>String</code> value for the <code>Attribute</code> instance with the
-   *         specified name in the specified list
-   *
-   * @throws AttributeException
-   */
-  public static String getStringValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        if (attribute.value instanceof String)
-        {
-          return String.class.cast(attribute.value);
-        }
-        else if (attribute.value instanceof BigDecimal)
-        {
-          return attribute.value.toString();
-        }
-        else if (attribute.value instanceof Double)
-        {
-          return attribute.value.toString();
-        }
-        else if (attribute.value instanceof Long)
-        {
-          return attribute.value.toString();
-        }
-
-        throw new AttributeException("Failed to retrieve the \"long\" value for the Attribute ("
-            + attribute.name + ") which contains a value of type \"" + attribute.getTypeName()
-            + "\"");
-      }
-    }
-
-    throw new AttributeException("Failed to retrieve the \"string\" value for the Attribute ("
-        + name + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Set the binary value for the <code>Attribute</code> instance with the specified name in the
-   * specified list.
-   *
-   * @param list  the list of <code>Attribute</code> instances to search for the
-   *              <code>Attribute</code> with the specified name
-   * @param name  the name for the attribute
-   * @param value the binary value for the attribute
-   *
-   * @throws AttributeException
-   */
-  public static void setBinaryValue(List<Attribute> list, String name, BinaryBuffer value)
-    throws AttributeException
-  {
-    setBinaryValue(list, name, value.getData());
-  }
-
-  /**
-   * Set the binary value for the <code>Attribute</code> instance with the specified name in the
-   * specified list.
-   *
-   * @param list  the list of <code>Attribute</code> instances to search for the
-   *              <code>Attribute</code> with the specified name
-   * @param name  the name for the attribute
-   * @param value the binary value for the attribute
-   *
-   * @throws AttributeException
-   */
-  public static void setBinaryValue(List<Attribute> list, String name, byte[] value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        attribute.setBinaryValue(value);
-
-        return;
-      }
-    }
-
-    throw new AttributeException("Failed to set the \"binary\" value for the Attribute (" + name
-        + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Set the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list  the list of <code>Attribute</code> instances to search for the
-   *              <code>Attribute</code> with the specified name
-   * @param name  the name for the attribute
-   * @param value the <code>BigDecimal</code> value for the attribute
-   *
-   * @throws AttributeException
-   */
-  public static void setDecimalValue(List<Attribute> list, String name, BigDecimal value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        attribute.setDecimalValue(value);
-
-        return;
-      }
-    }
-
-    throw new AttributeException("Failed to set the \"decimal\" value for the Attribute (" + name
-        + ") to the value (" + value
-        + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Set the <code>double</code> value for the <code>Attribute</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list  the list of <code>Attribute</code> instances to search for the
-   *              <code>Attribute</code> with the specified name
-   * @param name  the name for the attribute
-   * @param value the <code>double</code> value for the attribute
-   *
-   * @throws AttributeException
-   */
-  public static void setDoubleValue(List<Attribute> list, String name, double value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        attribute.setDoubleValue(value);
-
-        return;
-      }
-    }
-
-    throw new AttributeException("Failed to set the \"double\" value for the Attribute (" + name
-        + ") to the value (" + value
-        + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Set the <code>long</code> value for the <code>Attribute</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list  the list of <code>Attribute</code> instances to search for the
-   *              <code>Attribute</code> with the specified name
-   * @param name  the name for the attribute
-   * @param value the <code>long</code> value for the attribute
-   *
-   * @throws AttributeException
-   */
-  public static void setLongValue(List<Attribute> list, String name, long value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        attribute.setLongValue(value);
-
-        return;
-      }
-    }
-
-    throw new AttributeException("Failed to set the \"long\" value for the Attribute (" + name
-        + ") to the value (" + value
-        + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
-   * Set the <code>String</code> value for the <code>Attribute</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list  the list of <code>Attribute</code> instances to search for the
-   *              <code>Attribute</code> with the specified name
-   * @param name  the name for the attribute
-   * @param value the <code>String</code> value for the attribute
-   *
-   * @throws AttributeException
-   */
-  public static void setStringValue(List<Attribute> list, String name, String value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        attribute.setStringValue(value);
-
-        return;
-      }
-    }
-
-    throw new AttributeException("Failed to set the \"string\" value for the Attribute (" + name
-        + ") to the value (" + value
-        + ") since no matching Attribute entry could be found in the specified list");
-  }
-
-  /**
    * Returns the binary value for the <code>Attribute</code> instance.
    *
    * @return the binary value for the <code>Attribute</code> instance
@@ -533,8 +533,9 @@ public class Attribute
       return BinaryBuffer.class.cast(value).getData();
     }
 
-    throw new AttributeException("Failed to retrieve the \"binary\" value for the Attribute ("
-        + name + ") which contains a value of type \"" + getTypeName() + "\"");
+    throw new AttributeException(
+      String.format("Failed to retrieve the binary value for the attribute (%s) with type (%s)",
+        name, getTypeName()));
   }
 
   /**
@@ -557,7 +558,9 @@ public class Attribute
       {
         return new BigDecimal(String.class.cast(value));
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
     else if (value instanceof Double)
     {
@@ -568,8 +571,9 @@ public class Attribute
       return BigDecimal.valueOf(Long.class.cast(value));
     }
 
-    throw new AttributeException("Failed to retrieve the \"decimal\" value for the Attribute ("
-        + name + ") which contains a value of type \"" + getTypeName() + "\"");
+    throw new AttributeException(
+      String.format("Failed to retrieve the decimal value for the attribute (%s) with type (%s)",
+        name, getTypeName()));
   }
 
   /**
@@ -592,7 +596,9 @@ public class Attribute
       {
         return Double.valueOf(String.class.cast(value));
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
     else if (value instanceof BigDecimal)
     {
@@ -603,8 +609,9 @@ public class Attribute
       return Long.class.cast(value);
     }
 
-    throw new AttributeException("Failed to retrieve the \"double\" value for the Attribute ("
-        + name + ") which contains a value of type \"" + getTypeName() + "\"");
+    throw new AttributeException(
+      String.format("Failed to retrieve the double value for the attribute (%s) with type (%s)",
+        name, getTypeName()));
   }
 
   /**
@@ -627,7 +634,9 @@ public class Attribute
       {
         return Long.valueOf(String.class.cast(value));
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
     else if (value instanceof BigDecimal)
     {
@@ -638,8 +647,9 @@ public class Attribute
       return Double.class.cast(value).longValue();
     }
 
-    throw new AttributeException("Failed to retrieve the \"long\" value for the Attribute (" + name
-        + ") which contains a value of type \"" + getTypeName() + "\"");
+    throw new AttributeException(
+      String.format("Failed to retrieve the long value for the attribute (%s) with type (%s)", name,
+        getTypeName()));
   }
 
   /**
@@ -679,8 +689,9 @@ public class Attribute
       return value.toString();
     }
 
-    throw new AttributeException("Failed to retrieve the \"long\" value for the Attribute (" + name
-        + ") which contains a value of type \"" + getTypeName() + "\"");
+    throw new AttributeException(
+      String.format("Failed to retrieve the string value for the attribute (%s) with type (%s)",
+        name, getTypeName()));
   }
 
   /**
@@ -754,7 +765,7 @@ public class Attribute
    *
    * @param value the binary value for the attribute
    */
-  public void setBinaryValue(BinaryBuffer value)
+  public void setBinaryValue(byte[] value)
   {
     this.value = new BinaryBuffer(value);
   }
@@ -764,7 +775,7 @@ public class Attribute
    *
    * @param value the binary value for the attribute
    */
-  public void setBinaryValue(byte[] value)
+  public void setBinaryValue(BinaryBuffer value)
   {
     this.value = new BinaryBuffer(value);
   }
@@ -817,5 +828,13 @@ public class Attribute
   public void setStringValue(String value)
   {
     this.value = value;
+  }
+
+  /**
+   * The enumeration defining the types of values that an <code>Attribute</code> instance can store.
+   */
+  public enum ValueType
+  {
+    STRING_VALUE, LONG_VALUE, DOUBLE_VALUE, DECIMAL_VALUE, BINARY_VALUE, UNKNOWN_VALUE
   }
 }

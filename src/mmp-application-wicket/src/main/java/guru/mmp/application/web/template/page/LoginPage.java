@@ -16,22 +16,19 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.application.Debug;
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.behavior.DefaultFocusBehavior;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
+import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -43,16 +40,12 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
-
-import javax.inject.Inject;
 
 /**
  * The <code>LoginPage</code> class implements the "Login"
@@ -60,18 +53,22 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-public class LoginPage extends WebPage
+public class LoginPage
+  extends WebPage
 {
-  private transient static CssReferenceHeaderItem applicationCssHeaderItem;
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LoginPage.class);
+
+  private static final long serialVersionUID = 1000000;
+
+  private transient static CssReferenceHeaderItem applicationCssHeaderItem;
+
   private String password;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
+
   private String username;
 
   /**
@@ -121,11 +118,11 @@ public class LoginPage extends WebPage
         {
           try
           {
-            if (Debug.inDebugMode() && "s".equals(username))
-            {
-              username = "Administrator";
-              password = "Password1";
-            }
+//            if (Debug.inDebugMode() && "s".equals(username))
+//            {
+//              username = "Administrator";
+//              password = "Password1";
+//            }
 
             // Authenticate the user
             UUID userDirectoryId = securityService.authenticate(username, password);
@@ -138,6 +135,7 @@ public class LoginPage extends WebPage
 
             session.setUserDirectoryId(user.getUserDirectoryId());
             session.setUsername(user.getUsername());
+            session.setUserFullName(user.getFirstNames() + user.getLastName());
 
             // Make session permanent after login
             if (session.isTemporary())
@@ -149,14 +147,21 @@ public class LoginPage extends WebPage
               session.dirty();  // for cluster replication
             }
 
+            // Invalidate the cached navigation state
+            if (session instanceof TemplateWebSession)
+            {
+              ((TemplateWebSession)session).getNavigationState().invalidate();
+            }
+
             // Check whether the user is associated with more than 1 organisation
-            List<Organisation> organisations =
-              securityService.getOrganisationsForUserDirectory(userDirectoryId);
+            List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(
+              userDirectoryId);
 
             if (organisations.size() == 0)
             {
               error("Authentication Failed.");
-              error("The user (" + username + ") is not associated with any organisations.");
+              error(
+                String.format("The user (%s) is not associated with any organisations.", username));
             }
             else if (organisations.size() == 1)
             {
@@ -171,17 +176,16 @@ public class LoginPage extends WebPage
 
               if (logger.isDebugEnabled())
               {
-                logger.debug("Successfully authenticated user (" + username
-                    + ") for organisation (" + organisations.get(0).getId() + ") with groups ("
-                    + StringUtil.delimit(groupNames, ",") + ") and function codes ("
-                    + StringUtil.delimit(functionCodes, ",") + ")");
+                logger.debug(String.format(
+                  "Successfully authenticated user (%s) for organisation (%s) with groups (%s) " +
+                    "and function codes (%s)", username, organisations.get(0).getId(),
+                  StringUtil.delimit(groupNames, ","), StringUtil.delimit(functionCodes, ",")));
               }
 
               // Redirect to the secure home page for the application
               throw new RedirectToUrlException(
-                  urlFor(
-                    ((TemplateWebApplication) getApplication()).getSecureHomePage(),
-                      new PageParameters()).toString());
+                urlFor(((TemplateWebApplication) getApplication()).getSecureHomePage(),
+                  new PageParameters()).toString());
             }
             else
             {
@@ -189,8 +193,8 @@ public class LoginPage extends WebPage
                * Redirect to the page allowing the user to select which organisation they wish to
                * work with.
                */
-              throw new RedirectToUrlException(urlFor(SelectOrganisationPage.class,
-                  new PageParameters()).toString());
+              throw new RedirectToUrlException(
+                urlFor(SelectOrganisationPage.class, new PageParameters()).toString());
             }
           }
           catch (RedirectToUrlException e)
@@ -211,8 +215,9 @@ public class LoginPage extends WebPage
           }
           catch (Throwable e)
           {
-            logger.error("Failed to authenticate the user (" + username + "): " + e.getMessage(),
-                e);
+            logger.error(
+              String.format("Failed to authenticate the user (%s): %s", username, e.getMessage()),
+              e);
             error("The system is currently unavailable.");
           }
         }
@@ -258,8 +263,8 @@ public class LoginPage extends WebPage
   {
     if (applicationCssHeaderItem == null)
     {
-      applicationCssHeaderItem =
-        CssHeaderItem.forReference(getWebApplication().getApplicationCssResourceReference());
+      applicationCssHeaderItem = CssHeaderItem.forReference(
+        getWebApplication().getApplicationCssResourceReference());
     }
 
     return applicationCssHeaderItem;

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -25,30 +23,28 @@ import org.apache.wicket.model.IModel;
 
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>PropertyChoiceRenderer</code> class implements a simple property-based ChoiceRenderer.
  * <p/>
  * Use the given property names as the source to obtain the respective ID and LABEL strings used to
  * render the Choice to the Hosting component.
- *
+ * <p/>
  * Example:
- *
- *   // Somewhere, in SomePersistentData.java file...
- *   public class SomePersistentData implements Serializable
- *   {
- *      private Integer id;
- *      private String  description;
- *      //plus, getters and setters....
- *   }
- *
- *   // Extract Objects from DB
- *   List values = myService.findDataElements();
- *
- *   add(new DropDownChoice("myWicketId",
- *       new PropertyModel(myDataObject, "propertyName"), values,
- *       new PropertyChoiceRenderer("id", "description")))
+ * <p/>
+ * // Somewhere, in SomePersistentData.java file...
+ * public class SomePersistentData implements Serializable
+ * {
+ * private Integer id;
+ * private String  description;
+ * //plus, getters and setters....
+ * }
+ * <p/>
+ * // Extract Objects from DB
+ * List values = myService.findDataElements();
+ * <p/>
+ * add(new DropDownChoice("myWicketId",
+ * new PropertyModel(myDataObject, "propertyName"), values,
+ * new PropertyChoiceRenderer("id", "description")))
  *
  * @param <T>
  *

@@ -16,11 +16,7 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DAOException;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;
@@ -41,7 +37,7 @@ public interface IMessagingDAO
    * @param totalParts the total number of parts for the message
    *
    * @return <code>true</code> if all the parts for the message have been  queued for assembly or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws DAOException
    */
@@ -184,8 +180,8 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId,
-      String lockName)
+  List<MessagePart> getMessagePartsQueuedForDownloadForUser(
+    String username, UUID deviceId, String lockName)
     throws DAOException;
 
   /**
@@ -197,7 +193,7 @@ public interface IMessagingDAO
    *                 when they are retrieved
    *
    * @return the messages for a user that have been queued for download by a particular remote
-   *         device
+   * device
    *
    * @throws DAOException
    */
@@ -228,7 +224,7 @@ public interface IMessagingDAO
    *                             for processing when it is retrieved
    *
    * @return the next message that has been queued for processing or <code>null</code> if no
-   *         messages are currently queued for processing
+   * messages are currently queued for processing
    *
    * @throws DAOException
    */
@@ -261,7 +257,7 @@ public interface IMessagingDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws DAOException
    */
@@ -274,7 +270,7 @@ public interface IMessagingDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @return <code>true</code> if the message part has already been queued for assemble or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws DAOException
    */
@@ -306,8 +302,8 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status,
-      MessagePart.Status newStatus)
+  int resetExpiredMessagePartLocks(
+    int lockTimeout, MessagePart.Status status, MessagePart.Status newStatus)
     throws DAOException;
 
   /**
@@ -335,8 +331,8 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  int resetMessagePartLocks(String lockName, MessagePart.Status status,
-      MessagePart.Status newStatus)
+  int resetMessagePartLocks(
+    String lockName, MessagePart.Status status, MessagePart.Status newStatus)
     throws DAOException;
 
   /**

@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.*;
@@ -13,19 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- *    group type for explicit groups, named top-level groups and
- *    group references
- *
+ * group type for explicit groups, named top-level groups and
+ * group references
+ * <p/>
  * <p>Java class for group complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="group">
  *   &lt;complexContent>
  *     &lt;extension base="{http://www.w3.org/2001/XMLSchema}annotated">
- *       &lt;group ref="{http://www.w3.org/2001/XMLSchema}particle" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;group ref="{http://www.w3.org/2001/XMLSchema}particle" maxOccurs="unbounded"
+ *       minOccurs="0"/>
  *       &lt;attGroup ref="{http://www.w3.org/2001/XMLSchema}defRef"/>
  *       &lt;attGroup ref="{http://www.w3.org/2001/XMLSchema}occurs"/>
  *       &lt;anyAttribute processContents='lax' namespace='##other'/>
@@ -33,57 +30,60 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "group", propOrder = { "elementsAndGroupsAndAlls" })
-@XmlSeeAlso({ ExplicitGroup.class, RealGroup.class })
-public abstract class GroupType extends Annotated
+@XmlType(name = "group", propOrder = {"elementsAndGroupsAndAlls"})
+@XmlSeeAlso({ExplicitGroup.class, RealGroup.class})
+public abstract class GroupType
+  extends Annotated
 {
-  @XmlElementRefs({ @XmlElementRef(name = "any", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = Any.class, required = false) ,
-      @XmlElementRef(name = "sequence", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false) ,
-      @XmlElementRef(name = "choice", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false) ,
-      @XmlElementRef(name = "group", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false) ,
-      @XmlElementRef(name = "element", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false) ,
-      @XmlElementRef(name = "all", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false) })
+  @XmlElementRefs({@XmlElementRef(name = "any", namespace = "http://www.w3.org/2001/XMLSchema",
+    type = Any.class, required = false),
+    @XmlElementRef(name = "sequence", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false),
+    @XmlElementRef(name = "choice", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false),
+    @XmlElementRef(name = "group", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false),
+    @XmlElementRef(name = "element", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false),
+    @XmlElementRef(name = "all", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false)})
   protected List<Object> elementsAndGroupsAndAlls;
+
   @XmlAttribute(name = "maxOccurs")
   @XmlSchemaType(name = "allNNI")
   protected String maxOccurs;
+
   @XmlAttribute(name = "minOccurs")
   @XmlSchemaType(name = "nonNegativeInteger")
   protected BigInteger minOccurs;
+
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
+
   @XmlAttribute(name = "ref")
   protected QName ref;
 
   /**
    * Gets the value of the elementsAndGroupsAndAlls property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the elementsAndGroupsAndAlls property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getElementsAndGroupsAndAlls().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link JAXBElement }{@code <}{@link LocalElement }{@code >}
    * {@link Any }
@@ -91,8 +91,6 @@ public abstract class GroupType extends Annotated
    * {@link JAXBElement }{@code <}{@link ExplicitGroup }{@code >}
    * {@link JAXBElement }{@code <}{@link ExplicitGroup }{@code >}
    * {@link JAXBElement }{@code <}{@link GroupRef }{@code >}
-   *
-   *
    *
    * @return
    */
@@ -109,10 +107,8 @@ public abstract class GroupType extends Annotated
   /**
    * Gets the value of the maxOccurs property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getMaxOccurs()
   {
@@ -129,10 +125,8 @@ public abstract class GroupType extends Annotated
   /**
    * Gets the value of the minOccurs property.
    *
-   * @return
-   *     possible object is
-   *     {@link BigInteger }
-   *
+   * @return possible object is
+   * {@link BigInteger }
    */
   public BigInteger getMinOccurs()
   {
@@ -149,10 +143,8 @@ public abstract class GroupType extends Annotated
   /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getName()
   {
@@ -162,10 +154,8 @@ public abstract class GroupType extends Annotated
   /**
    * Gets the value of the ref property.
    *
-   * @return
-   *     possible object is
-   *     {@link QName }
-   *
+   * @return possible object is
+   * {@link QName }
    */
   public QName getRef()
   {
@@ -175,10 +165,8 @@ public abstract class GroupType extends Annotated
   /**
    * Sets the value of the maxOccurs property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setMaxOccurs(String value)
   {
@@ -188,10 +176,8 @@ public abstract class GroupType extends Annotated
   /**
    * Sets the value of the minOccurs property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link BigInteger }
-   *
+   * @param value allowed object is
+   *              {@link BigInteger }
    */
   public void setMinOccurs(BigInteger value)
   {
@@ -201,10 +187,8 @@ public abstract class GroupType extends Annotated
   /**
    * Sets the value of the name property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setName(String value)
   {
@@ -214,10 +198,8 @@ public abstract class GroupType extends Annotated
   /**
    * Sets the value of the ref property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link QName }
-   *
+   * @param value allowed object is
+   *              {@link QName }
    */
   public void setRef(QName value)
   {

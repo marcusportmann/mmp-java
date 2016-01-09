@@ -30,13 +30,8 @@ public enum ReportType
   LOCAL(0, "Local Report"), DATABASE(1, "Database Report");
 
   private int code;
-  private String name;
 
-  ReportType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the report type given by the specified numeric code value.
@@ -58,6 +53,12 @@ public enum ReportType
       default:
         return ReportType.LOCAL;
     }
+  }
+
+  ReportType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
   }
 
   /**

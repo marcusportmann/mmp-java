@@ -16,17 +16,11 @@
 
 package guru.mmp.application.web.template;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.application.web.resource.thirdparty.greensockjs.TweenLiteJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.moment.MomentJavaScriptResourceReference;
-import guru.mmp.application.web.resource.thirdparty.rwdtable.RWDTableJavaScriptResourceReference;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.page.LoginPage;
 import guru.mmp.application.web.template.page.LogoutPage;
-import guru.mmp.application.web.template.resource.*;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
@@ -43,7 +37,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-public abstract class TemplateWebApplication extends guru.mmp.application.web.WebApplication
+public abstract class TemplateWebApplication
+  extends guru.mmp.application.web.WebApplication
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TemplateWebApplication.class);
@@ -58,16 +53,6 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   private NavigationGroup navigationRoot;
 
   /**
-   * Constructs a new <code>TemplateWebApplication</code>.
-   *
-   * @param displayName the user-friendly name that should be displayed for the application
-   */
-  public TemplateWebApplication(String displayName)
-  {
-    this.displayName = displayName;
-  }
-
-  /**
    * Returns the <code>TemplateWebApplication</code> instance.
    *
    * @return the <code>TemplateWebApplication</code> instance
@@ -75,6 +60,16 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   public static TemplateWebApplication getTemplateWebApplication()
   {
     return (TemplateWebApplication) get();
+  }
+
+  /**
+   * Constructs a new <code>TemplateWebApplication</code>.
+   *
+   * @param displayName the user-friendly name that should be displayed for the application
+   */
+  public TemplateWebApplication(String displayName)
+  {
+    this.displayName = displayName;
   }
 
   /**
@@ -119,7 +114,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
 
   /**
    * Returns the complete navigation hierarchy for the application.
-   *
+   * <p/>
    * This hierarchy is not filter according to the security permissions of specific users.
    *
    * @return the complete navigation hierarchy for the application
@@ -134,7 +129,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    * otherwise.
    *
    * @return <code>true</code> if multiple organisation support is enabled or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public boolean isMultipleOrganisationSupportEnabled()
   {
@@ -177,17 +172,15 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
         "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
         TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
 */
+/*
     // Initialise the template-web-application.js resource bundle for the Web Application Template
     getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
-        "js/template-web-application.js", MomentJavaScriptResourceReference.get(),
-        TweenLiteJavaScriptResourceReference.get(), RWDTableJavaScriptResourceReference.get(),
-        TemplateBootstrapJavaScriptResourceReference.get(),
-        TemplateCombinedJavaScriptResourceReference.get(),
-        TemplateCoreJavaScriptResourceReference.get(), TemplateJavaScriptResourceReference.get());
+      "js/template-web-application.js", TemplateJavaScriptResourceReference.get());
+*/
 
     // Check it multiple organisation support is enabled
     if (!StringUtil.isNullOrEmpty(
-        getServletContext().getInitParameter("multipleOrganisationSupportEnabled")))
+      getServletContext().getInitParameter("multipleOrganisationSupportEnabled")))
     {
       try
       {
@@ -196,9 +189,9 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
       }
       catch (Throwable e)
       {
-        throw new RuntimeException("Failed to parse the value ("
-            + getServletContext().getInitParameter("multipleOrganisationSupportEnabled")
-            + ") for the \"multipleOrganisationSupportEnabled\" parameter", e);
+        throw new RuntimeException(String.format(
+          "Failed to parse the value (%s) for the \"multipleOrganisationSupportEnabled\" parameter",
+          getServletContext().getInitParameter("multipleOrganisationSupportEnabled")), e);
       }
     }
 
@@ -260,30 +253,34 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
 
         if (getHomePage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug("Ignoring home page navigation item \"" + navigationLink.getName()
-              + "\" under the path \"" + navigationItemPath + "\"");
+          logger.debug(
+            String.format("Ignoring home page navigation item \"%s\" under the path \"%s\"",
+              navigationLink.getName(), navigationItemPath));
         }
         else if (getSecureHomePage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug("Ignoring secure home page navigation item \"" + navigationLink.getName()
-              + "\" under the path \"" + navigationItemPath + "\"");
+          logger.debug(
+            String.format("Ignoring secure home page navigation item \"%s\" under the path \"%s\"",
+              navigationLink.getName(), navigationItemPath));
         }
         else if (getLoginPage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug("Ignoring login page navigation item \"" + navigationLink.getName()
-              + "\" under the path \"" + navigationItemPath + "\"");
+          logger.debug(
+            String.format("Ignoring login page navigation item \"%s\" under the path \"%s\"",
+              navigationLink.getName(), navigationItemPath));
         }
         else if (getLogoutPage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug("Ignoring logout page navigation item \"" + navigationLink.getName()
-              + "\" under the path \"" + navigationItemPath + "\"");
+          logger.debug(
+            String.format("Ignoring logout page navigation item \"%s\" under the path \"%s\"",
+              navigationLink.getName(), navigationItemPath));
         }
         else
         {
           mountPage(navigationItemPath, navigationLink.getPageClass());
 
-          logger.info("Mounting the page \"" + navigationLink.getPageClass().getName()
-              + "\" under the path \"" + navigationItemPath + "\"");
+          logger.info(String.format("Mounting the page \"%s\" under the path \"%s\"",
+            navigationLink.getPageClass().getName(), navigationItemPath));
         }
       }
     }

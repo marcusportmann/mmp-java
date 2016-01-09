@@ -16,20 +16,14 @@
 
 package guru.mmp.application.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.sql.*;
-
 import java.util.*;
 import java.util.Date;
 
@@ -38,7 +32,8 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
-public class InternalUserDirectory extends UserDirectoryBase
+public class InternalUserDirectory
+  extends UserDirectoryBase
 {
   /**
    * The default number of failed password attempts before the user is locked.
@@ -62,35 +57,65 @@ public class InternalUserDirectory extends UserDirectoryBase
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(InternalUserDirectory.class);
+
   private String addInternalUserToInternalGroupSQL;
+
   private String changeInternalUserPasswordSQL;
+
   private String createInternalGroupSQL;
+
   private String createInternalUserSQL;
+
   private String deleteInternalGroupSQL;
+
   private String deleteInternalUserSQL;
+
   private String getFilteredInternalUsersSQL;
+
   private String getFunctionCodesForUserIdSQL;
+
   private String getInternalGroupIdSQL;
+
   private String getInternalGroupNamesForInternalUserSQL;
+
   private String getInternalGroupSQL;
+
   private String getInternalGroupsForInternalUserSQL;
+
   private String getInternalGroupsSQL;
+
   private String getInternalUserIdSQL;
+
   private String getInternalUserSQL;
+
   private String getInternalUsersSQL;
+
   private String getNumberOfFilteredInternalUsersSQL;
+
   private String getNumberOfInternalGroupsSQL;
+
   private String getNumberOfInternalUsersSQL;
+
   private String getNumberOfUsersForGroupSQL;
+
   private String incrementPasswordAttemptsSQL;
+
   private String isInternalUserInInternalGroupSQL;
+
   private String isPasswordInInternalUserPasswordHistorySQL;
+
   private int maxFilteredUsers;
+
   private int maxPasswordAttempts;
+
   private int passwordExpiryMonths;
+
   private int passwordHistoryMonths;
+
   private String removeInternalUserFromInternalGroupSQL;
+
   private String saveInternalUserPasswordHistorySQL;
+
   private String updateInternalGroupSQL;
 
   /**
@@ -147,8 +172,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to initialise the the user directory (" + userDirectoryId
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to initialise the the user directory (%s): %s", userDirectoryId,
+          e.getMessage()), e);
     }
   }
 
@@ -173,7 +199,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if ((internalUserId = getInternalUserId(connection, username)) == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
       // Get the ID of the internal group with the specified group name
@@ -181,7 +208,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if ((internalGroupId = getInternalGroupId(connection, groupName)) == null)
       {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+        throw new GroupNotFoundException(
+          String.format("The group (%s) could not be found", groupName));
       }
 
       // Check if the user has already been added to the group for the user directory
@@ -199,8 +227,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + addInternalUserToInternalGroupSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            addInternalUserToInternalGroupSQL));
       }
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -209,9 +237,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to add the user (" + username + ") to the group ("
-          + groupName + ") for the user directory (" + getUserDirectoryId() + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to add the user (%s) to the group (%s) for the user directory (%s): %s", username,
+        groupName, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -228,8 +256,9 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void adminChangePassword(String username, String newPassword, boolean expirePassword,
-      boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
+  public void adminChangePassword(
+    String username, String newPassword, boolean expirePassword, boolean lockUser,
+    boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
@@ -239,7 +268,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (user == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
       String passwordHash = createPasswordHash(newPassword);
@@ -288,8 +318,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + changeInternalUserPasswordSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            changeInternalUserPasswordSQL));
       }
 
       savePasswordHistory(connection, user.getId(), passwordHash);
@@ -300,9 +330,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to administratively change the password for the user ("
-          + username + ") for the user directory (" + getUserDirectoryId() + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to change the password for the user (%s) for the user directory (%s): %s", username,
+        getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -320,7 +350,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   public void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, SecurityException
+    UserNotFoundException, SecurityException
   {
     try (Connection connection = getDataSource().getConnection())
     {
@@ -328,20 +358,22 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (user == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
-      if ((user.getPasswordAttempts() != null)
-          && (user.getPasswordAttempts() >= maxPasswordAttempts))
+      if ((user.getPasswordAttempts() != null) &&
+        (user.getPasswordAttempts() >= maxPasswordAttempts))
       {
-        throw new UserLockedException("The user (" + username
-            + ") has exceeded the number of failed password attempts and has been locked");
+        throw new UserLockedException(String.format(
+          "The user (%s) has exceeded the number of failed password attempts and has been locked",
+          username));
       }
 
       if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
       {
-        throw new ExpiredPasswordException("The password for the user (" + username
-            + ") has expired");
+        throw new ExpiredPasswordException(
+          String.format("The password for the user (%s) has expired", username));
       }
 
       if (!user.getPassword().equals(createPasswordHash(password)))
@@ -351,19 +383,20 @@ public class InternalUserDirectory extends UserDirectoryBase
           incrementPasswordAttempts(user.getId());
         }
 
-        throw new AuthenticationFailedException("Authentication failed for the user (" + username
-            + ")");
+        throw new AuthenticationFailedException(
+          String.format("Authentication failed for the user (%s)", username));
       }
     }
     catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
-        | ExpiredPasswordException e)
+      | ExpiredPasswordException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to authenticate the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to authenticate the user (%s) for the user directory (%s): %s",
+          username, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -382,7 +415,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   public void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-      ExistingPasswordException, SecurityException
+    ExistingPasswordException, SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
       PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
@@ -391,14 +424,16 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (user == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
-      if ((user.getPasswordAttempts() == null)
-          || (user.getPasswordAttempts() > maxPasswordAttempts))
+      if ((user.getPasswordAttempts() == null) ||
+        (user.getPasswordAttempts() > maxPasswordAttempts))
       {
-        throw new UserLockedException("The user (" + username
-            + ") has exceeded the number of failed password attempts and has been locked");
+        throw new UserLockedException(String.format(
+          "The user (%s) has exceeded the number of failed password attempts and has been locked",
+          username));
       }
 
       String passwordHash = createPasswordHash(password);
@@ -406,14 +441,15 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (!user.getPassword().equals(passwordHash))
       {
-        throw new AuthenticationFailedException("Authentication failed while attempting to change"
-            + " the password for the user (" + username + ")");
+        throw new AuthenticationFailedException(String.format(
+          "Authentication failed while attempting to change the password for the user (%s)",
+          username));
       }
 
       if (isPasswordInHistory(connection, user.getId(), newPasswordHash))
       {
-        throw new ExistingPasswordException("The new password for the user (" + username
-            + ") has been used recently and is not valid");
+        throw new ExistingPasswordException(String.format(
+          "The new password for the user (%s) has been used recently and is not valid", username));
       }
 
       statement.setString(1, newPasswordHash);
@@ -446,21 +482,22 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + changeInternalUserPasswordSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            changeInternalUserPasswordSQL));
       }
 
       savePasswordHistory(connection, user.getId(), newPasswordHash);
     }
     catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
-        | UserLockedException e)
+      | UserLockedException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to change the password for the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to change the password for the user (%s) for the user directory (%s): %s", username,
+        getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -480,8 +517,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       if (getInternalGroupId(connection, group.getGroupName()) != null)
       {
-        throw new DuplicateGroupException("The group (" + group.getGroupName()
-            + ") already exists");
+        throw new DuplicateGroupException(
+          String.format("The group (%s) already exists", group.getGroupName()));
       }
 
       UUID internalGroupId = IDGenerator.nextUUID(getDataSource());
@@ -494,8 +531,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createInternalGroupSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            createInternalGroupSQL));
       }
 
       group.setId(internalGroupId);
@@ -509,8 +546,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the group (" + group.getGroupName()
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to create the group (%s) for the user directory (%s): %s",
+          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -532,7 +570,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       if (getInternalUserId(connection, user.getUsername()) != null)
       {
-        throw new DuplicateUserException("The user (" + user.getUsername() + ") already exists");
+        throw new DuplicateUserException(
+          String.format("The user (%s) already exists", user.getUsername()));
       }
 
       UUID internalUserId = IDGenerator.nextUUID(getDataSource());
@@ -594,8 +633,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + createInternalUserSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            createInternalUserSQL));
       }
 
       user.setId(internalUserId);
@@ -613,8 +652,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the user (" + user.getUsername()
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to create the user (%s) for the user directory (%s): %s",
+          user.getUsername(), getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -637,13 +677,15 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalGroupId == null)
       {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+        throw new GroupNotFoundException(
+          String.format("The group (%s) could not be found", groupName));
       }
 
       if (getNumberOfInternalUsersForInternalGroup(connection, internalGroupId) > 0)
       {
-        throw new ExistingGroupMembersException("The group (" + groupName
-            + ") could not be deleted since it is still associated with 1 or more user(s)");
+        throw new ExistingGroupMembersException(String.format(
+          "The group (%s) could not be deleted since it is still associated with 1 or more user(s)",
+          groupName));
       }
 
       statement.setObject(1, getUserDirectoryId());
@@ -652,8 +694,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + deleteInternalGroupSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            deleteInternalGroupSQL));
       }
 
       deleteGroup(connection, groupName);
@@ -664,8 +706,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to delete the group (%s) for the user directory (%s): %s", groupName,
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -687,7 +730,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalUserId == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
       statement.setObject(1, getUserDirectoryId());
@@ -696,8 +740,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + deleteInternalUserSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            deleteInternalUserSQL));
       }
     }
     catch (UserNotFoundException e)
@@ -706,8 +750,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to delete the user (%s) for the user directory (%s): %s", username,
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -749,8 +794,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to find the users for the user directory ("
-          + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to find the users for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -767,9 +813,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-          ? getInternalUsersSQL
-          : getFilteredInternalUsersSQL))
+      PreparedStatement statement = connection.prepareStatement(
+        StringUtil.isNullOrEmpty(filter) ? getInternalUsersSQL : getFilteredInternalUsersSQL))
     {
       statement.setMaxRows(maxFilteredUsers);
 
@@ -806,8 +851,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the filtered users for the user directory ("
-          + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the filtered users for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -831,7 +877,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalUserId == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
       return getFunctionCodesForUserId(connection, internalUserId);
@@ -842,8 +889,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the function codes for the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the function codes for the user (%s) for the user directory (%s): %s",
+        username, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -880,7 +928,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
         else
         {
-          throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+          throw new GroupNotFoundException(
+            String.format("The group (%s) could not be found", groupName));
         }
       }
     }
@@ -890,8 +939,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the group (%s) for the user directory (%s): %s",
+          groupName, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -915,7 +965,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalUserId == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
       return getGroupNamesForUser(connection, internalUserId);
@@ -926,8 +977,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the group names for the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the group names for the user (%s) for the user directory (%s): %s",
+        username, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -965,8 +1017,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the groups for the user directory ("
-          + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the groups for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -990,7 +1043,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalUserId == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
       // Get the list of groups the user is associated with
@@ -1002,8 +1056,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the groups for the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the groups for the user (%s) for the user directory (%s): %s", username,
+        getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1020,8 +1075,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-          ? getNumberOfInternalUsersSQL
+      PreparedStatement statement = connection.prepareStatement(
+        StringUtil.isNullOrEmpty(filter) ? getNumberOfInternalUsersSQL
           : getNumberOfFilteredInternalUsersSQL))
     {
       if (StringUtil.isNullOrEmpty(filter))
@@ -1047,9 +1102,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           int numberOfFilteredUsers = rs.getInt(1);
 
-          return ((numberOfFilteredUsers > maxFilteredUsers)
-              ? maxFilteredUsers
-              : numberOfFilteredUsers);
+          return ((numberOfFilteredUsers > maxFilteredUsers) ? maxFilteredUsers
+            : numberOfFilteredUsers);
         }
         else
         {
@@ -1059,9 +1113,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-          "Failed to retrieve the number of filtered users for the user directory ("
-          + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to retrieve the number of filtered users for the user directory (%s): %s",
+        getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1095,8 +1149,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(
-          "Failed to retrieve the number of groups for the user directory (" + getUserDirectoryId()
-          + "):" + e.getMessage(), e);
+        String.format("Failed to retrieve the number of groups for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1129,8 +1183,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the number of users for the user directory ("
-          + getUserDirectoryId() + "):" + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the number of users for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1157,7 +1212,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
       else
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
     }
     catch (UserNotFoundException e)
@@ -1166,8 +1222,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the user (%s) for the user directory (%s): %s", username,
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1202,8 +1259,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the users for the user directory ("
-          + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the users for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1213,7 +1271,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws SecurityException
    */
@@ -1226,8 +1284,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to check whether the user (" + username
-          + ") is an existing user for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityException(String.format(
+        "Failed to check whether the user (%s) is an existing user for the user directory (%s)",
+        username, getUserDirectoryId()), e);
     }
   }
 
@@ -1253,7 +1312,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalUserId == null)
       {
-        throw new UserNotFoundException("The user (" + username + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", username));
       }
 
       // Get the ID of the internal group with the specified group name
@@ -1261,7 +1321,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalGroupId == null)
       {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+        throw new GroupNotFoundException(
+          String.format("The group (%s) could not be found", groupName));
       }
 
       // Get the current list of internal groups for the internal user
@@ -1273,9 +1334,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to check whether the user (" + username
-          + ") is in the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to check if the user (%s) is in the group (%s) for the user directory (%s): %s",
+        username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1293,8 +1354,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws UserNotFoundException, GroupNotFoundException, SecurityException
   {
     try (Connection connection = getDataSource().getConnection();
-      PreparedStatement statement =
-          connection.prepareStatement(removeInternalUserFromInternalGroupSQL))
+      PreparedStatement statement = connection.prepareStatement(
+        removeInternalUserFromInternalGroupSQL))
     {
       // Get the ID of the internal user with the specified username
       UUID internalUserId = getInternalUserId(connection, username);
@@ -1324,9 +1385,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to remove the user (" + username + ") from the group ("
-          + groupName + ") for the user directory (" + getUserDirectoryId() + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to remove the user (%s) from the group (%s) for the user directory (%s): %s",
+        username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1350,7 +1411,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Does the user directory support administering groups.
    *
    * @return <code>true</code> if the directory supports administering groups or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public boolean supportsGroupAdministration()
   {
@@ -1361,7 +1422,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Does the user directory support administering users.
    *
    * @return <code>true</code> if the directory supports administering users or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public boolean supportsUserAdministration()
   {
@@ -1386,8 +1447,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalGroupId == null)
       {
-        throw new GroupNotFoundException("The group (" + group.getGroupName()
-            + ") could not be found");
+        throw new GroupNotFoundException(
+          String.format("The group (%s) could not be found", group.getGroupName()));
       }
 
       statement.setString(1, StringUtil.notNull(group.getDescription()));
@@ -1397,8 +1458,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + updateInternalGroupSQL + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            updateInternalGroupSQL));
       }
     }
     catch (GroupNotFoundException e)
@@ -1407,8 +1468,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to update the group (" + group.getGroupName()
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to update the group (%s) for the user directory (%s): %s",
+          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1431,7 +1493,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalUserId == null)
       {
-        throw new UserNotFoundException("The user (" + user.getUsername() + ") could not be found");
+        throw new UserNotFoundException(
+          String.format("The user (%s) could not be found", user.getUsername()));
       }
 
       StringBuilder buffer = new StringBuilder();
@@ -1445,74 +1508,54 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (user.getTitle() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET TITLE=?"
-            : ", TITLE=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET TITLE=?" : ", TITLE=?");
       }
 
       if (user.getFirstNames() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET FIRST_NAMES=?"
-            : ", FIRST_NAMES=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET FIRST_NAMES=?" : ", FIRST_NAMES=?");
       }
 
       if (user.getLastName() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET LAST_NAME=?"
-            : ", LAST_NAME=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET LAST_NAME=?" : ", LAST_NAME=?");
       }
 
       if (user.getEmail() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET EMAIL=?"
-            : ", EMAIL=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET EMAIL=?" : ", EMAIL=?");
       }
 
       if (user.getPhoneNumber() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PHONE=?"
-            : ", PHONE=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET PHONE=?" : ", PHONE=?");
       }
 
       if (user.getFaxNumber() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET FAX=?"
-            : ", FAX=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET FAX=?" : ", FAX=?");
       }
 
       if (user.getMobileNumber() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET MOBILE=?"
-            : ", MOBILE=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET MOBILE=?" : ", MOBILE=?");
       }
 
       if (user.getDescription() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET DESCRIPTION=?"
-            : ", DESCRIPTION=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET DESCRIPTION=?" : ", DESCRIPTION=?");
       }
 
       if (!StringUtil.isNullOrEmpty(user.getPassword()))
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET PASSWORD=?"
-            : ", PASSWORD=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET PASSWORD=?" : ", PASSWORD=?");
       }
 
-      fieldsBuffer.append((fieldsBuffer.length() == 0)
-          ? "SET PASSWORD_ATTEMPTS=?"
-          : ", PASSWORD_ATTEMPTS=?");
+      fieldsBuffer.append(
+        (fieldsBuffer.length() == 0) ? "SET PASSWORD_ATTEMPTS=?" : ", PASSWORD_ATTEMPTS=?");
 
-      fieldsBuffer.append((fieldsBuffer.length() == 0)
-          ? "SET PASSWORD_EXPIRY=?"
-          : ", PASSWORD_EXPIRY=?");
+      fieldsBuffer.append(
+        (fieldsBuffer.length() == 0) ? "SET PASSWORD_EXPIRY=?" : ", PASSWORD_EXPIRY=?");
 
       buffer.append(fieldsBuffer.toString());
       buffer.append(" WHERE USER_DIRECTORY_ID=? AND ID=?");
@@ -1616,7 +1659,7 @@ public class InternalUserDirectory extends UserDirectoryBase
           else
           {
             statement.setTimestamp(parameterIndex,
-                new Timestamp(user.getPasswordExpiry().getTime()));
+              new Timestamp(user.getPasswordExpiry().getTime()));
           }
         }
 
@@ -1631,8 +1674,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         if (statement.executeUpdate() != 1)
         {
           throw new SecurityException(
-              "No rows were affected as a result of executing the SQL statement (" + updateUserSQL
-              + ")");
+            String.format("No rows were affected as a result of executing the SQL statement (%s)",
+              updateUserSQL));
         }
       }
     }
@@ -1642,8 +1685,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to update the user (" + user.getUsername()
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to update the user (%s) for the user directory (%s): %s",
+          user.getUsername(), getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1658,144 +1702,142 @@ public class InternalUserDirectory extends UserDirectoryBase
     super.buildStatements(schemaPrefix);
 
     // addInternalUserToInternalGroupSQL
-    addInternalUserToInternalGroupSQL = "INSERT INTO " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP"
-        + " (USER_DIRECTORY_ID, INTERNAL_USER_ID, INTERNAL_GROUP_ID) VALUES (?, ?, ?)";
+    addInternalUserToInternalGroupSQL = "INSERT INTO " + schemaPrefix +
+      "INTERNAL_USER_TO_INTERNAL_GROUP_MAP (USER_DIRECTORY_ID, INTERNAL_USER_ID, " +
+      "INTERNAL_GROUP_ID) VALUES (?, ?, ?)";
 
     // changeInternalUserPasswordSQL
-    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU"
-        + " SET IU.PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=?"
-        + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU SET IU" +
+      ".PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=? WHERE IU.USER_DIRECTORY_ID=? " +
+      "AND IU.ID=?";
 
     // createInternalGroupSQL
-    createInternalGroupSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_GROUPS"
-        + " (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
+    createInternalGroupSQL = "INSERT INTO " + schemaPrefix +
+      "INTERNAL_GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
     // createInternalUserSQL
-    createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS"
-        + " (ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, PHONE,"
-        + " FAX, MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY,"
-        + " DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS" + " (ID, " +
+      "USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, PHONE," + " FAX, " +
+      "MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY," + " DESCRIPTION) VALUES (?, ?, ?, ?," +
+      " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // deleteInternalGroupSQL
-    deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG"
-        + " WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG" + " WHERE IG" +
+      ".USER_DIRECTORY_ID=? AND IG.ID=?";
 
     // deleteInternalUserSQL
-    deleteInternalUserSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_USERS IU"
-        + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+    deleteInternalUserSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE IU" +
+      ".USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // getFilteredInternalUsersSQL
-    getFilteredInternalUsersSQL =
-      "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-      + " IU.LAST_NAME, IU.PHONE, IU.FAX, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,"
-      + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix
-      + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND"
-      + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
-      + " OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
+    getFilteredInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU" +
+      ".FIRST_NAMES," + " IU.LAST_NAME, IU.PHONE, IU.FAX, IU.MOBILE, IU.EMAIL, IU" +
+      ".PASSWORD_ATTEMPTS," + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix +
+      "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND" + " ((UPPER(IU.USERNAME) LIKE ?) OR " +
+      "(UPPER(IU.FIRST_NAMES) LIKE ?)" + " OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
 
     // getFunctionCodesForUserIdSQL
     getFunctionCodesForUserIdSQL =
-      "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F" + " INNER JOIN " + schemaPrefix
-      + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID INNER JOIN " + schemaPrefix
-      + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID INNER JOIN " + schemaPrefix
-      + "GROUPS G ON G.ID = RTGM.GROUP_ID INNER JOIN " + schemaPrefix
-      + "INTERNAL_GROUPS IG ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID"
-      + "     AND IG.ID = G.ID INNER JOIN " + schemaPrefix
-      + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTIGM"
-      + "   ON IUTIGM.USER_DIRECTORY_ID = IG.USER_DIRECTORY_ID AND IUTIGM.INTERNAL_GROUP_ID = IG.ID"
-      + " WHERE IUTIGM.USER_DIRECTORY_ID=? AND IUTIGM.INTERNAL_USER_ID=?";
+      "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F" + " INNER JOIN " +
+        schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID " +
+        "INNER JOIN " + schemaPrefix +
+        "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID " +
+        "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID INNER JOIN " +
+        schemaPrefix + "INTERNAL_GROUPS IG ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID" +
+        "    " +
+        " AND IG.ID = G.ID INNER JOIN " + schemaPrefix +
+        "INTERNAL_USER_TO_INTERNAL_GROUP_MAP " +
+        "IUTIGM" + "   ON IUTIGM.USER_DIRECTORY_ID = IG.USER_DIRECTORY_ID AND IUTIGM" +
+        ".INTERNAL_GROUP_ID = IG.ID" + " WHERE IUTIGM.USER_DIRECTORY_ID=? AND IUTIGM" +
+        ".INTERNAL_USER_ID=?";
 
     // getInternalGroupIdSQL
-    getInternalGroupIdSQL = "SELECT IG.ID FROM " + schemaPrefix + "INTERNAL_GROUPS IG"
-        + " WHERE IG.USER_DIRECTORY_ID=? AND UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalGroupIdSQL = "SELECT IG.ID FROM " + schemaPrefix + "INTERNAL_GROUPS IG" + " WHERE " +
+      "IG.USER_DIRECTORY_ID=? AND UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalGroupNamesForInternalUserSQL
-    getInternalGroupNamesForInternalUserSQL = "SELECT IG.GROUPNAME FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG, " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-        + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.USER_DIRECTORY_ID=?"
-        + " AND IUTGM.INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
+    getInternalGroupNamesForInternalUserSQL = "SELECT IG.GROUPNAME FROM " + schemaPrefix +
+      "INTERNAL_GROUPS IG, " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM" + " " +
+      "WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.USER_DIRECTORY_ID=?" + " AND IUTGM" +
+      ".INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
 
     // getInternalGroupSQL
-    getInternalGroupSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? AND"
-        + " UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalGroupSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix +
+      "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? AND" + " UPPER(IG.GROUPNAME)=UPPER(CAST" +
+      "(? AS VARCHAR(100)))";
 
     // getInternalGroupsForInternalUserSQL
-    getInternalGroupsForInternalUserSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM "
-        + schemaPrefix + "INTERNAL_GROUPS IG, " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-        + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.USER_DIRECTORY_ID=?"
-        + " AND IUTGM.INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
+    getInternalGroupsForInternalUserSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " +
+      schemaPrefix + "INTERNAL_GROUPS IG, " + schemaPrefix +
+      "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM" + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND" +
+      " IUTGM.USER_DIRECTORY_ID=?" + " AND IUTGM.INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
 
     // getInternalGroupsSQL
-    getInternalGroupsSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? ORDER BY IG.GROUPNAME";
+    getInternalGroupsSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix +
+      "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? ORDER BY IG.GROUPNAME";
 
     // getNumberOfFilteredInternalUsersSQL
-    getNumberOfFilteredInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix
-        + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND"
-        + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
-        + " OR (UPPER(IU.LAST_NAME) LIKE ?))";
+    getNumberOfFilteredInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix +
+      "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND" + " ((UPPER(IU.USERNAME) LIKE ?) OR " +
+      "(UPPER(IU.FIRST_NAMES) LIKE ?)" + " OR (UPPER(IU.LAST_NAME) LIKE ?))";
 
     // getNumberOfInternalGroupsSQL
-    getNumberOfInternalGroupsSQL = "SELECT COUNT(IG.ID) FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG" + " WHERE IG.USER_DIRECTORY_ID=?";
+    getNumberOfInternalGroupsSQL = "SELECT COUNT(IG.ID) FROM " + schemaPrefix + "INTERNAL_GROUPS " +
+      "IG" + " WHERE IG.USER_DIRECTORY_ID=?";
 
     // getNumberOfUsersForGroupSQL
-    getNumberOfUsersForGroupSQL = "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=?"
-        + " AND IUTGM.INTERNAL_GROUP_ID=?";
+    getNumberOfUsersForGroupSQL = "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM " + schemaPrefix +
+      "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=?" + " AND IUTGM" +
+      ".INTERNAL_GROUP_ID=?";
 
     // getNumberOfInternalUsersSQL
-    getNumberOfInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix + "INTERNAL_USERS IU"
-        + " WHERE IU.USER_DIRECTORY_ID=?";
+    getNumberOfInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix + "INTERNAL_USERS " +
+      "IU" + " WHERE IU.USER_DIRECTORY_ID=?";
 
     // getInternalUserIdSQL
-    getInternalUserIdSQL = "SELECT IU.ID FROM " + schemaPrefix + "INTERNAL_USERS IU"
-        + " WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalUserIdSQL = "SELECT IU.ID FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE IU" +
+      ".USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUserSQL
-    getInternalUserSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-        + " IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,"
-        + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU"
-        + " WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalUserSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES," + " " +
+      "IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS," + " IU" +
+      ".PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE " +
+      "IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUsersSQL
-    getInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-        + " IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,"
-        + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU"
-        + " WHERE IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
+    getInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES," + "" +
+      " IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS," + " IU" +
+      ".PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE " +
+      "IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
 
     // incrementPasswordAttemptsSQL
-    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU"
-        + " SET IU.PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1"
-        + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU" + " SET IU" +
+      ".PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1" + " WHERE IU.USER_DIRECTORY_ID=? AND IU" +
+      ".ID=?";
 
     // isPasswordInInternalUserPasswordHistorySQL
-    isPasswordInInternalUserPasswordHistorySQL = "SELECT IUPH.ID FROM " + schemaPrefix
-        + "INTERNAL_USERS_PASSWORD_HISTORY IUPH"
-        + " WHERE IUPH.INTERNAL_USER_ID=? AND IUPH.CHANGED > ? AND IUPH.PASSWORD=?";
+    isPasswordInInternalUserPasswordHistorySQL = "SELECT IUPH.ID FROM " + schemaPrefix +
+      "INTERNAL_USERS_PASSWORD_HISTORY IUPH" + " WHERE IUPH.INTERNAL_USER_ID=? AND IUPH.CHANGED" +
+      " > ? AND IUPH.PASSWORD=?";
 
     // isInternalUserInInternalGroupSQL
-    isInternalUserInInternalGroupSQL = "SELECT IUTGM.INTERNAL_USER_ID FROM " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=? AND"
-        + " IUTGM.INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
+    isInternalUserInInternalGroupSQL = "SELECT IUTGM.INTERNAL_USER_ID FROM " + schemaPrefix +
+      "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=? AND" + " IUTGM" +
+      ".INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
 
     // removeInternalUserFromInternalGroupSQL
-    removeInternalUserFromInternalGroupSQL = "DELETE FROM " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-        + " WHERE IUTGM.USER_DIRECTORY_ID=? AND IUTGM.INTERNAL_USER_ID=?"
-        + " AND IUTGM.INTERNAL_GROUP_ID=?";
+    removeInternalUserFromInternalGroupSQL = "DELETE FROM " + schemaPrefix +
+      "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM" + " WHERE IUTGM.USER_DIRECTORY_ID=? AND IUTGM" +
+      ".INTERNAL_USER_ID=?" + " AND IUTGM.INTERNAL_GROUP_ID=?";
 
     // saveInternalUserPasswordHistorySQL
-    saveInternalUserPasswordHistorySQL = "INSERT INTO " + schemaPrefix
-        + "INTERNAL_USERS_PASSWORD_HISTORY"
-        + " (ID, INTERNAL_USER_ID, CHANGED, PASSWORD) VALUES (?, ?, ?, ?)";
+    saveInternalUserPasswordHistorySQL = "INSERT INTO " + schemaPrefix +
+      "INTERNAL_USERS_PASSWORD_HISTORY (ID, INTERNAL_USER_ID, CHANGED, PASSWORD) VALUES (?, ?, " +
+      "?, ?)";
 
     // updateInternalGroupSQL
-    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG"
-        + " SET IG.DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG" + " SET IG" +
+      ".DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
   }
 
   /**
@@ -1807,14 +1849,14 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param attributes the attributes to be used as the selection criteria
    *
    * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-   *         INTERNAL_USERS table using the values of the specified attributes as the selection
-   *         criteria
+   * INTERNAL_USERS table using the values of the specified attributes as the selection
+   * criteria
    *
    * @throws InvalidAttributeException
    * @throws SQLException
    */
-  private PreparedStatement buildFindUsersStatement(Connection connection,
-      List<Attribute> attributes)
+  private PreparedStatement buildFindUsersStatement(
+    Connection connection, List<Attribute> attributes)
     throws InvalidAttributeException, AttributeException, SQLException
   {
     // Build the SQL statement to select the users
@@ -1875,8 +1917,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
         else
         {
-          throw new InvalidAttributeException("The attribute (" + attribute.getName()
-              + ") is invalid");
+          throw new InvalidAttributeException(
+            "The attribute (" + attribute.getName() + ") is invalid");
         }
       }
 
@@ -2038,8 +2080,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   private List<String> getGroupNamesForUser(Connection connection, UUID internalUserId)
     throws SQLException
   {
-    try (PreparedStatement statement =
-        connection.prepareStatement(getInternalGroupNamesForInternalUserSQL))
+    try (PreparedStatement statement = connection.prepareStatement(
+      getInternalGroupNamesForInternalUserSQL))
     {
       statement.setObject(1, getUserDirectoryId());
       statement.setObject(2, internalUserId);
@@ -2066,7 +2108,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName  the group name uniquely identifying the internal group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal group
-   *         with the specified group name
+   * with the specified group name
    *
    * @throws SecurityException
    */
@@ -2092,8 +2134,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the ID for the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the ID for the group (%s) for the user directory (%s)",
+          groupName, getUserDirectoryId()), e);
     }
   }
 
@@ -2112,8 +2155,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   private List<Group> getInternalGroupsForInternalUser(Connection connection, UUID internalUserId)
     throws SQLException
   {
-    try (PreparedStatement statement =
-        connection.prepareStatement(getInternalGroupsForInternalUserSQL))
+    try (PreparedStatement statement = connection.prepareStatement(
+      getInternalGroupsForInternalUserSQL))
     {
       statement.setObject(1, getUserDirectoryId());
       statement.setObject(2, internalUserId);
@@ -2145,7 +2188,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param username   the username uniquely identifying the internal user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
-   *         with the specified username
+   * with the specified username
    *
    * @throws SecurityException
    */
@@ -2171,8 +2214,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the ID for the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the ID for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
   }
 
@@ -2184,7 +2228,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    *                        internal group
    *
    * @return the IDs for all the internal users that are associated with the group the specific
-   *         numeric ID
+   * numeric ID
    *
    * @throws SQLException
    */
@@ -2262,8 +2306,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       try (Connection connection = getDataSource().getConnection())
       {
-        try (PreparedStatement statement =
-            connection.prepareStatement(incrementPasswordAttemptsSQL))
+        try (PreparedStatement statement = connection.prepareStatement(
+          incrementPasswordAttemptsSQL))
         {
           statement.setObject(1, getUserDirectoryId());
           statement.setObject(2, internalUserId);
@@ -2271,8 +2315,8 @@ public class InternalUserDirectory extends UserDirectoryBase
           if (statement.executeUpdate() != 1)
           {
             throw new SecurityException(
-                "No rows were affected as a result of executing the SQL statement ("
-                + incrementPasswordAttemptsSQL + ")");
+              String.format("No rows were affected as a result of executing the SQL statement (%s)",
+                incrementPasswordAttemptsSQL));
           }
         }
       }
@@ -2287,14 +2331,14 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
       catch (Throwable f)
       {
-        logger.error("Failed to rollback the transaction while incrementing the password attempts"
-            + " for the user (" + internalUserId + ") for the user directory ("
-            + getUserDirectoryId() + ")", f);
+        logger.error(String.format(
+          "Failed to rollback the transaction while incrementing the password attempts for the " +
+            "user (%s) for the user directory (%s)", internalUserId, getUserDirectoryId()), f);
       }
 
-      throw new SecurityException("Failed to increment the password attempts for the user ("
-          + internalUserId + ") for the user directory (" + getUserDirectoryId() + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to increment the password attempts for the user (%s) for the user directory (%s):" +
+          " %s", internalUserId, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -2304,10 +2348,9 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
       catch (Throwable e)
       {
-        logger.error(
-            "Failed to resume the original transaction while incrementing the password attempts"
-            + " for the user (" + internalUserId + ") for the user directory ("
-            + getUserDirectoryId() + ")", e);
+        logger.error(String.format(
+          "Failed to resume the transaction while incrementing the password attempts for the user" +
+            " (%s) for the user directory (%s)", internalUserId, getUserDirectoryId()), e);
       }
     }
   }
@@ -2325,12 +2368,12 @@ public class InternalUserDirectory extends UserDirectoryBase
    *
    * @throws SQLException
    */
-  private boolean isInternalUserInInternalGroup(Connection connection, UUID internalUserId,
-      UUID internalGroupId)
+  private boolean isInternalUserInInternalGroup(
+    Connection connection, UUID internalUserId, UUID internalGroupId)
     throws SQLException
   {
-    try (PreparedStatement statement =
-        connection.prepareStatement(isInternalUserInInternalGroupSQL))
+    try (PreparedStatement statement = connection.prepareStatement(
+      isInternalUserInInternalGroupSQL))
     {
       statement.setObject(1, getUserDirectoryId());
       statement.setObject(2, internalUserId);
@@ -2353,16 +2396,16 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param passwordHash   the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
-   *         period of time or <code>false</code> otherwise
+   * period of time or <code>false</code> otherwise
    *
    * @throws SQLException
    */
-  private boolean isPasswordInHistory(Connection connection, UUID internalUserId,
-      String passwordHash)
+  private boolean isPasswordInHistory(
+    Connection connection, UUID internalUserId, String passwordHash)
     throws SQLException
   {
-    try (PreparedStatement statement =
-        connection.prepareStatement(isPasswordInInternalUserPasswordHistorySQL))
+    try (PreparedStatement statement = connection.prepareStatement(
+      isPasswordInInternalUserPasswordHistorySQL))
     {
       Calendar calendar = Calendar.getInstance();
 
@@ -2383,8 +2426,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   private void savePasswordHistory(Connection connection, UUID internalUserId, String passwordHash)
     throws SQLException
   {
-    try (PreparedStatement statement =
-        connection.prepareStatement(saveInternalUserPasswordHistorySQL))
+    try (PreparedStatement statement = connection.prepareStatement(
+      saveInternalUserPasswordHistorySQL))
     {
       UUID id = IDGenerator.nextUUID(getDataSource());
 

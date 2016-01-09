@@ -16,8 +16,6 @@
 
 package guru.mmp.common.http;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -25,43 +23,41 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.net.ssl.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
-import javax.net.ssl.*;
 
 /**
  * The <code>SecureHttpClient</code> class implements a secure HTTP client builder.
  *
  * @author Marcus Portmann
  */
-public class SecureHttpClientBuilder extends HttpClientBuilder
+public class SecureHttpClientBuilder
+  extends HttpClientBuilder
 {
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(SecureHttpClientBuilder.class);
+
   private SSLConnectionSocketFactory sslSocketFactory;
 
   /**
    * Constructs a new <code>SecureHttpClient</code>.
-   *
    */
   public SecureHttpClientBuilder()
   {
     SSLConnectionSocketFactory sslConnectionSocketFactory = getSSLConnectionSocketFactory();
 
-    Registry<ConnectionSocketFactory> socketFactoryRegistry =
-      RegistryBuilder.<ConnectionSocketFactory>create().register("https",
-        sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory()).build();
+    Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
+      .<ConnectionSocketFactory>create().register(
+      "https", sslConnectionSocketFactory).register("http",
+      new PlainConnectionSocketFactory()).build();
 
-    PoolingHttpClientConnectionManager connectionManager =
-      new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+    PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+      socketFactoryRegistry);
 
     setConnectionManager(connectionManager);
   }
@@ -75,7 +71,7 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
         SSLContext sslContext = SSLContext.getInstance("TLS");
 
         // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager()
         {
           public void checkClientTrusted(X509Certificate[] chain, String authType)
             throws CertificateException
@@ -93,19 +89,19 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
           {
             return new X509Certificate[0];
           }
-        } };
+        }};
 
         sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 
         sslSocketFactory = new SSLConnectionSocketFactory(sslContext.getSocketFactory(),
-            new HostnameVerifier()
-        {
-          @Override
-          public boolean verify(String hostname, SSLSession sslSession)
+          new HostnameVerifier()
           {
-            // TODO: Implement proper verification of the server identity -- MARCUS
+            @Override
+            public boolean verify(String hostname, SSLSession sslSession)
+            {
+              // TODO: Implement proper verification of the server identity -- MARCUS
 
-            return true;
+              return true;
 
 //          if (hostname.equalsIgnoreCase(sslSession.getPeerHost()))
 //          {
@@ -118,8 +114,8 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
 //
 //            return false;
 //          }
-          }
-        });
+            }
+          });
       }
       catch (Throwable e)
       {

@@ -16,25 +16,20 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.namespace.QName;
 
 /**
  * The <code>MessageEventDefinition</code> class represents a Message Event Definition that forms
  * part of a Process.
- * <p>
+ * <p/>
  * <b>Message Event Definition</b> XML schema:
  * <pre>
  * &lt;xsd:element name="messageEventDefinition" type="tMessageEventDefinition"
@@ -54,7 +49,8 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class MessageEventDefinition extends EventDefinition
+public final class MessageEventDefinition
+  extends EventDefinition
 {
   /**
    * The reference to the message for the Message Event.
@@ -63,7 +59,7 @@ public final class MessageEventDefinition extends EventDefinition
 
   /**
    * The reference to the Operation that is used by the Message Event.
-   * <p>
+   * <p/>
    * It MUST be specified for executable Processes.
    */
   private QName operationRef;
@@ -128,7 +124,7 @@ public final class MessageEventDefinition extends EventDefinition
 
   /**
    * Returns the reference to the Operation that is used by the Message Event.
-   * <p>
+   * <p/>
    * It MUST be specified for executable Processes.
    *
    * @return the reference to the Operation that is used by the Message Event

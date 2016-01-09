@@ -16,8 +16,6 @@
 
 package guru.mmp.common.service.ws;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -61,6 +59,7 @@ public class ServiceRegistryEntry
    * security model.
    */
   public static final int SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE = 1;
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -128,8 +127,9 @@ public class ServiceRegistryEntry
    * @param serviceClass        the fully qualified name of the Java web service client class
    * @param wsdlLocation        the location of the WSDL defining the web service on the classpath
    */
-  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
-      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation)
+  public ServiceRegistryEntry(
+    String name, int securityType, boolean requiresUserToken, boolean supportsCompression,
+    String endpoint, String serviceClass, String wsdlLocation)
   {
     this.name = name;
     this.securityType = securityType;
@@ -158,9 +158,9 @@ public class ServiceRegistryEntry
    * @param password            the password to use when accessing a web service with
    *                            username-password security enabled
    */
-  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
-      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation,
-      String username, String password)
+  public ServiceRegistryEntry(
+    String name, int securityType, boolean requiresUserToken, boolean supportsCompression,
+    String endpoint, String serviceClass, String wsdlLocation, String username, String password)
   {
     this.name = name;
     this.securityType = securityType;
@@ -198,7 +198,7 @@ public class ServiceRegistryEntry
    * enabled.
    *
    * @return the password to use when accessing a web service with username-password security
-   *         enabled
+   * enabled
    */
   public String getPassword()
   {
@@ -210,7 +210,7 @@ public class ServiceRegistryEntry
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the web service requires a user security token or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean getRequiresSecurityToken()
   {
@@ -222,7 +222,7 @@ public class ServiceRegistryEntry
    * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password.
    *
    * @return the type of security model implemented by the web service i.e. 0 = None,
-   *         1 = WS-Security, 2 = Client SSL, 3 = Username-Password
+   * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password
    */
   public int getSecurityType()
   {
@@ -244,7 +244,7 @@ public class ServiceRegistryEntry
    * otherwise.
    *
    * @return <code>true</code> if the web service supports compression or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public boolean getSupportsCompression()
   {
@@ -256,7 +256,7 @@ public class ServiceRegistryEntry
    * enabled.
    *
    * @return the username to use when accessing a web service with username-password security
-   *         enabled
+   * enabled
    */
   public String getUsername()
   {

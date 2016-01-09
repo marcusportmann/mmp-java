@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -27,8 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>SecurityAdministrationPage</code> class implements the
  * "Security Administration" page for the Web Application Template.
@@ -36,12 +32,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
-public class SecurityAdministrationPage extends TemplateWebPage
+public class SecurityAdministrationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserAdministrationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
@@ -54,7 +51,9 @@ public class SecurityAdministrationPage extends TemplateWebPage
   {
     super("Security");
 
-    try {}
+    try
+    {
+    }
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to initialise the SecurityAdministrationPage", e);

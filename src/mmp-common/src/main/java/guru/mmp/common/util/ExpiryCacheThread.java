@@ -16,15 +16,11 @@
 
 package guru.mmp.common.util;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ExpiryCacheThread</code> class implements the background thread responsible for
@@ -41,22 +37,20 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ExpiryCacheThread extends Thread
+public class ExpiryCacheThread
+  extends Thread
 {
   /**
    * The number of seconds the thread will "sleep" between expiry runs.
    */
   private static final int SLEEP_TIME = 300;
-  private static ExpiryCacheThread singleton = null;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ExpiryCacheThread.class);
-  private final List<ExpiryCache<?, ?>> expiryCaches = new ArrayList<>();
 
-  /**
-   * Private constructor to enforce singleton pattern.
-   */
-  private ExpiryCacheThread() {}
+  private static ExpiryCacheThread singleton = null;
+
+  private final List<ExpiryCache<?, ?>> expiryCaches = new ArrayList<>();
 
   /**
    * Singleton accessor.
@@ -74,6 +68,11 @@ public class ExpiryCacheThread extends Thread
 
     return singleton;
   }
+
+  /**
+   * Private constructor to enforce singleton pattern.
+   */
+  private ExpiryCacheThread() {}
 
   /**
    * Add the <code>ExpiryCache</code> to the list of caches monitored by the
@@ -130,8 +129,9 @@ public class ExpiryCacheThread extends Thread
         }
         catch (Exception e)
         {
-          logger.error("Failed to expire the entries in the expiry cache. This operation will be"
-              + " retried: " + e.getMessage(), e);
+          logger.error(
+            "Failed to expire the entries in the expiry cache. This operation will be" + " " +
+              "retried: " + e.getMessage(), e);
         }
       }
 

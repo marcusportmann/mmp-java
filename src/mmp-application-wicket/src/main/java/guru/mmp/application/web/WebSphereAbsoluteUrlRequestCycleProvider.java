@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -28,10 +26,9 @@ import org.apache.wicket.request.cycle.RequestCycleContext;
  * provider which overrides the {@link UrlRenderer} to generate absolute links that are compatible
  * with WebSphere.
  *
+ * @author Marcus Portmann
  * @see {@link WebSphereAbsoluteUrlRenderer}
  * @see {@link RequestCycle#getUrlRenderer()}
- *
- * @author Marcus Portmann
  */
 public class WebSphereAbsoluteUrlRequestCycleProvider
   implements IRequestCycleProvider

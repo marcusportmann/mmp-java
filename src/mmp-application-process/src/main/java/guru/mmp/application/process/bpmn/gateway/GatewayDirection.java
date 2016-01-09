@@ -19,7 +19,7 @@ package guru.mmp.application.process.bpmn.gateway;
 /**
  * The <code>GatewayDirection</code> enumeration defines the possible directions for a Business
  * Process Model and Notation (BPMN) gateway.
- * <p>
+ * <p/>
  * <b>Gateway Direction</b> XML schema:
  * <pre>
  * &lt;xsd:simpleType name="tGatewayDirection"&gt;
@@ -40,13 +40,8 @@ public enum GatewayDirection
   DIVERGING("Diverging", "Diverging"), MIXED("Mixed", "Mixed");
 
   private String id;
-  private String name;
 
-  GatewayDirection(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the gateway direction given by the specified ID.
@@ -76,6 +71,12 @@ public enum GatewayDirection
     }
   }
 
+  GatewayDirection(String id, String name)
+  {
+    this.id = id;
+    this.name = name;
+  }
+
   /**
    * Returns the ID identifying the gateway direction.
    *
@@ -101,7 +102,7 @@ public enum GatewayDirection
    * enumeration value.
    *
    * @return the string representation of the <code>GatewayDirection</code>
-   *         enumeration value
+   * enumeration value
    */
   public String toString()
   {

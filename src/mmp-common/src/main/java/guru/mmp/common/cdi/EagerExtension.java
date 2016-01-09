@@ -16,8 +16,6 @@
 
 package guru.mmp.common.cdi;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
@@ -44,8 +42,8 @@ public class EagerExtension
    */
   public <T> void collect(@Observes ProcessBean<T> event)
   {
-    if (event.getAnnotated().isAnnotationPresent(Eager.class)
-        && event.getAnnotated().isAnnotationPresent(ApplicationScoped.class))
+    if (event.getAnnotated().isAnnotationPresent(Eager.class) &&
+      event.getAnnotated().isAnnotationPresent(ApplicationScoped.class))
     {
       eagerBeansList.add(event.getBean());
     }
@@ -58,14 +56,14 @@ public class EagerExtension
    * @param beanManager the bean manager
    */
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public void load(@SuppressWarnings("unused")
-  @Observes AfterDeploymentValidation event, BeanManager beanManager)
+  public void load(
+    @SuppressWarnings("unused") @Observes AfterDeploymentValidation event, BeanManager beanManager)
   {
     for (Bean<?> bean : eagerBeansList)
     {
       // Note: toString() is important to instantiate the bean
       beanManager.getReference(bean, bean.getBeanClass(),
-          beanManager.createCreationalContext(bean)).toString();
+        beanManager.createCreationalContext(bean)).toString();
     }
   }
 }

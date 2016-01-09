@@ -16,23 +16,18 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.namespace.QName;
 
 /**
  * The <code>BaseElement</code> class provides the base class that all BPMN elements that form part
  * of a Process should be derived from.
- * <p>
+ * <p/>
  * <b>BaseElement</b> XML schema:
  * <pre>
  * &lt;xsd:element name="baseElement" type="tBaseElement"/&gt;
@@ -123,7 +118,7 @@ public abstract class BaseElement
    * element does not have a parent.
    *
    * @return the BPMN element that is the parent of this BPMN element or <code>null</code> if the
-   *         BPMN element does not have a parent
+   * BPMN element does not have a parent
    */
   public BaseElement getParent()
   {

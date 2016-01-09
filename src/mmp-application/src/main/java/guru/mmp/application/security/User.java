@@ -16,8 +16,6 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
@@ -31,21 +29,37 @@ public class User
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String description;
+
   private String email;
+
   private String faxNumber;
+
   private String firstNames;
+
   private UUID id;
+
   private boolean isReadOnly;
+
   private String lastName;
+
   private String mobileNumber;
+
   private String password;
+
   private Integer passwordAttempts;
+
   private Date passwordExpiry;
+
   private String phoneNumber;
+
   private HashMap<String, String> properties = new HashMap<>();
+
   private String title;
+
   private UUID userDirectoryId;
+
   private String username;
 
   /**
@@ -138,7 +152,7 @@ public class User
    * the user
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
-   *         the user
+   * the user
    */
   public Integer getPasswordAttempts()
   {
@@ -172,7 +186,7 @@ public class User
    * @param name the name of the user property
    *
    * @return the value of the user property with the specified name or <code>null</code> if the
-   *         user property does not exist
+   * user property does not exist
    */
   public String getProperty(String name)
   {
@@ -194,7 +208,7 @@ public class User
    * the user is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the user is associated with
+   * the user is associated with
    */
   public UUID getUserDirectoryId()
   {
@@ -223,7 +237,7 @@ public class User
    * @param name the name of the user property
    *
    * @return <code>true</code> if the user has a property with the specified name or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean hasProperty(String name)
   {

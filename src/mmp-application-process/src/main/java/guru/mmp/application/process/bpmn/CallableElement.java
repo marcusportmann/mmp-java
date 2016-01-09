@@ -16,26 +16,20 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.namespace.QName;
 
 /**
  * The <code>CallableElement</code> class provides the base class that all CallableElements that
  * form part of a Process should be derived from.
- * <p>
+ * <p/>
  * <b>CallableElement</b> XML schema:
  * <pre>
  * &lt;xsd:element name="callableElement" type="tCallableElement"/&gt;
@@ -56,7 +50,8 @@ import javax.xml.namespace.QName;
  *
  * @author Marcus Portmann
  */
-public abstract class CallableElement extends RootElement
+public abstract class CallableElement
+  extends RootElement
 {
   /**
    * The InputOutputBinding, which defines a combination of one InputSet and one OutputSet in order
@@ -109,8 +104,8 @@ public abstract class CallableElement extends RootElement
           {
             case "supportedInterfaceRef":
             {
-              supportedInterfaceIds.add(XmlUtils.getQName(childElement,
-                  childElement.getTextContent()));
+              supportedInterfaceIds.add(
+                XmlUtils.getQName(childElement, childElement.getTextContent()));
 
               break;
             }
@@ -143,7 +138,7 @@ public abstract class CallableElement extends RootElement
    * in order to bind this to an operation defined in an interface.
    *
    * @return the InputOutputBinding, which defines a combination of one InputSet and one OutputSet
-   *         in order to bind this to an operation defined in an interface
+   * in order to bind this to an operation defined in an interface
    */
   public InputOutputBinding getInputOutputBinding()
   {
@@ -155,7 +150,7 @@ public abstract class CallableElement extends RootElement
    * and OutputSets for the CallableElement.
    *
    * @return the InputOutputSpecification, which defines the inputs and outputs and the InputSets
-   *         and OutputSets for the CallableElement
+   * and OutputSets for the CallableElement
    */
   public InputOutputSpecification getInputOutputSpecification()
   {
@@ -177,7 +172,7 @@ public abstract class CallableElement extends RootElement
    * by this element.
    *
    * @return the IDs uniquely identifying the Interfaces describing the external behavior provided
-   *         by this element
+   * by this element
    */
   public List<QName> getSupportedInterfaceIds()
   {

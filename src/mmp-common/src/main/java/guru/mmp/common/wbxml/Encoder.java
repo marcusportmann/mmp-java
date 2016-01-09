@@ -16,8 +16,6 @@
 
 package guru.mmp.common.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +28,13 @@ import java.util.List;
 public class Encoder
 {
   private static final String ENCODING_UTF_8 = "UTF-8";
+
   private BinaryBuffer buffer;
+
   private byte[] data;
+
   private int length;
+
   private List<String> stringTable;
 
   /**
@@ -154,8 +156,8 @@ public class Encoder
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to encode the string of length " + str.length()
-          + " for the WBXML document", e);
+      throw new RuntimeException(
+        "Failed to encode the string of length " + str.length() + " for the WBXML document", e);
     }
 
     buffer.append(0);
@@ -292,8 +294,8 @@ public class Encoder
       }
       catch (Throwable e)
       {
-        throw new RuntimeException("Failed to calculate the length of the string table for the "
-            + "WBXML document", e);
+        throw new RuntimeException(
+          "Failed to calculate the length of the string table for the " + "WBXML document", e);
       }
     }
 
@@ -321,8 +323,9 @@ public class Encoder
         }
         catch (Throwable e)
         {
-          throw new RuntimeException("Failed to calculate the offset of the string (" + str
-              + ") in the string table for the WBXML document", e);
+          throw new RuntimeException(
+            "Failed to calculate the offset of the string (" + str + ") in the string table for" +
+              " the WBXML document", e);
         }
       }
     }

@@ -16,10 +16,7 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
-import java.util.Map;
 
 /**
  * The <code>IUserDirectoryProvider</code> interface defines the functionality that must be
@@ -60,8 +57,9 @@ public interface IUserDirectory
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void adminChangePassword(String username, String newPassword, boolean expirePassword,
-      boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
+  void adminChangePassword(
+    String username, String newPassword, boolean expirePassword, boolean lockUser,
+    boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityException;
 
   /**
@@ -78,7 +76,7 @@ public interface IUserDirectory
    */
   void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, SecurityException;
+    UserNotFoundException, SecurityException;
 
   /**
    * Change the password for the user.
@@ -95,7 +93,7 @@ public interface IUserDirectory
    */
   void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-      ExistingPasswordException, SecurityException;
+    ExistingPasswordException, SecurityException;
 
   /**
    * Create a new group.
@@ -292,7 +290,7 @@ public interface IUserDirectory
    * @param username the username identifying the user
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws SecurityException
    */
@@ -344,7 +342,7 @@ public interface IUserDirectory
    * Does the user directory support administering groups.
    *
    * @return <code>true</code> if the directory supports administering groups or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   boolean supportsGroupAdministration();
 
@@ -352,7 +350,7 @@ public interface IUserDirectory
    * Does the user directory support administering users.
    *
    * @return <code>true</code> if the directory supports administering users or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   boolean supportsUserAdministration();
 

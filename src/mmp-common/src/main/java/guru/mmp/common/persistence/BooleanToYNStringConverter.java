@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.AttributeConverter;
 
 /**
@@ -39,7 +37,7 @@ public class BooleanToYNStringConverter
    * @param b Boolean
    *
    * @return "Y" if the parameter is Boolean.TRUE, otherwise it will return
-   *         "N" when the parameter is Boolean.FALSE
+   * "N" when the parameter is Boolean.FALSE
    */
   @Override
   public String convertToDatabaseColumn(Boolean b)
@@ -67,7 +65,7 @@ public class BooleanToYNStringConverter
    * @param s String
    *
    * @return Boolean.TRUE if the string is "Y" or "y", otherwise it
-   *         will ignore the value and return Boolean.FALSE
+   * will ignore the value and return Boolean.FALSE
    */
   @Override
   public Boolean convertToEntityAttribute(String s)

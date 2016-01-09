@@ -16,22 +16,20 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  * The <code>Assignment</code> class represents an Assignment that forms part of a Process.
- * <p>
+ * <p/>
  * The Assignment class is used to specify a simple mapping of data elements using a specified
  * Expression language.
- * <p>
+ * <p/>
  * The default Expression language for all Expressions is specified in the Definitions element,
  * using the expressionLanguage attribute. It can also be overridden on each individual Assignment
  * using the same attribute.
- * <p>
+ * <p/>
  * <b>Assignment</b> XML schema:
  * <pre>
  * &lt;xsd:element name="assignment" type="tAssignment" /&gt;
@@ -49,7 +47,8 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
-public final class Assignment extends BaseElement
+public final class Assignment
+  extends BaseElement
 {
   /**
    * The Expression that evaluates the source of the Assignment.
@@ -128,7 +127,7 @@ public final class Assignment extends BaseElement
    * element.
    *
    * @return the Expression that defines the actual Assignment operation and the target data
-   *         element
+   * element
    */
   public Expression getTo()
   {

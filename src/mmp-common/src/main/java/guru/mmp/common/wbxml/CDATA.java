@@ -16,8 +16,6 @@
 
 package guru.mmp.common.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -35,6 +33,7 @@ public class CDATA
   implements Serializable, Content
 {
   private static final long serialVersionUID = 1000000;
+
   private String text;
 
   /**
@@ -104,9 +103,9 @@ public class CDATA
   }
 
   /**
-   * @see Object#toString()
-   *
    * @return the string representation of the <code>CDATA</code> instance
+   *
+   * @see Object#toString()
    */
   @Override
   public String toString()

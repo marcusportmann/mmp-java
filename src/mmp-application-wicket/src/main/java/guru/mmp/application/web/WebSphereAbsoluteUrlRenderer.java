@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
@@ -28,9 +26,10 @@ import org.slf4j.LoggerFactory;
  * The <code>WebSphereAbsoluteUrlRenderer</code> provides a customised <code>UrlRenderer</code>
  * that renders absolute URLs that are compatible with WebSphere instead of relative URLs.
  *
- * @author  Marcus Portmann
+ * @author Marcus Portmann
  */
-public class WebSphereAbsoluteUrlRenderer extends UrlRenderer
+public class WebSphereAbsoluteUrlRenderer
+  extends UrlRenderer
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebSphereAbsoluteUrlRenderer.class);

@@ -16,19 +16,13 @@
 
 package guru.mmp.common.service.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.handler.RequestData;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.security.cert.X509Certificate;
-
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -41,8 +35,8 @@ public class WebServiceSignatureTrustValidator
   extends org.apache.ws.security.validate.SignatureTrustValidator
 {
   /* Logger */
-  private static final Logger logger =
-    LoggerFactory.getLogger(WebServiceSignatureTrustValidator.class);
+  private static final Logger logger = LoggerFactory.getLogger(
+    WebServiceSignatureTrustValidator.class);
 
   /**
    * Returns <code>true</code> if the certificate's SubjectDN matches the constraints defined in
@@ -50,21 +44,21 @@ public class WebServiceSignatureTrustValidator
    * to match ONE of the subject cert constraints (not all).
    *
    * @return <code>true</code> if the certificate's SubjectDN matches the constraints defined in
-   *         the subject DNConstraints; <code>false</code>, otherwise. The certificate subject DN
-   *         only has to match ONE of the subject cert constraints (not all)
+   * the subject DNConstraints; <code>false</code>, otherwise. The certificate subject DN
+   * only has to match ONE of the subject cert constraints (not all)
    */
 
   @Override
-  protected boolean matches(java.security.cert.X509Certificate cert,
-      Collection<Pattern> subjectDNPatterns)
+  protected boolean matches(
+    java.security.cert.X509Certificate cert, Collection<Pattern> subjectDNPatterns)
   {
-    return (subjectDNPatterns == null) || (subjectDNPatterns.size() == 0)
-        || super.matches(cert, subjectDNPatterns);
+    return (subjectDNPatterns == null) || (subjectDNPatterns.size() == 0) || super.matches(cert,
+      subjectDNPatterns);
   }
 
   @Override
-  protected boolean verifyTrustInCert(X509Certificate cert, Crypto crypto, RequestData data,
-      boolean enableRevocation)
+  protected boolean verifyTrustInCert(
+    X509Certificate cert, Crypto crypto, RequestData data, boolean enableRevocation)
     throws WSSecurityException
   {
     if (super.verifyTrustInCert(cert, crypto, data, enableRevocation))
@@ -80,24 +74,24 @@ public class WebServiceSignatureTrustValidator
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Successfully verified the trust for the client certificate ("
-            + cert.getSubjectDN().getName() + ")");
+        logger.debug("Successfully verified the trust for the client certificate (" +
+          cert.getSubjectDN().getName() + ")");
       }
 
       return true;
     }
     else
     {
-      logger.warn("Failed to verify the trust for the client certificate ("
-          + cert.getSubjectDN().getName() + ")");
+      logger.warn("Failed to verify the trust for the client certificate (" +
+        cert.getSubjectDN().getName() + ")");
 
       return false;
     }
   }
 
   @Override
-  protected boolean verifyTrustInCerts(X509Certificate[] certificates, Crypto crypto,
-      RequestData data, boolean enableRevocation)
+  protected boolean verifyTrustInCerts(
+    X509Certificate[] certificates, Crypto crypto, RequestData data, boolean enableRevocation)
     throws WSSecurityException
   {
     if ((certificates == null) || (certificates.length == 0))
@@ -120,16 +114,16 @@ public class WebServiceSignatureTrustValidator
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Successfully verified the trust for the client certificate ("
-            + certificates[0].getSubjectDN().getName() + ")");
+        logger.debug("Successfully verified the trust for the client certificate (" +
+          certificates[0].getSubjectDN().getName() + ")");
       }
 
       return true;
     }
     else
     {
-      logger.warn("Failed to verify the trust for the client certificate ("
-          + certificates[0].getSubjectDN().getName() + ")");
+      logger.warn("Failed to verify the trust for the client certificate (" +
+        certificates[0].getSubjectDN().getName() + ")");
 
       return false;
     }

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -38,13 +34,14 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class AuthenticateRequestData extends WbxmlMessageData
+public class AuthenticateRequestData
+  extends WbxmlMessageData
 {
   /**
    * The UUID for the "Authenticate Request" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the
@@ -93,7 +90,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -109,9 +106,8 @@ public class AuthenticateRequestData extends WbxmlMessageData
       return false;
     }
 
-    if ((!rootElement.hasChild("User")) || (!rootElement.hasChild("Password"))
-        || (!rootElement.hasChild("Device"))
-        || (!rootElement.hasChild("PreferredEncryptionScheme")))
+    if ((!rootElement.hasChild("User")) || (!rootElement.hasChild("Password")) ||
+      (!rootElement.hasChild("Device")) || (!rootElement.hasChild("PreferredEncryptionScheme")))
     {
       return false;
     }
@@ -128,7 +124,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
    * authentication request originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         authentication request originated from
+   * authentication request originated from
    */
   public UUID getDeviceId()
   {
@@ -192,7 +188,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */

@@ -16,35 +16,29 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 /**
  * The <code>DataAssociation</code> class represents a DataAssociation that forms part of a Process.
- * <p>
+ * <p/>
  * Data Associations are used to move data between Data Objects, Properties, and inputs and outputs
  * of Activities, Processes, and GlobalTasks.
- * <p>
+ * <p/>
  * The DataAssociation class is a BaseElement contained by an Activity or Event, used to model how
  * data is pushed into or pulled from item-aware elements. DataAssociation elements have one or
  * more sources and a target; the source of the association is copied into the target.
- * <p>
+ * <p/>
  * The ItemDefinition from the souceRef and targetRef MUST have the same ItemDefinition or the
  * DataAssociation MUST have a transformation Expression that transforms the source ItemDefinition
  * into the target ItemDefinition.
- * <p>
+ * <p/>
  * <b>DataAssociation</b> XML schema:
  * <pre>
  * &lt;xsd:element name="dataAssociation" type="tDataAssociation" /&gt;
@@ -66,11 +60,12 @@ import javax.xml.namespace.QName;
  *
  * @author Marcus Portmann
  */
-public abstract class DataAssociation extends BaseElement
+public abstract class DataAssociation
+  extends BaseElement
 {
   /**
    * The data element Assignments.
-   * <p>
+   * <p/>
    * By using an Assignment, single data structure elements can be assigned from the source
    * structure to the target structure.
    */
@@ -78,21 +73,21 @@ public abstract class DataAssociation extends BaseElement
 
   /**
    * The ID uniquely identifying the source of the Data Association.
-   * <p>
+   * <p/>
    * The source MUST be an ItemAwareElement.
    */
   private QName sourceId;
 
   /**
    * The ID uniquely identifying the target of the Data Association.
-   * <p>
+   * <p/>
    * The target MUST be an ItemAwareElement.
    */
   private QName targetId;
 
   /**
    * The optional transformation Expression.
-   * <p>
+   * <p/>
    * The actual scope of accessible data for that Expression is defined by the source and target of
    * the specific Data Association types.
    */
@@ -161,7 +156,7 @@ public abstract class DataAssociation extends BaseElement
 
   /**
    * Returns the data element Assignments.
-   * <p>
+   * <p/>
    * By using an Assignment, single data structure elements can be assigned from the source
    * structure to the target structure.
    *
@@ -174,7 +169,7 @@ public abstract class DataAssociation extends BaseElement
 
   /**
    * Returns the ID uniquely identifying the source of the Data Association.
-   * <p>
+   * <p/>
    * The source MUST be an ItemAwareElement.
    *
    * @return the ID uniquely identifying the source of the Data Association
@@ -186,7 +181,7 @@ public abstract class DataAssociation extends BaseElement
 
   /**
    * Returns the ID uniquely identifying the target of the Data Association.
-   * <p>
+   * <p/>
    * The source MUST be an ItemAwareElement.
    *
    * @return the ID uniquely identifying the target of the Data Association
@@ -199,7 +194,7 @@ public abstract class DataAssociation extends BaseElement
   /**
    * Returns the optional transformation Expression or <code>null</code> if no transformation
    * Expression is specified.
-   * <p>
+   * <p/>
    * The actual scope of accessible data for that Expression is defined by the source and target of
    * the specific Data Association types.
    *

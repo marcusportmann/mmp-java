@@ -16,15 +16,11 @@
 
 package guru.mmp.common.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The TransactionManagerFactory retrieves the implementation of the TransactionManager for the
@@ -34,11 +30,6 @@ import javax.naming.NamingException;
  */
 public class TransactionManagerFactory
 {
-  /**
-   * Private default constructor to enforce utility pattern.
-   */
-  private TransactionManagerFactory() {}
-
   /**
    * This class retrieves the TransactionManager implementation from JNDI.
    *
@@ -63,19 +54,21 @@ public class TransactionManagerFactory
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Attempting to retrieve the TransactionManager using the JNDI"
-              + " entry (java:jboss/TransactionManager)");
+          logger.debug("Attempting to retrieve the TransactionManager using the JNDI" + " entry " +
+            "(java:jboss/TransactionManager)");
         }
 
-        javax.transaction.TransactionManager transactionManager =
-          (javax.transaction.TransactionManager) ic.lookup("java:jboss/TransactionManager");
+        javax.transaction.TransactionManager transactionManager = (javax.transaction
+          .TransactionManager) ic.lookup(
+          "java:jboss/TransactionManager");
 
         if (transactionManager != null)
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("Successfully retrieved the TransactionManager using the JNDI"
-                + " entry (java:jboss/TransactionManager)");
+            logger.debug(
+              "Successfully retrieved the TransactionManager using the JNDI" + " entry " +
+                "(java:jboss/TransactionManager)");
           }
 
           return transactionManager;
@@ -88,8 +81,8 @@ public class TransactionManagerFactory
     }
     catch (Throwable e)
     {
-      throw new TransactionManagerException("Failed to retrieve the TransactionManager from JNDI: "
-          + e.getMessage(), e);
+      throw new TransactionManagerException(
+        "Failed to retrieve the TransactionManager from JNDI: " + e.getMessage(), e);
     }
     finally
     {
@@ -99,7 +92,9 @@ public class TransactionManagerFactory
         {
           ic.close();
         }
-        catch (Throwable ignored) {}
+        catch (Throwable ignored)
+        {
+        }
       }
     }
 
@@ -113,19 +108,21 @@ public class TransactionManagerFactory
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Attempting to retrieve the TransactionManager using the JNDI"
-              + " entry (java:appserver/TransactionManager)");
+          logger.debug("Attempting to retrieve the TransactionManager using the JNDI" + " entry " +
+            "(java:appserver/TransactionManager)");
         }
 
-        javax.transaction.TransactionManager transactionManager =
-          (javax.transaction.TransactionManager) ic.lookup("java:appserver/TransactionManager");
+        javax.transaction.TransactionManager transactionManager = (javax.transaction
+          .TransactionManager) ic.lookup(
+          "java:appserver/TransactionManager");
 
         if (transactionManager != null)
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("Successfully retrieved the TransactionManager using the JNDI"
-                + " entry (java:appserver/TransactionManager)");
+            logger.debug(
+              "Successfully retrieved the TransactionManager using the JNDI" + " entry " +
+                "(java:appserver/TransactionManager)");
           }
 
           return transactionManager;
@@ -138,8 +135,8 @@ public class TransactionManagerFactory
     }
     catch (Throwable e)
     {
-      throw new TransactionManagerException("Failed to retrieve the TransactionManager from JNDI: "
-          + e.getMessage(), e);
+      throw new TransactionManagerException(
+        "Failed to retrieve the TransactionManager from JNDI: " + e.getMessage(), e);
     }
     finally
     {
@@ -149,7 +146,9 @@ public class TransactionManagerFactory
         {
           ic.close();
         }
-        catch (Throwable ignored) {}
+        catch (Throwable ignored)
+        {
+        }
       }
     }
 
@@ -158,23 +157,23 @@ public class TransactionManagerFactory
     {
       if (logger.isDebugEnabled())
       {
-        logger.debug("Attempting to retrieve the TransactionManager from the"
-            + " TransactionManagerFactory (com.ibm.ws.Transaction.TransactionManagerFactory)");
+        logger.debug("Attempting to retrieve the TransactionManager from the" + " " +
+          "TransactionManagerFactory (com.ibm.ws.Transaction.TransactionManagerFactory)");
       }
 
       // The implementation class in WebSphere 5
       Class<?> clazz = Class.forName("com.ibm.ws.Transaction.TransactionManagerFactory");
-      javax.transaction.TransactionManager transactionManager =
-        (javax.transaction.TransactionManager) clazz.getMethod("getTransactionManager",
-          (Class[]) null).invoke(null, (Object[]) null);
+      javax.transaction.TransactionManager transactionManager = (javax.transaction
+        .TransactionManager) clazz.getMethod(
+        "getTransactionManager", (Class[]) null).invoke(null, (Object[]) null);
 
       if (transactionManager != null)
       {
         if (logger.isDebugEnabled())
         {
           logger.debug(
-              "Successfully retrieved the TransactionManager from the TransactionManagerFactory"
-              + " (com.ibm.ws.Transaction.TransactionManagerFactory)");
+            "Successfully retrieved the TransactionManager from the TransactionManagerFactory" +
+              " (com.ibm.ws.Transaction.TransactionManagerFactory)");
         }
 
         return transactionManager;
@@ -190,23 +189,23 @@ public class TransactionManagerFactory
     {
       if (logger.isDebugEnabled())
       {
-        logger.debug("Attempting to retrieve the TransactionManager from the"
-            + " TransactionManagerFactory (com.ibm.ejs.jts.jta.TransactionManagerFactory)");
+        logger.debug("Attempting to retrieve the TransactionManager from the" + " " +
+          "TransactionManagerFactory (com.ibm.ejs.jts.jta.TransactionManagerFactory)");
       }
 
       // The implementation class in WebSphere 5
       Class<?> clazz = Class.forName("com.ibm.ejs.jts.jta.TransactionManagerFactory");
-      javax.transaction.TransactionManager transactionManager =
-        (javax.transaction.TransactionManager) clazz.getMethod("getTransactionManager",
-          (Class[]) null).invoke(null, (Object[]) null);
+      javax.transaction.TransactionManager transactionManager = (javax.transaction
+        .TransactionManager) clazz.getMethod(
+        "getTransactionManager", (Class[]) null).invoke(null, (Object[]) null);
 
       if (transactionManager != null)
       {
         if (logger.isDebugEnabled())
         {
           logger.debug(
-              "Successfully retrieved the TransactionManager from the TransactionManagerFactory"
-              + " (com.ibm.ejs.jts.jta.TransactionManagerFactory)");
+            "Successfully retrieved the TransactionManager from the TransactionManagerFactory" +
+              " (com.ibm.ejs.jts.jta.TransactionManagerFactory)");
         }
 
         return transactionManager;
@@ -227,19 +226,21 @@ public class TransactionManagerFactory
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Attempting to retrieve the TransactionManager using the JNDI"
-              + " entry (java:/TransactionManager)");
+          logger.debug("Attempting to retrieve the TransactionManager using the JNDI" + " entry " +
+            "(java:/TransactionManager)");
         }
 
-        javax.transaction.TransactionManager transactionManager =
-          (javax.transaction.TransactionManager) ic.lookup("java:/TransactionManager");
+        javax.transaction.TransactionManager transactionManager = (javax.transaction
+          .TransactionManager) ic.lookup(
+          "java:/TransactionManager");
 
         if (transactionManager != null)
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("Successfully retrieved the TransactionManager using the JNDI"
-                + " entry (java:/TransactionManager)");
+            logger.debug(
+              "Successfully retrieved the TransactionManager using the JNDI" + " entry " +
+                "(java:/TransactionManager)");
           }
 
           return transactionManager;
@@ -252,8 +253,8 @@ public class TransactionManagerFactory
     }
     catch (Throwable e)
     {
-      throw new TransactionManagerException("Failed to retrieve the TransactionManager from JNDI: "
-          + e.getMessage(), e);
+      throw new TransactionManagerException(
+        "Failed to retrieve the TransactionManager from JNDI: " + e.getMessage(), e);
     }
     finally
     {
@@ -263,7 +264,9 @@ public class TransactionManagerFactory
         {
           ic.close();
         }
-        catch (Throwable ignored) {}
+        catch (Throwable ignored)
+        {
+        }
       }
     }
 
@@ -277,19 +280,22 @@ public class TransactionManagerFactory
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Attempting to retrieve the TransactionManager using the JNDI"
-              + " entry (javax.transaction.TransactionManager)");
+          logger.debug(
+            "Attempting to retrieve the TransactionManager using the JNDI" + " entry (javax" +
+              ".transaction.TransactionManager)");
         }
 
-        javax.transaction.TransactionManager transactionManager =
-          (javax.transaction.TransactionManager) ic.lookup("javax.transaction.TransactionManager");
+        javax.transaction.TransactionManager transactionManager = (javax.transaction
+          .TransactionManager) ic.lookup(
+          "javax.transaction.TransactionManager");
 
         if (transactionManager != null)
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("Successfully retrieved the TransactionManager using the JNDI"
-                + " entry (javax.transaction.TransactionManager)");
+            logger.debug(
+              "Successfully retrieved the TransactionManager using the JNDI" + " entry (javax" +
+                ".transaction.TransactionManager)");
           }
 
           return transactionManager;
@@ -302,8 +308,8 @@ public class TransactionManagerFactory
     }
     catch (Throwable e)
     {
-      throw new TransactionManagerException("Failed to retrieve the TransactionManager from JNDI: "
-          + e.getMessage(), e);
+      throw new TransactionManagerException(
+        "Failed to retrieve the TransactionManager from JNDI: " + e.getMessage(), e);
     }
     finally
     {
@@ -313,7 +319,9 @@ public class TransactionManagerFactory
         {
           ic.close();
         }
-        catch (Throwable ignored) {}
+        catch (Throwable ignored)
+        {
+        }
       }
     }
 
@@ -326,19 +334,22 @@ public class TransactionManagerFactory
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("Attempting to retrieve the TransactionManager using the local JNDI"
-              + " reference (java:comp/env/TransactionManager)");
+          logger.debug(
+            "Attempting to retrieve the TransactionManager using the local JNDI" + " reference " +
+              "(java:comp/env/TransactionManager)");
         }
 
-        javax.transaction.TransactionManager transactionManager =
-          (javax.transaction.TransactionManager) ic.lookup("java:comp/env/TransactionManager");
+        javax.transaction.TransactionManager transactionManager = (javax.transaction
+          .TransactionManager) ic.lookup(
+          "java:comp/env/TransactionManager");
 
         if (transactionManager != null)
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug("Successfully retrieved the TransactionManager using the local JNDI"
-                + " reference (java:comp/env/TransactionManager)");
+            logger.debug(
+              "Successfully retrieved the TransactionManager using the local JNDI" + " " +
+                "reference (java:comp/env/TransactionManager)");
           }
 
           return transactionManager;
@@ -351,8 +362,8 @@ public class TransactionManagerFactory
     }
     catch (Throwable e)
     {
-      throw new TransactionManagerException("Failed to retrieve the TransactionManager from JNDI: "
-          + e.getMessage(), e);
+      throw new TransactionManagerException(
+        "Failed to retrieve the TransactionManager from JNDI: " + e.getMessage(), e);
     }
     finally
     {
@@ -362,10 +373,17 @@ public class TransactionManagerFactory
         {
           ic.close();
         }
-        catch (Throwable ignored) {}
+        catch (Throwable ignored)
+        {
+        }
       }
     }
 
     return null;
   }
+
+  /**
+   * Private default constructor to enforce utility pattern.
+   */
+  private TransactionManagerFactory() {}
 }

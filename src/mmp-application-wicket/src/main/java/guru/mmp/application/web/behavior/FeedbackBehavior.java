@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.behavior;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -29,14 +27,15 @@ import org.apache.wicket.behavior.Behavior;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class FeedbackBehavior extends Behavior
+public class FeedbackBehavior
+  extends Behavior
 {
-  private static final long serialVersionUID = 1000000;
-
   /**
    * The re-usable thread-safe feedback behavior.
    */
   public static final FeedbackBehavior FEEDBACK_BEHAVIOR = new FeedbackBehavior();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Bind this handler to the given component.

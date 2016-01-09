@@ -16,15 +16,10 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
-import guru.mmp.application.web.template.component.Alerts;
-import guru.mmp.application.web.template.component.Breadcrumbs;
-import guru.mmp.application.web.template.component.MainNavigationMenu;
-import guru.mmp.application.web.template.component.UserMenu;
+import guru.mmp.application.web.template.component.*;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import org.apache.wicket.devutils.debugbar.DebugBar;
@@ -40,13 +35,19 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author Marcus Portmann
  */
-public abstract class TemplateWebPage extends WebPage
+public abstract class TemplateWebPage
+  extends WebPage
 {
-  private transient static CssReferenceHeaderItem applicationCssHeaderItem;
   private static final long serialVersionUID = 1000000;
+
+  private transient static CssReferenceHeaderItem applicationCssHeaderItem;
+
   private Alerts alerts;
+
   private String heading;
+
   private String subHeading;
+
   private String title;
 
   /**
@@ -62,8 +63,8 @@ public abstract class TemplateWebPage extends WebPage
   /**
    * Constructs a new <code>TemplateWebPage</code>.
    *
-   * @param heading      the page heading
-   * @param subHeading   the sub-heading for the page
+   * @param heading    the page heading
+   * @param subHeading the sub-heading for the page
    */
   public TemplateWebPage(String heading, String subHeading)
   {
@@ -85,11 +86,14 @@ public abstract class TemplateWebPage extends WebPage
       titleLabel.setRenderBodyOnly(false);
       add(titleLabel);
 
-      // Setup the top navigation menu
-      add(new UserMenu("userMenu"));
+      // Setup the backend header
+      add(new BackendHeader("backendHeader"));
 
-      // Setup the main navigation menu
-      add(new MainNavigationMenu("mainNavigationMenu"));
+      // Setup the backend user menu side overlay
+      add(new BackendUserMenuSideOverlay("backendUserMenuSideOverlay"));
+
+      // Setup the backend main navigation
+      add(new BackendMainNavigation("backendMainNavigation"));
 
       // Setup the breadcrumbs
       add(new Breadcrumbs("breadcrumbs"));
@@ -225,8 +229,8 @@ public abstract class TemplateWebPage extends WebPage
   {
     if (applicationCssHeaderItem == null)
     {
-      applicationCssHeaderItem =
-        CssHeaderItem.forReference(getWebApplication().getApplicationCssResourceReference());
+      applicationCssHeaderItem = CssHeaderItem.forReference(
+        getWebApplication().getApplicationCssResourceReference());
     }
 
     return applicationCssHeaderItem;

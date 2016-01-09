@@ -16,16 +16,13 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>TerminateEventDefinition</code> class represents a Terminate Event Definition that
  * forms part of a Process.
- * <p>
+ * <p/>
  * <b>Terminate Event Definition</b> XML schema:
  * <pre>
  * &lt;xsd:element name="terminateEventDefinition" type="tTerminateEventDefinition"
@@ -39,7 +36,8 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public final class TerminateEventDefinition extends EventDefinition
+public final class TerminateEventDefinition
+  extends EventDefinition
 {
   /**
    * Constructs a new <code>TerminateEventDefinition</code>.

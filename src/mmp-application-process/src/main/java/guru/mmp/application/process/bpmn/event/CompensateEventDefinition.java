@@ -16,21 +16,16 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
-
 import org.w3c.dom.Element;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.namespace.QName;
 
 /**
  * The <code>CompensateEventDefinition</code> class represents a Compensate Event Definition that
  * forms part of a Process.
- * <p>
+ * <p/>
  * <b>Compensate Event Definition</b> XML schema:
  * <pre>
  * &lt;xsd:element name="compensateEventDefinition" type="tCompensateEventDefinition"
@@ -48,12 +43,14 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class CompensateEventDefinition extends EventDefinition
+public final class CompensateEventDefinition
+  extends EventDefinition
 {
   /**
    * The reference to the Activity associated with the Compensate Event Definition.
    */
   private QName activityRef;
+
   private boolean waitForCompletion;
 
   /**

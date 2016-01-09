@@ -16,8 +16,6 @@
 
 package guru.mmp.common.model;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -34,19 +32,31 @@ import java.util.Date;
 public class ValidationErrorDetail
   implements java.io.Serializable
 {
-  /** No error code specified. */
+  /**
+   * No error code specified.
+   */
   public static final String NO_ERROR_CODE = "NONE";
 
-  /** No error detail specified. */
+  /**
+   * No error detail specified.
+   */
   public static final String NO_ERROR_DETAIL = "NONE";
 
-  /** No error message specified. */
+  /**
+   * No error message specified.
+   */
   public static final String NO_ERROR_MESSAGE = "NONE";
+
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
+
   private static final long serialVersionUID = 1000000;
+
   private String code;
+
   private String detail;
+
   private String message;
+
   private String when;
 
   /**
@@ -78,9 +88,7 @@ public class ValidationErrorDetail
    */
   public ValidationErrorDetail(Throwable cause)
   {
-    init(NO_ERROR_CODE, (cause == null)
-        ? null
-        : cause.toString(), NO_ERROR_DETAIL, cause);
+    init(NO_ERROR_CODE, (cause == null) ? null : cause.toString(), NO_ERROR_DETAIL, cause);
   }
 
   /**
@@ -143,9 +151,7 @@ public class ValidationErrorDetail
    */
   public String getCode()
   {
-    return (code == null)
-        ? NO_ERROR_CODE
-        : code;
+    return (code == null) ? NO_ERROR_CODE : code;
   }
 
   /**
@@ -231,8 +237,8 @@ public class ValidationErrorDetail
         }
         catch (Throwable e)
         {
-          this.detail = "Unable to dump the stack for the exception (" + cause + "): "
-              + e.getMessage();
+          this.detail =
+            "Unable to dump the stack for the exception (" + cause + "): " + e.getMessage();
         }
       }
     }

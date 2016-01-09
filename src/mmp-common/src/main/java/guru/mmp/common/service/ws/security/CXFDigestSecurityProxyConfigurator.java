@@ -16,8 +16,6 @@
 
 package guru.mmp.common.service.ws.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -31,16 +29,27 @@ import java.lang.reflect.Proxy;
 public class CXFDigestSecurityProxyConfigurator
 {
   private static Method cxfAuthorizationPolicySetAuthorizationMethod;
+
   private static Method cxfAuthorizationPolicySetAuthorizationTypeMethod;
+
   private static Method cxfAuthorizationPolicySetPasswordMethod;
+
   private static Method cxfAuthorizationPolicySetUserNameMethod;
+
   private static Method cxfClientGetConduitMethod;
+
   private static Method cxfHTTPClientPolicySetAllowChunkingMethod;
+
   private static Method cxfHTTPConduitGetAuthorizationMethod;
+
   private static Method cxfHTTPConduitGetClientMethod;
+
   private static Method cxfHTTPConduitSetAuthSupplierMethod;
+
   private static Method cxfProxyGetClientMethod;
+
   private static Class<?> digestAuthSupplierClass;
+
   private static boolean initialised;
 
   /**
@@ -114,33 +123,33 @@ public class CXFDigestSecurityProxyConfigurator
 
     Object authorizationPolicy = cxfHTTPConduitGetAuthorizationMethod.invoke(httpConduit);
 
-    cxfAuthorizationPolicySetAuthorizationMethod =
-      authorizationPolicy.getClass().getMethod("setAuthorization", String.class);
+    cxfAuthorizationPolicySetAuthorizationMethod = authorizationPolicy.getClass().getMethod(
+      "setAuthorization", String.class);
 
-    cxfAuthorizationPolicySetAuthorizationTypeMethod =
-      authorizationPolicy.getClass().getMethod("setAuthorizationType", String.class);
+    cxfAuthorizationPolicySetAuthorizationTypeMethod = authorizationPolicy.getClass().getMethod(
+      "setAuthorizationType", String.class);
 
-    cxfAuthorizationPolicySetUserNameMethod =
-      authorizationPolicy.getClass().getMethod("setUserName", String.class);
+    cxfAuthorizationPolicySetUserNameMethod = authorizationPolicy.getClass().getMethod(
+      "setUserName", String.class);
 
-    cxfAuthorizationPolicySetPasswordMethod =
-      authorizationPolicy.getClass().getMethod("setPassword", String.class);
+    cxfAuthorizationPolicySetPasswordMethod = authorizationPolicy.getClass().getMethod(
+      "setPassword", String.class);
 
-    digestAuthSupplierClass =
-      contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.DigestAuthSupplier");
+    digestAuthSupplierClass = contextClassLoader.loadClass(
+      "org.apache.cxf.transport.http.auth.DigestAuthSupplier");
 
-    Class<?> authSupplierClass =
-      contextClassLoader.loadClass("org.apache.cxf.transport.http.auth.HttpAuthSupplier");
+    Class<?> authSupplierClass = contextClassLoader.loadClass(
+      "org.apache.cxf.transport.http.auth.HttpAuthSupplier");
 
     cxfHTTPConduitSetAuthSupplierMethod = httpConduit.getClass().getMethod("setAuthSupplier",
-        authSupplierClass);
+      authSupplierClass);
 
     cxfHTTPConduitGetClientMethod = httpConduit.getClass().getMethod("getClient");
 
     Object httpClientPolicy = cxfHTTPConduitGetClientMethod.invoke(httpConduit);
 
-    cxfHTTPClientPolicySetAllowChunkingMethod =
-      httpClientPolicy.getClass().getMethod("setAllowChunking", boolean.class);
+    cxfHTTPClientPolicySetAllowChunkingMethod = httpClientPolicy.getClass().getMethod(
+      "setAllowChunking", boolean.class);
 
     initialised = true;
   }

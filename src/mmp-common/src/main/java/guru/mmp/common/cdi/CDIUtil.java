@@ -16,8 +16,6 @@
 
 package guru.mmp.common.cdi;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>CDIUtil</code> class is a utility class which provides utility methods related to
  * container-based dependency injection (CDI).
@@ -45,21 +41,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CDIUtil
 {
-  private static BeanManager cachedBeanManager;
-  private static CreationalContext<Object> cachedCreationalContext;
+  /* The cached injection targets. */
+  private static final Map<Class<?>, InjectionTarget<?>> cachedInjectionTargets = new
+    ConcurrentHashMap<>();
+
+  /* The cached list of injectable classes. */
+  private static final List<Class<?>> injectableClasses = new ArrayList<>();
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CDIUtil.class);
 
-  /* The cached injection targets. */
-  private static final Map<Class<?>, InjectionTarget<?>> cachedInjectionTargets =
-    new ConcurrentHashMap<>();
-
   /* The cached list of non-injectable classes. */
   private static final List<Class<?>> nonInjectableClasses = new ArrayList<>();
 
-  /* The cached list of injectable classes. */
-  private static final List<Class<?>> injectableClasses = new ArrayList<>();
+  private static BeanManager cachedBeanManager;
+
+  private static CreationalContext<Object> cachedCreationalContext;
 
   /**
    * Perform container-based dependency injection on the target using the spe.
@@ -68,7 +65,7 @@ public class CDIUtil
    *
    * @throws CDIException
    */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public static void inject(Object target)
     throws CDIException
   {
@@ -79,12 +76,15 @@ public class CDIUtil
       {
         cachedBeanManager = InitialContext.doLookup("java:comp/BeanManager");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
 
       if (cachedBeanManager == null)
       {
-        throw new CDIException("Failed to inject the object of type (" + target.getClass() + "):"
-            + " Failed to retrieve the CDI BeanManager from JNDI");
+        throw new CDIException(
+          "Failed to inject the object of type (" + target.getClass() + "):" + " Failed to " +
+            "retrieve the CDI BeanManager from JNDI");
       }
     }
 
@@ -96,8 +96,9 @@ public class CDIUtil
       }
       catch (Throwable e)
       {
-        throw new CDIException("Failed to inject the object of type (" + target.getClass() + "):"
-            + " Failed to create the CDI creational context", e);
+        throw new CDIException(
+          "Failed to inject the object of type (" + target.getClass() + "):" + " Failed to " +
+            "create the CDI creational context", e);
       }
     }
 
@@ -120,8 +121,9 @@ public class CDIUtil
           {
             if (logger.isDebugEnabled())
             {
-              logger.info("The class (" + clazz.getName()
-                  + ") is not injectable will be ignored in future");
+              logger.info(
+                "The class (" + clazz.getName() + ") is not injectable will be ignored in " +
+                  "future");
             }
 
             if (!nonInjectableClasses.contains(clazz))
@@ -134,8 +136,8 @@ public class CDIUtil
 
           if (logger.isDebugEnabled())
           {
-            logger.debug("The class (" + clazz.getName()
-                + ") is injectable and will be injected in future");
+            logger.debug(
+              "The class (" + clazz.getName() + ") is injectable and will be injected in future");
           }
 
           if (!injectableClasses.contains(clazz))

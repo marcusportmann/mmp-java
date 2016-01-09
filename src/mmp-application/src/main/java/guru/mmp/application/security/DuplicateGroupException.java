@@ -23,7 +23,8 @@ package guru.mmp.application.security;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class DuplicateGroupException extends RuntimeException
+public class DuplicateGroupException
+  extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

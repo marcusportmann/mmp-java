@@ -19,35 +19,35 @@ package guru.mmp.application.process.bpmn.activity;
 /**
  * The <code>LoopType</code> enumeration defines the possible ways that a Business Process Model and
  * Notation (BPMN) activity can be executed multiple times.
- * <p>
+ * <p/>
  * There are three types of loops:
  * <ul>
- *   <li>
- *     <b>Standard</b>: There are two variations of the standard loop:
- *     <ul>
- *       <li>
- *         <b>While</b> loop: First, the loop condition is checked and if it evaluates to true, the
- *         activity is performed. Otherwise, the activity is not executed and the process continues.
- *         Each time the activity finishes executing, the condition is evaluated again until it
- *         becomes false. There is a chance that the activity will never be performed.
- *       </li>
- *       <li>
- *         <b>Until</b> loop: First, the activity is performed and then, the loop condition is
- *         checked. If it evaluates to true the activity is performed again, if not, the process
- *         continues. The activity is always performed at least once.
- *       </li>
- *     </ul>
- *   </li>
- *   <li>
- *     <b>Parallel Multi-Instance</b>: The parallel multi-instance loop operates on some type of
- *     collection. The instance of the activity is performed in parallel once for each item in the
- *     collection.
- *   </li>
- *   <li>
- *     <b>Sequential Multi-Instance</b>: The sequential multi-instance loop operates on some type of
- *     collection. The instance of the activity is performed once for each item in the collection
- *     sequentially.
- *   </li>
+ * <li>
+ * <b>Standard</b>: There are two variations of the standard loop:
+ * <ul>
+ * <li>
+ * <b>While</b> loop: First, the loop condition is checked and if it evaluates to true, the
+ * activity is performed. Otherwise, the activity is not executed and the process continues.
+ * Each time the activity finishes executing, the condition is evaluated again until it
+ * becomes false. There is a chance that the activity will never be performed.
+ * </li>
+ * <li>
+ * <b>Until</b> loop: First, the activity is performed and then, the loop condition is
+ * checked. If it evaluates to true the activity is performed again, if not, the process
+ * continues. The activity is always performed at least once.
+ * </li>
+ * </ul>
+ * </li>
+ * <li>
+ * <b>Parallel Multi-Instance</b>: The parallel multi-instance loop operates on some type of
+ * collection. The instance of the activity is performed in parallel once for each item in the
+ * collection.
+ * </li>
+ * <li>
+ * <b>Sequential Multi-Instance</b>: The sequential multi-instance loop operates on some type of
+ * collection. The instance of the activity is performed once for each item in the collection
+ * sequentially.
+ * </li>
  * </ul>
  *
  * @author Marcus Portmann
@@ -58,13 +58,8 @@ public enum LoopType
   SEQUENTIAL_MULTI_INSTANCE(4, "Sequential Multi-Instance");
 
   private int code;
-  private String name;
 
-  LoopType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the loop type given by the specified numeric code value.
@@ -92,6 +87,12 @@ public enum LoopType
       default:
         return LoopType.NONE;
     }
+  }
+
+  LoopType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
   }
 
   /**
@@ -129,7 +130,7 @@ public enum LoopType
    * enumeration value.
    *
    * @return the string representation of the <code>LoopType</code>
-   *         enumeration value
+   * enumeration value
    */
   public String toString()
   {

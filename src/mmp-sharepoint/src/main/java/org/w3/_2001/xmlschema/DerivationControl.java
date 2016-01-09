@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -9,9 +6,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for derivationControl.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * <p/>
  * <pre>
  * &lt;simpleType name="derivationControl">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}NMTOKEN">
@@ -23,7 +20,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- *
  */
 @XmlType(name = "derivationControl")
 @XmlEnum
@@ -41,11 +37,6 @@ public enum DerivationControl
   UNION("union");
 
   private final String value;
-
-  DerivationControl(String v)
-  {
-    value = v;
-  }
 
   /**
    * Method description
@@ -65,6 +56,11 @@ public enum DerivationControl
     }
 
     throw new IllegalArgumentException(v);
+  }
+
+  DerivationControl(String v)
+  {
+    value = v;
   }
 
   /**

@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -77,7 +75,7 @@ public class Location
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the obj argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
   public boolean equals(Object obj)
@@ -99,9 +97,8 @@ public class Location
 
     Location other = (Location) obj;
 
-    return (latitude == other.latitude) && (longitude == other.longitude)
-        && (precision == other.precision);
-
+    return (latitude == other.latitude) && (longitude == other.longitude) &&
+      (precision == other.precision);
   }
 
   /**

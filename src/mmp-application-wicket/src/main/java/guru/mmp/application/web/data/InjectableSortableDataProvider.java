@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -26,13 +24,14 @@ import org.apache.wicket.protocol.http.WebApplication;
  * <code>SortableDataProvider</code> base class that provides support for container-based
  * dependency injection (CDI).
  *
- * @author Marcus Portmann
- *
  * @param <T>
  * @param <S>
+ *
+ * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class InjectableSortableDataProvider<T, S> extends SortableDataProvider<T, S>
+public abstract class InjectableSortableDataProvider<T, S>
+  extends SortableDataProvider<T, S>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -41,8 +40,9 @@ public abstract class InjectableSortableDataProvider<T, S> extends SortableDataP
    */
   public InjectableSortableDataProvider()
   {
-    guru.mmp.application.web.WebApplication webApplication =
-      guru.mmp.application.web.WebApplication.class.cast(WebApplication.get());
+    guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
+      .WebApplication.class.cast(
+      WebApplication.get());
 
     webApplication.getWebApplicationInjector().inject(this);
   }

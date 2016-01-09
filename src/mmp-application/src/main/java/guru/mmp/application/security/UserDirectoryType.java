@@ -16,12 +16,8 @@
 
 package guru.mmp.application.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -36,12 +32,19 @@ public class UserDirectoryType
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserDirectoryType.class);
+
   private static final long serialVersionUID = 1000000;
+
   private transient Class administrationClass;
+
   private String administrationClassName;
+
   private UUID id;
+
   private String name;
+
   private transient Class userDirectoryClass;
+
   private String userDirectoryClassName;
 
   /**
@@ -56,14 +59,13 @@ public class UserDirectoryType
    *                                Wicket component used to administer the configuration for the
    *                                user directory type
    */
-  public UserDirectoryType(UUID id, String name, String userDirectoryClassName,
-      String administrationClassName)
+  public UserDirectoryType(
+    UUID id, String name, String userDirectoryClassName, String administrationClassName)
   {
     this.id = id;
     this.name = name;
     this.userDirectoryClassName = userDirectoryClassName;
     this.administrationClassName = administrationClassName;
-
   }
 
   /**
@@ -71,7 +73,7 @@ public class UserDirectoryType
    * configuration for the user directory type.
    *
    * @return the Java class that implements the Wicket component used to administer the
-   *         configuration for the user directory type
+   * configuration for the user directory type
    *
    * @throws SecurityException
    */
@@ -82,13 +84,14 @@ public class UserDirectoryType
     {
       try
       {
-        administrationClass =
-          Thread.currentThread().getContextClassLoader().loadClass(administrationClassName);
+        administrationClass = Thread.currentThread().getContextClassLoader().loadClass(
+          administrationClassName);
       }
       catch (Throwable e)
       {
-        throw new SecurityException("Failed to load the administration class ("
-            + administrationClassName + ") for the user directory (" + name + ")", e);
+        throw new SecurityException(
+          String.format("Failed to load the administration class (%s) for the user directory (%s)",
+            administrationClassName, name), e);
       }
     }
 
@@ -100,7 +103,7 @@ public class UserDirectoryType
    * to administer the configuration for the user directory type.
    *
    * @return the fully qualified name of the Java class that implements the Wicket component used
-   *         to administer the configuration for the user directory type
+   * to administer the configuration for the user directory type
    */
   public String getAdministrationClassName()
   {
@@ -112,7 +115,7 @@ public class UserDirectoryType
    * type.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         type
+   * type
    */
   public UUID getId()
   {
@@ -143,19 +146,20 @@ public class UserDirectoryType
     {
       try
       {
-        userDirectoryClass =
-          Thread.currentThread().getContextClassLoader().loadClass(userDirectoryClassName);
+        userDirectoryClass = Thread.currentThread().getContextClassLoader().loadClass(
+          userDirectoryClassName);
 
         if (!IUserDirectory.class.isAssignableFrom(userDirectoryClass))
         {
           throw new SecurityException(
-              "The user directory class does not implement the IUserDirectory interface");
+            "The user directory class does not implement the IUserDirectory interface");
         }
       }
       catch (Throwable e)
       {
-        throw new SecurityException("Failed to load the user directory class ("
-            + userDirectoryClassName + ") for the user directory (" + name + ")", e);
+        throw new SecurityException(
+          String.format("Failed to load the user directory class (%s) for the user directory (%s)",
+            userDirectoryClassName, name), e);
       }
     }
 

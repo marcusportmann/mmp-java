@@ -16,34 +16,28 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-
 import javax.xml.namespace.QName;
+import java.util.List;
 
 /**
  * The <code>BoundaryEvent</code> class represents a Boundary Event that forms part of a Process.
- * <p>
+ * <p/>
  * Boundary Events are placed on the boundary of an Activity.
- * <p>
+ * <p/>
  * Boundary Events are catching only Intermediate Events that may or may not be interrupting to the
  * Activity. Events thrown inside an Activity are passed up the Process hierarchy until some
  * Activity catches them.
- * <p>
+ * <p/>
  * Common uses of Boundary Events include deadlines and timeouts.
- * <p>
+ * <p/>
  * <b>Boundary Event</b> XML schema:
  * <pre>
  * &lt;xsd:element name="boundaryEvent" type="tBoundaryEvent" substitutionGroup="flowElement"/&gt;
@@ -60,7 +54,8 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class BoundaryEvent extends CatchEvent
+public final class BoundaryEvent
+  extends CatchEvent
 {
   /**
    * The reference to the element the Boundary Event is attached to.
@@ -86,9 +81,8 @@ public final class BoundaryEvent extends CatchEvent
 
     try
     {
-      this.cancelActivity = StringUtil
-        .isNullOrEmpty(element.getAttribute("cancelActivity")) || Boolean
-        .parseBoolean(element.getAttribute("cancelActivity"));
+      this.cancelActivity = StringUtil.isNullOrEmpty(element.getAttribute("cancelActivity")) ||
+        Boolean.parseBoolean(element.getAttribute("cancelActivity"));
 
       if (!StringUtil.isNullOrEmpty("attachedToRef"))
       {
@@ -126,7 +120,7 @@ public final class BoundaryEvent extends CatchEvent
 
   /**
    * Returns <code>true</code> if the Activity should be cancelled or <code>false</code> otherwise.
-   * <p>
+   * <p/>
    * If the Activity is cancelled the Boundary Event acts as an error or an escalation.
    *
    * @return <code>true</code> if the Activity should be cancelled or <code>false</code> otherwise

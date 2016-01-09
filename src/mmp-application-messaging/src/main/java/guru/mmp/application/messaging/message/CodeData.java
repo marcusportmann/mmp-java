@@ -16,16 +16,11 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
 
 /**
@@ -126,7 +121,7 @@ public class CodeData
    * code is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the category the
-   *         code is associated with
+   * code is associated with
    */
   public UUID getCategoryId()
   {

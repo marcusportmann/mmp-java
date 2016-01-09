@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
@@ -36,8 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>UpdateCodeCategoryPage</code> class implements the
  * "Update Code Category" page for the Web Application Template.
@@ -45,12 +41,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE_CATEGORY)
-public class UpdateCodeCategoryPage extends TemplateWebPage
+public class UpdateCodeCategoryPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateCodeCategoryPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
   @Inject
@@ -92,8 +89,8 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
               codeCategory.setCodeData(null);
             }
 
-            if ((codeCategory.getCategoryType() != CodeCategoryType.REMOTE_HTTP_SERVICE)
-                && (codeCategory.getCategoryType() != CodeCategoryType.REMOTE_WEB_SERVICE))
+            if ((codeCategory.getCategoryType() != CodeCategoryType.REMOTE_HTTP_SERVICE) &&
+              (codeCategory.getCategoryType() != CodeCategoryType.REMOTE_WEB_SERVICE))
             {
               codeCategory.setEndPoint(null);
               codeCategory.setIsEndPointSecure(false);

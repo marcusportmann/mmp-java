@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -11,9 +8,9 @@ import java.util.List;
 
 /**
  * <p>Java class for keybase complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="keybase">
  *   &lt;complexContent>
@@ -28,44 +25,43 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "keybase", propOrder = { "selector", "fields" })
-@XmlSeeAlso({ Keyref.class })
-public class Keybase extends Annotated
+@XmlType(name = "keybase", propOrder = {"selector", "fields"})
+@XmlSeeAlso({Keyref.class})
+public class Keybase
+  extends Annotated
 {
   @XmlElement(name = "field", required = true)
   protected List<Field> fields;
+
   @XmlAttribute(name = "name", required = true)
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
+
   @XmlElement(required = true)
   protected Selector selector;
 
   /**
    * Gets the value of the fields property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the fields property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getFields().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link Field }
-   *
-   *
    *
    * @return
    */
@@ -82,10 +78,8 @@ public class Keybase extends Annotated
   /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getName()
   {
@@ -95,10 +89,8 @@ public class Keybase extends Annotated
   /**
    * Gets the value of the selector property.
    *
-   * @return
-   *     possible object is
-   *     {@link Selector }
-   *
+   * @return possible object is
+   * {@link Selector }
    */
   public Selector getSelector()
   {
@@ -108,10 +100,8 @@ public class Keybase extends Annotated
   /**
    * Sets the value of the name property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setName(String value)
   {
@@ -121,10 +111,8 @@ public class Keybase extends Annotated
   /**
    * Sets the value of the selector property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Selector }
-   *
+   * @param value allowed object is
+   *              {@link Selector }
    */
   public void setSelector(Selector value)
   {

@@ -16,16 +16,12 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.*;
 import javax.inject.Inject;
 import java.util.concurrent.Future;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundMessageProcessorTimer</code> class implements the timer for the Background
@@ -75,8 +71,8 @@ public class BackgroundMessageProcessorTimer
       }
       catch (Throwable e)
       {
-        logger.error("Failed to invoke the Background Message Processor to asynchronously process"
-            + " all pending messages", e);
+        logger.error("Failed to invoke the Background Message Processor to asynchronously " +
+          "process all the pending messages", e);
       }
     }
   }

@@ -16,31 +16,25 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 /**
  * The <code>CallActivity</code> class represents a Call Activity that forms part of a Process.
- * <p>
+ * <p/>
  * A call activity is just a reusable activity. If a sub-process is referenced in more than one
  * process (diagram), it can be defined in its own diagram and "called" from each process that
  * uses it.
- * <p>
+ * <p/>
  * <b>Call Activity</b> XML schema:
  * <pre>
  * &lt;xsd:element name="callActivity" type="tCallActivity" substitutionGroup="flowElement"/&gt;
@@ -56,7 +50,8 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class CallActivity extends Activity
+public final class CallActivity
+  extends Activity
 {
   /**
    * The reference to the element to be called, which will be either a Process or a Global Task.
@@ -104,7 +99,7 @@ public final class CallActivity extends Activity
    * Task.
    *
    * @return the reference to the element to be called, which will be either a Process or a Global
-   *         Task
+   * Task
    */
   public QName getCalledElementRef()
   {

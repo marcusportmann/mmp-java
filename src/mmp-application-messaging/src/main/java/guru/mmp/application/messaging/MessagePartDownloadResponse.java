@@ -16,18 +16,13 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 import guru.mmp.common.wbxml.Parser;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +76,24 @@ public class MessagePartDownloadResponse
   private List<MessagePart> messageParts;
 
   /**
+   * Returns <code>true</code> if the WBXML document contains valid message part download response
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message part download response
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessagePartDownloadResponse") &&
+      (rootElement.getAttributes().size() == 2) &&
+      rootElement.hasAttribute("code") && rootElement.hasAttribute("detail");
+  }
+
+  /**
    * Constructs a new <code>MessagePartDownloadResponse</code> and populates it from the information
    * stored in the specified WBXML document.
    *
@@ -119,8 +132,9 @@ public class MessagePartDownloadResponse
       }
       catch (Throwable e)
       {
-        throw new MessagingException("Failed to parse the WBXML for a message part associated with"
-            + " the message part download response", e);
+        throw new MessagingException(
+          "Failed to parse the WBXML for a message part associated with" + " the message part " +
+            "download response", e);
       }
     }
   }
@@ -182,24 +196,6 @@ public class MessagePartDownloadResponse
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message part download response
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message part download response
-   *         information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessagePartDownloadResponse")
-        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code")
-        && rootElement.hasAttribute("detail");
-  }
-
-  /**
    * Returns the result code.
    *
    * @return the result code
@@ -214,7 +210,7 @@ public class MessagePartDownloadResponse
    * download request.
    *
    * @return the user-friendly text description of the result of processing the message part
-   *         download request
+   * download request
    */
   public String getDetail()
   {
@@ -226,7 +222,7 @@ public class MessagePartDownloadResponse
    * part download request.
    *
    * @return the flattened information for the exception that resulted from processing the message
-   *         part download request
+   * part download request
    */
   public String getException()
   {

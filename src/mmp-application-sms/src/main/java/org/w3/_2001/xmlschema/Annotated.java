@@ -1,22 +1,18 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- *
- *        This type is extended by all types which allow annotation
- *        other than <schema> itself
- *
- *
+ * This type is extended by all types which allow annotation
+ * other than <schema> itself
+ * <p/>
+ * <p/>
  * <p>Java class for annotated complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="annotated">
  *   &lt;complexContent>
@@ -30,19 +26,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "annotated", propOrder = { "annotation" })
-@XmlSeeAlso({ ExtensionType.class, RestrictionType.class, Notation.class, AttributeType.class,
-    Field.class, Selector.class, Keybase.class, ElementType.class, AttributeGroupType.class,
-    Wildcard.class, GroupType.class, SimpleContent.class, ComplexContent.class,
-    ComplexTypeType.class, Facet.class, Restriction.class, List.class, Union.class,
-    SimpleTypeType.class, Import.class, Include.class })
-public class Annotated extends OpenAttrs
+@XmlType(name = "annotated", propOrder = {"annotation"})
+@XmlSeeAlso({ExtensionType.class, RestrictionType.class, Notation.class, AttributeType.class,
+  Field.class, Selector.class, Keybase.class, ElementType.class, AttributeGroupType.class,
+  Wildcard.class, GroupType.class, SimpleContent.class, ComplexContent.class, ComplexTypeType.class,
+  Facet.class, Restriction.class, List.class, Union.class, SimpleTypeType.class, Import.class,
+  Include.class})
+public class Annotated
+  extends OpenAttrs
 {
   protected Annotation annotation;
+
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
@@ -52,10 +48,8 @@ public class Annotated extends OpenAttrs
   /**
    * Gets the value of the annotation property.
    *
-   * @return
-   *     possible object is
-   *     {@link Annotation }
-   *
+   * @return possible object is
+   * {@link Annotation }
    */
   public Annotation getAnnotation()
   {
@@ -65,10 +59,8 @@ public class Annotated extends OpenAttrs
   /**
    * Gets the value of the id property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getId()
   {
@@ -78,10 +70,8 @@ public class Annotated extends OpenAttrs
   /**
    * Sets the value of the annotation property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Annotation }
-   *
+   * @param value allowed object is
+   *              {@link Annotation }
    */
   public void setAnnotation(Annotation value)
   {
@@ -91,10 +81,8 @@ public class Annotated extends OpenAttrs
   /**
    * Sets the value of the id property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setId(String value)
   {

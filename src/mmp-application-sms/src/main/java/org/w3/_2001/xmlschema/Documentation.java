@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- non-JDK imports --------------------------------------------------------
 
 import org.w3c.dom.Element;
 
@@ -12,13 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * <p>Java class for anonymous complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -33,48 +28,47 @@ import java.util.Map;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "content" })
+@XmlType(name = "", propOrder = {"content"})
 @XmlRootElement(name = "documentation")
 public class Documentation
 {
   @XmlMixed
   @XmlAnyElement(lax = true)
   protected List<Object> content;
+
   @XmlAttribute(name = "lang", namespace = "http://www.w3.org/XML/1998/namespace")
   protected String lang;
+
   @XmlAttribute(name = "source")
   @XmlSchemaType(name = "anyURI")
   protected String source;
+
   @XmlAnyAttribute
   private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
   /**
    * Gets the value of the content property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the content property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getContent().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link String }
    * {@link Object }
    * {@link Element }
-   *
-   *
    *
    * @return
    */
@@ -91,10 +85,8 @@ public class Documentation
   /**
    * Gets the value of the lang property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getLang()
   {
@@ -103,17 +95,15 @@ public class Documentation
 
   /**
    * Gets a map that contains attributes that aren't bound to any typed property on this class.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * the map is keyed by the name of the attribute and
    * the value is the string value of the attribute.
-   *
+   * <p/>
    * the map returned by this method is live, and you can add new attribute
    * by updating the map directly. Because of this design, there's no setter.
    *
-   *
-   * @return
-   *     always non-null
+   * @return always non-null
    */
   public Map<QName, String> getOtherAttributes()
   {
@@ -123,10 +113,8 @@ public class Documentation
   /**
    * Gets the value of the source property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getSource()
   {
@@ -136,10 +124,8 @@ public class Documentation
   /**
    * Sets the value of the lang property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setLang(String value)
   {
@@ -149,10 +135,8 @@ public class Documentation
   /**
    * Sets the value of the source property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setSource(String value)
   {

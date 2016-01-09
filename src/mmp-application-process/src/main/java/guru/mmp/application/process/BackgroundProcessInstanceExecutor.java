@@ -16,20 +16,13 @@
 
 package guru.mmp.application.process;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.concurrent.Future;
-
 import javax.annotation.PostConstruct;
-
 import javax.ejb.*;
-
 import javax.inject.Inject;
+import java.util.concurrent.Future;
 
 /**
  * The <code>BackgroundProcessInstanceExecutor</code> class implements the background process
@@ -53,7 +46,7 @@ public class BackgroundProcessInstanceExecutor
    * Execute all the process instances scheduled for execution.
    *
    * @return <code>true</code> if the process instances were executed successfully or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Asynchronous
   public Future<Boolean> execute()
@@ -61,8 +54,7 @@ public class BackgroundProcessInstanceExecutor
     // If CDI injection was not completed successfully for the bean then stop here
     if (processService == null)
     {
-      logger.error("Failed to execute the process instances:"
-        + " The ProcessService was NOT injected");
+      logger.error("Failed to execute the process instances: The Process Service was NOT injected");
 
       return new AsyncResult<>(false);
     }
@@ -87,7 +79,7 @@ public class BackgroundProcessInstanceExecutor
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the background process instance executor");
+    logger.info("Initialising the Background Process Instance Executor");
 
     if (processService != null)
     {
@@ -105,12 +97,11 @@ public class BackgroundProcessInstanceExecutor
       {
         logger.error("Failed to reset the locks for the process instances being executed", e);
       }
-
     }
     else
     {
-      logger.error("Failed to initialise the background process instance executor:"
-        + " The Process Service was NOT injected");
+      logger.error("Failed to initialise the Background Process Instance Executor:" +
+        " The Process Service was NOT injected");
     }
   }
 
@@ -154,16 +145,19 @@ public class BackgroundProcessInstanceExecutor
       }
       catch (Throwable e)
       {
-        logger.error("Failed to execute the process instance (" + processInstance.getId() + ")", e);
+        logger.error(
+          String.format("Failed to execute the process instance (%s)", processInstance.getId()), e);
 
         try
         {
-          processService.unlockProcessInstance(processInstance.getId(), ProcessInstance.Status.FAILED);
+          processService.unlockProcessInstance(processInstance.getId(),
+            ProcessInstance.Status.FAILED);
         }
         catch (Throwable f)
         {
-          logger.error("Failed to unlock and set the status for the process instance ("
-            + processInstance.getId() + ")", f);
+          logger.error(
+            String.format("Failed to unlock and set the status for the process instance (%s)",
+              processInstance.getId()), f);
         }
       }
     }

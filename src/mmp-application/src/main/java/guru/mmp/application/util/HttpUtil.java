@@ -16,14 +16,11 @@
 
 package guru.mmp.application.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.servlet.ServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-
-import javax.servlet.ServletRequest;
 
 /**
  * The HttpUtil class provides utility methods that are useful when working with the HTTP protocol.
@@ -33,11 +30,6 @@ import javax.servlet.ServletRequest;
 @SuppressWarnings("unused")
 public class HttpUtil
 {
-  /**
-   * Private default constructor to enforce utility pattern.
-   */
-  private HttpUtil() {}
-
   /**
    * Sort the names of the parameters in the request.
    *
@@ -61,4 +53,9 @@ public class HttpUtil
 
     return list.toArray(new String[list.size()]);
   }
+
+  /**
+   * Private default constructor to enforce utility pattern.
+   */
+  private HttpUtil() {}
 }

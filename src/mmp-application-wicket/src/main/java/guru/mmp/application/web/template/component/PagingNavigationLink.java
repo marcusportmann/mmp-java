@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
@@ -30,10 +28,13 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
  *
  * @author Marcus Portmann
  */
-public class PagingNavigationLink<T> extends Link<T>
+public class PagingNavigationLink<T>
+  extends Link<T>
 {
   private static final long serialVersionUID = 1000000;
+
   protected IPageable pageable;
+
   private long pageNumber;
 
   /**
@@ -67,7 +68,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise.
    *
    * @return <code>true</code> if this page is the first page of the containing
-   *         <code>PageableListView</code> or <code>false</code> otherwise
+   * <code>PageableListView</code> or <code>false</code> otherwise
    */
   public boolean isFirst()
   {
@@ -79,7 +80,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise.
    *
    * @return <code>true</code> if this page is the first page of the containing
-   *         <code>PageableListView</code> or <code>false</code> otherwise
+   * <code>PageableListView</code> or <code>false</code> otherwise
    */
   public boolean isLast()
   {
@@ -93,7 +94,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * @param page the page
    *
    * @return <code>true</code> if this <code>PageableListView</code> navigation link links to the
-   *         specified page or <code>false</code> otherwise
+   * specified page or <code>false</code> otherwise
    *
    * @see org.apache.wicket.markup.html.link.Link#linksTo(org.apache.wicket.Page)
    */

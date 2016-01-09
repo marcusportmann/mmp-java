@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -33,19 +31,22 @@ import org.apache.wicket.model.Model;
  *
  * @author Marcus Portmann
  */
-public class PagingNavigation extends Loop
+public class PagingNavigation
+  extends Loop
 {
+  /**
+   * The <code>AttributeModifier</code> used to apply the "active" CSS class to a link.
+   */
+  public static final AttributeModifier ACTIVE_CSS_CLASS_MODIFIER = AttributeModifier.replace(
+    "class", "active");
+
   /**
    * The maximum number of page links to show.
    */
   private static final int MAXIMUM_NUMBER_PAGE_LINKS = 5;
+
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The <code>AttributeModifier</code> used to apply the "active" CSS class to a link.
-   */
-  public static final AttributeModifier ACTIVE_CSS_CLASS_MODIFIER =
-    AttributeModifier.replace("class", "active");
   protected IPageable pageable;
 
   /**
@@ -74,7 +75,7 @@ public class PagingNavigation extends Loop
 
   /**
    * Returns the margin.
-   *
+   * <p/>
    * The default value is half the view size, unless explicitly set.
    *
    * @return the margin
@@ -141,7 +142,7 @@ public class PagingNavigation extends Loop
    * sophisticated page links.
    *
    * @see org.apache.wicket.markup.html.list.Loop#populateItem(
-   *         org.apache.wicket.markup.html.list.LoopItem)
+   *org.apache.wicket.markup.html.list.LoopItem)
    */
   @Override
   protected void populateItem(LoopItem loopItem)

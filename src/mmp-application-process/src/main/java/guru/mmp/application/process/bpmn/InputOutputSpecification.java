@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
 /**
  * The <code>InputOutputSpecification</code> class represents an InputOutputSpecification that
  * forms part of a Process.
- * <p>
+ * <p/>
  * <b>InputOutputSpecification</b> XML schema:
  * <pre>
  *

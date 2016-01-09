@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -26,8 +24,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TemplateJavaScriptResourceReference</code> class implements the
  * JavaScript resource reference for the template.js resource that forms part of the
@@ -35,27 +31,24 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateJavaScriptResourceReference extends JavaScriptResourceReference
+public class TemplateJavaScriptResourceReference
+  extends JavaScriptResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM =
-    JavaScriptHeaderItem.forReference(new TemplateJavaScriptResourceReference());
-  private static final TemplateJavaScriptResourceReference INSTANCE =
-    new TemplateJavaScriptResourceReference();
+  private static final TemplateJavaScriptResourceReference INSTANCE = new
+    TemplateJavaScriptResourceReference();
 
-  private TemplateJavaScriptResourceReference()
-  {
-    super(TemplateJavaScriptResourceReference.class, Debug.inDebugMode()
-        ? "js/template.js"
-        : "js/template.js");
-  }
+  private static final JavaScriptHeaderItem JAVA_SCRIPT_HEADER_ITEM = JavaScriptHeaderItem
+    .forReference(
+    new TemplateJavaScriptResourceReference());
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the JavaScript resource reference for the
    * template.js resource that forms part of the Web Application Template.
    *
    * @return the single instance of the JavaScript resource reference for the
-   *         template.js resource that forms part of the Web Application Template
+   * template.js resource that forms part of the Web Application Template
    */
   public static TemplateJavaScriptResourceReference get()
   {
@@ -72,6 +65,12 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
     return JAVA_SCRIPT_HEADER_ITEM;
   }
 
+  private TemplateJavaScriptResourceReference()
+  {
+    super(TemplateJavaScriptResourceReference.class,
+      Debug.inDebugMode() ? "js/template.js" : "js/template.js");
+  }
+
   /**
    * Returns the dependencies for the JavaScript resource reference.
    *
@@ -82,9 +81,22 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(TemplateBootstrapJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TemplateCombinedJavaScriptResourceReference.getJavaScriptHeaderItem());
-    dependencies.add(TemplateCoreJavaScriptResourceReference.getJavaScriptHeaderItem());
+    dependencies.add(JavaScriptHeaderItem.forReference(
+      new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
+        "js/oneui.min.js")));
+
+    dependencies.add(JavaScriptHeaderItem.forReference(
+      new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
+        "js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")));
+    dependencies.add(JavaScriptHeaderItem.forReference(
+      new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
+        "js/plugins/bootstrap-datetimepicker/moment.min.js")));
+    dependencies.add(JavaScriptHeaderItem.forReference(
+      new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
+        "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js")));
+    dependencies.add(JavaScriptHeaderItem.forReference(
+      new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
+        "js/plugins/select2/select2.full.min.js")));
 
     return dependencies;
   }

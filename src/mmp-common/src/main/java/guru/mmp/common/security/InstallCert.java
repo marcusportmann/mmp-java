@@ -16,16 +16,12 @@
 
 package guru.mmp.common.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.net.ssl.*;
 import java.io.*;
-
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
-import javax.net.ssl.*;
 
 /*
 * Copyright 2006 Sun Microsystems, Inc.  All Rights Reserved.
@@ -94,13 +90,9 @@ public class InstallCert
       String[] c = args[0].split(":");
 
       host = c[0];
-      port = (c.length == 1)
-          ? 443
-          : Integer.parseInt(c[1]);
+      port = (c.length == 1) ? 443 : Integer.parseInt(c[1]);
 
-      String p = (args.length == 1)
-          ? "changeit"
-          : args[1];
+      String p = (args.length == 1) ? "changeit" : args[1];
 
       passphrase = p.toCharArray();
     }
@@ -135,15 +127,15 @@ public class InstallCert
     in.close();
 
     SSLContext context = SSLContext.getInstance("TLS");
-    TrustManagerFactory tmf =
-      TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+    TrustManagerFactory tmf = TrustManagerFactory.getInstance(
+      TrustManagerFactory.getDefaultAlgorithm());
 
     tmf.init(ks);
 
     X509TrustManager defaultTrustManager = (X509TrustManager) tmf.getTrustManagers()[0];
     SavingTrustManager tm = new SavingTrustManager(defaultTrustManager);
 
-    context.init(null, new TrustManager[] { tm }, null);
+    context.init(null, new TrustManager[]{tm}, null);
 
     SSLSocketFactory factory = context.getSocketFactory();
 
@@ -205,9 +197,7 @@ public class InstallCert
 
     try
     {
-      k = (line.length() == 0)
-          ? 0
-          : Integer.parseInt(line) - 1;
+      k = (line.length() == 0) ? 0 : Integer.parseInt(line) - 1;
     }
     catch (NumberFormatException e)
     {
@@ -251,6 +241,7 @@ public class InstallCert
     implements X509TrustManager
   {
     private X509Certificate[] chain;
+
     private X509TrustManager tm;
 
     SavingTrustManager(X509TrustManager tm)

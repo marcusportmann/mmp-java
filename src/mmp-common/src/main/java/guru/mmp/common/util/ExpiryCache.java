@@ -16,8 +16,6 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,15 +30,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p/>
  * TODO: Implement expiry when the cache reaches a certain size.
  *
- * @author Marcus Portmann
- *
  * @param <K> the type of keys maintained by this cache
  * @param <V> the type of cached values
+ *
+ * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 public class ExpiryCache<K, V>
 {
   private ConcurrentHashMap<K, ExpiryCacheEntry<V>> entries = null;
+
   private int expiryPeriod = -1;
 
   /**

@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
 import java.util.UUID;
 
@@ -92,7 +90,7 @@ public interface IProcessService
    * The process instance will be locked to prevent duplicate processing.
    *
    * @return the next process instance that is scheduled for execution or <code>null</code> if no
-   *         process instances are currently scheduled for execution
+   * process instances are currently scheduled for execution
    *
    * @throws ProcessServiceException
    */
@@ -132,7 +130,7 @@ public interface IProcessService
    * @param version the version of the process definition
    *
    * @return the summary for the process definition and version or <code>null</code> if the process
-   *         definition could not be found
+   * definition could not be found
    *
    * @throws ProcessServiceException
    */

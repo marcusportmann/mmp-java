@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,9 +7,9 @@ import java.io.Serializable;
 
 /**
  * <p>Java class for namedGroup complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="namedGroup">
  *   &lt;complexContent>
@@ -30,8 +27,10 @@ import java.io.Serializable;
  *               &lt;/complexContent>
  *             &lt;/complexType>
  *           &lt;/element>
- *           &lt;element name="choice" type="{http://www.w3.org/2001/XMLSchema}simpleExplicitGroup"/>
- *           &lt;element name="sequence" type="{http://www.w3.org/2001/XMLSchema}simpleExplicitGroup"/>
+ *           &lt;element name="choice" type="{http://www.w3
+ *           .org/2001/XMLSchema}simpleExplicitGroup"/>
+ *           &lt;element name="sequence" type="{http://www.w3
+ *           .org/2001/XMLSchema}simpleExplicitGroup"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" />
@@ -40,12 +39,11 @@ import java.io.Serializable;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "namedGroup")
-public class NamedGroup extends RealGroup
+public class NamedGroup
+  extends RealGroup
   implements Serializable
 {
   private final static long serialVersionUID = 1L;

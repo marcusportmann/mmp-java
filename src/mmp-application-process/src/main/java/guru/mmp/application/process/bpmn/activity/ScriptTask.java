@@ -16,28 +16,23 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The <code>ScriptTask</code> class represents a Script Task that forms part of a Process.
- * <p>
+ * <p/>
  * This task represents work that is performed by the BPM engine as an automated function written
  * in a script language like JavaScript.
- * <p>
+ * <p/>
  * <b>Script Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="scriptTask" type="tScriptTask" substitutionGroup="flowElement"/&gt;
@@ -56,7 +51,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ScriptTask extends Task
+public final class ScriptTask
+  extends Task
 {
   /**
    * The script.
@@ -80,8 +76,8 @@ public final class ScriptTask extends Task
 
     try
     {
-      this.scriptFormat =
-        ScriptFormat.fromMimeType(StringUtil.notNull(element.getAttribute("scriptFormat")));
+      this.scriptFormat = ScriptFormat.fromMimeType(
+        StringUtil.notNull(element.getAttribute("scriptFormat")));
 
       NodeList scriptElements = element.getElementsByTagName("script");
 

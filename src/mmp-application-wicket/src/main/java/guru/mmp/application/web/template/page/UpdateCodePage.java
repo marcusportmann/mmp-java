@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -35,8 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>UpdateCodePage</code> class implements the
  * "Update Code" page for the Web Application Template.
@@ -44,12 +40,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE)
-public class UpdateCodePage extends TemplateWebPage
+public class UpdateCodePage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateCodePage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
   @Inject
@@ -92,6 +89,7 @@ public class UpdateCodePage extends TemplateWebPage
           catch (Throwable e)
           {
             logger.error("Failed to update the code: " + e.getMessage(), e);
+
             UpdateCodePage.this.error("Failed to update the code");
           }
         }

@@ -16,18 +16,13 @@
 
 package guru.mmp.application.web.template.data;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>DetachableCodeModel</code> class provides a detachable model
@@ -35,7 +30,8 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
+public class DetachableCodeModel
+  extends InjectableLoadableDetachableModel<Code>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -99,8 +95,9 @@ public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to load the code (" + id
-          + ") for the code category (" + categoryId + ")", e);
+      throw new WebApplicationException(
+        String.format("Failed to load the code (%s) for the code category (%s)", id, categoryId),
+        e);
     }
   }
 

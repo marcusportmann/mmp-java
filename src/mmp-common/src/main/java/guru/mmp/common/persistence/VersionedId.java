@@ -16,8 +16,6 @@
 
 package guru.mmp.common.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -74,7 +72,7 @@ public class VersionedId
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the obj argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
   public boolean equals(Object obj)
@@ -144,9 +142,7 @@ public class VersionedId
   @Override
   public int hashCode()
   {
-    return ((id == null)
-        ? 0
-        : id.hashCode()) + version;
+    return ((id == null) ? 0 : id.hashCode()) + version;
   }
 
   /**

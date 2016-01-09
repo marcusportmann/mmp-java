@@ -16,18 +16,13 @@
 
 package guru.mmp.application.web.template.resource;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.resource.thirdparty.fontawesome.FontAwesomeCssResourceReference;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateCssResourceReference</code> class implements the CSS resource
@@ -36,26 +31,22 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class TemplateCssResourceReference extends CssResourceReference
+public class TemplateCssResourceReference
+  extends CssResourceReference
 {
-  private static final long serialVersionUID = 1000000;
-  private static final TemplateCssResourceReference INSTANCE = new TemplateCssResourceReference();
-  private static final CssHeaderItem CSS_HEADER_ITEM =
-    CssHeaderItem.forReference(new TemplateCssResourceReference());
+  private static final CssHeaderItem CSS_HEADER_ITEM = CssHeaderItem.forReference(
+    new TemplateCssResourceReference());
 
-  private TemplateCssResourceReference()
-  {
-    super(TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "css/template.css"
-        : "css/template.css");
-  }
+  private static final TemplateCssResourceReference INSTANCE = new TemplateCssResourceReference();
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Returns the single instance of the CSS resource reference for the template.css
    * CSS file that forms part of the Web Application Template.
    *
    * @return the single instance of the CSS resource reference for the template.css
-   *         CSS file that forms part of the Web Application Template
+   * CSS file that forms part of the Web Application Template
    */
   public static TemplateCssResourceReference get()
   {
@@ -67,11 +58,17 @@ public class TemplateCssResourceReference extends CssResourceReference
    * Web Application Template.
    *
    * @return the CSS header item for the template.css CSS file that forms part of the
-   *         Web Application Template
+   * Web Application Template
    */
   public static CssHeaderItem getCssHeaderItem()
   {
     return CSS_HEADER_ITEM;
+  }
+
+  private TemplateCssResourceReference()
+  {
+    super(TemplateCssResourceReference.class,
+      Debug.inDebugMode() ? "css/template.css" : "css/template.css");
   }
 
   /**
@@ -84,8 +81,29 @@ public class TemplateCssResourceReference extends CssResourceReference
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
-    dependencies.add(FontAwesomeCssResourceReference.getCssHeaderItem());
-    dependencies.add(TemplateCoreCssResourceReference.getCssHeaderItem());
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/bootstrap-datepicker/bootstrap-datepicker3.css"
+          : "js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"
+          : "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/select2/select2.css"
+          : "js/plugins/select2/select2.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "js/plugins/select2/select2-bootstrap.css"
+          : "js/plugins/select2/select2-bootstrap.min.css")));
+
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "css/bootstrap.min.css" : "css/bootstrap.min.css")));
+    dependencies.add(CssHeaderItem.forReference(
+      new CssResourceReference(TemplateCssResourceReference.class,
+        Debug.inDebugMode() ? "css/oneui.min.css" : "css/oneui.min.css")));
 
     return dependencies;
   }

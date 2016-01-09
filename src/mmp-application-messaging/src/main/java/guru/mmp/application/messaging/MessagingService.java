@@ -16,13 +16,12 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import guru.mmp.application.messaging.MessagePart.Status;
 import guru.mmp.application.messaging.handler.IMessageHandler;
 import guru.mmp.application.messaging.handler.MessageHandlerConfig;
 import guru.mmp.application.registry.IRegistry;
+import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.util.Base64;
@@ -30,46 +29,30 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-
-import java.lang.reflect.Constructor;
-
-import java.net.URL;
-
-import java.security.MessageDigest;
-
-import java.util.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
-import javax.naming.InitialContext;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.util.*;
 
 /**
  * The <code>MessagingService</code> class provides the implementation of the Messaging Service
@@ -91,20 +74,21 @@ public class MessagingService
   /**
    * The AES encryption IV used when generating user-device AES encryption keys.
    */
-  private static final byte[] AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV =
-    Base64.decode("QSaz5pMnMbar66FsNdI/ZQ==");
-
-  /**
-   * The AES encryption key used to encrypt sensitive configuration information stored in
-   * the registry.
-   */
-  private static final byte[] REGISTRY_ENCRYPTION_KEY =
-    Base64.decode("Ev5UOwzqSEoSsqbyCVn6q9LZHhhkbXZndDgyOGQyMjY=");
+  private static final byte[] AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV = Base64
+    .decode(
+    "QSaz5pMnMbar66FsNdI/ZQ==");
 
   /**
    * The AES encryption IV.
    */
   private static final byte[] REGISTRY_ENCRYPTION_IV = Base64.decode("xh2wcoShURa4c6w7HbOngQ==");
+
+  /**
+   * The AES encryption key used to encrypt sensitive configuration information stored in
+   * the registry.
+   */
+  private static final byte[] REGISTRY_ENCRYPTION_KEY = Base64.decode(
+    "Ev5UOwzqSEoSsqbyCVn6q9LZHhhkbXZndDgyOGQyMjY=");
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
@@ -117,7 +101,7 @@ public class MessagingService
   private BackgroundMessageProcessor backgroundMessageProcessor;
 
   /* The name of the Messaging Service instance. */
-  private String instanceName;
+  private String instanceName = ServiceUtil.getServiceInstanceName("Messaging Service");
 
   /* The maximum number of times processing will be attempted for a message. */
   private int maximumProcessingAttempts;
@@ -166,7 +150,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to archive the message (" + message.getId() + ")", e);
+      throw new MessagingException(
+        String.format("Failed to archive the message (%s)", message.getId()), e);
     }
   }
 
@@ -177,7 +162,7 @@ public class MessagingService
    * @param message the message to process
    *
    * @return <code>true</code> if the Messaging Service is capable of processing the specified
-   *         message or <code>false</code> otherwise
+   * message or <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -194,7 +179,7 @@ public class MessagingService
    * @param messagePart the message part to queue for assembly
    *
    * @return <code>true</code> if the Messaging Service is capable of queueing the specified
-   *         message part for assembly or <code>false</code> otherwise
+   * message part for assembly or <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -221,8 +206,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to create the error report (" + errorReport.getId()
-          + ")", e);
+      throw new MessagingException(
+        String.format("Failed to create the error report (%s)", errorReport.getId()), e);
     }
   }
 
@@ -232,7 +217,7 @@ public class MessagingService
    * @param message the message to decrypt
    *
    * @return <code>true</code> if the message data was decrypted successfully or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws MessagingException
    */
@@ -262,9 +247,8 @@ public class MessagingService
     {
       // Decrypt the message data
       byte[] decryptedData = MessageTranslator.decryptMessageData(userEncryptionKey,
-        StringUtil.isNullOrEmpty(message.getEncryptionIV())
-        ? new byte[0]
-        : Base64.decode(message.getEncryptionIV()), message.getData());
+        StringUtil.isNullOrEmpty(message.getEncryptionIV()) ? new byte[0]
+          : Base64.decode(message.getEncryptionIV()), message.getData());
 
       // Verify the data hash for the unencrypted data
       MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
@@ -275,13 +259,12 @@ public class MessagingService
 
       if (!messageChecksum.equals(message.getDataHash()))
       {
-        logger.warn("Data hash verification failed for the message (" + message.getId()
-            + ") from the user (" + message.getUsername() + ") and device ("
-            + message.getDeviceId() + "). " + message.getData().length + " ("
-            + decryptedData.length
-            + ") bytes of message data was encrypted using the encryption IV ("
-            + message.getEncryptionIV() + "). Expected data hash (" + message.getDataHash()
-            + ") but got (" + messageChecksum + ")");
+        logger.warn(String.format(
+          "Data hash verification failed for the message (%s) from the user (%s) and device (%s)." +
+            " %d (%d) bytes of message data was encrypted using the encryption IV (%s). Expected " +
+            "data hash (%s) but got (%s)", message.getId(), message.getUsername(),
+          message.getDeviceId(), message.getData().length, decryptedData.length,
+          message.getEncryptionIV(), message.getDataHash(), messageChecksum));
 
         return false;
       }
@@ -296,9 +279,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to decrypt the data for the message (" + message.getId()
-          + ") from the user (" + message.getUsername() + ") and device (" + message.getDeviceId()
-          + ")", e);
+      throw new MessagingException(String.format(
+        "Failed to decrypt the data for the message (%s) from the user (%s) and device (%s)",
+        message.getId(), message.getUsername(), message.getDeviceId()), e);
     }
   }
 
@@ -318,7 +301,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to delete the message (" + message.getId() + ")", e);
+      throw new MessagingException(
+        String.format("Failed to delete the message (%s)", message.getId()), e);
     }
   }
 
@@ -338,7 +322,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to delete the message (" + id + ")", e);
+      throw new MessagingException(String.format("Failed to delete the message (%s)", id), e);
     }
   }
 
@@ -358,7 +342,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to delete the message part (" + id + ")", e);
+      throw new MessagingException(String.format("Failed to delete the message part (%s)", id), e);
     }
   }
 
@@ -382,8 +366,8 @@ public class MessagingService
       byte[] key = CryptoUtils.passwordToAESKey(password);
 
       SecretKey secretKey = new SecretKeySpec(aesEncryptionMasterKey, CryptoUtils.AES_KEY_SPEC);
-      IvParameterSpec iv =
-        new IvParameterSpec(AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV);
+      IvParameterSpec iv = new IvParameterSpec(
+        AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV);
       Cipher cipher = Cipher.getInstance("AES/CFB/NoPadding");
 
       cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
@@ -392,8 +376,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to derive the encryption key for the user (" + username
-          + ") and device (" + deviceId + ")", e);
+      throw new MessagingException(
+        String.format("Failed to derive the encryption key for the user (%s) and device (%s)",
+          username, deviceId), e);
     }
   }
 
@@ -403,7 +388,7 @@ public class MessagingService
    * @param message the message to encrypt
    *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws MessagingException
    */
@@ -446,17 +431,15 @@ public class MessagingService
 
       message.setDataHash(messageChecksum);
       message.setData(encryptedData);
-      message.setEncryptionIV((encryptionIV.length == 0)
-          ? ""
-          : Base64.encodeBytes(encryptionIV));
+      message.setEncryptionIV((encryptionIV.length == 0) ? "" : Base64.encodeBytes(encryptionIV));
 
       return true;
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to encrypt the data for the message (" + message.getId()
-          + ") from the user (" + message.getUsername() + ") and device (" + message.getDeviceId()
-          + ")", e);
+      throw new MessagingException(String.format(
+        "Failed to encrypt the data for the message (%s) from the user (%s) and device (%s)",
+        message.getId(), message.getUsername(), message.getDeviceId()), e);
     }
   }
 
@@ -478,7 +461,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the error report (" + id + ")", e);
+      throw new MessagingException(String.format("Failed to retrieve the error report (%s)", id),
+        e);
     }
   }
 
@@ -488,7 +472,7 @@ public class MessagingService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   *         found
+   * found
    *
    * @throws MessagingException
    */
@@ -501,8 +485,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the summary for the error report (" + id
-          + ")", e);
+      throw new MessagingException(
+        String.format("Failed to retrieve the summary for the error report (%s)", id), e);
     }
   }
 
@@ -534,7 +518,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the message (" + id + ")", e);
+      throw new MessagingException(String.format("Failed to retrieve the message (%s)", id), e);
     }
   }
 
@@ -554,13 +538,13 @@ public class MessagingService
   {
     try
     {
-      return messagingDAO.getMessagePartsQueuedForDownloadForUser(username, deviceId,
-          getInstanceName());
+      return messagingDAO.getMessagePartsQueuedForDownloadForUser(username, deviceId, instanceName);
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the message parts for the user (" + username
-          + ") that have been queued for" + " download by the device (" + deviceId + ")", e);
+      throw new MessagingException(String.format(
+        "Failed to retrieve the message parts for the user (%s) that have been queued for " +
+          "download by the device (%s)", username, deviceId), e);
     }
   }
 
@@ -571,7 +555,7 @@ public class MessagingService
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
-   *         device
+   * device
    *
    * @throws MessagingException
    */
@@ -580,13 +564,13 @@ public class MessagingService
   {
     try
     {
-      return messagingDAO.getMessagesQueuedForDownloadForUser(username, deviceId,
-          getInstanceName());
+      return messagingDAO.getMessagesQueuedForDownloadForUser(username, deviceId, instanceName);
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to retrieve the messages for the user (" + username
-          + ") that have been queued for download by the device (" + deviceId + ")", e);
+      throw new MessagingException(String.format(
+        "Failed to retrieve the messages for the user (%s) that have been queued for download by " +
+          "the device (%s)", username, deviceId), e);
     }
   }
 
@@ -601,8 +585,8 @@ public class MessagingService
 
     if (!StringUtil.isNullOrEmpty(applicationServerRootDirectory))
     {
-      String messagingDebugDirectory = applicationServerRootDirectory + File.separator
-        + "messagingDebug";
+      String messagingDebugDirectory = applicationServerRootDirectory + File.separator +
+        "messagingDebug";
 
       try
       {
@@ -615,8 +599,9 @@ public class MessagingService
       }
       catch (Throwable e)
       {
-        logger.warn("Failed to check if the messaging debug directory exists ("
-            + messagingDebugDirectory + "): " + e.getMessage());
+        logger.warn(
+          String.format("Failed to check if the messaging debug directory exists (%s): %s",
+            messagingDebugDirectory, e.getMessage()));
       }
     }
 
@@ -643,7 +628,7 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException(
-          "Failed to retrieve the summaries for the most recent error reports", e);
+        "Failed to retrieve the summaries for the most recent error reports", e);
     }
   }
 
@@ -653,7 +638,7 @@ public class MessagingService
    * The message will be locked to prevent duplicate processing.
    *
    * @return the next message that has been queued for processing or <code>null</code> if no
-   *         messages are currently queued for processing
+   * messages are currently queued for processing
    *
    * @throws MessagingException
    */
@@ -662,8 +647,7 @@ public class MessagingService
   {
     try
     {
-      return messagingDAO.getNextMessageQueuedForProcessing(processingRetryDelay,
-          getInstanceName());
+      return messagingDAO.getNextMessageQueuedForProcessing(processingRetryDelay, instanceName);
     }
     catch (Throwable e)
     {
@@ -707,21 +691,19 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to increment the processing attempts for the message ("
-          + message.getId() + ")", e);
+      throw new MessagingException(
+        String.format("Failed to increment the processing attempts for the message (%s)",
+          message.getId()), e);
     }
   }
 
   /**
    * Initialise the Messaging Service instance.
-   *
-   * @throws MessagingException
    */
   @PostConstruct
   public void init()
-    throws MessagingException
   {
-    logger.info("Initialising the Messaging Service instance (" + getInstanceName() + ")");
+    logger.info(String.format("Initialising the Messaging Service instance (%s)", instanceName));
 
     messageHandlers = new HashMap<>();
 
@@ -738,7 +720,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to initialise the Messaging Service", e);
+      throw new RuntimeException("Failed to initialise the Messaging Service", e);
     }
   }
 
@@ -748,7 +730,7 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if a message with the specified type information should be archived
-   *         or <code>false</code> otherwise
+   * or <code>false</code> otherwise
    */
   public boolean isArchivableMessage(Message message)
   {
@@ -761,7 +743,7 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message can be processed asynchronously or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean isAsynchronousMessage(Message message)
   {
@@ -774,7 +756,7 @@ public class MessagingService
    * @param message the message to check
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
-   *         otherwise
+   * otherwise
    *
    * @throws MessagingException
    */
@@ -787,8 +769,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to check whether the message (" + message.getId()
-          + ") has been archived", e);
+      throw new MessagingException(
+        String.format("Failed to check whether the message (%s) has been archived",
+          message.getId()), e);
     }
   }
 
@@ -798,7 +781,7 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message should be processed synchronously or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean isSynchronousMessage(Message message)
   {
@@ -819,14 +802,15 @@ public class MessagingService
   {
     if (logger.isDebugEnabled())
     {
-      logger.debug("Processing message (" + message.getId() + ") with type (" + message.getTypeId()
-          + ")");
+      logger.debug(String.format("Processing message (%s) with type (%s)", message.getId(),
+        message.getTypeId()));
     }
 
     if (!messageHandlers.containsKey(message.getTypeId()))
     {
-      throw new MessagingException("No message handler registered to process messages with type ("
-          + message.getTypeId() + "))");
+      throw new MessagingException(
+        String.format("No message handler registered to process messages with type (%s)",
+          message.getTypeId()));
     }
 
     IMessageHandler messageHandler = messageHandlers.get(message.getTypeId());
@@ -837,8 +821,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to process the message (" + message.getId()
-          + ") with type (" + message.getTypeId() + ")", e);
+      throw new MessagingException(
+        String.format("Failed to process the message (%s) with type (%s)", message.getId(),
+          message.getTypeId()), e);
     }
   }
 
@@ -870,10 +855,10 @@ public class MessagingService
          */
         if (!message.isEncrypted())
         {
-          throw new MessagingException("The message (" + message.getId() + ") with type ("
-              + message.getTypeId() + ") exceeds the maximum asynchronous message size ("
-              + Message.MAX_ASYNC_MESSAGE_SIZE
-              + ") and must be encrypted prior to being queued for download");
+          throw new MessagingException(String.format(
+            "The message (%s) with type (%s) exceeds the maximum asynchronous message size (%d) " +
+              "and must be encrypted prior to being queued for download", message.getId(),
+            message.getTypeId(), Message.MAX_ASYNC_MESSAGE_SIZE));
         }
 
         // Calculate the hash for the message data to use as the message checksum
@@ -901,7 +886,7 @@ public class MessagingService
             messagePartData = new byte[MessagePart.MAX_MESSAGE_PART_SIZE];
 
             System.arraycopy(message.getData(), (i * MessagePart.MAX_MESSAGE_PART_SIZE),
-                messagePartData, 0, MessagePart.MAX_MESSAGE_PART_SIZE);
+              messagePartData, 0, MessagePart.MAX_MESSAGE_PART_SIZE);
           }
 
           // If this is the last message part
@@ -912,7 +897,7 @@ public class MessagingService
             messagePartData = new byte[sizeOfPart];
 
             System.arraycopy(message.getData(), (i * MessagePart.MAX_MESSAGE_PART_SIZE),
-                messagePartData, 0, sizeOfPart);
+              messagePartData, 0, sizeOfPart);
           }
 
           MessagePart messagePart = new MessagePart(i + 1, numberOfParts, message.getId(),
@@ -926,14 +911,15 @@ public class MessagingService
           messagingDAO.createMessagePart(messagePart);
         }
 
-        logger.debug("Queued " + numberOfParts + " message parts for download for the message ("
-            + message.getId() + ")");
+        logger.debug(
+          String.format("Queued %d message parts for download for the message (%s)", numberOfParts,
+            message.getId()));
       }
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to queue the message (" + message.getId()
-          + ") for download", e);
+      throw new MessagingException(
+        String.format("Failed to queue the message (%s) for download", message.getId()), e);
     }
 
     // Archive the message
@@ -959,8 +945,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to queue the message (" + message.getId()
-          + ") for processing", e);
+      throw new MessagingException(
+        String.format("Failed to queue the message (%s) for processing", message.getId()), e);
     }
 
     // Archive the message
@@ -968,8 +954,9 @@ public class MessagingService
 
     if (logger.isDebugEnabled())
     {
-      logger.debug("Queued message (" + message.getId() + ") with type (" + message.getTypeId()
-          + ") for processing");
+      logger.debug(
+        String.format("Queued message (%s) with type (%s) for processing", message.getId(),
+          message.getTypeId()));
 
       logger.debug(message.toString());
     }
@@ -981,8 +968,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      logger.error("Failed to invoke the Background Message Processor to process the message ("
-          + message.getId() + ") that was queued for processing", e);
+      logger.error(String.format(
+        "Failed to invoke the Background Message Processor to process the message (%s) that was " +
+          "queued for processing", message.getId()), e);
     }
   }
 
@@ -1004,9 +992,9 @@ public class MessagingService
       // Verify that the message has not already been queued for processing
       if (messagingDAO.isMessageArchived(messagePart.getId()))
       {
-        logger.debug("The message (" + messagePart.getMessageId()
-            + ") has already been queued for processing so the message part ("
-            + messagePart.getId() + ") will be ignored");
+        logger.debug(String.format(
+          "The message (%s) has already been queued for processing so the message part (%s) will " +
+            "be ignored", messagePart.getMessageId(), messagePart.getId()));
 
         return;
       }
@@ -1019,8 +1007,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to queue the message part (" + messagePart.getId()
-          + ") for assembly", e);
+      throw new MessagingException(
+        String.format("Failed to queue the message part (%s) for assembly", messagePart.getId()),
+        e);
     }
 
     // TODO: MOVE TO BACKGROUND THREAD RATHER TO PREVENT MOBILE DEVICE WAITING FOR THIS - MARCUS
@@ -1033,12 +1022,11 @@ public class MessagingService
     {
       // Check whether all the parts for the message have been queued for assembly
       if (messagingDAO.allPartsQueuedForMessage(messagePart.getMessageId(),
-          messagePart.getTotalParts()))
+        messagePart.getTotalParts()))
       {
         // Retrieve the message parts queued for assembly
-        List<MessagePart> messageParts =
-          messagingDAO.getMessagePartsQueuedForAssembly(messagePart.getMessageId(),
-            getInstanceName());
+        List<MessagePart> messageParts = messagingDAO.getMessagePartsQueuedForAssembly(
+          messagePart.getMessageId(), instanceName);
 
         // Assemble the message from its constituent parts
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -1062,13 +1050,13 @@ public class MessagingService
           // Delete the message parts
           messagingDAO.deleteMessagePartsForMessage(messagePart.getMessageId());
 
-          logger.error("Failed to verify the checksum for the reconstructed" + " message ("
-              + messagePart.getMessageId() + ") with type (" + messagePart.getMessageTypeId()
-              + ") from user (" + messagePart.getMessageUsername() + ") and device ("
-              + messagePart.getMessageDeviceId() + "). Found " + reconstructedData.length
-              + " bytes of message data with the hash (" + messageChecksum
-              + ") that was reconstructed from " + messageParts.size()
-              + " message parts. The message will NOT be processed");
+          logger.error(String.format(
+            "Failed to verify the checksum for the reconstructed message (%s) with type (%s) from" +
+              " the user (%s) and device (%s). Found %d bytes of message data with the hash (%s) " +
+              "that was reconstructed from %d message parts. The message will NOT be processed",
+            messagePart.getMessageId(), messagePart.getMessageTypeId(),
+            messagePart.getMessageUsername(), messagePart.getMessageDeviceId(),
+            reconstructedData.length, messageChecksum, messageParts.size()));
 
           String messagingDebugDirectory = getMessagingDebugDirectory();
 
@@ -1079,26 +1067,26 @@ public class MessagingService
 
             try
             {
-              String invalidMessageDataFilename = messagingDebugDirectory + File.separator
-                + messagePart.getMessageId() + ".data";
+              String invalidMessageDataFilename = messagingDebugDirectory + File.separator +
+                messagePart.getMessageId() + ".data";
 
               invalidMessageDataOut = new FileOutputStream(new File(invalidMessageDataFilename));
 
               invalidMessageDataOut.write(reconstructedData);
               invalidMessageDataOut.flush();
 
-              String invalidMessageInfoFilename = messagingDebugDirectory + File.separator
-                + messagePart.getMessageId() + ".info";
+              String invalidMessageInfoFilename = messagingDebugDirectory + File.separator +
+                messagePart.getMessageId() + ".info";
 
-              invalidMessageInfoWriter =
-                new PrintWriter(new FileOutputStream(new File(invalidMessageInfoFilename)));
+              invalidMessageInfoWriter = new PrintWriter(
+                new FileOutputStream(new File(invalidMessageInfoFilename)));
 
               invalidMessageInfoWriter.println("ID: " + messagePart.getMessageId());
               invalidMessageInfoWriter.println("Type ID: " + messagePart.getMessageTypeId());
               invalidMessageInfoWriter.println("User: " + messagePart.getMessageUsername());
               invalidMessageInfoWriter.println("Device ID: " + messagePart.getMessageDeviceId());
-              invalidMessageInfoWriter.println("Correlation ID: "
-                  + messagePart.getMessageCorrelationId());
+              invalidMessageInfoWriter.println(
+                "Correlation ID: " + messagePart.getMessageCorrelationId());
               invalidMessageInfoWriter.println("Data Hash: " + messagePart.getMessageDataHash());
               invalidMessageInfoWriter.println("Checksum: " + messagePart.getMessageChecksum());
               invalidMessageInfoWriter.println("Parts: " + messageParts.size());
@@ -1109,8 +1097,9 @@ public class MessagingService
             }
             catch (Throwable e)
             {
-              logger.error("Failed to write the invalid message to the messaging debug directory ("
-                  + messagingDebugDirectory + "): " + e.getMessage(), e);
+              logger.error(String.format(
+                "Failed to write the invalid message to the messaging debug directory (%s): %s",
+                messagingDebugDirectory, e.getMessage()), e);
             }
             finally
             {
@@ -1121,7 +1110,9 @@ public class MessagingService
                   invalidMessageDataOut.close();
                 }
               }
-              catch (Throwable ignored) {}
+              catch (Throwable ignored)
+              {
+              }
 
               try
               {
@@ -1130,7 +1121,9 @@ public class MessagingService
                   invalidMessageInfoWriter.close();
                 }
               }
-              catch (Throwable ignored) {}
+              catch (Throwable ignored)
+              {
+              }
             }
           }
 
@@ -1153,13 +1146,13 @@ public class MessagingService
           // Delete the message parts
           messagingDAO.deleteMessagePartsForMessage(messagePart.getMessageId());
 
-          logger.error("Failed to decrypt the reconstructed message (" + messagePart.getMessageId()
-              + ") with type (" + messagePart.getMessageTypeId() + ") from the user ("
-              + messagePart.getMessageUsername() + ") and device ("
-              + messagePart.getMessageDeviceId() + "). Found " + reconstructedData.length
-              + " bytes of message data with the hash (" + messageChecksum
-              + ") that was reconstructed from " + messageParts.size()
-              + " message parts. The message will NOT be processed");
+          logger.error(String.format(
+            "Failed to decrypt the reconstructed message (%s) with type (%s) from the user (%s) " +
+              "and device (%s). Found %d bytes of message data with the hash (%s) that was " +
+              "reconstructed from %d message parts. The message will NOT be processed",
+            messagePart.getMessageId(), messagePart.getMessageTypeId(),
+            messagePart.getMessageUsername(), messagePart.getMessageDeviceId(),
+            reconstructedData.length, messageChecksum, messageParts.size()));
 
           String messagingDebugDirectory = getMessagingDebugDirectory();
 
@@ -1170,26 +1163,26 @@ public class MessagingService
 
             try
             {
-              String invalidMessageDataFilename = messagingDebugDirectory + File.separator
-                + messagePart.getMessageId() + ".data";
+              String invalidMessageDataFilename = messagingDebugDirectory + File.separator +
+                messagePart.getMessageId() + ".data";
 
               invalidMessageDataOut = new FileOutputStream(new File(invalidMessageDataFilename));
 
               invalidMessageDataOut.write(reconstructedData);
               invalidMessageDataOut.flush();
 
-              String invalidMessageInfoFilename = messagingDebugDirectory + File.separator
-                + messagePart.getMessageId() + ".info";
+              String invalidMessageInfoFilename = messagingDebugDirectory + File.separator +
+                messagePart.getMessageId() + ".info";
 
-              invalidMessageInfoWriter =
-                new PrintWriter(new FileOutputStream(new File(invalidMessageInfoFilename)));
+              invalidMessageInfoWriter = new PrintWriter(
+                new FileOutputStream(new File(invalidMessageInfoFilename)));
 
               invalidMessageInfoWriter.println("ID: " + messagePart.getMessageId());
               invalidMessageInfoWriter.println("Type ID: " + messagePart.getMessageTypeId());
               invalidMessageInfoWriter.println("User: " + messagePart.getMessageUsername());
               invalidMessageInfoWriter.println("Device ID: " + messagePart.getMessageDeviceId());
-              invalidMessageInfoWriter.println("Correlation ID: "
-                  + messagePart.getMessageCorrelationId());
+              invalidMessageInfoWriter.println(
+                "Correlation ID: " + messagePart.getMessageCorrelationId());
               invalidMessageInfoWriter.println("Checksum: " + messagePart.getMessageChecksum());
               invalidMessageInfoWriter.println("Parts: " + messageParts.size());
               invalidMessageInfoWriter.println("Reconstructucted Checksum: " + messageChecksum);
@@ -1199,8 +1192,9 @@ public class MessagingService
             }
             catch (Throwable e)
             {
-              logger.error("Failed to write the invalid message to the messaging debug directory ("
-                  + messagingDebugDirectory + "): " + e.getMessage(), e);
+              logger.error(String.format(
+                "Failed to write the invalid message to the messaging debug directory (%s): %s",
+                messagingDebugDirectory, e.getMessage()), e);
             }
             finally
             {
@@ -1211,7 +1205,9 @@ public class MessagingService
                   invalidMessageDataOut.close();
                 }
               }
-              catch (Throwable ignored) {}
+              catch (Throwable ignored)
+              {
+              }
 
               try
               {
@@ -1220,7 +1216,9 @@ public class MessagingService
                   invalidMessageInfoWriter.close();
                 }
               }
-              catch (Throwable ignored) {}
+              catch (Throwable ignored)
+              {
+              }
             }
           }
 
@@ -1233,8 +1231,9 @@ public class MessagingService
     }
     catch (Exception e)
     {
-      throw new MessagingException("Failed to assemble the parts for the message ("
-          + messagePart.getMessageId() + ")", e);
+      throw new MessagingException(
+        String.format("Failed to assemble the parts for the message (%s)",
+          messagePart.getMessageId()), e);
     }
   }
 
@@ -1251,19 +1250,20 @@ public class MessagingService
   {
     try
     {
-      messagingDAO.resetMessageLocks(getInstanceName(), status, newStatus);
+      messagingDAO.resetMessageLocks(instanceName, status, newStatus);
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Successfully reset the locks for the messages with the status (" + status
-            + ") that have been locked using the lock name (" + getInstanceName() + ")");
+        logger.debug(String.format(
+          "Successfully reset the locks for the messages with the status (%s) that have been " +
+            "locked using the lock name (%s)", status, instanceName));
       }
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to reset the locks for the "
-          + " messages with the status (" + status
-          + ") that have been locked using the lock name (" + getInstanceName() + ")", e);
+      throw new MessagingException(String.format(
+        "Failed to reset the locks for the  messages with the status (%s) that have been locked " +
+          "using the lock name (%s)", status, instanceName), e);
     }
   }
 
@@ -1280,19 +1280,20 @@ public class MessagingService
   {
     try
     {
-      messagingDAO.resetMessagePartLocks(getInstanceName(), status, newStatus);
+      messagingDAO.resetMessagePartLocks(instanceName, status, newStatus);
 
       if (logger.isDebugEnabled())
       {
-        logger.debug("Successfully reset the locks for the message parts with the status ("
-            + status + ") that have been locked using the lock name (" + getInstanceName() + ")");
+        logger.debug(String.format(
+          "Successfully reset the locks for the message parts with the status (%s) that have been" +
+            " locked using the lock name (%s)", status, instanceName));
       }
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to reset the locks for the "
-          + " message parts with the status (" + status
-          + ") that have been locked using the lock name (" + getInstanceName() + ")", e);
+      throw new MessagingException(String.format(
+        "Failed to reset the locks for the  message parts with the status (%s) that have been " +
+          "locked using the lock name (%s)", status, instanceName), e);
     }
   }
 
@@ -1315,8 +1316,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to set the status for the message (" + message.getId()
-          + ") to (" + status.toString() + ")", e);
+      throw new MessagingException(
+        String.format("Failed to set the status for the message (%s) to (%s)", message.getId(),
+          status.toString()), e);
     }
   }
 
@@ -1339,121 +1341,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingException("Failed to unlock the message (" + message.getId() + ")", e);
+      throw new MessagingException(
+        String.format("Failed to unlock the message (%s)", message.getId()), e);
     }
-  }
-
-  /**
-   * Retrieves the name of the Messaging Service instance.
-   */
-  private String getInstanceName()
-  {
-    if (instanceName == null)
-    {
-      String applicationName = null;
-
-      try
-      {
-        applicationName = InitialContext.doLookup("java:app/AppName");
-      }
-      catch (Throwable ignored) {}
-
-      if (applicationName == null)
-      {
-        try
-        {
-          applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
-        }
-        catch (Throwable ignored) {}
-      }
-
-      if (applicationName == null)
-      {
-        logger.error("Failed to retrieve the application name from JNDI using the names ("
-            + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the Messaging Service instance name");
-
-        applicationName = "Unknown";
-      }
-
-      instanceName = applicationName + "::";
-
-      try
-      {
-        java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
-
-        instanceName += localMachine.getHostName().toLowerCase();
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to retrieve the server hostname while constructing the Messaging"
-            + " Service instance name", e);
-        instanceName = "Unknown";
-      }
-
-      // Check if we are running under JBoss and if so retrieve the server name
-      if (System.getProperty("jboss.server.name") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("jboss.server.name");
-      }
-
-      // Check if we are running under Glassfish and if so retrieve the server name
-      else if (System.getProperty("glassfish.version") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("com.sun.aas.instanceName");
-      }
-
-      // Check if we are running under Tomcat
-      else if (System.getProperty("catalina.home") != null)
-      {
-        instanceName = instanceName + "::Tomcat";
-      }
-
-      // Check if we are running under WebSphere Application Server Community Edition (Geronimo)
-      else if (System.getProperty("org.apache.geronimo.server.dir") != null)
-      {
-        instanceName = instanceName + "::Geronimo";
-      }
-
-      // Check if we are running under WebSphere Application Server Liberty Profile
-      else if (System.getProperty("wlp.user.dir") != null)
-      {
-        instanceName = instanceName + "::WLP";
-      }
-
-      /*
-       * Check if we are running under WebSphere and if so execute the code below to retrieve the
-       * server name.
-       */
-      else
-      {
-        Class<?> clazz = null;
-
-        try
-        {
-          clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.ibm.websphere.management.configservice.ConfigService");
-        }
-        catch (Throwable ignored)
-        {}
-
-        if (clazz != null)
-        {
-          try
-          {
-            instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
-          }
-          catch (Throwable e)
-          {
-            logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the Messaging Service instance name", e);
-            instanceName = instanceName + "::Unknown";
-          }
-        }
-      }
-    }
-
-    return instanceName;
   }
 
   /**
@@ -1470,8 +1360,8 @@ public class MessagingService
       if (!registry.stringValueExists("/Services/MessagingService", "AESEncryptionMasterKey"))
       {
         registry.setStringValue("/Services/MessagingService", "AESEncryptionMasterKey",
-            "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=", REGISTRY_ENCRYPTION_KEY,
-            REGISTRY_ENCRYPTION_IV);
+          "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=", REGISTRY_ENCRYPTION_KEY,
+          REGISTRY_ENCRYPTION_IV);
       }
 
       if (!registry.integerValueExists("/Services/MessagingService", "ProcessingRetryDelay"))
@@ -1484,20 +1374,21 @@ public class MessagingService
         registry.setIntegerValue("/Services/MessagingService", "MaximumProcessingAttempts", 10000);
       }
 
-      aesEncryptionMasterKey = Base64.decode(registry.getStringValue("/Services/MessagingService",
-          "AESEncryptionMasterKey", "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=",
-          REGISTRY_ENCRYPTION_KEY, REGISTRY_ENCRYPTION_IV));
+      aesEncryptionMasterKey = Base64.decode(
+        registry.getStringValue("/Services/MessagingService", "AESEncryptionMasterKey",
+          "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=", REGISTRY_ENCRYPTION_KEY,
+          REGISTRY_ENCRYPTION_IV));
 
       processingRetryDelay = registry.getIntegerValue("/Services/MessagingService",
-          "ProcessingRetryDelay", 60000);
+        "ProcessingRetryDelay", 60000);
 
       maximumProcessingAttempts = registry.getIntegerValue("/Services/MessagingService",
-          "MaximumProcessingAttempts", 10000);
+        "MaximumProcessingAttempts", 10000);
     }
     catch (Throwable e)
     {
       throw new MessagingException(
-          "Failed to initialise the configuration for the Messaging Service", e);
+        "Failed to initialise the configuration for the Messaging Service", e);
     }
   }
 
@@ -1512,38 +1403,38 @@ public class MessagingService
     {
       try
       {
-        logger.info("Initialising the message handler (" + messageHandlerConfig.getName()
-            + ") with class (" + messageHandlerConfig.getClassName() + ")");
+        logger.info(String.format("Initialising the message handler (%s) with class (%s)",
+          messageHandlerConfig.getName(), messageHandlerConfig.getClassName()));
 
         Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            messageHandlerConfig.getClassName());
+          messageHandlerConfig.getClassName());
 
         Constructor<?> constructor = clazz.getConstructor(MessageHandlerConfig.class);
 
         if (constructor != null)
         {
           // Create an instance of the message handler
-          IMessageHandler messageHandler =
-            (IMessageHandler) constructor.newInstance(messageHandlerConfig);
+          IMessageHandler messageHandler = (IMessageHandler) constructor.newInstance(
+            messageHandlerConfig);
 
           // Perform container-based dependency injection on the message handler
           CDIUtil.inject(messageHandler);
 
-          List<MessageHandlerConfig.MessageConfig> messagesConfig =
-            messageHandlerConfig.getMessagesConfig();
+          List<MessageHandlerConfig.MessageConfig> messagesConfig = messageHandlerConfig
+            .getMessagesConfig();
 
           for (MessageHandlerConfig.MessageConfig messageConfig : messagesConfig)
           {
             if (messageHandlers.containsKey(messageConfig.getMessageTypeId()))
             {
-              IMessageHandler existingMessageHandler =
-                messageHandlers.get(messageConfig.getMessageTypeId());
+              IMessageHandler existingMessageHandler = messageHandlers.get(
+                messageConfig.getMessageTypeId());
 
-              logger.warn("Failed to register the message handler ("
-                  + messageHandler.getClass().getName() + ") for the message type ("
-                  + messageConfig.getMessageTypeId() + ") since another message handler ("
-                  + existingMessageHandler.getClass().getName()
-                  + ") has already been registered to process messages of this type");
+              logger.warn(String.format(
+                "Failed to register the message handler (%s) for the message type (%s) since " +
+                  "another message handler (%s) has already been registered to process messages " +
+                  "of this type", messageHandler.getClass().getName(),
+                messageConfig.getMessageTypeId(), existingMessageHandler.getClass().getName()));
             }
             else
             {
@@ -1553,15 +1444,16 @@ public class MessagingService
         }
         else
         {
-          logger.error("Failed to register the message handler ("
-              + messageHandlerConfig.getClassName() + ") since the message handler class"
-              + " does not provide a constructor with the required signature");
+          logger.error(String.format(
+            "Failed to register the message handler (%s) since the message handler class does not" +
+              " provide a constructor with the required signature",
+            messageHandlerConfig.getClassName()));
         }
       }
       catch (Throwable e)
       {
-        logger.error("Failed to initialise the message handler (" + messageHandlerConfig.getName()
-            + ") with class (" + messageHandlerConfig.getClassName() + ")", e);
+        logger.error(String.format("Failed to initialise the message handler (%s) with class (%s)",
+          messageHandlerConfig.getName(), messageHandlerConfig.getClassName()), e);
       }
     }
   }
@@ -1573,7 +1465,7 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type should be archived or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   private boolean isArchivableMessage(UUID typeId)
   {
@@ -1598,7 +1490,7 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed asynchronously
-   *         or <code>false</code> otherwise
+   * or <code>false</code> otherwise
    */
   private boolean isAsynchronousMessage(UUID typeId)
   {
@@ -1623,7 +1515,7 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed synchronously
-   *         or <code>false</code> otherwise
+   * or <code>false</code> otherwise
    */
   private boolean isSynchronousMessage(UUID typeId)
   {
@@ -1665,8 +1557,8 @@ public class MessagingService
 
         if (logger.isDebugEnabled())
         {
-          logger.debug("Reading the messaging configuration file ("
-              + configurationFile.toURI().toString() + ")");
+          logger.debug(String.format("Reading the messaging configuration file (%s)",
+            configurationFile.toURI().toString()));
         }
 
         // Retrieve a document builder instance using the factory
@@ -1677,8 +1569,8 @@ public class MessagingService
         // builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
-        builder.setEntityResolver(new DtdJarResolver("MessagingConfig.dtd",
-            "META-INF/MessagingConfig.dtd"));
+        builder.setEntityResolver(
+          new DtdJarResolver("MessagingConfig.dtd", "META-INF/MessagingConfig.dtd"));
         builder.setErrorHandler(new XmlParserErrorHandler());
 
         // Parse the XML messaging configuration file using the document builder
@@ -1706,15 +1598,15 @@ public class MessagingService
           for (Element messageElement : messageElements)
           {
             UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
-            boolean isSynchronous =
-              messageElement.getAttribute("isSynchronous").equalsIgnoreCase("Y");
-            boolean isAsynchronous =
-              messageElement.getAttribute("isAsynchronous").equalsIgnoreCase("Y");
-            boolean isArchivable =
-              messageElement.getAttribute("isArchivable").equalsIgnoreCase("Y");
+            boolean isSynchronous = messageElement.getAttribute("isSynchronous").equalsIgnoreCase(
+              "Y");
+            boolean isAsynchronous = messageElement.getAttribute("isAsynchronous").equalsIgnoreCase(
+              "Y");
+            boolean isArchivable = messageElement.getAttribute("isArchivable").equalsIgnoreCase(
+              "Y");
 
             messageHandlerConfig.addMessageConfig(messageType, isSynchronous, isAsynchronous,
-                isArchivable);
+              isArchivable);
           }
 
           messageHandlersConfig.add(messageHandlerConfig);

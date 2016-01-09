@@ -25,37 +25,60 @@ package guru.mmp.common.util;
 @SuppressWarnings("unused")
 public class Base64
 {
-  /** Indicates error in encoding. */
+  /**
+   * Indicates error in encoding.
+   */
   public final static byte BAD_ENCODING;
 
-  /** Indicates equals sign in encoding. */
+  /**
+   * Specify that data should be compressed (value is <tt>true</tt>).
+   */
+  public final static boolean COMPRESS = true;
+
+  /**
+   * Specify decoding (value is <tt>false</tt>).
+   */
+  public final static boolean DECODE = false;
+
+  /**
+   * Specify that data should not be compressed (value is <tt>false</tt>).
+   */
+  public final static boolean DONT_COMPRESS = false;
+
+  /**
+   * Specify encoding (value is <tt>true</tt>).
+   */
+  public final static boolean ENCODE = true;
+
+  /**
+   * Indicates equals sign in encoding.
+   */
   public final static byte EQUALS_SIGN_ENC;
 
-  /** Indicates white space in encoding. */
+  /**
+   * Indicates white space in encoding.
+   */
   public final static byte WHITE_SPACE_ENC;
 
   /**
    * The 64 valid Base64 values.
    */
-  private final static byte[] ALPHABET =
-  {
-    (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D', (byte) 'E', (byte) 'F', (byte) 'G', (byte) 'H',
-    (byte) 'I', (byte) 'J', (byte) 'K', (byte) 'L', (byte) 'M', (byte) 'N', (byte) 'O', (byte) 'P',
-    (byte) 'Q', (byte) 'R', (byte) 'S', (byte) 'T', (byte) 'U', (byte) 'V', (byte) 'W', (byte) 'X',
-    (byte) 'Y', (byte) 'Z', (byte) 'a', (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f',
-    (byte) 'g', (byte) 'h', (byte) 'i', (byte) 'j', (byte) 'k', (byte) 'l', (byte) 'm', (byte) 'n',
-    (byte) 'o', (byte) 'p', (byte) 'q', (byte) 'r', (byte) 's', (byte) 't', (byte) 'u', (byte) 'v',
-    (byte) 'w', (byte) 'x', (byte) 'y', (byte) 'z', (byte) '0', (byte) '1', (byte) '2', (byte) '3',
-    (byte) '4', (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) '+', (byte) '/'
-  };
+  private final static byte[] ALPHABET = {(byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D',
+    (byte) 'E', (byte) 'F', (byte) 'G', (byte) 'H', (byte) 'I', (byte) 'J', (byte) 'K', (byte) 'L',
+    (byte) 'M', (byte) 'N', (byte) 'O', (byte) 'P', (byte) 'Q', (byte) 'R', (byte) 'S', (byte) 'T',
+    (byte) 'U', (byte) 'V', (byte) 'W', (byte) 'X', (byte) 'Y', (byte) 'Z', (byte) 'a', (byte) 'b',
+    (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f', (byte) 'g', (byte) 'h', (byte) 'i', (byte) 'j',
+    (byte) 'k', (byte) 'l', (byte) 'm', (byte) 'n', (byte) 'o', (byte) 'p', (byte) 'q', (byte) 'r',
+    (byte) 's', (byte) 't', (byte) 'u', (byte) 'v', (byte) 'w', (byte) 'x', (byte) 'y', (byte) 'z',
+    (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5', (byte) '6', (byte) '7',
+    (byte) '8', (byte) '9', (byte) '+', (byte) '/'};
 
   /**
    * Translates a Base64 value to either its 6-bit reconstruction value or a negative number
    * indicating some other meaning.
    */
-  private final static byte[] DECODABET =
-  {
-    -9, -9, -9, -9, -9, -9, -9, -9, -9,                  // Decimal  0 -  8
+  private final static byte[] DECODABET = {-9, -9, -9, -9, -9, -9, -9, -9, -9,
+    // Decimal  0 -  8
     -5, -5,                                              // Whitespace: Tab and Linefeed
     -9, -9,                                              // Decimal 11 - 12
     -5,                                                  // Whitespace: Carriage Return
@@ -75,8 +98,7 @@ public class Base64
     -9, -9, -9, -9, -9, -9,                              // Decimal 91 - 96
     26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,  // Letters 'a' through 'm'
     39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // Letters 'n' through 'z'
-    -9, -9, -9,
-    -9                                                   // Decimal 123 - 126
+    -9, -9, -9, -9                                                   // Decimal 123 - 126
 
     /*
      * ,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 127 - 139
@@ -89,8 +111,7 @@ public class Base64
      * -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 218 - 230
      * -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,     // Decimal 231 - 243
      * -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9         // Decimal 244 - 255
-     */
-  };
+     */};
 
   /**
    * The equals sign (=) as a byte.
@@ -107,37 +128,12 @@ public class Base64
    */
   private final static byte NEW_LINE = (byte) '\n';
 
-  /**
-   * Specify encoding (value is <tt>true</tt>).
-   */
-  public final static boolean ENCODE = true;
-
-  /**
-   * Specify that data should not be compressed (value is <tt>false</tt>).
-   */
-  public final static boolean DONT_COMPRESS = false;
-
-  /**
-   * Specify decoding (value is <tt>false</tt>).
-   */
-  public final static boolean DECODE = false;
-
-  /**
-   * Specify that data should be compressed (value is <tt>true</tt>).
-   */
-  public final static boolean COMPRESS = true;
-
   static
   {
     BAD_ENCODING = -9;
     WHITE_SPACE_ENC = -5;
     EQUALS_SIGN_ENC = -1;
   }
-
-  /**
-   * Defeats instantiation.
-   */
-  private Base64() {}
 
   /**
    * Decodes data from Base64 notation.
@@ -203,8 +199,8 @@ public class Base64
       }
       else
       {
-        throw new Base64Exception("Bad Base64 input character at " + i + ": " + source[i]
-            + "(decimal)");
+        throw new Base64Exception(
+          "Bad Base64 input character at " + i + ": " + source[i] + "(decimal)");
       }
     }
 
@@ -213,6 +209,91 @@ public class Base64
     System.arraycopy(outBuff, 0, out, 0, outBuffPosn);
 
     return out;
+  }
+
+  /**
+   * Decodes four bytes from array <var>source</var> and writes the resulting bytes (up to three of
+   * them) to <var>destination</var>. The source and destination arrays can be manipulated anywhere
+   * along their length by specifying <var>srcOffset</var> and <var>destOffset</var>. This method
+   * does not check to make sure your arrays are large enough to accomodate
+   * <var>srcOffset</var> + 4 for the <var>source</var> array or <var>destOffset</var> + 3 for
+   * the <var>destination</var> array.
+   * <p/>
+   * This method returns the actual number of bytes that were converted from the Base64 encoding.
+   *
+   * @param source      the array to convert
+   * @param srcOffset   the index where conversion begins
+   * @param destination the array to hold the conversion
+   * @param destOffset  the index where output will be put
+   *
+   * @return the number of decoded bytes converted
+   *
+   * @since 1.3
+   */
+  private static int decode4to3(byte[] source, int srcOffset, byte[] destination, int destOffset)
+  {
+    // Example: Dk==
+    if (source[srcOffset + 2] == EQUALS_SIGN)
+    {
+      // Two ways to do the same thing. Don't know which way I like best.
+      // int outBuff =   ((DECODABET[ source[ srcOffset    ] ] << 24) >>>  6)
+      // | ((DECODABET[ source[ srcOffset + 1] ] << 24) >>> 12);
+      int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18) |
+        ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12);
+
+      destination[destOffset] = (byte) (outBuff >>> 16);
+
+      return 1;
+    }
+
+    // Example: DkL=
+    else if (source[srcOffset + 3] == EQUALS_SIGN)
+    {
+      // Two ways to do the same thing. Don't know which way I like best.
+      // int outBuff =   ((DECODABET[ source[ srcOffset     ] ] << 24) >>>  6)
+      // | ((DECODABET[ source[ srcOffset + 1 ] ] << 24) >>> 12)
+      // | ((DECODABET[ source[ srcOffset + 2 ] ] << 24) >>> 18);
+      int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18) |
+        ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12) |
+        ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6);
+
+      destination[destOffset] = (byte) (outBuff >>> 16);
+      destination[destOffset + 1] = (byte) (outBuff >>> 8);
+
+      return 2;
+    }
+
+    // Example: DkLE
+    else
+    {
+      try
+      {
+        // Two ways to do the same thing. Don't know which way I like best.
+        // int outBuff =   ((DECODABET[ source[ srcOffset     ] ] << 24) >>>  6)
+        // | ((DECODABET[ source[ srcOffset + 1 ] ] << 24) >>> 12)
+        // | ((DECODABET[ source[ srcOffset + 2 ] ] << 24) >>> 18)
+        // | ((DECODABET[ source[ srcOffset + 3 ] ] << 24) >>> 24);
+        int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18) |
+          ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12) |
+          ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6) |
+          ((DECODABET[source[srcOffset + 3]] & 0xFF));
+
+        destination[destOffset] = (byte) (outBuff >> 16);
+        destination[destOffset + 1] = (byte) (outBuff >> 8);
+        destination[destOffset + 2] = (byte) (outBuff);
+
+        return 3;
+      }
+      catch (Exception e)
+      {
+        System.out.println("" + source[srcOffset] + ": " + (DECODABET[source[srcOffset]]));
+        System.out.println("" + source[srcOffset + 1] + ": " + (DECODABET[source[srcOffset + 1]]));
+        System.out.println("" + source[srcOffset + 2] + ": " + (DECODABET[source[srcOffset + 2]]));
+        System.out.println("" + source[srcOffset + 3] + ": " + (DECODABET[source[srcOffset + 3]]));
+
+        return -1;
+      }
+    }
   }
 
   /**
@@ -286,6 +367,73 @@ public class Base64
   }
 
   /**
+   * Encodes up to three bytes of the array <var>source</var> and writes the resulting four Base64
+   * bytes to <var>destination</var>. The source and destination arrays can be manipulated anywhere
+   * along their length by specifying <var>srcOffset</var> and <var>destOffset</var>. This method
+   * does not check to make sure your arrays are large enough to accomodate
+   * <var>srcOffset</var> + 3 for the <var>source</var> array or <var>destOffset</var> + 4 for the
+   * <var>destination</var> array. The actual number of significant bytes in your array is given by
+   * <var>numSigBytes</var>.
+   *
+   * @param source      the array to convert
+   * @param srcOffset   the index where conversion begins
+   * @param numSigBytes the number of significant bytes in your array
+   * @param destination the array to hold the conversion
+   * @param destOffset  the index where output will be put
+   *
+   * @return the <var>destination</var> array
+   *
+   * @since 1.3
+   */
+  private static byte[] encode3to4(
+    byte[] source, int srcOffset, int numSigBytes, byte[] destination, int destOffset)
+  {
+    // 1         2         3
+    // 01234567890123456789012345678901 Bit position
+    // --------000000001111111122222222 Array position from threeBytes
+    // --------|    ||    ||    ||    | Six bit groups to index ALPHABET
+    // >>18  >>12  >> 6  >> 0  Right shift necessary
+    // 0x3f  0x3f  0x3f  Additional AND
+    // Create _buffer with zero-padding if there are only one or two
+    // significant bytes passed in the array.
+    // We have to shift left 24 in order to flush out the 1's that appear
+    // when Java treats a value as negative that is cast from a byte to an int.
+    int inBuff = ((numSigBytes > 0) ? ((source[srcOffset] << 24) >>> 8) : 0) |
+      ((numSigBytes > 1) ? ((source[srcOffset + 1] << 24) >>> 16) : 0) |
+      ((numSigBytes > 2) ? ((source[srcOffset + 2] << 24) >>> 24) : 0);
+
+    switch (numSigBytes)
+    {
+      case 3:
+        destination[destOffset] = ALPHABET[(inBuff >>> 18)];
+        destination[destOffset + 1] = ALPHABET[(inBuff >>> 12) & 0x3f];
+        destination[destOffset + 2] = ALPHABET[(inBuff >>> 6) & 0x3f];
+        destination[destOffset + 3] = ALPHABET[(inBuff) & 0x3f];
+
+        return destination;
+
+      case 2:
+        destination[destOffset] = ALPHABET[(inBuff >>> 18)];
+        destination[destOffset + 1] = ALPHABET[(inBuff >>> 12) & 0x3f];
+        destination[destOffset + 2] = ALPHABET[(inBuff >>> 6) & 0x3f];
+        destination[destOffset + 3] = EQUALS_SIGN;
+
+        return destination;
+
+      case 1:
+        destination[destOffset] = ALPHABET[(inBuff >>> 18)];
+        destination[destOffset + 1] = ALPHABET[(inBuff >>> 12) & 0x3f];
+        destination[destOffset + 2] = EQUALS_SIGN;
+        destination[destOffset + 3] = EQUALS_SIGN;
+
+        return destination;
+
+      default:
+        return destination;
+    }
+  }
+
+  /**
    * Encodes a byte array into Base64 notation.
    * Equivalent to calling <code>encodeBytes(source, 0, source.length)</code>
    *
@@ -348,12 +496,8 @@ public class Base64
   {
     int len43 = len * 4 / 3;
     byte[] outBuff = new byte[(len43)  // Main 4:3
-      + ((len % 3) > 0
-        ? 4
-        : 0)                           // Account for padding
-          + (breakLines
-        ? (len43 / MAX_LINE_LENGTH)
-        : 0)];                         // New lines
+      + ((len % 3) > 0 ? 4 : 0)                           // Account for padding
+      + (breakLines ? (len43 / MAX_LINE_LENGTH) : 0)];                         // New lines
     int d = 0;
     int e = 0;
     int len2 = len - 2;
@@ -415,158 +559,7 @@ public class Base64
   }
 
   /**
-   * Decodes four bytes from array <var>source</var> and writes the resulting bytes (up to three of
-   * them) to <var>destination</var>. The source and destination arrays can be manipulated anywhere
-   * along their length by specifying <var>srcOffset</var> and <var>destOffset</var>. This method
-   * does not check to make sure your arrays are large enough to accomodate
-   * <var>srcOffset</var> + 4 for the <var>source</var> array or <var>destOffset</var> + 3 for
-   * the <var>destination</var> array.
-   *
-   * This method returns the actual number of bytes that were converted from the Base64 encoding.
-   *
-   * @param source      the array to convert
-   * @param srcOffset   the index where conversion begins
-   * @param destination the array to hold the conversion
-   * @param destOffset  the index where output will be put
-   *
-   * @return the number of decoded bytes converted
-   *
-   * @since 1.3
+   * Defeats instantiation.
    */
-  private static int decode4to3(byte[] source, int srcOffset, byte[] destination, int destOffset)
-  {
-    // Example: Dk==
-    if (source[srcOffset + 2] == EQUALS_SIGN)
-    {
-      // Two ways to do the same thing. Don't know which way I like best.
-      // int outBuff =   ((DECODABET[ source[ srcOffset    ] ] << 24) >>>  6)
-      // | ((DECODABET[ source[ srcOffset + 1] ] << 24) >>> 12);
-      int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18)
-        | ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12);
-
-      destination[destOffset] = (byte) (outBuff >>> 16);
-
-      return 1;
-    }
-
-    // Example: DkL=
-    else if (source[srcOffset + 3] == EQUALS_SIGN)
-    {
-      // Two ways to do the same thing. Don't know which way I like best.
-      // int outBuff =   ((DECODABET[ source[ srcOffset     ] ] << 24) >>>  6)
-      // | ((DECODABET[ source[ srcOffset + 1 ] ] << 24) >>> 12)
-      // | ((DECODABET[ source[ srcOffset + 2 ] ] << 24) >>> 18);
-      int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18)
-        | ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12)
-        | ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6);
-
-      destination[destOffset] = (byte) (outBuff >>> 16);
-      destination[destOffset + 1] = (byte) (outBuff >>> 8);
-
-      return 2;
-    }
-
-    // Example: DkLE
-    else
-    {
-      try
-      {
-        // Two ways to do the same thing. Don't know which way I like best.
-        // int outBuff =   ((DECODABET[ source[ srcOffset     ] ] << 24) >>>  6)
-        // | ((DECODABET[ source[ srcOffset + 1 ] ] << 24) >>> 12)
-        // | ((DECODABET[ source[ srcOffset + 2 ] ] << 24) >>> 18)
-        // | ((DECODABET[ source[ srcOffset + 3 ] ] << 24) >>> 24);
-        int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18)
-          | ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12)
-          | ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6)
-          | ((DECODABET[source[srcOffset + 3]] & 0xFF));
-
-        destination[destOffset] = (byte) (outBuff >> 16);
-        destination[destOffset + 1] = (byte) (outBuff >> 8);
-        destination[destOffset + 2] = (byte) (outBuff);
-
-        return 3;
-      }
-      catch (Exception e)
-      {
-        System.out.println("" + source[srcOffset] + ": " + (DECODABET[source[srcOffset]]));
-        System.out.println("" + source[srcOffset + 1] + ": " + (DECODABET[source[srcOffset + 1]]));
-        System.out.println("" + source[srcOffset + 2] + ": " + (DECODABET[source[srcOffset + 2]]));
-        System.out.println("" + source[srcOffset + 3] + ": " + (DECODABET[source[srcOffset + 3]]));
-
-        return -1;
-      }
-    }
-  }
-
-  /**
-   * Encodes up to three bytes of the array <var>source</var> and writes the resulting four Base64
-   * bytes to <var>destination</var>. The source and destination arrays can be manipulated anywhere
-   * along their length by specifying <var>srcOffset</var> and <var>destOffset</var>. This method
-   * does not check to make sure your arrays are large enough to accomodate
-   * <var>srcOffset</var> + 3 for the <var>source</var> array or <var>destOffset</var> + 4 for the
-   * <var>destination</var> array. The actual number of significant bytes in your array is given by
-   * <var>numSigBytes</var>.
-   *
-   * @param source      the array to convert
-   * @param srcOffset   the index where conversion begins
-   * @param numSigBytes the number of significant bytes in your array
-   * @param destination the array to hold the conversion
-   * @param destOffset  the index where output will be put
-   *
-   * @return the <var>destination</var> array
-   *
-   * @since 1.3
-   */
-  private static byte[] encode3to4(byte[] source, int srcOffset, int numSigBytes,
-      byte[] destination, int destOffset)
-  {
-    // 1         2         3
-    // 01234567890123456789012345678901 Bit position
-    // --------000000001111111122222222 Array position from threeBytes
-    // --------|    ||    ||    ||    | Six bit groups to index ALPHABET
-    // >>18  >>12  >> 6  >> 0  Right shift necessary
-    // 0x3f  0x3f  0x3f  Additional AND
-    // Create _buffer with zero-padding if there are only one or two
-    // significant bytes passed in the array.
-    // We have to shift left 24 in order to flush out the 1's that appear
-    // when Java treats a value as negative that is cast from a byte to an int.
-    int inBuff = ((numSigBytes > 0)
-        ? ((source[srcOffset] << 24) >>> 8)
-        : 0) | ((numSigBytes > 1)
-        ? ((source[srcOffset + 1] << 24) >>> 16)
-        : 0) | ((numSigBytes > 2)
-        ? ((source[srcOffset + 2] << 24) >>> 24)
-        : 0);
-
-    switch (numSigBytes)
-    {
-      case 3:
-        destination[destOffset] = ALPHABET[(inBuff >>> 18)];
-        destination[destOffset + 1] = ALPHABET[(inBuff >>> 12) & 0x3f];
-        destination[destOffset + 2] = ALPHABET[(inBuff >>> 6) & 0x3f];
-        destination[destOffset + 3] = ALPHABET[(inBuff) & 0x3f];
-
-        return destination;
-
-      case 2:
-        destination[destOffset] = ALPHABET[(inBuff >>> 18)];
-        destination[destOffset + 1] = ALPHABET[(inBuff >>> 12) & 0x3f];
-        destination[destOffset + 2] = ALPHABET[(inBuff >>> 6) & 0x3f];
-        destination[destOffset + 3] = EQUALS_SIGN;
-
-        return destination;
-
-      case 1:
-        destination[destOffset] = ALPHABET[(inBuff >>> 18)];
-        destination[destOffset + 1] = ALPHABET[(inBuff >>> 12) & 0x3f];
-        destination[destOffset + 2] = EQUALS_SIGN;
-        destination[destOffset + 3] = EQUALS_SIGN;
-
-        return destination;
-
-      default:
-        return destination;
-    }
-  }
+  private Base64() {}
 }

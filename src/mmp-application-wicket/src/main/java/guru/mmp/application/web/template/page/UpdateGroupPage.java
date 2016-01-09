@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
@@ -34,8 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>UpdateGroupPage</code> class implements the
  * "Update Group" page for the Web Application Template.
@@ -43,12 +39,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_GROUP)
-public class UpdateGroupPage extends TemplateWebPage
+public class UpdateGroupPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateGroupPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
@@ -89,6 +86,7 @@ public class UpdateGroupPage extends TemplateWebPage
           catch (Throwable e)
           {
             logger.error("Failed to update the group: " + e.getMessage(), e);
+
             UpdateGroupPage.this.error("Failed to update the group");
           }
         }

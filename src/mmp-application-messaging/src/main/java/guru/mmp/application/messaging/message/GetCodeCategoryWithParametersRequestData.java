@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.ISO8601;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.*;
 
@@ -39,13 +35,14 @@ import java.util.*;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
+public class GetCodeCategoryWithParametersRequestData
+  extends WbxmlMessageData
 {
   /**
    * The UUID for the "Get Code Category With Parameters Request" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("3500a28a-6a2c-482b-b81f-a849c9c3ef79");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "3500a28a-6a2c-482b-b81f-a849c9c3ef79");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category to
@@ -88,8 +85,8 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
    *                             category is current
    */
-  public GetCodeCategoryWithParametersRequestData(UUID id, Date lastRetrieved,
-      Map<String, String> parameters, boolean returnCodesIfCurrent)
+  public GetCodeCategoryWithParametersRequestData(
+    UUID id, Date lastRetrieved, Map<String, String> parameters, boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
@@ -116,7 +113,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -130,8 +127,8 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
       return false;
     }
 
-    if ((!rootElement.hasChild("Id")) || (!rootElement.hasChild("LastRetrieved"))
-        || (!rootElement.hasChild("ReturnCodesIfCurrent")))
+    if ((!rootElement.hasChild("Id")) || (!rootElement.hasChild("LastRetrieved")) ||
+      (!rootElement.hasChild("ReturnCodesIfCurrent")))
     {
       return false;
     }
@@ -148,8 +145,9 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
       }
       catch (Throwable e)
       {
-        throw new RuntimeException("Failed to parse the LastRetrieved ISO8601 timestamp ("
-            + lastRetrievedValue + ") for the \"Get Code Category Request\" message", e);
+        throw new RuntimeException(
+          "Failed to parse the LastRetrieved ISO8601 timestamp (" + lastRetrievedValue + ") for" +
+            " the \"Get Code Category Request\" message", e);
       }
     }
     else
@@ -157,8 +155,8 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
       this.lastRetrieved = new Date(Long.parseLong(lastRetrievedValue));
     }
 
-    this.returnCodesIfCurrent =
-      Boolean.parseBoolean(rootElement.getChildText("ReturnCodesIfCurrent"));
+    this.returnCodesIfCurrent = Boolean.parseBoolean(
+      rootElement.getChildText("ReturnCodesIfCurrent"));
 
     this.parameters = new HashMap<>();
 
@@ -180,7 +178,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * to retrieve.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identify the code category to
-   *         retrieve
+   * retrieve
    */
   public UUID getId()
   {
@@ -212,7 +210,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * is current or <code>false</code> otherwise.
    *
    * @return <code>true</code> if the codes for the code category be returned if the code category
-   *         is current or <code>false</code> otherwise
+   * is current or <code>false</code> otherwise
    */
   public boolean getReturnCodesIfCurrent()
   {
@@ -277,7 +275,7 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */
@@ -287,11 +285,10 @@ public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
     Element rootElement = new Element("GetCodeCategoryWithParametersRequest");
 
     rootElement.addContent(new Element("Id", id.toString()));
-    rootElement.addContent(new Element("LastRetrieved", (lastRetrieved == null)
-        ? ISO8601.now()
-        : ISO8601.fromDate(lastRetrieved)));
-    rootElement.addContent(new Element("ReturnCodesIfCurrent",
-        String.valueOf(returnCodesIfCurrent)));
+    rootElement.addContent(new Element("LastRetrieved",
+      (lastRetrieved == null) ? ISO8601.now() : ISO8601.fromDate(lastRetrieved)));
+    rootElement.addContent(
+      new Element("ReturnCodesIfCurrent", String.valueOf(returnCodesIfCurrent)));
 
     for (String parameterName : parameters.keySet())
     {

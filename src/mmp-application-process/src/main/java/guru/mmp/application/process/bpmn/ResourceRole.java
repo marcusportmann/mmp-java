@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
 
 /**
  * The <code>ResourceRole</code> class represents a ResourceRole that forms part of a Process.
- * <p>
+ * <p/>
  * <b>ResourceRole</b> XML schema:
  * <pre>
  *

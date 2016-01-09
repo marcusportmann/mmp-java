@@ -16,12 +16,8 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -30,9 +26,6 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,7 +36,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
+public class DropDownChoiceWithFeedback<T>
+  extends DropDownChoice<T>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -88,8 +82,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
    * @param choices  the choices
    * @param renderer the custom renderer for the choices
    */
-  public DropDownChoiceWithFeedback(String id, List<? extends T> choices,
-      IChoiceRenderer<? super T> renderer)
+  public DropDownChoiceWithFeedback(
+    String id, List<? extends T> choices, IChoiceRenderer<? super T> renderer)
   {
     super(id, choices, renderer);
   }
@@ -102,16 +96,16 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
    * @param choices  the choices
    * @param renderer the custom renderer for the choices
    */
-  public DropDownChoiceWithFeedback(String id, IModel<T> model, List<? extends T> choices,
-      IChoiceRenderer<? super T> renderer)
+  public DropDownChoiceWithFeedback(
+    String id, IModel<T> model, List<? extends T> choices, IChoiceRenderer<? super T> renderer)
   {
     super(id, model, choices, renderer);
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
-   *
    * @param response the Wicket header response
+   *
+   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
    */
   @Override
   public void renderHead(IHeaderResponse response)
@@ -153,21 +147,12 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      if (ajaxRequestHandler.getComponents().contains(this.getForm()))
-      {
-        getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
-      }
-
       String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
       if (feedbackJavaScript != null)
       {
         ajaxRequestHandler.appendJavaScript(feedbackJavaScript);
       }
-    }
-    else
-    {
-      getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
     }
   }
 }

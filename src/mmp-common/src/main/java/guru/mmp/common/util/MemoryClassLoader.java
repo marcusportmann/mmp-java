@@ -16,8 +16,6 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +35,8 @@ import java.util.jar.JarInputStream;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class MemoryClassLoader extends ClassLoader
+public class MemoryClassLoader
+  extends ClassLoader
 {
   /**
    * The list of byte arrays containing the binary data representation of the JARs associated with
@@ -87,13 +86,12 @@ public class MemoryClassLoader extends ClassLoader
   }
 
   /**
-   * @see ClassLoader#findClass(String)
-   *
    * @param name the name of the class
    *
    * @return the resulting Class object
    *
    * @throws ClassNotFoundException
+   * @see ClassLoader#findClass(String)
    */
   @Override
   public Class<?> findClass(String name)
@@ -115,18 +113,19 @@ public class MemoryClassLoader extends ClassLoader
     }
     catch (IOException e)
     {
-      throw new ClassNotFoundException("An IOException occurred while attempting to retrieve the"
-          + " binary representation of the class (" + name + ") from the JAR: " + e.getMessage());
+      throw new ClassNotFoundException(
+        "An IOException occurred while attempting to retrieve the" + " binary representation of" +
+          " the class (" + name + ") from the JAR: " + e.getMessage());
     }
   }
 
   /**
-   * @see ClassLoader#getResource(String)
-   *
    * @param name the resource name
    *
    * @return a URL object for reading the resource, or <code>null</code> if the resource could not
-   *         be found
+   * be found
+   *
+   * @see ClassLoader#getResource(String)
    */
   @Override
   public URL getResource(String name)
@@ -154,7 +153,7 @@ public class MemoryClassLoader extends ClassLoader
    * @param resourcePath the path to the resource
    *
    * @return the binary data for the resource with the specified path or <code>null</code> if the
-   *         resource could not be found
+   * resource could not be found
    *
    * @throws IOException an IO exception occurs
    */
@@ -191,9 +190,9 @@ public class MemoryClassLoader extends ClassLoader
    * @param className the fully qualified name of the class to find
    *
    * @return the binary data for the class with the specified name or <code>null</code> if the
-   *         class could not be found
+   * class could not be found
    *
-   * @throws IOException  an IO exception occurs
+   * @throws IOException an IO exception occurs
    */
   private byte[] getClassData(String className)
     throws IOException
@@ -253,7 +252,7 @@ public class MemoryClassLoader extends ClassLoader
    * @param jarData the binary representation of the JAR file to search
    *
    * @return the binary representation of the JAR entry or <code>null</code> if the entry could not
-   *         be found
+   * be found
    *
    * @throws IOException an IO exception occurs
    */
@@ -290,15 +289,16 @@ public class MemoryClassLoader extends ClassLoader
    * The MemoryUrlConnection nested class provides a URL connection for a resource stored in a JAR
    * file managed by a MemoryClassLoader instance.
    */
-  private class MemoryUrlConnection extends URLConnection
+  private class MemoryUrlConnection
+    extends URLConnection
   {
     private MemoryClassLoader memoryClassLoader = null;
 
     /**
      * Constructs a MemoryUrlConnection using the specified URL and MemoryClassLoader.
      *
-     * @param url                the specified URL
-     * @param memoryClassLoader  the memory class loader
+     * @param url               the specified URL
+     * @param memoryClassLoader the memory class loader
      */
     public MemoryUrlConnection(URL url, MemoryClassLoader memoryClassLoader)
     {
@@ -326,20 +326,21 @@ public class MemoryClassLoader extends ClassLoader
 
       if (resourceData == null)
       {
-        throw new IOException("Unable to find the resource (" + getURL().getFile()
-            + ") in the in-memory JAR (" + getURL().getHost() + ")");
+        throw new IOException(
+          "Unable to find the resource (" + getURL().getFile() + ") in the in-memory JAR (" +
+            getURL().getHost() + ")");
       }
 
       return new ByteArrayInputStream(resourceData);
     }
   }
 
-
   /**
    * The MemoryUrlStreamHandler nested class that provides URL stream handling capabilities for
    * resources stored in a JAR file managed by a MemoryClassLoader instance.
    */
-  private class MemoryUrlStreamHandler extends URLStreamHandler
+  private class MemoryUrlStreamHandler
+    extends URLStreamHandler
   {
     private MemoryClassLoader memoryClassLoader = null;
 

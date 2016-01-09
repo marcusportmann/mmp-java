@@ -16,8 +16,6 @@
 
 package guru.mmp.application.batch;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
 import java.util.UUID;
 
@@ -97,7 +95,7 @@ public interface IBatchService
    * The job will be locked to prevent duplicate processing.
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
-   *         currently scheduled for execution
+   * currently scheduled for execution
    *
    * @throws BatchServiceException
    */
@@ -154,7 +152,7 @@ public interface IBatchService
    * Schedule the next unscheduled job for execution.
    *
    * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
-   *         if there are no more unscheduled jobs to schedule
+   * if there are no more unscheduled jobs to schedule
    *
    * @throws BatchServiceException
    */

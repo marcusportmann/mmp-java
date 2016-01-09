@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -10,9 +7,9 @@ import java.util.ArrayList;
 
 /**
  * <p>Java class for simpleType complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType name="simpleType">
  *   &lt;complexContent>
@@ -25,46 +22,47 @@ import java.util.ArrayList;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "simpleType", propOrder = { "union", "list", "restriction" })
-@XmlSeeAlso({ LocalSimpleType.class, SimpleType.class })
-public abstract class SimpleTypeType extends Annotated
+@XmlType(name = "simpleType", propOrder = {"union", "list", "restriction"})
+@XmlSeeAlso({LocalSimpleType.class, SimpleType.class})
+public abstract class SimpleTypeType
+  extends Annotated
 {
   @XmlAttribute(name = "final")
   @XmlSchemaType(name = "simpleDerivationSet")
   protected java.util.List<String> finals;
+
   protected org.w3._2001.xmlschema.List list;
+
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
+
   protected Restriction restriction;
+
   protected Union union;
 
   /**
    * Gets the value of the finals property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the finals property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getFinals().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link String }
-   *
-   *
    *
    * @return
    */
@@ -81,10 +79,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Gets the value of the list property.
    *
-   * @return
-   *     possible object is
-   *     {@link org.w3._2001.xmlschema.List }
-   *
+   * @return possible object is
+   * {@link org.w3._2001.xmlschema.List }
    */
   public org.w3._2001.xmlschema.List getList()
   {
@@ -94,10 +90,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Gets the value of the name property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getName()
   {
@@ -107,10 +101,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Gets the value of the restriction property.
    *
-   * @return
-   *     possible object is
-   *     {@link Restriction }
-   *
+   * @return possible object is
+   * {@link Restriction }
    */
   public Restriction getRestriction()
   {
@@ -120,10 +112,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Gets the value of the union property.
    *
-   * @return
-   *     possible object is
-   *     {@link Union }
-   *
+   * @return possible object is
+   * {@link Union }
    */
   public Union getUnion()
   {
@@ -133,10 +123,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Sets the value of the list property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link org.w3._2001.xmlschema.List }
-   *
+   * @param value allowed object is
+   *              {@link org.w3._2001.xmlschema.List }
    */
   public void setList(org.w3._2001.xmlschema.List value)
   {
@@ -146,10 +134,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Sets the value of the name property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setName(String value)
   {
@@ -159,10 +145,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Sets the value of the restriction property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Restriction }
-   *
+   * @param value allowed object is
+   *              {@link Restriction }
    */
   public void setRestriction(Restriction value)
   {
@@ -172,10 +156,8 @@ public abstract class SimpleTypeType extends Annotated
   /**
    * Sets the value of the union property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link Union }
-   *
+   * @param value allowed object is
+   *              {@link Union }
    */
   public void setUnion(Union value)
   {

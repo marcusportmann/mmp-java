@@ -16,8 +16,6 @@
 
 package guru.mmp.common.test;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.http.SecureHttpClientBuilder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityHttpClientBuilderTest</code> class contains the implementation of the JUnit
@@ -61,7 +57,7 @@ public class TestSecureHttpClientBuilder
     SecureHttpClientBuilder secureHttpClientBuilder = new SecureHttpClientBuilder();
 
     RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(
-        30000).setConnectTimeout(30000).setSocketTimeout(30000).build();
+      30000).setConnectTimeout(30000).setSocketTimeout(30000).build();
 
     secureHttpClientBuilder.setDefaultRequestConfig(requestConfig);
 

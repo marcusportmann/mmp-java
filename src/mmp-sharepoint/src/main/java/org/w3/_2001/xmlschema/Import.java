@@ -1,15 +1,12 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -21,17 +18,17 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "import")
-public class Import extends Annotated
+public class Import
+  extends Annotated
 {
   @XmlAttribute(name = "namespace")
   @XmlSchemaType(name = "anyURI")
   protected String namespace;
+
   @XmlAttribute(name = "schemaLocation")
   @XmlSchemaType(name = "anyURI")
   protected String schemaLocation;
@@ -39,10 +36,8 @@ public class Import extends Annotated
   /**
    * Gets the value of the namespace property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getNamespace()
   {
@@ -52,10 +47,8 @@ public class Import extends Annotated
   /**
    * Gets the value of the schemaLocation property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getSchemaLocation()
   {
@@ -65,10 +58,8 @@ public class Import extends Annotated
   /**
    * Sets the value of the namespace property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setNamespace(String value)
   {
@@ -78,10 +69,8 @@ public class Import extends Annotated
   /**
    * Sets the value of the schemaLocation property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setSchemaLocation(String value)
   {

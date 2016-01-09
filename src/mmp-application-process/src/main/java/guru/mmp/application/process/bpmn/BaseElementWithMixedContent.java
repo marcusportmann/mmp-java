@@ -16,23 +16,18 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.namespace.QName;
 
 /**
  * The <code>BaseElementWithMixedContent</code> class provides the base class that all BPMN
  * elements with mixed content that form part of a Process should be derived from.
- * <p>
+ * <p/>
  * <b>BaseElementWithMixedContent</b> XML schema:
  * <pre>
  * &lt;xsd:element name="baseElementWithMixedContent" type="tBaseElementWithMixedContent"/&gt;

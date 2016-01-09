@@ -16,16 +16,11 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.*;
 import guru.mmp.common.util.StringUtil;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +28,10 @@ import java.util.List;
 /**
  * The <code>Activity</code> class provides the base class that all Activity subclasses should be
  * derived from.
- * <p>
+ * <p/>
  * Activities represent points in a Process flow where work is performed. They are the executable
  * elements of a BPMN Process. An Activity can be atomic or non-atomic (compound).
- * <p>
+ * <p/>
  * <b>Activity</b> XML schema:
  * <pre>
  * &lt;xsd:element name="activity" type="tActivity"/&gt;
@@ -63,7 +58,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class Activity extends FlowNode
+public abstract class Activity
+  extends FlowNode
 {
   /**
    * The number of tokens will be sent down any outgoing Sequence Flow (assuming any Sequence Flow
@@ -74,7 +70,7 @@ public abstract class Activity extends FlowNode
   /**
    * The Sequence Flow that will receive a token when none of the <code>conditionExpression</code>s
    * on other outgoing Sequence Flows evaluate to <code>true</code>.
-   * <p>
+   * <p/>
    * The default Sequence Flow should not have a <code>conditionExpression</code>. Any such
    * Expression SHALL be ignored.
    */
@@ -88,7 +84,7 @@ public abstract class Activity extends FlowNode
 
   /**
    * Is the Activity intended for the purposes of compensation?
-   * <p>
+   * <p/>
    * If <code>false</code>, then this Activity executes as a result of normal execution flow.
    * If <code>true</code>, this Activity is only activated when a Compensation Event is detected
    * and initiated under Compensation Event visibility scope.
@@ -97,7 +93,7 @@ public abstract class Activity extends FlowNode
 
   /**
    * The loop characteristics for the Activity.
-   * <p>
+   * <p/>
    * An Activity MAY be performed once or MAY be repeated. If repeated, the Activity MUST have
    * <code>loopCharacteristics</code> that define the repetition criteria (if the isExecutable
    * attribute of the Process is set to true).
@@ -105,23 +101,23 @@ public abstract class Activity extends FlowNode
   private LoopCharacteristics loopCharacteristics;
 
   /**
+   * The modeler-defined properties for the Activity.
+   * <p/>
+   * These properties are contained within the Activity.
+   */
+  private List<Property> properties = new ArrayList<>();
+
+  /**
    * The resources that will perform or will be responsible for the Activity.
-   * <p>
+   * <p/>
    * A resource, e.g. a performer, can be specified in the form of a specific individual, a group,
    * an organization role or position, or an organization.
    */
   private List<ResourceRole> resources = new ArrayList<>();
 
   /**
-   * The modeler-defined properties for the Activity.
-   * <p>
-   * These properties are contained within the Activity.
-   */
-  private List<Property> properties = new ArrayList<>();
-
-  /**
    * The number of tokens that MUST arrive before the Activity can begin.
-   * <p>
+   * <p/>
    * The default value is 1. The value MUST NOT be less than 1. This attribute defines the number
    * of tokens that MUST arrive before the Activity can begin. Note that any value for the attribute
    * that is greater than 1 is an advanced type of modeling and should be used with caution.
@@ -140,8 +136,9 @@ public abstract class Activity extends FlowNode
 
     try
     {
-      this.isForCompensation = !StringUtil.isNullOrEmpty(element.getAttribute("isForCompensation"))
-          && Boolean.parseBoolean(element.getAttribute("isForCompensation"));
+      this.isForCompensation = !StringUtil.isNullOrEmpty(
+        element.getAttribute("isForCompensation")) && Boolean.parseBoolean(
+        element.getAttribute("isForCompensation"));
 
       if (StringUtil.isNullOrEmpty(element.getAttribute("startQuantity")))
       {
@@ -194,14 +191,16 @@ public abstract class Activity extends FlowNode
 
             case "dataInputAssociation":
             {
-              throw new ParserException("Failed to parse the unsupported XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unsupported XML element (" + childElement.getNodeName() +
+                  ")");
             }
 
             case "dataOutputAssociation":
             {
-              throw new ParserException("Failed to parse the unsupported XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unsupported XML element (" + childElement.getNodeName() +
+                  ")");
             }
 
             case "resourceRole":
@@ -220,8 +219,8 @@ public abstract class Activity extends FlowNode
 
             default:
             {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
             }
           }
         }
@@ -238,7 +237,7 @@ public abstract class Activity extends FlowNode
    * Sequence Flow conditions are satisfied).
    *
    * @return the number of tokens will be sent down any outgoing Sequence Flow (assuming any
-   *         Sequence Flow conditions are satisfied)
+   * Sequence Flow conditions are satisfied)
    */
   public int getCompletionQuantity()
   {
@@ -249,13 +248,13 @@ public abstract class Activity extends FlowNode
    * Returns the ID of the Sequence Flow that will receive a token when none of the
    * <code>conditionExpression</code>s on other outgoing Sequence Flows evaluate to
    * <code>true</code>.
-   * <p>
+   * <p/>
    * The default Sequence Flow should not have a <code>conditionExpression</code>. Any such
    * Expression SHALL be ignored.
    *
    * @return the ID of the Sequence Flow that will receive a token when none of the
-   *         <code>conditionExpression</code>s on other outgoing Sequence Flows evaluate to
-   *         <code>true</code>
+   * <code>conditionExpression</code>s on other outgoing Sequence Flows evaluate to
+   * <code>true</code>
    */
   public String getDefaultRef()
   {
@@ -267,7 +266,7 @@ public abstract class Activity extends FlowNode
    * the <code>InputSet</code>s and <code>OutputSet</code>s for the Activity.
    *
    * @return the <code>InputOutputSpecification</code>, which defines the inputs and outputs and
-   *         the <code>InputSet</code>s and <code>OutputSet</code>s for the Activity
+   * the <code>InputSet</code>s and <code>OutputSet</code>s for the Activity
    */
   public InputOutputSpecification getIoSpecification()
   {
@@ -276,7 +275,7 @@ public abstract class Activity extends FlowNode
 
   /**
    * Returns the loop characteristics for the Activity.
-   * <p>
+   * <p/>
    * An Activity MAY be performed once or MAY be repeated. If repeated, the Activity MUST have
    * <code>loopCharacteristics</code> that define the repetition criteria (if the isExecutable
    * attribute of the Process is set to true).
@@ -300,7 +299,7 @@ public abstract class Activity extends FlowNode
 
   /**
    * Returns the resources that will perform or will be responsible for the Activity.
-   * <p>
+   * <p/>
    * A resource, e.g. a Performer, can be specified in the form of a specific individual, a group,
    * an organization role or position, or an organization.
    *
@@ -313,7 +312,7 @@ public abstract class Activity extends FlowNode
 
   /**
    * Returns the number of tokens that MUST arrive before the Activity can begin.
-   * <p>
+   * <p/>
    * The default value is 1. The value MUST NOT be less than 1. This attribute defines the number
    * of tokens that MUST arrive before the Activity can begin. Note that any value for the attribute
    * that is greater than 1 is an advanced type of modeling and should be used with caution.
@@ -328,13 +327,13 @@ public abstract class Activity extends FlowNode
   /**
    * Returns <code>true</code> if the Activity is intended for the purposes of compensation or
    * <code>false</code> otherwise.
-   * <p>
+   * <p/>
    * If <code>false</code>, then this Activity executes as a result of normal execution flow.
    * If <code>true</code>, this Activity is only activated when a Compensation Event is detected
    * and initiated under Compensation Event visibility scope.
    *
    * @return <code>true</code> if the Activity is intended for the purposes of compensation or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean isForCompensation()
   {

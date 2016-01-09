@@ -16,19 +16,17 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>DataOutputAssociation</code> class represents a DataOutputAssociation that forms part
  * of a Process.
- * <p>
+ * <p/>
  * The DataOutputAssociation can be used to associate a DataOutput contained within an Activity
  * with any ItemAwareElement accessible in the scope the association will be executed in. The
  * target of such a DataAssociation can be every ItemAwareElement accessible in the current scope,
  * e.g., a Data Object, a Property, or an Expression.
- * <p>
+ * <p/>
  * <b>DataOutputAssociation</b> XML schema:
  * <pre>
  * &lt;xsd:element name="dataOutputAssociation" type="tDataOutputAssociation" /&gt;
@@ -41,7 +39,8 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public final class DataOutputAssociation extends DataAssociation
+public final class DataOutputAssociation
+  extends DataAssociation
 {
   /**
    * Constructs a new <code>DataOutputAssociation</code>.

@@ -16,16 +16,11 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.Organisation;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
 
 /**
@@ -120,9 +115,9 @@ public class OrganisationData
   }
 
   /**
-   *  Set the description for the organisation.
+   * Set the description for the organisation.
    *
-   *  @param description the description for the organisation
+   * @param description the description for the organisation
    */
   public void setDescription(String description)
   {

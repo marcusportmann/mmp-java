@@ -16,35 +16,32 @@
 
 package guru.mmp.application.process.bpmn.gateway;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.FlowElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>Gateway</code> class provides the base class that all Gateway subclasses should be
  * derived from.
- * <p>
+ * <p/>
  * Gateways are objects that control the flow of the process instead of performing some action.
- * <p>
+ * <p/>
  * Gateways have two behaviors:
  * <ul>
- *   <li><b>Converging</b>, that refers to what they do to the incoming flows.</li>
- *   <li><b>Diverging</b>, what they do to outgoing flows.</li>
+ * <li><b>Converging</b>, that refers to what they do to the incoming flows.</li>
+ * <li><b>Diverging</b>, what they do to outgoing flows.</li>
  * </ul>
  * There are five types of gateways:
  * <ol>
- *   <li>Exclusive</li>
- *   <li>Parallel</li>
- *   <li>Event</li>
- *   <li>Inclusive</li>
- *   <li>Complex</li>
+ * <li>Exclusive</li>
+ * <li>Parallel</li>
+ * <li>Event</li>
+ * <li>Inclusive</li>
+ * <li>Complex</li>
  * </ol>
- * <p>
+ * <p/>
  * <b>Gateway</b> XML schema:
  * <pre>
  * &lt;xsd:element name="gateway" type="tGateway" abstract="true"/&gt;
@@ -61,27 +58,28 @@ import org.w3c.dom.Element;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-abstract class Gateway extends FlowElement
+abstract class Gateway
+  extends FlowElement
 {
   /**
    * The constraints on the incoming and outgoing Sequence Flows.
-   * <p>
+   * <p/>
    * <ul>
-   *   <li>
-   *     <b>Unspecified:</b> There are no constraints. The Gateway MAY have any number of incoming
-   *     and outgoing Sequence Flows.
-   *   </li>
-   *   <li>
-   *     <b>Converging:</b> This Gateway MAY have multiple incoming Sequence Flows but MUST have no
-   *     more than one (1) outgoing Sequence Flow.
-   *   </li>
-   *   <li>
-   *     <b>Diverging:</b> This Gateway MAY have multiple outgoing Sequence Flows but MUST have no
-   *     more than one (1) incoming Sequence Flow.
-   *   </li>
-   *   <li>
-   *     <b>Mixed:</b> This Gateway contains multiple outgoing and multiple incoming Sequence Flows.
-   *   </li>
+   * <li>
+   * <b>Unspecified:</b> There are no constraints. The Gateway MAY have any number of incoming
+   * and outgoing Sequence Flows.
+   * </li>
+   * <li>
+   * <b>Converging:</b> This Gateway MAY have multiple incoming Sequence Flows but MUST have no
+   * more than one (1) outgoing Sequence Flow.
+   * </li>
+   * <li>
+   * <b>Diverging:</b> This Gateway MAY have multiple outgoing Sequence Flows but MUST have no
+   * more than one (1) incoming Sequence Flow.
+   * </li>
+   * <li>
+   * <b>Mixed:</b> This Gateway contains multiple outgoing and multiple incoming Sequence Flows.
+   * </li>
    * </ul>
    */
   private GatewayDirection gatewayDirection;
@@ -115,23 +113,23 @@ abstract class Gateway extends FlowElement
 
   /**
    * Returns the constraints on the incoming and outgoing Sequence Flows.
-   * <p>
+   * <p/>
    * <ul>
-   *   <li>
-   *     <b>Unspecified:</b> There are no constraints. The Gateway MAY have any number of incoming
-   *     and outgoing Sequence Flows.
-   *   </li>
-   *   <li>
-   *     <b>Converging:</b> This Gateway MAY have multiple incoming Sequence Flows but MUST have no
-   *     more than one (1) outgoing Sequence Flow.
-   *   </li>
-   *   <li>
-   *     <b>Diverging:</b> This Gateway MAY have multiple outgoing Sequence Flows but MUST have no
-   *     more than one (1) incoming Sequence Flow.
-   *   </li>
-   *   <li>
-   *     <b>Mixed:</b> This Gateway contains multiple outgoing and multiple incoming Sequence Flows.
-   *   </li>
+   * <li>
+   * <b>Unspecified:</b> There are no constraints. The Gateway MAY have any number of incoming
+   * and outgoing Sequence Flows.
+   * </li>
+   * <li>
+   * <b>Converging:</b> This Gateway MAY have multiple incoming Sequence Flows but MUST have no
+   * more than one (1) outgoing Sequence Flow.
+   * </li>
+   * <li>
+   * <b>Diverging:</b> This Gateway MAY have multiple outgoing Sequence Flows but MUST have no
+   * more than one (1) incoming Sequence Flow.
+   * </li>
+   * <li>
+   * <b>Mixed:</b> This Gateway contains multiple outgoing and multiple incoming Sequence Flows.
+   * </li>
    * </ul>
    *
    * @return the constraints on the incoming and outgoing Sequence Flows

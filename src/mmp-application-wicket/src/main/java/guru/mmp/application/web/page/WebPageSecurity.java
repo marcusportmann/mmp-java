@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.page;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,16 +25,16 @@ import java.lang.annotation.Target;
  * Annotation type that is used to identify secure web pages. The value specified for the
  * annotation is the function code that uniquely identifies the function associated with the
  * web page e.g. Application.Security.CreateUser, etc.
- *
+ * <p/>
  * Function codes can refer to a specific "function" e.g. Application.Security.CreateUser or a
  * "functionality grouping" e.g. Application.Security.UserManagement. The decision
  * on whether to use a "function" or "functionality grouping" is dependent on the granularity
  * of the application's access control.
  *
- *  @author Marcus Portmann
+ * @author Marcus Portmann
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE})
 public @interface WebPageSecurity
 {
   String value();

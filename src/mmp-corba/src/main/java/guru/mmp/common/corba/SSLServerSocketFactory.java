@@ -16,8 +16,6 @@
 
 package guru.mmp.common.corba;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.security.context.ServiceSecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +27,6 @@ import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SSLServerSocketFactory</code> provides the capability to create SSL server sockets
@@ -44,6 +40,7 @@ public class SSLServerSocketFactory
 
 {
   private static final Logger logger = LoggerFactory.getLogger(SSLServerSocketFactory.class);
+
   private ServerSocketFactory serverSocketFactory;
 
   /**
@@ -59,7 +56,7 @@ public class SSLServerSocketFactory
    *
    * @return a server socket
    *
-   * @exception IOException
+   * @throws IOException
    */
   @Override
   public ServerSocket createServerSocket(int port)
@@ -71,11 +68,13 @@ public class SSLServerSocketFactory
     }
     catch (Throwable e)
     {
-      logger.error("Failed to create a SSL server socket for the CORBA ORB on port (" + port
-          + "): " + e.getMessage(), e);
+      logger.error(
+        "Failed to create a SSL server socket for the CORBA ORB on port (" + port + "): " +
+          e.getMessage(), e);
 
-      throw new IOException("Failed to create a SSL server socket for the CORBA ORB on port ("
-          + port + "): " + e.getMessage(), e);
+      throw new IOException(
+        "Failed to create a SSL server socket for the CORBA ORB on port (" + port + "): " +
+          e.getMessage(), e);
     }
   }
 
@@ -88,7 +87,7 @@ public class SSLServerSocketFactory
    *
    * @return a server socket
    *
-   * @exception IOException
+   * @throws IOException
    */
   @Override
   public ServerSocket createServerSocket(int port, int backlog)
@@ -100,11 +99,13 @@ public class SSLServerSocketFactory
     }
     catch (Throwable e)
     {
-      logger.error("Failed to create a SSL server socket for the CORBA ORB on port (" + port
-          + "): " + e.getMessage(), e);
+      logger.error(
+        "Failed to create a SSL server socket for the CORBA ORB on port (" + port + "): " +
+          e.getMessage(), e);
 
-      throw new IOException("Failed to create a SSL server socket for the CORBA ORB on port ("
-          + port + "): " + e.getMessage(), e);
+      throw new IOException(
+        "Failed to create a SSL server socket for the CORBA ORB on port (" + port + "): " +
+          e.getMessage(), e);
     }
   }
 
@@ -117,7 +118,7 @@ public class SSLServerSocketFactory
    *
    * @return a server socket
    *
-   * @exception IOException
+   * @throws IOException
    */
   @Override
   public ServerSocket createServerSocket(int port, int backlog, InetAddress ifAddress)
@@ -129,11 +130,13 @@ public class SSLServerSocketFactory
     }
     catch (Throwable e)
     {
-      logger.error("Failed to create a SSL server socket for the CORBA ORB on port (" + port
-          + "): " + e.getMessage(), e);
+      logger.error(
+        "Failed to create a SSL server socket for the CORBA ORB on port (" + port + "): " +
+          e.getMessage(), e);
 
-      throw new IOException("Failed to create a SSL server socket for the CORBA ORB on port ("
-          + port + "): " + e.getMessage(), e);
+      throw new IOException(
+        "Failed to create a SSL server socket for the CORBA ORB on port (" + port + "): " +
+          e.getMessage(), e);
     }
   }
 
@@ -150,16 +153,16 @@ public class SSLServerSocketFactory
       ServiceSecurityContext serviceSecurityContext = ServiceSecurityContext.getContext("ORB");
 
       // Initialize the key manager factory
-      KeyManagerFactory keyManagerFactory =
-        KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+      KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
+        KeyManagerFactory.getDefaultAlgorithm());
 
       keyManagerFactory.init(serviceSecurityContext.getKeyStore(),
-          serviceSecurityContext.getKeyStorePassword().toCharArray());
+        serviceSecurityContext.getKeyStorePassword().toCharArray());
 
       // Initialize the truest manager factory
 
-      TrustManagerFactory trustManagerFactory =
-        TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+      TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+        TrustManagerFactory.getDefaultAlgorithm());
 
       trustManagerFactory.init(serviceSecurityContext.getKeyStore());
 
@@ -167,19 +170,17 @@ public class SSLServerSocketFactory
       SSLContext sslContext = SSLContext.getInstance("TLS");
 
       sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
-          null);
+        null);
 
       // Retrieve the SSL server socket factory
       serverSocketFactory = sslContext.getServerSocketFactory();
 
       return serverSocketFactory;
-
     }
     catch (Throwable e)
     {
-      throw new IOException("Failed to initialize the SSL server socket factory: "
-          + e.getMessage(), e);
+      throw new IOException("Failed to initialize the SSL server socket factory: " + e.getMessage(),
+        e);
     }
-
   }
 }

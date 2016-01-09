@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -25,24 +23,19 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateProcessSecurity;
 import guru.mmp.application.web.template.component.ProcessDefinitionInputPanel;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
-import javax.inject.Inject;
 
 /**
  * The <code>UpdateProcessDefinitionPage</code> class implements the
@@ -51,12 +44,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_UPDATE_PROCESS_DEFINITION)
-public class UpdateProcessDefinitionPage extends TemplateWebPage
+public class UpdateProcessDefinitionPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateProcessDefinitionPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Process Service */
   @Inject
@@ -65,24 +59,24 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
   /**
    * Constructs a new <code>UpdateProcessDefinitionPage</code>.
    *
-   * @param previousPage          the previous page
+   * @param previousPage           the previous page
    * @param processDefinitionModel the model for the process definition
    */
-  public UpdateProcessDefinitionPage(PageReference previousPage,
-      IModel<ProcessDefinition> processDefinitionModel)
+  public UpdateProcessDefinitionPage(
+    PageReference previousPage, IModel<ProcessDefinition> processDefinitionModel)
   {
     super("Update Process Definition");
 
     try
     {
-      processDefinitionModel.getObject().setVersion(processDefinitionModel.getObject().getVersion()
-          + 1);
+      processDefinitionModel.getObject().setVersion(
+        processDefinitionModel.getObject().getVersion() + 1);
 
       Form<ProcessDefinition> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(processDefinitionModel));
 
-      ProcessDefinitionInputPanel processDefinitionInputPanel =
-        new ProcessDefinitionInputPanel("processDefinition", true);
+      ProcessDefinitionInputPanel processDefinitionInputPanel = new ProcessDefinitionInputPanel(
+        "processDefinition", true);
 
       updateForm.add(processDefinitionInputPanel);
 
@@ -138,8 +132,8 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
             }
             catch (Throwable e)
             {
-              logger.error("Failed to delete the uploaded file (" + fileUpload.getClientFileName()
-                  + ")", e);
+              logger.error(String.format("Failed to delete the uploaded file (%s)",
+                fileUpload.getClientFileName()), e);
             }
           }
         }

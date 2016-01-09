@@ -16,9 +16,7 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.application.web.resource.thirdparty.jquery.JQueryJavaScriptResourceReference;
+import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
@@ -34,15 +32,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>WebApplication</code> class provides a base class for all "application specific"
  * Wicket web application classes.
  *
  * @author Marcus Portmann
  */
-public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
+public abstract class WebApplication
+  extends org.apache.wicket.protocol.http.WebApplication
 {
   /* Logger */
   @SuppressWarnings("unused")
@@ -127,10 +124,10 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     getSecuritySettings().setAuthorizationStrategy(new WebAuthorizationStrategy());
 
     // Override the version of the jQuery library that ships with Wicket
-    getJavaScriptLibrarySettings().setJQueryReference(JQueryJavaScriptResourceReference.get());
+    getJavaScriptLibrarySettings().setJQueryReference(TemplateJavaScriptResourceReference.get());
 
-    if ((System.getProperty("was.install.root") != null)
-        || (System.getProperty("wlp.user.dir") != null))
+    if ((System.getProperty("was.install.root") != null) || (System.getProperty("wlp.user.dir") !=
+      null))
     {
       setRequestCycleProvider(new WebSphereAbsoluteUrlRequestCycleProvider());
     }

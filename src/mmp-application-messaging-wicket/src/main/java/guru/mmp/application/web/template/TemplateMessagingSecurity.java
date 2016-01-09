@@ -25,6 +25,8 @@ package guru.mmp.application.web.template;
  */
 public class TemplateMessagingSecurity
 {
-  /** The Application.ErrorReports function code. */
+  /**
+   * The Application.ErrorReports function code.
+   */
   public static final String FUNCTION_CODE_ERROR_REPORTS = "Application.ErrorReports";
 }

@@ -16,16 +16,12 @@
 
 package guru.mmp.common.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.Connection;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SimpleDataAccessObject</code> class is the common base class which all Simple Data
@@ -39,7 +35,9 @@ public abstract class SimpleDataAccessObject
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SimpleDataAccessObject.class);
+
   private DataSource dataSource;
+
   private boolean hasExistingDataSource;
 
   /**
@@ -90,8 +88,9 @@ public abstract class SimpleDataAccessObject
         dataSource = null;
       }
 
-      throw new DAOException("Failed to retrieve a connection from the data source ("
-          + getDataSourceName() + "): " + e.getMessage(), e);
+      throw new DAOException(
+        "Failed to retrieve a connection from the data source (" + getDataSourceName() + "): " +
+          e.getMessage(), e);
     }
   }
 
@@ -123,8 +122,9 @@ public abstract class SimpleDataAccessObject
       }
       catch (Throwable e)
       {
-        throw new DAOException("Failed to lookup the data source (" + getDataSourceName()
-            + ") using JNDI: " + e.getMessage(), e);
+        throw new DAOException(
+          "Failed to lookup the data source (" + getDataSourceName() + ") using JNDI: " +
+            e.getMessage(), e);
       }
     }
 

@@ -16,19 +16,14 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +31,7 @@ import java.util.List;
 /**
  * The <code>CatchEvent</code> class provides the base class that all Catch Event subclasses should
  * be derived from.
- * <p>
+ * <p/>
  * <b>Catch Event</b> XML schema:
  * <pre>
  * &lt;xsd:element name="catchEvent" type="tCatchEvent"/&gt;
@@ -60,7 +55,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class CatchEvent extends Event
+public abstract class CatchEvent
+  extends Event
 {
   /**
    * Must all of the types of triggers that are listed in the Catch Event must be triggered before
@@ -80,9 +76,9 @@ public abstract class CatchEvent extends Event
 
     try
     {
-      this.isParallelMultiple = !StringUtil
-        .isNullOrEmpty(element.getAttribute("parallelMultiple")) && Boolean
-        .parseBoolean(element.getAttribute("parallelMultiple"));
+      this.isParallelMultiple = !StringUtil.isNullOrEmpty(
+        element.getAttribute("parallelMultiple")) && Boolean.parseBoolean(
+        element.getAttribute("parallelMultiple"));
 
       NodeList childElements = element.getChildNodes();
 
@@ -158,7 +154,7 @@ public abstract class CatchEvent extends Event
    * must be triggered before the Process is instantiated or <code>false</code> otherwise.
    *
    * @return <code>true</code> if all of the types of triggers that are listed in the Catch Event
-   *         must be triggered before the Process is instantiated or <code>false</code> otherwise
+   * must be triggered before the Process is instantiated or <code>false</code> otherwise
    */
   public boolean isParallelMultiple()
   {

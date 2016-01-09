@@ -16,8 +16,6 @@
 
 package guru.mmp.application.reporting;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -66,7 +64,7 @@ public class ReportDefinitionSummary
    * definition.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *         definition
+   * definition
    */
   public UUID getId()
   {

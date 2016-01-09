@@ -16,8 +16,6 @@
 
 package guru.mmp.common.xml;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;

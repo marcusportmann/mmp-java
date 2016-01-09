@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="no-focus" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2-bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/oneui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
+    <link rel="StyleSheet" type="text/css" href="../../resource/css/application.css"/>
+
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/oneui.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.full.min.js"></script>
+  </head>
+  <body>
+    <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
+      <nav id="sidebar">
+        <div id="sidebar-scroll">
+          <div class="sidebar-content">
+            <div class="side-header side-content bg-white-op">
+              <button class="btn btn-link text-gray pull-right hidden-md hidden-lg" type="button" data-toggle="layout" data-action="sidebar_close"><i class="fa fa-times"></i></button>
+            </div>
+            <div class="side-content">
+              <ul class="nav-main"><li><a href="#"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a></li></ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <header id="header-navbar" class="content-mini content-mini-full">
+        <ul class="nav-header pull-left">
+          <li class="hidden-md hidden-lg"><button class="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button"><i class="fa fa-navicon"></i></button></li>
+          <li class="hidden-xs hidden-sm"><button class="btn btn-default" data-toggle="layout" data-action="sidebar_mini_toggle" type="button"><i class="fa fa-ellipsis-v"></i></button></li>
+        </ul>
+      </header>
+      <main id="main-container">
+        <div class="content bg-gray-lighter">
+          <div class="row items-push">
+            <div class="col-sm-7"><h1 class="page-heading">Title <small>Subtitle.</small></h1></div>
+            <div class="col-sm-5 text-right hidden-xs"><ol class="breadcrumb push-10-t"><li>Category</li><li class="active">Page</li></ol></div>
+          </div>
+        </div>
+        <div class="content content-narrow">
+
+
+
+          <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <h4 class="modal-title">Remove User</h4>
+                </div>
+
+                <div class="modal-body">
+                  <p>
+                    Are you sure you wish to remove the user
+                    <b><span wicket:id="name">[Name]</span></b>?
+                  </p>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                  <a wicket:id="removeLink" class="btn btn-primary">Yes</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div wicket:id="tableContainer" class="table-container">
+            <div class="table-header">
+              <div class="table-header-left">
+                <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User</a>
+              </div>
+              <div class="table-header-right">
+                <form wicket:id="filterForm" class="table-filter-form">
+                  <input wicket:id="filter" type="text" name="filter"/>
+                  <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm">
+                    <i class="fa fa-filter"> Filter</i></button>
+                </form>
+              </div>
+            </div>
+
+            <table class="table table-bordered table-striped table-condensed table-actions">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>First Name(s)</th>
+                  <th>Last Name</th>
+                  <th class="center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr wicket:id="user">
+                  <td><span>[Username]</span></td>
+                  <td><span>[First Name(s)]</span></td>
+                  <td><span>[Surname]</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 2</span></td>
+                  <td><span>First Name(s) 2</span></td>
+                  <td><span>Surname 2</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 3</span></td>
+                  <td><span>First Name(s) 3</span></td>
+                  <td><span>Surname 3</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 4</span></td>
+                  <td><span>First Name(s) 4</span></td>
+                  <td><span>Surname 4</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 5</span></td>
+                  <td><span>First Name(s) 5</span></td>
+                  <td><span>Surname 5</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 6</span></td>
+                  <td><span>First Name(s) 6</span></td>
+                  <td><span>Surname 6</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 7</span></td>
+                  <td><span>First Name(s) 7</span></td>
+                  <td><span>Surname 7</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 8</span></td>
+                  <td><span>First Name(s) 8</span></td>
+                  <td><span>Surname 8</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 9</span></td>
+                  <td><span>First Name(s) 9</span></td>
+                  <td><span>Surname 9</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span>Username 10</span></td>
+                  <td><span>First Name(s) 10</span></td>
+                  <td><span>Surname 10</span></td>
+                  <td class="four-actions">
+                    <div class="btn-group">
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
+                      <a class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div wicket:id="navigator" class="paging-navigator">
+              <ul class="pagination pagination-sm">
+                <li>
+                  <a href="#">
+                    <i class="fa fa-angle-double-left"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-angle-left"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">1</a>
+                </li>
+                <li class="active">
+                  <a href="#">2</a>
+                </li>
+                <li>
+                  <a href="#">3</a>
+                </li>
+                <li class="disabled">
+                  <a href="#">4</a>
+                </li>
+                <li>
+                  <a href="#">5</a>
+                </li>
+                <li>
+                  <a href="#">6</a>
+                </li>
+                <li>
+                  <a href="#">7</a>
+                </li>
+                <li>
+                  <a href="#">8</a>
+                </li>
+                <li>
+                  <a href="#">9</a>
+                </li>
+                <li>
+                  <a href="#">10</a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-angle-right"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-angle-double-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+
+
+
+
+
+
+
+        </div>
+      </main>
+      <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
+        <div class="pull-left">
+          Copyright &copy; <span class="js-year-copy"></span> <a class="font-w600" href="#" target="_blank"><span class="copyright-name"></span></a>
+        </div>
+      </footer>
+    </div>
+    <script>
+      jQuery(function() {
+        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
+        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
+      });
+    </script>
+  </body>
+</html>
+
+
+

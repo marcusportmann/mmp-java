@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -44,8 +42,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>CodeAdministrationPage</code> class implements the
  * "Code Administration" page for the Web Application Template.
@@ -53,12 +49,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
-public class CodeAdministrationPage extends TemplateWebPage
+public class CodeAdministrationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CodeAdministrationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
   @Inject
@@ -67,13 +64,13 @@ public class CodeAdministrationPage extends TemplateWebPage
   /**
    * Constructs a new <code>CodeAdministrationPage</code>.
    *
-   * @param previousPage   the previous page
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category the codes are associated with
+   * @param previousPage     the previous page
+   * @param codeCategoryId   the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         code category the codes are associated with
    * @param codeCategoryName the name of the code category
    */
-  public CodeAdministrationPage(PageReference previousPage, UUID codeCategoryId,
-      String codeCategoryName)
+  public CodeAdministrationPage(
+    PageReference previousPage, UUID codeCategoryId, String codeCategoryName)
   {
     super("Codes", codeCategoryName);
 
@@ -171,7 +168,6 @@ public class CodeAdministrationPage extends TemplateWebPage
       tableContainer.add(dataView);
 
       tableContainer.add(new PagingNavigator("navigator", dataView));
-
     }
     catch (Throwable e)
     {
@@ -189,11 +185,15 @@ public class CodeAdministrationPage extends TemplateWebPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a code to be confirmed.
    */
-  private class RemoveDialog extends Dialog
+  private class RemoveDialog
+    extends Dialog
   {
     private static final long serialVersionUID = 1000000;
+
     private UUID categoryId;
+
     private String id;
+
     private Label nameLabel;
 
     /**
@@ -223,15 +223,17 @@ public class CodeAdministrationPage extends TemplateWebPage
 
             target.add(tableContainer);
 
-            CodeAdministrationPage.this.info("Successfully removed the code "
-                + nameLabel.getDefaultModelObjectAsString());
+            CodeAdministrationPage.this.info(
+              "Successfully removed the code " + nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the code (" + id + ") for the code category (" + categoryId + "): " + e.getMessage(), e);
+            logger.error(
+              String.format("Failed to remove the code (%s) for the code category (%s): %s", id,
+                categoryId, e.getMessage()), e);
 
-            CodeAdministrationPage.this.error("Failed to remove the code "
-                + nameLabel.getDefaultModelObjectAsString());
+            CodeAdministrationPage.this.error(
+              "Failed to remove the code " + nameLabel.getDefaultModelObjectAsString());
           }
 
           target.add(getAlerts());

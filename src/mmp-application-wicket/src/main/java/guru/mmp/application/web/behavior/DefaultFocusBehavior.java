@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.behavior;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -29,13 +27,14 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
  *
  * @author Marcus Portmann
  */
-public class DefaultFocusBehavior extends Behavior
+public class DefaultFocusBehavior
+  extends Behavior
 {
   private static final long serialVersionUID = 1000000;
 
   /**
    * Bind this handler to the given component.
-   *
+   * <p/>
    * This method is called by the host component immediately after this behavior is added to it.
    * This method is useful if you need to do initialisation based on the component it is attached
    * and you can't wait to do it at render time. Keep in mind that if you decide to keep a
@@ -61,7 +60,7 @@ public class DefaultFocusBehavior extends Behavior
   {
     super.renderHead(component, response);
 
-    response.render(OnLoadHeaderItem.forScript("document.getElementById('"
-        + component.getMarkupId() + "').focus();"));
+    response.render(OnLoadHeaderItem.forScript(
+      String.format("document.getElementById('%s').focus();", component.getMarkupId())));
   }
 }

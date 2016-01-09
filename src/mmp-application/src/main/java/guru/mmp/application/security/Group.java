@@ -16,8 +16,6 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.UUID;
 
 /**
@@ -29,9 +27,13 @@ public class Group
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String description;
+
   private String groupName;
+
   private UUID id;
+
   private UUID userDirectoryId;
 
   /**
@@ -84,7 +86,7 @@ public class Group
    * the group is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the group is associated with
+   * the group is associated with
    */
   public UUID getUserDirectoryId()
   {

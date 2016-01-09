@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.page.SecureAnonymousWebPage;
 import guru.mmp.application.web.page.WebPageSecurity;
@@ -81,21 +79,20 @@ public class WebAuthorizationStrategy
    * the {@link org.apache.wicket.settings.SecuritySettings security settings} will be called.
    * The default implementation of that listener throws a
    * {@link UnauthorizedInstantiationException}.
-   * <p>
+   * <p/>
    * If you wish to implement a strategy that authenticates users which cannot access a given Page
    * (or other Component), you can simply throw a
    * {@link org.apache.wicket.RestartResponseAtInterceptPageException} in your implementation of
    * this method.
    *
-   * @param <T> the type of component
-   *
+   * @param <T>            the type of component
    * @param componentClass the component class to check
    *
    * @return <code>true</code> if the given component may be created or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public <T extends IRequestableComponent> boolean isInstantiationAuthorized(
-      Class<T> componentClass)
+    Class<T> componentClass)
   {
     if (guru.mmp.application.web.page.WebPage.class.isAssignableFrom(componentClass))
     {
@@ -107,35 +104,33 @@ public class WebAuthorizationStrategy
 
         if (session != null)
         {
-          if ((!session.isUserLoggedIn())
-              || (!session.hasAcccessToFunction(webPageSecurity.value())))
+          if ((!session.isUserLoggedIn()) || (!session.hasAcccessToFunction(
+            webPageSecurity.value())))
           {
-            logger.warn("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
-                ? "Unknown"
-                : session.getUsername()) + ") does not have access to the function ("
-                + webPageSecurity.value() + ")");
+            logger.warn("The user (" + (StringUtil.isNullOrEmpty(session.getUsername()) ? "Unknown"
+              : session.getUsername()) + ") does not have " +
+              "access to the function (" + webPageSecurity.value() + ")");
 
             if (Debug.inDebugMode())
             {
-              logger.info("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
-                  ? "Unknown"
-                  : session.getUsername()) + ") has access to the following functions: "
-                  + ((session.getFunctionCodes().size() == 0)
-                  ? "None"
-                  : StringUtil.delimit(session.getFunctionCodes(), ",")));
+              logger.info("The user (" +
+                (StringUtil.isNullOrEmpty(session.getUsername()) ? "Unknown"
+                  : session.getUsername()) + ") has access to " +
+                "the following functions: " + ((session.getFunctionCodes().size() == 0) ? "None"
+                : StringUtil.delimit(session.getFunctionCodes(), ",")));
             }
 
             session.invalidate();
 
             throw new RestartResponseAtInterceptPageException(
-                ((WebApplication) session.getApplication()).getLogoutPage());
+              ((WebApplication) session.getApplication()).getLogoutPage());
           }
         }
       }
       else
       {
-        SecureAnonymousWebPage secureAnonymousWebPage =
-          componentClass.getAnnotation(SecureAnonymousWebPage.class);
+        SecureAnonymousWebPage secureAnonymousWebPage = componentClass.getAnnotation(
+          SecureAnonymousWebPage.class);
 
         if (secureAnonymousWebPage != null)
         {
@@ -146,7 +141,7 @@ public class WebAuthorizationStrategy
             session.invalidate();
 
             throw new RestartResponseAtInterceptPageException(
-                ((WebApplication) session.getApplication()).getLogoutPage());
+              ((WebApplication) session.getApplication()).getLogoutPage());
           }
         }
       }
@@ -162,7 +157,7 @@ public class WebAuthorizationStrategy
    * @param parameters the request parameters
    *
    * @return <code>true</code>  if the request to this resource is allowed or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   public boolean isResourceAuthorized(IResource resource, PageParameters parameters)
   {

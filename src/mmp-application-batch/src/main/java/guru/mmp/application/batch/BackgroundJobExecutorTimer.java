@@ -16,18 +16,12 @@
 
 package guru.mmp.application.batch;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.concurrent.Future;
-
 import javax.ejb.*;
-
 import javax.inject.Inject;
+import java.util.concurrent.Future;
 
 /**
  * The <code>BackgroundJobExecutorTimer</code> class implements the timer for the Background Job
@@ -77,8 +71,8 @@ public class BackgroundJobExecutorTimer
       }
       catch (Throwable e)
       {
-        logger.error("Failed to invoke the Background Job Executor to asynchronously "
-            + "execute all the jobs", e);
+        logger.error(
+          "Failed to invoke the Background Job Executor to asynchronously execute all the jobs", e);
       }
     }
   }

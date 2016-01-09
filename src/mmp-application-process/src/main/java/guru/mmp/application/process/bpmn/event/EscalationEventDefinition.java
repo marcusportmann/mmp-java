@@ -16,23 +16,18 @@
 
 package guru.mmp.application.process.bpmn.event;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.w3c.dom.Element;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.namespace.QName;
 
 /**
  * The <code>EscalationEventDefinition</code> class represents an Escalation Event Definition that
  * forms part of a Process.
- * <p>
+ * <p/>
  * <b>Escalation Event Definition</b> XML schema:
  * <pre>
  * &lt;xsd:element name="escalationEventDefinition" type="tEscalationEventDefinition"
@@ -49,7 +44,8 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class EscalationEventDefinition extends EventDefinition
+public final class EscalationEventDefinition
+  extends EventDefinition
 {
   /**
    * The reference to the escalation associated with this Escalation Event Definition.

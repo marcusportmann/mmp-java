@@ -16,15 +16,11 @@
 
 package guru.mmp.application.web.template.navigation;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.Page;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>NavigationGroup</code> class stores the information for a navigation group which
@@ -32,10 +28,12 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class NavigationGroup extends NavigationItem
+public class NavigationGroup
+  extends NavigationItem
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private List<NavigationItem> items;
 
   /**
@@ -87,7 +85,7 @@ public class NavigationGroup extends NavigationItem
    * @param page the page
    *
    * @return <code>true</code> if the page is in the navigation item's hierarchy or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean isPageInNavigationHierarchy(Page page)
   {

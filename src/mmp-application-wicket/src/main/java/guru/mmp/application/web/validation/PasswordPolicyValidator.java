@@ -16,14 +16,10 @@
 
 package guru.mmp.application.web.validation;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.regex.Pattern;
 
@@ -34,17 +30,21 @@ import java.util.regex.Pattern;
  * @author Marcus Portmann
  */
 @SuppressWarnings("deprecation")
-public class PasswordPolicyValidator extends Behavior
+public class PasswordPolicyValidator
+  extends Behavior
   implements IValidator<String>
 {
-  private static final long serialVersionUID = 1000000;
-  private static final Pattern UPPER = Pattern.compile("[A-Z]");
-  private static final Pattern NUMBER = Pattern.compile("[0-9]");
   private static final Pattern LOWER = Pattern.compile("[a-z]");
+
+  private static final Pattern NUMBER = Pattern.compile("[0-9]");
+
+  private static final Pattern UPPER = Pattern.compile("[A-Z]");
+
+  private static final long serialVersionUID = 1000000;
 
   /**
    * Validates the IValidatable instance.
-   *
+   * <p/>
    * Validation errors should be reported using the
    * <code>IValidatable.error(org.apache.wicket.validation.IValidationError)</code> method.
    *

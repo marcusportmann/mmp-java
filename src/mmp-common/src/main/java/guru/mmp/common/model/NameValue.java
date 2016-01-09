@@ -16,14 +16,10 @@
 
 package guru.mmp.common.model;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.BinaryBuffer;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>NameValue</code> class stores a name-value pair where the value is one of a number of
@@ -36,13 +32,372 @@ public class NameValue
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String name;
+
   private Object value;
 
-  /** the enum defining the types of values that a <code>NameValue</code> instance can store */
-  public enum ValueType
+  /**
+   * Returns the binary value for the <code>NameValue</code> instance with the specified name in
+   * the specified list.
+   *
+   * @param list the list of <code>NameValue</code> instances to search through
+   * @param name the name for the name-value pair
+   *
+   * @return the binary value for the <code>NameValue</code> instance with the specified name
+   */
+  public static byte[] getBinaryValue(List<NameValue> list, String name)
   {
-    STRING_VALUE, LONG_VALUE, DOUBLE_VALUE, DECIMAL_VALUE, BINARY_VALUE, UNKNOWN_VALUE
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        if (nameValue.value instanceof BinaryBuffer)
+        {
+          return BinaryBuffer.class.cast(nameValue.value).getData();
+        }
+
+        throw new NameValueException(
+          "Failed to retrieve the binary value for the NameValue" + " object (" + nameValue.name +
+            ") which contains a value of type " + nameValue.getTypeName());
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to retrieve the binary value for the NameValue" + " object (" + name + ") since " +
+        "no matching NameValue entry could be found in the list");
+  }
+
+  /**
+   * Returns the <code>BigDecimal</code> value for the <code>NameValue</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list the list of <code>NameValue</code> instances to search through
+   * @param name the name for the name-value pair
+   *
+   * @return the <code>BigDecimal</code> value for the <code>NameValue</code> instance with the
+   * specified name
+   */
+  public static BigDecimal getDecimalValue(List<NameValue> list, String name)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        if (nameValue.value instanceof BigDecimal)
+        {
+          return BigDecimal.class.cast(nameValue.value);
+        }
+        else if (nameValue.value instanceof String)
+        {
+          try
+          {
+            return new BigDecimal(String.class.cast(nameValue.value));
+          }
+          catch (Throwable ignored)
+          {
+          }
+        }
+        else if (nameValue.value instanceof Double)
+        {
+          return BigDecimal.valueOf(Double.class.cast(nameValue.value));
+        }
+        else if (nameValue.value instanceof Long)
+        {
+          return BigDecimal.valueOf(Long.class.cast(nameValue.value));
+        }
+
+        throw new NameValueException(
+          "Failed to retrieve the decimal value for the NameValue" + " object (" +
+            nameValue.name + ") which contains a value of type " + nameValue.getTypeName());
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to retrieve the decimal value for the NameValue" + " object (" + name + ") since " +
+        "no matching NameValue entry could be found in the list");
+  }
+
+  /**
+   * Returns the <code>double</code> value for the <code>NameValue</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list the list of <code>NameValue</code> instances to search through
+   * @param name the name for the name-value pair
+   *
+   * @return the <code>double</code> value for the <code>NameValue</code> instance with the
+   * specified name
+   */
+  public static double getDoubleValue(List<NameValue> list, String name)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        if (nameValue.value instanceof Double)
+        {
+          return Double.class.cast(nameValue.value);
+        }
+        else if (nameValue.value instanceof String)
+        {
+          try
+          {
+            return Double.valueOf(String.class.cast(nameValue.value));
+          }
+          catch (Throwable ignored)
+          {
+          }
+        }
+        else if (nameValue.value instanceof BigDecimal)
+        {
+          return BigDecimal.class.cast(nameValue.value).doubleValue();
+        }
+        else if (nameValue.value instanceof Long)
+        {
+          return Long.class.cast(nameValue.value);
+        }
+
+        throw new NameValueException(
+          "Failed to retrieve the double value for the NameValue" + " object (" + nameValue.name +
+            ") which contains a value of type " + nameValue.getTypeName());
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to retrieve the double value for the NameValue" + " object (" + name + ") since " +
+        "no matching NameValue entry could be found in the list");
+  }
+
+  /**
+   * Returns the <code>long</code> value for the <code>NameValue</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list the list of <code>NameValue</code> instances to search through
+   * @param name the name for the name-value pair
+   *
+   * @return the <code>long</code> value for the <code>NameValue</code> instance with the
+   * specified name
+   */
+  public static long getLongValue(List<NameValue> list, String name)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        if (nameValue.value instanceof Long)
+        {
+          return Long.class.cast(nameValue.value);
+        }
+        else if (nameValue.value instanceof String)
+        {
+          try
+          {
+            return Long.valueOf(String.class.cast(nameValue.value));
+          }
+          catch (Throwable ignored)
+          {
+          }
+        }
+        else if (nameValue.value instanceof BigDecimal)
+        {
+          return BigDecimal.class.cast(nameValue.value).longValue();
+        }
+        else if (nameValue.value instanceof Double)
+        {
+          return Double.class.cast(nameValue.value).longValue();
+        }
+
+        throw new NameValueException(
+          "Failed to retrieve the long value for the NameValue" + " object (" + nameValue.name +
+            ") which contains a value of type " + nameValue.getTypeName());
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to retrieve the long value for the NameValue" + " object (" + name + ") since no " +
+        "matching NameValue entry could be found in the list");
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>NameValue</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list the list of <code>NameValue</code> instances to search through
+   * @param name the name for the name-value pair
+   *
+   * @return the <code>String</code> value for the <code>NameValue</code> instance with the
+   * specified name
+   */
+  public static String getStringValue(List<NameValue> list, String name)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        if (nameValue.value instanceof String)
+        {
+          return String.class.cast(nameValue.value);
+        }
+        else if (nameValue.value instanceof BigDecimal)
+        {
+          return nameValue.value.toString();
+        }
+        else if (nameValue.value instanceof Double)
+        {
+          return nameValue.value.toString();
+        }
+        else if (nameValue.value instanceof Long)
+        {
+          return nameValue.value.toString();
+        }
+
+        throw new NameValueException(
+          "Failed to retrieve the string value for the NameValue" + " object (" + nameValue.name +
+            ") which contains a value of type " + nameValue.getTypeName());
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to retrieve the string value for the NameValue" + " object (" + name + ") since " +
+        "no matching NameValue entry could be found in the list");
+  }
+
+  /**
+   * Set the binary value for the <code>NameValue</code> instance with the specified name in the
+   * specified list.
+   *
+   * @param list  the list of <code>NameValue</code> instances to search through
+   * @param name  the name for the name-value pair
+   * @param value the binary value for the name-value pair
+   */
+  public static void setBinaryValue(List<NameValue> list, String name, BinaryBuffer value)
+  {
+    setBinaryValue(list, name, value.getData());
+  }
+
+  /**
+   * Set the binary value for the <code>NameValue</code> instance with the specified name in the
+   * specified list.
+   *
+   * @param list  the list of <code>NameValue</code> instances to search through
+   * @param name  the name for the name-value pair
+   * @param value the binary value for the name-value pair
+   */
+  public static void setBinaryValue(List<NameValue> list, String name, byte[] value)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        nameValue.setBinaryValue(value);
+
+        return;
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to set the binary value for the NameValue object (" + name + ") since no matching" +
+        " NameValue entry could be found in the list");
+  }
+
+  /**
+   * Set the <code>BigDecimal</code> value for the <code>NameValue</code> instance with the
+   * specified name in the specified list.
+   *
+   * @param list  the list of <code>NameValue</code> instances to search through
+   * @param name  the name for the name-value pair
+   * @param value the <code>BigDecimal</code> value for the name-value pair
+   */
+  public static void setDecimalValue(List<NameValue> list, String name, BigDecimal value)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        nameValue.setDecimalValue(value);
+
+        return;
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to set the decimal value for the NameValue object (" + name + ") to the value (" +
+        value + ") since no matching NameValue entry" + " could be found in the list");
+  }
+
+  /**
+   * Set the <code>double</code> value for the <code>NameValue</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list  the list of <code>NameValue</code> instances to search through
+   * @param name  the name for the name-value pair
+   * @param value the <code>double</code> value for the name-value pair
+   */
+  public static void setDoubleValue(List<NameValue> list, String name, double value)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        nameValue.setDoubleValue(value);
+
+        return;
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to set the double value for the NameValue object (" + name + ") to the value (" +
+        value + ") since no matching NameValue entry" + " could be found in the list");
+  }
+
+  /**
+   * Set the <code>long</code> value for the <code>NameValue</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list  the list of <code>NameValue</code> instances to search through
+   * @param name  the name for the name-value pair
+   * @param value the <code>long</code> value for the name-value pair
+   */
+  public static void setLongValue(List<NameValue> list, String name, long value)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        nameValue.setLongValue(value);
+
+        return;
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to set the long value for the NameValue object (" + name + ") to the value (" +
+        value + ") since no matching NameValue entry" + " could be found in the list");
+  }
+
+  /**
+   * Set the <code>String</code> value for the <code>NameValue</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list  the list of <code>NameValue</code> instances to search through
+   * @param name  the name for the name-value pair
+   * @param value the <code>String</code> value for the name-value pair
+   */
+  public static void setStringValue(List<NameValue> list, String name, String value)
+  {
+    for (NameValue nameValue : list)
+    {
+      if (nameValue.name.equalsIgnoreCase(name))
+      {
+        nameValue.setStringValue(value);
+
+        return;
+      }
+    }
+
+    throw new NameValueException(
+      "Failed to set the string value for the NameValue object (" + name + ") to the value (" +
+        value + ") since no matching NameValue entry" + " could be found in the list");
   }
 
   /**
@@ -118,371 +473,9 @@ public class NameValue
   }
 
   /**
-   * Returns the binary value for the <code>NameValue</code> instance with the specified name in
-   * the specified list.
-   *
-   * @param list the list of <code>NameValue</code> instances to search through
-   * @param name the name for the name-value pair
-   *
-   * @return the binary value for the <code>NameValue</code> instance with the specified name
-   *
-   */
-  public static byte[] getBinaryValue(List<NameValue> list, String name)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        if (nameValue.value instanceof BinaryBuffer)
-        {
-          return BinaryBuffer.class.cast(nameValue.value).getData();
-        }
-
-        throw new NameValueException("Failed to retrieve the binary value for the NameValue"
-            + " object (" + nameValue.name + ") which contains a value of type "
-            + nameValue.getTypeName());
-      }
-    }
-
-    throw new NameValueException("Failed to retrieve the binary value for the NameValue"
-        + " object (" + name + ") since no matching NameValue entry could be found in the list");
-  }
-
-  /**
-   * Returns the <code>BigDecimal</code> value for the <code>NameValue</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list the list of <code>NameValue</code> instances to search through
-   * @param name the name for the name-value pair
-   *
-   * @return the <code>BigDecimal</code> value for the <code>NameValue</code> instance with the
-   *         specified name
-   *
-   */
-  public static BigDecimal getDecimalValue(List<NameValue> list, String name)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        if (nameValue.value instanceof BigDecimal)
-        {
-          return BigDecimal.class.cast(nameValue.value);
-        }
-        else if (nameValue.value instanceof String)
-        {
-          try
-          {
-            return new BigDecimal(String.class.cast(nameValue.value));
-          }
-          catch (Throwable ignored) {}
-        }
-        else if (nameValue.value instanceof Double)
-        {
-          return BigDecimal.valueOf(Double.class.cast(nameValue.value));
-        }
-        else if (nameValue.value instanceof Long)
-        {
-          return BigDecimal.valueOf(Long.class.cast(nameValue.value));
-        }
-
-        throw new NameValueException("Failed to retrieve the decimal value for the NameValue"
-            + " object (" + nameValue.name + ") which contains a value of type "
-            + nameValue.getTypeName());
-      }
-    }
-
-    throw new NameValueException("Failed to retrieve the decimal value for the NameValue"
-        + " object (" + name + ") since no matching NameValue entry could be found in the list");
-  }
-
-  /**
-   * Returns the <code>double</code> value for the <code>NameValue</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list the list of <code>NameValue</code> instances to search through
-   * @param name the name for the name-value pair
-   *
-   * @return the <code>double</code> value for the <code>NameValue</code> instance with the
-   *         specified name
-   *
-   */
-  public static double getDoubleValue(List<NameValue> list, String name)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        if (nameValue.value instanceof Double)
-        {
-          return Double.class.cast(nameValue.value);
-        }
-        else if (nameValue.value instanceof String)
-        {
-          try
-          {
-            return Double.valueOf(String.class.cast(nameValue.value));
-          }
-          catch (Throwable ignored) {}
-        }
-        else if (nameValue.value instanceof BigDecimal)
-        {
-          return BigDecimal.class.cast(nameValue.value).doubleValue();
-        }
-        else if (nameValue.value instanceof Long)
-        {
-          return Long.class.cast(nameValue.value);
-        }
-
-        throw new NameValueException("Failed to retrieve the double value for the NameValue"
-            + " object (" + nameValue.name + ") which contains a value of type "
-            + nameValue.getTypeName());
-      }
-    }
-
-    throw new NameValueException("Failed to retrieve the double value for the NameValue"
-        + " object (" + name + ") since no matching NameValue entry could be found in the list");
-  }
-
-  /**
-   * Returns the <code>long</code> value for the <code>NameValue</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list the list of <code>NameValue</code> instances to search through
-   * @param name the name for the name-value pair
-   *
-   * @return the <code>long</code> value for the <code>NameValue</code> instance with the
-   *         specified name
-   *
-   */
-  public static long getLongValue(List<NameValue> list, String name)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        if (nameValue.value instanceof Long)
-        {
-          return Long.class.cast(nameValue.value);
-        }
-        else if (nameValue.value instanceof String)
-        {
-          try
-          {
-            return Long.valueOf(String.class.cast(nameValue.value));
-          }
-          catch (Throwable ignored) {}
-        }
-        else if (nameValue.value instanceof BigDecimal)
-        {
-          return BigDecimal.class.cast(nameValue.value).longValue();
-        }
-        else if (nameValue.value instanceof Double)
-        {
-          return Double.class.cast(nameValue.value).longValue();
-        }
-
-        throw new NameValueException("Failed to retrieve the long value for the NameValue"
-            + " object (" + nameValue.name + ") which contains a value of type "
-            + nameValue.getTypeName());
-      }
-    }
-
-    throw new NameValueException("Failed to retrieve the long value for the NameValue"
-        + " object (" + name + ") since no matching NameValue entry could be found in the list");
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>NameValue</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list the list of <code>NameValue</code> instances to search through
-   * @param name the name for the name-value pair
-   *
-   * @return the <code>String</code> value for the <code>NameValue</code> instance with the
-   *         specified name
-   *
-   */
-  public static String getStringValue(List<NameValue> list, String name)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        if (nameValue.value instanceof String)
-        {
-          return String.class.cast(nameValue.value);
-        }
-        else if (nameValue.value instanceof BigDecimal)
-        {
-          return nameValue.value.toString();
-        }
-        else if (nameValue.value instanceof Double)
-        {
-          return nameValue.value.toString();
-        }
-        else if (nameValue.value instanceof Long)
-        {
-          return nameValue.value.toString();
-        }
-
-        throw new NameValueException("Failed to retrieve the string value for the NameValue"
-            + " object (" + nameValue.name + ") which contains a value of type "
-            + nameValue.getTypeName());
-      }
-    }
-
-    throw new NameValueException("Failed to retrieve the string value for the NameValue"
-        + " object (" + name + ") since no matching NameValue entry could be found in the list");
-  }
-
-  /**
-   * Set the binary value for the <code>NameValue</code> instance with the specified name in the
-   * specified list.
-   *
-   * @param list  the list of <code>NameValue</code> instances to search through
-   * @param name  the name for the name-value pair
-   * @param value the binary value for the name-value pair
-   */
-  public static void setBinaryValue(List<NameValue> list, String name, BinaryBuffer value)
-  {
-    setBinaryValue(list, name, value.getData());
-  }
-
-  /**
-   * Set the binary value for the <code>NameValue</code> instance with the specified name in the
-   * specified list.
-   *
-   * @param list  the list of <code>NameValue</code> instances to search through
-   * @param name  the name for the name-value pair
-   * @param value the binary value for the name-value pair
-   *
-   */
-  public static void setBinaryValue(List<NameValue> list, String name, byte[] value)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        nameValue.setBinaryValue(value);
-
-        return;
-      }
-    }
-
-    throw new NameValueException("Failed to set the binary value for the NameValue object (" + name
-        + ") since no matching NameValue entry could be found in the list");
-  }
-
-  /**
-   * Set the <code>BigDecimal</code> value for the <code>NameValue</code> instance with the
-   * specified name in the specified list.
-   *
-   * @param list  the list of <code>NameValue</code> instances to search through
-   * @param name  the name for the name-value pair
-   * @param value the <code>BigDecimal</code> value for the name-value pair
-   *
-   */
-  public static void setDecimalValue(List<NameValue> list, String name, BigDecimal value)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        nameValue.setDecimalValue(value);
-
-        return;
-      }
-    }
-
-    throw new NameValueException("Failed to set the decimal value for the NameValue object ("
-        + name + ") to the value (" + value + ") since no matching NameValue entry"
-        + " could be found in the list");
-  }
-
-  /**
-   * Set the <code>double</code> value for the <code>NameValue</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list  the list of <code>NameValue</code> instances to search through
-   * @param name  the name for the name-value pair
-   * @param value the <code>double</code> value for the name-value pair
-   *
-   */
-  public static void setDoubleValue(List<NameValue> list, String name, double value)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        nameValue.setDoubleValue(value);
-
-        return;
-      }
-    }
-
-    throw new NameValueException("Failed to set the double value for the NameValue object (" + name
-        + ") to the value (" + value + ") since no matching NameValue entry"
-        + " could be found in the list");
-  }
-
-  /**
-   * Set the <code>long</code> value for the <code>NameValue</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list  the list of <code>NameValue</code> instances to search through
-   * @param name  the name for the name-value pair
-   * @param value the <code>long</code> value for the name-value pair
-   *
-   */
-  public static void setLongValue(List<NameValue> list, String name, long value)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        nameValue.setLongValue(value);
-
-        return;
-      }
-    }
-
-    throw new NameValueException("Failed to set the long value for the NameValue object (" + name
-        + ") to the value (" + value + ") since no matching NameValue entry"
-        + " could be found in the list");
-  }
-
-  /**
-   * Set the <code>String</code> value for the <code>NameValue</code> instance with the specified
-   * name in the specified list.
-   *
-   * @param list  the list of <code>NameValue</code> instances to search through
-   * @param name  the name for the name-value pair
-   * @param value the <code>String</code> value for the name-value pair
-   *
-   */
-  public static void setStringValue(List<NameValue> list, String name, String value)
-  {
-    for (NameValue nameValue : list)
-    {
-      if (nameValue.name.equalsIgnoreCase(name))
-      {
-        nameValue.setStringValue(value);
-
-        return;
-      }
-    }
-
-    throw new NameValueException("Failed to set the string value for the NameValue object (" + name
-        + ") to the value (" + value + ") since no matching NameValue entry"
-        + " could be found in the list");
-  }
-
-  /**
    * Returns the binary value for the <code>NameValue</code> instance.
    *
    * @return the binary value for the <code>NameValue</code> instance
-   *
    */
   public byte[] getBinaryValue()
   {
@@ -491,15 +484,15 @@ public class NameValue
       return BinaryBuffer.class.cast(value).getData();
     }
 
-    throw new NameValueException("Failed to retrieve the binary value for the NameValue"
-        + " object (" + name + ") which contains a value of type \"" + getTypeName() + "\"");
+    throw new NameValueException(
+      "Failed to retrieve the binary value for the NameValue" + " object (" + name + ") which " +
+        "contains a value of type \"" + getTypeName() + "\"");
   }
 
   /**
    * Returns the <code>BigDecimal</code> value for the <code>NameValue</code> instance.
    *
    * @return the <code>BigDecimal</code> value for the <code>NameValue</code> instance
-   *
    */
   public BigDecimal getDecimalValue()
   {
@@ -513,7 +506,9 @@ public class NameValue
       {
         return new BigDecimal(String.class.cast(value));
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
     else if (value instanceof Double)
     {
@@ -524,15 +519,15 @@ public class NameValue
       return BigDecimal.valueOf(Long.class.cast(value));
     }
 
-    throw new NameValueException("Failed to retrieve the decimal value for the NameValue"
-        + " object (" + name + ") which contains a value of type " + getTypeName());
+    throw new NameValueException(
+      "Failed to retrieve the decimal value for the NameValue" + " object (" + name + ") which " +
+        "contains a value of type " + getTypeName());
   }
 
   /**
    * Returns the <code>double</code> value for the <code>NameValue</code> instance.
    *
    * @return the <code>double</code> value for the <code>NameValue</code> instance
-   *
    */
   public double getDoubleValue()
   {
@@ -546,7 +541,9 @@ public class NameValue
       {
         return Double.valueOf(String.class.cast(value));
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
     else if (value instanceof BigDecimal)
     {
@@ -557,15 +554,15 @@ public class NameValue
       return Long.class.cast(value);
     }
 
-    throw new NameValueException("Failed to retrieve the double value for the NameValue"
-        + " object (" + name + ") which contains a value of type " + getTypeName());
+    throw new NameValueException(
+      "Failed to retrieve the double value for the NameValue" + " object (" + name + ") which " +
+        "contains a value of type " + getTypeName());
   }
 
   /**
    * Returns the <code>long</code> value for the <code>NameValue</code> instance.
    *
    * @return the <code>long</code> value for the <code>NameValue</code> instance
-   *
    */
   public long getLongValue()
   {
@@ -579,7 +576,9 @@ public class NameValue
       {
         return Long.valueOf(String.class.cast(value));
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
     else if (value instanceof BigDecimal)
     {
@@ -590,8 +589,9 @@ public class NameValue
       return Double.class.cast(value).longValue();
     }
 
-    throw new NameValueException("Failed to retrieve the long value for the NameValue"
-        + " object (" + name + ") which contains a value of type " + getTypeName());
+    throw new NameValueException(
+      "Failed to retrieve the long value for the NameValue" + " object (" + name + ") which " +
+        "contains a value of type " + getTypeName());
   }
 
   /**
@@ -608,7 +608,6 @@ public class NameValue
    * Returns the <code>String</code> value for the <code>NameValue</code> instance.
    *
    * @return the <code>String</code> value for the <code>NameValue</code> instance
-   *
    */
   public String getStringValue()
   {
@@ -629,8 +628,9 @@ public class NameValue
       return value.toString();
     }
 
-    throw new NameValueException("Failed to retrieve the string value for the NameValue"
-        + " object (" + name + ") which contains a value of type " + getTypeName());
+    throw new NameValueException(
+      "Failed to retrieve the string value for the NameValue" + " object (" + name + ") which " +
+        "contains a value of type " + getTypeName());
   }
 
   /**
@@ -704,7 +704,7 @@ public class NameValue
    *
    * @param value the binary value for the name-value pair
    */
-  public void setBinaryValue(BinaryBuffer value)
+  public void setBinaryValue(byte[] value)
   {
     this.value = new BinaryBuffer(value);
   }
@@ -714,7 +714,7 @@ public class NameValue
    *
    * @param value the binary value for the name-value pair
    */
-  public void setBinaryValue(byte[] value)
+  public void setBinaryValue(BinaryBuffer value)
   {
     this.value = new BinaryBuffer(value);
   }
@@ -767,5 +767,13 @@ public class NameValue
   public void setStringValue(String value)
   {
     this.value = value;
+  }
+
+  /**
+   * the enum defining the types of values that a <code>NameValue</code> instance can store
+   */
+  public enum ValueType
+  {
+    STRING_VALUE, LONG_VALUE, DOUBLE_VALUE, DECIMAL_VALUE, BINARY_VALUE, UNKNOWN_VALUE
   }
 }

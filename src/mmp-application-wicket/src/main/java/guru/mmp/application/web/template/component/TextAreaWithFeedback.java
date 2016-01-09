@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
@@ -35,7 +33,8 @@ import org.apache.wicket.request.IRequestHandler;
  *
  * @author Marcus Portmann
  */
-public class TextAreaWithFeedback<T> extends TextArea<T>
+public class TextAreaWithFeedback<T>
+  extends TextArea<T>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -62,9 +61,9 @@ public class TextAreaWithFeedback<T> extends TextArea<T>
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
-   *
    * @param response the Wicket header response
+   *
+   * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
    */
   @Override
   public void renderHead(IHeaderResponse response)
@@ -106,21 +105,12 @@ public class TextAreaWithFeedback<T> extends TextArea<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      if (ajaxRequestHandler.getComponents().contains(this.getForm()))
-      {
-        getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
-      }
-
       String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
       if (feedbackJavaScript != null)
       {
         ajaxRequestHandler.appendJavaScript(feedbackJavaScript);
       }
-    }
-    else
-    {
-      getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
     }
   }
 }

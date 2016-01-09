@@ -28,13 +28,8 @@ public enum CodeCategoryType
   CODE_PROVIDER(4, "Code Provider");
 
   private int code;
-  private String name;
 
-  CodeCategoryType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the code category type given by the specified numeric code value.
@@ -65,6 +60,12 @@ public enum CodeCategoryType
       default:
         return CodeCategoryType.LOCAL_STANDARD;
     }
+  }
+
+  CodeCategoryType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
   }
 
   /**
@@ -98,11 +99,9 @@ public enum CodeCategoryType
   }
 
   /**
-   * Return the string representation of the <code>CodeCategoryType</code>
-   * enumeration value.
+   * Return the string representation of the <code>CodeCategoryType</code> enumeration value.
    *
-   * @return the string representation of the <code>CodeCategoryType</code>
-   *         enumeration value
+   * @return the string representation of the <code>CodeCategoryType</code> enumeration value
    */
   public String toString()
   {

@@ -16,10 +16,7 @@
 
 package guru.mmp.application.process;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -88,8 +85,9 @@ public class ProcessInstance
    * @param lockName          the name of the entity that has locked the process instance for
    *                          execution
    */
-  public ProcessInstance(UUID id, UUID definitionId, int definitionVersion, byte[] data,
-      Status status, Date nextExecution, String lockName)
+  public ProcessInstance(
+    UUID id, UUID definitionId, int definitionVersion, byte[] data, Status status,
+    Date nextExecution, String lockName)
   {
     this.id = id;
     this.definitionId = definitionId;
@@ -98,95 +96,6 @@ public class ProcessInstance
     this.status = status;
     this.nextExecution = nextExecution;
     this.lockName = lockName;
-  }
-
-  /**
-   * The enumeration giving the possible statuses for a process instance.
-   */
-  public enum Status
-  {
-    UNKNOWN(0, "Unknown"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"),
-    COMPLETED(3, "Completed"), FAILED(4, "Failed"), ANY(-1, "Any");
-
-    private int code;
-    private String name;
-
-    Status(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the status given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the status
-     *
-     * @return the status given by the specified numeric code value
-     */
-    public static Status fromCode(int code)
-    {
-      switch (code)
-      {
-        case 1:
-          return Status.SCHEDULED;
-
-        case 2:
-          return Status.EXECUTING;
-
-        case 3:
-          return Status.COMPLETED;
-
-        case 4:
-          return Status.FAILED;
-
-        case -1:
-          return Status.ANY;
-
-        default:
-          return Status.UNKNOWN;
-      }
-    }
-
-    /**
-     * Returns the numeric code value identifying the status.
-     *
-     * @return the numeric code value identifying the status
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the <code>String</code> value of the numeric code value identifying the status.
-     *
-     * @return the <code>String</code> value of the numeric code value identifying the status
-     */
-    public String getCodeAsString()
-    {
-      return String.valueOf(code);
-    }
-
-    /**
-     * Returns the name of the status.
-     *
-     * @return the name of the status
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the status enumeration value.
-     *
-     * @return the string representation of the status enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
   }
 
   /**
@@ -204,7 +113,7 @@ public class ProcessInstance
    * definition for the process instance.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *         definition for the process instance
+   * definition for the process instance
    */
   public UUID getDefinitionId()
   {
@@ -226,7 +135,7 @@ public class ProcessInstance
    * instance.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the process
-   *         instance
+   * instance
    */
   public UUID getId()
   {
@@ -344,7 +253,98 @@ public class ProcessInstance
   @Override
   public String toString()
   {
-    return "ProcessInstance {" + "id=\"" + getId() + "\", " + "definitionId=\"" + getDefinitionId()
-        + "\", " + "definitionVersion=\"" + getDefinitionVersion() + "\"}";
+    return String.format(
+      "ProcessInstance {id=\"%s\", definitionId=\"%s\", definitionVersion=\"%d\"}", getId(),
+      getDefinitionId(), getDefinitionVersion());
+  }
+
+  /**
+   * The enumeration giving the possible statuses for a process instance.
+   */
+  public enum Status
+  {
+    UNKNOWN(0, "Unknown"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"),
+    COMPLETED(3, "Completed"), FAILED(4, "Failed"), ANY(-1, "Any");
+
+    private int code;
+
+    private String name;
+
+    /**
+     * Returns the status given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the status
+     *
+     * @return the status given by the specified numeric code value
+     */
+    public static Status fromCode(int code)
+    {
+      switch (code)
+      {
+        case 1:
+          return Status.SCHEDULED;
+
+        case 2:
+          return Status.EXECUTING;
+
+        case 3:
+          return Status.COMPLETED;
+
+        case 4:
+          return Status.FAILED;
+
+        case -1:
+          return Status.ANY;
+
+        default:
+          return Status.UNKNOWN;
+      }
+    }
+
+    Status(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the numeric code value identifying the status.
+     *
+     * @return the numeric code value identifying the status
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the <code>String</code> value of the numeric code value identifying the status.
+     *
+     * @return the <code>String</code> value of the numeric code value identifying the status
+     */
+    public String getCodeAsString()
+    {
+      return String.valueOf(code);
+    }
+
+    /**
+     * Returns the name of the status.
+     *
+     * @return the name of the status
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the status enumeration value.
+     *
+     * @return the string representation of the status enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
   }
 }

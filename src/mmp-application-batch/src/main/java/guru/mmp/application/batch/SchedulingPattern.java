@@ -16,8 +16,6 @@
 
 package guru.mmp.application.batch;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.*;
 
 /**
@@ -146,9 +144,14 @@ import java.util.*;
 public class SchedulingPattern
 {
   /**
-   * The parser for the minute values.
+   * The parser for the day of month values.
    */
-  private static final ValueParser MINUTE_VALUE_PARSER = new MinuteValueParser();
+  private static final ValueParser DAY_OF_MONTH_VALUE_PARSER = new DayOfMonthValueParser();
+
+  /**
+   * The parser for the day of week values.
+   */
+  private static final ValueParser DAY_OF_WEEK_VALUE_PARSER = new DayOfWeekValueParser();
 
   /**
    * The parser for the hour values.
@@ -156,9 +159,9 @@ public class SchedulingPattern
   private static final ValueParser HOUR_VALUE_PARSER = new HourValueParser();
 
   /**
-   * The parser for the day of month values.
+   * The parser for the minute values.
    */
-  private static final ValueParser DAY_OF_MONTH_VALUE_PARSER = new DayOfMonthValueParser();
+  private static final ValueParser MINUTE_VALUE_PARSER = new MinuteValueParser();
 
   /**
    * The parser for the month values.
@@ -166,9 +169,19 @@ public class SchedulingPattern
   private static final ValueParser MONTH_VALUE_PARSER = new MonthValueParser();
 
   /**
-   * The parser for the day of week values.
+   * The ValueMatcher list for the "day of month" field.
    */
-  private static final ValueParser DAY_OF_WEEK_VALUE_PARSER = new DayOfWeekValueParser();
+  protected List<ValueMatcher> dayOfMonthMatchers = new ArrayList<>();
+
+  /**
+   * The ValueMatcher list for the "day of week" field.
+   */
+  protected List<ValueMatcher> dayOfWeekMatchers = new ArrayList<>();
+
+  /**
+   * The ValueMatcher list for the "hour" field.
+   */
+  protected List<ValueMatcher> hourMatchers = new ArrayList<>();
 
   /**
    * How many matcher groups in this pattern?
@@ -181,206 +194,14 @@ public class SchedulingPattern
   protected List<ValueMatcher> minuteMatchers = new ArrayList<>();
 
   /**
-   * The ValueMatcher list for the "hour" field.
-   */
-  protected List<ValueMatcher> hourMatchers = new ArrayList<>();
-
-  /**
-   * The ValueMatcher list for the "day of month" field.
-   */
-  protected List<ValueMatcher> dayOfMonthMatchers = new ArrayList<>();
-
-  /**
    * The ValueMatcher list for the "month" field.
    */
   protected List<ValueMatcher> monthMatchers = new ArrayList<>();
 
   /**
-   * The ValueMatcher list for the "day of week" field.
-   */
-  protected List<ValueMatcher> dayOfWeekMatchers = new ArrayList<>();
-
-  /**
    * The pattern as a string.
    */
   private String asString;
-
-  /**
-   * Builds a SchedulingPattern by parsing it from a string.
-   *
-   * @param pattern the pattern as a crontab-like string
-   *
-   * @throws InvalidSchedulingPatternException
-   */
-  public SchedulingPattern(String pattern)
-    throws InvalidSchedulingPatternException
-  {
-    this.asString = pattern;
-
-    StringTokenizer st1 = new StringTokenizer(pattern, "|");
-
-    if (st1.countTokens() < 1)
-    {
-      throw new InvalidSchedulingPatternException("invalid pattern: \"" + pattern + "\"");
-    }
-
-    while (st1.hasMoreTokens())
-    {
-      String localPattern = st1.nextToken();
-      StringTokenizer st2 = new StringTokenizer(localPattern, " \t");
-
-      if (st2.countTokens() != 5)
-      {
-        throw new InvalidSchedulingPatternException("invalid pattern: \"" + localPattern + "\"");
-      }
-
-      try
-      {
-        minuteMatchers.add(buildValueMatcher(st2.nextToken(), MINUTE_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
-        throw new InvalidSchedulingPatternException("invalid pattern \"" + localPattern
-            + "\". Error parsing minutes field: " + e.getMessage() + ".");
-      }
-
-      try
-      {
-        hourMatchers.add(buildValueMatcher(st2.nextToken(), HOUR_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
-        throw new InvalidSchedulingPatternException("invalid pattern \"" + localPattern
-            + "\". Error parsing hours field: " + e.getMessage() + ".");
-      }
-
-      try
-      {
-        dayOfMonthMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_MONTH_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
-        throw new InvalidSchedulingPatternException("invalid pattern \"" + localPattern
-            + "\". Error parsing days of month field: " + e.getMessage() + ".");
-      }
-
-      try
-      {
-        monthMatchers.add(buildValueMatcher(st2.nextToken(), MONTH_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
-        throw new InvalidSchedulingPatternException("invalid pattern \"" + localPattern
-            + "\". Error parsing months field: " + e.getMessage() + ".");
-      }
-
-      try
-      {
-        dayOfWeekMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_WEEK_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
-        throw new InvalidSchedulingPatternException("invalid pattern \"" + localPattern
-            + "\". Error parsing days of week field: " + e.getMessage() + ".");
-      }
-
-      matcherSize++;
-    }
-  }
-
-  /**
-   * Validates a string as a scheduling pattern.
-   *
-   * @param schedulingPattern the pattern to validate
-   *
-   * @return <code>true</code> if the given string represents a valid scheduling pattern or
-   *         <code>false</code> otherwise
-   */
-  @SuppressWarnings("unused")
-  public static boolean validate(String schedulingPattern)
-  {
-    try
-    {
-      new SchedulingPattern(schedulingPattern);
-    }
-    catch (InvalidSchedulingPatternException e)
-    {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Returns <code>true</code> if the given EPOCH timestamp in milliseconds matches the pattern,
-   * according to the system default time zone.
-   *
-   * @param timestamp the EPOCH timestamp in milliseconds
-   *
-   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
-   *         otherwise
-   */
-  public boolean match(long timestamp)
-  {
-    return match(TimeZone.getDefault(), timestamp);
-  }
-
-  /**
-   * Returns <code>true</code> if the EPOCH timestamp in milliseconds matches the pattern,
-   * according to the given time zone.
-   *
-   * @param timezone  the time zone
-   * @param timestamp the EPOCH timestamp in milliseconds
-   *
-   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
-   *         otherwise
-   */
-  public boolean match(TimeZone timezone, long timestamp)
-  {
-    GregorianCalendar gc = new GregorianCalendar();
-
-    gc.setTimeInMillis(timestamp);
-    gc.setTimeZone(timezone);
-
-    int minute = gc.get(Calendar.MINUTE);
-    int hour = gc.get(Calendar.HOUR_OF_DAY);
-    int dayOfMonth = gc.get(Calendar.DAY_OF_MONTH);
-    int month = gc.get(Calendar.MONTH) + 1;
-    int dayOfWeek = gc.get(Calendar.DAY_OF_WEEK) - 1;
-    int year = gc.get(Calendar.YEAR);
-
-    for (int i = 0; i < matcherSize; i++)
-    {
-      ValueMatcher minuteMatcher = minuteMatchers.get(i);
-      ValueMatcher hourMatcher = hourMatchers.get(i);
-      ValueMatcher dayOfMonthMatcher = dayOfMonthMatchers.get(i);
-      ValueMatcher monthMatcher = monthMatchers.get(i);
-      ValueMatcher dayOfWeekMatcher = dayOfWeekMatchers.get(i);
-      boolean eval = minuteMatcher.match(minute) && hourMatcher.match(hour)
-        && ((dayOfMonthMatcher instanceof DayOfMonthValueMatcher)
-          ? ((DayOfMonthValueMatcher) dayOfMonthMatcher).match(dayOfMonth, month,
-            gc.isLeapYear(year))
-          : dayOfMonthMatcher.match(dayOfMonth)) && monthMatcher.match(month)
-            && dayOfWeekMatcher.match(dayOfWeek);
-
-      if (eval)
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * Returns the pattern as a string.
-   *
-   * @return The pattern as a string.
-   */
-  public String toString()
-  {
-    return asString;
-  }
 
   /**
    * This utility method changes an alias to an integer value.
@@ -404,7 +225,190 @@ public class SchedulingPattern
       }
     }
 
-    throw new Exception("invalid alias \"" + value + "\"");
+    throw new Exception(String.format("Invalid alias \"%s\"", value));
+  }
+
+  /**
+   * Validates a string as a scheduling pattern.
+   *
+   * @param schedulingPattern the pattern to validate
+   *
+   * @return <code>true</code> if the given string represents a valid scheduling pattern or
+   * <code>false</code> otherwise
+   */
+  @SuppressWarnings("unused")
+  public static boolean validate(String schedulingPattern)
+  {
+    try
+    {
+      new SchedulingPattern(schedulingPattern);
+    }
+    catch (InvalidSchedulingPatternException e)
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Builds a SchedulingPattern by parsing it from a string.
+   *
+   * @param pattern the pattern as a crontab-like string
+   *
+   * @throws InvalidSchedulingPatternException
+   */
+  public SchedulingPattern(String pattern)
+    throws InvalidSchedulingPatternException
+  {
+    this.asString = pattern;
+
+    StringTokenizer st1 = new StringTokenizer(pattern, "|");
+
+    if (st1.countTokens() < 1)
+    {
+      throw new InvalidSchedulingPatternException(
+        String.format("Invalid pattern: \"%s\"", pattern));
+    }
+
+    while (st1.hasMoreTokens())
+    {
+      String localPattern = st1.nextToken();
+      StringTokenizer st2 = new StringTokenizer(localPattern, " \t");
+
+      if (st2.countTokens() != 5)
+      {
+        throw new InvalidSchedulingPatternException(
+          String.format("Invalid pattern: \"%s\"", localPattern));
+      }
+
+      try
+      {
+        minuteMatchers.add(buildValueMatcher(st2.nextToken(), MINUTE_VALUE_PARSER));
+      }
+      catch (Exception e)
+      {
+        throw new InvalidSchedulingPatternException(
+          String.format("Invalid pattern \"%s\". Error parsing minutes field: %s", localPattern,
+            e.getMessage()));
+      }
+
+      try
+      {
+        hourMatchers.add(buildValueMatcher(st2.nextToken(), HOUR_VALUE_PARSER));
+      }
+      catch (Exception e)
+      {
+        throw new InvalidSchedulingPatternException(
+          String.format("Invalid pattern \"%s\". Error parsing hours field: %s", localPattern,
+            e.getMessage()));
+      }
+
+      try
+      {
+        dayOfMonthMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_MONTH_VALUE_PARSER));
+      }
+      catch (Exception e)
+      {
+        throw new InvalidSchedulingPatternException(
+          String.format("Invalid pattern \"%s\". Error parsing days of month field: %s",
+            localPattern, e.getMessage()));
+      }
+
+      try
+      {
+        monthMatchers.add(buildValueMatcher(st2.nextToken(), MONTH_VALUE_PARSER));
+      }
+      catch (Exception e)
+      {
+        throw new InvalidSchedulingPatternException(
+          String.format("Invalid pattern \"%s\". Error parsing months field: %s", localPattern,
+            e.getMessage()));
+      }
+
+      try
+      {
+        dayOfWeekMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_WEEK_VALUE_PARSER));
+      }
+      catch (Exception e)
+      {
+        throw new InvalidSchedulingPatternException(
+          String.format("Invalid pattern \"%s\". Error parsing days of week field: %s",
+            localPattern, e.getMessage()));
+      }
+
+      matcherSize++;
+    }
+  }
+
+  /**
+   * Returns <code>true</code> if the EPOCH timestamp in milliseconds matches the pattern,
+   * according to the given time zone.
+   *
+   * @param timezone  the time zone
+   * @param timestamp the EPOCH timestamp in milliseconds
+   *
+   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
+   * otherwise
+   */
+  public boolean match(TimeZone timezone, long timestamp)
+  {
+    GregorianCalendar gc = new GregorianCalendar();
+
+    gc.setTimeInMillis(timestamp);
+    gc.setTimeZone(timezone);
+
+    int minute = gc.get(Calendar.MINUTE);
+    int hour = gc.get(Calendar.HOUR_OF_DAY);
+    int dayOfMonth = gc.get(Calendar.DAY_OF_MONTH);
+    int month = gc.get(Calendar.MONTH) + 1;
+    int dayOfWeek = gc.get(Calendar.DAY_OF_WEEK) - 1;
+    int year = gc.get(Calendar.YEAR);
+
+    for (int i = 0; i < matcherSize; i++)
+    {
+      ValueMatcher minuteMatcher = minuteMatchers.get(i);
+      ValueMatcher hourMatcher = hourMatchers.get(i);
+      ValueMatcher dayOfMonthMatcher = dayOfMonthMatchers.get(i);
+      ValueMatcher monthMatcher = monthMatchers.get(i);
+      ValueMatcher dayOfWeekMatcher = dayOfWeekMatchers.get(i);
+      boolean eval = minuteMatcher.match(minute) && hourMatcher.match(hour) &&
+        ((dayOfMonthMatcher instanceof DayOfMonthValueMatcher)
+          ? ((DayOfMonthValueMatcher) dayOfMonthMatcher).match(dayOfMonth, month,
+          gc.isLeapYear(year)) : dayOfMonthMatcher.match(dayOfMonth)) && monthMatcher.match(
+        month) && dayOfWeekMatcher.match(dayOfWeek);
+
+      if (eval)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns <code>true</code> if the given EPOCH timestamp in milliseconds matches the pattern,
+   * according to the system default time zone.
+   *
+   * @param timestamp the EPOCH timestamp in milliseconds
+   *
+   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
+   * otherwise
+   */
+  public boolean match(long timestamp)
+  {
+    return match(TimeZone.getDefault(), timestamp);
+  }
+
+  /**
+   * Returns the pattern as a string.
+   *
+   * @return The pattern as a string.
+   */
+  public String toString()
+  {
+    return asString;
   }
 
   /**
@@ -439,8 +443,9 @@ public class SchedulingPattern
       }
       catch (Exception e)
       {
-        throw new Exception("invalid field \"" + str + "\", invalid element \"" + element + "\", "
-            + e.getMessage());
+        throw new Exception(
+          String.format("Invalid field \"%s\", invalid element \"%s\": %s", str, element,
+            e.getMessage()));
       }
 
       for (Integer value : local)
@@ -454,7 +459,7 @@ public class SchedulingPattern
 
     if (values.size() == 0)
     {
-      throw new Exception("invalid field \"" + str + "\"");
+      throw new Exception(String.format("Invalid field \"%s\"", str));
     }
 
     if (parser == DAY_OF_MONTH_VALUE_PARSER)
@@ -485,7 +490,7 @@ public class SchedulingPattern
 
     if ((size < 1) || (size > 2))
     {
-      throw new Exception("syntax error");
+      throw new Exception("Syntax error");
     }
 
     List<Integer> values;
@@ -496,7 +501,7 @@ public class SchedulingPattern
     }
     catch (Exception e)
     {
-      throw new Exception("invalid range, " + e.getMessage());
+      throw new Exception(String.format("Invalid range: %s", e.getMessage()));
     }
 
     if (size == 2)
@@ -510,12 +515,12 @@ public class SchedulingPattern
       }
       catch (NumberFormatException e)
       {
-        throw new Exception("invalid divisor \"" + dStr + "\"");
+        throw new Exception("Invalid divisor \"" + dStr + "\"");
       }
 
       if (div < 1)
       {
-        throw new Exception("non positive divisor \"" + div + "\"");
+        throw new Exception("Non positive divisor \"" + div + "\"");
       }
 
       List<Integer> values2 = new ArrayList<>();
@@ -565,7 +570,7 @@ public class SchedulingPattern
 
     if ((size < 1) || (size > 2))
     {
-      throw new Exception("syntax error");
+      throw new Exception("Syntax error");
     }
 
     String v1Str = st.nextToken();
@@ -577,7 +582,7 @@ public class SchedulingPattern
     }
     catch (Exception e)
     {
-      throw new Exception("invalid value \"" + v1Str + "\", " + e.getMessage());
+      throw new Exception(String.format("Invalid value \"%s\": %s", v1Str, e.getMessage()));
     }
 
     if (size == 1)
@@ -599,7 +604,7 @@ public class SchedulingPattern
       }
       catch (Exception e)
       {
-        throw new Exception("invalid value \"" + v2Str + "\", " + e.getMessage());
+        throw new Exception(String.format("Invalid value \"%s\": %s", v2Str, e.getMessage()));
       }
 
       List<Integer> values = new ArrayList<>();
@@ -668,11 +673,11 @@ public class SchedulingPattern
       throws Exception;
   }
 
-
   /**
    * The days of month value parser.
    */
-  private static class DayOfMonthValueParser extends SimpleValueParser
+  private static class DayOfMonthValueParser
+    extends SimpleValueParser
   {
     /**
      * Builds the value parser.
@@ -705,19 +710,16 @@ public class SchedulingPattern
     }
   }
 
-
   /**
    * The value parser for the months field.
    */
-  private static class DayOfWeekValueParser extends SimpleValueParser
+  private static class DayOfWeekValueParser
+    extends SimpleValueParser
   {
     /**
      * Days of week aliases.
      */
-    private static String[] ALIASES =
-    {
-      "sun", "mon", "tue", "wed", "thu", "fri", "sat"
-    };
+    private static String[] ALIASES = {"sun", "mon", "tue", "wed", "thu", "fri", "sat"};
 
     /**
      * Builds the months value parser.
@@ -752,11 +754,11 @@ public class SchedulingPattern
     }
   }
 
-
   /**
    * The hours value parser.
    */
-  private static class HourValueParser extends SimpleValueParser
+  private static class HourValueParser
+    extends SimpleValueParser
   {
     /**
      * Builds the value parser.
@@ -767,11 +769,11 @@ public class SchedulingPattern
     }
   }
 
-
   /**
    * The minutes value parser.
    */
-  private static class MinuteValueParser extends SimpleValueParser
+  private static class MinuteValueParser
+    extends SimpleValueParser
   {
     /**
      * Builds the value parser.
@@ -782,19 +784,17 @@ public class SchedulingPattern
     }
   }
 
-
   /**
    * The value parser for the months field.
    */
-  private static class MonthValueParser extends SimpleValueParser
+  private static class MonthValueParser
+    extends SimpleValueParser
   {
     /**
      * Months aliases.
      */
-    private static String[] ALIASES =
-    {
-      "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
-    };
+    private static String[] ALIASES = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug",
+      "sep", "oct", "nov", "dec"};
 
     /**
      * Builds the months value parser.
@@ -828,7 +828,6 @@ public class SchedulingPattern
       }
     }
   }
-
 
   /**
    * A simple value parser.

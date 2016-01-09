@@ -16,8 +16,6 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -35,9 +33,28 @@ import java.security.cert.X509Certificate;
  *
  * @author Marcus Portmann
  */
-public class ClientSSLSocketFactory extends SSLSocketFactory
+public class ClientSSLSocketFactory
+  extends SSLSocketFactory
 {
   private SSLSocketFactory socketFactory;
+
+  /**
+   * Returns <code>true</code> if we are running under the IBM JDK or <code>false</code> otherwise.
+   *
+   * @return <code>true</code> if we are running under the IBM JDK or <code>false</code> otherwise
+   */
+  public static boolean isIBMJDK()
+  {
+    for (Provider provider : Security.getProviders())
+    {
+      if (provider.getName().startsWith("IBMJSSE"))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   /**
    * Constructs a new <code>ClientSSLSocketFactory</code>
@@ -48,13 +65,14 @@ public class ClientSSLSocketFactory extends SSLSocketFactory
    * @param trustStore                 the trust store
    * @param disableServerTrustChecking disable server trust checking
    */
-  public ClientSSLSocketFactory(KeyStore keyStore, String keyStorePassword, KeyStore trustStore,
-      boolean disableServerTrustChecking)
+  public ClientSSLSocketFactory(
+    KeyStore keyStore, String keyStorePassword, KeyStore trustStore,
+    boolean disableServerTrustChecking)
   {
     try
     {
       // Create a trust manager that does not validate certificate chains
-      TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
+      TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager()
       {
         public void checkClientTrusted(X509Certificate[] chain, String authType)
           throws CertificateException
@@ -72,17 +90,17 @@ public class ClientSSLSocketFactory extends SSLSocketFactory
         {
           return new X509Certificate[0];
         }
-      } };
+      }};
 
       // Setup the key manager for the client SSL socket factory
-      KeyManagerFactory keyManagerFactory =
-        KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+      KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
+        KeyManagerFactory.getDefaultAlgorithm());
 
       keyManagerFactory.init(keyStore, keyStorePassword.toCharArray());
 
       // Setup the trust manager for the client SSL socket factory
-      TrustManagerFactory trustManagerFactory =
-        TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+      TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+        TrustManagerFactory.getDefaultAlgorithm());
 
       trustManagerFactory.init(trustStore);
 
@@ -96,7 +114,7 @@ public class ClientSSLSocketFactory extends SSLSocketFactory
       else
       {
         sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
-            new SecureRandom());
+          new SecureRandom());
       }
 
       HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
@@ -117,26 +135,8 @@ public class ClientSSLSocketFactory extends SSLSocketFactory
     catch (Throwable e)
     {
       throw new ClientSSLSocketFactoryException(
-          "Failed to initialise the Client SSL socket factory", e);
+        "Failed to initialise the Client SSL socket factory", e);
     }
-  }
-
-  /**
-   * Returns <code>true</code> if we are running under the IBM JDK or <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if we are running under the IBM JDK or <code>false</code> otherwise
-   */
-  public static boolean isIBMJDK()
-  {
-    for (Provider provider : Security.getProviders())
-    {
-      if (provider.getName().startsWith("IBMJSSE"))
-      {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   /**

@@ -16,10 +16,7 @@
 
 package guru.mmp.common.service.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.security.context.ServiceSecurityContext;
-
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSSecurityEngine;
 import org.apache.ws.security.WSSecurityEngineResult;
@@ -30,31 +27,23 @@ import org.apache.ws.security.handler.WSHandlerResult;
 import org.apache.ws.security.message.token.Timestamp;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.apache.xml.security.utils.XMLUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
-import java.security.KeyStore;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-
 import javax.security.auth.callback.CallbackHandler;
-
 import javax.xml.soap.*;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import javax.xml.ws.soap.SOAPFaultException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * The <code>WebServiceSecurityHandler</code> class is a JAX-WS handler that implements the
@@ -62,7 +51,8 @@ import javax.xml.ws.soap.SOAPFaultException;
  *
  * @author Marcus Portmann
  */
-public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
+public class WebServiceSecurityHandler
+  extends WebServiceSecurityHandlerBase
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebServiceSecurityHandler.class);
@@ -128,8 +118,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param messageContext the message context
    *
    * @return The password used to access the key store that contains the private key for the secure
-   *         web service. This private key is used to sign the SOAP messages returned by the
-   *         service.
+   * web service. This private key is used to sign the SOAP messages returned by the
+   * service.
    *
    * @see org.apache.ws.security.handler.WSHandler#getPassword(Object)
    */
@@ -146,7 +136,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param messageContext the message context
    *
    * @return <code>true</code> if handler fault processing should continue for the current message
-   *         or <code>false</code> if fault processing should stop
+   * or <code>false</code> if fault processing should stop
    *
    * @see javax.xml.ws.handler.Handler#handleFault(MessageContext)
    */
@@ -175,7 +165,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param messageContext the message context
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   *         or <code>false</code> if processing should stop
+   * or <code>false</code> if processing should stop
    */
   @Override
   public boolean handleMessage(SOAPMessageContext messageContext)
@@ -186,8 +176,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     // Retrieve the SOAP protocol version
     SOAPVersion soapVersion = getSOAPVersion(messageContext);
 
-    Boolean outboundProperty =
-      (Boolean) messageContext.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+    Boolean outboundProperty = (Boolean) messageContext.get(
+      MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
     messageContext.put(MESSAGE_CONTEXT_CRYPTO_PROPERTIES, cryptoProperties);
 
@@ -258,13 +248,13 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param requestData    the request data
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   *         or <code>false</code> if processing should stop
+   * or <code>false</code> if processing should stop
    *
    * @throws WSSecurityException
    */
-  @SuppressWarnings({ "unchecked" })
-  private boolean doRequest(SOAPVersion soapVersion, SOAPMessageContext messageContext,
-      RequestData requestData)
+  @SuppressWarnings({"unchecked"})
+  private boolean doRequest(
+    SOAPVersion soapVersion, SOAPMessageContext messageContext, RequestData requestData)
     throws WSSecurityException, SOAPException
   {
     /*
@@ -301,8 +291,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
 
     if (doAction == WSConstants.NO_SECURITY)
     {
-      logger.warn("No security-related actions specified."
-          + " The SOAP request will not be processed");
+      logger.warn(
+        "No security-related actions specified." + " The SOAP request will not be processed");
 
       return true;
     }
@@ -323,7 +313,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     if (soapVersion == SOAPVersion.SOAP_1_1)
     {
       if (WSSecurityUtil.findElement(doc.getDocumentElement(), "Fault",
-          SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE) != null)
+        SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE) != null)
       {
         return false;
       }
@@ -331,7 +321,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     else if (soapVersion == SOAPVersion.SOAP_1_2)
     {
       if (WSSecurityUtil.findElement(doc.getDocumentElement(), "Fault",
-          SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE) != null)
+        SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE) != null)
       {
         return false;
       }
@@ -357,8 +347,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     if (wsResults == null)
     {
       throw new WSSecurityException(WSSecurityException.SECURITY_TOKEN_UNAVAILABLE,
-          "Failed to process the SOAP request:"
-          + " The request does not contain the required security header");
+        "Failed to process the SOAP request:" + " The request does not contain the required " +
+          "security header");
     }
 
     /*
@@ -375,8 +365,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     }
     catch (SOAPException e)
     {
-      throw new WSSecurityException("Failed to process the SOAP request:"
-          + " Couldn't set content on the SOAPPart", e);
+      throw new WSSecurityException(
+        "Failed to process the SOAP request:" + " Couldn't set content on the SOAPPart", e);
     }
 
     /*
@@ -396,8 +386,9 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     }
     catch (Exception e)
     {
-      throw new WSSecurityException("Failed to process the SOAP request:"
-          + " Cannot get SOAP header after security processing", e);
+      throw new WSSecurityException(
+        "Failed to process the SOAP request:" + " Cannot get SOAP header after security " +
+          "processing", e);
     }
 
     Iterator<?> headers;
@@ -417,8 +408,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     {
       SOAPHeaderElement hE = (SOAPHeaderElement) headers.next();
 
-      if (hE.getElementName().getLocalName().equals(WSConstants.WSSE_LN)
-          && hE.getNamespaceURI().equals(WSConstants.WSSE_NS))
+      if (hE.getElementName().getLocalName().equals(WSConstants.WSSE_LN) &&
+        hE.getNamespaceURI().equals(WSConstants.WSSE_NS))
       {
         securityHeaderElement = hE;
 
@@ -443,8 +434,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
 
     if (timestampActionResult != null)
     {
-      Timestamp timestamp =
-        (Timestamp) timestampActionResult.get(WSSecurityEngineResult.TAG_TIMESTAMP);
+      Timestamp timestamp = (Timestamp) timestampActionResult.get(
+        WSSecurityEngineResult.TAG_TIMESTAMP);
 
       if ((timestamp != null) && requestData.getWssConfig().isTimeStampStrict())
       {
@@ -461,8 +452,9 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     // Now check the security actions: do they match, in right order?
     if (!checkReceiverResults(wsResults, actions))
     {
-      throw new WSSecurityException("Failed to process the SOAP request:"
-          + " Security processing failed (security actions mismatch)");
+      throw new WSSecurityException(
+        "Failed to process the SOAP request:" + " Security processing failed (security actions " +
+          "mismatch)");
     }
 
     /*
@@ -482,9 +474,9 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     results.add(0, rResult);
 
     // Process the security tokens
-    Iterator<?> elements =
-      securityHeaderElement.getChildElements(soapFactory.createName(WSConstants.BINARY_TOKEN_LN,
-        securityHeaderElement.getPrefix(), WSConstants.WSSE_NS));
+    Iterator<?> elements = securityHeaderElement.getChildElements(
+      soapFactory.createName(WSConstants.BINARY_TOKEN_LN, securityHeaderElement.getPrefix(),
+        WSConstants.WSSE_NS));
     SOAPElement ele;
 
     if (elements.hasNext())
@@ -503,8 +495,9 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     {
       securityContext.reset();
 
-      throw new WSSecurityException("Failed to process the SOAP request:"
-          + " The BinarySecurityToken element could not be found in the SOAP header");
+      throw new WSSecurityException(
+        "Failed to process the SOAP request:" + " The BinarySecurityToken element could not be " +
+          "found in the SOAP header");
     }
 
     if (logger.isDebugEnabled())
@@ -524,18 +517,18 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param requestData    the request data
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   *         or <code>false</code> if processing should stop
+   * or <code>false</code> if processing should stop
    *
    * @throws WSSecurityException
    */
-  private boolean doResponse(SOAPVersion soapVersion, SOAPMessageContext messageContext,
-      RequestData requestData)
+  private boolean doResponse(
+    SOAPVersion soapVersion, SOAPMessageContext messageContext, RequestData requestData)
     throws WSSecurityException
   {
     if ((soapVersion != SOAPVersion.SOAP_1_1) && (soapVersion != SOAPVersion.SOAP_1_2))
     {
-      throw new WSSecurityException("Failed to process the SOAP response: Unknown SOAP version ("
-          + soapVersion + ")");
+      throw new WSSecurityException(
+        "Failed to process the SOAP response: Unknown SOAP version (" + soapVersion + ")");
     }
 
     // Initialise the request
@@ -557,8 +550,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
 
     if (doAction == WSConstants.NO_SECURITY)
     {
-      logger.warn("No security-related actions specified."
-          + " The SOAP response will not be modified");
+      logger.warn(
+        "No security-related actions specified." + " The SOAP response will not be modified");
 
       return true;
     }
@@ -581,8 +574,9 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
        */
       if ((requestData.getUsername() == null) || requestData.getUsername().equals(""))
       {
-        throw new WSSecurityException("Failed to process the SOAP response:"
-            + " Empty username for the specified action (" + action + ")");
+        throw new WSSecurityException(
+          "Failed to process the SOAP response:" + " Empty username for the specified action (" +
+            action + ")");
       }
     }
 
@@ -616,8 +610,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
     }
     catch (SOAPException e)
     {
-      throw new WSSecurityException("Failed to process the SOAP response:"
-          + " Couldn't set content on the SOAPPart", e);
+      throw new WSSecurityException(
+        "Failed to process the SOAP response:" + " Couldn't set content on the SOAPPart", e);
     }
 
     return true;
@@ -655,12 +649,12 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
 
         cryptoProperties = new Properties();
         cryptoProperties.put("org.apache.ws.security.crypto.provider",
-            WebServiceCrypto.class.getName());
+          WebServiceCrypto.class.getName());
         cryptoProperties.put(ServiceSecurityContext.class.getName(), getServiceSecurityContext());
         setOption(WSHandlerConstants.SIG_PROP_REF_ID, MESSAGE_CONTEXT_CRYPTO_PROPERTIES);
 
         secEngine.getWssConfig().setValidator(WSSecurityEngine.SIGNATURE,
-            new WebServiceSignatureTrustValidator());
+          new WebServiceSignatureTrustValidator());
       }
       catch (WebServiceSecurityHandlerException e)
       {
@@ -669,7 +663,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
       catch (Throwable e)
       {
         throw new WebServiceSecurityHandlerException(
-            "Failed to initialise the web service security handler: " + e.getMessage(), e);
+          "Failed to initialise the web service security handler: " + e.getMessage(), e);
       }
 
       isInitialised = true;

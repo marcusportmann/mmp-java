@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import br.com.digilabs.jqplot.Chart;
 import guru.mmp.application.web.behavior.JQPlotBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -28,7 +26,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class JQPlotChart extends WebMarkupContainer
+public class JQPlotChart
+  extends WebMarkupContainer
 {
   private static final long serialVersionUID = 1000000;
 

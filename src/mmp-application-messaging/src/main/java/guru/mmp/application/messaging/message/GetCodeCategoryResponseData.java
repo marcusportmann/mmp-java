@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -39,7 +35,8 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class GetCodeCategoryResponseData extends WbxmlMessageData
+public class GetCodeCategoryResponseData
+  extends WbxmlMessageData
 {
   /**
    * The error code returned when access is denied.
@@ -64,8 +61,8 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("0336b544-91e5-4eb9-81db-3dd94e116c92");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "0336b544-91e5-4eb9-81db-3dd94e116c92");
 
   /**
    * The code category.
@@ -123,7 +120,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -173,7 +170,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    * '0' indicates success and a non-zero code indicates an error condition.
    *
    * @return the error code indicating the result of retrieving the code category where a code of
-   *         '0' indicates success and a non-zero code indicates an error condition
+   * '0' indicates success and a non-zero code indicates an error condition
    */
   public int getErrorCode()
   {
@@ -201,7 +198,6 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   }
 
   /**
-   *
    * Set the error code indicating the result of retrieving the code category where a code of '0'
    * indicates success and a non-zero code indicates an error condition.
    *
@@ -228,7 +224,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */

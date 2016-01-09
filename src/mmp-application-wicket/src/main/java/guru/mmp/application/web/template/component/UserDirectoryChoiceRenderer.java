@@ -16,15 +16,10 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
-
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;

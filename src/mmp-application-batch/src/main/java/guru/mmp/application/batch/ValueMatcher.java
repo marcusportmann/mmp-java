@@ -32,7 +32,7 @@ interface ValueMatcher
    * @param value the value
    *
    * @return <code>true</code> if the given value matches the rules of the
-   *         <code>ValueMatcher</code>, <code>false</code> otherwise
+   * <code>ValueMatcher</code>, <code>false</code> otherwise
    */
   boolean match(int value);
 }

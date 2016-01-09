@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
@@ -25,8 +23,6 @@ import guru.mmp.common.wbxml.Parser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageResult</code> class stores the results of the server-side Messaging
@@ -98,6 +94,24 @@ public class MessageResult
   private Message message;
 
   /**
+   * Returns <code>true</code> if the WBXML document contains valid message result information or
+   * <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message result information or
+   * <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element messageResultElement = document.getRootElement();
+
+    return messageResultElement.getName().equals("MessageResult") &&
+      (messageResultElement.getAttributes().size() == 2) && !((!messageResultElement.hasAttribute(
+      "code")) || (!messageResultElement.hasAttribute("detail")));
+  }
+
+  /**
    * Constructs a new <code>MessageResult</code>.
    *
    * @param document the WBXML document containing the message result information
@@ -133,8 +147,8 @@ public class MessageResult
       }
       catch (Throwable e)
       {
-        throw new MessagingException("Failed to parse the WBXML for the message associated with"
-            + " the message result", e);
+        throw new MessagingException(
+          "Failed to parse the WBXML for the message associated with" + " the message result", e);
       }
     }
   }
@@ -193,25 +207,6 @@ public class MessageResult
         exception = "Unable to dump the stack for the exception (" + cause + "): " + e.getMessage();
       }
     }
-  }
-
-  /**
-   * Returns <code>true</code> if the WBXML document contains valid message result information or
-   * <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message result information or
-   *         <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element messageResultElement = document.getRootElement();
-
-    return messageResultElement.getName().equals("MessageResult")
-        && (messageResultElement.getAttributes().size() == 2)
-        && !((!messageResultElement.hasAttribute("code"))
-          || (!messageResultElement.hasAttribute("detail")));
   }
 
   /**

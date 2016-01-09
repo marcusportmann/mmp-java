@@ -16,10 +16,7 @@
 
 package guru.mmp.application.messaging;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -104,8 +101,9 @@ public class ErrorReport
    *                           the device the error report originated from
    * @param data               the data associated with the error report e.g. the application XML
    */
-  public ErrorReport(UUID id, UUID applicationId, int applicationVersion, String description,
-      String detail, String feedback, Date created, String who, UUID deviceId, byte[] data)
+  public ErrorReport(
+    UUID id, UUID applicationId, int applicationVersion, String description, String detail,
+    String feedback, Date created, String who, UUID deviceId, byte[] data)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -124,7 +122,7 @@ public class ErrorReport
    * that generated the error report.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the application
-   *         that generated the error report
+   * that generated the error report
    */
   public UUID getApplicationId()
   {
@@ -186,7 +184,7 @@ public class ErrorReport
    * report originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the error
-   *         report originated from
+   * report originated from
    */
   public UUID getDeviceId()
   {

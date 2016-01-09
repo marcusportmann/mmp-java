@@ -16,16 +16,13 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import guru.mmp.application.security.DuplicateOrganisationException;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
-import guru.mmp.application.security.OrganisationNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -34,11 +31,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
 
@@ -49,12 +43,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_ORGANISATION)
-public class AddOrganisationPage extends TemplateWebPage
+public class AddOrganisationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddOrganisationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   @SuppressWarnings("unused")
   private boolean createUserDirectory;
@@ -76,11 +71,6 @@ public class AddOrganisationPage extends TemplateWebPage
     {
       Form<Organisation> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(new Organisation())));
-
-      // The "code" field
-      TextField<String> codeField = new TextFieldWithFeedback<>("code");
-      codeField.setRequired(true);
-      addForm.add(codeField);
 
       // The "name" field
       TextField<String> nameField = new TextFieldWithFeedback<>("name");
@@ -110,25 +100,17 @@ public class AddOrganisationPage extends TemplateWebPage
           {
             Organisation organisation = addForm.getModelObject();
 
-            /*
-             * Check if an organisation with the specified code already exists and if so return an
-             * error.
-             */
             try
             {
-              securityService.getOrganisation(organisation.getId());
-
+              securityService.createOrganisation(organisation, createUserDirectory);
+            }
+            catch (DuplicateOrganisationException e)
+            {
               AddOrganisationPage.this.error(
-                  "An organisation with the specified code already exists.");
+                "An organisation with the specified code already exists.");
 
               return;
             }
-            catch (OrganisationNotFoundException e)
-            {
-              // Do nothing, this is not an error
-            }
-
-            securityService.createOrganisation(organisation, createUserDirectory);
 
             setResponsePage(previousPage.getPage());
           }

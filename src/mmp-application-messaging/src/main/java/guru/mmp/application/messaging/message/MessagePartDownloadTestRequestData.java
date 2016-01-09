@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -39,13 +35,14 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class MessagePartDownloadTestRequestData extends WbxmlMessageData
+public class MessagePartDownloadTestRequestData
+  extends WbxmlMessageData
 {
   /**
    * The UUID for the "Message Part Download Test Request" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("def49acc-426f-4e6a-ad31-78732e24c0c2");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "def49acc-426f-4e6a-ad31-78732e24c0c2");
 
   /**
    * The test value.
@@ -78,7 +75,7 @@ public class MessagePartDownloadTestRequestData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -92,7 +89,6 @@ public class MessagePartDownloadTestRequestData extends WbxmlMessageData
     if (!rootElement.getName().equals("MessagePartDownloadTestRequest"))
     {
       return false;
-
     }
 
     if (!rootElement.hasChild("TestValue"))
@@ -130,7 +126,7 @@ public class MessagePartDownloadTestRequestData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */

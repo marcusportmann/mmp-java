@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -39,13 +35,14 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TestResponseData extends WbxmlMessageData
+public class TestResponseData
+  extends WbxmlMessageData
 {
   /**
    * The UUID for the "Test Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("a3bad7ba-f9d4-4403-b54a-cb1f335ebbad");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "a3bad7ba-f9d4-4403-b54a-cb1f335ebbad");
 
   /**
    * The test value.
@@ -78,7 +75,7 @@ public class TestResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -129,7 +126,7 @@ public class TestResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */

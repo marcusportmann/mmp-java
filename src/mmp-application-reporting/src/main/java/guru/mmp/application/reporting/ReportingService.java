@@ -16,8 +16,7 @@
 
 package guru.mmp.application.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.util.StringUtil;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -32,12 +31,9 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.naming.InitialContext;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.util.*;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -53,7 +49,7 @@ public class ReportingService
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
   /* The name of the Reporting Service instance. */
-  private String instanceName;
+  private String instanceName = ServiceUtil.getServiceInstanceName("Reporting Service");
 
   /* The real path to the folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
@@ -87,8 +83,8 @@ public class ReportingService
 
       if (reportDefinition == null)
       {
-        throw new ReportingServiceException("Failed to find the report definition (" + definitionId
-            + ")");
+        throw new ReportingServiceException(
+          "Failed to find the report definition (" + definitionId + ")");
       }
 
       Map<String, Object> localParameters = new HashMap<>();
@@ -103,16 +99,16 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint =
-        JasperFillManager.fillReport(new ByteArrayInputStream(reportDefinition.getTemplate()),
-          localParameters, connection);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(
+        new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters, connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to create the PDF for the report using the"
-          + " report definintion (" + definitionId + ")", e);
+      throw new ReportingServiceException(
+        String.format("Failed to create the PDF for the report using the report definintion (%s)",
+          definitionId), e);
     }
   }
 
@@ -128,8 +124,8 @@ public class ReportingService
    *
    * @throws ReportingServiceException
    */
-  public byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters,
-      Connection connection)
+  public byte[] createReportPDF(
+    UUID definitionId, Map<String, Object> parameters, Connection connection)
     throws ReportingServiceException
   {
     try
@@ -138,8 +134,8 @@ public class ReportingService
 
       if (reportDefinition == null)
       {
-        throw new ReportingServiceException("Failed to find the report definition (" + definitionId
-            + ")");
+        throw new ReportingServiceException(
+          String.format("Failed to find the report definition (%s)", definitionId));
       }
 
       Map<String, Object> localParameters = new HashMap<>();
@@ -154,16 +150,16 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint =
-        JasperFillManager.fillReport(new ByteArrayInputStream(reportDefinition.getTemplate()),
-          localParameters, connection);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(
+        new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters, connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to create the PDF for the report using the"
-          + " report definintion (" + definitionId + ")", e);
+      throw new ReportingServiceException(
+        String.format("Failed to create the PDF for the report using the report definintion (%s)",
+          definitionId), e);
     }
   }
 
@@ -179,8 +175,8 @@ public class ReportingService
    *
    * @throws ReportingServiceException
    */
-  public byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters,
-      Document document)
+  public byte[] createReportPDF(
+    UUID definitionId, Map<String, Object> parameters, Document document)
     throws ReportingServiceException
   {
     try
@@ -189,8 +185,8 @@ public class ReportingService
 
       if (reportDefinition == null)
       {
-        throw new ReportingServiceException("Failed to find the report definition (" + definitionId
-            + ")");
+        throw new ReportingServiceException(
+          String.format("Failed to find the report definition (%s)", definitionId));
       }
 
       Map<String, Object> localParameters = new HashMap<>();
@@ -211,16 +207,16 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint =
-        JasperFillManager.fillReport(new ByteArrayInputStream(reportDefinition.getTemplate()),
-          localParameters);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(
+        new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to create the PDF for the report using the"
-          + " report definintion (" + definitionId + ")", e);
+      throw new ReportingServiceException(
+        String.format("Failed to create the PDF for the report using the report definintion (%s)",
+          definitionId), e);
     }
   }
 
@@ -241,8 +237,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to delete the report definition with ID (" + id
-          + ")", e);
+      throw new ReportingServiceException(
+        String.format("Failed to delete the report definition with ID (%s)", id), e);
     }
   }
 
@@ -295,8 +291,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to retrieve the report definition with ID (" + id
-          + ")", e);
+      throw new ReportingServiceException(
+        String.format("Failed to retrieve the report definition with ID (%s)", id), e);
     }
   }
 
@@ -317,7 +313,7 @@ public class ReportingService
     catch (Throwable e)
     {
       throw new ReportingServiceException(
-          "Failed to retrieve the summaries for all the report definitions", e);
+        "Failed to retrieve the summaries for all the report definitions", e);
     }
   }
 
@@ -328,7 +324,7 @@ public class ReportingService
    *           definition
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
-   *         could not be found
+   * could not be found
    *
    * @throws ReportingServiceException
    */
@@ -342,7 +338,7 @@ public class ReportingService
     catch (Throwable e)
     {
       throw new ReportingServiceException(
-          "Failed to retrieve the summary for report definition with ID (" + id + ")", e);
+        String.format("Failed to retrieve the summary for report definition with ID (%s)", id), e);
     }
   }
 
@@ -368,14 +364,12 @@ public class ReportingService
 
   /**
    * Initialise the Reporting Service instance.
-   *
-   * @throws ReportingServiceException
    */
   @PostConstruct
   public void init()
     throws ReportingServiceException
   {
-    logger.info("Initialising the Reporting Service instance (" + getInstanceName() + ")");
+    logger.info(String.format("Initialising the Reporting Service instance (%s)", instanceName));
 
     try
     {
@@ -384,8 +378,7 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to initialise the Reporting Service: "
-          + e.getMessage());
+      throw new RuntimeException("Failed to initialise the Reporting Service", e);
     }
   }
 
@@ -408,8 +401,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to check whether the report definition with ID ("
-          + id + ") exists", e);
+      throw new ReportingServiceException(
+        String.format("Failed to check whether the report definition with ID (%s) exists", id), e);
     }
   }
 
@@ -444,8 +437,9 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException("Failed to save the report definition with ID ("
-          + reportDefinition.getId() + ")", e);
+      throw new ReportingServiceException(
+        String.format("Failed to save the report definition with ID (%s)",
+          reportDefinition.getId()), e);
     }
   }
 
@@ -458,113 +452,6 @@ public class ReportingService
   public void setLocalReportFolderPath(String localReportFolderPath)
   {
     this.localReportFolderPath = localReportFolderPath;
-  }
-
-  /**
-   * Retrieves the name of the Reporting Service instance.
-   */
-  private String getInstanceName()
-  {
-    if (instanceName == null)
-    {
-      String applicationName = null;
-
-      try
-      {
-        applicationName = InitialContext.doLookup("java:app/AppName");
-      }
-      catch (Throwable ignored) {}
-
-      if (applicationName == null)
-      {
-        try
-        {
-          applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
-        }
-        catch (Throwable ignored) {}
-      }
-
-      if (applicationName == null)
-      {
-        logger.error("Failed to retrieve the application name from JNDI using the names ("
-            + "java:app/AppName) and (java:comp/env/ApplicationName) while constructing"
-            + " the Reporting Service instance name");
-
-        applicationName = "Unknown";
-      }
-
-      instanceName = applicationName + "::";
-
-      try
-      {
-        java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
-
-        instanceName += localMachine.getHostName().toLowerCase();
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to retrieve the server hostname while constructing the Reporting"
-            + " Service instance name", e);
-        instanceName = "Unknown";
-      }
-
-      // Check if we are running under JBoss and if so retrieve the server name
-      if (System.getProperty("jboss.server.name") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("jboss.server.name");
-      }
-
-      // Check if we are running under Glassfish and if so retrieve the server name
-      else if (System.getProperty("glassfish.version") != null)
-      {
-        instanceName = instanceName + "::" + System.getProperty("com.sun.aas.instanceName");
-      }
-
-      // Check if we are running under WebSphere Application Server Community Edition (Geronimo)
-      else if (System.getProperty("org.apache.geronimo.server.dir") != null)
-      {
-        instanceName = instanceName + "::Geronimo";
-      }
-
-      // Check if we are running under WebSphere Application Server Liberty Profile
-      else if (System.getProperty("wlp.user.dir") != null)
-      {
-        instanceName = instanceName + "::WLP";
-      }
-
-      /*
-       * Check if we are running under WebSphere and if so execute the code below to retrieve the
-       * server name.
-       */
-      else
-      {
-        Class<?> clazz = null;
-
-        try
-        {
-          clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.ibm.websphere.management.configservice.ConfigService");
-        }
-        catch (Throwable ignored)
-        {}
-
-        if (clazz != null)
-        {
-          try
-          {
-            instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
-          }
-          catch (Throwable e)
-          {
-            logger.error("Failed to retrieve the name of the WebSphere server instance from JNDI"
-              + " while constructing the Reporting Service instance name", e);
-            instanceName = instanceName + "::Unknown";
-          }
-        }
-      }
-    }
-
-    return instanceName;
   }
 
   /**

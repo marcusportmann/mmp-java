@@ -25,7 +25,8 @@ package guru.mmp.application.security;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ExpiredPasswordException extends Exception
+public class ExpiredPasswordException
+  extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

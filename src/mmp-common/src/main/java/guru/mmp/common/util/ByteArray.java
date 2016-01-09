@@ -16,8 +16,6 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -30,6 +28,7 @@ public class ByteArray
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private byte[] bytes;
 
   /**

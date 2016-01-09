@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
@@ -28,7 +26,6 @@ import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.DropdownMenu;
 import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.FilteredUserDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -42,16 +39,12 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * The <code>UserAdministrationPage</code> class implements the
@@ -60,12 +53,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
-public class UserAdministrationPage extends TemplateWebPage
+public class UserAdministrationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserAdministrationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
@@ -123,9 +117,9 @@ public class UserAdministrationPage extends TemplateWebPage
       FilteredUserDataProvider dataProvider = new FilteredUserDataProvider(userDirectory.getId());
 
       // The "userDirectoryDropdownMenu" dropdown button
-      DropdownMenu<UserDirectory> userDirectoryDropdownMenu =
-        new DropdownMenu<UserDirectory>("userDirectoryDropdownMenu",
-          new PropertyModel<>(this, "userDirectory"), userDirectories, "fa fa-users")
+      DropdownMenu<UserDirectory> userDirectoryDropdownMenu = new DropdownMenu<UserDirectory>(
+        "userDirectoryDropdownMenu", new PropertyModel<>(this, "userDirectory"), userDirectories,
+        "fa fa-users")
       {
         @Override
         protected String getDisplayValue(UserDirectory menuItem)
@@ -180,8 +174,8 @@ public class UserAdministrationPage extends TemplateWebPage
           User user = item.getModelObject();
 
           item.add(new Label("username", new PropertyModel<String>(item.getModel(), "username")));
-          item.add(new Label("firstNames",
-              new PropertyModel<String>(item.getModel(), "firstNames")));
+          item.add(
+            new Label("firstNames", new PropertyModel<String>(item.getModel(), "firstNames")));
           item.add(new Label("lastName", new PropertyModel<String>(item.getModel(), "lastName")));
 
           // The "userGroupsLink" link
@@ -287,15 +281,15 @@ public class UserAdministrationPage extends TemplateWebPage
   {
     WebSession session = getWebApplicationSession();
 
-    List<UserDirectory> allUserDirectories =
-      securityService.getUserDirectoriesForOrganisation(session.getOrganisation().getId());
+    List<UserDirectory> allUserDirectories = securityService.getUserDirectoriesForOrganisation(
+      session.getOrganisation().getId());
 
     List<UserDirectory> userDirectories = new ArrayList<>();
 
     for (UserDirectory userDirectory : allUserDirectories)
     {
-      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID))
-          && (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)))
+      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)) &&
+        (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)))
       {
         // Do nothing
       }
@@ -312,10 +306,13 @@ public class UserAdministrationPage extends TemplateWebPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a user to be confirmed.
    */
-  private class RemoveDialog extends Dialog
+  private class RemoveDialog
+    extends Dialog
   {
     private static final long serialVersionUID = 1000000;
+
     private Label nameLabel;
+
     private String username;
 
     /**
@@ -345,15 +342,16 @@ public class UserAdministrationPage extends TemplateWebPage
 
             target.add(tableContainer);
 
-            UserAdministrationPage.this.info("Successfully removed the user "
-                + nameLabel.getDefaultModelObjectAsString());
+            UserAdministrationPage.this.info(
+              "Successfully removed the user " + nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the user (" + username + "): " + e.getMessage(), e);
+            logger.error(
+              String.format("Failed to remove the user (%s): %s", username, e.getMessage()), e);
 
-            UserAdministrationPage.this.error("Failed to remove the user "
-                + nameLabel.getDefaultModelObjectAsString());
+            UserAdministrationPage.this.error(
+              "Failed to remove the user " + nameLabel.getDefaultModelObjectAsString());
           }
 
           target.add(getAlerts());

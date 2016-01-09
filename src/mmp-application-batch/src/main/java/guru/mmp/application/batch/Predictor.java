@@ -16,8 +16,6 @@
 
 package guru.mmp.application.batch;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -187,15 +185,15 @@ public class Predictor
       ValueMatcher dayOfWeekMatcher = schedulingPattern.dayOfWeekMatchers.get(k);
       ValueMatcher monthMatcher = schedulingPattern.monthMatchers.get(k);
 
-      for (;;)
+      for (; ; )
       {          // day of week
-        for (;;)
+        for (; ; )
         {        // month
-          for (;;)
+          for (; ; )
           {      // day of month
-            for (;;)
+            for (; ; )
             {    // hour
-              for (;;)
+              for (; ; )
               {  // minutes
                 if (minuteMatcher.match(minute))
                 {

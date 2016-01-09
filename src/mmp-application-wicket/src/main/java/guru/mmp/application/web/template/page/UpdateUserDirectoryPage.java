@@ -16,29 +16,26 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.application.security.*;
+import guru.mmp.application.security.ISecurityService;
+import guru.mmp.application.security.UserDirectory;
+import guru.mmp.application.security.UserDirectoryType;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.template.component.UserDirectoryAdministrationPanel;
-
 import org.apache.wicket.PageReference;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.lang.reflect.Constructor;
-
 import javax.inject.Inject;
+import java.lang.reflect.Constructor;
 
 /**
  * The <code>UpdateUserDirectoryPage</code> class implements the
@@ -47,12 +44,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
-public class UpdateUserDirectoryPage extends TemplateWebPage
+public class UpdateUserDirectoryPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateUserDirectoryPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
@@ -64,8 +62,8 @@ public class UpdateUserDirectoryPage extends TemplateWebPage
    * @param previousPage       the previous page
    * @param userDirectoryModel the model for the user directory
    */
-  public UpdateUserDirectoryPage(PageReference previousPage,
-      IModel<UserDirectory> userDirectoryModel)
+  public UpdateUserDirectoryPage(
+    PageReference previousPage, IModel<UserDirectory> userDirectoryModel)
   {
     super("Update User Directory");
 
@@ -95,13 +93,14 @@ public class UpdateUserDirectoryPage extends TemplateWebPage
 
       Class<? extends UserDirectoryAdministrationPanel> userDirectoryAdministrationPanelClass =
         userDirectoryType.getAdministrationClass().asSubclass(
-          UserDirectoryAdministrationPanel.class);
+        UserDirectoryAdministrationPanel.class);
 
       Constructor<? extends UserDirectoryAdministrationPanel> constructor =
-        userDirectoryAdministrationPanelClass.getConstructor(String.class, IModel.class);
+        userDirectoryAdministrationPanelClass.getConstructor(
+        String.class, IModel.class);
 
-      UserDirectoryAdministrationPanel userDirectoryAdministrationPanel =
-        constructor.newInstance("userDirectoryAdministrationPanel", userDirectoryModel);
+      UserDirectoryAdministrationPanel userDirectoryAdministrationPanel = constructor.newInstance(
+        "userDirectoryAdministrationPanel", userDirectoryModel);
 
       updateForm.add(userDirectoryAdministrationPanel);
 

@@ -27,13 +27,8 @@ public enum RegistryValueType
   BINARY(4, "Binary");
 
   private int code;
-  private String name;
 
-  RegistryValueType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the registry value type given by the specified numeric code value.
@@ -61,6 +56,12 @@ public enum RegistryValueType
       default:
         return RegistryValueType.NONE;
     }
+  }
+
+  RegistryValueType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
   }
 
   /**

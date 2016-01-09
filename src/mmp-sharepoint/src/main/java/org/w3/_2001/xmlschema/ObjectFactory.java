@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
@@ -20,53 +17,67 @@ import javax.xml.namespace.QName;
  * type definitions, element declarations and model
  * groups.  Factory methods for each of these are
  * provided in this class.
- *
  */
 @XmlRegistry
 public class ObjectFactory
 {
-  private final static QName _MaxExclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "maxExclusive");
-  private final static QName _Length_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "length");
-  private final static QName _FractionDigits_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "fractionDigits");
   private final static QName _All_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "all");
-  private final static QName _MinInclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "minInclusive");
-  private final static QName _MinLength_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "minLength");
-  private final static QName _MaxLength_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "maxLength");
-  private final static QName _Key_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "key");
-  private final static QName _Enumeration_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "enumeration");
-  private final static QName _Choice_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "choice");
-  private final static QName _Sequence_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "sequence");
-  private final static QName _MinExclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "minExclusive");
-  private final static QName _MaxInclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "maxInclusive");
+
   private final static QName _AnyAttribute_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
     "anyAttribute");
-  private final static QName _Unique_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "unique");
+
+  private final static QName _Choice_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "choice");
+
+  private final static QName _Enumeration_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "enumeration");
+
+  private final static QName _FractionDigits_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "fractionDigits");
+
+  private final static QName _GroupTypeElement_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "element");
+
   private final static QName _GroupTypeGroup_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
     "group");
-  private final static QName _GroupTypeElement_QNAME =
-    new QName("http://www.w3.org/2001/XMLSchema", "element");
+
+  private final static QName _Key_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "key");
+
+  private final static QName _Length_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "length");
+
+  private final static QName _MaxExclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "maxExclusive");
+
+  private final static QName _MaxInclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "maxInclusive");
+
+  private final static QName _MaxLength_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "maxLength");
+
+  private final static QName _MinExclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "minExclusive");
+
+  private final static QName _MinInclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "minInclusive");
+
+  private final static QName _MinLength_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "minLength");
+
+  private final static QName _Sequence_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "sequence");
+
+  private final static QName _Unique_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
+    "unique");
 
   /**
-   * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.w3._2001.xmlschema
-   *
+   * Create a new ObjectFactory that can be used to create new instances of schema derived
+   * classes for package: org.w3._2001.xmlschema
    */
   public ObjectFactory() {}
 
   /**
    * Create an instance of {@link All }
-   *
    *
    * @return
    */
@@ -77,7 +88,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link All }{@code >}}
-   *
    *
    * @param value
    *
@@ -92,7 +102,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Annotated }
    *
-   *
    * @return
    */
   public Annotated createAnnotated()
@@ -102,7 +111,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link Annotation }
-   *
    *
    * @return
    */
@@ -114,7 +122,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Any }
    *
-   *
    * @return
    */
   public Any createAny()
@@ -124,7 +131,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Wildcard }{@code >}}
-   *
    *
    * @param value
    *
@@ -139,7 +145,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Appinfo }
    *
-   *
    * @return
    */
   public Appinfo createAppinfo()
@@ -149,7 +154,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link Attribute }
-   *
    *
    * @return
    */
@@ -161,7 +165,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link AttributeGroup }
    *
-   *
    * @return
    */
   public AttributeGroup createAttributeGroup()
@@ -171,7 +174,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link AttributeGroupRef }
-   *
    *
    * @return
    */
@@ -183,7 +185,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link AttributeType }
    *
-   *
    * @return
    */
   public AttributeType createAttributeType()
@@ -193,7 +194,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link ExplicitGroup }{@code >}}
-   *
    *
    * @param value
    *
@@ -208,7 +208,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link ComplexContent }
    *
-   *
    * @return
    */
   public ComplexContent createComplexContent()
@@ -218,7 +217,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link ComplexRestrictionType }
-   *
    *
    * @return
    */
@@ -230,7 +228,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link ComplexType }
    *
-   *
    * @return
    */
   public ComplexType createComplexType()
@@ -240,7 +237,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link Documentation }
-   *
    *
    * @return
    */
@@ -252,7 +248,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Element }
    *
-   *
    * @return
    */
   public Element createElement()
@@ -262,7 +257,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link NoFixedFacet }{@code >}}
-   *
    *
    * @param value
    *
@@ -277,7 +271,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link ExplicitGroup }
    *
-   *
    * @return
    */
   public ExplicitGroup createExplicitGroup()
@@ -287,7 +280,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link ExtensionType }
-   *
    *
    * @return
    */
@@ -299,7 +291,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Facet }
    *
-   *
    * @return
    */
   public Facet createFacet()
@@ -310,7 +301,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Field }
    *
-   *
    * @return
    */
   public Field createField()
@@ -320,7 +310,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link NumFacet }{@code >}}
-   *
    *
    * @param value
    *
@@ -335,7 +324,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Group }
    *
-   *
    * @return
    */
   public Group createGroup()
@@ -345,7 +333,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link GroupRef }
-   *
    *
    * @return
    */
@@ -357,29 +344,27 @@ public class ObjectFactory
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link LocalElement }{@code >}}
    *
-   *
    * @param value
    *
    * @return
    */
   @XmlElementDecl(namespace = "http://www.w3.org/2001/XMLSchema", name = "element",
-      scope = GroupType.class)
+    scope = GroupType.class)
   public JAXBElement<LocalElement> createGroupTypeElement(LocalElement value)
   {
     return new JAXBElement<LocalElement>(_GroupTypeElement_QNAME, LocalElement.class,
-        GroupType.class, value);
+      GroupType.class, value);
   }
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link GroupRef }{@code >}}
-   *
    *
    * @param value
    *
    * @return
    */
   @XmlElementDecl(namespace = "http://www.w3.org/2001/XMLSchema", name = "group",
-      scope = GroupType.class)
+    scope = GroupType.class)
   public JAXBElement<GroupRef> createGroupTypeGroup(GroupRef value)
   {
     return new JAXBElement<GroupRef>(_GroupTypeGroup_QNAME, GroupRef.class, GroupType.class, value);
@@ -387,7 +372,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link Import }
-   *
    *
    * @return
    */
@@ -399,7 +383,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Include }
    *
-   *
    * @return
    */
   public Include createInclude()
@@ -409,7 +392,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Keybase }{@code >}}
-   *
    *
    * @param value
    *
@@ -424,7 +406,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Keybase }
    *
-   *
    * @return
    */
   public Keybase createKeybase()
@@ -435,7 +416,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Keyref }
    *
-   *
    * @return
    */
   public Keyref createKeyref()
@@ -445,7 +425,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link NumFacet }{@code >}}
-   *
    *
    * @param value
    *
@@ -460,7 +439,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link List }
    *
-   *
    * @return
    */
   public List createList()
@@ -470,7 +448,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link LocalComplexType }
-   *
    *
    * @return
    */
@@ -482,7 +459,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link LocalElement }
    *
-   *
    * @return
    */
   public LocalElement createLocalElement()
@@ -493,7 +469,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link LocalSimpleType }
    *
-   *
    * @return
    */
   public LocalSimpleType createLocalSimpleType()
@@ -503,7 +478,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Facet }{@code >}}
-   *
    *
    * @param value
    *
@@ -518,7 +492,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Facet }{@code >}}
    *
-   *
    * @param value
    *
    * @return
@@ -531,7 +504,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link NumFacet }{@code >}}
-   *
    *
    * @param value
    *
@@ -546,7 +518,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Facet }{@code >}}
    *
-   *
    * @param value
    *
    * @return
@@ -559,7 +530,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Facet }{@code >}}
-   *
    *
    * @param value
    *
@@ -574,7 +544,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link NumFacet }{@code >}}
    *
-   *
    * @param value
    *
    * @return
@@ -588,7 +557,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link NarrowMaxMin }
    *
-   *
    * @return
    */
   public NarrowMaxMin createNarrowMaxMin()
@@ -598,7 +566,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link NoFixedFacet }
-   *
    *
    * @return
    */
@@ -610,7 +577,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Notation }
    *
-   *
    * @return
    */
   public Notation createNotation()
@@ -620,7 +586,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link NumFacet }
-   *
    *
    * @return
    */
@@ -632,7 +597,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link OpenAttrs }
    *
-   *
    * @return
    */
   public OpenAttrs createOpenAttrs()
@@ -642,7 +606,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link Pattern }
-   *
    *
    * @return
    */
@@ -654,7 +617,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link RealGroup }
    *
-   *
    * @return
    */
   public RealGroup createRealGroup()
@@ -664,7 +626,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link Redefine }
-   *
    *
    * @return
    */
@@ -676,7 +637,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Restriction }
    *
-   *
    * @return
    */
   public Restriction createRestriction()
@@ -686,7 +646,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link RestrictionType }
-   *
    *
    * @return
    */
@@ -698,7 +657,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Schema }
    *
-   *
    * @return
    */
   public Schema createSchema()
@@ -709,7 +667,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Selector }
    *
-   *
    * @return
    */
   public Selector createSelector()
@@ -719,7 +676,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link ExplicitGroup }{@code >}}
-   *
    *
    * @param value
    *
@@ -734,7 +690,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link SimpleContent }
    *
-   *
    * @return
    */
   public SimpleContent createSimpleContent()
@@ -744,7 +699,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link SimpleExplicitGroup }
-   *
    *
    * @return
    */
@@ -756,7 +710,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link SimpleExtensionType }
    *
-   *
    * @return
    */
   public SimpleExtensionType createSimpleExtensionType()
@@ -766,7 +719,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link SimpleRestrictionType }
-   *
    *
    * @return
    */
@@ -778,7 +730,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link SimpleType }
    *
-   *
    * @return
    */
   public SimpleType createSimpleType()
@@ -788,7 +739,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link TotalDigits }
-   *
    *
    * @return
    */
@@ -800,7 +750,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link Union }
    *
-   *
    * @return
    */
   public Union createUnion()
@@ -810,7 +759,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Keybase }{@code >}}
-   *
    *
    * @param value
    *
@@ -825,7 +773,6 @@ public class ObjectFactory
   /**
    * Create an instance of {@link WhiteSpace }
    *
-   *
    * @return
    */
   public WhiteSpace createWhiteSpace()
@@ -835,7 +782,6 @@ public class ObjectFactory
 
   /**
    * Create an instance of {@link Wildcard }
-   *
    *
    * @return
    */

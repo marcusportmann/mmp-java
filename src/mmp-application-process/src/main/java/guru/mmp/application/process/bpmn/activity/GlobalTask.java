@@ -16,22 +16,17 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.*;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The <code>GlobalTask</code> class represents a Global Task that forms part of a Process.
- * <p>
+ * <p/>
  * <b>Global Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="globalTask" type="tGlobalTask" substitutionGroup="rootElement"/&gt;
@@ -49,11 +44,12 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class GlobalTask extends CallableElement
+public abstract class GlobalTask
+  extends CallableElement
 {
   /**
    * The resources that will perform or will be responsible for the Global Task.
-   * <p>
+   * <p/>
    * In the case where the Call Activity that references this Global Task defines its own resources,
    * they will override the ones defined here.
    */

@@ -16,8 +16,6 @@
 
 package guru.mmp.common.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;

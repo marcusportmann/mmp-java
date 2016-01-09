@@ -16,8 +16,6 @@
 
 package guru.mmp.application.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.UUID;
 
 /**
@@ -30,16 +28,19 @@ public class Function
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private String code;
+
   private String description;
+
   private UUID id;
+
   private String name;
 
   /**
    * Constructs a new <code>Function</code>.
    */
-  public Function()
-  {}
+  public Function() {}
 
   /**
    * Returns the code for the function.

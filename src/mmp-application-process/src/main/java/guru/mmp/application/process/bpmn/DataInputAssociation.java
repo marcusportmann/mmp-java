@@ -16,18 +16,16 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.Element;
 
 /**
  * The <code>DataInputAssociation</code> class represents a DataInputAssociation that forms part of
  * a Process.
- * <p>
+ * <p/>
  * The DataInputAssociation can be used to associate an ItemAwareElement element with a DataInput
  * contained in an Activity. The source of such a DataAssociation can be every ItemAwareElement
  * accessible in the current scope, e.g., a Data Object, a Property, or an Expression.
- * <p>
+ * <p/>
  * <b>DataInputAssociation</b> XML schema:
  * <pre>
  * &lt;xsd:element name="dataInputAssociation" type="tDataInputAssociation" /&gt;
@@ -40,7 +38,8 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public final class DataInputAssociation extends DataAssociation
+public final class DataInputAssociation
+  extends DataAssociation
 {
   /**
    * Constructs a new <code>DataInputAssociation</code>.

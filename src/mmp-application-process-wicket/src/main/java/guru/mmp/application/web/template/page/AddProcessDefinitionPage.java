@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -25,26 +23,20 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateProcessSecurity;
 import guru.mmp.application.web.template.component.ProcessDefinitionInputPanel;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
 import java.util.UUID;
-
-import javax.inject.Inject;
 
 /**
  * The <code>AddProcessDefinitionPage</code> class implements the "Add Process Definition"
@@ -53,12 +45,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_ADD_PROCESS_DEFINITION)
-public class AddProcessDefinitionPage extends TemplateWebPage
+public class AddProcessDefinitionPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddProcessDefinitionPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Process Service */
   @Inject
@@ -81,8 +74,8 @@ public class AddProcessDefinitionPage extends TemplateWebPage
       addForm.getModelObject().setId(UUID.randomUUID());
       addForm.getModelObject().setVersion(1);
 
-      ProcessDefinitionInputPanel processDefinitionInputPanel =
-        new ProcessDefinitionInputPanel("processDefinition", false);
+      ProcessDefinitionInputPanel processDefinitionInputPanel = new ProcessDefinitionInputPanel(
+        "processDefinition", false);
 
       addForm.add(processDefinitionInputPanel);
 
@@ -138,8 +131,8 @@ public class AddProcessDefinitionPage extends TemplateWebPage
             }
             catch (Throwable e)
             {
-              logger.error("Failed to delete the uploaded file (" + fileUpload.getClientFileName()
-                  + ")", e);
+              logger.error(String.format("Failed to delete the uploaded file (%s)",
+                fileUpload.getClientFileName()), e);
             }
           }
         }

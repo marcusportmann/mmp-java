@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
@@ -39,14 +37,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  *
  * @author Marcus Portmann
  */
-public class Breadcrumbs extends Component
+public class Breadcrumbs
+  extends Component
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * @see org.apache.wicket.Component#Component(String)
-   *
    * @param id the non-null id of this component
+   *
+   * @see org.apache.wicket.Component#Component(String)
    */
   public Breadcrumbs(String id)
   {
@@ -74,7 +73,7 @@ public class Breadcrumbs extends Component
         NavigationState navigationState = webSession.getNavigationState();
 
         // If we have cached breadcrumbs HTML then check if we can use it
-        if (navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML() != null)
+        if (navigationState.getCachedBreadcrumbsHTML() != null)
         {
           /*
            * If we are rendering the breadcrumbs for the last page accessed in the navigation
@@ -83,7 +82,7 @@ public class Breadcrumbs extends Component
           if (navigationState.isLastPageAccessedInNavigationHierarchy(getPage()))
           {
             response.write(
-                navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML());
+              navigationState.getCachedBreadcrumbsHTML());
 
             return;
           }
@@ -96,7 +95,7 @@ public class Breadcrumbs extends Component
           if (!webSession.getNavigation().isPageInNavigationHierarchy(getPage()))
           {
             response.write(
-                navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML());
+              navigationState.getCachedBreadcrumbsHTML());
 
             return;
           }
@@ -104,7 +103,7 @@ public class Breadcrumbs extends Component
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("<ol class=\"breadcrumb bc-1\">");
+        buffer.append("<ol class=\"breadcrumb push-10-t\">");
 
         Class<? extends Page> clazz;
 
@@ -120,7 +119,7 @@ public class Breadcrumbs extends Component
         if (clazz.isAssignableFrom(getPage().getPageClass()))
         {
           buffer.append(
-              "<li class=\"active\"><a href=\"#\"><i class=\"fa-home\"></i>Home</a></li>");
+            "<li class=\"active\"><a href=\"#\"><i class=\"fa-home\"></i>Home</a></li>");
         }
         else
         {
@@ -137,9 +136,9 @@ public class Breadcrumbs extends Component
 
         navigationState.setLastPageAccessedInNavigationHierarchy(getPage());
 
-        navigationState.setLastPageAccessedInNavigationHierarchyBreadcrumbsHTML(buffer.toString());
+        navigationState.setCachedBreadcrumbsHTML(buffer.toString());
 
-        response.write(navigationState.getLastPageAccessedInNavigationHierarchyBreadcrumbsHTML());
+        response.write(navigationState.getCachedBreadcrumbsHTML());
       }
     }
   }

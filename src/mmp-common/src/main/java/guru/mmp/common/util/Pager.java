@@ -16,31 +16,38 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * The Pager class provides a generic pager for a list of items.
  *
- * @author Marcus Portmann
- *
  * @param <T>
+ *
+ * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 public class Pager<T>
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private int currentPage;
+
   private int firstPage;
+
   private List<T> items;
+
   private int itemsPerPage;
+
   private int pageFirstItemIndex;
+
   private int pageLastItemIndex;
+
   private int pagesPerGroup;
+
   private int totalItems;
+
   private int totalPages;
 
   /**

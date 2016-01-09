@@ -16,8 +16,6 @@
 
 package guru.mmp.common.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -38,8 +36,11 @@ public class Element
   implements Serializable, Content
 {
   private static final long serialVersionUID = 1000000;
+
   private List<Attribute> attributes = new ArrayList<>();
+
   private List<Content> content = new ArrayList<>();
+
   private String name = null;
 
   /**
@@ -117,7 +118,7 @@ public class Element
    * @param name the name of the attribute
    *
    * @return the attribute with the specified name or <code>null</code> if no matching attribute
-   *         could be found
+   * could be found
    */
   public Attribute getAttribute(String name)
   {
@@ -138,7 +139,7 @@ public class Element
    * @param name the name of the attribute
    *
    * @return the value for the attribute with the specified name or <code>null</code> if no
-   *         matching attribute could be found
+   * matching attribute could be found
    */
   public String getAttributeValue(String name)
   {
@@ -169,7 +170,7 @@ public class Element
    * @param name the name of the child element
    *
    * @return the child element or <code>null</code> if an element with the specified name could
-   *         not be found
+   * not be found
    */
   public Element getChild(String name)
   {
@@ -195,7 +196,7 @@ public class Element
    * @param name the name of the child element
    *
    * @return the binary data content for the child element or <code>null</code> if an element with
-   *         the specified name could not be found
+   * the specified name could not be found
    */
   public byte[] getChildOpaque(String name)
   {
@@ -221,7 +222,7 @@ public class Element
    * @param name the name of the child element
    *
    * @return the text content for the child element or <code>null</code> if an element with the
-   *         specified name could not be found
+   * specified name could not be found
    */
   public String getChildText(String name)
   {
@@ -359,7 +360,7 @@ public class Element
    * @param name the name of the attribute
    *
    * @return <code>true</code> if the element has an attribute with the specified name or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean hasAttribute(String name)
   {
@@ -391,7 +392,7 @@ public class Element
    * @param name the name of the child element
    *
    * @return <code>true</code> if the element has a child element with the specified name or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean hasChild(String name)
   {

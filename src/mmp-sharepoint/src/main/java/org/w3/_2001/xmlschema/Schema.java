@@ -1,7 +1,4 @@
-
 package org.w3._2001.xmlschema;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -11,9 +8,9 @@ import java.util.List;
 
 /**
  * <p>Java class for anonymous complex type.
- *
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -27,15 +24,20 @@ import java.util.List;
  *         &lt;/choice>
  *         &lt;sequence maxOccurs="unbounded" minOccurs="0">
  *           &lt;group ref="{http://www.w3.org/2001/XMLSchema}schemaTop"/>
- *           &lt;element ref="{http://www.w3.org/2001/XMLSchema}annotation" maxOccurs="unbounded" minOccurs="0"/>
+ *           &lt;element ref="{http://www.w3.org/2001/XMLSchema}annotation" maxOccurs="unbounded"
+ *           minOccurs="0"/>
  *         &lt;/sequence>
  *       &lt;/sequence>
  *       &lt;attribute name="targetNamespace" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
  *       &lt;attribute name="version" type="{http://www.w3.org/2001/XMLSchema}token" />
- *       &lt;attribute name="finalDefault" type="{http://www.w3.org/2001/XMLSchema}fullDerivationSet" default="" />
- *       &lt;attribute name="blockDefault" type="{http://www.w3.org/2001/XMLSchema}blockSet" default="" />
- *       &lt;attribute name="attributeFormDefault" type="{http://www.w3.org/2001/XMLSchema}formChoice" default="unqualified" />
- *       &lt;attribute name="elementFormDefault" type="{http://www.w3.org/2001/XMLSchema}formChoice" default="unqualified" />
+ *       &lt;attribute name="finalDefault" type="{http://www.w3
+ *       .org/2001/XMLSchema}fullDerivationSet" default="" />
+ *       &lt;attribute name="blockDefault" type="{http://www.w3.org/2001/XMLSchema}blockSet"
+ *       default="" />
+ *       &lt;attribute name="attributeFormDefault" type="{http://www.w3
+ *       .org/2001/XMLSchema}formChoice" default="unqualified" />
+ *       &lt;attribute name="elementFormDefault" type="{http://www.w3
+ *       .org/2001/XMLSchema}formChoice" default="unqualified" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}ID" />
  *       &lt;attribute ref="{http://www.w3.org/XML/1998/namespace}lang"/>
  *       &lt;anyAttribute processContents='lax' namespace='##other'/>
@@ -43,46 +45,52 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "includesAndImportsAndRedefines" })
+@XmlType(name = "", propOrder = {"includesAndImportsAndRedefines"})
 @XmlRootElement(name = "schema")
-public class Schema extends OpenAttrs
+public class Schema
+  extends OpenAttrs
 {
   @XmlAttribute(name = "attributeFormDefault")
   protected FormChoice attributeFormDefault;
+
   @XmlAttribute(name = "blockDefault")
   @XmlSchemaType(name = "blockSet")
   protected List<String> blockDefaults;
+
   @XmlAttribute(name = "elementFormDefault")
   protected FormChoice elementFormDefault;
+
   @XmlAttribute(name = "finalDefault")
   @XmlSchemaType(name = "fullDerivationSet")
   protected List<String> finalDefaults;
+
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
   @XmlSchemaType(name = "ID")
   protected String id;
-  @XmlElements({ @XmlElement(name = "include", type = Include.class) ,
-      @XmlElement(name = "import", type = Import.class) ,
-      @XmlElement(name = "redefine", type = Redefine.class) ,
-      @XmlElement(name = "annotation", type = Annotation.class) ,
-      @XmlElement(name = "simpleType", type = SimpleType.class) ,
-      @XmlElement(name = "complexType", type = ComplexType.class) ,
-      @XmlElement(name = "group", type = Group.class) ,
-      @XmlElement(name = "attributeGroup", type = AttributeGroup.class) ,
-      @XmlElement(name = "element", type = Element.class) ,
-      @XmlElement(name = "attribute", type = Attribute.class) ,
-      @XmlElement(name = "notation", type = Notation.class) })
+
+  @XmlElements({@XmlElement(name = "include", type = Include.class), @XmlElement(name = "import",
+    type = Import.class), @XmlElement(name = "redefine", type = Redefine.class),
+    @XmlElement(name = "annotation", type = Annotation.class),
+    @XmlElement(name = "simpleType", type = SimpleType.class),
+    @XmlElement(name = "complexType", type = ComplexType.class),
+    @XmlElement(name = "group", type = Group.class),
+    @XmlElement(name = "attributeGroup", type = AttributeGroup.class),
+    @XmlElement(name = "element", type = Element.class),
+    @XmlElement(name = "attribute", type = Attribute.class),
+    @XmlElement(name = "notation", type = Notation.class)})
   protected List<OpenAttrs> includesAndImportsAndRedefines;
+
   @XmlAttribute(name = "lang", namespace = "http://www.w3.org/XML/1998/namespace")
   protected String lang;
+
   @XmlAttribute(name = "targetNamespace")
   @XmlSchemaType(name = "anyURI")
   protected String targetNamespace;
+
   @XmlAttribute(name = "version")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "token")
@@ -91,10 +99,8 @@ public class Schema extends OpenAttrs
   /**
    * Gets the value of the attributeFormDefault property.
    *
-   * @return
-   *     possible object is
-   *     {@link FormChoice }
-   *
+   * @return possible object is
+   * {@link FormChoice }
    */
   public FormChoice getAttributeFormDefault()
   {
@@ -110,25 +116,23 @@ public class Schema extends OpenAttrs
 
   /**
    * Gets the value of the blockDefaults property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the blockDefaults property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getBlockDefaults().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link String }
-   *
-   *
    *
    * @return
    */
@@ -145,10 +149,8 @@ public class Schema extends OpenAttrs
   /**
    * Gets the value of the elementFormDefault property.
    *
-   * @return
-   *     possible object is
-   *     {@link FormChoice }
-   *
+   * @return possible object is
+   * {@link FormChoice }
    */
   public FormChoice getElementFormDefault()
   {
@@ -164,25 +166,23 @@ public class Schema extends OpenAttrs
 
   /**
    * Gets the value of the finalDefaults property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the finalDefaults property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getFinalDefaults().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link String }
-   *
-   *
    *
    * @return
    */
@@ -199,10 +199,8 @@ public class Schema extends OpenAttrs
   /**
    * Gets the value of the id property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getId()
   {
@@ -211,21 +209,22 @@ public class Schema extends OpenAttrs
 
   /**
    * Gets the value of the includesAndImportsAndRedefines property.
-   *
-   * <p>
+   * <p/>
+   * <p/>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
-   * This is why there is not a <CODE>set</CODE> method for the includesAndImportsAndRedefines property.
-   *
-   * <p>
+   * This is why there is not a <CODE>set</CODE> method for the includesAndImportsAndRedefines
+   * property.
+   * <p/>
+   * <p/>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getIncludesAndImportsAndRedefines().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
+   * <p/>
+   * <p/>
+   * <p/>
    * Objects of the following type(s) are allowed in the list
    * {@link Include }
    * {@link Import }
@@ -238,8 +237,6 @@ public class Schema extends OpenAttrs
    * {@link Element }
    * {@link Attribute }
    * {@link Notation }
-   *
-   *
    *
    * @return
    */
@@ -256,10 +253,8 @@ public class Schema extends OpenAttrs
   /**
    * Gets the value of the lang property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getLang()
   {
@@ -269,10 +264,8 @@ public class Schema extends OpenAttrs
   /**
    * Gets the value of the targetNamespace property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getTargetNamespace()
   {
@@ -282,10 +275,8 @@ public class Schema extends OpenAttrs
   /**
    * Gets the value of the version property.
    *
-   * @return
-   *     possible object is
-   *     {@link String }
-   *
+   * @return possible object is
+   * {@link String }
    */
   public String getVersion()
   {
@@ -295,10 +286,8 @@ public class Schema extends OpenAttrs
   /**
    * Sets the value of the attributeFormDefault property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link FormChoice }
-   *
+   * @param value allowed object is
+   *              {@link FormChoice }
    */
   public void setAttributeFormDefault(FormChoice value)
   {
@@ -308,10 +297,8 @@ public class Schema extends OpenAttrs
   /**
    * Sets the value of the elementFormDefault property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link FormChoice }
-   *
+   * @param value allowed object is
+   *              {@link FormChoice }
    */
   public void setElementFormDefault(FormChoice value)
   {
@@ -321,10 +308,8 @@ public class Schema extends OpenAttrs
   /**
    * Sets the value of the id property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setId(String value)
   {
@@ -334,10 +319,8 @@ public class Schema extends OpenAttrs
   /**
    * Sets the value of the lang property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setLang(String value)
   {
@@ -347,10 +330,8 @@ public class Schema extends OpenAttrs
   /**
    * Sets the value of the targetNamespace property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setTargetNamespace(String value)
   {
@@ -360,10 +341,8 @@ public class Schema extends OpenAttrs
   /**
    * Sets the value of the version property.
    *
-   * @param value
-   *     allowed object is
-   *     {@link String }
-   *
+   * @param value allowed object is
+   *              {@link String }
    */
   public void setVersion(String value)
   {

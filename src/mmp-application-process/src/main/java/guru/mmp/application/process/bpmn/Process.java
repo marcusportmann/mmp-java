@@ -16,15 +16,10 @@
 
 package guru.mmp.application.process.bpmn;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.activity.*;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.namespace.QName;
 import java.util.Collection;
@@ -33,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The <code>Process</code> class represents a Process.
- * <p>
+ * <p/>
  * <b>Process</b> XML schema:
  * <pre>
  * &lt;xsd:element name="process" type="tProcess" substitutionGroup="rootElement"/&gt;
@@ -64,7 +59,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class Process extends CallableElement
+public final class Process
+  extends CallableElement
 {
   /**
    * The FlowElements for the process.
@@ -228,8 +224,8 @@ public final class Process extends CallableElement
 
             default:
             {
-              throw new ParserException("Failed to parse the unknown XML element ("
-                  + childElement.getNodeName() + ")");
+              throw new ParserException(
+                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
             }
           }
         }
@@ -257,7 +253,7 @@ public final class Process extends CallableElement
    * @param id the ID uniquely identifying the FlowElement
    *
    * @return the FlowElement or <code>null</code> if the FlowElement could
-   *         not be found
+   * not be found
    */
   public FlowElement getFlowElement(QName id)
   {
@@ -297,10 +293,10 @@ public final class Process extends CallableElement
 
   /**
    * Returns whether the Process is executable.
-   * <p>
+   * <p/>
    * An executable Process is a private Process that has been modeled for the purpose of being
    * executed.
-   * <p>
+   * <p/>
    * A non-executable process is a private Process that has been modeled for the purpose of
    * documenting process behavior at a modeler-defined level of detail. Thus, information needed
    * for execution, such as formal condition expressions are typically not included in a

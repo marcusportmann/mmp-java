@@ -16,8 +16,6 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -26,14 +24,12 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>ManualTask</code> class represents a Manual Task that forms part of a Process.
- * <p>
+ * <p/>
  * This task represents work that is not automated and is performed outside the control of the
  * BPM engine.
- * <p>
+ * <p/>
  * <b>Manual Task</b> XML schema:
  * <pre>
  * &lt;xsd:element name="manualTask" type="tManualTask" substitutionGroup="flowElement"/&gt;
@@ -46,7 +42,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public final class ManualTask extends Task
+public final class ManualTask
+  extends Task
 {
   /**
    * Constructs a new <code>ManualTask</code>.

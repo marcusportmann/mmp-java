@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.navigation;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.apache.wicket.Page;
 
 /**
@@ -29,6 +27,7 @@ import org.apache.wicket.Page;
 public abstract class NavigationItem
 {
   private String iconClass;
+
   private String name;
 
   /**
@@ -70,7 +69,7 @@ public abstract class NavigationItem
    * @param page the page
    *
    * @return <code>true</code> if the page is in the navigation item's hierarchy or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public abstract boolean isPageInNavigationHierarchy(Page page);
 }

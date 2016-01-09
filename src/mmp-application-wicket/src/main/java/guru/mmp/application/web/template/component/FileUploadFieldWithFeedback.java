@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
@@ -65,9 +63,9 @@ public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
   }
 
   /**
-   * @see org.apache.wicket.markup.html.form.FormComponent#renderHead(IHeaderResponse)
-   *
    * @param response the Wicket header response
+   *
+   * @see org.apache.wicket.markup.html.form.FormComponent#renderHead(IHeaderResponse)
    */
   @Override
   public void renderHead(IHeaderResponse response)
@@ -107,21 +105,12 @@ public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      if (ajaxRequestHandler.getComponents().contains(this.getForm()))
-      {
-        getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
-      }
-
       String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
 
       if (feedbackJavaScript != null)
       {
         ajaxRequestHandler.appendJavaScript(feedbackJavaScript);
       }
-    }
-    else
-    {
-      getResponse().write("<div id=\"" + getId() + "Feedback\" class=\"hidden\"></div>");
     }
   }
 }

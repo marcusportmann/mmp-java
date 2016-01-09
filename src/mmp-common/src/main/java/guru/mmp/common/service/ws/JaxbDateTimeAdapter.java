@@ -16,11 +16,7 @@
 
 package guru.mmp.common.service.ws;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.ISO8601;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.Calendar;
 

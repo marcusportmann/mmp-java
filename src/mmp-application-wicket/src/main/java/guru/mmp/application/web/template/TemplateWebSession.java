@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
@@ -28,19 +26,20 @@ import org.apache.wicket.request.Request;
 import java.io.Serializable;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TemplateWebSession</code> class stores the session information for a user accessing a
  * Wicket web application that make use of the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class TemplateWebSession extends WebSession
+public class TemplateWebSession
+  extends WebSession
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
   private NavigationGroup navigation;
+
   private NavigationState navigationState;
 
   /**
@@ -55,10 +54,10 @@ public class TemplateWebSession extends WebSession
 
   /**
    * Returns the user-specific navigation hierarchy for the application.
-   *
+   * <p/>
    * This hierarchy is derived from the application's navigation hierarchy and filtered according
    * to the security permissions of the user associated with the session.
-   *
+   * <p/>
    * NOTE: If the session is associated with an "anonymous" user then only the unsecured navigation
    * items will be included in the navigation hierarchy.
    *
@@ -167,7 +166,9 @@ public class TemplateWebSession extends WebSession
         }
         else
         {
-          if (link.isAnonymousOnly() && isUserLoggedIn()) {}
+          if (link.isAnonymousOnly() && isUserLoggedIn())
+          {
+          }
           else
           {
             filteredGroup.addItem(link);

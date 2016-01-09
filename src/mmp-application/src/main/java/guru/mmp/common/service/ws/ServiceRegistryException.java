@@ -23,7 +23,8 @@ package guru.mmp.common.service.ws;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ServiceRegistryException extends RuntimeException
+public class ServiceRegistryException
+  extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

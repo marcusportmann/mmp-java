@@ -26,6 +26,7 @@ package guru.mmp.application.messaging.message;
 public class ErrorDetailData
 {
   private String code;
+
   private String message;
 
   /**

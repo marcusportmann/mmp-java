@@ -16,16 +16,11 @@
 
 package guru.mmp.application.web.template.component;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
-
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
 
@@ -35,7 +30,8 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
-public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministrationPanel
+public class LDAPUserDirectoryAdministrationPanel
+  extends UserDirectoryAdministrationPanel
 {
   /**
    * Constructs a new <code>LDAPUserDirectoryAdministrationPanel</code>.
@@ -120,25 +116,25 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       add(userObjectClassField);
 
       // The "userUsernameAttribute" field
-      TextField<String> userUsernameAttributeField =
-        new TextFieldWithFeedback<>("userUsernameAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserUsernameAttribute"));
+      TextField<String> userUsernameAttributeField = new TextFieldWithFeedback<>(
+        "userUsernameAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserUsernameAttribute"));
       userUsernameAttributeField.setType(String.class);
       userUsernameAttributeField.setRequired(true);
       add(userUsernameAttributeField);
 
       // The "userPasswordExpiryAttribute" field
-      TextField<String> userPasswordExpiryAttributeField =
-        new TextFieldWithFeedback<>("userPasswordExpiryAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordExpiryAttribute"));
+      TextField<String> userPasswordExpiryAttributeField = new TextFieldWithFeedback<>(
+        "userPasswordExpiryAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordExpiryAttribute"));
       userPasswordExpiryAttributeField.setType(String.class);
       userPasswordExpiryAttributeField.setRequired(true);
       add(userPasswordExpiryAttributeField);
 
       // The "userPasswordAttemptsAttribute" field
-      TextField<String> userPasswordAttemptsAttributeField =
-        new TextFieldWithFeedback<>("userPasswordAttemptsAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordAttemptsAttribute"));
+      TextField<String> userPasswordAttemptsAttributeField = new TextFieldWithFeedback<>(
+        "userPasswordAttemptsAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordAttemptsAttribute"));
       userPasswordAttemptsAttributeField.setType(String.class);
       userPasswordAttemptsAttributeField.setRequired(true);
       add(userPasswordAttemptsAttributeField);
@@ -151,41 +147,41 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       add(userTitleAttributeField);
 
       // The "userFirstNamesAttribute" field
-      TextField<String> userFirstNamesAttributeField =
-        new TextFieldWithFeedback<>("userFirstNamesAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserFirstNamesAttribute"));
+      TextField<String> userFirstNamesAttributeField = new TextFieldWithFeedback<>(
+        "userFirstNamesAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserFirstNamesAttribute"));
       userFirstNamesAttributeField.setType(String.class);
       userFirstNamesAttributeField.setRequired(true);
       add(userFirstNamesAttributeField);
 
       // The "userLastNameAttribute" field
-      TextField<String> userLastNameAttributeField =
-        new TextFieldWithFeedback<>("userLastNameAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserLastNameAttribute"));
+      TextField<String> userLastNameAttributeField = new TextFieldWithFeedback<>(
+        "userLastNameAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserLastNameAttribute"));
       userLastNameAttributeField.setType(String.class);
       userLastNameAttributeField.setRequired(true);
       add(userLastNameAttributeField);
 
       // The "userPhoneNumberAttribute" field
-      TextField<String> userPhoneNumberAttributeField =
-        new TextFieldWithFeedback<>("userPhoneNumberAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserPhoneNumberAttribute"));
+      TextField<String> userPhoneNumberAttributeField = new TextFieldWithFeedback<>(
+        "userPhoneNumberAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserPhoneNumberAttribute"));
       userPhoneNumberAttributeField.setType(String.class);
       userPhoneNumberAttributeField.setRequired(false);
       add(userPhoneNumberAttributeField);
 
       // The "userFaxNumberAttribute" field
-      TextField<String> userFaxNumberAttributeField =
-        new TextFieldWithFeedback<>("userFaxNumberAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserFaxNumberAttribute"));
+      TextField<String> userFaxNumberAttributeField = new TextFieldWithFeedback<>(
+        "userFaxNumberAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserFaxNumberAttribute"));
       userFaxNumberAttributeField.setType(String.class);
       userFaxNumberAttributeField.setRequired(false);
       add(userFaxNumberAttributeField);
 
       // The "userMobileNumberAttribute" field
-      TextField<String> userMobileNumberAttributeField =
-        new TextFieldWithFeedback<>("userMobileNumberAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserMobileNumberAttribute"));
+      TextField<String> userMobileNumberAttributeField = new TextFieldWithFeedback<>(
+        "userMobileNumberAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserMobileNumberAttribute"));
       userMobileNumberAttributeField.setType(String.class);
       userMobileNumberAttributeField.setRequired(true);
       add(userMobileNumberAttributeField);
@@ -198,17 +194,17 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       add(userEmailAttributeField);
 
       // The "userDescriptionAttribute" field
-      TextField<String> userDescriptionAttributeField =
-        new TextFieldWithFeedback<>("userDescriptionAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserDescriptionAttribute"));
+      TextField<String> userDescriptionAttributeField = new TextFieldWithFeedback<>(
+        "userDescriptionAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserDescriptionAttribute"));
       userDescriptionAttributeField.setType(String.class);
       userDescriptionAttributeField.setRequired(false);
       add(userDescriptionAttributeField);
 
       // The "userPasswordHistoryAttribute" field
-      TextField<String> userPasswordHistoryAttributeField =
-        new TextFieldWithFeedback<>("userPasswordHistoryAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordHistoryAttribute"));
+      TextField<String> userPasswordHistoryAttributeField = new TextFieldWithFeedback<>(
+        "userPasswordHistoryAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.UserPasswordHistoryAttribute"));
       userPasswordHistoryAttributeField.setType(String.class);
       userPasswordHistoryAttributeField.setRequired(true);
       add(userPasswordHistoryAttributeField);
@@ -229,57 +225,57 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       add(groupNameAttributeField);
 
       // The "groupMemberAttribute" field
-      TextField<String> groupMemberAttributeField =
-        new TextFieldWithFeedback<>("groupMemberAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.GroupMemberAttribute"));
+      TextField<String> groupMemberAttributeField = new TextFieldWithFeedback<>(
+        "groupMemberAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.GroupMemberAttribute"));
       groupMemberAttributeField.setType(String.class);
       groupMemberAttributeField.setRequired(true);
       add(groupMemberAttributeField);
 
       // The "groupDescriptionAttribute" field
-      TextField<String> groupDescriptionAttributeField =
-        new TextFieldWithFeedback<>("groupDescriptionAttribute",
-          new PropertyModel<>(userDirectoryModel, "parameters.GroupDescriptionAttribute"));
+      TextField<String> groupDescriptionAttributeField = new TextFieldWithFeedback<>(
+        "groupDescriptionAttribute",
+        new PropertyModel<>(userDirectoryModel, "parameters.GroupDescriptionAttribute"));
       groupDescriptionAttributeField.setType(String.class);
       groupDescriptionAttributeField.setRequired(true);
       add(groupDescriptionAttributeField);
 
       // The "maxPasswordAttempts" field
-      TextField<String> maxPasswordAttemptsField =
-        new TextFieldWithFeedback<>("maxPasswordAttempts",
-          new PropertyModel<>(userDirectoryModel, "parameters.MaxPasswordAttempts"));
+      TextField<String> maxPasswordAttemptsField = new TextFieldWithFeedback<>(
+        "maxPasswordAttempts",
+        new PropertyModel<>(userDirectoryModel, "parameters.MaxPasswordAttempts"));
       maxPasswordAttemptsField.setType(String.class);
       maxPasswordAttemptsField.setRequired(true);
       add(maxPasswordAttemptsField);
 
       // The "passwordExpiryMonths" field
-      TextField<String> passwordExpiryMonthsField =
-        new TextFieldWithFeedback<>("passwordExpiryMonths",
-          new PropertyModel<>(userDirectoryModel, "parameters.PasswordExpiryMonths"));
+      TextField<String> passwordExpiryMonthsField = new TextFieldWithFeedback<>(
+        "passwordExpiryMonths",
+        new PropertyModel<>(userDirectoryModel, "parameters.PasswordExpiryMonths"));
       passwordExpiryMonthsField.setType(String.class);
       passwordExpiryMonthsField.setRequired(true);
       add(passwordExpiryMonthsField);
 
       // The "supportPasswordHistory" field
-      TextField<String> supportPasswordHistoryField =
-        new TextFieldWithFeedback<>("supportPasswordHistory",
-          new PropertyModel<>(userDirectoryModel, "parameters.SupportPasswordHistory"));
+      TextField<String> supportPasswordHistoryField = new TextFieldWithFeedback<>(
+        "supportPasswordHistory",
+        new PropertyModel<>(userDirectoryModel, "parameters.SupportPasswordHistory"));
       supportPasswordHistoryField.setType(String.class);
       supportPasswordHistoryField.setRequired(true);
       add(supportPasswordHistoryField);
 
       // The "passwordHistoryMonths" field
-      TextField<String> passwordHistoryMonthsField =
-        new TextFieldWithFeedback<>("passwordHistoryMonths",
-          new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMonths"));
+      TextField<String> passwordHistoryMonthsField = new TextFieldWithFeedback<>(
+        "passwordHistoryMonths",
+        new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMonths"));
       passwordHistoryMonthsField.setType(String.class);
       passwordHistoryMonthsField.setRequired(true);
       add(passwordHistoryMonthsField);
 
       // The "passwordHistoryMaxLength" field
-      TextField<String> passwordHistoryMaxLengthField =
-        new TextFieldWithFeedback<>("passwordHistoryMaxLength",
-          new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMaxLength"));
+      TextField<String> passwordHistoryMaxLengthField = new TextFieldWithFeedback<>(
+        "passwordHistoryMaxLength",
+        new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMaxLength"));
       passwordHistoryMaxLengthField.setType(String.class);
       passwordHistoryMaxLengthField.setRequired(true);
       add(passwordHistoryMaxLengthField);
@@ -301,7 +297,7 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
     catch (Throwable e)
     {
       throw new WebApplicationException(
-          "Failed to initialise the LDAPUserDirectoryAdministrationPanel", e);
+        "Failed to initialise the LDAPUserDirectoryAdministrationPanel", e);
     }
   }
 

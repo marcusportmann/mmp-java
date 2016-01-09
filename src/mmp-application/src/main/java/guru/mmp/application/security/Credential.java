@@ -31,7 +31,7 @@ public interface Credential
    * @param another the credential to compare with
    *
    * @return true if the object passed in matches the credential represented by the implementation
-   *         of this interface
+   * of this interface
    */
   @Override
   boolean equals(Object another);

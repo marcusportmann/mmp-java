@@ -16,13 +16,9 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -30,7 +26,7 @@ import java.util.UUID;
  * The <code>MessageDownloadRequest</code> class represents a request sent by the Messaging
  * Infrastructure on a mobile device to download the queued messages for the device from the
  * server-side messaging infrastructure.
- *
+ * <p/>
  * NOTE: No information in the download request is encrypted and the request itself is not
  * authenticated. This is because the queued messages returned by the server-side Messaging
  * Infrastructure will themselves be encrypted.
@@ -49,6 +45,24 @@ public class MessageDownloadRequest
    * The username identifying the user whose messages should be downloaded.
    */
   private String username;
+
+  /**
+   * Returns <code>true</code> if the WBXML document contains valid message download request
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message download request
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessageDownloadRequest") &&
+      (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("deviceId") &&
+      rootElement.hasAttribute("username");
+  }
 
   /**
    * Constructs a new <code>MessageDownloadRequest</code> and populates it from the information
@@ -78,29 +92,11 @@ public class MessageDownloadRequest
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message download request
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message download request
-   *         information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessageDownloadRequest")
-        && (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("deviceId")
-        && rootElement.hasAttribute("username");
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
    * message download request originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         message download request originated from
+   * message download request originated from
    */
   public UUID getDeviceId()
   {
@@ -147,7 +143,8 @@ public class MessageDownloadRequest
   @Override
   public String toString()
   {
-    return "<MessageDownloadRequest deviceId=\"" + deviceId + "\" username=\"" + username + "\"/>";
+    return String.format("<MessageDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId,
+      username);
   }
 
   /**

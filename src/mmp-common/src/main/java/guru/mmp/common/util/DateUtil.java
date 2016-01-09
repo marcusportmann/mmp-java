@@ -16,8 +16,6 @@
 
 package guru.mmp.common.util;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.Calendar;
 import java.util.Date;
 

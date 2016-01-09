@@ -16,8 +16,6 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
@@ -25,27 +23,25 @@ import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.Dialog;
 import guru.mmp.application.web.template.component.PagingNavigator;
-import guru.mmp.application.web.template.data.OrganisationDataProvider;
-
+import guru.mmp.application.web.template.data.FilteredOrganisationDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>OrganisationAdministrationPage</code> class implements the
@@ -54,13 +50,14 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
-public class OrganisationAdministrationPage extends TemplateWebPage
+public class OrganisationAdministrationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
-  private static final Logger logger =
-    LoggerFactory.getLogger(OrganisationAdministrationPage.class);
+  private static final Logger logger = LoggerFactory.getLogger(
+    OrganisationAdministrationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
@@ -100,7 +97,29 @@ public class OrganisationAdministrationPage extends TemplateWebPage
       };
       tableContainer.add(addLink);
 
-      OrganisationDataProvider dataProvider = new OrganisationDataProvider();
+      FilteredOrganisationDataProvider dataProvider = new FilteredOrganisationDataProvider();
+
+      // The "filterForm" form
+      Form<Void> filterForm = new Form<>("filterForm");
+      filterForm.setMarkupId("filterForm");
+      filterForm.setOutputMarkupId(true);
+
+      // The "filter" field
+      TextField<String> filterField = new TextField<>("filter",
+        new PropertyModel<>(dataProvider, "filter"));
+      filterForm.add(filterField);
+
+      // The "filterButton" button
+      Button filterButton = new Button("filterButton")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onSubmit() {}
+      };
+      filterButton.setDefaultFormProcessing(true);
+      filterForm.add(filterButton);
+      tableContainer.add(filterForm);
 
       // The organisation data view
       DataView<Organisation> dataView = new DataView<Organisation>("organisation", dataProvider)
@@ -110,7 +129,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
         @Override
         protected void populateItem(Item<Organisation> item)
         {
-          item.add(new Label("code", new PropertyModel<String>(item.getModel(), "code")));
+          item.add(new Label("id", new PropertyModel<String>(item.getModel(), "id")));
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
 
           // The "updateLink" link
@@ -161,7 +180,7 @@ public class OrganisationAdministrationPage extends TemplateWebPage
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to initialise the OrganisationAdministrationPage",
-          e);
+        e);
     }
   }
 
@@ -169,10 +188,13 @@ public class OrganisationAdministrationPage extends TemplateWebPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal of an
    * organisation to be confirmed.
    */
-  private class RemoveDialog extends Dialog
+  private class RemoveDialog
+    extends Dialog
   {
     private static final long serialVersionUID = 1000000;
+
     private UUID id;
+
     private Label nameLabel;
 
     /**
@@ -202,15 +224,16 @@ public class OrganisationAdministrationPage extends TemplateWebPage
 
             target.add(tableContainer);
 
-            OrganisationAdministrationPage.this.info("Successfully removed the organisation "
-                + nameLabel.getDefaultModelObjectAsString());
+            OrganisationAdministrationPage.this.info(
+              "Successfully removed the organisation " + nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to remove the organisation (" + id + "): " + e.getMessage(), e);
+            logger.error(
+              String.format("Failed to remove the organisation (%s): %s", id, e.getMessage()), e);
 
-            OrganisationAdministrationPage.this.error("Failed to remove the organisation "
-                + nameLabel.getDefaultModelObjectAsString());
+            OrganisationAdministrationPage.this.error(
+              "Failed to remove the organisation " + nameLabel.getDefaultModelObjectAsString());
           }
 
           target.add(getAlerts());

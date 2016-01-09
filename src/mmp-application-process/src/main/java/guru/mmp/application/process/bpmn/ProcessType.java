@@ -18,7 +18,7 @@ package guru.mmp.application.process.bpmn;
 
 /**
  * The <code>ProcessType</code> enumeration defines the possible types of Processes.
- * <p>
+ * <p/>
  * <b>Process Type</b> XML schema:
  * <pre>
  * &lt;xsd:simpleType name="tProcessType"&gt;
@@ -37,13 +37,8 @@ public enum ProcessType
   NONE("None", "None"), PUBLIC("Public", "Public"), PRIVATE("Private", "Private");
 
   private String id;
-  private String name;
 
-  ProcessType(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
-  }
+  private String name;
 
   /**
    * Returns the Process type given by the specified ID.
@@ -68,6 +63,12 @@ public enum ProcessType
       default:
         throw new RuntimeException("Invalid ID for process type (" + id + ")");
     }
+  }
+
+  ProcessType(String id, String name)
+  {
+    this.id = id;
+    this.name = name;
   }
 
   /**
@@ -95,7 +96,7 @@ public enum ProcessType
    * enumeration value.
    *
    * @return the string representation of the <code>ProcessType</code>
-   *         enumeration value
+   * enumeration value
    */
   public String toString()
   {

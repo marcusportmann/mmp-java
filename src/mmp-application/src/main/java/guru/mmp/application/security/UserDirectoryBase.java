@@ -16,28 +16,21 @@
 
 package guru.mmp.application.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
-import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.Base64;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.security.MessageDigest;
-
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
 
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory
@@ -48,10 +41,15 @@ public abstract class UserDirectoryBase
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserDirectoryBase.class);
+
   private String createGroupSQL;
+
   private DataSource dataSource;
+
   private String databaseCatalogSeparator;
+
   private String deleteGroupSQL;
+
   private String getGroupIdSQL;
 
   /**
@@ -83,7 +81,9 @@ public abstract class UserDirectoryBase
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored) {}
+    catch (Throwable ignored)
+    {
+    }
 
     if (dataSource == null)
     {
@@ -91,15 +91,17 @@ public abstract class UserDirectoryBase
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored) {}
+      catch (Throwable ignored)
+      {
+      }
     }
 
     if (dataSource == null)
     {
-      throw new SecurityException("Failed to initialise the user directory (" + userDirectoryId
-          + "): Failed to retrieve the application data source"
-          + " using the JNDI names (java:app/jdbc/ApplicationDataSource) and"
-          + " (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new SecurityException(String.format(
+        "Failed to initialise the user directory (%s): Failed to retrieve the application data " +
+          "source using the JNDI names (java:app/jdbc/ApplicationDataSource) and " +
+          "(java:comp/env/jdbc/ApplicationDataSource)", userDirectoryId));
     }
 
     try
@@ -126,8 +128,9 @@ public abstract class UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to initialise the the user directory (" + userDirectoryId
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to initialise the the user directory (%s): %s", userDirectoryId,
+          e.getMessage()), e);
     }
   }
 
@@ -159,21 +162,21 @@ public abstract class UserDirectoryBase
   protected void buildStatements(String schemaPrefix)
   {
     // createGroupSQL
-    createGroupSQL = "INSERT INTO " + schemaPrefix + "GROUPS"
-        + " (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES (?, ?, ?)";
+    createGroupSQL = "INSERT INTO " + schemaPrefix +
+      "GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES (?, ?, ?)";
 
     // deleteGroupSQL
-    deleteGroupSQL = "DELETE FROM " + schemaPrefix + "GROUPS G"
-        + " WHERE G.USER_DIRECTORY_ID=? AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    deleteGroupSQL = "DELETE FROM " + schemaPrefix + "GROUPS G WHERE G.USER_DIRECTORY_ID=? " +
+      "AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getGroupIdSQL
-    getGroupIdSQL = "SELECT G.ID FROM " + schemaPrefix + "GROUPS G"
-        + " WHERE G.USER_DIRECTORY_ID=? AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getGroupIdSQL = "SELECT G.ID FROM " + schemaPrefix + "GROUPS G WHERE G" +
+      ".USER_DIRECTORY_ID=? AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
   }
 
   /**
    * Create a new group.
-   * <p>
+   * <p/>
    * If a group with the specified group name already exists the ID for this existing group will be
    * returned.
    *
@@ -193,14 +196,15 @@ public abstract class UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to create the group (%s) for the user directory (%s): %s", groupName,
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
   /**
    * Create a new group.
-   * <p>
+   * <p/>
    * If a group with the specified group name already exists the ID for this existing group will be
    * returned.
    *
@@ -231,17 +235,17 @@ public abstract class UserDirectoryBase
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement (" + createGroupSQL
-            + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            createGroupSQL));
       }
 
       return groupId;
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to create the group (" + groupName + ") with the ID ("
-          + groupId + ") for the user directory (" + getUserDirectoryId() + "): "
-          + e.getMessage(), e);
+      throw new SecurityException(String.format(
+        "Failed to create the group (%s) with the ID (%s) for the user directory (%s): %s",
+        groupName, groupId, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -267,8 +271,9 @@ public abstract class UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to generate a SHA-256 hash of the password (" + password
-          + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to generate a SHA-256 hash of the password (%s): %s", password,
+          e.getMessage()), e);
     }
   }
 
@@ -279,7 +284,7 @@ public abstract class UserDirectoryBase
    * @param groupName  the group name uniquely identifying the group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   *         <code>null</code> if a group with the specified group name could not be found
+   * <code>null</code> if a group with the specified group name could not be found
    *
    * @throws SecurityException
    */
@@ -301,16 +306,17 @@ public abstract class UserDirectoryBase
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityException(
-            "No rows were affected as a result of executing the SQL statement (" + deleteGroupSQL
-            + ")");
+          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+            deleteGroupSQL));
       }
 
       return groupId;
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to delete the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException(
+        String.format("Failed to delete the group (%s) for the user directory (%s): %s", groupName,
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -341,7 +347,7 @@ public abstract class UserDirectoryBase
    * @param groupName  the group name uniquely identifying the group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   *         <code>null</code> if a group with the specified group name could not be found
+   * <code>null</code> if a group with the specified group name could not be found
    *
    * @throws SecurityException
    */
@@ -367,8 +373,9 @@ public abstract class UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityException("Failed to retrieve the ID for the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityException(
+        String.format("Failed to retrieve the ID for the group (%s) for the user directory (%s)",
+          groupName, getUserDirectoryId()), e);
     }
   }
 

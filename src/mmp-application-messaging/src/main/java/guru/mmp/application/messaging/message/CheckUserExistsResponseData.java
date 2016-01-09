@@ -16,8 +16,6 @@
 
 package guru.mmp.application.messaging.message;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -25,8 +23,6 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
 
@@ -39,7 +35,8 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class CheckUserExistsResponseData extends WbxmlMessageData
+public class CheckUserExistsResponseData
+  extends WbxmlMessageData
 {
   /**
    * The error code returned to indicate success.
@@ -59,8 +56,8 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Check User Exists Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID =
-    UUID.fromString("a38bd55e-3470-46f1-a96a-a6b08a9adc63");
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "a38bd55e-3470-46f1-a96a-a6b08a9adc63");
 
   /**
    * The error code;
@@ -111,7 +108,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -127,8 +124,8 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
       return false;
     }
 
-    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage"))
-        || (!rootElement.hasChild("UserExists")))
+    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage")) ||
+      (!rootElement.hasChild("UserExists")))
     {
       return false;
     }
@@ -221,7 +218,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    *
    * @throws MessagingException
    */

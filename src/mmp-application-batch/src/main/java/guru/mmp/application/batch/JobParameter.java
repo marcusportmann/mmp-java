@@ -16,8 +16,6 @@
 
 package guru.mmp.application.batch;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**
@@ -37,15 +35,15 @@ public class JobParameter
   private long id;
 
   /**
-   * The name of the job parameter.
-   */
-  private String name;
-
-  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter
    * is associated with.
    */
   private String jobId;
+
+  /**
+   * The name of the job parameter.
+   */
+  private String name;
 
   /**
    * The value of the job parameter.
@@ -80,6 +78,18 @@ public class JobParameter
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   * parameter is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   * parameter is associated with
+   */
+  public String getJobId()
+  {
+    return jobId;
+  }
+
+  /**
    * Returns the name of the job parameter.
    *
    * @return the name of the job parameter
@@ -87,18 +97,6 @@ public class JobParameter
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   *         parameter is associated with
-   */
-  public String getJobId()
-  {
-    return jobId;
   }
 
   /**
@@ -122,16 +120,6 @@ public class JobParameter
   }
 
   /**
-   * Set the name of the job parameter.
-   *
-   * @param name the name of the job parameter
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the job the job
    * parameter is associated with.
    *
@@ -141,6 +129,16 @@ public class JobParameter
   public void setJobId(String jobId)
   {
     this.jobId = jobId;
+  }
+
+  /**
+   * Set the name of the job parameter.
+   *
+   * @param name the name of the job parameter
+   */
+  public void setName(String name)
+  {
+    this.name = name;
   }
 
   /**

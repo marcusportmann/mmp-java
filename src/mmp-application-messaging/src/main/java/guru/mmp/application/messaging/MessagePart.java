@@ -16,14 +16,10 @@
 
 package guru.mmp.application.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.common.util.ISO8601;
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.Date;
 import java.util.UUID;
@@ -105,7 +101,7 @@ public class MessagePart
   private UUID messageOrganisationId;
 
   /**
-   *  The priority for the original message.
+   * The priority for the original message.
    */
   private Message.Priority messagePriority;
 
@@ -151,6 +147,30 @@ public class MessagePart
   private Date updated;
 
   /**
+   * Returns <code>true</code> if the WBXML document contains valid message part information or
+   * <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message part information or
+   * <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessagePart") && !((!rootElement.hasAttribute("id")) ||
+      (!rootElement.hasAttribute("partNo")) || (!rootElement.hasAttribute("totalParts")) ||
+      (!rootElement.hasAttribute("sendAttempts")) || (!rootElement.hasAttribute("messageId")) ||
+      (!rootElement.hasAttribute("messageUsername")) || (!rootElement.hasAttribute(
+      "messageDeviceId")) || (!rootElement.hasAttribute("messageTypeId")) ||
+      (!rootElement.hasAttribute("messageCorrelationId")) || (!rootElement.hasAttribute(
+      "messagePriority")) || (!rootElement.hasAttribute("messageCreated")) ||
+      (!rootElement.hasAttribute("messageDataHash")) || (!rootElement.hasAttribute(
+      "messageEncryptionIV")) || (!rootElement.hasAttribute("messageChecksum")));
+  }
+
+  /**
    * Constructs a new <code>MessagePart</code> and populates it from the message information stored
    * in the specified WBXML document.
    *
@@ -170,10 +190,10 @@ public class MessagePart
     this.messageUsername = rootElement.getAttributeValue("messageUsername");
     this.messageDeviceId = UUID.fromString(rootElement.getAttributeValue("messageDeviceId"));
     this.messageTypeId = UUID.fromString(rootElement.getAttributeValue("messageTypeId"));
-    this.messageCorrelationId =
-      UUID.fromString(rootElement.getAttributeValue("messageCorrelationId"));
-    this.messagePriority =
-      Message.Priority.fromCode(Integer.parseInt(rootElement.getAttributeValue("messagePriority")));
+    this.messageCorrelationId = UUID.fromString(
+      rootElement.getAttributeValue("messageCorrelationId"));
+    this.messagePriority = Message.Priority.fromCode(
+      Integer.parseInt(rootElement.getAttributeValue("messagePriority")));
 
     String messageCreatedAttributeValue = rootElement.getAttributeValue("messageCreated");
 
@@ -183,8 +203,9 @@ public class MessagePart
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to parse the messageCreated ISO8601 timestamp ("
-          + messageCreatedAttributeValue + ") for the message part", e);
+      throw new RuntimeException(String.format(
+        "Failed to parse the messageCreated ISO8601 timestamp (%s) for the message part (%s)",
+        messageCreatedAttributeValue, id), e);
     }
 
     this.messageDataHash = rootElement.getAttributeValue("messageDataHash");
@@ -219,10 +240,11 @@ public class MessagePart
    * @param messageChecksum      the checksum for the original message
    * @param data                 the binary data for the message part
    */
-  public MessagePart(int partNo, int totalParts, UUID messageId, String messageUsername,
-      UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
-      Message.Priority messagePriority, Date messageCreated, String messageDataHash,
-      String messageEncryptionIV, String messageChecksum, byte[] data)
+  public MessagePart(
+    int partNo, int totalParts, UUID messageId, String messageUsername, UUID messageDeviceId,
+    UUID messageTypeId, UUID messageCorrelationId, Message.Priority messagePriority,
+    Date messageCreated, String messageDataHash, String messageEncryptionIV, String messageChecksum,
+    byte[] data)
   {
     this.id = UUID.randomUUID();
     this.partNo = partNo;
@@ -278,11 +300,12 @@ public class MessagePart
    *                             processing
    * @param data                 the binary data for the message part
    */
-  public MessagePart(UUID id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
-      Status status, Date persisted, Date updated, UUID messageId, String messageUsername,
-      UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
-      Message.Priority messagePriority, Date messageCreated, String messageDataHash,
-      String messageEncryptionIV, String messageChecksum, String lockName, byte[] data)
+  public MessagePart(
+    UUID id, int partNo, int totalParts, int sendAttempts, int downloadAttempts, Status status,
+    Date persisted, Date updated, UUID messageId, String messageUsername, UUID messageDeviceId,
+    UUID messageTypeId, UUID messageCorrelationId, Message.Priority messagePriority,
+    Date messageCreated, String messageDataHash, String messageEncryptionIV, String messageChecksum,
+    String lockName, byte[] data)
   {
     this.id = id;
     this.partNo = partNo;
@@ -304,129 +327,6 @@ public class MessagePart
     this.messageChecksum = messageChecksum;
     this.lockName = lockName;
     this.data = data;
-  }
-
-  /**
-   * The enumeration giving the possible statuses for a message part.
-   */
-  public enum Status
-  {
-    INITIALISED(0, "Initialised"), QUEUED_FOR_SENDING(1, "QueuedForSending"),
-    SENDING(2, "Sending"), QUEUED_FOR_ASSEMBLY(3, "QueuedForAssembly"),
-    ASSEMBLING(4, "Assembling"), QUEUED_FOR_DOWNLOAD(5, "QueuedForDownload"),
-    DOWNLOADING(6, "Downloading"), ABORTED(7, "Aborted"), FAILED(8, "Failed"),
-    UNKNOWN(-1, "Unknown");
-
-    private int code;
-    private String name;
-
-    Status(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the status given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the status
-     *
-     * @return the status given by the specified numeric code value
-     */
-    public static Status fromCode(int code)
-    {
-      switch (code)
-      {
-        case 0:
-          return Status.INITIALISED;
-
-        case 1:
-          return Status.QUEUED_FOR_SENDING;
-
-        case 2:
-          return Status.SENDING;
-
-        case 3:
-          return Status.QUEUED_FOR_ASSEMBLY;
-
-        case 4:
-          return Status.ASSEMBLING;
-
-        case 5:
-          return Status.QUEUED_FOR_DOWNLOAD;
-
-        case 6:
-          return Status.DOWNLOADING;
-
-        case 7:
-          return Status.ABORTED;
-
-        case 8:
-          return Status.FAILED;
-
-        default:
-          return Status.UNKNOWN;
-      }
-    }
-
-    /**
-     * Returns the numeric code value identifying the status.
-     *
-     * @return the numeric code value identifying the status
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the name of the status.
-     *
-     * @return the name of the status
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the status enumeration value.
-     *
-     * @return the string representation of the status enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if the WBXML document contains valid message part information or
-   * <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message part information or
-   *         <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessagePart")
-        && !((!rootElement.hasAttribute("id")) || (!rootElement.hasAttribute("partNo"))
-          || (!rootElement.hasAttribute("totalParts"))
-            || (!rootElement.hasAttribute("sendAttempts"))
-              || (!rootElement.hasAttribute("messageId"))
-                || (!rootElement.hasAttribute("messageUsername"))
-                  || (!rootElement.hasAttribute("messageDeviceId"))
-                    || (!rootElement.hasAttribute("messageTypeId"))
-                      || (!rootElement.hasAttribute("messageCorrelationId"))
-                        || (!rootElement.hasAttribute("messagePriority"))
-                          || (!rootElement.hasAttribute("messageCreated"))
-                            || (!rootElement.hasAttribute("messageDataHash"))
-                              || (!rootElement.hasAttribute("messageEncryptionIV"))
-                                || (!rootElement.hasAttribute("messageChecksum")));
   }
 
   /**
@@ -514,7 +414,7 @@ public class MessagePart
    * original message originated from
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         original message originated from
+   * original message originated from
    */
   public UUID getMessageDeviceId()
   {
@@ -526,7 +426,7 @@ public class MessagePart
    * message.
    *
    * @return the base-64 encoded initialisation vector for the encryption scheme for the original
-   *         message
+   * message
    */
   public String getMessageEncryptionIV()
   {
@@ -559,7 +459,7 @@ public class MessagePart
    * original message.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of the
-   *         original message
+   * original message
    */
   public UUID getMessageTypeId()
   {
@@ -641,7 +541,7 @@ public class MessagePart
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the data for the original message is encrypted or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   public boolean messageIsEncrypted()
   {
@@ -927,5 +827,100 @@ public class MessagePart
     Encoder encoder = new Encoder(new Document(rootElement));
 
     return encoder.getData();
+  }
+
+  /**
+   * The enumeration giving the possible statuses for a message part.
+   */
+  public enum Status
+  {
+    INITIALISED(0, "Initialised"), QUEUED_FOR_SENDING(1, "QueuedForSending"),
+    SENDING(2, "Sending"), QUEUED_FOR_ASSEMBLY(3, "QueuedForAssembly"),
+    ASSEMBLING(4, "Assembling"), QUEUED_FOR_DOWNLOAD(5, "QueuedForDownload"),
+    DOWNLOADING(6, "Downloading"), ABORTED(7, "Aborted"), FAILED(8, "Failed"),
+    UNKNOWN(-1, "Unknown");
+
+    private int code;
+
+    private String name;
+
+    /**
+     * Returns the status given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the status
+     *
+     * @return the status given by the specified numeric code value
+     */
+    public static Status fromCode(int code)
+    {
+      switch (code)
+      {
+        case 0:
+          return Status.INITIALISED;
+
+        case 1:
+          return Status.QUEUED_FOR_SENDING;
+
+        case 2:
+          return Status.SENDING;
+
+        case 3:
+          return Status.QUEUED_FOR_ASSEMBLY;
+
+        case 4:
+          return Status.ASSEMBLING;
+
+        case 5:
+          return Status.QUEUED_FOR_DOWNLOAD;
+
+        case 6:
+          return Status.DOWNLOADING;
+
+        case 7:
+          return Status.ABORTED;
+
+        case 8:
+          return Status.FAILED;
+
+        default:
+          return Status.UNKNOWN;
+      }
+    }
+
+    Status(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the numeric code value identifying the status.
+     *
+     * @return the numeric code value identifying the status
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the name of the status.
+     *
+     * @return the name of the status
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the status enumeration value.
+     *
+     * @return the string representation of the status enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
   }
 }

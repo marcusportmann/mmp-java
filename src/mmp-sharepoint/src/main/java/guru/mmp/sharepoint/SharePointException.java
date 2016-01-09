@@ -16,18 +16,12 @@
 
 package guru.mmp.sharepoint;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.w3c.dom.NodeList;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.xml.soap.Detail;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
-
-import javax.xml.soap.Detail;
 
 /**
  * The <code>SharePointException</code> exception is thrown to indicate an error condition when
@@ -36,13 +30,19 @@ import javax.xml.soap.Detail;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SharePointException extends Exception
+public class SharePointException
+  extends Exception
 {
   private static final String NO_ERROR_CODE = "NONE";
+
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
+
   private static final long serialVersionUID = 1000000;
+
   private String sharePointErrorCode;
+
   private String sharePointErrorDescription;
+
   private Date when;
 
   /**
@@ -105,18 +105,16 @@ public class SharePointException extends Exception
           {
             Detail detail = sfe.getFault().getDetail();
 
-            NodeList nodeList =
-              detail.getElementsByTagNameNS("http://schemas.microsoft.com/sharepoint/soap/",
-                "errorcode");
+            NodeList nodeList = detail.getElementsByTagNameNS(
+              "http://schemas.microsoft.com/sharepoint/soap/", "errorcode");
 
             if (nodeList.getLength() > 0)
             {
               this.sharePointErrorCode = nodeList.item(0).getTextContent();
             }
 
-            nodeList =
-              detail.getElementsByTagNameNS("http://schemas.microsoft.com/sharepoint/soap/",
-                "errorstring");
+            nodeList = detail.getElementsByTagNameNS(
+              "http://schemas.microsoft.com/sharepoint/soap/", "errorstring");
 
             if (nodeList.getLength() > 0)
             {
@@ -172,7 +170,7 @@ public class SharePointException extends Exception
         catch (Throwable e)
         {
           this.sharePointErrorDescription =
-            "Failed to extract the SharePoint error information from SOAP fault";
+            "Failed to extract the SharePoint error information " + "from SOAP fault";
 
           e.printStackTrace();
         }
@@ -187,9 +185,7 @@ public class SharePointException extends Exception
    */
   public String getSharePointErrorCode()
   {
-    return (sharePointErrorCode == null)
-        ? NO_ERROR_CODE
-        : sharePointErrorCode;
+    return (sharePointErrorCode == null) ? NO_ERROR_CODE : sharePointErrorCode;
   }
 
   /**
@@ -199,9 +195,7 @@ public class SharePointException extends Exception
    */
   public String getSharePointErrorDescription()
   {
-    return (sharePointErrorDescription == null)
-        ? ""
-        : sharePointErrorDescription;
+    return (sharePointErrorDescription == null) ? "" : sharePointErrorDescription;
   }
 
   /**

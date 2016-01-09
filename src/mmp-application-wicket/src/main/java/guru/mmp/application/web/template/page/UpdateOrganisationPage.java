@@ -16,26 +16,20 @@
 
 package guru.mmp.application.web.template.page;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import javax.inject.Inject;
 
@@ -46,12 +40,13 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_ORGANISATION)
-public class UpdateOrganisationPage extends TemplateWebPage
+public class UpdateOrganisationPage
+  extends TemplateWebPage
 {
-  private static final long serialVersionUID = 1000000;
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateOrganisationPage.class);
+
+  private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
@@ -72,11 +67,11 @@ public class UpdateOrganisationPage extends TemplateWebPage
       Form<Organisation> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(organisationModel));
 
-      // The "code" field
-      TextField<String> codeField = new TextFieldWithFeedback<>("code");
-      codeField.setRequired(true);
-      codeField.setEnabled(false);
-      updateForm.add(codeField);
+      // The "id" field
+      TextField<String> idField = new TextFieldWithFeedback<>("id");
+      idField.setRequired(true);
+      idField.setEnabled(false);
+      updateForm.add(idField);
 
       // The "name" field
       TextField<String> nameField = new TextFieldWithFeedback<>("name");
