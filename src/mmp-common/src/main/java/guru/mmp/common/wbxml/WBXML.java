@@ -25,8 +25,7 @@ package guru.mmp.common.wbxml;
 public class WBXML
 {
   /** The ID for the ISO 8895-1 character set. */
-
-  // public static final int CHARSET_ISO_8859_1 = 0x04;
+  public static final int CHARSET_ISO_8859_1 = 0x04;
 
   /** The ID for the UTF-16 character set. */
   public static final int CHARSET_UTF_16 = 0x03F7;
@@ -40,55 +39,58 @@ public class WBXML
   /** The value signifying an entity token */
   public static final int TOKEN_ENTITY = 0x02;
 
-  /** Field description */
+  /** The value signifying a single-byte document-type-specific extension token. */
   public static final int TOKEN_EXT_0 = 0xC0;
 
-  /** Field description */
+  /** The value signifying a single-byte document-type-specific extension token. */
   public static final int TOKEN_EXT_1 = 0xC1;
 
-  /** Field description */
+  /** The value signifying a single-byte document-type-specific extension token. */
   public static final int TOKEN_EXT_2 = 0xC2;
 
-  /** Field description */
+  /** The value signifying an inline string document-type-specific extension token. */
   public static final int TOKEN_EXT_I_0 = 0x40;
 
-  /** Field description */
+  /** The value signifying an inline string document-type-specific extension token. */
   public static final int TOKEN_EXT_I_1 = 0x41;
 
-  /** Field description */
+  /** The value signifying an inline string document-type-specific extension token. */
   public static final int TOKEN_EXT_I_2 = 0x42;
 
-  /** Field description */
+  /** The value signifying an inline integer document-type-specific extension token. */
   public static final int TOKEN_EXT_T_0 = 0x80;
 
-  /** Field description */
+  /** The value signifying an inline integer document-type-specific extension token. */
   public static final int TOKEN_EXT_T_1 = 0x81;
 
-  /** Field description */
+  /** The value signifying an inline integer document-type-specific extension token. */
   public static final int TOKEN_EXT_T_2 = 0x82;
 
-  /** Field description */
+  /**
+   * The value signifying an unknown attribute name, or unknown tag posessing no attributes or
+   * content.
+   */
   public static final int TOKEN_LITERAL = 0x04;
 
-  /** Field description */
+  /** The value signifying an unknown tag possessing attributes but no content. */
   public static final int TOKEN_LITERAL_A = 0x84;
 
-  /** Field description */
+  /** The value signifying an unknown tag possessing both attributes and content. */
   public static final int TOKEN_LITERAL_AC = 0xC4;
 
-  /** Field description */
+  /** The value signifying an unknown tag possessing content but no attributes. */
   public static final int TOKEN_LITERAL_C = 0x44;
 
-  /** The value signifying an opaque content token */
+  /** The value signifying an opaque content token. */
   public static final int TOKEN_OPAQUE = 0xC3;
 
-  /** Field description */
+  /** The value signifying a processing instruction. */
   public static final int TOKEN_PI = 0x43;
 
-  /** Field description */
+  /** The value signifying an inline string. */
   public static final int TOKEN_STR_I = 0x03;
 
-  /** Field description */
+  /** The value signifying a string table reference. */
   public static final int TOKEN_STR_T = 0x83;
 
   /** The value signifying a switch page token. */
