@@ -57,20 +57,19 @@
               <div class="block-header bg-gray-lighter"><h3 class="block-title">Test Form</h3></div>
               <div class="block-content block-content-narrow">
 
-                <form wicket:id="testForm" id="testForm" class="form-horizontal">
-
+                <form wicket:id="testForm" id="testForm" class="form-horizontal push-10-t push-10">
 
                   <div class="form-group">
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
                         <label for="firstNames">First Name(s)</label>
-                        <input wicket:id="firstNames" id="firstNames" name="firstNames" type="text" class="form-control">
+                        <input wicket:id="firstNames" id="firstNames" name="firstNames" type="text" class="form-control" placeholder="Enter the first name(s) for the user">
                       </div>
                     </div>
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
                         <label for="lastName">Last Name</label>
-                        <input wicket:id="lastName" id="lastName" name="lastName" type="text" class="form-control">
+                        <input wicket:id="lastName" id="lastName" name="lastName" type="text" class="form-control" placeholder="Enter the last name for the user">
                       </div>
                     </div>
                   </div>
@@ -78,13 +77,13 @@
                   <div class="form-group">
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <select wicket:id="title" id="title" name="title" class="js-select2 form-control select2-hidden-accessible">
+                        <label for="title">Title</label>
+                        <select wicket:id="title" id="title" name="title" class="js-select2 form-control select2-hidden-accessible" data-placeholder="Enter the title for the user">
                           <option></option>
                           <option>Mr</option>
                           <option>Mrs</option>
                           <option>Ms</option>
                         </select>
-                        <label>Title</label>
                       </div>
                     </div>
                     <div class="col-xs-6">
@@ -95,14 +94,14 @@
                   <div class="form-group">
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <input wicket:id="password" id="password" name="password" type="password" class="form-control"/>
                         <label for="password">Password</label>
+                        <input wicket:id="password" id="password" name="password" type="password" class="form-control" placeholder="Enter the password for the user"/>
                       </div>
                     </div>
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <input wicket:id="confirmPassword" id="confirmPassword" name="confirmPassword" type="password" class="form-control"/>
                         <label for="password">Confirm Password</label>
+                        <input wicket:id="confirmPassword" id="confirmPassword" name="confirmPassword" type="password" class="form-control" placeholder="Confirm the password"/>
                       </div>
                     </div>
                   </div>
@@ -110,8 +109,8 @@
                   <div class="form-group">
                     <div class="col-xs-12">
                       <div class="form-material form-material-primary">
-                        <textarea wicket:id="notes" id="notes" name="notes" rows="4" cols="5" class="form-control"></textarea>
                         <label for="notes">Notes</label>
+                        <textarea wicket:id="notes" id="notes" name="notes" rows="4" cols="5" class="form-control" placeholder="Enter the notes"></textarea>
                       </div>
                     </div>
                   </div>
@@ -119,7 +118,7 @@
                   <div class="form-group">
                     <label class="col-xs-12" for="favouritePet">Favourite Pet</label>
                     <div class="col-xs-6">
-                      <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1" class="form-control">
+                      <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1" class="form-control" data-placeholder="Select a pet">
                         <option></option>
                         <option value="1">Dog</option>
                         <option value="2">Cat</option>
@@ -154,14 +153,14 @@
                   <div class="form-group">
                     <div class="col-xs-6">
                       <label class="css-input css-checkbox css-checkbox-default" for="isActive">
-                        <input wicket:id="isActive" id="isActive" type="checkbox" name="isActive" value="option1">
+                        <input wicket:id="isActive" id="isActive" name="isActive" type="checkbox">
                         <span></span>
                         Is Active?
                       </label>
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group form-group-separator">
                     <div class="col-xs-12">
                       <button wicket:id="okButton" type="submit" class="btn btn-primary pull-right push-10-l">OK</button>
                       <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right">Cancel</button>
@@ -169,6 +168,7 @@
                   </div>
 
                 </form>
+
               </div>
             </div>
 
