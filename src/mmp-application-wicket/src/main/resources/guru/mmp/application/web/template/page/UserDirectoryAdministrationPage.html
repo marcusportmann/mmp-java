@@ -8,20 +8,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
 
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2-bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/oneui.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2-bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/oneui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/css/template.css"/>
     <link rel="StyleSheet" type="text/css" href="../../resource/css/application.css"/>
 
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/oneui.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.full.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/oneui.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.full.min.js"></script>
   </head>
   <body>
     <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
@@ -53,12 +53,97 @@
         <div class="content content-narrow">
 
 
+          <wicket:extend>
 
+            <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Remove User Directory</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      Are you sure you wish to remove the user directory <b><span wicket:id="name">[Name]</span></b>?
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <a wicket:id="removeLink" class="btn btn-primary">Yes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <div id="addDialog" wicket:id="addDialog" class="modal fade" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"><span wicket:id="title"></span></h4>
+                  </div>
+                  <div class="modal-body">
+                    <div wicket:id="alerts"></div>
+                    <form wicket:id="form" id="form" class="form-horizontal">
+                      <div class="form-group">
+                        <label for="userDirectoryType" class="control-label col-sm-3">User Directory Type</label>
+                        <div class="col-sm-9">
+                          <select wicket:id="userDirectoryType" id="userDirectoryType" class="form-control" type="text" name="userDirectoryType"></select>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <a wicket:id="cancelLink" id="cancelLink" class="btn btn-default"><span wicket:id="cancelText"></span></a>
+                    <a wicket:id="submitLink" id="submitLink" class="btn btn-primary pull-right"><span wicket:id="submitText"></span></a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <div wicket:id="tableContainer" class="table-container">
+              <div class="table-header">
+                <div class="table-header-left">
+                  <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User Directory</a>
+                </div>
+                <div class="table-header-right">
+                  <form wicket:id="filterForm" class="table-filter-form">
+                    <input wicket:id="filter" type="text" name="filter"/>
+                    <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm">
+                      <i class="fa fa-filter"> Filter</i></button>
+                  </form>
+                </div>
+              </div>
 
+              <table class="table table-bordered table-striped table-condensed table-actions">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th class="center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr wicket:id="userDirectory">
+                    <td><span wicket:id="name">[Code]</span></td>
+                    <td><span wicket:id="type">[Type]</span></td>
+                    <td class="two-actions">
+                      <div class="btn-group">
+                        <a wicket:id="updateLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User Directory"><i class="fa fa-edit"></i></a>
+                        <a wicket:id="removeLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User Directory"><i class="fa fa-times fa fa-white"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div wicket:id="navigator" class="paging-navigator"></div>
+            </div>
 
-
+          </wicket:extend>
 
 
         </div>
@@ -140,97 +225,7 @@
             </ol>
           </div>
         </div>
-        <wicket:extend>
 
-          <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h4 class="modal-title">Remove User Directory</h4>
-                </div>
-                <div class="modal-body">
-                  <p>
-                    Are you sure you wish to remove the user directory <b><span wicket:id="name">[Name]</span></b>?
-                  </p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                  <a wicket:id="removeLink" class="btn btn-primary">Yes</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="addDialog" wicket:id="addDialog" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h4 class="modal-title"><span wicket:id="title"></span></h4>
-                </div>
-                <div class="modal-body">
-                  <div wicket:id="alerts"></div>
-                  <form wicket:id="form" id="form" class="form-horizontal">
-                    <div class="form-group">
-                      <label for="userDirectoryType" class="control-label col-sm-3">User Directory Type</label>
-                      <div class="col-sm-9">
-                        <select wicket:id="userDirectoryType" id="userDirectoryType" class="form-control" type="text" name="userDirectoryType"></select>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <a wicket:id="cancelLink" id="cancelLink" class="btn btn-default"><span wicket:id="cancelText"></span></a>
-                  <a wicket:id="submitLink" id="submitLink" class="btn btn-primary pull-right"><span wicket:id="submitText"></span></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div wicket:id="tableContainer" class="table-container">
-            <div class="table-header">
-              <div class="table-header-left">
-                <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User Directory</a>
-              </div>
-              <div class="table-header-right">
-                <form wicket:id="filterForm" class="table-filter-form">
-                  <input wicket:id="filter" type="text" name="filter"/>
-                  <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm">
-                    <i class="fa fa-filter"> Filter</i></button>
-                </form>
-              </div>
-            </div>
-
-            <table class="table table-striped table-condensed table-actions">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th class="center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr wicket:id="userDirectory">
-                  <td><span wicket:id="name">[Code]</span></td>
-                  <td><span wicket:id="type">[Type]</span></td>
-                  <td class="two-actions">
-                    <div class="btn-group">
-                      <a wicket:id="updateLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update User Directory"><i class="fa fa-edit"></i></a>
-                      <a wicket:id="removeLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove User Directory"><i class="fa fa-times fa fa-white"></i></a>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div wicket:id="navigator" class="paging-navigator"></div>
-          </div>
-
-        </wicket:extend>
       </div>
     </div>
   </body>
