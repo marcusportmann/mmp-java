@@ -4,39 +4,53 @@
     <wicket:panel>
 
       <div class="form-group">
-        <label for="id" class="control-label col-sm-3">ID</label>
-        <div class="col-sm-9">
-          <input wicket:id="id" id="id" class="form-control" type="text" name="id"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="id">ID</label>
+            <input wicket:id="id" id="id" name="id" type="text" class="form-control" placeholder="Enter an ID">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="name" class="control-label col-sm-3">Name</label>
-        <div class="col-sm-9">
-          <input wicket:id="name" id="name" class="form-control" type="text" name="name"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="name">Name</label>
+            <input wicket:id="name" id="name" name="name" type="text" class="form-control" placeholder="Enter a name">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="description" class="control-label col-sm-3">Description</label>
-        <div class="col-sm-9">
-          <input wicket:id="description" id="description" class="form-control" type="text" name="description"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="description">Description</label>
+            <input wicket:id="description" id="description" name="description" type="text" class="form-control" placeholder="Enter a description">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="categoryType" class="control-label col-sm-3">Category Type</label>
-        <div class="col-sm-9">
-          <select wicket:id="categoryType" id="categoryType" class="form-control" name="categoryType"></select>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="categoryType">Category Type</label>
+            <select wicket:id="categoryType" id="categoryType" name="categoryType" class="js-select2 form-control select2-hidden-accessible" data-placeholder="Select a category type">
+              <option></option>
+            </select>
+
+
+          </div>
         </div>
       </div>
 
       <div wicket:id="codeDataContainer">
 
         <div class="form-group">
-          <label for="codeData" class="control-label col-sm-3">Code Data</label>
-          <div class="col-sm-9">
-            <textarea wicket:id="codeData" id="codeData" class="form-control form-control-code-data input-sm" type="text" name="codeData"></textarea>
+          <div class="col-xs-12">
+            <div class="form-material form-material-primary">
+              <label for="codeData">Code Data</label>
+              <textarea wicket:id="codeData" id="codeData" name="codeData" rows="4" cols="5" class="form-control" placeholder="Enter the code data"></textarea>
+            </div>
           </div>
         </div>
 
@@ -45,44 +59,50 @@
       <div wicket:id="endPointContainer">
 
         <div class="form-group">
-          <label for="endPoint" class="control-label col-sm-3">End Point</label>
-          <div class="col-sm-9">
-            <input wicket:id="endPoint" id="endPoint" class="form-control" type="text" name="endPoint"/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="isEndPointSecure" class="control-label col-sm-3"></label>
-          <div class="col-sm-9">
-            <div class="checkbox">
-              <label>
-                <input wicket:id="isEndPointSecure" id="isEndPointSecure" class="cbr" type="checkbox" name="isEndPointSecure"/>
-                Is Secure?
-              </label>
+          <div class="col-xs-12">
+            <div class="form-material form-material-primary">
+              <label for="endPoint">End Point</label>
+              <input wicket:id="endPoint" id="endPoint" name="endPoint" type="text" class="form-control" placeholder="Enter an end point">
             </div>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="isCacheable" class="control-label col-sm-3"></label>
-          <div class="col-sm-9">
-            <div class="checkbox">
-              <label>
-                <input wicket:id="isCacheable" id="isCacheable" class="cbr" type="checkbox" name="isCacheable"/>
-                Is Cacheable?
-              </label>
-            </div>
+          <div class="col-xs-12">
+            <label class="css-input css-checkbox css-checkbox-default" for="isEndPointSecure">
+              <input wicket:id="isEndPointSecure" id="isEndPointSecure" name="isEndPointSecure" type="checkbox">
+              <span></span>
+              Is Secure?
+            </label>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="cacheExpiry" class="control-label col-sm-3">Cache Expiry</label>
-          <div class="col-sm-9">
-            <input wicket:id="cacheExpiry" id="cacheExpiry" class="form-control" type="text" name="cacheExpiry"/>
+          <div class="col-xs-12">
+            <label class="css-input css-checkbox css-checkbox-default" for="isEndPointSecure">
+              <input wicket:id="isCacheable" id="isCacheable" name="isCacheable" type="checkbox">
+              <span></span>
+              Is Cacheable?
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-12">
+            <div class="form-material form-material-primary">
+              <label for="cacheExpiry">Cache Expiry</label>
+              <input wicket:id="cacheExpiry" id="cacheExpiry" name="cacheExpiry" type="text" class="form-control" placeholder="Enter a cache expiry">
+            </div>
           </div>
         </div>
 
       </div>
+
+      <script>
+        $(document).ready(function() {
+          $('#categoryType').select2({ minimumResultsForSearch: Infinity });
+        });
+      </script>
 
     </wicket:panel>
   </body>

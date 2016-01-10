@@ -30,6 +30,7 @@ import org.apache.wicket.util.string.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>CodeCategoryInputPanel</code> class provides a Wicket component that can
@@ -72,7 +73,7 @@ public class CodeCategoryInputPanel
     try
     {
       // The "id" field
-      TextField<String> idField = new TextFieldWithFeedback<>("id");
+      TextField<UUID> idField = new TextFieldWithFeedback<>("id");
       idField.setRequired(true);
       idField.setEnabled(!isIdReadOnly);
       add(idField);
@@ -104,7 +105,6 @@ public class CodeCategoryInputPanel
           try
           {
             target.add(categoryTypeField);
-            target.appendJavaScript("cbr_replace();");
 
             resetContainers(target);
           }

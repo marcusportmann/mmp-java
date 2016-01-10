@@ -6,6 +6,11 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+    <script type="text/javascript">
+      jQuery(function() {
+        App.initHelpers(['select2']);
+      });
+    </script>
   </head>
   <body>
     <div class="bg-white pulldown">
@@ -52,11 +57,5 @@
     <div class="pulldown push-30-t text-center animated fadeInUp">
       <small class="text-muted">Copyright &copy; <span class="js-year-copy"></span> <span class="copyright-name"></span></small>
     </div>
-    <script>
-      jQuery(function() {
-        // Init mandatory page helpers (Select2 plugin)
-        App.initHelpers(['select2']);
-      });
-    </script>
   </body>
 </html>

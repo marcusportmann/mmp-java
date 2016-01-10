@@ -22,6 +22,11 @@
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.full.min.js"></script>
+    <script type="text/javascript">
+      jQuery(function() {
+        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
+      });
+    </script>
   </head>
   <body>
     <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
@@ -292,12 +297,6 @@
           </div>
 
 
-
-
-
-
-
-
         </div>
       </main>
       <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
@@ -306,12 +305,6 @@
         </div>
       </footer>
     </div>
-    <script>
-      jQuery(function() {
-        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
-        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
-      });
-    </script>
   </body>
 </html>
 

@@ -63,13 +63,13 @@ public class LoginPage
 
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
 
-  private String password;
+  private String password = "Password1";
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
 
-  private String username;
+  private String username = "Administrator";
 
   /**
    * Constructs a new <code>LoginPage</code>.
@@ -103,7 +103,8 @@ public class LoginPage
       loginForm.add(usernameField);
 
       // The "password" field
-      PasswordTextField passwordField = new PasswordTextFieldWithFeedback("password",
+      //PasswordTextField passwordField = new PasswordTextFieldWithFeedback("password",
+      TextField passwordField = new TextFieldWithFeedback("password",
         new PropertyModel<>(this, "password"));
       passwordField.setRequired(true);
       loginForm.add(passwordField);

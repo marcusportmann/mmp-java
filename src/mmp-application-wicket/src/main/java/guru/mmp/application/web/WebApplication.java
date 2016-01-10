@@ -23,6 +23,8 @@ import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.util.convert.ConversionException;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * The <code>WebApplication</code> class provides a base class for all "application specific"
@@ -151,6 +154,24 @@ public abstract class WebApplication
       public DateFormat getDateFormat(Locale ignore)
       {
         return new SimpleDateFormat("yyyy-MM-dd");
+      }
+    });
+
+    converterLocator.set(UUID.class, new IConverter<Object>()
+    {
+      private static final long serialVersionUID = 1000000;
+
+      @Override
+      public Object convertToObject(String value, Locale locale)
+        throws ConversionException
+      {
+        return UUID.fromString(value);
+      }
+
+      @Override
+      public String convertToString(Object value, Locale locale)
+      {
+        return value.toString();
       }
     });
 

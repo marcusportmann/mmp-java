@@ -54,6 +54,18 @@
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/dropzonejs/dropzone.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/jquery-tags-input/jquery.tagsinput.min.js"></script>
 
+    <script type="text/javascript">
+      jQuery(function() {
+
+        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
+        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
+
+        // Init optional page helpers (BS Colorpicker + BS Maxlength + Masked Input + Range Sliders + Tags Inputs plugins)
+        App.initHelpers(['colorpicker', 'maxlength', 'masked-inputs', 'rangeslider', 'tags-inputs']);
+
+      });
+    </script>
+
   </head>
   <body>
     <!-- Page Container -->
@@ -1166,20 +1178,6 @@
       <!-- END Footer -->
     </div>
     <!-- END Page Container -->
-
-    <!-- Page JS Code -->
-    <script>
-      jQuery(function() {
-
-        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
-        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
-
-        // Init optional page helpers (BS Colorpicker + BS Maxlength + Masked Input + Range Sliders + Tags Inputs plugins)
-        App.initHelpers(['colorpicker', 'maxlength', 'masked-inputs', 'rangeslider', 'tags-inputs']);
-
-      });
-    </script>
-
   </body>
 </html>
 

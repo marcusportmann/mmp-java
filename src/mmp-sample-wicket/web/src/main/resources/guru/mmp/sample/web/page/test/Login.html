@@ -41,6 +41,13 @@
     <!-- Template JS -->
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/template.js"></script>
 
+    <script type="text/javascript">
+      jQuery(function() {
+        // Init mandatory page helpers (Select2 plugin)
+        App.initHelpers(['select2']);
+      });
+    </script>
+
   </head>
   <body>
     <!-- Login Content -->
@@ -102,13 +109,6 @@
       <small class="text-muted">Copyright &copy; <span class="js-year-copy"></span> <span class="copyright-name"></span></small>
     </div>
     <!-- END Login Footer -->
-    <script>
-      jQuery(function() {
-        // Init mandatory page helpers (Select2 plugin)
-        App.initHelpers(['select2']);
-      });
-    </script>
-
   </body>
 </html>
 

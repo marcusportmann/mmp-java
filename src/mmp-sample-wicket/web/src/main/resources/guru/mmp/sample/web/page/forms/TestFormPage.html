@@ -22,6 +22,11 @@
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.full.min.js"></script>
+    <script type="text/javascript">
+      jQuery(function() {
+        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
+      });
+    </script>
   </head>
   <body>
     <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
@@ -100,7 +105,7 @@
                     </div>
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <label for="password">Confirm Password</label>
+                        <label for="confirmPassword">Confirm Password</label>
                         <input wicket:id="confirmPassword" id="confirmPassword" name="confirmPassword" type="password" class="form-control" placeholder="Confirm the password"/>
                       </div>
                     </div>
@@ -118,12 +123,14 @@
                   <div class="form-group">
                     <label class="col-xs-12" for="favouritePet">Favourite Pet</label>
                     <div class="col-xs-6">
-                      <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1" class="form-control" data-placeholder="Select a pet">
-                        <option></option>
-                        <option value="1">Dog</option>
-                        <option value="2">Cat</option>
-                        <option value="3">Hamster</option>
-                      </select>
+                      <div class="form-material">
+                        <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1" class="form-control" data-placeholder="Select a pet">
+                          <option></option>
+                          <option value="1">Dog</option>
+                          <option value="2">Cat</option>
+                          <option value="3">Hamster</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
 
@@ -174,6 +181,12 @@
               </div>
             </div>
 
+            <script>
+              $(document).ready(function() {
+                $('#title').select2({ minimumResultsForSearch: Infinity });
+              });
+            </script>
+
           </wicket:extend>
         </div>
       </main>
@@ -183,12 +196,6 @@
         </div>
       </footer>
     </div>
-    <script>
-      jQuery(function() {
-        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
-        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
-      });
-    </script>
   </body>
 </html>
 

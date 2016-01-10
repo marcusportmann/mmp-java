@@ -21,6 +21,11 @@
     <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resource/js/plugins/select2/select2.full.min.js"></script>
+    <script type="text/javascript">
+      jQuery(function() {
+        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
+      });
+    </script>
   </head>
   <body>
     <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
@@ -86,7 +91,7 @@
                   <div class="form-group">
                     <div class="col-xs-12">
                       <div class="form-material form-material-primary input-group">
-                        <label for="username">E-Mail</label>
+                        <label for="email">E-Mail</label>
                         <input wicket:id="email" id="email" name="email" type="text" class="form-control" placeholder="Enter an e-mail address">
                         <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
                       </div>
@@ -106,7 +111,7 @@
                   <div class="form-group">
                     <div class="col-xs-12">
                       <div class="form-material form-material-primary">
-                        <label for="username">Description</label>
+                        <label for="description">Description</label>
                         <input wicket:id="description" id="description" name="description" type="text" class="form-control" placeholder="">
                       </div>
                     </div>
@@ -121,7 +126,7 @@
                     </div>
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <label for="username">Confirm Password</label>
+                        <label for="confirmPassword">Confirm Password</label>
                         <input wicket:id="confirmPassword" id="confirmPassword" name="confirmPassword" type="text" class="form-control" placeholder="Confirm the password">
                       </div>
                     </div>
@@ -169,6 +174,12 @@
               </div>
             </div>
 
+            <script>
+              $(document).ready(function() {
+                $('#groupName').select2({ minimumResultsForSearch: Infinity });
+              });
+            </script>
+
           </wicket:extend>
         </div>
       </main>
@@ -178,15 +189,5 @@
         </div>
       </footer>
     </div>
-    <script>
-      jQuery(function() {
-        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
-        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
-      });
-
-      $(document).ready(function() {
-        $('#groupName').select2({ minimumResultsForSearch: Infinity });
-      });
-    </script>
   </body>
 </html>
