@@ -21,13 +21,13 @@
   <dependencies>
     <dependency>
       <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-angular</artifactId>
+      <artifactId>mmp-application-aurelia</artifactId>
       <version>2.0.0</version>
       <type>war</type>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-angular</artifactId>
+      <artifactId>mmp-application-aurelia</artifactId>
       <version>2.0.0</version>
       <type>warpath</type>
     </dependency>

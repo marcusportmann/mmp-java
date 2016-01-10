@@ -431,12 +431,9 @@ public class SecurityServiceTest
 
     attributes.add(new Attribute("description", "%Description 1%"));
     attributes.add(new Attribute("email", "%E-Mail 1%"));
-    attributes.add(new Attribute("faxNumber", "%Fax Number 1%"));
     attributes.add(new Attribute("firstNames", "%FirstName 1%"));
     attributes.add(new Attribute("lastName", "%LastName 1%"));
     attributes.add(new Attribute("mobileNumber", "%Mobile Number 1%"));
-    attributes.add(new Attribute("phoneNumber", "%Phone Number 1%"));
-    attributes.add(new Attribute("title", "%Title 1%"));
     attributes.add(new Attribute("username", "%Username 1%"));
 
     List<User> retrievedUsers = securityService.findUsers(userDirectory.getId(), attributes);
