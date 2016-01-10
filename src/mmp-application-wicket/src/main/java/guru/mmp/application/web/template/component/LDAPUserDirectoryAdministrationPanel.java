@@ -139,13 +139,6 @@ public class LDAPUserDirectoryAdministrationPanel
       userPasswordAttemptsAttributeField.setRequired(true);
       add(userPasswordAttemptsAttributeField);
 
-      // The "userTitleAttribute" field
-      TextField<String> userTitleAttributeField = new TextFieldWithFeedback<>("userTitleAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserTitleAttribute"));
-      userTitleAttributeField.setType(String.class);
-      userTitleAttributeField.setRequired(false);
-      add(userTitleAttributeField);
-
       // The "userFirstNamesAttribute" field
       TextField<String> userFirstNamesAttributeField = new TextFieldWithFeedback<>(
         "userFirstNamesAttribute",
@@ -161,22 +154,6 @@ public class LDAPUserDirectoryAdministrationPanel
       userLastNameAttributeField.setType(String.class);
       userLastNameAttributeField.setRequired(true);
       add(userLastNameAttributeField);
-
-      // The "userPhoneNumberAttribute" field
-      TextField<String> userPhoneNumberAttributeField = new TextFieldWithFeedback<>(
-        "userPhoneNumberAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserPhoneNumberAttribute"));
-      userPhoneNumberAttributeField.setType(String.class);
-      userPhoneNumberAttributeField.setRequired(false);
-      add(userPhoneNumberAttributeField);
-
-      // The "userFaxNumberAttribute" field
-      TextField<String> userFaxNumberAttributeField = new TextFieldWithFeedback<>(
-        "userFaxNumberAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserFaxNumberAttribute"));
-      userFaxNumberAttributeField.setType(String.class);
-      userFaxNumberAttributeField.setRequired(false);
-      add(userFaxNumberAttributeField);
 
       // The "userMobileNumberAttribute" field
       TextField<String> userMobileNumberAttributeField = new TextFieldWithFeedback<>(
@@ -209,7 +186,6 @@ public class LDAPUserDirectoryAdministrationPanel
       userPasswordHistoryAttributeField.setRequired(true);
       add(userPasswordHistoryAttributeField);
 
-      // The "groupObjectClass" field
       // The "groupObjectClass" field
       TextField<String> groupObjectClassField = new TextFieldWithFeedback<>("groupObjectClass",
         new PropertyModel<>(userDirectoryModel, "parameters.GroupObjectClass"));
@@ -378,11 +354,6 @@ public class LDAPUserDirectoryAdministrationPanel
       parameters.put("PasswordHistoryAttribute", "passwordhistory");
     }
 
-    if (!parameters.containsKey("TitleAttribute"))
-    {
-      parameters.put("TitleAttribute", "title");
-    }
-
     if (!parameters.containsKey("FirstNamesAttribute"))
     {
       parameters.put("FirstNamesAttribute", "givenName");
@@ -391,16 +362,6 @@ public class LDAPUserDirectoryAdministrationPanel
     if (!parameters.containsKey("LastNameAttribute"))
     {
       parameters.put("LastNameAttribute", "sn");
-    }
-
-    if (!parameters.containsKey("PhoneNumberAttribute"))
-    {
-      parameters.put("PhoneNumberAttribute", "telephoneNumber");
-    }
-
-    if (!parameters.containsKey("FaxNumberAttribute"))
-    {
-      parameters.put("FaxNumberAttribute", "facsimileTelephoneNumber");
     }
 
     if (!parameters.containsKey("MobileNumberAttribute"))

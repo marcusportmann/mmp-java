@@ -592,28 +592,25 @@ public class InternalUserDirectory
       }
 
       statement.setString(4, passwordHash);
-      statement.setString(5, StringUtil.notNull(user.getTitle()));
-      statement.setString(6, StringUtil.notNull(user.getFirstNames()));
-      statement.setString(7, StringUtil.notNull(user.getLastName()));
-      statement.setString(8, StringUtil.notNull(user.getPhoneNumber()));
-      statement.setString(9, StringUtil.notNull(user.getFaxNumber()));
-      statement.setString(10, StringUtil.notNull(user.getMobileNumber()));
-      statement.setString(11, StringUtil.notNull(user.getEmail()));
+      statement.setString(5, StringUtil.notNull(user.getFirstNames()));
+      statement.setString(6, StringUtil.notNull(user.getLastName()));
+      statement.setString(7, StringUtil.notNull(user.getMobileNumber()));
+      statement.setString(8, StringUtil.notNull(user.getEmail()));
 
       if (userLocked)
       {
-        statement.setInt(12, maxPasswordAttempts);
+        statement.setInt(9, maxPasswordAttempts);
         user.setPasswordAttempts(maxPasswordAttempts);
       }
       else
       {
-        statement.setInt(12, 0);
+        statement.setInt(9, 0);
         user.setPasswordAttempts(0);
       }
 
       if (expiredPassword)
       {
-        statement.setTimestamp(13, new Timestamp(0));
+        statement.setTimestamp(10, new Timestamp(0));
         user.setPasswordExpiry(new Date(0));
       }
       else
@@ -624,11 +621,11 @@ public class InternalUserDirectory
 
         long expiryTime = calendar.getTimeInMillis();
 
-        statement.setTimestamp(13, new Timestamp(expiryTime));
+        statement.setTimestamp(10, new Timestamp(expiryTime));
         user.setPasswordExpiry(new Date(expiryTime));
       }
 
-      statement.setString(14, StringUtil.notNull(user.getDescription()));
+      statement.setString(11, StringUtil.notNull(user.getDescription()));
 
       if (statement.executeUpdate() != 1)
       {
@@ -1506,11 +1503,6 @@ public class InternalUserDirectory
 
       StringBuilder fieldsBuffer = new StringBuilder();
 
-      if (user.getTitle() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET TITLE=?" : ", TITLE=?");
-      }
-
       if (user.getFirstNames() != null)
       {
         fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET FIRST_NAMES=?" : ", FIRST_NAMES=?");
@@ -1524,16 +1516,6 @@ public class InternalUserDirectory
       if (user.getEmail() != null)
       {
         fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET EMAIL=?" : ", EMAIL=?");
-      }
-
-      if (user.getPhoneNumber() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET PHONE=?" : ", PHONE=?");
-      }
-
-      if (user.getFaxNumber() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET FAX=?" : ", FAX=?");
       }
 
       if (user.getMobileNumber() != null)
@@ -1566,12 +1548,6 @@ public class InternalUserDirectory
       {
         int parameterIndex = 1;
 
-        if (user.getTitle() != null)
-        {
-          statement.setString(parameterIndex, user.getTitle());
-          parameterIndex++;
-        }
-
         if (user.getFirstNames() != null)
         {
           statement.setString(parameterIndex, user.getFirstNames());
@@ -1587,18 +1563,6 @@ public class InternalUserDirectory
         if (user.getEmail() != null)
         {
           statement.setString(parameterIndex, user.getEmail());
-          parameterIndex++;
-        }
-
-        if (user.getPhoneNumber() != null)
-        {
-          statement.setString(parameterIndex, user.getPhoneNumber());
-          parameterIndex++;
-        }
-
-        if (user.getFaxNumber() != null)
-        {
-          statement.setString(parameterIndex, user.getFaxNumber());
           parameterIndex++;
         }
 
@@ -1717,9 +1681,9 @@ public class InternalUserDirectory
 
     // createInternalUserSQL
     createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS" + " (ID, " +
-      "USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, PHONE," + " FAX, " +
-      "MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY," + " DESCRIPTION) VALUES (?, ?, ?, ?," +
-      " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "USER_DIRECTORY_ID, USERNAME, PASSWORD, FIRST_NAMES, LAST_NAME, MOBILE, EMAIL, " +
+      "PASSWORD_ATTEMPTS, PASSWORD_EXPIRY, DESCRIPTION) " +
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // deleteInternalGroupSQL
     deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG" + " WHERE IG" +
@@ -1730,11 +1694,12 @@ public class InternalUserDirectory
       ".USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // getFilteredInternalUsersSQL
-    getFilteredInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU" +
-      ".FIRST_NAMES," + " IU.LAST_NAME, IU.PHONE, IU.FAX, IU.MOBILE, IU.EMAIL, IU" +
-      ".PASSWORD_ATTEMPTS," + " IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix +
-      "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND" + " ((UPPER(IU.USERNAME) LIKE ?) OR " +
-      "(UPPER(IU.FIRST_NAMES) LIKE ?)" + " OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
+    getFilteredInternalUsersSQL =
+      "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL," +
+        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " +
+        schemaPrefix + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND" +
+        " ((UPPER(IU.USERNAME) LIKE ?) OR " +
+        "(UPPER(IU.FIRST_NAMES) LIKE ?) OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
 
     // getFunctionCodesForUserIdSQL
     getFunctionCodesForUserIdSQL =
@@ -1799,16 +1764,17 @@ public class InternalUserDirectory
       ".USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUserSQL
-    getInternalUserSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES," + " " +
-      "IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS," + " IU" +
-      ".PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE " +
-      "IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalUserSQL =
+      "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL," +
+        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " +
+        schemaPrefix + "INTERNAL_USERS IU" + " WHERE " +
+        "IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUsersSQL
-    getInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES," + "" +
-      " IU.LAST_NAME, IU.PHONE, IU.FAX,  IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS," + " IU" +
-      ".PASSWORD_EXPIRY, IU.DESCRIPTION FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE " +
-      "IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
+    getInternalUsersSQL =
+      "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL," +
+        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " +
+        schemaPrefix + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
 
     // incrementPasswordAttemptsSQL
     incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU" + " SET IU" +
@@ -1862,9 +1828,9 @@ public class InternalUserDirectory
     // Build the SQL statement to select the users
     StringBuilder buffer = new StringBuilder();
 
-    buffer.append("SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES, ");
-    buffer.append("IU.LAST_NAME, IU.PHONE, IU.FAX, IU.MOBILE, IU.EMAIL, ");
-    buffer.append("IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM ");
+    buffer.append("SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, ");
+    buffer.append("IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, ");
+    buffer.append("IU.DESCRIPTION FROM ");
 
     buffer.append(DataAccessObject.DEFAULT_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
 
@@ -1887,10 +1853,6 @@ public class InternalUserDirectory
         {
           whereParameters.append("LOWER(IU.EMAIL) LIKE LOWER(?)");
         }
-        else if (attribute.getName().equalsIgnoreCase("faxNumber"))
-        {
-          whereParameters.append("LOWER(IU.FAX) LIKE LOWER(?)");
-        }
         else if (attribute.getName().equalsIgnoreCase("firstNames"))
         {
           whereParameters.append("LOWER(IU.FIRST_NAMES) LIKE LOWER(?)");
@@ -1902,14 +1864,6 @@ public class InternalUserDirectory
         else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
         {
           whereParameters.append("LOWER(IU.MOBILE) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-        {
-          whereParameters.append("LOWER(IU.PHONE) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("title"))
-        {
-          whereParameters.append("LOWER(IU.TITLE) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("username"))
         {
@@ -1949,11 +1903,6 @@ public class InternalUserDirectory
         statement.setString(parameterIndex, attribute.getStringValue());
         parameterIndex++;
       }
-      else if (attribute.getName().equalsIgnoreCase("faxNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
       else if (attribute.getName().equalsIgnoreCase("firstNames"))
       {
         statement.setString(parameterIndex, attribute.getStringValue());
@@ -1965,16 +1914,6 @@ public class InternalUserDirectory
         parameterIndex++;
       }
       else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("title"))
       {
         statement.setString(parameterIndex, attribute.getStringValue());
         parameterIndex++;
@@ -2009,25 +1948,22 @@ public class InternalUserDirectory
     user.setUsername(rs.getString(2));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setPassword(StringUtil.notNull(rs.getString(3)));
-    user.setTitle(StringUtil.notNull(rs.getString(4)));
-    user.setFirstNames(StringUtil.notNull(rs.getString(5)));
-    user.setLastName(StringUtil.notNull(rs.getString(6)));
-    user.setPhoneNumber(StringUtil.notNull(rs.getString(7)));
-    user.setFaxNumber(StringUtil.notNull(rs.getString(8)));
-    user.setMobileNumber(StringUtil.notNull(rs.getString(9)));
-    user.setEmail(StringUtil.notNull(rs.getString(10)));
+    user.setFirstNames(StringUtil.notNull(rs.getString(4)));
+    user.setLastName(StringUtil.notNull(rs.getString(5)));
+    user.setMobileNumber(StringUtil.notNull(rs.getString(6)));
+    user.setEmail(StringUtil.notNull(rs.getString(7)));
 
-    if (rs.getObject(11) != null)
+    if (rs.getObject(8) != null)
     {
-      user.setPasswordAttempts(rs.getInt(11));
+      user.setPasswordAttempts(rs.getInt(8));
     }
 
-    if (rs.getObject(12) != null)
+    if (rs.getObject(9) != null)
     {
-      user.setPasswordExpiry(new Date(rs.getTimestamp(12).getTime()));
+      user.setPasswordExpiry(new Date(rs.getTimestamp(9).getTime()));
     }
 
-    user.setDescription(StringUtil.notNull(rs.getString(13)));
+    user.setDescription(StringUtil.notNull(rs.getString(10)));
 
     return user;
   }

@@ -63,13 +63,13 @@
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
                         <label for="firstNames">First Name(s)</label>
-                        <input wicket:id="firstNames" id="firstNames" name="firstNames" type="text" class="form-control" placeholder="Enter the first name(s) for the user">
+                        <input wicket:id="firstNames" id="firstNames" name="firstNames" type="text" class="form-control" placeholder="Enter a first name">
                       </div>
                     </div>
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
                         <label for="lastName">Last Name</label>
-                        <input wicket:id="lastName" id="lastName" name="lastName" type="text" class="form-control" placeholder="Enter the last name for the user">
+                        <input wicket:id="lastName" id="lastName" name="lastName" type="text" class="form-control" placeholder="Enter a last name">
                       </div>
                     </div>
                   </div>
@@ -78,7 +78,7 @@
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
                         <label for="title">Title</label>
-                        <select wicket:id="title" id="title" name="title" class="js-select2 form-control select2-hidden-accessible" data-placeholder="Enter the title for the user">
+                        <select wicket:id="title" id="title" name="title" class="js-select2 form-control select2-hidden-accessible" data-placeholder="Select a title">
                           <option></option>
                           <option>Mr</option>
                           <option>Mrs</option>
@@ -95,7 +95,7 @@
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
                         <label for="password">Password</label>
-                        <input wicket:id="password" id="password" name="password" type="password" class="form-control" placeholder="Enter the password for the user"/>
+                        <input wicket:id="password" id="password" name="password" type="password" class="form-control" placeholder="Enter a password"/>
                       </div>
                     </div>
                     <div class="col-xs-6">
@@ -160,7 +160,9 @@
                     </div>
                   </div>
 
-                  <div class="form-group form-group-separator">
+                  <div class="form-group-separator"></div>
+
+                  <div class="form-group">
                     <div class="col-xs-12">
                       <button wicket:id="okButton" type="submit" class="btn btn-primary pull-right push-10-l">OK</button>
                       <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right">Cancel</button>

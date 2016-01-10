@@ -59,36 +59,46 @@
                 <form wicket:id="addForm" id="addForm" class="form-horizontal">
 
                   <div class="form-group">
-                    <div class="col-xs-7">
-                      <div class="form-material form-material-primary">
+                    <div class="col-xs-12">
+                      <div class="form-material form-material-primary input-group">
                         <label for="username">Username</label>
-                        <input wicket:id="username" id="username" name="username" type="text" class="form-control" placeholder="Enter the username for the user">
-                      </div>
-                    </div>
-                    <div class="col-xs-5">
-                      <div class="form-material form-material-primary select2-no-search-box">
-                        <select wicket:id="title" id="title" name="title" class="js-select2 form-control select2-hidden-accessible" data-placeholder="Select a title">
-                          <option></option>
-                          <option>Mr</option>
-                          <option>Mrs</option>
-                          <option>Ms</option>
-                        </select>
-                        <label for="username">Title</label>
+                        <input wicket:id="username" id="username" name="username" type="text" class="form-control" placeholder="Enter a username">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
                       </div>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <div class="col-xs-7">
+                    <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <label for="username">First Name(s)</label>
-                        <input wicket:id="username" id="username" name="username" type="text" class="form-control" placeholder="Enter the first name(s) for the user">
+                        <label for="firstNames">First Name(s)</label>
+                        <input wicket:id="firstNames" id="firstNames" name="firstNames" type="text" class="form-control" placeholder="Enter a first name">
                       </div>
                     </div>
-                    <div class="col-xs-5">
+                    <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <label for="username">Last Name</label>
-                        <input wicket:id="username" id="username" name="username" type="text" class="form-control" placeholder="Enter the last name for the user">
+                        <label for="lastName">Last Name</label>
+                        <input wicket:id="lastName" id="lastName" name="lastName" type="text" class="form-control" placeholder="Enter a last name">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <div class="form-material form-material-primary input-group">
+                        <label for="username">E-Mail</label>
+                        <input wicket:id="email" id="email" name="email" type="text" class="form-control" placeholder="Enter an e-mail address">
+                        <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <div class="form-material form-material-primary input-group">
+                        <label for="mobileNumber">Mobile Number</label>
+                        <input wicket:id="mobileNumber" id="mobileNumber" name="mobileNumber" type="text" class="form-control" placeholder="Enter a mobile number">
+                        <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                       </div>
                     </div>
                   </div>
@@ -96,116 +106,56 @@
                   <div class="form-group">
                     <div class="col-xs-12">
                       <div class="form-material form-material-primary">
-                        <label for="username">E-Mail</label>
-                        <input wicket:id="email" id="email" name="email" type="text" class="form-control" placeholder="Enter the e-mail address for the user">
+                        <label for="username">Description</label>
+                        <input wicket:id="description" id="description" name="description" type="text" class="form-control" placeholder="">
                       </div>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <div class="col-xs-4">
+                    <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <label for="username">Phone Number</label>
-                        <input wicket:id="username" id="username" name="username" type="text" class="form-control" placeholder="Enter the phone number for the user">
+                        <label for="username">Password</label>
+                        <input wicket:id="password" id="password" name="password" type="text" class="form-control" placeholder="Enter a password">
                       </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-xs-6">
                       <div class="form-material form-material-primary">
-                        <label for="username">Fax Number</label>
-                        <input wicket:id="username" id="username" name="username" type="text" class="form-control" placeholder="Enter the fax number for the user">
+                        <label for="username">Confirm Password</label>
+                        <input wicket:id="confirmPassword" id="confirmPassword" name="confirmPassword" type="text" class="form-control" placeholder="Confirm the password">
                       </div>
                     </div>
-                    <div class="col-xs-4">
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-6">
+                      <label class="css-input css-checkbox css-checkbox-default" for="expiredPassword">
+                        <input wicket:id="expiredPassword" id="expiredPassword" name="expiredPassword" type="checkbox">
+                        <span></span>
+                        Expired Password?
+                      </label>
+                    </div>
+                    <div class="col-xs-6">
+                      <label class="css-input css-checkbox css-checkbox-default" for="userLocked">
+                        <input wicket:id="userLocked" id="userLocked" name="userLocked" type="checkbox">
+                        <span></span>
+                        User Locked?
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-12">
                       <div class="form-material form-material-primary">
-                        <label for="username">Mobile Number</label>
-                        <input wicket:id="username" id="username" name="username" type="text" class="form-control" placeholder="Enter the mobile number for the user">
+                        <label for="groupName">Group</label>
+                        <select wicket:id="groupName" id="groupName" name="groupName" class="js-select2 form-control select2-hidden-accessible" data-placeholder="">
+                          <option></option>
+                          <option>Administrators</option>
+                          <option>Organisation Administrators</option>
+                        </select>
                       </div>
                     </div>
                   </div>
-
-<!--
-
-
-
-
-                  <div class="form-group">
-                    <label for="phoneNumber" class="control-label col-sm-3">Phone Number</label>
-                    <div class="col-sm-9">
-                      <input wicket:id="phoneNumber" id="phoneNumber" class="form-control" type="text" name="phoneNumber"/>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="faxNumber" class="control-label col-sm-3">Fax Number</label>
-                    <div class="col-sm-9">
-                      <input wicket:id="faxNumber" id="faxNumber" class="form-control" type="text" name="faxNumber"/>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="mobileNumber" class="control-label col-sm-3">Mobile Number</label>
-                    <div class="col-sm-9">
-                      <input wicket:id="mobileNumber" id="mobileNumber" class="form-control" type="text" name="mobileNumber"/>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="description" class="control-label col-sm-3">Description</label>
-                    <div class="col-sm-9">
-                      <input wicket:id="description" id="description" class="form-control" type="text" name="description"/>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="password" class="control-label col-sm-3">Password</label>
-                    <div class="col-sm-9">
-                      <input wicket:id="password" id="password" class="form-control" type="password" name="password"/>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="confirmPassword" class="control-label col-sm-3">Confirm Password</label>
-                    <div class="col-sm-9">
-                      <input wicket:id="confirmPassword" id="confirmPassword" class="form-control" type="password" name="confirmPassword"/>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="expiredPassword" class="control-label col-sm-3"></label>
-                    <div class="col-sm-9">
-                      <div class="checkbox">
-                        <label>
-                          <input wicket:id="expiredPassword" id="expiredPassword" class="cbr" type="checkbox" name="expiredPassword"/>
-                          Expired Password?
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="userLocked" class="control-label col-sm-3"></label>
-                    <div class="col-sm-9">
-                      <div class="checkbox">
-                        <label>
-                          <input wicket:id="userLocked" id="userLocked" class="cbr" type="checkbox" name="userLocked"/>
-                          Lock User?
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="groupName" class="control-label col-sm-3">Group</label>
-                    <div class="col-sm-9">
-                      <select wicket:id="groupName" id="groupName" class="form-control" type="text" name="groupName"></select>
-                    </div>
-                  </div>
-
--->
-
-
-
-                  <div class="form-group-separator"></div>
 
                   <div class="form-group">
                     <div class="col-xs-12">
@@ -235,7 +185,7 @@
       });
 
       $(document).ready(function() {
-        $('#title').select2({ minimumResultsForSearch: Infinity });
+        $('#groupName').select2({ minimumResultsForSearch: Infinity });
       });
     </script>
   </body>

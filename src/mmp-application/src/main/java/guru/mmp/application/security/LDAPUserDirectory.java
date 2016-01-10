@@ -123,8 +123,6 @@ public class LDAPUserDirectory
 
   private String userEmailAttribute;
 
-  private String userFaxNumberAttribute;
-
   private String userFirstNamesAttribute;
 
   private String userLastNameAttribute;
@@ -140,10 +138,6 @@ public class LDAPUserDirectory
   private String userPasswordHistoryAttribute;
 
   private String[] userPasswordHistoryAttributeArray;
-
-  private String userPhoneNumberAttribute;
-
-  private String userTitleAttribute;
 
   private String userUsernameAttribute;
 
@@ -304,11 +298,6 @@ public class LDAPUserDirectory
             "(%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("UserTitleAttribute"))
-      {
-        userTitleAttribute = parameters.get("UserTitleAttribute");
-      }
-
       if (parameters.containsKey("UserFirstNamesAttribute"))
       {
         userFirstNamesAttribute = parameters.get("UserFirstNamesAttribute");
@@ -329,16 +318,6 @@ public class LDAPUserDirectory
         throw new SecurityException(String.format(
           "No UserLastNameAttribute configuration parameter found for the user directory (%s)",
           userDirectoryId));
-      }
-
-      if (parameters.containsKey("UserPhoneNumberAttribute"))
-      {
-        userPhoneNumberAttribute = parameters.get("UserPhoneNumberAttribute");
-      }
-
-      if (parameters.containsKey("UserFaxNumberAttribute"))
-      {
-        userFaxNumberAttribute = parameters.get("UserFaxNumberAttribute");
       }
 
       if (parameters.containsKey("UserMobileNumberAttribute"))
@@ -965,11 +944,6 @@ public class LDAPUserDirectory
 
       attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
 
-      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
-      {
-        attributes.put(new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle())));
-      }
-
       if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
       {
         attributes.put(
@@ -985,18 +959,6 @@ public class LDAPUserDirectory
       if (!StringUtil.isNullOrEmpty(userEmailAttribute))
       {
         attributes.put(new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail())));
-      }
-
-      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
-      {
-        attributes.put(
-          new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber())));
-      }
-
-      if (!StringUtil.isNullOrEmpty(userFaxNumberAttribute))
-      {
-        attributes.put(
-          new BasicAttribute(userFaxNumberAttribute, StringUtil.notNull(user.getFaxNumber())));
       }
 
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
@@ -2334,12 +2296,6 @@ public class LDAPUserDirectory
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
-      {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle()))));
-      }
-
       if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
@@ -2356,18 +2312,6 @@ public class LDAPUserDirectory
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
           new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail()))));
-      }
-
-      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
-      {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
-      }
-
-      if (!StringUtil.isNullOrEmpty(userFaxNumberAttribute))
-      {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userFaxNumberAttribute, StringUtil.notNull(user.getFaxNumber()))));
       }
 
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
@@ -2494,16 +2438,6 @@ public class LDAPUserDirectory
     user.setReadOnly(isReadOnly);
     user.setPassword("");
 
-    if ((!StringUtil.isNullOrEmpty(userTitleAttribute)) && (attributes.get(userTitleAttribute) !=
-      null))
-    {
-      user.setTitle(String.valueOf(attributes.get(userTitleAttribute).get()));
-    }
-    else
-    {
-      user.setTitle("");
-    }
-
     if ((!StringUtil.isNullOrEmpty(userFirstNamesAttribute)) && (attributes.get(
       userFirstNamesAttribute) != null))
     {
@@ -2522,26 +2456,6 @@ public class LDAPUserDirectory
     else
     {
       user.setLastName("");
-    }
-
-    if ((!StringUtil.isNullOrEmpty(userPhoneNumberAttribute)) && (attributes.get(
-      userPhoneNumberAttribute) != null))
-    {
-      user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
-    }
-    else
-    {
-      user.setPhoneNumber("");
-    }
-
-    if ((!StringUtil.isNullOrEmpty(userFaxNumberAttribute)) && (attributes.get(
-      userFaxNumberAttribute) != null))
-    {
-      user.setFaxNumber(String.valueOf(attributes.get(userFaxNumberAttribute).get()));
-    }
-    else
-    {
-      user.setFaxNumber("");
     }
 
     if ((!StringUtil.isNullOrEmpty(userMobileNumberAttribute)) && (attributes.get(

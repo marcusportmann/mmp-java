@@ -34,8 +34,6 @@ public class User
 
   private String email;
 
-  private String faxNumber;
-
   private String firstNames;
 
   private UUID id;
@@ -52,11 +50,7 @@ public class User
 
   private Date passwordExpiry;
 
-  private String phoneNumber;
-
   private HashMap<String, String> properties = new HashMap<>();
-
-  private String title;
 
   private UUID userDirectoryId;
 
@@ -85,16 +79,6 @@ public class User
   public String getEmail()
   {
     return email;
-  }
-
-  /**
-   * Returns the fax number for the user
-   *
-   * @return the fax number for the user
-   */
-  public String getFaxNumber()
-  {
-    return faxNumber;
   }
 
   /**
@@ -170,16 +154,6 @@ public class User
   }
 
   /**
-   * Returns the phone number for the user
-   *
-   * @return the phone number for the user
-   */
-  public String getPhoneNumber()
-  {
-    return phoneNumber;
-  }
-
-  /**
    * Returns the value of the user property with the specified name or <code>null</code> if the
    * user property does not exist.
    *
@@ -191,16 +165,6 @@ public class User
   public String getProperty(String name)
   {
     return properties.get(name);
-  }
-
-  /**
-   * Returns the title for the user
-   *
-   * @return the title for the user
-   */
-  public String getTitle()
-  {
-    return title;
   }
 
   /**
@@ -275,16 +239,6 @@ public class User
   }
 
   /**
-   * Set the fax number for the user.
-   *
-   * @param faxNumber the fax number for the user
-   */
-  public void setFaxNumber(String faxNumber)
-  {
-    this.faxNumber = faxNumber;
-  }
-
-  /**
    * Set the first name(s) for the user.
    *
    * @param firstNames the first name(s) for the user
@@ -355,16 +309,6 @@ public class User
   }
 
   /**
-   * Set the phone number for the user.
-   *
-   * @param phoneNumber the phone number for the user
-   */
-  public void setPhoneNumber(String phoneNumber)
-  {
-    this.phoneNumber = phoneNumber;
-  }
-
-  /**
    * Set the value of the user property.
    *
    * @param name  the name of the user property
@@ -383,16 +327,6 @@ public class User
   public void setReadOnly(boolean isReadOnly)
   {
     this.isReadOnly = isReadOnly;
-  }
-
-  /**
-   * Set the title for the user.
-   *
-   * @param title the title for the user
-   */
-  public void setTitle(String title)
-  {
-    this.title = title;
   }
 
   /**
