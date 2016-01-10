@@ -18,6 +18,8 @@ package guru.mmp.application.web.template.component;
 
 import org.apache.wicket.markup.html.form.TextField;
 
+import java.util.UUID;
+
 /**
  * The <code>CodeInputPanel</code> class provides a Wicket component that can
  * be used to capture the information for a <code>Code</code>.
@@ -41,7 +43,7 @@ public class CodeInputPanel
     super(id);
 
     // The "id" field
-    TextField<String> idField = new TextFieldWithFeedback<>("id");
+    TextField<UUID> idField = new TextFieldWithFeedback<>("id");
     idField.setRequired(true);
     idField.setEnabled(!isIdReadOnly);
     add(idField);

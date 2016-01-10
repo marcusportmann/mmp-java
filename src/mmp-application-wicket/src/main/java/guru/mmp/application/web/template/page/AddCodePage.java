@@ -67,7 +67,6 @@ public class AddCodePage
       Form<Code> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(new Code())));
 
-      addForm.getModelObject().setId(UUID.randomUUID().toString());
       addForm.getModelObject().setCategoryId(codeCategoryId);
 
       addForm.add(new CodeInputPanel("code", false));

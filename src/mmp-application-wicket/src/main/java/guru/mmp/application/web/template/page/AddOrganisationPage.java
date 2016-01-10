@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 /**
  * The <code>AddOrganisationPage</code> class implements the
@@ -71,6 +72,13 @@ public class AddOrganisationPage
     {
       Form<Organisation> addForm = new Form<>("addForm",
         new CompoundPropertyModel<>(new Model<>(new Organisation())));
+
+      addForm.getModelObject().setId(UUID.randomUUID());
+
+      // The "id" field
+      TextField<UUID> idField = new TextFieldWithFeedback<>("id");
+      idField.setRequired(true);
+      addForm.add(idField);
 
       // The "name" field
       TextField<String> nameField = new TextFieldWithFeedback<>("name");

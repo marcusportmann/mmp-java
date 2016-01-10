@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>UserDirectoryTypeChoiceRenderer</code> class implements a <code>ChoiceRenderer</code>
@@ -79,9 +80,11 @@ public class UserDirectoryTypeChoiceRenderer
   public UserDirectoryType getObject(
     String id, IModel<? extends List<? extends UserDirectoryType>> choices)
   {
+    UUID uuid = UUID.fromString(id);
+
     for (UserDirectoryType choice : choices.getObject())
     {
-      if (choice.getId().equals(id))
+      if (choice.getId().equals(uuid))
       {
         return choice;
       }

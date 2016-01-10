@@ -92,9 +92,13 @@
                     <div wicket:id="alerts"></div>
                     <form wicket:id="form" id="form" class="form-horizontal">
                       <div class="form-group">
-                        <label for="userDirectoryType" class="control-label col-sm-3">User Directory Type</label>
-                        <div class="col-sm-9">
-                          <select wicket:id="userDirectoryType" id="userDirectoryType" class="form-control" type="text" name="userDirectoryType"></select>
+                        <label for="userDirectoryType" class="control-label col-xs-4">User Directory Type</label>
+                        <div class="col-xs-8">
+                          <div class="template-custom-select">
+                            <select wicket:id="userDirectoryType" id="userDirectoryType" name="userDirectoryType" size="1" class="form-control">
+                              <option value="" selected disabled>Select a user directory</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
                     </form>

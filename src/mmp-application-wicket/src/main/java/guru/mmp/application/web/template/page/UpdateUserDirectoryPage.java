@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.lang.reflect.Constructor;
+import java.util.UUID;
 
 /**
  * The <code>UpdateUserDirectoryPage</code> class implements the
@@ -73,6 +74,12 @@ public class UpdateUserDirectoryPage
 
       Form<UserDirectory> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(userDirectoryModel));
+
+      // The "id" field
+      TextField<UUID> idField = new TextFieldWithFeedback<>("id");
+      idField.setRequired(true);
+      idField.setEnabled(false);
+      updateForm.add(idField);
 
       // The "name" field
       TextField<String> nameField = new TextFieldWithFeedback<>("name");
