@@ -135,6 +135,9 @@ public class UserAdministrationPage
           if (target != null)
           {
             target.add(tableContainer);
+
+            target.appendJavaScript(
+              "jQuery('[data-toggle=\"tooltip\"]').tooltip({container: 'body', animation: false});");
           }
         }
       };

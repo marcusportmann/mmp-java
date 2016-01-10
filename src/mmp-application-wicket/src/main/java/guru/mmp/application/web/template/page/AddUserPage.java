@@ -73,23 +73,6 @@ public class AddUserPage
   private boolean userLocked;
 
   /**
-   * Returns the user title options e.g. Mr, Mrs, Ms, etc.
-   *
-   * @return the user title options e.g. Mr, Mrs, Ms, etc
-   */
-  public static List<String> getTitleOptions()
-  {
-    List<String> titleOptions = new ArrayList<>();
-
-    titleOptions.add("Mr");
-    titleOptions.add("Mrs");
-    titleOptions.add("Ms");
-    titleOptions.add("Dr");
-
-    return titleOptions;
-  }
-
-  /**
    * Constructs a new <code>AddUserPage</code>.
    *
    * @param previousPage    the previous page
@@ -110,12 +93,6 @@ public class AddUserPage
       usernameField.setRequired(true);
       addForm.add(usernameField);
 
-      // The "title" field
-      DropDownChoice<String> titleField = new DropDownChoiceWithFeedback<>("title",
-        getTitleOptions());
-      titleField.setRequired(true);
-      addForm.add(titleField);
-
       // The "firstNames" field
       TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
       firstNamesField.setRequired(true);
@@ -130,16 +107,6 @@ public class AddUserPage
       TextField<String> emailField = new TextFieldWithFeedback<>("email");
       emailField.setRequired(true);
       addForm.add(emailField);
-
-      // The "phoneNumber" field
-      TextField<String> phoneNumberField = new TextFieldWithFeedback<>("phoneNumber");
-      phoneNumberField.setRequired(false);
-      addForm.add(phoneNumberField);
-
-      // The "faxNumber" field
-      TextField<String> faxNumberField = new TextFieldWithFeedback<>("faxNumber");
-      faxNumberField.setRequired(false);
-      addForm.add(faxNumberField);
 
       // The "mobileNumber" field
       TextField<String> mobileNumberField = new TextFieldWithFeedback<>("mobileNumber");
@@ -195,8 +162,6 @@ public class AddUserPage
         {
           try
           {
-            WebSession session = getWebApplicationSession();
-
             User user = addForm.getModelObject();
 
             // Check if a user with the specified username already exists and if so return an error

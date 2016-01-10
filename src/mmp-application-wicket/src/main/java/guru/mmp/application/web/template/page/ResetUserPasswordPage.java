@@ -88,12 +88,6 @@ public class ResetUserPasswordPage
       usernameField.setEnabled(false);
       resetForm.add(usernameField);
 
-      // The "title" field
-      TextField<String> titleField = new TextFieldWithFeedback<>("title");
-      titleField.setRequired(true);
-      titleField.setEnabled(false);
-      resetForm.add(titleField);
-
       // The "firstNames" field
       TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
       firstNamesField.setRequired(true);

@@ -21,11 +21,9 @@ import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.page.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.component.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -74,12 +72,6 @@ public class UpdateUserPage
       usernameField.setEnabled(false);
       updateForm.add(usernameField);
 
-      // The "title" field
-      DropDownChoice<String> titleField = new DropDownChoiceWithFeedback<>("title",
-        AddUserPage.getTitleOptions());
-      titleField.setRequired(true);
-      updateForm.add(titleField);
-
       // The "firstNames" field
       TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
       firstNamesField.setRequired(true);
@@ -94,16 +86,6 @@ public class UpdateUserPage
       TextField<String> emailField = new TextFieldWithFeedback<>("email");
       emailField.setRequired(true);
       updateForm.add(emailField);
-
-      // The "phoneNumber" field
-      TextField<String> phoneNumberField = new TextFieldWithFeedback<>("phoneNumber");
-      phoneNumberField.setRequired(false);
-      updateForm.add(phoneNumberField);
-
-      // The "faxNumber" field
-      TextField<String> faxNumberField = new TextFieldWithFeedback<>("faxNumber");
-      faxNumberField.setRequired(false);
-      updateForm.add(faxNumberField);
 
       // The "mobileNumber" field
       TextField<String> mobileNumberField = new TextFieldWithFeedback<>("mobileNumber");

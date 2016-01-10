@@ -164,7 +164,6 @@ public class UserGroupsPage
           String description = StringUtil.truncate(group.getDescription(), 30);
 
           item.add(new Label("name", Model.of(name)));
-          item.add(new Label("description", Model.of(description)));
 
           // The "removeLink" link
           AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
@@ -190,7 +189,14 @@ public class UserGroupsPage
                 groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
                 groupNameField.setModelObject(null);
 
-                target.add(tableContainer);
+                if (target != null)
+                {
+                  target.add(tableContainer);
+
+                  target.appendJavaScript(
+                    "jQuery('[data-toggle=\"tooltip\"]').tooltip({container: 'body', animation: " +
+                      "false});");
+                }
               }
               catch (Throwable e)
               {

@@ -91,7 +91,7 @@ public class TemplateCssResourceReference
           : "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css")));
     dependencies.add(CssHeaderItem.forReference(
       new CssResourceReference(TemplateCssResourceReference.class,
-        Debug.inDebugMode() ? "js/plugins/select2/select2.css"
+        Debug.inDebugMode() ? "js/plugins/select2/select2.min.css"
           : "js/plugins/select2/select2.min.css")));
     dependencies.add(CssHeaderItem.forReference(
       new CssResourceReference(TemplateCssResourceReference.class,

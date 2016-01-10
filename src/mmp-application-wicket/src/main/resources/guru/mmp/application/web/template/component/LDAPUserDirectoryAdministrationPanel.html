@@ -7,7 +7,7 @@
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
             <label for="host">Host</label>
-            <input wicket:id="host" id="host" name="host" type="text" class="form-control" placeholder="Enter a hostname">
+            <input wicket:id="host" id="host" name="host" type="text" class="form-control" placeholder="Enter the LDAP server hostname">
           </div>
         </div>
       </div>
@@ -16,7 +16,7 @@
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
             <label for="port">Port</label>
-            <input wicket:id="port" id="port" name="port" type="text" class="form-control" placeholder="Enter a port">
+            <input wicket:id="port" id="port" name="port" type="text" class="form-control" placeholder="Enter the LDAP server port">
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
             <label for="bindDN">Bind DN</label>
-            <input wicket:id="bindDN" id="bindDN" name="bindDN" type="text" class="form-control" placeholder="Enter a bind DN">
+            <input wicket:id="bindDN" id="bindDN" name="bindDN" type="text" class="form-control" placeholder="Enter the bind DN">
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
             <label for="bindPassword">Bind Password</label>
-            <input wicket:id="bindPassword" id="bindPassword" name="bindPassword" type="text" class="form-control" placeholder="Enter a bind password">
+            <input wicket:id="bindPassword" id="bindPassword" name="bindPassword" type="text" class="form-control" placeholder="Enter the bind password">
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
             <label for="baseDN">Base DN</label>
-            <input wicket:id="baseDN" id="baseDN" name="baseDN" type="text" class="form-control" placeholder="Enter a base DN">
+            <input wicket:id="baseDN" id="baseDN" name="baseDN" type="text" class="form-control" placeholder="Enter the base DN">
           </div>
         </div>
       </div>
@@ -60,9 +60,8 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="userBaseDN">User Base DN</label>
+            <input wicket:id="userBaseDN" id="userBaseDN" name="userBaseDN" type="text" class="form-control" placeholder="Enter the user base DN">
           </div>
         </div>
       </div>
@@ -70,9 +69,8 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="groupBaseDN">Group Base DN</label>
+            <input wicket:id="groupBaseDN" id="groupBaseDN" name="groupBaseDN" type="text" class="form-control" placeholder="Enter the group base DN">
           </div>
         </div>
       </div>
@@ -80,9 +78,8 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="sharedBaseDN">Shared Base DN</label>
+            <input wicket:id="sharedBaseDN" id="sharedBaseDN" name="sharedBaseDN" type="text" class="form-control" placeholder="Enter the shared base DN">
           </div>
         </div>
       </div>
@@ -90,9 +87,8 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="userObjectClass">User Object Class</label>
+            <input wicket:id="userObjectClass" id="userObjectClass" name="userObjectClass" type="text" class="form-control" placeholder="Enter the user object class">
           </div>
         </div>
       </div>
@@ -100,9 +96,8 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="userUsernameAttribute">User Username Attribute</label>
+            <input wicket:id="userUsernameAttribute" id="userUsernameAttribute" name="userUsernameAttribute" type="text" class="form-control" placeholder="Enter the username attribute">
           </div>
         </div>
       </div>
@@ -110,9 +105,8 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="userPasswordExpiryAttribute">User Password Expiry Attribute</label>
+            <input wicket:id="userPasswordExpiryAttribute" id="userPasswordExpiryAttribute" name="userPasswordExpiryAttribute" type="text" class="form-control" placeholder="Enter the password expiry attribute">
           </div>
         </div>
       </div>
@@ -120,9 +114,8 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="userPasswordAttemptsAttribute">User Password Attempts Attribute</label>
+            <input wicket:id="userPasswordAttemptsAttribute" id="userPasswordAttemptsAttribute" name="userPasswordAttemptsAttribute" type="text" class="form-control" placeholder="Enter the password attempts attribute">
           </div>
         </div>
       </div>
@@ -130,187 +123,153 @@
       <div class="form-group">
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
-            <label for="xxx">XXX</label>
-            <input wicket:id="xxx" id="xxx" name="xxx" type="text" class="form-control" placeholder="Enter
-            ">
+            <label for="userPasswordHistoryAttribute">User Password History Attribute</label>
+            <input wicket:id="userPasswordHistoryAttribute" id="userPasswordHistoryAttribute" name="userPasswordHistoryAttribute" type="text" class="form-control" placeholder="Enter the password history attribute">
           </div>
         </div>
       </div>
 
-
-
-
-
-
-
-
-
-
       <div class="form-group">
-        <label for="userBaseDN" class="control-label col-sm-4">User Base DN</label>
-        <div class="col-sm-8">
-          <input wicket:id="userBaseDN" id="userBaseDN" class="form-control" type="text" name="userBaseDN"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="userFirstNamesAttribute">User First Names Attribute</label>
+            <input wicket:id="userFirstNamesAttribute" id="userFirstNamesAttribute" name="userFirstNamesAttribute" type="text" class="form-control" placeholder="Enter the first names attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="groupBaseDN" class="control-label col-sm-4">Group Base DN</label>
-        <div class="col-sm-8">
-          <input wicket:id="groupBaseDN" id="groupBaseDN" class="form-control" type="text" name="groupBaseDN"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="userLastNameAttribute">User Last Name Attribute</label>
+            <input wicket:id="userLastNameAttribute" id="userLastNameAttribute" name="userLastNameAttribute" type="text" class="form-control" placeholder="Enter the last name attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="sharedBaseDN" class="control-label col-sm-4">Shared Base DN</label>
-        <div class="col-sm-8">
-          <input wicket:id="sharedBaseDN" id="sharedBaseDN" class="form-control" type="text" name="sharedBaseDN"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="userMobileNumberAttribute">User Mobile Number Attribute</label>
+            <input wicket:id="userMobileNumberAttribute" id="userMobileNumberAttribute" name="userMobileNumberAttribute" type="text" class="form-control" placeholder="Enter the mobile number attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userObjectClass" class="control-label col-sm-4">User Object Class</label>
-        <div class="col-sm-8">
-          <input wicket:id="userObjectClass" id="userObjectClass" class="form-control" type="text" name="userObjectClass"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="userEmailAttribute">User E-Mail Attribute</label>
+            <input wicket:id="userEmailAttribute" id="userEmailAttribute" name="userEmailAttribute" type="text" class="form-control" placeholder="Enter the e-mail attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userUsernameAttribute" class="control-label col-sm-4">User Username Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userUsernameAttribute" id="userUsernameAttribute" class="form-control" type="text" name="userUsernameAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="userDescriptionAttribute">User Description Attribute</label>
+            <input wicket:id="userDescriptionAttribute" id="userDescriptionAttribute" name="userDescriptionAttribute" type="text" class="form-control" placeholder="Enter the description attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userPasswordExpiryAttribute" class="control-label col-sm-4">User Password Expiry Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userPasswordExpiryAttribute" id="userPasswordExpiryAttribute" class="form-control" type="text" name="userPasswordExpiryAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="groupObjectClass">Group Object Class</label>
+            <input wicket:id="groupObjectClass" id="groupObjectClass" name="groupObjectClass" type="text" class="form-control" placeholder="Enter the group object class">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userPasswordAttemptsAttribute" class="control-label col-sm-4">User Password Attempts Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userPasswordAttemptsAttribute" id="userPasswordAttemptsAttribute" class="form-control" type="text" name="userPasswordAttemptsAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="groupNameAttribute">Group Name Attribute</label>
+            <input wicket:id="groupNameAttribute" id="groupNameAttribute" name="groupNameAttribute" type="text" class="form-control" placeholder="Enter the group name attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userPasswordHistoryAttribute" class="control-label col-sm-4">User Password History Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userPasswordHistoryAttribute" id="userPasswordHistoryAttribute" class="form-control" type="text" name="userPasswordHistoryAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="groupMemberAttribute">Group Member Attribute</label>
+            <input wicket:id="groupMemberAttribute" id="groupMemberAttribute" name="groupMemberAttribute" type="text" class="form-control" placeholder="Enter the group member attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userFirstNamesAttribute" class="control-label col-sm-4">User First Names Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userFirstNamesAttribute" id="userFirstNamesAttribute" class="form-control" type="text" name="userFirstNamesAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="groupDescriptionAttribute">Group Description Attribute</label>
+            <input wicket:id="groupDescriptionAttribute" id="groupDescriptionAttribute" name="groupDescriptionAttribute" type="text" class="form-control" placeholder="Enter the group description attribute">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userLastNameAttribute" class="control-label col-sm-4">User Last Name Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userLastNameAttribute" id="userLastNameAttribute" class="form-control" type="text" name="userLastNameAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="maxPasswordAttempts">Maximum Password Attempts</label>
+            <input wicket:id="maxPasswordAttempts" id="maxPasswordAttempts" name="maxPasswordAttempts" type="text" class="form-control" placeholder="Enter the maximum number of authentication attempts">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userMobileNumberAttribute" class="control-label col-sm-4">User Mobile Number Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userMobileNumberAttribute" id="userMobileNumberAttribute" class="form-control" type="text" name="userMobileNumberAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="passwordExpiryMonths">Password Expiry (months)</label>
+            <input wicket:id="passwordExpiryMonths" id="passwordExpiryMonths" name="passwordExpiryMonths" type="text" class="form-control" placeholder="Enter the password expiry in months">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userEmailAttribute" class="control-label col-sm-4">User E-Mail Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userEmailAttribute" id="userEmailAttribute" class="form-control" type="text" name="userEmailAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="supportPasswordHistory">Support Password History</label>
+            <input wicket:id="supportPasswordHistory" id="supportPasswordHistory" name="supportPasswordHistory" type="text" class="form-control" placeholder="Support password history (true/false)">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="userDescriptionAttribute" class="control-label col-sm-4">User Description Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="userDescriptionAttribute" id="userDescriptionAttribute" class="form-control" type="text" name="userDescriptionAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="passwordHistoryMonths">Password History (months)</label>
+            <input wicket:id="passwordHistoryMonths" id="passwordHistoryMonths" name="passwordHistoryMonths" type="text" class="form-control" placeholder="Enter the password history in months">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="groupObjectClass" class="control-label col-sm-4">Group Object Class</label>
-        <div class="col-sm-8">
-          <input wicket:id="groupObjectClass" id="groupObjectClass" class="form-control" type="text" name="groupObjectClass"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="passwordHistoryMaxLength">Password History Max Length</label>
+            <input wicket:id="passwordHistoryMaxLength" id="passwordHistoryMaxLength" name="passwordHistoryMaxLength" type="text" class="form-control" placeholder="Enter the maximum password history length">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="groupNameAttribute" class="control-label col-sm-4">Group Name Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="groupNameAttribute" id="groupNameAttribute" class="form-control" type="text" name="groupNameAttribute"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="maxFilteredUsers">Maximum Filtered Users</label>
+            <input wicket:id="maxFilteredUsers" id="maxFilteredUsers" name="maxFilteredUsers" type="text" class="form-control" placeholder="Enter the maximum number of filtered users">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="groupMemberAttribute" class="control-label col-sm-4">Group Member Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="groupMemberAttribute" id="groupMemberAttribute" class="form-control" type="text" name="groupMemberAttribute"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="groupDescriptionAttribute" class="control-label col-sm-4">Group Description Attribute</label>
-        <div class="col-sm-8">
-          <input wicket:id="groupDescriptionAttribute" id="groupDescriptionAttribute" class="form-control" type="text" name="groupDescriptionAttribute"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="maxPasswordAttempts" class="control-label col-sm-4">Maximum Password Attempts</label>
-        <div class="col-sm-8">
-          <input wicket:id="maxPasswordAttempts" id="maxPasswordAttempts" class="form-control" type="text" name="maxPasswordAttempts"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="passwordExpiryMonths" class="control-label col-sm-4">Password Expiry (months)</label>
-        <div class="col-sm-8">
-          <input wicket:id="passwordExpiryMonths" id="passwordExpiryMonths" class="form-control" type="text" name="passwordExpiryMonths"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="supportPasswordHistory" class="control-label col-sm-4">Support Password History</label>
-        <div class="col-sm-8">
-          <input wicket:id="supportPasswordHistory" id="supportPasswordHistory" class="form-control" type="text" name="supportPasswordHistory"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="passwordHistoryMonths" class="control-label col-sm-4">Password History (months)</label>
-        <div class="col-sm-8">
-          <input wicket:id="passwordHistoryMonths" id="passwordHistoryMonths" class="form-control" type="text" name="passwordHistoryMonths"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="passwordHistoryMaxLength" class="control-label col-sm-4">Password History Max Length</label>
-        <div class="col-sm-8">
-          <input wicket:id="passwordHistoryMaxLength" id="passwordHistoryMaxLength" class="form-control" type="text" name="passwordHistoryMaxLength"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="maxFilteredUsers" class="control-label col-sm-4">Maximum Filtered Users</label>
-        <div class="col-sm-8">
-          <input wicket:id="maxFilteredUsers" id="maxFilteredUsers" class="form-control" type="text" name="maxFilteredUsers"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="maxFilteredGroups" class="control-label col-sm-4">Maximum Filtered Groups</label>
-        <div class="col-sm-8">
-          <input wicket:id="maxFilteredGroups" id="maxFilteredGroups" class="form-control" type="text" name="maxFilteredGroups"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="maxFilteredGroups">Maximum Filtered Groups</label>
+            <input wicket:id="maxFilteredGroups" id="maxFilteredGroups" name="maxFilteredGroups" type="text" class="form-control" placeholder="Enter the maximum number of filtered groups">
+          </div>
         </div>
       </div>
 
