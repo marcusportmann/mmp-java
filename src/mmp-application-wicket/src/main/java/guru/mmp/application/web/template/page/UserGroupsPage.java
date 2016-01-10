@@ -26,8 +26,6 @@ import guru.mmp.application.web.template.component.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.PageReference;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -160,18 +158,17 @@ public class UserGroupsPage
         {
           Group group = item.getModelObject();
 
-          String name = StringUtil.truncate(group.getGroupName(), 25);
-          String description = StringUtil.truncate(group.getDescription(), 30);
+          String name = group.getGroupName();
 
           item.add(new Label("name", Model.of(name)));
 
           // The "removeLink" link
-          AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+          Link<Void> removeLink = new Link<Void>("removeLink")
           {
             private static final long serialVersionUID = 1000000;
 
             @Override
-            public void onClick(AjaxRequestTarget target)
+            public void onClick()
             {
               WebSession session = getWebApplicationSession();
 
@@ -188,15 +185,6 @@ public class UserGroupsPage
 
                 groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
                 groupNameField.setModelObject(null);
-
-                if (target != null)
-                {
-                  target.add(tableContainer);
-
-                  target.appendJavaScript(
-                    "jQuery('[data-toggle=\"tooltip\"]').tooltip({container: 'body', animation: " +
-                      "false});");
-                }
               }
               catch (Throwable e)
               {
