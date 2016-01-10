@@ -153,11 +153,13 @@
                     <div class="col-xs-12">
                       <div class="form-material form-material-primary">
                         <label for="groupName">Group</label>
-                        <select wicket:id="groupName" id="groupName" name="groupName" class="js-select2 form-control select2-hidden-accessible" data-placeholder="">
-                          <option></option>
-                          <option>Administrators</option>
-                          <option>Organisation Administrators</option>
-                        </select>
+                        <div class="template-custom-select">
+                          <select wicket:id="groupName" id="groupName" name="groupName" size="1" class="form-control">
+                            <option value="" selected disabled>Select a group</option>
+                            <option>Administrators</option>
+                            <option>Organisation Administrators</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -173,12 +175,6 @@
 
               </div>
             </div>
-
-            <script>
-              $(document).ready(function() {
-                $('#groupName').select2({ minimumResultsForSearch: Infinity });
-              });
-            </script>
 
           </wicket:extend>
         </div>

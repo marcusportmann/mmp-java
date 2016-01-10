@@ -99,6 +99,22 @@
                   <div class="form-group">
                     <div class="col-xs-6">
                       <div class="form-material form-material-primary">
+                        <label for="favouritePet">Favourite Pet</label>
+                        <div class="template-custom-select">
+                          <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1" class="form-control">
+                            <option value="" selected disabled>Select a pet</option>
+                            <option value="1">Dog</option>
+                            <option value="2">Cat</option>
+                            <option value="3">Hamster</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-6">
+                      <div class="form-material form-material-primary">
                         <label for="password">Password</label>
                         <input wicket:id="password" id="password" name="password" type="password" class="form-control" placeholder="Enter a password"/>
                       </div>
@@ -116,20 +132,6 @@
                       <div class="form-material form-material-primary">
                         <label for="notes">Notes</label>
                         <textarea wicket:id="notes" id="notes" name="notes" rows="4" cols="5" class="form-control" placeholder="Enter the notes"></textarea>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-xs-12" for="favouritePet">Favourite Pet</label>
-                    <div class="col-xs-6">
-                      <div class="form-material">
-                        <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1" class="form-control" data-placeholder="Select a pet">
-                          <option></option>
-                          <option value="1">Dog</option>
-                          <option value="2">Cat</option>
-                          <option value="3">Hamster</option>
-                        </select>
                       </div>
                     </div>
                   </div>

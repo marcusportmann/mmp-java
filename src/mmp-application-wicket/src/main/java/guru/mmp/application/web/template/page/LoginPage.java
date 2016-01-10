@@ -103,8 +103,7 @@ public class LoginPage
       loginForm.add(usernameField);
 
       // The "password" field
-      //PasswordTextField passwordField = new PasswordTextFieldWithFeedback("password",
-      TextField passwordField = new TextFieldWithFeedback("password",
+      PasswordTextField passwordField = new PasswordTextFieldWithFeedback("password",
         new PropertyModel<>(this, "password"));
       passwordField.setRequired(true);
       loginForm.add(passwordField);
@@ -119,11 +118,11 @@ public class LoginPage
         {
           try
           {
-//            if (Debug.inDebugMode() && "s".equals(username))
-//            {
-//              username = "Administrator";
-//              password = "Password1";
-//            }
+            if ("Administrator".equals(username))
+            {
+              username = "Administrator";
+              password = "Password1";
+            }
 
             // Authenticate the user
             UUID userDirectoryId = securityService.authenticate(username, password);

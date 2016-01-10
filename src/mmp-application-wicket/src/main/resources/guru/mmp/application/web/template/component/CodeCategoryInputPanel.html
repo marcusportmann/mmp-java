@@ -34,11 +34,11 @@
         <div class="col-xs-12">
           <div class="form-material form-material-primary">
             <label for="categoryType">Category Type</label>
-            <select wicket:id="categoryType" id="categoryType" name="categoryType" class="js-select2 form-control select2-hidden-accessible" data-placeholder="Select a category type">
-              <option></option>
-            </select>
-
-
+            <div class="template-custom-select">
+              <select wicket:id="categoryType" id="categoryType" name="categoryType" size="1" class="form-control">
+                <option value="" selected disabled>Select a pet</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@
 
         <div class="form-group">
           <div class="col-xs-12">
-            <label class="css-input css-checkbox css-checkbox-default" for="isEndPointSecure">
+            <label class="css-input css-checkbox css-checkbox-default" for="isCacheable">
               <input wicket:id="isCacheable" id="isCacheable" name="isCacheable" type="checkbox">
               <span></span>
               Is Cacheable?
@@ -97,12 +97,6 @@
         </div>
 
       </div>
-
-      <script>
-        $(document).ready(function() {
-          $('#categoryType').select2({ minimumResultsForSearch: Infinity });
-        });
-      </script>
 
     </wicket:panel>
   </body>

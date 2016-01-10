@@ -68,7 +68,7 @@ public class UpdateCodeCategoryPage
       Form<CodeCategory> updateForm = new Form<>("updateForm",
         new CompoundPropertyModel<>(codeCategoryModel));
 
-      updateForm.add(new CodeCategoryInputPanel("codeCategory", false));
+      updateForm.add(new CodeCategoryInputPanel("codeCategory", true));
 
       // The "updateButton" button
       Button updateButton = new Button("updateButton")
