@@ -4,23 +4,29 @@
     <wicket:panel>
 
       <div class="form-group">
-        <label for="id" class="control-label col-xs-3">ID</label>
-        <div class="col-xs-9">
-          <input wicket:id="id" id="id" class="form-control" type="text" name="id"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="id">ID</label>
+            <input wicket:id="id" id="id" name="id" type="text" class="form-control" placeholder="Enter an ID">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="name" class="control-label col-xs-3">Name</label>
-        <div class="col-xs-9">
-          <input wicket:id="name" id="name" class="form-control" type="text" name="name"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="name">Name</label>
+            <input wicket:id="name" id="name" name="name" type="text" class="form-control" placeholder="Enter a name">
+          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="fileUpload" class="control-label col-xs-3">Template</label>
-        <div class="col-xs-9">
-          <input wicket:id="fileUpload" id="fileUpload" class="form-control" type="file" name="fileUpload"/>
+        <div class="col-xs-12">
+          <div class="form-material form-material-primary">
+            <label for="name">Template</label>
+            <input wicket:id="fileUpload" id="fileUpload" class="form-control" type="file" name="fileUpload" placeholder="Please select a file">
+          </div>
         </div>
       </div>
 

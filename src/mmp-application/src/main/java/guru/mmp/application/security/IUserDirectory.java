@@ -27,11 +27,6 @@ import java.util.List;
 public interface IUserDirectory
 {
   /**
-   * The unique ID for the default internal user directory.
-   */
-  int DEFAULT_INTERNAL_USER_DIRECTORY_ID = 1;
-
-  /**
    * Add the user to the group.
    *
    * @param username  the username identifying the user

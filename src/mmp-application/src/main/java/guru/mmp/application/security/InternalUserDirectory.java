@@ -276,15 +276,15 @@ public class InternalUserDirectory
 
       statement.setString(1, passwordHash);
 
-      if (user.getPasswordAttempts() == null)
+      if (lockUser)
       {
-        statement.setNull(2, java.sql.Types.INTEGER);
+        statement.setInt(2, maxPasswordAttempts);
       }
       else
       {
-        if (lockUser)
+        if (user.getPasswordAttempts() == null)
         {
-          statement.setInt(2, maxPasswordAttempts);
+          statement.setNull(2, java.sql.Types.INTEGER);
         }
         else
         {
@@ -292,15 +292,15 @@ public class InternalUserDirectory
         }
       }
 
-      if (user.getPasswordExpiry() == null)
+      if (expirePassword)
       {
-        statement.setNull(3, Types.TIMESTAMP);
+        statement.setTimestamp(3, new Timestamp(0));
       }
       else
       {
-        if (expirePassword)
+        if (user.getPasswordExpiry() == null)
         {
-          statement.setTimestamp(3, new Timestamp(0));
+          statement.setNull(3, Types.TIMESTAMP);
         }
         else
         {
@@ -428,7 +428,7 @@ public class InternalUserDirectory
           String.format("The user (%s) could not be found", username));
       }
 
-      if ((user.getPasswordAttempts() == null) ||
+      if ((user.getPasswordAttempts() != null) &&
         (user.getPasswordAttempts() > maxPasswordAttempts))
       {
         throw new UserLockedException(String.format(

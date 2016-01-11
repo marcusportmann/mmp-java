@@ -24,6 +24,9 @@ import guru.mmp.application.web.template.page.*;
 import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
 import guru.mmp.sample.web.page.forms.TestFormPage;
+import guru.mmp.sample.web.page.ui.BlocksPage;
+import guru.mmp.sample.web.page.ui.GridPage;
+import guru.mmp.sample.web.page.ui.TypographyPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -113,7 +116,9 @@ public class SampleApplication
 
     NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "fa fa-sliders");
 
-//    uiElementsGroup.addItem(new NavigationLink("Alerts", AlertsPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Blocks", BlocksPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Grid", GridPage.class));
+    uiElementsGroup.addItem(new NavigationLink("Typography", TypographyPage.class));
 
     root.addItem(uiElementsGroup);
 

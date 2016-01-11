@@ -47,9 +47,9 @@ public class RadioGroupWithFeedback<T>
   {
     super(id);
 
-    setMarkupId(id);
     setRenderBodyOnly(false);
     setOutputMarkupId(true);
+    setMarkupId(id);
   }
 
   /**

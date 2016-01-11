@@ -25,9 +25,9 @@ import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.component.Alerts;
 import guru.mmp.application.web.template.component.PasswordTextFieldWithFeedback;
-import guru.mmp.application.web.template.component.TextFieldWithFeedback;
 import guru.mmp.application.web.template.resource.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+import guru.mmp.application.web.validation.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -36,10 +36,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,12 +77,19 @@ public class ChangePasswordPage
   @Inject
   private ISecurityService securityService;
 
-  private String username;
-
   /**
    * Constructs a new <code>ChangePasswordPage</code>.
    */
-  public ChangePasswordPage()
+  @SuppressWarnings("unused")
+  protected ChangePasswordPage()
+  {}
+
+  /**
+   * Constructs a new <code>ChangePasswordPage</code>.
+   *
+   * @param username the username
+   */
+  public ChangePasswordPage(String username)
   {
     try
     {
@@ -103,23 +111,19 @@ public class ChangePasswordPage
       changePasswordForm.setOutputMarkupId(true);
       add(changePasswordForm);
 
-      // The "username" field
-      TextField<String> usernameField = new TextFieldWithFeedback<>("username",
-        new PropertyModel<>(this, "username"));
-      usernameField.setRequired(true);
-      usernameField.add(new DefaultFocusBehavior());
-      changePasswordForm.add(usernameField);
-
       // The "oldPassword" field
       PasswordTextField oldPasswordField = new PasswordTextFieldWithFeedback("oldPassword",
         new PropertyModel<>(this, "oldPassword"));
       oldPasswordField.setRequired(true);
+      oldPasswordField.add(new DefaultFocusBehavior());
       changePasswordForm.add(oldPasswordField);
 
       // The "newPassword" field
       PasswordTextField newPasswordField = new PasswordTextFieldWithFeedback("newPassword",
         new PropertyModel<>(this, "newPassword"));
       newPasswordField.setRequired(true);
+      newPasswordField.add(StringValidator.minimumLength(6));
+      newPasswordField.add(new PasswordPolicyValidator());
       changePasswordForm.add(newPasswordField);
 
       // The "confirmPassword" field
@@ -128,8 +132,10 @@ public class ChangePasswordPage
       confirmPasswordField.setRequired(true);
       changePasswordForm.add(confirmPasswordField);
 
-      // The "loginButton" button
-      changePasswordForm.add(new Button("loginButton")
+      changePasswordForm.add(new EqualPasswordInputValidator(newPasswordField, confirmPasswordField));
+
+      // The "changePasswordButton" button
+      changePasswordForm.add(new Button("changePasswordButton")
       {
         private static final long serialVersionUID = 1000000;
 
@@ -216,9 +222,13 @@ public class ChangePasswordPage
           {
             throw e;
           }
+          catch (ExistingPasswordException e)
+          {
+            error("The specified new password has been used recently.");
+          }
           catch (AuthenticationFailedException | UserNotFoundException e)
           {
-            error("The specified username or password is incorrect.");
+            error("The specified old password is incorrect.");
           }
           catch (UserLockedException e)
           {

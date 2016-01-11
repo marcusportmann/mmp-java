@@ -33,7 +33,7 @@
     <module>mmp-sharepoint</module>
     <module>mmp-corba</module>
     <module>mmp-sample-wicket</module>
-    <module>mmp-sample-aurelia</module>
+    <!-- <module>mmp-sample-aurelia</module> -->
   </modules>
 
 </project>

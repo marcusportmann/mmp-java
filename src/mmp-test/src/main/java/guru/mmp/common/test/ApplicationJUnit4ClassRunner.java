@@ -38,6 +38,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -55,13 +56,6 @@ import java.util.logging.Logger;
 public class ApplicationJUnit4ClassRunner
   extends BlockJUnit4ClassRunner
 {
-  /**
-   * The paths to the resources on the classpath that contain the SQL statements used to initialise
-   * the in-memory application database.
-   */
-  public static final String[] APPLICATION_SQL_RESOURCES = {
-    "guru/mmp/application/persistence/ApplicationH2.sql"};
-
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
    *
@@ -186,6 +180,19 @@ public class ApplicationJUnit4ClassRunner
   }
 
   /**
+   * Returns the paths to the resources on the classpath that contain the SQL statements used to
+   * initialise the in-memory application database.
+   */
+  protected List<String> getDatabaseInitResources()
+  {
+    List<String> resources = new ArrayList<>();
+
+    resources.add("guru/mmp/application/persistence/ApplicationH2.sql");
+
+    return resources;
+  }
+
+  /**
    * Initialise the in-memory application database and return a data source that can be used to
    * interact with the database.
    * <p/>
@@ -237,7 +244,7 @@ public class ApplicationJUnit4ClassRunner
        * Initialise the in-memory database using the SQL statements contained in the file with the
        * specified resource path.
        */
-      for (String resourcePath : APPLICATION_SQL_RESOURCES)
+      for (String resourcePath : getDatabaseInitResources())
       {
         try
         {

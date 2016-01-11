@@ -116,7 +116,14 @@ public class BackendUserMenuSideOverlay
 
           if (isMultipleOrganisationSupportEnabled)
           {
-            buffer.append(getBackendUserMenuHeader(StringUtil.notNull(webSession.getUserFullName()),
+            String fullName = webSession.getUserFullName();
+
+            if (StringUtil.isNullOrEmpty(fullName))
+            {
+              fullName = webSession.getUsername();
+            }
+
+            buffer.append(getBackendUserMenuHeader(fullName,
               webSession.getOrganisation().getName()));
           }
           else

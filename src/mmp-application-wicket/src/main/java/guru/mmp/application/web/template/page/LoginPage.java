@@ -16,6 +16,7 @@
 
 package guru.mmp.application.web.template.page;
 
+import guru.mmp.application.Debug;
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
@@ -63,13 +64,13 @@ public class LoginPage
 
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
 
-  private String password = "Password1";
+  private String password;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
 
-  private String username = "Administrator";
+  private String username;
 
   /**
    * Constructs a new <code>LoginPage</code>.
@@ -118,7 +119,7 @@ public class LoginPage
         {
           try
           {
-            if ("Administrator".equals(username))
+            if (Debug.inDebugMode() && ("s".equals(username)))
             {
               username = "Administrator";
               password = "Password1";
@@ -211,7 +212,7 @@ public class LoginPage
           }
           catch (ExpiredPasswordException e)
           {
-            error("Your password has expired.");
+            getRequestCycle().setResponsePage(new ChangePasswordPage(username));
           }
           catch (Throwable e)
           {
