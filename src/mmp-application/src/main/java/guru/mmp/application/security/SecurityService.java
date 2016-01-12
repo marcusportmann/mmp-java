@@ -17,7 +17,7 @@
 package guru.mmp.application.security;
 
 import guru.mmp.application.registry.IRegistry;
-import guru.mmp.common.exception.InvalidArgumentException;
+import guru.mmp.common.exceptions.InvalidArgumentException;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;

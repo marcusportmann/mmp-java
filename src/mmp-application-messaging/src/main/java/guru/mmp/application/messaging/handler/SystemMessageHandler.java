@@ -23,7 +23,7 @@ import guru.mmp.application.messaging.ErrorReport;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessageTranslator;
-import guru.mmp.application.messaging.message.*;
+import guru.mmp.application.messaging.messages.*;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.security.AuthenticationFailedException;
 import guru.mmp.application.security.ISecurityService;

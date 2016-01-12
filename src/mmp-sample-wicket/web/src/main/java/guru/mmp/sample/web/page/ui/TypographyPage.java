@@ -16,7 +16,7 @@
 
 package guru.mmp.sample.web.page.ui;
 
-import guru.mmp.application.web.template.page.TemplateWebPage;
+import guru.mmp.application.web.template.pages.TemplateWebPage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**

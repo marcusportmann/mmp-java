@@ -16,11 +16,11 @@
 
 package guru.mmp.sample.web;
 
-import guru.mmp.application.web.page.WebPage;
+import guru.mmp.application.web.pages.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationLink;
-import guru.mmp.application.web.template.page.*;
+import guru.mmp.application.web.template.pages.*;
 import guru.mmp.sample.web.page.DashboardPage;
 import guru.mmp.sample.web.page.HomePage;
 import guru.mmp.sample.web.page.forms.TestFormPage;

@@ -17,8 +17,8 @@
 package guru.mmp.application.web;
 
 import guru.mmp.application.security.Organisation;
-import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.servlet.ViewReportParameters;
+import guru.mmp.application.web.pages.WebPage;
+import guru.mmp.application.web.servlets.ViewReportParameters;
 import org.apache.wicket.request.Request;
 
 import java.io.Serializable;

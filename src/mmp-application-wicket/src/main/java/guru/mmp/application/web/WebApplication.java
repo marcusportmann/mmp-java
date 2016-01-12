@@ -16,7 +16,7 @@
 
 package guru.mmp.application.web;
 
-import guru.mmp.application.web.template.resource.TemplateJavaScriptResourceReference;
+import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;

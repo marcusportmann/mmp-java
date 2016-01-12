@@ -16,10 +16,10 @@
 
 package guru.mmp.application.web.template.navigation;
 
-import guru.mmp.application.web.page.AnonymousOnlyWebPage;
-import guru.mmp.application.web.page.SecureAnonymousWebPage;
-import guru.mmp.application.web.page.WebPage;
-import guru.mmp.application.web.page.WebPageSecurity;
+import guru.mmp.application.web.pages.AnonymousOnlyWebPage;
+import guru.mmp.application.web.pages.SecureAnonymousWebPage;
+import guru.mmp.application.web.pages.WebPage;
+import guru.mmp.application.web.pages.WebPageSecurity;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;

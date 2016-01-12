@@ -16,7 +16,7 @@
 
 package guru.mmp.sample.web.page.forms;
 
-import guru.mmp.application.web.template.page.TemplateWebPage;
+import guru.mmp.application.web.template.pages.TemplateWebPage;
 import guru.mmp.sample.model.TestData;
 import org.apache.wicket.model.IModel;
 

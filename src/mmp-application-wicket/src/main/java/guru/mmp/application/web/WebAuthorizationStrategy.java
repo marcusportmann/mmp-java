@@ -17,8 +17,8 @@
 package guru.mmp.application.web;
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.page.SecureAnonymousWebPage;
-import guru.mmp.application.web.page.WebPageSecurity;
+import guru.mmp.application.web.pages.SecureAnonymousWebPage;
+import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
@@ -94,7 +94,7 @@ public class WebAuthorizationStrategy
   public <T extends IRequestableComponent> boolean isInstantiationAuthorized(
     Class<T> componentClass)
   {
-    if (guru.mmp.application.web.page.WebPage.class.isAssignableFrom(componentClass))
+    if (guru.mmp.application.web.pages.WebPage.class.isAssignableFrom(componentClass))
     {
       WebPageSecurity webPageSecurity = componentClass.getAnnotation(WebPageSecurity.class);
 

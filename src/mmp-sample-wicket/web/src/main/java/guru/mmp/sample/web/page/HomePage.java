@@ -19,9 +19,9 @@ package guru.mmp.sample.web.page;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.page.AnonymousOnlyWebPage;
-import guru.mmp.application.web.template.component.UserDirectoryChoiceRenderer;
-import guru.mmp.application.web.template.page.TemplateWebPage;
+import guru.mmp.application.web.pages.AnonymousOnlyWebPage;
+import guru.mmp.application.web.template.components.UserDirectoryChoiceRenderer;
+import guru.mmp.application.web.template.pages.TemplateWebPage;
 
 import javax.inject.Inject;
 import java.util.List;

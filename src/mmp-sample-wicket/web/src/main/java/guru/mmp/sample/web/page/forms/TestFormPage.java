@@ -17,8 +17,8 @@
 package guru.mmp.sample.web.page.forms;
 
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.template.component.*;
-import guru.mmp.application.web.template.page.TemplateWebPage;
+import guru.mmp.application.web.template.components.*;
+import guru.mmp.application.web.template.pages.TemplateWebPage;
 import guru.mmp.sample.model.TestData;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.*;

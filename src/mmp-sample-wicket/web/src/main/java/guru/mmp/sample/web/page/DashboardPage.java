@@ -18,10 +18,10 @@ package guru.mmp.sample.web.page;
 
 import guru.mmp.application.reporting.ReportType;
 import guru.mmp.application.web.WebSession;
-import guru.mmp.application.web.page.WebPageSecurity;
-import guru.mmp.application.web.servlet.ViewReportParameters;
+import guru.mmp.application.web.pages.WebPageSecurity;
+import guru.mmp.application.web.servlets.ViewReportParameters;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.page.TemplateWebPage;
+import guru.mmp.application.web.template.pages.TemplateWebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 

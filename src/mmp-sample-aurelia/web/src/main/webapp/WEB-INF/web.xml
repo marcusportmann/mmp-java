@@ -65,7 +65,7 @@
   <!--
   <servlet>
     <servlet-name>DumpNamespaceServlet</servlet-name>
-    <servlet-class>guru.mmp.application.web.servlet.DumpNamespaceServlet</servlet-class>
+    <servlet-class>guru.mmp.application.web.servlets.DumpNamespaceServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DumpNamespaceServlet</servlet-name>
@@ -80,7 +80,7 @@
   <servlet>
     <description>Messaging Servlet</description>
     <servlet-name>MessagingServlet</servlet-name>
-    <servlet-class>guru.mmp.application.web.servlet.MessagingServlet</servlet-class>
+    <servlet-class>guru.mmp.application.web.servlets.MessagingServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>MessagingServlet</servlet-name>
@@ -94,7 +94,7 @@
   <!--
   <servlet>
     <servlet-name>ViewReportServlet</servlet-name>
-    <servlet-class>guru.mmp.application.web.servlet.ViewReportServlet</servlet-class>
+    <servlet-class>guru.mmp.application.web.servlets.ViewReportServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ViewReportServlet</servlet-name>
