@@ -26,44 +26,6 @@
       <type>war</type>
     </dependency>
     <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-aurelia</artifactId>
-      <version>2.0.0</version>
-      <type>warpath</type>
-    </dependency>
-    
-    <!--
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-batch</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    -->
-    <!--
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-messaging-angular</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-process-angular</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-reporting-angular</artifactId>
-      <version>2.0.0</version>
-    </dependency> 
-    -->
-    <!--
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-sms</artifactId>
-      <version>2.0.0</version>
-    </dependency>  
-    -->
-    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>7.0</version>
@@ -105,43 +67,6 @@
       </plugin>      
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>generate-ws-bindings</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.jvnet.jax-ws-commons</groupId>
-            <artifactId>jaxws-maven-plugin</artifactId>
-            <version>2.3</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>wsimport</goal>
-                </goals>
-                <configuration>
-                  <target>2.1</target>
-                  <wsdlFiles>
-                    <wsdlFile>${basedir}/src/main/webapp/WEB-INF/wsdl/SampleService.wsdl</wsdlFile>
-                  </wsdlFiles>
-                  <keep>true</keep>
-                  <sourceDestDir>src/main/java</sourceDestDir>
-                  <vmArgs>
-                    <vmArg>-Djavax.xml.accessExternalDTD=all</vmArg>
-                    <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-                  </vmArgs>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>
 
