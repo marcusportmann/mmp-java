@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page;
+package guru.mmp.sample.web.pages;
 
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;

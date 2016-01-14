@@ -14,30 +14,38 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page.forms;
+package guru.mmp.sample.web.pages.ui;
 
 import guru.mmp.application.web.template.pages.TemplateWebPage;
-import guru.mmp.sample.model.TestData;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
- * The <code>TestFormResultsPage</code> class implements the "Test Form Results"
+ * The <code>GridPage</code> class implements the "Grid"
  * page for the web application.
  *
  * @author Marcus Portmann
  */
-public class TestFormResultsPage
+public class GridPage
   extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TestFormResultsPage</code>.
-   *
-   * @param model the model
+   * Constructs a new <code>GridPage</code>.
    */
-  public TestFormResultsPage(IModel<TestData> model)
+  public GridPage()
   {
-    super("Test Form Results", "The test form results");
+    super("Grid", "");
+  }
+
+  /**
+   * Render to the web response whatever the component wants to contribute to the head section.
+   *
+   * @param response the header response
+   */
+  @Override
+  public void renderHead(IHeaderResponse response)
+  {
+    super.renderHead(response);
   }
 }

@@ -14,38 +14,30 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page.ui;
+package guru.mmp.sample.web.pages.forms;
 
 import guru.mmp.application.web.template.pages.TemplateWebPage;
-import org.apache.wicket.markup.head.IHeaderResponse;
+import guru.mmp.sample.model.TestData;
+import org.apache.wicket.model.IModel;
 
 /**
- * The <code>BlocksPage</code> class implements the "Blocks"
+ * The <code>TestFormResultsPage</code> class implements the "Test Form Results"
  * page for the web application.
  *
  * @author Marcus Portmann
  */
-public class BlocksPage
+public class TestFormResultsPage
   extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>BlocksPage</code>.
-   */
-  public BlocksPage()
-  {
-    super("Block Styles", "");
-  }
-
-  /**
-   * Render to the web response whatever the component wants to contribute to the head section.
+   * Constructs a new <code>TestFormResultsPage</code>.
    *
-   * @param response the header response
+   * @param model the model
    */
-  @Override
-  public void renderHead(IHeaderResponse response)
+  public TestFormResultsPage(IModel<TestData> model)
   {
-    super.renderHead(response);
+    super("Test Form Results", "The test form results");
   }
 }

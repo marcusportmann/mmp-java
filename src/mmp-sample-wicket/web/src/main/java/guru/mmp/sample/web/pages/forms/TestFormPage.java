@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page.forms;
+package guru.mmp.sample.web.pages.forms;
 
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.template.components.*;

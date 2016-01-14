@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page.ui;
+package guru.mmp.sample.web.pages.ui;
 
 import guru.mmp.application.web.template.pages.TemplateWebPage;
 import org.apache.wicket.markup.head.IHeaderResponse;

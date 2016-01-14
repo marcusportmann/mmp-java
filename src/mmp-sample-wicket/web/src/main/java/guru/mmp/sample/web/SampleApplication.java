@@ -21,12 +21,12 @@ import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.pages.*;
-import guru.mmp.sample.web.page.DashboardPage;
-import guru.mmp.sample.web.page.HomePage;
-import guru.mmp.sample.web.page.forms.TestFormPage;
-import guru.mmp.sample.web.page.ui.BlocksPage;
-import guru.mmp.sample.web.page.ui.GridPage;
-import guru.mmp.sample.web.page.ui.TypographyPage;
+import guru.mmp.sample.web.pages.DashboardPage;
+import guru.mmp.sample.web.pages.HomePage;
+import guru.mmp.sample.web.pages.forms.TestFormPage;
+import guru.mmp.sample.web.pages.ui.BlocksPage;
+import guru.mmp.sample.web.pages.ui.GridPage;
+import guru.mmp.sample.web.pages.ui.TypographyPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 

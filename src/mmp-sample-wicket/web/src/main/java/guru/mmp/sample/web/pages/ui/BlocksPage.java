@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.web.page.ui;
+package guru.mmp.sample.web.pages.ui;
 
 import guru.mmp.application.web.template.pages.TemplateWebPage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
- * The <code>GridPage</code> class implements the "Grid"
+ * The <code>BlocksPage</code> class implements the "Blocks"
  * page for the web application.
  *
  * @author Marcus Portmann
  */
-public class GridPage
+public class BlocksPage
   extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>GridPage</code>.
+   * Constructs a new <code>BlocksPage</code>.
    */
-  public GridPage()
+  public BlocksPage()
   {
-    super("Grid", "");
+    super("Block Styles", "");
   }
 
   /**
