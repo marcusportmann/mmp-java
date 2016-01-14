@@ -55,7 +55,7 @@ public class SampleApplication
   @Override
   public CssResourceReference getApplicationCssResourceReference()
   {
-    return new CssResourceReference(SampleApplication.class, "resource/css/application.css");
+    return new CssResourceReference(SampleApplication.class, "resources/css/application.css");
   }
 
   /**

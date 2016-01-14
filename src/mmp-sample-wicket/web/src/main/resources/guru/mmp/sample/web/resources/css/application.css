@@ -1,44 +1,27 @@
-.login-header .logo .logo-image
+.application-logo-container .application-logo-icon
 {
-  display: inline-block;
-  width: 180px;
-  height: 40px;
-  background-image: url('../images/logo-black-background.png');
-  background-size: 100% 100%;
+  background: url('../images/application-logo-icon.png') no-repeat;
+  background-size: 60px 60px;
 }
 
-.sidebar-menu .logo-env .logo .logo-expanded .logo-image
+.application-logo-container .application-logo-name
 {
-  display: inline-block;
-  width: 180px;
-  height: 40px;
-  background-image: url('../images/logo-black-background.png');
-  background-size: 100% 100%;
+  background: url('../images/application-logo-name.png') no-repeat;
+  background-size: 170px 60px;
 }
 
-.sidebar-menu .logo-env .logo .logo-collapsed .logo-image
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx)
 {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background-image: url('../images/logo-collapsed-black-background.png');
-  background-size: 100% 100%;
-}
-
-.navbar.horizontal-menu .navbar-inner .navbar-brand .logo .logo-image
-{
-  display: block;
-  width: 180px;
-  height: 40px;
-  background-image: url('../images/logo-white-background.png');
-  background-size: 100% 100%;
-}
-
-@media screen and (max-width: 768px)
-{
-  .navbar.horizontal-menu .navbar-inner .navbar-brand .logo .logo-image
+  .application-logo-container .application-logo-icon
   {
-    background-image: url('../images/logo-black-background.png');
+    background: url('../images/application-logo-icon@2x.png') no-repeat;
+    background-size: 60px 60px;
+  }
+
+  .application-logo-container .application-logo-name
+  {
+    background: url('../images/application-logo-name@2x.png') no-repeat;
+    background-size: 170px 60px;
   }
 }
 

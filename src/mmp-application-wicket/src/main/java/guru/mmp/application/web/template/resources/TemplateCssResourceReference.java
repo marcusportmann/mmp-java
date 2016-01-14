@@ -103,7 +103,7 @@ public class TemplateCssResourceReference
         Debug.inDebugMode() ? "css/bootstrap.min.css" : "css/bootstrap.min.css")));
     dependencies.add(CssHeaderItem.forReference(
       new CssResourceReference(TemplateCssResourceReference.class,
-        Debug.inDebugMode() ? "css/oneui.min.css" : "css/oneui.min.css")));
+        Debug.inDebugMode() ? "css/template-core.min.css" : "css/template-core.min.css")));
 
     return dependencies;
   }

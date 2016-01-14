@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<html class="no-focus" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:wicket="http://wicket.apache.org/"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
+<html class="no-focus">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
@@ -13,11 +10,11 @@
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2-bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/oneui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/template-core.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/template.css"/>
     <link rel="StyleSheet" type="text/css" href="../../resources/css/application.css"/>
 
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/oneui.min.js"></script>
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/template-core.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
@@ -35,6 +32,10 @@
           <div class="sidebar-content">
             <div class="side-header side-content bg-white-op">
               <button class="btn btn-link text-gray pull-right hidden-md hidden-lg" type="button" data-toggle="layout" data-action="sidebar_close"><i class="fa fa-times"></i></button>
+              <div class="application-logo-container">
+                <div class="application-logo-icon"></div>
+                <div class="application-logo-name sidebar-mini-hide"></div>
+              </div>
             </div>
             <div class="side-content">
               <ul class="nav-main"><li><a href="#"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a></li></ul>
@@ -56,8 +57,6 @@
           </div>
         </div>
         <div class="content content-narrow">
-
-
 
           <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
             <div class="modal-dialog">

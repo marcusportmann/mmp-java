@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
     <script>
       jQuery(function() {
-        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
         App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
       });
     </script>
@@ -16,45 +15,17 @@
   <body>
     <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
       <div wicket:id="backendUserMenuSideOverlay"></div>
-
-      <!-- Sidebar -->
       <nav id="sidebar">
-        <!-- Sidebar Scroll Container -->
         <div id="sidebar-scroll">
-          <!-- Sidebar Content -->
-          <!-- Adding .sidebar-mini-hide to an element will hide it when the sidebar is in mini mode -->
           <div class="sidebar-content">
-            <!-- Side Header -->
             <div class="side-header side-content bg-white-op">
-              <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
               <button class="btn btn-link text-gray pull-right hidden-md hidden-lg" type="button" data-toggle="layout" data-action="sidebar_close">
                 <i class="fa fa-times"></i>
               </button>
-
-<!--
-          <header class="logo-env">
-            <div class="logo">
-              <a href="#" class="logo-expanded">
-                <div class="logo-image"></div>
-              </a>
-
-              <a href="#" class="logo-collapsed">
-                <div class="logo-image"></div>
-              </a>
-            </div>
-
-            <div class="mobile-menu-toggle visible-xs">
-              <a href="#" data-toggle="user-info-menu">
-                <i class="fa-bell-o"></i>
-              </a>
-
-              <a href="#" data-toggle="mobile-menu">
-                <i class="fa-bars"></i>
-              </a>
-            </div>
-          </header>
--->
-
+              <div class="application-logo-container">
+                <div class="application-logo-icon"></div>
+                <div class="application-logo-name sidebar-mini-hide"></div>
+              </div>
               <a class="h5 text-white" href="#">
                 <i class="fa fa-circle-o-notch text-primary"></i> <span class="h4 font-w600 sidebar-mini-hide">ne</span>
               </a>

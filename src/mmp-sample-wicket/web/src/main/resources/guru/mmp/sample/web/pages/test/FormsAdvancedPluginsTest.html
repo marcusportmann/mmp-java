@@ -1,52 +1,32 @@
 <!DOCTYPE html>
-<!--[if IE 9]>         <html class="ie9 no-focus"> <![endif]-->
-<!--[if gt IE 9]><!--> <html class="no-focus"> <!--<![endif]-->
+<html class="no-focus">
   <head>
     <meta charset="utf-8">
-
-    <title>Sample | Forms Advanced Plugins Test</title>
-
-    <meta name="description" content="Sample | Forms Advanced Plugins Test">
-    <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
 
-    <!-- Stylesheets -->
-
-    <!-- Web fonts -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
-
-    <!-- Mandatory Page JS Plugins CSS go here -->
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2-bootstrap.min.css"/>
 
-    <!-- Optional Page JS Plugins CSS go here -->
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/ion-rangeslider/css/ion.rangeSlider.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/ion-rangeslider/css/ion.rangeSlider.skinHTML5.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/dropzonejs/dropzone.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/jquery-tags-input/jquery.tagsinput.min.css"/>
 
-    <!-- Bootstrap, OneUI and Application CSS -->
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/oneui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/template-core.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/template.css"/>
     <link rel="StyleSheet" type="text/css" href="../../resources/css/application.css"/>
 
-    <!-- END Stylesheets -->
-
-
-    <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
-    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/oneui.min.js"></script>
-
-    <!-- Mandatory Page JS Plugins -->
+    <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/template-core.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2.full.min.js"></script>
 
-    <!-- Optional Page JS Plugins -->
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
     <script type="text/javascript" src="../../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/masked-inputs/jquery.maskedinput.min.js"></script>
@@ -56,45 +36,17 @@
 
     <script type="text/javascript">
       jQuery(function() {
-
-        // Init mandatory page helpers (BS Datepicker + BS Datetimepicker + Select2 plugins)
         App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
 
-        // Init optional page helpers (BS Colorpicker + BS Maxlength + Masked Input + Range Sliders + Tags Inputs plugins)
         App.initHelpers(['colorpicker', 'maxlength', 'masked-inputs', 'rangeslider', 'tags-inputs']);
-
       });
     </script>
-
   </head>
   <body>
-    <!-- Page Container -->
-    <!--
-        Available Classes:
-
-        'enable-cookies'             Remembers active color theme between pages (when set through color theme list)
-
-        'sidebar-l'                  Left Sidebar and right Side Overlay
-        'sidebar-r'                  Right Sidebar and left Side Overlay
-        'sidebar-mini'               Mini hoverable Sidebar (> 991px)
-        'sidebar-o'                  Visible Sidebar by default (> 991px)
-        'sidebar-o-xs'               Visible Sidebar by default (< 992px)
-
-        'side-overlay-hover'         Hoverable Side Overlay (> 991px)
-        'side-overlay-o'             Visible Side Overlay by default (> 991px)
-
-        'side-scroll'                Enables custom scrolling on Sidebar and Side Overlay instead of native scrolling (> 991px)
-
-        'header-navbar-fixed'        Enables fixed header
-    -->
     <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
-      <!-- Side Overlay-->
       <aside id="side-overlay">
-        <!-- Side Overlay Scroll Container -->
         <div id="side-overlay-scroll">
-          <!-- Side Header -->
           <div class="side-header side-content">
-            <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
             <button class="btn btn-default pull-right" type="button" data-toggle="layout" data-action="side_overlay_close">
               <i class="fa fa-times"></i>
             </button>
@@ -103,9 +55,6 @@
               <div class="font-s12 text-gray-darker push-5-l">Sample</div>
             </div>
           </div>
-          <!-- END Side Header -->
-
-          <!-- Side Content -->
           <div class="side-content remove-padding-t">
             <ul class="list list-activity pull-r-l border-t">
               <li class="action">
@@ -134,99 +83,31 @@
               </li>
             </ul>
           </div>
-          <!-- END Side Content -->
         </div>
-        <!-- END Side Overlay Scroll Container -->
       </aside>
-      <!-- END Side Overlay -->
-
-      <!-- Sidebar -->
       <nav id="sidebar">
-        <!-- Sidebar Scroll Container -->
         <div id="sidebar-scroll">
-          <!-- Sidebar Content -->
-          <!-- Adding .sidebar-mini-hide to an element will hide it when the sidebar is in mini mode -->
           <div class="sidebar-content">
-            <!-- Side Header -->
             <div class="side-header side-content bg-white-op">
-              <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
-              <button class="btn btn-link text-gray pull-right hidden-md hidden-lg" type="button" data-toggle="layout" data-action="sidebar_close">
-                <i class="fa fa-times"></i>
-              </button>
-              
-
-                
-
-              <a class="h5 text-white" href="#">
-                <span class="h3 font-w600 text-primary">T</span> <span class="h4 font-w600 sidebar-mini-hide">emplate</span>
-              </a>
+              <button class="btn btn-link text-gray pull-right hidden-md hidden-lg" type="button" data-toggle="layout" data-action="sidebar_close"><i class="fa fa-times"></i></button>
+              <div class="application-logo-container">
+                <div class="application-logo-icon"></div>
+                <div class="application-logo-name sidebar-mini-hide"></div>
+              </div>
             </div>
-            <!-- END Side Header -->
-
-            <!-- Side Content -->
             <div class="side-content">
-              <ul class="nav-main">
-                <li>
-                  <a class="active" href="#"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a>
-                </li>
-                <li class="nav-main-heading"><span class="sidebar-mini-hide">Header</span></li>
-                <li>
-                  <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-wrench"></i><span class="sidebar-mini-hide">Dropdown</span></a>
-                  <ul>
-                    <li>
-                      <a href="#">Link #1</a>
-                    </li>
-                    <li>
-                      <a href="#l">Link #2</a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+              <ul class="nav-main"><li><a href="#"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a></li></ul>
             </div>
-            <!-- END Side Content -->
           </div>
-          <!-- Sidebar Content -->
         </div>
-        <!-- END Sidebar Scroll Container -->
       </nav>
-      <!-- END Sidebar -->
-
-      <!-- Header -->
       <header id="header-navbar" class="content-mini content-mini-full">
-        <!-- Header Navigation Right -->
-        <ul class="nav-header pull-right">
-          <li>
-            <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
-            <button class="btn btn-default" data-toggle="layout" data-action="side_overlay_toggle" type="button">
-              <i class="fa fa-user"></i>
-            </button>
-
-          </li>
-        </ul>
-        <!-- END Header Navigation Right -->
-
-        <!-- Header Navigation Left -->
         <ul class="nav-header pull-left">
-          <li class="hidden-md hidden-lg">
-            <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
-            <button class="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button">
-              <i class="fa fa-navicon"></i>
-            </button>
-          </li>
-          <li class="hidden-xs hidden-sm">
-            <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
-            <button class="btn btn-default" data-toggle="layout" data-action="sidebar_mini_toggle" type="button">
-              <i class="fa fa-ellipsis-v"></i>
-            </button>
-          </li>
+          <li class="hidden-md hidden-lg"><button class="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button"><i class="fa fa-navicon"></i></button></li>
+          <li class="hidden-xs hidden-sm"><button class="btn btn-default" data-toggle="layout" data-action="sidebar_mini_toggle" type="button"><i class="fa fa-ellipsis-v"></i></button></li>
         </ul>
-        <!-- END Header Navigation Left -->
       </header>
-      <!-- END Header -->
-
-      <!-- Main Container -->
       <main id="main-container">
-        <!-- Page Header -->
         <div class="content bg-gray-lighter">
           <div class="row items-push">
             <div class="col-sm-7">
@@ -242,9 +123,6 @@
             </div>
           </div>
         </div>
-        <!-- END Page Header -->
-
-        <!-- Page Content -->
         <div class="content content-narrow">
           <!-- Datepicker -->
           <!-- Bootstrap Datepicker (.js-datepicker and .input-daterange class is initialized in App() -> uiHelperDatepicker()) -->
@@ -1163,25 +1041,13 @@
           </div>
           <!-- END DropzoneJS and Tags Input -->
         </div>
-        <!-- END Page Content -->
-
-
-
       </main>
-      <!-- END Main Container -->
-
-      <!-- Footer -->
       <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
-        <div class="pull-right">
-          Crafted with <i class="fa fa-heart text-city"></i> by <a class="font-w600" href="http://goo.gl/vNS3I" target="_blank">pixelcave</a>
-        </div>
         <div class="pull-left">
-          <a class="font-w600" href="http://goo.gl/6LF10W" target="_blank">OneUI</a> &copy; <span class="js-year-copy"></span>
+          Copyright &copy; <span class="js-year-copy"></span> <a class="font-w600" href="#" target="_blank"><span class="copyright-name"></span></a>
         </div>
       </footer>
-      <!-- END Footer -->
     </div>
-    <!-- END Page Container -->
   </body>
 </html>
 

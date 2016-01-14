@@ -83,7 +83,7 @@ public class TemplateJavaScriptResourceReference
 
     dependencies.add(JavaScriptHeaderItem.forReference(
       new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,
-        "js/oneui.min.js")));
+        "js/template-core.min.js")));
 
     dependencies.add(JavaScriptHeaderItem.forReference(
       new JavaScriptResourceReference(TemplateJavaScriptResourceReference.class,

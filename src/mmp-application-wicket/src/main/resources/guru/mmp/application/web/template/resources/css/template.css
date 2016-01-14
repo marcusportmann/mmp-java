@@ -340,5 +340,78 @@ body
   height: 1px;
 }
 
+.side-header.side-content
+{
+  padding: 0;
+}
+
+
+.application-logo-container
+{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 60px;
+}
+
+.application-logo-container .application-logo-icon
+{
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  padding: 0;
+  margin:0;
+  width: 60px;
+  height: 60px;
+  background: url('../images/application-logo-icon.png') no-repeat;
+  background-size: 60px 60px;
+}
+
+.application-logo-container .application-logo-name
+{
+  position: relative;
+  left: 60px;
+  top: 0;
+  display: block;
+  margin:0;
+  width: 170px;
+  height: 60px;
+  background: url('../images/application-logo-name.png') no-repeat;
+  background-size: 170px 60px;
+}
+
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx)
+{
+  .application-logo-container .application-logo-icon
+  {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    padding: 0;
+    margin:0;
+    width: 60px;
+    height: 60px;
+    background: url('../images/application-logo-icon@2x.png') no-repeat;
+    background-size: 60px 60px;
+  }
+
+  .application-logo-container .application-logo-name
+  {
+    position: relative;
+    left: 60px;
+    top: 0;
+    display: block;
+    margin:0;
+    width: 170px;
+    height: 60px;
+    background: url('../images/application-logo-name@2x.png') no-repeat;
+    background-size: 170px 60px;
+  }
+}
+
+
 
 
