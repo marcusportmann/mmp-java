@@ -42,6 +42,11 @@ div.side-content ul.list.list-activity li.action i.fa
   padding-right: 20px;
 }
 
+.breadcrumb
+{
+  font-weight: 400;
+}
+
 .table-container
 {
   -webkit-box-shadow: none;
@@ -104,16 +109,6 @@ div.side-content ul.list.list-activity li.action i.fa
   vertical-align: top;
   padding: 0;
   margin: 0;
-}
-
-.table-header > .table-header-left .template-custom-select
-{
-  /*
-  display: inline-block;
-  border: 1px solid red;
-  height: 30px;
-  padding-left: 5px;
-  */
 }
 
 .table-header > .table-header-left > .dropdown-menu-holder
