@@ -28,7 +28,7 @@
     <description>Application Database Schema</description>
     <env-entry-name>java:app/env/ApplicationDatabaseSchema</env-entry-name>
     <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value></env-entry-value>
+    <env-entry-value>SAMPLE</env-entry-value>
   </env-entry>
   <env-entry>
     <description>Application Class</description>

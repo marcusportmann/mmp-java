@@ -2095,7 +2095,7 @@ public class SecurityService
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + schemaSeparator;
 
       // Build the SQL statements
       buildStatements(schemaPrefix);

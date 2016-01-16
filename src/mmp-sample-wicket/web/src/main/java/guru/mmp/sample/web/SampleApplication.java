@@ -79,40 +79,17 @@ public class SampleApplication
   }
 
   /**
-   * Abstract method that must be implement by all application-specific <code>WebApplication</code>
-   * subclasses to setup the navigation hierarchy for the application.
+   * Setup the navigation hierarchy for the application.
    *
    * @param root the root of the navigation hierarchy
    */
+  @Override
   protected void initNavigation(NavigationGroup root)
   {
+    super.initNavigation(root);
+
     root.addItem(new NavigationLink("Home", "fa fa-home", HomePage.class));
     root.addItem(new NavigationLink("Dashboard", "fa fa-home", DashboardPage.class));
-
-    NavigationGroup administrationGroup = new NavigationGroup("Administration", "fa fa-gear");
-
-    administrationGroup.addItem(
-      new NavigationLink("Codes", "fa fa-list", CodeCategoryAdministrationPage.class));
-    administrationGroup.addItem(
-      new NavigationLink("Organisations", "fa fa-globe", OrganisationAdministrationPage.class));
-    administrationGroup.addItem(new NavigationLink("Process Definitions", "fa fa-gears",
-      ProcessDefinitionAdministrationPage.class));
-    // TODO: Add Roles here
-    administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
-      ReportDefinitionAdministrationPage.class));
-    administrationGroup.addItem(
-      new NavigationLink("User Directories", "fa fa-users", UserDirectoryAdministrationPage.class));
-
-    root.addItem(administrationGroup);
-
-    NavigationGroup securityGroup = new NavigationGroup("Security", "fa fa-shield");
-//    securityGroup.addItem(new NavigationLink("General", "fa fa-gear",
-//        SecurityAdministrationPage.class));
-    securityGroup.addItem(new NavigationLink("Users", "fa fa-user", UserAdministrationPage.class));
-    securityGroup.addItem(
-      new NavigationLink("Groups", "fa fa-group", GroupAdministrationPage.class));
-
-    root.addItem(securityGroup);
 
     NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "fa fa-sliders");
 

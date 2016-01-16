@@ -36,9 +36,9 @@ public abstract class DataAccessObject
   implements IDataAccessObject
 {
   /**
-   * The default application database schema.
+   * The mmp-java Java and JEE development framework database schema.
    */
-  public static final String DEFAULT_DATABASE_SCHEMA = "MMP";
+  public static final String MMP_DATABASE_SCHEMA = "MMP";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(DataAccessObject.class);
@@ -116,12 +116,12 @@ public abstract class DataAccessObject
     if (StringUtil.isNullOrEmpty(schema))
     {
       logger.info(
-        "The application database schema was not set using the JNDI environment entry" + " " +
+        "The application database schema was not set using the JNDI environment entry " +
           "(java:app/env/ApplicationDatabaseSchema) or " +
-          "(java:comp/env/ApplicationDatabaseSchema)" + " using the default schema (" +
-          DEFAULT_DATABASE_SCHEMA + ")");
+          "(java:comp/env/ApplicationDatabaseSchema) using the default schema (" +
+          MMP_DATABASE_SCHEMA + ")");
 
-      schema = DEFAULT_DATABASE_SCHEMA;
+      schema = MMP_DATABASE_SCHEMA;
     }
 
     init();
@@ -142,7 +142,7 @@ public abstract class DataAccessObject
     }
 
     this.dataSource = dataSource;
-    this.schema = DEFAULT_DATABASE_SCHEMA;
+    this.schema = MMP_DATABASE_SCHEMA;
     init();
   }
 

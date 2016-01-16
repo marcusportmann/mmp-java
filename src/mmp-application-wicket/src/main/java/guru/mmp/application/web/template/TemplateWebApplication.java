@@ -19,8 +19,7 @@ package guru.mmp.application.web.template;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
-import guru.mmp.application.web.template.pages.LoginPage;
-import guru.mmp.application.web.template.pages.LogoutPage;
+import guru.mmp.application.web.template.pages.*;
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
@@ -29,6 +28,9 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
@@ -166,6 +168,19 @@ public abstract class TemplateWebApplication
     navigationRoot = new NavigationGroup("");
     initNavigation(navigationRoot);
 
+    /*
+     * Sort the "Administration" group by name as the application-specific subclass may have added
+     * items to this group.
+     */
+    NavigationGroup administrationGroup = navigationRoot.getNavigationGroup("Administration");
+
+    if (administrationGroup != null)
+    {
+      administrationGroup.sortItems();
+    }
+
+    navigationRoot.sortItems();
+
 /*
     // Initialise the template-web-application.css resource bundle for the Web Application Template
     getResourceBundles().addCssBundle(TemplateCssResourceReference.class,
@@ -204,12 +219,60 @@ public abstract class TemplateWebApplication
   }
 
   /**
-   * This method must be implemented by all application-specific <code>WebApplication</code>
-   * subclasses to setup the navigation hierarchy for the application.
+   * Setup the navigation hierarchy for the application.
    *
    * @param root the root of the navigation hierarchy
    */
-  protected abstract void initNavigation(NavigationGroup root);
+  protected void initNavigation(NavigationGroup root)
+  {
+    NavigationGroup administrationGroup = new NavigationGroup("Administration", "fa fa-gear");
+
+    administrationGroup.addItem(
+      new NavigationLink("Codes", "fa fa-list", CodeCategoryAdministrationPage.class));
+    administrationGroup.addItem(
+      new NavigationLink("Groups", "fa fa-group", GroupAdministrationPage.class));
+    administrationGroup.addItem(
+      new NavigationLink("Organisations", "fa fa-globe", OrganisationAdministrationPage.class));
+
+    try
+    {
+      Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
+        "guru.mmp.application.web.template.pages.ProcessDefinitionAdministrationPage");
+
+      if (Page.class.isAssignableFrom(clazz))
+      {
+        administrationGroup.addItem(
+          new NavigationLink("Process Definitions", "fa fa-gears", (Class<? extends Page>) clazz));
+      }
+    }
+    catch (ClassNotFoundException ignored)
+    {
+    }
+
+    try
+    {
+      Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
+        "guru.mmp.application.web.template.pages.ReportDefinitionAdministrationPage");
+
+      if (Page.class.isAssignableFrom(clazz))
+      {
+        administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
+          (Class<? extends Page>) clazz));
+      }
+    }
+    catch (ClassNotFoundException ignored)
+    {
+    }
+
+    // TODO: Add Roles here
+
+    administrationGroup.addItem(
+      new NavigationLink("Users", "fa fa-user", UserAdministrationPage.class));
+    administrationGroup.addItem(
+      new NavigationLink("User Directories", "fa fa-users", UserDirectoryAdministrationPage.class));
+
+    root.addItem(administrationGroup);
+  }
 
   private String getNavigationItemPathComponent(NavigationItem navigationItem)
   {

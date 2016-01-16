@@ -374,7 +374,7 @@ public class ReportingDAO
       }
 
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.DEFAULT_DATABASE_SCHEMA + idQuote +
+      String schemaPrefix = idQuote + DataAccessObject.MMP_DATABASE_SCHEMA + idQuote +
         schemaSeparator;
 
       // Build the SQL statements for the DAO

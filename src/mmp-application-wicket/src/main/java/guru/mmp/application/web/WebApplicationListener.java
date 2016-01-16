@@ -193,7 +193,7 @@ public class WebApplicationListener
       }
 
       // Create and populate the database tables if required
-      if (!DAOUtil.tableExists(connection, null, DataAccessObject.DEFAULT_DATABASE_SCHEMA,
+      if (!DAOUtil.tableExists(connection, null, DataAccessObject.MMP_DATABASE_SCHEMA,
         "REGISTRY"))
       {
         logger.info("Creating and populating the default database tables");

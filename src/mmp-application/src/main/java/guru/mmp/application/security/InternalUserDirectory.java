@@ -1497,7 +1497,7 @@ public class InternalUserDirectory
       StringBuilder buffer = new StringBuilder();
 
       buffer.append("UPDATE ");
-      buffer.append(DataAccessObject.DEFAULT_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
+      buffer.append(DataAccessObject.MMP_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
 
       buffer.append("INTERNAL_USERS ");
 
@@ -1832,7 +1832,7 @@ public class InternalUserDirectory
     buffer.append("IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, ");
     buffer.append("IU.DESCRIPTION FROM ");
 
-    buffer.append(DataAccessObject.DEFAULT_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
+    buffer.append(DataAccessObject.MMP_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
 
     buffer.append("INTERNAL_USERS IU");
 

@@ -121,7 +121,7 @@ public abstract class UserDirectoryBase
       }
 
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.DEFAULT_DATABASE_SCHEMA + databaseCatalogSeparator;
+      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + databaseCatalogSeparator;
 
       // Build the SQL statements
       buildStatements(schemaPrefix);

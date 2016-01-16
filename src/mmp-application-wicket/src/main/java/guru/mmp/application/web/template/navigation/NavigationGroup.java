@@ -20,6 +20,7 @@ import org.apache.wicket.Page;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,6 +80,34 @@ public class NavigationGroup
   }
 
   /**
+   * Retrieve the navigation group with the specified name.
+   * <p/>
+   * The case will be ignored when matching the name.
+   *
+   * @param name the name of the group
+   *
+   * @return the navigation group with the specified name or <code>null</code> if the navigation
+   * group cannot be found
+   */
+  public NavigationGroup getNavigationGroup(String name)
+  {
+    for (NavigationItem item : items)
+    {
+      if (item instanceof NavigationGroup)
+      {
+        NavigationGroup navigationGroup = (NavigationGroup) item;
+
+        if (navigationGroup.getName().equalsIgnoreCase(name))
+        {
+          return navigationGroup;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
    * Returns <code>true</code> if the page is in the navigation item's hierarchy or
    * <code>false</code> otherwise.
    *
@@ -98,5 +127,41 @@ public class NavigationGroup
     }
 
     return false;
+  }
+
+  /**
+   * Sort the items in the navigation group.
+   * <p/>
+   * This will place all the navigation links first followed by the navigation sub-groups. Both the
+   * navigation links and the navigation sub-groups will be sorted alphabetically.
+   */
+  public void sortItems()
+  {
+    Collections.sort(items, (navigationItem1, navigationItem2) -> {
+      if ((navigationItem1 instanceof NavigationLink) &&
+        ((navigationItem2 instanceof NavigationLink)))
+      {
+        return navigationItem1.getName().compareTo(navigationItem2.getName());
+      }
+      else if ((navigationItem1 instanceof NavigationGroup) &&
+        ((navigationItem2 instanceof NavigationGroup)))
+      {
+        return navigationItem1.getName().compareTo(navigationItem2.getName());
+      }
+      else if ((navigationItem1 instanceof NavigationLink) &&
+        ((navigationItem2 instanceof NavigationGroup)))
+      {
+        return -1;
+      }
+      else if ((navigationItem1 instanceof NavigationGroup) &&
+        ((navigationItem2 instanceof NavigationLink)))
+      {
+        return 1;
+      }
+      else
+      {
+        return navigationItem1.getName().compareTo(navigationItem2.getName());
+      }
+    });
   }
 }
