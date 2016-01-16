@@ -367,7 +367,6 @@ public class ReportingService
    */
   @PostConstruct
   public void init()
-    throws ReportingServiceException
   {
     logger.info(String.format("Initialising the Reporting Service instance (%s)", instanceName));
 
