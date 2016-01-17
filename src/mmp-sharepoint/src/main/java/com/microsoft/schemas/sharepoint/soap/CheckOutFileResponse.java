@@ -1,12 +1,18 @@
+
 package com.microsoft.schemas.sharepoint.soap;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java class for anonymous complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -18,29 +24,33 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"checkOutFileResult"})
+@XmlType(name = "", propOrder = {
+    "checkOutFileResult"
+})
 @XmlRootElement(name = "CheckOutFileResponse")
-public class CheckOutFileResponse
-{
+public class CheckOutFileResponse {
 
-  @XmlElement(name = "CheckOutFileResult")
-  protected boolean checkOutFileResult;
+    @XmlElement(name = "CheckOutFileResult")
+    protected boolean checkOutFileResult;
 
-  /**
-   * Gets the value of the checkOutFileResult property.
-   */
-  public boolean isCheckOutFileResult()
-  {
-    return checkOutFileResult;
-  }
+    /**
+     * Gets the value of the checkOutFileResult property.
+     * 
+     */
+    public boolean isCheckOutFileResult() {
+        return checkOutFileResult;
+    }
 
-  /**
-   * Sets the value of the checkOutFileResult property.
-   */
-  public void setCheckOutFileResult(boolean value)
-  {
-    this.checkOutFileResult = value;
-  }
+    /**
+     * Sets the value of the checkOutFileResult property.
+     * 
+     */
+    public void setCheckOutFileResult(boolean value) {
+        this.checkOutFileResult = value;
+    }
+
 }

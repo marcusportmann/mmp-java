@@ -55,11 +55,6 @@ public class CodeCategoryData
   private List<CodeData> codes;
 
   /**
-   * The description for the code category.
-   */
-  private String description;
-
-  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
   private UUID id;
@@ -84,7 +79,6 @@ public class CodeCategoryData
     this.codeDataType = CodeDataType.STANDARD;
     this.id = codeCategory.getId();
     this.name = codeCategory.getName();
-    this.description = codeCategory.getDescription();
     this.lastUpdated = codeCategory.getUpdated();
 
     this.codes = new ArrayList<>();
@@ -126,7 +120,6 @@ public class CodeCategoryData
       Integer.parseInt(element.getChildText("CodeDataType")));
     this.id = UUID.fromString(element.getChildText("Id"));
     this.name = element.getChildText("Name");
-    this.description = element.getChildText("Description");
 
     String lastUpdatedValue = element.getChildText("LastUpdated");
 
@@ -199,16 +192,6 @@ public class CodeCategoryData
   }
 
   /**
-   * Returns the description for the code category.
-   *
-   * @return the description for the code category
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
@@ -269,16 +252,6 @@ public class CodeCategoryData
   }
 
   /**
-   * Set the description for the code category.
-   *
-   * @param description the description for the code category
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
@@ -321,7 +294,6 @@ public class CodeCategoryData
       new Element("CodeDataType", String.valueOf(codeDataType.getCode())));
     codeCategoryElement.addContent(new Element("Id", id.toString()));
     codeCategoryElement.addContent(new Element("Name", StringUtil.notNull(name)));
-    codeCategoryElement.addContent(new Element("Description", StringUtil.notNull(description)));
     codeCategoryElement.addContent(new Element("LastUpdated",
       (lastUpdated == null) ? ISO8601.now() : ISO8601.fromDate(lastUpdated)));
 
@@ -358,7 +330,6 @@ public class CodeCategoryData
     buffer.append("CodeCategory {");
     buffer.append("id=\"").append(getId()).append("\", ");
     buffer.append("name=\"").append(getName()).append("\", ");
-    buffer.append("description=\"").append(getDescription()).append("\", ");
     buffer.append("lastUpdated=\"").append(ISO8601.fromDate(getLastUpdated())).append("\", ");
     buffer.append("codeData=\"").append((getCodeData() != null) ? getCodeData().length : 0).append(
       " bytes of custom code data\"");
@@ -383,7 +354,6 @@ public class CodeCategoryData
         buffer.append("id=\"").append(code.getId()).append("\", ");
         buffer.append("categoryId=\"").append(code.getCategoryId()).append("\", ");
         buffer.append("name=\"").append(code.getName()).append("\", ");
-        buffer.append("description=\"").append(code.getDescription()).append("\", ");
         buffer.append("value=\"").append(code.getValue()).append("\"");
 
         buffer.append("}");

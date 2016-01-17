@@ -53,11 +53,6 @@ public class CodeInputPanel
     nameField.setRequired(true);
     add(nameField);
 
-    // The "description" field
-    TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-    descriptionField.setRequired(false);
-    add(descriptionField);
-
     // The "value" field
     TextField<String> valueField = new TextFieldWithFeedback<>("value");
     valueField.setRequired(true);

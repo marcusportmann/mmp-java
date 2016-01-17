@@ -1,12 +1,18 @@
+
 package com.microsoft.schemas.sharepoint.soap;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java class for anonymous complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -18,29 +24,33 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"checkInFileResult"})
+@XmlType(name = "", propOrder = {
+    "checkInFileResult"
+})
 @XmlRootElement(name = "CheckInFileResponse")
-public class CheckInFileResponse
-{
+public class CheckInFileResponse {
 
-  @XmlElement(name = "CheckInFileResult")
-  protected boolean checkInFileResult;
+    @XmlElement(name = "CheckInFileResult")
+    protected boolean checkInFileResult;
 
-  /**
-   * Gets the value of the checkInFileResult property.
-   */
-  public boolean isCheckInFileResult()
-  {
-    return checkInFileResult;
-  }
+    /**
+     * Gets the value of the checkInFileResult property.
+     * 
+     */
+    public boolean isCheckInFileResult() {
+        return checkInFileResult;
+    }
 
-  /**
-   * Sets the value of the checkInFileResult property.
-   */
-  public void setCheckInFileResult(boolean value)
-  {
-    this.checkInFileResult = value;
-  }
+    /**
+     * Sets the value of the checkInFileResult property.
+     * 
+     */
+    public void setCheckInFileResult(boolean value) {
+        this.checkInFileResult = value;
+    }
+
 }

@@ -83,11 +83,6 @@ public class CodeCategoryInputPanel
       nameField.setRequired(true);
       add(nameField);
 
-      // The "description" field
-      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-      descriptionField.setRequired(true);
-      add(descriptionField);
-
       // The "categoryType" field
       CodeCategoryTypeChoiceRenderer codeCategoryTypeChoiceRenderer = new
         CodeCategoryTypeChoiceRenderer();

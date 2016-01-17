@@ -36,11 +36,6 @@ public class Code
   private UUID categoryId;
 
   /**
-   * The description for the code.
-   */
-  private String description;
-
-  /**
    * The ID used to uniquely identify the code.
    */
   private String id;
@@ -63,19 +58,17 @@ public class Code
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param id          the ID used to uniquely identify the code
-   * @param categoryId  the Universally Unique Identifier (UUID) used to uniquely identify the code
-   *                    category the code is associated with
-   * @param name        the name of the code
-   * @param description the description for the code
-   * @param value       the value for the code
+   * @param id         the ID used to uniquely identify the code
+   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the code
+   *                   category the code is associated with
+   * @param name       the name of the code
+   * @param value      the value for the code
    */
-  public Code(String id, UUID categoryId, String name, String description, String value)
+  public Code(String id, UUID categoryId, String name, String value)
   {
     this.id = id;
     this.categoryId = categoryId;
     this.name = name;
-    this.description = description;
     this.value = value;
   }
 
@@ -89,16 +82,6 @@ public class Code
   public UUID getCategoryId()
   {
     return categoryId;
-  }
-
-  /**
-   * Returns the description for the code.
-   *
-   * @return the description for the code
-   */
-  public String getDescription()
-  {
-    return description;
   }
 
   /**
@@ -141,16 +124,6 @@ public class Code
   public void setCategoryId(UUID categoryId)
   {
     this.categoryId = categoryId;
-  }
-
-  /**
-   * Set the description for the code.
-   *
-   * @param description the description for the code
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**
