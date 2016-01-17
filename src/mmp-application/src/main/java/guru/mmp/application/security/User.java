@@ -30,8 +30,6 @@ public class User
 {
   private static final long serialVersionUID = 1000000;
 
-  private String description;
-
   private String email;
 
   private String firstNames;
@@ -60,16 +58,6 @@ public class User
    * Constructs a new <code>User</code>.
    */
   public User() {}
-
-  /**
-   * Returns the description for the user
-   *
-   * @return the description for the user
-   */
-  public String getDescription()
-  {
-    return description;
-  }
 
   /**
    * Returns the e-mail address for the user
@@ -216,16 +204,6 @@ public class User
   public boolean isReadOnly()
   {
     return isReadOnly;
-  }
-
-  /**
-   * Set the description for the user.
-   *
-   * @param description the description for the user
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**

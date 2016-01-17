@@ -1,12 +1,18 @@
+
 package com.microsoft.schemas.sharepoint.soap;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * <p>Java class for anonymous complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -18,29 +24,33 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"undoCheckOutResult"})
+@XmlType(name = "", propOrder = {
+    "undoCheckOutResult"
+})
 @XmlRootElement(name = "UndoCheckOutResponse")
-public class UndoCheckOutResponse
-{
+public class UndoCheckOutResponse {
 
-  @XmlElement(name = "UndoCheckOutResult")
-  protected boolean undoCheckOutResult;
+    @XmlElement(name = "UndoCheckOutResult")
+    protected boolean undoCheckOutResult;
 
-  /**
-   * Gets the value of the undoCheckOutResult property.
-   */
-  public boolean isUndoCheckOutResult()
-  {
-    return undoCheckOutResult;
-  }
+    /**
+     * Gets the value of the undoCheckOutResult property.
+     * 
+     */
+    public boolean isUndoCheckOutResult() {
+        return undoCheckOutResult;
+    }
 
-  /**
-   * Sets the value of the undoCheckOutResult property.
-   */
-  public void setUndoCheckOutResult(boolean value)
-  {
-    this.undoCheckOutResult = value;
-  }
+    /**
+     * Sets the value of the undoCheckOutResult property.
+     * 
+     */
+    public void setUndoCheckOutResult(boolean value) {
+        this.undoCheckOutResult = value;
+    }
+
 }

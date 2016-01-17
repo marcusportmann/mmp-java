@@ -52,11 +52,6 @@ public class CodeCategory
   private List<Code> codes;
 
   /**
-   * The description for the code category.
-   */
-  private String description;
-
-  /**
    * The endpoint if this is a remote code category.
    */
   private String endPoint;
@@ -99,7 +94,6 @@ public class CodeCategory
    * @param categoryType     the type of code category e.g. Local, RemoteHTTPService,
    *                         RemoteWebService, etc
    * @param name             the name of the code category
-   * @param description      the description for the code category
    * @param endPoint         the endpoint if this is a remote code category
    * @param isEndPointSecure is the endpoint for the remote code category secure
    * @param isCacheable      is the code data retrieved for the remote code category cacheable
@@ -108,13 +102,12 @@ public class CodeCategory
    * @param updated          the date and time the code category was updated
    */
   public CodeCategory(
-    UUID id, CodeCategoryType categoryType, String name, String description, String endPoint,
-    boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry, Date updated)
+    UUID id, CodeCategoryType categoryType, String name, String endPoint, boolean isEndPointSecure,
+    boolean isCacheable, Integer cacheExpiry, Date updated)
   {
     this.id = id;
     this.categoryType = categoryType;
     this.name = name;
-    this.description = description;
     this.codeData = null;
     this.endPoint = endPoint;
     this.isEndPointSecure = isEndPointSecure;
@@ -131,7 +124,6 @@ public class CodeCategory
    * @param categoryType     the type of code category e.g. Local, RemoteHTTPService,
    *                         RemoteWebService, etc
    * @param name             the name of the code category
-   * @param description      the description for the code category
    * @param codeData         the custom code data for the code category
    * @param endPoint         the endpoint if this is a remote code category
    * @param isEndPointSecure is the endpoint for the remote code category secure
@@ -141,14 +133,12 @@ public class CodeCategory
    * @param updated          the date and time the code category was updated
    */
   public CodeCategory(
-    UUID id, CodeCategoryType categoryType, String name, String description, String codeData,
-    String endPoint, boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry,
-    Date updated)
+    UUID id, CodeCategoryType categoryType, String name, String codeData, String endPoint,
+    boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry, Date updated)
   {
     this.id = id;
     this.categoryType = categoryType;
     this.name = name;
-    this.description = description;
     this.codeData = codeData;
     this.endPoint = endPoint;
     this.isEndPointSecure = isEndPointSecure;
@@ -197,16 +187,6 @@ public class CodeCategory
   public List<Code> getCodes()
   {
     return codes;
-  }
-
-  /**
-   * Returns the description for the code category.
-   *
-   * @return the description for the code category
-   */
-  public String getDescription()
-  {
-    return description;
   }
 
   /**
@@ -314,16 +294,6 @@ public class CodeCategory
   public void setCodes(List<Code> codes)
   {
     this.codes = codes;
-  }
-
-  /**
-   * Set the description for the code category.
-   *
-   * @param description the description for the code category
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**

@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <code>ISecurityService</code> interface defines the functionality provided by the
- * Security Service which manages security related information for users and groups.
+ * The <code>ISecurityService</code> interface defines the functionality provided by a Security
+ * Service implementation, which manages the security related information for an application.
  *
  * @author Marcus Portmann
  */

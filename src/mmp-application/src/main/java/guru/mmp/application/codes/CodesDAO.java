@@ -187,8 +187,7 @@ public class CodesDAO
 
       statement.setObject(2, code.getCategoryId());
       statement.setString(3, code.getName());
-      statement.setString(4, code.getDescription());
-      statement.setString(5, code.getValue());
+      statement.setString(4, code.getValue());
 
       if (statement.executeUpdate() != 1)
       {
@@ -261,8 +260,7 @@ public class CodesDAO
 
       statement.setObject(2, code.getCategoryId());
       statement.setString(3, code.getName());
-      statement.setString(4, code.getDescription());
-      statement.setString(5, code.getValue());
+      statement.setString(4, code.getValue());
 
       if (statement.executeUpdate() != 1)
       {
@@ -294,25 +292,24 @@ public class CodesDAO
       statement.setObject(1, codeCategory.getId());
       statement.setInt(2, codeCategory.getCategoryType().getCode());
       statement.setString(3, codeCategory.getName());
-      statement.setString(4, codeCategory.getDescription());
-      statement.setBytes(5,
+      statement.setBytes(4,
         (codeCategory.getCodeData() != null) ? codeCategory.getCodeData().getBytes("UTF-8") : null);
-      statement.setString(6, codeCategory.getEndPoint());
-      statement.setBoolean(7, codeCategory.getIsEndPointSecure());
-      statement.setBoolean(8, codeCategory.getIsCacheable());
+      statement.setString(5, codeCategory.getEndPoint());
+      statement.setBoolean(6, codeCategory.getIsEndPointSecure());
+      statement.setBoolean(7, codeCategory.getIsCacheable());
 
       if (codeCategory.getCacheExpiry() == null)
       {
-        statement.setNull(9, java.sql.Types.INTEGER);
+        statement.setNull(8, java.sql.Types.INTEGER);
       }
       else
       {
-        statement.setInt(9, codeCategory.getCacheExpiry());
+        statement.setInt(8, codeCategory.getCacheExpiry());
       }
 
       Timestamp updated = new Timestamp(System.currentTimeMillis());
 
-      statement.setTimestamp(10, updated);
+      statement.setTimestamp(9, updated);
 
       if (statement.executeUpdate() != 1)
       {
@@ -864,9 +861,8 @@ public class CodesDAO
       PreparedStatement statement = connection.prepareStatement(updateCodeSQL))
     {
       statement.setString(1, code.getName());
-      statement.setString(2, code.getDescription());
-      statement.setString(3, code.getValue());
-      statement.setString(4, code.getId());
+      statement.setString(2, code.getValue());
+      statement.setString(3, code.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -902,24 +898,23 @@ public class CodesDAO
 
       statement.setInt(1, codeCategory.getCategoryType().getCode());
       statement.setString(2, codeCategory.getName());
-      statement.setString(3, codeCategory.getDescription());
-      statement.setBytes(4,
+      statement.setBytes(3,
         (codeCategory.getCodeData() != null) ? codeCategory.getCodeData().getBytes("UTF-8") : null);
-      statement.setString(5, codeCategory.getEndPoint());
-      statement.setBoolean(6, codeCategory.getIsEndPointSecure());
-      statement.setBoolean(7, codeCategory.getIsCacheable());
+      statement.setString(4, codeCategory.getEndPoint());
+      statement.setBoolean(5, codeCategory.getIsEndPointSecure());
+      statement.setBoolean(6, codeCategory.getIsCacheable());
 
       if (codeCategory.getCacheExpiry() == null)
       {
-        statement.setNull(8, java.sql.Types.INTEGER);
+        statement.setNull(7, java.sql.Types.INTEGER);
       }
       else
       {
-        statement.setInt(8, codeCategory.getCacheExpiry());
+        statement.setInt(7, codeCategory.getCacheExpiry());
       }
 
-      statement.setTimestamp(9, new Timestamp(updated.getTime()));
-      statement.setObject(10, codeCategory.getId());
+      statement.setTimestamp(8, new Timestamp(updated.getTime()));
+      statement.setObject(9, codeCategory.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -961,16 +956,16 @@ public class CodesDAO
 
     // createCachedCodeSQL
     createCachedCodeSQL = "INSERT INTO " + schemaPrefix + "CACHED_CODES (ID, CATEGORY_ID, NAME, " +
-      "DESCRIPTION, VALUE) VALUES (?, ?, ?, ?, ?)";
+      "VALUE) VALUES (?, ?, ?, ?)";
 
     // createCodeCategorySQL
     createCodeCategorySQL = "INSERT INTO " + schemaPrefix + "CODE_CATEGORIES (ID, CATEGORY_TYPE, " +
-      "NAME, DESCRIPTION, CODE_DATA, ENDPOINT, IS_ENDPOINT_SECURE, IS_CACHEABLE, CACHE_EXPIRY, " +
-      "UPDATED) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "NAME, CODE_DATA, ENDPOINT, IS_ENDPOINT_SECURE, IS_CACHEABLE, CACHE_EXPIRY, UPDATED) " +
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createCodeSQL
-    createCodeSQL = "INSERT INTO " + schemaPrefix + "CODES (ID, CATEGORY_ID, NAME, DESCRIPTION, " +
-      "VALUE) VALUES (?, ?, ?, ?, ?)";
+    createCodeSQL = "INSERT INTO " + schemaPrefix + "CODES (ID, CATEGORY_ID, NAME, VALUE) " +
+      "VALUES (?, ?, ?, ?)";
 
     // deleteCachedCodeCategorySQL
     deleteCachedCodeCategorySQL = "DELETE FROM " + schemaPrefix + "CACHED_CODE_CATEGORIES CCC " +
@@ -992,13 +987,13 @@ public class CodesDAO
         "CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
 
     // getCodeCategoriesSQL
-    getCodeCategoriesSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION, CC" +
-      ".CODE_DATA, CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC" +
-      ".UPDATED FROM " + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
+    getCodeCategoriesSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, CC.ENDPOINT, " +
+      "CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, " +
+      "CC.UPDATED FROM " + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
 
     // getCodeCategoriesNoDataSQL
-    getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION, CC" +
-      ".ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM " +
+    getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.ENDPOINT," +
+      " CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM " +
       schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
 
     // getCodeCategoryCacheExpirySQL
@@ -1006,21 +1001,21 @@ public class CodesDAO
       "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // getCodeCategorySQL
-    getCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.DESCRIPTION, CC.CODE_DATA, " +
-      "CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM " +
+    getCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, CC.ENDPOINT," +
+      " CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM " +
       schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // getCodesForCodeCategorySQL
-    getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.DESCRIPTION, C.VALUE FROM" +
+    getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM" +
       " " + schemaPrefix + "CODES C WHERE C.CATEGORY_ID=? ORDER BY C.NAME";
 
     // getCachedCodesForCachedCodeCategorySQL
-    getCachedCodesForCachedCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_ID, CC.NAME, CC" +
-      ".DESCRIPTION, CC.VALUE FROM " + schemaPrefix + "CACHED_CODES CC WHERE CC.CATEGORY_ID=? " +
-      "ORDER BY CC.NAME";
+    getCachedCodesForCachedCodeCategorySQL =
+      "SELECT CC.ID, CC.CATEGORY_ID, CC.NAME, CC.VALUE FROM " + schemaPrefix +
+        "CACHED_CODES CC WHERE CC.CATEGORY_ID=? ORDER BY CC.NAME";
 
     // getCodeSQL
-    getCodeSQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.DESCRIPTION, C.VALUE FROM " +
+    getCodeSQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM " +
       schemaPrefix + "CODES C WHERE C.CATEGORY_ID=? AND C.ID=?";
 
     // getNumberOfCodesForCodeCategorySQL
@@ -1028,21 +1023,21 @@ public class CodesDAO
       "WHERE C.CATEGORY_ID=?";
 
     // getNumberOfCodeCategoriesSQL
-    getNumberOfCodeCategoriesSQL = "SELECT COUNT(CC.ID) FROM " + schemaPrefix + "CODE_CATEGORIES " +
-      "CC";
+    getNumberOfCodeCategoriesSQL =
+      "SELECT COUNT(CC.ID) FROM " + schemaPrefix + "CODE_CATEGORIES CC";
 
     // updateCachedCodeCategorySQL
-    updateCachedCodeCategorySQL = "UPDATE " + schemaPrefix + "CACHED_CODE_CATEGORIES CCC SET CCC" +
-      ".CODE_DATA=?, CCC.LAST_UPDATED, CCC.CACHED=? WHERE CCC.ID=?";
+    updateCachedCodeCategorySQL = "UPDATE " + schemaPrefix + "CACHED_CODE_CATEGORIES CCC SET " +
+      "CCC.CODE_DATA=?, CCC.LAST_UPDATED, CCC.CACHED=? WHERE CCC.ID=?";
 
     // updateCodeCategorySQL
-    updateCodeCategorySQL = "UPDATE " + schemaPrefix + "CODE_CATEGORIES CC SET CC" +
-      ".CATEGORY_TYPE=?, CC.NAME=?, CC.DESCRIPTION=?, CC.CODE_DATA=?, CC.ENDPOINT=?, CC" +
-      ".IS_ENDPOINT_SECURE=?, CC.IS_CACHEABLE=?, CC.CACHE_EXPIRY=?, CC.UPDATED=? WHERE CC.ID=?";
+    updateCodeCategorySQL =
+      "UPDATE " + schemaPrefix + "CODE_CATEGORIES CC SET CC.CATEGORY_TYPE=?, " +
+        "CC.NAME=?, CC.CODE_DATA=?, CC.ENDPOINT=?, CC.IS_ENDPOINT_SECURE=?, " +
+        "CC.IS_CACHEABLE=?, CC.CACHE_EXPIRY=?, CC.UPDATED=? WHERE CC.ID=?";
 
     // updateCodeSQL
-    updateCodeSQL = "UPDATE " + schemaPrefix + "CODES C SET C.NAME=?, C.DESCRIPTION=?, C.VALUE=? " +
-      "WHERE C.ID=?";
+    updateCodeSQL = "UPDATE " + schemaPrefix + "CODES C SET C.NAME=?, C.VALUE=? WHERE C.ID=?";
   }
 
   private CachedCodeCategory getCachedCodeCategory(ResultSet rs)
@@ -1083,22 +1078,20 @@ public class CodesDAO
   private Code getCode(ResultSet rs)
     throws SQLException
   {
-    return new Code(rs.getString(1), (UUID) rs.getObject(2), rs.getString(3), rs.getString(4),
-      rs.getString(5));
+    return new Code(rs.getString(1), (UUID) rs.getObject(2), rs.getString(3), rs.getString(4));
   }
 
   private CodeCategory getCodeCategory(ResultSet rs)
     throws SQLException, UnsupportedEncodingException
   {
-    int cacheExpiry = rs.getInt(9);
+    int cacheExpiry = rs.getInt(8);
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
     return new CodeCategory((UUID) rs.getObject(1), CodeCategoryType.fromCode(rs.getInt(2)),
-      rs.getString(3), rs.getString(4),
-      (rs.getBytes(5) != null) ? new String(rs.getBytes(5), "UTF-8") : null, rs.getString(6),
-      rs.getBoolean(7), rs.getBoolean(8), cacheExpiryIsNull ? null : cacheExpiry,
-      rs.getTimestamp(10));
+      rs.getString(3), (rs.getBytes(4) != null) ? new String(rs.getBytes(4), "UTF-8") : null,
+      rs.getString(5), rs.getBoolean(6), rs.getBoolean(7), cacheExpiryIsNull ? null : cacheExpiry,
+      rs.getTimestamp(9));
   }
 
   private Integer getCodeCategoryCacheExpiry(Connection connection, UUID id)
@@ -1141,13 +1134,13 @@ public class CodesDAO
   private CodeCategory getCodeCategoryNoData(ResultSet rs)
     throws SQLException
   {
-    int cacheExpiry = rs.getInt(8);
+    int cacheExpiry = rs.getInt(7);
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
     return new CodeCategory((UUID) rs.getObject(1), CodeCategoryType.fromCode(rs.getInt(2)),
-      rs.getString(3), rs.getString(4), rs.getString(5), rs.getBoolean(6), rs.getBoolean(7),
-      cacheExpiryIsNull ? null : cacheExpiry, rs.getTimestamp(9));
+      rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getBoolean(6),
+      cacheExpiryIsNull ? null : cacheExpiry, rs.getTimestamp(8));
   }
 
   private List<Code> getCodesForCodeCategory(Connection connection, UUID id)

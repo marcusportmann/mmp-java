@@ -17,8 +17,8 @@
 package guru.mmp.application.tests;
 
 /**
- * The <code>ITestTransactionalService</code> interface defines the functionality provided by the
- * Test Transactional Service.
+ * The <code>ITestTransactionalService</code> interface defines the functionality provided by a
+ * Test Transactional Service implementation.
  *
  * @author Marcus Portmann
  */

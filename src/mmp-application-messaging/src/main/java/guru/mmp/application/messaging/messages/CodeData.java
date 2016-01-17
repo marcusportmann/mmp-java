@@ -40,11 +40,6 @@ public class CodeData
   private UUID categoryId;
 
   /**
-   * The description for the code.
-   */
-  private String description;
-
-  /**
    * The ID used to uniquely identify the code.
    */
   private String id;
@@ -74,7 +69,6 @@ public class CodeData
     this.id = String.valueOf(code.getId());
     this.categoryId = code.getCategoryId();
     this.name = code.getName();
-    this.description = code.getDescription();
     this.value = code.getValue();
   }
 
@@ -90,7 +84,6 @@ public class CodeData
       this.id = element.getChildText("Id");
       this.categoryId = UUID.fromString(element.getChildText("CategoryId"));
       this.name = StringUtil.notNull(element.getChildText("Name"));
-      this.description = StringUtil.notNull(element.getChildText("Description"));
       this.value = StringUtil.notNull(element.getChildText("Value"));
     }
     catch (Throwable e)
@@ -112,7 +105,6 @@ public class CodeData
     this.id = code.getId();
     this.categoryId = categoryId;
     this.name = code.getName();
-    this.description = code.getDescription();
     this.value = code.getValue();
   }
 
@@ -126,16 +118,6 @@ public class CodeData
   public UUID getCategoryId()
   {
     return categoryId;
-  }
-
-  /**
-   * Returns the description for the code.
-   *
-   * @return the description for the code
-   */
-  public String getDescription()
-  {
-    return description;
   }
 
   /**
@@ -181,16 +163,6 @@ public class CodeData
   }
 
   /**
-   * Set the description for the code.
-   *
-   * @param description the description for the code
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
    * Set the ID used to uniquely identify the code.
    *
    * @param id the ID used to uniquely identify the code
@@ -232,7 +204,6 @@ public class CodeData
     codeElement.addContent(new Element("Id", StringUtil.notNull(id)));
     codeElement.addContent(new Element("CategoryId", categoryId.toString()));
     codeElement.addContent(new Element("Name", StringUtil.notNull(name)));
-    codeElement.addContent(new Element("Description", StringUtil.notNull(description)));
     codeElement.addContent(new Element("Value", StringUtil.notNull(value)));
 
     return codeElement;

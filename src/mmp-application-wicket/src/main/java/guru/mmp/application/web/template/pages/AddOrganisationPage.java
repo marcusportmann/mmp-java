@@ -85,11 +85,6 @@ public class AddOrganisationPage
       nameField.setRequired(true);
       addForm.add(nameField);
 
-      // The "description" field
-      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-      descriptionField.setRequired(false);
-      addForm.add(descriptionField);
-
       // The "createUserDirectory" field
       CheckBox createUserDirectoryCheckbox = new CheckBox("createUserDirectory",
         new PropertyModel<>(this, "createUserDirectory"));

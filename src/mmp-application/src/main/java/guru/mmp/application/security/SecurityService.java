@@ -580,7 +580,6 @@ public class SecurityService
 
           statement.setObject(1, organisationId);
           statement.setString(2, organisation.getName());
-          statement.setString(3, organisation.getDescription());
 
           if (statement.executeUpdate() != 1)
           {
@@ -599,8 +598,7 @@ public class SecurityService
             statement.setObject(1, userDirectory.getId());
             statement.setObject(2, userDirectory.getTypeId());
             statement.setString(3, userDirectory.getName());
-            statement.setString(4, userDirectory.getDescription());
-            statement.setString(5, userDirectory.getConfiguration());
+            statement.setString(4, userDirectory.getConfiguration());
 
             if (statement.executeUpdate() != 1)
             {
@@ -767,8 +765,7 @@ public class SecurityService
       statement.setObject(1, userDirectoryId);
       statement.setObject(2, userDirectory.getTypeId());
       statement.setString(3, userDirectory.getName());
-      statement.setString(4, userDirectory.getDescription());
-      statement.setString(5, userDirectory.getConfiguration());
+      statement.setString(4, userDirectory.getConfiguration());
 
       if (statement.executeUpdate() != 1)
       {
@@ -2513,8 +2510,7 @@ public class SecurityService
       }
 
       statement.setString(1, organisation.getName());
-      statement.setString(2, StringUtil.notNull(organisation.getDescription()));
-      statement.setObject(3, organisation.getId());
+      statement.setObject(2, organisation.getId());
 
       if (statement.executeUpdate() <= 0)
       {
@@ -2594,9 +2590,8 @@ public class SecurityService
       PreparedStatement statement = connection.prepareStatement(updateUserDirectorySQL))
     {
       statement.setString(1, userDirectory.getName());
-      statement.setString(2, userDirectory.getDescription());
-      statement.setString(3, userDirectory.getConfiguration());
-      statement.setObject(4, userDirectory.getId());
+      statement.setString(2, userDirectory.getConfiguration());
+      statement.setObject(3, userDirectory.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -2654,7 +2649,6 @@ public class SecurityService
     Organisation organisation = new Organisation();
     organisation.setId((UUID) rs.getObject(1));
     organisation.setName(rs.getString(2));
-    organisation.setDescription(StringUtil.notNull(rs.getString(3)));
 
     return organisation;
   }
@@ -2678,12 +2672,12 @@ public class SecurityService
       "DESCRIPTION) VALUES (?, ?, ?, ?)";
 
     // createOrganisationSQL
-    createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS" + " (ID, NAME, " +
-      "DESCRIPTION) VALUES (?, ?, ?)";
+    createOrganisationSQL =
+      "INSERT INTO " + schemaPrefix + "ORGANISATIONS (ID, NAME) VALUES (?, ?)";
 
     // createUserDirectorySQL
-    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES" + " (ID, TYPE_ID," +
-      " NAME, DESCRIPTION, CONFIGURATION) VALUES (?, ?, ?, ?, ?)";
+    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES (ID, TYPE_ID," +
+      " NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
 
     // deleteFunctionSQL
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
@@ -2695,12 +2689,12 @@ public class SecurityService
     deleteUserDirectorySQL = "DELETE FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
 
     // getFilteredUserDirectoriesSQL
-    getFilteredUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION," + " UD" +
-      ".CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD" + " WHERE (UPPER(UD.NAME) " +
-      "LIKE ?) ORDER BY UD.NAME ";
+    getFilteredUserDirectoriesSQL =
+      "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM " + schemaPrefix +
+        "USER_DIRECTORIES UD" + " WHERE (UPPER(UD.NAME) LIKE ?) ORDER BY UD.NAME ";
 
     // getFilteredOrganisationsSQL
-    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix +
+    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix +
       "ORGANISATIONS O WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
 
     // getFunctionIdSQL
@@ -2738,34 +2732,34 @@ public class SecurityService
       "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM WHERE UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationsForUserDirectorySQL
-    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " +
+    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME FROM " +
       schemaPrefix + "ORGANISATIONS O INNER JOIN " + schemaPrefix +
-      "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID" + " WHERE " +
+      "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID WHERE " +
       "UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationSQL
-    getOrganisationSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix +
+    getOrganisationSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix +
       "ORGANISATIONS O WHERE O.ID=?";
 
     // getOrganisationsSQL
-    getOrganisationsSQL = "SELECT O.ID, O.NAME, O.DESCRIPTION FROM " + schemaPrefix +
+    getOrganisationsSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix +
       "ORGANISATIONS O ORDER BY O.NAME";
 
     // getUserDirectoriesForOrganisationSQL
-    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION," +
+    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME," +
       " UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN " +
       schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM" + " ON UD.ID = UDTOM" +
       ".USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O" + " ON UDTOM" +
       ".ORGANISATION_ID = O.ID WHERE O.ID=?";
 
     // getUserDirectoriesSQL
-    getUserDirectoriesSQL =
-      "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION" + " FROM " +
-        schemaPrefix + "USER_DIRECTORIES UD";
+    getUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM " +
+      schemaPrefix + "USER_DIRECTORIES UD";
 
     // getUserDirectorySQL
-    getUserDirectorySQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.DESCRIPTION, UD.CONFIGURATION" +
-      " FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
+    getUserDirectorySQL =
+      "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM " + schemaPrefix +
+        "USER_DIRECTORIES UD WHERE UD.ID=?";
 
     // getUserDirectoryTypesSQL
     getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS," + " UDT" +
@@ -2784,12 +2778,11 @@ public class SecurityService
       ".DESCRIPTION=? WHERE F.CODE=?";
 
     // updateOrganisationSQL
-    updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O" + " SET O.NAME=?, O" +
-      ".DESCRIPTION=? WHERE O.ID=?";
+    updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O SET O.NAME=? WHERE O.ID=?";
 
     // updateUserDirectorySQL
-    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD" + " SET UD.NAME=?, " +
-      "UD.DESCRIPTION=?, UD.CONFIGURATION=? WHERE UD.ID=?";
+    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD SET UD.NAME=?, " +
+      "UD.CONFIGURATION=? WHERE UD.ID=?";
   }
 
   /**
@@ -2812,8 +2805,7 @@ public class SecurityService
     userDirectory.setTypeId((UUID) rs.getObject(2));
     userDirectory.setType(userDirectoryTypes.get(rs.getObject(2)));
     userDirectory.setName(rs.getString(3));
-    userDirectory.setDescription(rs.getString(4));
-    userDirectory.setConfiguration(rs.getString(5));
+    userDirectory.setConfiguration(rs.getString(4));
 
     return userDirectory;
   }
@@ -2942,7 +2934,6 @@ public class SecurityService
     userDirectory.setId(IDGenerator.nextUUID(dataSource));
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
     userDirectory.setName(organisation.getName() + " User Directory");
-    userDirectory.setDescription(organisation.getDescription() + " User Directory");
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE userDirectory " +
       "SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>" +

@@ -963,7 +963,7 @@ public class CodesService
       for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
       {
         codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
-          remoteCode.getDescription(), remoteCode.getValue()));
+          remoteCode.getValue()));
       }
 
       codeCategory.setCodes(codes);
@@ -1033,7 +1033,7 @@ public class CodesService
       for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
       {
         codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
-          remoteCode.getDescription(), remoteCode.getValue()));
+          remoteCode.getValue()));
       }
 
       codeCategory.setCodes(codes);

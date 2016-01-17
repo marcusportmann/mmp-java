@@ -170,14 +170,6 @@ public class LDAPUserDirectoryAdministrationPanel
       userEmailAttributeField.setRequired(true);
       add(userEmailAttributeField);
 
-      // The "userDescriptionAttribute" field
-      TextField<String> userDescriptionAttributeField = new TextFieldWithFeedback<>(
-        "userDescriptionAttribute",
-        new PropertyModel<>(userDirectoryModel, "parameters.UserDescriptionAttribute"));
-      userDescriptionAttributeField.setType(String.class);
-      userDescriptionAttributeField.setRequired(false);
-      add(userDescriptionAttributeField);
-
       // The "userPasswordHistoryAttribute" field
       TextField<String> userPasswordHistoryAttributeField = new TextFieldWithFeedback<>(
         "userPasswordHistoryAttribute",
@@ -339,45 +331,41 @@ public class LDAPUserDirectoryAdministrationPanel
       parameters.put("UsernameAttribute", "uid");
     }
 
-    if (!parameters.containsKey("PasswordExpiryAttribute"))
+    if (!parameters.containsKey("UserPasswordExpiryAttribute"))
     {
-      parameters.put("PasswordExpiryAttribute", "passwordexpiry");
+      parameters.put("UserPasswordExpiryAttribute", "passwordexpiry");
     }
 
-    if (!parameters.containsKey("PasswordAttemptsAttribute"))
+    if (!parameters.containsKey("UserPasswordAttemptsAttribute"))
     {
-      parameters.put("PasswordAttemptsAttribute", "passwordattempts");
+      parameters.put("UserPasswordAttemptsAttribute", "passwordattempts");
     }
 
-    if (!parameters.containsKey("PasswordHistoryAttribute"))
+    if (!parameters.containsKey("UserPasswordHistoryAttribute"))
     {
-      parameters.put("PasswordHistoryAttribute", "passwordhistory");
+      parameters.put("UserPasswordHistoryAttribute", "passwordhistory");
     }
 
-    if (!parameters.containsKey("FirstNamesAttribute"))
+    if (!parameters.containsKey("UserFirstNamesAttribute"))
     {
-      parameters.put("FirstNamesAttribute", "givenName");
+      parameters.put("UserFirstNamesAttribute", "givenName");
     }
 
-    if (!parameters.containsKey("LastNameAttribute"))
+    if (!parameters.containsKey("UserLastNameAttribute"))
     {
-      parameters.put("LastNameAttribute", "sn");
+      parameters.put("UserLastNameAttribute", "sn");
     }
 
-    if (!parameters.containsKey("MobileNumberAttribute"))
+    if (!parameters.containsKey("UserMobileNumberAttribute"))
     {
-      parameters.put("MobileNumberAttribute", "mobile");
+      parameters.put("UserMobileNumberAttribute", "mobile");
     }
 
-    if (!parameters.containsKey("EmailAttribute"))
+    if (!parameters.containsKey("UserEmailAttribute"))
     {
-      parameters.put("EmailAttribute", "mail");
+      parameters.put("UserEmailAttribute", "mail");
     }
 
-    if (!parameters.containsKey("DescriptionAttribute"))
-    {
-      parameters.put("DescriptionAttribute", "cn");
-    }
 
     if (!parameters.containsKey("GroupObjectClass"))
     {

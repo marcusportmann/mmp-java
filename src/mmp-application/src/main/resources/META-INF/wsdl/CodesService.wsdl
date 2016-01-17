@@ -60,11 +60,6 @@
               <xs:documentation>The name of the code.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Description" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>The description for the code.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
           <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Value" type="xs:string">
             <xs:annotation>
               <xs:documentation>The value for the code.</xs:documentation>
@@ -89,11 +84,6 @@
           <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Name" type="xs:string">
             <xs:annotation>
               <xs:documentation>The name of the code category.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Description" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>The description for the code category.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="CodeDataType" type="interface:CodeDataType">

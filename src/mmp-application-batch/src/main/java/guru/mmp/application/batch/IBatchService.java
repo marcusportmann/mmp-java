@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <code>IBatchService</code> interface defines the functionality that must be provided
- * by a Batch Service implementation.
+ * The <code>IBatchService</code> interface defines the functionality provided by a Batch Service
+ * implementation.
  *
  * @author Marcus Portmann
  */

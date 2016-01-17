@@ -57,7 +57,6 @@ public class CodesServiceTest
     code.setId("Test Code Id " + codeCount);
     code.setCategoryId(codeCategoryId);
     code.setName("Test Code Name " + codeCount);
-    code.setDescription("Test Code Description " + codeCount);
     code.setValue("Test Code Value " + codeCount);
 
     return code;
@@ -72,7 +71,6 @@ public class CodesServiceTest
     codeCategory.setId(UUID.randomUUID());
     codeCategory.setCategoryType(CodeCategoryType.LOCAL_CUSTOM);
     codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
     codeCategory.setCodeData("THIS IS THE CODE DATA");
     codeCategory.setEndPoint(null);
     codeCategory.setIsEndPointSecure(false);
@@ -92,7 +90,6 @@ public class CodesServiceTest
     codeCategory.setId(UUID.randomUUID());
     codeCategory.setCategoryType(CodeCategoryType.LOCAL_STANDARD);
     codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
     codeCategory.setCodeData(null);
     codeCategory.setEndPoint(null);
     codeCategory.setIsEndPointSecure(false);
@@ -112,7 +109,6 @@ public class CodesServiceTest
     codeCategory.setId(UUID.randomUUID());
     codeCategory.setCategoryType(CodeCategoryType.REMOTE_HTTP_SERVICE);
     codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
     codeCategory.setCodeData(null);
     codeCategory.setEndPoint("This is the end point");
     codeCategory.setIsEndPointSecure(true);
@@ -132,7 +128,6 @@ public class CodesServiceTest
     codeCategory.setId(UUID.randomUUID());
     codeCategory.setCategoryType(CodeCategoryType.REMOTE_WEB_SERVICE);
     codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setDescription("Test Code Category Description " + codeCategoryCount);
     codeCategory.setCodeData(null);
     codeCategory.setEndPoint("This is the end point");
     codeCategory.setIsEndPointSecure(true);
@@ -169,7 +164,6 @@ public class CodesServiceTest
     compareCodes(code, retrievedCode);
 
     code.setName("Updated " + code.getName());
-    code.setDescription("Updated " + code.getDescription());
     code.setValue("Updated " + code.getValue());
 
     codesService.updateCode(code);
@@ -290,7 +284,6 @@ public class CodesServiceTest
 
     codeCategory.setCategoryType(CodeCategoryType.REMOTE_WEB_SERVICE);
     codeCategory.setName("Updated " + codeCategory.getName());
-    codeCategory.setDescription("Updated " + codeCategory.getDescription());
     codeCategory.setCodeData("Updated Code Data");
     codeCategory.setEndPoint("Updated End Point");
     codeCategory.setIsEndPointSecure(true);
@@ -363,8 +356,6 @@ public class CodesServiceTest
       codeCategory1.getCategoryType(), codeCategory2.getCategoryType());
     assertEquals("The name values for the two code categories do not match",
       codeCategory1.getName(), codeCategory2.getName());
-    assertEquals("The description values for the two code categories do not match",
-      codeCategory1.getDescription(), codeCategory2.getDescription());
 
     if (checkCodeData)
     {
@@ -391,8 +382,6 @@ public class CodesServiceTest
       code2.getCategoryId());
     assertEquals("The name values for the two codes do not match", code1.getName(),
       code2.getName());
-    assertEquals("The description values for the two codes do not match", code1.getDescription(),
-      code2.getDescription());
     assertEquals("The value values for the two codes do not match", code1.getValue(),
       code2.getValue());
   }

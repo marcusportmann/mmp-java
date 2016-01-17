@@ -113,11 +113,6 @@ public class AddUserPage
       mobileNumberField.setRequired(false);
       addForm.add(mobileNumberField);
 
-      // The "description" field
-      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-      descriptionField.setRequired(false);
-      addForm.add(descriptionField);
-
       // The "password" field
       PasswordTextFieldWithFeedback passwordField = new PasswordTextFieldWithFeedback("password");
       passwordField.setRequired(true);

@@ -42,8 +42,6 @@ public class UserDirectory
 {
   private static final long serialVersionUID = 1000000;
 
-  private String description;
-
   private UUID id;
 
   private String name;
@@ -84,16 +82,6 @@ public class UserDirectory
     buffer.append("</userDirectory>");
 
     return buffer.toString();
-  }
-
-  /**
-   * Returns the description for the user directory.
-   *
-   * @return the description for the user directory
-   */
-  public String getDescription()
-  {
-    return description;
   }
 
   /**
@@ -194,16 +182,6 @@ public class UserDirectory
       throw new SecurityException(
         "Failed to parse the XML configuration data for the user directory", e);
     }
-  }
-
-  /**
-   * Set the description for the user directory.
-   *
-   * @param description the description for the user directory
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**

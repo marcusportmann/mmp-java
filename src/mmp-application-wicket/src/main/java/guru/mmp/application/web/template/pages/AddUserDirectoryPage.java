@@ -90,11 +90,6 @@ public class AddUserDirectoryPage
       nameField.setRequired(true);
       addForm.add(nameField);
 
-      // The "description" field
-      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-      descriptionField.setRequired(false);
-      addForm.add(descriptionField);
-
       // The "userDirectoryTypeName" field
       TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName",
         new Model<>(userDirectoryType.getName()));
