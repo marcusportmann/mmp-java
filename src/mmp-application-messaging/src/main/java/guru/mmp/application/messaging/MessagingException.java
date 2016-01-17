@@ -24,8 +24,7 @@ package guru.mmp.application.messaging;
  *
  * @author Marcus Portmann
  */
-public class MessagingException
-  extends Exception
+public class MessagingException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

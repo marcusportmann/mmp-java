@@ -25,8 +25,7 @@ package guru.mmp.application.messaging.handler;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class MessageHandlerException
-  extends Exception
+public class MessageHandlerException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

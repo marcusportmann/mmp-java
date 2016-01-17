@@ -16,6 +16,9 @@
 
 package guru.mmp.common.service.ws;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
 import org.slf4j.Logger;
@@ -27,9 +30,14 @@ import javax.enterprise.inject.Default;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.xml.ws.Service;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ServiceRegistry</code> class provides an implementation of a "Service Registry" which
@@ -45,13 +53,9 @@ public class ServiceRegistry
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(ServiceRegistry.class);
-
   private ConcurrentMap<String, Class<?>> cachedWebServiceClientClasses = new ConcurrentHashMap<>();
-
   private DataSource dataSource;
-
   private String getNumberOfServiceRegistryEntriesSQL;
-
   private String getServiceRegistryEntrySQL;
 
   /**
@@ -83,7 +87,7 @@ public class ServiceRegistry
   {
     try (Connection connection = getConnection();
       PreparedStatement statement = connection.prepareStatement(
-        getNumberOfServiceRegistryEntriesSQL))
+          getNumberOfServiceRegistryEntriesSQL))
     {
       try (ResultSet rs = statement.executeQuery())
       {
@@ -100,7 +104,7 @@ public class ServiceRegistry
     catch (Throwable e)
     {
       throw new ServiceRegistryException(
-        "Failed to retrieve the number of Service Registry entries: " + e.getMessage(), e);
+          "Failed to retrieve the number of Service Registry entries: " + e.getMessage(), e);
     }
   }
 
@@ -124,8 +128,8 @@ public class ServiceRegistry
     if (serviceRegistryEntry == null)
     {
       throw new ServiceRegistryException(
-        "Failed to retrieve the service proxy for the web service (" + name + "): A service " +
-          "registry entry could not be found for the web service");
+          "Failed to retrieve the service proxy for the web service (" + name + "): A service "
+          + "registry entry could not be found for the web service");
     }
 
     try
@@ -135,55 +139,55 @@ public class ServiceRegistry
       if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry.SECURITY_TYPE_NONE)
       {
         return WebServiceClientSecurityHelper.getServiceProxy(serviceClass, serviceInterface,
-          serviceRegistryEntry.getWsdlLocation(), serviceRegistryEntry.getEndpoint());
+            serviceRegistryEntry.getWsdlLocation(), serviceRegistryEntry.getEndpoint());
       }
-      else if (serviceRegistryEntry.getSecurityType() ==
-        ServiceRegistryEntry.SECURITY_TYPE_CLIENT_SSL)
+      else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry
+          .SECURITY_TYPE_CLIENT_SSL)
       {
         return WebServiceClientSecurityHelper.getClientSSLServiceProxy(serviceClass,
-          serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-          serviceRegistryEntry.getEndpoint());
+            serviceInterface, serviceRegistryEntry.getWsdlLocation(),
+            serviceRegistryEntry.getEndpoint());
       }
       else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry.SECURITY_TYPE_DIGEST)
       {
         return WebServiceClientSecurityHelper.getDigestAuthenticationServiceProxy(serviceClass,
-          serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-          serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
-          serviceRegistryEntry.getPassword());
+            serviceInterface, serviceRegistryEntry.getWsdlLocation(),
+            serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
+            serviceRegistryEntry.getPassword());
       }
-      else if (serviceRegistryEntry.getSecurityType() ==
-        ServiceRegistryEntry.SECURITY_TYPE_HTTP_AUTHENTICATION)
+      else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry
+          .SECURITY_TYPE_HTTP_AUTHENTICATION)
       {
         return WebServiceClientSecurityHelper.getHTTPAuthenticationServiceProxy(serviceClass,
-          serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-          serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
-          serviceRegistryEntry.getPassword());
+            serviceInterface, serviceRegistryEntry.getWsdlLocation(),
+            serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
+            serviceRegistryEntry.getPassword());
       }
-      else if (serviceRegistryEntry.getSecurityType() ==
-        ServiceRegistryEntry.SECURITY_TYPE_WS_SECURITY_USERNAME_TOKEN)
+      else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry
+          .SECURITY_TYPE_WS_SECURITY_USERNAME_TOKEN)
       {
         return WebServiceClientSecurityHelper.getWSSecurityUsernameTokenServiceProxy(serviceClass,
-          serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-          serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
-          serviceRegistryEntry.getPassword());
+            serviceInterface, serviceRegistryEntry.getWsdlLocation(),
+            serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
+            serviceRegistryEntry.getPassword());
       }
-      else if (serviceRegistryEntry.getSecurityType() ==
-        ServiceRegistryEntry.SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE)
+      else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry
+          .SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE)
       {
-        return WebServiceClientSecurityHelper.getWSSecurityX509CertificateServiceProxy(serviceClass,
-          serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-          serviceRegistryEntry.getEndpoint());
+        return WebServiceClientSecurityHelper.getWSSecurityX509CertificateServiceProxy(
+            serviceClass, serviceInterface, serviceRegistryEntry.getWsdlLocation(),
+            serviceRegistryEntry.getEndpoint());
       }
       else
       {
         return WebServiceClientSecurityHelper.getServiceProxy(serviceClass, serviceInterface,
-          serviceRegistryEntry.getWsdlLocation(), serviceRegistryEntry.getEndpoint());
+            serviceRegistryEntry.getWsdlLocation(), serviceRegistryEntry.getEndpoint());
       }
     }
     catch (Throwable e)
     {
       throw new ServiceRegistryException(
-        "Failed to retrieve the service proxy for the web service (" + name + ")", e);
+          "Failed to retrieve the service proxy for the web service (" + name + ")", e);
     }
   }
 
@@ -205,8 +209,8 @@ public class ServiceRegistry
   {
     if ((name == null) || (name.length() == 0))
     {
-      throw new ServiceRegistryException(
-        "Failed to get the Service Registry entry (" + name + "): The specified name is invalid");
+      throw new ServiceRegistryException("Failed to get the Service Registry entry (" + name
+          + "): The specified name is invalid");
     }
 
     // Store the value in the database
@@ -219,9 +223,9 @@ public class ServiceRegistry
       {
         if (rs.next())
         {
-          return new ServiceRegistryEntry(rs.getString(1), rs.getInt(2),
-            rs.getString(3).equalsIgnoreCase("Y"), rs.getString(4).equalsIgnoreCase("Y"),
-            rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
+          return new ServiceRegistryEntry(rs.getString(1), rs.getInt(2), rs.getString(3)
+              .equalsIgnoreCase("Y"), rs.getString(4).equalsIgnoreCase("Y"), rs.getString(5),
+              rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
         }
         else
         {
@@ -231,8 +235,8 @@ public class ServiceRegistry
     }
     catch (Throwable e)
     {
-      throw new ServiceRegistryException(
-        "Failed to get the Service Registry entry (" + name + "): " + e.getMessage(), e);
+      throw new ServiceRegistryException("Failed to get the Service Registry entry (" + name
+          + "): " + e.getMessage(), e);
     }
   }
 
@@ -246,9 +250,7 @@ public class ServiceRegistry
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -256,61 +258,34 @@ public class ServiceRegistry
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
       throw new ServiceRegistryException(
-        "Failed to retrieve the application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+          "Failed to retrieve the application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
     {
-      // Retrieve the database meta data
-      String schemaSeparator;
-      String idQuote;
-
-      try (Connection connection = dataSource.getConnection())
-      {
-        DatabaseMetaData metaData = connection.getMetaData();
-
-        // Retrieve the schema separator for the database
-        schemaSeparator = metaData.getCatalogSeparator();
-
-        if ((schemaSeparator == null) || (schemaSeparator.length() == 0))
-        {
-          schemaSeparator = ".";
-        }
-
-        // Retrieve the identifier enquoting string for the database
-        idQuote = metaData.getIdentifierQuoteString();
-
-        if ((idQuote == null) || (idQuote.length() == 0))
-        {
-          idQuote = "\"";
-        }
-      }
-
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.MMP_DATABASE_SCHEMA + idQuote +
-        schemaSeparator;
+      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
+          dataSource);
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
     }
     catch (Exception e)
     {
-      throw new ServiceRegistryException(
-        "Failed to initialise the Service Registry: " + e.getMessage(), e);
+      throw new ServiceRegistryException("Failed to initialise the Service Registry: "
+          + e.getMessage(), e);
     }
     catch (Throwable e)
     {
-      throw new ServiceRegistryException(
-        "Failed to initialise the Service Registry: " + e.getMessage());
+      throw new ServiceRegistryException("Failed to initialise the Service Registry: "
+          + e.getMessage());
     }
   }
 
@@ -335,13 +310,13 @@ public class ServiceRegistry
     throws SQLException
   {
     // getNumberOfServiceRegistryEntriesSQL
-    getNumberOfServiceRegistryEntriesSQL = "SELECT COUNT(NAME) FROM " + schemaPrefix +
-      "SERVICE_REGISTRY";
+    getNumberOfServiceRegistryEntriesSQL = "SELECT COUNT(NAME) FROM " + schemaPrefix
+        + "SERVICE_REGISTRY";
 
     // getServiceRegistryEntrySQL
-    getServiceRegistryEntrySQL = "SELECT NAME, SECURITY_TYPE, REQUIRES_USER_TOKEN," + " " +
-      "SUPPORTS_COMPRESSION, ENDPOINT, SERVICE_CLASS, WSDL_LOCATION, USERNAME, PASSWORD FROM " +
-      schemaPrefix + "SERVICE_REGISTRY WHERE NAME=?";
+    getServiceRegistryEntrySQL = "SELECT NAME, SECURITY_TYPE, REQUIRES_USER_TOKEN," + " "
+        + "SUPPORTS_COMPRESSION, ENDPOINT, SERVICE_CLASS, WSDL_LOCATION, USERNAME, PASSWORD FROM "
+        + schemaPrefix + "SERVICE_REGISTRY WHERE NAME=?";
   }
 
   /**
@@ -361,7 +336,7 @@ public class ServiceRegistry
     catch (Throwable e)
     {
       throw new ServiceRegistryException(
-        "Failed to retrieve a database connection from the data source: " + e.getMessage(), e);
+          "Failed to retrieve a database connection from the data source: " + e.getMessage(), e);
     }
   }
 
@@ -374,13 +349,13 @@ public class ServiceRegistry
       try
       {
         cachedWebServiceClientClass = Thread.currentThread().getContextClassLoader().loadClass(
-          name);
+            name);
 
         if (!Service.class.isAssignableFrom(cachedWebServiceClientClass))
         {
-          throw new RuntimeException(
-            "The web service client class (" + cachedWebServiceClientClass.getName() + ") does " +
-              "not extend the javax.xml.ws.Service class");
+          throw new RuntimeException("The web service client class ("
+              + cachedWebServiceClientClass.getName() + ") does "
+              + "not extend the javax.xml.ws.Service class");
         }
         else
         {

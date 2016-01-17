@@ -16,22 +16,33 @@
 
 package guru.mmp.application.batch;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>BatchDAO</code> class implements the job-related persistence operations.
@@ -45,7 +56,6 @@ public class BatchDAO
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BatchDAO.class);
-
   @SuppressWarnings("unused")
   private String createJobSQL;
 
@@ -53,34 +63,20 @@ public class BatchDAO
    * The data source used to provide connections to the database.
    */
   private DataSource dataSource;
-
   @SuppressWarnings("unused")
   private String deleteJobSQL;
-
   private String getJobParametersSQL;
-
   private String getJobSQL;
-
   private String getJobsSQL;
-
   private String getNextJobScheduledForExecutionSQL;
-
   private String getNextUnscheduledJobSQL;
-
   private String getNumberOfJobsSQL;
-
   private String getUnscheduledJobsSQL;
-
   private String incrementJobExecutionAttemptsSQL;
-
   private String lockJobSQL;
-
   private String resetJobLocksSQL;
-
   private String scheduleJobSQL;
-
   private String setJobStatusSQL;
-
   private String unlockJobSQL;
 
   /**
@@ -109,15 +105,14 @@ public class BatchDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
-            createJobSQL));
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)", createJobSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to add the job (%s) to the database", job.getName()), e);
+      throw new DAOException(String.format("Failed to add the job (%s) to the database",
+          job.getName()), e);
     }
   }
 
@@ -152,8 +147,8 @@ public class BatchDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(String.format("Failed to retrieve the job (%s) from the database", id),
-        e);
+      throw new DAOException(String.format("Failed to retrieve the job (%s) from the database",
+          id), e);
     }
   }
 
@@ -188,9 +183,8 @@ public class BatchDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to retrieve the parameters for the job (%s) from the database", id),
-        e);
+      throw new DAOException(String.format(
+          "Failed to retrieve the parameters for the job (%s) from the database", id), e);
     }
   }
 
@@ -262,7 +256,7 @@ public class BatchDAO
 
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
-          getNextJobScheduledForExecutionSQL))
+            getNextJobScheduledForExecutionSQL))
       {
         Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - executionRetryDelay);
 
@@ -292,8 +286,8 @@ public class BatchDAO
               if (updateStatement.executeUpdate() != 1)
               {
                 throw new DAOException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  lockJobSQL));
+                    "No rows were affected as a result of executing the SQL statement (%s)",
+                    lockJobSQL));
               }
             }
           }
@@ -313,13 +307,13 @@ public class BatchDAO
       catch (Throwable f)
       {
         logger.error(
-          "Failed to rollback the transaction while retrieving the next job that has been " +
-            "scheduled for execution from the database", f);
+            "Failed to rollback the transaction while retrieving the next job that has been "
+            + "scheduled for execution from the database", f);
       }
 
       throw new DAOException(
-        "Failed to retrieve the next job that has been scheduled for execution from the database",
-        e);
+          "Failed to retrieve the next job that has been scheduled for execution from the database",
+          e);
     }
     finally
     {
@@ -333,8 +327,8 @@ public class BatchDAO
       catch (Throwable e)
       {
         logger.error(
-          "Failed to resume the transaction while retrieving the next job that has been scheduled" +
-            " for execution from the database", e);
+            "Failed to resume the transaction while retrieving the next job that has been scheduled"
+            + " for execution from the database", e);
       }
     }
   }
@@ -422,16 +416,15 @@ public class BatchDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             incrementJobExecutionAttemptsSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to increment the execution attempts for the job (%s) in the database",
-          id), e);
+      throw new DAOException(String.format(
+          "Failed to increment the execution attempts for the job (%s) in the database", id), e);
     }
   }
 
@@ -445,9 +438,7 @@ public class BatchDAO
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -455,47 +446,28 @@ public class BatchDAO
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
-      throw new DAOException(
-        "Failed to retrieve the application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new DAOException("Failed to retrieve the application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
     {
-      // Retrieve the database meta data
-      String schemaSeparator;
-
-      try (Connection connection = dataSource.getConnection())
-      {
-        DatabaseMetaData metaData = connection.getMetaData();
-
-        // Retrieve the schema separator for the database
-        schemaSeparator = metaData.getCatalogSeparator();
-
-        if ((schemaSeparator == null) || (schemaSeparator.length() == 0))
-        {
-          schemaSeparator = ".";
-        }
-      }
-
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
+          dataSource);
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to initialise the %s data access object: %s", getClass().getName(),
-          e.getMessage()), e);
+      throw new DAOException(String.format("Failed to initialise the %s data access object: %s",
+          getClass().getName(), e.getMessage()), e);
     }
   }
 
@@ -521,16 +493,15 @@ public class BatchDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
-            lockJobSQL));
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)", lockJobSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to lock and set the status for the job (%s) to (%s) in the database",
-          id, status), e);
+      throw new DAOException(String.format(
+          "Failed to lock and set the status for the job (%s) to (%s) in the database", id,
+          status), e);
     }
   }
 
@@ -558,7 +529,7 @@ public class BatchDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format("Failed to reschedule the job (%s) for execution", id),
-        e);
+          e);
     }
   }
 
@@ -589,8 +560,8 @@ public class BatchDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to reset the locks for the jobs with status (%s) that have been locked using the " +
-          "lock name (%s)", status, lockName), e);
+          "Failed to reset the locks for the jobs with status (%s) that have been locked using the "
+          + "lock name (%s)", status, lockName), e);
     }
   }
 
@@ -636,16 +607,16 @@ public class BatchDAO
             try
             {
               Predictor predictor = new Predictor(job.getSchedulingPattern(),
-                System.currentTimeMillis());
+                  System.currentTimeMillis());
 
               nextExecution = predictor.nextMatchingDate();
             }
             catch (Throwable e)
             {
               logger.error(String.format(
-                "The next execution date could not be determined for the unscheduled job (%s) " +
-                  "with the scheduling pattern (%s): The job will be marked as FAILED", job.getId(),
-                job.getSchedulingPattern()), e);
+                  "The next execution date could not be determined for the unscheduled job (%s) "
+                  + "with the scheduling pattern (%s): The job will be marked as FAILED",
+                  job.getId(), job.getSchedulingPattern()), e);
             }
 
             if (nextExecution == null)
@@ -654,8 +625,9 @@ public class BatchDAO
             }
             else
             {
-              logger.info(String.format("Scheduling the unscheduled job (%s) for execution at (%s)",
-                job.getId(), nextExecution));
+              logger.info(String.format(
+                  "Scheduling the unscheduled job (%s) for execution at (%s)", job.getId(),
+                  nextExecution));
 
               scheduleJob(connection, job.getId(), nextExecution);
             }
@@ -681,13 +653,13 @@ public class BatchDAO
       }
       catch (Throwable f)
       {
-        logger.error("Failed to rollback the transaction while scheduling the next unscheduled job",
-          e);
+        logger.error(
+            "Failed to rollback the transaction while scheduling the next unscheduled job", e);
       }
 
       if (e instanceof DAOException)
       {
-        throw ((DAOException) e);
+        throw((DAOException) e);
       }
       else
       {
@@ -706,7 +678,7 @@ public class BatchDAO
       catch (Throwable e)
       {
         logger.error("Failed to resume the transaction while scheduling the next unscheduled job",
-          e);
+            e);
       }
     }
   }
@@ -728,9 +700,8 @@ public class BatchDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to set the status (%s)  for the job (%s) in the database", status,
-          id), e);
+      throw new DAOException(String.format(
+          "Failed to set the status (%s)  for the job (%s) in the database", status, id), e);
     }
   }
 
@@ -754,16 +725,16 @@ public class BatchDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result  of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result  of executing the SQL statement (%s)",
             unlockJobSQL));
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to unlock and set the status for the job (%s) to (%s) in the database", id, status),
-        e);
+          "Failed to unlock and set the status for the job (%s) to (%s) in the database", id,
+          status), e);
     }
   }
 
@@ -775,78 +746,79 @@ public class BatchDAO
   protected void buildStatements(String schemaPrefix)
   {
     // createJobSQL
-    createJobSQL = "INSERT INTO " + schemaPrefix + "JOBS" + " (ID, NAME, SCHEDULING_PATTERN, " +
-      "JOB_CLASS, STATUS) VALUES (?, ?, ?, ?, ?)";
+    createJobSQL = "INSERT INTO " + schemaPrefix + "JOBS" + " (ID, NAME, SCHEDULING_PATTERN, "
+        + "JOB_CLASS, STATUS) VALUES (?, ?, ?, ?, ?)";
 
     // deleteJobSQL
     deleteJobSQL = "DELETE FROM " + schemaPrefix + "JOBS J WHERE J.ID=?";
 
     // getNextJobScheduledForExecutionSQL
-    getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS," +
-      "" + " J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION," +
-      " J.UPDATED FROM " + schemaPrefix + "JOBS J" + " WHERE J.STATUS=? AND ((J" +
-      ".EXECUTION_ATTEMPTS=0) OR ((J.EXECUTION_ATTEMPTS>0)" + " AND (J.LAST_EXECUTED<?))) AND J" +
-      ".NEXT_EXECUTION <= ?" + " ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+    getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS,"
+        + "" + " J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION,"
+        + " J.UPDATED FROM " + schemaPrefix + "JOBS J" + " WHERE J.STATUS=? AND ((J"
+        + ".EXECUTION_ATTEMPTS=0) OR ((J.EXECUTION_ATTEMPTS>0)"
+        + " AND (J.LAST_EXECUTED<?))) AND J" + ".NEXT_EXECUTION <= ?"
+        + " ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getNextUnscheduledJobSQL
-    getNextUnscheduledJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," +
-      "" + " J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED" +
-      " FROM " + schemaPrefix + "JOBS J" + " WHERE J.NEXT_EXECUTION IS NULL AND J.STATUS <= 2" +
-      " ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+    getNextUnscheduledJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS,"
+        + "" + " J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED"
+        + " FROM " + schemaPrefix + "JOBS J" + " WHERE J.NEXT_EXECUTION IS NULL AND J.STATUS <= 2"
+        + " ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getNumberOfJobsSQL
     getNumberOfJobsSQL = "SELECT COUNT(J.ID) FROM " + schemaPrefix + "JOBS J";
 
     // getJobSQL
-    getJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," + " J" +
-      ".EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED" + " FROM" +
-      " " + schemaPrefix + "JOBS J" + " WHERE J.ID = ?";
+    getJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," + " J"
+        + ".EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED"
+        + " FROM" + " " + schemaPrefix + "JOBS J" + " WHERE J.ID = ?";
 
     // getJobsSQL
-    getJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," + " J" +
-      ".EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED" + " FROM" +
-      " " + schemaPrefix + "JOBS J";
+    getJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," + " J"
+        + ".EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED"
+        + " FROM" + " " + schemaPrefix + "JOBS J";
 
     // getJobParametersSQL
-    getJobParametersSQL = "SELECT JP.ID, JP.JOB_ID, JP.NAME, JP.VALUE" + " FROM " + schemaPrefix +
-      "JOB_PARAMETERS JP WHERE JP.JOB_ID = ?";
+    getJobParametersSQL = "SELECT JP.ID, JP.JOB_ID, JP.NAME, JP.VALUE" + " FROM " + schemaPrefix
+        + "JOB_PARAMETERS JP WHERE JP.JOB_ID = ?";
 
     // getUnscheduledJobsSQL
-    getUnscheduledJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," +
-      " J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED" + " " +
-      "FROM " + schemaPrefix + "JOBS J" + " WHERE J.NEXT_EXECUTION IS NULL";
+    getUnscheduledJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS,"
+        + " J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED" + " "
+        + "FROM " + schemaPrefix + "JOBS J" + " WHERE J.NEXT_EXECUTION IS NULL";
 
     // lockJobSQL
-    lockJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.LOCK_NAME=?, J" +
-      ".UPDATED=? WHERE J.ID=?";
+    lockJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.LOCK_NAME=?, J"
+        + ".UPDATED=? WHERE J.ID=?";
 
     // incrementJobExecutionAttemptsSQL
-    incrementJobExecutionAttemptsSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J" +
-      ".EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, J.UPDATED=?, J.LAST_EXECUTED=?" + " WHERE J" +
-      ".ID=?";
+    incrementJobExecutionAttemptsSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J"
+        + ".EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, J.UPDATED=?, J.LAST_EXECUTED=?" + " WHERE J"
+        + ".ID=?";
 
     // resetJobLocksSQL
-    resetJobLocksSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.LOCK_NAME=NULL, " +
-      "J.UPDATED=? WHERE J.LOCK_NAME=? AND J.STATUS=?";
+    resetJobLocksSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.LOCK_NAME=NULL, "
+        + "J.UPDATED=? WHERE J.LOCK_NAME=? AND J.STATUS=?";
 
     // scheduleJobSQL
-    scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=1, J.EXECUTION_ATTEMPTS" +
-      " = 0, J.NEXT_EXECUTION=?, UJ.PDATED=? WHERE ID=?";
+    scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=1, J.EXECUTION_ATTEMPTS"
+        + " = 0, J.NEXT_EXECUTION=?, UJ.PDATED=? WHERE ID=?";
 
     // setJobStatusSQL
     setJobStatusSQL = "UPDATE " + schemaPrefix + "JOBS J SET J.STATUS=? WHERE J.ID=?";
 
     // unlockJobSQL
-    unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.UPDATED=?, J" +
-      ".LOCK_NAME=NULL WHERE J.ID=?";
+    unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.UPDATED=?, J"
+        + ".LOCK_NAME=NULL WHERE J.ID=?";
   }
 
   private Job getJob(ResultSet rs)
     throws SQLException
   {
-    return new Job((UUID) rs.getObject(1), rs.getString(2), rs.getString(3), rs.getString(4),
-      Job.Status.fromCode(rs.getInt(5)), rs.getInt(6), rs.getString(7), rs.getTimestamp(8),
-      rs.getTimestamp(9), rs.getTimestamp(10));
+    return new Job((UUID) rs.getObject(1), rs.getString(2), rs.getString(3), rs.getString(4), Job
+        .Status.fromCode(rs.getInt(5)), rs.getInt(6), rs.getString(7), rs.getTimestamp(8),
+        rs.getTimestamp(9), rs.getTimestamp(10));
   }
 
   private JobParameter getJobParameter(ResultSet rs)
@@ -865,8 +837,8 @@ public class BatchDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             scheduleJobSQL));
       }
     }
@@ -885,16 +857,15 @@ public class BatchDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             setJobStatusSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to set the status (%s)  for the job (%s) in the database", status,
-          id), e);
+      throw new DAOException(String.format(
+          "Failed to set the status (%s)  for the job (%s) in the database", status, id), e);
     }
   }
 }

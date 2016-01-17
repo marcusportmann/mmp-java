@@ -16,13 +16,17 @@
 
 package guru.mmp.common.persistence;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.util.Date;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * The <code>DatedId</code> class is a JPA embeddable class that stores a composite key with
@@ -154,7 +158,11 @@ public class ArchivedId
   @Override
   public int hashCode()
   {
-    return ((id == null) ? 0 : id.hashCode()) + ((archived == null) ? 0 : archived.hashCode());
+    return ((id == null)
+        ? 0
+        : id.hashCode()) + ((archived == null)
+        ? 0
+        : archived.hashCode());
   }
 
   /**

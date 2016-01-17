@@ -16,8 +16,11 @@
 
 package guru.mmp.common.persistence;
 
-import javax.interceptor.InterceptorBinding;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.annotation.*;
+
+import javax.interceptor.InterceptorBinding;
 
 /**
  * The <code>NewTransaction</code> annotation is used together with the
@@ -30,7 +33,5 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-public @interface NewTransaction
-{
-}
+@Target({ ElementType.TYPE, ElementType.METHOD })
+public @interface NewTransaction {}

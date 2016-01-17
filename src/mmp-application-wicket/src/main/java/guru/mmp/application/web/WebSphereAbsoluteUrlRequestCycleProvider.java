@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.cycle.RequestCycle;

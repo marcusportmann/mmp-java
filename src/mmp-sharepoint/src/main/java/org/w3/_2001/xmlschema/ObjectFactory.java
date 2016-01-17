@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
@@ -22,53 +24,37 @@ import javax.xml.namespace.QName;
 public class ObjectFactory
 {
   private final static QName _All_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "all");
-
   private final static QName _AnyAttribute_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "anyAttribute");
-
+      "anyAttribute");
   private final static QName _Choice_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "choice");
-
+      "choice");
   private final static QName _Enumeration_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "enumeration");
-
+      "enumeration");
   private final static QName _FractionDigits_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "fractionDigits");
-
-  private final static QName _GroupTypeElement_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "element");
-
+      "fractionDigits");
+  private final static QName _GroupTypeElement_QNAME = new QName(
+      "http://www.w3.org/2001/XMLSchema", "element");
   private final static QName _GroupTypeGroup_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "group");
-
+      "group");
   private final static QName _Key_QNAME = new QName("http://www.w3.org/2001/XMLSchema", "key");
-
   private final static QName _Length_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "length");
-
+      "length");
   private final static QName _MaxExclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "maxExclusive");
-
+      "maxExclusive");
   private final static QName _MaxInclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "maxInclusive");
-
+      "maxInclusive");
   private final static QName _MaxLength_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "maxLength");
-
+      "maxLength");
   private final static QName _MinExclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "minExclusive");
-
+      "minExclusive");
   private final static QName _MinInclusive_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "minInclusive");
-
+      "minInclusive");
   private final static QName _MinLength_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "minLength");
-
+      "minLength");
   private final static QName _Sequence_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "sequence");
-
+      "sequence");
   private final static QName _Unique_QNAME = new QName("http://www.w3.org/2001/XMLSchema",
-    "unique");
+      "unique");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema derived
@@ -349,11 +335,11 @@ public class ObjectFactory
    * @return
    */
   @XmlElementDecl(namespace = "http://www.w3.org/2001/XMLSchema", name = "element",
-    scope = GroupType.class)
+      scope = GroupType.class)
   public JAXBElement<LocalElement> createGroupTypeElement(LocalElement value)
   {
     return new JAXBElement<LocalElement>(_GroupTypeElement_QNAME, LocalElement.class,
-      GroupType.class, value);
+        GroupType.class, value);
   }
 
   /**
@@ -364,7 +350,7 @@ public class ObjectFactory
    * @return
    */
   @XmlElementDecl(namespace = "http://www.w3.org/2001/XMLSchema", name = "group",
-    scope = GroupType.class)
+      scope = GroupType.class)
   public JAXBElement<GroupRef> createGroupTypeGroup(GroupRef value)
   {
     return new JAXBElement<GroupRef>(_GroupTypeGroup_QNAME, GroupRef.class, GroupType.class, value);

@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -31,8 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "selector")
-public class Selector
-  extends Annotated
+public class Selector extends Annotated
 {
   @XmlAttribute(name = "xpath", required = true)
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)

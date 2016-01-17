@@ -36,12 +36,17 @@ package guru.mmp.application.process.bpmn.gateway;
  */
 public enum GatewayDirection
 {
-  UNSPECIFIED("Unspecified", "Unspecified"), CONVERGING("Converging", "Converging"),
-  DIVERGING("Diverging", "Diverging"), MIXED("Mixed", "Mixed");
+  UNSPECIFIED("Unspecified", "Unspecified"), CONVERGING("Converging", "Converging"), DIVERGING(
+      "Diverging", "Diverging"), MIXED("Mixed", "Mixed");
 
   private String id;
-
   private String name;
+
+  GatewayDirection(String id, String name)
+  {
+    this.id = id;
+    this.name = name;
+  }
 
   /**
    * Returns the gateway direction given by the specified ID.
@@ -69,12 +74,6 @@ public enum GatewayDirection
       default:
         throw new RuntimeException("Invalid ID for gateway direction (" + id + ")");
     }
-  }
-
-  GatewayDirection(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
   }
 
   /**

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.activity.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -25,6 +27,8 @@ import javax.xml.namespace.QName;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Process</code> class represents a Process.
@@ -59,8 +63,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class Process
-  extends CallableElement
+public final class Process extends CallableElement
 {
   /**
    * The FlowElements for the process.
@@ -224,8 +227,8 @@ public final class Process
 
             default:
             {
-              throw new ParserException(
-                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
+              throw new ParserException("Failed to parse the unknown XML element ("
+                  + childElement.getNodeName() + ")");
             }
           }
         }

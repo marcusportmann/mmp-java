@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 /**
@@ -35,8 +37,5 @@ public final class ResourceRole
    *
    * @param element the XML element containing the ResourceRole information
    */
-  public ResourceRole(Element element)
-  {
-
-  }
+  public ResourceRole(Element element) {}
 }

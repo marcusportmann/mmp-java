@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -37,6 +39,8 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UpdateReportDefinitionPage</code> class implements the
  * "Update Report Definition" page for the Web Application Template.
@@ -44,12 +48,10 @@ import java.io.InputStream;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_UPDATE_REPORT_DEFINITION)
-public class UpdateReportDefinitionPage
-  extends TemplateWebPage
+public class UpdateReportDefinitionPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateReportDefinitionPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
@@ -57,23 +59,29 @@ public class UpdateReportDefinitionPage
   private IReportingService reportingService;
 
   /**
+   * Hidden <code>UpdateReportDefinitionPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected UpdateReportDefinitionPage() {}
+
+  /**
    * Constructs a new <code>UpdateReportDefinitionPage</code>.
    *
    * @param previousPage          the previous page
    * @param reportDefinitionModel the model for the report definition
    */
-  public UpdateReportDefinitionPage(
-    PageReference previousPage, IModel<ReportDefinition> reportDefinitionModel)
+  public UpdateReportDefinitionPage(PageReference previousPage,
+      IModel<ReportDefinition> reportDefinitionModel)
   {
     super("Update Report Definition");
 
     try
     {
-      Form<ReportDefinition> updateForm = new Form<>("updateForm",
-        new CompoundPropertyModel<>(reportDefinitionModel));
+      Form<ReportDefinition> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(
+          reportDefinitionModel));
 
       ReportDefinitionInputPanel reportDefinitionInputPanel = new ReportDefinitionInputPanel(
-        "reportDefinition", true);
+          "reportDefinition", true);
 
       updateForm.add(reportDefinitionInputPanel);
 
@@ -130,7 +138,7 @@ public class UpdateReportDefinitionPage
             catch (Throwable e)
             {
               logger.error(String.format("Failed to delete the uploaded file (%s)",
-                fileUpload.getClientFileName()), e);
+                  fileUpload.getClientFileName()), e);
             }
           }
         }
@@ -160,10 +168,4 @@ public class UpdateReportDefinitionPage
       throw new WebApplicationException("Failed to initialise the UpdateReportDefinitionPage", e);
     }
   }
-
-  /**
-   * Hidden <code>UpdateReportDefinitionPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateReportDefinitionPage() {}
 }

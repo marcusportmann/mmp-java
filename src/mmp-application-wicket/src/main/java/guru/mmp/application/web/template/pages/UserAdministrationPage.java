@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
@@ -46,6 +48,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UserAdministrationPage</code> class implements the
  * "User Administration" page for the Web Application Template.
@@ -53,12 +57,10 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
-public class UserAdministrationPage
-  extends TemplateWebPage
+public class UserAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserAdministrationPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
@@ -118,8 +120,8 @@ public class UserAdministrationPage
 
       // The "userDirectoryDropdownMenu" dropdown button
       DropdownMenu<UserDirectory> userDirectoryDropdownMenu = new DropdownMenu<UserDirectory>(
-        "userDirectoryDropdownMenu", new PropertyModel<>(this, "userDirectory"), userDirectories,
-        "fa fa-users")
+          "userDirectoryDropdownMenu", new PropertyModel<>(this, "userDirectory"), userDirectories,
+          "fa fa-users")
       {
         @Override
         protected String getDisplayValue(UserDirectory menuItem)
@@ -137,7 +139,7 @@ public class UserAdministrationPage
             target.add(tableContainer);
 
             target.appendJavaScript(
-              "jQuery('[data-toggle=\"tooltip\"]').tooltip({container: 'body', animation: false});");
+                "jQuery('[data-toggle=\"tooltip\"]').tooltip({container: 'body', animation: false});");
           }
         }
       };
@@ -150,8 +152,8 @@ public class UserAdministrationPage
       filterForm.setOutputMarkupId(true);
 
       // The "filter" field
-      TextField<String> filterField = new TextField<>("filter",
-        new PropertyModel<>(dataProvider, "filter"));
+      TextField<String> filterField = new TextField<>("filter", new PropertyModel<>(dataProvider,
+          "filter"));
       filterForm.add(filterField);
 
       // The "filterButton" button
@@ -177,8 +179,8 @@ public class UserAdministrationPage
           User user = item.getModelObject();
 
           item.add(new Label("username", new PropertyModel<String>(item.getModel(), "username")));
-          item.add(
-            new Label("firstNames", new PropertyModel<String>(item.getModel(), "firstNames")));
+          item.add(new Label("firstNames", new PropertyModel<String>(item.getModel(),
+              "firstNames")));
           item.add(new Label("lastName", new PropertyModel<String>(item.getModel(), "lastName")));
 
           // The "userGroupsLink" link
@@ -194,7 +196,7 @@ public class UserAdministrationPage
               if (!user.getUsername().equalsIgnoreCase("Administrator"))
               {
                 UserGroupsPage page = new UserGroupsPage(getPageReference(), userDirectory.getId(),
-                  user.getUsername());
+                    user.getUsername());
 
                 setResponsePage(page);
               }
@@ -232,7 +234,7 @@ public class UserAdministrationPage
             public void onClick()
             {
               ResetUserPasswordPage page = new ResetUserPasswordPage(getPageReference(),
-                new Model<>(item.getModelObject()));
+                  new Model<>(item.getModelObject()));
 
               setResponsePage(page);
             }
@@ -285,14 +287,14 @@ public class UserAdministrationPage
     WebSession session = getWebApplicationSession();
 
     List<UserDirectory> allUserDirectories = securityService.getUserDirectoriesForOrganisation(
-      session.getOrganisation().getId());
+        session.getOrganisation().getId());
 
     List<UserDirectory> userDirectories = new ArrayList<>();
 
     for (UserDirectory userDirectory : allUserDirectories)
     {
-      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)) &&
-        (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)))
+      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID))
+          && (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)))
       {
         // Do nothing
       }
@@ -309,13 +311,10 @@ public class UserAdministrationPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a user to be confirmed.
    */
-  private class RemoveDialog
-    extends Dialog
+  private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-
     private Label nameLabel;
-
     private String username;
 
     /**
@@ -333,35 +332,35 @@ public class UserAdministrationPage
       add(nameLabel);
 
       add(new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
           {
-            securityService.deleteUser(userDirectory.getId(), username);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                securityService.deleteUser(userDirectory.getId(), username);
 
-            UserAdministrationPage.this.info(
-              "Successfully removed the user " + nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to remove the user (%s): %s", username, e.getMessage()), e);
+                target.add(tableContainer);
 
-            UserAdministrationPage.this.error(
-              "Failed to remove the user " + nameLabel.getDefaultModelObjectAsString());
-          }
+                UserAdministrationPage.this.info("Successfully removed the user "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to remove the user (%s): %s", username,
+                    e.getMessage()), e);
 
-          target.add(getAlerts());
+                UserAdministrationPage.this.error("Failed to remove the user "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      });
+              target.add(getAlerts());
+
+              hide(target);
+            }
+          });
     }
 
     /**

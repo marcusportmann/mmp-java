@@ -85,9 +85,7 @@ public class Debug
       {
         return Boolean.parseBoolean(System.getProperty("guru.mmp.application.debugMode"));
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     return false;

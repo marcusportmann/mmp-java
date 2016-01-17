@@ -16,6 +16,8 @@
 
 package guru.mmp.common.wbxml;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.OutputStream;
 import java.io.Serializable;
 
@@ -31,11 +33,8 @@ public class Document
    * The Public ID for an Unknown WBXML document type.
    */
   public static final int PUBLIC_ID_UNKNOWN = 0x01;
-
   private static final long serialVersionUID = 1000000;
-
   private int publicId = PUBLIC_ID_UNKNOWN;
-
   private Element rootElement = null;
 
   /**

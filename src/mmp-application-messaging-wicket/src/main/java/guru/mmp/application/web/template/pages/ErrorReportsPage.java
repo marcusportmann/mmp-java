@@ -16,22 +16,29 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.ErrorReportSummary;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateMessagingSecurity;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.text.SimpleDateFormat;
+
 import java.util.List;
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ErrorReportsPage</code> class implements the
@@ -41,11 +48,9 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @WebPageSecurity(TemplateMessagingSecurity.FUNCTION_CODE_ERROR_REPORTS)
-public class ErrorReportsPage
-  extends TemplateWebPage
+public class ErrorReportsPage extends TemplateWebPage
 {
   private static final int MAXIMUM_NUMBER_OF_ENTRIES = 50;
-
   private static final long serialVersionUID = 1000000;
 
   /* Messaging Service */
@@ -61,8 +66,8 @@ public class ErrorReportsPage
 
     try
     {
-      LoadableDetachableModel<List<ErrorReportSummary>> ldm = new
-        LoadableDetachableModel<List<ErrorReportSummary>>()
+      LoadableDetachableModel<List<ErrorReportSummary>> ldm =
+          new LoadableDetachableModel<List<ErrorReportSummary>>()
       {
         private static final long serialVersionUID = 1000000;
 
@@ -77,15 +82,15 @@ public class ErrorReportsPage
           }
           catch (Throwable e)
           {
-            throw new WebApplicationException(
-              String.format("Failed to load the form audit log entries for the organisation (%s)",
+            throw new WebApplicationException(String.format(
+                "Failed to load the form audit log entries for the organisation (%s)",
                 session.getOrganisation()), e);
           }
         }
       };
 
-      ListView<ErrorReportSummary> listView = new ListView<ErrorReportSummary>("errorReportSummary",
-        ldm)
+      ListView<ErrorReportSummary> listView = new ListView<ErrorReportSummary>(
+          "errorReportSummary", ldm)
       {
         private static final long serialVersionUID = 1000000;
 

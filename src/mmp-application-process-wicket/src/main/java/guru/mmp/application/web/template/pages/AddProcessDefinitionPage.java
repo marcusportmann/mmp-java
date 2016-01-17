@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -23,20 +25,26 @@ import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateProcessSecurity;
 import guru.mmp.application.web.template.components.ProcessDefinitionInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>AddProcessDefinitionPage</code> class implements the "Add Process Definition"
@@ -45,17 +53,23 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_ADD_PROCESS_DEFINITION)
-public class AddProcessDefinitionPage
-  extends TemplateWebPage
+public class AddProcessDefinitionPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddProcessDefinitionPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Process Service */
   @Inject
   private IProcessService processService;
+
+  /**
+   * Constructs a new <code>AddProcessDefinitionPage</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected AddProcessDefinitionPage() {}
 
   /**
    * Constructs a new <code>AddProcessDefinitionPage</code>.
@@ -68,14 +82,14 @@ public class AddProcessDefinitionPage
 
     try
     {
-      Form<ProcessDefinition> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(new Model<>(new ProcessDefinition())));
+      Form<ProcessDefinition> addForm = new Form<>("addForm", new CompoundPropertyModel<>(
+          new Model<>(new ProcessDefinition())));
 
       addForm.getModelObject().setId(UUID.randomUUID());
       addForm.getModelObject().setVersion(1);
 
       ProcessDefinitionInputPanel processDefinitionInputPanel = new ProcessDefinitionInputPanel(
-        "processDefinition", false);
+          "processDefinition", false);
 
       addForm.add(processDefinitionInputPanel);
 
@@ -132,7 +146,7 @@ public class AddProcessDefinitionPage
             catch (Throwable e)
             {
               logger.error(String.format("Failed to delete the uploaded file (%s)",
-                fileUpload.getClientFileName()), e);
+                  fileUpload.getClientFileName()), e);
             }
           }
         }
@@ -162,12 +176,4 @@ public class AddProcessDefinitionPage
       throw new WebApplicationException("Failed to initialise the AddProcessDefinitionPage", e);
     }
   }
-
-  /**
-   * Constructs a new <code>AddProcessDefinitionPage</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected AddProcessDefinitionPage() {}
 }

@@ -16,10 +16,14 @@
 
 package guru.mmp.application.util;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.InitialContext;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ServiceUtil</code> class provides utility methods that are useful when creating
@@ -45,9 +49,7 @@ public class ServiceUtil
     {
       applicationName = InitialContext.doLookup("java:app/AppName");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (applicationName == null)
     {
@@ -55,17 +57,15 @@ public class ServiceUtil
       {
         applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (applicationName == null)
     {
       logger.error(String.format(
-        "Failed to retrieve the application name from JNDI using the (java:app/AppName) and " +
-          "(java:comp/env/ApplicationName) names while constructing the %s instance name",
-        serviceName));
+          "Failed to retrieve the application name from JNDI using the (java:app/AppName) and "
+          + "(java:comp/env/ApplicationName) names while constructing the %s instance name",
+          serviceName));
 
       applicationName = "Unknown";
     }
@@ -81,8 +81,8 @@ public class ServiceUtil
     catch (Throwable e)
     {
       logger.error(String.format(
-        "Failed to retrieve the server hostname while constructing the %s instance name",
-        serviceName), e);
+          "Failed to retrieve the server hostname while constructing the %s instance name",
+          serviceName), e);
       instanceName = "Unknown";
     }
 
@@ -121,11 +121,9 @@ public class ServiceUtil
       try
       {
         clazz = Thread.currentThread().getContextClassLoader().loadClass(
-          "com.ibm.websphere.management.configservice.ConfigService");
+            "com.ibm.websphere.management.configservice.ConfigService");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
 
       if (clazz != null)
       {
@@ -136,8 +134,8 @@ public class ServiceUtil
         catch (Throwable e)
         {
           logger.error(String.format(
-            "Failed to retrieve the name of the WebSphere server instance from JNDI while " +
-              "constructing the %s instance name", serviceName), e);
+              "Failed to retrieve the name of the WebSphere server instance from JNDI while "
+              + "constructing the %s instance name", serviceName), e);
           instanceName = instanceName + "::Unknown";
         }
       }

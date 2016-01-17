@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 /**
@@ -33,8 +35,7 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public abstract class Expression
-  extends BaseElementWithMixedContent
+public abstract class Expression extends BaseElementWithMixedContent
 {
   /**
    * Constructs a new <code>Expression</code>.

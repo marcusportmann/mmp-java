@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -26,14 +28,15 @@ import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>CodeCategoryDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves <code>CodeCategory</code> instances from the database.
  *
  * @author Marcus Portmann
  */
-public class CodeCategoryDataProvider
-  extends InjectableDataProvider<CodeCategory>
+public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategory>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -48,6 +51,14 @@ public class CodeCategoryDataProvider
 
   /**
    * Constructs a new <code>CodeCategoryDataProvider</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected CodeCategoryDataProvider() {}
+
+  /**
+   * Constructs a new <code>CodeCategoryDataProvider</code>.
    *
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
    */
@@ -55,14 +66,6 @@ public class CodeCategoryDataProvider
   {
     this.retrieveCodes = retrieveCodes;
   }
-
-  /**
-   * Constructs a new <code>CodeCategoryDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected CodeCategoryDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -87,14 +90,13 @@ public class CodeCategoryDataProvider
     {
       List<CodeCategory> allCodeCategories = codesService.getCodeCategories(retrieveCodes);
 
-      return allCodeCategories.subList((int) first,
-        (int) Math.min(first + count, allCodeCategories.size())).iterator();
+      return allCodeCategories.subList((int) first, (int) Math.min(first + count,
+          allCodeCategories.size())).iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the code categories from index (%d) to (%d)", first,
-          first + count), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the code categories from index (%d) to (%d)", first, first + count), e);
     }
   }
 

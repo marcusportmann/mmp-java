@@ -16,6 +16,8 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
 /**
@@ -52,9 +54,8 @@ public interface IUserDirectory
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void adminChangePassword(
-    String username, String newPassword, boolean expirePassword, boolean lockUser,
-    boolean resetPasswordHistory, PasswordChangeReason reason)
+  void adminChangePassword(String username, String newPassword, boolean expirePassword,
+      boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityException;
 
   /**
@@ -71,7 +72,7 @@ public interface IUserDirectory
    */
   void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-    UserNotFoundException, SecurityException;
+        UserNotFoundException, SecurityException;
 
   /**
    * Change the password for the user.
@@ -88,7 +89,7 @@ public interface IUserDirectory
    */
   void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-    ExistingPasswordException, SecurityException;
+        ExistingPasswordException, SecurityException;
 
   /**
    * Create a new group.

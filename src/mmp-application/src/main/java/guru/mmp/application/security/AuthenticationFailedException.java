@@ -25,8 +25,7 @@ package guru.mmp.application.security;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class AuthenticationFailedException
-  extends Exception
+public class AuthenticationFailedException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

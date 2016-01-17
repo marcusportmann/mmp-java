@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.behaviors;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import br.com.digilabs.jqplot.Chart;
 import br.com.digilabs.jqplot.JqPlotUtils;
 import guru.mmp.application.web.WebApplicationException;
@@ -29,21 +31,19 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>JQPlotBehavior</code> class implements the Wicket behavior that enables jqPlot
  * for a control that is assigned the behavior on page load.
  *
  * @author Marcus Portmann
  */
-public class JQPlotBehavior
-  extends Behavior
+public class JQPlotBehavior extends Behavior
 {
   private static final long serialVersionUID = 1000000;
-
   private Chart<?> chart;
-
   private String divId;
-
   private List<String> resources;
 
   /**
@@ -77,8 +77,8 @@ public class JQPlotBehavior
 
       for (String resource : resources)
       {
-        response.render(JavaScriptHeaderItem.forReference(
-          new JavaScriptResourceReference(JQPlotJavaScriptResourceReference.class, resource)));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
+            JQPlotJavaScriptResourceReference.class, resource)));
       }
 
       String json = JqPlotUtils.createJquery(chart, divId);
@@ -88,7 +88,7 @@ public class JQPlotBehavior
     catch (Throwable e)
     {
       throw new WebApplicationException(
-        "Failed the add the jqPlot JavaScript, CSS and JSON header items to the response", e);
+          "Failed the add the jqPlot JavaScript, CSS and JSON header items to the response", e);
     }
   }
 }

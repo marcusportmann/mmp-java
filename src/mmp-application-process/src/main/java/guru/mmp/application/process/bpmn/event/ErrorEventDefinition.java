@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
@@ -23,6 +25,8 @@ import guru.mmp.common.xml.XmlUtils;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorEventDefinition</code> class represents an Error Event Definition that forms part
@@ -44,8 +48,7 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ErrorEventDefinition
-  extends EventDefinition
+public final class ErrorEventDefinition extends EventDefinition
 {
   /**
    * The reference to the error associated with this Error Event Definition.

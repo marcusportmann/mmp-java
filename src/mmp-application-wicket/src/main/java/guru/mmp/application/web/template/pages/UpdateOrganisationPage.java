@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
@@ -33,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UpdateOrganisationPage</code> class implements the
  * "Update Organisation" page for the Web Application Template.
@@ -40,17 +44,21 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_ORGANISATION)
-public class UpdateOrganisationPage
-  extends TemplateWebPage
+public class UpdateOrganisationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateOrganisationPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
+
+  /**
+   * Hidden <code>UpdateOrganisationPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected UpdateOrganisationPage() {}
 
   /**
    * Constructs a new <code>UpdateOrganisationPage</code>.
@@ -64,8 +72,8 @@ public class UpdateOrganisationPage
 
     try
     {
-      Form<Organisation> updateForm = new Form<>("updateForm",
-        new CompoundPropertyModel<>(organisationModel));
+      Form<Organisation> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(
+          organisationModel));
 
       // The "id" field
       TextField<String> idField = new TextFieldWithFeedback<>("id");
@@ -127,10 +135,4 @@ public class UpdateOrganisationPage
       throw new WebApplicationException("Failed to initialise the UpdateOrganisationPage", e);
     }
   }
-
-  /**
-   * Hidden <code>UpdateOrganisationPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateOrganisationPage() {}
 }

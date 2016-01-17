@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessagesModel;
@@ -30,6 +32,8 @@ import org.apache.wicket.request.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>FeedbackList</code> class renders the <code>FeedBackMessage</code>s for the page
  * that are not linked to a particular input control as a set of alerts.
@@ -37,8 +41,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class FeedbackList
-  extends Component
+public class FeedbackList extends Component
   implements IFeedback
 {
   private static final long serialVersionUID = 1000000;
@@ -64,8 +67,8 @@ public class FeedbackList
    */
   protected List<FeedbackMessage> getFilteredMessages()
   {
-    @SuppressWarnings("unchecked") List<FeedbackMessage> messages = (List<FeedbackMessage>)
-      getDefaultModelObject();
+    @SuppressWarnings("unchecked")
+    List<FeedbackMessage> messages = (List<FeedbackMessage>) getDefaultModelObject();
 
     List<FeedbackMessage> filteredMessages = new ArrayList<>();
 

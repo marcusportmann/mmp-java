@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.ResourceUtil;
 import guru.mmp.common.xml.XmlSchemaClasspathInputSource;
 import org.w3c.dom.Document;
@@ -34,6 +36,8 @@ import javax.xml.validation.SchemaFactory;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Parser</code> class provides the capability to parse the XML definition for a Process.
@@ -61,44 +65,44 @@ public class Parser
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
       schemaFactory.setResourceResolver(new LSResourceResolver()
-      {
-        @Override
-        public LSInput resolveResource(
-          String type, String namespaceURI, String publicId, String systemId, String baseURI)
-        {
-          switch (systemId)
           {
-            case "BPMNDI.xsd":
+            @Override
+            public LSInput resolveResource(String type, String namespaceURI, String publicId,
+                String systemId, String baseURI)
             {
-              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                "META-INF/BPMNDI.xsd");
+              switch (systemId)
+              {
+                case "BPMNDI.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId,
+                      baseURI, "META-INF/BPMNDI.xsd");
+                }
+
+                case "DC.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId,
+                      baseURI, "META-INF/DC.xsd");
+                }
+
+                case "DI.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId,
+                      baseURI, "META-INF/DI.xsd");
+                }
+
+                case "Semantic.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId,
+                      baseURI, "META-INF/Semantic.xsd");
+                }
+              }
+
+              throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");
             }
+          });
 
-            case "DC.xsd":
-            {
-              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                "META-INF/DC.xsd");
-            }
-
-            case "DI.xsd":
-            {
-              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                "META-INF/DI.xsd");
-            }
-
-            case "Semantic.xsd":
-            {
-              return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                "META-INF/Semantic.xsd");
-            }
-          }
-
-          throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");
-        }
-      });
-
-      Schema schema = schemaFactory.newSchema(new StreamSource(
-        new ByteArrayInputStream(ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))));
+      Schema schema = schemaFactory.newSchema(new StreamSource(new ByteArrayInputStream(
+          ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))));
 
       DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
       documentBuilderFactory.setValidating(false);
@@ -127,8 +131,8 @@ public class Parser
           }
           else
           {
-            throw new ParserException(
-              "Failed to parse the unknown node (" + element.getNodeName() + ")");
+            throw new ParserException("Failed to parse the unknown node (" + element.getNodeName()
+                + ")");
           }
         }
       }

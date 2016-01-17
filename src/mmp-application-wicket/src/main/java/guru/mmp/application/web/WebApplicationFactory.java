@@ -16,11 +16,15 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
 
 import javax.naming.InitialContext;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebApplicationFactory</code> class implements the <code>IWebApplicationFactory</code>
@@ -51,9 +55,7 @@ public class WebApplicationFactory
     {
       applicationClass = InitialContext.doLookup("java:app/env/ApplicationClass");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (applicationClass == null)
     {
@@ -61,16 +63,14 @@ public class WebApplicationFactory
       {
         applicationClass = InitialContext.doLookup("java:comp/env/ApplicationClass");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (applicationClass == null)
     {
       throw new WebApplicationException(
-        "Failed to retrieve the web application class using the JNDI environment entries " +
-          "(java:app/env/ApplicationClass) and (java:comp/env/ApplicationClass)");
+          "Failed to retrieve the web application class using the JNDI environment entries "
+          + "(java:app/env/ApplicationClass) and (java:comp/env/ApplicationClass)");
     }
 
     Object webApplicationObject;
@@ -83,8 +83,8 @@ public class WebApplicationFactory
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        "The web application class (" + applicationClass + ")" + " could not be instantiated", e);
+      throw new WebApplicationException("The web application class (" + applicationClass + ")"
+          + " could not be instantiated", e);
     }
 
     try
@@ -92,8 +92,7 @@ public class WebApplicationFactory
       WebApplicationInjector webApplicationInjector = new WebApplicationInjector();
 
       guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
-        .WebApplication.class.cast(
-        webApplicationObject);
+          .WebApplication.class.cast(webApplicationObject);
 
       webApplication.setWebApplicationInjector(webApplicationInjector);
 
@@ -108,7 +107,7 @@ public class WebApplicationFactory
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to create the WebApplication: " + e.getMessage(),
-        e);
+          e);
     }
   }
 

@@ -16,6 +16,8 @@
 
 package guru.mmp.service.sample.ws;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.service.ws.security.WebServiceSecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +29,14 @@ import javax.jws.WebService;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SampleServiceBean</code> class implements the Sample Service.
  */
 @HandlerChain(file = "/META-INF/SampleServiceSecurity.xml")
 @WebService(name = "ISampleService", portName = "SampleService", serviceName = "SampleService",
-  targetNamespace = "http://ws.sample.services.mmp.guru")
+    targetNamespace = "http://ws.sample.services.mmp.guru")
 @SuppressWarnings("unused")
 public class SampleServiceBean
 {
@@ -45,20 +49,19 @@ public class SampleServiceBean
    * @return the version for the web service
    */
   @WebMethod(operationName = "GetVersion",
-    action = "http://ws.sample.service.mmp.guru/ISampleService/GetVersion")
+      action = "http://ws.sample.service.mmp.guru/ISampleService/GetVersion")
   @WebResult(name = "out", targetNamespace = "http://ws.sample.service.mmp.guru")
   @RequestWrapper(localName = "GetVersion", targetNamespace = "http://ws.sample.service.mmp.guru",
-    className = "guru.mmp.service.sample.ws.GetVersion")
+      className = "guru.mmp.service.sample.ws.GetVersion")
   @ResponseWrapper(localName = "GetVersionResponse",
-    targetNamespace = "http://ws.sample.service.mmp.guru",
-    className = "guru.mmp.service.sample.ws.GetVersionResponse")
+      targetNamespace = "http://ws.sample.service.mmp.guru",
+      className = "guru.mmp.service.sample.ws.GetVersionResponse")
   public String getVersion()
   {
     if (WebServiceSecurityContext.getContext().getClientCertificate() != null)
     {
-      logger.info("Found client certificate (" +
-        WebServiceSecurityContext.getContext().getClientCertificate().getSubjectDN().toString() +
-        ")");
+      logger.info("Found client certificate (" + WebServiceSecurityContext.getContext()
+          .getClientCertificate().getSubjectDN().toString() + ")");
     }
     else
     {

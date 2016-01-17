@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -26,6 +28,8 @@ import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BoundaryEvent</code> class represents a Boundary Event that forms part of a Process.
@@ -54,8 +58,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class BoundaryEvent
-  extends CatchEvent
+public final class BoundaryEvent extends CatchEvent
 {
   /**
    * The reference to the element the Boundary Event is attached to.
@@ -81,8 +84,8 @@ public final class BoundaryEvent
 
     try
     {
-      this.cancelActivity = StringUtil.isNullOrEmpty(element.getAttribute("cancelActivity")) ||
-        Boolean.parseBoolean(element.getAttribute("cancelActivity"));
+      this.cancelActivity = StringUtil.isNullOrEmpty(element.getAttribute("cancelActivity"))
+          || Boolean.parseBoolean(element.getAttribute("cancelActivity"));
 
       if (!StringUtil.isNullOrEmpty("attachedToRef"))
       {

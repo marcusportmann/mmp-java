@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,19 +31,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>WebApplicationServlet</code> servlet provides a servlet-based alternative to
  * the <code>WebApplicationFilter</code> filter.
  *
  * @author Marcus Portmann
  */
-public class WebApplicationServlet
-  extends HttpServlet
+public class WebApplicationServlet extends HttpServlet
 {
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(WebApplicationServlet.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* The filter where all the processing is done. */
@@ -85,50 +87,50 @@ public class WebApplicationServlet
     }
     catch (Throwable e)
     {
-      throw new ServletException(
-        "Failed to initialise the WebApplicationServlet: " + "Failed to perform CDI injection " +
-          "on the WebApplicationFilter", e);
+      throw new ServletException("Failed to initialise the WebApplicationServlet: "
+          + "Failed to perform CDI injection " + "on the WebApplicationFilter", e);
     }
 
     // Initialise the WebApplicationFilter
-    webApplicationFilter.init(true, new FilterConfig()
-    {
-      /**
-       * @see javax.servlet.FilterConfig#getFilterName()
-       */
-      @Override
-      public String getFilterName()
-      {
-        return WebApplicationServlet.this.getServletName();
-      }
+    webApplicationFilter.init(true,
+        new FilterConfig()
+        {
+          /**
+           * @see javax.servlet.FilterConfig#getFilterName()
+           */
+          @Override
+          public String getFilterName()
+          {
+            return WebApplicationServlet.this.getServletName();
+          }
 
-      /**
-       * @see javax.servlet.FilterConfig#getInitParameter(java.lang.String)
-       */
-      @Override
-      public String getInitParameter(String name)
-      {
-        return WebApplicationServlet.this.getInitParameter(name);
-      }
+          /**
+           * @see javax.servlet.FilterConfig#getInitParameter(java.lang.String)
+           */
+          @Override
+          public String getInitParameter(String name)
+          {
+            return WebApplicationServlet.this.getInitParameter(name);
+          }
 
-      /**
-       * @see javax.servlet.FilterConfig#getInitParameterNames()
-       */
-      @Override
-      public Enumeration<String> getInitParameterNames()
-      {
-        return WebApplicationServlet.this.getInitParameterNames();
-      }
+          /**
+           * @see javax.servlet.FilterConfig#getInitParameterNames()
+           */
+          @Override
+          public Enumeration<String> getInitParameterNames()
+          {
+            return WebApplicationServlet.this.getInitParameterNames();
+          }
 
-      /**
-       * @see javax.servlet.FilterConfig#getServletContext()
-       */
-      @Override
-      public ServletContext getServletContext()
-      {
-        return WebApplicationServlet.this.getServletContext();
-      }
-    });
+          /**
+           * @see javax.servlet.FilterConfig#getServletContext()
+           */
+          @Override
+          public ServletContext getServletContext()
+          {
+            return WebApplicationServlet.this.getServletContext();
+          }
+        });
   }
 
   /**

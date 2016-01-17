@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.MarkupStream;
 
@@ -25,8 +27,7 @@ import org.apache.wicket.markup.MarkupStream;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class BlankComponent
-  extends Component
+public class BlankComponent extends Component
 {
   private static final long serialVersionUID = 1000000;
 

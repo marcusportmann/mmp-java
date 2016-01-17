@@ -16,6 +16,8 @@
 
 package guru.mmp.common.service.ws.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.security.cert.X509Certificate;
 
 /**
@@ -28,7 +30,7 @@ import java.security.cert.X509Certificate;
 public class WebServiceSecurityContext
 {
   private static ThreadLocal<WebServiceSecurityContext> threadLocalWebServiceSecurityContext =
-    new ThreadLocal<WebServiceSecurityContext>()
+      new ThreadLocal<WebServiceSecurityContext>()
   {
     @Override
     protected WebServiceSecurityContext initialValue()

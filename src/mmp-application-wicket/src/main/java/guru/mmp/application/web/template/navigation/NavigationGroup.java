@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.navigation;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Page;
 
 import java.io.Serializable;
@@ -23,18 +25,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>NavigationGroup</code> class stores the information for a navigation group which
  * groups a number of navigation items under an application's navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-public class NavigationGroup
-  extends NavigationItem
+public class NavigationGroup extends NavigationItem
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private List<NavigationItem> items;
 
   /**
@@ -137,31 +139,32 @@ public class NavigationGroup
    */
   public void sortItems()
   {
-    Collections.sort(items, (navigationItem1, navigationItem2) -> {
-      if ((navigationItem1 instanceof NavigationLink) &&
-        ((navigationItem2 instanceof NavigationLink)))
-      {
-        return navigationItem1.getName().compareTo(navigationItem2.getName());
-      }
-      else if ((navigationItem1 instanceof NavigationGroup) &&
-        ((navigationItem2 instanceof NavigationGroup)))
-      {
-        return navigationItem1.getName().compareTo(navigationItem2.getName());
-      }
-      else if ((navigationItem1 instanceof NavigationLink) &&
-        ((navigationItem2 instanceof NavigationGroup)))
-      {
-        return -1;
-      }
-      else if ((navigationItem1 instanceof NavigationGroup) &&
-        ((navigationItem2 instanceof NavigationLink)))
-      {
-        return 1;
-      }
-      else
-      {
-        return navigationItem1.getName().compareTo(navigationItem2.getName());
-      }
-    });
+    Collections.sort(items,
+        (navigationItem1, navigationItem2) -> {
+          if ((navigationItem1 instanceof NavigationLink)
+              && ((navigationItem2 instanceof NavigationLink)))
+          {
+            return navigationItem1.getName().compareTo(navigationItem2.getName());
+          }
+          else if ((navigationItem1 instanceof NavigationGroup)
+              && ((navigationItem2 instanceof NavigationGroup)))
+          {
+            return navigationItem1.getName().compareTo(navigationItem2.getName());
+          }
+          else if ((navigationItem1 instanceof NavigationLink)
+              && ((navigationItem2 instanceof NavigationGroup)))
+          {
+            return -1;
+          }
+          else if ((navigationItem1 instanceof NavigationGroup)
+              && ((navigationItem2 instanceof NavigationLink)))
+          {
+            return 1;
+          }
+          else
+          {
+            return navigationItem1.getName().compareTo(navigationItem2.getName());
+          }
+        });
   }
 }

@@ -16,15 +16,21 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.ErrorReportSummary;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ErrorReportSummaryDataProvider</code> class provides an
@@ -34,8 +40,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ErrorReportSummaryDataProvider
-  extends InjectableDataProvider<ErrorReportSummary>
+public class ErrorReportSummaryDataProvider extends InjectableDataProvider<ErrorReportSummary>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -50,6 +55,13 @@ public class ErrorReportSummaryDataProvider
 
   /**
    * Constructs a new <code>ErrorReportSummaryDataProvider</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  protected ErrorReportSummaryDataProvider() {}
+
+  /**
+   * Constructs a new <code>ErrorReportSummaryDataProvider</code>.
    *
    * @param maximumNumberOfEntries the maximum number of summaries for the most recent error
    *                               reports to retrieve
@@ -58,13 +70,6 @@ public class ErrorReportSummaryDataProvider
   {
     this.maximumNumberOfEntries = maximumNumberOfEntries;
   }
-
-  /**
-   * Constructs a new <code>ErrorReportSummaryDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  protected ErrorReportSummaryDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -87,18 +92,17 @@ public class ErrorReportSummaryDataProvider
   {
     try
     {
-      List<ErrorReportSummary> allErrorReportSummaries = messagingService
-        .getMostRecentErrorReportSummaries(
-        maximumNumberOfEntries);
+      List<ErrorReportSummary> allErrorReportSummaries =
+          messagingService.getMostRecentErrorReportSummaries(maximumNumberOfEntries);
 
-      return allErrorReportSummaries.subList((int) first,
-        (int) Math.min(first + count, allErrorReportSummaries.size())).iterator();
+      return allErrorReportSummaries.subList((int) first, (int) Math.min(first + count,
+          allErrorReportSummaries.size())).iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the summaries for the error reports from index (%d) to (%d)",
-          first, first + count), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the summaries for the error reports from index (%d) to (%d)", first,
+          first + count), e);
     }
   }
 
@@ -141,8 +145,8 @@ public class ErrorReportSummaryDataProvider
     catch (Throwable e)
     {
       throw new WebApplicationException(
-        "Failed to retrieve the total number of summaries for the error reports in the database",
-        e);
+          "Failed to retrieve the total number of summaries for the error reports in the database",
+          e);
     }
   }
 }

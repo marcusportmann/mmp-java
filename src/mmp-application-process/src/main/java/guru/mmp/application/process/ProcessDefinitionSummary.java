@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -47,6 +49,12 @@ public class ProcessDefinitionSummary
 
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
+   */
+  @SuppressWarnings("unused")
+  private ProcessDefinitionSummary() {}
+
+  /**
+   * Constructs a new <code>ProcessDefinitionSummary</code>.
    *
    * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the process
    *                definition
@@ -59,12 +67,6 @@ public class ProcessDefinitionSummary
     this.version = version;
     this.name = name;
   }
-
-  /**
-   * Constructs a new <code>ProcessDefinitionSummary</code>.
-   */
-  @SuppressWarnings("unused")
-  private ProcessDefinitionSummary() {}
 
   /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the process

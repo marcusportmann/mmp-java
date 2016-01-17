@@ -38,8 +38,13 @@ public enum TransactionMethod
   COMPENSATE("Compensate", "Compensate"), IMAGE("Image", "Image"), STORE("Store", "Store");
 
   private String id;
-
   private String name;
+
+  TransactionMethod(String id, String name)
+  {
+    this.id = id;
+    this.name = name;
+  }
 
   /**
    * Returns the transaction method given by the specified ID.
@@ -64,12 +69,6 @@ public enum TransactionMethod
       default:
         throw new RuntimeException("Invalid ID for transaction method (" + id + ")");
     }
-  }
-
-  TransactionMethod(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
   }
 
   /**

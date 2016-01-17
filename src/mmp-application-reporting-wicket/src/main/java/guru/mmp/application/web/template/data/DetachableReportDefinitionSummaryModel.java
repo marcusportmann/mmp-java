@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
@@ -24,6 +26,8 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DetachableReportDefinitionSummaryModel</code> class provides a detachable model
  * implementation for the <code>ReportDefinitionSummary</code> model class.
@@ -31,7 +35,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public class DetachableReportDefinitionSummaryModel
-  extends InjectableLoadableDetachableModel<ReportDefinitionSummary>
+    extends InjectableLoadableDetachableModel<ReportDefinitionSummary>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -43,6 +47,14 @@ public class DetachableReportDefinitionSummaryModel
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
+
+  /**
+   * Constructs a new <code>DetachableReportDefinitionSummaryModel</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected DetachableReportDefinitionSummaryModel() {}
 
   /**
    * Constructs a new <code>DetachableReportDefinitionSummaryModel</code>.
@@ -68,14 +80,6 @@ public class DetachableReportDefinitionSummaryModel
   }
 
   /**
-   * Constructs a new <code>DetachableReportDefinitionSummaryModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected DetachableReportDefinitionSummaryModel() {}
-
-  /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
    */
   @Override
@@ -87,8 +91,8 @@ public class DetachableReportDefinitionSummaryModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the summary for the report definition (%s)", id), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the summary for the report definition (%s)", id), e);
     }
   }
 

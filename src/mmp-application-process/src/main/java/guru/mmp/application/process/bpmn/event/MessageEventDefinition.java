@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
@@ -25,6 +27,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.namespace.QName;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageEventDefinition</code> class represents a Message Event Definition that forms
@@ -49,8 +53,7 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class MessageEventDefinition
-  extends EventDefinition
+public final class MessageEventDefinition extends EventDefinition
 {
   /**
    * The reference to the message for the Message Event.

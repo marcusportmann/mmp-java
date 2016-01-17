@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
 import org.w3c.dom.Element;
@@ -23,6 +25,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.namespace.QName;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BaseElement</code> class provides the base class that all BPMN elements that form part

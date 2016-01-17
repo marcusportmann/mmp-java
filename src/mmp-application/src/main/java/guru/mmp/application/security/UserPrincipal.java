@@ -16,6 +16,8 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.security.Principal;
 
 /**

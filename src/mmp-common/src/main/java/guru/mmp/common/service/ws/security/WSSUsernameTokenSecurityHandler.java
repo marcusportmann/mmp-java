@@ -16,19 +16,26 @@
 
 package guru.mmp.common.service.ws.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.RequestData;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import java.io.ByteArrayOutputStream;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * The <code>WSSUsernameTokenSecurityHandler</code> class is a JAX-WS handler that implements the
@@ -44,22 +51,14 @@ public class WSSUsernameTokenSecurityHandler
    */
   @SuppressWarnings("unused")
   protected static final String FLOW_CONFIG_OPTION = "flow";
-
-  private static final String WSS_USERNAME_TOKEN_PROFILE_PASSWORD_TEXT_TYPE = "http://docs" +
-    ".oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
-
-  private static final String WSS_WS_SECURITY_UTILITY_NAMESPACE =
-    "http://docs.oasis-open" + ".org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd";
+  private static final String WSS_USERNAME_TOKEN_PROFILE_PASSWORD_TEXT_TYPE = "http://docs"
+      + ".oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
+  private static final String WSS_WS_SECURITY_UTILITY_NAMESPACE = "http://docs.oasis-open"
+      + ".org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(
-    WSSUsernameTokenSecurityHandler.class);
-
-  /**
-   * The password to use when accessing a web service with WS-Security Username Token security
-   * enabled.
-   */
-  private String password;
+      WSSUsernameTokenSecurityHandler.class);
 
   /**
    * The SOAP Protocol 1.1 factory.
@@ -72,10 +71,21 @@ public class WSSUsernameTokenSecurityHandler
   private SOAPFactory soap12Factory = null;
 
   /**
+   * The password to use when accessing a web service with WS-Security Username Token security
+   * enabled.
+   */
+  private String password;
+
+  /**
    * The username to use when accessing a web service with WS-Security Username Token security
    * enabled.
    */
   private String username;
+
+  /**
+   * The enumeration identifying the possible SOAP protocol versions.
+   */
+  enum SOAPVersion { SOAP_1_1, SOAP_1_2 }
 
   /**
    * Constructs a new <code>WSSUsernameTokenSecurityHandler</code>.
@@ -97,8 +107,8 @@ public class WSSUsernameTokenSecurityHandler
     catch (SOAPException e)
     {
       throw new WebServiceSecurityHandlerException(
-        "Failed to initialise the WS-Security Username Token security handler: " + "The SOAP 1" +
-          ".1 factory could not be initialised", e);
+          "Failed to initialise the WS-Security Username Token security handler: " + "The SOAP 1"
+          + ".1 factory could not be initialised", e);
     }
 
     try
@@ -108,8 +118,8 @@ public class WSSUsernameTokenSecurityHandler
     catch (SOAPException e)
     {
       throw new WebServiceSecurityHandlerException(
-        "Failed to initialise the WS-Security Username Token security handler: " + "The SOAP 1" +
-          ".2 factory could not be initialised", e);
+          "Failed to initialise the WS-Security Username Token security handler: " + "The SOAP 1"
+          + ".2 factory could not be initialised", e);
     }
   }
 
@@ -136,8 +146,8 @@ public class WSSUsernameTokenSecurityHandler
   public Set<QName> getHeaders()
   {
     QName securityHeader = new QName(
-      "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
-      "Security");
+        "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
+        "Security");
 
     HashSet<QName> headers = new HashSet<>();
 
@@ -177,8 +187,8 @@ public class WSSUsernameTokenSecurityHandler
   @Override
   public boolean handleMessage(SOAPMessageContext messageContext)
   {
-    Boolean outboundProperty = (Boolean) messageContext.get(
-      MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+    Boolean outboundProperty = (Boolean) messageContext.get(MessageContext
+        .MESSAGE_OUTBOUND_PROPERTY);
 
     RequestData requestData = new RequestData();
 
@@ -213,8 +223,8 @@ public class WSSUsernameTokenSecurityHandler
     catch (Throwable e)
     {
       throw new WebServiceSecurityHandlerException(
-        "The WS-Security Username Token security handler" + " failed to handle the SOAP message",
-        e);
+          "The WS-Security Username Token security handler" + " failed to handle the SOAP message",
+          e);
     }
     finally
     {
@@ -296,8 +306,8 @@ public class WSSUsernameTokenSecurityHandler
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to determine the SOAP protocol version: " + e.getMessage(),
-        e);
+      throw new RuntimeException("Failed to determine the SOAP protocol version: "
+          + e.getMessage(), e);
     }
 
     if (soapNS.equalsIgnoreCase(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE))
@@ -310,9 +320,8 @@ public class WSSUsernameTokenSecurityHandler
     }
     else
     {
-      throw new RuntimeException(
-        "Unable to determine the SOAP protocol version from the envelope" + " namespace (" +
-          soapNS + ")");
+      throw new RuntimeException("Unable to determine the SOAP protocol version from the envelope"
+          + " namespace (" + soapNS + ")");
     }
   }
 
@@ -335,7 +344,7 @@ public class WSSUsernameTokenSecurityHandler
       SOAPHeader header = envelope.addHeader();
 
       SOAPElement securityElement = header.addChildElement("Security", "wsse",
-        "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
+          "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
 
       SOAPElement usernameTokenElement = securityElement.addChildElement("UsernameToken", "wsse");
 
@@ -354,9 +363,8 @@ public class WSSUsernameTokenSecurityHandler
     }
     catch (Throwable e)
     {
-      throw new WebServiceSecurityHandlerException(
-        "Failed to add the WS-Security Username Token " + "authentication credentials to the " +
-          "request being sent to the web service", e);
+      throw new WebServiceSecurityHandlerException("Failed to add the WS-Security Username Token "
+          + "authentication credentials to the " + "request being sent to the web service", e);
     }
   }
 
@@ -380,13 +388,5 @@ public class WSSUsernameTokenSecurityHandler
     }
 
     return encoding;
-  }
-
-  /**
-   * The enumeration identifying the possible SOAP protocol versions.
-   */
-  enum SOAPVersion
-  {
-    SOAP_1_1, SOAP_1_2
   }
 }

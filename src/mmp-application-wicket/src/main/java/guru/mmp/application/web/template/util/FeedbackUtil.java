@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.util;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -24,6 +26,8 @@ import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
 
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>FeedbackUtil</code> class is a utility class that provides methods for working with
@@ -38,25 +42,25 @@ public class FeedbackUtil
    * that has an error message.
    */
   public static final AttributeModifier HAS_ERROR_CSS_CLASS_MODIFIER = AttributeModifier.append(
-    "class", " has-error");
+      "class", " has-error");
 
   /**
    * The JavaScript used to clear the feedback for a form component.
    */
   private static final String CLEAR_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT =
-    "clear_form_component_feedback('%1$s');";
+      "clear_form_component_feedback('%1$s');";
 
   /**
    * The JavaScript used to display the feedback for a form component using the 'domready' event.
    */
-  private static final String DOM_READY_SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT = "$(function()" +
-    "{show_form_component_feedback('%1$s', '%2$s', '%3$s');});";
+  private static final String DOM_READY_SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT = "$(function()"
+      + "{show_form_component_feedback('%1$s', '%2$s', '%3$s');});";
 
   /**
    * The JavaScript used to display the feedback for a form component.
    */
   private static final String SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT =
-    "show_form_component_feedback('%1$s', '%2$s', " + "'%3$s');";
+      "show_form_component_feedback('%1$s', '%2$s', " + "'%3$s');";
 
   /**
    * Applies the appropriate CSS class to a component based on the type of feedback message
@@ -95,8 +99,8 @@ public class FeedbackUtil
    * @return the JavaScript to display the feedback message or <code>null</code>
    * if there is no feedback for the specified component
    */
-  public static String generateFeedbackJavaScript(
-    String id, Component component, boolean isAjaxRequest)
+  public static String generateFeedbackJavaScript(String id, Component component,
+      boolean isAjaxRequest)
   {
     if (component.hasFeedbackMessage())
     {
@@ -127,9 +131,10 @@ public class FeedbackUtil
         feedbackClass = "has-success";
       }
 
-      String javaScript = String.format(isAjaxRequest ? SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT
+      String javaScript = String.format(isAjaxRequest
+          ? SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT
           : DOM_READY_SHOW_FORM_COMPONENT_FEEDBACK_JAVA_SCRIPT, id, feedbackClass,
-        JavaScriptUtils.escapeQuotes(feedbackMessage.getMessage().toString()));
+              JavaScriptUtils.escapeQuotes(feedbackMessage.getMessage().toString()));
 
       // Clear the feedback messages for the component
       for (FeedbackMessage componentFeedbackMessage : feedbackMessages)

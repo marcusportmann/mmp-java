@@ -16,6 +16,8 @@
 
 package guru.mmp.common.model;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,11 +33,9 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ValidationException
-  extends ModelException
+public class ValidationException extends ModelException
 {
   private static final long serialVersionUID = 1000000;
-
   private List<ValidationError> errors = new ArrayList<>();
 
   /**

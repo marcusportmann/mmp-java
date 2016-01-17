@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -23,6 +25,8 @@ import org.apache.wicket.model.IModel;
 
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryChoiceRenderer</code> class implements a <code>ChoiceRenderer</code> for

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.cdi;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.proxy.IProxyTargetLocator;
 
@@ -25,6 +27,8 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import java.lang.annotation.Annotation;
 import java.util.Set;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CDIProxyTargetLocator</code> class provides a <code>IProxyTargetLocator</code>
@@ -76,17 +80,17 @@ public class CDIProxyTargetLocator
     catch (Throwable e)
     {
       throw new WicketRuntimeException(String.format(
-        "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-          "(%s): Failed to retrieve the CDI BeanManager from JNDI", type.getName(),
-        getQualifiersAsString()), e);
+          "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers "
+          + "(%s): Failed to retrieve the CDI BeanManager from JNDI", type.getName(),
+          getQualifiersAsString()), e);
     }
 
     if (beanManager == null)
     {
       throw new WicketRuntimeException(String.format(
-        "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-          "(%s): Failed to retrieve the CDI BeanManager from JNDI", type.getName(),
-        getQualifiersAsString()));
+          "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers "
+          + "(%s): Failed to retrieve the CDI BeanManager from JNDI", type.getName(),
+          getQualifiersAsString()));
     }
 
     CreationalContext<Object> creationalContext;
@@ -98,7 +102,7 @@ public class CDIProxyTargetLocator
     catch (Throwable e)
     {
       throw new WicketRuntimeException(
-        "Failed to locate the proxy target: Failed to create the CDI CreationalContext", e);
+          "Failed to locate the proxy target: Failed to create the CDI CreationalContext", e);
     }
 
     Set<Bean<?>> beans = beanManager.getBeans(type, qualifiers);
@@ -110,8 +114,8 @@ public class CDIProxyTargetLocator
     else if (beans.size() == 0)
     {
       throw new WicketRuntimeException(String.format(
-        "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-          "(%s): No matching bean found", type.getName(), getQualifiersAsString()));
+          "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers "
+          + "(%s): No matching bean found", type.getName(), getQualifiersAsString()));
     }
 
 //  for (Bean<?> bean : beans)
@@ -145,9 +149,9 @@ public class CDIProxyTargetLocator
     }
 
     throw new WicketRuntimeException(String.format(
-      "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers " +
-        "(%s): Unable to determine which bean to use from [%s]", type.getName(),
-      getQualifiersAsString(), buffer.toString()));
+        "Failed to locate the proxy target: Failed to resolve the CDI bean (%s) with qualifiers "
+        + "(%s): Unable to determine which bean to use from [%s]", type.getName(),
+        getQualifiersAsString(), buffer.toString()));
   }
 
   private String getQualifiersAsString()

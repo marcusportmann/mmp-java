@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -22,13 +24,11 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "import")
-public class Import
-  extends Annotated
+public class Import extends Annotated
 {
   @XmlAttribute(name = "namespace")
   @XmlSchemaType(name = "anyURI")
   protected String namespace;
-
   @XmlAttribute(name = "schemaLocation")
   @XmlSchemaType(name = "anyURI")
   protected String schemaLocation;

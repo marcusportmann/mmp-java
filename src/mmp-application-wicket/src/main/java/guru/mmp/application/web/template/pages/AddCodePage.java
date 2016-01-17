@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -33,6 +35,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AddCodePage</code> class implements the
  * "Add Code" page for the Web Application Template.
@@ -40,17 +44,21 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_CODE)
-public class AddCodePage
-  extends TemplateWebPage
+public class AddCodePage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddCodePage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
   @Inject
   private ICodesService codesService;
+
+  /**
+   * Hidden <code>AddCodePage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected AddCodePage() {}
 
   /**
    * Constructs a new <code>AddCodePage</code>.
@@ -64,8 +72,8 @@ public class AddCodePage
 
     try
     {
-      Form<Code> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(new Model<>(new Code())));
+      Form<Code> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(
+          new Code())));
 
       addForm.getModelObject().setCategoryId(codeCategoryId);
 
@@ -116,10 +124,4 @@ public class AddCodePage
       throw new WebApplicationException("Failed to initialise the AddCodePage", e);
     }
   }
-
-  /**
-   * Hidden <code>AddCodePage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddCodePage() {}
 }

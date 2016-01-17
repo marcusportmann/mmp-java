@@ -55,11 +55,16 @@ package guru.mmp.application.process.bpmn.activity;
 public enum LoopType
 {
   NONE(0, "None"), STANDARD(1, "Standard"), PARALLEL_MULTI_INSTANCE(2, "Parallel Multi-Instance"),
-  SEQUENTIAL_MULTI_INSTANCE(4, "Sequential Multi-Instance");
+      SEQUENTIAL_MULTI_INSTANCE(4, "Sequential Multi-Instance");
 
   private int code;
-
   private String name;
+
+  LoopType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
+  }
 
   /**
    * Returns the loop type given by the specified numeric code value.
@@ -87,12 +92,6 @@ public enum LoopType
       default:
         return LoopType.NONE;
     }
-  }
-
-  LoopType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
   }
 
   /**

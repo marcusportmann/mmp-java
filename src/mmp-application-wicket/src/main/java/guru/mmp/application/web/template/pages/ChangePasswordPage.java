@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
@@ -48,28 +50,24 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ChangePasswordPage</code> class implements the "Change Password" page for the Web
  * Application Template.
  *
  * @author Marcus Portmann
  */
-public class ChangePasswordPage
-  extends WebPage
+public class ChangePasswordPage extends WebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ChangePasswordPage.class);
-
   private static final long serialVersionUID = 1000000;
-
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
-
   @SuppressWarnings("unused")
   private String confirmPassword;
-
   @SuppressWarnings("unused")
   private String newPassword;
-
   @SuppressWarnings("unused")
   private String oldPassword;
 
@@ -81,8 +79,7 @@ public class ChangePasswordPage
    * Constructs a new <code>ChangePasswordPage</code>.
    */
   @SuppressWarnings("unused")
-  protected ChangePasswordPage()
-  {}
+  protected ChangePasswordPage() {}
 
   /**
    * Constructs a new <code>ChangePasswordPage</code>.
@@ -94,8 +91,8 @@ public class ChangePasswordPage
     try
     {
       // Setup the page title
-      String title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | Change " +
-        "Password";
+      String title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | Change "
+          + "Password";
 
       Label titleLabel = new Label("pageTitle", title);
       titleLabel.setRenderBodyOnly(false);
@@ -113,14 +110,14 @@ public class ChangePasswordPage
 
       // The "oldPassword" field
       PasswordTextField oldPasswordField = new PasswordTextFieldWithFeedback("oldPassword",
-        new PropertyModel<>(this, "oldPassword"));
+          new PropertyModel<>(this, "oldPassword"));
       oldPasswordField.setRequired(true);
       oldPasswordField.add(new DefaultFocusBehavior());
       changePasswordForm.add(oldPasswordField);
 
       // The "newPassword" field
       PasswordTextField newPasswordField = new PasswordTextFieldWithFeedback("newPassword",
-        new PropertyModel<>(this, "newPassword"));
+          new PropertyModel<>(this, "newPassword"));
       newPasswordField.setRequired(true);
       newPasswordField.add(StringValidator.minimumLength(6));
       newPasswordField.add(new PasswordPolicyValidator());
@@ -128,121 +125,122 @@ public class ChangePasswordPage
 
       // The "confirmPassword" field
       PasswordTextField confirmPasswordField = new PasswordTextFieldWithFeedback("confirmPassword",
-        new PropertyModel<>(this, "confirmPassword"));
+          new PropertyModel<>(this, "confirmPassword"));
       confirmPasswordField.setRequired(true);
       changePasswordForm.add(confirmPasswordField);
 
-      changePasswordForm.add(new EqualPasswordInputValidator(newPasswordField, confirmPasswordField));
+      changePasswordForm.add(new EqualPasswordInputValidator(newPasswordField,
+          confirmPasswordField));
 
       // The "changePasswordButton" button
       changePasswordForm.add(new Button("changePasswordButton")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onSubmit()
-        {
-          try
           {
-            // Authenticate the user
-            UUID userDirectoryId = securityService.changePassword(username, oldPassword,
-              newPassword);
+            private static final long serialVersionUID = 1000000;
 
-            // Retrieve the user details
-            User user = securityService.getUser(userDirectoryId, username);
-
-            // Initialise the web session for the user
-            WebSession session = getWebApplicationSession();
-
-            session.setUserDirectoryId(user.getUserDirectoryId());
-            session.setUsername(user.getUsername());
-            session.setUserFullName(user.getFirstNames() + user.getLastName());
-
-            // Make session permanent after login
-            if (session.isTemporary())
+            @Override
+            public void onSubmit()
             {
-              session.bind();
-            }
-            else
-            {
-              session.dirty();  // for cluster replication
-            }
-
-            // Invalidate the cached navigation state
-            if (session instanceof TemplateWebSession)
-            {
-              ((TemplateWebSession)session).getNavigationState().invalidate();
-            }
-
-            // Check whether the user is associated with more than 1 organisation
-            List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(
-              userDirectoryId);
-
-            if (organisations.size() == 0)
-            {
-              error("Authentication Failed.");
-              error(
-                String.format("The user (%s) is not associated with any organisations.", username));
-            }
-            else if (organisations.size() == 1)
-            {
-              List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
-                username);
-              List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
-                username);
-
-              session.setOrganisation(organisations.get(0));
-              session.setGroupNames(groupNames);
-              session.setFunctionCodes(functionCodes);
-
-              if (logger.isDebugEnabled())
+              try
               {
-                logger.debug(String.format(
-                  "Successfully authenticated user (%s) for organisation (%s) with groups (%s) " +
-                    "and function codes (%s)", username, organisations.get(0).getId(),
-                  StringUtil.delimit(groupNames, ","), StringUtil.delimit(functionCodes, ",")));
-              }
+                // Authenticate the user
+                UUID userDirectoryId = securityService.changePassword(username, oldPassword,
+                    newPassword);
 
-              // Redirect to the secure home page for the application
-              throw new RedirectToUrlException(
-                urlFor(((TemplateWebApplication) getApplication()).getSecureHomePage(),
-                  new PageParameters()).toString());
+                // Retrieve the user details
+                User user = securityService.getUser(userDirectoryId, username);
+
+                // Initialise the web session for the user
+                WebSession session = getWebApplicationSession();
+
+                session.setUserDirectoryId(user.getUserDirectoryId());
+                session.setUsername(user.getUsername());
+                session.setUserFullName(user.getFirstNames() + user.getLastName());
+
+                // Make session permanent after login
+                if (session.isTemporary())
+                {
+                  session.bind();
+                }
+                else
+                {
+                  session.dirty();  // for cluster replication
+                }
+
+                // Invalidate the cached navigation state
+                if (session instanceof TemplateWebSession)
+                {
+                  ((TemplateWebSession) session).getNavigationState().invalidate();
+                }
+
+                // Check whether the user is associated with more than 1 organisation
+                List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(
+                    userDirectoryId);
+
+                if (organisations.size() == 0)
+                {
+                  error("Authentication Failed.");
+                  error(String.format("The user (%s) is not associated with any organisations.",
+                      username));
+                }
+                else if (organisations.size() == 1)
+                {
+                  List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
+                      username);
+                  List<String> functionCodes = securityService.getFunctionCodesForUser(
+                      userDirectoryId, username);
+
+                  session.setOrganisation(organisations.get(0));
+                  session.setGroupNames(groupNames);
+                  session.setFunctionCodes(functionCodes);
+
+                  if (logger.isDebugEnabled())
+                  {
+                    logger.debug(String.format(
+                        "Successfully authenticated user (%s) for organisation (%s) with groups (%s) "
+                        + "and function codes (%s)", username, organisations.get(0).getId(),
+                        StringUtil.delimit(groupNames, ","), StringUtil.delimit(functionCodes,
+                        ",")));
+                  }
+
+                  // Redirect to the secure home page for the application
+                  throw new RedirectToUrlException(urlFor(
+                      ((TemplateWebApplication) getApplication()).getSecureHomePage(),
+                      new PageParameters()).toString());
+                }
+                else
+                {
+                  /*
+                   * Redirect to the page allowing the user to select which organisation they wish to
+                   * work with.
+                   */
+                  throw new RedirectToUrlException(urlFor(SelectOrganisationPage.class,
+                      new PageParameters()).toString());
+                }
+              }
+              catch (RedirectToUrlException e)
+              {
+                throw e;
+              }
+              catch (ExistingPasswordException e)
+              {
+                error("The specified new password has been used recently.");
+              }
+              catch (AuthenticationFailedException | UserNotFoundException e)
+              {
+                error("The specified old password is incorrect.");
+              }
+              catch (UserLockedException e)
+              {
+                error("Your user account has been locked.");
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to authenticate the user (%s): %s", username,
+                    e.getMessage()), e);
+                error("The system is currently unavailable.");
+              }
             }
-            else
-            {
-              /*
-               * Redirect to the page allowing the user to select which organisation they wish to
-               * work with.
-               */
-              throw new RedirectToUrlException(
-                urlFor(SelectOrganisationPage.class, new PageParameters()).toString());
-            }
-          }
-          catch (RedirectToUrlException e)
-          {
-            throw e;
-          }
-          catch (ExistingPasswordException e)
-          {
-            error("The specified new password has been used recently.");
-          }
-          catch (AuthenticationFailedException | UserNotFoundException e)
-          {
-            error("The specified old password is incorrect.");
-          }
-          catch (UserLockedException e)
-          {
-            error("Your user account has been locked.");
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to authenticate the user (%s): %s", username, e.getMessage()),
-              e);
-            error("The system is currently unavailable.");
-          }
-        }
-      });
+          });
     }
     catch (Throwable e)
     {
@@ -285,7 +283,7 @@ public class ChangePasswordPage
     if (applicationCssHeaderItem == null)
     {
       applicationCssHeaderItem = CssHeaderItem.forReference(
-        getWebApplication().getApplicationCssResourceReference());
+          getWebApplication().getApplicationCssResourceReference());
     }
 
     return applicationCssHeaderItem;

@@ -16,11 +16,15 @@
 
 package guru.mmp.application.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageDownloadRequest</code> class represents a request sent by the Messaging
@@ -47,24 +51,6 @@ public class MessageDownloadRequest
   private String username;
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message download request
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message download request
-   * information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessageDownloadRequest") &&
-      (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("deviceId") &&
-      rootElement.hasAttribute("username");
-  }
-
-  /**
    * Constructs a new <code>MessageDownloadRequest</code> and populates it from the information
    * stored in the specified WBXML document.
    *
@@ -89,6 +75,25 @@ public class MessageDownloadRequest
   {
     this.deviceId = deviceId;
     this.username = username;
+  }
+
+  /**
+   * Returns <code>true</code> if the WBXML document contains valid message download request
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message download request
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessageDownloadRequest")
+        && (rootElement.getAttributes().size() == 2)
+        && rootElement.hasAttribute("deviceId")
+        && rootElement.hasAttribute("username");
   }
 
   /**
@@ -144,7 +149,7 @@ public class MessageDownloadRequest
   public String toString()
   {
     return String.format("<MessageDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId,
-      username);
+        username);
   }
 
   /**

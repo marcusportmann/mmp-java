@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.resources;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.IResource;
 
@@ -37,8 +39,7 @@ public abstract class InjectableResource
   public InjectableResource()
   {
     guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
-      .WebApplication.class.cast(
-      WebApplication.get());
+        .WebApplication.class.cast(WebApplication.get());
 
     webApplication.getWebApplicationInjector().inject(this);
   }

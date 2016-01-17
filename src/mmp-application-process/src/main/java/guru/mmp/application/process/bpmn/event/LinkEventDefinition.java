@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.common.util.StringUtil;
@@ -27,6 +29,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>LinkEventDefinition</code> class represents a Link Event Definition that forms part
@@ -52,19 +56,18 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class LinkEventDefinition
-  extends EventDefinition
+public final class LinkEventDefinition extends EventDefinition
 {
-  /**
-   * The name of the link that triggered the event.
-   */
-  private String name;
-
   /**
    * The references to the corresponding 'catch' or 'target' Link Event Definition(s), when this
    * Link Event Definition represents a 'throw' or 'source' Link Event Definition.
    */
   private List<QName> sourceRefs = new ArrayList<>();
+
+  /**
+   * The name of the link that triggered the event.
+   */
+  private String name;
 
   /**
    * The reference to the corresponding 'throw' or 'source' Link Event Definition, when this Link
@@ -114,8 +117,8 @@ public final class LinkEventDefinition
 
             default:
             {
-              throw new ParserException(
-                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
+              throw new ParserException("Failed to parse the unknown XML element ("
+                  + childElement.getNodeName() + ")");
             }
           }
         }

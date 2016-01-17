@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -24,13 +26,14 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DefaultTask</code> class represents a Default Task that forms part of a Process.
  *
  * @author Marcus Portmann
  */
-public final class DefaultTask
-  extends Task
+public final class DefaultTask extends Task
 {
   /**
    * Constructs a new <code>DefaultTask</code>.

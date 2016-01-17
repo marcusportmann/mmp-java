@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
@@ -43,6 +45,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>GroupAdministrationPage</code> class implements the
  * "Group Administration" page for the Web Application Template.
@@ -50,12 +54,10 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_GROUP_ADMINISTRATION)
-public class GroupAdministrationPage
-  extends TemplateWebPage
+public class GroupAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(GroupAdministrationPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
@@ -115,8 +117,8 @@ public class GroupAdministrationPage
 
       // The "userDirectoryDropdownMenu" dropdown button
       DropdownMenu<UserDirectory> userDirectoryDropdownMenu = new DropdownMenu<UserDirectory>(
-        "userDirectoryDropdownMenu", new PropertyModel<>(this, "userDirectory"), userDirectories,
-        "fa fa-users")
+          "userDirectoryDropdownMenu", new PropertyModel<>(this, "userDirectory"), userDirectories,
+          "fa fa-users")
       {
         @Override
         protected String getDisplayValue(UserDirectory menuItem)
@@ -147,8 +149,8 @@ public class GroupAdministrationPage
         protected void populateItem(Item<Group> item)
         {
           item.add(new Label("groupName", new PropertyModel<String>(item.getModel(), "groupName")));
-          item.add(
-            new Label("description", new PropertyModel<String>(item.getModel(), "description")));
+          item.add(new Label("description", new PropertyModel<String>(item.getModel(),
+              "description")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -206,14 +208,14 @@ public class GroupAdministrationPage
     WebSession session = getWebApplicationSession();
 
     List<UserDirectory> allUserDirectories = securityService.getUserDirectoriesForOrganisation(
-      session.getOrganisation().getId());
+        session.getOrganisation().getId());
 
     List<UserDirectory> userDirectories = new ArrayList<>();
 
     for (UserDirectory userDirectory : allUserDirectories)
     {
-      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID) &&
-        (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID))))
+      if ((userDirectory.getId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID)
+          && (!session.getUserDirectoryId().equals(SecurityService.DEFAULT_USER_DIRECTORY_ID))))
       {
         // Do nothing
       }
@@ -230,13 +232,10 @@ public class GroupAdministrationPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a group to be confirmed.
    */
-  private class RemoveDialog
-    extends Dialog
+  private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-
     private String groupName;
-
     private Label nameLabel;
 
     /**
@@ -254,41 +253,40 @@ public class GroupAdministrationPage
       add(nameLabel);
 
       add(new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
           {
-            securityService.deleteGroup(userDirectory.getId(), groupName);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                securityService.deleteGroup(userDirectory.getId(), groupName);
 
-            GroupAdministrationPage.this.info(
-              "Successfully removed the group " + nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (ExistingGroupMembersException e)
-          {
-            GroupAdministrationPage.this.error(
-              "Failed to remove the group " + nameLabel.getDefaultModelObjectAsString() + " " +
-                "with existing users");
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to remove the group (%s): %s", groupName, e.getMessage()), e);
+                target.add(tableContainer);
 
-            GroupAdministrationPage.this.error(
-              "Failed to remove the group " + nameLabel.getDefaultModelObjectAsString());
-          }
+                GroupAdministrationPage.this.info("Successfully removed the group "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (ExistingGroupMembersException e)
+              {
+                GroupAdministrationPage.this.error("Failed to remove the group "
+                    + nameLabel.getDefaultModelObjectAsString() + " " + "with existing users");
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to remove the group (%s): %s", groupName,
+                    e.getMessage()), e);
 
-          target.add(getAlerts());
+                GroupAdministrationPage.this.error("Failed to remove the group "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      });
+              target.add(getAlerts());
+
+              hide(target);
+            }
+          });
     }
 
     /**

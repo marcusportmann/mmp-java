@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -31,47 +33,34 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "complexType",
-  propOrder = {"sequence", "choice", "all", "group", "attributesAndAttributeGroups", "anyAttribute",
-    "complexContent", "simpleContent"})
-@XmlSeeAlso({LocalComplexType.class, ComplexType.class})
-public abstract class ComplexTypeType
-  extends Annotated
+    propOrder = { "sequence", "choice", "all", "group", "attributesAndAttributeGroups",
+        "anyAttribute", "complexContent", "simpleContent" })
+@XmlSeeAlso({ LocalComplexType.class, ComplexType.class })
+public abstract class ComplexTypeType extends Annotated
 {
   @XmlAttribute(name = "abstract")
   protected Boolean _abstract;
-
   protected All all;
-
   protected Wildcard anyAttribute;
-
-  @XmlElements({@XmlElement(name = "attribute", type = AttributeType.class),
-    @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class)})
+  @XmlElements({ @XmlElement(name = "attribute", type = AttributeType.class) ,
+      @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class) })
   protected List<Annotated> attributesAndAttributeGroups;
-
   @XmlAttribute(name = "block")
   @XmlSchemaType(name = "derivationSet")
   protected List<String> blocks;
-
   protected ExplicitGroup choice;
-
   protected ComplexContent complexContent;
-
   @XmlAttribute(name = "final")
   @XmlSchemaType(name = "derivationSet")
   protected List<String> finals;
-
   protected GroupRef group;
-
   @XmlAttribute(name = "mixed")
   protected Boolean mixed;
-
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
-
   protected ExplicitGroup sequence;
-
   protected SimpleContent simpleContent;
 
   /**

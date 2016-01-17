@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -26,6 +28,8 @@ import guru.mmp.common.wbxml.Encoder;
 
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>MessagePartDownloadTestRequestData</code> class manages the data for a
  * "Message Part Download Test Request" message.
@@ -35,14 +39,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class MessagePartDownloadTestRequestData
-  extends WbxmlMessageData
+public class MessagePartDownloadTestRequestData extends WbxmlMessageData
 {
   /**
    * The UUID for the "Message Part Download Test Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "def49acc-426f-4e6a-ad31-78732e24c0c2");
+      "def49acc-426f-4e6a-ad31-78732e24c0c2");
 
   /**
    * The test value.

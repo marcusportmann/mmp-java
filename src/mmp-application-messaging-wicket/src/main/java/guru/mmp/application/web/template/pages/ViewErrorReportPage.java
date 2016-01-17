@@ -16,21 +16,29 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.ErrorReport;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateMessagingSecurity;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.text.SimpleDateFormat;
+
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ViewErrorReportPage</code> class implements the "View Error Report"
@@ -39,18 +47,24 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateMessagingSecurity.FUNCTION_CODE_ERROR_REPORTS)
-public class ViewErrorReportPage
-  extends TemplateWebPage
+public class ViewErrorReportPage extends TemplateWebPage
 {
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(ViewErrorReportPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Messaging Service */
   @Inject
   private IMessagingService messagingService;
+
+  /**
+   * Constructs a new <code>ViewErrorReportPage</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected ViewErrorReportPage() {}
 
   /**
    * Constructs a new <code>ViewErrorReportPage</code>.
@@ -86,8 +100,8 @@ public class ViewErrorReportPage
 
       form.add(new Label("id", errorReport.getId()));
       form.add(new Label("applicationId", errorReport.getApplicationId()));
-      form.add(
-        new Label("applicationVersion", String.valueOf(errorReport.getApplicationVersion())));
+      form.add(new Label("applicationVersion", String.valueOf(
+          errorReport.getApplicationVersion())));
       form.add(new Label("deviceId", errorReport.getDeviceId()));
       form.add(new Label("created", sdf.format(errorReport.getCreated())));
       form.add(new Label("who", errorReport.getWho()));
@@ -113,12 +127,4 @@ public class ViewErrorReportPage
       throw new WebApplicationException("Failed to initialise the ViewErrorReportPage", e);
     }
   }
-
-  /**
-   * Constructs a new <code>ViewErrorReportPage</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected ViewErrorReportPage() {}
 }

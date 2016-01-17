@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ReportDefinitionDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves <code>ReportDefinition</code> instances from the database.
@@ -34,8 +38,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ReportDefinitionDataProvider
-  extends InjectableDataProvider<ReportDefinition>
+public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportDefinition>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -84,9 +87,9 @@ public class ReportDefinitionDataProvider
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the report definitions from index (%d) to (%d)", first,
-          first + count), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the report definitions from index (%d) to (%d)", first, first + count),
+          e);
     }
   }
 

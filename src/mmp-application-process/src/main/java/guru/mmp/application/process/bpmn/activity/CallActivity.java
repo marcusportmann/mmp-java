@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -27,6 +29,8 @@ import org.w3c.dom.Element;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CallActivity</code> class represents a Call Activity that forms part of a Process.
@@ -50,8 +54,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class CallActivity
-  extends Activity
+public final class CallActivity extends Activity
 {
   /**
    * The reference to the element to be called, which will be either a Process or a Global Task.

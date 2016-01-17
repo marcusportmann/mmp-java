@@ -16,6 +16,8 @@
 
 package guru.mmp.application.codes;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHandlerResolver;
 import guru.mmp.common.util.DateUtil;
@@ -39,6 +41,8 @@ import javax.xml.ws.BindingProvider;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesService</code> class provides the Codes Service implementation.
@@ -96,8 +100,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to check whether the cached code category (%s) exists", id), e);
+      throw new CodesServiceException(String.format(
+          "Failed to check whether the cached code category (%s) exists", id), e);
     }
   }
 
@@ -119,8 +123,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to check whether the code category (%s) exists", id), e);
+      throw new CodesServiceException(String.format(
+          "Failed to check whether the code category (%s) exists", id), e);
     }
   }
 
@@ -140,8 +144,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to create the cached code (%s) for the cached code category (%s)",
+      throw new CodesServiceException(String.format(
+          "Failed to create the cached code (%s) for the cached code category (%s)",
           code.getName(), code.getCategoryId()), e);
     }
   }
@@ -163,9 +167,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to create the cached code category (%s)", cachedCodeCategory.getId()),
-        e);
+      throw new CodesServiceException(String.format(
+          "Failed to create the cached code category (%s)", cachedCodeCategory.getId()), e);
     }
   }
 
@@ -185,8 +188,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to create the code (%s) for the code category (%s)", code.getName(),
+      throw new CodesServiceException(String.format(
+          "Failed to create the code (%s) for the code category (%s)", code.getName(),
           code.getCategoryId()), e);
     }
   }
@@ -208,8 +211,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to create the code category (%s)", codeCategory.getId()), e);
+      throw new CodesServiceException(String.format("Failed to create the code category (%s)",
+          codeCategory.getId()), e);
     }
   }
 
@@ -230,8 +233,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to delete the cached code category (%s)", id), e);
+      throw new CodesServiceException(String.format(
+          "Failed to delete the cached code category (%s)", id), e);
     }
   }
 
@@ -253,9 +256,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to delete the code (%s) for the code category (%s)", id,
-          codeCategoryId), e);
+      throw new CodesServiceException(String.format(
+          "Failed to delete the code (%s) for the code category (%s)", id, codeCategoryId), e);
     }
   }
 
@@ -276,7 +278,7 @@ public class CodesService
     catch (Throwable e)
     {
       throw new CodesServiceException(String.format("Failed to delete the code category (%s)", id),
-        e);
+          e);
     }
   }
 
@@ -311,8 +313,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the cached code category (%s)", id), e);
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the cached code category (%s)", id), e);
     }
   }
 
@@ -335,9 +337,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the cached codes for the cached code category (%s)", id),
-        e);
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the cached codes for the cached code category (%s)", id), e);
     }
   }
 
@@ -361,9 +362,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the code (%s) for the code category (%s)", id,
-          codeCategoryId), e);
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the code (%s) for the code category (%s)", id, codeCategoryId), e);
     }
   }
 
@@ -422,8 +422,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the code category (%s)", id), e);
+      throw new CodesServiceException(String.format("Failed to retrieve the code category (%s)",
+          id), e);
     }
   }
 
@@ -440,8 +440,8 @@ public class CodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getCodeCategoryWithParameters(
-    UUID id, Map<String, String> parameters, boolean retrieveCodes)
+  public CodeCategory getCodeCategoryWithParameters(UUID id, Map<String, String> parameters,
+      boolean retrieveCodes)
     throws CodesServiceException
   {
     try
@@ -463,8 +463,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the code category (%s)", id), e);
+      throw new CodesServiceException(String.format("Failed to retrieve the code category (%s)",
+          id), e);
     }
   }
 
@@ -484,8 +484,8 @@ public class CodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getCodeProviderCodeCategory(
-    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
+  public CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+      boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -493,7 +493,7 @@ public class CodesService
       for (ICodeProvider codeProvider : codeProviders)
       {
         CodeCategory codeProviderCodeCategory = codeProvider.getCodeCategory(codeCategory,
-          lastRetrieved, returnCodesIfCurrent);
+            lastRetrieved, returnCodesIfCurrent);
 
         if (codeProviderCodeCategory != null)
         {
@@ -505,9 +505,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the code provider code category (%s)",
-          codeCategory.getId()), e);
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the code provider code category (%s)", codeCategory.getId()), e);
     }
   }
 
@@ -529,9 +528,8 @@ public class CodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getCodeProviderCodeCategoryWithParameters(
-    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
-    boolean returnCodesIfCurrent)
+  public CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory,
+      Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -539,7 +537,7 @@ public class CodesService
       for (ICodeProvider codeProvider : codeProviders)
       {
         CodeCategory codeProviderCodeCategory = codeProvider.getCodeCategoryWithParameters(
-          codeCategory, parameters, lastRetrieved, returnCodesIfCurrent);
+            codeCategory, parameters, lastRetrieved, returnCodesIfCurrent);
 
         if (codeProviderCodeCategory != null)
         {
@@ -551,8 +549,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the code provider code category (%s) with parameters",
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the code provider code category (%s) with parameters",
           codeCategory.getId()), e);
     }
   }
@@ -575,8 +573,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the codes for the code category (%s)", id), e);
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the codes for the code category (%s)", id), e);
     }
   }
 
@@ -618,8 +616,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the number of codes for the code category (%s)", id), e);
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the number of codes for the code category (%s)", id), e);
     }
   }
 
@@ -639,8 +637,8 @@ public class CodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getRemoteCodeCategory(
-    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
+  public CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+      boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -673,7 +671,7 @@ public class CodesService
       if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_WEB_SERVICE)
       {
         CodeCategory webServiceRemoteCodeCategory = getRemoteWebServiceCodeCategory(codeCategory,
-          lastRetrieved, returnCodesIfCurrent);
+            lastRetrieved, returnCodesIfCurrent);
 
         // If the remote code category is cacheable then cache it now
         if (codeCategory.getIsCacheable())
@@ -686,20 +684,20 @@ public class CodesService
       else if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_HTTP_SERVICE)
       {
         throw new CodesServiceException(String.format(
-          "The code category type (%s) for the remote code category (%s) is not supported",
-          codeCategory.getCategoryType(), codeCategory.getId()));
+            "The code category type (%s) for the remote code category (%s) is not supported",
+            codeCategory.getCategoryType(), codeCategory.getId()));
       }
       else
       {
         throw new CodesServiceException(String.format(
-          "The code category type (%s) for the remote code category (%s) is not supported",
-          codeCategory.getCategoryType(), codeCategory.getId()));
+            "The code category type (%s) for the remote code category (%s) is not supported",
+            codeCategory.getCategoryType(), codeCategory.getId()));
       }
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the remote code category (%s)", codeCategory.getId()), e);
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the remote code category (%s)", codeCategory.getId()), e);
     }
   }
 
@@ -720,9 +718,8 @@ public class CodesService
    *
    * @throws CodesServiceException
    */
-  public CodeCategory getRemoteCodeCategoryWithParameters(
-    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
-    boolean returnCodesIfCurrent)
+  public CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
+      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
@@ -732,25 +729,25 @@ public class CodesService
       if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_WEB_SERVICE)
       {
         return getRemoteWebServiceCodeCategoryWithParameters(codeCategory, parameters,
-          lastRetrieved, returnCodesIfCurrent);
+            lastRetrieved, returnCodesIfCurrent);
       }
       else if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_HTTP_SERVICE)
       {
         throw new CodesServiceException(String.format(
-          "The code category type (%s) for the remote code category (%s) is not supported",
-          codeCategory.getCategoryType(), codeCategory.getId()));
+            "The code category type (%s) for the remote code category (%s) is not supported",
+            codeCategory.getCategoryType(), codeCategory.getId()));
       }
       else
       {
         throw new CodesServiceException(String.format(
-          "The code category type (%s) for the remote code category (%s) is not supported",
-          codeCategory.getCategoryType(), codeCategory.getId()));
+            "The code category type (%s) for the remote code category (%s) is not supported",
+            codeCategory.getCategoryType(), codeCategory.getId()));
       }
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the remote code category (%s) with parameters",
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the remote code category (%s) with parameters",
           codeCategory.getId()), e);
     }
   }
@@ -767,7 +764,7 @@ public class CodesService
 
     try
     {
-      // Initialise the configuration for the Messaging Service
+      // Initialise the configuration for the Codes Service
       initConfiguration();
 
       // Read the codes configuration
@@ -802,8 +799,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to check whether the cached code category (%s) is current", id), e);
+      throw new CodesServiceException(String.format(
+          "Failed to check whether the cached code category (%s) is current", id), e);
     }
   }
 
@@ -826,9 +823,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to update the cached code category (%s)", cachedCodeCategory.getId()),
-        e);
+      throw new CodesServiceException(String.format(
+          "Failed to update the cached code category (%s)", cachedCodeCategory.getId()), e);
     }
   }
 
@@ -850,8 +846,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to update the code (%s)", code.getId()),
-        e);
+      throw new CodesServiceException(String.format("Failed to update the code (%s)",
+          code.getId()), e);
     }
   }
 
@@ -880,8 +876,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to update the code category (%s)", codeCategory.getId()), e);
+      throw new CodesServiceException(String.format("Failed to update the code category (%s)",
+          codeCategory.getId()), e);
     }
   }
 
@@ -906,7 +902,7 @@ public class CodesService
 
       // Create the cached code category
       CachedCodeCategory cachedCodeCategory = new CachedCodeCategory(codeCategory.getId(),
-        codeCategory.getCodeData(), codeCategory.getUpdated(), new Date());
+          codeCategory.getCodeData(), codeCategory.getUpdated(), new Date());
 
       createCachedCodeCategory(cachedCodeCategory);
 
@@ -921,22 +917,22 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to cache the remote code category (%s)", codeCategory.getId()), e);
+      throw new CodesServiceException(String.format(
+          "Failed to cache the remote code category (%s)", codeCategory.getId()), e);
     }
   }
 
-  private CodeCategory getRemoteWebServiceCodeCategory(
-    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
+  private CodeCategory getRemoteWebServiceCodeCategory(CodeCategory codeCategory,
+      Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
     {
       URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
-        "META-INF/wsdl/CodesService.wsdl");
+          "META-INF/wsdl/CodesService.wsdl");
 
       guru.mmp.service.codes.ws.CodesService service = new guru.mmp.service.codes.ws.CodesService(
-        wsdlLocation, new QName("http://ws.codes.service.mmp.guru", "CodesService"));
+          wsdlLocation, new QName("http://ws.codes.service.mmp.guru", "CodesService"));
 
       // Setup the JAX-WS handlers that implement the MMP Web Service Security model
       if (codeCategory.getIsEndPointSecure())
@@ -951,10 +947,11 @@ public class CodesService
       BindingProvider bindingProvider = ((BindingProvider) codesService);
 
       bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-        codeCategory.getEndPoint());
+          codeCategory.getEndPoint());
 
       guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory = codesService.getCodeCategory(
-        codeCategory.getId().toString(), DateUtil.toCalendar(lastRetrieved), returnCodesIfCurrent);
+          codeCategory.getId().toString(), DateUtil.toCalendar(lastRetrieved),
+          returnCodesIfCurrent);
 
       codeCategory.setUpdated(DateUtil.toDate(remoteCodeCategory.getLastUpdated()));
 
@@ -963,7 +960,7 @@ public class CodesService
       for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
       {
         codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
-          remoteCode.getValue()));
+            remoteCode.getValue()));
       }
 
       codeCategory.setCodes(codes);
@@ -973,24 +970,23 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(
-        String.format("Failed to retrieve the remote code category (%s) from the web service (%s)",
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the remote code category (%s) from the web service (%s)",
           codeCategory.getId(), codeCategory.getEndPoint()), e);
     }
   }
 
-  private CodeCategory getRemoteWebServiceCodeCategoryWithParameters(
-    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
-    boolean returnCodesIfCurrent)
+  private CodeCategory getRemoteWebServiceCodeCategoryWithParameters(CodeCategory codeCategory,
+      Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException
   {
     try
     {
       URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
-        "META-INF/wsdl/CodesService.wsdl");
+          "META-INF/wsdl/CodesService.wsdl");
 
       guru.mmp.service.codes.ws.CodesService service = new guru.mmp.service.codes.ws.CodesService(
-        wsdlLocation, new QName("http://ws.codes.service.mmp.guru", "CodesService"));
+          wsdlLocation, new QName("http://ws.codes.service.mmp.guru", "CodesService"));
 
       // Setup the JAX-WS handlers that implement the MMP Web Service Security model
       if (codeCategory.getIsEndPointSecure())
@@ -1005,7 +1001,7 @@ public class CodesService
       BindingProvider bindingProvider = ((BindingProvider) codesService);
 
       bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-        codeCategory.getEndPoint());
+          codeCategory.getEndPoint());
 
       List<guru.mmp.service.codes.ws.Parameter> wsParameters = new ArrayList<>();
 
@@ -1021,10 +1017,9 @@ public class CodesService
         wsParameters.add(wsParameter);
       }
 
-      guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory = codesService
-        .getCodeCategoryWithParameters(
-        codeCategory.getId().toString(), wsParameters, DateUtil.toCalendar(lastRetrieved),
-        returnCodesIfCurrent);
+      guru.mmp.service.codes.ws.CodeCategory remoteCodeCategory =
+          codesService.getCodeCategoryWithParameters(codeCategory.getId().toString(), wsParameters,
+          DateUtil.toCalendar(lastRetrieved), returnCodesIfCurrent);
 
       codeCategory.setUpdated(DateUtil.toDate(remoteCodeCategory.getLastUpdated()));
 
@@ -1033,7 +1028,7 @@ public class CodesService
       for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
       {
         codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
-          remoteCode.getValue()));
+            remoteCode.getValue()));
       }
 
       codeCategory.setCodes(codes);
@@ -1044,8 +1039,8 @@ public class CodesService
     catch (Throwable e)
     {
       throw new CodesServiceException(String.format(
-        "Failed to retrieve the remote code category (%s) with parameters from the web service " +
-          "(%s)", codeCategory.getId(), codeCategory.getEndPoint()), e);
+          "Failed to retrieve the remote code category (%s) with parameters from the web service "
+          + "(%s)", codeCategory.getId(), codeCategory.getEndPoint()), e);
     }
   }
 
@@ -1063,10 +1058,10 @@ public class CodesService
       try
       {
         logger.info(String.format("Initialising the code provider (%s) with class (%s)",
-          codeProviderConfig.getName(), codeProviderConfig.getClassName()));
+            codeProviderConfig.getName(), codeProviderConfig.getClassName()));
 
         Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-          codeProviderConfig.getClassName());
+            codeProviderConfig.getClassName());
 
         Constructor<?> constructor = clazz.getConstructor(CodeProviderConfig.class);
 
@@ -1082,15 +1077,15 @@ public class CodesService
         }
         else
         {
-          logger.error(String.format("Failed to register the code provider (%s): " +
-              "The code provider class does not provide a constructor with the required signature",
-            codeProviderConfig.getClassName()));
+          logger.error(String.format("Failed to register the code provider (%s): "
+              + "The code provider class does not provide a constructor with the required signature",
+              codeProviderConfig.getClassName()));
         }
       }
       catch (Throwable e)
       {
         logger.error(String.format("Failed to initialise the code provider (%s) with class (%s)",
-          codeProviderConfig.getName(), codeProviderConfig.getClassName()), e);
+            codeProviderConfig.getName(), codeProviderConfig.getClassName()), e);
       }
     }
   }
@@ -1101,8 +1096,7 @@ public class CodesService
    * @throws CodesServiceException
    */
   private void initConfiguration()
-    throws CodesServiceException
-  {}
+    throws CodesServiceException {}
 
   /**
    * Read the codes configuration from all the <i>META-INF/CodesConfig.xml</i>
@@ -1129,7 +1123,7 @@ public class CodesService
         if (logger.isDebugEnabled())
         {
           logger.debug(String.format("Reading the codes configuration file (%s)",
-            configurationFile.toURI().toString()));
+              configurationFile.toURI().toString()));
         }
 
         // Retrieve a document builder instance using the factory
@@ -1140,8 +1134,8 @@ public class CodesService
         // builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
-        builder.setEntityResolver(
-          new DtdJarResolver("CodesConfig.dtd", "META-INF/CodesConfig.dtd"));
+        builder.setEntityResolver(new DtdJarResolver("CodesConfig.dtd",
+            "META-INF/CodesConfig.dtd"));
         builder.setErrorHandler(new XmlParserErrorHandler());
 
         // Parse the XML messaging configuration file using the document builder

@@ -16,10 +16,14 @@
 
 package guru.mmp.application.process;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOException;
 
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IProcessDAO</code> interface defines the process-related persistence operations.
@@ -234,8 +238,8 @@ public interface IProcessDAO
    *
    * @throws DAOException
    */
-  int resetProcessInstanceLocks(
-    String lockName, ProcessInstance.Status status, ProcessInstance.Status newStatus)
+  int resetProcessInstanceLocks(String lockName, ProcessInstance.Status status, ProcessInstance
+      .Status newStatus)
     throws DAOException;
 
   /**

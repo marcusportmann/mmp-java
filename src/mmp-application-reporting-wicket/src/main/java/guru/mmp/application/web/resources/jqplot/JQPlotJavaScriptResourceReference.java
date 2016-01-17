@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.resources.jqplot;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.Debug;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -25,19 +27,27 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>JQPlotJavaScriptResourceReference</code> class implements the resource reference for
  * the jqPlot JavaScript library bundled with the web application library.
  *
  * @author Marcus Portmann
  */
-public class JQPlotJavaScriptResourceReference
-  extends JavaScriptResourceReference
+public class JQPlotJavaScriptResourceReference extends JavaScriptResourceReference
 {
-  private static final JQPlotJavaScriptResourceReference INSTANCE = new
-    JQPlotJavaScriptResourceReference();
-
+  private static final JQPlotJavaScriptResourceReference INSTANCE =
+      new JQPlotJavaScriptResourceReference();
   private static final long serialVersionUID = 1000000;
+
+  private JQPlotJavaScriptResourceReference()
+  {
+    super(JQPlotJavaScriptResourceReference.class,
+        Debug.inDebugMode()
+        ? "jquery.jqplot.less"
+        : "jquery.jqplot.min.less");
+  }
 
   /**
    * Returns the single instance of the resource reference for the jqPlot JavaScript library
@@ -49,12 +59,6 @@ public class JQPlotJavaScriptResourceReference
   public static JQPlotJavaScriptResourceReference get()
   {
     return INSTANCE;
-  }
-
-  private JQPlotJavaScriptResourceReference()
-  {
-    super(JQPlotJavaScriptResourceReference.class,
-      Debug.inDebugMode() ? "jquery.jqplot.less" : "jquery.jqplot.min.less");
   }
 
   /**
@@ -72,8 +76,8 @@ public class JQPlotJavaScriptResourceReference
       dependencies.add(headerItem);
     }
 
-    dependencies.add(JavaScriptHeaderItem.forReference(
-      Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
+    dependencies.add(JavaScriptHeaderItem.forReference(Application.get()
+        .getJavaScriptLibrarySettings().getJQueryReference()));
 
     return dependencies;
   }

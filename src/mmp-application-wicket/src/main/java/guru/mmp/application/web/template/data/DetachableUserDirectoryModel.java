@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.security.UserDirectoryNotFoundException;
@@ -25,14 +27,15 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DetachableUserDirectoryModel</code> class provides a detachable model
  * implementation for the <code>UserDirectory</code> model class.
  *
  * @author Marcus Portmann
  */
-public class DetachableUserDirectoryModel
-  extends InjectableLoadableDetachableModel<UserDirectory>
+public class DetachableUserDirectoryModel extends InjectableLoadableDetachableModel<UserDirectory>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -47,13 +50,11 @@ public class DetachableUserDirectoryModel
 
   /**
    * Constructs a new <code>DetachableUserDirectoryModel</code>.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * <p/>
+   * Hidden default constructor to support CDI.
    */
-  public DetachableUserDirectoryModel(UUID id)
-  {
-    this.id = id;
-  }
+  @SuppressWarnings("unused")
+  protected DetachableUserDirectoryModel() {}
 
   /**
    * Constructs a new <code>DetachableUserDirectoryModel</code>.
@@ -69,11 +70,13 @@ public class DetachableUserDirectoryModel
 
   /**
    * Constructs a new <code>DetachableUserDirectoryModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  @SuppressWarnings("unused")
-  protected DetachableUserDirectoryModel() {}
+  public DetachableUserDirectoryModel(UUID id)
+  {
+    this.id = id;
+  }
 
   /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
@@ -91,8 +94,8 @@ public class DetachableUserDirectoryModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to load the user directory (%s)", id),
-        e);
+      throw new WebApplicationException(String.format("Failed to load the user directory (%s)",
+          id), e);
     }
   }
 

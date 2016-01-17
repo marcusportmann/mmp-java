@@ -25,8 +25,7 @@ package guru.mmp.application.batch;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class BatchServiceException
-  extends Exception
+public class BatchServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

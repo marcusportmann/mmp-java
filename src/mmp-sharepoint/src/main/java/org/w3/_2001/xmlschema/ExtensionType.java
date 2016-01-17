@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
@@ -27,27 +29,20 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "extensionType",
-  propOrder = {"sequence", "choice", "all", "group", "attributesAndAttributeGroups",
-    "anyAttribute"})
-@XmlSeeAlso({SimpleExtensionType.class})
-public class ExtensionType
-  extends Annotated
+    propOrder = { "sequence", "choice", "all", "group", "attributesAndAttributeGroups",
+        "anyAttribute" })
+@XmlSeeAlso({ SimpleExtensionType.class })
+public class ExtensionType extends Annotated
 {
   protected All all;
-
   protected Wildcard anyAttribute;
-
-  @XmlElements({@XmlElement(name = "attribute", type = AttributeType.class),
-    @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class)})
+  @XmlElements({ @XmlElement(name = "attribute", type = AttributeType.class) ,
+      @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class) })
   protected List<Annotated> attributesAndAttributeGroups;
-
   @XmlAttribute(name = "base", required = true)
   protected QName base;
-
   protected ExplicitGroup choice;
-
   protected GroupRef group;
-
   protected ExplicitGroup sequence;
 
   /**

@@ -16,12 +16,16 @@
 
 package guru.mmp.common.xml;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.ls.LSInput;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Reader;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlSchemaClasspathInputSource</code> class provides an implementation of the
@@ -78,8 +82,8 @@ public class XmlSchemaClasspathInputSource
    *                      URI
    * @param classpathName the name of the resource on the classpath for this input source
    */
-  public XmlSchemaClasspathInputSource(
-    String namespaceURI, String publicId, String systemId, String baseURI, String classpathName)
+  public XmlSchemaClasspathInputSource(String namespaceURI, String publicId, String systemId,
+      String baseURI, String classpathName)
   {
     this.namespaceURI = namespaceURI;
     this.publicId = publicId;
@@ -90,7 +94,7 @@ public class XmlSchemaClasspathInputSource
     try
     {
       try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-        classpathName))
+          classpathName))
       {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -107,8 +111,8 @@ public class XmlSchemaClasspathInputSource
     }
     catch (Throwable e)
     {
-      throw new XmlSchemaException(
-        "Failed to read the classpath resource (" + classpathName + ") for the input source", e);
+      throw new XmlSchemaException("Failed to read the classpath resource (" + classpathName
+          + ") for the input source", e);
     }
   }
 
@@ -246,7 +250,7 @@ public class XmlSchemaClasspathInputSource
     catch (Throwable e)
     {
       throw new XmlSchemaException(
-        "Failed to read the data from the byte stream for the input source", e);
+          "Failed to read the data from the byte stream for the input source", e);
     }
   }
 
@@ -271,7 +275,7 @@ public class XmlSchemaClasspathInputSource
   public void setCharacterStream(Reader characterStream)
   {
     throw new XmlSchemaException(
-      "Reading the data for the input source from a character stream is not supported");
+        "Reading the data for the input source from a character stream is not supported");
   }
 
   /**
@@ -305,7 +309,7 @@ public class XmlSchemaClasspathInputSource
   public void setStringData(String stringData)
   {
     throw new XmlSchemaException(
-      "Reading the data for the input source from a string is not supported");
+        "Reading the data for the input source from a string is not supported");
   }
 
   /**

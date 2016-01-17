@@ -16,11 +16,15 @@
 
 package guru.mmp.application.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagePartReceivedRequest</code> class represents a request sent by the Messaging
@@ -42,24 +46,6 @@ public class MessagePartReceivedRequest
    * successfully downloaded.
    */
   private UUID messagePartId;
-
-  /**
-   * Returns <code>true</code> if the WBXML document contains valid message part received request
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message part received request
-   * information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessagePartReceivedRequest") &&
-      (rootElement.getAttributes().size() == 2) && !((!rootElement.hasAttribute("device")) ||
-      (!rootElement.hasAttribute("messagePartId")));
-  }
 
   /**
    * Constructs a new <code>MessagePartReceivedRequest</code> and populates it from the information
@@ -87,6 +73,24 @@ public class MessagePartReceivedRequest
   {
     this.deviceId = deviceId;
     this.messagePartId = messagePartId;
+  }
+
+  /**
+   * Returns <code>true</code> if the WBXML document contains valid message part received request
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message part received request
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessagePartReceivedRequest")
+        && (rootElement.getAttributes().size() == 2)
+        && !((!rootElement.hasAttribute("device")) || (!rootElement.hasAttribute("messagePartId")));
   }
 
   /**
@@ -146,7 +150,7 @@ public class MessagePartReceivedRequest
   public String toString()
   {
     return String.format("<MessagePartReceivedRequest deviceId=\"%s\" messagePartId=\"%s\"/>",
-      deviceId, messagePartId);
+        deviceId, messagePartId);
   }
 
   /**

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -27,6 +29,8 @@ import org.w3c.dom.Element;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ServiceTask</code> class represents a Service Task that forms part of a Process.
@@ -50,8 +54,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ServiceTask
-  extends Task
+public final class ServiceTask extends Task
 {
   /**
    * The technology that the Service Task will use to send and receive messages.

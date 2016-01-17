@@ -16,9 +16,12 @@
 
 package guru.mmp.common.persistence;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
 
 /**
  * The <code>Location</code> class is a JPA embeddable class that stores a GPS location.
@@ -97,8 +100,9 @@ public class Location
 
     Location other = (Location) obj;
 
-    return (latitude == other.latitude) && (longitude == other.longitude) &&
-      (precision == other.precision);
+    return (latitude == other.latitude)
+        && (longitude == other.longitude)
+        && (precision == other.precision);
   }
 
   /**

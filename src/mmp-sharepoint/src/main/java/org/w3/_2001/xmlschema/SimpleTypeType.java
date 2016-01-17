@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -24,24 +26,19 @@ import java.util.ArrayList;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "simpleType", propOrder = {"union", "list", "restriction"})
-@XmlSeeAlso({LocalSimpleType.class, SimpleType.class})
-public abstract class SimpleTypeType
-  extends Annotated
+@XmlType(name = "simpleType", propOrder = { "union", "list", "restriction" })
+@XmlSeeAlso({ LocalSimpleType.class, SimpleType.class })
+public abstract class SimpleTypeType extends Annotated
 {
   @XmlAttribute(name = "final")
   @XmlSchemaType(name = "simpleDerivationSet")
   protected java.util.List<String> finals;
-
   protected org.w3._2001.xmlschema.List list;
-
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
-
   protected Restriction restriction;
-
   protected Union union;
 
   /**

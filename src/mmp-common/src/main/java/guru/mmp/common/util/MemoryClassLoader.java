@@ -16,6 +16,8 @@
 
 package guru.mmp.common.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,8 +37,7 @@ import java.util.jar.JarInputStream;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class MemoryClassLoader
-  extends ClassLoader
+public class MemoryClassLoader extends ClassLoader
 {
   /**
    * The list of byte arrays containing the binary data representation of the JARs associated with
@@ -113,9 +114,9 @@ public class MemoryClassLoader
     }
     catch (IOException e)
     {
-      throw new ClassNotFoundException(
-        "An IOException occurred while attempting to retrieve the" + " binary representation of" +
-          " the class (" + name + ") from the JAR: " + e.getMessage());
+      throw new ClassNotFoundException("An IOException occurred while attempting to retrieve the"
+          + " binary representation of" + " the class (" + name + ") from the JAR: "
+          + e.getMessage());
     }
   }
 
@@ -289,8 +290,7 @@ public class MemoryClassLoader
    * The MemoryUrlConnection nested class provides a URL connection for a resource stored in a JAR
    * file managed by a MemoryClassLoader instance.
    */
-  private class MemoryUrlConnection
-    extends URLConnection
+  private class MemoryUrlConnection extends URLConnection
   {
     private MemoryClassLoader memoryClassLoader = null;
 
@@ -326,21 +326,20 @@ public class MemoryClassLoader
 
       if (resourceData == null)
       {
-        throw new IOException(
-          "Unable to find the resource (" + getURL().getFile() + ") in the in-memory JAR (" +
-            getURL().getHost() + ")");
+        throw new IOException("Unable to find the resource (" + getURL().getFile()
+            + ") in the in-memory JAR (" + getURL().getHost() + ")");
       }
 
       return new ByteArrayInputStream(resourceData);
     }
   }
 
+
   /**
    * The MemoryUrlStreamHandler nested class that provides URL stream handling capabilities for
    * resources stored in a JAR file managed by a MemoryClassLoader instance.
    */
-  private class MemoryUrlStreamHandler
-    extends URLStreamHandler
+  private class MemoryUrlStreamHandler extends URLStreamHandler
   {
     private MemoryClassLoader memoryClassLoader = null;
 

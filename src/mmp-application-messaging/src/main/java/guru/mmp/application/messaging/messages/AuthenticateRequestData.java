@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -26,6 +28,8 @@ import guru.mmp.common.wbxml.Encoder;
 
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AuthenticateRequestData</code> class manages the data for a
  * "Authenticate Request" message.
@@ -34,14 +38,13 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class AuthenticateRequestData
-  extends WbxmlMessageData
+public class AuthenticateRequestData extends WbxmlMessageData
 {
   /**
    * The UUID for the "Authenticate Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
+      "d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the
@@ -106,8 +109,9 @@ public class AuthenticateRequestData
       return false;
     }
 
-    if ((!rootElement.hasChild("User")) || (!rootElement.hasChild("Password")) ||
-      (!rootElement.hasChild("Device")) || (!rootElement.hasChild("PreferredEncryptionScheme")))
+    if ((!rootElement.hasChild("Username"))
+        || (!rootElement.hasChild("Password"))
+        || (!rootElement.hasChild("DeviceId")))
     {
       return false;
     }

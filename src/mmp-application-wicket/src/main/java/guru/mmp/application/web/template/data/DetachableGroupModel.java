@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.Group;
 import guru.mmp.application.security.GroupNotFoundException;
 import guru.mmp.application.security.ISecurityService;
@@ -25,14 +27,15 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DetachableGroupModel</code> class provides a detachable model
  * implementation for the <code>Group</code> model class.
  *
  * @author Marcus Portmann
  */
-public class DetachableGroupModel
-  extends InjectableLoadableDetachableModel<Group>
+public class DetachableGroupModel extends InjectableLoadableDetachableModel<Group>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -49,6 +52,14 @@ public class DetachableGroupModel
    * The Universally Unique Identifier (UUID) used to uniquely identify the user directory;
    */
   private UUID userDirectoryId;
+
+  /**
+   * Constructs a new <code>DetachableGroupModel</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected DetachableGroupModel() {}
 
   /**
    * Constructs a new <code>DetachableGroupModel</code>.
@@ -76,14 +87,6 @@ public class DetachableGroupModel
   }
 
   /**
-   * Constructs a new <code>DetachableGroupModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected DetachableGroupModel() {}
-
-  /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
    */
   @Override
@@ -100,7 +103,7 @@ public class DetachableGroupModel
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format("Failed to load the group (%s)", groupName),
-        e);
+          e);
     }
   }
 

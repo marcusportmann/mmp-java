@@ -16,12 +16,16 @@
 
 package guru.mmp.common.tomcat;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.atomikos.icatch.jta.UserTransactionManager;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 
 import java.util.logging.Logger;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AtomikosLifecycleListener</code> is a Tomcat Lifecycle Listener that starts and stops
@@ -34,7 +38,6 @@ public class AtomikosLifecycleListener
   implements LifecycleListener
 {
   Logger logger = Logger.getLogger(AtomikosLifecycleListener.class.getName());
-
   private UserTransactionManager userTransactionManager;
 
   /**

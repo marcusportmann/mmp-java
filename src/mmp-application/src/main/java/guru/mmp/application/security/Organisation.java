@@ -16,6 +16,8 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
 
 /**
@@ -27,9 +29,7 @@ public class Organisation
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private UUID id;
-
   private String name;
 
   /**

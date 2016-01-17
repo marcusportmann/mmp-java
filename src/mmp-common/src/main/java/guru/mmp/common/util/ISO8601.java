@@ -16,6 +16,8 @@
 
 package guru.mmp.common.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,8 +32,8 @@ import java.util.GregorianCalendar;
  */
 public final class ISO8601
 {
-  private static final ThreadLocal<SimpleDateFormat> threadLocalSimpleDateFormat = new
-    ThreadLocal<SimpleDateFormat>()
+  private static final ThreadLocal<SimpleDateFormat> threadLocalSimpleDateFormat =
+      new ThreadLocal<SimpleDateFormat>()
   {
     @Override
     protected SimpleDateFormat initialValue()

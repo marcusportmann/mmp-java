@@ -16,6 +16,8 @@
 
 package guru.mmp.common.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +41,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ExpiryCache<K, V>
 {
   private ConcurrentHashMap<K, ExpiryCacheEntry<V>> entries = null;
-
   private int expiryPeriod = -1;
 
   /**

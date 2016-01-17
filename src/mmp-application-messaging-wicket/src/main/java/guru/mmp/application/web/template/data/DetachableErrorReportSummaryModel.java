@@ -16,13 +16,18 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.ErrorReportSummary;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>DetachableErrorReportSummaryModel</code> class provides a detachable model
@@ -31,7 +36,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public class DetachableErrorReportSummaryModel
-  extends InjectableLoadableDetachableModel<ErrorReportSummary>
+    extends InjectableLoadableDetachableModel<ErrorReportSummary>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -43,6 +48,14 @@ public class DetachableErrorReportSummaryModel
   /* Messaging Service */
   @Inject
   private IMessagingService messagingService;
+
+  /**
+   * Constructs a new <code>DetachableErrorReportSummaryModel</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected DetachableErrorReportSummaryModel() {}
 
   /**
    * Constructs a new <code>DetachableErrorReportSummaryModel</code>.
@@ -68,14 +81,6 @@ public class DetachableErrorReportSummaryModel
   }
 
   /**
-   * Constructs a new <code>DetachableErrorReportSummaryModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected DetachableErrorReportSummaryModel() {}
-
-  /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
    */
   @Override
@@ -87,8 +92,8 @@ public class DetachableErrorReportSummaryModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the summary for the error report (%s)", id), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the summary for the error report (%s)", id), e);
     }
   }
 

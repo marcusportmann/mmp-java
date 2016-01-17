@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.navigation;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.pages.AnonymousOnlyWebPage;
 import guru.mmp.application.web.pages.SecureAnonymousWebPage;
 import guru.mmp.application.web.pages.WebPage;
@@ -27,26 +29,22 @@ import org.apache.wicket.util.string.StringValue;
 import java.io.Serializable;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>NavigationLink</code> class stores the information for a navigation link that forms
  * part of a web application's navigation hierarchy and links to a specific Wicket-based web page.
  *
  * @author Marcus Portmann
  */
-public class NavigationLink
-  extends NavigationItem
+public class NavigationLink extends NavigationItem
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private String functionCode;
-
   private boolean isAnonymousOnly;
-
   private boolean isSecure;
-
   private Class<? extends Page> pageClass;
-
   private PageParameters pageParameters;
 
   /**
@@ -92,8 +90,8 @@ public class NavigationLink
    * @param pageClass      the class for the Wicket <code>Page</code> associated with the link
    * @param pageParameters the parameters for the page associated with the link
    */
-  public NavigationLink(
-    String name, String iconClass, Class<? extends Page> pageClass, PageParameters pageParameters)
+  public NavigationLink(String name, String iconClass, Class<? extends Page> pageClass,
+      PageParameters pageParameters)
   {
     super(name, iconClass);
     this.pageClass = pageClass;
@@ -109,7 +107,7 @@ public class NavigationLink
     else
     {
       SecureAnonymousWebPage secureAnonymousWebPage = pageClass.getAnnotation(
-        SecureAnonymousWebPage.class);
+          SecureAnonymousWebPage.class);
 
       if (secureAnonymousWebPage != null)
       {
@@ -122,7 +120,7 @@ public class NavigationLink
         this.isSecure = false;
 
         AnonymousOnlyWebPage anonymousOnlyWebPage = pageClass.getAnnotation(
-          AnonymousOnlyWebPage.class);
+            AnonymousOnlyWebPage.class);
 
         if (anonymousOnlyWebPage != null)
         {
@@ -213,8 +211,8 @@ public class NavigationLink
 
         for (int i = 0; i < pageParameterValues.size(); i++)
         {
-          if (!pageParameterValues.get(i).toString().equals(
-            tmpPageParameterValues.get(i).toString()))
+          if (!pageParameterValues.get(i).toString().equals(tmpPageParameterValues.get(i)
+              .toString()))
           {
             return false;
           }

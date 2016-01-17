@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.navigation;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Page;
 
 /**
@@ -27,7 +29,6 @@ import org.apache.wicket.Page;
 public abstract class NavigationItem
 {
   private String iconClass;
-
   private String name;
 
   /**

@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import java.math.BigInteger;
 
@@ -22,13 +24,11 @@ import java.math.BigInteger;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "any")
-public class Any
-  extends Wildcard
+public class Any extends Wildcard
 {
   @XmlAttribute(name = "maxOccurs")
   @XmlSchemaType(name = "allNNI")
   protected String maxOccurs;
-
   @XmlAttribute(name = "minOccurs")
   @XmlSchemaType(name = "nonNegativeInteger")
   protected BigInteger minOccurs;

@@ -16,6 +16,8 @@
 
 package guru.mmp.common.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
 import guru.mmp.common.cdi.CDIUtil;
@@ -44,6 +46,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ApplicationJUnit4ClassRunner</code> class implements the JUnit runner that provides
  * support for JUnit test classes that test the capabilities provided by the the <b>mmp-java (Open
@@ -53,8 +57,7 @@ import java.util.logging.Logger;
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4ClassRunner
-  extends BlockJUnit4ClassRunner
+public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 {
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
@@ -71,7 +74,7 @@ public class ApplicationJUnit4ClassRunner
     try
     {
       System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-        "org.apache.naming.java.javaURLContextFactory");
+          "org.apache.naming.java.javaURLContextFactory");
       System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 
       if (!ContextBindings.isThreadBound())
@@ -92,15 +95,13 @@ public class ApplicationJUnit4ClassRunner
 
         ic.bind("app/AppName", "Test");
 
-        ic.bind("app/env/RegistryPathPrefix", "/Test");
-
         // Initialise the JTA user transaction and transaction manager
         Enhancer transactionManagerEnhancer = new Enhancer();
         transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
         transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
 
-        TransactionManager transactionManager = (TransactionManager) transactionManagerEnhancer
-          .create();
+        TransactionManager transactionManager =
+            (TransactionManager) transactionManagerEnhancer.create();
 
         ic.bind("comp/TransactionManager", transactionManager);
         ic.bind("jboss/TransactionManager", transactionManager);
@@ -118,7 +119,7 @@ public class ApplicationJUnit4ClassRunner
 
         // Initialise the Weld bean manager
         Class<?> weldClass = Thread.currentThread().getContextClassLoader().loadClass(
-          "org.jboss.weld.environment.se.Weld");
+            "org.jboss.weld.environment.se.Weld");
 
         Method initializeMethod = weldClass.getMethod("initialize");
 
@@ -172,8 +173,8 @@ public class ApplicationJUnit4ClassRunner
     }
     catch (Throwable e)
     {
-      throw new RuntimeException(
-        "Failed to inject the test object of type (" + testObject.getClass().getName() + ")", e);
+      throw new RuntimeException("Failed to inject the test object of type ("
+          + testObject.getClass().getName() + ")", e);
     }
 
     return testObject;
@@ -210,35 +211,35 @@ public class ApplicationJUnit4ClassRunner
       Thread.currentThread().getContextClassLoader().loadClass("org.h2.Driver");
 
       Class<?> jdbcDataSourceClass = Thread.currentThread().getContextClassLoader().loadClass(
-        "org.h2.jdbcx.JdbcDataSource");
+          "org.h2.jdbcx.JdbcDataSource");
 
       Method setURLMethod = jdbcDataSourceClass.getMethod("setURL", String.class);
 
       final DataSource jdbcDataSource = (DataSource) jdbcDataSourceClass.newInstance();
 
-      setURLMethod.invoke(jdbcDataSource,
-        "jdbc:h2:mem:" + Thread.currentThread().getName() + ";MODE=DB2;DB_CLOSE_DELAY=-1;" +
-          "DB_CLOSE_ON_EXIT=FALSE");
+      setURLMethod.invoke(jdbcDataSource, "jdbc:h2:mem:" + Thread.currentThread().getName()
+          + ";MODE=DB2;DB_CLOSE_DELAY=-1;" + "DB_CLOSE_ON_EXIT=FALSE");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
-      {
-        @Override
-        public void run()
-        {
-          try
           {
-            try (Connection connection = jdbcDataSource.getConnection();
-              Statement statement = connection.createStatement())
+            @Override
+            public void run()
             {
-              statement.executeUpdate("SHUTDOWN");
+              try
+              {
+                try (Connection connection = jdbcDataSource.getConnection();
+                  Statement statement = connection.createStatement())
+                {
+                  statement.executeUpdate("SHUTDOWN");
+                }
+              }
+              catch (Throwable e)
+              {
+                throw new RuntimeException("Failed to shutdown the in-memory application database",
+                    e);
+              }
             }
-          }
-          catch (Throwable e)
-          {
-            throw new RuntimeException("Failed to shutdown the in-memory application database", e);
-          }
-        }
-      });
+          });
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the
@@ -278,7 +279,7 @@ public class ApplicationJUnit4ClassRunner
           catch (Throwable f)
           {
             Logger.getAnonymousLogger().severe(
-              "Failed to shutdown the in-memory application database: " + e.getMessage());
+                "Failed to shutdown the in-memory application database: " + e.getMessage());
           }
 
           throw e;
@@ -286,28 +287,27 @@ public class ApplicationJUnit4ClassRunner
       }
 
       Class<?> atomikosDataSourceBeanClass = Thread.currentThread().getContextClassLoader()
-        .loadClass(
-        "com.atomikos.jdbc.AtomikosDataSourceBean");
+          .loadClass("com.atomikos.jdbc.AtomikosDataSourceBean");
 
       Object atomikosDataSourceBean = atomikosDataSourceBeanClass.newInstance();
 
       Method setUniqueResourceNameMethod = atomikosDataSourceBeanClass.getMethod(
-        "setUniqueResourceName", String.class);
+          "setUniqueResourceName", String.class);
 
-      setUniqueResourceNameMethod.invoke(atomikosDataSourceBean,
-        Thread.currentThread().getName() + "-ApplicationDataSource");
+      setUniqueResourceNameMethod.invoke(atomikosDataSourceBean, Thread.currentThread().getName()
+          + "-ApplicationDataSource");
 
       Method setXaDataSourceMethod = atomikosDataSourceBeanClass.getMethod("setXaDataSource",
-        XADataSource.class);
+          XADataSource.class);
 
       setXaDataSourceMethod.invoke(atomikosDataSourceBean, (XADataSource) jdbcDataSource);
 
-      Method setMinPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMinPoolSize",
-        Integer.TYPE);
+      Method setMinPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMinPoolSize", Integer
+          .TYPE);
       setMinPoolSizeMethod.invoke(atomikosDataSourceBean, 5);
 
-      Method setMaxPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMaxPoolSize",
-        Integer.TYPE);
+      Method setMaxPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMaxPoolSize", Integer
+          .TYPE);
       setMaxPoolSizeMethod.invoke(atomikosDataSourceBean, 10);
 
       return ((DataSource) atomikosDataSourceBean);
@@ -330,7 +330,7 @@ public class ApplicationJUnit4ClassRunner
     super.runChild(method, notifier);
 
     Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
-      TransactionManagerTransactionTracker.getActiveTransactionStackTraces();
+        TransactionManagerTransactionTracker.getActiveTransactionStackTraces();
 
     // Check for unexpected active transactions managed by the Transaction Manager implementation
     for (Transaction transaction : activeTransactionStackTraces.keySet())
@@ -342,18 +342,17 @@ public class ApplicationJUnit4ClassRunner
         if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
         {
           Logger.getAnonymousLogger().log(Level.WARNING,
-            "Failed to successfully execute the test (" + method.getName() + "): Found an " +
-              "unexpected active transaction (" + transaction.toString() + ") that was " +
-              "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class" +
-              " (" + stackTrace[i + 1].getClassName() + ") on line (" +
-              stackTrace[i + 1].getLineNumber() + ")");
+              "Failed to successfully execute the test (" + method.getName() + "): Found an "
+              + "unexpected active transaction (" + transaction.toString() + ") that was "
+              + "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
+              + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
 
-          throw new RuntimeException(
-            "Failed to successfully execute the test (" + method.getName() + "): Found an " +
-              "unexpected active transaction (" + transaction.toString() + ") that was " +
-              "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class" +
-              " (" + stackTrace[i + 1].getClassName() + ") on line (" +
-              stackTrace[i + 1].getLineNumber() + ")");
+          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
+              + "): Found an " + "unexpected active transaction (" + transaction.toString()
+              + ") that was " + "started by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
         }
       }
     }
@@ -370,18 +369,17 @@ public class ApplicationJUnit4ClassRunner
         if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
         {
           Logger.getAnonymousLogger().log(Level.WARNING,
-            "Failed to successfully execute the test (" + method.getName() + "): Found an " +
-              "unexpected active transaction (" + transaction.toString() + ") that was " +
-              "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class" +
-              " (" + stackTrace[i + 1].getClassName() + ") on line (" +
-              stackTrace[i + 1].getLineNumber() + ")");
+              "Failed to successfully execute the test (" + method.getName() + "): Found an "
+              + "unexpected active transaction (" + transaction.toString() + ") that was "
+              + "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
+              + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
 
-          throw new RuntimeException(
-            "Failed to successfully execute the test (" + method.getName() + "): Found an " +
-              "unexpected active transaction (" + transaction.toString() + ") that was " +
-              "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class" +
-              " (" + stackTrace[i + 1].getClassName() + ") on line (" +
-              stackTrace[i + 1].getLineNumber() + ")");
+          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
+              + "): Found an " + "unexpected active transaction (" + transaction.toString()
+              + ") that was " + "started by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
         }
       }
     }

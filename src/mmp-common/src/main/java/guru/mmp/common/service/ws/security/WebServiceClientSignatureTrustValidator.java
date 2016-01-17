@@ -16,11 +16,16 @@
 
 package guru.mmp.common.service.ws.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.handler.RequestData;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.security.cert.X509Certificate;
+
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -29,8 +34,8 @@ import java.util.regex.Pattern;
  *
  * @author Marcus Portmann
  */
-public class WebServiceClientSignatureTrustValidator
-  extends org.apache.ws.security.validate.SignatureTrustValidator
+public class WebServiceClientSignatureTrustValidator extends org.apache.ws.security.validate
+    .SignatureTrustValidator
 {
   /**
    * Returns <code>true</code> if the certificate's SubjectDN matches the constraints defined in
@@ -42,24 +47,25 @@ public class WebServiceClientSignatureTrustValidator
    * only has to match ONE of the subject cert constraints (not all)
    */
   @Override
-  protected boolean matches(
-    java.security.cert.X509Certificate cert, Collection<Pattern> subjectDNPatterns)
+  protected boolean matches(java.security.cert.X509Certificate cert,
+      Collection<Pattern> subjectDNPatterns)
   {
-    return (subjectDNPatterns == null) || (subjectDNPatterns.size() == 0) || super.matches(cert,
-      subjectDNPatterns);
+    return (subjectDNPatterns == null)
+        || (subjectDNPatterns.size() == 0)
+        || super.matches(cert, subjectDNPatterns);
   }
 
   @Override
-  protected boolean verifyTrustInCert(
-    X509Certificate cert, Crypto crypto, RequestData data, boolean enableRevocation)
+  protected boolean verifyTrustInCert(X509Certificate cert, Crypto crypto, RequestData data,
+      boolean enableRevocation)
     throws WSSecurityException
   {
     return super.verifyTrustInCert(cert, crypto, data, enableRevocation);
   }
 
   @Override
-  protected boolean verifyTrustInCerts(
-    X509Certificate[] certificates, Crypto crypto, RequestData data, boolean enableRevocation)
+  protected boolean verifyTrustInCerts(X509Certificate[] certificates, Crypto crypto,
+      RequestData data, boolean enableRevocation)
     throws WSSecurityException
   {
     return super.verifyTrustInCerts(certificates, crypto, data, enableRevocation);

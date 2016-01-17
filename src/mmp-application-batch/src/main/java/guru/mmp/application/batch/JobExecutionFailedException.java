@@ -25,8 +25,7 @@ package guru.mmp.application.batch;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class JobExecutionFailedException
-  extends Exception
+public class JobExecutionFailedException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

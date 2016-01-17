@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "openAttrs")
-@XmlSeeAlso({Redefine.class, Annotation.class, Annotated.class, Schema.class})
+@XmlSeeAlso({ Redefine.class, Annotation.class, Annotated.class, Schema.class })
 public class OpenAttrs
 {
   @XmlAnyAttribute

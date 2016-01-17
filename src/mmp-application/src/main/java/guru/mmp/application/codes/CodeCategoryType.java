@@ -24,12 +24,17 @@ package guru.mmp.application.codes;
 public enum CodeCategoryType
 {
   LOCAL_STANDARD(0, "Local Standard Codes"), LOCAL_CUSTOM(1, "Local Custom Codes"),
-  REMOTE_HTTP_SERVICE(2, "Remote HTTP Service"), REMOTE_WEB_SERVICE(3, "Remote Web Service"),
-  CODE_PROVIDER(4, "Code Provider");
+      REMOTE_HTTP_SERVICE(2, "Remote HTTP Service"), REMOTE_WEB_SERVICE(3, "Remote Web Service"),
+      CODE_PROVIDER(4, "Code Provider");
 
   private int code;
-
   private String name;
+
+  CodeCategoryType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
+  }
 
   /**
    * Returns the code category type given by the specified numeric code value.
@@ -60,12 +65,6 @@ public enum CodeCategoryType
       default:
         return CodeCategoryType.LOCAL_STANDARD;
     }
-  }
-
-  CodeCategoryType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
   }
 
   /**

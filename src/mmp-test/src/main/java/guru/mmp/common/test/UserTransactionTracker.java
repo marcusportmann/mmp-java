@@ -16,6 +16,8 @@
 
 package guru.mmp.common.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.TransactionManager;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -28,6 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UserTransactionTracker</code> class implements a cglib method interceptor that tracks
  * the Java Transaction (JTA) API transactions managed by a
@@ -39,9 +43,8 @@ public class UserTransactionTracker
   implements MethodInterceptor, Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private transient static Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
-    new ConcurrentHashMap<>();
+      new ConcurrentHashMap<>();
 
   /**
    * Returns the active transaction stack traces.
@@ -90,8 +93,8 @@ public class UserTransactionTracker
 
             if (afterTransaction != null)
             {
-              activeTransactionStackTraces.put(afterTransaction,
-                Thread.currentThread().getStackTrace());
+              activeTransactionStackTraces.put(afterTransaction, Thread.currentThread()
+                  .getStackTrace());
             }
           }
         }
@@ -147,7 +150,7 @@ public class UserTransactionTracker
     catch (Throwable e)
     {
       Logger.getAnonymousLogger().log(Level.SEVERE, "Failed to invoke the UserTransaction method",
-        e);
+          e);
 
       throw e;
     }
@@ -167,7 +170,7 @@ public class UserTransactionTracker
     catch (Throwable e)
     {
       Logger.getAnonymousLogger().log(Level.SEVERE, "Failed to retrieve the current transaction",
-        e);
+          e);
 
       return null;
     }

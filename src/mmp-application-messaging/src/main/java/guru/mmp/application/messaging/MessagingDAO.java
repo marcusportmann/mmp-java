@@ -16,9 +16,12 @@
 
 package guru.mmp.application.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message.Priority;
 import guru.mmp.application.messaging.Message.Status;
 import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import org.slf4j.Logger;
@@ -35,6 +38,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>MessagingDAO</code> class implements the persistence operations for the
  * messaging infrastructure.
@@ -48,74 +53,42 @@ public class MessagingDAO
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingDAO.class);
-
   private String allPartsQueuedForMessageSQL;
-
   private String archiveMessageSQL;
-
   private String createErrorReportSQL;
-
   private String createMessagePartSQL;
-
   private String createMessageSQL;
 
   /**
    * The data source used to provide connections to the database.
    */
   private DataSource dataSource;
-
   private String deleteMessagePartSQL;
-
   private String deleteMessagePartsForMessageSQL;
-
   private String deleteMessageSQL;
-
   private String getErrorReportSQL;
-
   private String getErrorReportSummarySQL;
-
   private String getMessagSQL;
-
   private String getMessagePartsQueuedForAssemblySQL;
-
   private String getMessagePartsQueuedForDownloadForUserSQL;
-
   private String getMessagesQueuedForDownloadForUserSQL;
-
   private String getMostRecentErrorReportSummariesSQL;
-
   private String getNextMessageForProcessingSQL;
-
   private String getNumberOfErrorReportsSQL;
-
   private String incrementMessageProcessingAttemptsSQL;
-
   private String isMessageArchivedSQL;
-
   private String isMessagePartQueuedForAssemblySQL;
-
   private String lockMessageForDownloadSQL;
-
   private String lockMessagePartForDownloadSQL;
-
   private String lockMessagePartSQL;
-
   private String lockMessageSQL;
-
   private String resetExpiredMessageLocksSQL;
-
   private String resetExpiredMessagePartLocksSQL;
-
   private String resetMessageLocksSQL;
-
   private String resetMessagePartLocksSQL;
-
   private String setMessagePartStatusSQL;
-
   private String setMessageStatusSQL;
-
   private String unlockMessagePartSQL;
-
   private String unlockMessageSQL;
 
   /**
@@ -151,8 +124,8 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to check whether all the message parts for the message (%s) have been queued for " +
-          "assembly in the database", messageId), e);
+          "Failed to check whether all the message parts for the message (%s) have been queued for "
+          + "assembly in the database", messageId), e);
     }
   }
 
@@ -180,15 +153,15 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             archiveMessageSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to archive the message (%s) in the database", message.getId()), e);
+      throw new DAOException(String.format("Failed to archive the message (%s) in the database",
+          message.getId()), e);
     }
   }
 
@@ -240,16 +213,15 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             createErrorReportSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to add the error report (%s) to the database", errorReport.getId()),
-        e);
+      throw new DAOException(String.format("Failed to add the error report (%s) to the database",
+          errorReport.getId()), e);
     }
   }
 
@@ -285,8 +257,8 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             createMessageSQL));
       }
 
@@ -295,8 +267,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to add the message (%s) to the database", message.getId()), e);
+      throw new DAOException(String.format("Failed to add the message (%s) to the database",
+          message.getId()), e);
     }
   }
 
@@ -337,8 +309,8 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             createMessagePartSQL));
       }
 
@@ -346,9 +318,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to add the message part (%s) to the database", messagePart.getId()),
-        e);
+      throw new DAOException(String.format("Failed to add the message part (%s) to the database",
+          messagePart.getId()), e);
     }
   }
 
@@ -371,8 +342,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(String.format("Failed to delete the message (%s) in the database", id),
-        e);
+      throw new DAOException(String.format("Failed to delete the message (%s) in the database",
+          id), e);
     }
   }
 
@@ -395,8 +366,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to delete the message part (%s) in the database", id), e);
+      throw new DAOException(String.format(
+          "Failed to delete the message part (%s) in the database", id), e);
     }
   }
 
@@ -419,9 +390,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to delete the message parts for the message (%s) in the database",
-          messageId), e);
+      throw new DAOException(String.format(
+          "Failed to delete the message parts for the message (%s) in the database", messageId), e);
     }
   }
 
@@ -456,8 +426,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to retrieve the error report (%s) from the database", id), e);
+      throw new DAOException(String.format(
+          "Failed to retrieve the error report (%s) from the database", id), e);
     }
   }
 
@@ -493,9 +463,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to retrieve the summary for the error report (%s) from the database",
-          id), e);
+      throw new DAOException(String.format(
+          "Failed to retrieve the summary for the error report (%s) from the database", id), e);
     }
   }
 
@@ -530,8 +499,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to retrieve the message (%s) from the database", id), e);
+      throw new DAOException(String.format("Failed to retrieve the message (%s) from the database",
+          id), e);
     }
   }
 
@@ -569,7 +538,7 @@ public class MessagingDAO
 
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
-          getMessagePartsQueuedForAssemblySQL))
+            getMessagePartsQueuedForAssemblySQL))
       {
         statement.setInt(1, MessagePart.Status.QUEUED_FOR_ASSEMBLY.getCode());
         statement.setObject(2, messageId);
@@ -600,8 +569,8 @@ public class MessagingDAO
             if (updateStatement.executeUpdate() != 1)
             {
               throw new DAOException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                lockMessagePartSQL));
+                  "No rows were affected as a result of executing the SQL statement (%s)",
+                  lockMessagePartSQL));
             }
           }
         }
@@ -620,13 +589,13 @@ public class MessagingDAO
       catch (Throwable f)
       {
         logger.error(String.format(
-          "Failed to rollback the transaction while retrieving the message parts that have been " +
-            "queued for assembly for the message (%s) from the database", messageId), f);
+            "Failed to rollback the transaction while retrieving the message parts that have been "
+            + "queued for assembly for the message (%s) from the database", messageId), f);
       }
 
       throw new DAOException(String.format(
-        "Failed to retrieve the message parts that have been queued for assembly for the message " +
-          "(%s) from the database", messageId), e);
+          "Failed to retrieve the message parts that have been queued for assembly for the message "
+          + "(%s) from the database", messageId), e);
     }
     finally
     {
@@ -640,8 +609,8 @@ public class MessagingDAO
       catch (Throwable e)
       {
         logger.error(String.format(
-          "Failed to resume the transaction while retrieving the message parts that have been " +
-            "queued for assembly for the message (%s) from the database", messageId), e);
+            "Failed to resume the transaction while retrieving the message parts that have been "
+            + "queued for assembly for the message (%s) from the database", messageId), e);
       }
     }
   }
@@ -660,8 +629,8 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<MessagePart> getMessagePartsQueuedForDownloadForUser(
-    String username, UUID deviceId, String lockName)
+  public List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId,
+      String lockName)
     throws DAOException
   {
     // Retrieve the Transaction Manager
@@ -683,7 +652,7 @@ public class MessagingDAO
 
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
-          getMessagePartsQueuedForDownloadForUserSQL))
+            getMessagePartsQueuedForDownloadForUserSQL))
       {
         /*
          * First check if we already have message parts locked for downloading for this device, if
@@ -732,7 +701,7 @@ public class MessagingDAO
           messagePart.setDownloadAttempts(messagePart.getDownloadAttempts() + 1);
 
           try (PreparedStatement updateStatement = connection.prepareStatement(
-            lockMessagePartForDownloadSQL))
+              lockMessagePartForDownloadSQL))
           {
             updateStatement.setInt(1, MessagePart.Status.DOWNLOADING.getCode());
             updateStatement.setString(2, lockName);
@@ -742,8 +711,8 @@ public class MessagingDAO
             if (updateStatement.executeUpdate() != 1)
             {
               throw new DAOException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                lockMessagePartForDownloadSQL));
+                  "No rows were affected as a result of executing the SQL statement (%s)",
+                  lockMessagePartForDownloadSQL));
             }
           }
         }
@@ -762,14 +731,14 @@ public class MessagingDAO
       catch (Throwable f)
       {
         logger.error(String.format(
-          "Failed to rollback the transaction while retrieving the message parts for the user " +
-            "(%s) that have been queued for download by the device (%s) from the database",
-          username, deviceId), f);
+            "Failed to rollback the transaction while retrieving the message parts for the user "
+            + "(%s) that have been queued for download by the device (%s) from the database",
+            username, deviceId), f);
       }
 
       throw new DAOException(String.format(
-        "Failed to retrieve the message parts for the user (%s) that have been queued for " +
-          "download by the device (%s) from the database", username, deviceId), e);
+          "Failed to retrieve the message parts for the user (%s) that have been queued for "
+          + "download by the device (%s) from the database", username, deviceId), e);
     }
     finally
     {
@@ -783,9 +752,9 @@ public class MessagingDAO
       catch (Throwable e)
       {
         logger.error(String.format(
-          "Failed to resume the transaction while retrieving the message parts for the user (%s) " +
-            "that have been queued for download by the device (%s) from the database", username,
-          deviceId), e);
+            "Failed to resume the transaction while retrieving the message parts for the user (%s) "
+            + "that have been queued for download by the device (%s) from the database", username,
+            deviceId), e);
       }
     }
   }
@@ -804,8 +773,8 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<Message> getMessagesQueuedForDownloadForUser(
-    String username, UUID deviceId, String lockName)
+  public List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId,
+      String lockName)
     throws DAOException
   {
     // Retrieve the Transaction Manager
@@ -827,7 +796,7 @@ public class MessagingDAO
 
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
-          getMessagesQueuedForDownloadForUserSQL))
+            getMessagesQueuedForDownloadForUserSQL))
       {
         /*
          * First check if we already have messages locked for downloading for the user-device
@@ -877,7 +846,7 @@ public class MessagingDAO
           message.setDownloadAttempts(message.getDownloadAttempts() + 1);
 
           try (PreparedStatement updateStatement = connection.prepareStatement(
-            lockMessageForDownloadSQL))
+              lockMessageForDownloadSQL))
           {
             updateStatement.setInt(1, Message.Status.DOWNLOADING.getCode());
             updateStatement.setString(2, lockName);
@@ -887,8 +856,8 @@ public class MessagingDAO
             if (updateStatement.executeUpdate() != 1)
             {
               throw new DAOException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                lockMessageForDownloadSQL));
+                  "No rows were affected as a result of executing the SQL statement (%s)",
+                  lockMessageForDownloadSQL));
             }
           }
         }
@@ -907,14 +876,14 @@ public class MessagingDAO
       catch (Throwable f)
       {
         logger.error(String.format(
-          "Failed to rollback the transaction while retrieving the messages for the user (%s) " +
-            "that have been queued for download by the device (%s) from the database", username,
-          deviceId), f);
+            "Failed to rollback the transaction while retrieving the messages for the user (%s) "
+            + "that have been queued for download by the device (%s) from the database", username,
+            deviceId), f);
       }
 
       throw new DAOException(String.format(
-        "Failed to retrieve the messages for the user (%s) that have been queued for download by " +
-          "the device (%s) from the database", username, deviceId), e);
+          "Failed to retrieve the messages for the user (%s) that have been queued for download by "
+          + "the device (%s) from the database", username, deviceId), e);
     }
     finally
     {
@@ -928,9 +897,9 @@ public class MessagingDAO
       catch (Throwable e)
       {
         logger.error(String.format(
-          "Failed to resume the transaction while retrieving the messages for the user (%s) that " +
-            "have been queued for download by the device (%s) from the database", username,
-          deviceId), e);
+            "Failed to resume the transaction while retrieving the messages for the user (%s) that "
+            + "have been queued for download by the device (%s) from the database", username,
+            deviceId), e);
       }
     }
   }
@@ -949,8 +918,8 @@ public class MessagingDAO
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-        String.format("%s ORDER BY CREATED DESC FETCH FIRST %d ROWS ONLY",
+      PreparedStatement statement = connection.prepareStatement(String.format(
+          "%s ORDER BY CREATED DESC FETCH FIRST %d ROWS ONLY",
           getMostRecentErrorReportSummariesSQL, maximumNumberOfEntries)))
     {
       try (ResultSet rs = statement.executeQuery())
@@ -968,7 +937,8 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException(
-        "Failed to retrieve the summaries for the most recent error reports from the database", e);
+          "Failed to retrieve the summaries for the most recent error reports from the database",
+          e);
     }
   }
 
@@ -1010,8 +980,8 @@ public class MessagingDAO
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(getNextMessageForProcessingSQL))
       {
-        Timestamp processedBefore = new Timestamp(
-          System.currentTimeMillis() - processingRetryDelay);
+        Timestamp processedBefore = new Timestamp(System.currentTimeMillis()
+            - processingRetryDelay);
 
         statement.setInt(1, Message.Status.QUEUED_FOR_PROCESSING.getCode());
         statement.setTimestamp(2, processedBefore);
@@ -1038,8 +1008,8 @@ public class MessagingDAO
               if (updateStatement.executeUpdate() != 1)
               {
                 throw new DAOException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  lockMessageSQL));
+                    "No rows were affected as a result of executing the SQL statement (%s)",
+                    lockMessageSQL));
               }
             }
           }
@@ -1059,13 +1029,13 @@ public class MessagingDAO
       catch (Throwable f)
       {
         logger.error(
-          "Failed to rollback the transaction while retrieving the next message that has been " +
-            "queued for processing from the database", f);
+            "Failed to rollback the transaction while retrieving the next message that has been "
+            + "queued for processing from the database", f);
       }
 
       throw new DAOException(
-        "Failed to retrieve the next message that has been queued for processing from the database",
-        e);
+          "Failed to retrieve the next message that has been queued for processing from the database",
+          e);
     }
     finally
     {
@@ -1079,8 +1049,8 @@ public class MessagingDAO
       catch (Throwable e)
       {
         logger.error(
-          "Failed to resume the transaction while retrieving the next message that has been " +
-            "queued for processing from the database", e);
+            "Failed to resume the transaction while retrieving the next message that has been "
+            + "queued for processing from the database", e);
       }
     }
   }
@@ -1112,8 +1082,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the total number of error reports in the database",
-        e);
+      throw new DAOException(
+          "Failed to retrieve the total number of error reports in the database", e);
     }
   }
 
@@ -1129,7 +1099,7 @@ public class MessagingDAO
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
-        incrementMessageProcessingAttemptsSQL))
+          incrementMessageProcessingAttemptsSQL))
     {
       Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 
@@ -1139,8 +1109,8 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             incrementMessageProcessingAttemptsSQL));
       }
 
@@ -1150,8 +1120,8 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to increment the processing attempts for the message (%s) in the database",
-        message.getId()), e);
+          "Failed to increment the processing attempts for the message (%s) in the database",
+          message.getId()), e);
     }
   }
 
@@ -1165,9 +1135,7 @@ public class MessagingDAO
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -1175,47 +1143,28 @@ public class MessagingDAO
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
-      throw new DAOException(
-        "Failed to retrieve the application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new DAOException("Failed to retrieve the application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
     {
-      // Retrieve the database meta data
-      String schemaSeparator;
-
-      try (Connection connection = dataSource.getConnection())
-      {
-        DatabaseMetaData metaData = connection.getMetaData();
-
-        // Retrieve the schema separator for the database
-        schemaSeparator = metaData.getCatalogSeparator();
-
-        if ((schemaSeparator == null) || (schemaSeparator.length() == 0))
-        {
-          schemaSeparator = ".";
-        }
-      }
-
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
+          dataSource);
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to initialise the %s data access object: %s", getClass().getName(),
-          e.getMessage()), e);
+      throw new DAOException(String.format("Failed to initialise the %s data access object: %s",
+          getClass().getName(), e.getMessage()), e);
     }
   }
 
@@ -1244,8 +1193,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        "Failed to check whether the message (" + id + ") is archived in the database", e);
+      throw new DAOException("Failed to check whether the message (" + id
+          + ") is archived in the database", e);
     }
   }
 
@@ -1275,8 +1224,8 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to check whether the message part (%s) is queued for assembly in the database", id),
-        e);
+          "Failed to check whether the message part (%s) is queued for assembly in the database",
+          id), e);
     }
   }
 
@@ -1291,8 +1240,8 @@ public class MessagingDAO
    *
    * @throws DAOException
    */
-  public int resetExpiredMessageLocks(
-    int lockTimeout, Message.Status status, Message.Status newStatus)
+  public int resetExpiredMessageLocks(int lockTimeout, Message.Status status, Message
+      .Status newStatus)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1307,9 +1256,8 @@ public class MessagingDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to reset the expired locks for the messages with the status (%s)",
-          status), e);
+      throw new DAOException(String.format(
+          "Failed to reset the expired locks for the messages with the status (%s)", status), e);
     }
   }
 
@@ -1324,8 +1272,8 @@ public class MessagingDAO
    *
    * @throws DAOException
    */
-  public int resetExpiredMessagePartLocks(
-    int lockTimeout, MessagePart.Status status, MessagePart.Status newStatus)
+  public int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status, MessagePart
+      .Status newStatus)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1341,7 +1289,8 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to reset the expired locks for the message parts with the status (%s)", status), e);
+          "Failed to reset the expired locks for the message parts with the status (%s)", status),
+          e);
     }
   }
 
@@ -1372,8 +1321,8 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to reset the locks for the messages with the status (%s) that have been locked " +
-          "using the lock name (%s)", status, lockName), e);
+          "Failed to reset the locks for the messages with the status (%s) that have been locked "
+          + "using the lock name (%s)", status, lockName), e);
     }
   }
 
@@ -1388,8 +1337,8 @@ public class MessagingDAO
    *
    * @throws DAOException
    */
-  public int resetMessagePartLocks(
-    String lockName, MessagePart.Status status, MessagePart.Status newStatus)
+  public int resetMessagePartLocks(String lockName, MessagePart.Status status, MessagePart
+      .Status newStatus)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -1404,8 +1353,8 @@ public class MessagingDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to reset the locks for the message parts with the status (%s) that have been " +
-          "locked using the lock name (%s)", status, lockName), e);
+          "Failed to reset the locks for the message parts with the status (%s) that have been "
+          + "locked using the lock name (%s)", status, lockName), e);
     }
   }
 
@@ -1430,16 +1379,16 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             setMessagePartStatusSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to set the status for the message part (%s) to (%s) in the database",
-          id, status.toString()), e);
+      throw new DAOException(String.format(
+          "Failed to set the status for the message part (%s) to (%s) in the database", id,
+          status.toString()), e);
     }
   }
 
@@ -1463,15 +1412,15 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             setMessageStatusSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to set the status for the message (%s) to (%s) in the database", id,
+      throw new DAOException(String.format(
+          "Failed to set the status for the message (%s) to (%s) in the database", id,
           status.toString()), e);
     }
   }
@@ -1496,16 +1445,16 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             unlockMessageSQL));
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to unlock and set the status for the message (%s) to (%s) in the database", id,
-        status.toString()), e);
+          "Failed to unlock and set the status for the message (%s) to (%s) in the database", id,
+          status.toString()), e);
     }
   }
 
@@ -1530,16 +1479,16 @@ public class MessagingDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             unlockMessagePartSQL));
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to unlock and set the status for the message part (%s) to (%s) in the database", id,
-        status.toString()), e);
+          "Failed to unlock and set the status for the message part (%s) to (%s) in the database",
+          id, status.toString()), e);
     }
   }
 
@@ -1551,35 +1500,35 @@ public class MessagingDAO
   protected void buildStatements(String schemaPrefix)
   {
     // allPartsQueuedForMessageSQL
-    allPartsQueuedForMessageSQL =
-      "SELECT COUNT(MP.ID) FROM " + schemaPrefix + "MESSAGE_PARTS MP" + " WHERE MP.MSG_ID=?";
+    allPartsQueuedForMessageSQL = "SELECT COUNT(MP.ID) FROM " + schemaPrefix + "MESSAGE_PARTS MP"
+        + " WHERE MP.MSG_ID=?";
 
     // archiveMessageSQL
-    archiveMessageSQL = "INSERT INTO " + schemaPrefix + "ARCHIVED_MESSAGES" + " (ID, USERNAME, " +
-      "DEVICE_ID, TYPE_ID, CORRELATION_ID, CREATED, ARCHIVED, DATA)" + " VALUES (?, ?, ?, ?, ?," +
-      " ?, ?, ?)";
+    archiveMessageSQL = "INSERT INTO " + schemaPrefix + "ARCHIVED_MESSAGES" + " (ID, USERNAME, "
+        + "DEVICE_ID, TYPE_ID, CORRELATION_ID, CREATED, ARCHIVED, DATA)"
+        + " VALUES (?, ?, ?, ?, ?," + " ?, ?, ?)";
 
     // createErrorReportSQL
-    createErrorReportSQL = "INSERT INTO " + schemaPrefix + "ERROR_REPORTS" + " (ID, " +
-      "APPLICATION_ID, APPLICATION_VERSION, DESCRIPTION, DETAIL, FEEDBACK, CREATED, WHO," + " " +
-      "DEVICE_ID, DATA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    createErrorReportSQL = "INSERT INTO " + schemaPrefix + "ERROR_REPORTS" + " (ID, "
+        + "APPLICATION_ID, APPLICATION_VERSION, DESCRIPTION, DETAIL, FEEDBACK, CREATED, WHO," + " "
+        + "DEVICE_ID, DATA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createMessagePartSQL
-    createMessagePartSQL = "INSERT INTO " + schemaPrefix + "MESSAGE_PARTS" + " (ID, PART_NO, " +
-      "TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED," + " MSG_ID, " +
-      "MSG_USERNAME, MSG_DEVICE_ID, MSG_TYPE_ID, MSG_CORRELATION_ID, MSG_PRIORITY," + " " +
-      "MSG_CREATED, MSG_DATA_HASH, MSG_ENCRYPTION_IV, MSG_CHECKSUM, DATA)" + " VALUES (?, ?, ?," +
-      " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    createMessagePartSQL = "INSERT INTO " + schemaPrefix + "MESSAGE_PARTS" + " (ID, PART_NO, "
+        + "TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED," + " MSG_ID, "
+        + "MSG_USERNAME, MSG_DEVICE_ID, MSG_TYPE_ID, MSG_CORRELATION_ID, MSG_PRIORITY," + " "
+        + "MSG_CREATED, MSG_DATA_HASH, MSG_ENCRYPTION_IV, MSG_CHECKSUM, DATA)"
+        + " VALUES (?, ?, ?," + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createMessageSQL
-    createMessageSQL = "INSERT INTO " + schemaPrefix + "MESSAGES" + " (ID, USERNAME, DEVICE_ID, " +
-      "TYPE_ID, CORRELATION_ID, PRIORITY, STATUS, CREATED," + " PERSISTED, UPDATED, " +
-      "SEND_ATTEMPTS, PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, DATA)" + " VALUES (?, ?, ?, ?, ?, ?," +
-      " ?, ?, ?, ?, ?, ?, ?, ?)";
+    createMessageSQL = "INSERT INTO " + schemaPrefix + "MESSAGES" + " (ID, USERNAME, DEVICE_ID, "
+        + "TYPE_ID, CORRELATION_ID, PRIORITY, STATUS, CREATED," + " PERSISTED, UPDATED, "
+        + "SEND_ATTEMPTS, PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, DATA)"
+        + " VALUES (?, ?, ?, ?, ?, ?," + " ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // deleteMessagePartsForMessageSQL
-    deleteMessagePartsForMessageSQL = "DELETE FROM " + schemaPrefix + "MESSAGE_PARTS MP WHERE MP" +
-      ".MSG_ID=?";
+    deleteMessagePartsForMessageSQL = "DELETE FROM " + schemaPrefix + "MESSAGE_PARTS MP WHERE MP"
+        + ".MSG_ID=?";
 
     // deleteMessagePartSQL
     deleteMessagePartSQL = "DELETE FROM " + schemaPrefix + "MESSAGE_PARTS MP WHERE MP.ID=?";
@@ -1588,126 +1537,129 @@ public class MessagingDAO
     deleteMessageSQL = "DELETE FROM " + schemaPrefix + "MESSAGES M WHERE M.ID=?";
 
     // getErrorReportSQL
-    getErrorReportSQL = "SELECT ER.ID, ER.APPLICATION_ID, ER.APPLICATION_VERSION," + " ER" +
-      ".DESCRIPTION, ER.DETAIL, ER.FEEDBACK, ER.CREATED, ER.WHO, ER.DEVICE_ID, ER.DATA FROM " +
-      schemaPrefix + "ERROR_REPORTS ER WHERE ER.ID=?";
+    getErrorReportSQL = "SELECT ER.ID, ER.APPLICATION_ID, ER.APPLICATION_VERSION," + " ER"
+        + ".DESCRIPTION, ER.DETAIL, ER.FEEDBACK, ER.CREATED, ER.WHO, ER.DEVICE_ID, ER.DATA FROM "
+        + schemaPrefix + "ERROR_REPORTS ER WHERE ER.ID=?";
 
     // getErrorReportSummarySQL
-    getErrorReportSummarySQL = "SELECT ER.ID, ER.APPLICATION_ID, P.NAME, ER.APPLICATION_VERSION, " +
-      "ER.CREATED, ER.WHO," + " ER.DEVICE_ID FROM " + schemaPrefix + "ERROR_REPORTS ER LEFT " +
-      "OUTER JOIN " + schemaPrefix + "PACKAGES P ON ER.APPLICATION_ID = P.ID AND ER.ID=?";
+    getErrorReportSummarySQL = "SELECT ER.ID, ER.APPLICATION_ID, P.NAME, ER.APPLICATION_VERSION, "
+        + "ER.CREATED, ER.WHO," + " ER.DEVICE_ID FROM " + schemaPrefix + "ERROR_REPORTS ER LEFT "
+        + "OUTER JOIN " + schemaPrefix + "PACKAGES P ON ER.APPLICATION_ID = P.ID AND ER.ID=?";
 
     // getMessagSQL
-    getMessagSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M.CORRELATION_ID," + " M" +
-      ".PRIORITY, M.STATUS, M.CREATED, M.PERSISTED, M.UPDATED, M.SEND_ATTEMPTS," + " M" +
-      ".PROCESS_ATTEMPTS, M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M.LAST_PROCESSED, M.DATA FROM " +
-      schemaPrefix + "MESSAGES M WHERE M.ID=?";
+    getMessagSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M.CORRELATION_ID," + " M"
+        + ".PRIORITY, M.STATUS, M.CREATED, M.PERSISTED, M.UPDATED, M.SEND_ATTEMPTS," + " M"
+        + ".PROCESS_ATTEMPTS, M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M.LAST_PROCESSED, M.DATA FROM "
+        + schemaPrefix + "MESSAGES M WHERE M.ID=?";
 
     // getMessagePartsQueuedForAssemblySQL
-    getMessagePartsQueuedForAssemblySQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP" +
-      ".SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS," + " MP.STATUS, MP.PERSISTED, MP.UPDATED, MP" +
-      ".MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID," + " MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, " +
-      "MP.MSG_PRIORITY, MP.MSG_CREATED," + " MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV, MP" +
-      ".MSG_CHECKSUM, MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP" + " " +
-      "WHERE MP.STATUS=? AND MP.MSG_ID=? ORDER BY MP.PART_NO FOR UPDATE";
+    getMessagePartsQueuedForAssemblySQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP"
+        + ".SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS," + " MP.STATUS, MP.PERSISTED, MP.UPDATED, MP"
+        + ".MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID,"
+        + " MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, " + "MP.MSG_PRIORITY, MP.MSG_CREATED,"
+        + " MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV, MP"
+        + ".MSG_CHECKSUM, MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP" + " "
+        + "WHERE MP.STATUS=? AND MP.MSG_ID=? ORDER BY MP.PART_NO FOR UPDATE";
 
     // getMessagePartsQueuedForDownloadForUserSQL
-    getMessagePartsQueuedForDownloadForUserSQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP" +
-      ".SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS," + " MP.PERSISTED, MP.UPDATED, MP" +
-      ".MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID," + " MP.MSG_CORRELATION_ID, " +
-      "MP.MSG_PRIORITY, MP.MSG_CREATED, MP.MSG_DATA_HASH," + " MP.MSG_ENCRYPTION_IV, MP" +
-      ".MSG_CHECKSUM," + " MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP" + "" +
-      " WHERE MP.STATUS=? AND MP.MSG_USERNAME=? AND MP.MSG_DEVICE_ID=?" + " ORDER BY MP.PART_NO" +
-      " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
+    getMessagePartsQueuedForDownloadForUserSQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP"
+        + ".SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS," + " MP.PERSISTED, MP.UPDATED, MP"
+        + ".MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID,"
+        + " MP.MSG_CORRELATION_ID, " + "MP.MSG_PRIORITY, MP.MSG_CREATED, MP.MSG_DATA_HASH,"
+        + " MP.MSG_ENCRYPTION_IV, MP" + ".MSG_CHECKSUM," + " MP.LOCK_NAME, MP.DATA FROM "
+        + schemaPrefix + "MESSAGE_PARTS MP" + ""
+        + " WHERE MP.STATUS=? AND MP.MSG_USERNAME=? AND MP.MSG_DEVICE_ID=?"
+        + " ORDER BY MP.PART_NO" + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
     // getMessagesQueuedForDownloadForUserSQL
-    getMessagesQueuedForDownloadForUserSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M" +
-      ".CORRELATION_ID, M.PRIORITY, M.STATUS," + " M.CREATED, M.PERSISTED, M.UPDATED, M" +
-      ".SEND_ATTEMPTS, M.PROCESS_ATTEMPTS," + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M" +
-      ".LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M" + " WHERE M.STATUS=? AND M" +
-      ".USERNAME=? AND M.DEVICE_ID=? ORDER BY M.CREATED" + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
+    getMessagesQueuedForDownloadForUserSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M"
+        + ".CORRELATION_ID, M.PRIORITY, M.STATUS," + " M.CREATED, M.PERSISTED, M.UPDATED, M"
+        + ".SEND_ATTEMPTS, M.PROCESS_ATTEMPTS," + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M"
+        + ".LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M" + " WHERE M.STATUS=? AND M"
+        + ".USERNAME=? AND M.DEVICE_ID=? ORDER BY M.CREATED"
+        + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
     // getMostRecentErrorReportSummariesSQL
-    getMostRecentErrorReportSummariesSQL = "SELECT ER.ID, ER.APPLICATION_ID, P.NAME, ER" +
-      ".APPLICATION_VERSION, ER.CREATED, ER.WHO," + " ER.DEVICE_ID FROM " + schemaPrefix +
-      "ERROR_REPORTS ER LEFT OUTER JOIN " + schemaPrefix + "PACKAGES P ON ER.APPLICATION_ID = P" +
-      ".ID";
+    getMostRecentErrorReportSummariesSQL = "SELECT ER.ID, ER.APPLICATION_ID, P.NAME, ER"
+        + ".APPLICATION_VERSION, ER.CREATED, ER.WHO," + " ER.DEVICE_ID FROM " + schemaPrefix
+        + "ERROR_REPORTS ER LEFT OUTER JOIN " + schemaPrefix
+        + "PACKAGES P ON ER.APPLICATION_ID = P" + ".ID";
 
     // getNextMessageForProcessingSQL
-    getNextMessageForProcessingSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M" +
-      ".CORRELATION_ID, M.PRIORITY, M.STATUS," + " M.CREATED, M.PERSISTED, M.UPDATED, M" +
-      ".SEND_ATTEMPTS, M.PROCESS_ATTEMPTS," + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M" +
-      ".LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M" + " WHERE M.STATUS=? AND (M" +
-      ".LAST_PROCESSED<? OR M.LAST_PROCESSED IS NULL)" + " ORDER BY M.UPDATED FETCH FIRST 1 " +
-      "ROWS ONLY FOR UPDATE";
+    getNextMessageForProcessingSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M"
+        + ".CORRELATION_ID, M.PRIORITY, M.STATUS," + " M.CREATED, M.PERSISTED, M.UPDATED, M"
+        + ".SEND_ATTEMPTS, M.PROCESS_ATTEMPTS," + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M"
+        + ".LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M"
+        + " WHERE M.STATUS=? AND (M" + ".LAST_PROCESSED<? OR M.LAST_PROCESSED IS NULL)"
+        + " ORDER BY M.UPDATED FETCH FIRST 1 " + "ROWS ONLY FOR UPDATE";
 
     // getNumberOfErrorReportsSQL
-    getNumberOfErrorReportsSQL = "SELECT COUNT(ER.ID)" + " FROM " + schemaPrefix + "ERROR_REPORTS" +
-      " ER";
+    getNumberOfErrorReportsSQL = "SELECT COUNT(ER.ID)" + " FROM " + schemaPrefix + "ERROR_REPORTS"
+        + " ER";
 
     // incrementMessageProcessingAttemptsSQL
-    incrementMessageProcessingAttemptsSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M" +
-      ".PROCESS_ATTEMPTS=M.PROCESS_ATTEMPTS + 1, M.UPDATED=?, M.LAST_PROCESSED=?" + " WHERE M" +
-      ".ID=?";
+    incrementMessageProcessingAttemptsSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M"
+        + ".PROCESS_ATTEMPTS=M.PROCESS_ATTEMPTS + 1, M.UPDATED=?, M.LAST_PROCESSED=?" + " WHERE M"
+        + ".ID=?";
 
     // isMessageArchivedSQL
-    isMessageArchivedSQL = "SELECT AM.ID FROM " + schemaPrefix + "ARCHIVED_MESSAGES AM" + " WHERE" +
-      " AM.ID=?";
+    isMessageArchivedSQL = "SELECT AM.ID FROM " + schemaPrefix + "ARCHIVED_MESSAGES AM" + " WHERE"
+        + " AM.ID=?";
 
     // isMessagePartQueuedForAssemblySQL
-    isMessagePartQueuedForAssemblySQL =
-      "SELECT MP.ID FROM " + schemaPrefix + "MESSAGE_PARTS MP" + " WHERE MP.ID=?";
+    isMessagePartQueuedForAssemblySQL = "SELECT MP.ID FROM " + schemaPrefix + "MESSAGE_PARTS MP"
+        + " WHERE MP.ID=?";
 
     // lockMessageForDownloadSQL
-    lockMessageForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M" +
-      ".LOCK_NAME=?, M.UPDATED=?, M.DOWNLOAD_ATTEMPTS=M.DOWNLOAD_ATTEMPTS+1" + " WHERE M.ID=?";
+    lockMessageForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M"
+        + ".LOCK_NAME=?, M.UPDATED=?, M.DOWNLOAD_ATTEMPTS=M.DOWNLOAD_ATTEMPTS+1" + " WHERE M.ID=?";
 
     // lockMessagePartForDownloadSQL
-    lockMessagePartForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP" +
-      ".STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=?," + " MP.DOWNLOAD_ATTEMPTS=MP" +
-      ".DOWNLOAD_ATTEMPTS+1 WHERE MP.ID=?";
+    lockMessagePartForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP"
+        + ".STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=?," + " MP.DOWNLOAD_ATTEMPTS=MP"
+        + ".DOWNLOAD_ATTEMPTS+1 WHERE MP.ID=?";
 
     // lockMessageSQL
-    lockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.LOCK_NAME=?, M" +
-      ".UPDATED=? WHERE M.ID=?";
+    lockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.LOCK_NAME=?, M"
+        + ".UPDATED=? WHERE M.ID=?";
 
     // lockMessagePartSQL
-    lockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, MP" +
-      ".LOCK_NAME=?, MP.UPDATED=? WHERE MP.ID=?";
+    lockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, MP"
+        + ".LOCK_NAME=?, MP.UPDATED=? WHERE MP.ID=?";
 
     // resetExpiredMessageLocksSQL
-    resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M" +
-      ".LOCK_NAME=NULL, M.UPDATED=?" + " WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M" +
-      ".UPDATED < ?";
+    resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M"
+        + ".LOCK_NAME=NULL, M.UPDATED=?" + " WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M"
+        + ".UPDATED < ?";
 
     // resetExpiredMessagePartLocksSQL
-    resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP" +
-      ".STATUS=?, MP.LOCK_NAME=NULL, MP.UPDATED=?" + " WHERE MP.LOCK_NAME IS NOT NULL AND MP" +
-      ".STATUS=? AND MP.UPDATED < ?";
+    resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP"
+        + ".STATUS=?, MP.LOCK_NAME=NULL, MP.UPDATED=?" + " WHERE MP.LOCK_NAME IS NOT NULL AND MP"
+        + ".STATUS=? AND MP.UPDATED < ?";
 
     // resetMessageLocksSQL
-    resetMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M" +
-      ".LOCK_NAME=NULL, M.UPDATED=? WHERE M.LOCK_NAME=? AND M.STATUS=?";
+    resetMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M"
+        + ".LOCK_NAME=NULL, M.UPDATED=? WHERE M.LOCK_NAME=? AND M.STATUS=?";
 
     // resetMessagePartLocksSQL
-    resetMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?," +
-      " MP.LOCK_NAME=NULL WHERE MP.LOCK_NAME=? AND MP.STATUS=?";
+    resetMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?,"
+        + " MP.LOCK_NAME=NULL WHERE MP.LOCK_NAME=? AND MP.STATUS=?";
 
     // setMessagePartStatusSQL
-    setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, " +
-      "MP.UPDATED=? WHERE MP.ID=?";
+    setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, "
+        + "MP.UPDATED=? WHERE MP.ID=?";
 
     // setMessageStatusSQL
-    setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.UPDATED=?" +
-      " WHERE M.ID=?";
+    setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.UPDATED=?"
+        + " WHERE M.ID=?";
 
     // unlockMessagePartSQL
-    unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, MP" +
-      ".UPDATED=?, MP.LOCK_NAME=NULL WHERE MP.ID=?";
+    unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, MP"
+        + ".UPDATED=?, MP.LOCK_NAME=NULL WHERE MP.ID=?";
 
     // unlockMessageSQL
-    unlockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.UPDATED=?, M" +
-      ".LOCK_NAME=NULL WHERE M.ID=?";
+    unlockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.UPDATED=?, M"
+        + ".LOCK_NAME=NULL WHERE M.ID=?";
   }
 
   private ErrorReport buildErrorReportFromResultSet(ResultSet rs)
@@ -1716,8 +1668,11 @@ public class MessagingDAO
     byte[] data = rs.getBytes(10);
 
     return new ErrorReport((UUID) rs.getObject(1), (UUID) rs.getObject(2), rs.getInt(3),
-      rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7), rs.getString(8),
-      (UUID) rs.getObject(9), (data == null) ? new byte[0] : data);
+        rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7), rs.getString(8),
+        (UUID) rs.getObject(9),
+        (data == null)
+        ? new byte[0]
+        : data);
   }
 
   private ErrorReportSummary buildErrorReportSummaryFromResultSet(ResultSet rs)
@@ -1731,27 +1686,27 @@ public class MessagingDAO
     }
 
     return new ErrorReportSummary((UUID) rs.getObject(1), (UUID) rs.getObject(2), applicationName,
-      rs.getInt(4), rs.getTimestamp(5), rs.getString(6), (UUID) rs.getObject(7));
+        rs.getInt(4), rs.getTimestamp(5), rs.getString(6), (UUID) rs.getObject(7));
   }
 
   private Message buildMessageFromResultSet(ResultSet rs)
     throws SQLException
   {
     return new Message((UUID) rs.getObject(1), rs.getString(2), (UUID) rs.getObject(3),
-      (UUID) rs.getObject(4), (UUID) rs.getObject(5), Priority.fromCode(rs.getInt(6)),
-      Status.fromCode(rs.getInt(7)), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),
-      rs.getInt(11), rs.getInt(12), rs.getInt(13), rs.getString(14), rs.getTimestamp(15),
-      rs.getBytes(16), "", "");
+        (UUID) rs.getObject(4), (UUID) rs.getObject(5), Priority.fromCode(rs.getInt(6)),
+        Status.fromCode(rs.getInt(7)), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),
+        rs.getInt(11), rs.getInt(12), rs.getInt(13), rs.getString(14), rs.getTimestamp(15),
+        rs.getBytes(16), "", "");
   }
 
   private MessagePart buildMessagePartFromResultSet(ResultSet rs)
     throws SQLException
   {
     return new MessagePart((UUID) rs.getObject(1), rs.getInt(2), rs.getInt(3), rs.getInt(4),
-      rs.getInt(5), MessagePart.Status.fromCode(rs.getInt(6)), rs.getTimestamp(7),
-      rs.getTimestamp(8), (UUID) rs.getObject(9), rs.getString(10), (UUID) rs.getObject(11),
-      (UUID) rs.getObject(12), (UUID) rs.getObject(13), Priority.fromCode(rs.getInt(14)),
-      rs.getTimestamp(15), rs.getString(16), rs.getString(17), rs.getString(18), rs.getString(19),
-      rs.getBytes(20));
+        rs.getInt(5), MessagePart.Status.fromCode(rs.getInt(6)), rs.getTimestamp(7),
+        rs.getTimestamp(8), (UUID) rs.getObject(9), rs.getString(10), (UUID) rs.getObject(11),
+        (UUID) rs.getObject(12), (UUID) rs.getObject(13), Priority.fromCode(rs.getInt(14)),
+        rs.getTimestamp(15), rs.getString(16), rs.getString(17), rs.getString(18), rs.getString(
+        19), rs.getBytes(20));
   }
 }

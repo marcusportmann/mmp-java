@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.handler;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -70,11 +72,11 @@ public class MessageHandlerConfig
    *                       supported message type
    * @param isArchivable   should messages of the supported message type be archived
    */
-  public void addMessageConfig(
-    UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous, boolean isArchivable)
+  public void addMessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+      boolean isArchivable)
   {
-    messagesConfig.add(
-      new MessageConfig(messageTypeId, isSynchronous, isAsynchronous, isArchivable));
+    messagesConfig.add(new MessageConfig(messageTypeId, isSynchronous, isAsynchronous,
+        isArchivable));
   }
 
   /**
@@ -223,8 +225,8 @@ public class MessageHandlerConfig
      *                       the supported message type
      * @param isArchivable   should messages of the supported message type be archived
      */
-    public MessageConfig(
-      UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous, boolean isArchivable)
+    public MessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+        boolean isArchivable)
     {
       this.messageTypeId = messageTypeId;
       this.isSynchronous = isSynchronous;

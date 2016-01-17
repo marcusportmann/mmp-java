@@ -16,7 +16,10 @@
 
 package guru.mmp.application.process;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOException;
+import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import org.slf4j.Logger;
@@ -32,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ProcessDAO</code> class implements the process-related persistence operations.
  *
@@ -44,50 +49,30 @@ public class ProcessDAO
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ProcessDAO.class);
-
   private String createProcessDefinitionSQL;
-
   private String createProcessInstanceSQL;
 
   /**
    * The data source used to provide connections to the database.
    */
   private DataSource dataSource;
-
   private String deleteProcessDefinitionSQL;
-
   private String deleteProcessInstanceSQL;
-
   private String getCurrentProcessDefinitionSummariesSQL;
-
   private String getCurrentProcessDefinitionsSQL;
-
   private String getNextProcessInstanceScheduledForExecutionSQL;
-
   private String getNumberOfProcessDefinitionSQL;
-
   private String getNumberOfProcessInstancesSQL;
-
   private String getProcessDefinitionByIdAndVersionSQL;
-
   private String getProcessDefinitionSummaryByIdAndVersionSQL;
-
   private String getProcessInstanceByIdSQL;
-
   private String getProcessInstanceSummariesSQL;
-
   private String getProcessInstanceSummaryByIdSQL;
-
   private String lockProcessInstanceSQL;
-
   private String processDefinitionExistsSQL;
-
   private String processInstanceExistsSQL;
-
   private String resetProcessInstanceLocksSQL;
-
   private String unlockProcessInstanceSQL;
-
   private String updateProcessInstanceDataSQL;
 
   /**
@@ -116,16 +101,17 @@ public class ProcessDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             createProcessDefinitionSQL));
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to add the process definition (%s) with ID (%s) and version (%d) to the database",
-        processDefinition.getName(), processDefinition.getId(), processDefinition.getVersion()), e);
+          "Failed to add the process definition (%s) with ID (%s) and version (%d) to the database",
+          processDefinition.getName(), processDefinition.getId(), processDefinition.getVersion()),
+          e);
     }
   }
 
@@ -160,16 +146,15 @@ public class ProcessDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             createProcessInstanceSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to add the process instance (%s) to the database",
-          processInstance.getId()), e);
+      throw new DAOException(String.format(
+          "Failed to add the process instance (%s) to the database", processInstance.getId()), e);
     }
   }
 
@@ -191,15 +176,15 @@ public class ProcessDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             deleteProcessDefinitionSQL));
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to delete all versions of the process definition (%s) in the database", id), e);
+          "Failed to delete all versions of the process definition (%s) in the database", id), e);
     }
   }
 
@@ -221,15 +206,15 @@ public class ProcessDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             deleteProcessInstanceSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to delete the process instance (%s) in the database", id), e);
+      throw new DAOException(String.format(
+          "Failed to delete the process instance (%s) in the database", id), e);
     }
   }
 
@@ -245,7 +230,7 @@ public class ProcessDAO
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
-        getCurrentProcessDefinitionSummariesSQL))
+          getCurrentProcessDefinitionSummariesSQL))
     {
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
@@ -262,8 +247,8 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(
-        "Failed to retrieve the summaries for the current versions of the process definitions " +
-          "from the database", e);
+          "Failed to retrieve the summaries for the current versions of the process definitions "
+          + "from the database", e);
     }
   }
 
@@ -295,7 +280,8 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(
-        "Failed to retrieve the current versions of the process definitions from the database", e);
+          "Failed to retrieve the current versions of the process definitions from the database",
+          e);
     }
   }
 
@@ -334,7 +320,7 @@ public class ProcessDAO
 
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
-          getNextProcessInstanceScheduledForExecutionSQL))
+            getNextProcessInstanceScheduledForExecutionSQL))
       {
         statement.setInt(1, ProcessInstance.Status.SCHEDULED.getCode());
         statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
@@ -349,7 +335,7 @@ public class ProcessDAO
             processInstance.setLockName(lockName);
 
             try (PreparedStatement updateStatement = connection.prepareStatement(
-              lockProcessInstanceSQL))
+                lockProcessInstanceSQL))
             {
               updateStatement.setInt(1, ProcessInstance.Status.EXECUTING.getCode());
               updateStatement.setString(2, lockName);
@@ -358,8 +344,8 @@ public class ProcessDAO
               if (updateStatement.executeUpdate() != 1)
               {
                 throw new DAOException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  lockProcessInstanceSQL));
+                    "No rows were affected as a result of executing the SQL statement (%s)",
+                    lockProcessInstanceSQL));
               }
             }
           }
@@ -379,13 +365,13 @@ public class ProcessDAO
       catch (Throwable f)
       {
         logger.error(
-          "Failed to rollback the transaction while retrieving the next process instance that has" +
-            " been scheduled for execution from the database", f);
+            "Failed to rollback the transaction while retrieving the next process instance that has"
+            + " been scheduled for execution from the database", f);
       }
 
       throw new DAOException(
-        "Failed to retrieve the next process instance that has been scheduled for execution from " +
-          "the database", e);
+          "Failed to retrieve the next process instance that has been scheduled for execution from "
+          + "the database", e);
     }
     finally
     {
@@ -399,8 +385,8 @@ public class ProcessDAO
       catch (Throwable e)
       {
         logger.error(
-          "Failed to resume the transaction while retrieving the next process instance that has " +
-            "been scheduled for execution from the database", e);
+            "Failed to resume the transaction while retrieving the next process instance that has "
+            + "been scheduled for execution from the database", e);
       }
     }
   }
@@ -427,15 +413,15 @@ public class ProcessDAO
         else
         {
           throw new DAOException(String.format(
-            "No results were returned as a result of executing the SQL statement (%s)",
-            getNumberOfProcessDefinitionSQL));
+              "No results were returned as a result of executing the SQL statement (%s)",
+              getNumberOfProcessDefinitionSQL));
         }
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(
-        "Failed to retrieve the number of process definitions from the database", e);
+          "Failed to retrieve the number of process definitions from the database", e);
     }
   }
 
@@ -461,15 +447,15 @@ public class ProcessDAO
         else
         {
           throw new DAOException(String.format(
-            "No results were returned as a result of executing the SQL statement (%s)",
-            getNumberOfProcessInstancesSQL));
+              "No results were returned as a result of executing the SQL statement (%s)",
+              getNumberOfProcessInstancesSQL));
         }
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException("Failed to retrieve the number of process instances from the database",
-        e);
+      throw new DAOException(
+          "Failed to retrieve the number of process instances from the database", e);
     }
   }
 
@@ -490,7 +476,7 @@ public class ProcessDAO
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
-        getProcessDefinitionByIdAndVersionSQL))
+          getProcessDefinitionByIdAndVersionSQL))
     {
       statement.setObject(1, id);
       statement.setInt(2, version);
@@ -510,8 +496,8 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to retrieve the process definition with ID (%s) and version (%d) from the database",
-        id, version), e);
+          "Failed to retrieve the process definition with ID (%s) and version (%d) from the database",
+          id, version), e);
     }
   }
 
@@ -532,7 +518,7 @@ public class ProcessDAO
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
-        getProcessDefinitionSummaryByIdAndVersionSQL))
+          getProcessDefinitionSummaryByIdAndVersionSQL))
     {
       statement.setObject(1, id);
       statement.setInt(2, version);
@@ -552,8 +538,8 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to retrieve the summary for the process definition with ID (%s) and version (%d) " +
-          "from the database", id, version), e);
+          "Failed to retrieve the summary for the process definition with ID (%s) and version (%d) "
+          + "from the database", id, version), e);
     }
   }
 
@@ -589,8 +575,8 @@ public class ProcessDAO
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to retrieve the process instance (%s) from the database", id), e);
+      throw new DAOException(String.format(
+          "Failed to retrieve the process instance (%s) from the database", id), e);
     }
   }
 
@@ -622,7 +608,7 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(
-        "Failed to retrieve the summaries for the process instances from the database", e);
+          "Failed to retrieve the summaries for the process instances from the database", e);
     }
   }
 
@@ -660,7 +646,7 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to retrieve the summary for the process instance (%s) from the database", id), e);
+          "Failed to retrieve the summary for the process instance (%s) from the database", id), e);
     }
   }
 
@@ -674,9 +660,7 @@ public class ProcessDAO
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -684,57 +668,28 @@ public class ProcessDAO
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
-      throw new DAOException(
-        "Failed to retrieve the application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new DAOException("Failed to retrieve the application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
     {
-      // Retrieve the database meta data
-      String schemaSeparator;
-      String idQuote;
-
-      try (Connection connection = dataSource.getConnection())
-      {
-        DatabaseMetaData metaData = connection.getMetaData();
-
-        // Retrieve the schema separator for the database
-        schemaSeparator = metaData.getCatalogSeparator();
-
-        if ((schemaSeparator == null) || (schemaSeparator.length() == 0))
-        {
-          schemaSeparator = ".";
-        }
-
-        // Retrieve the identifier enquoting string for the database
-        idQuote = metaData.getIdentifierQuoteString();
-
-        if ((idQuote == null) || (idQuote.length() == 0))
-        {
-          idQuote = "\"";
-        }
-      }
-
       // Determine the schema prefix
-      String schemaPrefix = idQuote + DataAccessObject.MMP_DATABASE_SCHEMA + idQuote +
-        schemaSeparator;
+      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
+          dataSource);
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to initialise the %s data access object: %s", getClass().getName(),
-          e.getMessage()), e);
+      throw new DAOException(String.format("Failed to initialise the %s data access object: %s",
+          getClass().getName(), e.getMessage()), e);
     }
   }
 
@@ -767,16 +722,16 @@ public class ProcessDAO
         else
         {
           throw new DAOException(String.format(
-            "No results were returned as a result of executing the SQL statement (%s)",
-            processDefinitionExistsSQL));
+              "No results were returned as a result of executing the SQL statement (%s)",
+              processDefinitionExistsSQL));
         }
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to check whether the process definition with ID (%s) and version (%d) exists in " +
-          "the database", id, version), e);
+          "Failed to check whether the process definition with ID (%s) and version (%d) exists in "
+          + "the database", id, version), e);
     }
   }
 
@@ -807,16 +762,15 @@ public class ProcessDAO
         else
         {
           throw new DAOException(String.format(
-            "No results were returned as a result of executing the SQL statement (%s)",
-            processInstanceExistsSQL));
+              "No results were returned as a result of executing the SQL statement (%s)",
+              processInstanceExistsSQL));
         }
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to check whether the process instance (%s) exists in the database",
-          id), e);
+      throw new DAOException(String.format(
+          "Failed to check whether the process instance (%s) exists in the database", id), e);
     }
   }
 
@@ -832,8 +786,8 @@ public class ProcessDAO
    *
    * @throws DAOException
    */
-  public int resetProcessInstanceLocks(
-    String lockName, ProcessInstance.Status status, ProcessInstance.Status newStatus)
+  public int resetProcessInstanceLocks(String lockName, ProcessInstance.Status status,
+      ProcessInstance.Status newStatus)
     throws DAOException
   {
     try (Connection connection = dataSource.getConnection();
@@ -848,8 +802,8 @@ public class ProcessDAO
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to reset the locks for the process instances with status (%s) that have been " +
-          "locked using the lock name (%s)", status, lockName), e);
+          "Failed to reset the locks for the process instances with status (%s) that have been "
+          + "locked using the lock name (%s)", status, lockName), e);
     }
   }
 
@@ -873,16 +827,16 @@ public class ProcessDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result  of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result  of executing the SQL statement (%s)",
             unlockProcessInstanceSQL));
       }
     }
     catch (Throwable e)
     {
       throw new DAOException(String.format(
-        "Failed to unlock and set the status for the process instance (%s) to (%s) in the database",
-        id, status), e);
+          "Failed to unlock and set the status for the process instance (%s) to (%s) in the database",
+          id, status), e);
     }
   }
 
@@ -906,16 +860,15 @@ public class ProcessDAO
 
       if (statement.executeUpdate() != 1)
       {
-        throw new DAOException(
-          String.format("No rows were affected as a result of executing the SQL statement (%s)",
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
             updateProcessInstanceDataSQL));
       }
     }
     catch (Throwable e)
     {
-      throw new DAOException(
-        String.format("Failed to update the data for the process instance (%s) in the database",
-          id), e);
+      throw new DAOException(String.format(
+          "Failed to update the data for the process instance (%s) in the database", id), e);
     }
   }
 
@@ -927,104 +880,105 @@ public class ProcessDAO
   protected void buildStatements(String schemaPrefix)
   {
     // createProcessDefinitionSQL
-    createProcessDefinitionSQL = "INSERT INTO " + schemaPrefix + "PROCESS_DEFINITIONS (ID, " +
-      "VERSION, NAME, DATA) VALUES (?, ?, ?, ?)";
+    createProcessDefinitionSQL = "INSERT INTO " + schemaPrefix + "PROCESS_DEFINITIONS (ID, "
+        + "VERSION, NAME, DATA) VALUES (?, ?, ?, ?)";
 
     // createProcessInstanceSQL
-    createProcessInstanceSQL = "INSERT INTO " + schemaPrefix + "PROCESS_INSTANCES (ID, " +
-      "DEFINITION_ID, DEFINITION_VERSION, DATA, STATUS, NEXT_EXECUTION)" + " VALUES (?, ?, ?, " +
-      "?, ?, ?)";
+    createProcessInstanceSQL = "INSERT INTO " + schemaPrefix + "PROCESS_INSTANCES (ID, "
+        + "DEFINITION_ID, DEFINITION_VERSION, DATA, STATUS, NEXT_EXECUTION)" + " VALUES (?, ?, ?, "
+        + "?, ?, ?)";
 
     // deleteProcessDefinitionSQL
-    deleteProcessDefinitionSQL = "DELETE FROM " + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PD" +
-      ".ID=?";
+    deleteProcessDefinitionSQL = "DELETE FROM " + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PD"
+        + ".ID=?";
 
     // deleteProcessInstanceSQL
     deleteProcessInstanceSQL = "DELETE FROM " + schemaPrefix + "PROCESS_INSTANCES PI WHERE PI.ID=?";
 
     // getCurrentProcessDefinitionsSQL
-    getCurrentProcessDefinitionsSQL = "SELECT PD.ID, PD.VERSION, PD.NAME, PD.DATA FROM " +
-      schemaPrefix + "PROCESS_DEFINITIONS PD " + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX" +
-      "(VERSION) AS CURRENT_VERSION FROM " + schemaPrefix + "PROCESS_DEFINITIONS GROUP BY " +
-      "CURRENT_ID) PDC" + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
+    getCurrentProcessDefinitionsSQL = "SELECT PD.ID, PD.VERSION, PD.NAME, PD.DATA FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD " + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX"
+        + "(VERSION) AS CURRENT_VERSION FROM " + schemaPrefix + "PROCESS_DEFINITIONS GROUP BY "
+        + "CURRENT_ID) PDC" + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
 
     // getCurrentProcessDefinitionSummariesSQL
-    getCurrentProcessDefinitionSummariesSQL = "SELECT PD.ID, PD.VERSION, PD.NAME FROM " +
-      schemaPrefix + "PROCESS_DEFINITIONS PD " + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX" +
-      "(VERSION) AS CURRENT_VERSION FROM " + schemaPrefix + "PROCESS_DEFINITIONS GROUP BY " +
-      "CURRENT_ID) PDC" + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
+    getCurrentProcessDefinitionSummariesSQL = "SELECT PD.ID, PD.VERSION, PD.NAME FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD " + "INNER JOIN (SELECT ID AS CURRENT_ID, MAX"
+        + "(VERSION) AS CURRENT_VERSION FROM " + schemaPrefix + "PROCESS_DEFINITIONS GROUP BY "
+        + "CURRENT_ID) PDC" + " ON PD.ID = PDC.CURRENT_ID AND PD.VERSION = PDC.CURRENT_VERSION";
 
     // getNextProcessInstanceScheduledForExecutionSQL
-    getNextProcessInstanceScheduledForExecutionSQL = "SELECT PI.ID, PI.DEFINITION_ID, PI" +
-      ".DEFINITION_VERSION, PI.DATA, PI.STATUS, " + "PI.NEXT_EXECUTION, PI.LOCK_NAME FROM " +
-      schemaPrefix + "PROCESS_INSTANCES PI WHERE PI.STATUS=? AND PI.NEXT_EXECUTION <= ?" + " " +
-      "FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+    getNextProcessInstanceScheduledForExecutionSQL = "SELECT PI.ID, PI.DEFINITION_ID, PI"
+        + ".DEFINITION_VERSION, PI.DATA, PI.STATUS, " + "PI.NEXT_EXECUTION, PI.LOCK_NAME FROM "
+        + schemaPrefix + "PROCESS_INSTANCES PI WHERE PI.STATUS=? AND PI.NEXT_EXECUTION <= ?" + " "
+        + "FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getNumberOfProcessDefinitionSQL
-    getNumberOfProcessDefinitionSQL = "SELECT COUNT(DISTINCT PD.ID) FROM " + schemaPrefix +
-      "PROCESS_DEFINITIONS PD";
+    getNumberOfProcessDefinitionSQL = "SELECT COUNT(DISTINCT PD.ID) FROM " + schemaPrefix
+        + "PROCESS_DEFINITIONS PD";
 
     // getNumberOfProcessInstancesSQL
-    getNumberOfProcessInstancesSQL = "SELECT COUNT(PI.ID)" + " FROM " + schemaPrefix +
-      "PROCESS_INSTANCES PI, " + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PI.DEFINITION_ID " +
-      "= PD.ID" + " AND PI.DEFINITION_VERSION = PD.VERSION";
+    getNumberOfProcessInstancesSQL = "SELECT COUNT(PI.ID)" + " FROM " + schemaPrefix
+        + "PROCESS_INSTANCES PI, " + schemaPrefix
+        + "PROCESS_DEFINITIONS PD WHERE PI.DEFINITION_ID " + "= PD.ID"
+        + " AND PI.DEFINITION_VERSION = PD.VERSION";
 
     // getProcessDefinitionByIdAndVersionSQL
-    getProcessDefinitionByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.NAME, PD.DATA FROM " +
-      schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PD.ID=? AND PD.VERSION = ?";
+    getProcessDefinitionByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.NAME, PD.DATA FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PD.ID=? AND PD.VERSION = ?";
 
     // getProcessDefinitionSummaryByIdAndVersionSQL
-    getProcessDefinitionSummaryByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.NAME FROM " +
-      schemaPrefix + "PROCESS_DEFINITIONS PD WHERE ID=? AND VERSION=?";
+    getProcessDefinitionSummaryByIdAndVersionSQL = "SELECT PD.ID, PD.VERSION, PD.NAME FROM "
+        + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE ID=? AND VERSION=?";
 
     // getProcessInstanceByIdSQL
-    getProcessInstanceByIdSQL = "SELECT PI.ID, PI.DEFINITION_ID, PI.DEFINITION_VERSION, PI.DATA, " +
-      "" + "PI.STATUS, PI.NEXT_EXECUTION, PI.LOCK_NAME FROM " + schemaPrefix +
-      "PROCESS_INSTANCES PI WHERE PI.ID=?";
+    getProcessInstanceByIdSQL = "SELECT PI.ID, PI.DEFINITION_ID, PI.DEFINITION_VERSION, PI.DATA, "
+        + "" + "PI.STATUS, PI.NEXT_EXECUTION, PI.LOCK_NAME FROM " + schemaPrefix
+        + "PROCESS_INSTANCES PI WHERE PI.ID=?";
 
     // getProcessInstanceSummariesSQL
-    getProcessInstanceSummariesSQL = "SELECT PI.ID, PI.DEFINITION_ID," + " PI.DEFINITION_VERSION," +
-      " PD.NAME AS NAME, PI.STATUS," + " PI.NEXT_EXECUTION, PI.LOCK_NAME FROM " + schemaPrefix +
-      "PROCESS_INSTANCES PI, " + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PI" +
-      ".DEFINITION_ID = PD.ID" + " AND PI.DEFINITION_VERSION = PD.VERSION";
+    getProcessInstanceSummariesSQL = "SELECT PI.ID, PI.DEFINITION_ID," + " PI.DEFINITION_VERSION,"
+        + " PD.NAME AS NAME, PI.STATUS," + " PI.NEXT_EXECUTION, PI.LOCK_NAME FROM " + schemaPrefix
+        + "PROCESS_INSTANCES PI, " + schemaPrefix + "PROCESS_DEFINITIONS PD WHERE PI"
+        + ".DEFINITION_ID = PD.ID" + " AND PI.DEFINITION_VERSION = PD.VERSION";
 
     // getProcessInstanceSummaryByIdSQL
-    getProcessInstanceSummaryByIdSQL = "SELECT PI.ID, PI.DEFINITION_ID," + " PI" +
-      ".DEFINITION_VERSION, PD.NAME AS NAME, PI.STATUS," + " PI.NEXT_EXECUTION, PI.LOCK_NAME " +
-      "FROM " + schemaPrefix + "PROCESS_INSTANCES PI, " + schemaPrefix + "PROCESS_DEFINITIONS " +
-      "PD WHERE PI.DEFINITION_ID = PD.ID" + " AND PI.DEFINITION_VERSION = PD.VERSION AND PI.ID " +
-      "= ?";
+    getProcessInstanceSummaryByIdSQL = "SELECT PI.ID, PI.DEFINITION_ID," + " PI"
+        + ".DEFINITION_VERSION, PD.NAME AS NAME, PI.STATUS," + " PI.NEXT_EXECUTION, PI.LOCK_NAME "
+        + "FROM " + schemaPrefix + "PROCESS_INSTANCES PI, " + schemaPrefix + "PROCESS_DEFINITIONS "
+        + "PD WHERE PI.DEFINITION_ID = PD.ID"
+        + " AND PI.DEFINITION_VERSION = PD.VERSION AND PI.ID " + "= ?";
 
     // lockProcesInstanceSQL
-    lockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI" +
-      ".STATUS=?, PI.LOCK_NAME=? WHERE PI.ID=?";
+    lockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
+        + ".STATUS=?, PI.LOCK_NAME=? WHERE PI.ID=?";
 
     // processDefinitionExistsSQL
-    processDefinitionExistsSQL = "SELECT COUNT(PD.ID) FROM " + schemaPrefix +
-      "PROCESS_DEFINITIONS PD WHERE PD.ID=? AND PD.VERSION=?";
+    processDefinitionExistsSQL = "SELECT COUNT(PD.ID) FROM " + schemaPrefix
+        + "PROCESS_DEFINITIONS PD WHERE PD.ID=? AND PD.VERSION=?";
 
     // processInstanceExistsSQL
-    processInstanceExistsSQL = "SELECT COUNT(PI.ID) FROM " + schemaPrefix + "PROCESS_INSTANCES PI" +
-      " WHERE PI.ID=?";
+    processInstanceExistsSQL = "SELECT COUNT(PI.ID) FROM " + schemaPrefix + "PROCESS_INSTANCES PI"
+        + " WHERE PI.ID=?";
 
     // resetProcessInstanceLocksSQL
-    resetProcessInstanceLocksSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI" +
-      ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.LOCK_NAME=? AND PI.STATUS=?";
+    resetProcessInstanceLocksSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
+        + ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.LOCK_NAME=? AND PI.STATUS=?";
 
     // unlockProcessInstanceSQL
-    unlockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI" +
-      ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.ID=?";
+    unlockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
+        + ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.ID=?";
 
     // updateProcessInstanceDataSQL
-    updateProcessInstanceDataSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI" +
-      ".DATA=? WHERE PI.ID=?";
+    updateProcessInstanceDataSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
+        + ".DATA=? WHERE PI.ID=?";
   }
 
   private ProcessDefinition getProcessDefinition(ResultSet rs)
     throws SQLException
   {
-    return new ProcessDefinition((UUID) rs.getObject(1), rs.getInt(2), rs.getString(3),
-      rs.getBytes(4));
+    return new ProcessDefinition((UUID) rs.getObject(1), rs.getInt(2), rs.getString(3), rs.getBytes(
+        4));
   }
 
   private ProcessDefinitionSummary getProcessDefinitionSummary(ResultSet rs)
@@ -1037,15 +991,14 @@ public class ProcessDAO
     throws SQLException
   {
     return new ProcessInstance((UUID) rs.getObject(1), (UUID) rs.getObject(2), rs.getInt(3),
-      rs.getBytes(4), ProcessInstance.Status.fromCode(rs.getInt(5)), rs.getTimestamp(6),
-      rs.getString(7));
+        rs.getBytes(4), ProcessInstance.Status.fromCode(rs.getInt(5)), rs.getTimestamp(6),
+        rs.getString(7));
   }
 
   private ProcessInstanceSummary getProcessInstanceSummary(ResultSet rs)
     throws SQLException
   {
-    return new ProcessInstanceSummary(rs.getString(1), rs.getString(2), rs.getInt(3),
-      rs.getString(4), ProcessInstance.Status.fromCode(rs.getInt(5)), rs.getTimestamp(6),
-      rs.getString(7));
+    return new ProcessInstanceSummary(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getString(
+        4), ProcessInstance.Status.fromCode(rs.getInt(5)), rs.getTimestamp(6), rs.getString(7));
   }
 }

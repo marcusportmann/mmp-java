@@ -16,6 +16,9 @@
 
 package guru.mmp.application.tests;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.NewTransaction;
 import guru.mmp.common.persistence.Transactional;
@@ -25,7 +28,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -39,9 +47,7 @@ public class TestTransactionalService
   implements ITestTransactionalService
 {
   private String createTestDataSQL;
-
   private DataSource dataSource;
-
   private String getTestDataSQL;
 
   /**
@@ -65,8 +71,8 @@ public class TestTransactionalService
       if (statement.executeUpdate() != 1)
       {
         throw new RuntimeException(
-          "No rows were affected as a result of executing the SQL statement (" +
-            createTestDataSQL + ")");
+            "No rows were affected as a result of executing the SQL statement ("
+            + createTestDataSQL + ")");
       }
     }
     catch (Throwable e)
@@ -97,14 +103,14 @@ public class TestTransactionalService
       if (statement.executeUpdate() != 1)
       {
         throw new RuntimeException(
-          "No rows were affected as a result of executing the SQL statement (" +
-            createTestDataSQL + ")");
+            "No rows were affected as a result of executing the SQL statement ("
+            + createTestDataSQL + ")");
       }
     }
     catch (Throwable e)
     {
       throw new TestTransactionalServiceException(
-        "Failed to create the test data in a new transaction", e);
+          "Failed to create the test data in a new transaction", e);
     }
   }
 
@@ -140,7 +146,7 @@ public class TestTransactionalService
     catch (Throwable e)
     {
       throw new TestTransactionalServiceException(
-        "Failed to create the test data in a new transaction", e);
+          "Failed to create the test data in a new transaction", e);
     }
   }
 
@@ -154,9 +160,7 @@ public class TestTransactionalService
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -164,38 +168,21 @@ public class TestTransactionalService
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
       throw new RuntimeException(
-        "Failed to retrieve the application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+          "Failed to retrieve the application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try
     {
-      // Retrieve the database meta data
-      String schemaSeparator;
-
-      try (Connection connection = dataSource.getConnection())
-      {
-        DatabaseMetaData metaData = connection.getMetaData();
-
-        // Retrieve the schema separator for the database
-        schemaSeparator = metaData.getCatalogSeparator();
-
-        if ((schemaSeparator == null) || (schemaSeparator.length() == 0))
-        {
-          schemaSeparator = ".";
-        }
-      }
-
       // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + schemaSeparator;
+      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
+          dataSource);
 
       // Build the SQL statements for the DAO
       buildStatements(schemaPrefix);
@@ -217,8 +204,8 @@ public class TestTransactionalService
     throws SQLException
   {
     // createTestDataSQL
-    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA" + " (ID, NAME, VALUE) VALUES " +
-      "(?, ?, ?)";
+    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA" + " (ID, NAME, VALUE) VALUES "
+        + "(?, ?, ?)";
 
     // getTestDataSQL
     getTestDataSQL = "SELECT ID, NAME, VALUE FROM " + schemaPrefix + "TEST_DATA WHERE ID=?";

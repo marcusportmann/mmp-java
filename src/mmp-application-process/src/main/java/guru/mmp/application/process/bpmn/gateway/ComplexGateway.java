@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.gateway;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -23,6 +25,8 @@ import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ComplexGateway</code> class represents a Complex Gateway that forms part of a Process.
@@ -46,8 +50,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ComplexGateway
-  extends Gateway
+public final class ComplexGateway extends Gateway
 {
   /**
    * Constructs a new <code>ComplexGateway</code>.

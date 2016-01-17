@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -42,6 +44,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>CodeAdministrationPage</code> class implements the
  * "Code Administration" page for the Web Application Template.
@@ -49,17 +53,21 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
-public class CodeAdministrationPage
-  extends TemplateWebPage
+public class CodeAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CodeAdministrationPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
   @Inject
   private ICodesService codesService;
+
+  /**
+   * Constructs a new <code>CodeAdministrationPage</code>.
+   */
+  @SuppressWarnings("unused")
+  protected CodeAdministrationPage() {}
 
   /**
    * Constructs a new <code>CodeAdministrationPage</code>.
@@ -69,8 +77,8 @@ public class CodeAdministrationPage
    *                         code category the codes are associated with
    * @param codeCategoryName the name of the code category
    */
-  public CodeAdministrationPage(
-    PageReference previousPage, UUID codeCategoryId, String codeCategoryName)
+  public CodeAdministrationPage(PageReference previousPage, UUID codeCategoryId,
+      String codeCategoryName)
   {
     super("Codes", codeCategoryName);
 
@@ -176,24 +184,14 @@ public class CodeAdministrationPage
   }
 
   /**
-   * Constructs a new <code>CodeAdministrationPage</code>.
-   */
-  @SuppressWarnings("unused")
-  protected CodeAdministrationPage() {}
-
-  /**
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a code to be confirmed.
    */
-  private class RemoveDialog
-    extends Dialog
+  private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-
     private UUID categoryId;
-
     private String id;
-
     private Label nameLabel;
 
     /**
@@ -211,36 +209,36 @@ public class CodeAdministrationPage
       add(nameLabel);
 
       add(new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
           {
-            codesService.deleteCode(categoryId, id);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                codesService.deleteCode(categoryId, id);
 
-            CodeAdministrationPage.this.info(
-              "Successfully removed the code " + nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to remove the code (%s) for the code category (%s): %s", id,
-                categoryId, e.getMessage()), e);
+                target.add(tableContainer);
 
-            CodeAdministrationPage.this.error(
-              "Failed to remove the code " + nameLabel.getDefaultModelObjectAsString());
-          }
+                CodeAdministrationPage.this.info("Successfully removed the code "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format(
+                    "Failed to remove the code (%s) for the code category (%s): %s", id,
+                    categoryId, e.getMessage()), e);
 
-          target.add(getAlerts());
+                CodeAdministrationPage.this.error("Failed to remove the code "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      });
+              target.add(getAlerts());
+
+              hide(target);
+            }
+          });
     }
 
     /**

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplication;
 import guru.mmp.application.web.template.TemplateWebApplication;
@@ -36,6 +38,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>BackendUserMenuSideOverlay</code> class provides a Wicket component that renders the
  * user menu side overlay for the backend user interface for the Web Application Template.
@@ -43,11 +47,9 @@ import javax.servlet.http.HttpServletRequest;
  * @author Marcus Portmann
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public class BackendUserMenuSideOverlay
-  extends Component
+public class BackendUserMenuSideOverlay extends Component
 {
   private static final long serialVersionUID = 1000000;
-
   private boolean isMultipleOrganisationSupportEnabled;
 
   /* Security Service */
@@ -67,8 +69,8 @@ public class BackendUserMenuSideOverlay
 
     if (application instanceof TemplateWebApplication)
     {
-      isMultipleOrganisationSupportEnabled = ((TemplateWebApplication) application)
-        .isMultipleOrganisationSupportEnabled();
+      isMultipleOrganisationSupportEnabled =
+          ((TemplateWebApplication) application).isMultipleOrganisationSupportEnabled();
     }
   }
 
@@ -99,11 +101,10 @@ public class BackendUserMenuSideOverlay
           return;
         }
 
-
         WebApplication webApplication = (WebApplication) getApplication();
 
-        String requestURI = ((HttpServletRequest) (RequestCycle.get().getRequest())
-          .getContainerRequest()).getRequestURI();
+        String requestURI = ((HttpServletRequest) (RequestCycle.get()
+            .getRequest()).getContainerRequest()).getRequestURI();
 
         if (!webSession.isUserLoggedIn())
         {
@@ -123,31 +124,31 @@ public class BackendUserMenuSideOverlay
               fullName = webSession.getUsername();
             }
 
-            buffer.append(getBackendUserMenuHeader(fullName,
-              webSession.getOrganisation().getName()));
+            buffer.append(getBackendUserMenuHeader(fullName, webSession.getOrganisation()
+                .getName()));
           }
           else
           {
-            buffer.append(
-              getBackendUserMenuHeader(StringUtil.notNull(webSession.getUserFullName()), ""));
+            buffer.append(getBackendUserMenuHeader(StringUtil.notNull(
+                webSession.getUserFullName()), ""));
           }
 
-//          buffer.append("<li class=\"action\"><a>");
-//          buffer.append("<div class=\"row\">");
-//          buffer.append("<div class=\"pull-left\"><i class=\"fa fa-wrench\"></i></div>");
-//          buffer.append("<div class=\"pull-left text-gray-darker\">Settings</div>");
-//          buffer.append("</div></a></li>");
+//        buffer.append("<li class=\"action\"><a>");
+//        buffer.append("<div class=\"row\">");
+//        buffer.append("<div class=\"pull-left\"><i class=\"fa fa-wrench\"></i></div>");
+//        buffer.append("<div class=\"pull-left text-gray-darker\">Settings</div>");
+//        buffer.append("</div></a></li>");
 //
-//          buffer.append("<li class=\"action\"><a>");
-//          buffer.append("<div class=\"row\">");
-//          buffer.append("<div class=\"pull-left\"><i class=\"fa fa-user\"></i></div>");
-//          buffer.append("<div class=\"pull-left text-gray-darker\">Profiles</div>");
-//          buffer.append("</div></a></li>");
+//        buffer.append("<li class=\"action\"><a>");
+//        buffer.append("<div class=\"row\">");
+//        buffer.append("<div class=\"pull-left\"><i class=\"fa fa-user\"></i></div>");
+//        buffer.append("<div class=\"pull-left text-gray-darker\">Profiles</div>");
+//        buffer.append("</div></a></li>");
 
           buffer.append("<li class=\"action bg-gray-lighter\"><a href=\"");
 
           String logoutUrl = urlFor(webApplication.getLogoutPage(),
-            new PageParameters()).toString();
+              new PageParameters()).toString();
 
           if (logoutUrl.startsWith("/"))
           {
@@ -173,12 +174,12 @@ public class BackendUserMenuSideOverlay
 
   private String getBackendUserMenuHeader(String userFullName, String organisationName)
   {
-    return "<aside id=\"side-overlay\"><div id=\"side-overlay-scroll\">" +
-      "<div class=\"side-header side-content\"><button class=\"btn btn-default pull-right\" " +
-      "type=\"button\" data-toggle=\"layout\" data-action=\"side_overlay_close\"><i class=\"fa " +
-      "fa-times\"></i></button><div><div class=\"font-w600 text-default\">" + userFullName +
-      "</div><div class=\"font-s12 text-gray-darker push-5-l\">" + organisationName +
-      "</div></div></div><div class=\"side-content remove-padding-t\"><ul class=\"list " +
-      "list-activity pull-r-l border-t\">";
+    return "<aside id=\"side-overlay\"><div id=\"side-overlay-scroll\">"
+        + "<div class=\"side-header side-content\"><button class=\"btn btn-default pull-right\" "
+        + "type=\"button\" data-toggle=\"layout\" data-action=\"side_overlay_close\"><i class=\"fa "
+        + "fa-times\"></i></button><div><div class=\"font-w600 text-default\">" + userFullName
+        + "</div><div class=\"font-s12 text-gray-darker push-5-l\">" + organisationName
+        + "</div></div></div><div class=\"side-content remove-padding-t\"><ul class=\"list "
+        + "list-activity pull-r-l border-t\">";
   }
 }

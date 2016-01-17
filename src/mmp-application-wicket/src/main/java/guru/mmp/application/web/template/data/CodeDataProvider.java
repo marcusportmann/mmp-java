@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -27,14 +29,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>CodeDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves <code>Code</code> instances from the database.
  *
  * @author Marcus Portmann
  */
-public class CodeDataProvider
-  extends InjectableDataProvider<Code>
+public class CodeDataProvider extends InjectableDataProvider<Code>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -49,6 +52,14 @@ public class CodeDataProvider
 
   /**
    * Constructs a new <code>CodeDataProvider</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected CodeDataProvider() {}
+
+  /**
+   * Constructs a new <code>CodeDataProvider</code>.
    *
    * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       code category
@@ -57,14 +68,6 @@ public class CodeDataProvider
   {
     this.codeCategoryId = codeCategoryId;
   }
-
-  /**
-   * Constructs a new <code>CodeDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected CodeDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -89,13 +92,13 @@ public class CodeDataProvider
     {
       List<Code> allCodes = codesService.getCodesForCodeCategory(codeCategoryId);
 
-      return allCodes.subList((int) first,
-        (int) Math.min(first + count, allCodes.size())).iterator();
+      return allCodes.subList((int) first, (int) Math.min(first + count, allCodes.size()))
+          .iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the codes from index (%d) to (%d)", first, first + count), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the codes from index (%d) to (%d)", first, first + count), e);
     }
   }
 

@@ -16,20 +16,30 @@
 
 package guru.mmp.application.batch;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.*;
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.concurrent.Future;
+
+import javax.annotation.PostConstruct;
+
+import javax.ejb.*;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 
 /**
  * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.
  *
  * @author Marcus Portmann
  */
-@Singleton
+@ApplicationScoped
+@Default
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
 public class BackgroundJobExecutor
@@ -98,8 +108,8 @@ public class BackgroundJobExecutor
     }
     else
     {
-      logger.error("Failed to initialise the Background Job Executor: " +
-        "The Batch Service was NOT injected");
+      logger.error("Failed to initialise the Background Job Executor: "
+          + "The Batch Service was NOT injected");
     }
   }
 
@@ -122,9 +132,7 @@ public class BackgroundJobExecutor
           }
 
           // Schedule any unscheduled jobs
-          while (batchService.scheduleNextUnscheduledJobForExecution())
-          {
-          }
+          while (batchService.scheduleNextUnscheduledJobForExecution()) {}
 
           return;
         }
@@ -157,15 +165,15 @@ public class BackgroundJobExecutor
           }
           catch (Throwable f)
           {
-            logger.error(
-              String.format("Failed to unlock and set the status for the job (%s) to \"Scheduled\"",
+            logger.error(String.format(
+                "Failed to unlock and set the status for the job (%s) to \"Scheduled\"",
                 job.getId()), f);
           }
         }
         catch (Throwable e)
         {
-          logger.warn(
-            String.format("The job (%s) could not be rescheduled and will be marked as \"Failed\"",
+          logger.warn(String.format(
+              "The job (%s) could not be rescheduled and will be marked as \"Failed\"",
               job.getId()));
 
           try
@@ -174,9 +182,9 @@ public class BackgroundJobExecutor
           }
           catch (Throwable f)
           {
-            logger.error(
-              String.format("Failed to unlock and set the status for the job (%s) to \"Failed\"",
-                job.getId()), f);
+            logger.error(String.format(
+                "Failed to unlock and set the status for the job (%s) to \"Failed\"", job.getId()),
+                f);
           }
         }
       }
@@ -194,7 +202,7 @@ public class BackgroundJobExecutor
         catch (Throwable f)
         {
           logger.error(String.format("Failed to increment the execution attempts for the job (%s)",
-            job.getId()), f);
+              job.getId()), f);
         }
 
         try
@@ -207,8 +215,8 @@ public class BackgroundJobExecutor
           if (job.getExecutionAttempts() >= batchService.getMaximumJobExecutionAttempts())
           {
             logger.warn(String.format(
-              "The job (%s) has exceeded the maximum  number of execution attempts and will be " +
-                "marked as \"Failed\"", job.getId()));
+                "The job (%s) has exceeded the maximum  number of execution attempts and will be "
+                + "marked as \"Failed\"", job.getId()));
 
             batchService.unlockJob(job.getId(), Job.Status.FAILED);
           }
@@ -219,8 +227,8 @@ public class BackgroundJobExecutor
         }
         catch (Throwable f)
         {
-          logger.error(
-            String.format("Failed to unlock and set the status for the job (%s)", job.getId()), f);
+          logger.error(String.format("Failed to unlock and set the status for the job (%s)",
+              job.getId()), f);
         }
       }
     }

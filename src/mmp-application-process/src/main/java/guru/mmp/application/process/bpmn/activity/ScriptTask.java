@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -26,6 +28,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ScriptTask</code> class represents a Script Task that forms part of a Process.
@@ -51,8 +55,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ScriptTask
-  extends Task
+public final class ScriptTask extends Task
 {
   /**
    * The script.
@@ -76,8 +79,8 @@ public final class ScriptTask
 
     try
     {
-      this.scriptFormat = ScriptFormat.fromMimeType(
-        StringUtil.notNull(element.getAttribute("scriptFormat")));
+      this.scriptFormat = ScriptFormat.fromMimeType(StringUtil.notNull(element.getAttribute(
+          "scriptFormat")));
 
       NodeList scriptElements = element.getElementsByTagName("script");
 

@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -27,19 +29,16 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "keybase", propOrder = {"selector", "fields"})
-@XmlSeeAlso({Keyref.class})
-public class Keybase
-  extends Annotated
+@XmlType(name = "keybase", propOrder = { "selector", "fields" })
+@XmlSeeAlso({ Keyref.class })
+public class Keybase extends Annotated
 {
   @XmlElement(name = "field", required = true)
   protected List<Field> fields;
-
   @XmlAttribute(name = "name", required = true)
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
-
   @XmlElement(required = true)
   protected Selector selector;
 

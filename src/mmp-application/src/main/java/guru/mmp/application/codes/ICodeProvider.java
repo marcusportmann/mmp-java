@@ -16,6 +16,8 @@
 
 package guru.mmp.application.codes;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.Map;
 
@@ -42,8 +44,8 @@ public interface ICodeProvider
    *
    * @throws CodeProviderException
    */
-  CodeCategory getCodeCategory(
-    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
+  CodeCategory getCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+      boolean returnCodesIfCurrent)
     throws CodeProviderException;
 
   /**
@@ -62,8 +64,7 @@ public interface ICodeProvider
    *
    * @throws CodeProviderException
    */
-  CodeCategory getCodeCategoryWithParameters(
-    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
-    boolean returnCodesIfCurrent)
+  CodeCategory getCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
+      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodeProviderException;
 }

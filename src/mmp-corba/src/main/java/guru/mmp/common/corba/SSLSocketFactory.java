@@ -16,6 +16,8 @@
 
 package guru.mmp.common.corba;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import org.omg.CORBA.TIMEOUT;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SSLSocketFactory</code> provides the capability to create SSL socket connections
  * for CORBA clients.
@@ -41,7 +45,6 @@ public class SSLSocketFactory
   implements org.jacorb.orb.factory.SocketFactory
 {
   private static final Logger logger = LoggerFactory.getLogger(SSLSocketFactory.class);
-
   private SocketFactory socketFactory;
 
   /**
@@ -66,9 +69,8 @@ public class SSLSocketFactory
 
     if (logger.isDebugEnabled())
     {
-      logger.debug(
-        "Attempting to open a SSL socket connection to the remote CORBA ORB (" + host + ":" +
-          port + ")");
+      logger.debug("Attempting to open a SSL socket connection to the remote CORBA ORB (" + host
+          + ":" + port + ")");
     }
 
     try
@@ -77,29 +79,25 @@ public class SSLSocketFactory
     }
     catch (UnknownHostException e)
     {
-      logger.error(
-        "Failed to open a SSL socket connection to the remote CORBA ORB (" + host + ":" + port +
-          ") since the host could not be resolved");
+      logger.error("Failed to open a SSL socket connection to the remote CORBA ORB (" + host + ":"
+          + port + ") since the host could not be resolved");
 
       throw e;
     }
     catch (IOException e)
     {
-      logger.error(
-        "Failed to open a SSL socket connection to the remote CORBA ORB (" + host + ":" + port +
-          "): " + e.getMessage(), e);
+      logger.error("Failed to open a SSL socket connection to the remote CORBA ORB (" + host + ":"
+          + port + "): " + e.getMessage(), e);
 
       throw e;
     }
     catch (Throwable e)
     {
-      logger.error(
-        "Failed to open a SSL socket connection to the remote CORBA ORB (" + host + ":" + port +
-          "): " + e.getMessage(), e);
+      logger.error("Failed to open a SSL socket connection to the remote CORBA ORB (" + host + ":"
+          + port + "): " + e.getMessage(), e);
 
-      throw new IOException(
-        "Failed to open a SSL socket connection to the remote CORBA ORB (" + host + ":" + port +
-          "): " + e.getMessage());
+      throw new IOException("Failed to open a SSL socket connection to the remote CORBA ORB ("
+          + host + ":" + port + "): " + e.getMessage());
     }
   }
 
@@ -150,20 +148,20 @@ public class SSLSocketFactory
 
     try
     {
-      ApplicationSecurityContext applicationSecurityContext = ApplicationSecurityContext
-        .getContext();
+      ApplicationSecurityContext applicationSecurityContext =
+          ApplicationSecurityContext.getContext();
 
       // Initialize the key manager factory
       KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
-        KeyManagerFactory.getDefaultAlgorithm());
+          KeyManagerFactory.getDefaultAlgorithm());
 
       keyManagerFactory.init(applicationSecurityContext.getKeyStore(),
-        applicationSecurityContext.getKeyStorePassword().toCharArray());
+          applicationSecurityContext.getKeyStorePassword().toCharArray());
 
       // Initialize the truest manager factory
 
       TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
-        TrustManagerFactory.getDefaultAlgorithm());
+          TrustManagerFactory.getDefaultAlgorithm());
 
       trustManagerFactory.init(applicationSecurityContext.getKeyStore());
 
@@ -171,7 +169,7 @@ public class SSLSocketFactory
       SSLContext sslContext = SSLContext.getInstance("TLS");
 
       sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
-        null);
+          null);
 
       // Retrieve the SSL socket factory
       socketFactory = sslContext.getSocketFactory();

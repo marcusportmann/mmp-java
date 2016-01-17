@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 import javax.xml.bind.annotation.*;
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * <p>Java class for anonymous complex type.
@@ -29,20 +33,18 @@ import java.util.Map;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"content"})
+@XmlType(name = "", propOrder = { "content" })
 @XmlRootElement(name = "appinfo")
 public class Appinfo
 {
+  @XmlAnyAttribute
+  private Map<QName, String> otherAttributes = new HashMap<QName, String>();
   @XmlMixed
   @XmlAnyElement(lax = true)
   protected List<Object> content;
-
   @XmlAttribute(name = "source")
   @XmlSchemaType(name = "anyURI")
   protected String source;
-
-  @XmlAnyAttribute
-  private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
   /**
    * Gets the value of the content property.

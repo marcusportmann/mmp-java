@@ -25,8 +25,7 @@ package guru.mmp.application.security;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class AttributeException
-  extends Exception
+public class AttributeException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

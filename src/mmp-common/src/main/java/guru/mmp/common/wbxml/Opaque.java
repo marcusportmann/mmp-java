@@ -16,6 +16,8 @@
 
 package guru.mmp.common.wbxml;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -33,7 +35,6 @@ public class Opaque
   implements Serializable, Content
 {
   private static final long serialVersionUID = 1000000;
-
   private BinaryBuffer buffer = null;
 
   /**

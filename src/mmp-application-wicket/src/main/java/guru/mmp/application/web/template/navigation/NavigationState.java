@@ -16,12 +16,16 @@
 
 package guru.mmp.application.web.template.navigation;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
 import java.io.Serializable;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>NavigationState</code> class stores the current navigation state.
@@ -170,8 +174,7 @@ public class NavigationState
       List<StringValue> pageParameterValues = pageParameters.getValues(namedKey);
 
       List<StringValue> lastPageAccessedInNavigationHierarchyParameterValues =
-        lastPageAccessedInNavigationHierarchyParameters.getValues(
-        namedKey);
+          lastPageAccessedInNavigationHierarchyParameters.getValues(namedKey);
 
       if (pageParameterValues.size() != lastPageAccessedInNavigationHierarchyParameterValues.size())
       {
@@ -181,7 +184,7 @@ public class NavigationState
       for (int i = 0; i < pageParameterValues.size(); i++)
       {
         if (!pageParameterValues.get(i).toString().equals(
-          lastPageAccessedInNavigationHierarchyParameterValues.get(i).toString()))
+            lastPageAccessedInNavigationHierarchyParameterValues.get(i).toString()))
         {
           return false;
         }

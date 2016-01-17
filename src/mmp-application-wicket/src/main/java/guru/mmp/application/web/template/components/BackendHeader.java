@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.WebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationState;
@@ -31,14 +33,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.servlet.http.HttpServletRequest;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>BackendHeader</code> class provides a Wicket component that renders the header for the
  * backend user interface for the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class BackendHeader
-  extends Component
+public class BackendHeader extends Component
 {
   private static final long serialVersionUID = 1000000;
 
@@ -93,8 +96,8 @@ public class BackendHeader
 
           String loginUrl = urlFor(webApplication.getLoginPage(), new PageParameters()).toString();
 
-          String requestURI = ((HttpServletRequest) (RequestCycle.get().getRequest())
-            .getContainerRequest()).getRequestURI();
+          String requestURI = ((HttpServletRequest) (RequestCycle.get()
+              .getRequest()).getContainerRequest()).getRequestURI();
 
           if (loginUrl.startsWith("/"))
           {
@@ -109,18 +112,18 @@ public class BackendHeader
         }
         else
         {
-          buffer.append("<li><button class=\"btn btn-default\" data-toggle=\"layout\" " +
-            "data-action=\"side_overlay_toggle\" type=\"button\"><i class=\"fa " +
-            "fa-user\"></i></button></li>");
+          buffer.append("<li><button class=\"btn btn-default\" data-toggle=\"layout\" "
+              + "data-action=\"side_overlay_toggle\" type=\"button\"><i class=\"fa "
+              + "fa-user\"></i></button></li>");
         }
 
         buffer.append(
-          "</ul><ul class=\"nav-header pull-left\"><li class=\"hidden-md hidden-lg\"><button " +
-            "class=\"btn btn-default\" data-toggle=\"layout\" data-action=\"sidebar_toggle\" " +
-            "type=\"button\"><i class=\"fa fa-navicon\"></i></button></li><li class=\"hidden-xs " +
-            "hidden-sm\"><button class=\"btn btn-default\" data-toggle=\"layout\" " +
-            "data-action=\"sidebar_mini_toggle\" type=\"button\"><i class=\"fa " +
-            "fa-ellipsis-v\"></i></button></li></ul></header>");
+            "</ul><ul class=\"nav-header pull-left\"><li class=\"hidden-md hidden-lg\"><button "
+            + "class=\"btn btn-default\" data-toggle=\"layout\" data-action=\"sidebar_toggle\" "
+            + "type=\"button\"><i class=\"fa fa-navicon\"></i></button></li><li class=\"hidden-xs "
+            + "hidden-sm\"><button class=\"btn btn-default\" data-toggle=\"layout\" "
+            + "data-action=\"sidebar_mini_toggle\" type=\"button\"><i class=\"fa "
+            + "fa-ellipsis-v\"></i></button></li></ul></header>");
 
         navigationState.setCachedBackendHeaderHTML(buffer.toString());
 

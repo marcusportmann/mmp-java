@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
@@ -43,6 +45,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>OrganisationAdministrationPage</code> class implements the
  * "Organisation Administration" page for the Web Application Template.
@@ -50,13 +54,11 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
-public class OrganisationAdministrationPage
-  extends TemplateWebPage
+public class OrganisationAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(
-    OrganisationAdministrationPage.class);
-
+      OrganisationAdministrationPage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
@@ -105,8 +107,8 @@ public class OrganisationAdministrationPage
       filterForm.setOutputMarkupId(true);
 
       // The "filter" field
-      TextField<String> filterField = new TextField<>("filter",
-        new PropertyModel<>(dataProvider, "filter"));
+      TextField<String> filterField = new TextField<>("filter", new PropertyModel<>(dataProvider,
+          "filter"));
       filterForm.add(filterField);
 
       // The "filterButton" button
@@ -141,7 +143,7 @@ public class OrganisationAdministrationPage
             public void onClick()
             {
               UpdateOrganisationPage page = new UpdateOrganisationPage(getPageReference(),
-                item.getModel());
+                  item.getModel());
 
               setResponsePage(page);
             }
@@ -180,7 +182,7 @@ public class OrganisationAdministrationPage
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to initialise the OrganisationAdministrationPage",
-        e);
+          e);
     }
   }
 
@@ -188,13 +190,10 @@ public class OrganisationAdministrationPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal of an
    * organisation to be confirmed.
    */
-  private class RemoveDialog
-    extends Dialog
+  private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-
     private UUID id;
-
     private Label nameLabel;
 
     /**
@@ -212,35 +211,35 @@ public class OrganisationAdministrationPage
       add(nameLabel);
 
       add(new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
           {
-            securityService.deleteOrganisation(id);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                securityService.deleteOrganisation(id);
 
-            OrganisationAdministrationPage.this.info(
-              "Successfully removed the organisation " + nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to remove the organisation (%s): %s", id, e.getMessage()), e);
+                target.add(tableContainer);
 
-            OrganisationAdministrationPage.this.error(
-              "Failed to remove the organisation " + nameLabel.getDefaultModelObjectAsString());
-          }
+                OrganisationAdministrationPage.this.info("Successfully removed the organisation "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to remove the organisation (%s): %s", id,
+                    e.getMessage()), e);
 
-          target.add(getAlerts());
+                OrganisationAdministrationPage.this.error("Failed to remove the organisation "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      });
+              target.add(getAlerts());
+
+              hide(target);
+            }
+          });
     }
 
     /**

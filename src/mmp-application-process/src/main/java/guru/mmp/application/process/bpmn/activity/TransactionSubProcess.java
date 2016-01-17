@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -24,6 +26,8 @@ import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionSubProcess</code> class represents a Transaction Sub-Process that forms
@@ -70,8 +74,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class TransactionSubProcess
-  extends SubProcess
+public final class TransactionSubProcess extends SubProcess
 {
   /**
    * The transaction method for the Transaction Sub-Process.

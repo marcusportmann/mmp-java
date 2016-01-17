@@ -16,11 +16,15 @@
 
 package guru.mmp.application.web.servlets;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.ReportType;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ViewReportParameters</code> class holds the information describing what report should
@@ -76,9 +80,8 @@ public class ViewReportParameters
    *                           the web project or the ID of the report stored in the database
    * @param reportParameters   the report parameters
    */
-  public ViewReportParameters(
-    String reportName, ReportType reportType, String reportFileNameOrId,
-    Map<String, Object> reportParameters)
+  public ViewReportParameters(String reportName, ReportType reportType, String reportFileNameOrId,
+      Map<String, Object> reportParameters)
   {
     this.id = "ReportParameters-" + UUID.randomUUID().toString();
     this.reportName = reportName;

@@ -28,26 +28,26 @@ public class TemplateProcessSecurity
   /**
    * The Application.AddProcessDefinition function code.
    */
-  public static final String FUNCTION_CODE_ADD_PROCESS_DEFINITION =
-    "Application" + ".AddProcessDefinition";
+  public static final String FUNCTION_CODE_ADD_PROCESS_DEFINITION = "Application"
+      + ".AddProcessDefinition";
 
   /**
    * The Application.ProcessDefinitionAdministration function code.
    */
-  public static final String FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION =
-    "Application" + ".ProcessDefinitionAdministration";
+  public static final String FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION = "Application"
+      + ".ProcessDefinitionAdministration";
 
   /**
    * The Application.RemoveProcessDefinition function code.
    */
-  public static final String FUNCTION_CODE_REMOVE_PROCESS_DEFINITION =
-    "Application" + ".RemoveProcessDefinition";
+  public static final String FUNCTION_CODE_REMOVE_PROCESS_DEFINITION = "Application"
+      + ".RemoveProcessDefinition";
 
   /**
    * The Application.UpdateProcessDefinition function code.
    */
-  public static final String FUNCTION_CODE_UPDATE_PROCESS_DEFINITION =
-    "Application" + ".UpdateProcessDefinition";
+  public static final String FUNCTION_CODE_UPDATE_PROCESS_DEFINITION = "Application"
+      + ".UpdateProcessDefinition";
 
   /**
    * The Application.ViewProcess function code.

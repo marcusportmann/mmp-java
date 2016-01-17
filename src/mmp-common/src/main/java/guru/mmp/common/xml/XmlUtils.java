@@ -16,6 +16,8 @@
 
 package guru.mmp.common.xml;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -30,6 +32,8 @@ import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlUtils</code> class provides utility methods for working with XML documents.
@@ -162,9 +166,8 @@ public class XmlUtils
           }
           catch (Throwable e)
           {
-            throw new RuntimeException(
-              "Failed to parse the invalid boolean value (" + childElement.getTextContent() +
-                ")");
+            throw new RuntimeException("Failed to parse the invalid boolean value ("
+                + childElement.getTextContent() + ")");
           }
         }
       }
@@ -267,7 +270,8 @@ public class XmlUtils
     else if (nameParts.length == 2)
     {
       String namespaceURI = nameParts[0].equals(XMLConstants.DEFAULT_NS_PREFIX)
-        ? document.lookupNamespaceURI(null) : document.lookupNamespaceURI(nameParts[0]);
+          ? document.lookupNamespaceURI(null)
+          : document.lookupNamespaceURI(nameParts[0]);
 
       return new QName(namespaceURI, nameParts[1], nameParts[0]);
     }

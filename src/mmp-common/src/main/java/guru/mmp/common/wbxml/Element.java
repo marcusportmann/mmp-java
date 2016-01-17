@@ -16,10 +16,13 @@
 
 package guru.mmp.common.wbxml;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,12 +39,14 @@ public class Element
   implements Serializable, Content
 {
   private static final long serialVersionUID = 1000000;
-
   private List<Attribute> attributes = new ArrayList<>();
-
   private List<Content> content = new ArrayList<>();
-
   private String name = null;
+
+  /**
+   * Hidden default constructor.
+   */
+  protected Element() {}
 
   /**
    * Constructs an <code>Element</code> with the specified name.
@@ -76,11 +81,6 @@ public class Element
     this(name);  // invoke above constructor
     this.addContent(content);
   }
-
-  /**
-   * Hidden default constructor.
-   */
-  protected Element() {}
 
   /**
    * Add the binary content to the element as an Opaque content type instance.

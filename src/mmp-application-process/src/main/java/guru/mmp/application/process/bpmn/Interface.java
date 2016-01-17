@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 /**
@@ -35,8 +37,5 @@ public final class Interface
    *
    * @param element the XML element containing the Interface information
    */
-  public Interface(Element element)
-  {
-
-  }
+  public Interface(Element element) {}
 }

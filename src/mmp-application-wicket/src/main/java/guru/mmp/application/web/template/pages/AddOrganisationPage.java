@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.DuplicateOrganisationException;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
@@ -37,6 +39,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AddOrganisationPage</code> class implements the
  * "Add Organisation" page for the Web Application Template.
@@ -44,20 +48,23 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_ORGANISATION)
-public class AddOrganisationPage
-  extends TemplateWebPage
+public class AddOrganisationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddOrganisationPage.class);
-
   private static final long serialVersionUID = 1000000;
-
   @SuppressWarnings("unused")
   private boolean createUserDirectory;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
+
+  /**
+   * Hidden <code>AddOrganisationPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected AddOrganisationPage() {}
 
   /**
    * Constructs a new <code>AddOrganisationPage</code>.
@@ -70,8 +77,8 @@ public class AddOrganisationPage
 
     try
     {
-      Form<Organisation> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(new Model<>(new Organisation())));
+      Form<Organisation> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(
+          new Organisation())));
 
       addForm.getModelObject().setId(UUID.randomUUID());
 
@@ -87,7 +94,7 @@ public class AddOrganisationPage
 
       // The "createUserDirectory" field
       CheckBox createUserDirectoryCheckbox = new CheckBox("createUserDirectory",
-        new PropertyModel<>(this, "createUserDirectory"));
+          new PropertyModel<>(this, "createUserDirectory"));
       createUserDirectoryCheckbox.setRequired(false);
       addForm.add(createUserDirectoryCheckbox);
 
@@ -110,7 +117,7 @@ public class AddOrganisationPage
             catch (DuplicateOrganisationException e)
             {
               AddOrganisationPage.this.error(
-                "An organisation with the specified code already exists.");
+                  "An organisation with the specified code already exists.");
 
               return;
             }
@@ -149,10 +156,4 @@ public class AddOrganisationPage
       throw new WebApplicationException("Failed to initialise the AddOrganisationPage", e);
     }
   }
-
-  /**
-   * Hidden <code>AddOrganisationPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddOrganisationPage() {}
 }

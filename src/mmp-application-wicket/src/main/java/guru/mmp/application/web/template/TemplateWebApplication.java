@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
@@ -29,8 +31,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.Comparator;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
@@ -39,8 +40,7 @@ import java.util.Comparator;
  *
  * @author Marcus Portmann
  */
-public abstract class TemplateWebApplication
-  extends guru.mmp.application.web.WebApplication
+public abstract class TemplateWebApplication extends guru.mmp.application.web.WebApplication
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TemplateWebApplication.class);
@@ -55,16 +55,6 @@ public abstract class TemplateWebApplication
   private NavigationGroup navigationRoot;
 
   /**
-   * Returns the <code>TemplateWebApplication</code> instance.
-   *
-   * @return the <code>TemplateWebApplication</code> instance
-   */
-  public static TemplateWebApplication getTemplateWebApplication()
-  {
-    return (TemplateWebApplication) get();
-  }
-
-  /**
    * Constructs a new <code>TemplateWebApplication</code>.
    *
    * @param displayName the user-friendly name that should be displayed for the application
@@ -72,6 +62,16 @@ public abstract class TemplateWebApplication
   public TemplateWebApplication(String displayName)
   {
     this.displayName = displayName;
+  }
+
+  /**
+   * Returns the <code>TemplateWebApplication</code> instance.
+   *
+   * @return the <code>TemplateWebApplication</code> instance
+   */
+  public static TemplateWebApplication getTemplateWebApplication()
+  {
+    return (TemplateWebApplication) get();
   }
 
   /**
@@ -187,6 +187,7 @@ public abstract class TemplateWebApplication
         "css/template-web-application.css", TemplateBootstrapCssResourceReference.get(),
         TemplateCoreCssResourceReference.get(), TemplateCssResourceReference.get());
 */
+
 /*
     // Initialise the template-web-application.js resource bundle for the Web Application Template
     getResourceBundles().addJavaScriptBundle(TemplateJavaScriptResourceReference.class,
@@ -194,19 +195,19 @@ public abstract class TemplateWebApplication
 */
 
     // Check it multiple organisation support is enabled
-    if (!StringUtil.isNullOrEmpty(
-      getServletContext().getInitParameter("multipleOrganisationSupportEnabled")))
+    if (!StringUtil.isNullOrEmpty(getServletContext().getInitParameter(
+        "multipleOrganisationSupportEnabled")))
     {
       try
       {
         isMultipleOrganisationSupportEnabled = Boolean.parseBoolean(
-          getServletContext().getInitParameter("multipleOrganisationSupportEnabled"));
+            getServletContext().getInitParameter("multipleOrganisationSupportEnabled"));
       }
       catch (Throwable e)
       {
         throw new RuntimeException(String.format(
-          "Failed to parse the value (%s) for the \"multipleOrganisationSupportEnabled\" parameter",
-          getServletContext().getInitParameter("multipleOrganisationSupportEnabled")), e);
+            "Failed to parse the value (%s) for the \"multipleOrganisationSupportEnabled\" parameter",
+            getServletContext().getInitParameter("multipleOrganisationSupportEnabled")), e);
       }
     }
 
@@ -227,49 +228,45 @@ public abstract class TemplateWebApplication
   {
     NavigationGroup administrationGroup = new NavigationGroup("Administration", "fa fa-gear");
 
-    administrationGroup.addItem(
-      new NavigationLink("Codes", "fa fa-list", CodeCategoryAdministrationPage.class));
-    administrationGroup.addItem(
-      new NavigationLink("Groups", "fa fa-group", GroupAdministrationPage.class));
-    administrationGroup.addItem(
-      new NavigationLink("Organisations", "fa fa-globe", OrganisationAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("Codes", "fa fa-list",
+        CodeCategoryAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("Groups", "fa fa-group",
+        GroupAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("Organisations", "fa fa-globe",
+        OrganisationAdministrationPage.class));
 
     try
     {
       Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-        "guru.mmp.application.web.template.pages.ProcessDefinitionAdministrationPage");
+          "guru.mmp.application.web.template.pages.ProcessDefinitionAdministrationPage");
 
       if (Page.class.isAssignableFrom(clazz))
       {
-        administrationGroup.addItem(
-          new NavigationLink("Process Definitions", "fa fa-gears", (Class<? extends Page>) clazz));
+        administrationGroup.addItem(new NavigationLink("Process Definitions", "fa fa-gears",
+            (Class<? extends Page>) clazz));
       }
     }
-    catch (ClassNotFoundException ignored)
-    {
-    }
+    catch (ClassNotFoundException ignored) {}
 
     try
     {
       Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-        "guru.mmp.application.web.template.pages.ReportDefinitionAdministrationPage");
+          "guru.mmp.application.web.template.pages.ReportDefinitionAdministrationPage");
 
       if (Page.class.isAssignableFrom(clazz))
       {
         administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
-          (Class<? extends Page>) clazz));
+            (Class<? extends Page>) clazz));
       }
     }
-    catch (ClassNotFoundException ignored)
-    {
-    }
+    catch (ClassNotFoundException ignored) {}
 
     // TODO: Add Roles here
 
-    administrationGroup.addItem(
-      new NavigationLink("Users", "fa fa-user", UserAdministrationPage.class));
-    administrationGroup.addItem(
-      new NavigationLink("User Directories", "fa fa-users", UserDirectoryAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("Users", "fa fa-user",
+        UserAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("User Directories", "fa fa-users",
+        UserDirectoryAdministrationPage.class));
 
     root.addItem(administrationGroup);
   }
@@ -316,26 +313,26 @@ public abstract class TemplateWebApplication
 
         if (getHomePage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug(
-            String.format("Ignoring home page navigation item \"%s\" under the path \"%s\"",
+          logger.debug(String.format(
+              "Ignoring home page navigation item \"%s\" under the path \"%s\"",
               navigationLink.getName(), navigationItemPath));
         }
         else if (getSecureHomePage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug(
-            String.format("Ignoring secure home page navigation item \"%s\" under the path \"%s\"",
+          logger.debug(String.format(
+              "Ignoring secure home page navigation item \"%s\" under the path \"%s\"",
               navigationLink.getName(), navigationItemPath));
         }
         else if (getLoginPage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug(
-            String.format("Ignoring login page navigation item \"%s\" under the path \"%s\"",
+          logger.debug(String.format(
+              "Ignoring login page navigation item \"%s\" under the path \"%s\"",
               navigationLink.getName(), navigationItemPath));
         }
         else if (getLogoutPage().isAssignableFrom(navigationLink.getPageClass()))
         {
-          logger.debug(
-            String.format("Ignoring logout page navigation item \"%s\" under the path \"%s\"",
+          logger.debug(String.format(
+              "Ignoring logout page navigation item \"%s\" under the path \"%s\"",
               navigationLink.getName(), navigationItemPath));
         }
         else
@@ -343,7 +340,7 @@ public abstract class TemplateWebApplication
           mountPage(navigationItemPath, navigationLink.getPageClass());
 
           logger.info(String.format("Mounting the page \"%s\" under the path \"%s\"",
-            navigationLink.getPageClass().getName(), navigationItemPath));
+              navigationLink.getPageClass().getName(), navigationItemPath));
         }
       }
     }

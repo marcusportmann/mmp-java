@@ -16,11 +16,15 @@
 
 package guru.mmp.common.xml;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.xml.sax.SAXParseException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlParserException</code> exception is thrown to indicate an error condition when
@@ -29,17 +33,12 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class XmlParserException
-  extends RuntimeException
+public class XmlParserException extends RuntimeException
 {
   private static final String NO_ERROR_CODE = "NONE";
-
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
-
   private static final long serialVersionUID = 1000000;
-
   private String code;
-
   private Date when;
 
   /**
@@ -59,10 +58,12 @@ public class XmlParserException
    */
   public XmlParserException(SAXParseException cause)
   {
-    super(cause.getMessage() + " at line (" + cause.getLineNumber() + ") and column (" +
-      (cause.getColumnNumber() + ") with SystemID (" +
-        ((cause.getSystemId() != null) ? cause.getSystemId() : "UNKNOWN") + ") and PublicID (" +
-        ((cause.getPublicId() != null) ? cause.getPublicId() : "UNKNOWN") + ")"));
+    super(cause.getMessage() + " at line (" + cause.getLineNumber() + ") and column ("
+        + (cause.getColumnNumber() + ") with SystemID (" + ((cause.getSystemId() != null)
+        ? cause.getSystemId()
+        : "UNKNOWN") + ") and PublicID (" + ((cause.getPublicId() != null)
+        ? cause.getPublicId()
+        : "UNKNOWN") + ")"));
     this.when = new Date();
   }
 
@@ -139,7 +140,9 @@ public class XmlParserException
    */
   public String getCode()
   {
-    return (code == null) ? NO_ERROR_CODE : code;
+    return (code == null)
+        ? NO_ERROR_CODE
+        : code;
   }
 
   /**

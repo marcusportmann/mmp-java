@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 /**
@@ -34,8 +36,7 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public abstract class RootElement
-  extends BaseElement
+public abstract class RootElement extends BaseElement
 {
   /**
    * Constructs a new <code>RootElement</code>.

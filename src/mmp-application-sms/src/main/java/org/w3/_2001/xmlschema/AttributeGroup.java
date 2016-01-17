@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,7 +30,4 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "namedAttributeGroup")
 @XmlRootElement(name = "attributeGroup")
-public class AttributeGroup
-  extends AttributeGroupType
-{
-}
+public class AttributeGroup extends AttributeGroupType {}

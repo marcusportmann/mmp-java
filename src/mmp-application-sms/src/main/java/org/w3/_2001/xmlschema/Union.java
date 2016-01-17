@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
@@ -34,14 +36,12 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"simpleTypes"})
+@XmlType(name = "", propOrder = { "simpleTypes" })
 @XmlRootElement(name = "union")
-public class Union
-  extends Annotated
+public class Union extends Annotated
 {
   @XmlAttribute(name = "memberTypes")
   protected List<QName> memberTypes;
-
   @XmlElement(name = "simpleType")
   protected List<LocalSimpleType> simpleTypes;
 

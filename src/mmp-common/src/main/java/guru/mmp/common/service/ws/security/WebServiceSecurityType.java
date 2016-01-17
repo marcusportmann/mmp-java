@@ -54,8 +54,13 @@ public enum WebServiceSecurityType
   DIGEST_AUTHENTICATION(5, "Digest Authentication");
 
   private int code;
-
   private String name;
+
+  WebServiceSecurityType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
+  }
 
   /**
    * Returns the web service security type given by the specified numeric code value.
@@ -86,12 +91,6 @@ public enum WebServiceSecurityType
       default:
         return WebServiceSecurityType.DIGEST_AUTHENTICATION;
     }
-  }
-
-  WebServiceSecurityType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
   }
 
   /**

@@ -16,12 +16,16 @@
 
 package guru.mmp.application.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <b>MessagePartResult</b> class stores the results of a message part being uploaded to
@@ -71,24 +75,6 @@ public class MessagePartResult
    * The <b>detail</b> may be blank if the message part was uploaded successfully.
    */
   private String detail;
-
-  /**
-   * Returns <code>true</code> if the WBXML document contains valid message received response
-   * information or <code>false</code> otherwise.
-   *
-   * @param document the WBXML document to validate
-   *
-   * @return <code>true</code> if the WBXML document contains valid message received response
-   * information or <code>false</code> otherwise
-   */
-  public static boolean isValidWBXML(Document document)
-  {
-    Element rootElement = document.getRootElement();
-
-    return rootElement.getName().equals("MessagePartResult") &&
-      (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("code") &&
-      rootElement.hasAttribute("detail");
-  }
 
   /**
    * Constructs a new <code>MessagePartResult</code> and populates it from the information
@@ -149,9 +135,28 @@ public class MessagePartResult
       catch (Throwable e)
       {
         exception = String.format("Unable to dump the stack for the exception (%s): %s", cause,
-          e.getMessage());
+            e.getMessage());
       }
     }
+  }
+
+  /**
+   * Returns <code>true</code> if the WBXML document contains valid message received response
+   * information or <code>false</code> otherwise.
+   *
+   * @param document the WBXML document to validate
+   *
+   * @return <code>true</code> if the WBXML document contains valid message received response
+   * information or <code>false</code> otherwise
+   */
+  public static boolean isValidWBXML(Document document)
+  {
+    Element rootElement = document.getRootElement();
+
+    return rootElement.getName().equals("MessagePartResult")
+        && (rootElement.getAttributes().size() == 2)
+        && rootElement.hasAttribute("code")
+        && rootElement.hasAttribute("detail");
   }
 
   /**

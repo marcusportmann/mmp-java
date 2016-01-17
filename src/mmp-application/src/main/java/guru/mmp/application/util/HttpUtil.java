@@ -16,6 +16,8 @@
 
 package guru.mmp.application.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.servlet.ServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +32,11 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class HttpUtil
 {
+  /**
+   * Private default constructor to enforce utility pattern.
+   */
+  private HttpUtil() {}
+
   /**
    * Sort the names of the parameters in the request.
    *
@@ -53,9 +60,4 @@ public class HttpUtil
 
     return list.toArray(new String[list.size()]);
   }
-
-  /**
-   * Private default constructor to enforce utility pattern.
-   */
-  private HttpUtil() {}
 }

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.slf4j.Logger;
@@ -32,14 +34,15 @@ import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 import java.io.IOException;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>WebApplicationFilter</code> extends the Wicket filter by initialising and managing the
  * Transaction associated with each web request.
  *
  * @author Marcus Portmann
  */
-public class WebApplicationFilter
-  extends org.apache.wicket.protocol.http.WicketFilter
+public class WebApplicationFilter extends org.apache.wicket.protocol.http.WicketFilter
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebApplicationFilter.class);
@@ -109,9 +112,9 @@ public class WebApplicationFilter
       {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND,
-          String.format("The requested resource (%s) could not be found",
-            StringUtil.notNull(getRequestURI(request))));
+        httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, String.format(
+            "The requested resource (%s) could not be found", StringUtil.notNull(getRequestURI(
+            request))));
       }
     }
     finally

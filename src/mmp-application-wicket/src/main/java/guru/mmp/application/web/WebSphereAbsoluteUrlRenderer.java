@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
@@ -28,8 +30,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-public class WebSphereAbsoluteUrlRenderer
-  extends UrlRenderer
+public class WebSphereAbsoluteUrlRenderer extends UrlRenderer
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebSphereAbsoluteUrlRenderer.class);

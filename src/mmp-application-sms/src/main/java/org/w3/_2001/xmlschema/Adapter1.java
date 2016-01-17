@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.Calendar;
 
@@ -9,8 +11,7 @@ import java.util.Calendar;
  * @author Marcus Portmann
  * @version 1.0.0, 2014-12-19
  */
-public class Adapter1
-  extends XmlAdapter<String, Calendar>
+public class Adapter1 extends XmlAdapter<String, Calendar>
 {
   /**
    * Method description

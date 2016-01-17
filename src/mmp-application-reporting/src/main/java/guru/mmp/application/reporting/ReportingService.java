@@ -16,6 +16,8 @@
 
 package guru.mmp.application.reporting;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.util.StringUtil;
 import net.sf.jasperreports.engine.JRParameter;
@@ -34,6 +36,8 @@ import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.util.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -83,8 +87,8 @@ public class ReportingService
 
       if (reportDefinition == null)
       {
-        throw new ReportingServiceException(
-          "Failed to find the report definition (" + definitionId + ")");
+        throw new ReportingServiceException("Failed to find the report definition (" + definitionId
+            + ")");
       }
 
       Map<String, Object> localParameters = new HashMap<>();
@@ -99,15 +103,15 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint = JasperFillManager.fillReport(
-        new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters, connection);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
+          reportDefinition.getTemplate()), localParameters, connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to create the PDF for the report using the report definintion (%s)",
+      throw new ReportingServiceException(String.format(
+          "Failed to create the PDF for the report using the report definintion (%s)",
           definitionId), e);
     }
   }
@@ -124,8 +128,8 @@ public class ReportingService
    *
    * @throws ReportingServiceException
    */
-  public byte[] createReportPDF(
-    UUID definitionId, Map<String, Object> parameters, Connection connection)
+  public byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters,
+      Connection connection)
     throws ReportingServiceException
   {
     try
@@ -134,8 +138,8 @@ public class ReportingService
 
       if (reportDefinition == null)
       {
-        throw new ReportingServiceException(
-          String.format("Failed to find the report definition (%s)", definitionId));
+        throw new ReportingServiceException(String.format(
+            "Failed to find the report definition (%s)", definitionId));
       }
 
       Map<String, Object> localParameters = new HashMap<>();
@@ -150,15 +154,15 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint = JasperFillManager.fillReport(
-        new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters, connection);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
+          reportDefinition.getTemplate()), localParameters, connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to create the PDF for the report using the report definintion (%s)",
+      throw new ReportingServiceException(String.format(
+          "Failed to create the PDF for the report using the report definintion (%s)",
           definitionId), e);
     }
   }
@@ -175,8 +179,8 @@ public class ReportingService
    *
    * @throws ReportingServiceException
    */
-  public byte[] createReportPDF(
-    UUID definitionId, Map<String, Object> parameters, Document document)
+  public byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters,
+      Document document)
     throws ReportingServiceException
   {
     try
@@ -185,8 +189,8 @@ public class ReportingService
 
       if (reportDefinition == null)
       {
-        throw new ReportingServiceException(
-          String.format("Failed to find the report definition (%s)", definitionId));
+        throw new ReportingServiceException(String.format(
+            "Failed to find the report definition (%s)", definitionId));
       }
 
       Map<String, Object> localParameters = new HashMap<>();
@@ -207,15 +211,15 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint = JasperFillManager.fillReport(
-        new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
+          reportDefinition.getTemplate()), localParameters);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to create the PDF for the report using the report definintion (%s)",
+      throw new ReportingServiceException(String.format(
+          "Failed to create the PDF for the report using the report definintion (%s)",
           definitionId), e);
     }
   }
@@ -237,8 +241,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to delete the report definition with ID (%s)", id), e);
+      throw new ReportingServiceException(String.format(
+          "Failed to delete the report definition with ID (%s)", id), e);
     }
   }
 
@@ -291,8 +295,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to retrieve the report definition with ID (%s)", id), e);
+      throw new ReportingServiceException(String.format(
+          "Failed to retrieve the report definition with ID (%s)", id), e);
     }
   }
 
@@ -313,7 +317,7 @@ public class ReportingService
     catch (Throwable e)
     {
       throw new ReportingServiceException(
-        "Failed to retrieve the summaries for all the report definitions", e);
+          "Failed to retrieve the summaries for all the report definitions", e);
     }
   }
 
@@ -337,8 +341,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to retrieve the summary for report definition with ID (%s)", id), e);
+      throw new ReportingServiceException(String.format(
+          "Failed to retrieve the summary for report definition with ID (%s)", id), e);
     }
   }
 
@@ -400,8 +404,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to check whether the report definition with ID (%s) exists", id), e);
+      throw new ReportingServiceException(String.format(
+          "Failed to check whether the report definition with ID (%s) exists", id), e);
     }
   }
 
@@ -436,9 +440,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(
-        String.format("Failed to save the report definition with ID (%s)",
-          reportDefinition.getId()), e);
+      throw new ReportingServiceException(String.format(
+          "Failed to save the report definition with ID (%s)", reportDefinition.getId()), e);
     }
   }
 

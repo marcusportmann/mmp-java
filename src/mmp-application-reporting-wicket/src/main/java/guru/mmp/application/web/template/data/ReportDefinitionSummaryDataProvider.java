@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ReportDefinitionSummaryDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves <code>ReportDefinitionSummary</code> instances from the database.
@@ -34,7 +38,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 public class ReportDefinitionSummaryDataProvider
-  extends InjectableDataProvider<ReportDefinitionSummary>
+    extends InjectableDataProvider<ReportDefinitionSummary>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -68,8 +72,8 @@ public class ReportDefinitionSummaryDataProvider
   {
     try
     {
-      List<ReportDefinitionSummary> allReportDefinitionSummaries = reportingService
-        .getReportDefinitionSummaries();
+      List<ReportDefinitionSummary> allReportDefinitionSummaries =
+          reportingService.getReportDefinitionSummaries();
 
       List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
 
@@ -85,8 +89,8 @@ public class ReportDefinitionSummaryDataProvider
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-        "Failed to load the summaries for the report definitions from index (%d) to (%d)", first,
-        first + count), e);
+          "Failed to load the summaries for the report definitions from index (%d) to (%d)", first,
+          first + count), e);
     }
   }
 

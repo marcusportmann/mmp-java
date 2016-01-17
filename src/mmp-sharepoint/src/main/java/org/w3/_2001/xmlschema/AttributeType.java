@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -39,33 +41,25 @@ import javax.xml.namespace.QName;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "attribute", propOrder = {"simpleType"})
-@XmlSeeAlso({Attribute.class})
-public class AttributeType
-  extends Annotated
+@XmlType(name = "attribute", propOrder = { "simpleType" })
+@XmlSeeAlso({ Attribute.class })
+public class AttributeType extends Annotated
 {
   @XmlAttribute(name = "default")
   protected String _default;
-
   @XmlAttribute(name = "fixed")
   protected String fixed;
-
   @XmlAttribute(name = "form")
   protected FormChoice form;
-
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
-
   @XmlAttribute(name = "ref")
   protected QName ref;
-
   protected LocalSimpleType simpleType;
-
   @XmlAttribute(name = "type")
   protected QName type;
-
   @XmlAttribute(name = "use")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   protected String use;

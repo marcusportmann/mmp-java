@@ -16,10 +16,14 @@
 
 package guru.mmp.application.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOException;
 
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IMessagingDAO</code> interface defines the persistence operations for the
@@ -180,8 +184,8 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<MessagePart> getMessagePartsQueuedForDownloadForUser(
-    String username, UUID deviceId, String lockName)
+  List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId,
+      String lockName)
     throws DAOException;
 
   /**
@@ -302,8 +306,8 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  int resetExpiredMessagePartLocks(
-    int lockTimeout, MessagePart.Status status, MessagePart.Status newStatus)
+  int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status, MessagePart
+      .Status newStatus)
     throws DAOException;
 
   /**
@@ -331,8 +335,8 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  int resetMessagePartLocks(
-    String lockName, MessagePart.Status status, MessagePart.Status newStatus)
+  int resetMessagePartLocks(String lockName, MessagePart.Status status, MessagePart
+      .Status newStatus)
     throws DAOException;
 
   /**

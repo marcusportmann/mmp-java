@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
@@ -28,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>FilteredUserDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves a filtered list of <code>User</code> instances from the
@@ -35,8 +39,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class FilteredUserDataProvider
-  extends InjectableDataProvider<User>
+public class FilteredUserDataProvider extends InjectableDataProvider<User>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -126,8 +129,8 @@ public class FilteredUserDataProvider
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-        "Failed to load the users from index (%d) to (%d) for the user directory (%s)", first,
-        first + count, userDirectoryId), e);
+          "Failed to load the users from index (%d) to (%d) for the user directory (%s)", first,
+          first + count, userDirectoryId), e);
     }
   }
 
@@ -181,9 +184,9 @@ public class FilteredUserDataProvider
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to retrieve the number of users for the user directory (%s)",
-          userDirectoryId), e);
+      throw new WebApplicationException(String.format(
+          "Failed to retrieve the number of users for the user directory (%s)", userDirectoryId),
+          e);
     }
   }
 }

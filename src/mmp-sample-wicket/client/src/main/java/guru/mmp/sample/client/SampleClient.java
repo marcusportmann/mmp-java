@@ -16,6 +16,8 @@
 
 package guru.mmp.sample.client;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
 import guru.mmp.service.sample.ws.ISampleService;
@@ -30,7 +32,7 @@ public class SampleClient
    * The Sample Service endpoint.
    */
   public static final String SAMPLE_SERVICE_ENDPOINT =
-    "http://localhost:51000/sample/SampleService";
+      "http://localhost:51000/sample/SampleService";
 
   /**
    * The path to the classpath resource containing the WSDL for the Sample Service.
@@ -47,18 +49,18 @@ public class SampleClient
     try
     {
       // Initialise the application security context
-      ApplicationSecurityContext applicationSecurityContext = ApplicationSecurityContext
-        .getContext();
+      ApplicationSecurityContext applicationSecurityContext =
+          ApplicationSecurityContext.getContext();
 
       applicationSecurityContext.init("Sample");
 
-      ISampleService sampleService = WebServiceClientSecurityHelper
-        .getWSSecurityX509CertificateServiceProxy(
-        SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL, SAMPLE_SERVICE_ENDPOINT);
+      ISampleService sampleService =
+          WebServiceClientSecurityHelper.getWSSecurityX509CertificateServiceProxy(
+          SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL, SAMPLE_SERVICE_ENDPOINT);
 
-//      ISampleService sampleService =
-//        WebServiceClientSecurityHelper.getServiceProxy(
-//          SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL,
+//    ISampleService sampleService =
+//      WebServiceClientSecurityHelper.getServiceProxy(
+//        SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL,
 // SAMPLE_SERVICE_ENDPOINT);
 
       System.out.println("sampleService.getVersion() = " + sampleService.getVersion());

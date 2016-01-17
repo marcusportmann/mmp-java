@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
@@ -33,14 +35,15 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>BackendMainNavigation</code> class provides a Wicket component that renders the main
  * navigation for the backend user interface for the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class BackendMainNavigation
-  extends Component
+public class BackendMainNavigation extends Component
 {
   private static final long serialVersionUID = 1000000;
 
@@ -83,8 +86,7 @@ public class BackendMainNavigation
            */
           if (navigationState.isLastPageAccessedInNavigationHierarchy(getPage()))
           {
-            response.write(
-              navigationState.getCachedBackendMainNavigationHTML());
+            response.write(navigationState.getCachedBackendMainNavigationHTML());
 
             return;
           }
@@ -96,32 +98,29 @@ public class BackendMainNavigation
            */
           if (!webSession.getNavigation().isPageInNavigationHierarchy(getPage()))
           {
-            response.write(
-              navigationState.getCachedBackendMainNavigationHTML());
+            response.write(navigationState.getCachedBackendMainNavigationHTML());
 
             return;
           }
         }
 
-        String requestURI = ((HttpServletRequest) (RequestCycle.get().getRequest())
-          .getContainerRequest()).getRequestURI();
+        String requestURI = ((HttpServletRequest) (RequestCycle.get()
+            .getRequest()).getContainerRequest()).getRequestURI();
 
         StringBuilder buffer = new StringBuilder();
 
         // Build the main navigation menu
         renderNavigationGroup(requestURI, webSession.getNavigation(), 0, buffer);
 
-        navigationState.setCachedBackendMainNavigationHTML(
-          buffer.toString());
+        navigationState.setCachedBackendMainNavigationHTML(buffer.toString());
 
-        response.write(
-          navigationState.getCachedBackendMainNavigationHTML());
+        response.write(navigationState.getCachedBackendMainNavigationHTML());
       }
     }
   }
 
-  private void renderNavigationGroup(
-    String requestURI, NavigationGroup navigationGroup, int depth, StringBuilder buffer)
+  private void renderNavigationGroup(String requestURI, NavigationGroup navigationGroup, int depth,
+      StringBuilder buffer)
   {
     if (depth == 0)
     {
@@ -173,8 +172,8 @@ public class BackendMainNavigation
 
         if (depth == 0)
         {
-          buffer.append("<span class=\"sidebar-mini-hide\">").append(
-            subNavigationGroup.getName()).append("</span></a>");
+          buffer.append("<span class=\"sidebar-mini-hide\">").append(subNavigationGroup.getName())
+              .append("</span></a>");
         }
         else
         {
@@ -192,7 +191,7 @@ public class BackendMainNavigation
         NavigationLink navigationLink = (NavigationLink) navigationItem;
 
         String url = urlFor(navigationLink.getPageClass(),
-          navigationLink.getPageParameters()).toString();
+            navigationLink.getPageParameters()).toString();
 
         if (navigationItem == selectedNavigationItemForCurrentPage)
         {

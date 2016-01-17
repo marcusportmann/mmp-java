@@ -23,8 +23,7 @@ package guru.mmp.common.exceptions;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class InvalidArgumentException
-  extends RuntimeException
+public class InvalidArgumentException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

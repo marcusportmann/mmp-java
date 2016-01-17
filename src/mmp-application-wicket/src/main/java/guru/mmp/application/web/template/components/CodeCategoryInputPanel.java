@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.CodesServiceException;
 import guru.mmp.application.web.WebApplicationException;
@@ -32,31 +34,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>CodeCategoryInputPanel</code> class provides a Wicket component that can
  * be used to capture the information for a <code>CodeCategory</code>.
  *
  * @author Marcus Portmann
  */
-public class CodeCategoryInputPanel
-  extends InputPanel
+public class CodeCategoryInputPanel extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
-
   private TextField<Integer> cacheExpiryField;
-
   private DropDownChoice<CodeCategoryType> categoryTypeField;
-
   private WebMarkupContainer codeDataContainer;
-
   private TextArea<String> codeDataField;
-
   private WebMarkupContainer endPointContainer;
-
   private TextField<String> endPointField;
-
   private CheckBox isCacheableField;
-
   private CheckBox isEndPointSecureField;
 
   /**
@@ -84,31 +79,31 @@ public class CodeCategoryInputPanel
       add(nameField);
 
       // The "categoryType" field
-      CodeCategoryTypeChoiceRenderer codeCategoryTypeChoiceRenderer = new
-        CodeCategoryTypeChoiceRenderer();
+      CodeCategoryTypeChoiceRenderer codeCategoryTypeChoiceRenderer =
+          new CodeCategoryTypeChoiceRenderer();
 
       categoryTypeField = new DropDownChoiceWithFeedback<>("categoryType",
-        getCodeCategoryTypeOptions(), codeCategoryTypeChoiceRenderer);
+          getCodeCategoryTypeOptions(), codeCategoryTypeChoiceRenderer);
 
       categoryTypeField.add(new AjaxFormComponentUpdatingBehavior("change")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        protected void onUpdate(AjaxRequestTarget target)
-        {
-          try
           {
-            target.add(categoryTypeField);
+            private static final long serialVersionUID = 1000000;
 
-            resetContainers(target);
-          }
-          catch (Throwable e)
-          {
-            throw new RuntimeException("Failed to update the categoryType field", e);
-          }
-        }
-      });
+            @Override
+            protected void onUpdate(AjaxRequestTarget target)
+            {
+              try
+              {
+                target.add(categoryTypeField);
+
+                resetContainers(target);
+              }
+              catch (Throwable e)
+              {
+                throw new RuntimeException("Failed to update the categoryType field", e);
+              }
+            }
+          });
 
       categoryTypeField.setRequired(true);
       add(categoryTypeField);
@@ -166,8 +161,8 @@ public class CodeCategoryInputPanel
       {
         super.onConfigure();
 
-        setVisible(
-          CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
+        setVisible(CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(
+            categoryTypeField.getValue()));
       }
     };
 
@@ -183,8 +178,8 @@ public class CodeCategoryInputPanel
       {
         super.onConfigure();
 
-        setRequired(
-          CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(categoryTypeField.getValue()));
+        setRequired(CodeCategoryType.LOCAL_CUSTOM.getCodeAsString().equals(
+            categoryTypeField.getValue()));
       }
     };
     codeDataContainer.add(codeDataField);
@@ -202,9 +197,9 @@ public class CodeCategoryInputPanel
         super.onConfigure();
 
         setVisible(CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString().equals(
-          categoryTypeField.getValue()) ||
-          CodeCategoryType.REMOTE_WEB_SERVICE.getCodeAsString().equals(
-            categoryTypeField.getValue()));
+            categoryTypeField.getValue())
+            || CodeCategoryType.REMOTE_WEB_SERVICE.getCodeAsString().equals(
+                categoryTypeField.getValue()));
       }
     };
 
@@ -221,9 +216,9 @@ public class CodeCategoryInputPanel
         super.onConfigure();
 
         setRequired((CodeCategoryType.REMOTE_HTTP_SERVICE.getCodeAsString().equals(
-          categoryTypeField.getValue()) ||
-          CodeCategoryType.REMOTE_WEB_SERVICE.getCodeAsString().equals(
-            categoryTypeField.getValue())));
+            categoryTypeField.getValue())
+            || CodeCategoryType.REMOTE_WEB_SERVICE.getCodeAsString().equals(
+                categoryTypeField.getValue())));
       }
     };
     endPointContainer.add(endPointField);
@@ -236,17 +231,17 @@ public class CodeCategoryInputPanel
     isCacheableField = new CheckBox("isCacheable");
 
     isCacheableField.add(new AjaxFormComponentUpdatingBehavior("change")
-    {
-      private static final long serialVersionUID = 1000000;
+        {
+          private static final long serialVersionUID = 1000000;
 
-      @Override
-      protected void onUpdate(AjaxRequestTarget target)
-      {
-        cacheExpiryField.setModelObject(null);
+          @Override
+          protected void onUpdate(AjaxRequestTarget target)
+          {
+            cacheExpiryField.setModelObject(null);
 
-        target.add(cacheExpiryField);
-      }
-    });
+            target.add(cacheExpiryField);
+          }
+        });
 
     isCacheableField.setOutputMarkupId(true);
     endPointContainer.add(isCacheableField);

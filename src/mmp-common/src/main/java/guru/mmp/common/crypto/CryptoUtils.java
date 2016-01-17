@@ -16,9 +16,13 @@
 
 package guru.mmp.common.crypto;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.math.BigInteger;
+
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+
 import java.util.UUID;
 
 /**
@@ -48,7 +52,6 @@ public class CryptoUtils
    * The AES tranformation name.
    */
   public static final String AES_TRANSFORMATION_NAME = "AES/CFB8/NoPadding";
-
   private static SecureRandom secureRandom = new SecureRandom();
 
   /**
@@ -97,36 +100,22 @@ public class CryptoUtils
     return passwordTo3DESKey(password.getBytes(), salt, 4, 24);
   }
 
-  private static byte[] passwordTo3DESKey(byte[] password, byte[] salt, int iteration, int keysize)
+  /**
+   * Convert the specified password to an AES key that can be used with the AES cypher encrypt and
+   * decrypt functions.
+   *
+   * @param password the password to convert to an AES key
+   *
+   * @return the AES key
+   *
+   * @throws CryptoException
+   */
+  public static byte[] passwordToAESKey(String password)
     throws CryptoException
   {
-    try
-    {
-      // Concatenate password and salt.
-      byte[] pwAndSalt = new byte[password.length + salt.length];
+    byte[] salt = "9aeabd0f-be94-486e-a693-ed2d553ea202".getBytes();
 
-      System.arraycopy(password, 0, pwAndSalt, 0, password.length);
-      System.arraycopy(salt, 0, pwAndSalt, password.length, salt.length);
-
-      // Create the key as sha1(sha1(sha1(sha1(...(pw+salt))...)
-      MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-
-      for (int i = 0; i < iteration; i++)
-      {
-        messageDigest.update(pwAndSalt, 0, pwAndSalt.length);
-        messageDigest.digest(pwAndSalt, 0, messageDigest.getDigestLength());
-      }
-
-      byte[] key = new byte[keysize];
-
-      System.arraycopy(pwAndSalt, 0, key, 0, keysize);
-
-      return key;
-    }
-    catch (Throwable e)
-    {
-      throw new CryptoException("Failed to convert the password to a 3DES key", e);
-    }
+    return passwordToAESKey(password.getBytes(), salt, 4, AES_KEY_SIZE);
   }
 
   /**
@@ -163,22 +152,36 @@ public class CryptoUtils
     return passwordToAESKey(password.getBytes(), salt.getBytes(), 4, AES_KEY_SIZE);
   }
 
-  /**
-   * Convert the specified password to an AES key that can be used with the AES cypher encrypt and
-   * decrypt functions.
-   *
-   * @param password the password to convert to an AES key
-   *
-   * @return the AES key
-   *
-   * @throws CryptoException
-   */
-  public static byte[] passwordToAESKey(String password)
+  private static byte[] passwordTo3DESKey(byte[] password, byte[] salt, int iteration, int keysize)
     throws CryptoException
   {
-    byte[] salt = "9aeabd0f-be94-486e-a693-ed2d553ea202".getBytes();
+    try
+    {
+      // Concatenate password and salt.
+      byte[] pwAndSalt = new byte[password.length + salt.length];
 
-    return passwordToAESKey(password.getBytes(), salt, 4, AES_KEY_SIZE);
+      System.arraycopy(password, 0, pwAndSalt, 0, password.length);
+      System.arraycopy(salt, 0, pwAndSalt, password.length, salt.length);
+
+      // Create the key as sha1(sha1(sha1(sha1(...(pw+salt))...)
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+
+      for (int i = 0; i < iteration; i++)
+      {
+        messageDigest.update(pwAndSalt, 0, pwAndSalt.length);
+        messageDigest.digest(pwAndSalt, 0, messageDigest.getDigestLength());
+      }
+
+      byte[] key = new byte[keysize];
+
+      System.arraycopy(pwAndSalt, 0, key, 0, keysize);
+
+      return key;
+    }
+    catch (Throwable e)
+    {
+      throw new CryptoException("Failed to convert the password to a 3DES key", e);
+    }
   }
 
   private static byte[] passwordToAESKey(byte[] password, byte[] salt, int iteration, int keysize)

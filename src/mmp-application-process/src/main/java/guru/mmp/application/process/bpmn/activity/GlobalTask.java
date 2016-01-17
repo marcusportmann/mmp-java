@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,6 +25,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GlobalTask</code> class represents a Global Task that forms part of a Process.
@@ -44,8 +48,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class GlobalTask
-  extends CallableElement
+public abstract class GlobalTask extends CallableElement
 {
   /**
    * The resources that will perform or will be responsible for the Global Task.

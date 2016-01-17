@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.Expression;
 import guru.mmp.application.process.bpmn.FormalExpression;
@@ -46,8 +48,7 @@ import org.w3c.dom.NodeList;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class ConditionalEventDefinition
-  extends EventDefinition
+public final class ConditionalEventDefinition extends EventDefinition
 {
   /**
    * The condition.

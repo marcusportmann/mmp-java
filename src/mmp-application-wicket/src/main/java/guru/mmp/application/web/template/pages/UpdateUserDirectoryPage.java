@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.security.UserDirectoryType;
@@ -38,6 +40,8 @@ import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UpdateUserDirectoryPage</code> class implements the
  * "Update User Directory" page for the Web Application Template.
@@ -45,12 +49,10 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
-public class UpdateUserDirectoryPage
-  extends TemplateWebPage
+public class UpdateUserDirectoryPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateUserDirectoryPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
@@ -58,13 +60,19 @@ public class UpdateUserDirectoryPage
   private ISecurityService securityService;
 
   /**
+   * Hidden <code>UpdateUserDirectoryPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected UpdateUserDirectoryPage() {}
+
+  /**
    * Constructs a new <code>UpdateUserDirectoryPage</code>.
    *
    * @param previousPage       the previous page
    * @param userDirectoryModel the model for the user directory
    */
-  public UpdateUserDirectoryPage(
-    PageReference previousPage, IModel<UserDirectory> userDirectoryModel)
+  public UpdateUserDirectoryPage(PageReference previousPage,
+      IModel<UserDirectory> userDirectoryModel)
   {
     super("Update User Directory");
 
@@ -72,8 +80,8 @@ public class UpdateUserDirectoryPage
     {
       UserDirectoryType userDirectoryType = userDirectoryModel.getObject().getType();
 
-      Form<UserDirectory> updateForm = new Form<>("updateForm",
-        new CompoundPropertyModel<>(userDirectoryModel));
+      Form<UserDirectory> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(
+          userDirectoryModel));
 
       // The "id" field
       TextField<UUID> idField = new TextFieldWithFeedback<>("id");
@@ -88,21 +96,20 @@ public class UpdateUserDirectoryPage
 
       // The "userDirectoryTypeName" field
       TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName",
-        new Model<>(userDirectoryType.getName()));
+          new Model<>(userDirectoryType.getName()));
       userDirectoryTypeNameField.setRequired(false);
       userDirectoryTypeNameField.setEnabled(false);
       updateForm.add(userDirectoryTypeNameField);
 
       Class<? extends UserDirectoryAdministrationPanel> userDirectoryAdministrationPanelClass =
-        userDirectoryType.getAdministrationClass().asSubclass(
-        UserDirectoryAdministrationPanel.class);
+          userDirectoryType.getAdministrationClass().asSubclass(
+          UserDirectoryAdministrationPanel.class);
 
       Constructor<? extends UserDirectoryAdministrationPanel> constructor =
-        userDirectoryAdministrationPanelClass.getConstructor(
-        String.class, IModel.class);
+          userDirectoryAdministrationPanelClass.getConstructor(String.class, IModel.class);
 
       UserDirectoryAdministrationPanel userDirectoryAdministrationPanel = constructor.newInstance(
-        "userDirectoryAdministrationPanel", userDirectoryModel);
+          "userDirectoryAdministrationPanel", userDirectoryModel);
 
       updateForm.add(userDirectoryAdministrationPanel);
 
@@ -154,10 +161,4 @@ public class UpdateUserDirectoryPage
       throw new WebApplicationException("Failed to initialise the UpdateUserDirectoryPage", e);
     }
   }
-
-  /**
-   * Hidden <code>UpdateUserDirectoryPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateUserDirectoryPage() {}
 }

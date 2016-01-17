@@ -16,20 +16,28 @@
 
 package guru.mmp.application.batch;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.cdi.CDIUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
 
 /**
  * The <code>BatchService</code> class provides the Batch Service implementation.
@@ -110,8 +118,8 @@ public class BatchService
     catch (Throwable e)
     {
       throw new BatchServiceException(String.format(
-        "Failed to execute the job (%s) with ID (%s): Failed to load the job class (%s)",
-        job.getName(), job.getId(), job.getJobClass()), e);
+          "Failed to execute the job (%s) with ID (%s): Failed to load the job class (%s)",
+          job.getName(), job.getId(), job.getJobClass()), e);
     }
 
     // Initialise the job
@@ -126,8 +134,8 @@ public class BatchService
       if (!(jobObject instanceof IJob))
       {
         throw new BatchServiceException(String.format(
-          "The job class (%s) does not implement the guru.mmp.application.batch.IJob interface",
-          job.getJobClass()));
+            "The job class (%s) does not implement the guru.mmp.application.batch.IJob interface",
+            job.getJobClass()));
       }
 
       jobImplementation = (IJob) jobObject;
@@ -137,9 +145,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException(
-        String.format("Failed to initialise the job (%s) with ID (%s)", job.getName(), job.getId()),
-        e);
+      throw new BatchServiceException(String.format(
+          "Failed to initialise the job (%s) with ID (%s)", job.getName(), job.getId()), e);
     }
 
     // Execute the job
@@ -163,9 +170,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException(
-        String.format("Failed to execute the job (%s) with ID (%s)", job.getName(), job.getId()),
-        e);
+      throw new BatchServiceException(String.format("Failed to execute the job (%s) with ID (%s)",
+          job.getName(), job.getId()), e);
     }
   }
 
@@ -209,8 +215,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException(
-        String.format("Failed to retrieve the parameters for the job (%s)", id), e);
+      throw new BatchServiceException(String.format(
+          "Failed to retrieve the parameters for the job (%s)", id), e);
     }
   }
 
@@ -264,7 +270,7 @@ public class BatchService
     catch (Throwable e)
     {
       throw new BatchServiceException(
-        "Failed to retrieve the next job that has been scheduled for execution", e);
+          "Failed to retrieve the next job that has been scheduled for execution", e);
     }
   }
 
@@ -304,8 +310,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException(
-        String.format("Failed to increment the execution attempts for the job (%s)", id), e);
+      throw new BatchServiceException(String.format(
+          "Failed to increment the execution attempts for the job (%s)", id), e);
     }
   }
 
@@ -347,8 +353,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException(
-        String.format("Failed to reschedule the job (%s) for execution", id), e);
+      throw new BatchServiceException(String.format(
+          "Failed to reschedule the job (%s) for execution", id), e);
     }
   }
 
@@ -372,8 +378,8 @@ public class BatchService
     catch (Throwable e)
     {
       throw new BatchServiceException(String.format(
-        "Failed to reset the locks for the jobs with the status (%s) that have been locked using " +
-          "the lock name (%s)", status, instanceName), e);
+          "Failed to reset the locks for the jobs with the status (%s) that have been locked using "
+          + "the lock name (%s)", status, instanceName), e);
     }
   }
 
@@ -395,7 +401,7 @@ public class BatchService
     catch (Throwable e)
     {
       throw new BatchServiceException("Failed to schedule the next unscheduled job for execution",
-        e);
+          e);
     }
   }
 
@@ -416,9 +422,8 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException(
-        String.format("Failed to unlock and set the status for the job (%s) to (%s)", id, status),
-        e);
+      throw new BatchServiceException(String.format(
+          "Failed to unlock and set the status for the job (%s) to (%s)", id, status), e);
     }
   }
 
@@ -444,15 +449,15 @@ public class BatchService
       }
 
       jobExecutionRetryDelay = registry.getIntegerValue("/Services/BatchService",
-        "JobExecutionRetryDelay", 600000);
+          "JobExecutionRetryDelay", 600000);
 
       maximumJobExecutionAttempts = registry.getIntegerValue("/Services/BatchService",
-        "MaximumJobExecutionAttempts", 6 * 24);
+          "MaximumJobExecutionAttempts", 6 * 24);
     }
     catch (Throwable e)
     {
       throw new BatchServiceException(
-        "Failed to initialise the configuration for the Batch Service", e);
+          "Failed to initialise the configuration for the Batch Service", e);
     }
   }
 
@@ -465,9 +470,9 @@ public class BatchService
     }
     catch (Throwable e)
     {
-      throw new BatchServiceException(
-        String.format("Failed in inject the job class (%s) for the job (%s) with ID (%s)",
-          job.getJobClass(), job.getName(), job.getId()), e);
+      throw new BatchServiceException(String.format(
+          "Failed in inject the job class (%s) for the job (%s) with ID (%s)", job.getJobClass(),
+          job.getName(), job.getId()), e);
     }
   }
 }

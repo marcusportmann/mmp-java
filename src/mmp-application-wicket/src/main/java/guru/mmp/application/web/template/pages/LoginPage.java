@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.Debug;
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
@@ -48,28 +50,25 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>LoginPage</code> class implements the "Login"
  * page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class LoginPage
-  extends WebPage
+public class LoginPage extends WebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LoginPage.class);
-
   private static final long serialVersionUID = 1000000;
-
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
-
   private String password;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
-
   private String username;
 
   /**
@@ -97,132 +96,132 @@ public class LoginPage
       add(loginForm);
 
       // The "username" field
-      TextField<String> usernameField = new TextFieldWithFeedback<>("username",
-        new PropertyModel<>(this, "username"));
+      TextField<String> usernameField = new TextFieldWithFeedback<>("username", new PropertyModel<>(
+          this, "username"));
       usernameField.setRequired(true);
       usernameField.add(new DefaultFocusBehavior());
       loginForm.add(usernameField);
 
       // The "password" field
       PasswordTextField passwordField = new PasswordTextFieldWithFeedback("password",
-        new PropertyModel<>(this, "password"));
+          new PropertyModel<>(this, "password"));
       passwordField.setRequired(true);
       loginForm.add(passwordField);
 
       // The "loginButton" button
       loginForm.add(new Button("loginButton")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onSubmit()
-        {
-          try
           {
-            if (Debug.inDebugMode() && ("s".equals(username)))
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onSubmit()
             {
-              username = "Administrator";
-              password = "Password1";
-            }
-
-            // Authenticate the user
-            UUID userDirectoryId = securityService.authenticate(username, password);
-
-            // Retrieve the user details
-            User user = securityService.getUser(userDirectoryId, username);
-
-            // Initialise the web session for the user
-            WebSession session = getWebApplicationSession();
-
-            session.setUserDirectoryId(user.getUserDirectoryId());
-            session.setUsername(user.getUsername());
-            session.setUserFullName(user.getFirstNames() + user.getLastName());
-
-            // Make session permanent after login
-            if (session.isTemporary())
-            {
-              session.bind();
-            }
-            else
-            {
-              session.dirty();  // for cluster replication
-            }
-
-            // Invalidate the cached navigation state
-            if (session instanceof TemplateWebSession)
-            {
-              ((TemplateWebSession)session).getNavigationState().invalidate();
-            }
-
-            // Check whether the user is associated with more than 1 organisation
-            List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(
-              userDirectoryId);
-
-            if (organisations.size() == 0)
-            {
-              error("Authentication Failed.");
-              error(
-                String.format("The user (%s) is not associated with any organisations.", username));
-            }
-            else if (organisations.size() == 1)
-            {
-              List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
-                username);
-              List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
-                username);
-
-              session.setOrganisation(organisations.get(0));
-              session.setGroupNames(groupNames);
-              session.setFunctionCodes(functionCodes);
-
-              if (logger.isDebugEnabled())
+              try
               {
-                logger.debug(String.format(
-                  "Successfully authenticated user (%s) for organisation (%s) with groups (%s) " +
-                    "and function codes (%s)", username, organisations.get(0).getId(),
-                  StringUtil.delimit(groupNames, ","), StringUtil.delimit(functionCodes, ",")));
-              }
+                if (Debug.inDebugMode() && ("s".equals(username)))
+                {
+                  username = "Administrator";
+                  password = "Password1";
+                }
 
-              // Redirect to the secure home page for the application
-              throw new RedirectToUrlException(
-                urlFor(((TemplateWebApplication) getApplication()).getSecureHomePage(),
-                  new PageParameters()).toString());
+                // Authenticate the user
+                UUID userDirectoryId = securityService.authenticate(username, password);
+
+                // Retrieve the user details
+                User user = securityService.getUser(userDirectoryId, username);
+
+                // Initialise the web session for the user
+                WebSession session = getWebApplicationSession();
+
+                session.setUserDirectoryId(user.getUserDirectoryId());
+                session.setUsername(user.getUsername());
+                session.setUserFullName(user.getFirstNames() + user.getLastName());
+
+                // Make session permanent after login
+                if (session.isTemporary())
+                {
+                  session.bind();
+                }
+                else
+                {
+                  session.dirty();  // for cluster replication
+                }
+
+                // Invalidate the cached navigation state
+                if (session instanceof TemplateWebSession)
+                {
+                  ((TemplateWebSession) session).getNavigationState().invalidate();
+                }
+
+                // Check whether the user is associated with more than 1 organisation
+                List<Organisation> organisations = securityService.getOrganisationsForUserDirectory(
+                    userDirectoryId);
+
+                if (organisations.size() == 0)
+                {
+                  error("Authentication Failed.");
+                  error(String.format("The user (%s) is not associated with any organisations.",
+                      username));
+                }
+                else if (organisations.size() == 1)
+                {
+                  List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
+                      username);
+                  List<String> functionCodes = securityService.getFunctionCodesForUser(
+                      userDirectoryId, username);
+
+                  session.setOrganisation(organisations.get(0));
+                  session.setGroupNames(groupNames);
+                  session.setFunctionCodes(functionCodes);
+
+                  if (logger.isDebugEnabled())
+                  {
+                    logger.debug(String.format(
+                        "Successfully authenticated user (%s) for organisation (%s) with groups (%s) "
+                        + "and function codes (%s)", username, organisations.get(0).getId(),
+                        StringUtil.delimit(groupNames, ","), StringUtil.delimit(functionCodes,
+                        ",")));
+                  }
+
+                  // Redirect to the secure home page for the application
+                  throw new RedirectToUrlException(urlFor(
+                      ((TemplateWebApplication) getApplication()).getSecureHomePage(),
+                      new PageParameters()).toString());
+                }
+                else
+                {
+                  /*
+                   * Redirect to the page allowing the user to select which organisation they wish to
+                   * work with.
+                   */
+                  throw new RedirectToUrlException(urlFor(SelectOrganisationPage.class,
+                      new PageParameters()).toString());
+                }
+              }
+              catch (RedirectToUrlException e)
+              {
+                throw e;
+              }
+              catch (AuthenticationFailedException | UserNotFoundException e)
+              {
+                error("The specified username or password is incorrect.");
+              }
+              catch (UserLockedException e)
+              {
+                error("Your user account has been locked.");
+              }
+              catch (ExpiredPasswordException e)
+              {
+                getRequestCycle().setResponsePage(new ChangePasswordPage(username));
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to authenticate the user (%s): %s", username,
+                    e.getMessage()), e);
+                error("The system is currently unavailable.");
+              }
             }
-            else
-            {
-              /*
-               * Redirect to the page allowing the user to select which organisation they wish to
-               * work with.
-               */
-              throw new RedirectToUrlException(
-                urlFor(SelectOrganisationPage.class, new PageParameters()).toString());
-            }
-          }
-          catch (RedirectToUrlException e)
-          {
-            throw e;
-          }
-          catch (AuthenticationFailedException | UserNotFoundException e)
-          {
-            error("The specified username or password is incorrect.");
-          }
-          catch (UserLockedException e)
-          {
-            error("Your user account has been locked.");
-          }
-          catch (ExpiredPasswordException e)
-          {
-            getRequestCycle().setResponsePage(new ChangePasswordPage(username));
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to authenticate the user (%s): %s", username, e.getMessage()),
-              e);
-            error("The system is currently unavailable.");
-          }
-        }
-      });
+          });
     }
     catch (Throwable e)
     {
@@ -265,7 +264,7 @@ public class LoginPage
     if (applicationCssHeaderItem == null)
     {
       applicationCssHeaderItem = CssHeaderItem.forReference(
-        getWebApplication().getApplicationCssResourceReference());
+          getWebApplication().getApplicationCssResourceReference());
     }
 
     return applicationCssHeaderItem;

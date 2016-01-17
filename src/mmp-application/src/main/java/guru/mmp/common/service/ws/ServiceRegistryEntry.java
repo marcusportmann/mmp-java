@@ -16,6 +16,8 @@
 
 package guru.mmp.common.service.ws;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 
 /**
@@ -59,7 +61,6 @@ public class ServiceRegistryEntry
    * security model.
    */
   public static final int SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE = 1;
-
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -127,9 +128,8 @@ public class ServiceRegistryEntry
    * @param serviceClass        the fully qualified name of the Java web service client class
    * @param wsdlLocation        the location of the WSDL defining the web service on the classpath
    */
-  public ServiceRegistryEntry(
-    String name, int securityType, boolean requiresUserToken, boolean supportsCompression,
-    String endpoint, String serviceClass, String wsdlLocation)
+  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
+      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation)
   {
     this.name = name;
     this.securityType = securityType;
@@ -158,9 +158,9 @@ public class ServiceRegistryEntry
    * @param password            the password to use when accessing a web service with
    *                            username-password security enabled
    */
-  public ServiceRegistryEntry(
-    String name, int securityType, boolean requiresUserToken, boolean supportsCompression,
-    String endpoint, String serviceClass, String wsdlLocation, String username, String password)
+  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
+      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation,
+      String username, String password)
   {
     this.name = name;
     this.securityType = securityType;

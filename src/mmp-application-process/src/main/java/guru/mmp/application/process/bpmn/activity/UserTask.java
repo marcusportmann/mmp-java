@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -26,6 +28,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserTask</code> class represents a User Task that forms part of a Process.
@@ -50,8 +54,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public final class UserTask
-  extends Task
+public final class UserTask extends Task
 {
   /**
    * The technology that the User Task will use to send and receive messages.
@@ -93,8 +96,8 @@ public final class UserTask
 
             default:
             {
-              throw new ParserException(
-                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
+              throw new ParserException("Failed to parse the unknown XML element ("
+                  + childElement.getNodeName() + ")");
             }
           }
         }

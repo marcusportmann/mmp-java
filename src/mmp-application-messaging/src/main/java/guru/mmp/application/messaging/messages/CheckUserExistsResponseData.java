@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -26,6 +28,8 @@ import guru.mmp.common.wbxml.Encoder;
 
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>CheckUserExistsResponseData</code> class manages the data for a
  * "Check User Exists Response" message.
@@ -35,8 +39,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class CheckUserExistsResponseData
-  extends WbxmlMessageData
+public class CheckUserExistsResponseData extends WbxmlMessageData
 {
   /**
    * The error code returned to indicate success.
@@ -57,7 +60,7 @@ public class CheckUserExistsResponseData
    * The UUID for the "Check User Exists Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "a38bd55e-3470-46f1-a96a-a6b08a9adc63");
+      "a38bd55e-3470-46f1-a96a-a6b08a9adc63");
 
   /**
    * The error code;
@@ -124,8 +127,9 @@ public class CheckUserExistsResponseData
       return false;
     }
 
-    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage")) ||
-      (!rootElement.hasChild("UserExists")))
+    if ((!rootElement.hasChild("ErrorCode"))
+        || (!rootElement.hasChild("ErrorMessage"))
+        || (!rootElement.hasChild("UserExists")))
     {
       return false;
     }

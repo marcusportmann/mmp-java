@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.security.UserDirectory;
@@ -46,6 +48,8 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UserDirectoryAdministrationPage</code> class implements the
  * "UserDirectory Administration" page for the Web Application Template.
@@ -53,13 +57,11 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
-public class UserDirectoryAdministrationPage
-  extends TemplateWebPage
+public class UserDirectoryAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(
-    UserDirectoryAdministrationPage.class);
-
+      UserDirectoryAdministrationPage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
@@ -112,8 +114,8 @@ public class UserDirectoryAdministrationPage
       filterForm.setOutputMarkupId(true);
 
       // The "filter" field
-      TextField<String> filterField = new TextField<>("filter",
-        new PropertyModel<>(dataProvider, "filter"));
+      TextField<String> filterField = new TextField<>("filter", new PropertyModel<>(dataProvider,
+          "filter"));
       filterForm.add(filterField);
 
       // The "filterButton" button
@@ -148,7 +150,7 @@ public class UserDirectoryAdministrationPage
             public void onClick()
             {
               UpdateUserDirectoryPage page = new UpdateUserDirectoryPage(getPageReference(),
-                item.getModel());
+                  item.getModel());
 
               setResponsePage(page);
             }
@@ -187,7 +189,7 @@ public class UserDirectoryAdministrationPage
     catch (Throwable e)
     {
       throw new WebApplicationException("Failed to initialise the UserDirectoryAdministrationPage",
-        e);
+          e);
     }
   }
 
@@ -195,11 +197,9 @@ public class UserDirectoryAdministrationPage
    * The <code>AddDialog</code> class implements a dialog that allows the user directory type to be
    * selected when adding a user directory.
    */
-  private class AddDialog
-    extends FormDialog
+  private class AddDialog extends FormDialog
   {
     private static final long serialVersionUID = 1000000;
-
     @SuppressWarnings("unused")
     private UserDirectoryType userDirectoryType;
 
@@ -212,13 +212,13 @@ public class UserDirectoryAdministrationPage
 
       try
       {
-        UserDirectoryTypeChoiceRenderer userDirectoryTypeChoiceRenderer = new
-          UserDirectoryTypeChoiceRenderer();
+        UserDirectoryTypeChoiceRenderer userDirectoryTypeChoiceRenderer =
+            new UserDirectoryTypeChoiceRenderer();
 
         // The "userDirectoryType" field
         DropDownChoice<UserDirectoryType> userDirectoryTypeField = new DropDownChoiceWithFeedback<>(
-          "userDirectoryType", new PropertyModel<>(this, "userDirectoryType"),
-          getUserDirectoryTypeOptions(), userDirectoryTypeChoiceRenderer);
+            "userDirectoryType", new PropertyModel<>(this, "userDirectoryType"),
+            getUserDirectoryTypeOptions(), userDirectoryTypeChoiceRenderer);
         userDirectoryTypeField.setRequired(true);
         userDirectoryTypeField.setOutputMarkupId(true);
         getForm().add(userDirectoryTypeField);
@@ -264,8 +264,8 @@ public class UserDirectoryAdministrationPage
         if (!UserDirectoryAdministrationPanel.class.isAssignableFrom(administrationClass))
         {
           throw new WebApplicationException(String.format(
-            "The administration class (%s) does not extend the UserDirectoryAdministrationPanel " +
-              "class", administrationClass.getName()));
+              "The administration class (%s) does not extend the UserDirectoryAdministrationPanel "
+              + "class", administrationClass.getName()));
         }
 
         setResponsePage(new AddUserDirectoryPage(getPageReference(), userDirectoryType));
@@ -275,8 +275,8 @@ public class UserDirectoryAdministrationPage
       catch (Throwable e)
       {
         logger.error(String.format(
-          "Failed to retrieve the administration class (%s) for the user directory type (%s)",
-          userDirectoryType.getAdministrationClassName(), userDirectoryType.getName()), e);
+            "Failed to retrieve the administration class (%s) for the user directory type (%s)",
+            userDirectoryType.getAdministrationClassName(), userDirectoryType.getName()), e);
 
         error(target, "Failed to retrieve the administration class for the user directory type");
       }
@@ -297,17 +297,15 @@ public class UserDirectoryAdministrationPage
     }
   }
 
+
   /**
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal of a
    * user directory to be confirmed.
    */
-  private class RemoveDialog
-    extends Dialog
+  private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-
     private UUID id;
-
     private Label nameLabel;
 
     /**
@@ -325,35 +323,36 @@ public class UserDirectoryAdministrationPage
       add(nameLabel);
 
       add(new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
           {
-            securityService.deleteUserDirectory(id);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                securityService.deleteUserDirectory(id);
 
-            UserDirectoryAdministrationPage.this.info("Successfully removed the user directory " +
-              nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to remove the user directory (%s): %s", id, e.getMessage()), e);
+                target.add(tableContainer);
 
-            UserDirectoryAdministrationPage.this.error(
-              "Failed to remove the user directory " + nameLabel.getDefaultModelObjectAsString());
-          }
+                UserDirectoryAdministrationPage.this.info(
+                    "Successfully removed the user directory "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to remove the user directory (%s): %s", id,
+                    e.getMessage()), e);
 
-          target.add(getAlerts());
+                UserDirectoryAdministrationPage.this.error("Failed to remove the user directory "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      });
+              target.add(getAlerts());
+
+              hide(target);
+            }
+          });
     }
 
     /**

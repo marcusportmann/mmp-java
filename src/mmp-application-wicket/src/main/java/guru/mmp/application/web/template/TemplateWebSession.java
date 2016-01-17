@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
@@ -26,20 +28,19 @@ import org.apache.wicket.request.Request;
 import java.io.Serializable;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>TemplateWebSession</code> class stores the session information for a user accessing a
  * Wicket web application that make use of the Web Application Template.
  *
  * @author Marcus Portmann
  */
-public class TemplateWebSession
-  extends WebSession
+public class TemplateWebSession extends WebSession
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private NavigationGroup navigation;
-
   private NavigationState navigationState;
 
   /**
@@ -166,9 +167,7 @@ public class TemplateWebSession
         }
         else
         {
-          if (link.isAnonymousOnly() && isUserLoggedIn())
-          {
-          }
+          if (link.isAnonymousOnly() && isUserLoggedIn()) {}
           else
           {
             filteredGroup.addItem(link);
@@ -179,7 +178,7 @@ public class TemplateWebSession
       {
         NavigationGroup originalSubGroup = (NavigationGroup) item;
         NavigationGroup filteredSubGroup = new NavigationGroup(originalSubGroup.getName(),
-          originalSubGroup.getIconClass());
+            originalSubGroup.getIconClass());
 
         filterNavigationGroup(filteredSubGroup, originalSubGroup);
 

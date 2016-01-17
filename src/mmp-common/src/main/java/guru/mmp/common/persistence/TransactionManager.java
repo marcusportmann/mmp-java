@@ -16,8 +16,12 @@
 
 package guru.mmp.common.persistence;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import javax.transaction.*;
 
@@ -32,25 +36,8 @@ public final class TransactionManager
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TransactionManager.class);
-
   private static TransactionManager singleton;
-
   private javax.transaction.TransactionManager transactionManager;
-
-  /**
-   * Returns the <code>TransactionManager</code> singleton.
-   *
-   * @return the <code>TransactionManager</code> singleton
-   */
-  public static TransactionManager getTransactionManager()
-  {
-    if (singleton == null)
-    {
-      singleton = new TransactionManager();
-    }
-
-    return singleton;
-  }
 
   /**
    * Private default constructor to enforce singleton pattern.
@@ -68,10 +55,24 @@ public final class TransactionManager
 
     if (transactionManager == null)
     {
-      logger.warn(
-        "Failed to retrieve the JTA TransactionManager:" + " Transactional database access is " +
-          "not available");
+      logger.warn("Failed to retrieve the JTA TransactionManager:"
+          + " Transactional database access is " + "not available");
     }
+  }
+
+  /**
+   * Returns the <code>TransactionManager</code> singleton.
+   *
+   * @return the <code>TransactionManager</code> singleton
+   */
+  public static TransactionManager getTransactionManager()
+  {
+    if (singleton == null)
+    {
+      singleton = new TransactionManager();
+    }
+
+    return singleton;
   }
 
   /**
@@ -126,7 +127,7 @@ public final class TransactionManager
    */
   public void commit()
     throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-    SecurityException, IllegalStateException, SystemException
+        SecurityException, IllegalStateException, SystemException
   {
     if (isEnabled())
     {

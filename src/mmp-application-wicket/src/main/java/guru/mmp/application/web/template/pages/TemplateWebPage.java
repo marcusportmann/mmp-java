@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
@@ -35,20 +37,19 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author Marcus Portmann
  */
-public abstract class TemplateWebPage
-  extends WebPage
+public abstract class TemplateWebPage extends WebPage
 {
   private static final long serialVersionUID = 1000000;
-
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
-
   private Alerts alerts;
-
   private String heading;
-
   private String subHeading;
-
   private String title;
+
+  /**
+   * Hidden constructor for the the <code>TemplateWebPage</code> class.
+   */
+  protected TemplateWebPage() {}
 
   /**
    * Constructs a new <code>TemplateWebPage</code>.
@@ -117,11 +118,6 @@ public abstract class TemplateWebPage
       throw new WebApplicationException("Failed to initialise the TemplateWebPage", e);
     }
   }
-
-  /**
-   * Hidden constructor for the the <code>TemplateWebPage</code> class.
-   */
-  protected TemplateWebPage() {}
 
   /**
    * Returns the alerts.
@@ -230,7 +226,7 @@ public abstract class TemplateWebPage
     if (applicationCssHeaderItem == null)
     {
       applicationCssHeaderItem = CssHeaderItem.forReference(
-        getWebApplication().getApplicationCssResourceReference());
+          getWebApplication().getApplicationCssResourceReference());
     }
 
     return applicationCssHeaderItem;

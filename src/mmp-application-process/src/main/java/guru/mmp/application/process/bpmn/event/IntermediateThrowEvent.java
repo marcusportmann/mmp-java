@@ -16,12 +16,16 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import org.w3c.dom.Element;
 
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IntermediateThrowEvent</code> class represents an Intermediate Throw Event that forms
@@ -41,8 +45,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class IntermediateThrowEvent
-  extends ThrowEvent
+public final class IntermediateThrowEvent extends ThrowEvent
 {
   /**
    * Constructs a new <code>IntermediateThrowEvent</code>.

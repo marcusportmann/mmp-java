@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -35,14 +37,15 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>WebApplication</code> class provides a base class for all "application specific"
  * Wicket web application classes.
  *
  * @author Marcus Portmann
  */
-public abstract class WebApplication
-  extends org.apache.wicket.protocol.http.WebApplication
+public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
   /* Logger */
   @SuppressWarnings("unused")
@@ -129,8 +132,8 @@ public abstract class WebApplication
     // Override the version of the jQuery library that ships with Wicket
     getJavaScriptLibrarySettings().setJQueryReference(TemplateJavaScriptResourceReference.get());
 
-    if ((System.getProperty("was.install.root") != null) || (System.getProperty("wlp.user.dir") !=
-      null))
+    if ((System.getProperty("was.install.root") != null)
+        || (System.getProperty("wlp.user.dir") != null))
     {
       setRequestCycleProvider(new WebSphereAbsoluteUrlRequestCycleProvider());
     }
@@ -146,34 +149,36 @@ public abstract class WebApplication
   {
     ConverterLocator converterLocator = new ConverterLocator();
 
-    converterLocator.set(Date.class, new DateConverter()
-    {
-      private static final long serialVersionUID = 1000000;
+    converterLocator.set(Date.class,
+        new DateConverter()
+        {
+          private static final long serialVersionUID = 1000000;
 
-      @Override
-      public DateFormat getDateFormat(Locale ignore)
-      {
-        return new SimpleDateFormat("yyyy-MM-dd");
-      }
-    });
+          @Override
+          public DateFormat getDateFormat(Locale ignore)
+          {
+            return new SimpleDateFormat("yyyy-MM-dd");
+          }
+        });
 
-    converterLocator.set(UUID.class, new IConverter<Object>()
-    {
-      private static final long serialVersionUID = 1000000;
+    converterLocator.set(UUID.class,
+        new IConverter<Object>()
+        {
+          private static final long serialVersionUID = 1000000;
 
-      @Override
-      public Object convertToObject(String value, Locale locale)
-        throws ConversionException
-      {
-        return UUID.fromString(value);
-      }
+          @Override
+          public Object convertToObject(String value, Locale locale)
+              throws ConversionException
+          {
+            return UUID.fromString(value);
+          }
 
-      @Override
-      public String convertToString(Object value, Locale locale)
-      {
-        return value.toString();
-      }
-    });
+          @Override
+          public String convertToString(Object value, Locale locale)
+          {
+            return value.toString();
+          }
+        });
 
     return converterLocator;
   }

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.codes;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -197,8 +199,8 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeCategoryWithParameters(
-    UUID id, Map<String, String> parameters, boolean retrieveCodes)
+  CodeCategory getCodeCategoryWithParameters(UUID id, Map<String, String> parameters,
+      boolean retrieveCodes)
     throws CodesServiceException;
 
   /**
@@ -217,8 +219,8 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeProviderCodeCategory(
-    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
+  CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+      boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -239,9 +241,8 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  CodeCategory getCodeProviderCodeCategoryWithParameters(
-    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
-    boolean returnCodesIfCurrent)
+  CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
+      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -294,8 +295,8 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  CodeCategory getRemoteCodeCategory(
-    CodeCategory codeCategory, Date lastRetrieved, boolean returnCodesIfCurrent)
+  CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
+      boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**
@@ -315,9 +316,8 @@ public interface ICodesService
    *
    * @throws CodesServiceException
    */
-  CodeCategory getRemoteCodeCategoryWithParameters(
-    CodeCategory codeCategory, Map<String, String> parameters, Date lastRetrieved,
-    boolean returnCodesIfCurrent)
+  CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
+      String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodesServiceException;
 
   /**

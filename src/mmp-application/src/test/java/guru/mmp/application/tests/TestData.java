@@ -22,9 +22,7 @@ package guru.mmp.application.tests;
 public class TestData
 {
   private String id;
-
   private String name;
-
   private String value;
 
   /**

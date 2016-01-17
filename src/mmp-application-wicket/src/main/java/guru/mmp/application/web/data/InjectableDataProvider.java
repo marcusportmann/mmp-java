@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -36,8 +38,7 @@ public abstract class InjectableDataProvider<T>
   public InjectableDataProvider()
   {
     guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
-      .WebApplication.class.cast(
-      WebApplication.get());
+        .WebApplication.class.cast(WebApplication.get());
 
     webApplication.getWebApplicationInjector().inject(this);
   }

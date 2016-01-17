@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import org.w3c.dom.Element;
 
@@ -38,8 +40,7 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public abstract class EventDefinition
-  extends BaseElement
+public abstract class EventDefinition extends BaseElement
 {
   /**
    * Constructs a new <code>EventDefinition</code>.

@@ -16,10 +16,25 @@
 
 package guru.mmp.common.service.ws.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.handler.WSHandler;
+
 import org.slf4j.Logger;
+
 import org.w3c.dom.Document;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+
+import java.security.KeyStore;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -29,12 +44,6 @@ import javax.xml.transform.Source;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import java.io.ByteArrayOutputStream;
-import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * The <code>WebServiceSecurityHandlerBase</code> class provides the base class for all web service
@@ -43,17 +52,13 @@ import java.util.Set;
  *
  * @author Marcus Portmann
  */
-public abstract class WebServiceSecurityHandlerBase
-  extends WSHandler
+public abstract class WebServiceSecurityHandlerBase extends WSHandler
   implements SOAPHandler<SOAPMessageContext>
 {
   /**
    * The name of the parameter on the SOAP message context that will contain the crypto properties.
    */
   protected static final String MESSAGE_CONTEXT_CRYPTO_PROPERTIES = "CryptoProperties";
-
-  /* The handler configuration options. */
-  protected Map<String, Object> options;
 
   /**
    * The SOAP Protocol 1.1 factory.
@@ -65,48 +70,13 @@ public abstract class WebServiceSecurityHandlerBase
    */
   private SOAPFactory soap12Factory = null;
 
+  /* The handler configuration options. */
+  protected Map<String, Object> options;
+
   /**
-   * Utility method to convert a <code>SOAPMessage</code> to an <code>org.w3c.dom.Document</code>.
-   *
-   * @param message   the <code>SOAPMessage</code> instance to convert
-   * @param isRequest <code>true</code> if the conversion is associated with a SOAP request or
-   *                  <code>false</code> otherwise
-   *
-   * @return the <code>org.w3c.dom.Document</code> representation of the <code>SOAPMessage</code>
-   *
-   * @throws WSSecurityException
+   * The enumeration identifying the possible SOAP protocol versions.
    */
-  protected static Document messageToDocument(SOAPMessage message, boolean isRequest)
-    throws WSSecurityException
-  {
-    try
-    {
-      Source content = message.getSOAPPart().getContent();
-
-      DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-
-      documentBuilderFactory.setNamespaceAware(true);
-
-      DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
-
-      return builder.parse(org.apache.ws.security.util.XMLUtils.sourceToInputSource(content));
-    }
-    catch (Exception e)
-    {
-      if (isRequest)
-      {
-        throw new WSSecurityException(
-          "Failed to process the SOAP request:" + " Failed to convert the SOAPMessage into an " +
-            "org.w3c.dom.Document", e);
-      }
-      else
-      {
-        throw new WSSecurityException(
-          "Failed to process the SOAP response:" + " Failed to convert the SOAPMessage into an " +
-            "org.w3c.dom.Document", e);
-      }
-    }
-  }
+  enum SOAPVersion { SOAP_1_1, SOAP_1_2 }
 
   /**
    * Constructs a new <code>WebServiceSecurityHandlerBase</code>.
@@ -128,14 +98,14 @@ public abstract class WebServiceSecurityHandlerBase
       if (isClient)
       {
         throw new WebServiceSecurityHandlerException(
-          "Failed to initialise the web service client security handler: " + "The SOAP 1.1 " +
-            "factory could not be initialised", e);
+            "Failed to initialise the web service client security handler: " + "The SOAP 1.1 "
+            + "factory could not be initialised", e);
       }
       else
       {
         throw new WebServiceSecurityHandlerException(
-          "Failed to initialise the web service security handler: " + "The SOAP 1.1 factory " +
-            "could not be initialised", e);
+            "Failed to initialise the web service security handler: " + "The SOAP 1.1 factory "
+            + "could not be initialised", e);
       }
     }
 
@@ -148,14 +118,14 @@ public abstract class WebServiceSecurityHandlerBase
       if (isClient)
       {
         throw new WebServiceSecurityHandlerException(
-          "Failed to initialise the web service client security handler: " + "The SOAP 1.2 " +
-            "factory could not be initialised", e);
+            "Failed to initialise the web service client security handler: " + "The SOAP 1.2 "
+            + "factory could not be initialised", e);
       }
       else
       {
         throw new WebServiceSecurityHandlerException(
-          "Failed to initialise the web service security handler: " + "The SOAP 1.2 factory " +
-            "could not be initialised", e);
+            "Failed to initialise the web service security handler: " + "The SOAP 1.2 factory "
+            + "could not be initialised", e);
       }
     }
   }
@@ -184,8 +154,8 @@ public abstract class WebServiceSecurityHandlerBase
   public Set<QName> getHeaders()
   {
     QName securityHeader = new QName(
-      "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
-      "Security");
+        "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
+        "Security");
 
     HashSet<QName> headers = new HashSet<>();
 
@@ -264,6 +234,47 @@ public abstract class WebServiceSecurityHandlerBase
   }
 
   /**
+   * Utility method to convert a <code>SOAPMessage</code> to an <code>org.w3c.dom.Document</code>.
+   *
+   * @param message   the <code>SOAPMessage</code> instance to convert
+   * @param isRequest <code>true</code> if the conversion is associated with a SOAP request or
+   *                  <code>false</code> otherwise
+   *
+   * @return the <code>org.w3c.dom.Document</code> representation of the <code>SOAPMessage</code>
+   *
+   * @throws WSSecurityException
+   */
+  protected static Document messageToDocument(SOAPMessage message, boolean isRequest)
+    throws WSSecurityException
+  {
+    try
+    {
+      Source content = message.getSOAPPart().getContent();
+
+      DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+      documentBuilderFactory.setNamespaceAware(true);
+
+      DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
+
+      return builder.parse(org.apache.ws.security.util.XMLUtils.sourceToInputSource(content));
+    }
+    catch (Exception e)
+    {
+      if (isRequest)
+      {
+        throw new WSSecurityException("Failed to process the SOAP request:"
+            + " Failed to convert the SOAPMessage into an " + "org.w3c.dom.Document", e);
+      }
+      else
+      {
+        throw new WSSecurityException("Failed to process the SOAP response:"
+            + " Failed to convert the SOAPMessage into an " + "org.w3c.dom.Document", e);
+      }
+    }
+  }
+
+  /**
    * Create a SOAP fault from the specified WS-Security exception.
    *
    * @param messageContext the SOAP message context this SOAP fault is associated with
@@ -273,8 +284,8 @@ public abstract class WebServiceSecurityHandlerBase
    *
    * @return the SOAP fault
    */
-  protected SOAPFault createSOAPFault(
-    SOAPMessageContext messageContext, Throwable exception, boolean isClient)
+  protected SOAPFault createSOAPFault(SOAPMessageContext messageContext, Throwable exception,
+      boolean isClient)
   {
     return createSOAPFault(messageContext, exception, null, isClient);
   }
@@ -289,8 +300,8 @@ public abstract class WebServiceSecurityHandlerBase
    *
    * @return the SOAP fault
    */
-  protected SOAPFault createSOAPFault(
-    SOAPMessageContext messageContext, WSSecurityException exception, boolean isClient)
+  protected SOAPFault createSOAPFault(SOAPMessageContext messageContext,
+      WSSecurityException exception, boolean isClient)
   {
     if (exception.getFaultCode() != null)
     {
@@ -389,8 +400,8 @@ public abstract class WebServiceSecurityHandlerBase
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to determine the SOAP protocol version: " + e.getMessage(),
-        e);
+      throw new RuntimeException("Failed to determine the SOAP protocol version: "
+          + e.getMessage(), e);
     }
 
     if (soapNS.equalsIgnoreCase(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE))
@@ -403,9 +414,8 @@ public abstract class WebServiceSecurityHandlerBase
     }
     else
     {
-      throw new RuntimeException(
-        "Unable to determine the SOAP protocol version from the envelope" + " namespace (" +
-          soapNS + ")");
+      throw new RuntimeException("Unable to determine the SOAP protocol version from the envelope"
+          + " namespace (" + soapNS + ")");
     }
   }
 
@@ -421,8 +431,8 @@ public abstract class WebServiceSecurityHandlerBase
    *
    * @return the SOAP fault
    */
-  private SOAPFault createSOAPFault(
-    SOAPMessageContext messageContext, Throwable exception, QName faultCode, boolean isClient)
+  private SOAPFault createSOAPFault(SOAPMessageContext messageContext, Throwable exception,
+      QName faultCode, boolean isClient)
   {
     try
     {
@@ -444,13 +454,13 @@ public abstract class WebServiceSecurityHandlerBase
         {
           if (isClient)
           {
-            return soap11Factory.createFault(faultMessage,
-              new QName("http://schemas.xmlsoap.org/soap/envelope/", "Client"));
+            return soap11Factory.createFault(faultMessage, new QName(
+                "http://schemas.xmlsoap.org/soap/envelope/", "Client"));
           }
           else
           {
-            return soap11Factory.createFault(faultMessage,
-              new QName("http://schemas.xmlsoap.org/soap/envelope/", "Server"));
+            return soap11Factory.createFault(faultMessage, new QName(
+                "http://schemas.xmlsoap.org/soap/envelope/", "Server"));
           }
         }
       }
@@ -464,13 +474,13 @@ public abstract class WebServiceSecurityHandlerBase
         {
           if (isClient)
           {
-            return soap12Factory.createFault(faultMessage,
-              new QName("http://www.w3.org/2003/05/soap-envelope", "Sender"));
+            return soap12Factory.createFault(faultMessage, new QName(
+                "http://www.w3.org/2003/05/soap-envelope", "Sender"));
           }
           else
           {
-            return soap12Factory.createFault(faultMessage,
-              new QName("http://www.w3.org/2003/05/soap-envelope", "Receiver"));
+            return soap12Factory.createFault(faultMessage, new QName(
+                "http://www.w3.org/2003/05/soap-envelope", "Receiver"));
           }
         }
       }
@@ -505,13 +515,5 @@ public abstract class WebServiceSecurityHandlerBase
     }
 
     return encoding;
-  }
-
-  /**
-   * The enumeration identifying the possible SOAP protocol versions.
-   */
-  enum SOAPVersion
-  {
-    SOAP_1_1, SOAP_1_2
   }
 }

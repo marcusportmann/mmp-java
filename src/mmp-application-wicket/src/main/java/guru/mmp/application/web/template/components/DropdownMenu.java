@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -32,6 +34,8 @@ import org.apache.wicket.model.util.ListModel;
 
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DropdownMenu</code> class provides a Wicket component that renders a dropdown menu.
  *
@@ -40,15 +44,11 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class DropdownMenu<T>
-  extends Panel
+public abstract class DropdownMenu<T> extends Panel
 {
   private static final long serialVersionUID = 1000000;
-
   private String dropDownMenuText;
-
   private String iconClass;
-
   private IModel<? extends List<? extends T>> menuItems;
 
   /**
@@ -83,8 +83,8 @@ public abstract class DropdownMenu<T>
    * @param menuItems the model providing the list of all rendered menuItems
    * @param iconClass the CSS class for the icon for the dropdown
    */
-  public DropdownMenu(
-    String id, IModel<T> model, IModel<? extends List<? extends T>> menuItems, String iconClass)
+  public DropdownMenu(String id, IModel<T> model, IModel<? extends List<? extends T>> menuItems,
+      String iconClass)
   {
     super(id, model);
 
@@ -114,45 +114,45 @@ public abstract class DropdownMenu<T>
 
     add(dropDownMenuIconLabel);
 
-    Label dropDownMenuTextLabel = new Label("dropdownMenuText",
-      new PropertyModel(this, "dropDownMenuText"));
+    Label dropDownMenuTextLabel = new Label("dropdownMenuText", new PropertyModel(this,
+        "dropDownMenuText"));
     dropDownMenuTextLabel.setRenderBodyOnly(true);
 
     add(dropDownMenuTextLabel);
 
     add(new Loop("dropdownMenuItem", menuItems.getObject().size())
-    {
-      @Override
-      protected void populateItem(LoopItem loopItem)
-      {
-        int loopItemIndex = loopItem.getIndex();
-
-        AjaxFallbackLink dropdownMenuItemLink = new AjaxFallbackLink("dropdownMenuItemLink")
         {
           @Override
-          public void onClick(AjaxRequestTarget target)
+          protected void populateItem(LoopItem loopItem)
           {
-            T menuItem = menuItems.getObject().get(loopItemIndex);
+            int loopItemIndex = loopItem.getIndex();
 
-            DropdownMenu.this.setDefaultModelObject(menuItem);
-
-            dropDownMenuText = getDisplayValue(menuItem);
-
-            onMenuItemSelected(target, menuItem);
-
-            if (target != null)
+            AjaxFallbackLink dropdownMenuItemLink = new AjaxFallbackLink("dropdownMenuItemLink")
             {
-              target.add(DropdownMenu.this);
-            }
+              @Override
+              public void onClick(AjaxRequestTarget target)
+              {
+                T menuItem = menuItems.getObject().get(loopItemIndex);
+
+                DropdownMenu.this.setDefaultModelObject(menuItem);
+
+                dropDownMenuText = getDisplayValue(menuItem);
+
+                onMenuItemSelected(target, menuItem);
+
+                if (target != null)
+                {
+                  target.add(DropdownMenu.this);
+                }
+              }
+            };
+
+            dropdownMenuItemLink.add(new Label("dropdownMenuItemText", new Model<>(getDisplayValue(
+                menuItems.getObject().get(loopItemIndex)))));
+
+            loopItem.add(dropdownMenuItemLink);
           }
-        };
-
-        dropdownMenuItemLink.add(new Label("dropdownMenuItemText",
-          new Model<>(getDisplayValue(menuItems.getObject().get(loopItemIndex)))));
-
-        loopItem.add(dropdownMenuItemLink);
-      }
-    });
+        });
 
     setOutputMarkupId(true);
   }

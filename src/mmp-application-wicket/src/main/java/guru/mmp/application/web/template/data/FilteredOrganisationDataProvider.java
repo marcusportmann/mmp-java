@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>FilteredOrganisationDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves a filtered list of <code>Organisation</code> instances from the
@@ -34,8 +38,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class FilteredOrganisationDataProvider
-  extends InjectableDataProvider<Organisation>
+public class FilteredOrganisationDataProvider extends InjectableDataProvider<Organisation>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -99,9 +102,8 @@ public class FilteredOrganisationDataProvider
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the organisations from index (%d) to (%d)", first,
-          first + count), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the organisations from index (%d) to (%d)", first, first + count), e);
     }
   }
 

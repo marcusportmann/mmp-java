@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 /**
@@ -32,8 +34,5 @@ public class LoopCharacteristics
    *
    * @param element the XML element containing the Loop Characteristics information
    */
-  public LoopCharacteristics(Element element)
-  {
-
-  }
+  public LoopCharacteristics(Element element) {}
 }

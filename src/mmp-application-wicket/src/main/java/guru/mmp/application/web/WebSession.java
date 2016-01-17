@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.pages.WebPage;
 import guru.mmp.application.web.servlets.ViewReportParameters;
@@ -25,6 +27,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>WebSession</code> class stores the session information for a user accessing a Wicket
  * web application.
@@ -32,8 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class WebSession
-  extends org.apache.wicket.protocol.http.WebSession
+public class WebSession extends org.apache.wicket.protocol.http.WebSession
 {
   /**
    * The empty list of function codes for anonymous users.
@@ -44,7 +47,6 @@ public class WebSession
    * The empty list of group names for anonymous users.
    */
   public static final List<String> NO_GROUP_NAMES = new ArrayList<>();
-
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -71,7 +73,6 @@ public class WebSession
    * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
   private UUID userDirectoryId;
-
   private String userFullName;
 
   /**

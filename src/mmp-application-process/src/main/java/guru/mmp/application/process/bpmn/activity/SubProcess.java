@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.*;
 import guru.mmp.common.util.StringUtil;
 import org.w3c.dom.Element;
@@ -28,6 +30,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SubProcess</code> class represents a Sub-Process that forms part of a Process.
@@ -68,8 +72,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SubProcess
-  extends Activity
+public class SubProcess extends Activity
 {
   /**
    * The FlowElements for the Sub-Process.
@@ -93,8 +96,8 @@ public class SubProcess
 
     try
     {
-      this.triggeredByEvent = !StringUtil.isNullOrEmpty(element.getAttribute("triggeredByEvent")) &&
-        Boolean.parseBoolean(element.getAttribute("triggeredByEvent"));
+      this.triggeredByEvent = !StringUtil.isNullOrEmpty(element.getAttribute("triggeredByEvent"))
+          && Boolean.parseBoolean(element.getAttribute("triggeredByEvent"));
 
       NodeList childElements = element.getChildNodes();
 
@@ -184,8 +187,8 @@ public class SubProcess
 
             default:
             {
-              throw new ParserException(
-                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
+              throw new ParserException("Failed to parse the unknown XML element ("
+                  + childElement.getNodeName() + ")");
             }
           }
         }

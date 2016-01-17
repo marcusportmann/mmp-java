@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -55,66 +57,50 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "element",
-  propOrder = {"complexType", "simpleType", "uniquesAndKeiesAndKeyreves"})
-@XmlSeeAlso({LocalElement.class, Element.class})
-public abstract class ElementType
-  extends Annotated
+    propOrder = { "complexType", "simpleType", "uniquesAndKeiesAndKeyreves" })
+@XmlSeeAlso({ LocalElement.class, Element.class })
+public abstract class ElementType extends Annotated
 {
   @XmlAttribute(name = "abstract")
   protected Boolean _abstract;
-
   @XmlAttribute(name = "default")
   protected String _default;
-
   @XmlAttribute(name = "block")
   @XmlSchemaType(name = "blockSet")
   protected List<String> blocks;
-
   protected LocalComplexType complexType;
-
   @XmlAttribute(name = "final")
   @XmlSchemaType(name = "derivationSet")
   protected List<String> finals;
-
   @XmlAttribute(name = "fixed")
   protected String fixed;
-
   @XmlAttribute(name = "form")
   protected FormChoice form;
-
   @XmlAttribute(name = "maxOccurs")
   @XmlSchemaType(name = "allNNI")
   protected String maxOccurs;
-
   @XmlAttribute(name = "minOccurs")
   @XmlSchemaType(name = "nonNegativeInteger")
   protected BigInteger minOccurs;
-
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
-
   @XmlAttribute(name = "nillable")
   protected Boolean nillable;
-
   @XmlAttribute(name = "ref")
   protected QName ref;
-
   protected LocalSimpleType simpleType;
-
   @XmlAttribute(name = "substitutionGroup")
   protected QName substitutionGroup;
-
   @XmlAttribute(name = "type")
   protected QName type;
-
-  @XmlElementRefs({@XmlElementRef(name = "key", namespace = "http://www.w3.org/2001/XMLSchema",
-    type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "unique", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "keyref", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = Keyref.class, required = false)})
+  @XmlElementRefs({ @XmlElementRef(name = "key", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "unique", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "keyref", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = Keyref.class, required = false) })
   protected List<Object> uniquesAndKeiesAndKeyreves;
 
   /**

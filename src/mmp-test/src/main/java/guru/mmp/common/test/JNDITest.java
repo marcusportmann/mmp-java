@@ -16,11 +16,15 @@
 
 package guru.mmp.common.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.naming.ContextBindings;
 import org.junit.BeforeClass;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
@@ -31,8 +35,7 @@ import javax.naming.InitialContext;
  *
  * @author Marcus Portmann
  */
-public abstract class JNDITest
-  extends Test
+public abstract class JNDITest extends Test
 {
   /**
    * This method is executed before any of the test methods are executed for the test class.
@@ -43,7 +46,7 @@ public abstract class JNDITest
     try
     {
       System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-        "org.apache.naming.java.javaURLContextFactory");
+          "org.apache.naming.java.javaURLContextFactory");
       System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 
       InitialContext ic = new InitialContext();

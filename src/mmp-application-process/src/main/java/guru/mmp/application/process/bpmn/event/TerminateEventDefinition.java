@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import org.w3c.dom.Element;
 
@@ -36,8 +38,7 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public final class TerminateEventDefinition
-  extends EventDefinition
+public final class TerminateEventDefinition extends EventDefinition
 {
   /**
    * Constructs a new <code>TerminateEventDefinition</code>.

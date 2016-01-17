@@ -38,6 +38,13 @@ public abstract class CodeProvider
 
   /**
    * Constructs a new <code>CodeProvider</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  protected CodeProvider() {}
+
+  /**
+   * Constructs a new <code>CodeProvider</code>.
    *
    * @param name               the name of the code provider
    * @param codeProviderConfig the configuration information for the code provider
@@ -47,13 +54,6 @@ public abstract class CodeProvider
     this.name = name;
     this.codeProviderConfig = codeProviderConfig;
   }
-
-  /**
-   * Constructs a new <code>CodeProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  protected CodeProvider() {}
 
   /**
    * Returns the configuration information for the code provider

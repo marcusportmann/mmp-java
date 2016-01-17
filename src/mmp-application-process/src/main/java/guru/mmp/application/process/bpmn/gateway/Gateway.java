@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.gateway;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.FlowElement;
 import guru.mmp.application.process.bpmn.ParserException;
@@ -58,8 +60,7 @@ import org.w3c.dom.Element;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-abstract class Gateway
-  extends FlowElement
+abstract class Gateway extends FlowElement
 {
   /**
    * The constraints on the incoming and outgoing Sequence Flows.

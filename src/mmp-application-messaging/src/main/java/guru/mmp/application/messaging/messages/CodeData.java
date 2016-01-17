@@ -16,12 +16,16 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.Code;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
 
 import java.io.Serializable;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeData</code> class stores the information for a code.

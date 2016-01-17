@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
@@ -33,8 +35,7 @@ import org.apache.wicket.request.IRequestHandler;
  *
  * @author Marcus Portmann
  */
-public class RadioGroupWithFeedback<T>
-  extends RadioGroup<T>
+public class RadioGroupWithFeedback<T> extends RadioGroup<T>
 {
   private static final long serialVersionUID = 1000000;
 

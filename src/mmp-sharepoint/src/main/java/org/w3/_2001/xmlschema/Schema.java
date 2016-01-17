@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -47,50 +49,42 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"includesAndImportsAndRedefines"})
+@XmlType(name = "", propOrder = { "includesAndImportsAndRedefines" })
 @XmlRootElement(name = "schema")
-public class Schema
-  extends OpenAttrs
+public class Schema extends OpenAttrs
 {
   @XmlAttribute(name = "attributeFormDefault")
   protected FormChoice attributeFormDefault;
-
   @XmlAttribute(name = "blockDefault")
   @XmlSchemaType(name = "blockSet")
   protected List<String> blockDefaults;
-
   @XmlAttribute(name = "elementFormDefault")
   protected FormChoice elementFormDefault;
-
   @XmlAttribute(name = "finalDefault")
   @XmlSchemaType(name = "fullDerivationSet")
   protected List<String> finalDefaults;
-
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
   @XmlSchemaType(name = "ID")
   protected String id;
-
-  @XmlElements({@XmlElement(name = "include", type = Include.class), @XmlElement(name = "import",
-    type = Import.class), @XmlElement(name = "redefine", type = Redefine.class),
-    @XmlElement(name = "annotation", type = Annotation.class),
-    @XmlElement(name = "simpleType", type = SimpleType.class),
-    @XmlElement(name = "complexType", type = ComplexType.class),
-    @XmlElement(name = "group", type = Group.class),
-    @XmlElement(name = "attributeGroup", type = AttributeGroup.class),
-    @XmlElement(name = "element", type = Element.class),
-    @XmlElement(name = "attribute", type = Attribute.class),
-    @XmlElement(name = "notation", type = Notation.class)})
+  @XmlElements({ @XmlElement(name = "include", type = Include.class) ,
+      @XmlElement(name = "import", type = Import.class) ,
+      @XmlElement(name = "redefine", type = Redefine.class) ,
+      @XmlElement(name = "annotation", type = Annotation.class) ,
+      @XmlElement(name = "simpleType", type = SimpleType.class) ,
+      @XmlElement(name = "complexType", type = ComplexType.class) ,
+      @XmlElement(name = "group", type = Group.class) ,
+      @XmlElement(name = "attributeGroup", type = AttributeGroup.class) ,
+      @XmlElement(name = "element", type = Element.class) ,
+      @XmlElement(name = "attribute", type = Attribute.class) ,
+      @XmlElement(name = "notation", type = Notation.class) })
   protected List<OpenAttrs> includesAndImportsAndRedefines;
-
   @XmlAttribute(name = "lang", namespace = "http://www.w3.org/XML/1998/namespace")
   protected String lang;
-
   @XmlAttribute(name = "targetNamespace")
   @XmlSchemaType(name = "anyURI")
   protected String targetNamespace;
-
   @XmlAttribute(name = "version")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "token")

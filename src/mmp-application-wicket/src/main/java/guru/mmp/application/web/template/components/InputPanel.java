@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.WebSession;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,8 +32,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
  *
  * @author Marcus Portmann
  */
-public abstract class InputPanel
-  extends Panel
+public abstract class InputPanel extends Panel
 {
   private static final long serialVersionUID = 1000000;
 

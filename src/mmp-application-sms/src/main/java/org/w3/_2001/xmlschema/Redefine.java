@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -29,24 +31,21 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"annotationsAndSimpleTypesAndComplexTypes"})
+@XmlType(name = "", propOrder = { "annotationsAndSimpleTypesAndComplexTypes" })
 @XmlRootElement(name = "redefine")
-public class Redefine
-  extends OpenAttrs
+public class Redefine extends OpenAttrs
 {
-  @XmlElements({@XmlElement(name = "annotation", type = Annotation.class),
-    @XmlElement(name = "simpleType", type = SimpleType.class),
-    @XmlElement(name = "complexType", type = ComplexType.class),
-    @XmlElement(name = "group", type = Group.class),
-    @XmlElement(name = "attributeGroup", type = AttributeGroup.class)})
+  @XmlElements({ @XmlElement(name = "annotation", type = Annotation.class) ,
+      @XmlElement(name = "simpleType", type = SimpleType.class) ,
+      @XmlElement(name = "complexType", type = ComplexType.class) ,
+      @XmlElement(name = "group", type = Group.class) ,
+      @XmlElement(name = "attributeGroup", type = AttributeGroup.class) })
   protected List<OpenAttrs> annotationsAndSimpleTypesAndComplexTypes;
-
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
   @XmlSchemaType(name = "ID")
   protected String id;
-
   @XmlAttribute(name = "schemaLocation", required = true)
   @XmlSchemaType(name = "anyURI")
   protected String schemaLocation;

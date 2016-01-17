@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
 import org.w3c.dom.Element;
@@ -25,6 +27,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CallableElement</code> class provides the base class that all CallableElements that
@@ -50,9 +54,14 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class CallableElement
-  extends RootElement
+public abstract class CallableElement extends RootElement
 {
+  /**
+   * The IDs uniquely identifying the Interfaces describing the external behavior provided by this
+   * element.
+   */
+  private List<QName> supportedInterfaceIds = new ArrayList<>();
+
   /**
    * The InputOutputBinding, which defines a combination of one InputSet and one OutputSet in order
    * to bind this to an operation defined in an interface.
@@ -69,12 +78,6 @@ public abstract class CallableElement
    * The name of the CallableElement.
    */
   private String name;
-
-  /**
-   * The IDs uniquely identifying the Interfaces describing the external behavior provided by this
-   * element.
-   */
-  private List<QName> supportedInterfaceIds = new ArrayList<>();
 
   /**
    * Constructs a new <code>CallableElement</code>.
@@ -104,8 +107,8 @@ public abstract class CallableElement
           {
             case "supportedInterfaceRef":
             {
-              supportedInterfaceIds.add(
-                XmlUtils.getQName(childElement, childElement.getTextContent()));
+              supportedInterfaceIds.add(XmlUtils.getQName(childElement,
+                  childElement.getTextContent()));
 
               break;
             }

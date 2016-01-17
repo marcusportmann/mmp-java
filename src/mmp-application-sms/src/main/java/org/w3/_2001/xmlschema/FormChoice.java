@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -29,6 +31,11 @@ public enum FormChoice
 
   private final String value;
 
+  FormChoice(String v)
+  {
+    value = v;
+  }
+
   /**
    * Method description
    *
@@ -47,11 +54,6 @@ public enum FormChoice
     }
 
     throw new IllegalArgumentException(v);
-  }
-
-  FormChoice(String v)
-  {
-    value = v;
   }
 
   /**

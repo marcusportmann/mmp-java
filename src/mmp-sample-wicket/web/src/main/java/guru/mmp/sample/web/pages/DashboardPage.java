@@ -16,6 +16,8 @@
 
 package guru.mmp.sample.web.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.ReportType;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
@@ -28,6 +30,8 @@ import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DashboardPage</code> class implements the "Dashboard"
  * page for the web application.
@@ -35,8 +39,7 @@ import java.util.Map;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_DASHBOARD)
-public class DashboardPage
-  extends TemplateWebPage
+public class DashboardPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 
@@ -60,12 +63,12 @@ public class DashboardPage
         Map<String, Object> reportParameters = new HashMap<>();
 
         ViewReportParameters viewReportParameters = new ViewReportParameters("Sample Report",
-          ReportType.DATABASE, "2a4b74e8-7f03-416f-b058-b35bb06944ef", reportParameters);
+            ReportType.DATABASE, "2a4b74e8-7f03-416f-b058-b35bb06944ef", reportParameters);
 
         session.addViewReportParameters(viewReportParameters);
 
         getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(
-          "/servlet/ViewReportServlet?viewReportParametersId=" + viewReportParameters.getId()));
+            "/servlet/ViewReportServlet?viewReportParametersId=" + viewReportParameters.getId()));
       }
     };
 

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -27,6 +29,8 @@ import guru.mmp.common.wbxml.Encoder;
 import java.util.Date;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>GetCodeCategoryRequestData</code> class manages the data for a
  * "Get Code Category Request" message.
@@ -36,14 +40,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class GetCodeCategoryRequestData
-  extends WbxmlMessageData
+public class GetCodeCategoryRequestData extends WbxmlMessageData
 {
   /**
    * The UUID for the "Get Code Category Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "94d60eb6-a062-492d-b5e7-9fb1f05cf088");
+      "94d60eb6-a062-492d-b5e7-9fb1f05cf088");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category to
@@ -107,8 +110,9 @@ public class GetCodeCategoryRequestData
       return false;
     }
 
-    if ((!rootElement.hasChild("Id")) || (!rootElement.hasChild("LastRetrieved")) ||
-      (!rootElement.hasChild("ReturnCodesIfCurrent")))
+    if ((!rootElement.hasChild("Id"))
+        || (!rootElement.hasChild("LastRetrieved"))
+        || (!rootElement.hasChild("ReturnCodesIfCurrent")))
     {
       return false;
     }
@@ -125,9 +129,8 @@ public class GetCodeCategoryRequestData
       }
       catch (Throwable e)
       {
-        throw new RuntimeException(
-          "Failed to parse the LastRetrieved ISO8601 timestamp (" + lastRetrievedValue + ") for" +
-            " the \"Get Code Category Request\" message", e);
+        throw new RuntimeException("Failed to parse the LastRetrieved ISO8601 timestamp ("
+            + lastRetrievedValue + ") for" + " the \"Get Code Category Request\" message", e);
       }
     }
     else
@@ -135,8 +138,8 @@ public class GetCodeCategoryRequestData
       this.lastRetrieved = new Date(Long.parseLong(lastRetrievedValue));
     }
 
-    this.returnCodesIfCurrent = Boolean.parseBoolean(
-      rootElement.getChildText("ReturnCodesIfCurrent"));
+    this.returnCodesIfCurrent = Boolean.parseBoolean(rootElement.getChildText(
+        "ReturnCodesIfCurrent"));
 
     return true;
   }
@@ -223,10 +226,11 @@ public class GetCodeCategoryRequestData
     Element rootElement = new Element("GetCodeCategoryRequest");
 
     rootElement.addContent(new Element("Id", id.toString()));
-    rootElement.addContent(new Element("LastRetrieved",
-      (lastRetrieved == null) ? ISO8601.now() : ISO8601.fromDate(lastRetrieved)));
-    rootElement.addContent(
-      new Element("ReturnCodesIfCurrent", String.valueOf(returnCodesIfCurrent)));
+    rootElement.addContent(new Element("LastRetrieved", (lastRetrieved == null)
+        ? ISO8601.now()
+        : ISO8601.fromDate(lastRetrieved)));
+    rootElement.addContent(new Element("ReturnCodesIfCurrent", String.valueOf(
+        returnCodesIfCurrent)));
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

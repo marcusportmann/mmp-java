@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.security.context.ApplicationSecurityContext;
@@ -31,6 +33,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebApplicationListener</code> class initialises the context of a web application that
@@ -82,9 +86,7 @@ public class WebApplicationListener
     {
       applicationName = InitialContext.doLookup("java:app/AppName");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (applicationName == null)
     {
@@ -92,24 +94,22 @@ public class WebApplicationListener
       {
         applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (StringUtil.isNullOrEmpty(applicationName))
     {
-      logger.warn("Failed to retrieve the application name from JNDI using the names (" +
-        "java:app/AppName) and (java:comp/env/ApplicationName)." + " The application " +
-        "security context will not be initialised");
+      logger.warn("Failed to retrieve the application name from JNDI using the names ("
+          + "java:app/AppName) and (java:comp/env/ApplicationName)." + " The application "
+          + "security context will not be initialised");
     }
     else
     {
       // Initialise the application's security context
       if (ApplicationSecurityContext.getContext().exists(applicationName))
       {
-        logger.info("Initialising the application security context using the configuration file (" +
-          applicationName + ".ApplicationSecurity)");
+        logger.info("Initialising the application security context using the configuration file ("
+            + applicationName + ".ApplicationSecurity)");
 
         try
         {
@@ -118,15 +118,16 @@ public class WebApplicationListener
         catch (Throwable e)
         {
           throw new WebApplicationException(
-            "Failed to initialise the application security context using the" + " configuration" +
-              " file (META-INF/" + applicationName + ".ApplicationSecurity): " + e.getMessage(), e);
+              "Failed to initialise the application security context using the" + " configuration"
+              + " file (META-INF/" + applicationName + ".ApplicationSecurity): " + e.getMessage(),
+              e);
         }
       }
       else
       {
-        logger.info(
-          "The configuration file (" + applicationName + ".ApplicationSecurity) could not found" +
-            "." + " The application security context will not be initialised");
+        logger.info("The configuration file (" + applicationName
+            + ".ApplicationSecurity) could not found" + "."
+            + " The application security context will not be initialised");
       }
     }
   }
@@ -142,9 +143,7 @@ public class WebApplicationListener
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -152,26 +151,22 @@ public class WebApplicationListener
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
-      throw new WebApplicationException(
-        "Failed to initialise the default database tables:" + "Failed to retrieve the " +
-          "application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new WebApplicationException("Failed to initialise the default database tables:"
+          + "Failed to retrieve the " + "application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try (Connection connection = dataSource.getConnection())
     {
       DatabaseMetaData metaData = connection.getMetaData();
 
-      logger.info(
-        "Connected to the " + metaData.getDatabaseProductName() + " application database with " +
-          "version " + metaData.getDatabaseProductVersion());
+      logger.info("Connected to the " + metaData.getDatabaseProductName()
+          + " application database with " + "version " + metaData.getDatabaseProductVersion());
 
       // Determine the suffix for the SQL files containing the database DDL
       String databaseFileSuffix;
@@ -186,20 +181,19 @@ public class WebApplicationListener
 
         default:
 
-          logger.info("The default database tables will not be populated for the database type (" +
-            metaData.getDatabaseProductName() + ")");
+          logger.info("The default database tables will not be populated for the database type ("
+              + metaData.getDatabaseProductName() + ")");
 
           return;
       }
 
       // Create and populate the database tables if required
-      if (!DAOUtil.tableExists(connection, null, DataAccessObject.MMP_DATABASE_SCHEMA,
-        "REGISTRY"))
+      if (!DAOUtil.tableExists(connection, null, DataAccessObject.MMP_DATABASE_SCHEMA, "REGISTRY"))
       {
         logger.info("Creating and populating the default database tables");
 
-        String resourcePath = "/guru/mmp/application/persistence/Application" +
-          databaseFileSuffix + ".sql";
+        String resourcePath = "/guru/mmp/application/persistence/Application" + databaseFileSuffix
+            + ".sql";
         int numberOfStatementsExecuted = 0;
         int numberOfFailedStatements = 0;
         List<String> sqlStatements;
@@ -211,7 +205,7 @@ public class WebApplicationListener
         catch (Throwable e)
         {
           throw new WebApplicationException(
-            "Failed to load the SQL statements from the resource file (" + resourcePath + ")", e);
+              "Failed to load the SQL statements from the resource file (" + resourcePath + ")", e);
         }
 
         for (String sqlStatement : sqlStatements)
@@ -230,9 +224,8 @@ public class WebApplicationListener
 
         if (numberOfStatementsExecuted != sqlStatements.size())
         {
-          throw new WebApplicationException(
-            "Failed to execute " + numberOfFailedStatements + " SQL statement(s) in the " +
-              "resource file (" + resourcePath + ")");
+          throw new WebApplicationException("Failed to execute " + numberOfFailedStatements
+              + " SQL statement(s) in the " + "resource file (" + resourcePath + ")");
         }
       }
     }

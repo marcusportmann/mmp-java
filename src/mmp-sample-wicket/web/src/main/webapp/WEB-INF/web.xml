@@ -36,12 +36,6 @@
     <env-entry-type>java.lang.String</env-entry-type>
     <env-entry-value>guru.mmp.sample.web.SampleApplication</env-entry-value>
   </env-entry>
-  <env-entry>
-    <description>Application Registry Path Prefix</description>
-    <env-entry-name>java:app/env/RegistryPathPrefix</env-entry-name>
-    <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value>/Sample</env-entry-value>
-  </env-entry>
   <listener>
     <description>Application Listener</description>
     <listener-class>guru.mmp.application.web.WebApplicationListener</listener-class>

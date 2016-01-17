@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.Debug;
 import guru.mmp.application.web.pages.SecureAnonymousWebPage;
 import guru.mmp.application.web.pages.WebPageSecurity;
@@ -92,7 +94,7 @@ public class WebAuthorizationStrategy
    * otherwise
    */
   public <T extends IRequestableComponent> boolean isInstantiationAuthorized(
-    Class<T> componentClass)
+      Class<T> componentClass)
   {
     if (guru.mmp.application.web.pages.WebPage.class.isAssignableFrom(componentClass))
     {
@@ -104,33 +106,35 @@ public class WebAuthorizationStrategy
 
         if (session != null)
         {
-          if ((!session.isUserLoggedIn()) || (!session.hasAcccessToFunction(
-            webPageSecurity.value())))
+          if ((!session.isUserLoggedIn())
+              || (!session.hasAcccessToFunction(webPageSecurity.value())))
           {
-            logger.warn("The user (" + (StringUtil.isNullOrEmpty(session.getUsername()) ? "Unknown"
-              : session.getUsername()) + ") does not have " +
-              "access to the function (" + webPageSecurity.value() + ")");
+            logger.warn("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
+                ? "Unknown"
+                : session.getUsername()) + ") does not have " + "access to the function ("
+                    + webPageSecurity.value() + ")");
 
             if (Debug.inDebugMode())
             {
-              logger.info("The user (" +
-                (StringUtil.isNullOrEmpty(session.getUsername()) ? "Unknown"
-                  : session.getUsername()) + ") has access to " +
-                "the following functions: " + ((session.getFunctionCodes().size() == 0) ? "None"
-                : StringUtil.delimit(session.getFunctionCodes(), ",")));
+              logger.info("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
+                  ? "Unknown"
+                  : session.getUsername()) + ") has access to " + "the following functions: "
+                      + ((session.getFunctionCodes().size() == 0)
+                  ? "None"
+                  : StringUtil.delimit(session.getFunctionCodes(), ",")));
             }
 
             session.invalidate();
 
             throw new RestartResponseAtInterceptPageException(
-              ((WebApplication) session.getApplication()).getLogoutPage());
+                ((WebApplication) session.getApplication()).getLogoutPage());
           }
         }
       }
       else
       {
         SecureAnonymousWebPage secureAnonymousWebPage = componentClass.getAnnotation(
-          SecureAnonymousWebPage.class);
+            SecureAnonymousWebPage.class);
 
         if (secureAnonymousWebPage != null)
         {
@@ -141,7 +145,7 @@ public class WebAuthorizationStrategy
             session.invalidate();
 
             throw new RestartResponseAtInterceptPageException(
-              ((WebApplication) session.getApplication()).getLogoutPage());
+                ((WebApplication) session.getApplication()).getLogoutPage());
           }
         }
       }

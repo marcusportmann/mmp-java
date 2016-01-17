@@ -23,8 +23,7 @@ package guru.mmp.common.model;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class NameValueException
-  extends RuntimeException
+public class NameValueException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

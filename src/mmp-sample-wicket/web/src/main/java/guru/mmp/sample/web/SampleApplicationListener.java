@@ -16,6 +16,8 @@
 
 package guru.mmp.sample.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -33,6 +35,8 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleApplicationListener</code> class initialises the sample web application.
@@ -83,11 +87,10 @@ public class SampleApplicationListener
     try
     {
       byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
-        "guru/mmp/sample/report/SampleReport.jasper");
+          "guru/mmp/sample/report/SampleReport.jasper");
 
-      ReportDefinition sampleReportDefinition = new ReportDefinition(
-        UUID.fromString("2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report",
-        sampleReportDefinitionData);
+      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
+          "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {
@@ -112,9 +115,7 @@ public class SampleApplicationListener
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -122,26 +123,22 @@ public class SampleApplicationListener
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
-      throw new WebApplicationException(
-        "Failed to initialise the sample database tables:" + "Failed to retrieve the " +
-          "application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+      throw new WebApplicationException("Failed to initialise the sample database tables:"
+          + "Failed to retrieve the " + "application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     try (Connection connection = dataSource.getConnection())
     {
       DatabaseMetaData metaData = connection.getMetaData();
 
-      logger.info(
-        "Connected to the " + metaData.getDatabaseProductName() + " application database with " +
-          "version " + metaData.getDatabaseProductVersion());
+      logger.info("Connected to the " + metaData.getDatabaseProductName()
+          + " application database with " + "version " + metaData.getDatabaseProductVersion());
 
       // Determine the suffix for the SQL files containing the database DDL
       String databaseFileSuffix;
@@ -156,8 +153,8 @@ public class SampleApplicationListener
 
         default:
 
-          logger.info("The sample database tables will not be populated for the database type (" +
-            metaData.getDatabaseProductName() + ")");
+          logger.info("The sample database tables will not be populated for the database type ("
+              + metaData.getDatabaseProductName() + ")");
 
           return;
       }
@@ -179,7 +176,7 @@ public class SampleApplicationListener
         catch (Throwable e)
         {
           throw new WebApplicationException(
-            "Failed to load the SQL statements from the resource file (" + resourcePath + ")", e);
+              "Failed to load the SQL statements from the resource file (" + resourcePath + ")", e);
         }
 
         for (String sqlStatement : sqlStatements)
@@ -198,9 +195,8 @@ public class SampleApplicationListener
 
         if (numberOfStatementsExecuted != sqlStatements.size())
         {
-          throw new WebApplicationException(
-            "Failed to execute " + numberOfFailedStatements + " SQL statement(s) in the " +
-              "resource file (" + resourcePath + ")");
+          throw new WebApplicationException("Failed to execute " + numberOfFailedStatements
+              + " SQL statement(s) in the " + "resource file (" + resourcePath + ")");
         }
       }
     }

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
@@ -32,6 +34,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UserDirectory</code> class stores the information for a user directory.
  *
@@ -41,15 +45,10 @@ public class UserDirectory
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-
-  private UUID id;
-
-  private String name;
-
   private Map<String, String> parameters = new HashMap<>();
-
+  private UUID id;
+  private String name;
   private UserDirectoryType type;
-
   private UUID typeId;
 
   /**
@@ -68,14 +67,14 @@ public class UserDirectory
 
     buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     buffer.append(
-      "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
+        "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
 
     for (String parameterName : parameters.keySet())
     {
       buffer.append("<parameter>");
       buffer.append("<name>").append(parameterName).append("</name>");
       buffer.append("<value>").append(StringUtil.notNull(parameters.get(parameterName))).append(
-        "</value>");
+          "</value>");
       buffer.append("</parameter>");
     }
 
@@ -156,7 +155,7 @@ public class UserDirectory
       DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
       builder.setEntityResolver(new DtdJarResolver("UserDirectoryConfiguration.dtd",
-        "META-INF/UserDirectoryConfiguration.dtd"));
+          "META-INF/UserDirectoryConfiguration.dtd"));
       builder.setErrorHandler(new XmlParserErrorHandler());
 
       InputSource inputSource = new InputSource(new ByteArrayInputStream(configuration.getBytes()));
@@ -174,13 +173,13 @@ public class UserDirectory
         Element parameterElement = (Element) parameterElements.item(i);
 
         parameters.put(XmlUtils.getChildElementText(parameterElement, "name"),
-          XmlUtils.getChildElementText(parameterElement, "value"));
+            XmlUtils.getChildElementText(parameterElement, "value"));
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException(
-        "Failed to parse the XML configuration data for the user directory", e);
+          "Failed to parse the XML configuration data for the user directory", e);
     }
   }
 

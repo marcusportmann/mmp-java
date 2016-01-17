@@ -129,14 +129,19 @@ package guru.mmp.application.process.bpmn.event;
  */
 public enum EventType
 {
-  CANCEL(0, "Cancel"), COMPENSATION(1, "Compensation"), CONDITIONAL(2, "Conditional"),
-  ERROR(3, "Error"), ESCALATION(4, "Escalation"), LINK(5, "Link"), MESSAGE(6, "Message"),
-  MULTIPLE(7, "Multiple"), MULTIPLE_PARALLEL(8, "Multiple Parallel"), NONE(9, "None"),
-  SIGNAL(10, "Signal"), TERMINATE(11, "Terminate"), TIMER(12, "Timer");
+  CANCEL(0, "Cancel"), COMPENSATION(1, "Compensation"), CONDITIONAL(2, "Conditional"), ERROR(3,
+      "Error"), ESCALATION(4, "Escalation"), LINK(5, "Link"), MESSAGE(6, "Message"), MULTIPLE(7,
+      "Multiple"), MULTIPLE_PARALLEL(8, "Multiple Parallel"), NONE(9, "None"), SIGNAL(10,
+      "Signal"), TERMINATE(11, "Terminate"), TIMER(12, "Timer");
 
   private int code;
-
   private String name;
+
+  EventType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
+  }
 
   /**
    * Returns the Event type given by the specified numeric code value.
@@ -191,12 +196,6 @@ public enum EventType
       default:
         throw new RuntimeException("Unknown Event type (" + code + ")");
     }
-  }
-
-  EventType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
   }
 
   /**

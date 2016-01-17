@@ -16,6 +16,8 @@
 
 package guru.mmp.common.persistence;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.persistence.AttributeConverter;
 
 /**

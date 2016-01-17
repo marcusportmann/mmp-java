@@ -16,6 +16,8 @@
 
 package guru.mmp.application.sms;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
 import guru.mmp.application.Debug;
@@ -45,6 +47,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Future;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
  *
@@ -63,20 +67,17 @@ public class SMSService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
 
+  /* The name of the SMS Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SMS Service");
+
   /* Background SMS Sender */
   @Inject
   BackgroundSMSSender backgroundSMSSender;
 
-  /* The name of the SMS Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SMS Service");
-
   /* The maximum number of times sending will be attempted for a SMS. */
   private int maximumSendAttempts;
-
   private String myMobileAPIEndPoint;
-
   private String myMobileAPIPassword;
-
   private String myMobileAPIUsername;
 
   /* Registry */
@@ -205,7 +206,7 @@ public class SMSService
     catch (Throwable e)
     {
       throw new SMSServiceException(String.format("Failed to retrieve the SMS with ID (%d)", id),
-        e);
+          e);
     }
   }
 
@@ -225,8 +226,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(
-        String.format("Failed to increment the send attempts for the SMS (%d)", sms.getId()), e);
+      throw new SMSServiceException(String.format(
+          "Failed to increment the send attempts for the SMS (%d)", sms.getId()), e);
     }
   }
 
@@ -269,8 +270,8 @@ public class SMSService
     catch (Throwable e)
     {
       throw new SMSServiceException(String.format(
-        "Failed to reset the locks for the SMSs with status (%s) locked using the lock name (%s)",
-        status, instanceName), e);
+          "Failed to reset the locks for the SMSs with status (%s) locked using the lock name (%s)",
+          status, instanceName), e);
     }
   }
 
@@ -295,9 +296,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(
-        String.format("Failed to queue the SMS for the mobile number (%s) for sending",
-          mobileNumber), e);
+      throw new SMSServiceException(String.format(
+          "Failed to queue the SMS for the mobile number (%s) for sending", mobileNumber), e);
     }
   }
 
@@ -335,14 +335,14 @@ public class SMSService
 
       if (logger.isDebugEnabled())
       {
-        logger.debug(
-          String.format("Attempting to send a SMS using the mobile number (%s)", mobileNumber));
+        logger.debug(String.format("Attempting to send a SMS using the mobile number (%s)",
+            mobileNumber));
       }
 
       if (Debug.inDebugMode())
       {
-        logger.info(
-          String.format("Skipping sending of SMS (%s) to mobile number (%s) in DEBUG mode", message,
+        logger.info(String.format(
+            "Skipping sending of SMS (%s) to mobile number (%s) in DEBUG mode", message,
             mobileNumber));
 
         return true;
@@ -353,7 +353,7 @@ public class SMSService
       APISoap myMobileAPIService = getMyMobileAPIService();
 
       String apiResultXml = myMobileAPIService.sendSTRSTR(myMobileAPIUsername, myMobileAPIPassword,
-        sendXML);
+          sendXML);
 
       // Retrieve a document builder instance using the factory
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -400,8 +400,10 @@ public class SMSService
           return false;
         }
 
-        throw new RuntimeException("The MyMobileAPI service returned an error: " +
-          (StringUtil.isNullOrEmpty(error) ? "UNKNOWN" : error));
+        throw new RuntimeException("The MyMobileAPI service returned an error: "
+            + (StringUtil.isNullOrEmpty(error)
+            ? "UNKNOWN"
+            : error));
       }
 
       Element sendInfoElement = XmlUtils.getChildElement(apiResultElement, "send_info");
@@ -419,8 +421,8 @@ public class SMSService
       }
       catch (Throwable e)
       {
-        throw new RuntimeException("Invalid API result XML: " +
-          "Failed to retrieve and parse the value of the credits element", e);
+        throw new RuntimeException("Invalid API result XML: "
+            + "Failed to retrieve and parse the value of the credits element", e);
       }
 
       if (credits < 100)
@@ -430,16 +432,16 @@ public class SMSService
 
       if (logger.isDebugEnabled())
       {
-        logger.debug(
-          String.format("Successfully sent a SMS using the mobile number (%s)", mobileNumber));
+        logger.debug(String.format("Successfully sent a SMS using the mobile number (%s)",
+            mobileNumber));
       }
 
       return true;
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(
-        String.format("Failed to send the SMS to the mobile number (%s)", mobileNumber), e);
+      throw new SMSServiceException(String.format(
+          "Failed to send the SMS to the mobile number (%s)", mobileNumber), e);
     }
   }
 
@@ -461,7 +463,7 @@ public class SMSService
       catch (Throwable e)
       {
         logger.error(
-          "Failed to invoke the Background SMS Sender to asynchronously send all queued SMSs", e);
+            "Failed to invoke the Background SMS Sender to asynchronously send all queued SMSs", e);
       }
     }
   }
@@ -483,9 +485,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(
-        String.format("Failed to set the status for the SMS (%d) to (%s)", id, status.getName()),
-        e);
+      throw new SMSServiceException(String.format(
+          "Failed to set the status for the SMS (%d) to (%s)", id, status.getName()), e);
     }
   }
 
@@ -506,9 +507,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(
-        String.format("Failed to unlock the SMS (%d) and set its status to (%s)", id,
-          status.getName()), e);
+      throw new SMSServiceException(String.format(
+          "Failed to unlock the SMS (%d) and set its status to (%s)", id, status.getName()), e);
     }
   }
 
@@ -521,14 +521,14 @@ public class SMSService
 
     // buffer.append("<validityperiod>").append("48").append("</validityperiod>");
 
-    return "<senddata>" + "<settings>" + "<live>True</live>" +
-      "<return_credits>True</return_credits>" + "<default_date>" + dateFormat.format(now) +
-      "</default_date>" + "<default_time>" + timeFormat.format(now) + "</default_time>" +
-      "<default_curdate>" + dateFormat.format(now) + "</default_curdate>" + "<default_curtime>" +
-      timeFormat.format(now) + "</default_curtime>" + "<mo_forwardemail>" + "sms-reply@mmp.guru" +
-      "</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>" + mobileNumber +
-      "</numto>" + "<customerid>" + smsId + "</customerid>" + "<data1>" + message + "</data1>" +
-      "<type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
+    return "<senddata>" + "<settings>" + "<live>True</live>"
+        + "<return_credits>True</return_credits>" + "<default_date>" + dateFormat.format(now)
+        + "</default_date>" + "<default_time>" + timeFormat.format(now) + "</default_time>"
+        + "<default_curdate>" + dateFormat.format(now) + "</default_curdate>" + "<default_curtime>"
+        + timeFormat.format(now) + "</default_curtime>" + "<mo_forwardemail>"
+        + "sms-reply@mmp.guru" + "</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>"
+        + mobileNumber + "</numto>" + "<customerid>" + smsId + "</customerid>" + "<data1>"
+        + message + "</data1>" + "<type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
   }
 
   private String formatMobileNumber(String mobileNumber)
@@ -562,7 +562,7 @@ public class SMSService
   {
     // Retrieve the proxy for the MyMobileAPI service
     URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
-      "META-INF/wsdl/MyMobileAPI.wsdl");
+        "META-INF/wsdl/MyMobileAPI.wsdl");
 
     API api = new API(wsdlLocation, new QName("http://www.mymobileapi.com/api5", "API"));
 
@@ -572,7 +572,7 @@ public class SMSService
 
     // Set the endpoint for the service
     bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-      myMobileAPIEndPoint);
+        myMobileAPIEndPoint);
 
     return apiSoap;
   }
@@ -601,39 +601,39 @@ public class SMSService
       if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIUsername"))
       {
         registry.setStringValue("/Services/SMSService", "MyMobileAPIUsername",
-          "MyMobileAPIUsername");
+            "MyMobileAPIUsername");
       }
 
       if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIPassword"))
       {
         registry.setStringValue("/Services/SMSService", "MyMobileAPIPassword",
-          "MyMobileAPIPassword");
+            "MyMobileAPIPassword");
       }
 
       if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIEndPoint"))
       {
         registry.setStringValue("/Services/SMSService", "MyMobileAPIEndPoint",
-          "http://www.mymobileapi.com/api5/api.asmx");
+            "http://www.mymobileapi.com/api5/api.asmx");
       }
 
       sendRetryDelay = registry.getIntegerValue("/Services/SMSService", "SendRetryDelay", 600000);
 
       maximumSendAttempts = registry.getIntegerValue("/Services/SMSService", "MaximumSendAttempts",
-        100);
+          100);
 
       myMobileAPIUsername = registry.getStringValue("/Services/SMSService", "MyMobileAPIUsername",
-        "MyMobileAPIUsername");
+          "MyMobileAPIUsername");
 
       myMobileAPIPassword = registry.getStringValue("/Services/SMSService", "MyMobileAPIPassword",
-        "MyMobileAPIPassword");
+          "MyMobileAPIPassword");
 
       myMobileAPIEndPoint = registry.getStringValue("/Services/SMSService", "MyMobileAPIEndPoint",
-        "http://www.mymobileapi.com/api5/api.asmx");
+          "http://www.mymobileapi.com/api5/api.asmx");
     }
     catch (Throwable e)
     {
       throw new SMSServiceException("Failed to initialise the configuration for the SMS Service",
-        e);
+          e);
     }
   }
 
@@ -680,8 +680,10 @@ public class SMSService
       {
         String error = XmlUtils.getChildElementText(callResultElement, "error");
 
-        throw new RuntimeException("The MyMobileAPI service returned an error: " +
-          (StringUtil.isNullOrEmpty(error) ? "UNKNOWN" : error));
+        throw new RuntimeException("The MyMobileAPI service returned an error: "
+            + (StringUtil.isNullOrEmpty(error)
+            ? "UNKNOWN"
+            : error));
       }
 
       return apiResultElement;

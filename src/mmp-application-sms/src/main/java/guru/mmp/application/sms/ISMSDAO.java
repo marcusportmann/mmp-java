@@ -16,6 +16,8 @@
 
 package guru.mmp.application.sms;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOException;
 
 /**

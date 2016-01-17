@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
@@ -29,8 +31,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class Dialog
-  extends WebMarkupContainer
+public abstract class Dialog extends WebMarkupContainer
 {
   private static final long serialVersionUID = 1000000;
 

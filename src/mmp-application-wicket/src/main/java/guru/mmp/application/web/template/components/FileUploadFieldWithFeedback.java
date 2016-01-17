@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
@@ -37,7 +39,7 @@ import org.apache.wicket.request.IRequestHandler;
  */
 @SuppressWarnings("unused")
 public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
-  extends FileUploadField
+    extends FileUploadField
 {
   private static final long serialVersionUID = 1000000;
 

@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 
@@ -28,14 +30,12 @@ import javax.xml.namespace.QName;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"simpleType"})
+@XmlType(name = "", propOrder = { "simpleType" })
 @XmlRootElement(name = "list")
-public class List
-  extends Annotated
+public class List extends Annotated
 {
   @XmlAttribute(name = "itemType")
   protected QName itemType;
-
   protected LocalSimpleType simpleType;
 
   /**

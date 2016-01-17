@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -27,6 +29,8 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 import java.io.Serializable;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>FormDialog</code> class provides a modal dialog box with a form which appears over
@@ -41,13 +45,10 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class FormDialog<T>
-  extends Dialog
+public abstract class FormDialog<T> extends Dialog
 {
   private static final long serialVersionUID = 1000000;
-
   private Alerts alerts;
-
   private Form<T> form;
 
   /**
@@ -83,16 +84,16 @@ public abstract class FormDialog<T>
         {
           // Visit each form component and if it has an error re-render it
           form.visitFormComponents(new IVisitor<FormComponent<?>, Object>()
-          {
-            @Override
-            public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
-            {
-              if (formComponent.hasErrorMessage())
               {
-                target.add(formComponent);
-              }
-            }
-          });
+                @Override
+                public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
+                {
+                  if (formComponent.hasErrorMessage())
+                  {
+                    target.add(formComponent);
+                  }
+                }
+              });
         }
       }
 
@@ -259,27 +260,27 @@ public abstract class FormDialog<T>
     alerts.getFeedbackMessages().clear();
 
     visitChildren(new IVisitor<Component, Object>()
-    {
-      // Visit each component
-      @Override
-      public void component(Component component, IVisit<Object> iVisit)
-      {
-        // Is this a form?
-        if (Form.class.isAssignableFrom(component.getClass()))
         {
-          // Visit each form component and clear its input and feedback messages
-          ((Form<?>) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
+          // Visit each component
+          @Override
+          public void component(Component component, IVisit<Object> iVisit)
           {
-            @Override
-            public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
+            // Is this a form?
+            if (Form.class.isAssignableFrom(component.getClass()))
             {
-              formComponent.clearInput();
-              formComponent.getFeedbackMessages().clear();
+              // Visit each form component and clear its input and feedback messages
+              ((Form<?>) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
+              {
+                @Override
+                public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
+                {
+                  formComponent.clearInput();
+                  formComponent.getFeedbackMessages().clear();
+                }
+              });
             }
-          });
-        }
-      }
-    });
+          }
+        });
 
     if (target != null)
     {
@@ -302,30 +303,30 @@ public abstract class FormDialog<T>
   protected void resetFeedbackMessages(AjaxRequestTarget target)
   {
     visitChildren(new IVisitor<Component, Object>()
-    {
-      // Visit each component
-      @Override
-      public void component(Component component, IVisit<Object> iVisit)
-      {
-        // Is this a form?
-        if (Form.class.isAssignableFrom(component.getClass()))
         {
-          if (target != null)
+          // Visit each component
+          @Override
+          public void component(Component component, IVisit<Object> iVisit)
           {
-            target.add(component);
-          }
-
-          // Visit each form component and clear its input and feedback messages
-          ((Form<?>) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
-          {
-            @Override
-            public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
+            // Is this a form?
+            if (Form.class.isAssignableFrom(component.getClass()))
             {
-              formComponent.getFeedbackMessages().clear();
+              if (target != null)
+              {
+                target.add(component);
+              }
+
+              // Visit each form component and clear its input and feedback messages
+              ((Form<?>) component).visitFormComponents(new IVisitor<FormComponent<?>, Object>()
+              {
+                @Override
+                public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
+                {
+                  formComponent.getFeedbackMessages().clear();
+                }
+              });
             }
-          });
-        }
-      }
-    });
+          }
+        });
   }
 }

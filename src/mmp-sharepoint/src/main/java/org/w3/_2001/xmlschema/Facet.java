@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -23,13 +25,11 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "facet")
-@XmlSeeAlso({NoFixedFacet.class, WhiteSpace.class, NumFacet.class})
-public class Facet
-  extends Annotated
+@XmlSeeAlso({ NoFixedFacet.class, WhiteSpace.class, NumFacet.class })
+public class Facet extends Annotated
 {
   @XmlAttribute(name = "fixed")
   protected Boolean fixed;
-
   @XmlAttribute(name = "value", required = true)
   @XmlSchemaType(name = "anySimpleType")
   protected String value;

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -28,6 +30,8 @@ import guru.mmp.common.wbxml.Encoder;
 import java.util.Date;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SubmitErrorReportRequestData</code> class manages the data for a
  * "Submit Error Report Request" message.
@@ -37,14 +41,13 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SubmitErrorReportRequestData
-  extends WbxmlMessageData
+public class SubmitErrorReportRequestData extends WbxmlMessageData
 {
   /**
    * The UUID for the "Submit Error Report Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "ff638c33-b4f1-4e79-804c-9560da2543d6");
+      "ff638c33-b4f1-4e79-804c-9560da2543d6");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the application that
@@ -123,9 +126,9 @@ public class SubmitErrorReportRequestData
    *                           the device the error report originated from
    * @param data               the data associated with the error report e.g. the application XML
    */
-  public SubmitErrorReportRequestData(
-    UUID id, UUID applicationId, int applicationVersion, String description, String detail,
-    String feedback, Date when, String who, UUID deviceId, byte[] data)
+  public SubmitErrorReportRequestData(UUID id, UUID applicationId, int applicationVersion,
+      String description, String detail, String feedback, Date when, String who, UUID deviceId,
+      byte[] data)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
@@ -163,11 +166,16 @@ public class SubmitErrorReportRequestData
       return false;
     }
 
-    if ((!rootElement.hasChild("Id")) || (!rootElement.hasChild("ApplicationId")) ||
-      (!rootElement.hasChild("ApplicationVersion")) || (!rootElement.hasChild("Description")) ||
-      (!rootElement.hasChild("Detail")) || (!rootElement.hasChild("Feedback")) ||
-      (!rootElement.hasChild("When")) || (!rootElement.hasChild("Who")) || (!rootElement.hasChild(
-      "DeviceId")) || (!rootElement.hasChild("Data")))
+    if ((!rootElement.hasChild("Id"))
+        || (!rootElement.hasChild("ApplicationId"))
+        || (!rootElement.hasChild("ApplicationVersion"))
+        || (!rootElement.hasChild("Description"))
+        || (!rootElement.hasChild("Detail"))
+        || (!rootElement.hasChild("Feedback"))
+        || (!rootElement.hasChild("When"))
+        || (!rootElement.hasChild("Who"))
+        || (!rootElement.hasChild("DeviceId"))
+        || (!rootElement.hasChild("Data")))
     {
       return false;
     }
@@ -189,9 +197,8 @@ public class SubmitErrorReportRequestData
       }
       catch (Throwable e)
       {
-        throw new RuntimeException(
-          "Failed to parse the When ISO8601 timestamp (" + whenValue + ") for the \"Submit " +
-            "Error Report Request\" message", e);
+        throw new RuntimeException("Failed to parse the When ISO8601 timestamp (" + whenValue
+            + ") for the \"Submit " + "Error Report Request\" message", e);
       }
     }
     else
@@ -434,11 +441,14 @@ public class SubmitErrorReportRequestData
     rootElement.addContent(new Element("Description", StringUtil.notNull(description)));
     rootElement.addContent(new Element("Detail", StringUtil.notNull(detail)));
     rootElement.addContent(new Element("Feedback", StringUtil.notNull(feedback)));
-    rootElement.addContent(
-      new Element("When", (when == null) ? ISO8601.now() : ISO8601.fromDate(when)));
+    rootElement.addContent(new Element("When", (when == null)
+        ? ISO8601.now()
+        : ISO8601.fromDate(when)));
     rootElement.addContent(new Element("Who", StringUtil.notNull(who)));
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
-    rootElement.addContent(new Element("Data", (data != null) ? data : new byte[0]));
+    rootElement.addContent(new Element("Data", (data != null)
+        ? data
+        : new byte[0]));
 
     Document document = new Document(rootElement);
 

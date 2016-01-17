@@ -16,13 +16,18 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>DetachableProcessDefinitionModel</code> class provides a detachable model
@@ -31,7 +36,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public class DetachableProcessDefinitionModel
-  extends InjectableLoadableDetachableModel<ProcessDefinition>
+    extends InjectableLoadableDetachableModel<ProcessDefinition>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -48,6 +53,14 @@ public class DetachableProcessDefinitionModel
    * The version of the process definition.
    */
   private int version;
+
+  /**
+   * Constructs a new <code>DetachableProcessDefinitionModel</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected DetachableProcessDefinitionModel() {}
 
   /**
    * Constructs a new <code>DetachableProcessDefinitionModel</code>.
@@ -75,14 +88,6 @@ public class DetachableProcessDefinitionModel
   }
 
   /**
-   * Constructs a new <code>DetachableProcessDefinitionModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected DetachableProcessDefinitionModel() {}
-
-  /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
    */
   @Override
@@ -94,9 +99,8 @@ public class DetachableProcessDefinitionModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the process definition with ID (%s) and version (%d)", id,
-          version), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the process definition with ID (%s) and version (%d)", id, version), e);
     }
   }
 

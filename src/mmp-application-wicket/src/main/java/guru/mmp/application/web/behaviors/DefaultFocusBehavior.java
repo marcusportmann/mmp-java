@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.behaviors;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -27,8 +29,7 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
  *
  * @author Marcus Portmann
  */
-public class DefaultFocusBehavior
-  extends Behavior
+public class DefaultFocusBehavior extends Behavior
 {
   private static final long serialVersionUID = 1000000;
 
@@ -60,7 +61,7 @@ public class DefaultFocusBehavior
   {
     super.renderHead(component, response);
 
-    response.render(OnLoadHeaderItem.forScript(
-      String.format("document.getElementById('%s').focus();", component.getMarkupId())));
+    response.render(OnLoadHeaderItem.forScript(String.format(
+        "document.getElementById('%s').focus();", component.getMarkupId())));
   }
 }

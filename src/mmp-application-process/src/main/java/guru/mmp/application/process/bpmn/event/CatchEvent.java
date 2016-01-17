@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -27,6 +29,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CatchEvent</code> class provides the base class that all Catch Event subclasses should
@@ -55,8 +59,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class CatchEvent
-  extends Event
+public abstract class CatchEvent extends Event
 {
   /**
    * Must all of the types of triggers that are listed in the Catch Event must be triggered before
@@ -76,9 +79,8 @@ public abstract class CatchEvent
 
     try
     {
-      this.isParallelMultiple = !StringUtil.isNullOrEmpty(
-        element.getAttribute("parallelMultiple")) && Boolean.parseBoolean(
-        element.getAttribute("parallelMultiple"));
+      this.isParallelMultiple = !StringUtil.isNullOrEmpty(element.getAttribute("parallelMultiple"))
+          && Boolean.parseBoolean(element.getAttribute("parallelMultiple"));
 
       NodeList childElements = element.getChildNodes();
 

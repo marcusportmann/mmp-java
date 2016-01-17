@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.components;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 
 /**
@@ -62,8 +64,9 @@ public class StringSelectOption
   @Override
   public boolean equals(Object obj)
   {
-    return (obj != null) && ((obj == this) ||
-      ((obj instanceof StringSelectOption) && ((StringSelectOption) obj).value.equals(value)));
+    return (obj != null)
+        && ((obj == this) || ((obj instanceof StringSelectOption) && ((StringSelectOption) obj)
+            .value.equals(value)));
   }
 
   /**

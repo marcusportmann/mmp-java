@@ -16,6 +16,8 @@
 
 package guru.mmp.application.batch;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
 /**
@@ -28,10 +30,12 @@ import java.util.List;
  * @author Paul Fernley
  * @author Marcus Portmann
  */
-class DayOfMonthValueMatcher
-  extends IntArrayValueMatcher
+class DayOfMonthValueMatcher extends IntArrayValueMatcher
 {
-  private static final int[] lastDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  private static final int[] lastDays =
+  {
+    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+  };
 
   /**
    * Constructs a new <code>DayOfMonthValueMatcher</code>.
@@ -58,8 +62,8 @@ class DayOfMonthValueMatcher
    */
   public boolean match(int value, int month, boolean isLeapYear)
   {
-    return (super.match(value) || ((value > 27) && match(32) && isLastDayOfMonth(value, month,
-      isLeapYear)));
+    return (super.match(value)
+        || ((value > 27) && match(32) && isLastDayOfMonth(value, month, isLeapYear)));
   }
 
   private boolean isLastDayOfMonth(int value, int month, boolean isLeapYear)

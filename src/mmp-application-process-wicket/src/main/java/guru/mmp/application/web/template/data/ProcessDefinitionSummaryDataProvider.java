@@ -16,16 +16,22 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ProcessDefinitionSummaryDataProvider</code> class provides an
@@ -35,7 +41,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 public class ProcessDefinitionSummaryDataProvider
-  extends InjectableDataProvider<ProcessDefinitionSummary>
+    extends InjectableDataProvider<ProcessDefinitionSummary>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -69,8 +75,8 @@ public class ProcessDefinitionSummaryDataProvider
   {
     try
     {
-      List<ProcessDefinitionSummary> allProcessDefinitionSummaries = processService
-        .getCurrentProcessDefinitionSummaries();
+      List<ProcessDefinitionSummary> allProcessDefinitionSummaries =
+          processService.getCurrentProcessDefinitionSummaries();
 
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
@@ -86,8 +92,8 @@ public class ProcessDefinitionSummaryDataProvider
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-        "Failed to load the summaries for the process definitions from index (%d) to (%d)", first,
-        first + count), e);
+          "Failed to load the summaries for the process definitions from index (%d) to (%d)",
+          first, first + count), e);
     }
   }
 

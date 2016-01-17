@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -25,22 +27,18 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "attributeGroup", propOrder = {"attributesAndAttributeGroups", "anyAttribute"})
-@XmlSeeAlso({AttributeGroupRef.class, AttributeGroup.class})
-public abstract class AttributeGroupType
-  extends Annotated
+@XmlType(name = "attributeGroup", propOrder = { "attributesAndAttributeGroups", "anyAttribute" })
+@XmlSeeAlso({ AttributeGroupRef.class, AttributeGroup.class })
+public abstract class AttributeGroupType extends Annotated
 {
   protected Wildcard anyAttribute;
-
-  @XmlElements({@XmlElement(name = "attribute", type = AttributeType.class),
-    @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class)})
+  @XmlElements({ @XmlElement(name = "attribute", type = AttributeType.class) ,
+      @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class) })
   protected List<Annotated> attributesAndAttributeGroups;
-
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
-
   @XmlAttribute(name = "ref")
   protected QName ref;
 

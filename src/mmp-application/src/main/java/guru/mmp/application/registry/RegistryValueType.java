@@ -23,12 +23,17 @@ package guru.mmp.application.registry;
  */
 public enum RegistryValueType
 {
-  NONE(-1, "None"), STRING(1, "String"), INTEGER(2, "Integer"), DECIMAL(3, "Decimal"),
-  BINARY(4, "Binary");
+  NONE(-1, "None"), STRING(1, "String"), INTEGER(2, "Integer"), DECIMAL(3, "Decimal"), BINARY(4,
+      "Binary");
 
   private int code;
-
   private String name;
+
+  RegistryValueType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
+  }
 
   /**
    * Returns the registry value type given by the specified numeric code value.
@@ -56,12 +61,6 @@ public enum RegistryValueType
       default:
         return RegistryValueType.NONE;
     }
-  }
-
-  RegistryValueType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
   }
 
   /**

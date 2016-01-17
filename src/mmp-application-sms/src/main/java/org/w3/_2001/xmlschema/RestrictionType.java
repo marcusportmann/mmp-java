@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
@@ -31,55 +33,46 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "restrictionType",
-  propOrder = {"simpleType", "minExclusivesAndMinInclusivesAndMaxExclusives", "sequence", "choice",
-    "all", "group", "attributesAndAttributeGroups", "anyAttribute"})
-@XmlSeeAlso({ComplexRestrictionType.class, SimpleRestrictionType.class})
-public class RestrictionType
-  extends Annotated
+    propOrder = { "simpleType", "minExclusivesAndMinInclusivesAndMaxExclusives", "sequence",
+        "choice", "all", "group", "attributesAndAttributeGroups", "anyAttribute" })
+@XmlSeeAlso({ ComplexRestrictionType.class, SimpleRestrictionType.class })
+public class RestrictionType extends Annotated
 {
   protected All all;
-
   protected Wildcard anyAttribute;
-
-  @XmlElements({@XmlElement(name = "attribute", type = AttributeType.class),
-    @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class)})
+  @XmlElements({ @XmlElement(name = "attribute", type = AttributeType.class) ,
+      @XmlElement(name = "attributeGroup", type = AttributeGroupRef.class) })
   protected List<Annotated> attributesAndAttributeGroups;
-
   @XmlAttribute(name = "base", required = true)
   protected QName base;
-
   protected ExplicitGroup choice;
-
   protected GroupRef group;
-
-  @XmlElementRefs({@XmlElementRef(name = "minInclusive",
-    namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "maxExclusive", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false), @XmlElementRef(name = "fractionDigits",
-    namespace = "http://www.w3.org/2001/XMLSchema",
-    type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "whiteSpace", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = WhiteSpace.class, required = false),
-    @XmlElementRef(name = "totalDigits", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = TotalDigits.class, required = false),
-    @XmlElementRef(name = "minLength", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "enumeration", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false), @XmlElementRef(name = "maxInclusive",
-    namespace = "http://www.w3.org/2001/XMLSchema",
-    type = JAXBElement.class, required = false), @XmlElementRef(name = "minExclusive",
-    namespace = "http://www.w3.org/2001/XMLSchema",
-    type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "maxLength", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "pattern", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = Pattern.class, required = false),
-    @XmlElementRef(name = "length", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false)})
+  @XmlElementRefs({ @XmlElementRef(name = "minInclusive",
+      namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "maxExclusive", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "fractionDigits", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "whiteSpace", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = WhiteSpace.class, required = false) ,
+      @XmlElementRef(name = "totalDigits", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = TotalDigits.class, required = false) ,
+      @XmlElementRef(name = "minLength", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "enumeration", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "maxInclusive", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "minExclusive", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "maxLength", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "pattern", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = Pattern.class, required = false) ,
+      @XmlElementRef(name = "length", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) })
   protected List<Object> minExclusivesAndMinInclusivesAndMaxExclusives;
-
   protected ExplicitGroup sequence;
-
   protected LocalSimpleType simpleType;
 
   /**

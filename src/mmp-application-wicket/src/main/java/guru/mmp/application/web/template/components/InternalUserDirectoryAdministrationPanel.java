@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.wicket.markup.html.form.TextField;
@@ -24,14 +26,15 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.Map;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UserDirectoryAdministrationPanel</code> class implements the Wicket component used to
  * administer the configuration for the internal user directory type.
  *
  * @author Marcus Portmann
  */
-public class InternalUserDirectoryAdministrationPanel
-  extends UserDirectoryAdministrationPanel
+public class InternalUserDirectoryAdministrationPanel extends UserDirectoryAdministrationPanel
 {
   /**
    * Constructs a new <code>InternalUserDirectoryAdministrationPanel</code>.
@@ -39,8 +42,8 @@ public class InternalUserDirectoryAdministrationPanel
    * @param id                 the non-null id of this component
    * @param userDirectoryModel the model for the user directory
    */
-  public InternalUserDirectoryAdministrationPanel(
-    String id, IModel<UserDirectory> userDirectoryModel)
+  public InternalUserDirectoryAdministrationPanel(String id,
+      IModel<UserDirectory> userDirectoryModel)
   {
     super(id, userDirectoryModel);
 
@@ -48,31 +51,31 @@ public class InternalUserDirectoryAdministrationPanel
     {
       // The "maxPasswordAttempts" field
       TextField<String> maxPasswordAttemptsField = new TextFieldWithFeedback<>(
-        "maxPasswordAttempts",
-        new PropertyModel<>(userDirectoryModel, "parameters.MaxPasswordAttempts"));
+          "maxPasswordAttempts", new PropertyModel<>(userDirectoryModel,
+          "parameters.MaxPasswordAttempts"));
       maxPasswordAttemptsField.setType(String.class);
       maxPasswordAttemptsField.setRequired(true);
       add(maxPasswordAttemptsField);
 
       // The "passwordExpiryMonths" field
       TextField<String> passwordExpiryMonthsField = new TextFieldWithFeedback<>(
-        "passwordExpiryMonths",
-        new PropertyModel<>(userDirectoryModel, "parameters.PasswordExpiryMonths"));
+          "passwordExpiryMonths", new PropertyModel<>(userDirectoryModel,
+          "parameters.PasswordExpiryMonths"));
       passwordExpiryMonthsField.setType(String.class);
       passwordExpiryMonthsField.setRequired(true);
       add(passwordExpiryMonthsField);
 
       // The "passwordHistoryMonths" field
       TextField<String> passwordHistoryMonthsField = new TextFieldWithFeedback<>(
-        "passwordHistoryMonths",
-        new PropertyModel<>(userDirectoryModel, "parameters.PasswordHistoryMonths"));
+          "passwordHistoryMonths", new PropertyModel<>(userDirectoryModel,
+          "parameters.PasswordHistoryMonths"));
       passwordHistoryMonthsField.setType(String.class);
       passwordHistoryMonthsField.setRequired(true);
       add(passwordHistoryMonthsField);
 
       // The "maxFilteredUsers" field
       TextField<String> maxFilteredUsersField = new TextFieldWithFeedback<>("maxFilteredUsers",
-        new PropertyModel<>(userDirectoryModel, "parameters.MaxFilteredUsers"));
+          new PropertyModel<>(userDirectoryModel, "parameters.MaxFilteredUsers"));
       maxFilteredUsersField.setType(String.class);
       maxFilteredUsersField.setRequired(true);
       add(maxFilteredUsersField);
@@ -80,7 +83,7 @@ public class InternalUserDirectoryAdministrationPanel
     catch (Throwable e)
     {
       throw new WebApplicationException(
-        "Failed to initialise the InternalUserDirectoryAdministrationPanel", e);
+          "Failed to initialise the InternalUserDirectoryAdministrationPanel", e);
     }
   }
 

@@ -16,9 +16,13 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.markup.html.form.TextField;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeInputPanel</code> class provides a Wicket component that can
@@ -26,8 +30,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class CodeInputPanel
-  extends InputPanel
+public class CodeInputPanel extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
 

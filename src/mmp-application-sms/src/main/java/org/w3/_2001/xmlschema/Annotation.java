@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -27,15 +29,13 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"appinfosAndDocumentations"})
+@XmlType(name = "", propOrder = { "appinfosAndDocumentations" })
 @XmlRootElement(name = "annotation")
-public class Annotation
-  extends OpenAttrs
+public class Annotation extends OpenAttrs
 {
-  @XmlElements({@XmlElement(name = "appinfo", type = Appinfo.class),
-    @XmlElement(name = "documentation", type = Documentation.class)})
+  @XmlElements({ @XmlElement(name = "appinfo", type = Appinfo.class) ,
+      @XmlElement(name = "documentation", type = Documentation.class) })
   protected List<Object> appinfosAndDocumentations;
-
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID

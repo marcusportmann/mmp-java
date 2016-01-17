@@ -16,6 +16,8 @@
 
 package guru.mmp.common.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -31,21 +33,14 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class SerializedException
-  extends Exception
+public abstract class SerializedException extends Exception
 {
   private static final String NO_ERROR_CODE = "NONE";
-
   private static final String NO_ERROR_MESSAGE = "NONE";
-
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
-
   private static final long serialVersionUID = 1000000;
-
   private String code;
-
   private String detail;
-
   private String when;
 
   /**
@@ -78,8 +73,13 @@ public abstract class SerializedException
    */
   public SerializedException(Throwable cause)
   {
-    super((cause == null) ? null : cause.toString());
-    init(NO_ERROR_CODE, (cause == null) ? null : cause.toString(), cause);
+    super((cause == null)
+        ? null
+        : cause.toString());
+    init(NO_ERROR_CODE,
+        (cause == null)
+        ? null
+        : cause.toString(), cause);
   }
 
   /**
@@ -128,7 +128,9 @@ public abstract class SerializedException
    */
   public String getCode()
   {
-    return (code == null) ? NO_ERROR_CODE : code;
+    return (code == null)
+        ? NO_ERROR_CODE
+        : code;
   }
 
   /**

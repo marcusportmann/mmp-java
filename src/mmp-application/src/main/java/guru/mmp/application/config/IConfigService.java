@@ -24,6 +24,40 @@ package guru.mmp.application.config;
  */
 public interface IConfigService
 {
+  /**
+   * Retrieve the <code>String</code> configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return the <code>String</code> configuration value or <code>null</code> if the configuration
+   *         value could not be found
+   *
+   * @throws ConfigException
+   */
+  String getString(String key)
+    throws ConfigException;
 
+  /**
+   * Check if a configuration value with the specified key exists.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return <code>true</code> if a configuration value with the specified key exists or
+   *         <code>false</code> otherwise
+   *
+   * @throws ConfigException
+   */
+  boolean keyExists(String key)
+    throws ConfigException;
 
+  /**
+   * Set the configuration key to the specified value.
+   *
+   * @param key   the key used to uniquely identify the configuration value
+   * @param value the value
+   *
+   * @throws ConfigException
+   */
+  void setValue(String key, Object value)
+    throws ConfigException;
 }

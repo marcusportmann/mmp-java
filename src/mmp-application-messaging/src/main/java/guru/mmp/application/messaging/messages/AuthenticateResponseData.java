@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -27,6 +29,8 @@ import guru.mmp.common.wbxml.Encoder;
 
 import java.util.*;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AuthenticateResponseData</code> class manages the data for a
  * "Authenticate Response" message.
@@ -35,8 +39,7 @@ import java.util.*;
  *
  * @author Marcus Portmann
  */
-public class AuthenticateResponseData
-  extends WbxmlMessageData
+public class AuthenticateResponseData extends WbxmlMessageData
 {
   /**
    * The error code returned when an unknown error occurs during authentication.
@@ -52,7 +55,7 @@ public class AuthenticateResponseData
    * The UUID for the "Authenticate Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "82223035-1726-407f-8703-3977708e792c");
+      "82223035-1726-407f-8703-3977708e792c");
 
   /**
    * The error code indicating the result of processing the authentication where a code of '0'
@@ -126,8 +129,8 @@ public class AuthenticateResponseData
    *                          data passed as part of a message
    * @param userProperties    the properties returned for the authenticated user
    */
-  public AuthenticateResponseData(
-    List<Organisation> organisations, byte[] userEncryptionKey, Map<String, Object> userProperties)
+  public AuthenticateResponseData(List<Organisation> organisations, byte[] userEncryptionKey,
+      Map<String, Object> userProperties)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
@@ -166,8 +169,9 @@ public class AuthenticateResponseData
       return false;
     }
 
-    if ((!rootElement.hasChild("UserEncryptionKey")) || (!rootElement.hasChild("ErrorCode")) ||
-      (!rootElement.hasChild("ErrorMessage")) || (!rootElement.hasChild("UserEncryptionScheme")))
+      if ((!rootElement.hasChild("UserEncryptionKey"))
+        || (!rootElement.hasChild("ErrorCode"))
+        || (!rootElement.hasChild("ErrorMessage")))
     {
       return false;
     }
@@ -220,9 +224,8 @@ public class AuthenticateResponseData
           }
           else
           {
-            throw new MessagingException(
-              "Failed to read the user property (" + userPropertyName + ") with unknown type (" +
-                userPropertyType + ") from the message data");
+            throw new MessagingException("Failed to read the user property (" + userPropertyName
+                + ") with unknown type (" + userPropertyType + ") from the message data");
           }
         }
         catch (Throwable e)

@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 
@@ -22,8 +24,7 @@ import javax.xml.namespace.QName;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "keyref")
-public class Keyref
-  extends Keybase
+public class Keyref extends Keybase
 {
   @XmlAttribute(name = "refer", required = true)
   protected QName refer;

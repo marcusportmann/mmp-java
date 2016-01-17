@@ -16,9 +16,13 @@
 
 package guru.mmp.application.messaging.handler;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageHandler</code> class provides the base class that all message handlers should
@@ -41,6 +45,13 @@ public abstract class MessageHandler
 
   /**
    * Constructs a new <code>MessageHandler</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  protected MessageHandler() {}
+
+  /**
+   * Constructs a new <code>MessageHandler</code>.
    *
    * @param name                 the name of the message handler
    * @param messageHandlerConfig the configuration information for the message handler
@@ -50,13 +61,6 @@ public abstract class MessageHandler
     this.name = name;
     this.messageHandlerConfig = messageHandlerConfig;
   }
-
-  /**
-   * Constructs a new <code>MessageHandler</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  protected MessageHandler() {}
 
   /**
    * Returns the configuration information for the message handler.

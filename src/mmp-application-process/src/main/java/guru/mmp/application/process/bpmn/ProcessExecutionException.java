@@ -23,8 +23,7 @@ package guru.mmp.application.process.bpmn;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ProcessExecutionException
-  extends RuntimeException
+public class ProcessExecutionException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

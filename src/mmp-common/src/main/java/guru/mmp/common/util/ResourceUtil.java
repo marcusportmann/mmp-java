@@ -16,6 +16,8 @@
 
 package guru.mmp.common.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
@@ -39,13 +41,12 @@ public final class ResourceUtil
     try
     {
       try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-        path))
+          path))
       {
         if (is == null)
         {
-          throw new ResourceException(
-            "Failed to read the classpath resource (" + path + "): The resource could not be " +
-              "found");
+          throw new ResourceException("Failed to read the classpath resource (" + path
+              + "): The resource could not be " + "found");
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

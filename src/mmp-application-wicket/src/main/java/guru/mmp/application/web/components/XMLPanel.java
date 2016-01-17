@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupElement;
@@ -29,8 +31,7 @@ import org.apache.wicket.request.Response;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class XMLPanel
-  extends Component
+public class XMLPanel extends Component
 {
   private static final long serialVersionUID = 1000000;
 

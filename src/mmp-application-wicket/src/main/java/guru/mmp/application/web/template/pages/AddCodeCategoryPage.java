@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
@@ -36,6 +38,8 @@ import javax.inject.Inject;
 import java.util.Date;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AddCodeCategoryPage</code> class implements the
  * "Add Code Category" page for the Web Application Template.
@@ -43,17 +47,21 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_CODE_CATEGORY)
-public class AddCodeCategoryPage
-  extends TemplateWebPage
+public class AddCodeCategoryPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddCodeCategoryPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
   @Inject
   private ICodesService codesService;
+
+  /**
+   * Hidden <code>AddCodeCategoryPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected AddCodeCategoryPage() {}
 
   /**
    * Constructs a new <code>AddCodeCategoryPage</code>.
@@ -66,8 +74,8 @@ public class AddCodeCategoryPage
 
     try
     {
-      Form<CodeCategory> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(new Model<>(new CodeCategory())));
+      Form<CodeCategory> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(
+          new CodeCategory())));
 
       addForm.getModelObject().setId(UUID.randomUUID());
 
@@ -96,8 +104,8 @@ public class AddCodeCategoryPage
               codeCategory.setCodeData(null);
             }
 
-            if ((codeCategory.getCategoryType() != CodeCategoryType.REMOTE_HTTP_SERVICE) &&
-              (codeCategory.getCategoryType() != CodeCategoryType.REMOTE_WEB_SERVICE))
+            if ((codeCategory.getCategoryType() != CodeCategoryType.REMOTE_HTTP_SERVICE)
+                && (codeCategory.getCategoryType() != CodeCategoryType.REMOTE_WEB_SERVICE))
             {
               codeCategory.setEndPoint(null);
               codeCategory.setIsEndPointSecure(false);
@@ -146,12 +154,6 @@ public class AddCodeCategoryPage
       throw new WebApplicationException("Failed to initialise the AddCodeCategoryPage", e);
     }
   }
-
-  /**
-   * Hidden <code>AddCodeCategoryPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddCodeCategoryPage() {}
 
   @Override
   protected void onInitialize()

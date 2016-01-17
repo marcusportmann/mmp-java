@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.Parser;
 import guru.mmp.common.util.ResourceUtil;
 import org.junit.Test;
@@ -25,6 +27,9 @@ import org.junit.Test;
  */
 public class BPMNParserTests
 {
+  /**
+   * Method description
+   */
   @Test
   public void bpmnParserTest()
   {
@@ -32,7 +37,7 @@ public class BPMNParserTests
     {
       // Load the XML BPMN data from the classpath
       byte[] processDefinitionData = ResourceUtil.getClasspathResource(
-        "guru/mmp/application/process/test/Test.bpmn");
+          "guru/mmp/application/process/test/Test.bpmn");
 
       Parser parser = new Parser();
 

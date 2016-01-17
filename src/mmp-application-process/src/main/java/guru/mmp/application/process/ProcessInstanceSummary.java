@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -85,9 +87,8 @@ public class ProcessInstanceSummary
    * @param lockName          the name of the entity that has locked the process instance for
    *                          execution
    */
-  public ProcessInstanceSummary(
-    String id, String definitionId, int definitionVersion, String definitionName,
-    ProcessInstance.Status status, Date nextExecution, String lockName)
+  public ProcessInstanceSummary(String id, String definitionId, int definitionVersion,
+      String definitionName, ProcessInstance.Status status, Date nextExecution, String lockName)
   {
     this.id = id;
     this.definitionId = definitionId;
@@ -181,7 +182,7 @@ public class ProcessInstanceSummary
   public String toString()
   {
     return String.format(
-      "ProcessInstanceSummary {id=\"%s\", definitionId=\"%s\", definitionVersion=\"%d\"}", getId(),
-      getDefinitionId(), getDefinitionVersion());
+        "ProcessInstanceSummary {id=\"%s\", definitionId=\"%s\", definitionVersion=\"%d\"}",
+        getId(), getDefinitionId(), getDefinitionVersion());
   }
 }

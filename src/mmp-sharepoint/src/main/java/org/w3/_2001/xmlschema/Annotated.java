@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -28,17 +30,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "annotated", propOrder = {"annotation"})
-@XmlSeeAlso({ExtensionType.class, RestrictionType.class, Notation.class, AttributeType.class,
-  Field.class, Selector.class, Keybase.class, ElementType.class, AttributeGroupType.class,
-  Wildcard.class, GroupType.class, SimpleContent.class, ComplexContent.class, ComplexTypeType.class,
-  Facet.class, Restriction.class, List.class, Union.class, SimpleTypeType.class, Import.class,
-  Include.class})
-public class Annotated
-  extends OpenAttrs
+@XmlType(name = "annotated", propOrder = { "annotation" })
+@XmlSeeAlso({ ExtensionType.class, RestrictionType.class, Notation.class, AttributeType.class,
+    Field.class, Selector.class, Keybase.class, ElementType.class, AttributeGroupType.class,
+    Wildcard.class, GroupType.class, SimpleContent.class, ComplexContent.class,
+    ComplexTypeType.class, Facet.class, Restriction.class, List.class, Union.class,
+    SimpleTypeType.class, Import.class, Include.class })
+public class Annotated extends OpenAttrs
 {
   protected Annotation annotation;
-
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID

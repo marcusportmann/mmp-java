@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 /**
@@ -36,8 +38,5 @@ public final class InputOutputBinding
    *
    * @param element the XML element containing the InputOutputBinding information
    */
-  public InputOutputBinding(Element element)
-  {
-
-  }
+  public InputOutputBinding(Element element) {}
 }

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.sms.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
 import guru.mmp.common.util.StringUtil;
@@ -35,6 +37,8 @@ import java.io.StringReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestSMS</code> class contains the implementation of the SMS JUnit tests.
@@ -72,7 +76,7 @@ public class TestSMS
       APISoap myMobileAPIService = getMyMobileAPIService();
 
       String apiResultXml = myMobileAPIService.sendSTRSTR(myMobileAPIUsername, myMobileAPIPassword,
-        sendXML);
+          sendXML);
 
       // Retrieve a document builder instance using the factory
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -119,8 +123,10 @@ public class TestSMS
           return;
         }
 
-        throw new RuntimeException("The MyMobileAPI service returned an error: " +
-          (StringUtil.isNullOrEmpty(error) ? "UNKNOWN" : error));
+        throw new RuntimeException("The MyMobileAPI service returned an error: "
+            + (StringUtil.isNullOrEmpty(error)
+            ? "UNKNOWN"
+            : error));
       }
 
       Element sendInfoElement = XmlUtils.getChildElement(apiResultElement, "send_info");
@@ -138,9 +144,8 @@ public class TestSMS
       }
       catch (Throwable e)
       {
-        throw new RuntimeException(
-          "Invalid API result XML: " + "Failed to retrieve and parse the value of the credits " +
-            "element", e);
+        throw new RuntimeException("Invalid API result XML: "
+            + "Failed to retrieve and parse the value of the credits " + "element", e);
       }
 
       logger.info("Successfully sent a SMS using the mobile number (" + mobileNumber + ")");
@@ -159,21 +164,21 @@ public class TestSMS
 
     Date now = new Date();
 
-    return "<senddata>" + "<settings>" + "<live>True</live>" +
-      "<return_credits>True</return_credits>" + "<default_date>" + dateFormat.format(now) +
-      "</default_date>" + "<default_time>" + timeFormat.format(now) + "</default_time>" +
-      "<default_curdate>" + dateFormat.format(now) + "</default_curdate>" + "<default_curtime>" +
-      timeFormat.format(now) + "</default_curtime>" + "<mo_forwardemail>" + "sms-reply@mmp.guru" +
-      "</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>" + mobileNumber +
-      "</numto>" + "<customerid>" + smsId + "</customerid>" + "<data1>" + message + "</data1>" +
-      "<type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
+    return "<senddata>" + "<settings>" + "<live>True</live>"
+        + "<return_credits>True</return_credits>" + "<default_date>" + dateFormat.format(now)
+        + "</default_date>" + "<default_time>" + timeFormat.format(now) + "</default_time>"
+        + "<default_curdate>" + dateFormat.format(now) + "</default_curdate>" + "<default_curtime>"
+        + timeFormat.format(now) + "</default_curtime>" + "<mo_forwardemail>"
+        + "sms-reply@mmp.guru" + "</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>"
+        + mobileNumber + "</numto>" + "<customerid>" + smsId + "</customerid>" + "<data1>"
+        + message + "</data1>" + "<type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
   }
 
   private APISoap getMyMobileAPIService()
   {
     // Retrieve the proxy for the MyMobileAPI service
     URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
-      "META-INF/wsdl/MyMobileAPI.wsdl");
+        "META-INF/wsdl/MyMobileAPI.wsdl");
 
     API api = new API(wsdlLocation, new QName("http://www.mymobileapi.com/api5", "API"));
 
@@ -183,7 +188,7 @@ public class TestSMS
 
     // Set the endpoint for the service
     bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-      "http://www.mymobileapi.com/api5/api.asmx");
+        "http://www.mymobileapi.com/api5/api.asmx");
 
     return apiSoap;
   }

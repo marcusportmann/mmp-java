@@ -16,6 +16,8 @@
 
 package guru.mmp.sample.web.pages.forms;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.template.components.*;
 import guru.mmp.application.web.template.pages.TemplateWebPage;
@@ -30,52 +32,19 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>TestFormPage</code> class implements the "Test Form"
  * page for the web application.
  *
  * @author Marcus Portmann
  */
-public class TestFormPage
-  extends TemplateWebPage
+public class TestFormPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TestFormPage.class);
-
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * Returns the favourite pet options e.g. Dog, Cat, etc.
-   *
-   * @return the the favourite pet options e.g. Dog, Cat, etc
-   */
-  public static List<String> getFavouritePetOptions()
-  {
-    List<String> favouritePetOptions = new ArrayList<>();
-
-    favouritePetOptions.add("Dog");
-    favouritePetOptions.add("Cat");
-    favouritePetOptions.add("Hamster");
-
-    return favouritePetOptions;
-  }
-
-  /**
-   * Returns the user title options e.g. Mr, Mrs, Ms, etc.
-   *
-   * @return the user title options e.g. Mr, Mrs, Ms, etc
-   */
-  public static List<String> getTitleOptions()
-  {
-    List<String> titleOptions = new ArrayList<>();
-
-    titleOptions.add("Mr");
-    titleOptions.add("Mrs");
-    titleOptions.add("Ms");
-    titleOptions.add("Dr");
-
-    return titleOptions;
-  }
 
   /**
    * Constructs a new <code>TestFormPage</code>.
@@ -86,8 +55,8 @@ public class TestFormPage
 
     try
     {
-      Form<TestData> testForm = new Form<>("testForm",
-        new CompoundPropertyModel<>(new Model<>(new TestData())));
+      Form<TestData> testForm = new Form<>("testForm", new CompoundPropertyModel<>(new Model<>(
+          new TestData())));
 
       // The "firstNames" field
       TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
@@ -101,13 +70,13 @@ public class TestFormPage
 
       // The "title" field
       DropDownChoice<String> titleField = new DropDownChoiceWithFeedback<>("title",
-        getTitleOptions());
+          getTitleOptions());
       titleField.setRequired(true);
       testForm.add(titleField);
 
       // The "favouritePet" field
       DropDownChoice<String> favouritePetField = new DropDownChoiceWithFeedback<>("favouritePet",
-        getFavouritePetOptions());
+          getFavouritePetOptions());
       favouritePetField.setRequired(true);
       testForm.add(favouritePetField);
 
@@ -183,6 +152,39 @@ public class TestFormPage
     {
       throw new WebApplicationException("Failed to initialise the TestFormPage", e);
     }
+  }
+
+  /**
+   * Returns the favourite pet options e.g. Dog, Cat, etc.
+   *
+   * @return the the favourite pet options e.g. Dog, Cat, etc
+   */
+  public static List<String> getFavouritePetOptions()
+  {
+    List<String> favouritePetOptions = new ArrayList<>();
+
+    favouritePetOptions.add("Dog");
+    favouritePetOptions.add("Cat");
+    favouritePetOptions.add("Hamster");
+
+    return favouritePetOptions;
+  }
+
+  /**
+   * Returns the user title options e.g. Mr, Mrs, Ms, etc.
+   *
+   * @return the user title options e.g. Mr, Mrs, Ms, etc
+   */
+  public static List<String> getTitleOptions()
+  {
+    List<String> titleOptions = new ArrayList<>();
+
+    titleOptions.add("Mr");
+    titleOptions.add("Mrs");
+    titleOptions.add("Ms");
+    titleOptions.add("Dr");
+
+    return titleOptions;
   }
 
   /**

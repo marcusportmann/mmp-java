@@ -22,8 +22,7 @@ package guru.mmp.common.service.ws.security;
  *
  * @author Marcus Portmann
  */
-public class WebServiceSecurityHandlerException
-  extends RuntimeException
+public class WebServiceSecurityHandlerException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

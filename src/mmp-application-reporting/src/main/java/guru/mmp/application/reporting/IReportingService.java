@@ -16,12 +16,16 @@
 
 package guru.mmp.application.reporting;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Document;
 
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IReportingService</code> interface defines the functionality provided by a Reporting

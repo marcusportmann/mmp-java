@@ -37,8 +37,13 @@ public enum ProcessType
   NONE("None", "None"), PUBLIC("Public", "Public"), PRIVATE("Private", "Private");
 
   private String id;
-
   private String name;
+
+  ProcessType(String id, String name)
+  {
+    this.id = id;
+    this.name = name;
+  }
 
   /**
    * Returns the Process type given by the specified ID.
@@ -63,12 +68,6 @@ public enum ProcessType
       default:
         throw new RuntimeException("Invalid ID for process type (" + id + ")");
     }
-  }
-
-  ProcessType(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
   }
 
   /**

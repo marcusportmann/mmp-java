@@ -69,8 +69,8 @@ public class TemplateSecurity
   /**
    * The Application.CodeCategoryAdministration function code.
    */
-  public static final String FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION =
-    "Application" + ".CodeCategoryAdministration";
+  public static final String FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION = "Application"
+      + ".CodeCategoryAdministration";
 
   /**
    * The Application.Dashboard function code.
@@ -85,8 +85,8 @@ public class TemplateSecurity
   /**
    * The Application.OrganisationAdministration function code.
    */
-  public static final String FUNCTION_CODE_ORGANISATION_ADMINISTRATION =
-    "Application" + ".OrganisationAdministration";
+  public static final String FUNCTION_CODE_ORGANISATION_ADMINISTRATION = "Application"
+      + ".OrganisationAdministration";
 
   /**
    * The Application.RemoveCode function code.
@@ -126,8 +126,8 @@ public class TemplateSecurity
   /**
    * The Application.SecurityAdministration function code.
    */
-  public static final String FUNCTION_CODE_SECURITY_ADMINISTRATION =
-    "Application" + ".SecurityAdministration";
+  public static final String FUNCTION_CODE_SECURITY_ADMINISTRATION = "Application"
+      + ".SecurityAdministration";
 
   /**
    * The Application.UpdateCode function code.

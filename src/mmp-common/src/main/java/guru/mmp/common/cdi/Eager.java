@@ -16,6 +16,8 @@
 
 package guru.mmp.common.cdi;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.inject.Qualifier;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,7 +32,5 @@ import java.lang.annotation.Target;
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Eager
-{
-}
+@Target({ ElementType.TYPE })
+public @interface Eager {}

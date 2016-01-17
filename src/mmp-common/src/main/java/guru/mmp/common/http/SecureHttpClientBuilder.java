@@ -16,6 +16,8 @@
 
 package guru.mmp.common.http;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -30,18 +32,18 @@ import javax.net.ssl.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SecureHttpClient</code> class implements a secure HTTP client builder.
  *
  * @author Marcus Portmann
  */
-public class SecureHttpClientBuilder
-  extends HttpClientBuilder
+public class SecureHttpClientBuilder extends HttpClientBuilder
 {
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(SecureHttpClientBuilder.class);
-
   private SSLConnectionSocketFactory sslSocketFactory;
 
   /**
@@ -51,13 +53,12 @@ public class SecureHttpClientBuilder
   {
     SSLConnectionSocketFactory sslConnectionSocketFactory = getSSLConnectionSocketFactory();
 
-    Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
-      .<ConnectionSocketFactory>create().register(
-      "https", sslConnectionSocketFactory).register("http",
-      new PlainConnectionSocketFactory()).build();
+    Registry<ConnectionSocketFactory> socketFactoryRegistry =
+        RegistryBuilder.<ConnectionSocketFactory>create().register("https",
+        sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory()).build();
 
     PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
-      socketFactoryRegistry);
+        socketFactoryRegistry);
 
     setConnectionManager(connectionManager);
   }
@@ -71,7 +72,7 @@ public class SecureHttpClientBuilder
         SSLContext sslContext = SSLContext.getInstance("TLS");
 
         // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager()
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
         {
           public void checkClientTrusted(X509Certificate[] chain, String authType)
             throws CertificateException
@@ -89,33 +90,33 @@ public class SecureHttpClientBuilder
           {
             return new X509Certificate[0];
           }
-        }};
+        } };
 
         sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 
         sslSocketFactory = new SSLConnectionSocketFactory(sslContext.getSocketFactory(),
-          new HostnameVerifier()
-          {
-            @Override
-            public boolean verify(String hostname, SSLSession sslSession)
+            new HostnameVerifier()
             {
-              // TODO: Implement proper verification of the server identity -- MARCUS
+              @Override
+              public boolean verify(String hostname, SSLSession sslSession)
+              {
+                // TODO: Implement proper verification of the server identity -- MARCUS
 
-              return true;
+                return true;
 
-//          if (hostname.equalsIgnoreCase(sslSession.getPeerHost()))
-//          {
-//            return true;
-//          }
-//          else
-//          {
-//            logger.error("Failed to verify the SSL connection to the host ("
-// + hostname + ") which returned a certificate for the host (" + sslSession.getPeerHost() + ")");
-//
-//            return false;
-//          }
-            }
-          });
+                // if (hostname.equalsIgnoreCase(sslSession.getPeerHost()))
+                // {
+                // return true;
+                // }
+                // else
+                // {
+                // logger.error("Failed to verify the SSL connection to the host ("
+                // + hostname + ") which returned a certificate for the host (" + sslSession.getPeerHost() + ")");
+                //
+                // return false;
+                // }
+              }
+            });
       }
       catch (Throwable e)
       {

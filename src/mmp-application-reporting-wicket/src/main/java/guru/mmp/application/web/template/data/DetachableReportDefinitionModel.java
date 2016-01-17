@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -24,6 +26,8 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DetachableReportDefinitionModel</code> class provides a detachable model
  * implementation for the <code>ReportDefinition</code> model class.
@@ -31,7 +35,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public class DetachableReportDefinitionModel
-  extends InjectableLoadableDetachableModel<ReportDefinition>
+    extends InjectableLoadableDetachableModel<ReportDefinition>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -43,6 +47,14 @@ public class DetachableReportDefinitionModel
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
+
+  /**
+   * Constructs a new <code>DetachableReportDefinitionModel</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected DetachableReportDefinitionModel() {}
 
   /**
    * Constructs a new <code>DetachableReportDefinitionModel</code>.
@@ -68,14 +80,6 @@ public class DetachableReportDefinitionModel
   }
 
   /**
-   * Constructs a new <code>DetachableReportDefinitionModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected DetachableReportDefinitionModel() {}
-
-  /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
    */
   @Override
@@ -87,8 +91,8 @@ public class DetachableReportDefinitionModel
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the report definition (%s)", id), e);
+      throw new WebApplicationException(String.format("Failed to load the report definition (%s)",
+          id), e);
     }
   }
 

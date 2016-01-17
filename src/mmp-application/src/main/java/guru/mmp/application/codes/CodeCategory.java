@@ -16,6 +16,8 @@
 
 package guru.mmp.application.codes;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -101,9 +103,8 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(
-    UUID id, CodeCategoryType categoryType, String name, String endPoint, boolean isEndPointSecure,
-    boolean isCacheable, Integer cacheExpiry, Date updated)
+  public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String endPoint,
+      boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry, Date updated)
   {
     this.id = id;
     this.categoryType = categoryType;
@@ -132,9 +133,9 @@ public class CodeCategory
    *                         code category will expire
    * @param updated          the date and time the code category was updated
    */
-  public CodeCategory(
-    UUID id, CodeCategoryType categoryType, String name, String codeData, String endPoint,
-    boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry, Date updated)
+  public CodeCategory(UUID id, CodeCategoryType categoryType, String name, String codeData,
+      String endPoint, boolean isEndPointSecure, boolean isCacheable, Integer cacheExpiry,
+      Date updated)
   {
     this.id = id;
     this.categoryType = categoryType;

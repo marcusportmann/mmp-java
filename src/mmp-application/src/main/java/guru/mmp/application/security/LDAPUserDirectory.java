@@ -16,6 +16,8 @@
 
 package guru.mmp.application.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.JNDIUtil;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
@@ -31,13 +33,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.*;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>LDAPUserDirectory</code> class provides the LDAP user directory implementation.
  *
  * @author Marcus Portmann
  */
-public class LDAPUserDirectory
-  extends UserDirectoryBase
+public class LDAPUserDirectory extends UserDirectoryBase
 {
   /**
    * The default number of failed password attempts before the user is locked.
@@ -68,75 +71,42 @@ public class LDAPUserDirectory
    * The default maximum length of a users's password history.
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MAX_LENGTH = 128;
-
   private static final String[] EMPTY_ATTRIBUTE_LIST = new String[0];
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LDAPUserDirectory.class);
-
   @SuppressWarnings("unused")
   private LdapName baseDN;
-
   private String bindDN;
-
   private String bindPassword;
-
   private String getFunctionCodesForGroupsSQL;
-
   private LdapName groupBaseDN;
-
   private String groupDescriptionAttribute;
-
   private String groupMemberAttribute;
-
   private String[] groupMemberAttributeArray;
-
   private String groupNameAttribute;
-
   private String groupObjectClass;
-
   private String host;
-
   private int maxFilteredGroups;
-
   private int maxFilteredUsers;
-
   private int maxPasswordAttempts;
-
   private int passwordExpiryMonths;
-
   private int passwordHistoryMaxLength;
-
   private int passwordHistoryMonths;
-
   private int port;
-
   private LdapName sharedBaseDN;
-
   private boolean supportPasswordHistory;
-
   private boolean useSSL;
-
   private LdapName userBaseDN;
-
   private String userEmailAttribute;
-
   private String userFirstNamesAttribute;
-
   private String userLastNameAttribute;
-
   private String userMobileNumberAttribute;
-
   private String userObjectClass;
-
   private String userPasswordAttemptsAttribute;
-
   private String userPasswordExpiryAttribute;
-
   private String userPasswordHistoryAttribute;
-
   private String[] userPasswordHistoryAttributeArray;
-
   private String userUsernameAttribute;
 
   /**
@@ -161,9 +131,8 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new SecurityException(
-          String.format("No Host configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+        throw new SecurityException(String.format(
+            "No Host configuration parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (parameters.containsKey("Port"))
@@ -172,9 +141,8 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new SecurityException(
-          String.format("No Port configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+        throw new SecurityException(String.format(
+            "No Port configuration parameter found for the user directory (%s)", userDirectoryId));
       }
 
       useSSL = parameters.containsKey("UseSSL") && Boolean.parseBoolean(parameters.get("UseSSL"));
@@ -185,8 +153,8 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new SecurityException(
-          String.format("No BindDN configuration parameter found for the user directory (%s)",
+        throw new SecurityException(String.format(
+            "No BindDN configuration parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -196,8 +164,8 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new SecurityException(
-          String.format("No BindPassword configuration parameter found for the user directory (%s)",
+        throw new SecurityException(String.format(
+            "No BindPassword configuration parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -207,8 +175,8 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new SecurityException(
-          String.format("No BindDN configuration parameter found for the user directory (%s)",
+        throw new SecurityException(String.format(
+            "No BindDN configuration parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -218,8 +186,8 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new SecurityException(
-          String.format("No UserBaseDN configuration parameter found for the user directory (%s)",
+        throw new SecurityException(String.format(
+            "No UserBaseDN configuration parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -229,13 +197,13 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new SecurityException(
-          String.format("No GroupBaseDN configuration parameter found for the user directory (%s)",
+        throw new SecurityException(String.format(
+            "No GroupBaseDN configuration parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
-      if ((parameters.containsKey("SharedBaseDN")) && (!StringUtil.isNullOrEmpty(
-        parameters.get("SharedBaseDN"))))
+      if ((parameters.containsKey("SharedBaseDN"))
+          && (!StringUtil.isNullOrEmpty(parameters.get("SharedBaseDN"))))
       {
         sharedBaseDN = new LdapName(parameters.get("SharedBaseDN"));
       }
@@ -247,8 +215,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserObjectClass configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserObjectClass configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("UserUsernameAttribute"))
@@ -258,8 +226,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserUsernameAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserUsernameAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("UserPasswordExpiryAttribute"))
@@ -269,8 +237,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserPasswordExpiryAttribute configuration parameter found for the user directory " +
-            "(%s)", userDirectoryId));
+            "No UserPasswordExpiryAttribute configuration parameter found for the user directory "
+            + "(%s)", userDirectoryId));
       }
 
       if (parameters.containsKey("UserPasswordAttemptsAttribute"))
@@ -280,20 +248,20 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserPasswordAttemptsAttribute configuration parameter found for the user directory " +
-            "(%s)", userDirectoryId));
+            "No UserPasswordAttemptsAttribute configuration parameter found for the user directory "
+            + "(%s)", userDirectoryId));
       }
 
       if (parameters.containsKey("UserPasswordHistoryAttribute"))
       {
         userPasswordHistoryAttribute = parameters.get("UserPasswordHistoryAttribute");
-        userPasswordHistoryAttributeArray = new String[]{userPasswordHistoryAttribute};
+        userPasswordHistoryAttributeArray = new String[] { userPasswordHistoryAttribute };
       }
       else
       {
         throw new SecurityException(String.format(
-          "No UserPasswordHistoryAttribute configuration parameter found for the user directory " +
-            "(%s)", userDirectoryId));
+            "No UserPasswordHistoryAttribute configuration parameter found for the user directory "
+            + "(%s)", userDirectoryId));
       }
 
       if (parameters.containsKey("UserFirstNamesAttribute"))
@@ -303,8 +271,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserFirstNamesAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserFirstNamesAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("UserLastNameAttribute"))
@@ -314,8 +282,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserLastNameAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserLastNameAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("UserMobileNumberAttribute"))
@@ -325,8 +293,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserMobileNumberAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserMobileNumberAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("UserEmailAttribute"))
@@ -336,8 +304,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No UserEmailAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserEmailAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("GroupObjectClass"))
@@ -347,8 +315,8 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No GroupObjectClass configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No GroupObjectClass configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("GroupNameAttribute"))
@@ -358,21 +326,21 @@ public class LDAPUserDirectory
       else
       {
         throw new SecurityException(String.format(
-          "No GroupNameAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No GroupNameAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("GroupMemberAttribute"))
       {
         groupMemberAttribute = parameters.get("GroupMemberAttribute");
 
-        groupMemberAttributeArray = new String[]{groupMemberAttribute};
+        groupMemberAttributeArray = new String[] { groupMemberAttribute };
       }
       else
       {
         throw new SecurityException(String.format(
-          "No GroupMemberAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No GroupMemberAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("GroupDescriptionAttribute"))
@@ -398,8 +366,8 @@ public class LDAPUserDirectory
         passwordExpiryMonths = DEFAULT_PASSWORD_EXPIRY_MONTHS;
       }
 
-      supportPasswordHistory = parameters.containsKey("SupportPasswordHistory") &&
-        Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
+      supportPasswordHistory = parameters.containsKey("SupportPasswordHistory")
+          && Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
 
       if (parameters.containsKey("PasswordHistoryMonths"))
       {
@@ -439,9 +407,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to initialise the the user directory (%s): %s", userDirectoryId,
-          e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to initialise the the user directory (%s): %s", userDirectoryId, e.getMessage()),
+          e);
     }
   }
 
@@ -468,16 +436,16 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       LdapName groupDN = getGroupDN(dirContext, groupName);
 
       if (groupDN == null)
       {
-        throw new GroupNotFoundException(
-          String.format("The group (%s) could not be found", groupName));
+        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
+            groupName));
       }
 
       Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
@@ -486,9 +454,9 @@ public class LDAPUserDirectory
 
       if (attributes.get(groupMemberAttribute) != null)
       {
-        @SuppressWarnings("unchecked") NamingEnumeration<String> groupMembers =
-          (NamingEnumeration<String>) attributes.get(
-          groupMemberAttribute).getAll();
+        @SuppressWarnings("unchecked")
+        NamingEnumeration<String> groupMembers = (NamingEnumeration<String>) attributes.get(
+            groupMemberAttribute).getAll();
 
         while (groupMembers.hasMore())
         {
@@ -507,8 +475,8 @@ public class LDAPUserDirectory
 
       attribute.add(userDN.toString());
 
-      dirContext.modifyAttributes(groupDN,
-        new ModificationItem[]{new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)});
+      dirContext.modifyAttributes(groupDN, new ModificationItem[] { new ModificationItem(DirContext
+          .REPLACE_ATTRIBUTE, attribute) });
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {
@@ -517,8 +485,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to add the user (%s) to the group (%s) for the user directory (%s): %s", username,
-        groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to add the user (%s) to the group (%s) for the user directory (%s): %s",
+          username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -539,9 +507,8 @@ public class LDAPUserDirectory
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  public void adminChangePassword(
-    String username, String newPassword, boolean expirePassword, boolean lockUser,
-    boolean resetPasswordHistory, PasswordChangeReason reason)
+  public void adminChangePassword(String username, String newPassword, boolean expirePassword,
+      boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityException
   {
     DirContext dirContext = null;
@@ -554,8 +521,8 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       List<ModificationItem> modificationItems = new ArrayList<>();
@@ -572,8 +539,8 @@ public class LDAPUserDirectory
           BasicAttribute passwordExpiryAttribute = new BasicAttribute(userPasswordExpiryAttribute);
           passwordExpiryAttribute.add("0");
 
-          modificationItems.add(
-            new ModificationItem(DirContext.REPLACE_ATTRIBUTE, passwordExpiryAttribute));
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              passwordExpiryAttribute));
         }
         else
         {
@@ -583,8 +550,8 @@ public class LDAPUserDirectory
           BasicAttribute passwordExpiryAttribute = new BasicAttribute(userPasswordExpiryAttribute);
           passwordExpiryAttribute.add(String.valueOf(calendar.getTimeInMillis()));
 
-          modificationItems.add(
-            new ModificationItem(DirContext.REPLACE_ATTRIBUTE, passwordExpiryAttribute));
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              passwordExpiryAttribute));
         }
       }
 
@@ -593,20 +560,20 @@ public class LDAPUserDirectory
         if (lockUser)
         {
           BasicAttribute passwordAttemptsAttribute = new BasicAttribute(
-            userPasswordAttemptsAttribute);
+              userPasswordAttemptsAttribute);
           passwordAttemptsAttribute.add(String.valueOf(maxPasswordAttempts));
 
-          modificationItems.add(
-            new ModificationItem(DirContext.REPLACE_ATTRIBUTE, passwordAttemptsAttribute));
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              passwordAttemptsAttribute));
         }
         else
         {
           BasicAttribute passwordAttemptsAttribute = new BasicAttribute(
-            userPasswordAttemptsAttribute);
+              userPasswordAttemptsAttribute);
           passwordAttemptsAttribute.add("0");
 
-          modificationItems.add(
-            new ModificationItem(DirContext.REPLACE_ATTRIBUTE, passwordAttemptsAttribute));
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              passwordAttemptsAttribute));
         }
       }
 
@@ -615,15 +582,15 @@ public class LDAPUserDirectory
         if (resetPasswordHistory)
         {
           BasicAttribute passwordHistoryAttribute = new BasicAttribute(
-            userPasswordHistoryAttribute);
+              userPasswordHistoryAttribute);
 
-          modificationItems.add(
-            new ModificationItem(DirContext.REMOVE_ATTRIBUTE, passwordHistoryAttribute));
+          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+              passwordHistoryAttribute));
         }
       }
 
-      dirContext.modifyAttributes(userDN,
-        modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+      dirContext.modifyAttributes(userDN, modificationItems.toArray(
+          new ModificationItem[modificationItems.size()]));
     }
     catch (UserNotFoundException e)
     {
@@ -632,8 +599,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to change the password for the user (%s) for the user directory (%s): %s", username,
-        getUserDirectoryId(), e.getMessage()), e);
+          "Failed to change the password for the user (%s) for the user directory (%s): %s",
+          username, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -655,7 +622,7 @@ public class LDAPUserDirectory
    */
   public void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-    UserNotFoundException, SecurityException
+        UserNotFoundException, SecurityException
   {
     DirContext dirContext = null;
 
@@ -667,26 +634,26 @@ public class LDAPUserDirectory
 
       if (user == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       LdapName userDN = new LdapName(user.getProperty("dn"));
 
       if (!userDN.startsWith(sharedBaseDN))
       {
-        if ((user.getPasswordAttempts() != null) &&
-          (user.getPasswordAttempts() >= maxPasswordAttempts))
+        if ((user.getPasswordAttempts() != null)
+            && (user.getPasswordAttempts() >= maxPasswordAttempts))
         {
           throw new UserLockedException(String.format(
-            "The user (%s) has exceeded the number of failed password attempts and has been locked",
-            username));
+              "The user (%s) has exceeded the number of failed password attempts and has been locked",
+              username));
         }
 
         if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
         {
-          throw new ExpiredPasswordException(
-            String.format("The password for the user (%s) has expired", username));
+          throw new ExpiredPasswordException(String.format(
+              "The password for the user (%s) has expired", username));
         }
       }
 
@@ -704,19 +671,19 @@ public class LDAPUserDirectory
         {
           incrementPasswordAttempts(dirContext, user);
 
-          throw new AuthenticationFailedException(
-            String.format("Failed to authenticate the user (%s) for the user directory (%s)",
-              username, getUserDirectoryId()));
+          throw new AuthenticationFailedException(String.format(
+              "Failed to authenticate the user (%s) for the user directory (%s)", username,
+              getUserDirectoryId()));
         }
         else
         {
-          logger.error(
-            String.format("Failed to authenticate the user (%s) for the user directory (%s)",
-              username, getUserDirectoryId()), e);
+          logger.error(String.format(
+              "Failed to authenticate the user (%s) for the user directory (%s)", username,
+              getUserDirectoryId()), e);
 
-          throw new AuthenticationFailedException(
-            String.format("Failed to authenticate the user (%s) for the user directory (%s)",
-              username, getUserDirectoryId()), e);
+          throw new AuthenticationFailedException(String.format(
+              "Failed to authenticate the user (%s) for the user directory (%s)", username,
+              getUserDirectoryId()), e);
         }
       }
       finally
@@ -725,15 +692,15 @@ public class LDAPUserDirectory
       }
     }
     catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
-      | ExpiredPasswordException e)
+        | ExpiredPasswordException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to authenticate the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to authenticate the user (%s) for the user directory (%s): %s", username,
+          getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -756,7 +723,7 @@ public class LDAPUserDirectory
    */
   public void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-    ExistingPasswordException, SecurityException
+        ExistingPasswordException, SecurityException
   {
     throw new SecurityException("TODO: NOT IMPLEMENTED");
 
@@ -867,8 +834,8 @@ public class LDAPUserDirectory
 
       if (groupDN != null)
       {
-        throw new DuplicateGroupException(
-          String.format("The group (%s) already exists", group.getGroupName()));
+        throw new DuplicateGroupException(String.format("The group (%s) already exists",
+            group.getGroupName()));
       }
 
       Attributes attributes = new BasicAttributes();
@@ -880,13 +847,12 @@ public class LDAPUserDirectory
 
       if (!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
       {
-        attributes.put(new BasicAttribute(groupDescriptionAttribute,
-          StringUtil.notNull(group.getDescription())));
+        attributes.put(new BasicAttribute(groupDescriptionAttribute, StringUtil.notNull(
+            group.getDescription())));
       }
 
-      dirContext.bind(
-        groupNameAttribute + "=" + group.getGroupName() + "," + groupBaseDN.toString(), dirContext,
-        attributes);
+      dirContext.bind(groupNameAttribute + "=" + group.getGroupName() + ","
+          + groupBaseDN.toString(), dirContext, attributes);
     }
     catch (DuplicateGroupException e)
     {
@@ -894,9 +860,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to create the group (%s) for the user directory (%s): %s",
-          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to create the group (%s) for the user directory (%s): %s", group.getGroupName(),
+          getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -939,14 +905,14 @@ public class LDAPUserDirectory
 
       if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
       {
-        attributes.put(
-          new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames())));
+        attributes.put(new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(
+            user.getFirstNames())));
       }
 
       if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
       {
-        attributes.put(
-          new BasicAttribute(userLastNameAttribute, StringUtil.notNull(user.getLastName())));
+        attributes.put(new BasicAttribute(userLastNameAttribute, StringUtil.notNull(
+            user.getLastName())));
       }
 
       if (!StringUtil.isNullOrEmpty(userEmailAttribute))
@@ -956,8 +922,8 @@ public class LDAPUserDirectory
 
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
       {
-        attributes.put(new BasicAttribute(userMobileNumberAttribute,
-          StringUtil.notNull(user.getMobileNumber())));
+        attributes.put(new BasicAttribute(userMobileNumberAttribute, StringUtil.notNull(
+            user.getMobileNumber())));
       }
 
       String passwordHash;
@@ -982,8 +948,8 @@ public class LDAPUserDirectory
       {
         if (userLocked)
         {
-          attributes.put(
-            new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(maxPasswordAttempts)));
+          attributes.put(new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(
+              maxPasswordAttempts)));
         }
         else
         {
@@ -1002,13 +968,13 @@ public class LDAPUserDirectory
           Calendar calendar = Calendar.getInstance();
           calendar.add(Calendar.MONTH, passwordExpiryMonths);
 
-          attributes.put(new BasicAttribute(userPasswordExpiryAttribute,
-            String.valueOf(calendar.getTimeInMillis())));
+          attributes.put(new BasicAttribute(userPasswordExpiryAttribute, String.valueOf(
+              calendar.getTimeInMillis())));
         }
       }
 
-      userDN = new LdapName(
-        userUsernameAttribute + "=" + user.getUsername() + "," + userBaseDN.toString());
+      userDN = new LdapName(userUsernameAttribute + "=" + user.getUsername() + ","
+          + userBaseDN.toString());
 
       dirContext.bind(userDN, dirContext, attributes);
     }
@@ -1018,9 +984,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to create the user (%s) for the user directory (%s): %s",
-          user.getUsername(), getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to create the user (%s) for the user directory (%s): %s", user.getUsername(),
+          getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -1050,18 +1016,18 @@ public class LDAPUserDirectory
 
       if (groupDN == null)
       {
-        throw new GroupNotFoundException(
-          String.format("The group (%s) could not be found", groupName));
+        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
+            groupName));
       }
 
       Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
 
-      if ((attributes.get(groupMemberAttribute) != null) && (attributes.get(
-        groupMemberAttribute).size() > 0))
+      if ((attributes.get(groupMemberAttribute) != null)
+          && (attributes.get(groupMemberAttribute).size() > 0))
       {
         throw new ExistingGroupMembersException(String.format(
-          "The group (%s) could not be deleted since it is still associated with 1 or more user(s)",
-          groupName));
+            "The group (%s) could not be deleted since it is still associated with 1 or more user(s)",
+            groupName));
       }
 
       dirContext.destroySubcontext(groupDN);
@@ -1072,8 +1038,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to delete the group (%s) for the user directory (%s): %s", groupName,
+      throw new SecurityException(String.format(
+          "Failed to delete the group (%s) for the user directory (%s): %s", groupName,
           getUserDirectoryId(), e.getMessage()), e);
     }
     finally
@@ -1114,8 +1080,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to delete the user (%s) for the user directory (%s): %s", username,
+      throw new SecurityException(String.format(
+          "Failed to delete the user (%s) for the user directory (%s): %s", username,
           getUserDirectoryId(), e.getMessage()), e);
     }
     finally
@@ -1179,8 +1145,8 @@ public class LDAPUserDirectory
           }
           else
           {
-            throw new RuntimeException(
-              "Unsupported criteria attribute type (" + attribute.getType() + ")");
+            throw new RuntimeException("Unsupported criteria attribute type ("
+                + attribute.getType() + ")");
           }
 
           buffer.append("*)");
@@ -1219,9 +1185,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to find the users for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to find the users for the user directory (%s): %s", getUserDirectoryId(),
+          e.getMessage()), e);
     }
     finally
     {
@@ -1256,8 +1222,8 @@ public class LDAPUserDirectory
       if (!StringUtil.isNullOrEmpty(filter))
       {
         searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-          userObjectClass, userUsernameAttribute, filter, userFirstNamesAttribute, filter,
-          userLastNameAttribute, filter);
+            userObjectClass, userUsernameAttribute, filter, userFirstNamesAttribute, filter,
+            userLastNameAttribute, filter);
       }
 
       SearchControls searchControls = new SearchControls();
@@ -1288,8 +1254,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the filtered users for the user directory (%s): %s",
+      throw new SecurityException(String.format(
+          "Failed to retrieve the filtered users for the user directory (%s): %s",
           getUserDirectoryId(), e.getMessage()), e);
     }
     finally
@@ -1324,12 +1290,12 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", groupObjectClass,
-        groupMemberAttribute, userDN.toString());
+          groupMemberAttribute, userDN.toString());
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1345,8 +1311,8 @@ public class LDAPUserDirectory
 
         if (searchResult.getAttributes().get(groupNameAttribute) != null)
         {
-          groupNames.add(
-            String.valueOf(searchResult.getAttributes().get(groupNameAttribute).get()));
+          groupNames.add(String.valueOf(searchResult.getAttributes().get(groupNameAttribute)
+              .get()));
         }
       }
 
@@ -1399,8 +1365,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to retrieve the function codes for the user (%s) for the user directory (%s): %s",
-        username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the function codes for the user (%s) for the user directory (%s): %s",
+          username, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -1430,7 +1396,7 @@ public class LDAPUserDirectory
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", groupObjectClass,
-        groupNameAttribute, groupName);
+          groupNameAttribute, groupName);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1444,8 +1410,8 @@ public class LDAPUserDirectory
       }
       else
       {
-        throw new GroupNotFoundException(
-          String.format("The group (%s) could not be found", groupName));
+        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
+            groupName));
       }
     }
     catch (GroupNotFoundException e)
@@ -1454,9 +1420,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the group (%s) for the user directory (%s): %s",
-          groupName, getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to retrieve the group (%s) for the user directory (%s): %s", groupName,
+          getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -1489,12 +1455,12 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", groupObjectClass,
-        groupMemberAttribute, userDN.toString());
+          groupMemberAttribute, userDN.toString());
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1510,8 +1476,8 @@ public class LDAPUserDirectory
 
         if (searchResult.getAttributes().get(groupNameAttribute) != null)
         {
-          groupNames.add(
-            String.valueOf(searchResult.getAttributes().get(groupNameAttribute).get()));
+          groupNames.add(String.valueOf(searchResult.getAttributes().get(groupNameAttribute)
+              .get()));
         }
       }
 
@@ -1524,8 +1490,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to retrieve the group names for the user (%s) for the user directory (%s): %s",
-        username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the group names for the user (%s) for the user directory (%s): %s",
+          username, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -1571,9 +1537,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the groups for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to retrieve the groups for the user directory (%s): %s", getUserDirectoryId(),
+          e.getMessage()), e);
     }
     finally
     {
@@ -1606,12 +1572,12 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", groupObjectClass,
-        groupMemberAttribute, userDN.toString());
+          groupMemberAttribute, userDN.toString());
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1635,8 +1601,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to retrieve the groups for the user (%s) for the user directory (%s): %s", username,
-        getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the groups for the user (%s) for the user directory (%s): %s",
+          username, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -1670,8 +1636,8 @@ public class LDAPUserDirectory
       if (!StringUtil.isNullOrEmpty(filter))
       {
         searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-          userObjectClass, userUsernameAttribute, filter, userFirstNamesAttribute, filter,
-          userLastNameAttribute, filter);
+            userObjectClass, userUsernameAttribute, filter, userFirstNamesAttribute, filter,
+            userLastNameAttribute, filter);
       }
 
       SearchControls searchControls = new SearchControls();
@@ -1708,8 +1674,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to retrieve the number of filtered users for the user directory (%s):%s",
-        getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the number of filtered users for the user directory (%s):%s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -1759,8 +1725,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the number of groups for the user directory (%s):%s",
+      throw new SecurityException(String.format(
+          "Failed to retrieve the number of groups for the user directory (%s):%s",
           getUserDirectoryId(), e.getMessage()), e);
     }
     finally
@@ -1823,8 +1789,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the number of users for the user directory (%s):%s",
+      throw new SecurityException(String.format(
+          "Failed to retrieve the number of users for the user directory (%s):%s",
           getUserDirectoryId(), e.getMessage()), e);
     }
     finally
@@ -1858,8 +1824,8 @@ public class LDAPUserDirectory
 
       if (user == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       return user;
@@ -1870,8 +1836,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the user (%s) for the user directory (%s): %s", username,
+      throw new SecurityException(String.format(
+          "Failed to retrieve the user (%s) for the user directory (%s): %s", username,
           getUserDirectoryId(), e.getMessage()), e);
     }
     finally
@@ -1928,9 +1894,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the users for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to retrieve the users for the user directory (%s): %s", getUserDirectoryId(),
+          e.getMessage()), e);
     }
     finally
     {
@@ -1962,7 +1928,7 @@ public class LDAPUserDirectory
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", userObjectClass,
-        userUsernameAttribute, username);
+          userUsernameAttribute, username);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1992,8 +1958,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to check whether the user (%s) is an existing user for the user directory (%s)",
-        username, getUserDirectoryId()), e);
+          "Failed to check whether the user (%s) is an existing user for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
     finally
     {
@@ -2029,16 +1995,16 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       LdapName groupDN = getGroupDN(dirContext, groupName);
 
       if (groupDN == null)
       {
-        throw new GroupNotFoundException(
-          String.format("The group (%s) could not be found", groupName));
+        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
+            groupName));
       }
 
       Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
@@ -2067,8 +2033,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to check if the user (%s) is in the group (%s) for the user directory (%s): %s",
-        username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to check if the user (%s) is in the group (%s) for the user directory (%s): %s",
+          username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -2100,16 +2066,16 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", username));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            username));
       }
 
       LdapName groupDN = getGroupDN(dirContext, groupName);
 
       if (groupDN == null)
       {
-        throw new GroupNotFoundException(
-          String.format("The group (%s) could not be found", groupName));
+        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
+            groupName));
       }
 
       Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
@@ -2118,9 +2084,9 @@ public class LDAPUserDirectory
 
       if (attributes.get(groupMemberAttribute) != null)
       {
-        @SuppressWarnings("unchecked") NamingEnumeration<String> groupMembers =
-          (NamingEnumeration<String>) attributes.get(
-          groupMemberAttribute).getAll();
+        @SuppressWarnings("unchecked")
+        NamingEnumeration<String> groupMembers = (NamingEnumeration<String>) attributes.get(
+            groupMemberAttribute).getAll();
 
         while (groupMembers.hasMore())
         {
@@ -2135,13 +2101,13 @@ public class LDAPUserDirectory
 
       if (attribute.size() > 0)
       {
-        dirContext.modifyAttributes(groupDN,
-          new ModificationItem[]{new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)});
+        dirContext.modifyAttributes(groupDN, new ModificationItem[] { new ModificationItem(
+            DirContext.REPLACE_ATTRIBUTE, attribute) });
       }
       else
       {
-        dirContext.modifyAttributes(groupDN,
-          new ModificationItem[]{new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute)});
+        dirContext.modifyAttributes(groupDN, new ModificationItem[] { new ModificationItem(
+            DirContext.REMOVE_ATTRIBUTE, attribute) });
       }
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -2151,8 +2117,8 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to remove the user (%s) from the group (%s) for the user directory (%s): %s",
-        username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to remove the user (%s) from the group (%s) for the user directory (%s): %s",
+          username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -2219,23 +2185,22 @@ public class LDAPUserDirectory
 
       if (groupDN == null)
       {
-        throw new GroupNotFoundException(
-          String.format("The group (%s) could not be found", group.getGroupName()));
+        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
+            group.getGroupName()));
       }
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
       if (!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(groupDescriptionAttribute,
-            StringUtil.notNull(group.getDescription()))));
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+            groupDescriptionAttribute, StringUtil.notNull(group.getDescription()))));
       }
 
       if (modificationItems.size() > 0)
       {
-        dirContext.modifyAttributes(groupDN,
-          modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+        dirContext.modifyAttributes(groupDN, modificationItems.toArray(
+            new ModificationItem[modificationItems.size()]));
       }
     }
     catch (GroupNotFoundException e)
@@ -2244,9 +2209,9 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to update the group (%s) for the user directory (%s): %s",
-          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
+      throw new SecurityException(String.format(
+          "Failed to update the group (%s) for the user directory (%s): %s", group.getGroupName(),
+          getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {
@@ -2277,75 +2242,74 @@ public class LDAPUserDirectory
 
       if (userDN == null)
       {
-        throw new UserNotFoundException(
-          String.format("The user (%s) could not be found", user.getUsername()));
+        throw new UserNotFoundException(String.format("The user (%s) could not be found",
+            user.getUsername()));
       }
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
       if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+            userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
       }
 
       if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+            userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
       }
 
       if (!StringUtil.isNullOrEmpty(userEmailAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail()))));
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+            userEmailAttribute, StringUtil.notNull(user.getEmail()))));
       }
 
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userMobileNumberAttribute,
-            StringUtil.notNull(user.getMobileNumber()))));
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+            userMobileNumberAttribute, StringUtil.notNull(user.getMobileNumber()))));
       }
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute)) &&
-        (user.getPasswordAttempts() != null))
+      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+          && (user.getPasswordAttempts() != null))
       {
         if (lockUser)
         {
           modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordAttemptsAttribute,
-              String.valueOf(maxPasswordAttempts))));
+              new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(
+              maxPasswordAttempts))));
         }
         else
         {
           modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordAttemptsAttribute,
-              String.valueOf(user.getPasswordAttempts()))));
+              new BasicAttribute(userPasswordAttemptsAttribute, String.valueOf(
+              user.getPasswordAttempts()))));
         }
       }
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute)) &&
-        (user.getPasswordExpiry() != null))
+      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+          && (user.getPasswordExpiry() != null))
       {
         if (expirePassword)
         {
           modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordExpiryAttribute,
-              String.valueOf(System.currentTimeMillis()))));
+              new BasicAttribute(userPasswordExpiryAttribute, String.valueOf(
+              System.currentTimeMillis()))));
         }
         else
         {
           modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordExpiryAttribute,
-              String.valueOf(user.getPasswordExpiry().getTime()))));
+              new BasicAttribute(userPasswordExpiryAttribute, String.valueOf(
+              user.getPasswordExpiry().getTime()))));
         }
       }
 
       if (modificationItems.size() > 0)
       {
-        dirContext.modifyAttributes(userDN,
-          modificationItems.toArray(new ModificationItem[modificationItems.size()]));
+        dirContext.modifyAttributes(userDN, modificationItems.toArray(
+            new ModificationItem[modificationItems.size()]));
       }
     }
     catch (UserNotFoundException e)
@@ -2354,9 +2318,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        "Failed to update the user (" + user.getUsername() + ") for the user directory (" +
-          getUserDirectoryId() + "): " + e.getMessage(), e);
+      throw new SecurityException("Failed to update the user (" + user.getUsername()
+          + ") for the user directory (" + getUserDirectoryId() + "): " + e.getMessage(), e);
     }
     finally
     {
@@ -2375,12 +2338,10 @@ public class LDAPUserDirectory
     super.buildStatements(schemaPrefix);
 
     // getFunctionCodesForGroupsSQL
-    getFunctionCodesForGroupsSQL =
-      "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F" + " INNER JOIN " +
-        schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID " +
-        "INNER JOIN " + schemaPrefix +
-        "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID " +
-        "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID ";
+    getFunctionCodesForGroupsSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F"
+        + " INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
+        + "INNER JOIN " + schemaPrefix + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID "
+        + "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID ";
   }
 
   private Group buildGroupFromSearchResult(SearchResult searchResult)
@@ -2393,8 +2354,8 @@ public class LDAPUserDirectory
     group.setId(null);
     group.setUserDirectoryId(getUserDirectoryId());
 
-    if ((!StringUtil.isNullOrEmpty(groupDescriptionAttribute)) && (attributes.get(
-      groupDescriptionAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
+        && (attributes.get(groupDescriptionAttribute) != null))
     {
       group.setDescription(String.valueOf(attributes.get(groupDescriptionAttribute).get()));
     }
@@ -2419,8 +2380,8 @@ public class LDAPUserDirectory
     user.setReadOnly(isReadOnly);
     user.setPassword("");
 
-    if ((!StringUtil.isNullOrEmpty(userFirstNamesAttribute)) && (attributes.get(
-      userFirstNamesAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
+        && (attributes.get(userFirstNamesAttribute) != null))
     {
       user.setFirstNames(String.valueOf(attributes.get(userFirstNamesAttribute).get()));
     }
@@ -2429,8 +2390,8 @@ public class LDAPUserDirectory
       user.setFirstNames("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userLastNameAttribute)) && (attributes.get(
-      userLastNameAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userLastNameAttribute))
+        && (attributes.get(userLastNameAttribute) != null))
     {
       user.setLastName(String.valueOf(attributes.get(userLastNameAttribute).get()));
     }
@@ -2439,8 +2400,8 @@ public class LDAPUserDirectory
       user.setLastName("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userMobileNumberAttribute)) && (attributes.get(
-      userMobileNumberAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
+        && (attributes.get(userMobileNumberAttribute) != null))
     {
       user.setMobileNumber(String.valueOf(attributes.get(userMobileNumberAttribute).get()));
     }
@@ -2449,8 +2410,8 @@ public class LDAPUserDirectory
       user.setMobileNumber("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userEmailAttribute)) && (attributes.get(userEmailAttribute) !=
-      null))
+    if ((!StringUtil.isNullOrEmpty(userEmailAttribute))
+        && (attributes.get(userEmailAttribute) != null))
     {
       user.setEmail(String.valueOf(attributes.get(userEmailAttribute).get()));
     }
@@ -2459,36 +2420,36 @@ public class LDAPUserDirectory
       user.setEmail("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute)) && (attributes.get(
-      userPasswordAttemptsAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+        && (attributes.get(userPasswordAttemptsAttribute) != null))
     {
-      String userPasswordAttemptsAttributeValue = String.valueOf(
-        attributes.get(userPasswordAttemptsAttribute).get());
+      String userPasswordAttemptsAttributeValue = String.valueOf(attributes.get(
+          userPasswordAttemptsAttribute).get());
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttributeValue)) &&
-        (!userPasswordAttemptsAttributeValue.equals("-1")))
+      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttributeValue))
+          && (!userPasswordAttemptsAttributeValue.equals("-1")))
       {
-        user.setPasswordAttempts(
-          Integer.parseInt(String.valueOf(attributes.get(userPasswordAttemptsAttribute).get())));
+        user.setPasswordAttempts(Integer.parseInt(String.valueOf(attributes.get(
+            userPasswordAttemptsAttribute).get())));
       }
     }
 
-    if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute)) && (attributes.get(
-      userPasswordExpiryAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+        && (attributes.get(userPasswordExpiryAttribute) != null))
     {
-      String userPasswordExpiryAttributeValue = String.valueOf(
-        attributes.get(userPasswordExpiryAttribute).get());
+      String userPasswordExpiryAttributeValue = String.valueOf(attributes.get(
+          userPasswordExpiryAttribute).get());
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttributeValue)) &&
-        (!userPasswordExpiryAttributeValue.equals("-1")))
+      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttributeValue))
+          && (!userPasswordExpiryAttributeValue.equals("-1")))
       {
-        user.setPasswordExpiry(new Date(
-          Long.parseLong(String.valueOf(attributes.get(userPasswordExpiryAttribute).get()))));
+        user.setPasswordExpiry(new Date(Long.parseLong(String.valueOf(attributes.get(
+            userPasswordExpiryAttribute).get()))));
       }
     }
 
-    user.setProperty("dn",
-      new LdapName(searchResult.getNameInNamespace().toLowerCase()).toString());
+    user.setProperty("dn", new LdapName(searchResult.getNameInNamespace()
+        .toLowerCase()).toString());
 
     return user;
   }
@@ -2498,7 +2459,9 @@ public class LDAPUserDirectory
   {
     try
     {
-      String url = useSSL ? "ldaps://" : "ldap://";
+      String url = useSSL
+          ? "ldaps://"
+          : "ldap://";
       url += host;
       url += ":";
       url += port;
@@ -2517,8 +2480,8 @@ public class LDAPUserDirectory
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the JNDI directory context for the user directory (%s)",
+      throw new SecurityException(String.format(
+          "Failed to retrieve the JNDI directory context for the user directory (%s)",
           getUserDirectoryId()), e);
     }
   }
@@ -2533,7 +2496,7 @@ public class LDAPUserDirectory
       List<LdapName> groupDNs = new ArrayList<>();
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", groupObjectClass,
-        groupNameAttribute, groupName);
+          groupNameAttribute, groupName);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2569,16 +2532,16 @@ public class LDAPUserDirectory
           buffer.append("(").append(groupDN).append(")");
         }
 
-        throw new SecurityException(
-          String.format("Found multiple groups (%d) with the group name (%s) with DNs %s",
-            groupDNs.size(), groupName, buffer.toString()));
+        throw new SecurityException(String.format(
+            "Found multiple groups (%d) with the group name (%s) with DNs %s", groupDNs.size(),
+            groupName, buffer.toString()));
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)", groupName,
-        host, port), e);
+          "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)",
+          groupName, host, port), e);
     }
     finally
     {
@@ -2597,7 +2560,7 @@ public class LDAPUserDirectory
       List<User> users = new ArrayList<>();
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", userObjectClass,
-        userUsernameAttribute, username);
+          userUsernameAttribute, username);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2644,16 +2607,16 @@ public class LDAPUserDirectory
           buffer.append("(").append(user.getProperty("dn")).append(")");
         }
 
-        throw new SecurityException(
-          String.format("Found multiple users (%d) with the username (%s) with DNs %s",
-            users.size(), username, buffer.toString()));
+        throw new SecurityException(String.format(
+            "Found multiple users (%d) with the username (%s) with DNs %s", users.size(), username,
+            buffer.toString()));
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to retrieve the details for the user (%s) from the LDAP directory (%s:%d)",
-        username, host, port), e);
+          "Failed to retrieve the details for the user (%s) from the LDAP directory (%s:%d)",
+          username, host, port), e);
     }
     finally
     {
@@ -2673,7 +2636,7 @@ public class LDAPUserDirectory
       List<LdapName> userDNs = new ArrayList<>();
 
       String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", userObjectClass,
-        userUsernameAttribute, username);
+          userUsernameAttribute, username);
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -2685,8 +2648,8 @@ public class LDAPUserDirectory
 
       while (searchResultsNonSharedUsers.hasMore())
       {
-        userDNs.add(
-          new LdapName(searchResultsNonSharedUsers.next().getNameInNamespace().toLowerCase()));
+        userDNs.add(new LdapName(searchResultsNonSharedUsers.next().getNameInNamespace()
+            .toLowerCase()));
       }
 
       // Next search for a shared user
@@ -2696,8 +2659,8 @@ public class LDAPUserDirectory
 
         while (searchResultsSharedUsers.hasMore())
         {
-          userDNs.add(
-            new LdapName(searchResultsSharedUsers.next().getNameInNamespace().toLowerCase()));
+          userDNs.add(new LdapName(searchResultsSharedUsers.next().getNameInNamespace()
+              .toLowerCase()));
         }
       }
 
@@ -2723,16 +2686,16 @@ public class LDAPUserDirectory
           buffer.append("(").append(userDN).append(")");
         }
 
-        throw new SecurityException(
-          String.format("Found multiple users (%d) with the username (%s) with DNs %s",
-            userDNs.size(), username, buffer.toString()));
+        throw new SecurityException(String.format(
+            "Found multiple users (%d) with the username (%s) with DNs %s", userDNs.size(),
+            username, buffer.toString()));
       }
     }
     catch (Throwable e)
     {
-      throw new SecurityException(
-        String.format("Failed to retrieve the DN for the user (%s) from the LDAP directory (%s:%d)",
-          username, host, port), e);
+      throw new SecurityException(String.format(
+          "Failed to retrieve the DN for the user (%s) from the LDAP directory (%s:%d)", username,
+          host, port), e);
     }
     finally
     {
@@ -2745,25 +2708,25 @@ public class LDAPUserDirectory
   {
     try
     {
-      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute)) &&
-        (user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1))
+      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+          && (user.getPasswordAttempts() != null)
+          && (user.getPasswordAttempts() != -1))
       {
-        dirContext.modifyAttributes(user.getProperty("dn"), new ModificationItem[]{
-          new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-            new BasicAttribute(userPasswordAttemptsAttribute,
-              String.valueOf(user.getPasswordAttempts() + 1)))});
+        dirContext.modifyAttributes(user.getProperty("dn"), new ModificationItem[] {
+            new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+            userPasswordAttemptsAttribute, String.valueOf(user.getPasswordAttempts() + 1))) });
       }
     }
     catch (Throwable e)
     {
       logger.error(String.format(
-        "Failed to increment the password attempts for the user (%s) for the user directory (%s)",
-        user.getUsername(), getUserDirectoryId()), e);
+          "Failed to increment the password attempts for the user (%s) for the user directory (%s)",
+          user.getUsername(), getUserDirectoryId()), e);
     }
   }
 
-  private boolean isPasswordInHistory(
-    DirContext dirContext, String username, LdapName userDN, String passwordHash)
+  private boolean isPasswordInHistory(DirContext dirContext, String username, LdapName userDN,
+      String passwordHash)
     throws SecurityException
   {
     try
@@ -2774,9 +2737,9 @@ public class LDAPUserDirectory
 
         if (attributes.get(userPasswordHistoryAttribute) != null)
         {
-          @SuppressWarnings("unchecked") NamingEnumeration<String> existingPasswordHashes =
-            (NamingEnumeration<String>) attributes.get(
-            userPasswordHistoryAttribute).getAll();
+          @SuppressWarnings("unchecked")
+          NamingEnumeration<String> existingPasswordHashes =
+              (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
 
           while (existingPasswordHashes.hasMore())
           {
@@ -2791,16 +2754,16 @@ public class LDAPUserDirectory
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to check whether the password hash (%s) is in the password history for the user " +
-          "(%s) for the user directory (%s): %s", passwordHash, username, getUserDirectoryId(),
-        e.getMessage()), e);
+          "Failed to check whether the password hash (%s) is in the password history for the user "
+          + "(%s) for the user directory (%s): %s", passwordHash, username, getUserDirectoryId(),
+          e.getMessage()), e);
     }
 
     return false;
   }
 
-  private void savePasswordHistory(
-    DirContext dirContext, String username, LdapName userDN, String passwordHash)
+  private void savePasswordHistory(DirContext dirContext, String username, LdapName userDN,
+      String passwordHash)
     throws SecurityException
   {
     try
@@ -2813,9 +2776,9 @@ public class LDAPUserDirectory
 
         if (attributes.get(userPasswordHistoryAttribute) != null)
         {
-          @SuppressWarnings("unchecked") NamingEnumeration<String> existingPasswordHashes =
-            (NamingEnumeration<String>) attributes.get(
-            userPasswordHistoryAttribute).getAll();
+          @SuppressWarnings("unchecked")
+          NamingEnumeration<String> existingPasswordHashes =
+              (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
 
           while (existingPasswordHashes.hasMore())
           {
@@ -2825,15 +2788,15 @@ public class LDAPUserDirectory
 
         attribute.add(passwordHash);
 
-        dirContext.modifyAttributes(userDN,
-          new ModificationItem[]{new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)});
+        dirContext.modifyAttributes(userDN, new ModificationItem[] { new ModificationItem(DirContext
+            .REPLACE_ATTRIBUTE, attribute) });
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-        "Failed to save the password hash (%s) for the user (%s) for the user directory (%s): %s",
-        passwordHash, username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to save the password hash (%s) for the user (%s) for the user directory (%s): %s",
+          passwordHash, username, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 }

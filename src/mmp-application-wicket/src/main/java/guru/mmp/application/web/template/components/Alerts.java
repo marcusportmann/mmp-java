@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.FeedbackMessage;
@@ -31,6 +33,8 @@ import org.apache.wicket.request.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>Alerts</code> class provides a Wicket component that renders the
  * <code>FeedBackMessage</code>s for the page that are not linked to a particular input control as
@@ -38,12 +42,10 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class Alerts
-  extends Component
+public class Alerts extends Component
   implements IFeedback
 {
   private static final long serialVersionUID = 1000000;
-
   private String reporterId;
 
   /**
@@ -84,8 +86,8 @@ public class Alerts
    */
   protected final List<FeedbackMessage> getFilteredMessages()
   {
-    @SuppressWarnings("unchecked") final List<FeedbackMessage> messages = (List<FeedbackMessage>)
-      getDefaultModelObject();
+    @SuppressWarnings("unchecked")
+    final List<FeedbackMessage> messages = (List<FeedbackMessage>) getDefaultModelObject();
 
     List<FeedbackMessage> filteredMessages = new ArrayList<>();
 
@@ -95,9 +97,10 @@ public class Alerts
       {
         Component reporter = message.getReporter();
 
-        if ((reporter instanceof Button) || (reporter instanceof Form<?>) ||
-          (reporter instanceof org.apache.wicket.markup.html.WebPage) ||
-          (reporter instanceof InputPanel))
+        if ((reporter instanceof Button)
+            || (reporter instanceof Form<?>)
+            || (reporter instanceof org.apache.wicket.markup.html.WebPage)
+            || (reporter instanceof InputPanel))
         {
           filteredMessages.add(message);
         }
@@ -136,6 +139,7 @@ public class Alerts
       if (messages.size() == 0)
       {
         response.write("<div id=\"" + getMarkupId() + "\" class=\"alerts\"></div>");
+
         return;
       }
 

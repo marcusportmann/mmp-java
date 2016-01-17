@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -26,6 +28,8 @@ import guru.mmp.common.wbxml.Encoder;
 
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>GetCodeCategoryWithParametersResponseData</code> class manages the data for a
  * "Get Code Category With Parameters Response" message.
@@ -35,8 +39,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class GetCodeCategoryWithParametersResponseData
-  extends WbxmlMessageData
+public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
 {
   /**
    * The error code returned when access is denied.
@@ -62,7 +65,7 @@ public class GetCodeCategoryWithParametersResponseData
    * The UUID for the "Get Code Category With Parameters Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "12757310-9eee-4a3a-970c-9b4ee0e1108e");
+      "12757310-9eee-4a3a-970c-9b4ee0e1108e");
 
   /**
    * The code category.

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.registry;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 
@@ -84,8 +86,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  byte[] getBinaryValue(
-    String path, String name, byte[] defaultValue, byte[] encryptionKey, byte[] encryptionIV)
+  byte[] getBinaryValue(String path, String name, byte[] defaultValue, byte[] encryptionKey,
+      byte[] encryptionIV)
     throws RegistryException;
 
   /**
@@ -150,8 +152,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  String getStringValue(
-    String path, String name, String defaultValue, byte[] encryptionKey, byte[] encryptionIV)
+  String getStringValue(String path, String name, String defaultValue, byte[] encryptionKey,
+      byte[] encryptionIV)
     throws RegistryException;
 
   /**
@@ -210,8 +212,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  void setBinaryValue(
-    String path, String name, byte[] value, byte[] encryptionKey, byte[] encryptionIV)
+  void setBinaryValue(String path, String name, byte[] value, byte[] encryptionKey,
+      byte[] encryptionIV)
     throws RegistryException;
 
   /**
@@ -273,8 +275,8 @@ public interface IRegistry
    *
    * @throws RegistryException
    */
-  void setStringValue(
-    String path, String name, String value, byte[] encryptionKey, byte[] encryptionIV)
+  void setStringValue(String path, String name, String value, byte[] encryptionKey,
+      byte[] encryptionIV)
     throws RegistryException;
 
   /**

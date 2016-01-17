@@ -16,6 +16,8 @@
 
 package guru.mmp.sample.web.pages.forms;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.pages.TemplateWebPage;
 import guru.mmp.sample.model.TestData;
 import org.apache.wicket.model.IModel;
@@ -26,8 +28,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author Marcus Portmann
  */
-public class TestFormResultsPage
-  extends TemplateWebPage
+public class TestFormResultsPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 

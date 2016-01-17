@@ -16,6 +16,8 @@
 
 package guru.mmp.sample.web.pages.ui;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.pages.TemplateWebPage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 
@@ -25,8 +27,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
  *
  * @author Marcus Portmann
  */
-public class BlocksPage
-  extends TemplateWebPage
+public class BlocksPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
 

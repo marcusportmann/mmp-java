@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.PasswordChangeReason;
 import guru.mmp.application.security.User;
@@ -41,6 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ResetPasswordPage</code> class implements the
  * "Reset User Password" page for the Web Application Template.
@@ -48,12 +52,10 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_RESET_USER_PASSWORD)
-public class ResetUserPasswordPage
-  extends TemplateWebPage
+public class ResetUserPasswordPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ResetUserPasswordPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Should the user's password be expired */
@@ -67,6 +69,12 @@ public class ResetUserPasswordPage
   /* Should the user's password be locked */
   @SuppressWarnings("unused")
   private boolean userLocked;
+
+  /**
+   * Hidden <code>ResetPasswordPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected ResetUserPasswordPage() {}
 
   /**
    * Constructs a new <code>ResetUserPasswordPage</code>.
@@ -110,21 +118,21 @@ public class ResetUserPasswordPage
 
       // The "confirmPassword" field
       PasswordTextFieldWithFeedback confirmPasswordField = new PasswordTextFieldWithFeedback(
-        "confirmPassword", Model.of(""));
+          "confirmPassword", Model.of(""));
       confirmPasswordField.setRequired(true);
       resetForm.add(confirmPasswordField);
 
       resetForm.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 
       // The "expiredPassword" field
-      CheckBox expiredPasswordCheckbox = new CheckBox("expiredPassword",
-        new PropertyModel<>(this, "expiredPassword"));
+      CheckBox expiredPasswordCheckbox = new CheckBox("expiredPassword", new PropertyModel<>(this,
+          "expiredPassword"));
       expiredPasswordCheckbox.setRequired(false);
       resetForm.add(expiredPasswordCheckbox);
 
       // The "userLocked" field
-      CheckBox userLockedCheckbox = new CheckBox("userLocked",
-        new PropertyModel<>(this, "userLocked"));
+      CheckBox userLockedCheckbox = new CheckBox("userLocked", new PropertyModel<>(this,
+          "userLocked"));
       userLockedCheckbox.setRequired(false);
       resetForm.add(userLockedCheckbox);
 
@@ -141,8 +149,8 @@ public class ResetUserPasswordPage
             User user = userModel.getObject();
 
             securityService.adminChangePassword(user.getUserDirectoryId(), user.getUsername(),
-              user.getPassword(), expiredPassword, userLocked, false,
-              PasswordChangeReason.ADMINISTRATIVE);
+                user.getPassword(), expiredPassword, userLocked, false, PasswordChangeReason
+                .ADMINISTRATIVE);
 
             setResponsePage(previousPage.getPage());
           }
@@ -178,10 +186,4 @@ public class ResetUserPasswordPage
       throw new WebApplicationException("Failed to initialise the ResetPasswordPage", e);
     }
   }
-
-  /**
-   * Hidden <code>ResetPasswordPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected ResetUserPasswordPage() {}
 }

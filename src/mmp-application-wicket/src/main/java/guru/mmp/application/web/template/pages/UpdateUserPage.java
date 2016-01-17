@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
@@ -33,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UpdateUserPage</code> class implements the
  * "Update User" page for the Web Application Template.
@@ -40,17 +44,21 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_USER)
-public class UpdateUserPage
-  extends TemplateWebPage
+public class UpdateUserPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateUserPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
+
+  /**
+   * Hidden <code>UpdateUserPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected UpdateUserPage() {}
 
   /**
    * Constructs a new <code>UpdateUserPage</code>.
@@ -140,10 +148,4 @@ public class UpdateUserPage
       throw new WebApplicationException("Failed to initialise the UpdateUserPage", e);
     }
   }
-
-  /**
-   * Hidden <code>UpdateUserPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateUserPage() {}
 }

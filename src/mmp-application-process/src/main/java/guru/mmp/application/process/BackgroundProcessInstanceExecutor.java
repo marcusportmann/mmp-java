@@ -16,13 +16,19 @@
 
 package guru.mmp.application.process;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.concurrent.Future;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundProcessInstanceExecutor</code> class implements the background process
@@ -30,7 +36,8 @@ import java.util.concurrent.Future;
  *
  * @author Marcus Portmann
  */
-@Singleton
+@ApplicationScoped
+@Default
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
 public class BackgroundProcessInstanceExecutor
@@ -90,8 +97,8 @@ public class BackgroundProcessInstanceExecutor
       {
         logger.info("Resetting the locks for the process instances being executed");
 
-        processService.resetProcessInstanceLocks(ProcessInstance.Status.EXECUTING,
-          ProcessInstance.Status.SCHEDULED);
+        processService.resetProcessInstanceLocks(ProcessInstance.Status.EXECUTING, ProcessInstance
+            .Status.SCHEDULED);
       }
       catch (Throwable e)
       {
@@ -100,8 +107,8 @@ public class BackgroundProcessInstanceExecutor
     }
     else
     {
-      logger.error("Failed to initialise the Background Process Instance Executor:" +
-        " The Process Service was NOT injected");
+      logger.error("Failed to initialise the Background Process Instance Executor:"
+          + " The Process Service was NOT injected");
     }
   }
 
@@ -145,18 +152,18 @@ public class BackgroundProcessInstanceExecutor
       }
       catch (Throwable e)
       {
-        logger.error(
-          String.format("Failed to execute the process instance (%s)", processInstance.getId()), e);
+        logger.error(String.format("Failed to execute the process instance (%s)",
+            processInstance.getId()), e);
 
         try
         {
-          processService.unlockProcessInstance(processInstance.getId(),
-            ProcessInstance.Status.FAILED);
+          processService.unlockProcessInstance(processInstance.getId(), ProcessInstance.Status
+              .FAILED);
         }
         catch (Throwable f)
         {
-          logger.error(
-            String.format("Failed to unlock and set the status for the process instance (%s)",
+          logger.error(String.format(
+              "Failed to unlock and set the status for the process instance (%s)",
               processInstance.getId()), f);
         }
       }

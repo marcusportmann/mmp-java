@@ -16,16 +16,22 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ProcessDefinitionDataProvider</code> class provides an <code>IDataProvider</code>
@@ -33,8 +39,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class ProcessDefinitionDataProvider
-  extends InjectableDataProvider<ProcessDefinition>
+public class ProcessDefinitionDataProvider extends InjectableDataProvider<ProcessDefinition>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -45,9 +50,7 @@ public class ProcessDefinitionDataProvider
   /**
    * Constructs a new <code>ProcessDefinitionDataProvider</code>.
    */
-  public ProcessDefinitionDataProvider()
-  {
-  }
+  public ProcessDefinitionDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -85,9 +88,9 @@ public class ProcessDefinitionDataProvider
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to load the process definitions from index (%d) to (%d)", first,
-          first + count), e);
+      throw new WebApplicationException(String.format(
+          "Failed to load the process definitions from index (%d) to (%d)", first, first + count),
+          e);
     }
   }
 

@@ -27,8 +27,13 @@ public enum Implementation
   UNSPECIFIED("##unspecified", "Unspecified"), WEB_SERVICE("##WebService", "WebService");
 
   private String id;
-
   private String name;
+
+  Implementation(String id, String name)
+  {
+    this.id = id;
+    this.name = name;
+  }
 
   /**
    * Returns the implementation type given by the specified ID.
@@ -50,12 +55,6 @@ public enum Implementation
       default:
         throw new RuntimeException("Invalid ID for implementation type (" + id + ")");
     }
-  }
-
-  Implementation(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
   }
 
   /**

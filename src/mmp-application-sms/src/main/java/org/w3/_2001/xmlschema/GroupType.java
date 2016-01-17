@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -32,38 +34,33 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "group", propOrder = {"elementsAndGroupsAndAlls"})
-@XmlSeeAlso({ExplicitGroup.class, RealGroup.class})
-public abstract class GroupType
-  extends Annotated
+@XmlType(name = "group", propOrder = { "elementsAndGroupsAndAlls" })
+@XmlSeeAlso({ ExplicitGroup.class, RealGroup.class })
+public abstract class GroupType extends Annotated
 {
-  @XmlElementRefs({@XmlElementRef(name = "choice", namespace = "http://www.w3.org/2001/XMLSchema",
-    type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "sequence", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "any", namespace = "http://www.w3.org/2001/XMLSchema", type = Any.class,
-      required = false),
-    @XmlElementRef(name = "all", namespace = "http://www.w3" + ".org/2001/XMLSchema",
-      type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "element", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false),
-    @XmlElementRef(name = "group", namespace = "http://www.w3.org/2001/XMLSchema",
-      type = JAXBElement.class, required = false)})
+  @XmlElementRefs({ @XmlElementRef(name = "choice", namespace = "http://www.w3.org/2001/XMLSchema",
+      type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "sequence", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "any", namespace = "http://www.w3.org/2001/XMLSchema", type = Any.class,
+          required = false) ,
+      @XmlElementRef(name = "all", namespace = "http://www.w3" + ".org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "element", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) ,
+      @XmlElementRef(name = "group", namespace = "http://www.w3.org/2001/XMLSchema",
+          type = JAXBElement.class, required = false) })
   protected List<Object> elementsAndGroupsAndAlls;
-
   @XmlAttribute(name = "maxOccurs")
   @XmlSchemaType(name = "allNNI")
   protected String maxOccurs;
-
   @XmlAttribute(name = "minOccurs")
   @XmlSchemaType(name = "nonNegativeInteger")
   protected BigInteger minOccurs;
-
   @XmlAttribute(name = "name")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NCName")
   protected String name;
-
   @XmlAttribute(name = "ref")
   protected QName ref;
 

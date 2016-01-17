@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.util.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,8 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessService</code> class provides the Process Service implementation.
@@ -65,8 +69,8 @@ public class ProcessService
   {
     if (processDefinitionExists(processDefinition.getId(), processDefinition.getVersion()))
     {
-      throw new ProcessServiceException(
-        String.format("A process definition with ID (%s) and version (%d) already exists",
+      throw new ProcessServiceException(String.format(
+          "A process definition with ID (%s) and version (%d) already exists",
           processDefinition.getId(), processDefinition.getVersion()));
     }
 
@@ -76,8 +80,8 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException(
-        String.format("Failed to create the process definition with ID (%s) and version (%d)",
+      throw new ProcessServiceException(String.format(
+          "Failed to create the process definition with ID (%s) and version (%d)",
           processDefinition.getId(), processDefinition.getVersion()), e);
     }
   }
@@ -99,9 +103,8 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException(
-        String.format("Failed to delete all versions of the process definition with ID (%s)", id),
-        e);
+      throw new ProcessServiceException(String.format(
+          "Failed to delete all versions of the process definition with ID (%s)", id), e);
     }
   }
 
@@ -122,8 +125,8 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException(
-        "Failed to execute the process instance (" + processInstance.getId() + ")", e);
+      throw new ProcessServiceException("Failed to execute the process instance ("
+          + processInstance.getId() + ")", e);
     }
   }
 
@@ -144,7 +147,8 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-        "Failed to retrieve the summaries for the current versions of the process definitions", e);
+          "Failed to retrieve the summaries for the current versions of the process definitions",
+          e);
     }
   }
 
@@ -165,7 +169,7 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-        "Failed to retrieve the current versions of the process definitions", e);
+          "Failed to retrieve the current versions of the process definitions", e);
     }
   }
 
@@ -189,7 +193,7 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(
-        "Failed to retrieve the next process instance that has been scheduled for execution", e);
+          "Failed to retrieve the next process instance that has been scheduled for execution", e);
     }
   }
 
@@ -234,9 +238,9 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException(
-        String.format("Failed to retrieve the process definition with ID (%s) and version (%d)", id,
-          version), e);
+      throw new ProcessServiceException(String.format(
+          "Failed to retrieve the process definition with ID (%s) and version (%d)", id, version),
+          e);
     }
   }
 
@@ -262,8 +266,8 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(String.format(
-        "Failed to retrieve the summary for the process definition with ID (%s) and version (%d)",
-        id, version), e);
+          "Failed to retrieve the summary for the process definition with ID (%s) and version (%d)",
+          id, version), e);
     }
   }
 
@@ -307,8 +311,8 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(String.format(
-        "Failed to check whether the process definition with ID (%s) and version (%d) exists", id,
-        version), e);
+          "Failed to check whether the process definition with ID (%s) and version (%d) exists",
+          id, version), e);
     }
   }
 
@@ -322,8 +326,8 @@ public class ProcessService
    *
    * @throws ProcessServiceException
    */
-  public int resetProcessInstanceLocks(
-    ProcessInstance.Status status, ProcessInstance.Status newStatus)
+  public int resetProcessInstanceLocks(ProcessInstance.Status status, ProcessInstance
+      .Status newStatus)
     throws ProcessServiceException
   {
     try
@@ -333,8 +337,8 @@ public class ProcessService
     catch (Throwable e)
     {
       throw new ProcessServiceException(String.format(
-        "Failed to reset the locks for the process instances with the status (%s) that have been " +
-          "locked using the lock name (%s)", status, instanceName), e);
+          "Failed to reset the locks for the process instances with the status (%s) that have been "
+          + "locked using the lock name (%s)", status, instanceName), e);
     }
   }
 
@@ -356,9 +360,9 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException(
-        String.format("Failed to unlock and set the status for the process instance (%s) to (%s)",
-          id, status), e);
+      throw new ProcessServiceException(String.format(
+          "Failed to unlock and set the status for the process instance (%s) to (%s)", id, status),
+          e);
     }
   }
 
@@ -380,8 +384,8 @@ public class ProcessService
     }
     catch (Throwable e)
     {
-      throw new ProcessServiceException(
-        String.format("Failed to update the data for the process instance (%s)", id), e);
+      throw new ProcessServiceException(String.format(
+          "Failed to update the data for the process instance (%s)", id), e);
     }
   }
 

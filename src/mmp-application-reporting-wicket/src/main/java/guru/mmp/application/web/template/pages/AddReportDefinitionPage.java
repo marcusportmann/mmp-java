@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
@@ -38,6 +40,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AddReportDefinitionPage</code> class implements the "Add Report Definition"
  * page for the Web Application Template.
@@ -45,17 +49,23 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_ADD_REPORT_DEFINITION)
-public class AddReportDefinitionPage
-  extends TemplateWebPage
+public class AddReportDefinitionPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddReportDefinitionPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
+
+  /**
+   * Constructs a new <code>AddReportDefinitionPage</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected AddReportDefinitionPage() {}
 
   /**
    * Constructs a new <code>AddReportDefinitionPage</code>.
@@ -68,13 +78,13 @@ public class AddReportDefinitionPage
 
     try
     {
-      Form<ReportDefinition> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(new Model<>(new ReportDefinition())));
+      Form<ReportDefinition> addForm = new Form<>("addForm", new CompoundPropertyModel<>(
+          new Model<>(new ReportDefinition())));
 
       addForm.getModelObject().setId(UUID.randomUUID());
 
       ReportDefinitionInputPanel reportDefinitionInputPanel = new ReportDefinitionInputPanel(
-        "reportDefinition", false);
+          "reportDefinition", false);
 
       addForm.add(reportDefinitionInputPanel);
 
@@ -131,7 +141,7 @@ public class AddReportDefinitionPage
             catch (Throwable e)
             {
               logger.error(String.format("Failed to delete the uploaded file (%s)",
-                fileUpload.getClientFileName()), e);
+                  fileUpload.getClientFileName()), e);
             }
           }
         }
@@ -161,12 +171,4 @@ public class AddReportDefinitionPage
       throw new WebApplicationException("Failed to initialise the AddReportDefinitionPage", e);
     }
   }
-
-  /**
-   * Constructs a new <code>AddReportDefinitionPage</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected AddReportDefinitionPage() {}
 }

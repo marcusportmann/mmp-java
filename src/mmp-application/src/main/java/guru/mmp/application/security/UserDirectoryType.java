@@ -16,10 +16,14 @@
 
 package guru.mmp.application.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryType</code> class stores the information for a user directory type.
@@ -32,19 +36,12 @@ public class UserDirectoryType
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserDirectoryType.class);
-
   private static final long serialVersionUID = 1000000;
-
   private transient Class administrationClass;
-
   private String administrationClassName;
-
   private UUID id;
-
   private String name;
-
   private transient Class userDirectoryClass;
-
   private String userDirectoryClassName;
 
   /**
@@ -59,8 +56,8 @@ public class UserDirectoryType
    *                                Wicket component used to administer the configuration for the
    *                                user directory type
    */
-  public UserDirectoryType(
-    UUID id, String name, String userDirectoryClassName, String administrationClassName)
+  public UserDirectoryType(UUID id, String name, String userDirectoryClassName,
+      String administrationClassName)
   {
     this.id = id;
     this.name = name;
@@ -85,12 +82,12 @@ public class UserDirectoryType
       try
       {
         administrationClass = Thread.currentThread().getContextClassLoader().loadClass(
-          administrationClassName);
+            administrationClassName);
       }
       catch (Throwable e)
       {
-        throw new SecurityException(
-          String.format("Failed to load the administration class (%s) for the user directory (%s)",
+        throw new SecurityException(String.format(
+            "Failed to load the administration class (%s) for the user directory (%s)",
             administrationClassName, name), e);
       }
     }
@@ -147,18 +144,18 @@ public class UserDirectoryType
       try
       {
         userDirectoryClass = Thread.currentThread().getContextClassLoader().loadClass(
-          userDirectoryClassName);
+            userDirectoryClassName);
 
         if (!IUserDirectory.class.isAssignableFrom(userDirectoryClass))
         {
           throw new SecurityException(
-            "The user directory class does not implement the IUserDirectory interface");
+              "The user directory class does not implement the IUserDirectory interface");
         }
       }
       catch (Throwable e)
       {
-        throw new SecurityException(
-          String.format("Failed to load the user directory class (%s) for the user directory (%s)",
+        throw new SecurityException(String.format(
+            "Failed to load the user directory class (%s) for the user directory (%s)",
             userDirectoryClassName, name), e);
       }
     }

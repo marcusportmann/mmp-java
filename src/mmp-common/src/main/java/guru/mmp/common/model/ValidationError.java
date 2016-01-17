@@ -16,6 +16,8 @@
 
 package guru.mmp.common.model;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +32,7 @@ public class ValidationError
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private List<ValidationErrorDetail> details = new ArrayList<>();
-
   private String name;
 
   /**

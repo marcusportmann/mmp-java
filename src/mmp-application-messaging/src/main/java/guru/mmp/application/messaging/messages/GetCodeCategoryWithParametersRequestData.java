@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -26,6 +28,8 @@ import guru.mmp.common.wbxml.Encoder;
 
 import java.util.*;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>GetCodeCategoryWithParametersRequestData</code> class manages the data for a
  * "Get Code Category With Parameters Request" message.
@@ -35,14 +39,13 @@ import java.util.*;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class GetCodeCategoryWithParametersRequestData
-  extends WbxmlMessageData
+public class GetCodeCategoryWithParametersRequestData extends WbxmlMessageData
 {
   /**
    * The UUID for the "Get Code Category With Parameters Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "3500a28a-6a2c-482b-b81f-a849c9c3ef79");
+      "3500a28a-6a2c-482b-b81f-a849c9c3ef79");
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category to
@@ -85,8 +88,8 @@ public class GetCodeCategoryWithParametersRequestData
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
    *                             category is current
    */
-  public GetCodeCategoryWithParametersRequestData(
-    UUID id, Date lastRetrieved, Map<String, String> parameters, boolean returnCodesIfCurrent)
+  public GetCodeCategoryWithParametersRequestData(UUID id, Date lastRetrieved, Map<String,
+      String> parameters, boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
@@ -127,8 +130,9 @@ public class GetCodeCategoryWithParametersRequestData
       return false;
     }
 
-    if ((!rootElement.hasChild("Id")) || (!rootElement.hasChild("LastRetrieved")) ||
-      (!rootElement.hasChild("ReturnCodesIfCurrent")))
+    if ((!rootElement.hasChild("Id"))
+        || (!rootElement.hasChild("LastRetrieved"))
+        || (!rootElement.hasChild("ReturnCodesIfCurrent")))
     {
       return false;
     }
@@ -145,9 +149,8 @@ public class GetCodeCategoryWithParametersRequestData
       }
       catch (Throwable e)
       {
-        throw new RuntimeException(
-          "Failed to parse the LastRetrieved ISO8601 timestamp (" + lastRetrievedValue + ") for" +
-            " the \"Get Code Category Request\" message", e);
+        throw new RuntimeException("Failed to parse the LastRetrieved ISO8601 timestamp ("
+            + lastRetrievedValue + ") for" + " the \"Get Code Category Request\" message", e);
       }
     }
     else
@@ -155,8 +158,8 @@ public class GetCodeCategoryWithParametersRequestData
       this.lastRetrieved = new Date(Long.parseLong(lastRetrievedValue));
     }
 
-    this.returnCodesIfCurrent = Boolean.parseBoolean(
-      rootElement.getChildText("ReturnCodesIfCurrent"));
+    this.returnCodesIfCurrent = Boolean.parseBoolean(rootElement.getChildText(
+        "ReturnCodesIfCurrent"));
 
     this.parameters = new HashMap<>();
 
@@ -286,9 +289,11 @@ public class GetCodeCategoryWithParametersRequestData
 
     rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("LastRetrieved",
-      (lastRetrieved == null) ? ISO8601.now() : ISO8601.fromDate(lastRetrieved)));
-    rootElement.addContent(
-      new Element("ReturnCodesIfCurrent", String.valueOf(returnCodesIfCurrent)));
+        (lastRetrieved == null)
+        ? ISO8601.now()
+        : ISO8601.fromDate(lastRetrieved)));
+    rootElement.addContent(new Element("ReturnCodesIfCurrent", String.valueOf(
+        returnCodesIfCurrent)));
 
     for (String parameterName : parameters.keySet())
     {

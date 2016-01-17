@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.security.UserDirectoryType;
@@ -38,6 +40,8 @@ import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AddUserDirectoryPage</code> class implements the
  * "Add User Directory" page for the Web Application Template.
@@ -45,17 +49,21 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
-public class AddUserDirectoryPage
-  extends TemplateWebPage
+public class AddUserDirectoryPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddUserDirectoryPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
+
+  /**
+   * Hidden <code>AddUserDirectoryPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected AddUserDirectoryPage() {}
 
   /**
    * Constructs a new <code>AddUserDirectoryPage</code>.
@@ -75,8 +83,8 @@ public class AddUserDirectoryPage
 
       IModel<UserDirectory> userDirectoryModel = new Model<>(userDirectory);
 
-      Form<UserDirectory> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(userDirectoryModel));
+      Form<UserDirectory> addForm = new Form<>("addForm", new CompoundPropertyModel<>(
+          userDirectoryModel));
 
       addForm.getModelObject().setId(UUID.randomUUID());
 
@@ -92,21 +100,20 @@ public class AddUserDirectoryPage
 
       // The "userDirectoryTypeName" field
       TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName",
-        new Model<>(userDirectoryType.getName()));
+          new Model<>(userDirectoryType.getName()));
       userDirectoryTypeNameField.setRequired(false);
       userDirectoryTypeNameField.setEnabled(false);
       addForm.add(userDirectoryTypeNameField);
 
       Class<? extends UserDirectoryAdministrationPanel> userDirectoryAdministrationPanelClass =
-        userDirectoryType.getAdministrationClass().asSubclass(
-        UserDirectoryAdministrationPanel.class);
+          userDirectoryType.getAdministrationClass().asSubclass(
+          UserDirectoryAdministrationPanel.class);
 
       Constructor<? extends UserDirectoryAdministrationPanel> constructor =
-        userDirectoryAdministrationPanelClass.getConstructor(
-        String.class, IModel.class);
+          userDirectoryAdministrationPanelClass.getConstructor(String.class, IModel.class);
 
       UserDirectoryAdministrationPanel userDirectoryAdministrationPanel = constructor.newInstance(
-        "userDirectoryAdministrationPanel", userDirectoryModel);
+          "userDirectoryAdministrationPanel", userDirectoryModel);
 
       addForm.add(userDirectoryAdministrationPanel);
 
@@ -158,10 +165,4 @@ public class AddUserDirectoryPage
       throw new WebApplicationException("Failed to initialise the AddUserDirectoryPage", e);
     }
   }
-
-  /**
-   * Hidden <code>AddUserDirectoryPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddUserDirectoryPage() {}
 }

@@ -16,10 +16,14 @@
 
 package guru.mmp.application.messaging.handler;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.messaging.Message;
 
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestHandler</code> class implements a message handler for test messages.
@@ -27,12 +31,18 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TestHandler
-  extends MessageHandler
+public class TestHandler extends MessageHandler
 {
   /* Messaging Service */
   @Inject
   private IMessagingService messagingService;
+
+  /**
+   * Constructs a new <code>TestHandler</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  protected TestHandler() {}
 
   /**
    * Constructs a new <code>TestHandler</code>.
@@ -43,13 +53,6 @@ public class TestHandler
   {
     super("Test Handler", messageHandlerConfig);
   }
-
-  /**
-   * Constructs a new <code>TestHandler</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  protected TestHandler() {}
 
   /**
    * Process the specified message.

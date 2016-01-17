@@ -16,11 +16,15 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>FormalExpression</code> class represents a FormalExpression that forms part of a
@@ -51,8 +55,7 @@ import javax.xml.namespace.QName;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class FormalExpression
-  extends Expression
+public final class FormalExpression extends Expression
 {
   /**
    * The reference to the type of object that this Expression returns when evaluated e.g.
@@ -78,8 +81,8 @@ public final class FormalExpression
 
     try
     {
-      this.evaluatesToTypeRef = XmlUtils.getQName(element,
-        StringUtil.notNull(element.getAttribute("evaluatesToTypeRef")));
+      this.evaluatesToTypeRef = XmlUtils.getQName(element, StringUtil.notNull(element.getAttribute(
+          "evaluatesToTypeRef")));
 
       if (!StringUtil.isNullOrEmpty(element.getAttribute("language")))
       {

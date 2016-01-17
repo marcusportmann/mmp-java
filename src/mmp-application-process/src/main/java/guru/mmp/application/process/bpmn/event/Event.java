@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.FlowNode;
 import org.w3c.dom.Element;
@@ -68,8 +70,7 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public abstract class Event
-  extends FlowNode
+public abstract class Event extends FlowNode
 {
   /**
    * Constructs a new <code>Event</code>.

@@ -16,12 +16,16 @@
 
 package guru.mmp.application.web.validators;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import java.util.regex.Pattern;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordPolicyValidator</code> class implements a Wicket validator that provides
@@ -30,16 +34,12 @@ import java.util.regex.Pattern;
  * @author Marcus Portmann
  */
 @SuppressWarnings("deprecation")
-public class PasswordPolicyValidator
-  extends Behavior
+public class PasswordPolicyValidator extends Behavior
   implements IValidator<String>
 {
   private static final Pattern LOWER = Pattern.compile("[a-z]");
-
   private static final Pattern NUMBER = Pattern.compile("[0-9]");
-
   private static final Pattern UPPER = Pattern.compile("[A-Z]");
-
   private static final long serialVersionUID = 1000000;
 
   /**

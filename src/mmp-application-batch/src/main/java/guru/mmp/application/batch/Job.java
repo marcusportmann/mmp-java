@@ -16,7 +16,10 @@
 
 package guru.mmp.application.batch;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -102,9 +105,8 @@ public class Job
    * @param nextExecution     the date and time when the job will next be executed
    * @param updated           the date and time the job was updated
    */
-  public Job(
-    UUID id, String name, String schedulingPattern, String jobClass, Status status,
-    int executionAttempts, String lockName, Date lastExecuted, Date nextExecution, Date updated)
+  public Job(UUID id, String name, String schedulingPattern, String jobClass, Status status,
+      int executionAttempts, String lockName, Date lastExecuted, Date nextExecution, Date updated)
   {
     this.id = id;
     this.name = name;
@@ -116,6 +118,98 @@ public class Job
     this.lastExecuted = lastExecuted;
     this.nextExecution = nextExecution;
     this.updated = updated;
+  }
+
+  /**
+   * The enumeration giving the possible statuses for a job.
+   *
+   * @author Marcus Portmann
+   */
+  public enum Status
+  {
+    UNKNOWN(0, "Unknown"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"), EXECUTED(3,
+        "Executed"), ABORTED(4, "Aborted"), FAILED(5, "Failed");
+
+    private int code;
+    private String name;
+
+    Status(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the status given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the status
+     *
+     * @return the status given by the specified numeric code value
+     */
+    public static Status fromCode(int code)
+    {
+      switch (code)
+      {
+        case 1:
+          return Status.SCHEDULED;
+
+        case 2:
+          return Status.EXECUTING;
+
+        case 3:
+          return Status.EXECUTED;
+
+        case 4:
+          return Status.ABORTED;
+
+        case 5:
+          return Status.FAILED;
+
+        default:
+          return Status.UNKNOWN;
+      }
+    }
+
+    /**
+     * Returns the numeric code value identifying the status.
+     *
+     * @return the numeric code value identifying the status
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the <code>String</code> value of the numeric code value identifying the status.
+     *
+     * @return the <code>String</code> value of the numeric code value identifying the status
+     */
+    @SuppressWarnings("unused")
+    public String getCodeAsString()
+    {
+      return String.valueOf(code);
+    }
+
+    /**
+     * Returns the name of the status.
+     *
+     * @return the name of the status
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the status enumeration value.
+     *
+     * @return the string representation of the status enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
   }
 
   /**
@@ -318,98 +412,5 @@ public class Job
   public void setUpdated(Date updated)
   {
     this.updated = updated;
-  }
-
-  /**
-   * The enumeration giving the possible statuses for a job.
-   *
-   * @author Marcus Portmann
-   */
-  public enum Status
-  {
-    UNKNOWN(0, "Unknown"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"),
-    EXECUTED(3, "Executed"), ABORTED(4, "Aborted"), FAILED(5, "Failed");
-
-    private int code;
-
-    private String name;
-
-    /**
-     * Returns the status given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the status
-     *
-     * @return the status given by the specified numeric code value
-     */
-    public static Status fromCode(int code)
-    {
-      switch (code)
-      {
-        case 1:
-          return Status.SCHEDULED;
-
-        case 2:
-          return Status.EXECUTING;
-
-        case 3:
-          return Status.EXECUTED;
-
-        case 4:
-          return Status.ABORTED;
-
-        case 5:
-          return Status.FAILED;
-
-        default:
-          return Status.UNKNOWN;
-      }
-    }
-
-    Status(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the numeric code value identifying the status.
-     *
-     * @return the numeric code value identifying the status
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the <code>String</code> value of the numeric code value identifying the status.
-     *
-     * @return the <code>String</code> value of the numeric code value identifying the status
-     */
-    @SuppressWarnings("unused")
-    public String getCodeAsString()
-    {
-      return String.valueOf(code);
-    }
-
-    /**
-     * Returns the name of the status.
-     *
-     * @return the name of the status
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the status enumeration value.
-     *
-     * @return the string representation of the status enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
   }
 }

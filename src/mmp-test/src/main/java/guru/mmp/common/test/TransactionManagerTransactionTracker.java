@@ -16,6 +16,8 @@
 
 package guru.mmp.common.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -28,6 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>TransactionManagerTransactionTracker</code> class implements a cglib method
  * interceptor that tracks the Java Transaction (JTA) API transactions managed by a
@@ -39,9 +43,13 @@ public class TransactionManagerTransactionTracker
   implements MethodInterceptor, Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private transient static Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
-    new ConcurrentHashMap<>();
+      new ConcurrentHashMap<>();
+
+  /**
+   * Constructs a new <code>TransactionManagerMethodInterceptor</code>.
+   */
+  public TransactionManagerTransactionTracker() {}
 
   /**
    * Returns the active transaction stack traces.
@@ -52,11 +60,6 @@ public class TransactionManagerTransactionTracker
   {
     return activeTransactionStackTraces;
   }
-
-  /**
-   * Constructs a new <code>TransactionManagerMethodInterceptor</code>.
-   */
-  public TransactionManagerTransactionTracker() {}
 
   /**
    * Intercept the method invocation.
@@ -97,8 +100,8 @@ public class TransactionManagerTransactionTracker
 
             if (afterTransaction != null)
             {
-              activeTransactionStackTraces.put(afterTransaction,
-                Thread.currentThread().getStackTrace());
+              activeTransactionStackTraces.put(afterTransaction, Thread.currentThread()
+                  .getStackTrace());
             }
           }
         }
@@ -169,7 +172,7 @@ public class TransactionManagerTransactionTracker
     catch (Throwable e)
     {
       Logger.getAnonymousLogger().log(Level.SEVERE,
-        "Failed to invoke the TransactionManager method", e);
+          "Failed to invoke the TransactionManager method", e);
 
       throw e;
     }

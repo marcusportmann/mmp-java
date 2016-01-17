@@ -16,6 +16,8 @@
 
 package guru.mmp.application.sms;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -107,9 +109,8 @@ public class SMS
    * @param lockName      the name of the entity that has locked the SMS for sending
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
-  public SMS(
-    long id, String mobileNumber, String message, Status status, int sendAttempts, String lockName,
-    Date lastProcessed)
+  public SMS(long id, String mobileNumber, String message, Status status, int sendAttempts,
+      String lockName, Date lastProcessed)
   {
     this.id = id;
     this.mobileNumber = mobileNumber;
@@ -118,6 +119,95 @@ public class SMS
     this.sendAttempts = sendAttempts;
     this.lockName = lockName;
     this.lastProcessed = lastProcessed;
+  }
+
+  /**
+   * The enumeration giving the possible statuses for a SMS.
+   */
+  public enum Status
+  {
+    UNKNOWN(0, "Unknown"), QUEUED_FOR_SENDING(1, "QueuedForSending"), SENDING(2, "Sending"), SENT(
+        3, "Sent"), FAILED(4, "Failed"), ANY(-1, "Any");
+
+    private int code;
+    private String name;
+
+    Status(int code, String name)
+    {
+      this.code = code;
+      this.name = name;
+    }
+
+    /**
+     * Returns the status given by the specified numeric code value.
+     *
+     * @param code the numeric code value identifying the status
+     *
+     * @return the status given by the specified numeric code value
+     */
+    public static Status fromCode(int code)
+    {
+      switch (code)
+      {
+        case 1:
+          return Status.QUEUED_FOR_SENDING;
+
+        case 2:
+          return Status.SENDING;
+
+        case 3:
+          return Status.SENT;
+
+        case 4:
+          return Status.FAILED;
+
+        case -1:
+          return Status.ANY;
+
+        default:
+          return Status.UNKNOWN;
+      }
+    }
+
+    /**
+     * Returns the numeric code value identifying the status.
+     *
+     * @return the numeric code value identifying the status
+     */
+    public int getCode()
+    {
+      return code;
+    }
+
+    /**
+     * Returns the <code>String</code> value of the numeric code value identifying the status.
+     *
+     * @return the <code>String</code> value of the numeric code value identifying the status
+     */
+    public String getCodeAsString()
+    {
+      return String.valueOf(code);
+    }
+
+    /**
+     * Returns the name of the status.
+     *
+     * @return the name of the status
+     */
+    public String getName()
+    {
+      return name;
+    }
+
+    /**
+     * Return the string representation of the status enumeration value.
+     *
+     * @return the string representation of the status enumeration value
+     */
+    public String toString()
+    {
+      return name;
+    }
   }
 
   /**
@@ -258,95 +348,5 @@ public class SMS
   public void setStatus(Status status)
   {
     this.status = status;
-  }
-
-  /**
-   * The enumeration giving the possible statuses for a SMS.
-   */
-  public enum Status
-  {
-    UNKNOWN(0, "Unknown"), QUEUED_FOR_SENDING(1, "QueuedForSending"), SENDING(2, "Sending"),
-    SENT(3, "Sent"), FAILED(4, "Failed"), ANY(-1, "Any");
-
-    private int code;
-
-    private String name;
-
-    /**
-     * Returns the status given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the status
-     *
-     * @return the status given by the specified numeric code value
-     */
-    public static Status fromCode(int code)
-    {
-      switch (code)
-      {
-        case 1:
-          return Status.QUEUED_FOR_SENDING;
-
-        case 2:
-          return Status.SENDING;
-
-        case 3:
-          return Status.SENT;
-
-        case 4:
-          return Status.FAILED;
-
-        case -1:
-          return Status.ANY;
-
-        default:
-          return Status.UNKNOWN;
-      }
-    }
-
-    Status(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the numeric code value identifying the status.
-     *
-     * @return the numeric code value identifying the status
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the <code>String</code> value of the numeric code value identifying the status.
-     *
-     * @return the <code>String</code> value of the numeric code value identifying the status
-     */
-    public String getCodeAsString()
-    {
-      return String.valueOf(code);
-    }
-
-    /**
-     * Returns the name of the status.
-     *
-     * @return the name of the status
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the status enumeration value.
-     *
-     * @return the string representation of the status enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
   }
 }

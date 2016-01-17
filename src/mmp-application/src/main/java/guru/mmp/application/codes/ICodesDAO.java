@@ -16,10 +16,14 @@
 
 package guru.mmp.application.codes;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOException;
 
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ICodesDAO</code> interface defines the codes-related persistence operations.

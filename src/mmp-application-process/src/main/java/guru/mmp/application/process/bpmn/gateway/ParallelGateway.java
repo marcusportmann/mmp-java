@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.gateway;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
@@ -24,14 +26,15 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ParallelGateway</code> class represents a BPMN
  * parallel gateway that forms part of a Process.
  *
  * @author Marcus Portmann
  */
-public final class ParallelGateway
-  extends Gateway
+public final class ParallelGateway extends Gateway
 {
   /**
    * The gateway direction for the parallel gateway.

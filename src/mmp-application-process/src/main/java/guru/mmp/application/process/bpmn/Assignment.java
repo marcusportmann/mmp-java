@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,8 +49,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Marcus Portmann
  */
-public final class Assignment
-  extends BaseElement
+public final class Assignment extends BaseElement
 {
   /**
    * The Expression that evaluates the source of the Assignment.
@@ -91,14 +92,14 @@ public final class Assignment
           {
             case "from":
             {
-              //from = new Expression(this, childElement);
+              // from = new Expression(this, childElement);
 
               break;
             }
 
             case "to":
             {
-              //to = new Expression(this, childElement);
+              // to = new Expression(this, childElement);
 
               break;
             }

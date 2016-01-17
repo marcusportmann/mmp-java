@@ -23,16 +23,13 @@ package guru.mmp.application.web;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class WebApplicationBackgroundThread
-  extends Thread
+public abstract class WebApplicationBackgroundThread extends Thread
 {
   /**
    * The default sleep interval.
    */
   private static final long DEFAULT_SLEEP_INTERVAL = 30000L;
-
   private boolean isRunning;
-
   private long sleepInterval;
 
   /**
@@ -118,9 +115,7 @@ public abstract class WebApplicationBackgroundThread
           }
         }
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
   }
 
@@ -141,9 +136,7 @@ public abstract class WebApplicationBackgroundThread
         {
           join();
         }
-        catch (Throwable ignored)
-        {
-        }
+        catch (Throwable ignored) {}
       }
     }
   }

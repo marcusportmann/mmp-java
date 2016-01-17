@@ -22,8 +22,7 @@ package guru.mmp.common.xml;
  *
  * @author Marcus Portmann
  */
-public class XmlSchemaException
-  extends RuntimeException
+public class XmlSchemaException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

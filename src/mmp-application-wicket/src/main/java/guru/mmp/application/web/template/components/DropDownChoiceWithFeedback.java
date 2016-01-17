@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
 import org.apache.wicket.ajax.AjaxRequestHandler;
@@ -28,6 +30,8 @@ import org.apache.wicket.request.IRequestHandler;
 
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DropDownChoiceWithFeedback</code> class extends the Wicket <code>DropDownChoice</code>
  * component to provide support for displaying the feedback message for the component.
@@ -36,8 +40,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public class DropDownChoiceWithFeedback<T>
-  extends DropDownChoice<T>
+public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -82,8 +85,8 @@ public class DropDownChoiceWithFeedback<T>
    * @param choices  the choices
    * @param renderer the custom renderer for the choices
    */
-  public DropDownChoiceWithFeedback(
-    String id, List<? extends T> choices, IChoiceRenderer<? super T> renderer)
+  public DropDownChoiceWithFeedback(String id, List<? extends T> choices,
+      IChoiceRenderer<? super T> renderer)
   {
     super(id, choices, renderer);
   }
@@ -96,8 +99,8 @@ public class DropDownChoiceWithFeedback<T>
    * @param choices  the choices
    * @param renderer the custom renderer for the choices
    */
-  public DropDownChoiceWithFeedback(
-    String id, IModel<T> model, List<? extends T> choices, IChoiceRenderer<? super T> renderer)
+  public DropDownChoiceWithFeedback(String id, IModel<T> model, List<? extends T> choices,
+      IChoiceRenderer<? super T> renderer)
   {
     super(id, model, choices, renderer);
   }

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.event;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.BaseElement;
 import guru.mmp.application.process.bpmn.ParserException;
 import guru.mmp.application.process.bpmn.ProcessExecutionContext;
@@ -24,6 +26,8 @@ import guru.mmp.common.util.StringUtil;
 import org.w3c.dom.Element;
 
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>StartEvent</code> class represents a Start Event that forms part of a Process.
@@ -49,8 +53,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public final class StartEvent
-  extends CatchEvent
+public final class StartEvent extends CatchEvent
 {
   /**
    * Is the start event interrupting i.e. does the activity that triggered the event terminate
@@ -71,8 +74,8 @@ public final class StartEvent
 
     try
     {
-      this.isInterrupting = StringUtil.isNullOrEmpty(element.getAttribute("isInterrupting")) ||
-        Boolean.parseBoolean(element.getAttribute("isInterrupting"));
+      this.isInterrupting = StringUtil.isNullOrEmpty(element.getAttribute("isInterrupting"))
+          || Boolean.parseBoolean(element.getAttribute("isInterrupting"));
     }
     catch (Throwable e)
     {

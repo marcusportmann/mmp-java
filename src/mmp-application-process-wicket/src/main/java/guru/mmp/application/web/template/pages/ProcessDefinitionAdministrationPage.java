@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.process.ProcessDefinitionSummary;
@@ -26,6 +28,7 @@ import guru.mmp.application.web.template.TemplateProcessSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.ProcessDefinitionSummaryDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -36,11 +39,15 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ProcessDefinitionAdministrationPage</code> class implements the
@@ -49,13 +56,11 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION)
-public class ProcessDefinitionAdministrationPage
-  extends TemplateWebPage
+public class ProcessDefinitionAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(
-    ProcessDefinitionAdministrationPage.class);
-
+      ProcessDefinitionAdministrationPage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Process Service */
@@ -100,12 +105,12 @@ public class ProcessDefinitionAdministrationPage
       };
       tableContainer.add(addLink);
 
-      ProcessDefinitionSummaryDataProvider dataProvider = new
-        ProcessDefinitionSummaryDataProvider();
+      ProcessDefinitionSummaryDataProvider dataProvider =
+          new ProcessDefinitionSummaryDataProvider();
 
       // The process definition data view
       DataView<ProcessDefinitionSummary> dataView = new DataView<ProcessDefinitionSummary>(
-        "processDefinition", dataProvider)
+          "processDefinition", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
@@ -127,22 +132,22 @@ public class ProcessDefinitionAdministrationPage
               try
               {
                 ProcessDefinition processDefinition = processService.getProcessDefinition(
-                  processDefinitionSummary.getId(), processDefinitionSummary.getVersion());
+                    processDefinitionSummary.getId(), processDefinitionSummary.getVersion());
 
                 UpdateProcessDefinitionPage page = new UpdateProcessDefinitionPage(
-                  getPageReference(), new Model<>(processDefinition));
+                    getPageReference(), new Model<>(processDefinition));
 
                 setResponsePage(page);
               }
               catch (Throwable e)
               {
                 logger.error(String.format(
-                  "Failed to retrieve the process definition with ID (%s) and version (%d)",
-                  processDefinitionSummary.getId(), processDefinitionSummary.getVersion()), e);
+                    "Failed to retrieve the process definition with ID (%s) and version (%d)",
+                    processDefinitionSummary.getId(), processDefinitionSummary.getVersion()), e);
 
                 error(String.format(
-                  "Failed to retrieve the process definition with ID (%s) and version (%d)",
-                  processDefinitionSummary.getId(), processDefinitionSummary.getVersion()));
+                    "Failed to retrieve the process definition with ID (%s) and version (%d)",
+                    processDefinitionSummary.getId(), processDefinitionSummary.getVersion()));
               }
             }
           };
@@ -181,7 +186,7 @@ public class ProcessDefinitionAdministrationPage
     catch (Throwable e)
     {
       throw new WebApplicationException(
-        "Failed to initialise the ProcessDefinitionAdministrationPage", e);
+          "Failed to initialise the ProcessDefinitionAdministrationPage", e);
     }
   }
 
@@ -189,13 +194,10 @@ public class ProcessDefinitionAdministrationPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a process definition to be confirmed.
    */
-  private class RemoveDialog
-    extends Dialog
+  private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-
     private UUID id;
-
     private Label nameLabel;
 
     /**
@@ -213,38 +215,37 @@ public class ProcessDefinitionAdministrationPage
       add(nameLabel);
 
       add(new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
           {
-            processService.deleteProcessDefinition(id);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                processService.deleteProcessDefinition(id);
 
-            ProcessDefinitionAdministrationPage.this.info(
-              "Successfully removed the process definition " +
-                nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to remove the process definition (%s): %s", id, e.getMessage()),
-              e);
+                target.add(tableContainer);
 
-            ProcessDefinitionAdministrationPage.this.error(
-              "Failed to remove the process definition " +
-                nameLabel.getDefaultModelObjectAsString());
-          }
+                ProcessDefinitionAdministrationPage.this.info(
+                    "Successfully removed the process definition "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to remove the process definition (%s): %s", id,
+                    e.getMessage()), e);
 
-          target.add(getAlerts());
+                ProcessDefinitionAdministrationPage.this.error(
+                    "Failed to remove the process definition "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      });
+              target.add(getAlerts());
+
+              hide(target);
+            }
+          });
     }
 
     /**

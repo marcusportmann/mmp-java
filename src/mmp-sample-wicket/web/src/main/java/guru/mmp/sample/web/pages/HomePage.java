@@ -16,6 +16,8 @@
 
 package guru.mmp.sample.web.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
@@ -26,6 +28,8 @@ import guru.mmp.application.web.template.pages.TemplateWebPage;
 import javax.inject.Inject;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>HomePage</code> class implements the "Home"
  * page for the web application.
@@ -33,14 +37,11 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @AnonymousOnlyWebPage
-public class HomePage
-  extends TemplateWebPage
+public class HomePage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
-
   @Inject
   private ISecurityService securityService;
-
   private UserDirectory userDirectory;
 
   /**

@@ -16,6 +16,8 @@
 
 package guru.mmp.common.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.naming.*;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
@@ -43,9 +45,7 @@ public final class JNDIUtil
       {
         dirContext.close();
       }
-      catch (Throwable e)
-      {
-      }
+      catch (Throwable e) {}
     }
   }
 
@@ -62,9 +62,7 @@ public final class JNDIUtil
       {
         searchResults.close();
       }
-      catch (Throwable e)
-      {
-      }
+      catch (Throwable e) {}
     }
   }
 
@@ -75,16 +73,15 @@ public final class JNDIUtil
    */
   public static void close(SearchResult searchResult)
   {
-    if ((searchResult != null) && (searchResult.getObject() != null) &&
-      (searchResult.getObject() instanceof Context))
+    if ((searchResult != null)
+        && (searchResult.getObject() != null)
+        && (searchResult.getObject() instanceof Context))
     {
       try
       {
         ((Context) searchResult.getObject()).close();
       }
-      catch (Throwable e)
-      {
-      }
+      catch (Throwable e) {}
     }
   }
 
@@ -94,6 +91,20 @@ public final class JNDIUtil
   public static void dumpJNDI()
   {
     dumpJNDI(new PrintWriter(System.out));
+  }
+
+  /**
+   * Dump the contents of the JNDI tree.
+   *
+   * @return the contents of the JNDI as a <code>String</code>
+   */
+  public static String dumpJNDIToString()
+  {
+    StringWriter sw = new StringWriter();
+
+    dumpJNDI(new PrintWriter(sw));
+
+    return sw.getBuffer().toString();
   }
 
   private static void dumpJNDI(PrintWriter pw)
@@ -151,28 +162,12 @@ public final class JNDIUtil
           ic.close();
         }
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
   }
 
-  /**
-   * Dump the contents of the JNDI tree.
-   *
-   * @return the contents of the JNDI as a <code>String</code>
-   */
-  public static String dumpJNDIToString()
-  {
-    StringWriter sw = new StringWriter();
-
-    dumpJNDI(new PrintWriter(sw));
-
-    return sw.getBuffer().toString();
-  }
-
-  private static void dumpNameSpace(
-    PrintWriter pw, TreeDumpStatus treeDumpStatus, Context context, String path, int depth)
+  private static void dumpNameSpace(PrintWriter pw, TreeDumpStatus treeDumpStatus, Context context,
+      String path, int depth)
     throws NamingException
   {
     String indent = "";
@@ -194,8 +189,8 @@ public final class JNDIUtil
     }
     catch (Throwable e)
     {
-      pw.println(indent + "[ERROR] Failed to list the JNDI nodes for the context (" + path + "): " +
-        e.getMessage());
+      pw.println(indent + "[ERROR] Failed to list the JNDI nodes for the context (" + path + "): "
+          + e.getMessage());
       pw.println("");
 
       return;
@@ -212,9 +207,8 @@ public final class JNDIUtil
 
         if (!(object instanceof javax.naming.Context))
         {
-          pw.println(
-            indent + nameClassPair.getName() + " [" + nameClassPair.getClassName() + "] = " +
-              object);
+          pw.println(indent + nameClassPair.getName() + " [" + nameClassPair.getClassName()
+              + "] = " + object);
           pw.println();
         }
         else
@@ -305,15 +299,14 @@ public final class JNDIUtil
 
           if (processChildren)
           {
-            pw.println(
-              indent + nameClassPair.getName() + " [" + nameClassPair.getClassName() + "] = " +
-                object);
+            pw.println(indent + nameClassPair.getName() + " [" + nameClassPair.getClassName()
+                + "] = " + object);
             pw.println();
 
             if (path.length() > 0)
             {
               dumpNameSpace(pw, treeDumpStatus, context, path + "/" + nameClassPair.getName(),
-                depth + 1);
+                  depth + 1);
             }
             else
             {

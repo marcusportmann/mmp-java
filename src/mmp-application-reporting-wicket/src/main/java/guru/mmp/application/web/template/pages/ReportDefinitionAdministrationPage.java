@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
@@ -42,6 +44,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
  * "Report Definition Administration" page for the Web Application Template.
@@ -49,13 +53,11 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
-public class ReportDefinitionAdministrationPage
-  extends TemplateWebPage
+public class ReportDefinitionAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(
-    ReportDefinitionAdministrationPage.class);
-
+      ReportDefinitionAdministrationPage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
@@ -104,7 +106,7 @@ public class ReportDefinitionAdministrationPage
 
       // The report definition data view
       DataView<ReportDefinitionSummary> dataView = new DataView<ReportDefinitionSummary>(
-        "reportDefinition", dataProvider)
+          "reportDefinition", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
@@ -125,20 +127,20 @@ public class ReportDefinitionAdministrationPage
               try
               {
                 ReportDefinition reportDefinition = reportingService.getReportDefinition(
-                  reportDefinitionSummary.getId());
+                    reportDefinitionSummary.getId());
 
-                UpdateReportDefinitionPage page = new UpdateReportDefinitionPage(getPageReference(),
-                  new Model<>(reportDefinition));
+                UpdateReportDefinitionPage page = new UpdateReportDefinitionPage(
+                    getPageReference(), new Model<>(reportDefinition));
 
                 setResponsePage(page);
               }
               catch (Throwable e)
               {
                 logger.error(String.format("Failed to retrieve the report definition (%s)",
-                  reportDefinitionSummary.getId()), e);
+                    reportDefinitionSummary.getId()), e);
 
                 error(String.format("Failed to retrieve the report definition (%s)",
-                  reportDefinitionSummary.getId()));
+                    reportDefinitionSummary.getId()));
               }
             }
           };
@@ -177,7 +179,7 @@ public class ReportDefinitionAdministrationPage
     catch (Throwable e)
     {
       throw new WebApplicationException(
-        "Failed to initialise the ReportDefinitionAdministrationPage", e);
+          "Failed to initialise the ReportDefinitionAdministrationPage", e);
     }
   }
 
@@ -185,13 +187,10 @@ public class ReportDefinitionAdministrationPage
    * The <code>RemoveDialog</code> class implements a dialog that allows the removal
    * of a report definition to be confirmed.
    */
-  private class RemoveDialog
-    extends Dialog
+  private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-
     private UUID id;
-
     private Label nameLabel;
 
     /**
@@ -209,38 +208,37 @@ public class ReportDefinitionAdministrationPage
       add(nameLabel);
 
       add(new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
           {
-            reportingService.deleteReportDefinition(id);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                reportingService.deleteReportDefinition(id);
 
-            ReportDefinitionAdministrationPage.this.info(
-              "Successfully removed the report definition " +
-                nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (Throwable e)
-          {
-            logger.error(
-              String.format("Failed to remove the report definition (%s): %s", id, e.getMessage()),
-              e);
+                target.add(tableContainer);
 
-            ReportDefinitionAdministrationPage.this.error(
-              "Failed to remove the report definition " +
-                nameLabel.getDefaultModelObjectAsString());
-          }
+                ReportDefinitionAdministrationPage.this.info(
+                    "Successfully removed the report definition "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to remove the report definition (%s): %s", id,
+                    e.getMessage()), e);
 
-          target.add(getAlerts());
+                ReportDefinitionAdministrationPage.this.error(
+                    "Failed to remove the report definition "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      });
+              target.add(getAlerts());
+
+              hide(target);
+            }
+          });
     }
 
     /**

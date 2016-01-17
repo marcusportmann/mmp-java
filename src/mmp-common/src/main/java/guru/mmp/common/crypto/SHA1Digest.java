@@ -26,23 +26,14 @@ public final class SHA1Digest
 {
   // Additive constants
   private static final int Y1 = 0x5a827999;
-
   private static final int Y2 = 0x6ed9eba1;
-
   private static final int Y3 = 0x8f1bbcdc;
-
   private static final int Y4 = 0xca62c1d6;
-
-  private int H1, H2, H3, H4, H5;
-
   private int[] X = new int[80];
-
+  private int H1, H2, H3, H4, H5;
   private long byteCount;
-
   private byte[] xBuf;
-
   private int xBufOff;
-
   private int xOff;
 
   /**
@@ -280,8 +271,8 @@ public final class SHA1Digest
 
   private void processWord(byte[] in, int inOff)
   {
-    X[xOff++] = ((in[inOff] & 0xff) << 24) | ((in[inOff + 1] & 0xff) << 16) |
-      ((in[inOff + 2] & 0xff) << 8) | ((in[inOff + 3] & 0xff));
+    X[xOff++] = ((in[inOff] & 0xff) << 24) | ((in[inOff + 1] & 0xff) << 16) | ((in[inOff + 2]
+        & 0xff) << 8) | ((in[inOff + 3] & 0xff));
 
     if (xOff == 16)
     {

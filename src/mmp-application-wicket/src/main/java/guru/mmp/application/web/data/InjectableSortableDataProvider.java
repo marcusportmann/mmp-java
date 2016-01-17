@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -30,8 +32,7 @@ import org.apache.wicket.protocol.http.WebApplication;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class InjectableSortableDataProvider<T, S>
-  extends SortableDataProvider<T, S>
+public abstract class InjectableSortableDataProvider<T, S> extends SortableDataProvider<T, S>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -41,8 +42,7 @@ public abstract class InjectableSortableDataProvider<T, S>
   public InjectableSortableDataProvider()
   {
     guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
-      .WebApplication.class.cast(
-      WebApplication.get());
+        .WebApplication.class.cast(WebApplication.get());
 
     webApplication.getWebApplicationInjector().inject(this);
   }

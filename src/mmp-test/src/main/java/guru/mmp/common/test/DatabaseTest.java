@@ -16,6 +16,8 @@
 
 package guru.mmp.common.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
@@ -36,14 +38,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
  * of an in-memory H2 database.
  *
  * @author Marcus Portmann
  */
-public abstract class DatabaseTest
-  extends JNDITest
+public abstract class DatabaseTest extends JNDITest
 {
   /**
    * Initialise the in-memory database and return a data source that can be used to interact with
@@ -71,29 +74,29 @@ public abstract class DatabaseTest
 
       JdbcDataSource jdbcDataSource = new JdbcDataSource();
 
-      jdbcDataSource.setURL(
-        "jdbc:h2:mem:" + Thread.currentThread().getName() + ";MODE=DB2;DB_CLOSE_DELAY=-1;" +
-          "DB_CLOSE_ON_EXIT=FALSE");
+      jdbcDataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
+          + ";MODE=DB2;DB_CLOSE_DELAY=-1;" + "DB_CLOSE_ON_EXIT=FALSE");
 
       Runtime.getRuntime().addShutdownHook(new Thread()
-      {
-        @Override
-        public void run()
-        {
-          try
           {
-            try (Connection connection = jdbcDataSource.getConnection();
-              Statement statement = connection.createStatement())
+            @Override
+            public void run()
             {
-              statement.executeUpdate("SHUTDOWN");
+              try
+              {
+                try (Connection connection = jdbcDataSource.getConnection();
+                  Statement statement = connection.createStatement())
+                {
+                  statement.executeUpdate("SHUTDOWN");
+                }
+              }
+              catch (Throwable e)
+              {
+                throw new RuntimeException("Failed to shutdown the in-memory application database",
+                    e);
+              }
             }
-          }
-          catch (Throwable e)
-          {
-            throw new RuntimeException("Failed to shutdown the in-memory application database", e);
-          }
-        }
-      });
+          });
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the
@@ -142,8 +145,8 @@ public abstract class DatabaseTest
 
       AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
 
-      atomikosDataSourceBean.setUniqueResourceName(
-        Thread.currentThread().getName() + "-ApplicationDataSource");
+      atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
+          + "-ApplicationDataSource");
 
       atomikosDataSourceBean.setXaDataSource((XADataSource) jdbcDataSource);
 
@@ -194,7 +197,7 @@ public abstract class DatabaseTest
     try
     {
       System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-        "org.apache.naming.java.javaURLContextFactory");
+          "org.apache.naming.java.javaURLContextFactory");
       System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
 
       InitialContext ic = new InitialContext();
@@ -204,8 +207,8 @@ public abstract class DatabaseTest
       transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
       transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
 
-      TransactionManager transactionManager = (TransactionManager) transactionManagerEnhancer
-        .create();
+      TransactionManager transactionManager =
+          (TransactionManager) transactionManagerEnhancer.create();
 
       ic.bind("comp/TransactionManager", transactionManager);
       ic.bind("jboss/TransactionManager", transactionManager);

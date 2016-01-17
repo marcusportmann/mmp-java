@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -30,8 +32,5 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "realGroup")
-@XmlSeeAlso({GroupRef.class, Group.class})
-public class RealGroup
-  extends GroupType
-{
-}
+@XmlSeeAlso({ GroupRef.class, Group.class })
+public class RealGroup extends GroupType {}

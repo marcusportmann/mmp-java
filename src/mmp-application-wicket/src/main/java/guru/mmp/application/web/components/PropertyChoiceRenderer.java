@@ -16,12 +16,16 @@
 
 package guru.mmp.application.web.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PropertyChoiceRenderer</code> class implements a simple property-based ChoiceRenderer.

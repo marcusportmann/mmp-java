@@ -16,11 +16,12 @@
 
 package guru.mmp.sample.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.pages.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationLink;
-import guru.mmp.application.web.template.pages.*;
 import guru.mmp.sample.web.pages.DashboardPage;
 import guru.mmp.sample.web.pages.HomePage;
 import guru.mmp.sample.web.pages.forms.TestFormPage;
@@ -36,8 +37,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *
  * @author Marcus Portmann
  */
-public class SampleApplication
-  extends TemplateWebApplication
+public class SampleApplication extends TemplateWebApplication
 {
   /**
    * Constructs a new <code>SampleApplication</code>.
@@ -107,7 +107,7 @@ public class SampleApplication
 
     NavigationGroup tablesGroup = new NavigationGroup("Tables", "fa fa-table");
 
-//    tablesGroup.addItem(new NavigationLink("Basic Tables", BasicTablesPage.class));
+//  tablesGroup.addItem(new NavigationLink("Basic Tables", BasicTablesPage.class));
 
     root.addItem(tablesGroup);
   }

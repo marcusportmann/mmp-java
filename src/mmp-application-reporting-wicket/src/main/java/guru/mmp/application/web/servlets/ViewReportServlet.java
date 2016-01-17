@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.servlets;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingDAO;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
@@ -41,17 +43,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ViewReportServlet</code> class implements the servlet used to view reports.
  *
  * @author Marcus Portmann
  */
-public class ViewReportServlet
-  extends HttpServlet
+public class ViewReportServlet extends HttpServlet
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ViewReportServlet.class);
-
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -95,12 +97,12 @@ public class ViewReportServlet
         {
           // Retrieve the ViewReportParameters from the user's web session
           ViewReportParameters viewReportParameters = webSession.getViewReportParameters(
-            viewReportParametersId);
+              viewReportParametersId);
 
           if (viewReportParameters != null)
           {
-            if (webSession.hasAcccessToFunction(
-              TemplateReportingSecurity.FUNCTION_CODE_VIEW_REPORT))
+            if (webSession.hasAcccessToFunction(TemplateReportingSecurity
+                .FUNCTION_CODE_VIEW_REPORT))
             {
 //            // Check for a report logo and if one is not present then setup the default
 //            if (!viewReportParameters.getReportParameters().containsKey("reportLogo"))
@@ -121,8 +123,8 @@ public class ViewReportServlet
 
                   parameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
 
-                  for (Map.Entry<String, Object> reportParameter : viewReportParameters
-                    .getReportParameters().entrySet())
+                  for (Map.Entry<String, Object> reportParameter :
+                      viewReportParameters.getReportParameters().entrySet())
                   {
                     parameters.put(reportParameter.getKey(), reportParameter.getValue());
                   }
@@ -130,10 +132,10 @@ public class ViewReportServlet
                   // Generate the report
                   JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
                       getLocalReportTemplate(viewReportParameters.getReportFileNameOrId())),
-                    parameters, connection);
+                      parameters, connection);
 
-                  response.addHeader("content-disposition",
-                    "filename=" + viewReportParameters.getReportName() + ".pdf");
+                  response.addHeader("content-disposition", "filename="
+                      + viewReportParameters.getReportName() + ".pdf");
                   response.addHeader("Accept-Ranges", "none");
 
                   response.setContentType("application/pdf");
@@ -151,7 +153,7 @@ public class ViewReportServlet
               else if (viewReportParameters.getReportType() == ReportType.DATABASE)
               {
                 ReportDefinition reportDefinition = reportingService.getReportDefinition(
-                  UUID.fromString(viewReportParameters.getReportFileNameOrId()));
+                    UUID.fromString(viewReportParameters.getReportFileNameOrId()));
 
                 if (reportDefinition != null)
                 {
@@ -162,19 +164,18 @@ public class ViewReportServlet
 
                     parameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
 
-                    for (Map.Entry<String, Object> reportParameter : viewReportParameters
-                      .getReportParameters().entrySet())
+                    for (Map.Entry<String, Object> reportParameter :
+                        viewReportParameters.getReportParameters().entrySet())
                     {
                       parameters.put(reportParameter.getKey(), reportParameter.getValue());
                     }
 
                     // Generate the report
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(
-                      new ByteArrayInputStream(reportDefinition.getTemplate()), parameters,
-                      connection);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
+                        reportDefinition.getTemplate()), parameters, connection);
 
-                    response.addHeader("content-disposition",
-                      "filename=" + viewReportParameters.getReportName() + ".pdf");
+                    response.addHeader("content-disposition", "filename="
+                        + viewReportParameters.getReportName() + ".pdf");
                     response.addHeader("Accept-Ranges", "none");
 
                     response.setContentType("application/pdf");
@@ -189,15 +190,15 @@ public class ViewReportServlet
                 }
                 else
                 {
-                  throw new ServletException(
-                    String.format("Failed to view the report (%s): The report could not be found",
+                  throw new ServletException(String.format(
+                      "Failed to view the report (%s): The report could not be found",
                       viewReportParameters.getReportFileNameOrId()));
                 }
               }
               else
               {
-                throw new ServletException(
-                  String.format("Failed to view the report (%s): Unknown report type (%s)",
+                throw new ServletException(String.format(
+                    "Failed to view the report (%s): Unknown report type (%s)",
                     viewReportParameters.getReportFileNameOrId(),
                     viewReportParameters.getReportType()));
               }
@@ -206,15 +207,15 @@ public class ViewReportServlet
             // Unknown Report
             else
             {
-              throw new ServletException(
-                String.format("Access denied when attempting to view the report (%s)",
+              throw new ServletException(String.format(
+                  "Access denied when attempting to view the report (%s)",
                   viewReportParameters.getReportFileNameOrId()));
             }
           }
           else
           {
             logger.warn(String.format("Failed to retrieve the ViewReportParameters (%s)",
-              viewReportParametersId));
+                viewReportParametersId));
           }
         }
         catch (Throwable e)
@@ -233,16 +234,14 @@ public class ViewReportServlet
       response.setContentType("image/png");
 
       byte[] data = ResourceUtil.getClasspathResource(
-        "guru/mmp/application/web/template/resource/image/reportError.png");
+          "guru/mmp/application/web/template/resource/image/reportError.png");
 
       OutputStream out = response.getOutputStream();
 
       out.write(data);
       out.flush();
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
   }
 
   /**
@@ -281,8 +280,8 @@ public class ViewReportServlet
 
       if (!file.exists())
       {
-        throw new ServletException(
-          String.format("The local report template (%s) does not exist", localReportPath));
+        throw new ServletException(String.format("The local report template (%s) does not exist",
+            localReportPath));
       }
 
       is = new FileInputStream(localReportPath);
@@ -301,8 +300,8 @@ public class ViewReportServlet
     }
     catch (Throwable e)
     {
-      throw new ServletException(
-        String.format("Failed to load the local report template (%s)", reportFileName), e);
+      throw new ServletException(String.format("Failed to load the local report template (%s)",
+          reportFileName), e);
     }
     finally
     {
@@ -316,8 +315,8 @@ public class ViewReportServlet
       catch (Throwable e)
       {
         logger.error(String.format(
-          "Failed to close the input stream while loading the local report template (%s)",
-          reportFileName), e);
+            "Failed to close the input stream while loading the local report template (%s)",
+            reportFileName), e);
       }
     }
 

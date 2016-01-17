@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -34,14 +36,12 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "wildcard")
-@XmlSeeAlso({Any.class})
-public class Wildcard
-  extends Annotated
+@XmlSeeAlso({ Any.class })
+public class Wildcard extends Annotated
 {
   @XmlAttribute(name = "namespace")
   @XmlSchemaType(name = "namespaceList")
   protected List<String> namespaces;
-
   @XmlAttribute(name = "processContents")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   protected String processContents;

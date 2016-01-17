@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.WebSession;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -40,8 +42,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
  * @see guru.mmp.application.web.pages.WebPageSecurity
  */
 @SuppressWarnings("unused")
-public abstract class WebPage
-  extends org.apache.wicket.markup.html.WebPage
+public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
 {
   /**
    * The Application.AnonymousAccess function code applied to unsecured web pages.
@@ -52,13 +53,10 @@ public abstract class WebPage
    * The Application.SecureAnonymousAccess function code applied to secure web pages that can be
    * accessed any logged in user regardless of their role.
    */
-  public static final String FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS =
-    "Application" + ".SecureAnonymousAccess";
-
+  public static final String FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS = "Application"
+      + ".SecureAnonymousAccess";
   private static final long serialVersionUID = 1000000;
-
   private String functionCode;
-
   private boolean isSecure;
 
   /**
@@ -77,7 +75,7 @@ public abstract class WebPage
     else
     {
       SecureAnonymousWebPage secureAnonymousWebPage = getClass().getAnnotation(
-        SecureAnonymousWebPage.class);
+          SecureAnonymousWebPage.class);
 
       if (secureAnonymousWebPage != null)
       {

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.tests;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
@@ -32,6 +34,8 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>ReportingServiceTest</code> class contains the implementation of the JUnit
  * tests for the <code>ReportingService</code> class.
@@ -42,25 +46,8 @@ import static org.junit.Assert.assertEquals;
 public class ReportingServiceTest
 {
   private static int reportDefinitionCount;
-
   @Inject
   private IReportingService reportingService;
-
-  private static synchronized ReportDefinition getTestReportDefinitionDetails()
-    throws Exception
-  {
-    reportDefinitionCount++;
-
-    byte[] testReportTemplate = ResourceUtil.getClasspathResource(
-      "guru/mmp/application/tests/TestReport.jasper");
-
-    ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setId(UUID.randomUUID());
-    reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
-    reportDefinition.setTemplate(testReportTemplate);
-
-    return reportDefinition;
-  }
 
   /**
    * Test the create report PDF functionality.
@@ -99,15 +86,15 @@ public class ReportingServiceTest
     reportingService.saveReportDefinition(reportDefinition);
 
     ReportDefinition retrievedReportDefinition = reportingService.getReportDefinition(
-      reportDefinition.getId());
+        reportDefinition.getId());
 
     compareReportDefinitions(reportDefinition, retrievedReportDefinition);
 
     boolean reportDefinitionExists = reportingService.reportDefinitionExists(
-      reportDefinition.getId());
+        reportDefinition.getId());
 
     assertEquals("The report definition that was saved does not exist", true,
-      reportDefinitionExists);
+        reportDefinitionExists);
 
     reportDefinition.setName("Updated " + reportDefinition.getName());
 
@@ -120,62 +107,77 @@ public class ReportingServiceTest
     reportDefinitionExists = reportingService.reportDefinitionExists(reportDefinition.getId());
 
     assertEquals("The updated report definition that was saved does not exist", true,
-      reportDefinitionExists);
+        reportDefinitionExists);
 
     int numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
 
     assertEquals("The correct number of report definitions (1) was not retrieved", 1,
-      numberOfReportDefinitions);
+        numberOfReportDefinitions);
 
     List<ReportDefinition> reportDefinitions = reportingService.getReportDefinitions();
 
     assertEquals("The correct number of report definitions (1) was not retrieved", 1,
-      reportDefinitions.size());
+        reportDefinitions.size());
 
     compareReportDefinitions(reportDefinition, reportDefinitions.get(0));
 
-    ReportDefinitionSummary retrievedReportDefinitionSummary = reportingService
-      .getReportDefinitionSummary(
-      reportDefinition.getId());
+    ReportDefinitionSummary retrievedReportDefinitionSummary =
+        reportingService.getReportDefinitionSummary(reportDefinition.getId());
 
     compareReportDefinitionToReportDefinitionSummary(reportDefinition,
-      retrievedReportDefinitionSummary);
+        retrievedReportDefinitionSummary);
 
-    List<ReportDefinitionSummary> reportDefinitionSummaries = reportingService
-      .getReportDefinitionSummaries();
+    List<ReportDefinitionSummary> reportDefinitionSummaries =
+        reportingService.getReportDefinitionSummaries();
 
     assertEquals("The correct number of report definition summaries (1) was not retrieved", 1,
-      reportDefinitionSummaries.size());
+        reportDefinitionSummaries.size());
 
     compareReportDefinitionToReportDefinitionSummary(reportDefinition,
-      reportDefinitionSummaries.get(0));
+        reportDefinitionSummaries.get(0));
 
     reportingService.deleteReportDefinition(reportDefinition.getId());
 
     retrievedReportDefinition = reportingService.getReportDefinition(reportDefinition.getId());
 
     assertEquals("The report definition that should have been deleted was retrieved successfully",
-      null, retrievedReportDefinition);
+        null, retrievedReportDefinition);
   }
 
-  private void compareReportDefinitionToReportDefinitionSummary(
-    ReportDefinition reportDefinition, ReportDefinitionSummary reportDefinitionSummary)
+  private static synchronized ReportDefinition getTestReportDefinitionDetails()
+    throws Exception
   {
-    assertEquals("The ID values for the two report definitions do not match",
-      reportDefinition.getId(), reportDefinitionSummary.getId());
-    assertEquals("The name values for the two report definitions do not match",
-      reportDefinition.getName(), reportDefinitionSummary.getName());
+    reportDefinitionCount++;
+
+    byte[] testReportTemplate = ResourceUtil.getClasspathResource(
+        "guru/mmp/application/tests/TestReport.jasper");
+
+    ReportDefinition reportDefinition = new ReportDefinition();
+    reportDefinition.setId(UUID.randomUUID());
+    reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
+    reportDefinition.setTemplate(testReportTemplate);
+
+    return reportDefinition;
   }
 
-  private void compareReportDefinitions(
-    ReportDefinition reportDefinition1, ReportDefinition reportDefinition2)
+  private void compareReportDefinitionToReportDefinitionSummary(ReportDefinition reportDefinition,
+      ReportDefinitionSummary reportDefinitionSummary)
   {
     assertEquals("The ID values for the two report definitions do not match",
-      reportDefinition1.getId(), reportDefinition2.getId());
+        reportDefinition.getId(), reportDefinitionSummary.getId());
     assertEquals("The name values for the two report definitions do not match",
-      reportDefinition1.getName(), reportDefinition2.getName());
+        reportDefinition.getName(), reportDefinitionSummary.getName());
+  }
+
+  private void compareReportDefinitions(ReportDefinition reportDefinition1,
+      ReportDefinition reportDefinition2)
+  {
+    assertEquals("The ID values for the two report definitions do not match",
+        reportDefinition1.getId(), reportDefinition2.getId());
+    assertEquals("The name values for the two report definitions do not match",
+        reportDefinition1.getName(), reportDefinition2.getName());
     assertEquals("The template values for the two report definitions do not match", true,
-      Arrays.equals(reportDefinition1.getTemplate(), reportDefinition2.getTemplate()));
+        Arrays.equals(reportDefinition1.getTemplate(), reportDefinition2.getTemplate()));
   }
 
   private DataSource getApplicationDataSource()
@@ -186,9 +188,7 @@ public class ReportingServiceTest
     {
       dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
     }
-    catch (Throwable ignored)
-    {
-    }
+    catch (Throwable ignored) {}
 
     if (dataSource == null)
     {
@@ -196,16 +196,14 @@ public class ReportingServiceTest
       {
         dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     if (dataSource == null)
     {
       throw new RuntimeException(
-        "Failed to retrieve the application data source using the JNDI names " +
-          "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
+          "Failed to retrieve the application data source using the JNDI names "
+          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
     return dataSource;

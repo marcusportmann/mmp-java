@@ -16,10 +16,14 @@
 
 package guru.mmp.common.persistence;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * The <code>VersionedId</code> class is a JPA embeddable class that stores a composite key with
@@ -142,7 +146,9 @@ public class VersionedId
   @Override
   public int hashCode()
   {
-    return ((id == null) ? 0 : id.hashCode()) + version;
+    return ((id == null)
+        ? 0
+        : id.hashCode()) + version;
   }
 
   /**

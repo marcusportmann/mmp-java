@@ -16,6 +16,8 @@
 
 package guru.mmp.common.tomcat;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.atomikos.beans.PropertyUtils;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import org.apache.naming.ResourceRef;
@@ -29,6 +31,8 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BeanFactory</code> class provides a custom implementation of a bean factory using the
@@ -69,7 +73,7 @@ public class BeanFactory
    *
    * @throws NamingException
    */
-  @SuppressWarnings({"rawtypes"})
+  @SuppressWarnings({ "rawtypes" })
   public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment)
     throws NamingException
   {
@@ -88,9 +92,7 @@ public class BeanFactory
           {
             beanClass = threadClassLoader.loadClass(beanClassName);
           }
-          catch (ClassNotFoundException ignored)
-          {
-          }
+          catch (ClassNotFoundException ignored) {}
         }
         else
         {
@@ -106,16 +108,14 @@ public class BeanFactory
 
         if (beanClass == null)
         {
-          throw new NamingException(
-            "Failed to find the bean class (" + beanClassName + ") while creating the object " +
-              "instance (" + name.toString() + ")");
+          throw new NamingException("Failed to find the bean class (" + beanClassName
+              + ") while creating the object " + "instance (" + name.toString() + ")");
         }
 
         if (!AtomikosDataSourceBean.class.isAssignableFrom(beanClass))
         {
-          throw new NamingException(
-            "Failed to create the object instance (" + name.toString() + ") since the class (" +
-              beanClassName + ") is not an AtomikosDataSourceBean");
+          throw new NamingException("Failed to create the object instance (" + name.toString()
+              + ") since the class (" + beanClassName + ") is not an AtomikosDataSourceBean");
         }
 
         if (logger.isLoggable(Level.FINE))
@@ -132,8 +132,9 @@ public class BeanFactory
           RefAddr ra = (RefAddr) en.nextElement();
           String propName = ra.getType();
 
-          if (propName.equals(Constants.FACTORY) || propName.equals("scope") || propName.equals(
-            "auth"))
+          if (propName.equals(Constants.FACTORY)
+              || propName.equals("scope")
+              || propName.equals("auth"))
           {
             continue;
           }
@@ -142,8 +143,8 @@ public class BeanFactory
 
           if (logger.isLoggable(Level.FINE))
           {
-            logger.fine("Setting the property '" + propName + "' to '" + value + "' for the " +
-              "AtomikosDataSourceBean (" + beanClass.getName() + ")");
+            logger.fine("Setting the property '" + propName + "' to '" + value + "' for the "
+                + "AtomikosDataSourceBean (" + beanClass.getName() + ")");
           }
 
           if (propName.equals("xaProperties"))
@@ -164,9 +165,9 @@ public class BeanFactory
 
                 if (logger.isLoggable(Level.FINE))
                 {
-                  logger.fine(
-                    "Found xaProperty '" + propertyName + "' with value '" + propertyValue + "'" +
-                      " for the AtomikosDataSourceBean (" + beanClass.getName() + ")");
+                  logger.fine("Found xaProperty '" + propertyName + "' with value '"
+                      + propertyValue + "'" + " for the AtomikosDataSourceBean ("
+                      + beanClass.getName() + ")");
                 }
               }
             }
@@ -182,8 +183,8 @@ public class BeanFactory
 
         if (logger.isLoggable(Level.FINE))
         {
-          logger.fine("Finished setting " + i + " property(ies) for the AtomikosDataSourceBean (" +
-            beanClass.getName() + "), now initializing bean");
+          logger.fine("Finished setting " + i + " property(ies) for the AtomikosDataSourceBean ("
+              + beanClass.getName() + "), now initializing bean");
         }
 
         bean.init();
@@ -192,10 +193,9 @@ public class BeanFactory
       }
       catch (Throwable e)
       {
-        NamingException ne = new NamingException(
-          "Failed to create the object instance (" + name.toString() + ") using the " +
-            "AtomikosDataSourceBean (" + ((ResourceRef) obj).getClassName() + "): " +
-            e.getMessage());
+        NamingException ne = new NamingException("Failed to create the object instance ("
+            + name.toString() + ") using the " + "AtomikosDataSourceBean ("
+            + ((ResourceRef) obj).getClassName() + "): " + e.getMessage());
 
         ne.initCause(e);
 

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
 import guru.mmp.application.web.WebApplicationException;
@@ -43,6 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>UserGroupsPage</code> class implements the
  * "User Groups" page for the Web Application Template.
@@ -50,20 +54,23 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_GROUPS)
-public class UserGroupsPage
-  extends TemplateWebPage
+public class UserGroupsPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserGroupsPage.class);
-
   private static final long serialVersionUID = 1000000;
-
   @SuppressWarnings("unused")
   private String groupName;
 
   /* Security Service */
   @Inject
   private ISecurityService securityService;
+
+  /**
+   * Hidden <code>UserGroupsPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected UserGroupsPage() {}
 
   /**
    * Constructs a new <code>UserGroupsPage</code>.
@@ -101,8 +108,8 @@ public class UserGroupsPage
       tableContainer.add(backLink);
 
       // The "addUserToGroupForm" form
-      DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName",
-        new PropertyModel<>(this, "groupName"), getGroupOptions(userDirectoryId, username));
+      DropDownChoice<String> groupNameField = new DropDownChoice<>("groupName", new PropertyModel<>(
+          this, "groupName"), getGroupOptions(userDirectoryId, username));
 
       groupNameField.setRequired(true);
 
@@ -120,8 +127,8 @@ public class UserGroupsPage
             securityService.addUserToGroup(userDirectoryId, username, groupName);
 
             logger.info(String.format(
-              "User (%s) added the user (%s) to the group (%s) for the user directory (%s)",
-              session.getUsername(), username, groupName, userDirectoryId));
+                "User (%s) added the user (%s) to the group (%s) for the user directory (%s)",
+                session.getUsername(), username, groupName, userDirectoryId));
 
             groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
             groupNameField.setModelObject(null);
@@ -129,11 +136,11 @@ public class UserGroupsPage
           catch (Throwable e)
           {
             logger.error(String.format(
-              "Failed to add the user (%s) to the group (%s) for the user directory (%s): %s",
-              username, groupName, userDirectoryId, e.getMessage()), e);
+                "Failed to add the user (%s) to the group (%s) for the user directory (%s): %s",
+                username, groupName, userDirectoryId, e.getMessage()), e);
 
-            UserGroupsPage.this.error(
-              String.format("Failed to add the user %s to the group %s", username, groupName));
+            UserGroupsPage.this.error(String.format("Failed to add the user %s to the group %s",
+                username, groupName));
           }
         }
       };
@@ -146,7 +153,7 @@ public class UserGroupsPage
 
       // The group data view
       GroupsForUserDataProvider dataProvider = new GroupsForUserDataProvider(userDirectoryId,
-        username);
+          username);
 
       DataView<Group> dataView = new DataView<Group>("group", dataProvider)
       {
@@ -176,11 +183,11 @@ public class UserGroupsPage
               try
               {
                 securityService.removeUserFromGroup(userDirectoryId, username,
-                  group.getGroupName());
+                    group.getGroupName());
 
                 logger.info(String.format(
-                  "User (%s) removed the user (%s) from the group (%s) for the user directory (%s)",
-                  session.getUsername(), username, group.getGroupName(), userDirectoryId));
+                    "User (%s) removed the user (%s) from the group (%s) for the user directory (%s)",
+                    session.getUsername(), username, group.getGroupName(), userDirectoryId));
 
                 groupNameField.setChoices(getGroupOptions(userDirectoryId, username));
                 groupNameField.setModelObject(null);
@@ -188,11 +195,11 @@ public class UserGroupsPage
               catch (Throwable e)
               {
                 logger.error(String.format(
-                  "Failed to remove the user (%s) from the group (%s) for the user directory (%s)" +
-                    ": %s", username, group.getGroupName(), userDirectoryId, e.getMessage()), e);
+                    "Failed to remove the user (%s) from the group (%s) for the user directory (%s)"
+                    + ": %s", username, group.getGroupName(), userDirectoryId, e.getMessage()), e);
 
-                UserGroupsPage.this.error(
-                  String.format("Failed to remove the user %s from the group %s", username,
+                UserGroupsPage.this.error(String.format(
+                    "Failed to remove the user %s from the group %s", username,
                     group.getGroupName()));
               }
             }
@@ -213,12 +220,6 @@ public class UserGroupsPage
     }
   }
 
-  /**
-   * Hidden <code>UserGroupsPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UserGroupsPage() {}
-
   private List<String> getGroupOptions(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
   {
@@ -226,7 +227,7 @@ public class UserGroupsPage
 
     // Retrieve a list of name of the existing groups for the user
     List<String> existingGroupNames = securityService.getGroupNamesForUser(userDirectoryId,
-      username);
+        username);
 
     // Retrieve a complete list of groups for the organisation
     List<Group> groups = securityService.getGroups(userDirectoryId);

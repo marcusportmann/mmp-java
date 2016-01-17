@@ -16,6 +16,8 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +44,7 @@ public interface ISecurityService
    */
   void addUserToGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-    SecurityException;
+        SecurityException;
 
   /**
    * Administratively change the password for the user.
@@ -60,9 +62,9 @@ public interface ISecurityService
    * @throws UserNotFoundException
    * @throws SecurityException
    */
-  void adminChangePassword(
-    UUID userDirectoryId, String username, String newPassword, boolean expirePassword,
-    boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
+  void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
+      boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
+      PasswordChangeReason reason)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException;
 
   /**
@@ -81,7 +83,7 @@ public interface ISecurityService
    */
   UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-    UserNotFoundException, SecurityException;
+        UserNotFoundException, SecurityException;
 
   /**
    * Change the password for the user.
@@ -100,7 +102,7 @@ public interface ISecurityService
    */
   UUID changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-    ExistingPasswordException, SecurityException;
+        ExistingPasswordException, SecurityException;
 
   /**
    * Create a new authorised function.
@@ -193,7 +195,7 @@ public interface ISecurityService
    */
   void deleteGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-    SecurityException;
+        SecurityException;
 
   /**
    * Delete the organisation.
@@ -636,7 +638,7 @@ public interface ISecurityService
    */
   boolean isUserInGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-    SecurityException;
+        SecurityException;
 
   /**
    * Reload the user directories.
@@ -661,7 +663,7 @@ public interface ISecurityService
    */
   void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-    SecurityException;
+        SecurityException;
 
   /**
    * Rename the existing group.
@@ -678,7 +680,7 @@ public interface ISecurityService
    */
   void renameGroup(UUID userDirectoryId, String groupName, String newGroupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-    SecurityException;
+        SecurityException;
 
   /**
    * Does the user directory support administering groups.

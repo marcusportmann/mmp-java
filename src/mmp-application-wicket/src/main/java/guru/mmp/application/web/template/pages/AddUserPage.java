@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.pages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
@@ -41,6 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>AddUserPage</code> class implements the
  * "Add User" page for the Web Application Template.
@@ -48,12 +52,10 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_USER)
-public class AddUserPage
-  extends TemplateWebPage
+public class AddUserPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddUserPage.class);
-
   private static final long serialVersionUID = 1000000;
 
   /* Should the user be created with an expired password */
@@ -73,6 +75,12 @@ public class AddUserPage
   private boolean userLocked;
 
   /**
+   * Hidden <code>AddUserPage</code> constructor.
+   */
+  @SuppressWarnings("unused")
+  protected AddUserPage() {}
+
+  /**
    * Constructs a new <code>AddUserPage</code>.
    *
    * @param previousPage    the previous page
@@ -85,8 +93,8 @@ public class AddUserPage
 
     try
     {
-      Form<User> addForm = new Form<>("addForm",
-        new CompoundPropertyModel<>(new Model<>(new User())));
+      Form<User> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(
+          new User())));
 
       // The "username" field
       TextField<String> usernameField = new TextFieldWithFeedback<>("username");
@@ -123,27 +131,27 @@ public class AddUserPage
 
       // The "confirmPassword" field
       PasswordTextFieldWithFeedback confirmPasswordField = new PasswordTextFieldWithFeedback(
-        "confirmPassword", Model.of(""));
+          "confirmPassword", Model.of(""));
       confirmPasswordField.setRequired(true);
       addForm.add(confirmPasswordField);
 
       addForm.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 
       // The "expiredPassword" field
-      CheckBox expiredPasswordCheckbox = new CheckBox("expiredPassword",
-        new PropertyModel<>(this, "expiredPassword"));
+      CheckBox expiredPasswordCheckbox = new CheckBox("expiredPassword", new PropertyModel<>(this,
+          "expiredPassword"));
       expiredPasswordCheckbox.setRequired(false);
       addForm.add(expiredPasswordCheckbox);
 
       // The "userLocked" field
-      CheckBox userLockedCheckbox = new CheckBox("userLocked",
-        new PropertyModel<>(this, "userLocked"));
+      CheckBox userLockedCheckbox = new CheckBox("userLocked", new PropertyModel<>(this,
+          "userLocked"));
       userLockedCheckbox.setRequired(false);
       addForm.add(userLockedCheckbox);
 
       // The "groupName" field
       DropDownChoice<String> groupNameField = new DropDownChoiceWithFeedback<>("groupName",
-        new PropertyModel<>(this, "groupName"), getGroupOptions(userDirectoryId));
+          new PropertyModel<>(this, "groupName"), getGroupOptions(userDirectoryId));
       groupNameField.setRequired(false);
       addForm.add(groupNameField);
 
@@ -168,9 +176,7 @@ public class AddUserPage
 
               return;
             }
-            catch (UserNotFoundException ignored)
-            {
-            }
+            catch (UserNotFoundException ignored) {}
 
             securityService.createUser(userDirectoryId, user, expiredPassword, userLocked);
 
@@ -213,12 +219,6 @@ public class AddUserPage
       throw new WebApplicationException("Failed to initialise the AddUserPage", e);
     }
   }
-
-  /**
-   * Hidden <code>AddUserPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddUserPage() {}
 
   private List<String> getGroupOptions(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, guru.mmp.application.security.SecurityException

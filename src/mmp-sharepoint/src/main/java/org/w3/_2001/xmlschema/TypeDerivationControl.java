@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -35,6 +37,11 @@ public enum TypeDerivationControl
 
   private final DerivationControl value;
 
+  TypeDerivationControl(DerivationControl v)
+  {
+    value = v;
+  }
+
   /**
    * Method description
    *
@@ -53,11 +60,6 @@ public enum TypeDerivationControl
     }
 
     throw new IllegalArgumentException(v.toString());
-  }
-
-  TypeDerivationControl(DerivationControl v)
-  {
-    value = v;
   }
 
   /**

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.UserDirectoryType;
 import guru.mmp.application.web.WebApplicationException;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -23,6 +25,8 @@ import org.apache.wicket.model.IModel;
 
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryTypeChoiceRenderer</code> class implements a <code>ChoiceRenderer</code>
@@ -77,8 +81,8 @@ public class UserDirectoryTypeChoiceRenderer
    *
    * @return a choice from the list that has this id
    */
-  public UserDirectoryType getObject(
-    String id, IModel<? extends List<? extends UserDirectoryType>> choices)
+  public UserDirectoryType getObject(String id,
+      IModel<? extends List<? extends UserDirectoryType>> choices)
   {
     UUID uuid = UUID.fromString(id);
 
@@ -90,7 +94,7 @@ public class UserDirectoryTypeChoiceRenderer
       }
     }
 
-    throw new WebApplicationException(
-      "Failed to find the user directory type with ID (" + id + ")");
+    throw new WebApplicationException("Failed to find the user directory type with ID (" + id
+        + ")");
   }
 }

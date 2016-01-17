@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
@@ -24,14 +26,15 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DetachableCodeCategoryModel</code> class provides a detachable model
  * implementation for the <code>CodeCategory</code> model class.
  *
  * @author Marcus Portmann
  */
-public class DetachableCodeCategoryModel
-  extends InjectableLoadableDetachableModel<CodeCategory>
+public class DetachableCodeCategoryModel extends InjectableLoadableDetachableModel<CodeCategory>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -43,6 +46,14 @@ public class DetachableCodeCategoryModel
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
   private UUID id;
+
+  /**
+   * Constructs a new <code>DetachableCodeCategoryModel</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected DetachableCodeCategoryModel() {}
 
   /**
    * Constructs a new <code>DetachableCodeCategoryModel</code>.
@@ -68,14 +79,6 @@ public class DetachableCodeCategoryModel
   }
 
   /**
-   * Constructs a new <code>DetachableCodeCategoryModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected DetachableCodeCategoryModel() {}
-
-  /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()
    */
   @Override
@@ -88,7 +91,7 @@ public class DetachableCodeCategoryModel
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format("Failed to load the code category (%s)", id),
-        e);
+          e);
     }
   }
 

@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -22,8 +24,7 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "include")
-public class Include
-  extends Annotated
+public class Include extends Annotated
 {
   @XmlAttribute(name = "schemaLocation", required = true)
   @XmlSchemaType(name = "anyURI")

@@ -16,9 +16,13 @@
 
 package guru.mmp.application.messaging.handler;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IMessageHandler</code> interface defines the interface that must be implemented by all

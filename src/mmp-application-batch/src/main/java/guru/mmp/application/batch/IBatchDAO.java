@@ -16,7 +16,11 @@
 
 package guru.mmp.application.batch;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.persistence.DAOException;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;

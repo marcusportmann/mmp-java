@@ -16,6 +16,8 @@
 
 package guru.mmp.application.messaging.messages;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.WbxmlMessageData;
@@ -26,6 +28,8 @@ import guru.mmp.common.wbxml.Encoder;
 
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>SubmitErrorReportResponseData</code> class manages the data for a
  * "Submit Error Report Response" message.
@@ -35,8 +39,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SubmitErrorReportResponseData
-  extends WbxmlMessageData
+public class SubmitErrorReportResponseData extends WbxmlMessageData
 {
   /**
    * The message returned when a submitted error report is successfully processed.
@@ -47,7 +50,7 @@ public class SubmitErrorReportResponseData
    * The UUID for the "Submit Error Report Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
+      "8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
 
   /**
    * The error code indicating the result of processing the submitted error report where a code
@@ -115,8 +118,9 @@ public class SubmitErrorReportResponseData
       return false;
     }
 
-    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage")) ||
-      (!rootElement.hasChild("ErrorReportId")))
+    if ((!rootElement.hasChild("ErrorCode"))
+        || (!rootElement.hasChild("ErrorMessage"))
+        || (!rootElement.hasChild("ErrorReportId")))
     {
       return false;
     }
@@ -231,8 +235,8 @@ public class SubmitErrorReportResponseData
   @Override
   public String toString()
   {
-    return "SubmitErrorReportResponseData {" + "errorReportId=\"" + errorReportId + "\", " +
-      "errorCode=\"" + errorCode + "\", " + "errorMessage=\"" + StringUtil.notNull(errorMessage) +
-      "\"" + "}";
+    return "SubmitErrorReportResponseData {" + "errorReportId=\"" + errorReportId + "\", "
+        + "errorCode=\"" + errorCode + "\", " + "errorMessage=\"" + StringUtil.notNull(
+        errorMessage) + "\"" + "}";
   }
 }

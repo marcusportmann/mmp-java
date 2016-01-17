@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
 import guru.mmp.application.security.UserNotFoundException;
@@ -25,14 +27,15 @@ import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>DetachableUserModel</code> class provides a detachable model
  * implementation for the <code>User</code> model class.
  *
  * @author Marcus Portmann
  */
-public class DetachableUserModel
-  extends InjectableLoadableDetachableModel<User>
+public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -49,6 +52,14 @@ public class DetachableUserModel
    * The username for the user.
    */
   private String username;
+
+  /**
+   * Constructs a new <code>DetachableUserModel</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected DetachableUserModel() {}
 
   /**
    * Constructs a new <code>DetachableUserModel</code>.
@@ -74,14 +85,6 @@ public class DetachableUserModel
     this.userDirectoryId = userDirectoryId;
     this.username = username;
   }
-
-  /**
-   * Constructs a new <code>DetachableUserModel</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected DetachableUserModel() {}
 
   /**
    * @see org.apache.wicket.model.LoadableDetachableModel#load()

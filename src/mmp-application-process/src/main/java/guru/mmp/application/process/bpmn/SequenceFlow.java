@@ -16,11 +16,15 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SequenceFlow</code> class represents a SequenceFlow that forms part of a Process.
@@ -45,8 +49,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public final class SequenceFlow
-  extends FlowElement
+public final class SequenceFlow extends FlowElement
 {
   /**
    * If <code>false</code> the participants MAY send messages to each other between the elements

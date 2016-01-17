@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
@@ -28,13 +30,10 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
  *
  * @author Marcus Portmann
  */
-public class PagingNavigationLink<T>
-  extends Link<T>
+public class PagingNavigationLink<T> extends Link<T>
 {
   private static final long serialVersionUID = 1000000;
-
   protected IPageable pageable;
-
   private long pageNumber;
 
   /**

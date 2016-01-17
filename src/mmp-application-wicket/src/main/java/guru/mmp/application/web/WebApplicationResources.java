@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 

@@ -16,20 +16,28 @@
 
 package guru.mmp.application.sms;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.concurrent.Future;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundSMSSender</code> class implements the Background SMS Sender.
  *
  * @author Marcus Portmann
  */
-@Singleton
+@ApplicationScoped
+@Default
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
 public class BackgroundSMSSender
 {
@@ -68,7 +76,7 @@ public class BackgroundSMSSender
     else
     {
       logger.error(
-        "Failed to initialise the Background SMS Sender: The SMS Service was NOT injected");
+          "Failed to initialise the Background SMS Sender: The SMS Service was NOT injected");
     }
   }
 
@@ -160,9 +168,8 @@ public class BackgroundSMSSender
         }
         catch (Throwable f)
         {
-          logger.error(
-            String.format("Failed to increment the send attempts for the queued SMS (%d)",
-              sms.getId()), f);
+          logger.error(String.format(
+              "Failed to increment the send attempts for the queued SMS (%d)", sms.getId()), f);
         }
 
         try
@@ -175,8 +182,8 @@ public class BackgroundSMSSender
           if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts())
           {
             logger.warn(String.format(
-              "The queued SMS (%d) has exceeded the maximum  number of send attempts and will be " +
-                "marked as \"Failed\"", sms.getId()));
+                "The queued SMS (%d) has exceeded the maximum  number of send attempts and will be "
+                + "marked as \"Failed\"", sms.getId()));
 
             smsService.unlockSMS(sms.getId(), SMS.Status.FAILED);
           }
@@ -188,7 +195,7 @@ public class BackgroundSMSSender
         catch (Throwable f)
         {
           logger.error(String.format("Failed to unlock and set the status for the queued SMS (%d)",
-            sms.getId()), f);
+              sms.getId()), f);
         }
       }
     }

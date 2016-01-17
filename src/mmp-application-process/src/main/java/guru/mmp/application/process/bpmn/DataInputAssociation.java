@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.w3c.dom.Element;
 
 /**
@@ -38,8 +40,7 @@ import org.w3c.dom.Element;
  *
  * @author Marcus Portmann
  */
-public final class DataInputAssociation
-  extends DataAssociation
+public final class DataInputAssociation extends DataAssociation
 {
   /**
    * Constructs a new <code>DataInputAssociation</code>.

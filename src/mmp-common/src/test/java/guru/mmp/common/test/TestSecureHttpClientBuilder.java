@@ -16,14 +16,20 @@
 
 package guru.mmp.common.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.http.SecureHttpClientBuilder;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -56,8 +62,8 @@ public class TestSecureHttpClientBuilder
     // Configure the connection
     SecureHttpClientBuilder secureHttpClientBuilder = new SecureHttpClientBuilder();
 
-    RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(
-      30000).setConnectTimeout(30000).setSocketTimeout(30000).build();
+    RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(30000)
+        .setConnectTimeout(30000).setSocketTimeout(30000).build();
 
     secureHttpClientBuilder.setDefaultRequestConfig(requestConfig);
 

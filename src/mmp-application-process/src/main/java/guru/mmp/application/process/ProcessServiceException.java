@@ -25,8 +25,7 @@ package guru.mmp.application.process;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ProcessServiceException
-  extends Exception
+public class ProcessServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

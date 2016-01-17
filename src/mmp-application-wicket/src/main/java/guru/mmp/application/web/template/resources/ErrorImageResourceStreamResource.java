@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.resources;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.request.resource.caching.IResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
@@ -28,8 +30,7 @@ import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ErrorImageResourceStreamResource
-  extends ResourceStreamResource
+public class ErrorImageResourceStreamResource extends ResourceStreamResource
 {
   private static final long serialVersionUID = 1000000;
 

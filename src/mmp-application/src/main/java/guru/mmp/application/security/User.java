@@ -16,6 +16,8 @@
 
 package guru.mmp.application.security;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
@@ -29,29 +31,17 @@ public class User
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-
-  private String email;
-
-  private String firstNames;
-
-  private UUID id;
-
-  private boolean isReadOnly;
-
-  private String lastName;
-
-  private String mobileNumber;
-
-  private String password;
-
-  private Integer passwordAttempts;
-
-  private Date passwordExpiry;
-
   private HashMap<String, String> properties = new HashMap<>();
-
+  private String email;
+  private String firstNames;
+  private UUID id;
+  private boolean isReadOnly;
+  private String lastName;
+  private String mobileNumber;
+  private String password;
+  private Integer passwordAttempts;
+  private Date passwordExpiry;
   private UUID userDirectoryId;
-
   private String username;
 
   /**

@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -26,13 +28,10 @@ import org.apache.wicket.markup.html.panel.Panel;
  *
  * @author Marcus Portmann
  */
-public class PagingNavigator
-  extends Panel
+public class PagingNavigator extends Panel
 {
   private static final long serialVersionUID = 1000000;
-
   private boolean isVisible;
-
   private IPageable pageable;
 
   /**
@@ -85,8 +84,8 @@ public class PagingNavigator
    *
    * @return the increment link
    */
-  protected AbstractLink newPagingNavigationIncrementLink(
-    String id, IPageable pageable, int increment)
+  protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable,
+      int increment)
   {
     return new PagingNavigationIncrementLink<Void>(id, pageable, increment);
   }

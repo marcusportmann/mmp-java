@@ -16,8 +16,11 @@
 
 package guru.mmp.common.model;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 /**
@@ -27,17 +30,12 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ModelException
-  extends Exception
+public class ModelException extends Exception
 {
   private static final String NO_ERROR_CODE = "NONE";
-
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
-
   private static final long serialVersionUID = 1000000;
-
   private String code;
-
   private Date when;
 
   /**
@@ -122,7 +120,9 @@ public class ModelException
    */
   public String getCode()
   {
-    return (code == null) ? NO_ERROR_CODE : code;
+    return (code == null)
+        ? NO_ERROR_CODE
+        : code;
   }
 
   /**

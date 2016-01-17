@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.servlets;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Encoder;
 import guru.mmp.common.wbxml.Parser;
@@ -33,14 +35,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>WBXMLServlet</code> servlet acts as an endpoint that remote clients can use to send
  * and receive WBXML messages.
  *
  * @author Marcus Portmann
  */
-public class WBXMLServlet
-  extends HttpServlet
+public class WBXMLServlet extends HttpServlet
 {
   /**
    * The HTTP content-type used when receiving and sending WBXML.
@@ -49,7 +52,6 @@ public class WBXMLServlet
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WBXMLServlet.class);
-
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -78,12 +80,11 @@ public class WBXMLServlet
     throws ServletException, IOException
   {
     // Check the format of the request data
-    if ((request.getContentType() == null) || (!request.getContentType().equals(
-      WBXML_CONTENT_TYPE)))
+    if ((request.getContentType() == null)
+        || (!request.getContentType().equals(WBXML_CONTENT_TYPE)))
     {
-      response.sendError(500,
-        "Invalid content type (" + request.getContentType() + ") expecting (" +
-          WBXML_CONTENT_TYPE + ")");
+      response.sendError(500, "Invalid content type (" + request.getContentType() + ") expecting ("
+          + WBXML_CONTENT_TYPE + ")");
 
       return;
     }
@@ -155,9 +156,7 @@ public class WBXMLServlet
           in.close();
         }
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
 
     try
@@ -168,8 +167,8 @@ public class WBXMLServlet
     }
     catch (Throwable e)
     {
-      throw new ServletException(
-        "Failed to parse the WBXML request document from the HTTP" + " servlet request", e);
+      throw new ServletException("Failed to parse the WBXML request document from the HTTP"
+          + " servlet request", e);
     }
   }
 
@@ -192,11 +191,11 @@ public class WBXMLServlet
       pw.println("<head>");
       pw.println("  <style>");
       pw.println(
-        "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
+          "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
       pw.println(
-        "    h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
-      pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green; " +
-        "thirdparty-weight: bold; thirdparty-size: 9pt;}");
+          "    h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
+      pw.println("    .section {padding-top: 10px; padding-bottom: 2px; color: green; "
+          + "thirdparty-weight: bold; thirdparty-size: 9pt;}");
       pw.println("    .className {color: 808080;}");
       pw.println("  </style>");
       pw.println("</head>");
@@ -208,9 +207,7 @@ public class WBXMLServlet
       pw.println("</body>");
       pw.println("</html>");
     }
-    catch (IOException ignored)
-    {
-    }
+    catch (IOException ignored) {}
   }
 
   /**
@@ -235,8 +232,8 @@ public class WBXMLServlet
     catch (Throwable e)
     {
       logger.error(
-        "Failed to write the binary data for the WBXML response document to the HTTP servlet " +
-          "response", e);
+          "Failed to write the binary data for the WBXML response document to the HTTP servlet "
+          + "response", e);
     }
   }
 }

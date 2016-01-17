@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
@@ -28,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>GroupDataProvider</code> class provides an <code>IDataProvider</code>
  * implementation that retrieves a list of <code>Group</code> instances from the Security Service
@@ -35,8 +39,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class GroupDataProvider
-  extends InjectableDataProvider<Group>
+public class GroupDataProvider extends InjectableDataProvider<Group>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -51,6 +54,14 @@ public class GroupDataProvider
 
   /**
    * Constructs a new <code>GroupDataProvider</code>.
+   * <p/>
+   * Hidden default constructor to support CDI.
+   */
+  @SuppressWarnings("unused")
+  protected GroupDataProvider() {}
+
+  /**
+   * Constructs a new <code>GroupDataProvider</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
@@ -59,14 +70,6 @@ public class GroupDataProvider
   {
     this.userDirectoryId = userDirectoryId;
   }
-
-  /**
-   * Constructs a new <code>GroupDataProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected GroupDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -105,8 +108,8 @@ public class GroupDataProvider
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-        "Failed to load the groups from index (%d) to (%d) for the user directory (%s)", first,
-        first + count, userDirectoryId), e);
+          "Failed to load the groups from index (%d) to (%d) for the user directory (%s)", first,
+          first + count, userDirectoryId), e);
     }
   }
 
@@ -150,9 +153,9 @@ public class GroupDataProvider
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        String.format("Failed to retrieve the number of groups for the user directory (%s)",
-          userDirectoryId), e);
+      throw new WebApplicationException(String.format(
+          "Failed to retrieve the number of groups for the user directory (%s)", userDirectoryId),
+          e);
     }
   }
 }

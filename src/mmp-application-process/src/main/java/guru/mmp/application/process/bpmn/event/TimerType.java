@@ -26,8 +26,13 @@ public enum TimerType
   DATE(0, "Date"), CYCLE(1, "Cycle"), DURATION(2, "Duration");
 
   private int code;
-
   private String name;
+
+  TimerType(int code, String name)
+  {
+    this.code = code;
+    this.name = name;
+  }
 
   /**
    * Returns the Timer type given by the specified numeric code value.
@@ -52,12 +57,6 @@ public enum TimerType
       default:
         throw new RuntimeException("Unknown Timer type (" + code + ")");
     }
-  }
-
-  TimerType(int code, String name)
-  {
-    this.code = code;
-    this.name = name;
   }
 
   /**

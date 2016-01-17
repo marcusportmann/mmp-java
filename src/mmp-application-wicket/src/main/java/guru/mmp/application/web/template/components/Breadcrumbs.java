@@ -16,6 +16,8 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
@@ -37,8 +39,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  *
  * @author Marcus Portmann
  */
-public class Breadcrumbs
-  extends Component
+public class Breadcrumbs extends Component
 {
   private static final long serialVersionUID = 1000000;
 
@@ -81,8 +82,7 @@ public class Breadcrumbs
            */
           if (navigationState.isLastPageAccessedInNavigationHierarchy(getPage()))
           {
-            response.write(
-              navigationState.getCachedBreadcrumbsHTML());
+            response.write(navigationState.getCachedBreadcrumbsHTML());
 
             return;
           }
@@ -94,8 +94,7 @@ public class Breadcrumbs
            */
           if (!webSession.getNavigation().isPageInNavigationHierarchy(getPage()))
           {
-            response.write(
-              navigationState.getCachedBreadcrumbsHTML());
+            response.write(navigationState.getCachedBreadcrumbsHTML());
 
             return;
           }
@@ -119,7 +118,7 @@ public class Breadcrumbs
         if (clazz.isAssignableFrom(getPage().getPageClass()))
         {
           buffer.append(
-            "<li class=\"active\"><a href=\"#\"><i class=\"fa-home\"></i>Home</a></li>");
+              "<li class=\"active\"><a href=\"#\"><i class=\"fa-home\"></i>Home</a></li>");
         }
         else
         {

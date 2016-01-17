@@ -16,6 +16,8 @@
 
 package guru.mmp.common.corba;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.jacorb.config.Configuration;
 
 /**
@@ -25,8 +27,7 @@ import org.jacorb.config.Configuration;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class LoggingInitializer
-  extends org.jacorb.config.LoggingInitializer
+public class LoggingInitializer extends org.jacorb.config.LoggingInitializer
 {
   /**
    * Initialise the JacORB logging.

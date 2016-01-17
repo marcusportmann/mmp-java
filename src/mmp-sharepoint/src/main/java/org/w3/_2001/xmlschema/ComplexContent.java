@@ -1,5 +1,7 @@
 package org.w3._2001.xmlschema;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -24,16 +26,13 @@ import javax.xml.bind.annotation.*;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"extension", "restriction"})
+@XmlType(name = "", propOrder = { "extension", "restriction" })
 @XmlRootElement(name = "complexContent")
-public class ComplexContent
-  extends Annotated
+public class ComplexContent extends Annotated
 {
   protected ExtensionType extension;
-
   @XmlAttribute(name = "mixed")
   protected Boolean mixed;
-
   protected ComplexRestrictionType restriction;
 
   /**

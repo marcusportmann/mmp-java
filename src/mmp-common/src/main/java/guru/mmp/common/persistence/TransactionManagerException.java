@@ -23,8 +23,7 @@ package guru.mmp.common.persistence;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TransactionManagerException
-  extends RuntimeException
+public class TransactionManagerException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

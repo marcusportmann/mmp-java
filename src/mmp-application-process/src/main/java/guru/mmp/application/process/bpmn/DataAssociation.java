@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.xml.XmlUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,6 +26,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DataAssociation</code> class represents a DataAssociation that forms part of a Process.
@@ -60,8 +64,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class DataAssociation
-  extends BaseElement
+public abstract class DataAssociation extends BaseElement
 {
   /**
    * The data element Assignments.

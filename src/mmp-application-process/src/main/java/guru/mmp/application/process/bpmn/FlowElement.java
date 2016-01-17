@@ -16,12 +16,16 @@
 
 package guru.mmp.application.process.bpmn;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>FlowElement</code> class provides the base class that all FlowElements that form part
@@ -47,8 +51,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public abstract class FlowElement
-  extends BaseElement
+public abstract class FlowElement extends BaseElement
 {
   /**
    * The name of the FlowElement.

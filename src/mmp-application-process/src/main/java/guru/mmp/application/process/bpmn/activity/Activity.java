@@ -16,6 +16,8 @@
 
 package guru.mmp.application.process.bpmn.activity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.process.bpmn.*;
 import guru.mmp.common.util.StringUtil;
 import org.w3c.dom.Element;
@@ -24,6 +26,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Activity</code> class provides the base class that all Activity subclasses should be
@@ -58,9 +62,23 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class Activity
-  extends FlowNode
+public abstract class Activity extends FlowNode
 {
+  /**
+   * The modeler-defined properties for the Activity.
+   * <p/>
+   * These properties are contained within the Activity.
+   */
+  private List<Property> properties = new ArrayList<>();
+
+  /**
+   * The resources that will perform or will be responsible for the Activity.
+   * <p/>
+   * A resource, e.g. a performer, can be specified in the form of a specific individual, a group,
+   * an organization role or position, or an organization.
+   */
+  private List<ResourceRole> resources = new ArrayList<>();
+
   /**
    * The number of tokens will be sent down any outgoing Sequence Flow (assuming any Sequence Flow
    * conditions are satisfied).
@@ -101,21 +119,6 @@ public abstract class Activity
   private LoopCharacteristics loopCharacteristics;
 
   /**
-   * The modeler-defined properties for the Activity.
-   * <p/>
-   * These properties are contained within the Activity.
-   */
-  private List<Property> properties = new ArrayList<>();
-
-  /**
-   * The resources that will perform or will be responsible for the Activity.
-   * <p/>
-   * A resource, e.g. a performer, can be specified in the form of a specific individual, a group,
-   * an organization role or position, or an organization.
-   */
-  private List<ResourceRole> resources = new ArrayList<>();
-
-  /**
    * The number of tokens that MUST arrive before the Activity can begin.
    * <p/>
    * The default value is 1. The value MUST NOT be less than 1. This attribute defines the number
@@ -136,9 +139,8 @@ public abstract class Activity
 
     try
     {
-      this.isForCompensation = !StringUtil.isNullOrEmpty(
-        element.getAttribute("isForCompensation")) && Boolean.parseBoolean(
-        element.getAttribute("isForCompensation"));
+      this.isForCompensation = !StringUtil.isNullOrEmpty(element.getAttribute("isForCompensation"))
+          && Boolean.parseBoolean(element.getAttribute("isForCompensation"));
 
       if (StringUtil.isNullOrEmpty(element.getAttribute("startQuantity")))
       {
@@ -191,16 +193,14 @@ public abstract class Activity
 
             case "dataInputAssociation":
             {
-              throw new ParserException(
-                "Failed to parse the unsupported XML element (" + childElement.getNodeName() +
-                  ")");
+              throw new ParserException("Failed to parse the unsupported XML element ("
+                  + childElement.getNodeName() + ")");
             }
 
             case "dataOutputAssociation":
             {
-              throw new ParserException(
-                "Failed to parse the unsupported XML element (" + childElement.getNodeName() +
-                  ")");
+              throw new ParserException("Failed to parse the unsupported XML element ("
+                  + childElement.getNodeName() + ")");
             }
 
             case "resourceRole":
@@ -219,8 +219,8 @@ public abstract class Activity
 
             default:
             {
-              throw new ParserException(
-                "Failed to parse the unknown XML element (" + childElement.getNodeName() + ")");
+              throw new ParserException("Failed to parse the unknown XML element ("
+                  + childElement.getNodeName() + ")");
             }
           }
         }

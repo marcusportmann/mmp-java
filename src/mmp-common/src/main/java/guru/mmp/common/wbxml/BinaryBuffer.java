@@ -16,6 +16,8 @@
 
 package guru.mmp.common.wbxml;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -30,7 +32,6 @@ public class BinaryBuffer
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-
   private ByteArrayOutputStream stream = null;
 
   /**
@@ -54,9 +55,7 @@ public class BinaryBuffer
     {
       stream.write(data);
     }
-    catch (IOException ignored)
-    {
-    }
+    catch (IOException ignored) {}
   }
 
   /**
@@ -82,9 +81,7 @@ public class BinaryBuffer
     {
       stream.write(data);
     }
-    catch (IOException ignored)
-    {
-    }
+    catch (IOException ignored) {}
   }
 
   /**

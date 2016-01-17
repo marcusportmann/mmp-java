@@ -16,16 +16,24 @@
 
 package guru.mmp.common.persistence;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.common.util.StringUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.*;
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>DAOUtil</code> class provides utility functions used by the Data Access Objects (DAOs).
@@ -35,48 +43,10 @@ import java.util.StringTokenizer;
 @SuppressWarnings("unused")
 public class DAOUtil
 {
-  private static String cleanSQL(String text)
-  {
-    if (text == null)
-    {
-      throw new NullPointerException("Failed to clean the null SQL string");
-    }
-
-    // Strip whitespace from the beginning and end of the text
-    text = text.trim();
-
-    // If this is an empty string then stop here
-    if (text.length() == 0)
-    {
-      return text;
-    }
-
-    // First remove the new line characters
-    int index = text.length() - 1;
-
-    while ((index >= 0) && ((text.charAt(index) == '\r') || (text.charAt(index) == '\n')))
-    {
-      index--;
-    }
-
-    if (index < 0)
-    {
-      return "";
-    }
-
-    text = text.substring(0, index + 1);
-
-    // Replace multiple spaces with a single space
-    while (text.contains("  "))
-    {
-      text = text.replaceAll("  ", " ");
-    }
-
-    // Replace tabs with a single space
-    text = text.replaceAll("\t", " ");
-
-    return text;
-  }
+  /**
+   * Private default constructor to enforce utility pattern.
+   */
+  private DAOUtil() {}
 
   /**
    * Close the connection.
@@ -178,7 +148,7 @@ public class DAOUtil
         catch (Throwable e)
         {
           throw new RuntimeException(
-            "Failed to rollback the entity manager transaction and close the entity manager", e);
+              "Failed to rollback the entity manager transaction and close the entity manager", e);
         }
       }
       else
@@ -190,7 +160,7 @@ public class DAOUtil
         catch (Throwable e)
         {
           throw new RuntimeException(
-            "Failed to commit the entity manager transaction and close the entity manager", e);
+              "Failed to commit the entity manager transaction and close the entity manager", e);
         }
       }
     }
@@ -268,8 +238,36 @@ public class DAOUtil
     }
     catch (Throwable e)
     {
-      throw new SQLException(
-        "Failed to execute the SQL statements in the resource file (" + resourcePath + ")", e);
+      throw new SQLException("Failed to execute the SQL statements in the resource file ("
+          + resourcePath + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the schema separator for the database associated with the specified data source.
+   *
+   * @param dataSource
+   *
+   * @return the schema separator for the database associated with the specified data source
+   *
+   * @throws SQLException
+   */
+  public static String getSchemaSeparator(DataSource dataSource)
+    throws SQLException
+  {
+    try (Connection connection = dataSource.getConnection())
+    {
+      DatabaseMetaData metaData = connection.getMetaData();
+
+      // Retrieve the schema separator for the database
+      String schemaSeparator = metaData.getCatalogSeparator();
+
+      if ((schemaSeparator == null) || (schemaSeparator.length() == 0))
+      {
+        schemaSeparator = ".";
+      }
+
+      return schemaSeparator;
     }
   }
 
@@ -290,8 +288,8 @@ public class DAOUtil
 
     try
     {
-      reader = new BufferedReader(new InputStreamReader(
-        Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath)));
+      reader = new BufferedReader(new InputStreamReader(Thread.currentThread()
+          .getContextClassLoader().getResourceAsStream(resourcePath)));
 
       StringBuilder multiLineBuffer = null;
       String line;
@@ -394,9 +392,8 @@ public class DAOUtil
 
       if (multiLineBuffer != null)
       {
-        throw new IOException(
-          "Failed to process the last SQL statement from the file (" + resourcePath + ") since " +
-            "it was not terminated by a ';'");
+        throw new IOException("Failed to process the last SQL statement from the file ("
+            + resourcePath + ") since " + "it was not terminated by a ';'");
       }
 
       return sqlStatements;
@@ -410,9 +407,7 @@ public class DAOUtil
           reader.close();
         }
       }
-      catch (Throwable ignored)
-      {
-      }
+      catch (Throwable ignored) {}
     }
   }
 
@@ -450,8 +445,8 @@ public class DAOUtil
     }
     catch (IOException e)
     {
-      throw new SQLException(
-        "An IO error occurred while reading the BLOB from the database: " + e.getMessage());
+      throw new SQLException("An IO error occurred while reading the BLOB from the database: "
+          + e.getMessage());
     }
     finally
     {
@@ -648,8 +643,8 @@ public class DAOUtil
    * @throws SQLException
    */
   @SuppressWarnings("resource")
-  public static boolean tableExists(
-    Connection connection, String catalog, String schema, String table)
+  public static boolean tableExists(Connection connection, String catalog, String schema,
+      String table)
     throws SQLException
   {
     ResultSet rs = null;
@@ -669,7 +664,7 @@ public class DAOUtil
 
       DatabaseMetaData metaData = connection.getMetaData();
 
-      rs = metaData.getTables(catalog, schema, table, new String[]{"TABLE"});
+      rs = metaData.getTables(catalog, schema, table, new String[] { "TABLE" });
 
       while (rs.next())
       {
@@ -703,8 +698,8 @@ public class DAOUtil
    * @throws SQLException
    */
   @SuppressWarnings("resource")
-  public static boolean tableExists(
-    DataSource dataSource, String catalog, String schema, String table)
+  public static boolean tableExists(DataSource dataSource, String catalog, String schema,
+      String table)
     throws SQLException
   {
     Connection connection = null;
@@ -727,7 +722,7 @@ public class DAOUtil
 
       DatabaseMetaData metaData = connection.getMetaData();
 
-      rs = metaData.getTables(catalog, schema, table, new String[]{"TABLE"});
+      rs = metaData.getTables(catalog, schema, table, new String[] { "TABLE" });
 
       while (rs.next())
       {
@@ -748,8 +743,46 @@ public class DAOUtil
     }
   }
 
-  /**
-   * Private default constructor to enforce utility pattern.
-   */
-  private DAOUtil() {}
+  private static String cleanSQL(String text)
+  {
+    if (text == null)
+    {
+      throw new NullPointerException("Failed to clean the null SQL string");
+    }
+
+    // Strip whitespace from the beginning and end of the text
+    text = text.trim();
+
+    // If this is an empty string then stop here
+    if (text.length() == 0)
+    {
+      return text;
+    }
+
+    // First remove the new line characters
+    int index = text.length() - 1;
+
+    while ((index >= 0) && ((text.charAt(index) == '\r') || (text.charAt(index) == '\n')))
+    {
+      index--;
+    }
+
+    if (index < 0)
+    {
+      return "";
+    }
+
+    text = text.substring(0, index + 1);
+
+    // Replace multiple spaces with a single space
+    while (text.contains("  "))
+    {
+      text = text.replaceAll("  ", " ");
+    }
+
+    // Replace tabs with a single space
+    text = text.replaceAll("\t", " ");
+
+    return text;
+  }
 }
