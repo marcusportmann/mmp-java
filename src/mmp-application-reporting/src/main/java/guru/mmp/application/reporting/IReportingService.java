@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * The <code>IReportingService</code> interface defines the functionality that must be provided by
- * a Reporting Service implementation.
+ * The <code>IReportingService</code> interface defines the functionality provided by a Reporting
+ * Service implementation.
  *
  * @author Marcus Portmann
  */

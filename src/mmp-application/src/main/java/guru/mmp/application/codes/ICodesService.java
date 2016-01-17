@@ -22,8 +22,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * The <code>ICodesService</code> interface defines the functionality that must be provided by a
- * Codes Service implementation.
+ * The <code>ICodesService</code> interface defines the functionality provided by a Codes Service
+ * implementation.
  *
  * @author Marcus Portmann
  */

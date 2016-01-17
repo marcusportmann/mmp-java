@@ -20,8 +20,9 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 
 /**
- * The <code>IRegistry</code> interface defines the functionality provided by a "Registry" which is
- * a hierarchical store of configuration information used by applications and services.
+ * The <code>IRegistry</code> interface defines the functionality provided by a "Registry"
+ * implementation, which is a hierarchical store of configuration information used by applications
+ * and services.
  * <p/>
  * The configuration information is referenced through "paths" which use the "/" character as a
  * seperator e.g. /ConfigSection1/ConfigSection1.1/ConfigSection1.1/ConfigValueName

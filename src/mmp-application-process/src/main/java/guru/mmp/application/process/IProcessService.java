@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <code>IProcessService</code> interface defines the functionality that must be provided
- * by a Process Service implementation.
+ * The <code>IProcessService</code> interface defines the functionality provided by a Process
+ * Service implementation.
  *
  * @author Marcus Portmann
  */

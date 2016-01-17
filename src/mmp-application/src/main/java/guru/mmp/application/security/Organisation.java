@@ -28,8 +28,6 @@ public class Organisation
 {
   private static final long serialVersionUID = 1000000;
 
-  private String description;
-
   private UUID id;
 
   private String name;
@@ -38,16 +36,6 @@ public class Organisation
    * Constructs a new <code>Organisation</code>.
    */
   public Organisation() {}
-
-  /**
-   * Returns the description for the organisation.
-   *
-   * @return the description for the organisation
-   */
-  public String getDescription()
-  {
-    return description;
-  }
 
   /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
@@ -67,16 +55,6 @@ public class Organisation
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Set the description for the organisation.
-   *
-   * @param description the description for the organisation
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**

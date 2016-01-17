@@ -92,11 +92,6 @@ public class UpdateUserPage
       mobileNumberField.setRequired(false);
       updateForm.add(mobileNumberField);
 
-      // The "description" field
-      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-      descriptionField.setRequired(false);
-      updateForm.add(descriptionField);
-
       // The "updateButton" button
       Button updateButton = new Button("updateButton")
       {

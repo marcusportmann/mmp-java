@@ -17,8 +17,8 @@
 package guru.mmp.application.sms;
 
 /**
- * The <code>ISMSService</code> interface defines the functionality that must be provided by an
- * SMS Service implementation.
+ * The <code>ISMSService</code> interface defines the functionality provided by an SMS Service
+ * implementation.
  *
  * @author Marcus Portmann
  */

@@ -19,8 +19,8 @@ package guru.mmp.application.security;
 import java.util.List;
 
 /**
- * The <code>IUserDirectoryProvider</code> interface defines the functionality that must be
- * provided by a user directory, which manages users and groups.
+ * The <code>IUserDirectoryProvider</code> interface defines the functionality provided by a user
+ * directory, which manages users and groups.
  *
  * @author Marcus Portmann
  */

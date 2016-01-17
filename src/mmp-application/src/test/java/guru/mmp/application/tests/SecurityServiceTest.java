@@ -60,7 +60,6 @@ public class SecurityServiceTest
     user.setUsername("Numbered Test Username " + number);
     user.setPassword("Numbered Test Password " + number);
     user.setEmail("Numbered Test E-Mail " + number);
-    user.setDescription("Numbered Test User Description " + number);
     user.setFirstNames("Numbered Test FirstName " + number);
     user.setLastName("Numbered Test LastName " + number);
     user.setMobileNumber("Numbered Test Mobile Number " + number);
@@ -100,7 +99,6 @@ public class SecurityServiceTest
     Organisation organisation = new Organisation();
     organisation.setId(UUID.randomUUID());
     organisation.setName("Test Organisation Name " + organisationCount);
-    organisation.setDescription("Test Organisation Description " + organisationCount);
 
     return organisation;
   }
@@ -114,7 +112,6 @@ public class SecurityServiceTest
     user.setUsername("Test User Username " + userCount);
     user.setPassword("Test User Password " + userCount);
     user.setEmail("Test User E-Mail " + userCount);
-    user.setDescription("Test User Description " + userCount);
     user.setFirstNames("Test User FirstName " + userCount);
     user.setLastName("Test User LastName " + userCount);
     user.setMobileNumber("Test User Mobile Number " + userCount);
@@ -132,7 +129,6 @@ public class SecurityServiceTest
     userDirectory.setId(UUID.randomUUID());
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
-    userDirectory.setDescription("Test User Directory Description " + userDirectoryCount);
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE userDirectory " +
       "SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>" +
@@ -429,7 +425,6 @@ public class SecurityServiceTest
 
     List<Attribute> attributes = new ArrayList<>();
 
-    attributes.add(new Attribute("description", "%Description 1%"));
     attributes.add(new Attribute("email", "%E-Mail 1%"));
     attributes.add(new Attribute("firstNames", "%FirstName 1%"));
     attributes.add(new Attribute("lastName", "%LastName 1%"));
@@ -739,7 +734,6 @@ public class SecurityServiceTest
     compareOrganisations(organisation, filteredOrganisations.get(0));
 
     organisation.setName("Updated " + organisation.getName());
-    organisation.setDescription("Updated " + organisation.getDescription());
 
     securityService.updateOrganisation(organisation);
 
@@ -965,7 +959,6 @@ public class SecurityServiceTest
     compareUserDirectories(userDirectory, filteredUserDirectories.get(0));
 
     userDirectory.setName("Updated " + userDirectory.getName());
-    userDirectory.setDescription("Updated " + userDirectory.getDescription());
 
     securityService.updateUserDirectory(userDirectory);
 
@@ -1066,7 +1059,6 @@ public class SecurityServiceTest
     user.setPasswordExpiry(calendar.getTime());
     user.setPasswordAttempts(2);
     user.setEmail("Test Updated E-Mail");
-    user.setDescription("Test Updated User Description");
     user.setFirstNames("Test Updated FirstName");
     user.setLastName("Test Updated LastName");
     user.setMobileNumber("Test Updated Mobile Number");
@@ -1117,8 +1109,6 @@ public class SecurityServiceTest
       organisation2.getId());
     assertEquals("The name values for the two organisations do not match", organisation1.getName(),
       organisation2.getName());
-    assertEquals("The description values for the two organisations do not match",
-      organisation1.getDescription(), organisation2.getDescription());
   }
 
   private void compareUserDirectories(UserDirectory userDirectory1, UserDirectory userDirectory2)
@@ -1129,8 +1119,6 @@ public class SecurityServiceTest
       userDirectory1.getName(), userDirectory2.getName());
     assertEquals("The type ID values for the two user directories do not match",
       userDirectory1.getTypeId(), userDirectory2.getTypeId());
-    assertEquals("The description values for the two user directories do not match",
-      userDirectory1.getDescription(), userDirectory2.getDescription());
     assertEquals("The configuration values for the two user directories do not match",
       userDirectory1.getConfiguration(), userDirectory2.getConfiguration());
   }
@@ -1143,8 +1131,6 @@ public class SecurityServiceTest
         user1.getPasswordExpiry(), user2.getPasswordExpiry());
     }
 
-    assertEquals("The description values for the two users do not match", user1.getDescription(),
-      user2.getDescription());
     assertEquals("The e-mail values for the two users do not match", user1.getEmail(),
       user2.getEmail());
     assertEquals("The first names values for the two users do not match", user1.getFirstNames(),

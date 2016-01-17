@@ -86,11 +86,6 @@ public class UpdateUserDirectoryPage
       nameField.setRequired(true);
       updateForm.add(nameField);
 
-      // The "description" field
-      TextField<String> descriptionField = new TextFieldWithFeedback<>("description");
-      descriptionField.setRequired(false);
-      updateForm.add(descriptionField);
-
       // The "userDirectoryTypeName" field
       TextField<String> userDirectoryTypeNameField = new TextField<>("userDirectoryTypeName",
         new Model<>(userDirectoryType.getName()));

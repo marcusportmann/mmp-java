@@ -34,11 +34,6 @@ public class OrganisationData
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The description for the organisation.
-   */
-  private String description;
-
-  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    */
   private UUID id;
@@ -64,7 +59,6 @@ public class OrganisationData
     {
       this.id = UUID.fromString(element.getChildText("Id"));
       this.name = StringUtil.notNull(element.getChildText("Name"));
-      this.description = StringUtil.notNull(element.getChildText("Description"));
     }
     catch (Throwable e)
     {
@@ -81,17 +75,6 @@ public class OrganisationData
   {
     this.id = organisation.getId();
     this.name = organisation.getName();
-    this.description = organisation.getDescription();
-  }
-
-  /**
-   * Returns the description for the organisation.
-   *
-   * @return the description for the organisation
-   */
-  public String getDescription()
-  {
-    return description;
   }
 
   /**
@@ -112,16 +95,6 @@ public class OrganisationData
   public String getName()
   {
     return name;
-  }
-
-  /**
-   * Set the description for the organisation.
-   *
-   * @param description the description for the organisation
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
   }
 
   /**
@@ -155,7 +128,6 @@ public class OrganisationData
 
     organisationElement.addContent(new Element("Id", id.toString()));
     organisationElement.addContent(new Element("Name", StringUtil.notNull(name)));
-    organisationElement.addContent(new Element("Description", StringUtil.notNull(description)));
 
     return organisationElement;
   }

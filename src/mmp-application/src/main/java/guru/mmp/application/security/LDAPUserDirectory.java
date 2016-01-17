@@ -119,8 +119,6 @@ public class LDAPUserDirectory
 
   private LdapName userBaseDN;
 
-  private String userDescriptionAttribute;
-
   private String userEmailAttribute;
 
   private String userFirstNamesAttribute;
@@ -340,11 +338,6 @@ public class LDAPUserDirectory
         throw new SecurityException(String.format(
           "No UserEmailAttribute configuration parameter found for the user directory (%s)",
           userDirectoryId));
-      }
-
-      if (parameters.containsKey("UserDescriptionAttribute"))
-      {
-        userDescriptionAttribute = parameters.get("UserDescriptionAttribute");
       }
 
       if (parameters.containsKey("GroupObjectClass"))
@@ -965,12 +958,6 @@ public class LDAPUserDirectory
       {
         attributes.put(new BasicAttribute(userMobileNumberAttribute,
           StringUtil.notNull(user.getMobileNumber())));
-      }
-
-      if (!StringUtil.isNullOrEmpty(userDescriptionAttribute))
-      {
-        attributes.put(
-          new BasicAttribute(userDescriptionAttribute, StringUtil.notNull(user.getDescription())));
       }
 
       String passwordHash;
@@ -2321,12 +2308,6 @@ public class LDAPUserDirectory
             StringUtil.notNull(user.getMobileNumber()))));
       }
 
-      if (!StringUtil.isNullOrEmpty(userDescriptionAttribute))
-      {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-          new BasicAttribute(userDescriptionAttribute, StringUtil.notNull(user.getDescription()))));
-      }
-
       if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute)) &&
         (user.getPasswordAttempts() != null))
       {
@@ -2504,16 +2485,6 @@ public class LDAPUserDirectory
         user.setPasswordExpiry(new Date(
           Long.parseLong(String.valueOf(attributes.get(userPasswordExpiryAttribute).get()))));
       }
-    }
-
-    if ((!StringUtil.isNullOrEmpty(userDescriptionAttribute)) && (attributes.get(
-      userDescriptionAttribute) != null))
-    {
-      user.setDescription(String.valueOf(attributes.get(userDescriptionAttribute).get()));
-    }
-    else
-    {
-      user.setDescription("");
     }
 
     user.setProperty("dn",

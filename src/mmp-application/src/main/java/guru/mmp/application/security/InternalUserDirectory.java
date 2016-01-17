@@ -96,7 +96,7 @@ public class InternalUserDirectory
 
   private String getNumberOfInternalUsersSQL;
 
-  private String getNumberOfUsersForGroupSQL;
+  private String getNumberOfInternalUsersForInternalGroupSQL;
 
   private String incrementPasswordAttemptsSQL;
 
@@ -624,8 +624,6 @@ public class InternalUserDirectory
         statement.setTimestamp(10, new Timestamp(expiryTime));
         user.setPasswordExpiry(new Date(expiryTime));
       }
-
-      statement.setString(11, StringUtil.notNull(user.getDescription()));
 
       if (statement.executeUpdate() != 1)
       {
@@ -1523,11 +1521,6 @@ public class InternalUserDirectory
         fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET MOBILE=?" : ", MOBILE=?");
       }
 
-      if (user.getDescription() != null)
-      {
-        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET DESCRIPTION=?" : ", DESCRIPTION=?");
-      }
-
       if (!StringUtil.isNullOrEmpty(user.getPassword()))
       {
         fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET PASSWORD=?" : ", PASSWORD=?");
@@ -1569,12 +1562,6 @@ public class InternalUserDirectory
         if (user.getMobileNumber() != null)
         {
           statement.setString(parameterIndex, user.getMobileNumber());
-          parameterIndex++;
-        }
-
-        if (user.getDescription() != null)
-        {
-          statement.setString(parameterIndex, user.getDescription());
           parameterIndex++;
         }
 
@@ -1682,8 +1669,7 @@ public class InternalUserDirectory
     // createInternalUserSQL
     createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS" + " (ID, " +
       "USER_DIRECTORY_ID, USERNAME, PASSWORD, FIRST_NAMES, LAST_NAME, MOBILE, EMAIL, " +
-      "PASSWORD_ATTEMPTS, PASSWORD_EXPIRY, DESCRIPTION) " +
-      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "PASSWORD_ATTEMPTS, PASSWORD_EXPIRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // deleteInternalGroupSQL
     deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG" + " WHERE IG" +
@@ -1696,7 +1682,7 @@ public class InternalUserDirectory
     // getFilteredInternalUsersSQL
     getFilteredInternalUsersSQL =
       "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL," +
-        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " +
+        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " +
         schemaPrefix + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND" +
         " ((UPPER(IU.USERNAME) LIKE ?) OR " +
         "(UPPER(IU.FIRST_NAMES) LIKE ?) OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
@@ -1750,10 +1736,11 @@ public class InternalUserDirectory
     getNumberOfInternalGroupsSQL = "SELECT COUNT(IG.ID) FROM " + schemaPrefix + "INTERNAL_GROUPS " +
       "IG" + " WHERE IG.USER_DIRECTORY_ID=?";
 
-    // getNumberOfUsersForGroupSQL
-    getNumberOfUsersForGroupSQL = "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM " + schemaPrefix +
-      "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=?" + " AND IUTGM" +
-      ".INTERNAL_GROUP_ID=?";
+    // getNumberOfInternalUsersForInternalGroupSQL
+    getNumberOfInternalUsersForInternalGroupSQL =
+      "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM " + schemaPrefix +
+        "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=?" + " AND IUTGM" +
+        ".INTERNAL_GROUP_ID=?";
 
     // getNumberOfInternalUsersSQL
     getNumberOfInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix + "INTERNAL_USERS " +
@@ -1766,14 +1753,14 @@ public class InternalUserDirectory
     // getInternalUserSQL
     getInternalUserSQL =
       "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL," +
-        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " +
+        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " +
         schemaPrefix + "INTERNAL_USERS IU" + " WHERE " +
         "IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUsersSQL
     getInternalUsersSQL =
       "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL," +
-        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, IU.DESCRIPTION FROM " +
+        " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " +
         schemaPrefix + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
 
     // incrementPasswordAttemptsSQL
@@ -1829,8 +1816,7 @@ public class InternalUserDirectory
     StringBuilder buffer = new StringBuilder();
 
     buffer.append("SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, ");
-    buffer.append("IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY, ");
-    buffer.append("IU.DESCRIPTION FROM ");
+    buffer.append("IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM ");
 
     buffer.append(DataAccessObject.MMP_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
 
@@ -1845,11 +1831,7 @@ public class InternalUserDirectory
       {
         whereParameters.append(" AND ");
 
-        if (attribute.getName().equalsIgnoreCase("description"))
-        {
-          whereParameters.append("LOWER(IU.DESCRIPTION) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("email"))
+        if (attribute.getName().equalsIgnoreCase("email"))
         {
           whereParameters.append("LOWER(IU.EMAIL) LIKE LOWER(?)");
         }
@@ -1893,12 +1875,7 @@ public class InternalUserDirectory
 
     for (Attribute attribute : attributes)
     {
-      if (attribute.getName().equalsIgnoreCase("description"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("email"))
+      if (attribute.getName().equalsIgnoreCase("email"))
       {
         statement.setString(parameterIndex, attribute.getStringValue());
         parameterIndex++;
@@ -1962,8 +1939,6 @@ public class InternalUserDirectory
     {
       user.setPasswordExpiry(new Date(rs.getTimestamp(9).getTime()));
     }
-
-    user.setDescription(StringUtil.notNull(rs.getString(10)));
 
     return user;
   }
@@ -2171,7 +2146,8 @@ public class InternalUserDirectory
   private long getNumberOfInternalUsersForInternalGroup(Connection connection, UUID internalGroupId)
     throws SQLException
   {
-    try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
+    try (PreparedStatement statement = connection.prepareStatement(
+      getNumberOfInternalUsersForInternalGroupSQL))
     {
       statement.setObject(1, getUserDirectoryId());
       statement.setObject(2, internalGroupId);
