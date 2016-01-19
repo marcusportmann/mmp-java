@@ -18,7 +18,7 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.config.IConfigService;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 
 import org.junit.Test;
@@ -29,58 +29,69 @@ import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 /**
- * The <code>ConfigServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>ConfigService</code> class.
+ * The <code>ConfigurationServiceTest</code> class contains the implementation of the JUnit
+ * tests for the <code>ConfigurationService</code> class.
  *
  * @author Marcus Portmann
  */
 @RunWith(ApplicationJUnit4ClassRunner.class)
-public class ConfigServiceTest
+public class ConfigurationServiceTest
 {
-  private static final String TEST_KEY = ConfigServiceTest.class.getName() + ".TestKey";
+  private static final String TEST_KEY = ConfigurationServiceTest.class.getName() + ".TestKey";
   private static final String TEST_VALUE = "TestValue";
   @Inject
-  private IConfigService configService;
+  private IConfigurationService configurationService;
 
   /**
-   * Test the Config Service.
+   * Test the Configuration Service.
    *
    * @throws Exception
    */
   @Test
-  public void configServiceTest()
+  public void configurationServiceTest()
     throws Exception
   {
-    if (configService.keyExists(TEST_KEY))
+    if (configurationService.keyExists(TEST_KEY))
     {
       fail("Found the configuration key (" + TEST_KEY + ") that should not exist");
     }
 
-    configService.setValue(TEST_KEY, TEST_VALUE);
+    configurationService.setValue(TEST_KEY, TEST_VALUE);
 
-    if (!configService.keyExists(TEST_KEY))
+    if (!configurationService.keyExists(TEST_KEY))
     {
       fail("Failed to confirm that the configuration key (" + TEST_KEY + ") exists");
     }
 
-    String value = configService.getString(TEST_KEY);
+    String value = configurationService.getString(TEST_KEY);
 
     assertEquals("The required value (" + TEST_VALUE
         + ") was not retrieved for the configuration key (" + TEST_KEY + ")", TEST_VALUE, value);
 
-    configService.setValue(TEST_KEY, TEST_VALUE + "Updated");
+    configurationService.setValue(TEST_KEY, TEST_VALUE + "Updated");
 
-    if (!configService.keyExists(TEST_KEY))
+    if (!configurationService.keyExists(TEST_KEY))
     {
       fail("Failed to confirm that the configuration key (" + TEST_KEY + ") exists");
     }
 
-    value = configService.getString(TEST_KEY);
+    value = configurationService.getString(TEST_KEY);
 
     assertEquals("The required value (" + TEST_VALUE + "Updated"
-      + ") was not retrieved for the configuration key (" + TEST_KEY + ")", TEST_VALUE + "Updated", value);
+        + ") was not retrieved for the configuration key (" + TEST_KEY + ")", TEST_VALUE
+        + "Updated", value);
+
+    Map<String, String> filteredValues = configurationService.getFilteredStrings("test");
+
+    assertEquals("The required number of filtered configuration values (1) was not retrieved", 1,
+        filteredValues.size());
+
+    assertEquals("The required filtered configuration value (" + TEST_VALUE + "Updated"
+        + ") was not retrieved", TEST_VALUE + "Updated", value);
   }
 }

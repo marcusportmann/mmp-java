@@ -14,61 +14,62 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.config;
+package guru.mmp.application.configuration;
 
 /**
- * The <code>ConfigException</code> exception is thrown to indicate an error condition when
- * working with the Config Service.
+ * The <code>ConfigurationException</code> exception is thrown to indicate an error condition when
+ * working with the Configuration Service.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ConfigException extends Exception
+public class ConfigurationException
+  extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ConfigException</code> with <code>null</code> as its
+   * Constructs a new <code>ConfigurationException</code> with <code>null</code> as its
    * message.
    */
-  public ConfigException()
+  public ConfigurationException()
   {
     super();
   }
 
   /**
-   * Constructs a new <code>ConfigException</code> with the specified message.
+   * Constructs a new <code>ConfigurationException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ConfigException(String message)
+  public ConfigurationException(String message)
   {
     super(message);
   }
 
   /**
-   * Constructs a new <code>ConfigException</code> with the specified cause and a
+   * Constructs a new <code>ConfigurationException</code> with the specified cause and a
    * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
    * class and message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
    *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ConfigException(Throwable cause)
+  public ConfigurationException(Throwable cause)
   {
     super(cause);
   }
 
   /**
-   * Constructs a new <code>ConfigException</code> with the specified message and cause.
+   * Constructs a new <code>ConfigurationException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ConfigException(String message, Throwable cause)
+  public ConfigurationException(String message, Throwable cause)
   {
     super(message, cause);
   }

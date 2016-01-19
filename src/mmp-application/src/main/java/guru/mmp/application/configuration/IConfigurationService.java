@@ -14,16 +14,45 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.config;
+package guru.mmp.application.configuration;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Map;
 
 /**
- * The <code>IConfigService</code> interface defines the functionality provided by a Config Service
+ * The <code>IConfigurationService</code> interface defines the functionality provided by a Config Service
  * implementation, which manages the configuration information for an application or service.
  *
  * @author Marcus Portmann
  */
-public interface IConfigService
+public interface IConfigurationService
 {
+  /**
+   * Retrieve the numbered of filtered <code>String</code> key-value pairs for the configuration
+   * values.
+   *
+   * @param filter the filter to apply to the keys for the configuration values
+   *
+   * @return the number of filtered <code>String</code> key-value pairs for the configuration values
+   *
+   * @throws ConfigurationException
+   */
+  int getNumberOfFilteredStrings(String filter)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the filtered <code>String</code> key-value pairs for the configuration values.
+   *
+   * @param filter the filter to apply to the keys for the configuration values
+   *
+   * @return the filtered <code>String</code> key-value pairs for the configuration values
+   *
+   * @throws ConfigurationException
+   */
+  Map<String, String> getFilteredStrings(String filter)
+      throws ConfigurationException;
+
   /**
    * Retrieve the <code>String</code> configuration value.
    *
@@ -32,10 +61,10 @@ public interface IConfigService
    * @return the <code>String</code> configuration value or <code>null</code> if the configuration
    *         value could not be found
    *
-   * @throws ConfigException
+   * @throws ConfigurationException
    */
   String getString(String key)
-    throws ConfigException;
+      throws ConfigurationException;
 
   /**
    * Check if a configuration value with the specified key exists.
@@ -45,10 +74,10 @@ public interface IConfigService
    * @return <code>true</code> if a configuration value with the specified key exists or
    *         <code>false</code> otherwise
    *
-   * @throws ConfigException
+   * @throws ConfigurationException
    */
   boolean keyExists(String key)
-    throws ConfigException;
+      throws ConfigurationException;
 
   /**
    * Set the configuration key to the specified value.
@@ -56,8 +85,8 @@ public interface IConfigService
    * @param key   the key used to uniquely identify the configuration value
    * @param value the value
    *
-   * @throws ConfigException
+   * @throws ConfigurationException
    */
   void setValue(String key, Object value)
-    throws ConfigException;
+      throws ConfigurationException;
 }

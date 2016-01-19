@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.config;
+package guru.mmp.application.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -31,6 +31,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -41,22 +44,101 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /**
- * The <code>ConfigService</code> class provides the Config Service implementation.
+ * The <code>ConfigurationService</code> class provides the Config Service implementation.
  *
  * @author Marcus Portmann
  */
 @ApplicationScoped
 @Default
-public class ConfigService
-  implements IConfigService
+public class ConfigurationService
+  implements IConfigurationService
 {
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ConfigService.class);
+  private static final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
   private String createValueSQL;
   private DataSource dataSource;
   private String getValueSQL;
   private String keyExistsSQL;
   private String updateValueSQL;
+  private String getFilteredStringsSQL;
+  private String getNumberOfFilteredStringsSQL;
+
+  /**
+   * Retrieve the filtered <code>String</code> key-value pairs for the configuration values.
+   *
+   * @param filter the filter to apply to the keys for the configuration values
+   *
+   * @return the filtered <code>String</code> key-value pairs for the configuration values
+   *
+   * @throws ConfigurationException
+   */
+  public Map<String, String> getFilteredStrings(String filter)
+    throws ConfigurationException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getFilteredStringsSQL))
+    {
+      statement.setString(1, "%" + filter.toUpperCase() + "%");
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        Map<String, String> filteredValues = new HashMap<>();
+
+        while (rs.next())
+        {
+          filteredValues.put(rs.getString(1), rs.getString(2));
+        }
+
+        return filteredValues;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationException(String.format(
+          "Failed to retrieve the String configuration values matching the filter (%s): %s",
+          filter, e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Retrieve the numbered of filtered <code>String</code> key-value pairs for the configuration
+   * values.
+   *
+   * @param filter the filter to apply to the keys for the configuration values
+   *
+   * @return the number of filtered <code>String</code> key-value pairs for the configuration values
+   *
+   * @throws ConfigurationException
+   */
+  public int getNumberOfFilteredStrings(String filter)
+    throws ConfigurationException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getNumberOfFilteredStringsSQL))
+    {
+      statement.setString(1, "%" + filter.toUpperCase() + "%");
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          throw new ConfigurationException(String.format(
+              "No rows were returned as a result of executing the SQL statement (%s)",
+              getNumberOfFilteredStringsSQL));
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationException(String.format(
+          "Failed to retrieve the number of String configuration values matching the filter (%s): %s",
+          filter, e.getMessage()), e);
+    }
+  }
 
   /**
    * Retrieve the <code>String</code> configuration value.
@@ -66,10 +148,10 @@ public class ConfigService
    * @return the <code>String</code> configuration value or <code>null</code> if the configuration
    *         value could not be found
    *
-   * @throws ConfigException
+   * @throws ConfigurationException
    */
   public String getString(String key)
-    throws ConfigException
+    throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getValueSQL))
@@ -90,7 +172,7 @@ public class ConfigService
     }
     catch (Throwable e)
     {
-      throw new ConfigException(String.format(
+      throw new ConfigurationException(String.format(
           "Failed to retrieve the String configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
@@ -149,10 +231,10 @@ public class ConfigService
    * @return <code>true</code> if a configuration value with the specified key exists or
    *         <code>false</code> otherwise
    *
-   * @throws ConfigException
+   * @throws ConfigurationException
    */
   public boolean keyExists(String key)
-    throws ConfigException
+    throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection())
     {
@@ -160,7 +242,7 @@ public class ConfigService
     }
     catch (Throwable e)
     {
-      throw new ConfigException("Failed to checked whether the configuration key (" + key
+      throw new ConfigurationException("Failed to checked whether the configuration key (" + key
           + ") exists", e);
     }
   }
@@ -171,14 +253,14 @@ public class ConfigService
    * @param key   the key used to uniquely identify the configuration value
    * @param value the value
    *
-   * @throws ConfigException
+   * @throws ConfigurationException
    */
   public void setValue(String key, Object value)
-    throws ConfigException
+    throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection())
     {
-      String stringValue = null;
+      String stringValue;
 
       if (value instanceof String)
       {
@@ -194,11 +276,11 @@ public class ConfigService
         try (PreparedStatement statement = connection.prepareStatement(updateValueSQL))
         {
           statement.setString(1, stringValue);
-          statement.setString(2, key);
+          statement.setString(2, key.toUpperCase());
 
           if (statement.executeUpdate() <= 0)
           {
-            throw new ConfigException(String.format(
+            throw new ConfigurationException(String.format(
                 "No rows were affected as a result of executing the SQL statement (%s)",
                 updateValueSQL));
           }
@@ -213,7 +295,7 @@ public class ConfigService
 
           if (statement.executeUpdate() <= 0)
           {
-            throw new ConfigException(String.format(
+            throw new ConfigurationException(String.format(
                 "No rows were affected as a result of executing the SQL statement (%s)",
                 createValueSQL));
           }
@@ -222,7 +304,7 @@ public class ConfigService
     }
     catch (Throwable e)
     {
-      throw new ConfigException(String.format(
+      throw new ConfigurationException(String.format(
           "Failed to set the configuration value with the key (%s): %s", key, e.getMessage()), e);
     }
   }
@@ -237,18 +319,26 @@ public class ConfigService
   private void buildStatements(String schemaPrefix)
     throws SQLException
   {
+    // createValueSQL
+    createValueSQL = "INSERT INTO " + schemaPrefix + "CONFIG (KEY, VALUE) VALUES (?, ?)";
+
+    // getFilteredStringsSQL
+    getFilteredStringsSQL = "SELECT C.KEY, C.VALUE FROM " + schemaPrefix
+        + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
+
+    // getNumberOfFilteredStringsSQL
+    getNumberOfFilteredStringsSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix
+        + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
+
+    // getValueSQL
+    getValueSQL = "SELECT C.VALUE FROM " + schemaPrefix + "CONFIG C WHERE (UPPER(C.KEY) = ?)";
+
     // keyExistsSQL
     keyExistsSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix
         + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
 
-    // createValueSQL
-    createValueSQL = "INSERT INTO " + schemaPrefix + "CONFIG (KEY, VALUE) VALUES (?, ?)";
-
-    // getValueSQL
-    getValueSQL = "SELECT C.VALUE FROM " + schemaPrefix + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
-
     // updateValueSQL
-    updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG C SET C.VALUE = ? WHERE C.KEY = ?";
+    updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG C SET C.VALUE = ? WHERE (UPPER(C.KEY) = ?)";
   }
 
   private boolean keyExists(Connection connection, String key)

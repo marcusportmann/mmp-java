@@ -121,7 +121,7 @@ public class ServiceUtil
       try
       {
         clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.ibm.websphere.management.configservice.ConfigService");
+            "com.ibm.websphere.management.configservice.ConfigurationService");
       }
       catch (Throwable ignored) {}
 
