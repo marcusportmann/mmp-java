@@ -41,7 +41,7 @@ public class FilteredConfigurationDataProvider extends InjectableDataProvider< M
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The filter used to limit the matching users.
+   * The filter used to limit the matching configuration values.
    */
   private String filter;
 
