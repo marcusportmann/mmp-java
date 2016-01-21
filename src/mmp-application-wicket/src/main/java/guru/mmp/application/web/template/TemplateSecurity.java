@@ -160,6 +160,12 @@ public class TemplateSecurity
   public static final String FUNCTION_CODE_USER_ADMINISTRATION = "Application.UserAdministration";
 
   /**
+   * The Application.ConfigurationAdministration function code.
+   */
+  public static final String FUNCTION_CODE_CONFIGURATION_ADMINISTRATION =
+      "Application.ConfigurationAdministration";
+
+  /**
    * The Application.UserGroups function code.
    */
   public static final String FUNCTION_CODE_USER_GROUPS = "Application.UserGroups";
