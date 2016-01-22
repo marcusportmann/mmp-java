@@ -18,7 +18,7 @@ package guru.mmp.application.batch;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.registry.IRegistry;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.cdi.CDIUtil;
 
@@ -69,9 +69,9 @@ public class BatchService
    */
   private int maximumJobExecutionAttempts;
 
-  /* Registry */
+  /* Configuration Service */
   @Inject
-  private IRegistry registry;
+  private IConfigurationService configurationService;
 
   /**
    * Constructs a new <code>BatchService</code>.

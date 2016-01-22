@@ -47,7 +47,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_ORGANISATION)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
 public class AddOrganisationPage extends TemplateWebPage
 {
   /* Logger */

@@ -43,7 +43,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
 public class UpdateCodePage extends TemplateWebPage
 {
   /* Logger */

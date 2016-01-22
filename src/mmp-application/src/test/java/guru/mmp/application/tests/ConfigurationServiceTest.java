@@ -18,6 +18,7 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.configuration.ConfigurationEntry;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 
@@ -29,7 +30,7 @@ import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Map;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,56 +43,78 @@ import javax.inject.Inject;
 @RunWith(ApplicationJUnit4ClassRunner.class)
 public class ConfigurationServiceTest
 {
-  private static final String TEST_KEY = ConfigurationServiceTest.class.getName() + ".TestKey";
+  private static final String TEST_FILTERED_KEY = ConfigurationServiceTest.class.getName() + ".TestFilteredKey";
+  private static final String TEST_STRING_KEY = ConfigurationServiceTest.class.getName() + ".TestStringKey";
+
   private static final String TEST_VALUE = "TestValue";
   @Inject
   private IConfigurationService configurationService;
 
   /**
-   * Test the Configuration Service.
+   * Test the <code>String</code> configuration.
    *
    * @throws Exception
    */
   @Test
-  public void configurationServiceTest()
+  public void stringConfigurationTest()
     throws Exception
   {
-    if (configurationService.keyExists(TEST_KEY))
+    if (configurationService.keyExists(TEST_STRING_KEY))
     {
-      fail("Found the configuration key (" + TEST_KEY + ") that should not exist");
+      fail("Found the configuration key (" + TEST_STRING_KEY + ") that should not exist");
     }
 
-    configurationService.setValue(TEST_KEY, TEST_VALUE);
+    configurationService.setValue(TEST_STRING_KEY, TEST_VALUE);
 
-    if (!configurationService.keyExists(TEST_KEY))
+    if (!configurationService.keyExists(TEST_STRING_KEY))
     {
-      fail("Failed to confirm that the configuration key (" + TEST_KEY + ") exists");
+      fail("Failed to confirm that the configuration key (" + TEST_STRING_KEY + ") exists");
     }
 
-    String value = configurationService.getString(TEST_KEY);
+    String value = configurationService.getString(TEST_STRING_KEY);
 
     assertEquals("The required value (" + TEST_VALUE
-        + ") was not retrieved for the configuration key (" + TEST_KEY + ")", TEST_VALUE, value);
+        + ") was not retrieved for the configuration key (" + TEST_STRING_KEY + ")", TEST_VALUE, value);
 
-    configurationService.setValue(TEST_KEY, TEST_VALUE + "Updated");
+    configurationService.setValue(TEST_STRING_KEY, TEST_VALUE + "Updated");
 
-    if (!configurationService.keyExists(TEST_KEY))
+    if (!configurationService.keyExists(TEST_STRING_KEY))
     {
-      fail("Failed to confirm that the configuration key (" + TEST_KEY + ") exists");
+      fail("Failed to confirm that the configuration key (" + TEST_STRING_KEY + ") exists");
     }
 
-    value = configurationService.getString(TEST_KEY);
+    value = configurationService.getString(TEST_STRING_KEY);
 
     assertEquals("The required value (" + TEST_VALUE + "Updated"
-        + ") was not retrieved for the configuration key (" + TEST_KEY + ")", TEST_VALUE
+        + ") was not retrieved for the configuration key (" + TEST_STRING_KEY + ")", TEST_VALUE
         + "Updated", value);
+  }
 
-    Map<String, String> filteredValues = configurationService.getFilteredStrings("test");
+
+  /**
+   * Test the filtered configuration.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void filteredConfigurationTest()
+    throws Exception
+  {
+    configurationService.setValue(TEST_FILTERED_KEY, TEST_VALUE);
+
+    if (!configurationService.keyExists(TEST_FILTERED_KEY))
+    {
+      fail("Failed to confirm that the configuration key (" + TEST_FILTERED_KEY + ") exists");
+    }
+
+    List<ConfigurationEntry> filteredConfigurationEntries = configurationService.getFilteredConfigurationEntries("testfiltered");
 
     assertEquals("The required number of filtered configuration values (1) was not retrieved", 1,
-        filteredValues.size());
+      filteredConfigurationEntries.size());
 
-    assertEquals("The required filtered configuration value (" + TEST_VALUE + "Updated"
-        + ") was not retrieved", TEST_VALUE + "Updated", value);
+    assertEquals("The required filtered configuration value (" + TEST_VALUE
+      + ") was not retrieved", TEST_VALUE, filteredConfigurationEntries.get(0).getValue());
   }
+
+
 }

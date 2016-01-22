@@ -21,6 +21,7 @@ package guru.mmp.application.messaging.handler;
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.messaging.ErrorReport;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.messaging.Message;
@@ -63,9 +64,9 @@ public class SystemMessageHandler extends MessageHandler
   @Inject
   private IMessagingService messagingService;
 
-  /* Registry */
+  /* Configuration Service */
   @Inject
-  private IRegistry registry;
+  private IConfigurationService configurationService;
 
   /* Security Service */
   @Inject

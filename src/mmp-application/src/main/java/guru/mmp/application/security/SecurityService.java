@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.registry.IRegistry;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.common.exceptions.InvalidArgumentException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
@@ -133,10 +133,8 @@ public class SecurityService
   private String getUserDirectoryTypesSQL;
   private String organisationExistsSQL;
   private String organisationWithNameExistsSQL;
-
-  /* Registry */
   @Inject
-  private IRegistry registry;
+  private IConfigurationService configurationService;
   private String updateFunctionSQL;
   private String updateOrganisationSQL;
   private String updateUserDirectorySQL;

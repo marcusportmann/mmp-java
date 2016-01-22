@@ -19,6 +19,7 @@ package guru.mmp.application.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.messaging.MessagePart.Status;
 import guru.mmp.application.messaging.handler.IMessageHandler;
 import guru.mmp.application.messaging.handler.MessageHandlerConfig;
@@ -125,9 +126,9 @@ public class MessagingService
   /* The delay in milliseconds to wait before re-attempting to process a message. */
   private int processingRetryDelay;
 
-  /* Registry */
+  /* Configuration Service */
   @Inject
-  private IRegistry registry;
+  private IConfigurationService configurationService;
 
   /**
    * Constructs a new <code>MessagingService</code>.

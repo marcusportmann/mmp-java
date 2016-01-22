@@ -18,6 +18,7 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.security.*;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
@@ -47,7 +48,7 @@ public class SecurityServiceTest
   private static int userCount;
   private static int userDirectoryCount;
   @Inject
-  private IRegistry registry;
+  private IConfigurationService configurationService;
   @Inject
   private ISecurityService securityService;
 

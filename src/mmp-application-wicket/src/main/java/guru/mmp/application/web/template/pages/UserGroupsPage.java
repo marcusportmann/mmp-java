@@ -26,6 +26,7 @@ import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupsForUserDataProvider;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -37,15 +38,17 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserGroupsPage</code> class implements the
@@ -251,7 +254,8 @@ public class UserGroupsPage extends TemplateWebPage
 
       if (group.getGroupName().equalsIgnoreCase(TemplateSecurity.ADMINISTRATORS_GROUP_NAME))
       {
-        if (!session.hasAcccessToFunction(TemplateSecurity.FUNCTION_CODE_ADD_ORGANISATION))
+        if (!session.hasAcccessToFunction(TemplateSecurity
+            .FUNCTION_CODE_ORGANISATION_ADMINISTRATION))
         {
           isAvailableUserGroup = false;
         }

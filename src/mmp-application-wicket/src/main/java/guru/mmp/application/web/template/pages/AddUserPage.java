@@ -28,6 +28,7 @@ import guru.mmp.application.web.template.components.PasswordTextFieldWithFeedbac
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 import guru.mmp.application.web.validators.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -35,15 +36,17 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddUserPage</code> class implements the
@@ -51,7 +54,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ADD_USER)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
 public class AddUserPage extends TemplateWebPage
 {
   /* Logger */
@@ -237,7 +240,8 @@ public class AddUserPage extends TemplateWebPage
 
       if (group.getGroupName().equalsIgnoreCase(TemplateSecurity.ADMINISTRATORS_GROUP_NAME))
       {
-        if (!session.hasAcccessToFunction(TemplateSecurity.FUNCTION_CODE_ADD_ORGANISATION))
+        if (!session.hasAcccessToFunction(TemplateSecurity
+            .FUNCTION_CODE_ORGANISATION_ADMINISTRATION))
         {
           isAvailableUserGroup = false;
         }

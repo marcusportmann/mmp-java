@@ -20,34 +20,46 @@ package guru.mmp.application.sms;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
+
 import guru.mmp.application.Debug;
-import guru.mmp.application.registry.IRegistry;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.StringReader;
+
+import java.net.URL;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+import java.util.concurrent.Future;
+
 import javax.annotation.PostConstruct;
+
 import javax.ejb.AsyncResult;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
+
 import javax.inject.Inject;
+
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
-import java.io.StringReader;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.Future;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
@@ -80,9 +92,9 @@ public class SMSService
   private String myMobileAPIPassword;
   private String myMobileAPIUsername;
 
-  /* Registry */
+  /* Configuration Service */
   @Inject
-  private IRegistry registry;
+  private IConfigurationService configurationService;
 
   /* The delay in milliseconds to wait before re-attempting to send a SMS. */
   private int sendRetryDelay;
@@ -588,47 +600,20 @@ public class SMSService
     try
     {
       // Initialise the configuration
-      if (!registry.integerValueExists("/Services/SMSService", "SendRetryDelay"))
-      {
-        registry.setIntegerValue("/Services/SMSService", "SendRetryDelay", 600000);
-      }
+      sendRetryDelay = configurationService.getInteger(SMSService.class.getName()
+          + ".SendRetryDelay", 600000);
 
-      if (!registry.integerValueExists("/Services/SMSService", "MaximumSendAttempts"))
-      {
-        registry.setIntegerValue("/Services/SMSService", "MaximumSendAttempts", 100);
-      }
+      maximumSendAttempts = configurationService.getInteger(SMSService.class.getName()
+          + ".MaximumSendAttempts", 100);
 
-      if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIUsername"))
-      {
-        registry.setStringValue("/Services/SMSService", "MyMobileAPIUsername",
-            "MyMobileAPIUsername");
-      }
+      myMobileAPIUsername = configurationService.getString(SMSService.class.getName()
+          + ".MyMobileAPIUsername", "MyMobileAPIUsername");
 
-      if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIPassword"))
-      {
-        registry.setStringValue("/Services/SMSService", "MyMobileAPIPassword",
-            "MyMobileAPIPassword");
-      }
+      myMobileAPIPassword = configurationService.getString(SMSService.class.getName()
+          + ".MyMobileAPIPassword", "MyMobileAPIPassword");
 
-      if (!registry.stringValueExists("/Services/SMSService", "MyMobileAPIEndPoint"))
-      {
-        registry.setStringValue("/Services/SMSService", "MyMobileAPIEndPoint",
-            "http://www.mymobileapi.com/api5/api.asmx");
-      }
-
-      sendRetryDelay = registry.getIntegerValue("/Services/SMSService", "SendRetryDelay", 600000);
-
-      maximumSendAttempts = registry.getIntegerValue("/Services/SMSService", "MaximumSendAttempts",
-          100);
-
-      myMobileAPIUsername = registry.getStringValue("/Services/SMSService", "MyMobileAPIUsername",
-          "MyMobileAPIUsername");
-
-      myMobileAPIPassword = registry.getStringValue("/Services/SMSService", "MyMobileAPIPassword",
-          "MyMobileAPIPassword");
-
-      myMobileAPIEndPoint = registry.getStringValue("/Services/SMSService", "MyMobileAPIEndPoint",
-          "http://www.mymobileapi.com/api5/api.asmx");
+      myMobileAPIEndPoint = configurationService.getString(SMSService.class.getName()
+          + ".MyMobileAPIEndPoint", "http://www.mymobileapi.com/api5/api.asmx");
     }
     catch (Throwable e)
     {

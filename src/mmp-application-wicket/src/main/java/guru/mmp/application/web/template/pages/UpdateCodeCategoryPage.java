@@ -44,7 +44,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_UPDATE_CODE_CATEGORY)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION)
 public class UpdateCodeCategoryPage extends TemplateWebPage
 {
   /* Logger */
