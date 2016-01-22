@@ -22,14 +22,15 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>FilteredOrganisationDataProvider</code> class provides an <code>IDataProvider</code>
@@ -89,21 +90,14 @@ public class FilteredOrganisationDataProvider extends InjectableDataProvider<Org
     {
       List<Organisation> allOrganisations = securityService.getFilteredOrganisations(filter);
 
-      List<Organisation> organisations = new ArrayList<>();
-
-      long end = first + count;
-
-      for (long i = first; ((i < end) && (i < allOrganisations.size())); i++)
-      {
-        organisations.add(allOrganisations.get((int) i));
-      }
-
-      return organisations.iterator();
+      return allOrganisations.subList((int) first, (int) Math.min(first + count,
+          allOrganisations.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-          "Failed to load the organisations from index (%d) to (%d)", first, first + count), e);
+          "Failed to load the organisations from index (%d) to (%d) matching the filter (%s)",
+          first, first + count - 1, filter), e);
     }
   }
 
@@ -146,7 +140,8 @@ public class FilteredOrganisationDataProvider extends InjectableDataProvider<Org
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to retrieve the number of organisations", e);
+      throw new WebApplicationException(String.format(
+          "Failed to retrieve the number of organisations matching the filter (%s)", filter), e);
     }
   }
 }

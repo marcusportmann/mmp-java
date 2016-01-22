@@ -22,14 +22,15 @@ import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>ReportDefinitionDataProvider</code> class provides an <code>IDataProvider</code>
@@ -74,22 +75,14 @@ public class ReportDefinitionDataProvider extends InjectableDataProvider<ReportD
     {
       List<ReportDefinition> allReportDefinitions = reportingService.getReportDefinitions();
 
-      List<ReportDefinition> reportDefinitions = new ArrayList<>();
-
-      long end = first + count;
-
-      for (long i = first; ((i < end) && (i < allReportDefinitions.size())); i++)
-      {
-        reportDefinitions.add(allReportDefinitions.get((int) i));
-      }
-
-      return reportDefinitions.iterator();
+      return allReportDefinitions.subList((int) first, (int) Math.min(first + count,
+          allReportDefinitions.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-          "Failed to load the report definitions from index (%d) to (%d)", first, first + count),
-          e);
+          "Failed to load the report definitions from index (%d) to (%d)", first, first + count
+          - 1), e);
     }
   }
 

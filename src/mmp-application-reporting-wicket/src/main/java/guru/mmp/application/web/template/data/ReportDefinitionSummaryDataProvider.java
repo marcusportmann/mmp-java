@@ -25,7 +25,6 @@ import guru.mmp.application.web.data.InjectableDataProvider;
 import org.apache.wicket.model.IModel;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -75,22 +74,14 @@ public class ReportDefinitionSummaryDataProvider
       List<ReportDefinitionSummary> allReportDefinitionSummaries =
           reportingService.getReportDefinitionSummaries();
 
-      List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
-
-      long end = first + count;
-
-      for (long i = first; ((i < end) && (i < allReportDefinitionSummaries.size())); i++)
-      {
-        reportDefinitionSummaries.add(allReportDefinitionSummaries.get((int) i));
-      }
-
-      return reportDefinitionSummaries.iterator();
+      return allReportDefinitionSummaries.subList((int) first, (int) Math.min(first + count,
+        allReportDefinitionSummaries.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
           "Failed to load the summaries for the report definitions from index (%d) to (%d)", first,
-          first + count), e);
+          first + count - 1), e);
     }
   }
 

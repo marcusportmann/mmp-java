@@ -75,22 +75,14 @@ public class ProcessDefinitionDataProvider extends InjectableDataProvider<Proces
     {
       List<ProcessDefinition> allProcessDefinitions = processService.getCurrentProcessDefinitions();
 
-      List<ProcessDefinition> processDefinitions = new ArrayList<>();
-
-      long end = first + count;
-
-      for (long i = first; ((i < end) && (i < allProcessDefinitions.size())); i++)
-      {
-        processDefinitions.add(allProcessDefinitions.get((int) i));
-      }
-
-      return processDefinitions.iterator();
+      return allProcessDefinitions.subList((int) first, (int) Math.min(first + count,
+          allProcessDefinitions.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-          "Failed to load the process definitions from index (%d) to (%d)", first, first + count),
-          e);
+          "Failed to load the process definitions from index (%d) to (%d)", first, first + count
+          - 1), e);
     }
   }
 

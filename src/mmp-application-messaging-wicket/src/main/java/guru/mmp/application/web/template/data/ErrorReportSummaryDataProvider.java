@@ -102,7 +102,7 @@ public class ErrorReportSummaryDataProvider extends InjectableDataProvider<Error
     {
       throw new WebApplicationException(String.format(
           "Failed to load the summaries for the error reports from index (%d) to (%d)", first,
-          first + count), e);
+          first + count - 1), e);
     }
   }
 

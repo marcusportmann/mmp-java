@@ -22,14 +22,15 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserDirectoryDataProvider</code> class provides an <code>IDataProvider</code>
@@ -73,21 +74,14 @@ public class UserDirectoryDataProvider extends InjectableDataProvider<UserDirect
     {
       List<UserDirectory> allUserDirectories = securityService.getUserDirectories();
 
-      List<UserDirectory> userDirectories = new ArrayList<>();
-
-      long end = first + count;
-
-      for (long i = first; ((i < end) && (i < allUserDirectories.size())); i++)
-      {
-        userDirectories.add(allUserDirectories.get((int) i));
-      }
-
-      return userDirectories.iterator();
+      return allUserDirectories.subList((int) first, (int) Math.min(first + count,
+          allUserDirectories.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-          "Failed to load the user directories from index (%d) to (%d)", first, first + count), e);
+          "Failed to load the user directories from index (%d) to (%d)", first, first + count - 1),
+          e);
     }
   }
 

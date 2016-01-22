@@ -22,14 +22,16 @@ import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>GroupsForUserDataProvider</code> class provides an <code>IDataProvider</code>
@@ -98,15 +100,16 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   {
     try
     {
-      List<Group> groups = securityService.getGroupsForUser(userDirectoryId, username);
+      List<Group> allGroups = securityService.getGroupsForUser(userDirectoryId, username);
 
-      return groups.iterator();
+      return allGroups.subList((int) first, (int) Math.min(first + count, allGroups.size()))
+          .iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format(
-          "Failed to load the groups from index (%d) to (%d) for the user directory (%s)", first,
-          first + count, userDirectoryId), e);
+      throw new WebApplicationException(String.format("Failed to load the groups from index (%d)"
+          + " to (%d) for the user (%s) for the user directory (%s)", first, first + count - 1,
+          username, userDirectoryId), e);
     }
   }
 
@@ -141,9 +144,8 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format(
-          "Failed to retrieve the number of groups for the user directory (%s)", userDirectoryId),
-          e);
+      throw new WebApplicationException(String.format("Failed to retrieve the number of groups"
+          + " for the user (%s) for the user directory (%s)", username, userDirectoryId), e);
     }
   }
 }

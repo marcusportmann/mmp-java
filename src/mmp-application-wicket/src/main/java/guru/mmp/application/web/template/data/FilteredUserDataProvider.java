@@ -22,15 +22,17 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>FilteredUserDataProvider</code> class provides an <code>IDataProvider</code>
@@ -128,9 +130,9 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format(
-          "Failed to load the users from index (%d) to (%d) for the user directory (%s)", first,
-          first + count, userDirectoryId), e);
+      throw new WebApplicationException(String.format("Failed to load the users from index (%d)"
+          + " to (%d) for the user directory (%s) matching the filter (%s)", first, first + count
+          - 1, userDirectoryId, filter), e);
     }
   }
 
@@ -184,9 +186,8 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format(
-          "Failed to retrieve the number of users for the user directory (%s)", userDirectoryId),
-          e);
+      throw new WebApplicationException(String.format("Failed to retrieve the number of users for"
+          + " the user directory (%s) matching the filter (%s)", userDirectoryId, filter), e);
     }
   }
 }

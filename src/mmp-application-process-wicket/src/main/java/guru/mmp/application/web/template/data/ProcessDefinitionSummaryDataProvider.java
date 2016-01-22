@@ -78,22 +78,14 @@ public class ProcessDefinitionSummaryDataProvider
       List<ProcessDefinitionSummary> allProcessDefinitionSummaries =
           processService.getCurrentProcessDefinitionSummaries();
 
-      List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
-
-      long end = first + count;
-
-      for (long i = first; ((i < end) && (i < allProcessDefinitionSummaries.size())); i++)
-      {
-        processDefinitionSummaries.add(allProcessDefinitionSummaries.get((int) i));
-      }
-
-      return processDefinitionSummaries.iterator();
+      return allProcessDefinitionSummaries.subList((int) first, (int) Math.min(first + count,
+          allProcessDefinitionSummaries.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
           "Failed to load the summaries for the process definitions from index (%d) to (%d)",
-          first, first + count), e);
+          first, first + count - 1), e);
     }
   }
 

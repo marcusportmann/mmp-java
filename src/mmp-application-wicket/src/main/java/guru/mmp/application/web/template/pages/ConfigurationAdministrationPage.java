@@ -18,6 +18,8 @@ package guru.mmp.application.web.template.pages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.configuration.ConfigurationEntry;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
@@ -25,6 +27,7 @@ import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
+import guru.mmp.application.web.template.data.FilteredConfigurationEntryDataProvider;
 import guru.mmp.application.web.template.data.FilteredOrganisationDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -61,9 +64,9 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
     ConfigurationAdministrationPage.class);
   private static final long serialVersionUID = 1000000;
 
-  /* Security Service */
+  /* Configuration Service */
   @Inject
-  private ISecurityService securityService;
+  private IConfigurationService configurationService;
 
   /**
    * Constructs a new <code>ConfigurationAdministrationPage</code>.
@@ -82,11 +85,11 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
-      // The dialog used to confirm the removal of an organisation
+      // The dialog used to confirm the removal of a configuration entry
       RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
-      // The "addLink" used to add a new organisation
+      // The "addLink" used to add a new configuration entry
       Link<Void> addLink = new Link<Void>("addLink")
       {
         private static final long serialVersionUID = 1000000;
@@ -94,12 +97,12 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          setResponsePage(new AddOrganisationPage(getPageReference()));
+//          setResponsePage(new AddOrganisationPage(getPageReference()));
         }
       };
       tableContainer.add(addLink);
 
-      FilteredOrganisationDataProvider dataProvider = new FilteredOrganisationDataProvider();
+      FilteredConfigurationEntryDataProvider dataProvider = new FilteredConfigurationEntryDataProvider();
 
       // The "filterForm" form
       Form<Void> filterForm = new Form<>("filterForm");
@@ -123,16 +126,16 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
       filterForm.add(filterButton);
       tableContainer.add(filterForm);
 
-      // The organisation data view
-      DataView<Organisation> dataView = new DataView<Organisation>("organisation", dataProvider)
+      // The configuration entry data view
+      DataView<ConfigurationEntry> dataView = new DataView<ConfigurationEntry>("configurationEntry", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
         @Override
-        protected void populateItem(Item<Organisation> item)
+        protected void populateItem(Item<ConfigurationEntry> item)
         {
-          item.add(new Label("id", new PropertyModel<String>(item.getModel(), "id")));
-          item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
+          item.add(new Label("key", new PropertyModel<String>(item.getModel(), "key")));
+          item.add(new Label("value", new PropertyModel<String>(item.getModel(), "value")));
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -142,10 +145,10 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateOrganisationPage page = new UpdateOrganisationPage(getPageReference(),
-                item.getModel());
-
-              setResponsePage(page);
+//              UpdateOrganisationPage page = new UpdateOrganisationPage(getPageReference(),
+//                item.getModel());
+//
+//              setResponsePage(page);
             }
           };
           item.add(updateLink);
@@ -158,11 +161,11 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              Organisation organisation = item.getModelObject();
+              ConfigurationEntry configurationEntry = item.getModelObject();
 
-              if (organisation != null)
+              if (configurationEntry != null)
               {
-                removeDialog.show(target, organisation);
+                removeDialog.show(target, configurationEntry);
               }
               else
               {
@@ -187,19 +190,19 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
   }
 
   /**
-   * The <code>RemoveDialog</code> class implements a dialog that allows the removal of an
-   * organisation to be confirmed.
+   * The <code>RemoveDialog</code> class implements a dialog that allows the removal of a
+   * configuration entry to be confirmed.
    */
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private UUID id;
+    private String key;
     private Label nameLabel;
 
     /**
      * Constructs a new <code>RemoveDialog</code>.
      *
-     * @param tableContainer the table container, which allows the organisation table and its
+     * @param tableContainer the table container, which allows the configuration entry table and its
      *                       associated navigator to be updated using AJAX
      */
     public RemoveDialog(WebMarkupContainer tableContainer)
@@ -219,19 +222,19 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
         {
           try
           {
-            securityService.deleteOrganisation(id);
+//            securityService.deleteOrganisation(id);
 
             target.add(tableContainer);
 
-            ConfigurationAdministrationPage.this.info("Successfully removed the organisation "
+            ConfigurationAdministrationPage.this.info("Successfully removed the configuration entry "
               + nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
           {
-            logger.error(String.format("Failed to remove the organisation (%s): %s", id,
+            logger.error(String.format("Failed to remove the configuration entry (%s): %s", key,
               e.getMessage()), e);
 
-            ConfigurationAdministrationPage.this.error("Failed to remove the organisation "
+            ConfigurationAdministrationPage.this.error("Failed to remove the configuration entry "
               + nameLabel.getDefaultModelObjectAsString());
           }
 
@@ -245,13 +248,13 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target       the AJAX request target
-     * @param organisation the organisation being removed
+     * @param target             the AJAX request target
+     * @param configurationEntry the configuration entry being removed
      */
-    public void show(AjaxRequestTarget target, Organisation organisation)
+    public void show(AjaxRequestTarget target, ConfigurationEntry configurationEntry)
     {
-      id = organisation.getId();
-      nameLabel.setDefaultModelObject(organisation.getName());
+      key = configurationEntry.getKey();
+      nameLabel.setDefaultModelObject(configurationEntry.getKey());
 
       target.add(nameLabel);
 

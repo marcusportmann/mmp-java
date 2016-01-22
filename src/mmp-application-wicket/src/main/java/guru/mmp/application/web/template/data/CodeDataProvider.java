@@ -98,7 +98,7 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-          "Failed to load the codes from index (%d) to (%d)", first, first + count), e);
+          "Failed to load the codes from index (%d) to (%d)", first, first + count - 1), e);
     }
   }
 

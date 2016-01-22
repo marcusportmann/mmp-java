@@ -20,6 +20,7 @@ package guru.mmp.application.configuration;
 
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
+import guru.mmp.common.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +32,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -60,63 +61,74 @@ public class ConfigurationService
   private String getValueSQL;
   private String keyExistsSQL;
   private String updateValueSQL;
-  private String getFilteredStringsSQL;
-  private String getNumberOfFilteredStringsSQL;
+  private String getFilteredConfigurationEntriesSQL;
+  private String getNumberOfFilteredConfigurationEntriesSQL;
+  private String getConfigurationEntriesSQL;
+  private String getNumberOfConfigurationEntriesSQL;
 
   /**
-   * Retrieve the filtered <code>String</code> key-value pairs for the configuration values.
+   * Retrieve the filtered configuration entries.
    *
-   * @param filter the filter to apply to the keys for the configuration values
+   * @param filter the filter to apply to the keys for the configuration entries
    *
-   * @return the filtered <code>String</code> key-value pairs for the configuration values
+   * @return the filtered configuration entries
    *
    * @throws ConfigurationException
    */
-  public Map<String, String> getFilteredStrings(String filter)
+  public List<ConfigurationEntry> getFilteredConfigurationEntries(String filter)
     throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFilteredStringsSQL))
+      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+          ? getConfigurationEntriesSQL
+          : getFilteredConfigurationEntriesSQL))
     {
-      statement.setString(1, "%" + filter.toUpperCase() + "%");
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        statement.setString(1, "%" + filter.toUpperCase() + "%");
+      }
 
       try (ResultSet rs = statement.executeQuery())
       {
-        Map<String, String> filteredValues = new HashMap<>();
+        List<ConfigurationEntry> list = new ArrayList<>();
 
         while (rs.next())
         {
-          filteredValues.put(rs.getString(1), rs.getString(2));
+          list.add(new ConfigurationEntry(rs.getString(1), rs.getString(2)));
         }
 
-        return filteredValues;
+        return list;
       }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the String configuration values matching the filter (%s): %s",
-          filter, e.getMessage()), e);
+          "Failed to retrieve the configuration entries matching the filter (%s): %s", filter,
+          e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the numbered of filtered <code>String</code> key-value pairs for the configuration
-   * values.
+   * Retrieve the numbered of filtered configuration entries.
    *
-   * @param filter the filter to apply to the keys for the configuration values
+   * @param filter the filter to apply to the keys for the configuration entries
    *
-   * @return the number of filtered <code>String</code> key-value pairs for the configuration values
+   * @return the number of filtered configuration entries
    *
    * @throws ConfigurationException
    */
-  public int getNumberOfFilteredStrings(String filter)
+  public int getNumberOfFilteredConfigurationEntries(String filter)
     throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfFilteredStringsSQL))
+      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+          ? getNumberOfConfigurationEntriesSQL
+          : getNumberOfFilteredConfigurationEntriesSQL))
     {
-      statement.setString(1, "%" + filter.toUpperCase() + "%");
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        statement.setString(1, "%" + filter.toUpperCase() + "%");
+      }
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -128,14 +140,14 @@ public class ConfigurationService
         {
           throw new ConfigurationException(String.format(
               "No rows were returned as a result of executing the SQL statement (%s)",
-              getNumberOfFilteredStringsSQL));
+              getNumberOfFilteredConfigurationEntriesSQL));
         }
       }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the number of String configuration values matching the filter (%s): %s",
+          "Failed to retrieve the number of configuration entries matching the filter (%s): %s",
           filter, e.getMessage()), e);
     }
   }
@@ -322,12 +334,19 @@ public class ConfigurationService
     // createValueSQL
     createValueSQL = "INSERT INTO " + schemaPrefix + "CONFIG (KEY, VALUE) VALUES (?, ?)";
 
-    // getFilteredStringsSQL
-    getFilteredStringsSQL = "SELECT C.KEY, C.VALUE FROM " + schemaPrefix
-        + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
+    // getConfigurationEntriesSQL
+    getConfigurationEntriesSQL = "SELECT C.KEY, C.VALUE FROM " + schemaPrefix
+        + "CONFIG C ORDER BY C.KEY";
 
-    // getNumberOfFilteredStringsSQL
-    getNumberOfFilteredStringsSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix
+    // getFilteredConfigurationEntriesSQL
+    getFilteredConfigurationEntriesSQL = "SELECT C.KEY, C.VALUE FROM " + schemaPrefix
+        + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?) ORDER BY C.KEY";
+
+    // getNumberOfConfigurationEntriesSQL
+    getNumberOfConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix + "CONFIG C";
+
+    // getNumberOfFilteredConfigurationEntriesSQL
+    getNumberOfFilteredConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix
         + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
 
     // getValueSQL

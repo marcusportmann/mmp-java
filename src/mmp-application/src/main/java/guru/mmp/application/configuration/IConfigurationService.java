@@ -18,6 +18,7 @@ package guru.mmp.application.configuration;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,29 +30,28 @@ import java.util.Map;
 public interface IConfigurationService
 {
   /**
-   * Retrieve the numbered of filtered <code>String</code> key-value pairs for the configuration
-   * values.
+   * Retrieve the filtered configuration entries.
    *
-   * @param filter the filter to apply to the keys for the configuration values
+   * @param filter the filter to apply to the keys for the configuration entries
    *
-   * @return the number of filtered <code>String</code> key-value pairs for the configuration values
+   * @return the filtered configuration entries
    *
    * @throws ConfigurationException
    */
-  int getNumberOfFilteredStrings(String filter)
+  List<ConfigurationEntry> getFilteredConfigurationEntries(String filter)
     throws ConfigurationException;
 
   /**
-   * Retrieve the filtered <code>String</code> key-value pairs for the configuration values.
+   * Retrieve the numbered of filtered configuration entries.
    *
-   * @param filter the filter to apply to the keys for the configuration values
+   * @param filter the filter to apply to the keys for the configuration entries
    *
-   * @return the filtered <code>String</code> key-value pairs for the configuration values
+   * @return the number of filtered configuration entries
    *
    * @throws ConfigurationException
    */
-  Map<String, String> getFilteredStrings(String filter)
-      throws ConfigurationException;
+  int getNumberOfFilteredConfigurationEntries(String filter)
+    throws ConfigurationException;
 
   /**
    * Retrieve the <code>String</code> configuration value.
@@ -64,7 +64,7 @@ public interface IConfigurationService
    * @throws ConfigurationException
    */
   String getString(String key)
-      throws ConfigurationException;
+    throws ConfigurationException;
 
   /**
    * Check if a configuration value with the specified key exists.
@@ -77,7 +77,7 @@ public interface IConfigurationService
    * @throws ConfigurationException
    */
   boolean keyExists(String key)
-      throws ConfigurationException;
+    throws ConfigurationException;
 
   /**
    * Set the configuration key to the specified value.
@@ -88,5 +88,5 @@ public interface IConfigurationService
    * @throws ConfigurationException
    */
   void setValue(String key, Object value)
-      throws ConfigurationException;
+    throws ConfigurationException;
 }

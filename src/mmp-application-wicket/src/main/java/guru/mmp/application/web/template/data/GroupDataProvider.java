@@ -22,15 +22,16 @@ import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>GroupDataProvider</code> class provides an <code>IDataProvider</code>
@@ -94,22 +95,14 @@ public class GroupDataProvider extends InjectableDataProvider<Group>
     {
       List<Group> allGroups = securityService.getGroups(userDirectoryId);
 
-      List<Group> groups = new ArrayList<>();
-
-      long end = first + count;
-
-      for (long i = first; ((i < end) && (i < allGroups.size())); i++)
-      {
-        groups.add(allGroups.get((int) i));
-      }
-
-      return groups.iterator();
+      return allGroups.subList((int) first, (int) Math.min(first + count, allGroups.size()))
+          .iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
           "Failed to load the groups from index (%d) to (%d) for the user directory (%s)", first,
-          first + count, userDirectoryId), e);
+          first + count - 1, userDirectoryId), e);
     }
   }
 

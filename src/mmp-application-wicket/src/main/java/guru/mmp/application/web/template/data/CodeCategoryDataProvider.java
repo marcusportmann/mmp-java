@@ -96,7 +96,7 @@ public class CodeCategoryDataProvider extends InjectableDataProvider<CodeCategor
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-          "Failed to load the code categories from index (%d) to (%d)", first, first + count), e);
+          "Failed to load the code categories from index (%d) to (%d)", first, first + count - 1), e);
     }
   }
 
