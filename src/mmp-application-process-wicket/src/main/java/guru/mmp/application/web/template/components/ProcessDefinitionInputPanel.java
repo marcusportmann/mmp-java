@@ -23,9 +23,9 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.PropertyModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessDefinitionInputPanel</code> class provides a Wicket component that can

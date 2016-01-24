@@ -19,150 +19,22 @@ package guru.mmp.application.configuration;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * The <code>IConfigurationService</code> interface defines the functionality provided by a Config Service
- * implementation, which manages the configuration information for an application or service.
+ * The <code>IConfigurationService</code> interface defines the functionality provided by a
+ * Configuration Service implementation, which manages the configuration information for an
+ * application or service.
  *
  * @author Marcus Portmann
  */
 public interface IConfigurationService
 {
   /**
-   * Retrieve the filtered configuration entries.
+   * Retrieve the binary configuration value.
    *
-   * @param filter the filter to apply to the keys for the configuration entries
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return the filtered configuration entries
-   *
-   * @throws ConfigurationException
-   */
-  List<ConfigurationEntry> getFilteredConfigurationEntries(String filter)
-    throws ConfigurationException;
-
-  /**
-   * Retrieve the numbered of filtered configuration entries.
-   *
-   * @param filter the filter to apply to the keys for the configuration entries
-   *
-   * @return the number of filtered configuration entries
-   *
-   * @throws ConfigurationException
-   */
-  int getNumberOfFilteredConfigurationEntries(String filter)
-    throws ConfigurationException;
-
-  /**
-   * Retrieve the value for the <code>String</code> configuration entry.
-   *
-   * @param key the key used to uniquely identify the configuration entry
-   *
-   * @return the value for the <code>String</code> configuration entry or <code>null</code> if the
-   *         configuration entry could not be found
-   *
-   * @throws ConfigurationException
-   */
-  String getString(String key)
-    throws ConfigurationException;
-
-
-
-
-
-
-  /**
-   * Retrieve the <code>Integer</code> configuration entry.
-   *
-   * @param key the key used to uniquely identify the configuration entry
-   *
-   * @return the <code>Integer</code> configuration entry or <code>null</code> if the configuration
-   *         entry could not be found
-   *
-   * @throws ConfigurationException
-   */
-  Integer getInteger(String key)
-    throws ConfigurationException;
-
-  /**
-   * Retrieve the <code>Integer</code> configuration entry.
-   *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
-   *
-   * @return the <code>Integer</code> configuration entry or the default value if the configuration
-   *         entry does not exist
-   *
-   * @throws ConfigurationException
-   */
-  int getInteger(String key, int defaultValue)
-    throws ConfigurationException;
-
-
-
-  /**
-   * Retrieve the <code>Long</code> configuration entry.
-   *
-   * @param key the key used to uniquely identify the configuration entry
-   *
-   * @return the <code>Long</code> configuration entry or <code>null</code> if the configuration
-   *         entry could not be found
-   *
-   * @throws ConfigurationException
-   */
-  Long getLong(String key)
-    throws ConfigurationException;
-
-  /**
-   * Retrieve the <code>Long</code> configuration entry.
-   *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
-   *
-   * @return the <code>Long</code> configuration entry or the default value if the configuration
-   *         entry does not exist
-   *
-   * @throws ConfigurationException
-   */
-  long getLong(String key, long defaultValue)
-    throws ConfigurationException;
-
-
-  /**
-   * Retrieve the <code>Double</code> configuration entry.
-   *
-   * @param key the key used to uniquely identify the configuration entry
-   *
-   * @return the <code>Double</code> configuration entry or <code>null</code> if the configuration
-   *         entry could not be found
-   *
-   * @throws ConfigurationException
-   */
-  Double getDouble(String key)
-    throws ConfigurationException;
-
-  /**
-   * Retrieve the <code>Double</code> configuration entry.
-   *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
-   *
-   * @return the <code>Double</code> configuration entry or the default value if the configuration
-   *         entry does not exist
-   *
-   * @throws ConfigurationException
-   */
-  double getDouble(String key, double defaultValue)
-    throws ConfigurationException;
-
-
-
-  /**
-   * Retrieve the binary configuration entry.
-   *
-   * @param key the key used to uniquely identify the configuration entry
-   *
-   * @return the binary configuration entry or <code>null</code> if the configuration entry could
+   * @return the binary configuration value or <code>null</code> if the configuration value could
    *         not be found
    *
    * @throws ConfigurationException
@@ -171,12 +43,12 @@ public interface IConfigurationService
     throws ConfigurationException;
 
   /**
-   * Retrieve the binary configuration entry.
+   * Retrieve the binary configuration value.
    *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
    *
-   * @return the binary configuration entry or the default value if the configuration entry does
+   * @return the binary configuration value or the default value if the configuration value does
    *         not exist
    *
    * @throws ConfigurationException
@@ -184,16 +56,132 @@ public interface IConfigurationService
   byte[] getBinary(String key, byte[] defaultValue)
     throws ConfigurationException;
 
-
+  /**
+   * Retrieve the <code>Double</code> configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return the <code>Double</code> configuration value or <code>null</code> if the configuration
+   *         entry could not be found
+   *
+   * @throws ConfigurationException
+   */
+  Double getDouble(String key)
+    throws ConfigurationException;
 
   /**
-   * Retrieve the value for the <code>String</code> configuration entry.
+   * Retrieve the <code>Double</code> configuration value.
    *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
    *
-   * @return the value for the <code>String</code> configuration entry or the default value if the
-   *         configuration entry does not exist
+   * @return the <code>Double</code> configuration value or the default value if the configuration
+   *         entry does not exist
+   *
+   * @throws ConfigurationException
+   */
+  double getDouble(String key, double defaultValue)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the filtered configuration values.
+   *
+   * @param filter the filter to apply to the keys for the configuration values
+   *
+   * @return the filtered configuration values
+   *
+   * @throws ConfigurationException
+   */
+  List<ConfigurationValue> getFilteredConfigurationValues(String filter)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the <code>Integer</code> configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return the <code>Integer</code> configuration value or <code>null</code> if the configuration
+   *         entry could not be found
+   *
+   * @throws ConfigurationException
+   */
+  Integer getInteger(String key)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the <code>Integer</code> configuration value.
+   *
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
+   *
+   * @return the <code>Integer</code> configuration value or the default value if the configuration
+   *         entry does not exist
+   *
+   * @throws ConfigurationException
+   */
+  int getInteger(String key, int defaultValue)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the <code>Long</code> configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return the <code>Long</code> configuration value or <code>null</code> if the configuration
+   *         entry could not be found
+   *
+   * @throws ConfigurationException
+   */
+  Long getLong(String key)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the <code>Long</code> configuration value.
+   *
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
+   *
+   * @return the <code>Long</code> configuration value or the default value if the configuration
+   *         entry does not exist
+   *
+   * @throws ConfigurationException
+   */
+  long getLong(String key, long defaultValue)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the numbered of filtered configuration values.
+   *
+   * @param filter the filter to apply to the keys for the configuration values
+   *
+   * @return the number of filtered configuration values
+   *
+   * @throws ConfigurationException
+   */
+  int getNumberOfFilteredConfigurationValues(String filter)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the value for the <code>String</code> configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return the value for the <code>String</code> configuration value or <code>null</code> if the
+   *         configuration value could not be found
+   *
+   * @throws ConfigurationException
+   */
+  String getString(String key)
+    throws ConfigurationException;
+
+  /**
+   * Retrieve the value for the <code>String</code> configuration value.
+   *
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
+   *
+   * @return the value for the <code>String</code> configuration value or the default value if the
+   *         configuration value does not exist
    *
    * @throws ConfigurationException
    */
@@ -201,11 +189,11 @@ public interface IConfigurationService
     throws ConfigurationException;
 
   /**
-   * Check if a configuration entry with the specified key exists.
+   * Check if a configuration value with the specified key exists.
    *
-   * @param key the key used to uniquely identify the configuration entry
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return <code>true</code> if a configuration entry with the specified key exists or
+   * @return <code>true</code> if a configuration value with the specified key exists or
    *         <code>false</code> otherwise
    *
    * @throws ConfigurationException
@@ -216,7 +204,7 @@ public interface IConfigurationService
   /**
    * Set the configuration key to the specified value.
    *
-   * @param key   the key used to uniquely identify the configuration entry
+   * @param key   the key used to uniquely identify the configuration value
    * @param value the value
    *
    * @throws ConfigurationException

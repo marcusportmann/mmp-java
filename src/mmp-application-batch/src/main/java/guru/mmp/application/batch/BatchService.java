@@ -437,22 +437,11 @@ public class BatchService
   {
     try
     {
-      // Initialise the configuration
-      if (!registry.integerValueExists("/Services/BatchService", "JobExecutionRetryDelay"))
-      {
-        registry.setIntegerValue("/Services/BatchService", "JobExecutionRetryDelay", 600000);
-      }
+      jobExecutionRetryDelay = configurationService.getInteger(
+          "BatchService.JobExecutionRetryDelay", 60000);
 
-      if (!registry.integerValueExists("/Services/BatchService", "MaximumJobExecutionAttempts"))
-      {
-        registry.setIntegerValue("/Services/BatchService", "MaximumJobExecutionAttempts", 6 * 24);
-      }
-
-      jobExecutionRetryDelay = registry.getIntegerValue("/Services/BatchService",
-          "JobExecutionRetryDelay", 600000);
-
-      maximumJobExecutionAttempts = registry.getIntegerValue("/Services/BatchService",
-          "MaximumJobExecutionAttempts", 6 * 24);
+      maximumJobExecutionAttempts = configurationService.getInteger(
+          "BatchService.MaximumJobExecutionAttempts", 6 * 24);
     }
     catch (Throwable e)
     {

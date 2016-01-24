@@ -18,7 +18,7 @@ package guru.mmp.application.web.template.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.ConfigurationEntry;
+import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
@@ -33,20 +33,20 @@ import java.util.*;
 import javax.inject.Inject;
 
 /**
- * The <code>FilteredConfigurationEntryDataProvider</code> class provides an
+ * The <code>FilteredConfigurationValueDataProvider</code> class provides an
  * <code>IDataProvider</code> implementation that retrieves a filtered list of
- * <code>ConfigurationEntry</code> instances for the configuration values managed by the
+ * <code>ConfigurationValue</code> instances for the configuration values managed by the
  * Configuration Service.
  *
  * @author Marcus Portmann
  */
-public class FilteredConfigurationEntryDataProvider
-    extends InjectableDataProvider<ConfigurationEntry>
+public class FilteredConfigurationValueDataProvider
+    extends InjectableDataProvider<ConfigurationValue>
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The filter used to limit the matching configuration entries.
+   * The filter used to limit the matching configuration values.
    */
   private String filter;
 
@@ -55,9 +55,9 @@ public class FilteredConfigurationEntryDataProvider
   private IConfigurationService configurationService;
 
   /**
-   * Constructs a new <code>FilteredConfigurationEntryDataProvider</code>.
+   * Constructs a new <code>FilteredConfigurationValueDataProvider</code>.
    */
-  public FilteredConfigurationEntryDataProvider() {}
+  public FilteredConfigurationValueDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -65,9 +65,9 @@ public class FilteredConfigurationEntryDataProvider
   public void detach() {}
 
   /**
-   * Returns the filter used to limit the matching configuration entries.
+   * Returns the filter used to limit the matching configuration values.
    *
-   * @return the filter used to limit the matching configuration entries
+   * @return the filter used to limit the matching configuration values
    */
   public String getFilter()
   {
@@ -75,53 +75,53 @@ public class FilteredConfigurationEntryDataProvider
   }
 
   /**
-   * Retrieves the matching configuration entries from the Configuration Service starting with
+   * Retrieves the matching configuration values from the Configuration Service starting with
    * index <code>first</code> and ending with <code>first+count</code>.
    *
    * @param first the index of the first entry to return
    * @param count the number of the entries to return
    *
-   * @return the configuration entries retrieved from the Configuration Service starting with index
+   * @return the configuration values retrieved from the Configuration Service starting with index
    * <code>first</code> and ending with <code>first+count</code>
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
-  public Iterator<ConfigurationEntry> iterator(long first, long count)
+  public Iterator<ConfigurationValue> iterator(long first, long count)
   {
     try
     {
-      List<ConfigurationEntry> allConfigurationEntries =
-          configurationService.getFilteredConfigurationEntries(filter);
+      List<ConfigurationValue> allConfigurationEntries =
+          configurationService.getFilteredConfigurationValues(filter);
 
       return allConfigurationEntries.subList((int) first, (int) Math.min(first + count,
           allConfigurationEntries.size())).iterator();
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to load the configuration entries"
+      throw new WebApplicationException(String.format("Failed to load the configuration values"
           + " from index (%d) to (%d) matching the filter (%s)", first, first + count - 1, filter),
           e);
     }
   }
 
   /**
-   * Wraps the retrieved <code>ConfigurationEntry</code> POJO with a Wicket model.
+   * Wraps the retrieved <code>ConfigurationValue</code> POJO with a Wicket model.
    *
-   * @param configurationEntry the <code>ConfigurationEntry</code> instance to wrap
+   * @param configurationValue the <code>ConfigurationValue</code> instance to wrap
    *
-   * @return the Wicket model wrapping the <code>ConfigurationEntry</code> instance
+   * @return the Wicket model wrapping the <code>ConfigurationValue</code> instance
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    */
-  public IModel<ConfigurationEntry> model(ConfigurationEntry configurationEntry)
+  public IModel<ConfigurationValue> model(ConfigurationValue configurationValue)
   {
-    return new Model<ConfigurationEntry>(configurationEntry);
+    return new Model<>(configurationValue);
   }
 
   /**
-   * Set the filter used to limit the matching configuration entries.
+   * Set the filter used to limit the matching configuration values.
    *
-   * @param filter the filter used to limit the matching configuration entries
+   * @param filter the filter used to limit the matching configuration values
    */
   public void setFilter(String filter)
   {
@@ -129,9 +129,9 @@ public class FilteredConfigurationEntryDataProvider
   }
 
   /**
-   * Returns the total number of filtered configuration entries.
+   * Returns the total number of filtered configuration values.
    *
-   * @return the total number of filtered configuration entries
+   * @return the total number of filtered configuration values
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#size()
    */
@@ -139,12 +139,12 @@ public class FilteredConfigurationEntryDataProvider
   {
     try
     {
-      return configurationService.getNumberOfFilteredConfigurationEntries(filter);
+      return configurationService.getNumberOfFilteredConfigurationValues(filter);
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format("Failed to retrieve the number of"
-          + " configuration entries matching the filter (%s)", filter), e);
+          + " configuration values matching the filter (%s)", filter), e);
     }
   }
 }

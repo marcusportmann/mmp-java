@@ -22,16 +22,13 @@ import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.ArrayList;
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessDefinitionSummaryDataProvider</code> class provides an

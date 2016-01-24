@@ -21,37 +21,40 @@ package guru.mmp.application.configuration;
 import java.io.Serializable;
 
 /**
- * The <code>ConfigurationEntry</code> class stores the key and value for a configuration entry.
+ * The <code>ConfigurationValue</code> class stores the <code>String</code> key and
+ * <code>String</code> value for a configuration value.
+ *
+ * @author Marcus Portmann
  */
-public class ConfigurationEntry
+public class ConfigurationValue
   implements Serializable
 {
   /**
-   * The key for the configuration entry.
+   * The <code>String</code> key for the configuration value.
    */
   private String key;
 
   /**
-   * The value for the configuration entry.
+   * The <code>String</code> value for the configuration value.
    */
   private String value;
 
   /**
-   * Constructs a new <code>ConfigurationEntry</code>.
+   * Constructs a new <code>ConfigurationValue</code>.
    *
-   * @param key   the key for the configuration entry
-   * @param value the value for the configuration entry
+   * @param key   the <code>String</code> key for the configuration value
+   * @param value the <code>String</code> value for the configuration value
    */
-  public ConfigurationEntry(String key, String value)
+  public ConfigurationValue(String key, String value)
   {
     this.key = key;
     this.value = value;
   }
 
   /**
-   * Returns the key for the configuration entry.
+   * Returns the <code>String</code> key for the configuration value.
    *
-   * @return the key for the configuration entry
+   * @return the <code>String</code> key for the configuration value
    */
   public String getKey()
   {
@@ -59,9 +62,9 @@ public class ConfigurationEntry
   }
 
   /**
-   * Returns the value for the configuration entry.
+   * Returns the <code>String</code> value for the configuration value.
    *
-   * @return the value for the configuration entry
+   * @return the <code>String</code> value for the configuration value
    */
   public String getValue()
   {
@@ -69,9 +72,9 @@ public class ConfigurationEntry
   }
 
   /**
-   * Set the key for the configuration entry.
+   * Set the <code>String</code> key for the configuration value.
    *
-   * @param key the key for the configuration entry
+   * @param key the <code>String</code> key for the configuration value
    */
   public void setKey(String key)
   {
@@ -79,9 +82,9 @@ public class ConfigurationEntry
   }
 
   /**
-   * Set the value for the configuration entry.
+   * Set the <code>String</code> value for the configuration value.
    *
-   * @param value the value for the configuration entry
+   * @param value the <code>String</code> value for the configuration value
    */
   public void setValue(String value)
   {

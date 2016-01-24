@@ -75,7 +75,7 @@ public class ReportDefinitionSummaryDataProvider
           reportingService.getReportDefinitionSummaries();
 
       return allReportDefinitionSummaries.subList((int) first, (int) Math.min(first + count,
-        allReportDefinitionSummaries.size())).iterator();
+          allReportDefinitionSummaries.size())).iterator();
     }
     catch (Throwable e)
     {

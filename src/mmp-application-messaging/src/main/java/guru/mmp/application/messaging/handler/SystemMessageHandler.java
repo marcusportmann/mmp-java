@@ -27,23 +27,20 @@ import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessageTranslator;
 import guru.mmp.application.messaging.messages.*;
-import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.security.AuthenticationFailedException;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.security.UserNotFoundException;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.ExceptionUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the

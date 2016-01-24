@@ -600,20 +600,18 @@ public class SMSService
     try
     {
       // Initialise the configuration
-      sendRetryDelay = configurationService.getInteger(SMSService.class.getName()
-          + ".SendRetryDelay", 600000);
+      sendRetryDelay = configurationService.getInteger("SMSService.SendRetryDelay", 600000);
 
-      maximumSendAttempts = configurationService.getInteger(SMSService.class.getName()
-          + ".MaximumSendAttempts", 100);
+      maximumSendAttempts = configurationService.getInteger("SMSService.MaximumSendAttempts", 100);
 
-      myMobileAPIUsername = configurationService.getString(SMSService.class.getName()
-          + ".MyMobileAPIUsername", "MyMobileAPIUsername");
+      myMobileAPIUsername = configurationService.getString("SMSService.MyMobileAPIUsername",
+          "MyMobileAPIUsername");
 
-      myMobileAPIPassword = configurationService.getString(SMSService.class.getName()
-          + ".MyMobileAPIPassword", "MyMobileAPIPassword");
+      myMobileAPIPassword = configurationService.getString("SMSService.MyMobileAPIPassword",
+          "MyMobileAPIPassword");
 
-      myMobileAPIEndPoint = configurationService.getString(SMSService.class.getName()
-          + ".MyMobileAPIEndPoint", "http://www.mymobileapi.com/api5/api.asmx");
+      myMobileAPIEndPoint = configurationService.getString("SMSService.MyMobileAPIEndPoint",
+          "http://www.mymobileapi.com/api5/api.asmx");
     }
     catch (Throwable e)
     {

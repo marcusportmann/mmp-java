@@ -23,11 +23,10 @@ import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DetachableProcessDefinitionModel</code> class provides a detachable model

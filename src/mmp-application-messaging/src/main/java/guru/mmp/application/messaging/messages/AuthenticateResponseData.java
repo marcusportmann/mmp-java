@@ -169,7 +169,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
       return false;
     }
 
-      if ((!rootElement.hasChild("UserEncryptionKey"))
+    if ((!rootElement.hasChild("UserEncryptionKey"))
         || (!rootElement.hasChild("ErrorCode"))
         || (!rootElement.hasChild("ErrorMessage")))
     {

@@ -25,17 +25,15 @@ import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.messages.AuthenticateRequestData;
 import guru.mmp.application.messaging.messages.AuthenticateResponseData;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
-import javax.inject.Inject;
 
 /**
  * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit

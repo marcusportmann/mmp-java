@@ -42,6 +42,12 @@ div.side-content ul.list.list-activity li.action i.fa
   padding-right: 20px;
 }
 
+.side-header.side-content .current-user
+{
+  padding-top: 10px;
+  padding-left: 15px;
+}
+
 .breadcrumb
 {
   font-weight: 400;

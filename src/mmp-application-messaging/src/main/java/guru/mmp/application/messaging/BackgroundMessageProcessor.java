@@ -21,18 +21,14 @@ package guru.mmp.application.messaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.concurrent.Future;
-
 import javax.annotation.PostConstruct;
-
 import javax.ejb.*;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
+import java.util.concurrent.Future;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundMessageProcessor</code> class implements the Background Message Processor.

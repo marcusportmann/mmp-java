@@ -22,15 +22,13 @@ import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionDataProvider</code> class provides an <code>IDataProvider</code>

@@ -23,15 +23,15 @@ import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.pages.*;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.CssResourceReference;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
@@ -230,6 +230,8 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
 
     administrationGroup.addItem(new NavigationLink("Codes", "fa fa-list",
         CodeCategoryAdministrationPage.class));
+    administrationGroup.addItem(new NavigationLink("Configuration", "fa fa-list",
+        ConfigurationAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Groups", "fa fa-group",
         GroupAdministrationPage.class));
     administrationGroup.addItem(new NavigationLink("Organisations", "fa fa-globe",

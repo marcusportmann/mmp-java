@@ -177,7 +177,7 @@ public class BackendUserMenuSideOverlay extends Component
     return "<aside id=\"side-overlay\"><div id=\"side-overlay-scroll\">"
         + "<div class=\"side-header side-content\"><button class=\"btn btn-default pull-right\" "
         + "type=\"button\" data-toggle=\"layout\" data-action=\"side_overlay_close\"><i class=\"fa "
-        + "fa-times\"></i></button><div><div class=\"font-w600 text-default\">" + userFullName
+        + "fa-times\"></i></button><div class=\"current-user\"><div class=\"font-w600 text-default\">" + userFullName
         + "</div><div class=\"font-s12 text-gray-darker push-5-l\">" + organisationName
         + "</div></div></div><div class=\"side-content remove-padding-t\"><ul class=\"list "
         + "list-activity pull-r-l border-t\">";

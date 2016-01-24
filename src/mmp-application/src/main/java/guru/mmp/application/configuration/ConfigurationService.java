@@ -68,11 +68,11 @@ public class ConfigurationService
   private String getNumberOfConfigurationEntriesSQL;
 
   /**
-   * Retrieve the binary configuration entry.
+   * Retrieve the binary configuration value.
    *
-   * @param key the key used to uniquely identify the configuration entry
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return the binary configuration entry or <code>null</code> if the configuration entry could
+   * @return the binary configuration value or <code>null</code> if the configuration value could
    *         not be found
    *
    * @throws ConfigurationException
@@ -96,18 +96,18 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the binary configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the binary configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the binary configuration entry.
+   * Retrieve the binary configuration value.
    *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
    *
-   * @return the binary configuration entry or the default value if the configuration entry does
+   * @return the binary configuration value or the default value if the configuration value does
    *         not exist
    *
    * @throws ConfigurationException
@@ -124,17 +124,17 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the binary configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the binary configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the <code>Double</code> configuration entry.
+   * Retrieve the <code>Double</code> configuration value.
    *
-   * @param key the key used to uniquely identify the configuration entry
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Double</code> configuration entry or <code>null</code> if the configuration
+   * @return the <code>Double</code> configuration value or <code>null</code> if the configuration
    *         entry could not be found
    *
    * @throws ConfigurationException
@@ -158,18 +158,18 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Double configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the Double configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the <code>Double</code> configuration entry.
+   * Retrieve the <code>Double</code> configuration value.
    *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
    *
-   * @return the <code>Double</code> configuration entry or the default value if the configuration
+   * @return the <code>Double</code> configuration value or the default value if the configuration
    *         entry does not exist
    *
    * @throws ConfigurationException
@@ -186,21 +186,21 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Double configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the Double configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the filtered configuration entries.
+   * Retrieve the filtered configuration values.
    *
-   * @param filter the filter to apply to the keys for the configuration entries
+   * @param filter the filter to apply to the keys for the configuration values
    *
-   * @return the filtered configuration entries
+   * @return the filtered configuration values
    *
    * @throws ConfigurationException
    */
-  public List<ConfigurationEntry> getFilteredConfigurationEntries(String filter)
+  public List<ConfigurationValue> getFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
@@ -215,11 +215,11 @@ public class ConfigurationService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        List<ConfigurationEntry> list = new ArrayList<>();
+        List<ConfigurationValue> list = new ArrayList<>();
 
         while (rs.next())
         {
-          list.add(new ConfigurationEntry(rs.getString(1), rs.getString(2)));
+          list.add(new ConfigurationValue(rs.getString(1), rs.getString(2)));
         }
 
         return list;
@@ -228,17 +228,17 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the configuration entries matching the filter (%s): %s", filter,
+          "Failed to retrieve the configuration values matching the filter (%s): %s", filter,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the <code>Integer</code> configuration entry.
+   * Retrieve the <code>Integer</code> configuration value.
    *
-   * @param key the key used to uniquely identify the configuration entry
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Integer</code> configuration entry or <code>null</code> if the configuration
+   * @return the <code>Integer</code> configuration value or <code>null</code> if the configuration
    *         entry could not be found
    *
    * @throws ConfigurationException
@@ -262,18 +262,18 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Integer configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the Integer configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the <code>Integer</code> configuration entry.
+   * Retrieve the <code>Integer</code> configuration value.
    *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
    *
-   * @return the <code>Integer</code> configuration entry or the default value if the configuration
+   * @return the <code>Integer</code> configuration value or the default value if the configuration
    *         entry does not exist
    *
    * @throws ConfigurationException
@@ -290,17 +290,17 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Integer configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the Integer configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the <code>Long</code> configuration entry.
+   * Retrieve the <code>Long</code> configuration value.
    *
-   * @param key the key used to uniquely identify the configuration entry
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Long</code> configuration entry or <code>null</code> if the configuration
+   * @return the <code>Long</code> configuration value or <code>null</code> if the configuration
    *         entry could not be found
    *
    * @throws ConfigurationException
@@ -324,18 +324,18 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Long configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the Long configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the <code>Long</code> configuration entry.
+   * Retrieve the <code>Long</code> configuration value.
    *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
    *
-   * @return the <code>Long</code> configuration entry or the default value if the configuration
+   * @return the <code>Long</code> configuration value or the default value if the configuration
    *         entry does not exist
    *
    * @throws ConfigurationException
@@ -352,21 +352,21 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Long configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the Long configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the numbered of filtered configuration entries.
+   * Retrieve the numbered of filtered configuration values.
    *
-   * @param filter the filter to apply to the keys for the configuration entries
+   * @param filter the filter to apply to the keys for the configuration values
    *
-   * @return the number of filtered configuration entries
+   * @return the number of filtered configuration values
    *
    * @throws ConfigurationException
    */
-  public int getNumberOfFilteredConfigurationEntries(String filter)
+  public int getNumberOfFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
@@ -396,18 +396,18 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the number of configuration entries matching the filter (%s): %s",
+          "Failed to retrieve the number of configuration values matching the filter (%s): %s",
           filter, e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the value for the <code>String</code> configuration entry.
+   * Retrieve the value for the <code>String</code> configuration value.
    *
-   * @param key the key used to uniquely identify the configuration entry
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return the value for the <code>String</code> configuration entry or <code>null</code> if the
-   *         configuration entry could not be found
+   * @return the value for the <code>String</code> configuration value or <code>null</code> if the
+   *         configuration value could not be found
    *
    * @throws ConfigurationException
    */
@@ -434,19 +434,19 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the String configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the String configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the value for the <code>String</code> configuration entry.
+   * Retrieve the value for the <code>String</code> configuration value.
    *
-   * @param key          the key used to uniquely identify the configuration entry
-   * @param defaultValue the default value to return if the configuration entry does not exist
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
    *
-   * @return the value for the <code>String</code> configuration entry or the default value if the
-   *         configuration entry does not exist
+   * @return the value for the <code>String</code> configuration value or the default value if the
+   *         configuration value does not exist
    *
    * @throws ConfigurationException
    */
@@ -475,7 +475,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the String configuration entry with the key (%s): %s", key,
+          "Failed to retrieve the String configuration value with the key (%s): %s", key,
           e.getMessage()), e);
     }
   }
@@ -526,11 +526,11 @@ public class ConfigurationService
   }
 
   /**
-   * Check if a configuration entry with the specified key exists.
+   * Check if a configuration value with the specified key exists.
    *
-   * @param key the key used to uniquely identify the configuration entry
+   * @param key the key used to uniquely identify the configuration value
    *
-   * @return <code>true</code> if a configuration entry with the specified key exists or
+   * @return <code>true</code> if a configuration value with the specified key exists or
    *         <code>false</code> otherwise
    *
    * @throws ConfigurationException
@@ -552,7 +552,7 @@ public class ConfigurationService
   /**
    * Set the configuration key to the specified value.
    *
-   * @param key   the key used to uniquely identify the configuration entry
+   * @param key   the key used to uniquely identify the configuration value
    * @param value the value
    *
    * @throws ConfigurationException
@@ -596,7 +596,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to set the configuration entry with the key (%s): %s", key, e.getMessage()), e);
+          "Failed to set the configuration value with the key (%s): %s", key, e.getMessage()), e);
     }
   }
 
@@ -683,7 +683,7 @@ public class ConfigurationService
         else
         {
           throw new SQLException(String.format(
-              "Failed to check whether the configuration entry with the key (%s) exists: "
+              "Failed to check whether the configuration value with the key (%s) exists: "
               + "No results were returned as a result of executing the SQL statement (%s)", key,
               keyExistsSQL));
         }

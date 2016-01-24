@@ -23,7 +23,6 @@ import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.messaging.MessagePart.Status;
 import guru.mmp.application.messaging.handler.IMessageHandler;
 import guru.mmp.application.messaging.handler.MessageHandlerConfig;
-import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.crypto.CryptoUtils;
@@ -32,32 +31,44 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
-import javax.annotation.PostConstruct;
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+
 import java.lang.reflect.Constructor;
+
 import java.net.URL;
+
 import java.security.MessageDigest;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>MessagingService</code> class provides the implementation of the Messaging Service
@@ -82,17 +93,17 @@ public class MessagingService
   private static final byte[] AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV =
       Base64.decode("QSaz5pMnMbar66FsNdI/ZQ==");
 
-  /**
-   * The AES encryption IV.
-   */
-  private static final byte[] REGISTRY_ENCRYPTION_IV = Base64.decode("xh2wcoShURa4c6w7HbOngQ==");
-
-  /**
-   * The AES encryption key used to encrypt sensitive configuration information stored in
-   * the registry.
-   */
-  private static final byte[] REGISTRY_ENCRYPTION_KEY = Base64.decode(
-      "Ev5UOwzqSEoSsqbyCVn6q9LZHhhkbXZndDgyOGQyMjY=");
+///**
+// * The AES encryption IV.
+// */
+//private static final byte[] REGISTRY_ENCRYPTION_IV = Base64.decode("xh2wcoShURa4c6w7HbOngQ==");
+//
+///**
+// * The AES encryption key used to encrypt sensitive configuration information stored in
+// * the registry.
+// */
+//private static final byte[] REGISTRY_ENCRYPTION_KEY = Base64.decode(
+//    "Ev5UOwzqSEoSsqbyCVn6q9LZHhhkbXZndDgyOGQyMjY=");
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
@@ -1348,33 +1359,15 @@ public class MessagingService
   {
     try
     {
-      // Initialise the configuration
-      if (!registry.stringValueExists("/Services/MessagingService", "AESEncryptionMasterKey"))
-      {
-        registry.setStringValue("/Services/MessagingService", "AESEncryptionMasterKey",
-            "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=", REGISTRY_ENCRYPTION_KEY,
-            REGISTRY_ENCRYPTION_IV);
-      }
+      aesEncryptionMasterKey = configurationService.getBinary(
+          "MessagingService.AESEncryptionMasterKey", Base64.decode(
+          "m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE="));
 
-      if (!registry.integerValueExists("/Services/MessagingService", "ProcessingRetryDelay"))
-      {
-        registry.setIntegerValue("/Services/MessagingService", "ProcessingRetryDelay", 60000);
-      }
+      processingRetryDelay = configurationService.getInteger(
+          "MessagingService.ProcessingRetryDelay", 60000);
 
-      if (!registry.integerValueExists("/Services/MessagingService", "MaximumProcessingAttempts"))
-      {
-        registry.setIntegerValue("/Services/MessagingService", "MaximumProcessingAttempts", 10000);
-      }
-
-      aesEncryptionMasterKey = Base64.decode(registry.getStringValue("/Services/MessagingService",
-          "AESEncryptionMasterKey", "YRe6Xjcs/ClrT8itlgWY+cwWUJ5paW5vYWI0MWYzODk=",
-          REGISTRY_ENCRYPTION_KEY, REGISTRY_ENCRYPTION_IV));
-
-      processingRetryDelay = registry.getIntegerValue("/Services/MessagingService",
-          "ProcessingRetryDelay", 60000);
-
-      maximumProcessingAttempts = registry.getIntegerValue("/Services/MessagingService",
-          "MaximumProcessingAttempts", 10000);
+      maximumProcessingAttempts = configurationService.getInteger(
+          "MessagingService.MaximumProcessingAttempts", 1000);
     }
     catch (Throwable e)
     {

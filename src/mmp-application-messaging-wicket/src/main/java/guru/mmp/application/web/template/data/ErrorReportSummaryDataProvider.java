@@ -22,15 +22,13 @@ import guru.mmp.application.messaging.ErrorReportSummary;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorReportSummaryDataProvider</code> class provides an
