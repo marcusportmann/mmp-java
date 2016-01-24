@@ -1289,45 +1289,15 @@ INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganisationAdministration', 'Organisation Administration', 'Organisation Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('0ce064fa-c5df-4c98-a04c-ecaa334476b1', 'Application.AddOrganisation', 'Add Organisation', 'Add Organisation');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('b2c676e3-e735-4641-ba4c-6255508fa55c', 'Application.UpdateOrganisation', 'Update Organisation', 'Update Organisation');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('9cb8123f-14e5-4807-90d5-233dfbf06eaa', 'Application.RemoveOrganisation', 'Remove Organisation', 'Remove Organisation');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Application.UserAdministration', 'User Administration', 'User Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('7852b6da-b8ed-4b83-b3b8-09c8bf75d0da', 'Application.AddUser', 'Add User', 'Add User');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('7efb41d6-ed4d-4b26-9ef6-afed553adfec', 'Application.UpdateUser', 'Update User', 'Update User');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('72af0117-22fd-4fbd-8c47-25aba3e20ff3', 'Application.RemoveUser', 'Remove User', 'Remove User');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Application.GroupAdministration', 'Group Administration', 'Group Administration');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('a6a5a258-b641-455d-b8e8-895e3c0d4061', 'Application.AddGroup', 'Add Group', 'Add Group');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('5df604b2-565d-4a31-b5b0-5884232e314f', 'Application.UpdateGroup', 'Update Group', 'Update Group');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('a2cc3b0f-0cc0-4051-b877-17465f2250a6', 'Application.RemoveGroup', 'Remove Group', 'Remove Group');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('7a54a71e-3680-4d49-b87d-29604a247413', 'Application.UserGroups', 'User Groups', 'User Groups');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('0623bc3f-9a1b-4f19-8438-236660d789c5', 'Application.CodeCategoryAdministration', 'Code Category Administration', 'Code Category Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('8f37a264-2b08-44c4-9f38-476366b387b1', 'Application.AddCodeCategory', 'Add Code Category', 'Add Code Category');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('6a67414c-26b5-49a7-bc30-543d10781380', 'Application.RemoveCodeCategory', 'Remove Code Category', 'Remove Code Category');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('02983557-7377-406b-9042-638bac796e20', 'Application.UpdateCodeCategory', 'Update Code Category', 'Update Code Category');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Application.CodeAdministration', 'Code Administration', 'Code Administration');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('724ac4a2-fae8-4e55-af58-9b36948eb47e', 'Application.AddCode', 'Add Code', 'Add Code');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('abd3e562-0245-41d6-a6aa-558a00b794d9', 'Application.RemoveCode', 'Remove Code', 'Remove Code');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('37de7bc6-a668-4ac2-b4ad-9e2eb98fcdb2', 'Application.UpdateCode', 'Update Code', 'Update Code');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Application.ResetUserPassword', 'Reset User Password', 'Reset User Password');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
@@ -1341,24 +1311,17 @@ INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Application.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('5f3cf70e-d753-4ff9-a97a-314e50869283', 'Application.AddReportDefinition', 'Add Report Definition', 'Add Report Definition');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('993aefe2-a2a9-4371-a7a5-a4a73b56c385', 'Application.RemoveReportDefinition', 'Remove Report Definition', 'Remove Report Definition');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('96e22f92-0b4d-4422-8e59-406d9fab022b', 'Application.UpdateReportDefinition', 'Update Report Definition', 'Update Report Definition');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Application.ViewReport', 'View Report', 'View Report');
 
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Application.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('3dfad4f2-de9c-4666-94de-121e2ab27099', 'Application.AddProcessDefinition', 'Add Process Definition', 'Add Process Definition');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('176353f7-ad0c-4d25-9f74-b63e51ef1503', 'Application.RemoveProcessDefinition', 'Remove Process Definition', 'Remove Process Definition');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
-  ('53cf2ea1-509e-4b71-b763-f408c165cf41', 'Application.UpdateProcessDefinition', 'Update Process Definition', 'Update Process Definition');
-INSERT INTO MMP.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES
   ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Application.ViewProcess', 'View Process', 'View Process');
+
+INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
+  ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
+INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
+  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organisation Administrator', 'Organisation Administrator');
 
 INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
   ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
@@ -1378,22 +1341,13 @@ INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('9105fb6d-16
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ConfigurationAdministration
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ErrorReports
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ReportDefinitionAdministration
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('5f3cf70e-d753-4ff9-a97a-314e50869283', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.AddReportDefinition
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('993aefe2-a2a9-4371-a7a5-a4a73b56c385', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.RemoveReportDefinition
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('96e22f92-0b4d-4422-8e59-406d9fab022b', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UpdateReportDefinition
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewReport
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ProcessDefinitionAdministration
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('3dfad4f2-de9c-4666-94de-121e2ab27099', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.AddProcessDefinition
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('176353f7-ad0c-4d25-9f74-b63e51ef1503', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.RemoveProcessDefinition
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('53cf2ea1-509e-4b71-b763-f408c165cf41', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UpdateProcessDefinition
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewProcess
 
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.SecureHome
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.Dashboard
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserAdministration
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7852b6da-b8ed-4b83-b3b8-09c8bf75d0da', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.AddUser
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7efb41d6-ed4d-4b26-9ef6-afed553adfec', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UpdateUser
-INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('72af0117-22fd-4fbd-8c47-25aba3e20ff3', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.RemoveUser
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserGroups
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ResetUserPassword
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ViewReport

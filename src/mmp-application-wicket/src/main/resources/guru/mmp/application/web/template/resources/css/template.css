@@ -162,28 +162,28 @@ table.table-actions > tbody > tr > td > div > a > i
   padding-bottom: 2px;
 }
 
-.table-actions tbody > tr > td.one-action
+.table-actions thead > tr > th.one-action, .table-actions tbody > tr > td.one-action
 {
   text-align: center;
   white-space: nowrap;
   width: 30px;
 }
 
-.table-actions tbody > tr > td.two-actions
+.table-actions thead > tr > th.two-actions, .table-actions tbody > tr > td.two-actions
 {
   text-align: center;
   width: 60px;
   white-space: nowrap;
 }
 
-.table-actions tbody > tr > td.three-actions
+.table-actions thead > tr > th.three-actions, .table-actions tbody > tr > td.three-actions
 {
   text-align: center;
   width: 100px;
   white-space: nowrap;
 }
 
-.table-actions tbody > tr > td.four-actions
+.table-actions thead > tr > th.four-actions, .table-actions tbody > tr > td.four-actions
 {
   text-align: center;
   width: 120px;
