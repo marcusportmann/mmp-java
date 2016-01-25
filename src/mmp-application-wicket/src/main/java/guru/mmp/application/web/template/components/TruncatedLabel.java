@@ -16,9 +16,15 @@
 
 package guru.mmp.application.web.template.components;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
@@ -29,15 +35,18 @@ import java.io.Serializable;
 public class TruncatedLabel extends Label
 {
   private static final long serialVersionUID = 1000000;
+  private int size;
 
   /**
    * Constructs a new <code>TruncatedLabel</code>.
    *
-   * @param id the non-null id of this component
+   * @param id   the non-null id of this component
+   * @param size the maximum number of characters to display for the label
    */
-  public TruncatedLabel(String id)
+  public TruncatedLabel(String id, int size)
   {
     super(id);
+    this.size = size;
   }
 
   /**
@@ -45,10 +54,12 @@ public class TruncatedLabel extends Label
    *
    * @param id    the non-null id of this component
    * @param model the model for this component
+   * @param size  the maximum number of characters to display for the label
    */
-  public TruncatedLabel(String id, IModel<?> model)
+  public TruncatedLabel(String id, IModel<?> model, int size)
   {
     super(id, model);
+    this.size = size;
   }
 
   /**
@@ -56,14 +67,25 @@ public class TruncatedLabel extends Label
    *
    * @param id    the non-null id of this component
    * @param label the label text or object, converted to a string via the
-   *              {@link org.apache.wicket.util.convert.IConverter}.
+   *              {@link org.apache.wicket.util.convert.IConverter}
+   * @param size  the maximum number of characters to display for the label
    */
-  public TruncatedLabel(String id, Serializable label)
+  public TruncatedLabel(String id, Serializable label, int size)
   {
-    this(id, Model.of(label));
+    super(id, label);
+    this.size = size;
   }
 
+  @Override
+  public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+  {
+    String value = getDefaultModelObjectAsString();
 
+    if (value.length() > size)
+    {
+      value = value.substring(0, size) + "&hellip;";
+    }
 
-
+    replaceComponentTagBody(markupStream, openTag, value);
+  }
 }

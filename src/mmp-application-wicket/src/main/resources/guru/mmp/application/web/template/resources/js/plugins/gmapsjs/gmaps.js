@@ -14,16 +14,12 @@
 }(this, function() {
 
 /*!
- * GMaps.js v0.4.19
+ * GMaps.js v0.4.22
  * http://hpneo.github.com/gmaps/
  *
  * Copyright 2015, Gustavo Leon
  * Released under the MIT License.
  */
-
-if (!(typeof window.google === 'object' && window.google.maps)) {
-  throw 'Google Maps API is required. Please register the following JavaScript library http://maps.google.com/maps/api/js?sensor=true.'
-}
 
 var extend_object = function(obj, new_obj) {
   var name;
@@ -33,7 +29,9 @@ var extend_object = function(obj, new_obj) {
   }
 
   for (name in new_obj) {
-    obj[name] = new_obj[name];
+    if (new_obj[name] !== undefined) {
+      obj[name] = new_obj[name];
+    }
   }
 
   return obj;
@@ -120,9 +118,7 @@ var arrayToLatLng = function(coords, useGeoJSON) {
   return coords;
 };
 
-
 var getElementsByClassName = function (class_name, context) {
-
     var element,
         _class = class_name.replace('.', '');
 
@@ -164,6 +160,14 @@ var findAbsolutePosition = function(obj)  {
 
 var GMaps = (function(global) {
   "use strict";
+
+  if (!(typeof window.google === 'object' && window.google.maps)) {
+    if (typeof window.console === 'object' && window.console.error) {
+      console.error('Google Maps API is required. Please register the following JavaScript library https://maps.googleapis.com/maps/api/js.');
+    }
+
+    return function() {};
+  }
 
   var doc = document;
 
@@ -222,13 +226,11 @@ var GMaps = (function(global) {
         };
 
       if (typeof(options.el) === 'string' || typeof(options.div) === 'string') {
-
-          if (identifier.indexOf("#") > -1) {
-              this.el = getElementById(identifier, options.context);
-          } else {
-              this.el = getElementsByClassName.apply(this, [identifier, options.context]);
-          }
-
+        if (identifier.indexOf("#") > -1) {
+            this.el = getElementById(identifier, options.context);
+        } else {
+            this.el = getElementsByClassName.apply(this, [identifier, options.context]);
+        }
       } else {
           this.el = identifier;
       }
@@ -1374,7 +1376,7 @@ GMaps.prototype.getRoutes = function(options) {
       }
 
       if (options.callback) {
-        options.callback(self.routes);
+        options.callback(self.routes, result, status);
       }
     }
     else {
@@ -1386,7 +1388,7 @@ GMaps.prototype.getRoutes = function(options) {
 };
 
 GMaps.prototype.removeRoutes = function() {
-  this.routes = [];
+  this.routes.length = 0;
 };
 
 GMaps.prototype.getElevations = function(options) {
@@ -1434,6 +1436,35 @@ GMaps.prototype.getElevations = function(options) {
 
 GMaps.prototype.cleanRoute = GMaps.prototype.removePolylines;
 
+GMaps.prototype.renderRoute = function(options, renderOptions) {
+  var self = this,
+      panel = ((typeof renderOptions.panel === 'string') ? document.getElementById(renderOptions.panel.replace('#', '')) : renderOptions.panel),
+      display;
+
+  renderOptions.panel = panel;
+  renderOptions = extend_object({
+    map: this.map
+  }, renderOptions);
+  display = new google.maps.DirectionsRenderer(renderOptions);
+
+  this.getRoutes({
+    origin: options.origin,
+    destination: options.destination,
+    travelMode: options.travelMode,
+    waypoints: options.waypoints,
+    unitSystem: options.unitSystem,
+    error: options.error,
+    avoidHighways: options.avoidHighways,
+    avoidTolls: options.avoidTolls,
+    optimizeWaypoints: options.optimizeWaypoints,
+    callback: function(routes, response, status) {
+      if (status === google.maps.DirectionsStatus.OK) {
+        display.setDirections(response);
+      }
+    }
+  });
+};
+
 GMaps.prototype.drawRoute = function(options) {
   var self = this;
 
@@ -1444,10 +1475,13 @@ GMaps.prototype.drawRoute = function(options) {
     waypoints: options.waypoints,
     unitSystem: options.unitSystem,
     error: options.error,
-    callback: function(e) {
-      if (e.length > 0) {
+    avoidHighways: options.avoidHighways,
+    avoidTolls: options.avoidTolls,
+    optimizeWaypoints: options.optimizeWaypoints,
+    callback: function(routes) {
+      if (routes.length > 0) {
         var polyline_options = {
-          path: e[e.length - 1].overview_path,
+          path: routes[routes.length - 1].overview_path,
           strokeColor: options.strokeColor,
           strokeOpacity: options.strokeOpacity,
           strokeWeight: options.strokeWeight
@@ -1458,9 +1492,9 @@ GMaps.prototype.drawRoute = function(options) {
         }
 
         self.drawPolyline(polyline_options);
-        
+
         if (options.callback) {
-          options.callback(e[e.length - 1]);
+          options.callback(routes[routes.length - 1]);
         }
       }
     }
@@ -1514,7 +1548,7 @@ GMaps.prototype.travelRoute = function(options) {
 
 GMaps.prototype.drawSteppedRoute = function(options) {
   var self = this;
-  
+
   if (options.origin && options.destination) {
     this.getRoutes({
       origin: options.origin,
@@ -2006,6 +2040,10 @@ GMaps.prototype.off = function(event_name) {
   GMaps.off(event_name, this);
 };
 
+GMaps.prototype.once = function(event_name, handler) {
+  return GMaps.once(event_name, this, handler);
+};
+
 GMaps.custom_events = ['marker_added', 'marker_removed', 'polyline_added', 'polyline_removed', 'polygon_added', 'polygon_removed', 'geolocated', 'geolocation_failed'];
 
 GMaps.on = function(event_name, object, handler) {
@@ -2033,6 +2071,13 @@ GMaps.off = function(event_name, object) {
   }
   else {
     object.registered_events[event_name] = [];
+  }
+};
+
+GMaps.once = function(event_name, object, handler) {
+  if (GMaps.custom_events.indexOf(event_name) == -1) {
+    if(object instanceof GMaps) object = object.map;
+    return google.maps.event.addListenerOnce(object, event_name, handler);
   }
 };
 
@@ -2096,91 +2141,93 @@ GMaps.geocode = function(options) {
   });
 };
 
-//==========================
-// Polygon containsLatLng
-// https://github.com/tparkin/Google-Maps-Point-in-Polygon
-// Poygon getBounds extension - google-maps-extensions
-// http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.js
-if (!google.maps.Polygon.prototype.getBounds) {
-  google.maps.Polygon.prototype.getBounds = function(latLng) {
-    var bounds = new google.maps.LatLngBounds();
-    var paths = this.getPaths();
-    var path;
+if (typeof window.google === 'object' && window.google.maps) {
+  //==========================
+  // Polygon containsLatLng
+  // https://github.com/tparkin/Google-Maps-Point-in-Polygon
+  // Poygon getBounds extension - google-maps-extensions
+  // http://code.google.com/p/google-maps-extensions/source/browse/google.maps.Polygon.getBounds.js
+  if (!google.maps.Polygon.prototype.getBounds) {
+    google.maps.Polygon.prototype.getBounds = function(latLng) {
+      var bounds = new google.maps.LatLngBounds();
+      var paths = this.getPaths();
+      var path;
 
-    for (var p = 0; p < paths.getLength(); p++) {
-      path = paths.getAt(p);
-      for (var i = 0; i < path.getLength(); i++) {
-        bounds.extend(path.getAt(i));
-      }
-    }
-
-    return bounds;
-  };
-}
-
-if (!google.maps.Polygon.prototype.containsLatLng) {
-  // Polygon containsLatLng - method to determine if a latLng is within a polygon
-  google.maps.Polygon.prototype.containsLatLng = function(latLng) {
-    // Exclude points outside of bounds as there is no way they are in the poly
-    var bounds = this.getBounds();
-
-    if (bounds !== null && !bounds.contains(latLng)) {
-      return false;
-    }
-
-    // Raycast point in polygon method
-    var inPoly = false;
-
-    var numPaths = this.getPaths().getLength();
-    for (var p = 0; p < numPaths; p++) {
-      var path = this.getPaths().getAt(p);
-      var numPoints = path.getLength();
-      var j = numPoints - 1;
-
-      for (var i = 0; i < numPoints; i++) {
-        var vertex1 = path.getAt(i);
-        var vertex2 = path.getAt(j);
-
-        if (vertex1.lng() < latLng.lng() && vertex2.lng() >= latLng.lng() || vertex2.lng() < latLng.lng() && vertex1.lng() >= latLng.lng()) {
-          if (vertex1.lat() + (latLng.lng() - vertex1.lng()) / (vertex2.lng() - vertex1.lng()) * (vertex2.lat() - vertex1.lat()) < latLng.lat()) {
-            inPoly = !inPoly;
-          }
+      for (var p = 0; p < paths.getLength(); p++) {
+        path = paths.getAt(p);
+        for (var i = 0; i < path.getLength(); i++) {
+          bounds.extend(path.getAt(i));
         }
-
-        j = i;
       }
-    }
 
-    return inPoly;
+      return bounds;
+    };
+  }
+
+  if (!google.maps.Polygon.prototype.containsLatLng) {
+    // Polygon containsLatLng - method to determine if a latLng is within a polygon
+    google.maps.Polygon.prototype.containsLatLng = function(latLng) {
+      // Exclude points outside of bounds as there is no way they are in the poly
+      var bounds = this.getBounds();
+
+      if (bounds !== null && !bounds.contains(latLng)) {
+        return false;
+      }
+
+      // Raycast point in polygon method
+      var inPoly = false;
+
+      var numPaths = this.getPaths().getLength();
+      for (var p = 0; p < numPaths; p++) {
+        var path = this.getPaths().getAt(p);
+        var numPoints = path.getLength();
+        var j = numPoints - 1;
+
+        for (var i = 0; i < numPoints; i++) {
+          var vertex1 = path.getAt(i);
+          var vertex2 = path.getAt(j);
+
+          if (vertex1.lng() < latLng.lng() && vertex2.lng() >= latLng.lng() || vertex2.lng() < latLng.lng() && vertex1.lng() >= latLng.lng()) {
+            if (vertex1.lat() + (latLng.lng() - vertex1.lng()) / (vertex2.lng() - vertex1.lng()) * (vertex2.lat() - vertex1.lat()) < latLng.lat()) {
+              inPoly = !inPoly;
+            }
+          }
+
+          j = i;
+        }
+      }
+
+      return inPoly;
+    };
+  }
+
+  if (!google.maps.Circle.prototype.containsLatLng) {
+    google.maps.Circle.prototype.containsLatLng = function(latLng) {
+      if (google.maps.geometry) {
+        return google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
+      }
+      else {
+        return true;
+      }
+    };
+  }
+
+  google.maps.LatLngBounds.prototype.containsLatLng = function(latLng) {
+    return this.contains(latLng);
+  };
+
+  google.maps.Marker.prototype.setFences = function(fences) {
+    this.fences = fences;
+  };
+
+  google.maps.Marker.prototype.addFence = function(fence) {
+    this.fences.push(fence);
+  };
+
+  google.maps.Marker.prototype.getId = function() {
+    return this['__gm_id'];
   };
 }
-
-if (!google.maps.Circle.prototype.containsLatLng) {
-  google.maps.Circle.prototype.containsLatLng = function(latLng) {
-    if (google.maps.geometry) {
-      return google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
-    }
-    else {
-      return true;
-    }
-  };
-}
-
-google.maps.LatLngBounds.prototype.containsLatLng = function(latLng) {
-  return this.contains(latLng);
-};
-
-google.maps.Marker.prototype.setFences = function(fences) {
-  this.fences = fences;
-};
-
-google.maps.Marker.prototype.addFence = function(fence) {
-  this.fences.push(fence);
-};
-
-google.maps.Marker.prototype.getId = function() {
-  return this['__gm_id'];
-};
 
 //==========================
 // Array indexOf

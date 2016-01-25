@@ -118,7 +118,7 @@ public class Breadcrumbs extends Component
         if (clazz.isAssignableFrom(getPage().getPageClass()))
         {
           buffer.append(
-              "<li class=\"active\"><a href=\"#\"><i class=\"fa-home\"></i>Home</a></li>");
+              "<li class=\"active\"><a href=\"#\"><i class=\"fa fa-home\"></i> Home</a></li>");
         }
         else
         {
@@ -126,7 +126,7 @@ public class Breadcrumbs extends Component
 
           buffer.append(RequestCycle.get().urlFor(clazz, new PageParameters()));
 
-          buffer.append("\"><i class=\"fa-home\"></i>Home</a></li>");
+          buffer.append("\"><i class=\"fa fa-home\"></i> Home</a></li>");
 
           renderBreadcrumbs(webSession.getNavigation(), buffer);
         }

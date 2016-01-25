@@ -25,6 +25,7 @@ import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
+import guru.mmp.application.web.template.components.TruncatedLabel;
 import guru.mmp.application.web.template.data.FilteredConfigurationValueDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -54,7 +55,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
+//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
 public class ConfigurationAdministrationPage extends TemplateWebPage
 {
   /* Logger */

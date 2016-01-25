@@ -4,29 +4,6 @@
   padding-right: 5px;
 }
 
-@media screen and (min-width: 768px)
-{
-  .content
-  {
-    padding-top: 30px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .content .row.items-push
-  {
-    height: 55px;
-  }
-}
-
-@media screen and (max-width: 767px)
-{
-  .content .row.items-push
-  {
-    height: 65px;
-  }
-}
-
 div.side-content ul.list.list-activity li.action
 {
   padding-top: 15px;
@@ -149,6 +126,17 @@ th.center, td.center
   text-align: center;
 }
 
+.table-actions
+{
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+.table-actions tbody > tr > td
+{
+  overflow: hidden; -ms-text-overflow: ellipsis; -o-text-overflow: ellipsis; text-overflow: ellipsis; white-space: nowrap; width: inherit;
+}
+
 .table-actions tbody > tr > td > .btn
 {
   padding: 0 3px;
@@ -166,13 +154,13 @@ table.table-actions > tbody > tr > td > div > a > i
 {
   text-align: center;
   white-space: nowrap;
-  width: 30px;
+  width: 80px;
 }
 
 .table-actions thead > tr > th.two-actions, .table-actions tbody > tr > td.two-actions
 {
   text-align: center;
-  width: 60px;
+  width: 80px;
   white-space: nowrap;
 }
 
@@ -324,6 +312,7 @@ body
 
 .help-block-left
 {
+  margin-top: 0;
   padding-left: 5px;
   padding-bottom: 10px;
 }
