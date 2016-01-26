@@ -437,11 +437,23 @@ public class BatchService
   {
     try
     {
+      if (!configurationService.keyExists("BatchService.JobExecutionRetryDelay"))
+      {
+        configurationService.setValue("BatchService.JobExecutionRetryDelay", 60000,
+            "The delay in milliseconds between attempts to retry the execution of a job");
+      }
+
+      if (!configurationService.keyExists("BatchService.MaximumJobExecutionAttempts"))
+      {
+        configurationService.setValue("BatchService.MaximumJobExecutionAttempts", 6 * 24,
+            "The maximum number of attempts to execute a job");
+      }
+
       jobExecutionRetryDelay = configurationService.getInteger(
-          "BatchService.JobExecutionRetryDelay", 60000);
+          "BatchService.JobExecutionRetryDelay");
 
       maximumJobExecutionAttempts = configurationService.getInteger(
-          "BatchService.MaximumJobExecutionAttempts", 6 * 24);
+          "BatchService.MaximumJobExecutionAttempts");
     }
     catch (Throwable e)
     {

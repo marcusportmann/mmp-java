@@ -25,6 +25,7 @@ import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -43,12 +44,210 @@ import javax.inject.Inject;
 @RunWith(ApplicationJUnit4ClassRunner.class)
 public class ConfigurationServiceTest
 {
-  private static final String TEST_FILTERED_KEY = ConfigurationServiceTest.class.getName() + ".TestFilteredKey";
-  private static final String TEST_STRING_KEY = ConfigurationServiceTest.class.getName() + ".TestStringKey";
-
-  private static final String TEST_VALUE = "TestValue";
+  private static final String TEST_FILTERED_KEY = "TestFilteredKey";
+  private static final String TEST_STRING_KEY = "TestStringKey";
+  private static final String TEST_INTEGER_KEY = "TestIntegerKey";
+  private static final String TEST_LONG_KEY = "TestLongKey";
+  private static final String TEST_DOUBLE_KEY = "TestDoubleKey";
+  private static final String TEST_BINARY_KEY = "TestBinaryKey";
+  private static final String TEST_STRING_VALUE = "TestStringValue";
+  private static final String TEST_DESCRIPTION = "Test Description";
+  private static final Integer TEST_INTEGER_VALUE = 1234;
+  private static final Long TEST_LONG_VALUE = 4321L;
+  private static final Double TEST_DOUBLE_VALUE = 1234.4321;
+  private static final byte[] TEST_BINARY_VALUE = "TestBinaryValue".getBytes();
+  private static final byte[] TEST_BINARY_UPDATED_VALUE = "TestBinaryUpdatedValue".getBytes();
   @Inject
   private IConfigurationService configurationService;
+
+  /**
+   * Test the <code>Binary</code> configuration.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void binaryConfigurationTest()
+    throws Exception
+  {
+    if (configurationService.keyExists(TEST_BINARY_KEY))
+    {
+      fail("Found the Binary configuration key (" + TEST_BINARY_KEY + ") that should not exist");
+    }
+
+    configurationService.setValue(TEST_BINARY_KEY, TEST_BINARY_VALUE, TEST_DESCRIPTION);
+
+    if (!configurationService.keyExists(TEST_BINARY_KEY))
+    {
+      fail("Failed to confirm that the Binary configuration key (" + TEST_BINARY_KEY + ") exists");
+    }
+
+    byte[] value = configurationService.getBinary(TEST_BINARY_KEY);
+
+    assertArrayEquals("The required Binary value was not retrieved for the configuration key ("
+        + TEST_BINARY_KEY + ")", TEST_BINARY_VALUE, value);
+
+    configurationService.setValue(TEST_BINARY_KEY, TEST_BINARY_UPDATED_VALUE, TEST_DESCRIPTION
+        + " Updated");
+
+    if (!configurationService.keyExists(TEST_BINARY_KEY))
+    {
+      fail("Failed to confirm that the Binary configuration key (" + TEST_BINARY_KEY + ") exists");
+    }
+
+    value = configurationService.getBinary(TEST_BINARY_KEY);
+
+    assertArrayEquals(
+        "The required updated Binary value was not retrieved for the configuration key ("
+        + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
+  }
+
+  /**
+   * Test the <code>Double</code> configuration.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void doubleConfigurationTest()
+    throws Exception
+  {
+    if (configurationService.keyExists(TEST_DOUBLE_KEY))
+    {
+      fail("Found the Double configuration key (" + TEST_DOUBLE_KEY + ") that should not exist");
+    }
+
+    configurationService.setValue(TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE, TEST_DESCRIPTION);
+
+    if (!configurationService.keyExists(TEST_DOUBLE_KEY))
+    {
+      fail("Failed to confirm that the Double configuration key (" + TEST_DOUBLE_KEY + ") exists");
+    }
+
+    Double value = configurationService.getDouble(TEST_DOUBLE_KEY);
+
+    assertEquals("The required Double value was not retrieved for the configuration key ("
+        + TEST_DOUBLE_KEY + ")", TEST_DOUBLE_VALUE, value, 0.0);
+
+    configurationService.setValue(TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE + 1.1, TEST_DESCRIPTION
+        + " Updated");
+
+    if (!configurationService.keyExists(TEST_DOUBLE_KEY))
+    {
+      fail("Failed to confirm that the Double configuration key (" + TEST_DOUBLE_KEY + ") exists");
+    }
+
+    value = configurationService.getDouble(TEST_DOUBLE_KEY);
+
+    assertEquals("The required updated Double value was not retrieved for the configuration key ("
+        + TEST_DOUBLE_KEY + ")", TEST_DOUBLE_VALUE + 1.1, value, 0.0);
+  }
+
+  /**
+   * Test the filtered configuration.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void filteredConfigurationTest()
+    throws Exception
+  {
+    configurationService.setValue(TEST_FILTERED_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
+
+    if (!configurationService.keyExists(TEST_FILTERED_KEY))
+    {
+      fail("Failed to confirm that the configuration key (" + TEST_FILTERED_KEY + ") exists");
+    }
+
+    List<ConfigurationValue> filteredConfigurationEntries =
+        configurationService.getFilteredConfigurationValues("testfiltered");
+
+    assertEquals("The required number of filtered configuration values (1) was not retrieved", 1,
+        filteredConfigurationEntries.size());
+
+    assertEquals("The required filtered configuration value (" + TEST_STRING_VALUE
+        + ") was not retrieved", TEST_STRING_VALUE, filteredConfigurationEntries.get(0).getValue());
+  }
+
+  /**
+   * Test the <code>Integer</code> configuration.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void integerConfigurationTest()
+    throws Exception
+  {
+    if (configurationService.keyExists(TEST_INTEGER_KEY))
+    {
+      fail("Found the Integer configuration key (" + TEST_INTEGER_KEY + ") that should not exist");
+    }
+
+    configurationService.setValue(TEST_INTEGER_KEY, TEST_INTEGER_VALUE, TEST_DESCRIPTION);
+
+    if (!configurationService.keyExists(TEST_INTEGER_KEY))
+    {
+      fail("Failed to confirm that the Integer configuration key (" + TEST_INTEGER_KEY
+          + ") exists");
+    }
+
+    Integer value = configurationService.getInteger(TEST_INTEGER_KEY);
+
+    assertEquals("The required Integer value was not retrieved for the Integer configuration key ("
+        + TEST_INTEGER_KEY + ")", TEST_INTEGER_VALUE, value);
+
+    configurationService.setValue(TEST_INTEGER_KEY, TEST_INTEGER_VALUE + 1, TEST_DESCRIPTION
+        + " Updated");
+
+    if (!configurationService.keyExists(TEST_INTEGER_KEY))
+    {
+      fail("Failed to confirm that the Integer configuration key (" + TEST_INTEGER_KEY
+          + ") exists");
+    }
+
+    value = configurationService.getInteger(TEST_INTEGER_KEY);
+
+    assertEquals("The required updated Integer value was not retrieved for the configuration key ("
+        + TEST_INTEGER_KEY + ")", TEST_INTEGER_VALUE + 1, value.intValue());
+  }
+
+  /**
+   * Test the <code>Long</code> configuration.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void longConfigurationTest()
+    throws Exception
+  {
+    if (configurationService.keyExists(TEST_LONG_KEY))
+    {
+      fail("Found the Long configuration key (" + TEST_LONG_KEY + ") that should not exist");
+    }
+
+    configurationService.setValue(TEST_LONG_KEY, TEST_LONG_VALUE, TEST_DESCRIPTION);
+
+    if (!configurationService.keyExists(TEST_LONG_KEY))
+    {
+      fail("Failed to confirm that the Long configuration key (" + TEST_LONG_KEY + ") exists");
+    }
+
+    Long value = configurationService.getLong(TEST_LONG_KEY);
+
+    assertEquals("The required Long value was not retrieved for the Long configuration key ("
+        + TEST_LONG_KEY + ")", TEST_LONG_VALUE, value);
+
+    configurationService.setValue(TEST_LONG_KEY, TEST_LONG_VALUE + 1, TEST_DESCRIPTION
+        + " Updated");
+
+    if (!configurationService.keyExists(TEST_LONG_KEY))
+    {
+      fail("Failed to confirm that the Long configuration key (" + TEST_LONG_KEY + ") exists");
+    }
+
+    value = configurationService.getLong(TEST_LONG_KEY);
+
+    assertEquals("The required updated Long value was not retrieved for the configuration key ("
+        + TEST_LONG_KEY + ")", TEST_LONG_VALUE + 1L, value.longValue());
+  }
 
   /**
    * Test the <code>String</code> configuration.
@@ -61,60 +260,32 @@ public class ConfigurationServiceTest
   {
     if (configurationService.keyExists(TEST_STRING_KEY))
     {
-      fail("Found the configuration key (" + TEST_STRING_KEY + ") that should not exist");
+      fail("Found the String configuration key (" + TEST_STRING_KEY + ") that should not exist");
     }
 
-    configurationService.setValue(TEST_STRING_KEY, TEST_VALUE);
+    configurationService.setValue(TEST_STRING_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
     if (!configurationService.keyExists(TEST_STRING_KEY))
     {
-      fail("Failed to confirm that the configuration key (" + TEST_STRING_KEY + ") exists");
+      fail("Failed to confirm that the String configuration key (" + TEST_STRING_KEY + ") exists");
     }
 
     String value = configurationService.getString(TEST_STRING_KEY);
 
-    assertEquals("The required value (" + TEST_VALUE
-        + ") was not retrieved for the configuration key (" + TEST_STRING_KEY + ")", TEST_VALUE, value);
+    assertEquals("The required String value was not retrieved for the String configuration key ("
+        + TEST_STRING_KEY + ")", TEST_STRING_VALUE, value);
 
-    configurationService.setValue(TEST_STRING_KEY, TEST_VALUE + "Updated");
+    configurationService.setValue(TEST_STRING_KEY, TEST_STRING_VALUE + "Updated", TEST_DESCRIPTION
+        + " Updated");
 
     if (!configurationService.keyExists(TEST_STRING_KEY))
     {
-      fail("Failed to confirm that the configuration key (" + TEST_STRING_KEY + ") exists");
+      fail("Failed to confirm that the String configuration key (" + TEST_STRING_KEY + ") exists");
     }
 
     value = configurationService.getString(TEST_STRING_KEY);
 
-    assertEquals("The required value (" + TEST_VALUE + "Updated"
-        + ") was not retrieved for the configuration key (" + TEST_STRING_KEY + ")", TEST_VALUE
-        + "Updated", value);
+    assertEquals("The required updated String value was not retrieved for the configuration key ("
+        + TEST_STRING_KEY + ")", TEST_STRING_VALUE + "Updated", value);
   }
-
-
-  /**
-   * Test the filtered configuration.
-   *
-   * @throws Exception
-   */
-  @Test
-  public void filteredConfigurationTest()
-    throws Exception
-  {
-    configurationService.setValue(TEST_FILTERED_KEY, TEST_VALUE);
-
-    if (!configurationService.keyExists(TEST_FILTERED_KEY))
-    {
-      fail("Failed to confirm that the configuration key (" + TEST_FILTERED_KEY + ") exists");
-    }
-
-    List<ConfigurationValue> filteredConfigurationEntries = configurationService.getFilteredConfigurationValues("testfiltered");
-
-    assertEquals("The required number of filtered configuration values (1) was not retrieved", 1,
-      filteredConfigurationEntries.size());
-
-    assertEquals("The required filtered configuration value (" + TEST_VALUE
-      + ") was not retrieved", TEST_VALUE, filteredConfigurationEntries.get(0).getValue());
-  }
-
-
 }

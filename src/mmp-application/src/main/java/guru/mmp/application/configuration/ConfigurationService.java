@@ -72,26 +72,22 @@ public class ConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the binary configuration value or <code>null</code> if the configuration value could
-   *         not be found
+   * @return the binary configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   public byte[] getBinary(String key)
-    throws ConfigurationException
+    throws ConfigurationNotFoundException, ConfigurationException
   {
     try
     {
-      String stringValue = getString(key);
-
-      if (stringValue == null)
-      {
-        return null;
-      }
-      else
-      {
-        return Base64.decode(stringValue);
-      }
+      return Base64.decode(getString(key));
+    }
+    catch (ConfigurationNotFoundException e)
+    {
+      throw new ConfigurationNotFoundException(String.format(
+          "The binary configuration value with the key (%s) could not be found", key));
     }
     catch (Throwable e)
     {
@@ -134,26 +130,22 @@ public class ConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Double</code> configuration value or <code>null</code> if the configuration
-   *         entry could not be found
+   * @return the <code>Double</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   public Double getDouble(String key)
-    throws ConfigurationException
+    throws ConfigurationNotFoundException, ConfigurationException
   {
     try
     {
-      String stringValue = getString(key);
-
-      if (stringValue == null)
-      {
-        return null;
-      }
-      else
-      {
-        return Double.valueOf(stringValue);
-      }
+      return Double.valueOf(getString(key));
+    }
+    catch (ConfigurationNotFoundException e)
+    {
+      throw new ConfigurationNotFoundException(String.format(
+          "The Double configuration value with the key (%s) could not be found", key));
     }
     catch (Throwable e)
     {
@@ -238,26 +230,22 @@ public class ConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Integer</code> configuration value or <code>null</code> if the configuration
-   *         entry could not be found
+   * @return the <code>Integer</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   public Integer getInteger(String key)
-    throws ConfigurationException
+    throws ConfigurationNotFoundException, ConfigurationException
   {
     try
     {
-      String stringValue = getString(key);
-
-      if (stringValue == null)
-      {
-        return null;
-      }
-      else
-      {
-        return Integer.valueOf(stringValue);
-      }
+      return Integer.valueOf(getString(key));
+    }
+    catch (ConfigurationNotFoundException e)
+    {
+      throw new ConfigurationNotFoundException(String.format(
+          "The Integer configuration value with the key (%s) could not be found", key));
     }
     catch (Throwable e)
     {
@@ -300,26 +288,22 @@ public class ConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Long</code> configuration value or <code>null</code> if the configuration
-   *         entry could not be found
+   * @return the <code>Long</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   public Long getLong(String key)
-    throws ConfigurationException
+    throws ConfigurationNotFoundException, ConfigurationException
   {
     try
     {
-      String stringValue = getString(key);
-
-      if (stringValue == null)
-      {
-        return null;
-      }
-      else
-      {
-        return Long.valueOf(stringValue);
-      }
+      return Long.valueOf(getString(key));
+    }
+    catch (ConfigurationNotFoundException e)
+    {
+      throw new ConfigurationNotFoundException(String.format(
+          "The Long configuration value with the key (%s) could not be found", key));
     }
     catch (Throwable e)
     {
@@ -406,13 +390,13 @@ public class ConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the value for the <code>String</code> configuration value or <code>null</code> if the
-   *         configuration value could not be found
+   * @return the value for the <code>String</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   public String getString(String key)
-    throws ConfigurationException
+    throws ConfigurationNotFoundException, ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getValueSQL))
@@ -427,7 +411,8 @@ public class ConfigurationService
         }
         else
         {
-          return null;
+          throw new ConfigurationNotFoundException(String.format(
+              "The String configuration value with the key (%s) could not be found", key));
         }
       }
     }
@@ -484,7 +469,7 @@ public class ConfigurationService
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the Config Service");
+    logger.info("Initialising the Configuration Service");
 
     try
     {
@@ -519,7 +504,7 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Config Service", e);
+      throw new RuntimeException("Failed to initialise the Configuration Service", e);
     }
   }
 
@@ -566,6 +551,10 @@ public class ConfigurationService
       if (value instanceof String)
       {
         stringValue = (String) value;
+      }
+      else if (value instanceof byte[])
+      {
+        stringValue = Base64.encodeBytes((byte[])value);
       }
       else
       {
