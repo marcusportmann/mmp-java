@@ -204,11 +204,12 @@ public interface IConfigurationService
   /**
    * Set the configuration key to the specified value.
    *
-   * @param key   the key used to uniquely identify the configuration value
-   * @param value the value
+   * @param key         the key used to uniquely identify the configuration value
+   * @param value       the value for the configuration value
+   * @param description the description for the configuration value
    *
    * @throws ConfigurationException
    */
-  void setValue(String key, Object value)
+  void setValue(String key, Object value, String description)
     throws ConfigurationException;
 }

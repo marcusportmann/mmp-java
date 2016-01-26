@@ -43,17 +43,21 @@ COMMENT ON COLUMN MMP.IDGENERATOR.CURRENT
 
 
 CREATE TABLE MMP.CONFIG (
-  KEY    VARCHAR(1000) NOT NULL,
-  VALUE  VARCHAR(1000000) NOT NULL,
+  KEY          VARCHAR(100) NOT NULL,
+  VALUE        VARCHAR(1000000) NOT NULL,
+  DESCRIPTION  VARCHAR(200) NOT NULL,
 
   PRIMARY KEY (KEY)
 );
 
 COMMENT ON COLUMN MMP.CONFIG.KEY
-  IS 'The key used to uniquely identify the configuration entry';
+  IS 'The key used to uniquely identify the configuration value';
 
 COMMENT ON COLUMN MMP.CONFIG.VALUE
-  IS 'The value for the configuration entry';
+  IS 'The value for the configuration value';
+
+COMMENT ON COLUMN MMP.CONFIG.DESCRIPTION
+  IS 'The description for the configuration value';
 
 
 

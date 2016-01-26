@@ -21,8 +21,8 @@ package guru.mmp.application.configuration;
 import java.io.Serializable;
 
 /**
- * The <code>ConfigurationValue</code> class stores the <code>String</code> key and
- * <code>String</code> value for a configuration value.
+ * The <code>ConfigurationValue</code> class stores the key, value and description for a
+ * configuration value.
  *
  * @author Marcus Portmann
  */
@@ -30,31 +30,48 @@ public class ConfigurationValue
   implements Serializable
 {
   /**
-   * The <code>String</code> key for the configuration value.
+   * The key used to uniquely identify the configuration value.
    */
   private String key;
 
   /**
-   * The <code>String</code> value for the configuration value.
+   * The value for the configuration value.
    */
   private String value;
 
   /**
+   * The description for the configuration value.
+   */
+  private String description;
+
+  /**
    * Constructs a new <code>ConfigurationValue</code>.
    *
-   * @param key   the <code>String</code> key for the configuration value
-   * @param value the <code>String</code> value for the configuration value
+   * @param key         the key used to uniquely identify the configuration value
+   * @param value       the value for the configuration value
+   * @param description the description for the configuration value
    */
-  public ConfigurationValue(String key, String value)
+  public ConfigurationValue(String key, String value, String description)
   {
     this.key = key;
     this.value = value;
+    this.description = description;
   }
 
   /**
-   * Returns the <code>String</code> key for the configuration value.
+   * Returns the description for the configuration value.
    *
-   * @return the <code>String</code> key for the configuration value
+   * @return the description for the configuration value
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
+   * Returns the key used to uniquely identify the configuration value.
+   *
+   * @return the key used to uniquely identify the configuration value
    */
   public String getKey()
   {
@@ -62,9 +79,9 @@ public class ConfigurationValue
   }
 
   /**
-   * Returns the <code>String</code> value for the configuration value.
+   * Returns the value for the configuration value.
    *
-   * @return the <code>String</code> value for the configuration value
+   * @return the value for the configuration value
    */
   public String getValue()
   {
@@ -72,9 +89,19 @@ public class ConfigurationValue
   }
 
   /**
-   * Set the <code>String</code> key for the configuration value.
+   * Set the description for the configuration value.
    *
-   * @param key the <code>String</code> key for the configuration value
+   * @param description the description for the configuration value
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the key used to uniquely identify the configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
    */
   public void setKey(String key)
   {
@@ -82,9 +109,9 @@ public class ConfigurationValue
   }
 
   /**
-   * Set the <code>String</code> value for the configuration value.
+   * Set the value for the configuration value.
    *
-   * @param value the <code>String</code> value for the configuration value
+   * @param value the value for the configuration value
    */
   public void setValue(String value)
   {

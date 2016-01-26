@@ -62,9 +62,9 @@ public class ConfigurationService
   private String getValueSQL;
   private String keyExistsSQL;
   private String updateValueSQL;
-  private String getFilteredConfigurationEntriesSQL;
+  private String getFilteredConfigurationValuesSQL;
   private String getNumberOfFilteredConfigurationEntriesSQL;
-  private String getConfigurationEntriesSQL;
+  private String getConfigurationValuesSQL;
   private String getNumberOfConfigurationEntriesSQL;
 
   /**
@@ -205,8 +205,8 @@ public class ConfigurationService
   {
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-          ? getConfigurationEntriesSQL
-          : getFilteredConfigurationEntriesSQL))
+          ? getConfigurationValuesSQL
+          : getFilteredConfigurationValuesSQL))
     {
       if (!StringUtil.isNullOrEmpty(filter))
       {
@@ -219,7 +219,7 @@ public class ConfigurationService
 
         while (rs.next())
         {
-          list.add(new ConfigurationValue(rs.getString(1), rs.getString(2)));
+          list.add(new ConfigurationValue(rs.getString(1), rs.getString(2), rs.getString(3)));
         }
 
         return list;
@@ -466,8 +466,6 @@ public class ConfigurationService
         }
         else
         {
-          createValue(connection, key, defaultValue);
-
           return defaultValue;
         }
       }
@@ -552,12 +550,13 @@ public class ConfigurationService
   /**
    * Set the configuration key to the specified value.
    *
-   * @param key   the key used to uniquely identify the configuration value
-   * @param value the value
+   * @param key         the key used to uniquely identify the configuration value
+   * @param value       the value for the configuration value
+   * @param description the description for the configuration value
    *
    * @throws ConfigurationException
    */
-  public void setValue(String key, Object value)
+  public void setValue(String key, Object value, String description)
     throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection())
@@ -578,7 +577,8 @@ public class ConfigurationService
         try (PreparedStatement statement = connection.prepareStatement(updateValueSQL))
         {
           statement.setString(1, stringValue);
-          statement.setString(2, key.toUpperCase());
+          statement.setString(2, description);
+          statement.setString(3, key.toUpperCase());
 
           if (statement.executeUpdate() <= 0)
           {
@@ -590,7 +590,7 @@ public class ConfigurationService
       }
       else
       {
-        createValue(connection, key, stringValue);
+        createValue(connection, key, stringValue, description);
       }
     }
     catch (Throwable e)
@@ -611,14 +611,15 @@ public class ConfigurationService
     throws SQLException
   {
     // createValueSQL
-    createValueSQL = "INSERT INTO " + schemaPrefix + "CONFIG (KEY, VALUE) VALUES (?, ?)";
+    createValueSQL = "INSERT INTO " + schemaPrefix + "CONFIG (KEY, VALUE, DESCRIPTION) "
+        + "VALUES (?, ?, ?)";
 
-    // getConfigurationEntriesSQL
-    getConfigurationEntriesSQL = "SELECT C.KEY, C.VALUE FROM " + schemaPrefix
+    // getConfigurationValuesSQL
+    getConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM " + schemaPrefix
         + "CONFIG C ORDER BY C.KEY";
 
-    // getFilteredConfigurationEntriesSQL
-    getFilteredConfigurationEntriesSQL = "SELECT C.KEY, C.VALUE FROM " + schemaPrefix
+    // getFilteredConfigurationValuesSQL
+    getFilteredConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM " + schemaPrefix
         + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?) ORDER BY C.KEY";
 
     // getNumberOfConfigurationEntriesSQL
@@ -636,10 +637,11 @@ public class ConfigurationService
         + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
 
     // updateValueSQL
-    updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG C SET C.VALUE = ? WHERE (UPPER(C.KEY) = ?)";
+    updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG C SET C.VALUE = ?, C.DESCRIPTION = ? "
+        + "WHERE (UPPER(C.KEY) = ?)";
   }
 
-  private void createValue(Connection connection, String key, Object value)
+  private void createValue(Connection connection, String key, Object value, String description)
     throws SQLException, ConfigurationException
   {
     String stringValue;
@@ -657,6 +659,7 @@ public class ConfigurationService
     {
       statement.setString(1, key);
       statement.setString(2, stringValue);
+      statement.setString(3, description);
 
       if (statement.executeUpdate() <= 0)
       {
