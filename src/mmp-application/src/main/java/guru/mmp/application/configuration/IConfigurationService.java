@@ -34,13 +34,13 @@ public interface IConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the binary configuration value or <code>null</code> if the configuration value could
-   *         not be found
+   * @return the binary configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   byte[] getBinary(String key)
-    throws ConfigurationException;
+    throws ConfigurationNotFoundException, ConfigurationException;
 
   /**
    * Retrieve the binary configuration value.
@@ -61,13 +61,13 @@ public interface IConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Double</code> configuration value or <code>null</code> if the configuration
-   *         entry could not be found
+   * @return the <code>Double</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   Double getDouble(String key)
-    throws ConfigurationException;
+    throws ConfigurationNotFoundException, ConfigurationException;
 
   /**
    * Retrieve the <code>Double</code> configuration value.
@@ -100,13 +100,13 @@ public interface IConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Integer</code> configuration value or <code>null</code> if the configuration
-   *         entry could not be found
+   * @return the <code>Integer</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   Integer getInteger(String key)
-    throws ConfigurationException;
+    throws ConfigurationNotFoundException, ConfigurationException;
 
   /**
    * Retrieve the <code>Integer</code> configuration value.
@@ -127,13 +127,13 @@ public interface IConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the <code>Long</code> configuration value or <code>null</code> if the configuration
-   *         entry could not be found
+   * @return the <code>Long</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   Long getLong(String key)
-    throws ConfigurationException;
+    throws ConfigurationNotFoundException, ConfigurationException;
 
   /**
    * Retrieve the <code>Long</code> configuration value.
@@ -166,13 +166,13 @@ public interface IConfigurationService
    *
    * @param key the key used to uniquely identify the configuration value
    *
-   * @return the value for the <code>String</code> configuration value or <code>null</code> if the
-   *         configuration value could not be found
+   * @return the value for the <code>String</code> configuration value
    *
+   * @throws ConfigurationNotFoundException
    * @throws ConfigurationException
    */
   String getString(String key)
-    throws ConfigurationException;
+    throws ConfigurationNotFoundException, ConfigurationException;
 
   /**
    * Retrieve the value for the <code>String</code> configuration value.

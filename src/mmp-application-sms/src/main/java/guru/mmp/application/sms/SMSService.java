@@ -599,19 +599,45 @@ public class SMSService
   {
     try
     {
-      // Initialise the configuration
-      sendRetryDelay = configurationService.getInteger("SMSService.SendRetryDelay", 600000);
+      if (!configurationService.keyExists("SMSService.SendRetryDelay"))
+      {
+        configurationService.setValue("SMSService.SendRetryDelay", 600000,
+            "The delay in milliseconds between attempts to retry the sending of an SMS");
+      }
 
-      maximumSendAttempts = configurationService.getInteger("SMSService.MaximumSendAttempts", 100);
+      if (!configurationService.keyExists("SMSService.MaximumSendAttempts"))
+      {
+        configurationService.setValue("SMSService.MaximumSendAttempts", 100,
+            "The maximum number of attempts to send an SMS");
+      }
 
-      myMobileAPIUsername = configurationService.getString("SMSService.MyMobileAPIUsername",
-          "MyMobileAPIUsername");
+      if (!configurationService.keyExists("SMSService.MyMobileAPIUsername"))
+      {
+        configurationService.setValue("SMSService.MyMobileAPIUsername", "MyMobileAPIUsername",
+            "The My Mobile API username");
+      }
 
-      myMobileAPIPassword = configurationService.getString("SMSService.MyMobileAPIPassword",
-          "MyMobileAPIPassword");
+      if (!configurationService.keyExists("SMSService.MyMobileAPIPassword"))
+      {
+        configurationService.setValue("SMSService.MyMobileAPIPassword", "MyMobileAPIPassword",
+            "The My Mobile API password");
+      }
 
-      myMobileAPIEndPoint = configurationService.getString("SMSService.MyMobileAPIEndPoint",
-          "http://www.mymobileapi.com/api5/api.asmx");
+      if (!configurationService.keyExists("SMSService.MyMobileAPIEndPoint"))
+      {
+        configurationService.setValue("SMSService.MyMobileAPIEndPoint",
+            "http://www.mymobileapi.com/api5/api.asmx", "The My Mobile API end point");
+      }
+
+      sendRetryDelay = configurationService.getInteger("SMSService.SendRetryDelay");
+
+      maximumSendAttempts = configurationService.getInteger("SMSService.MaximumSendAttempts");
+
+      myMobileAPIUsername = configurationService.getString("SMSService.MyMobileAPIUsername");
+
+      myMobileAPIPassword = configurationService.getString("SMSService.MyMobileAPIPassword");
+
+      myMobileAPIEndPoint = configurationService.getString("SMSService.MyMobileAPIEndPoint");
     }
     catch (Throwable e)
     {

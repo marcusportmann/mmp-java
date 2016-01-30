@@ -1359,15 +1359,32 @@ public class MessagingService
   {
     try
     {
+      if (!configurationService.keyExists("MessagingService.AESEncryptionMasterKey"))
+      {
+        configurationService.setValue("MessagingService.AESEncryptionMasterKey", Base64.decode(
+            "m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE="), "The AES encryption master key");
+      }
+
+      if (!configurationService.keyExists("MessagingService.ProcessingRetryDelay"))
+      {
+        configurationService.setValue("MessagingService.ProcessingRetryDelay", 60000,
+            "The delay in milliseconds between attempts to retry the processing of a message");
+      }
+
+      if (!configurationService.keyExists("MessagingService.MaximumProcessingAttempts"))
+      {
+        configurationService.setValue("MessagingService.MaximumProcessingAttempts", 1000,
+            "The maximum number of attempts to process a message");
+      }
+
       aesEncryptionMasterKey = configurationService.getBinary(
-          "MessagingService.AESEncryptionMasterKey", Base64.decode(
-          "m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE="));
+          "MessagingService.AESEncryptionMasterKey");
 
       processingRetryDelay = configurationService.getInteger(
-          "MessagingService.ProcessingRetryDelay", 60000);
+          "MessagingService.ProcessingRetryDelay");
 
       maximumProcessingAttempts = configurationService.getInteger(
-          "MessagingService.MaximumProcessingAttempts", 1000);
+          "MessagingService.MaximumProcessingAttempts");
     }
     catch (Throwable e)
     {
