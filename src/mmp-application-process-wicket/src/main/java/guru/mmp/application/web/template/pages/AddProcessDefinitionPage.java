@@ -48,6 +48,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_ADD_PROCESS_DEFINITION)
 public class AddProcessDefinitionPage extends TemplateWebPage
 {
@@ -58,14 +59,6 @@ public class AddProcessDefinitionPage extends TemplateWebPage
   /* Process Service */
   @Inject
   private IProcessService processService;
-
-  /**
-   * Constructs a new <code>AddProcessDefinitionPage</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected AddProcessDefinitionPage() {}
 
   /**
    * Constructs a new <code>AddProcessDefinitionPage</code>.

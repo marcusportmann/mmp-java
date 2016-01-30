@@ -43,6 +43,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
 public class UpdateCodePage extends TemplateWebPage
 {
@@ -53,12 +54,6 @@ public class UpdateCodePage extends TemplateWebPage
   /* Codes Service */
   @Inject
   private ICodesService codesService;
-
-  /**
-   * Hidden <code>UpdateCodePage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateCodePage() {}
 
   /**
    * Constructs a new <code>UpdateCodePage</code>.

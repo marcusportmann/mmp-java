@@ -110,57 +110,58 @@ public class SelectOrganisationPage extends WebPage
       form.add(organisationField);
 
       // The "continueButton" button
-      form.add(new Button("continueButton")
+      Button continueButton = new Button("continueButton")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onSubmit()
+        {
+          WebSession session = getWebApplicationSession();
+
+          try
           {
-            private static final long serialVersionUID = 1000000;
+            List<String> groupNames = securityService.getGroupNamesForUser(
+                session.getUserDirectoryId(), session.getUsername());
+            List<String> functionCodes = securityService.getFunctionCodesForUser(
+                session.getUserDirectoryId(), session.getUsername());
 
-            @Override
-            public void onSubmit()
+            session.setOrganisation(securityService.getOrganisation(UUID.fromString(
+                organisation.getValue())));
+            session.setGroupNames(groupNames);
+            session.setFunctionCodes(functionCodes);
+
+            if (logger.isDebugEnabled())
             {
-              WebSession session = getWebApplicationSession();
-
-              try
-              {
-                List<String> groupNames = securityService.getGroupNamesForUser(
-                    session.getUserDirectoryId(), session.getUsername());
-                List<String> functionCodes = securityService.getFunctionCodesForUser(
-                    session.getUserDirectoryId(), session.getUsername());
-
-                session.setOrganisation(securityService.getOrganisation(UUID.fromString(
-                    organisation.getValue())));
-                session.setGroupNames(groupNames);
-                session.setFunctionCodes(functionCodes);
-
-                if (logger.isDebugEnabled())
-                {
-                  logger.debug(String.format(
-                      "Successfully authenticated user (%s) for organisation (%s) with groups (%s) and "
-                      + "function codes (%s)", session.getUsername(), organisation.getName(),
-                      StringUtil.delimit(groupNames, ","), StringUtil.delimit(functionCodes, ",")));
-                }
-
-                // Redirect to the secure home page for the application
-                throw new RedirectToUrlException(urlFor(
-                    ((TemplateWebApplication) getApplication()).getSecureHomePage(),
-                    new PageParameters()).toString());
-              }
-              catch (RedirectToUrlException e)
-              {
-                throw e;
-              }
-              catch (Throwable e)
-              {
-                logger.error(String.format("Failed to select the organisation for the user (%s)",
-                    session.getUsername()), e);
-
-                session.invalidateNow();
-
-                throw new RedirectToUrlException(urlFor(
-                    ((TemplateWebApplication) getApplication()).getHomePage(),
-                    new PageParameters()).toString());
-              }
+              logger.debug(String.format(
+                  "Successfully authenticated user (%s) for organisation (%s) with groups (%s) and "
+                  + "function codes (%s)", session.getUsername(), organisation.getName(),
+                  StringUtil.delimit(groupNames, ","), StringUtil.delimit(functionCodes, ",")));
             }
-          });
+
+            // Redirect to the secure home page for the application
+            throw new RedirectToUrlException(urlFor(
+                ((TemplateWebApplication) getApplication()).getSecureHomePage(),
+                new PageParameters()).toString());
+          }
+          catch (RedirectToUrlException e)
+          {
+            throw e;
+          }
+          catch (Throwable e)
+          {
+            logger.error(String.format("Failed to select the organisation for the user (%s)",
+                session.getUsername()), e);
+
+            session.invalidateNow();
+
+            throw new RedirectToUrlException(urlFor(
+                ((TemplateWebApplication) getApplication()).getHomePage(),
+                new PageParameters()).toString());
+          }
+        }
+      };
+      form.add(continueButton);
     }
     catch (Throwable e)
     {

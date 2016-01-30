@@ -202,6 +202,16 @@ public interface IConfigurationService
     throws ConfigurationException;
 
   /**
+   * Remove the configuration value with the specified key.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @throws ConfigurationException
+   */
+  void removeValue(String key)
+    throws ConfigurationException;
+
+  /**
    * Set the configuration key to the specified value.
    *
    * @param key         the key used to uniquely identify the configuration value

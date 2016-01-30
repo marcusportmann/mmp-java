@@ -21,11 +21,8 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.pages.WebPageSecurity;
-import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
-import guru.mmp.application.web.template.components.TruncatedLabel;
 import guru.mmp.application.web.template.data.FilteredConfigurationValueDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -55,6 +52,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+
 //@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
 public class ConfigurationAdministrationPage extends TemplateWebPage
 {
@@ -146,8 +144,8 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateConfigurationValuePage page = new UpdateConfigurationValuePage(getPageReference(),
-                item.getModel());
+              UpdateConfigurationValuePage page = new UpdateConfigurationValuePage(
+                  getPageReference(), item.getModel());
 
               setResponsePage(page);
             }
@@ -211,41 +209,43 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
       super("removeDialog");
 
       nameLabel = new Label("name", Model.of(""));
+
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
-      add(new AjaxLink<Void>("removeLink")
+      // The "removeLink" link
+      AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onClick(AjaxRequestTarget target)
+        {
+          try
           {
-            private static final long serialVersionUID = 1000000;
+            // securityService.deleteOrganisation(id);
 
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-              try
-              {
-    //          securityService.deleteOrganisation(id);
+            target.add(tableContainer);
 
-                target.add(tableContainer);
+            ConfigurationAdministrationPage.this.info(
+                "Successfully removed the configuration value "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
+          catch (Throwable e)
+          {
+            logger.error(String.format("Failed to remove the configuration value (%s): %s", key,
+                e.getMessage()), e);
 
-                ConfigurationAdministrationPage.this.info(
-                    "Successfully removed the configuration value "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
-              catch (Throwable e)
-              {
-                logger.error(String.format("Failed to remove the configuration value (%s): %s",
-                    key, e.getMessage()), e);
+            ConfigurationAdministrationPage.this.error("Failed to remove the configuration value "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
 
-                ConfigurationAdministrationPage.this.error(
-                    "Failed to remove the configuration value "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
+          target.add(getAlerts());
 
-              target.add(getAlerts());
-
-              hide(target);
-            }
-          });
+          hide(target);
+        }
+      };
+      add(removeLink);
     }
 
     /**
@@ -257,6 +257,7 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
     public void show(AjaxRequestTarget target, ConfigurationValue configurationValue)
     {
       key = configurationValue.getKey();
+
       nameLabel.setDefaultModelObject(configurationValue.getKey());
 
       target.add(nameLabel);

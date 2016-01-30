@@ -48,6 +48,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_ADD_REPORT_DEFINITION)
 public class AddReportDefinitionPage extends TemplateWebPage
 {
@@ -58,14 +59,6 @@ public class AddReportDefinitionPage extends TemplateWebPage
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
-
-  /**
-   * Constructs a new <code>AddReportDefinitionPage</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected AddReportDefinitionPage() {}
 
   /**
    * Constructs a new <code>AddReportDefinitionPage</code>.

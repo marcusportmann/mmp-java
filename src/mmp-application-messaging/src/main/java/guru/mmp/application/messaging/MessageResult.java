@@ -186,6 +186,7 @@ public class MessageResult
 
         cause.printStackTrace(pw);
         pw.flush();
+
         exception = baos.toString();
       }
       catch (Throwable e)

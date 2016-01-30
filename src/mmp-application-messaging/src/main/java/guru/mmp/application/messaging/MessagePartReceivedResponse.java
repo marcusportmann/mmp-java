@@ -127,6 +127,7 @@ public class MessagePartReceivedResponse
 
         cause.printStackTrace(pw);
         pw.flush();
+
         exception = baos.toString();
       }
       catch (Throwable e)

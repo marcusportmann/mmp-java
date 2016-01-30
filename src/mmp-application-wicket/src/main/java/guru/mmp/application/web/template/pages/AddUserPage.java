@@ -28,7 +28,6 @@ import guru.mmp.application.web.template.components.PasswordTextFieldWithFeedbac
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 import guru.mmp.application.web.validators.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -36,17 +35,15 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AddUserPage</code> class implements the

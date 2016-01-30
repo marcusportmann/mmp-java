@@ -66,6 +66,7 @@ public class ConfigurationService
   private String getNumberOfFilteredConfigurationEntriesSQL;
   private String getConfigurationValuesSQL;
   private String getNumberOfConfigurationEntriesSQL;
+  private String removeValueSQL;
 
   /**
    * Retrieve the binary configuration value.
@@ -533,6 +534,36 @@ public class ConfigurationService
   }
 
   /**
+   * Remove the configuration value with the specified key.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @throws ConfigurationException
+   */
+  public void removeValue(String key)
+    throws ConfigurationException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(removeValueSQL))
+    {
+      statement.setString(3, key.toUpperCase());
+
+      if (statement.executeUpdate() <= 0)
+      {
+        throw new ConfigurationException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
+            removeValueSQL));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationException(String.format(
+          "Failed to remove the configuration value with the key (%s): %s", key, e.getMessage()),
+          e);
+    }
+  }
+
+  /**
    * Set the configuration key to the specified value.
    *
    * @param key         the key used to uniquely identify the configuration value
@@ -554,7 +585,7 @@ public class ConfigurationService
       }
       else if (value instanceof byte[])
       {
-        stringValue = Base64.encodeBytes((byte[])value);
+        stringValue = Base64.encodeBytes((byte[]) value);
       }
       else
       {
@@ -624,6 +655,9 @@ public class ConfigurationService
     // keyExistsSQL
     keyExistsSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix
         + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
+
+    // removeValueSQL
+    removeValueSQL = "DELETE FROM " + schemaPrefix + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
 
     // updateValueSQL
     updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG C SET C.VALUE = ?, C.DESCRIPTION = ? "

@@ -22,12 +22,12 @@ import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.process.ProcessDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateProcessSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.ProcessDefinitionSummaryDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,13 +38,15 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>ProcessDefinitionAdministrationPage</code> class implements the
@@ -73,8 +75,6 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
 
     try
     {
-      WebSession session = getWebApplicationSession();
-
       /*
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
@@ -208,41 +208,44 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
       super("removeDialog");
 
       nameLabel = new Label("name", Model.of(""));
+
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
-      add(new AjaxLink<Void>("removeLink")
+      // The "removeLink" link
+      AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onClick(AjaxRequestTarget target)
+        {
+          try
           {
-            private static final long serialVersionUID = 1000000;
+            processService.deleteProcessDefinition(id);
 
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-              try
-              {
-                processService.deleteProcessDefinition(id);
+            target.add(tableContainer);
 
-                target.add(tableContainer);
+            ProcessDefinitionAdministrationPage.this.info(
+                "Successfully removed the process definition "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
+          catch (Throwable e)
+          {
+            logger.error(String.format("Failed to remove the process definition (%s): %s", id,
+                e.getMessage()), e);
 
-                ProcessDefinitionAdministrationPage.this.info(
-                    "Successfully removed the process definition "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
-              catch (Throwable e)
-              {
-                logger.error(String.format("Failed to remove the process definition (%s): %s", id,
-                    e.getMessage()), e);
+            ProcessDefinitionAdministrationPage.this.error(
+                "Failed to remove the process definition "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
 
-                ProcessDefinitionAdministrationPage.this.error(
-                    "Failed to remove the process definition "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
+          target.add(getAlerts());
 
-              target.add(getAlerts());
-
-              hide(target);
-            }
-          });
+          hide(target);
+        }
+      };
+      add(removeLink);
     }
 
     /**
@@ -264,6 +267,7 @@ public class ProcessDefinitionAdministrationPage extends TemplateWebPage
     public void show(AjaxRequestTarget target, ProcessDefinitionSummary processDefinitionSummary)
     {
       id = processDefinitionSummary.getId();
+
       nameLabel.setDefaultModelObject(processDefinitionSummary.getName());
 
       target.add(nameLabel);

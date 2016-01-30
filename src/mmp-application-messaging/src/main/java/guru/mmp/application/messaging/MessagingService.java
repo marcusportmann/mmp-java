@@ -31,44 +31,32 @@ import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-
-import java.lang.reflect.Constructor;
-
-import java.net.URL;
-
-import java.security.MessageDigest;
-
-import java.util.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.util.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagingService</code> class provides the implementation of the Messaging Service

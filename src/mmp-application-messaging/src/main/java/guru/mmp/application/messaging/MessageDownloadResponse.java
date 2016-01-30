@@ -173,6 +173,7 @@ public class MessageDownloadResponse
 
         cause.printStackTrace(pw);
         pw.flush();
+
         exception = baos.toString();
       }
       catch (Throwable e)

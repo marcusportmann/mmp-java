@@ -47,6 +47,7 @@ import java.io.InputStream;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_UPDATE_REPORT_DEFINITION)
 public class UpdateReportDefinitionPage extends TemplateWebPage
 {
@@ -57,12 +58,6 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
-
-  /**
-   * Hidden <code>UpdateReportDefinitionPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateReportDefinitionPage() {}
 
   /**
    * Constructs a new <code>UpdateReportDefinitionPage</code>.

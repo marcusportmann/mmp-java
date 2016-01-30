@@ -28,6 +28,7 @@ import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.DropdownMenu;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.GroupDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,14 +39,16 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>GroupAdministrationPage</code> class implements the
@@ -249,44 +252,47 @@ public class GroupAdministrationPage extends TemplateWebPage
       super("removeDialog");
 
       nameLabel = new Label("name", Model.of(""));
+
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
-      add(new AjaxLink<Void>("removeLink")
+      // The "removeLink" link
+      AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onClick(AjaxRequestTarget target)
+        {
+          try
           {
-            private static final long serialVersionUID = 1000000;
+            securityService.deleteGroup(userDirectory.getId(), groupName);
 
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-              try
-              {
-                securityService.deleteGroup(userDirectory.getId(), groupName);
+            target.add(tableContainer);
 
-                target.add(tableContainer);
+            GroupAdministrationPage.this.info("Successfully removed the group "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
+          catch (ExistingGroupMembersException e)
+          {
+            GroupAdministrationPage.this.error("Failed to remove the group "
+                + nameLabel.getDefaultModelObjectAsString() + " " + "with existing users");
+          }
+          catch (Throwable e)
+          {
+            logger.error(String.format("Failed to remove the group (%s): %s", groupName,
+                e.getMessage()), e);
 
-                GroupAdministrationPage.this.info("Successfully removed the group "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
-              catch (ExistingGroupMembersException e)
-              {
-                GroupAdministrationPage.this.error("Failed to remove the group "
-                    + nameLabel.getDefaultModelObjectAsString() + " " + "with existing users");
-              }
-              catch (Throwable e)
-              {
-                logger.error(String.format("Failed to remove the group (%s): %s", groupName,
-                    e.getMessage()), e);
+            GroupAdministrationPage.this.error("Failed to remove the group "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
 
-                GroupAdministrationPage.this.error("Failed to remove the group "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
+          target.add(getAlerts());
 
-              target.add(getAlerts());
-
-              hide(target);
-            }
-          });
+          hide(target);
+        }
+      };
+      add(removeLink);
     }
 
     /**
@@ -298,6 +304,7 @@ public class GroupAdministrationPage extends TemplateWebPage
     public void show(AjaxRequestTarget target, Group group)
     {
       groupName = group.getGroupName();
+
       nameLabel.setDefaultModelObject(group.getGroupName());
 
       target.add(nameLabel);

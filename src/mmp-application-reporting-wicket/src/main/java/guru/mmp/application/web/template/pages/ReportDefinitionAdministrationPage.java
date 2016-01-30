@@ -28,6 +28,7 @@ import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.ReportDefinitionSummaryDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,13 +39,15 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -204,41 +207,43 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
       super("removeDialog");
 
       nameLabel = new Label("name", Model.of(""));
+
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
-      add(new AjaxLink<Void>("removeLink")
+      // The "removeLink" link
+      AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onClick(AjaxRequestTarget target)
+        {
+          try
           {
-            private static final long serialVersionUID = 1000000;
+            reportingService.deleteReportDefinition(id);
 
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-              try
-              {
-                reportingService.deleteReportDefinition(id);
+            target.add(tableContainer);
 
-                target.add(tableContainer);
+            ReportDefinitionAdministrationPage.this.info(
+                "Successfully removed the report definition "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
+          catch (Throwable e)
+          {
+            logger.error(String.format("Failed to remove the report definition (%s): %s", id,
+                e.getMessage()), e);
 
-                ReportDefinitionAdministrationPage.this.info(
-                    "Successfully removed the report definition "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
-              catch (Throwable e)
-              {
-                logger.error(String.format("Failed to remove the report definition (%s): %s", id,
-                    e.getMessage()), e);
+            ReportDefinitionAdministrationPage.this.error("Failed to remove the report definition "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
 
-                ReportDefinitionAdministrationPage.this.error(
-                    "Failed to remove the report definition "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
+          target.add(getAlerts());
 
-              target.add(getAlerts());
-
-              hide(target);
-            }
-          });
+          hide(target);
+        }
+      };
+      add(removeLink);
     }
 
     /**
@@ -260,6 +265,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
     public void show(AjaxRequestTarget target, ReportDefinitionSummary reportDefinitionSummary)
     {
       id = reportDefinitionSummary.getId();
+
       nameLabel.setDefaultModelObject(reportDefinitionSummary.getName());
 
       target.add(nameLabel);

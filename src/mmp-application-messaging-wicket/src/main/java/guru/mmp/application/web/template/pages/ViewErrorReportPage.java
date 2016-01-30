@@ -42,6 +42,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateMessagingSecurity.FUNCTION_CODE_ERROR_REPORTS)
 public class ViewErrorReportPage extends TemplateWebPage
 {
@@ -56,14 +57,6 @@ public class ViewErrorReportPage extends TemplateWebPage
 
   /**
    * Constructs a new <code>ViewErrorReportPage</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected ViewErrorReportPage() {}
-
-  /**
-   * Constructs a new <code>ViewErrorReportPage</code>.
    *
    * @param previousPage the previous page
    * @param id           the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -71,7 +64,7 @@ public class ViewErrorReportPage extends TemplateWebPage
    */
   public ViewErrorReportPage(PageReference previousPage, UUID id)
   {
-    super("View Error Report", "Viewing the error report: " + id);
+    super("View Error Report", id.toString());
 
     try
     {

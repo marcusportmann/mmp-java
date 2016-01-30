@@ -178,7 +178,7 @@ public class ResetUserPasswordPage extends TemplateWebPage
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the ResetPasswordPage", e);
+      throw new WebApplicationException("Failed to initialise the ResetUserPasswordPage", e);
     }
   }
 }

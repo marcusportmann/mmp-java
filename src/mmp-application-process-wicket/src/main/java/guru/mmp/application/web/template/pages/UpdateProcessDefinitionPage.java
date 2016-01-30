@@ -21,7 +21,6 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.process.IProcessService;
 import guru.mmp.application.process.ProcessDefinition;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateProcessSecurity;
 import guru.mmp.application.web.template.components.ProcessDefinitionInputPanel;
@@ -47,6 +46,7 @@ import java.io.InputStream;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_UPDATE_PROCESS_DEFINITION)
 public class UpdateProcessDefinitionPage extends TemplateWebPage
 {
@@ -57,12 +57,6 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
   /* Process Service */
   @Inject
   private IProcessService processService;
-
-  /**
-   * Hidden <code>UpdateProcessDefinitionPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateProcessDefinitionPage() {}
 
   /**
    * Constructs a new <code>UpdateProcessDefinitionPage</code>.
@@ -101,8 +95,6 @@ public class UpdateProcessDefinitionPage extends TemplateWebPage
           try
           {
             ProcessDefinition processDefinition = processDefinitionModel.getObject();
-
-            WebSession session = getWebApplicationSession();
 
             fileUpload = processDefinitionInputPanel.getFileUpload();
 

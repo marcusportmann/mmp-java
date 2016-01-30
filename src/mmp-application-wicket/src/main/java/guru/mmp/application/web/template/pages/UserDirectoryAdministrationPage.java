@@ -27,6 +27,7 @@ import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.*;
 import guru.mmp.application.web.template.data.FilteredUserDirectoryDataProvider;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,14 +42,16 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>UserDirectoryAdministrationPage</code> class implements the
@@ -319,40 +322,42 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
       super("removeDialog");
 
       nameLabel = new Label("name", Model.of(""));
+
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
-      add(new AjaxLink<Void>("removeLink")
+      // The "removeLink" link
+      AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onClick(AjaxRequestTarget target)
+        {
+          try
           {
-            private static final long serialVersionUID = 1000000;
+            securityService.deleteUserDirectory(id);
 
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-              try
-              {
-                securityService.deleteUserDirectory(id);
+            target.add(tableContainer);
 
-                target.add(tableContainer);
+            UserDirectoryAdministrationPage.this.info("Successfully removed the user directory "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
+          catch (Throwable e)
+          {
+            logger.error(String.format("Failed to remove the user directory (%s): %s", id,
+                e.getMessage()), e);
 
-                UserDirectoryAdministrationPage.this.info(
-                    "Successfully removed the user directory "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
-              catch (Throwable e)
-              {
-                logger.error(String.format("Failed to remove the user directory (%s): %s", id,
-                    e.getMessage()), e);
+            UserDirectoryAdministrationPage.this.error("Failed to remove the user directory "
+                + nameLabel.getDefaultModelObjectAsString());
+          }
 
-                UserDirectoryAdministrationPage.this.error("Failed to remove the user directory "
-                    + nameLabel.getDefaultModelObjectAsString());
-              }
+          target.add(getAlerts());
 
-              target.add(getAlerts());
-
-              hide(target);
-            }
-          });
+          hide(target);
+        }
+      };
+      add(removeLink);
     }
 
     /**
@@ -364,6 +369,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
     public void show(AjaxRequestTarget target, UserDirectory userDirectory)
     {
       id = userDirectory.getId();
+
       nameLabel.setDefaultModelObject(userDirectory.getName());
 
       target.add(nameLabel);

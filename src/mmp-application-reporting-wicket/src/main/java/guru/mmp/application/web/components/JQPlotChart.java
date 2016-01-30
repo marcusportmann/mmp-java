@@ -41,6 +41,7 @@ public class JQPlotChart extends WebMarkupContainer
   public JQPlotChart(String id, Chart<?> chart)
   {
     super(id);
+
     setOutputMarkupId(true);
     add(new JQPlotBehavior(chart, getMarkupId()));
   }

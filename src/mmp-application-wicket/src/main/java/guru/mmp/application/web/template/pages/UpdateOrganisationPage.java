@@ -24,20 +24,18 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UpdateOrganisationPage</code> class implements the
@@ -45,6 +43,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
 public class UpdateOrganisationPage extends TemplateWebPage
 {
@@ -55,12 +54,6 @@ public class UpdateOrganisationPage extends TemplateWebPage
   /* Security Service */
   @Inject
   private ISecurityService securityService;
-
-  /**
-   * Hidden <code>UpdateOrganisationPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected UpdateOrganisationPage() {}
 
   /**
    * Constructs a new <code>UpdateOrganisationPage</code>.

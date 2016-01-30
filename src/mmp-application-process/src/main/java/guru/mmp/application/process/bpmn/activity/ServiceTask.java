@@ -24,13 +24,15 @@ import guru.mmp.application.process.bpmn.ProcessExecutionContext;
 import guru.mmp.application.process.bpmn.Token;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlUtils;
+
 import org.w3c.dom.Element;
 
-import javax.xml.namespace.QName;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.namespace.QName;
 
 /**
  * The <code>ServiceTask</code> class represents a Service Task that forms part of a Process.
