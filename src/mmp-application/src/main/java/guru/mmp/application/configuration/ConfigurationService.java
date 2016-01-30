@@ -193,7 +193,7 @@ public class ConfigurationService
    *
    * @throws ConfigurationException
    */
-  public List<Configuration> getFilteredConfigurationValues(String filter)
+  public List<ConfigurationValue> getFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
@@ -208,11 +208,11 @@ public class ConfigurationService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        List<Configuration> list = new ArrayList<>();
+        List<ConfigurationValue> list = new ArrayList<>();
 
         while (rs.next())
         {
-          list.add(new Configuration(rs.getString(1), rs.getString(2), rs.getString(3)));
+          list.add(new ConfigurationValue(rs.getString(1), rs.getString(2), rs.getString(3)));
         }
 
         return list;
@@ -682,7 +682,7 @@ public class ConfigurationService
     {
       statement.setString(1, key);
       statement.setString(2, stringValue);
-      statement.setString(3, description);
+      statement.setString(3, StringUtil.notNull(description));
 
       if (statement.executeUpdate() <= 0)
       {

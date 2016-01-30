@@ -18,7 +18,7 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.Configuration;
+import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 
@@ -157,7 +157,7 @@ public class ConfigurationServiceTest
       fail("Failed to confirm that the configuration key (" + TEST_FILTERED_KEY + ") exists");
     }
 
-    List<Configuration> filteredConfigurationEntries =
+    List<ConfigurationValue> filteredConfigurationEntries =
         configurationService.getFilteredConfigurationValues("testfiltered");
 
     assertEquals("The required number of filtered configuration values (1) was not retrieved", 1,

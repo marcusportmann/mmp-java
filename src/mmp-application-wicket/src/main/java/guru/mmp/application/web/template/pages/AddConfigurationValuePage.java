@@ -18,12 +18,12 @@ package guru.mmp.application.web.template.pages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.Configuration;
+import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.components.ConfigurationInputPanel;
+import guru.mmp.application.web.template.components.ConfigurationValueInputPanel;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -44,11 +44,11 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
-public class AddConfigurationPage
+public class AddConfigurationValuePage
   extends TemplateWebPage
 {
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(AddConfigurationPage.class);
+  private static final Logger logger = LoggerFactory.getLogger(AddConfigurationValuePage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Configuration Service */
@@ -60,16 +60,16 @@ public class AddConfigurationPage
    *
    * @param previousPage the previous page
    */
-  public AddConfigurationPage(PageReference previousPage)
+  public AddConfigurationValuePage(PageReference previousPage)
   {
-    super("Add Configuration");
+    super("Add Configuration Value");
 
     try
     {
-      Form<Configuration> addForm = new Form<>("addForm", new CompoundPropertyModel<>(
-          new Model<>(new Configuration())));
+      Form<ConfigurationValue> addForm = new Form<>("addForm", new CompoundPropertyModel<>(
+          new Model<>(new ConfigurationValue())));
 
-      addForm.add(new ConfigurationInputPanel("configuration", false));
+      addForm.add(new ConfigurationValueInputPanel("configurationValue", false));
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -81,17 +81,17 @@ public class AddConfigurationPage
         {
           try
           {
-            Configuration configuration = addForm.getModelObject();
+            ConfigurationValue configurationValue = addForm.getModelObject();
 
-            configurationService.setValue(configuration.getKey(),
-                configuration.getValue(), configuration.getDescription());
+            configurationService.setValue(configurationValue.getKey(),
+                configurationValue.getValue(), configurationValue.getDescription());
 
             setResponsePage(previousPage.getPage());
           }
           catch (Throwable e)
           {
             logger.error("Failed to add the configuration value: " + e.getMessage(), e);
-            AddConfigurationPage.this.error("Failed to add the configuration");
+            AddConfigurationValuePage.this.error("Failed to add the configuration value");
           }
         }
       };
@@ -116,7 +116,7 @@ public class AddConfigurationPage
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the AddConfigurationPage", e);
+      throw new WebApplicationException("Failed to initialise the AddConfigurationValuePage", e);
     }
   }
 }

@@ -87,8 +87,10 @@
                 <div class="table-header-right">
                   <form wicket:id="filterForm" class="table-filter-form">
                     <input wicket:id="filter" type="text" name="filter"/>
-                    <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm">
-                      <i class="fa fa-filter"> Filter</i></button>
+                    <div class="btn-group">
+                      <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Filter</button>
+                      <button wicket:id="resetButton" type="submit" class="btn btn-default btn-sm"><i class="fa fa-times"></i></button>
+                    </div>
                   </form>
                 </div>
               </div>

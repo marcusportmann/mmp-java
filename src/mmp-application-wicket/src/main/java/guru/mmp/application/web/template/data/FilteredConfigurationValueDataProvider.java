@@ -18,7 +18,7 @@ package guru.mmp.application.web.template.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.Configuration;
+import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
@@ -35,13 +35,13 @@ import javax.inject.Inject;
 /**
  * The <code>FilteredConfigurationDataProvider</code> class provides an
  * <code>IDataProvider</code> implementation that retrieves a filtered list of
- * <code>Configuration</code> instances for the configuration values managed by the
+ * <code>ConfigurationValue</code> instances for the configuration values managed by the
  * Configuration Service.
  *
  * @author Marcus Portmann
  */
-public class FilteredConfigurationDataProvider
-    extends InjectableDataProvider<Configuration>
+public class FilteredConfigurationValueDataProvider
+    extends InjectableDataProvider<ConfigurationValue>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -57,7 +57,7 @@ public class FilteredConfigurationDataProvider
   /**
    * Constructs a new <code>FilteredConfigurationDataProvider</code>.
    */
-  public FilteredConfigurationDataProvider() {}
+  public FilteredConfigurationValueDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -86,11 +86,11 @@ public class FilteredConfigurationDataProvider
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
-  public Iterator<Configuration> iterator(long first, long count)
+  public Iterator<ConfigurationValue> iterator(long first, long count)
   {
     try
     {
-      List<Configuration> allConfigurationEntries =
+      List<ConfigurationValue> allConfigurationEntries =
           configurationService.getFilteredConfigurationValues(filter);
 
       return allConfigurationEntries.subList((int) first, (int) Math.min(first + count,
@@ -113,7 +113,7 @@ public class FilteredConfigurationDataProvider
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    */
-  public IModel<Configuration> model(Configuration configurationValue)
+  public IModel<ConfigurationValue> model(ConfigurationValue configurationValue)
   {
     return new Model<>(configurationValue);
   }

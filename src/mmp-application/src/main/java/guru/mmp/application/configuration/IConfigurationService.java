@@ -92,7 +92,7 @@ public interface IConfigurationService
    *
    * @throws ConfigurationException
    */
-  List<Configuration> getFilteredConfigurationValues(String filter)
+  List<ConfigurationValue> getFilteredConfigurationValues(String filter)
     throws ConfigurationException;
 
   /**

@@ -64,11 +64,11 @@
                     <button type="button" class="close" data-dismiss="modal">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Remove Configuration</h4>
+                    <h4 class="modal-title">Remove Configuration Value</h4>
                   </div>
                   <div class="modal-body">
                     <p>
-                      Are you sure you wish to remove the configuration <b><span wicket:id="name">[Name]</span></b>?
+                      Are you sure you wish to remove the configuration value <b><span wicket:id="name">[Name]</span></b>?
                     </p>
                   </div>
                   <div class="modal-footer">
@@ -82,12 +82,15 @@
             <div wicket:id="tableContainer" class="table-container">
               <div class="table-header">
                 <div class="table-header-left">
-                  <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add Configuration</a>
+                  <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add Configuration Value</a>
                 </div>
                 <div class="table-header-right">
                   <form wicket:id="filterForm" class="table-filter-form">
                     <input wicket:id="filter" type="text" name="filter"/>
-                    <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Filter</button>
+                    <div class="btn-group">
+                      <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Filter</button>
+                      <button wicket:id="resetButton" type="submit" class="btn btn-default btn-sm"><i class="fa fa-times"></i></button>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -101,13 +104,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr wicket:id="configuration">
+                  <tr wicket:id="configurationValue">
                     <td><span wicket:id="key">[Key]</span></td>
                     <td class="hidden-xs"><span wicket:id="value">[Value]</span></td>
                     <td class="three-actions">
                       <div class="btn-group">
-                        <a wicket:id="updateLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update Configuration"><i class="fa fa-edit"></i></a>
-                        <a wicket:id="removeLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove Configuration"><i class="fa fa-times"></i></a>
+                        <a wicket:id="updateLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update Configuration Value"><i class="fa fa-edit"></i></a>
+                        <a wicket:id="removeLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove Configuration Value"><i class="fa fa-times"></i></a>
                       </div>
                     </td>
                   </tr>

@@ -128,6 +128,20 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
       };
       filterButton.setDefaultFormProcessing(true);
       filterForm.add(filterButton);
+
+      // The "resetButton" button
+      Button resetButton = new Button("resetButton")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onSubmit()
+        {
+          dataProvider.setFilter("");
+        }
+      };
+      filterForm.add(resetButton);
+
       tableContainer.add(filterForm);
 
       // The user directory data view
