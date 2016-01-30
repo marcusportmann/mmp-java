@@ -8828,9 +8828,6 @@
      <string>environment.systemVariables</string>
      <void property="variablesMap">
       <void method="remove">
-       <string>external.system.remote.process.idle.ttl.ms</string>
-      </void>
-      <void method="remove">
        <string>java.rmi.server.disableHttp</string>
       </void>
       <void method="remove">

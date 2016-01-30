@@ -48,6 +48,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
 public class AddUserDirectoryPage extends TemplateWebPage
 {
@@ -58,12 +59,6 @@ public class AddUserDirectoryPage extends TemplateWebPage
   /* Security Service */
   @Inject
   private ISecurityService securityService;
-
-  /**
-   * Hidden <code>AddUserDirectoryPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddUserDirectoryPage() {}
 
   /**
    * Constructs a new <code>AddUserDirectoryPage</code>.

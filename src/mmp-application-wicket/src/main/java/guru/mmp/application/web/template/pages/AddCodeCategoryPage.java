@@ -22,7 +22,6 @@ import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.CodeCategoryInputPanel;
@@ -49,6 +48,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION)
 public class AddCodeCategoryPage extends TemplateWebPage
 {
@@ -59,12 +59,6 @@ public class AddCodeCategoryPage extends TemplateWebPage
   /* Codes Service */
   @Inject
   private ICodesService codesService;
-
-  /**
-   * Hidden <code>AddCodeCategoryPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddCodeCategoryPage() {}
 
   /**
    * Constructs a new <code>AddCodeCategoryPage</code>.
@@ -94,8 +88,6 @@ public class AddCodeCategoryPage extends TemplateWebPage
         {
           try
           {
-            WebSession session = getWebApplicationSession();
-
             Date created = new Date();
 
             CodeCategory codeCategory = addForm.getModelObject();

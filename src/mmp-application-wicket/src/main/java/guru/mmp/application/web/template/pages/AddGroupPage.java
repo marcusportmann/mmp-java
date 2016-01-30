@@ -47,6 +47,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_GROUP_ADMINISTRATION)
 public class AddGroupPage extends TemplateWebPage
 {
@@ -57,12 +58,6 @@ public class AddGroupPage extends TemplateWebPage
   /* Security Service */
   @Inject
   private ISecurityService securityService;
-
-  /**
-   * Hidden <code>AddGroupPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddGroupPage() {}
 
   /**
    * Constructs a new <code>AddGroupPage</code>.

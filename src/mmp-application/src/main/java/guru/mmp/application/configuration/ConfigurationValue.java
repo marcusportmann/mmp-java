@@ -46,6 +46,16 @@ public class ConfigurationValue
 
   /**
    * Constructs a new <code>ConfigurationValue</code>.
+   */
+  public ConfigurationValue()
+  {
+    this.key = key;
+    this.value = value;
+    this.description = description;
+  }
+
+  /**
+   * Constructs a new <code>ConfigurationValue</code>.
    *
    * @param key         the key used to uniquely identify the configuration value
    * @param value       the value for the configuration value

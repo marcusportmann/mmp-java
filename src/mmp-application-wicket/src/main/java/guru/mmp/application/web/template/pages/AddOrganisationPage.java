@@ -47,6 +47,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
 public class AddOrganisationPage extends TemplateWebPage
 {
@@ -59,12 +60,6 @@ public class AddOrganisationPage extends TemplateWebPage
   /* Security Service */
   @Inject
   private ISecurityService securityService;
-
-  /**
-   * Hidden <code>AddOrganisationPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddOrganisationPage() {}
 
   /**
    * Constructs a new <code>AddOrganisationPage</code>.

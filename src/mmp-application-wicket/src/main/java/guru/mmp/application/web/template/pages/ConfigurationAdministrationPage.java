@@ -96,7 +96,7 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-//        setResponsePage(new AddConfigurationValuePage(getPageReference()));
+          setResponsePage(new AddConfigurationValuePage(getPageReference()));
         }
       };
       tableContainer.add(addLink);
@@ -146,10 +146,10 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-//            UpdateConfigurationValuePage page = new UpdateConfigurationValuePage(getPageReference(),
-//              item.getModel());
-//
-//            setResponsePage(page);
+              UpdateConfigurationValuePage page = new UpdateConfigurationValuePage(getPageReference(),
+                item.getModel());
+
+              setResponsePage(page);
             }
           };
           item.add(updateLink);

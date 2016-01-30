@@ -22,7 +22,6 @@ import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.Dialog;
@@ -74,8 +73,6 @@ public class CodeCategoryAdministrationPage extends TemplateWebPage
 
     try
     {
-      WebSession session = getWebApplicationSession();
-
       /*
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.

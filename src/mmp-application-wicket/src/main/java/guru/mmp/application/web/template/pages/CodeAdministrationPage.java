@@ -52,6 +52,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
 public class CodeAdministrationPage extends TemplateWebPage
 {
@@ -62,12 +63,6 @@ public class CodeAdministrationPage extends TemplateWebPage
   /* Codes Service */
   @Inject
   private ICodesService codesService;
-
-  /**
-   * Constructs a new <code>CodeAdministrationPage</code>.
-   */
-  @SuppressWarnings("unused")
-  protected CodeAdministrationPage() {}
 
   /**
    * Constructs a new <code>CodeAdministrationPage</code>.

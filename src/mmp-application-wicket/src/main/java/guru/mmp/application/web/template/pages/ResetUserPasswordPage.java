@@ -51,6 +51,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_RESET_USER_PASSWORD)
 public class ResetUserPasswordPage extends TemplateWebPage
 {
@@ -69,12 +70,6 @@ public class ResetUserPasswordPage extends TemplateWebPage
   /* Should the user's password be locked */
   @SuppressWarnings("unused")
   private boolean userLocked;
-
-  /**
-   * Hidden <code>ResetPasswordPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected ResetUserPasswordPage() {}
 
   /**
    * Constructs a new <code>ResetUserPasswordPage</code>.

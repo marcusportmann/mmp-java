@@ -18,12 +18,12 @@ package guru.mmp.application.web.template.pages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.codes.Code;
-import guru.mmp.application.codes.ICodesService;
+import guru.mmp.application.configuration.ConfigurationValue;
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.components.CodeInputPanel;
+import guru.mmp.application.web.template.components.ConfigurationValueInputPanel;
 
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
@@ -36,46 +36,41 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 
 /**
- * The <code>AddCodePage</code> class implements the
- * "Add Code" page for the Web Application Template.
+ * The <configurationValue>AddConfigurationValuePage</configurationValue> class implements the
+ * "Add Configuration Value" page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
-public class AddCodePage extends TemplateWebPage
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
+public class AddConfigurationValuePage extends TemplateWebPage
 {
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(AddCodePage.class);
+  private static final Logger logger = LoggerFactory.getLogger(AddConfigurationValuePage.class);
   private static final long serialVersionUID = 1000000;
 
-  /* Codes Service */
+  /* Configuration Service */
   @Inject
-  private ICodesService codesService;
+  private IConfigurationService configurationService;
 
   /**
-   * Constructs a new <code>AddCodePage</code>.
+   * Constructs a new <configurationValue>AddConfigurationValuePage</configurationValue>.
    *
-   * @param previousPage   the previous page
-   * @param codeCategoryId the ID uniquely identifying the code category for the code
+   * @param previousPage the previous page
    */
-  public AddCodePage(PageReference previousPage, UUID codeCategoryId)
+  public AddConfigurationValuePage(PageReference previousPage)
   {
-    super("Add Code");
+    super("Add Configuration Value");
 
     try
     {
-      Form<Code> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(
-          new Code())));
+      Form<ConfigurationValue> addForm = new Form<>("addForm", new CompoundPropertyModel<>(
+          new Model<>(new ConfigurationValue())));
 
-      addForm.getModelObject().setCategoryId(codeCategoryId);
-
-      addForm.add(new CodeInputPanel("code", false));
+      addForm.add(new ConfigurationValueInputPanel("configurationValue", false));
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -87,14 +82,17 @@ public class AddCodePage extends TemplateWebPage
         {
           try
           {
-            codesService.createCode(addForm.getModelObject());
+            ConfigurationValue configurationValue = addForm.getModelObject();
+
+            configurationService.setValue(configurationValue.getKey(),
+                configurationValue.getValue(), configurationValue.getDescription());
 
             setResponsePage(previousPage.getPage());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to add the code: " + e.getMessage(), e);
-            AddCodePage.this.error("Failed to add the code");
+            logger.error("Failed to add the configuration value: " + e.getMessage(), e);
+            AddConfigurationValuePage.this.error("Failed to add the configuration value");
           }
         }
       };
@@ -119,7 +117,7 @@ public class AddCodePage extends TemplateWebPage
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the AddCodePage", e);
+      throw new WebApplicationException("Failed to initialise the AddConfigurationValuePage", e);
     }
   }
 }

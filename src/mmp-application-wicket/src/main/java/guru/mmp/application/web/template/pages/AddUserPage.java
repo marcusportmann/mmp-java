@@ -54,6 +54,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
 public class AddUserPage extends TemplateWebPage
 {
@@ -76,12 +77,6 @@ public class AddUserPage extends TemplateWebPage
   /* Should the user be created with a locked password */
   @SuppressWarnings("unused")
   private boolean userLocked;
-
-  /**
-   * Hidden <code>AddUserPage</code> constructor.
-   */
-  @SuppressWarnings("unused")
-  protected AddUserPage() {}
 
   /**
    * Constructs a new <code>AddUserPage</code>.
