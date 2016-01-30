@@ -46,7 +46,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /**
- * The <code>ConfigurationService</code> class provides the Config Service implementation.
+ * The <code>ConfigurationService</code> class provides the Configuration Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -193,7 +193,7 @@ public class ConfigurationService
    *
    * @throws ConfigurationException
    */
-  public List<ConfigurationValue> getFilteredConfigurationValues(String filter)
+  public List<Configuration> getFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
     try (Connection connection = dataSource.getConnection();
@@ -208,11 +208,11 @@ public class ConfigurationService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        List<ConfigurationValue> list = new ArrayList<>();
+        List<Configuration> list = new ArrayList<>();
 
         while (rs.next())
         {
-          list.add(new ConfigurationValue(rs.getString(1), rs.getString(2), rs.getString(3)));
+          list.add(new Configuration(rs.getString(1), rs.getString(2), rs.getString(3)));
         }
 
         return list;
@@ -546,7 +546,7 @@ public class ConfigurationService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(removeValueSQL))
     {
-      statement.setString(3, key.toUpperCase());
+      statement.setString(1, key.toUpperCase());
 
       if (statement.executeUpdate() <= 0)
       {

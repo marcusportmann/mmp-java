@@ -48,7 +48,7 @@ import java.io.InputStream;
  * @author Marcus Portmann
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_UPDATE_REPORT_DEFINITION)
+@WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
 public class UpdateReportDefinitionPage extends TemplateWebPage
 {
   /* Logger */

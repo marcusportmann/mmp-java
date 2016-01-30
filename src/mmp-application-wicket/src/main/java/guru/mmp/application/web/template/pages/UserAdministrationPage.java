@@ -328,6 +328,7 @@ public class UserAdministrationPage extends TemplateWebPage
       super("removeDialog");
 
       nameLabel = new Label("name", Model.of(""));
+
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
@@ -372,6 +373,7 @@ public class UserAdministrationPage extends TemplateWebPage
     public void show(AjaxRequestTarget target, User user)
     {
       this.username = user.getUsername();
+
       this.nameLabel.setDefaultModelObject(user.getFirstNames() + " " + user.getLastName());
 
       target.add(nameLabel);

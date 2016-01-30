@@ -49,7 +49,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_ADD_PROCESS_DEFINITION)
+@WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION)
 public class AddProcessDefinitionPage extends TemplateWebPage
 {
   /* Logger */

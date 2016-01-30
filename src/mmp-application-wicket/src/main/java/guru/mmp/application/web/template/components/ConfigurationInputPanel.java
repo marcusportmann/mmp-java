@@ -25,23 +25,24 @@ import java.util.UUID;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ConfigurationValueInputPanel</code> class provides a Wicket component that can
- * be used to capture the information for a <code>ConfigurationValue</code>.
+ * The <code>ConfigurationInputPanel</code> class provides a Wicket component that can
+ * be used to capture the information for a <code>Configuration</code>.
  *
  * @author Marcus Portmann
  */
-public class ConfigurationValueInputPanel extends InputPanel
+public class ConfigurationInputPanel
+  extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ConfigurationValueInputPanel</code>.
+   * Constructs a new <code>ConfigurationInputPanel</code>.
    *
    * @param id           the non-null id of this component
-   * @param isIdReadOnly <code>true</code> if the ID for the <code>ConfigurationValue</code>
+   * @param isIdReadOnly <code>true</code> if the ID for the <code>Configuration</code>
    *                     is readonly or <code>false</code> otherwise
    */
-  public ConfigurationValueInputPanel(String id, boolean isIdReadOnly)
+  public ConfigurationInputPanel(String id, boolean isIdReadOnly)
   {
     super(id);
 

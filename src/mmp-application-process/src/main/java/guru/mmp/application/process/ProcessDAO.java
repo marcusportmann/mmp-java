@@ -174,7 +174,7 @@ public class ProcessDAO
     {
       statement.setObject(1, id);
 
-      if (statement.executeUpdate() != 1)
+      if (statement.executeUpdate() <= 0)
       {
         throw new DAOException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",

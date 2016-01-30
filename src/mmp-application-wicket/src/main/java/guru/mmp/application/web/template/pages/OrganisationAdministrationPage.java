@@ -26,7 +26,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.FilteredOrganisationDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,15 +39,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>OrganisationAdministrationPage</code> class implements the

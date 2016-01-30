@@ -49,7 +49,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_ADD_REPORT_DEFINITION)
+@WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
 public class AddReportDefinitionPage extends TemplateWebPage
 {
   /* Logger */

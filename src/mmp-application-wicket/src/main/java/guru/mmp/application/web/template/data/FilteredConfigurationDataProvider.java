@@ -18,7 +18,7 @@ package guru.mmp.application.web.template.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.ConfigurationValue;
+import guru.mmp.application.configuration.Configuration;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
@@ -33,15 +33,15 @@ import java.util.*;
 import javax.inject.Inject;
 
 /**
- * The <code>FilteredConfigurationValueDataProvider</code> class provides an
+ * The <code>FilteredConfigurationDataProvider</code> class provides an
  * <code>IDataProvider</code> implementation that retrieves a filtered list of
- * <code>ConfigurationValue</code> instances for the configuration values managed by the
+ * <code>Configuration</code> instances for the configuration values managed by the
  * Configuration Service.
  *
  * @author Marcus Portmann
  */
-public class FilteredConfigurationValueDataProvider
-    extends InjectableDataProvider<ConfigurationValue>
+public class FilteredConfigurationDataProvider
+    extends InjectableDataProvider<Configuration>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -55,9 +55,9 @@ public class FilteredConfigurationValueDataProvider
   private IConfigurationService configurationService;
 
   /**
-   * Constructs a new <code>FilteredConfigurationValueDataProvider</code>.
+   * Constructs a new <code>FilteredConfigurationDataProvider</code>.
    */
-  public FilteredConfigurationValueDataProvider() {}
+  public FilteredConfigurationDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -86,11 +86,11 @@ public class FilteredConfigurationValueDataProvider
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
-  public Iterator<ConfigurationValue> iterator(long first, long count)
+  public Iterator<Configuration> iterator(long first, long count)
   {
     try
     {
-      List<ConfigurationValue> allConfigurationEntries =
+      List<Configuration> allConfigurationEntries =
           configurationService.getFilteredConfigurationValues(filter);
 
       return allConfigurationEntries.subList((int) first, (int) Math.min(first + count,
@@ -105,15 +105,15 @@ public class FilteredConfigurationValueDataProvider
   }
 
   /**
-   * Wraps the retrieved <code>ConfigurationValue</code> POJO with a Wicket model.
+   * Wraps the retrieved <code>Configuration</code> POJO with a Wicket model.
    *
-   * @param configurationValue the <code>ConfigurationValue</code> instance to wrap
+   * @param configurationValue the <code>Configuration</code> instance to wrap
    *
-   * @return the Wicket model wrapping the <code>ConfigurationValue</code> instance
+   * @return the Wicket model wrapping the <code>Configuration</code> instance
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
    */
-  public IModel<ConfigurationValue> model(ConfigurationValue configurationValue)
+  public IModel<Configuration> model(Configuration configurationValue)
   {
     return new Model<>(configurationValue);
   }

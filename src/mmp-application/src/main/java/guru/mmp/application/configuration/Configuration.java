@@ -21,12 +21,12 @@ package guru.mmp.application.configuration;
 import java.io.Serializable;
 
 /**
- * The <code>ConfigurationValue</code> class stores the key, value and description for a
- * configuration value.
+ * The <code>Configuration</code> class stores the key, value and description for a configuration
+ * value.
  *
  * @author Marcus Portmann
  */
-public class ConfigurationValue
+public class Configuration
   implements Serializable
 {
   /**
@@ -45,23 +45,19 @@ public class ConfigurationValue
   private String description;
 
   /**
-   * Constructs a new <code>ConfigurationValue</code>.
+   * Constructs a new <code>Configuration</code>.
    */
-  public ConfigurationValue()
-  {
-    this.key = key;
-    this.value = value;
-    this.description = description;
-  }
+  public Configuration()
+  {}
 
   /**
-   * Constructs a new <code>ConfigurationValue</code>.
+   * Constructs a new <code>Configuration</code>.
    *
    * @param key         the key used to uniquely identify the configuration value
    * @param value       the value for the configuration value
    * @param description the description for the configuration value
    */
-  public ConfigurationValue(String key, String value, String description)
+  public Configuration(String key, String value, String description)
   {
     this.key = key;
     this.value = value;

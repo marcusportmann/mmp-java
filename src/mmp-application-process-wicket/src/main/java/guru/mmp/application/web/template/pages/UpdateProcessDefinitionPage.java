@@ -47,7 +47,7 @@ import java.io.InputStream;
  * @author Marcus Portmann
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_UPDATE_PROCESS_DEFINITION)
+@WebPageSecurity(TemplateProcessSecurity.FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION)
 public class UpdateProcessDefinitionPage extends TemplateWebPage
 {
   /* Logger */

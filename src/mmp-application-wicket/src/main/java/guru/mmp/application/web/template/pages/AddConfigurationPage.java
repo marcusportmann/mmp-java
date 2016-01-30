@@ -18,17 +18,17 @@ package guru.mmp.application.web.template.pages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.ConfigurationValue;
+import guru.mmp.application.configuration.Configuration;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.components.ConfigurationValueInputPanel;
+import guru.mmp.application.web.template.components.ConfigurationInputPanel;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,17 +37,18 @@ import javax.inject.Inject;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>UpdateConfigurationValuePage</code> class implements the
- * "Update Configuration Value" page for the Web Application Template.
+ * The <configurationValue>AddConfigurationPage</configurationValue> class implements the
+ * "Add Configuration Value" page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
-public class UpdateConfigurationValuePage extends TemplateWebPage
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
+public class AddConfigurationPage
+  extends TemplateWebPage
 {
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(UpdateConfigurationValuePage.class);
+  private static final Logger logger = LoggerFactory.getLogger(AddConfigurationPage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Configuration Service */
@@ -55,25 +56,23 @@ public class UpdateConfigurationValuePage extends TemplateWebPage
   private IConfigurationService configurationService;
 
   /**
-   * Constructs a new <code>UpdateConfigurationValuePage</code>.
+   * Constructs a new <configurationValue>AddConfigurationPage</configurationValue>.
    *
-   * @param previousPage            the previous page
-   * @param configurationValueModel the model for the configuration value
+   * @param previousPage the previous page
    */
-  public UpdateConfigurationValuePage(PageReference previousPage,
-      IModel<ConfigurationValue> configurationValueModel)
+  public AddConfigurationPage(PageReference previousPage)
   {
-    super("Update Configuration Value");
+    super("Add Configuration");
 
     try
     {
-      Form<ConfigurationValue> updateForm = new Form<>("updateForm", new CompoundPropertyModel<>(
-          configurationValueModel));
+      Form<Configuration> addForm = new Form<>("addForm", new CompoundPropertyModel<>(
+          new Model<>(new Configuration())));
 
-      updateForm.add(new ConfigurationValueInputPanel("configurationValue", true));
+      addForm.add(new ConfigurationInputPanel("configuration", false));
 
-      // The "updateButton" button
-      Button updateButton = new Button("updateButton")
+      // The "addButton" button
+      Button addButton = new Button("addButton")
       {
         private static final long serialVersionUID = 1000000;
 
@@ -82,23 +81,22 @@ public class UpdateConfigurationValuePage extends TemplateWebPage
         {
           try
           {
-            ConfigurationValue configurationValue = updateForm.getModelObject();
+            Configuration configuration = addForm.getModelObject();
 
-            configurationService.setValue(configurationValue.getKey(),
-                configurationValue.getValue(), configurationValue.getDescription());
+            configurationService.setValue(configuration.getKey(),
+                configuration.getValue(), configuration.getDescription());
 
             setResponsePage(previousPage.getPage());
           }
           catch (Throwable e)
           {
-            logger.error("Failed to update the configuration value: " + e.getMessage(), e);
-
-            UpdateConfigurationValuePage.this.error("Failed to update the configuration value");
+            logger.error("Failed to add the configuration value: " + e.getMessage(), e);
+            AddConfigurationPage.this.error("Failed to add the configuration");
           }
         }
       };
-      updateButton.setDefaultFormProcessing(true);
-      updateForm.add(updateButton);
+      addButton.setDefaultFormProcessing(true);
+      addForm.add(addButton);
 
       // The "cancelButton" button
       Button cancelButton = new Button("cancelButton")
@@ -112,13 +110,13 @@ public class UpdateConfigurationValuePage extends TemplateWebPage
         }
       };
       cancelButton.setDefaultFormProcessing(false);
-      updateForm.add(cancelButton);
+      addForm.add(cancelButton);
 
-      add(updateForm);
+      add(addForm);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the UpdateConfigurationValuePage", e);
+      throw new WebApplicationException("Failed to initialise the AddConfigurationPage", e);
     }
   }
 }

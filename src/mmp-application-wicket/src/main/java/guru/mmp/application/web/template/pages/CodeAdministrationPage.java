@@ -27,7 +27,6 @@ import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.CodeDataProvider;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -39,15 +38,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeAdministrationPage</code> class implements the
@@ -203,6 +200,7 @@ public class CodeAdministrationPage extends TemplateWebPage
       super("removeDialog");
 
       nameLabel = new Label("name", Model.of(""));
+
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
@@ -255,6 +253,7 @@ public class CodeAdministrationPage extends TemplateWebPage
       {
         id = code.getId();
         categoryId = code.getCategoryId();
+
         nameLabel.setDefaultModelObject(code.getName());
 
         target.add(nameLabel);

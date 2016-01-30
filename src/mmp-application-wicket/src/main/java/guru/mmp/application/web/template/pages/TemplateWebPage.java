@@ -111,6 +111,7 @@ public abstract class TemplateWebPage extends WebPage
 
       // Setup the alerts
       this.alerts = new Alerts("alerts");
+
       add(alerts);
     }
     catch (Throwable e)

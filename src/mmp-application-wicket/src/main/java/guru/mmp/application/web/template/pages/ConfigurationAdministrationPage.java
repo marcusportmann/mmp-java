@@ -18,12 +18,14 @@ package guru.mmp.application.web.template.pages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.ConfigurationValue;
+import guru.mmp.application.configuration.Configuration;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
+import guru.mmp.application.web.pages.WebPageSecurity;
+import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
-import guru.mmp.application.web.template.data.FilteredConfigurationValueDataProvider;
+import guru.mmp.application.web.template.data.FilteredConfigurationDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -52,8 +54,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-
-//@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
+@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
 public class ConfigurationAdministrationPage extends TemplateWebPage
 {
   /* Logger */
@@ -94,13 +95,12 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-          setResponsePage(new AddConfigurationValuePage(getPageReference()));
+          setResponsePage(new AddConfigurationPage(getPageReference()));
         }
       };
       tableContainer.add(addLink);
 
-      FilteredConfigurationValueDataProvider dataProvider =
-          new FilteredConfigurationValueDataProvider();
+      FilteredConfigurationDataProvider dataProvider = new FilteredConfigurationDataProvider();
 
       // The "filterForm" form
       Form<Void> filterForm = new Form<>("filterForm");
@@ -125,13 +125,12 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
       tableContainer.add(filterForm);
 
       // The configuration value data view
-      DataView<ConfigurationValue> dataView = new DataView<ConfigurationValue>(
-          "configurationValue", dataProvider)
+      DataView<Configuration> dataView = new DataView<Configuration>("configuration", dataProvider)
       {
         private static final long serialVersionUID = 1000000;
 
         @Override
-        protected void populateItem(Item<ConfigurationValue> item)
+        protected void populateItem(Item<Configuration> item)
         {
           item.add(new Label("key", new PropertyModel<String>(item.getModel(), "key")));
           item.add(new Label("value", new PropertyModel<String>(item.getModel(), "value")));
@@ -144,8 +143,8 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              UpdateConfigurationValuePage page = new UpdateConfigurationValuePage(
-                  getPageReference(), item.getModel());
+              UpdateConfigurationPage page = new UpdateConfigurationPage(getPageReference(),
+                  item.getModel());
 
               setResponsePage(page);
             }
@@ -160,11 +159,11 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
             @Override
             public void onClick(AjaxRequestTarget target)
             {
-              ConfigurationValue configurationValue = item.getModelObject();
+              Configuration configuration = item.getModelObject();
 
-              if (configurationValue != null)
+              if (configuration != null)
               {
-                removeDialog.show(target, configurationValue);
+                removeDialog.show(target, configuration);
               }
               else
               {
@@ -223,12 +222,11 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
         {
           try
           {
-            // securityService.deleteOrganisation(id);
+            configurationService.removeValue(key);
 
             target.add(tableContainer);
 
-            ConfigurationAdministrationPage.this.info(
-                "Successfully removed the configuration value "
+            ConfigurationAdministrationPage.this.info("Successfully removed the configuration "
                 + nameLabel.getDefaultModelObjectAsString());
           }
           catch (Throwable e)
@@ -236,7 +234,7 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
             logger.error(String.format("Failed to remove the configuration value (%s): %s", key,
                 e.getMessage()), e);
 
-            ConfigurationAdministrationPage.this.error("Failed to remove the configuration value "
+            ConfigurationAdministrationPage.this.error("Failed to remove the configuration "
                 + nameLabel.getDefaultModelObjectAsString());
           }
 
@@ -251,14 +249,14 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
     /**
      * Show the dialog using Ajax.
      *
-     * @param target             the AJAX request target
-     * @param configurationValue the configuration value being removed
+     * @param target        the AJAX request target
+     * @param configuration the configuration value being removed
      */
-    public void show(AjaxRequestTarget target, ConfigurationValue configurationValue)
+    public void show(AjaxRequestTarget target, Configuration configuration)
     {
-      key = configurationValue.getKey();
+      key = configuration.getKey();
 
-      nameLabel.setDefaultModelObject(configurationValue.getKey());
+      nameLabel.setDefaultModelObject(configuration.getKey());
 
       target.add(nameLabel);
 
