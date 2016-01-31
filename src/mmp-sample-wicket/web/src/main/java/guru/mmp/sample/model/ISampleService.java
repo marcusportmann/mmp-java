@@ -16,6 +16,10 @@
 
 package guru.mmp.sample.model;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+
 /**
  * The <code>ISampleService</code> interface defines the functionality that must be provided by
  * a Sample Service implementation.
@@ -24,6 +28,16 @@ package guru.mmp.sample.model;
  */
 public interface ISampleService
 {
+  /**
+   * Returns the data.
+   *
+   * @return the data
+   *
+   * @throws SampleServiceException
+   */
+  List<Data> getData()
+    throws SampleServiceException;
+
   /**
    * The test method.
    */

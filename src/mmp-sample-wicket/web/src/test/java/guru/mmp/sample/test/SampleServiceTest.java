@@ -16,14 +16,21 @@
 
 package guru.mmp.sample.test;
 
+import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.common.test.ApplicationDataSourceResourceReference;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+import guru.mmp.sample.model.Data;
+import guru.mmp.sample.model.ISampleService;
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.hibernate.resource.transaction.backend.jdbc.internal
+  .JdbcResourceLocalTransactionCoordinatorImpl;
+import org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -41,31 +48,40 @@ import java.util.Map;
  * @author Marcus Portmann
  */
 @RunWith(ApplicationJUnit4ClassRunner.class)
-//@ApplicationDataSourceResourceReference(name="java:jboss/datasources/SampleDS")
+@ApplicationDataSourceResourceReference(name="java:jboss/datasources/SampleDS")
 public class SampleServiceTest
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleServiceTest.class);
+
+  @Inject
+  private ISampleService sampleService;
 
   @Test
   public void jpaTest()
   {
     try
     {
-      //HibernatePersistenceProvider persistenceProvider = new HibernatePersistenceProvider();
+      List<Data> data = sampleService.getData();
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to execute the JPA test", e);
+    }
 
-//      Class<?> clazz = Class.forName("org.hibernate.jpa.HibernatePersistenceProvider");
-
-
+    /*
+    try
+    {
       Map<String, String> properties = new HashMap<>();
 
-//      properties.put("javax.persistence.provider", "org.hibernate.jpa.HibernatePersistenceProvider");
       properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-
+      properties.put("hibernate.transaction.jta.platform", "guru.mmp.common.test.ApplicationJUnit4ClassRunnerJtaPlatform");
 
       EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Sample", properties);
 
       EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+      JtaTransactionCoordinatorImpl gh = null;
 
       int xxx = 0;
       xxx++;
@@ -77,7 +93,7 @@ public class SampleServiceTest
       System.out.println("[ERROR] " + e.getMessage());
 
     }
-
+    */
 
 
   }

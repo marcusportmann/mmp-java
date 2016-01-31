@@ -28,6 +28,8 @@ import net.sf.cglib.proxy.Enhancer;
 
 import org.apache.naming.ContextBindings;
 
+import org.hibernate.cfg.Configuration;
+
 import org.jboss.weld.bootstrap.api.Bootstrap;
 import org.jboss.weld.bootstrap.api.CDI11Bootstrap;
 import org.jboss.weld.bootstrap.spi.Deployment;
@@ -35,6 +37,7 @@ import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.jboss.weld.resources.spi.ResourceLoader;
 import org.jboss.weld.transaction.spi.TransactionServices;
+
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -62,10 +65,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
-import javax.transaction.Synchronization;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
+import javax.transaction.*;
 
 /**
  * The <code>ApplicationJUnit4ClassRunner</code> class implements the JUnit runner that provides
@@ -136,39 +136,60 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         ic.bind("comp/UserTransaction", userTransaction);
         ic.bind("jboss/UserTransaction", userTransaction);
 
-        // Initialise the Weld bean manager
-        Weld weld = new Weld(){
-
+        // Initialise the Weld bean manager with JTA transaction support
+        Weld weld = new Weld()
+        {
           @Override
-          protected Deployment createDeployment(ResourceLoader resourceLoader, CDI11Bootstrap bootstrap) {
+          protected Deployment createDeployment(ResourceLoader resourceLoader,
+              CDI11Bootstrap bootstrap)
+          {
             Deployment deployment = super.createDeployment(resourceLoader, bootstrap);
-            deployment.getServices().add(TransactionServices.class, new TransactionServices()
-            {
+            deployment.getServices().add(TransactionServices.class,
+                new TransactionServices()
+                {
+                  @Override
+                  public void cleanup() {}
 
-              @Override
-              public void cleanup()
-              {
+                  @Override
+                  public void registerSynchronization(Synchronization synchronization)
+                  {
+                    try
+                    {
+                      Transaction transaction = transactionManager.getTransaction();
 
-              }
+                      if (transaction != null)
+                      {
+                        transaction.registerSynchronization(synchronization);
+                      }
+                    }
+                    catch (Throwable e)
+                    {
+                      throw new RuntimeException(
+                          "Failed to register the synchronisation with the Transaction", e);
+                    }
+                  }
 
-              @Override
-              public void registerSynchronization(Synchronization synchronization)
-              {
+                  @Override
+                  public boolean isTransactionActive()
+                  {
+                    try
+                    {
+                      return userTransaction.getStatus() == Status.STATUS_ACTIVE;
+                    }
+                    catch (Throwable e)
+                    {
+                      throw new RuntimeException(
+                          "Failed to check whether there is an active Transaction", e);
+                    }
+                  }
 
-              }
+                  @Override
+                  public UserTransaction getUserTransaction()
+                  {
+                    return userTransaction;
+                  }
+                });
 
-              @Override
-              public boolean isTransactionActive()
-              {
-                return false;
-              }
-
-              @Override
-              public UserTransaction getUserTransaction()
-              {
-                return null;
-              }
-            });
             return deployment;
           }
         };
