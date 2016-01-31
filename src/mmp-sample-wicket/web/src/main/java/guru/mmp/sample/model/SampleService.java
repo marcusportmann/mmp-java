@@ -16,6 +16,9 @@
 
 package guru.mmp.sample.model;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * The <code>SampleService</code> class provides the Sample Service implementation.
  *
@@ -24,6 +27,10 @@ package guru.mmp.sample.model;
 public class SampleService
   implements ISampleService
 {
+  /* Entity Manager */
+  @PersistenceContext(unitName = "Sample")
+  private EntityManager entityManager;
+
   /**
    * The test method.
    */

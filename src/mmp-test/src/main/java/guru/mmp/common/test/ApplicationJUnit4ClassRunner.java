@@ -20,33 +20,52 @@ package guru.mmp.common.test;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
+
 import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
+
 import net.sf.cglib.proxy.Enhancer;
+
 import org.apache.naming.ContextBindings;
+
+import org.jboss.weld.bootstrap.api.Bootstrap;
+import org.jboss.weld.bootstrap.api.CDI11Bootstrap;
+import org.jboss.weld.bootstrap.spi.Deployment;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+import org.jboss.weld.resources.spi.ResourceLoader;
+import org.jboss.weld.transaction.spi.TransactionServices;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import javax.enterprise.inject.spi.BeanManager;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.Method;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.enterprise.inject.spi.BeanManager;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
+import javax.sql.XADataSource;
+
+import javax.transaction.Synchronization;
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 
 /**
  * The <code>ApplicationJUnit4ClassRunner</code> class implements the JUnit runner that provides
@@ -82,7 +101,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         // Initialise the initial context
         InitialContext ic = new InitialContext();
 
-        // ic.createSubcontext("");
         ic.createSubcontext("app");
         ic.createSubcontext("app/env");
         ic.createSubcontext("app/jdbc");
@@ -92,6 +110,7 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         ic.createSubcontext("comp/env/jdbc");
 
         ic.createSubcontext("jboss");
+        ic.createSubcontext("jboss/datasources");
 
         ic.bind("app/AppName", "Test");
 
@@ -118,20 +137,45 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         ic.bind("jboss/UserTransaction", userTransaction);
 
         // Initialise the Weld bean manager
-        Class<?> weldClass = Thread.currentThread().getContextClassLoader().loadClass(
-            "org.jboss.weld.environment.se.Weld");
+        Weld weld = new Weld(){
 
-        Method initializeMethod = weldClass.getMethod("initialize");
+          @Override
+          protected Deployment createDeployment(ResourceLoader resourceLoader, CDI11Bootstrap bootstrap) {
+            Deployment deployment = super.createDeployment(resourceLoader, bootstrap);
+            deployment.getServices().add(TransactionServices.class, new TransactionServices()
+            {
 
-        Object weldObject = weldClass.newInstance();
+              @Override
+              public void cleanup()
+              {
 
-        Object weldContainerObject = initializeMethod.invoke(weldObject);
+              }
 
-        Method getBeanManagerMethod = weldContainerObject.getClass().getMethod("getBeanManager");
+              @Override
+              public void registerSynchronization(Synchronization synchronization)
+              {
 
-        BeanManager beanManager = (BeanManager) getBeanManagerMethod.invoke(weldContainerObject);
+              }
 
-        ic.bind("comp/BeanManager", beanManager);
+              @Override
+              public boolean isTransactionActive()
+              {
+                return false;
+              }
+
+              @Override
+              public UserTransaction getUserTransaction()
+              {
+                return null;
+              }
+            });
+            return deployment;
+          }
+        };
+
+        WeldContainer weldContainer = weld.initialize();
+
+        ic.bind("comp/BeanManager", weldContainer.getBeanManager());
 
         // Initialise the application data source
         DataSource dataSource = initApplicationDatabase(false);
@@ -142,6 +186,32 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         ContextBindings.bindContext(Thread.currentThread().getName(), ic);
 
         ContextBindings.bindThread(Thread.currentThread().getName(), null);
+
+        // Bind the application data source resource references
+        ApplicationDataSourceResourceReference[] applicationDataSourceResourceReferences =
+            testClass.getAnnotationsByType(ApplicationDataSourceResourceReference.class);
+
+        for (ApplicationDataSourceResourceReference applicationDataSourceResourceReference :
+            applicationDataSourceResourceReferences)
+        {
+          String name = applicationDataSourceResourceReference.name();
+
+          if (name.startsWith("java:"))
+          {
+            name = name.substring(5);
+          }
+
+          try
+          {
+            ic.bind(name, dataSource);
+          }
+          catch (Throwable e)
+          {
+            throw new RuntimeException(
+                "Failed to bind the application data source resource reference ("
+                + applicationDataSourceResourceReference.name() + ")", e);
+          }
+        }
       }
     }
     catch (Throwable e)
