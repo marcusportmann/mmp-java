@@ -27,7 +27,8 @@ import javax.transaction.UserTransaction;
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4ClassRunnerJtaPlatform extends AbstractJtaPlatform
+public class ApplicationJUnit4JtaPlatform
+  extends AbstractJtaPlatform
 {
   @Override
   protected TransactionManager locateTransactionManager()

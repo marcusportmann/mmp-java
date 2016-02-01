@@ -75,7 +75,7 @@ public class SampleServiceTest
       Map<String, String> properties = new HashMap<>();
 
       properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-      properties.put("hibernate.transaction.jta.platform", "guru.mmp.common.test.ApplicationJUnit4ClassRunnerJtaPlatform");
+      properties.put("hibernate.transaction.jta.platform", "guru.mmp.common.test.ApplicationJUnit4JtaPlatform");
 
       EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Sample", properties);
 
