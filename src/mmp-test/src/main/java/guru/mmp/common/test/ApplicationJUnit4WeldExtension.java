@@ -16,20 +16,61 @@
 
 package guru.mmp.common.test;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import guru.mmp.common.cdi.CDIException;
+
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.AnnotatedField;
+import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
+
+import javax.persistence.PersistenceContext;
 
 /**
  * The <code>ApplicationJUnit4ClassRunnerJtaPlatform</code> class.
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4WeldExtension implements Extension
+public class ApplicationJUnit4WeldExtension
+  implements Extension
 {
-  <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> processInjectionTarget)
+  <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> processInjectionTarget)
   {
-    System.out.println("[DEBUG] processInjectionTarget.getAnnotatedType().getJavaClass().getName() = " + processInjectionTarget.getAnnotatedType().getJavaClass().getName());
+    AnnotatedType<T> annotatedType = processInjectionTarget.getAnnotatedType();
+
+    for (AnnotatedField<? super T> field : annotatedType.getFields())
+    {
+      if (field.isAnnotationPresent(PersistenceContext.class))
+      {
+        try
+        {
+
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to inject the PersistenceContext", e);
+        }
+
+
+        System.out.println(
+          "[DEBUG] processInjectionTarget.getAnnotatedType().getJavaClass().getName() = "
+            + processInjectionTarget.getAnnotatedType().getJavaClass().getName());
+
+
+        return;
+      }
+
+
+    }
+
+
+
+
+
+
+
 
   }
 }
