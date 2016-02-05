@@ -16,20 +16,61 @@
 
 package guru.mmp.sample.model;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.application.configuration.IConfigurationService;
+import guru.mmp.common.persistence.Transactional;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  * The <code>SampleService</code> class provides the Sample Service implementation.
  *
  * @author Marcus Portmann
  */
+@ApplicationScoped
+@Default
 public class SampleService
   implements ISampleService
-{
-  /* Entity Manager */
-  @PersistenceContext(unitName = "Sample")
-  private EntityManager entityManager;
+ {
+   /* Entity Manager */
+   @PersistenceContext(unitName = "Sample")
+   private EntityManager entityManager;
+
+  /**
+   * Returns the data.
+   *
+   * @return the data
+   *
+   * @throws SampleServiceException
+   */
+  @Transactional
+  public List<Data> getData()
+    throws SampleServiceException
+  {
+    try
+    {
+      TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data", Data.class);
+
+      List<Data> data = query.getResultList();
+
+      return data;
+    }
+    catch (Throwable e)
+    {
+      throw new SampleServiceException("Failed to retrieve the data", e);
+    }
+  }
 
   /**
    * The test method.

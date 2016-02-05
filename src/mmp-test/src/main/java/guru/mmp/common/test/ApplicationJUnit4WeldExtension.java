@@ -14,32 +14,22 @@
  * limitations under the License.
  */
 
-package guru.mmp.sample.model;
+package guru.mmp.common.test;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessInjectionTarget;
 
 /**
- * The <code>ISampleService</code> interface defines the functionality that must be provided by
- * a Sample Service implementation.
+ * The <code>ApplicationJUnit4ClassRunnerJtaPlatform</code> class.
  *
  * @author Marcus Portmann
  */
-public interface ISampleService
+public class ApplicationJUnit4WeldExtension implements Extension
 {
-  /**
-   * Returns the data.
-   *
-   * @return the data
-   *
-   * @throws SampleServiceException
-   */
-  List<Data> getData()
-    throws SampleServiceException;
+  <X> void processInjectionTarget(@Observes ProcessInjectionTarget<X> processInjectionTarget)
+  {
+    System.out.println("[DEBUG] processInjectionTarget.getAnnotatedType().getJavaClass().getName() = " + processInjectionTarget.getAnnotatedType().getJavaClass().getName());
 
-  /**
-   * The test method.
-   */
-  void testMethod();
+  }
 }

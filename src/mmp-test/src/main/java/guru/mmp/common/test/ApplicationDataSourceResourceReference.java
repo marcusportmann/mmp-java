@@ -29,6 +29,8 @@ import java.lang.annotation.Target;
  * This is required when the tests being run make use of JPA. It allows the global JNDI name
  * specified for the JTA data source (jta-data-source) for a persistence unit, in the
  * persistence.xml file for the persistence unit, to be mapped to the application data source.
+ *
+ * @author Marcus Portmann
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
