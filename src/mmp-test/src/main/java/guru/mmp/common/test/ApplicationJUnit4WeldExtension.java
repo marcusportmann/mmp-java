@@ -18,14 +18,19 @@ package guru.mmp.common.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import guru.mmp.common.cdi.CDIException;
+import java.lang.reflect.Field;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AnnotatedField;
-import javax.enterprise.inject.spi.AnnotatedType;
-import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.ProcessInjectionTarget;
+import javax.enterprise.inject.spi.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -40,37 +45,95 @@ public class ApplicationJUnit4WeldExtension
   {
     AnnotatedType<T> annotatedType = processInjectionTarget.getAnnotatedType();
 
-    for (AnnotatedField<? super T> field : annotatedType.getFields())
+    boolean hasPersistenceContext = false;
+
+    for (Field field : annotatedType.getJavaClass().getDeclaredFields())
     {
       if (field.isAnnotationPresent(PersistenceContext.class))
       {
-        try
-        {
+        hasPersistenceContext = true;
 
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to inject the PersistenceContext", e);
-        }
-
-
-        System.out.println(
-          "[DEBUG] processInjectionTarget.getAnnotatedType().getJavaClass().getName() = "
-            + processInjectionTarget.getAnnotatedType().getJavaClass().getName());
-
-
-        return;
+        break;
       }
-
-
     }
 
+    if (!hasPersistenceContext)
+    {
+      return;
+    }
 
+    final InjectionTarget<T> injectionTarget = processInjectionTarget.getInjectionTarget();
 
+    InjectionTarget<T> wrapper = new InjectionTarget<T>()
+    {
+      @Override
+      public void postConstruct(T instance)
+      {
+        injectionTarget.postConstruct(instance);
+      }
 
+      @Override
+      public void inject(T instance, CreationalContext<T> context)
+      {
+        for (Field field : annotatedType.getJavaClass().getDeclaredFields())
+        {
+          PersistenceContext persistenceContext = field.getAnnotation(PersistenceContext.class);
 
+          if (persistenceContext != null)
+          {
+            try
+            {
+              Map<String, String> properties = new HashMap<>();
 
+              properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+              properties.put("hibernate.transaction.jta.platform",
+                  "guru.mmp.common.test.ApplicationJUnit4JtaPlatform");
 
+              EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(
+                  persistenceContext.unitName(), properties);
 
+              EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+              field.setAccessible(true);
+              field.set(instance, entityManager);
+            }
+            catch (Throwable e)
+            {
+              throw new RuntimeException("Failed to inject the PersistenceContext ("
+                  + persistenceContext.unitName() + ")", e);
+            }
+          }
+        }
+
+        injectionTarget.inject(instance, context);
+      }
+
+      @Override
+      public void dispose(T instance)
+      {
+        injectionTarget.dispose(instance);
+      }
+
+      @Override
+      public T produce(CreationalContext<T> context)
+      {
+        return injectionTarget.produce(context);
+      }
+
+      @Override
+      public void preDestroy(T instance)
+      {
+        injectionTarget.preDestroy(instance);
+      }
+
+      @Override
+      public Set<InjectionPoint> getInjectionPoints()
+      {
+        return injectionTarget.getInjectionPoints();
+      }
+
+    };
+
+    processInjectionTarget.setInjectionTarget(wrapper);
   }
 }

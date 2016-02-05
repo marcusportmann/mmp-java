@@ -60,7 +60,7 @@ public class SampleService
   {
     try
     {
-      TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data", Data.class);
+      TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
       List<Data> data = query.getResultList();
 

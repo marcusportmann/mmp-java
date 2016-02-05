@@ -18,6 +18,7 @@ package guru.mmp.sample.test;
 
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.common.test.ApplicationDataSourceResourceReference;
+import guru.mmp.common.test.ApplicationDataSourceSQLResource;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
@@ -49,6 +50,7 @@ import java.util.Map;
  */
 @RunWith(ApplicationJUnit4ClassRunner.class)
 @ApplicationDataSourceResourceReference(name="java:jboss/datasources/SampleDS")
+@ApplicationDataSourceSQLResource(path="guru/mmp/sample/persistence/SampleH2.sql")
 public class SampleServiceTest
 {
   /* Logger */

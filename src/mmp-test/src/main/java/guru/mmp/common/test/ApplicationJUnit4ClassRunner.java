@@ -28,9 +28,6 @@ import net.sf.cglib.proxy.Enhancer;
 
 import org.apache.naming.ContextBindings;
 
-import org.hibernate.cfg.Configuration;
-
-import org.jboss.weld.bootstrap.api.Bootstrap;
 import org.jboss.weld.bootstrap.api.CDI11Bootstrap;
 import org.jboss.weld.bootstrap.spi.Deployment;
 import org.jboss.weld.environment.se.Weld;
@@ -273,11 +270,20 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
    * initialise the in-memory application database.
    */
-  protected List<String> getDatabaseInitResources()
+  private List<String> getDatabaseInitResources()
   {
     List<String> resources = new ArrayList<>();
 
     resources.add("guru/mmp/application/persistence/ApplicationH2.sql");
+
+    ApplicationDataSourceSQLResource[] applicationDataSourceSQLResources =
+      getTestClass().getJavaClass().getAnnotationsByType(ApplicationDataSourceSQLResource.class);
+
+    for (ApplicationDataSourceSQLResource applicationDataSourceSQLResource :
+        applicationDataSourceSQLResources)
+    {
+      resources.add(applicationDataSourceSQLResource.path());
+    }
 
     return resources;
   }
