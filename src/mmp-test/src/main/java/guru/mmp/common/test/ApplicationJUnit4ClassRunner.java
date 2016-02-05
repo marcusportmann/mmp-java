@@ -54,8 +54,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.enterprise.inject.spi.BeanManager;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 

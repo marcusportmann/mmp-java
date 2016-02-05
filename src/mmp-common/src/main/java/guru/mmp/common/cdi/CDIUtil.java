@@ -61,7 +61,7 @@ public class CDIUtil
   private static CreationalContext<Object> cachedCreationalContext;
 
   /**
-   * Perform container-based dependency injection on the target using the spe.
+   * Perform container-based dependency injection on the target.
    *
    * @param target the object to inject
    *
