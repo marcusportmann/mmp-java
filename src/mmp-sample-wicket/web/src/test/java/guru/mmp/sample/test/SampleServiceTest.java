@@ -42,6 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * The <code>SampleServiceTest</code> class contains the implementation of the JUnit
  * tests for the <code>SampleService</code> class.
@@ -60,46 +62,13 @@ public class SampleServiceTest
   private ISampleService sampleService;
 
   @Test
-  public void jpaTest()
+  public void getDataTest()
+    throws Exception
   {
-    try
-    {
-      List<Data> data = sampleService.getData();
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to execute the JPA test", e);
-    }
+    List<Data> retrievedData = sampleService.getData();
 
-    /*
-    try
-    {
-      Map<String, String> properties = new HashMap<>();
-
-      properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-      properties.put("hibernate.transaction.jta.platform", "guru.mmp.common.test.ApplicationJUnit4JtaPlatform");
-
-      EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Sample", properties);
-
-      EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-      JtaTransactionCoordinatorImpl gh = null;
-
-      int xxx = 0;
-      xxx++;
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to execute the JPA test", e);
-
-      System.out.println("[ERROR] " + e.getMessage());
-
-    }
-    */
-
-
+    assertEquals("The correct number of data objects was not retrieved", 9,
+      retrievedData.size());
   }
-
-
 }
 

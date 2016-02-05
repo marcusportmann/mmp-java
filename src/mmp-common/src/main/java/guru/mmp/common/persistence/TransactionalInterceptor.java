@@ -98,8 +98,11 @@ public class TransactionalInterceptor
     {
       userTransaction = InitialContext.doLookup("java:comp/UserTransaction");
 
-      getLogger().info("Successfully retrieved the bean managed transaction using the JNDI lookup"
-          + " " + "(java:comp/UserTransaction)");
+      if (getLogger().isDebugEnabled())
+      {
+        getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
+            + "lookup (java:comp/UserTransaction)");
+      }
     }
     catch (Throwable ignored) {}
 
@@ -109,14 +112,16 @@ public class TransactionalInterceptor
       {
         userTransaction = InitialContext.doLookup("java:jboss/UserTransaction");
 
-        getLogger().info(
-            "Successfully retrieved the bean managed transaction using the JNDI lookup" + " "
-            + "(java:jboss/UserTransaction)");
+        if (getLogger().isDebugEnabled())
+        {
+          getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
+            + "lookup (java:jboss/UserTransaction)");
+        }
       }
       catch (Throwable ignored)
       {
-        getLogger().warn("Failed to lookup the bean managed transaction using the JNDI lookups"
-            + " " + "(java:comp/UserTransaction) and (java:jboss/UserTransaction)");
+        getLogger().warn("Failed to lookup the bean managed transaction using the JNDI lookups "
+            + "(java:comp/UserTransaction) and (java:jboss/UserTransaction)");
       }
     }
 
@@ -131,8 +136,8 @@ public class TransactionalInterceptor
       }
       catch (Throwable e)
       {
-        throw new TransactionalInterceptorException("Failed to determine if an existing JTA"
-            + " transaction is active while invoking the" + " intercepted method (" + getTarget(
+        throw new TransactionalInterceptorException("Failed to determine if an existing JTA "
+            + "transaction is active while invoking the intercepted method (" + getTarget(
             context) + ")");
       }
 
@@ -309,8 +314,11 @@ public class TransactionalInterceptor
     {
       userTransaction = InitialContext.doLookup("java:comp/UserTransaction");
 
-      getLogger().info("Successfully retrieved the bean managed transaction using the JNDI lookup"
-          + " " + "(java:comp/UserTransaction)");
+      if (getLogger().isDebugEnabled())
+      {
+        getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
+          + "lookup (java:comp/UserTransaction)");
+      }
     }
     catch (Throwable ignored) {}
 
@@ -320,9 +328,11 @@ public class TransactionalInterceptor
       {
         userTransaction = InitialContext.doLookup("java:jboss/UserTransaction");
 
-        getLogger().info(
-            "Successfully retrieved the bean managed transaction using the JNDI lookup" + " "
-            + "(java:jboss/UserTransaction)");
+        if (getLogger().isDebugEnabled())
+        {
+          getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
+            + "lookup (java:jboss/UserTransaction)");
+        }
       }
       catch (Throwable ignored)
       {

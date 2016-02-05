@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.naming.Context;
@@ -87,6 +88,9 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
 
     try
     {
+      LogManager.getLogManager().readConfiguration(Thread.currentThread().getContextClassLoader()
+          .getResourceAsStream("logging.properties"));
+
       System.setProperty(Context.INITIAL_CONTEXT_FACTORY,
           "org.apache.naming.java.javaURLContextFactory");
       System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
@@ -264,28 +268,6 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
     }
 
     return testObject;
-  }
-
-  /**
-   * Returns the paths to the resources on the classpath that contain the SQL statements used to
-   * initialise the in-memory application database.
-   */
-  private List<String> getDatabaseInitResources()
-  {
-    List<String> resources = new ArrayList<>();
-
-    resources.add("guru/mmp/application/persistence/ApplicationH2.sql");
-
-    ApplicationDataSourceSQLResource[] applicationDataSourceSQLResources =
-      getTestClass().getJavaClass().getAnnotationsByType(ApplicationDataSourceSQLResource.class);
-
-    for (ApplicationDataSourceSQLResource applicationDataSourceSQLResource :
-        applicationDataSourceSQLResources)
-    {
-      resources.add(applicationDataSourceSQLResource.path());
-    }
-
-    return resources;
   }
 
   /**
@@ -478,5 +460,27 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
         }
       }
     }
+  }
+
+  /**
+   * Returns the paths to the resources on the classpath that contain the SQL statements used to
+   * initialise the in-memory application database.
+   */
+  private List<String> getDatabaseInitResources()
+  {
+    List<String> resources = new ArrayList<>();
+
+    resources.add("guru/mmp/application/persistence/ApplicationH2.sql");
+
+    ApplicationDataSourceSQLResource[] applicationDataSourceSQLResources =
+        getTestClass().getJavaClass().getAnnotationsByType(ApplicationDataSourceSQLResource.class);
+
+    for (ApplicationDataSourceSQLResource applicationDataSourceSQLResource :
+        applicationDataSourceSQLResources)
+    {
+      resources.add(applicationDataSourceSQLResource.path());
+    }
+
+    return resources;
   }
 }
