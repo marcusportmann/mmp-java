@@ -69,7 +69,6 @@ public class ApplicationJUnit4EntityManagerExtension
     return nonTransactionalEntityManagers.get();
   }
 
-
   /**
    * Process the annotated type.
    *
@@ -103,7 +102,7 @@ public class ApplicationJUnit4EntityManagerExtension
       @Override
       public Class<? extends Annotation> annotationType()
       {
-        return EntityManagerCleanup.class;
+        return ApplicationJUnit4EntityManagerCleanup.class;
       }
     };
 

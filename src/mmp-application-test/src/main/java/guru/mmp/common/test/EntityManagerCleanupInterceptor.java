@@ -31,7 +31,7 @@ import javax.interceptor.InvocationContext;
  *
  * @author Marcus Portmann
  */
-@EntityManagerCleanup
+@ApplicationJUnit4EntityManagerCleanup
 @Interceptor
 public class EntityManagerCleanupInterceptor
   implements Serializable

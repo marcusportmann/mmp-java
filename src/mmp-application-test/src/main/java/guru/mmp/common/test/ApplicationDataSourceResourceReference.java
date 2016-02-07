@@ -22,8 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <code>ApplicationDataSourceResourceReference</code> annotation is used in conjunction with
- * the <code>ApplicationJUnit4ClassRunner</code> JUnit runner to add a JNDI resource reference
+ * The <code>ApplicationDataSourceResourceReference</code> annotation is used in conjunction
+ * with the <code>ApplicationJUnit4ClassRunner</code> JUnit runner to add a JNDI resource reference
  * to the application data source provided by the runner.
  * <p/>
  * This is required when the tests being run make use of JPA. It allows the global JNDI name

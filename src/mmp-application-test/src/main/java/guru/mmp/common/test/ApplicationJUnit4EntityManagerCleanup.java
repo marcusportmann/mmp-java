@@ -29,7 +29,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 
 /**
- * The <code>EntityManagerCleanup</code> annotation.
+ * The <code>ApplicationJUnitEntityManagerCleanup</code> annotation.
  * <p/>
  * This annotation is programmatically applied to CDI beans that a <code>EntityManager</code>
  * instance is injected into by the <code>ApplicationJUnit4EntityManagerInjector</code> Weld
@@ -43,4 +43,5 @@ import static java.lang.annotation.ElementType.TYPE;
 @InterceptorBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ METHOD, TYPE })
-public @interface EntityManagerCleanup {}
+public @interface ApplicationJUnit4EntityManagerCleanup
+{}

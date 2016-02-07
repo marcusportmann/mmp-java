@@ -58,14 +58,13 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
 import javax.transaction.*;
 
 /**
- * The <code>ApplicationJUnit4ClassRunner</code> class implements the JUnit runner that provides
+ * The <code>ApplicationClassRunner</code> class implements the JUnit runner that provides
  * support for JUnit test classes that test the capabilities provided by the the <b>mmp-java (Open
  * Source Java and JEE Development Framework)</b>.
  * <p/>
@@ -73,7 +72,7 @@ import javax.transaction.*;
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
+public class ApplicationClassRunner extends BlockJUnit4ClassRunner
 {
   /**
    * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.

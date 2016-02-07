@@ -16,31 +16,18 @@
 
 package guru.mmp.sample.test;
 
-import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.common.test.ApplicationDataSourceResourceReference;
 import guru.mmp.common.test.ApplicationDataSourceSQLResource;
 import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
-import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.hibernate.resource.transaction.backend.jdbc.internal
-  .JdbcResourceLocalTransactionCoordinatorImpl;
-import org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.spi.PersistenceProvider;
-import javax.persistence.spi.PersistenceProviderResolver;
-import javax.persistence.spi.PersistenceProviderResolverHolder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
