@@ -6,7 +6,7 @@
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-application-test</artifactId>
   <version>2.0.0</version>
-  <name>mmp-test</name>
+  <name>mmp-application-test</name>
 
   <packaging>jar</packaging>
 

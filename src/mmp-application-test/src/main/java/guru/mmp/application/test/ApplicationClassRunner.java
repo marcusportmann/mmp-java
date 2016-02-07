@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -58,6 +58,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
@@ -68,20 +69,27 @@ import javax.transaction.*;
  * support for JUnit test classes that test the capabilities provided by the the <b>mmp-java (Open
  * Source Java and JEE Development Framework)</b>.
  * <p/>
- * This includes support for JEE 6 Contexts and Dependency Injection (CDI) using Weld.
+ * This runner provides support for:
+ * <ul>
+ *   <li>JNDI using Apache Tomcat</li>
+ *   <li>An in-memory application database using H2</li>
+ *   <li>Contexts and Dependency Injection (CDI) using Weld</li>
+ *   <li>JTA transaction management using the Atomikos transaction manager</li>
+ *   <li>JPA using Hibernate</li>
+ * </ul>
  *
  * @author Marcus Portmann
  */
 public class ApplicationClassRunner extends BlockJUnit4ClassRunner
 {
   /**
-   * Constructs a new <code>ApplicationJUnit4ClassRunner</code>.
+   * Constructs a new <code>ApplicationClassRunner</code>.
    *
    * @param testClass the JUnit test class to run
    *
    * @throws InitializationError
    */
-  public ApplicationJUnit4ClassRunner(Class<?> testClass)
+  public ApplicationClassRunner(Class<?> testClass)
     throws InitializationError
   {
     super(testClass);
@@ -405,17 +413,6 @@ public class ApplicationClassRunner extends BlockJUnit4ClassRunner
   protected void runChild(FrameworkMethod method, RunNotifier notifier)
   {
     super.runChild(method, notifier);
-
-//    /**
-//     * Close the EntityManagers associated with the current thread that were created
-//     */
-//    for (EntityManager entityManager : EntityManagerTracker.getActiveEntityManagers())
-//    {
-//      if (entityManager.isOpen())
-//      {
-//        entityManager.close();
-//      }
-//    }
 
     Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
         TransactionManagerTransactionTracker.getActiveTransactionStackTraces();

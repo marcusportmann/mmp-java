@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -41,8 +41,8 @@ import java.util.logging.Logger;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>JNDITest</code> class provides the base class for all JUnit test classes that make use
- * of an in-memory H2 database.
+ * The <code>DatabaseTest</code> class provides the base class for all JUnit test classes that make
+ * use of an in-memory H2 database.
  *
  * @author Marcus Portmann
  */
@@ -146,7 +146,7 @@ public abstract class DatabaseTest extends JNDITest
       AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
 
       atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
-          + "-ApplicationDataSource");
+          + "-DataSource");
 
       atomikosDataSourceBean.setXaDataSource((XADataSource) jdbcDataSource);
 

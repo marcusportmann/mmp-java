@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,16 +22,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The <code>ApplicationDataSourceSQLResource</code> annotation is used in conjunction with
- * the <code>ApplicationJUnit4ClassRunner</code> JUnit runner to specify a resource on the
- * classpath that contains SQL statements to execute against the application data source provided
- * by the runner.
+ * The <code>ApplicationDataSourceResourceReference</code> annotation is used in conjunction
+ * with the <code>ApplicationClassRunner</code> JUnit runner to add a JNDI resource reference to
+ * the application data source provided by the runner.
+ * <p/>
+ * This is required when the tests being run make use of JPA. It allows the global JNDI name
+ * specified for the JTA data source (jta-data-source) for a persistence unit, in the
+ * persistence.xml file for the persistence unit, to be mapped to the application data source.
  *
  * @author Marcus Portmann
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ApplicationDataSourceSQLResource
+public @interface ApplicationDataSourceResourceReference
 {
-  String path();
+  String name();
 }

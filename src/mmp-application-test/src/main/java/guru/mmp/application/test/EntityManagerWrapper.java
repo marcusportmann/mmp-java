@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManager;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +33,11 @@ import javax.persistence.metamodel.Metamodel;
 import javax.transaction.Transaction;
 
 /**
- * The <code>ApplicationJUnit4EntityManagerWrapper</code> class.
+ * The <code>EntityManagerWrapper</code> class.
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4EntityManagerWrapper
+public class EntityManagerWrapper
   implements EntityManager
 {
   private String persistenceUnitName;
@@ -46,16 +47,16 @@ public class ApplicationJUnit4EntityManagerWrapper
    *
    * @param persistenceUnitName the name of the persistence unit
    */
-  public ApplicationJUnit4EntityManagerWrapper(String persistenceUnitName)
+  public EntityManagerWrapper(String persistenceUnitName)
   {
     this.persistenceUnitName = persistenceUnitName;
   }
 
-
-
-
   @Override
-  public void clear() {}
+  public void clear()
+  {
+    EntityManagerTracker.getEntityManager(persistenceUnitName).clear();
+  }
 
   @Override
   public void close() {}
@@ -88,10 +89,10 @@ public class ApplicationJUnit4EntityManagerWrapper
   public <T> TypedQuery<T> createNamedQuery(String name, Class<T> resultClass)
   {
     return null;
-//
-//    TypedQuery<T> typedQuery = getEntityManager().createNamedQuery(name, resultClass);
-//
-//    return new TypedQueryNonTxInvocationDetacher<>(getEntityManager(), typedQuery);
+
+    TypedQuery<T> typedQuery = getEntityManager().createNamedQuery(name, resultClass);
+
+    return new TypedQueryNonTxInvocationDetacher<>(getEntityManager(), typedQuery);
   }
 
   @Override
@@ -324,37 +325,6 @@ public class ApplicationJUnit4EntityManagerWrapper
 
 
 
-  private EntityManager getEntityManager()
-  {
-    try
-    {
-      TransactionManager transactionManager = TransactionManager.getTransactionManager();
-
-      Transaction transaction = transactionManager.getTransaction();
-
-      if (transaction != null)
-      {
-
-      }
-      else
-      {
 
 
-      }
-
-
-
-
-      //TransactionSynchronizationRegistry
-
-
-
-
-      return null;
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to retrieve the entity manager for the persistence unit (" + persistenceUnitName + ")", e);
-    }
-  }
 }

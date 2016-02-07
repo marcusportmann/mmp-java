@@ -1,1 +1,1 @@
-guru.mmp.common.test.ApplicationJUnit4EntityManagerExtension
+guru.mmp.application.test.EntityManagerInjectorExtension

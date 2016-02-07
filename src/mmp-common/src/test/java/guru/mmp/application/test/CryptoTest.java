@@ -14,12 +14,26 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
+
+import guru.mmp.common.crypto.CryptoUtils;
+import guru.mmp.common.util.Base64;
+import org.junit.Test;
 
 /**
- * The <code>Test</code> class provides the base class that contains functionality common to all
- * JUnit test classes.
- *
- * @author Marcus Portmann
+ * The <code>CryptoTest</code> class.
  */
-public abstract class Test {}
+public class CryptoTest
+{
+  @Test
+  public void aesTest()
+  {
+    byte[] aesKey = CryptoUtils.getRandomAESKey();
+
+    System.out.println(Base64.encodeBytes(aesKey));
+
+
+
+  }
+
+}

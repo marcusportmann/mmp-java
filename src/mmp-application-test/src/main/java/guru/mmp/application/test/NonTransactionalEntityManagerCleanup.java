@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -29,13 +29,14 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 
 /**
- * The <code>ApplicationJUnitEntityManagerCleanup</code> annotation.
+ * The <code>NonTransactionalEntityManagerCleanup</code> annotation.
  * <p/>
- * This annotation is programmatically applied to CDI beans that a <code>EntityManager</code>
- * instance is injected into by the <code>ApplicationJUnit4EntityManagerInjector</code> Weld
- * extension. CDI beans that are annotated in this way will be processed by the
- * <code>EntityManagerCleanupInterceptor</code>. The interceptor is responsible for cleaning up
- * the <code>EntityManager</code> instances that are not associated with a transaction.
+ * This annotation is applied programmatically to CDI beans that one or more
+ * <code>EntityManager</code> instances are injected into by the
+ * <code>EntityManagerInjectorExtension</code> Weld extension. Beans that are annotated in this
+ * way will be processed by the <code>NonTransactionalEntityManagerCleanupInterceptor</code>. This
+ * interceptor is responsible for cleaning up the <code>EntityManager</code> instances that are not
+ * associated with a JTA transaction.
  *
  * @author Marcus Portmann
  */
@@ -43,5 +44,5 @@ import static java.lang.annotation.ElementType.TYPE;
 @InterceptorBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ METHOD, TYPE })
-public @interface ApplicationJUnit4EntityManagerCleanup
+public @interface NonTransactionalEntityManagerCleanup
 {}

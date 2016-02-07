@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.cdi.AnnotatedTypeWrapper;
-
-import org.hibernate.Session;
-import org.hibernate.jpa.HibernateEntityManager;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -34,41 +31,16 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 /**
- * The <code>ApplicationJUnit4EntityManagerExtension</code> class implements the Weld extension,
- * which processes <code>PersistenceContext</code> annotations on CDI beans and injects
- * the appropriate <code>EntityManager</code> instances into these beans.
+ * The <code>EntityManagerInjectorExtension</code> class.
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4EntityManagerExtension
+public class EntityManagerInjectorExtension
   implements Extension
 {
-  private static ThreadLocal<List<EntityManager>> nonTransactionalEntityManagers =
-    new ThreadLocal<List<EntityManager>>()
-    {
-      @Override
-      protected List<EntityManager> initialValue()
-      {
-        return new ArrayList<>();
-      }
-    };
-
-  /**
-   * Returns the active <code>EntityManager</code>s associated with the current thread.
-   *
-   * @return the active <code>EntityManager</code>s associated with the current thread
-   */
-  public static List<EntityManager> getNonTransactionalEntityManagers()
-  {
-    return nonTransactionalEntityManagers.get();
-  }
-
   /**
    * Process the annotated type.
    *
@@ -97,14 +69,7 @@ public class ApplicationJUnit4EntityManagerExtension
       return;
     }
 
-    Annotation entityManagerCleanupAnnotation = new Annotation()
-    {
-      @Override
-      public Class<? extends Annotation> annotationType()
-      {
-        return ApplicationJUnit4EntityManagerCleanup.class;
-      }
-    };
+    Annotation entityManagerCleanupAnnotation = () -> NonTransactionalEntityManagerCleanup.class;
 
     AnnotatedTypeWrapper<T> wrapper = new AnnotatedTypeWrapper<T>(annotatedType,
         annotatedType.getAnnotations());
@@ -162,28 +127,11 @@ public class ApplicationJUnit4EntityManagerExtension
           {
             try
             {
-              Map<String, String> properties = new HashMap<>();
-
-              properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-              properties.put("hibernate.transaction.auto_close_session", "true");
-              properties.put("hibernate.current_session_context_class", "jta");
-              properties.put("hibernate.transaction.jta.platform",
-                  "guru.mmp.common.test.ApplicationJUnit4JtaPlatform");
-
-              EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(
-                  persistenceContext.unitName(), properties);
-
-              EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-              HibernateEntityManager hibernateEntityManager = entityManager.unwrap(
-                  HibernateEntityManager.class);
-
-              Session session = hibernateEntityManager.getSession();
+              EntityManagerWrapper entityManager = new EntityManagerWrapper(
+                  persistenceContext.unitName());
 
               field.setAccessible(true);
               field.set(instance, entityManager);
-
-              EntityManagerTracker.getActiveEntityManagers().add(entityManager);
             }
             catch (Throwable e)
             {

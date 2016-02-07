@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.persistence.TransactionManager;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -33,16 +35,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
 
 /**
- * The <code>TransactionManagerTransactionTracker</code> class implements a cglib method
- * interceptor that tracks the Java Transaction (JTA) API transactions associated with the current
- * thread and managed by a <code>javax.transaction.TransactionManager</code> implementation.
+ * The <code>UserTransactionTracker</code> class implements a cglib method interceptor that tracks
+ * the Java Transaction (JTA) API transactions associated with the current thread and managed by a
+ * <code>javax.transaction.UserTransaction</code> implementation.
  *
  * @author Marcus Portmann
  */
-public class TransactionManagerTransactionTracker
+public class UserTransactionTracker
   implements MethodInterceptor, Serializable
 {
   private static final long serialVersionUID = 1000000;
@@ -55,11 +56,6 @@ public class TransactionManagerTransactionTracker
       return new ConcurrentHashMap<>();
     }
   };
-
-  /**
-   * Constructs a new <code>TransactionManagerMethodInterceptor</code>.
-   */
-  public TransactionManagerTransactionTracker() {}
 
   /**
    * Returns the active transaction stack traces for the current thread.
@@ -89,8 +85,6 @@ public class TransactionManagerTransactionTracker
   {
     try
     {
-      Method getTransactionMethod = TransactionManager.class.getMethod("getTransaction");
-
       switch (method.getName())
       {
         case "begin":
@@ -106,7 +100,7 @@ public class TransactionManagerTransactionTracker
           }
           finally
           {
-            Transaction afterTransaction = (Transaction) getTransactionMethod.invoke(obj);
+            Transaction afterTransaction = getCurrentTransaction();
 
             if (afterTransaction != null)
             {
@@ -118,7 +112,7 @@ public class TransactionManagerTransactionTracker
 
         case "commit":
         {
-          Transaction beforeTransaction = (Transaction) getTransactionMethod.invoke(obj);
+          Transaction beforeTransaction = getCurrentTransaction();
 
           try
           {
@@ -126,7 +120,7 @@ public class TransactionManagerTransactionTracker
           }
           finally
           {
-            Transaction afterTransaction = (Transaction) getTransactionMethod.invoke(obj);
+            Transaction afterTransaction = getCurrentTransaction();
 
             if ((beforeTransaction != null) && (afterTransaction == null))
             {
@@ -136,16 +130,11 @@ public class TransactionManagerTransactionTracker
               }
             }
           }
-        }
-
-        case "resume":
-        {
-          return proxy.invokeSuper(obj, args);
         }
 
         case "rollback":
         {
-          Transaction beforeTransaction = (Transaction) getTransactionMethod.invoke(obj);
+          Transaction beforeTransaction = getCurrentTransaction();
 
           try
           {
@@ -153,7 +142,7 @@ public class TransactionManagerTransactionTracker
           }
           finally
           {
-            Transaction afterTransaction = (Transaction) getTransactionMethod.invoke(obj);
+            Transaction afterTransaction = getCurrentTransaction();
 
             if ((beforeTransaction != null) && (afterTransaction == null))
             {
@@ -163,16 +152,6 @@ public class TransactionManagerTransactionTracker
               }
             }
           }
-        }
-
-        case "setRollbackOnly":
-        {
-          return proxy.invokeSuper(obj, args);
-        }
-
-        case "suspend":
-        {
-          return proxy.invokeSuper(obj, args);
         }
 
         default:
@@ -181,10 +160,30 @@ public class TransactionManagerTransactionTracker
     }
     catch (Throwable e)
     {
-      Logger.getAnonymousLogger().log(Level.SEVERE,
-          "Failed to invoke the TransactionManager method", e);
+      Logger.getAnonymousLogger().log(Level.SEVERE, "Failed to invoke the UserTransaction method",
+          e);
 
       throw e;
+    }
+  }
+
+  /**
+   * Returns the current transaction.
+   *
+   * @return the current transaction or <code>null</code> if there is no current transaction
+   */
+  private Transaction getCurrentTransaction()
+  {
+    try
+    {
+      return TransactionManager.getTransactionManager().getTransaction();
+    }
+    catch (Throwable e)
+    {
+      Logger.getAnonymousLogger().log(Level.SEVERE, "Failed to retrieve the current transaction",
+          e);
+
+      return null;
     }
   }
 }

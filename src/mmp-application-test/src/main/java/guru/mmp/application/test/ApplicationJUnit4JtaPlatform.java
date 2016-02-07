@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatform;
 
@@ -23,7 +23,7 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 /**
- * The <code>ApplicationJUnit4ClassRunnerJtaPlatform</code> class.
+ * The <code>ApplicationJUnit4JtaPlatform</code> class.
  *
  * @author Marcus Portmann
  */

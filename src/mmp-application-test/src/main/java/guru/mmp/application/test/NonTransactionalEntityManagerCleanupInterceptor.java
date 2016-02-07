@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.test;
+package guru.mmp.application.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -24,16 +24,18 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
+import javax.persistence.EntityManager;
+
 /**
- * The <code>EntityManagerCleanupInterceptor</code> interceptor is responsible for cleaning up the
- * <code>EntityManager</code> instances, that are not associated with a transaction, that are
- * injected into CDI beans.
+ * The <code>NonTransactionalEntityManagerCleanupInterceptor</code> interceptor is responsible for
+ * cleaning up the <code>EntityManager</code> instances that are injected into CDI beans, that are
+ * not associated with a JTA transaction.
  *
  * @author Marcus Portmann
  */
-@ApplicationJUnit4EntityManagerCleanup
+@NonTransactionalEntityManagerCleanup
 @Interceptor
-public class EntityManagerCleanupInterceptor
+public class NonTransactionalEntityManagerCleanupInterceptor
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
@@ -48,7 +50,7 @@ public class EntityManagerCleanupInterceptor
    * @throws Exception
    */
   @AroundInvoke
-  public Object enitityManagerCleanup(InvocationContext context)
+  public Object nonTransactionalEntityManagerCleanup(InvocationContext context)
     throws Exception
   {
     try
@@ -58,7 +60,21 @@ public class EntityManagerCleanupInterceptor
     finally
     {
       // Cleanup the <code>EntityManager</code> instances that are not associated with a transaction
-
+      for (EntityManager entityManager :
+          EntityManagerTracker.getNonTransactionalEntityManagers())
+      {
+        try
+        {
+          if (entityManager.isOpen())
+          {
+            entityManager.close();
+          }
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to close the non-transactional entity manager", e);
+        }
+      }
     }
   }
 }
