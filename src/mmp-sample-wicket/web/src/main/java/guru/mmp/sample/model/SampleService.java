@@ -16,22 +16,21 @@
 
 package guru.mmp.sample.model;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import guru.mmp.application.configuration.IConfigurationService;
-import guru.mmp.common.persistence.Transactional;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
+import guru.mmp.common.persistence.TransactionManager;
+
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-import javax.inject.Inject;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
+import javax.transaction.Transaction;
+import javax.transaction.Transactional;
 
 /**
  * The <code>SampleService</code> class provides the Sample Service implementation.
@@ -42,10 +41,34 @@ import javax.persistence.TypedQuery;
 @Default
 public class SampleService
   implements ISampleService
- {
-   /* Entity Manager */
-   @PersistenceContext(unitName = "Sample")
-   private EntityManager entityManager;
+{
+  /* Entity Manager */
+  @PersistenceContext(unitName = "Sample")
+  private EntityManager entityManager;
+
+  /**
+   * Add the data.
+   *
+   * @throws SampleServiceException
+   */
+  //@Transactional
+  public void addData()
+    throws SampleServiceException
+  {
+    try
+    {
+      Data newData = new Data();
+      newData.setId(666);
+      newData.setName("New Name");
+      newData.setValue("New Value");
+
+      entityManager.persist(newData);
+    }
+    catch (Throwable e)
+    {
+      throw new SampleServiceException("Failed to retrieve the data", e);
+    }
+  }
 
   /**
    * Returns the data.
@@ -54,12 +77,19 @@ public class SampleService
    *
    * @throws SampleServiceException
    */
-  @Transactional
+  //@Transactional
   public List<Data> getData()
     throws SampleServiceException
   {
     try
     {
+      Transaction transaction = TransactionManager.getTransactionManager().getTransaction();
+
+      System.out.println("transaction = " + transaction);
+
+      System.out.println("entityManager.getClass().getName() = " + entityManager.getClass().getName());
+
+
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
       return query.getResultList();

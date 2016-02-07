@@ -19,22 +19,26 @@ package guru.mmp.common.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManager;
+
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import javax.transaction.Transaction;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.lang.reflect.Method;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.transaction.Transaction;
 
 /**
  * The <code>UserTransactionTracker</code> class implements a cglib method interceptor that tracks
- * the Java Transaction (JTA) API transactions managed by a
+ * the Java Transaction (JTA) API transactions associated with the current thread and managed by a
  * <code>javax.transaction.UserTransaction</code> implementation.
  *
  * @author Marcus Portmann
@@ -43,17 +47,24 @@ public class UserTransactionTracker
   implements MethodInterceptor, Serializable
 {
   private static final long serialVersionUID = 1000000;
-  private transient static Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
-      new ConcurrentHashMap<>();
+  private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
+      new ThreadLocal<Map<Transaction, StackTraceElement[]>>()
+  {
+    @Override
+    protected Map<Transaction, StackTraceElement[]> initialValue()
+    {
+      return new ConcurrentHashMap<>();
+    }
+  };
 
   /**
-   * Returns the active transaction stack traces.
+   * Returns the active transaction stack traces for the current thread.
    *
-   * @return the active transaction stack traces
+   * @return the active transaction stack traces for the current thread
    */
   public static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces()
   {
-    return activeTransactionStackTraces;
+    return activeTransactionStackTraces.get();
   }
 
   /**
@@ -93,7 +104,7 @@ public class UserTransactionTracker
 
             if (afterTransaction != null)
             {
-              activeTransactionStackTraces.put(afterTransaction, Thread.currentThread()
+              getActiveTransactionStackTraces().put(afterTransaction, Thread.currentThread()
                   .getStackTrace());
             }
           }
@@ -113,9 +124,9 @@ public class UserTransactionTracker
 
             if ((beforeTransaction != null) && (afterTransaction == null))
             {
-              if (activeTransactionStackTraces.containsKey(beforeTransaction))
+              if (getActiveTransactionStackTraces().containsKey(beforeTransaction))
               {
-                activeTransactionStackTraces.remove(beforeTransaction);
+                getActiveTransactionStackTraces().remove(beforeTransaction);
               }
             }
           }
@@ -135,9 +146,9 @@ public class UserTransactionTracker
 
             if ((beforeTransaction != null) && (afterTransaction == null))
             {
-              if (activeTransactionStackTraces.containsKey(beforeTransaction))
+              if (getActiveTransactionStackTraces().containsKey(beforeTransaction))
               {
-                activeTransactionStackTraces.remove(beforeTransaction);
+                getActiveTransactionStackTraces().remove(beforeTransaction);
               }
             }
           }

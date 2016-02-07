@@ -18,11 +18,12 @@ package guru.mmp.common.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import org.hibernate.Session;
+import org.hibernate.jpa.HibernateEntityManager;
+
 import java.lang.reflect.Field;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
@@ -34,11 +35,13 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 /**
- * The <code>ApplicationJUnit4ClassRunnerJtaPlatform</code> class.
+ * The <code>ApplicationJUnit4EntityManagerInjector</code> class implements the Weld extension,
+ * which processes <code>PersistenceContext</code> annotations on CDI beans and injects
+ * the appropriate <code>EntityManager</code> instances into these beans.
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4WeldExtension
+public class ApplicationJUnit4EntityManagerInjector
   implements Extension
 {
   <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> processInjectionTarget)
@@ -86,6 +89,9 @@ public class ApplicationJUnit4WeldExtension
               Map<String, String> properties = new HashMap<>();
 
               properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+              properties.put("hibernate.transaction.auto_close_session", "true");
+              properties.put("hibernate.current_session_context_class",
+                  "jta");
               properties.put("hibernate.transaction.jta.platform",
                   "guru.mmp.common.test.ApplicationJUnit4JtaPlatform");
 
@@ -94,8 +100,15 @@ public class ApplicationJUnit4WeldExtension
 
               EntityManager entityManager = entityManagerFactory.createEntityManager();
 
+            HibernateEntityManager hibernateEntityManager = entityManager.unwrap(
+                HibernateEntityManager.class);
+
+            Session session = hibernateEntityManager.getSession();
+
               field.setAccessible(true);
               field.set(instance, entityManager);
+
+              EntityManagerTracker.getActiveEntityManagers().add(entityManager);
             }
             catch (Throwable e)
             {

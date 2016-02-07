@@ -20,6 +20,8 @@ package guru.mmp.sample.model;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 /**
  * The <code>ISampleService</code> interface defines the functionality that must be provided by
  * a Sample Service implementation.
@@ -28,6 +30,14 @@ import java.util.List;
  */
 public interface ISampleService
 {
+  /**
+   * Add the data.
+   *
+   * @throws SampleServiceException
+   */
+  public void addData()
+    throws SampleServiceException;
+
   /**
    * Returns the data.
    *

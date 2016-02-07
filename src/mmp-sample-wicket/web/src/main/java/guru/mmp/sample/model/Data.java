@@ -136,4 +136,16 @@ public class Data
   {
     this.value = value;
   }
+
+  /**
+   * Returns a string representation of the data.
+   *
+   * @return a string representation of the data
+   */
+  @Override
+  public String toString()
+  {
+    return String.format("Data {id=\"%d\", name=\"%s\", value=\"%s\"}", getId(), getName(),
+        getValue());
+  }
 }

@@ -24,6 +24,13 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.AnonymousOnlyWebPage;
 import guru.mmp.application.web.template.components.UserDirectoryChoiceRenderer;
 import guru.mmp.application.web.template.pages.TemplateWebPage;
+import guru.mmp.sample.model.Data;
+import guru.mmp.sample.model.ISampleService;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.form.Button;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -39,10 +46,13 @@ import java.util.List;
 @AnonymousOnlyWebPage
 public class HomePage extends TemplateWebPage
 {
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(HomePage.class);
+
   private static final long serialVersionUID = 1000000;
+
   @Inject
-  private ISecurityService securityService;
-  private UserDirectory userDirectory;
+  private ISampleService sampleService;
 
   /**
    * Constructs a new <code>HomePage</code>.
@@ -53,9 +63,27 @@ public class HomePage extends TemplateWebPage
 
     try
     {
-      UserDirectoryChoiceRenderer userDirectoryChoiceRenderer = new UserDirectoryChoiceRenderer();
+      AjaxLink<Void> testLink = new AjaxLink<Void>("testLink")
+      {
+        @Override
+        public void onClick(AjaxRequestTarget target)
+        {
+          try
+          {
+            for (Data data : sampleService.getData())
+            {
+              logger.info(data.toString());
+            }
+          }
+          catch (Throwable e)
+          {
+            logger.error("Failed to retrieve the data", e);
+          }
 
-      List<UserDirectory> userDirectories = securityService.getUserDirectories();
+        }
+      };
+
+      add(testLink);
     }
     catch (Throwable e)
     {

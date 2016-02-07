@@ -34,6 +34,7 @@ import javax.interceptor.InvocationContext;
 import javax.naming.InitialContext;
 
 import javax.transaction.Status;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 
 /**

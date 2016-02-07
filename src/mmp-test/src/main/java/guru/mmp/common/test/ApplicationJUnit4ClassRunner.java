@@ -58,6 +58,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
@@ -405,6 +406,17 @@ public class ApplicationJUnit4ClassRunner extends BlockJUnit4ClassRunner
   protected void runChild(FrameworkMethod method, RunNotifier notifier)
   {
     super.runChild(method, notifier);
+
+//    /**
+//     * Close the EntityManagers associated with the current thread that were created
+//     */
+//    for (EntityManager entityManager : EntityManagerTracker.getActiveEntityManagers())
+//    {
+//      if (entityManager.isOpen())
+//      {
+//        entityManager.close();
+//      }
+//    }
 
     Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
         TransactionManagerTransactionTracker.getActiveTransactionStackTraces();

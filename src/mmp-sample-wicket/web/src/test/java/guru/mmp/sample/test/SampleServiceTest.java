@@ -65,6 +65,8 @@ public class SampleServiceTest
   public void getDataTest()
     throws Exception
   {
+//    sampleService.addData();
+
     List<Data> retrievedData = sampleService.getData();
 
     assertEquals("The correct number of data objects was not retrieved", 9,

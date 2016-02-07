@@ -21,21 +21,24 @@ package guru.mmp.common.test;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.lang.reflect.Method;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 
 /**
  * The <code>TransactionManagerTransactionTracker</code> class implements a cglib method
- * interceptor that tracks the Java Transaction (JTA) API transactions managed by a
- * <code>javax.transaction.TransactionManager</code> implementation.
+ * interceptor that tracks the Java Transaction (JTA) API transactions associated with the current
+ * thread and managed by a <code>javax.transaction.TransactionManager</code> implementation.
  *
  * @author Marcus Portmann
  */
@@ -43,8 +46,15 @@ public class TransactionManagerTransactionTracker
   implements MethodInterceptor, Serializable
 {
   private static final long serialVersionUID = 1000000;
-  private transient static Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
-      new ConcurrentHashMap<>();
+  private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
+      new ThreadLocal<Map<Transaction, StackTraceElement[]>>()
+  {
+    @Override
+    protected Map<Transaction, StackTraceElement[]> initialValue()
+    {
+      return new ConcurrentHashMap<>();
+    }
+  };
 
   /**
    * Constructs a new <code>TransactionManagerMethodInterceptor</code>.
@@ -52,13 +62,13 @@ public class TransactionManagerTransactionTracker
   public TransactionManagerTransactionTracker() {}
 
   /**
-   * Returns the active transaction stack traces.
+   * Returns the active transaction stack traces for the current thread.
    *
-   * @return the active transaction stack traces
+   * @return the active transaction stack traces for the current thread
    */
   public static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces()
   {
-    return activeTransactionStackTraces;
+    return activeTransactionStackTraces.get();
   }
 
   /**
@@ -100,7 +110,7 @@ public class TransactionManagerTransactionTracker
 
             if (afterTransaction != null)
             {
-              activeTransactionStackTraces.put(afterTransaction, Thread.currentThread()
+              getActiveTransactionStackTraces().put(afterTransaction, Thread.currentThread()
                   .getStackTrace());
             }
           }
@@ -120,9 +130,9 @@ public class TransactionManagerTransactionTracker
 
             if ((beforeTransaction != null) && (afterTransaction == null))
             {
-              if (activeTransactionStackTraces.containsKey(beforeTransaction))
+              if (getActiveTransactionStackTraces().containsKey(beforeTransaction))
               {
-                activeTransactionStackTraces.remove(beforeTransaction);
+                getActiveTransactionStackTraces().remove(beforeTransaction);
               }
             }
           }
@@ -147,9 +157,9 @@ public class TransactionManagerTransactionTracker
 
             if ((beforeTransaction != null) && (afterTransaction == null))
             {
-              if (activeTransactionStackTraces.containsKey(beforeTransaction))
+              if (getActiveTransactionStackTraces().containsKey(beforeTransaction))
               {
-                activeTransactionStackTraces.remove(beforeTransaction);
+                getActiveTransactionStackTraces().remove(beforeTransaction);
               }
             }
           }
