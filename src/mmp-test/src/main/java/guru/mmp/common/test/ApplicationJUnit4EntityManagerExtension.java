@@ -16,11 +16,16 @@
 
 package guru.mmp.common.test;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
+
+import guru.mmp.common.cdi.AnnotatedTypeWrapper;
 
 import org.hibernate.Session;
 import org.hibernate.jpa.HibernateEntityManager;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import java.util.*;
@@ -35,16 +40,88 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 /**
- * The <code>ApplicationJUnit4EntityManagerInjector</code> class implements the Weld extension,
+ * The <code>ApplicationJUnit4EntityManagerExtension</code> class implements the Weld extension,
  * which processes <code>PersistenceContext</code> annotations on CDI beans and injects
  * the appropriate <code>EntityManager</code> instances into these beans.
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4EntityManagerInjector
+public class ApplicationJUnit4EntityManagerExtension
   implements Extension
 {
-  <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> processInjectionTarget)
+  private static ThreadLocal<List<EntityManager>> nonTransactionalEntityManagers =
+    new ThreadLocal<List<EntityManager>>()
+    {
+      @Override
+      protected List<EntityManager> initialValue()
+      {
+        return new ArrayList<>();
+      }
+    };
+
+  /**
+   * Returns the active <code>EntityManager</code>s associated with the current thread.
+   *
+   * @return the active <code>EntityManager</code>s associated with the current thread
+   */
+  public static List<EntityManager> getNonTransactionalEntityManagers()
+  {
+    return nonTransactionalEntityManagers.get();
+  }
+
+
+  /**
+   * Process the annotated type.
+   *
+   * @param processAnnotatedType the process annotated type event
+   *
+   * @param <T>
+   */
+  public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> processAnnotatedType)
+  {
+    AnnotatedType<T> annotatedType = processAnnotatedType.getAnnotatedType();
+
+    boolean hasPersistenceContext = false;
+
+    for (Field field : annotatedType.getJavaClass().getDeclaredFields())
+    {
+      if (field.isAnnotationPresent(PersistenceContext.class))
+      {
+        hasPersistenceContext = true;
+
+        break;
+      }
+    }
+
+    if (!hasPersistenceContext)
+    {
+      return;
+    }
+
+    Annotation entityManagerCleanupAnnotation = new Annotation()
+    {
+      @Override
+      public Class<? extends Annotation> annotationType()
+      {
+        return EntityManagerCleanup.class;
+      }
+    };
+
+    AnnotatedTypeWrapper<T> wrapper = new AnnotatedTypeWrapper<T>(annotatedType,
+        annotatedType.getAnnotations());
+    wrapper.addAnnotation(entityManagerCleanupAnnotation);
+
+    processAnnotatedType.setAnnotatedType(wrapper);
+  }
+
+  /**
+   * Process the injection target.
+   *
+   * @param processInjectionTarget the process injection target event
+   *
+   * @param <T>
+   */
+  public <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> processInjectionTarget)
   {
     AnnotatedType<T> annotatedType = processInjectionTarget.getAnnotatedType();
 
@@ -90,8 +167,7 @@ public class ApplicationJUnit4EntityManagerInjector
 
               properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
               properties.put("hibernate.transaction.auto_close_session", "true");
-              properties.put("hibernate.current_session_context_class",
-                  "jta");
+              properties.put("hibernate.current_session_context_class", "jta");
               properties.put("hibernate.transaction.jta.platform",
                   "guru.mmp.common.test.ApplicationJUnit4JtaPlatform");
 
@@ -100,10 +176,10 @@ public class ApplicationJUnit4EntityManagerInjector
 
               EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-            HibernateEntityManager hibernateEntityManager = entityManager.unwrap(
-                HibernateEntityManager.class);
+              HibernateEntityManager hibernateEntityManager = entityManager.unwrap(
+                  HibernateEntityManager.class);
 
-            Session session = hibernateEntityManager.getSession();
+              Session session = hibernateEntityManager.getSession();
 
               field.setAccessible(true);
               field.set(instance, entityManager);

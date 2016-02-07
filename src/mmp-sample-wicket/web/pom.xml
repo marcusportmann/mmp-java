@@ -61,6 +61,19 @@
       <version>2.0.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- This dependency is included to support the debugging of JPA on WildFly -->
+    <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-jpa</artifactId>
+      <version>10.0.0.Final</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <build>

@@ -89,7 +89,6 @@ public class SampleService
 
       System.out.println("entityManager.getClass().getName() = " + entityManager.getClass().getName());
 
-
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
       return query.getResultList();

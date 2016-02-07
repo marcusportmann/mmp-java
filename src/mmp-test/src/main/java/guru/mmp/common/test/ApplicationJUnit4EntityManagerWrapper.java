@@ -33,6 +33,8 @@ import javax.transaction.Transaction;
 
 /**
  * The <code>ApplicationJUnit4EntityManagerWrapper</code> class.
+ *
+ * @author Marcus Portmann
  */
 public class ApplicationJUnit4EntityManagerWrapper
   implements EntityManager
@@ -86,6 +88,10 @@ public class ApplicationJUnit4EntityManagerWrapper
   public <T> TypedQuery<T> createNamedQuery(String name, Class<T> resultClass)
   {
     return null;
+//
+//    TypedQuery<T> typedQuery = getEntityManager().createNamedQuery(name, resultClass);
+//
+//    return new TypedQueryNonTxInvocationDetacher<>(getEntityManager(), typedQuery);
   }
 
   @Override
@@ -322,17 +328,20 @@ public class ApplicationJUnit4EntityManagerWrapper
   {
     try
     {
-      // Retrieve the active transaction if one exists
       TransactionManager transactionManager = TransactionManager.getTransactionManager();
 
       Transaction transaction = transactionManager.getTransaction();
 
-      if (transaction == null)
+      if (transaction != null)
       {
-        throw new RuntimeException("No active transaction");
+
+      }
+      else
+      {
+
+
       }
 
-      // If there is an active transaction is the entity manager associated with it
 
 
 
