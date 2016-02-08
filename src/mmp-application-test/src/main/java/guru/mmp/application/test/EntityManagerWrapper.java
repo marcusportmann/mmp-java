@@ -20,21 +20,21 @@ package guru.mmp.application.test;
 
 import guru.mmp.common.persistence.TransactionManager;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.metamodel.Metamodel;
+
 import javax.transaction.Status;
 import javax.transaction.Synchronization;
 import javax.transaction.Transaction;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>EntityManagerWrapper</code> class.
@@ -132,16 +132,21 @@ public class EntityManagerWrapper
   @Override
   public <T> TypedQuery<T> createNamedQuery(String name, Class<T> resultClass)
   {
-    return getEntityManager(persistenceUnitName).createNamedQuery(name, resultClass);
+    EntityManager entityManager = getEntityManager(persistenceUnitName);
 
-    // TypedQuery<T> typedQuery = getEntityManager().createNamedQuery(name, resultClass);
-    // return new TypedQueryNonTxInvocationDetacher<>(getEntityManager(), typedQuery);
+    TypedQuery<T> typedQuery = entityManager.createNamedQuery(name, resultClass);
+
+    return new TypedQueryNonTxInvocationDetacher<>(entityManager, typedQuery);
   }
 
   @Override
   public StoredProcedureQuery createNamedStoredProcedureQuery(String name)
   {
-    return getEntityManager(persistenceUnitName).createNamedStoredProcedureQuery(name);
+    EntityManager entityManager = getEntityManager(persistenceUnitName);
+
+    StoredProcedureQuery storedProcedureQuery = entityManager.createNamedStoredProcedureQuery(name);
+
+    return new StoredProcedureQueryNonTxInvocationDetacher(entityManager, storedProcedureQuery);
   }
 
   @Override
@@ -171,7 +176,11 @@ public class EntityManagerWrapper
   @Override
   public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery)
   {
-    return getEntityManager(persistenceUnitName).createQuery(criteriaQuery);
+    EntityManager entityManager = getEntityManager(persistenceUnitName);
+
+    TypedQuery<T> typedQuery = entityManager.createQuery(criteriaQuery);
+
+    return new TypedQueryNonTxInvocationDetacher<>(entityManager, typedQuery);
   }
 
   @Override
@@ -189,29 +198,46 @@ public class EntityManagerWrapper
   @Override
   public <T> TypedQuery<T> createQuery(String qlString, Class<T> resultClass)
   {
-    return getEntityManager(persistenceUnitName).createQuery(qlString, resultClass);
+    EntityManager entityManager = getEntityManager(persistenceUnitName);
+
+    TypedQuery<T> typedQuery = entityManager.createQuery(qlString, resultClass);
+
+    return new TypedQueryNonTxInvocationDetacher<>(entityManager, typedQuery);
   }
 
   @Override
   public StoredProcedureQuery createStoredProcedureQuery(String procedureName)
   {
-    return getEntityManager(persistenceUnitName).createStoredProcedureQuery(procedureName);
+    EntityManager entityManager = getEntityManager(persistenceUnitName);
+
+    StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(
+        procedureName);
+
+    return new StoredProcedureQueryNonTxInvocationDetacher(entityManager, storedProcedureQuery);
   }
 
   @Override
   public StoredProcedureQuery createStoredProcedureQuery(String procedureName,
       Class... resultClasses)
   {
-    return getEntityManager(persistenceUnitName).createStoredProcedureQuery(procedureName,
-        resultClasses);
+    EntityManager entityManager = getEntityManager(persistenceUnitName);
+
+    StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(
+        procedureName, resultClasses);
+
+    return new StoredProcedureQueryNonTxInvocationDetacher(entityManager, storedProcedureQuery);
   }
 
   @Override
   public StoredProcedureQuery createStoredProcedureQuery(String procedureName,
       String... resultSetMappings)
   {
-    return getEntityManager(persistenceUnitName).createStoredProcedureQuery(procedureName,
-        resultSetMappings);
+    EntityManager entityManager = getEntityManager(persistenceUnitName);
+
+    StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(
+        procedureName, resultSetMappings);
+
+    return new StoredProcedureQueryNonTxInvocationDetacher(entityManager, storedProcedureQuery);
   }
 
   @Override
@@ -477,10 +503,10 @@ public class EntityManagerWrapper
       Transaction transaction = transactionManager.getTransaction();
 
       /*
-       * If there is an existing transaction, attempt to retrieve the transactional entity manager for
-       * the persistence unit with the specified name. If an existing entity manager cannot be found
-       * then create a new entity manager for the persistence context with the specified name and
-       * associate it with the existing transaction.
+       * If there is an existing transaction, attempt to retrieve the transactional entity manager
+       * for the persistence unit with the specified name. If an existing entity manager cannot be
+       * found then create a new entity manager for the persistence context with the specified name
+       * and associate it with the existing transaction.
        */
       if ((transaction != null) && (transaction.getStatus() == Status.STATUS_ACTIVE))
       {
@@ -636,5 +662,526 @@ public class EntityManagerWrapper
 
     @Override
     public void beforeCompletion() {}
+  }
+
+
+  private class StoredProcedureQueryNonTxInvocationDetacher
+    implements StoredProcedureQuery
+  {
+    private final EntityManager underlyingEntityManager;
+    private final StoredProcedureQuery underlyingStoredProcedureQuery;
+
+    StoredProcedureQueryNonTxInvocationDetacher(EntityManager underlyingEntityManager,
+        StoredProcedureQuery underlyingStoredProcedureQuery)
+    {
+      this.underlyingEntityManager = underlyingEntityManager;
+      this.underlyingStoredProcedureQuery = underlyingStoredProcedureQuery;
+    }
+
+    @Override
+    public boolean execute()
+    {
+      return underlyingStoredProcedureQuery.execute();
+    }
+
+    @Override
+    public int executeUpdate()
+    {
+      return underlyingStoredProcedureQuery.executeUpdate();
+    }
+
+    @Override
+    public int getFirstResult()
+    {
+      return underlyingStoredProcedureQuery.getFirstResult();
+    }
+
+    @Override
+    public FlushModeType getFlushMode()
+    {
+      return underlyingStoredProcedureQuery.getFlushMode();
+    }
+
+    @Override
+    public Map<String, Object> getHints()
+    {
+      return underlyingStoredProcedureQuery.getHints();
+    }
+
+    @Override
+    public LockModeType getLockMode()
+    {
+      return underlyingStoredProcedureQuery.getLockMode();
+    }
+
+    @Override
+    public int getMaxResults()
+    {
+      return underlyingStoredProcedureQuery.getMaxResults();
+    }
+
+    @Override
+    public Object getOutputParameterValue(int position)
+    {
+      return underlyingStoredProcedureQuery.getOutputParameterValue(position);
+    }
+
+    @Override
+    public Object getOutputParameterValue(String parameterName)
+    {
+      return underlyingStoredProcedureQuery.getOutputParameterValue(parameterName);
+    }
+
+    @Override
+    public Parameter<?> getParameter(int position)
+    {
+      return underlyingStoredProcedureQuery.getParameter(position);
+    }
+
+    @Override
+    public Parameter<?> getParameter(String name)
+    {
+      return underlyingStoredProcedureQuery.getParameter(name);
+    }
+
+    @Override
+    public <T> Parameter<T> getParameter(int position, Class<T> type)
+    {
+      return underlyingStoredProcedureQuery.getParameter(position, type);
+    }
+
+    @Override
+    public <T> Parameter<T> getParameter(String name, Class<T> type)
+    {
+      return underlyingStoredProcedureQuery.getParameter(name, type);
+    }
+
+    @Override
+    public Object getParameterValue(int position)
+    {
+      return underlyingStoredProcedureQuery.getParameterValue(position);
+    }
+
+    @Override
+    public <T> T getParameterValue(Parameter<T> param)
+    {
+      return underlyingStoredProcedureQuery.getParameterValue(param);
+    }
+
+    @Override
+    public Object getParameterValue(String name)
+    {
+      return underlyingStoredProcedureQuery.getParameterValue(name);
+    }
+
+    @Override
+    public Set<Parameter<?>> getParameters()
+    {
+      return underlyingStoredProcedureQuery.getParameters();
+    }
+
+    @Override
+    public List getResultList()
+    {
+      try
+      {
+        return underlyingStoredProcedureQuery.getResultList();
+      }
+      finally
+      {
+        underlyingEntityManager.clear();
+      }
+    }
+
+    @Override
+    public Object getSingleResult()
+    {
+      try
+      {
+        return underlyingStoredProcedureQuery.getSingleResult();
+      }
+      finally
+      {
+        underlyingEntityManager.clear();
+      }
+    }
+
+    @Override
+    public int getUpdateCount()
+    {
+      return underlyingStoredProcedureQuery.getUpdateCount();
+    }
+
+    @Override
+    public boolean hasMoreResults()
+    {
+      return underlyingStoredProcedureQuery.hasMoreResults();
+    }
+
+    @Override
+    public boolean isBound(Parameter<?> param)
+    {
+      return underlyingStoredProcedureQuery.isBound(param);
+    }
+
+    @Override
+    public StoredProcedureQuery registerStoredProcedureParameter(int position, Class type,
+        ParameterMode mode)
+    {
+      return underlyingStoredProcedureQuery.registerStoredProcedureParameter(position, type, mode);
+    }
+
+    @Override
+    public StoredProcedureQuery registerStoredProcedureParameter(String parameterName, Class type,
+        ParameterMode mode)
+    {
+      return underlyingStoredProcedureQuery.registerStoredProcedureParameter(parameterName, type,
+          mode);
+    }
+
+    @Override
+    public Query setFirstResult(int startPosition)
+    {
+      return underlyingStoredProcedureQuery.setFirstResult(startPosition);
+    }
+
+    @Override
+    public StoredProcedureQuery setFlushMode(FlushModeType flushMode)
+    {
+      return underlyingStoredProcedureQuery.setFlushMode(flushMode);
+    }
+
+    @Override
+    public StoredProcedureQuery setHint(String hintName, Object value)
+    {
+      return underlyingStoredProcedureQuery.setHint(hintName, value);
+    }
+
+    @Override
+    public Query setLockMode(LockModeType lockMode)
+    {
+      return underlyingStoredProcedureQuery.setLockMode(lockMode);
+    }
+
+    @Override
+    public Query setMaxResults(int maxResult)
+    {
+      return underlyingStoredProcedureQuery.setMaxResults(maxResult);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(int position, Object value)
+    {
+      return underlyingStoredProcedureQuery.setParameter(position, value);
+    }
+
+    @Override
+    public <T> StoredProcedureQuery setParameter(Parameter<T> param, T value)
+    {
+      return underlyingStoredProcedureQuery.setParameter(param, value);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(String name, Object value)
+    {
+      return underlyingStoredProcedureQuery.setParameter(name, value);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(int position, Calendar value,
+        TemporalType temporalType)
+    {
+      return underlyingStoredProcedureQuery.setParameter(position, value, temporalType);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(int position, Date value, TemporalType temporalType)
+    {
+      return underlyingStoredProcedureQuery.setParameter(position, value, temporalType);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(Parameter<Calendar> param, Calendar value,
+        TemporalType temporalType)
+    {
+      return underlyingStoredProcedureQuery.setParameter(param, value, temporalType);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(Parameter<Date> param, Date value,
+        TemporalType temporalType)
+    {
+      return underlyingStoredProcedureQuery.setParameter(param, value, temporalType);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(String name, Calendar value, TemporalType temporalType)
+    {
+      return underlyingStoredProcedureQuery.setParameter(name, value, temporalType);
+    }
+
+    @Override
+    public StoredProcedureQuery setParameter(String name, Date value, TemporalType temporalType)
+    {
+      return underlyingStoredProcedureQuery.setParameter(name, value, temporalType);
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> cls)
+    {
+      return underlyingStoredProcedureQuery.unwrap(cls);
+    }
+  }
+
+
+  private class TypedQueryNonTxInvocationDetacher<X>
+    implements TypedQuery<X>
+  {
+    private final TypedQuery<X> underlyingQuery;
+    private final EntityManager underlyingEntityManager;
+
+    TypedQueryNonTxInvocationDetacher(EntityManager underlyingEntityManager,
+        TypedQuery<X> underlyingQuery)
+    {
+      this.underlyingQuery = underlyingQuery;
+      this.underlyingEntityManager = underlyingEntityManager;
+    }
+
+    @Override
+    public int executeUpdate()
+    {
+      return underlyingQuery.executeUpdate();
+    }
+
+    @Override
+    public int getFirstResult()
+    {
+      return underlyingQuery.getFirstResult();
+    }
+
+    @Override
+    public FlushModeType getFlushMode()
+    {
+      return underlyingQuery.getFlushMode();
+    }
+
+    @Override
+    public Map<String, Object> getHints()
+    {
+      return underlyingQuery.getHints();
+    }
+
+    @Override
+    public LockModeType getLockMode()
+    {
+      return underlyingQuery.getLockMode();
+    }
+
+    @Override
+    public int getMaxResults()
+    {
+      return underlyingQuery.getMaxResults();
+    }
+
+    @Override
+    public Parameter<?> getParameter(int position)
+    {
+      return underlyingQuery.getParameter(position);
+    }
+
+    @Override
+    public Parameter<?> getParameter(String name)
+    {
+      return underlyingQuery.getParameter(name);
+    }
+
+    @Override
+    public <T> Parameter<T> getParameter(int position, Class<T> type)
+    {
+      return underlyingQuery.getParameter(position, type);
+    }
+
+    @Override
+    public <T> Parameter<T> getParameter(String name, Class<T> type)
+    {
+      return underlyingQuery.getParameter(name, type);
+    }
+
+    @Override
+    public Object getParameterValue(int position)
+    {
+      return underlyingQuery.getParameterValue(position);
+    }
+
+    @Override
+    public <T> T getParameterValue(Parameter<T> param)
+    {
+      return underlyingQuery.getParameterValue(param);
+    }
+
+    @Override
+    public Object getParameterValue(String name)
+    {
+      return underlyingQuery.getParameterValue(name);
+    }
+
+    @Override
+    public Set<Parameter<?>> getParameters()
+    {
+      return underlyingQuery.getParameters();
+    }
+
+    @Override
+    public List<X> getResultList()
+    {
+      List<X> result = underlyingQuery.getResultList();
+
+      /**
+       * The purpose of this wrapper class is so that we can detach the returned entities from this
+       * method. Call EntityManager.clear will accomplish that.
+       */
+      underlyingEntityManager.clear();
+
+      return result;
+    }
+
+    @Override
+    public X getSingleResult()
+    {
+      X result = underlyingQuery.getSingleResult();
+
+      /**
+       * The purpose of this wrapper class is so that we can detach the returned entities from this
+       * method. Call EntityManager.clear will accomplish that.
+       */
+      underlyingEntityManager.clear();
+
+      return result;
+    }
+
+    @Override
+    public boolean isBound(Parameter<?> param)
+    {
+      return underlyingQuery.isBound(param);
+    }
+
+    @Override
+    public TypedQuery<X> setFirstResult(int startPosition)
+    {
+      underlyingQuery.setFirstResult(startPosition);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setFlushMode(FlushModeType flushMode)
+    {
+      underlyingQuery.setFlushMode(flushMode);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setHint(String hintName, Object value)
+    {
+      underlyingQuery.setHint(hintName, value);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setLockMode(LockModeType lockMode)
+    {
+      underlyingQuery.setLockMode(lockMode);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setMaxResults(int maxResult)
+    {
+      underlyingQuery.setMaxResults(maxResult);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(int position, Object value)
+    {
+      underlyingQuery.setParameter(position, value);
+
+      return this;
+    }
+
+    @Override
+    public <T> TypedQuery<X> setParameter(Parameter<T> param, T value)
+    {
+      underlyingQuery.setParameter(param, value);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(String name, Object value)
+    {
+      underlyingQuery.setParameter(name, value);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(int position, Calendar value, TemporalType temporalType)
+    {
+      underlyingQuery.setParameter(position, value, temporalType);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(int position, Date value, TemporalType temporalType)
+    {
+      underlyingQuery.setParameter(position, value, temporalType);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(Parameter<Calendar> param, Calendar value,
+        TemporalType temporalType)
+    {
+      underlyingQuery.setParameter(param, value, temporalType);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(Parameter<Date> param, Date value, TemporalType temporalType)
+    {
+      underlyingQuery.setParameter(param, value, temporalType);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(String name, Calendar value, TemporalType temporalType)
+    {
+      underlyingQuery.setParameter(name, value, temporalType);
+
+      return this;
+    }
+
+    @Override
+    public TypedQuery<X> setParameter(String name, Date value, TemporalType temporalType)
+    {
+      underlyingQuery.setParameter(name, value, temporalType);
+
+      return this;
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> cls)
+    {
+      return underlyingQuery.unwrap(cls);
+    }
   }
 }
