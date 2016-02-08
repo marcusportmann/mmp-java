@@ -51,18 +51,6 @@ public class SampleServiceTest
   private ISampleService sampleService;
 
   @Test
-  public void getDataTest()
-    throws Exception
-  {
-//    sampleService.addData();
-
-    List<Data> retrievedData = sampleService.getData();
-
-    assertEquals("The correct number of data objects was not retrieved", 9,
-      retrievedData.size());
-  }
-
-  @Test
   public void transactionalTest()
     throws Exception
   {
