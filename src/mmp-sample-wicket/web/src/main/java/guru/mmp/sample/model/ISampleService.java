@@ -40,16 +40,6 @@ public interface ISampleService
     throws SampleServiceException;
 
   /**
-   * Add the data and validate that the specified transaction is being used.
-   *
-   * @param transaction the transaction
-   *
-   * @throws SampleServiceException
-   */
-  void addDataAndValidateTransaction(Transaction transaction)
-    throws SampleServiceException;
-
-  /**
    * Returns the data.
    *
    * @return the data
@@ -57,16 +47,6 @@ public interface ISampleService
    * @throws SampleServiceException
    */
   List<Data> getData()
-    throws SampleServiceException;
-
-  /**
-   * Returns the data and validates that the specified transaction is being used.
-   *
-   * @return the data
-   *
-   * @throws SampleServiceException
-   */
-  List<Data> getDataAndValidateTransaction(Transaction transaction)
     throws SampleServiceException;
 
   /**

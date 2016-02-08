@@ -16,22 +16,30 @@
 
 package guru.mmp.sample.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.test.ApplicationClassRunner;
 import guru.mmp.application.test.ApplicationDataSourceResourceReference;
 import guru.mmp.application.test.ApplicationDataSourceSQLResource;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.transaction.Transaction;
+import static org.junit.Assert.assertEquals;
+
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import javax.inject.Inject;
+
+import javax.transaction.Transaction;
 
 /**
  * The <code>SampleServiceTest</code> class contains the implementation of the JUnit
@@ -40,33 +48,79 @@ import static org.junit.Assert.assertEquals;
  * @author Marcus Portmann
  */
 @RunWith(ApplicationClassRunner.class)
-@ApplicationDataSourceResourceReference(name="java:jboss/datasources/SampleDS")
-@ApplicationDataSourceSQLResource(path="guru/mmp/sample/persistence/SampleH2.sql")
+@ApplicationDataSourceResourceReference(name = "java:jboss/datasources/SampleDS")
+@ApplicationDataSourceSQLResource(path = "guru/mmp/sample/persistence/SampleH2.sql")
 public class SampleServiceTest
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleServiceTest.class);
-
   @Inject
   private ISampleService sampleService;
 
+  /**
+   * The rollback transaction test.
+   *
+   * @throws Exception
+   */
   @Test
-  public void transactionalTest()
+  public void rollbackTransactionTest()
     throws Exception
   {
-    Transaction transaction = null;
+    List<Data> beforeAddRetrievedData = sampleService.getData();
+
+    Transaction existingTransaction = null;
 
     try
     {
-      TransactionManager.getTransactionManager().beginNew();
+      existingTransaction = TransactionManager.getTransactionManager().beginNew();
 
-      transaction = TransactionManager.getTransactionManager().getTransaction();
+      sampleService.addData();
 
-      sampleService.addDataAndValidateTransaction(transaction);
+      TransactionManager.getTransactionManager().rollback();
+    }
+    catch (Throwable e)
+    {
+      TransactionManager.getTransactionManager().rollback();
 
-      List<Data> retrievedData = sampleService.getDataAndValidateTransaction(transaction);
+      throw e;
+    }
+    finally
+    {
+      if (existingTransaction != null)
+      {
+        TransactionManager.getTransactionManager().resume(existingTransaction);
+      }
+    }
 
-      assertEquals("The correct number of data objects was not retrieved", 10, retrievedData.size());
+    List<Data> afterAddRetrievedData = sampleService.getData();
+
+    assertEquals("The correct number of data objects was not retrieved",
+        beforeAddRetrievedData.size(), afterAddRetrievedData.size());
+  }
+
+  /**
+   * The successful transaction test.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void successfulTransactionTest()
+    throws Exception
+  {
+    List<Data> beforeAddRetrievedData = sampleService.getData();
+
+    Transaction existingTransaction = null;
+
+    try
+    {
+      existingTransaction = TransactionManager.getTransactionManager().beginNew();
+
+      sampleService.addData();
+
+      List<Data> afterAddRetrievedData = sampleService.getData();
+
+      assertEquals("The correct number of data objects was not retrieved",
+          beforeAddRetrievedData.size() + 1, afterAddRetrievedData.size());
 
       TransactionManager.getTransactionManager().commit();
     }
@@ -76,8 +130,12 @@ public class SampleServiceTest
 
       throw e;
     }
+    finally
+    {
+      if (existingTransaction != null)
+      {
+        TransactionManager.getTransactionManager().resume(existingTransaction);
+      }
+    }
   }
-
-
 }
-

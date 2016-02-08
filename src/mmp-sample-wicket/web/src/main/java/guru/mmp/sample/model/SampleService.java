@@ -76,22 +76,6 @@ public class SampleService
   }
 
   /**
-   * Add the data and validate that the specified transaction is being used.
-   *
-   * @param transaction the transaction
-   *
-   * @throws SampleServiceException
-   */
-  @Transactional
-  public void addDataAndValidateTransaction(Transaction transaction)
-    throws SampleServiceException
-  {
-    validateTransaction(transaction);
-
-    addData();
-  }
-
-  /**
    * Returns the data.
    *
    * @return the data
@@ -112,24 +96,6 @@ public class SampleService
     {
       throw new SampleServiceException("Failed to retrieve the data", e);
     }
-  }
-
-  /**
-   * Returns the data and validates that the specified transaction is being used.
-   *
-   *
-   * @param transaction
-   * @return the data
-   *
-   * @throws SampleServiceException
-   */
-  @Transactional
-  public List<Data> getDataAndValidateTransaction(Transaction transaction)
-    throws SampleServiceException
-  {
-    validateTransaction(transaction);
-
-    return getData();
   }
 
   /**
