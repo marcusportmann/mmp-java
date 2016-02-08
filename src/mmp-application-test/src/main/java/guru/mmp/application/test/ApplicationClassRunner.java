@@ -20,34 +20,30 @@ package guru.mmp.application.test;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
-
 import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.persistence.DAOUtil;
-
 import net.sf.cglib.proxy.Enhancer;
-
 import org.apache.naming.ContextBindings;
-
 import org.jboss.weld.bootstrap.api.CDI11Bootstrap;
 import org.jboss.weld.bootstrap.spi.Deployment;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.jboss.weld.resources.spi.ResourceLoader;
 import org.jboss.weld.transaction.spi.TransactionServices;
-
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import javax.sql.XADataSource;
+import javax.transaction.*;
 import java.lang.reflect.Method;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,14 +51,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
-import javax.persistence.EntityManager;
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
-
-import javax.transaction.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ApplicationClassRunner</code> class implements the JUnit runner that provides

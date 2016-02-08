@@ -20,8 +20,8 @@ package guru.mmp.application.tests;
 
 import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.registry.RegistryException;
+import guru.mmp.application.test.ApplicationClassRunner;
 import guru.mmp.common.crypto.CryptoUtils;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -38,7 +38,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationJUnit4ClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class RegistryTest
 {
   private byte[] encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);

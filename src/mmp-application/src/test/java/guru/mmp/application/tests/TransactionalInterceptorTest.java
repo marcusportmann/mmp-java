@@ -18,8 +18,8 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.test.ApplicationClassRunner;
 import guru.mmp.common.persistence.TransactionManagerFactory;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -41,7 +41,7 @@ import static org.junit.Assert.fail;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationJUnit4ClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class TransactionalInterceptorTest
 {
   private static int testDataCount;

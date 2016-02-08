@@ -16,26 +16,29 @@
 
 package guru.mmp.application.test;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatform;
 
 import javax.naming.InitialContext;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
- * The <code>ApplicationJUnit4JtaPlatform</code> class.
+ * The <code>ApplicationClassRunnerJtaPlatform</code> class.
  *
  * @author Marcus Portmann
  */
-public class ApplicationJUnit4JtaPlatform
-  extends AbstractJtaPlatform
+public class ApplicationClassRunnerJtaPlatform extends AbstractJtaPlatform
 {
   @Override
   protected TransactionManager locateTransactionManager()
   {
     try
     {
-      return (TransactionManager)InitialContext.doLookup("java:comp/TransactionManager");
+      return (TransactionManager) InitialContext.doLookup("java:comp/TransactionManager");
     }
     catch (Throwable e)
     {
@@ -48,7 +51,7 @@ public class ApplicationJUnit4JtaPlatform
   {
     try
     {
-      return (UserTransaction)InitialContext.doLookup("java:comp/UserTransaction");
+      return (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
     }
     catch (Throwable e)
     {

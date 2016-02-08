@@ -21,19 +21,16 @@ package guru.mmp.application.test;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 import java.io.Serializable;
-
 import java.lang.reflect.Method;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionManagerTransactionTracker</code> class implements a cglib method

@@ -18,13 +18,12 @@ package guru.mmp.application.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
+import javax.annotation.Priority;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
 import javax.persistence.EntityManager;
+import java.io.Serializable;
 
 /**
  * The <code>NonTransactionalEntityManagerCleanupInterceptor</code> interceptor is responsible for
@@ -35,6 +34,7 @@ import javax.persistence.EntityManager;
  */
 @NonTransactionalEntityManagerCleanup
 @Interceptor
+@Priority(Interceptor.Priority.APPLICATION)
 public class NonTransactionalEntityManagerCleanupInterceptor
   implements Serializable
 {
@@ -60,8 +60,8 @@ public class NonTransactionalEntityManagerCleanupInterceptor
     finally
     {
       // Cleanup the <code>EntityManager</code> instances that are not associated with a transaction
-      for (EntityManager entityManager :
-          EntityManagerTracker.getNonTransactionalEntityManagers())
+      for (EntityManager entityManager : EntityManagerWrapper.getNonTransactionalEntityManagers()
+          .values())
       {
         try
         {
@@ -75,6 +75,8 @@ public class NonTransactionalEntityManagerCleanupInterceptor
           throw new RuntimeException("Failed to close the non-transactional entity manager", e);
         }
       }
+
+      EntityManagerWrapper.getNonTransactionalEntityManagers().clear();
     }
   }
 }

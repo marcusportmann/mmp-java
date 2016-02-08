@@ -16,9 +16,13 @@
 
 package guru.mmp.sample.model;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManager;
+
+import net.sf.jasperreports.engine.util.JRStyledText;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
@@ -26,6 +30,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -51,7 +56,7 @@ public class SampleService
    *
    * @throws SampleServiceException
    */
-  //@Transactional
+  @Transactional
   public void addData()
     throws SampleServiceException
   {
@@ -71,24 +76,34 @@ public class SampleService
   }
 
   /**
+   * Add the data and validate that the specified transaction is being used.
+   *
+   * @param transaction the transaction
+   *
+   * @throws SampleServiceException
+   */
+  @Transactional
+  public void addDataAndValidateTransaction(Transaction transaction)
+    throws SampleServiceException
+  {
+    validateTransaction(transaction);
+
+    addData();
+  }
+
+  /**
    * Returns the data.
    *
    * @return the data
    *
    * @throws SampleServiceException
    */
-  //@Transactional
+  @Transactional
   public List<Data> getData()
     throws SampleServiceException
   {
     try
     {
-      Transaction transaction = TransactionManager.getTransactionManager().getTransaction();
-
-      System.out.println("transaction = " + transaction);
-
-      System.out.println("entityManager.getClass().getName() = " + entityManager.getClass().getName());
-
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
       return query.getResultList();
@@ -100,10 +115,48 @@ public class SampleService
   }
 
   /**
+   * Returns the data and validates that the specified transaction is being used.
+   *
+   *
+   * @param transaction
+   * @return the data
+   *
+   * @throws SampleServiceException
+   */
+  @Transactional
+  public List<Data> getDataAndValidateTransaction(Transaction transaction)
+    throws SampleServiceException
+  {
+    validateTransaction(transaction);
+
+    return getData();
+  }
+
+  /**
    * The test method.
    */
   public void testMethod()
   {
     System.out.println("[DEBUG] Hello world from the test method!!!");
+  }
+
+  private void validateTransaction(Transaction transaction)
+    throws SampleServiceException
+  {
+    try
+    {
+      Transaction currentTransaction = TransactionManager.getTransactionManager().getTransaction();
+
+      if (currentTransaction != transaction)
+      {
+        throw new RuntimeException(
+            "The current transaction does not match the transaction to validate");
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SampleServiceException("Failed to validate the transaction (" + transaction + ")",
+          e);
+    }
   }
 }

@@ -21,7 +21,7 @@ package guru.mmp.application.tests;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+import guru.mmp.application.test.ApplicationClassRunner;
 import guru.mmp.common.util.ResourceUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationJUnit4ClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class ReportingServiceTest
 {
   private static int reportDefinitionCount;

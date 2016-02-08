@@ -24,7 +24,7 @@ import guru.mmp.application.messaging.MessageTranslator;
 import guru.mmp.application.messaging.MessagingException;
 import guru.mmp.application.messaging.messages.AuthenticateRequestData;
 import guru.mmp.application.messaging.messages.AuthenticateResponseData;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+import guru.mmp.application.test.ApplicationClassRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -41,7 +41,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationJUnit4ClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class MessagingServiceTest
 {
   private static final UUID DEVICE_ID = UUID.randomUUID();

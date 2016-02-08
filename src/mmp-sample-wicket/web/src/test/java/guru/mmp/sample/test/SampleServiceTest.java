@@ -19,7 +19,7 @@ package guru.mmp.sample.test;
 import guru.mmp.application.test.ApplicationClassRunner;
 import guru.mmp.application.test.ApplicationDataSourceResourceReference;
 import guru.mmp.application.test.ApplicationDataSourceSQLResource;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
 import org.junit.Test;
@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.transaction.Transaction;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -60,5 +61,35 @@ public class SampleServiceTest
     assertEquals("The correct number of data objects was not retrieved", 9,
       retrievedData.size());
   }
+
+  @Test
+  public void transactionalTest()
+    throws Exception
+  {
+    Transaction transaction = null;
+
+    try
+    {
+      TransactionManager.getTransactionManager().beginNew();
+
+      transaction = TransactionManager.getTransactionManager().getTransaction();
+
+      sampleService.addDataAndValidateTransaction(transaction);
+
+      List<Data> retrievedData = sampleService.getDataAndValidateTransaction(transaction);
+
+      assertEquals("The correct number of data objects was not retrieved", 10, retrievedData.size());
+
+      TransactionManager.getTransactionManager().commit();
+    }
+    catch (Throwable e)
+    {
+      TransactionManager.getTransactionManager().rollback();
+
+      throw e;
+    }
+  }
+
+
 }
 

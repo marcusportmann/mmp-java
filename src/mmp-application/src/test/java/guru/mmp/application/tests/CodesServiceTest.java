@@ -22,20 +22,22 @@ import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+import guru.mmp.application.test.ApplicationClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * The <code>CodesServiceTest</code> class contains the implementation of the JUnit
@@ -43,7 +45,7 @@ import static org.junit.Assert.fail;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationJUnit4ClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class CodesServiceTest
 {
   private static int codeCategoryCount;
@@ -399,6 +401,7 @@ public class CodesServiceTest
         if (code1.getId().equals(code2.getId()))
         {
           compareCodes(code1, code2);
+
           foundCode = true;
 
           break;

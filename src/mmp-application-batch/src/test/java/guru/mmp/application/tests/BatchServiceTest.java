@@ -20,7 +20,7 @@ package guru.mmp.application.tests;
 
 import guru.mmp.application.batch.IBatchService;
 import guru.mmp.application.batch.Job;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+import guru.mmp.application.test.ApplicationClassRunner;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +41,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationJUnit4ClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class BatchServiceTest
 {
   private static int jobCount;

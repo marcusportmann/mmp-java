@@ -20,6 +20,7 @@ package guru.mmp.sample.model;
 
 import java.util.List;
 
+import javax.transaction.Transaction;
 import javax.transaction.Transactional;
 
 /**
@@ -35,7 +36,17 @@ public interface ISampleService
    *
    * @throws SampleServiceException
    */
-  public void addData()
+  void addData()
+    throws SampleServiceException;
+
+  /**
+   * Add the data and validate that the specified transaction is being used.
+   *
+   * @param transaction the transaction
+   *
+   * @throws SampleServiceException
+   */
+  void addDataAndValidateTransaction(Transaction transaction)
     throws SampleServiceException;
 
   /**
@@ -46,6 +57,16 @@ public interface ISampleService
    * @throws SampleServiceException
    */
   List<Data> getData()
+    throws SampleServiceException;
+
+  /**
+   * Returns the data and validates that the specified transaction is being used.
+   *
+   * @return the data
+   *
+   * @throws SampleServiceException
+   */
+  List<Data> getDataAndValidateTransaction(Transaction transaction)
     throws SampleServiceException;
 
   /**

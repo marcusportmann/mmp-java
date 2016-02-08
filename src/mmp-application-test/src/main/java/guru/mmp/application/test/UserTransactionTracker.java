@@ -19,22 +19,18 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManager;
-
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.transaction.Transaction;
 import java.io.Serializable;
-
 import java.lang.reflect.Method;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.transaction.Transaction;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserTransactionTracker</code> class implements a cglib method interceptor that tracks

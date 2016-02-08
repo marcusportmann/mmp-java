@@ -20,18 +20,15 @@ package guru.mmp.application.test;
 
 import guru.mmp.common.cdi.AnnotatedTypeWrapper;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import java.util.*;
-
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
-
 import javax.persistence.PersistenceContext;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.Set;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>EntityManagerInjectorExtension</code> class.
@@ -69,11 +66,11 @@ public class EntityManagerInjectorExtension
       return;
     }
 
-    Annotation entityManagerCleanupAnnotation = () -> NonTransactionalEntityManagerCleanup.class;
+    Annotation annotation = () -> NonTransactionalEntityManagerCleanup.class;
 
     AnnotatedTypeWrapper<T> wrapper = new AnnotatedTypeWrapper<T>(annotatedType,
         annotatedType.getAnnotations());
-    wrapper.addAnnotation(entityManagerCleanupAnnotation);
+    wrapper.addAnnotation(annotation);
 
     processAnnotatedType.setAnnotatedType(wrapper);
   }

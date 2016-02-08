@@ -19,19 +19,20 @@ package guru.mmp.application.tests;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.configuration.IConfigurationService;
-import guru.mmp.application.registry.IRegistry;
 import guru.mmp.application.security.*;
-import guru.mmp.common.test.ApplicationJUnit4ClassRunner;
+import guru.mmp.application.test.ApplicationClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.inject.Inject;
-import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.*;
+
+import javax.inject.Inject;
 
 /**
  * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit
@@ -39,7 +40,7 @@ import static org.junit.Assert.fail;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationJUnit4ClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class SecurityServiceTest
 {
   private static int functionCount;
@@ -698,6 +699,7 @@ public class SecurityServiceTest
         + group.getGroupName() + ")", group.getGroupName(), groupNames.get(0));
     securityService.removeUserFromGroup(userDirectory.getId(), user.getUsername(),
         group.getGroupName());
+
     groupNames = securityService.getGroupNamesForUser(userDirectory.getId(), user.getUsername());
 
     assertEquals("The correct number of group names (0) was not retrieved for the user ("
