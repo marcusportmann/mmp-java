@@ -23,23 +23,29 @@ import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.util.ResourceUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
+
+import javax.naming.InitialContext;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import javax.sql.DataSource;
 
 /**
- * The <code>SampleApplicationListener</code> class initialises the sample web application.
+ * The <code>SampleApplicationListener</code> class initialises the web application.
  *
  * @author Marcus Portmann
  */
@@ -72,17 +78,17 @@ public class SampleApplicationListener
    */
   public void contextInitialized(ServletContextEvent event)
   {
-    // Initialise the sample database tables if required
-    initSampleDatabaseTables();
+    // Initialise the application database tables if required
+    initApplicationDatabaseTables();
 
-    // Initialise the sample data
-    initSampleData();
+    // Initialise the application data
+    initApplicationData();
   }
 
   /**
-   * Initialise the sample data.
+   * Initialise the application data.
    */
-  private void initSampleData()
+  private void initApplicationData()
   {
     try
     {
@@ -100,14 +106,14 @@ public class SampleApplicationListener
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the sample data", e);
+      throw new WebApplicationException("Failed to initialise the application data", e);
     }
   }
 
   /**
-   * Initialise the sample database tables if required.
+   * Initialise the application database tables if required.
    */
-  private void initSampleDatabaseTables()
+  private void initApplicationDatabaseTables()
   {
     DataSource dataSource = null;
 
@@ -128,8 +134,8 @@ public class SampleApplicationListener
 
     if (dataSource == null)
     {
-      throw new WebApplicationException("Failed to initialise the sample database tables:"
-          + "Failed to retrieve the " + "application data source using the JNDI names "
+      throw new WebApplicationException("Failed to initialise the application database tables:"
+          + "Failed to retrieve the application data source using the JNDI names "
           + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
     }
 
@@ -153,7 +159,8 @@ public class SampleApplicationListener
 
         default:
 
-          logger.info("The sample database tables will not be populated for the database type ("
+          logger.info(
+              "The application database tables will not be populated for the database type ("
               + metaData.getDatabaseProductName() + ")");
 
           return;
@@ -162,7 +169,7 @@ public class SampleApplicationListener
       // Create and populate the database tables if required
       if (!DAOUtil.tableExists(connection, null, "SAMPLE", "DATA"))
       {
-        logger.info("Creating and populating the sample database tables");
+        logger.info("Creating and populating the application database tables");
 
         String resourcePath = "/guru/mmp/sample/persistence/Sample" + databaseFileSuffix + ".sql";
         int numberOfStatementsExecuted = 0;
@@ -184,11 +191,13 @@ public class SampleApplicationListener
           try
           {
             DAOUtil.executeStatement(connection, sqlStatement);
+
             numberOfStatementsExecuted++;
           }
           catch (Throwable e)
           {
             logger.error("Failed to execute the SQL statement: " + sqlStatement, e);
+
             numberOfFailedStatements++;
           }
         }
@@ -202,7 +211,7 @@ public class SampleApplicationListener
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the sample database tables", e);
+      throw new WebApplicationException("Failed to initialise the application database tables", e);
     }
   }
 }
