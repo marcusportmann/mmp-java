@@ -22,14 +22,16 @@ import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.util.*;
 import java.util.Date;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
@@ -193,9 +195,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Add the user to the group
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
-      statement.setObject(3, internalGroupId);
+      statement.setObject(1, internalUserId);
+      statement.setObject(2, internalGroupId);
 
       if (statement.executeUpdate() != 1)
       {
@@ -1344,9 +1345,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Remove the user from the group
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
-      statement.setObject(3, internalGroupId);
+      statement.setObject(1, internalUserId);
+      statement.setObject(2, internalGroupId);
       statement.executeUpdate();
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -1641,30 +1641,29 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     // addInternalUserToInternalGroupSQL
     addInternalUserToInternalGroupSQL = "INSERT INTO " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP (USER_DIRECTORY_ID, INTERNAL_USER_ID, "
-        + "INTERNAL_GROUP_ID) VALUES (?, ?, ?)";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP (INTERNAL_USER_ID, INTERNAL_GROUP_ID) VALUES (?, ?)";
 
     // changeInternalUserPasswordSQL
-    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU SET IU"
-        + ".PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=? WHERE IU.USER_DIRECTORY_ID=? "
-        + "AND IU.ID=?";
+    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU "
+        + "SET IU.PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=? "
+        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // createInternalGroupSQL
     createInternalGroupSQL = "INSERT INTO " + schemaPrefix
         + "INTERNAL_GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
     // createInternalUserSQL
-    createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS" + " (ID, "
-        + "USER_DIRECTORY_ID, USERNAME, PASSWORD, FIRST_NAMES, LAST_NAME, MOBILE, EMAIL, "
+    createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS "
+        + "(ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, FIRST_NAMES, LAST_NAME, MOBILE, EMAIL, "
         + "PASSWORD_ATTEMPTS, PASSWORD_EXPIRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // deleteInternalGroupSQL
-    deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG" + " WHERE IG"
-        + ".USER_DIRECTORY_ID=? AND IG.ID=?";
+    deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG "
+        + "WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
 
     // deleteInternalUserSQL
-    deleteInternalUserSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE IU"
-        + ".USER_DIRECTORY_ID=? AND IU.ID=?";
+    deleteInternalUserSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_USERS IU "
+        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // getFilteredInternalUsersSQL
     getFilteredInternalUsersSQL =
@@ -1675,16 +1674,15 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "(UPPER(IU.FIRST_NAMES) LIKE ?) OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
 
     // getFunctionCodesForUserIdSQL
-    getFunctionCodesForUserIdSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F"
-        + " INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
+    getFunctionCodesForUserIdSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F "
+        + "INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
         + "INNER JOIN " + schemaPrefix + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID "
-        + "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID INNER JOIN "
-        + schemaPrefix + "INTERNAL_GROUPS IG ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID"
-        + "    " + " AND IG.ID = G.ID INNER JOIN " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP " + "IUTIGM"
-        + "   ON IUTIGM.USER_DIRECTORY_ID = IG.USER_DIRECTORY_ID AND IUTIGM"
-        + ".INTERNAL_GROUP_ID = IG.ID" + " WHERE IUTIGM.USER_DIRECTORY_ID=? AND IUTIGM"
-        + ".INTERNAL_USER_ID=?";
+        + "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID "
+        + "INNER JOIN " + schemaPrefix + "INTERNAL_GROUPS IG "
+        + "ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID AND IG.ID = G.ID "
+        + "INNER JOIN " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTIGM "
+        + "ON IUTIGM.INTERNAL_GROUP_ID = IG.ID "
+        + "WHERE IUTIGM.INTERNAL_USER_ID=?";
 
     // getInternalGroupIdSQL
     getInternalGroupIdSQL = "SELECT IG.ID FROM " + schemaPrefix + "INTERNAL_GROUPS IG" + " WHERE "
@@ -1692,21 +1690,21 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     // getInternalGroupNamesForInternalUserSQL
     getInternalGroupNamesForInternalUserSQL = "SELECT IG.GROUPNAME FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG, " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM" + " "
-        + "WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.USER_DIRECTORY_ID=?" + " AND IUTGM"
-        + ".INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
+        + "INTERNAL_GROUPS IG, " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM "
+        + "WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.INTERNAL_USER_ID=? "
+        + "ORDER BY IG.GROUPNAME";
 
     // getInternalGroupSQL
     getInternalGroupSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? AND" + " UPPER(IG.GROUPNAME)=UPPER(CAST"
+        + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? AND UPPER(IG.GROUPNAME)=UPPER(CAST"
         + "(? AS VARCHAR(100)))";
 
     // getInternalGroupsForInternalUserSQL
     getInternalGroupsForInternalUserSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM "
         + schemaPrefix + "INTERNAL_GROUPS IG, " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-        + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND" + " IUTGM.USER_DIRECTORY_ID=?"
-        + " AND IUTGM.INTERNAL_USER_ID=? ORDER BY IG.GROUPNAME";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM "
+        + "WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.INTERNAL_USER_ID=? "
+        + "ORDER BY IG.GROUPNAME";
 
     // getInternalGroupsSQL
     getInternalGroupsSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
@@ -1715,69 +1713,65 @@ public class InternalUserDirectory extends UserDirectoryBase
     // getNumberOfFilteredInternalUsersSQL
     getNumberOfFilteredInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix
         + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND"
-        + " ((UPPER(IU.USERNAME) LIKE ?) OR " + "(UPPER(IU.FIRST_NAMES) LIKE ?)"
+        + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
         + " OR (UPPER(IU.LAST_NAME) LIKE ?))";
 
     // getNumberOfInternalGroupsSQL
-    getNumberOfInternalGroupsSQL = "SELECT COUNT(IG.ID) FROM " + schemaPrefix + "INTERNAL_GROUPS "
-        + "IG" + " WHERE IG.USER_DIRECTORY_ID=?";
+    getNumberOfInternalGroupsSQL = "SELECT COUNT(IG.ID) FROM " + schemaPrefix
+        + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=?";
 
     // getNumberOfInternalUsersForInternalGroupSQL
     getNumberOfInternalUsersForInternalGroupSQL = "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM "
         + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=?"
-        + " AND IUTGM" + ".INTERNAL_GROUP_ID=?";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.INTERNAL_GROUP_ID=?";
 
     // getNumberOfInternalUsersSQL
-    getNumberOfInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix + "INTERNAL_USERS "
-        + "IU" + " WHERE IU.USER_DIRECTORY_ID=?";
+    getNumberOfInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix + "INTERNAL_USERS IU "
+        + "WHERE IU.USER_DIRECTORY_ID=?";
 
     // getInternalUserIdSQL
-    getInternalUserIdSQL = "SELECT IU.ID FROM " + schemaPrefix + "INTERNAL_USERS IU" + " WHERE IU"
-        + ".USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalUserIdSQL = "SELECT IU.ID FROM " + schemaPrefix + "INTERNAL_USERS IU "
+        + "WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUserSQL
     getInternalUserSQL =
         "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL,"
-        + " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " + schemaPrefix + "INTERNAL_USERS IU"
-        + " WHERE "
-        + "IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+        + " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " + schemaPrefix + "INTERNAL_USERS IU "
+        + "WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUsersSQL
-    getInternalUsersSQL =
-        "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE, IU.EMAIL,"
-        + " IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " + schemaPrefix
+    getInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.FIRST_NAMES, IU.LAST_NAME, "
+        + " IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " + schemaPrefix
         + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
 
     // incrementPasswordAttemptsSQL
-    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU" + " SET IU"
-        + ".PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1" + " WHERE IU.USER_DIRECTORY_ID=? AND IU"
-        + ".ID=?";
+    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU SET "
+        + "IU.PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1 "
+        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // isPasswordInInternalUserPasswordHistorySQL
     isPasswordInInternalUserPasswordHistorySQL = "SELECT IUPH.ID FROM " + schemaPrefix
-        + "INTERNAL_USERS_PASSWORD_HISTORY IUPH"
-        + " WHERE IUPH.INTERNAL_USER_ID=? AND IUPH.CHANGED" + " > ? AND IUPH.PASSWORD=?";
+        + "INTERNAL_USERS_PASSWORD_HISTORY IUPH "
+        + "WHERE IUPH.INTERNAL_USER_ID=? AND IUPH.CHANGED > ? AND IUPH.PASSWORD=?";
 
     // isInternalUserInInternalGroupSQL
     isInternalUserInInternalGroupSQL = "SELECT IUTGM.INTERNAL_USER_ID FROM " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.USER_DIRECTORY_ID=? AND"
-        + " IUTGM" + ".INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.INTERNAL_USER_ID=? AND "
+        + "IUTGM.INTERNAL_GROUP_ID=?";
 
     // removeInternalUserFromInternalGroupSQL
     removeInternalUserFromInternalGroupSQL = "DELETE FROM " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
-        + " WHERE IUTGM.USER_DIRECTORY_ID=? AND IUTGM" + ".INTERNAL_USER_ID=?"
-        + " AND IUTGM.INTERNAL_GROUP_ID=?";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM "
+        + "WHERE IUTGM.INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
 
     // saveInternalUserPasswordHistorySQL
     saveInternalUserPasswordHistorySQL = "INSERT INTO " + schemaPrefix
-        + "INTERNAL_USERS_PASSWORD_HISTORY (ID, INTERNAL_USER_ID, CHANGED, PASSWORD) VALUES (?, ?, "
-        + "?, ?)";
+        + "INTERNAL_USERS_PASSWORD_HISTORY (ID, INTERNAL_USER_ID, CHANGED, PASSWORD) "
+        + "VALUES (?, ?, ?, ?)";
 
     // updateInternalGroupSQL
-    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG" + " SET IG"
-        + ".DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG SET "
+        + "IG.DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
   }
 
   /**
@@ -1948,8 +1942,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
+      statement.setObject(1, internalUserId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1981,8 +1974,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (PreparedStatement statement = connection.prepareStatement(
         getInternalGroupNamesForInternalUserSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
+      statement.setObject(1, internalUserId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2056,8 +2048,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (PreparedStatement statement = connection.prepareStatement(
         getInternalGroupsForInternalUserSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
+      statement.setObject(1, internalUserId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2136,8 +2127,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (PreparedStatement statement = connection.prepareStatement(
         getNumberOfInternalUsersForInternalGroupSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalGroupId);
+      statement.setObject(1, internalGroupId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2274,9 +2264,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (PreparedStatement statement = connection.prepareStatement(
         isInternalUserInInternalGroupSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
-      statement.setObject(3, internalGroupId);
+      statement.setObject(1, internalUserId);
+      statement.setObject(2, internalGroupId);
 
       try (ResultSet rs = statement.executeQuery())
       {
