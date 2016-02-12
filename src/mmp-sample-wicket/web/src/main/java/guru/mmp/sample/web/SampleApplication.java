@@ -73,7 +73,7 @@ public class SampleApplication extends TemplateWebApplication
    *
    * @return the page that users will be redirected to once they have logged into the application.
    */
-  public Class<? extends WebPage> getSecureHomePage()
+  public Class<? extends Page> getSecureHomePage()
   {
     return DashboardPage.class;
   }
