@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.components;
 
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
+
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -38,6 +39,7 @@ import org.apache.wicket.request.IRequestHandler;
 public class TextFieldWithFeedback<T> extends TextField<T>
 {
   private static final long serialVersionUID = 1000000;
+  private String feedbackMessageClasses;
 
   /**
    * Constructs a new <code>TextFieldWithFeedback</code>.
@@ -61,6 +63,16 @@ public class TextFieldWithFeedback<T> extends TextField<T>
   }
 
   /**
+   * Returns the additional CSS classes to apply to the feedback message.
+   *
+   * @return the additional CSS classes to apply to the feedback message
+   */
+  public String getFeedbackMessageClasses()
+  {
+    return feedbackMessageClasses;
+  }
+
+  /**
    * @param response the Wicket header response
    *
    * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
@@ -72,12 +84,23 @@ public class TextFieldWithFeedback<T> extends TextField<T>
 
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false,
+        feedbackMessageClasses);
 
     if (feedbackJavaScript != null)
     {
       response.render(JavaScriptHeaderItem.forScript(feedbackJavaScript, null));
     }
+  }
+
+  /**
+   * Set the additional CSS classes to apply to the feedback message.
+   *
+   * @param feedbackMessageClasses the additional CSS classes to apply to the feedback message
+   */
+  public void setFeedbackMessageClasses(String feedbackMessageClasses)
+  {
+    this.feedbackMessageClasses = feedbackMessageClasses;
   }
 
   /**
@@ -103,7 +126,8 @@ public class TextFieldWithFeedback<T> extends TextField<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
+      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true,
+          feedbackMessageClasses);
 
       if (feedbackJavaScript != null)
       {

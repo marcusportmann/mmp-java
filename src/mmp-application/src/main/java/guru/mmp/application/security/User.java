@@ -43,6 +43,7 @@ public class User
   private Date passwordExpiry;
   private UUID userDirectoryId;
   private String username;
+  private String title;
 
   /**
    * Constructs a new <code>User</code>.
@@ -143,6 +144,16 @@ public class User
   public String getProperty(String name)
   {
     return properties.get(name);
+  }
+
+  /**
+   * Returns the title for the user.
+   *
+   * @return the title for the user
+   */
+  public String getTitle()
+  {
+    return title;
   }
 
   /**
@@ -295,6 +306,16 @@ public class User
   public void setReadOnly(boolean isReadOnly)
   {
     this.isReadOnly = isReadOnly;
+  }
+
+  /**
+   * Set the title for the user.
+   *
+   * @param title the title for the user
+   */
+  public void setTitle(String title)
+  {
+    this.title = title;
   }
 
   /**

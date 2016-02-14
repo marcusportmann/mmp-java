@@ -21,6 +21,7 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
+import guru.mmp.application.web.components.StringSelectOption;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.DropDownChoiceWithFeedback;
@@ -28,6 +29,7 @@ import guru.mmp.application.web.template.components.PasswordTextFieldWithFeedbac
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 import guru.mmp.application.web.validators.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -35,15 +37,17 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddUserPage</code> class implements the
@@ -95,6 +99,13 @@ public class AddUserPage extends TemplateWebPage
       TextField<String> usernameField = new TextFieldWithFeedback<>("username");
       usernameField.setRequired(true);
       addForm.add(usernameField);
+
+      // The "title" field
+      DropDownChoiceWithFeedback<String> titleField = new DropDownChoiceWithFeedback<>("title",
+          getTitleOptions());
+      titleField.setRequired(true);
+      titleField.setFeedbackMessageClasses("hidden-xs");
+      addForm.add(titleField);
 
       // The "firstNames" field
       TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
@@ -213,6 +224,22 @@ public class AddUserPage extends TemplateWebPage
     {
       throw new WebApplicationException("Failed to initialise the AddUserPage", e);
     }
+  }
+
+  /**
+   * Returns the title options.
+   *
+   * @return the title options
+   */
+  public static List<String> getTitleOptions()
+  {
+    List<String> titles = new ArrayList<>();
+
+    titles.add("Mr");
+    titles.add("Ms");
+    titles.add("Dr");
+
+    return titles;
   }
 
   private List<String> getGroupOptions(UUID userDirectoryId)

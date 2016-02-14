@@ -956,6 +956,7 @@ public class SecurityServiceTest
     user.setPasswordExpiry(calendar.getTime());
     user.setPasswordAttempts(2);
     user.setEmail("Test Updated E-Mail");
+    user.setTitle("Test Updated Title");
     user.setFirstNames("Test Updated FirstName");
     user.setLastName("Test Updated LastName");
     user.setMobileNumber("Test Updated Mobile Number");
@@ -984,6 +985,7 @@ public class SecurityServiceTest
     user.setUsername("Numbered Test Username " + number);
     user.setPassword("Numbered Test Password " + number);
     user.setEmail("Numbered Test E-Mail " + number);
+    user.setTitle("Numbered Test Title " + number);
     user.setFirstNames("Numbered Test FirstName " + number);
     user.setLastName("Numbered Test LastName " + number);
     user.setMobileNumber("Numbered Test Mobile Number " + number);
@@ -1036,6 +1038,7 @@ public class SecurityServiceTest
     user.setUsername("Test User Username " + userCount);
     user.setPassword("Test User Password " + userCount);
     user.setEmail("Test User E-Mail " + userCount);
+    user.setTitle("Test User Title " + userCount);
     user.setFirstNames("Test User FirstName " + userCount);
     user.setLastName("Test User LastName " + userCount);
     user.setMobileNumber("Test User Mobile Number " + userCount);
@@ -1118,6 +1121,8 @@ public class SecurityServiceTest
 
     assertEquals("The e-mail values for the two users do not match", user1.getEmail(),
         user2.getEmail());
+    assertEquals("The title values for the two users do not match", user1.getTitle(),
+      user2.getTitle());
     assertEquals("The first names values for the two users do not match", user1.getFirstNames(),
         user2.getFirstNames());
     assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());

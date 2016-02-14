@@ -20,6 +20,7 @@ package guru.mmp.application.web.template.components;
 
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
+
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -28,9 +29,9 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>DropDownChoiceWithFeedback</code> class extends the Wicket <code>DropDownChoice</code>
@@ -43,6 +44,7 @@ import java.util.List;
 public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
 {
   private static final long serialVersionUID = 1000000;
+  private String feedbackMessageClasses;
 
   /**
    * Constructs a new <code>DropDownChoiceWithFeedback</code>.
@@ -106,6 +108,16 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
   }
 
   /**
+   * Returns the additional CSS classes to apply to the feedback message.
+   *
+   * @return the additional CSS classes to apply to the feedback message
+   */
+  public String getFeedbackMessageClasses()
+  {
+    return feedbackMessageClasses;
+  }
+
+  /**
    * @param response the Wicket header response
    *
    * @see org.apache.wicket.markup.html.form.TextField#renderHead(IHeaderResponse)
@@ -117,12 +129,23 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
 
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false);
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false,
+        feedbackMessageClasses);
 
     if (feedbackJavaScript != null)
     {
       response.render(JavaScriptHeaderItem.forScript(feedbackJavaScript, null));
     }
+  }
+
+  /**
+   * Set the additional CSS classes to apply to the feedback message.
+   *
+   * @param feedbackMessageClasses the additional CSS classes to apply to the feedback message
+   */
+  public void setFeedbackMessageClasses(String feedbackMessageClasses)
+  {
+    this.feedbackMessageClasses = feedbackMessageClasses;
   }
 
   /**
@@ -150,7 +173,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true);
+      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true,
+          feedbackMessageClasses);
 
       if (feedbackJavaScript != null)
       {

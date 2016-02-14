@@ -245,6 +245,7 @@ CREATE TABLE MMP.INTERNAL_USERS (
   USER_DIRECTORY_ID  UUID NOT NULL,
   USERNAME           VARCHAR(100) NOT NULL,
   PASSWORD           VARCHAR(50),
+  TITLE              VARCHAR(30),
   FIRST_NAMES        VARCHAR(100),
   LAST_NAME          VARCHAR(100),
   MOBILE             VARCHAR(30),
@@ -275,6 +276,9 @@ COMMENT ON COLUMN MMP.INTERNAL_USERS.USERNAME
 
 COMMENT ON COLUMN MMP.INTERNAL_USERS.PASSWORD
   IS 'The password for the internal user';
+
+COMMENT ON COLUMN MMP.INTERNAL_USERS.TITLE
+  IS 'The title for the internal user';
 
 COMMENT ON COLUMN MMP.INTERNAL_USERS.FIRST_NAMES
   IS 'The first name(s) / forename(s) for the internal user';
@@ -402,13 +406,13 @@ CREATE INDEX MMP_GROUPS_GROUPNAME_IX
   (GROUPNAME);
 
 COMMENT ON COLUMN MMP.GROUPS.ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the external group';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 COMMENT ON COLUMN MMP.GROUPS.USER_DIRECTORY_ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal group is associated with';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
 
 COMMENT ON COLUMN MMP.GROUPS.GROUPNAME
-  IS 'The group name for the external group';
+  IS 'The group name for the group';
 
 
 
@@ -504,7 +508,7 @@ COMMENT ON COLUMN MMP.ROLE_TO_GROUP_MAP.ROLE_ID
   IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
 
 COMMENT ON COLUMN MMP.ROLE_TO_GROUP_MAP.GROUP_ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the external group';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 
 
@@ -1253,8 +1257,8 @@ INSERT INTO MMP.USER_DIRECTORIES (ID, TYPE_ID, NAME, CONFIGURATION) VALUES
 INSERT INTO MMP.USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES
   ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO MMP.INTERNAL_USERS (ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, FIRST_NAMES, LAST_NAME, MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY) VALUES
-  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', '', '', '', '', null, null);
+INSERT INTO MMP.INTERNAL_USERS (ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY) VALUES
+  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', '', '', '', '', '', null, null);
 
 INSERT INTO MMP.INTERNAL_GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES
   ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');

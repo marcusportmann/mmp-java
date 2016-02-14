@@ -23,13 +23,16 @@ import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
+import guru.mmp.application.web.template.components.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +77,13 @@ public class UpdateUserPage extends TemplateWebPage
       usernameField.setRequired(true);
       usernameField.setEnabled(false);
       updateForm.add(usernameField);
+
+      // The "title" field
+      DropDownChoiceWithFeedback<String> titleField = new DropDownChoiceWithFeedback<>("title",
+        AddUserPage.getTitleOptions());
+      titleField.setRequired(true);
+      titleField.setFeedbackMessageClasses("hidden-sm");
+      updateForm.add(titleField);
 
       // The "firstNames" field
       TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");

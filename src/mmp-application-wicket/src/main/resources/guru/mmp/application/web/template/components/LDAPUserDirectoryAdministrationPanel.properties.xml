@@ -18,7 +18,6 @@
   <entry key="userFirstNamesAttribute.Required">The user first names attribute is required.</entry>
   <entry key="userLastNameAttribute.Required">The user last name attribute is required.</entry>
   <entry key="userPhoneNumberAttribute.Required">The user phone number attribute is required.</entry>
-  <entry key="userFaxNumberAttribute.Required">The user fax number attribute is required.</entry>
   <entry key="userMobileNumberAttribute.Required">The user mobile number attribute is required.</entry>
   <entry key="userEmailAttribute.Required">The user e-mail attribute is required.</entry>
   <entry key="userDescriptionAttribute.Required">The user description attribute is required.</entry>

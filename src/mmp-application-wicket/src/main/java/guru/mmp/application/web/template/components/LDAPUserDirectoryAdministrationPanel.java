@@ -142,6 +142,14 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       userPasswordAttemptsAttributeField.setRequired(true);
       add(userPasswordAttemptsAttributeField);
 
+      // The "userTitleAttribute" field
+      TextField<String> userTitleAttributeField = new TextFieldWithFeedback<>(
+        "userTitleAttribute", new PropertyModel<>(userDirectoryModel,
+        "parameters.UserTitleAttribute"));
+      userTitleAttributeField.setType(String.class);
+      userTitleAttributeField.setRequired(true);
+      add(userTitleAttributeField);
+
       // The "userFirstNamesAttribute" field
       TextField<String> userFirstNamesAttributeField = new TextFieldWithFeedback<>(
           "userFirstNamesAttribute", new PropertyModel<>(userDirectoryModel,
@@ -347,6 +355,11 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
     if (!parameters.containsKey("UserPasswordHistoryAttribute"))
     {
       parameters.put("UserPasswordHistoryAttribute", "passwordhistory");
+    }
+
+    if (!parameters.containsKey("UserTitleAttribute"))
+    {
+      parameters.put("UserTitleAttribute", "title");
     }
 
     if (!parameters.containsKey("UserFirstNamesAttribute"))

@@ -20,20 +20,23 @@ package guru.mmp.application.security;
 
 import guru.mmp.common.util.JNDIUtil;
 import guru.mmp.common.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import java.util.*;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.naming.ldap.LdapName;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.*;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>LDAPUserDirectory</code> class provides the LDAP user directory implementation.
@@ -99,6 +102,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private boolean useSSL;
   private LdapName userBaseDN;
   private String userEmailAttribute;
+  private String userTitleAttribute;
   private String userFirstNamesAttribute;
   private String userLastNameAttribute;
   private String userMobileNumberAttribute;
@@ -262,6 +266,17 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new SecurityException(String.format(
             "No UserPasswordHistoryAttribute configuration parameter found for the user directory "
             + "(%s)", userDirectoryId));
+      }
+
+      if (parameters.containsKey("UserTitleAttribute"))
+      {
+        userTitleAttribute = parameters.get("UserTitleAttribute");
+      }
+      else
+      {
+        throw new SecurityException(String.format(
+            "No UserTitleAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("UserFirstNamesAttribute"))
@@ -902,6 +917,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
       attributes.put(new BasicAttribute("objectclass", userObjectClass));
 
       attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
+
+      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
+      {
+        attributes.put(new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle())));
+      }
 
       if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
       {
@@ -2248,6 +2268,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
+      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+            userTitleAttribute, StringUtil.notNull(user.getTitle()))));
+      }
+
       if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
@@ -2379,6 +2405,16 @@ public class LDAPUserDirectory extends UserDirectoryBase
     user.setUserDirectoryId(getUserDirectoryId());
     user.setReadOnly(isReadOnly);
     user.setPassword("");
+
+    if ((!StringUtil.isNullOrEmpty(userTitleAttribute))
+        && (attributes.get(userTitleAttribute) != null))
+    {
+      user.setTitle(String.valueOf(attributes.get(userTitleAttribute).get()));
+    }
+    else
+    {
+      user.setTitle("");
+    }
 
     if ((!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
         && (attributes.get(userFirstNamesAttribute) != null))

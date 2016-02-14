@@ -1,5 +1,5 @@
 // Show feedback for a form control
-function show_form_component_feedback(form_component_id, feedback_class, feedback_message)
+function show_form_component_feedback(form_component_id, feedback_class, feedback_message_classes, feedback_message)
 {
   var formField = $("#" + form_component_id)
 
@@ -17,7 +17,7 @@ function show_form_component_feedback(form_component_id, feedback_class, feedbac
   // Create the new feedback div for the form field
   if (feedback_message.length > 0)
   {
-    formField.parents(".form-group > div").append($("<div id=\"" + form_component_id + "-feedback\"class=\"help-block help-block-left animated fadeInDown\">" + feedback_message + "</div>"));
+    formField.parents(".form-group > div").append($("<div id=\"" + form_component_id + "-feedback\"class=\"" + feedback_message_classes + " help-block help-block-left animated fadeInDown\">" + feedback_message + "</div>"));
   }
 }
 
