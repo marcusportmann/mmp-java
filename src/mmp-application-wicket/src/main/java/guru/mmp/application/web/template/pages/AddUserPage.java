@@ -122,6 +122,11 @@ public class AddUserPage extends TemplateWebPage
       emailField.setRequired(true);
       addForm.add(emailField);
 
+      // The "phoneNumber" field
+      TextField<String> phoneNumberField = new TextFieldWithFeedback<>("phoneNumber");
+      phoneNumberField.setRequired(false);
+      addForm.add(phoneNumberField);
+
       // The "mobileNumber" field
       TextField<String> mobileNumberField = new TextFieldWithFeedback<>("mobileNumber");
       mobileNumberField.setRequired(false);

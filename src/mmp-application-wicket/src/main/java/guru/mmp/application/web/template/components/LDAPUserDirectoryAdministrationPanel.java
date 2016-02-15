@@ -166,6 +166,14 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       userLastNameAttributeField.setRequired(true);
       add(userLastNameAttributeField);
 
+      // The "userPhoneNumberAttribute" field
+      TextField<String> userPhoneNumberAttributeField = new TextFieldWithFeedback<>(
+        "userPhoneNumberAttribute", new PropertyModel<>(userDirectoryModel,
+        "parameters.UserPhoneNumberAttribute"));
+      userPhoneNumberAttributeField.setType(String.class);
+      userPhoneNumberAttributeField.setRequired(true);
+      add(userPhoneNumberAttributeField);
+
       // The "userMobileNumberAttribute" field
       TextField<String> userMobileNumberAttributeField = new TextFieldWithFeedback<>(
           "userMobileNumberAttribute", new PropertyModel<>(userDirectoryModel,
@@ -370,6 +378,11 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
     if (!parameters.containsKey("UserLastNameAttribute"))
     {
       parameters.put("UserLastNameAttribute", "sn");
+    }
+
+    if (!parameters.containsKey("UserPhoneNumberAttribute"))
+    {
+      parameters.put("UserPhoneNumberAttribute", "telephoneNumber");
     }
 
     if (!parameters.containsKey("UserMobileNumberAttribute"))

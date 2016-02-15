@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="loginForm.username.Required">Please enter your username.</entry>
-	<entry key="loginForm.password.Required">Please enter your password.</entry>
+	<entry key="loginForm.username.Required">Enter your username.</entry>
+	<entry key="loginForm.password.Required">Enter your password.</entry>
 </properties>
 

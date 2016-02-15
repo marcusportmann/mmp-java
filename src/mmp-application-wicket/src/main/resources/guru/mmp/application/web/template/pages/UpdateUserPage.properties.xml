@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="updateForm.username.Required">A username is required.</entry>
-  <entry key="updateForm.title.Required">Select a title.</entry>
-  <entry key="updateForm.firstNames.Required">A first name is required.</entry>
-  <entry key="updateForm.lastName.Required">A last name is required.</entry>
-  <entry key="updateForm.email.Required">An e-mail address is required.</entry>
+  <entry key="updateForm.username.Required">Enter a username.</entry>
+  <entry key="updateForm.title.Required">Enter a title.</entry>
+  <entry key="updateForm.firstNames.Required">Enter a first name.</entry>
+  <entry key="updateForm.lastName.Required">Enter a last name.</entry>
+  <entry key="updateForm.email.Required">Enter an e-mail address.</entry>
 </properties>

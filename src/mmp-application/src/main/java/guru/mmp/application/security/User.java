@@ -44,6 +44,7 @@ public class User
   private UUID userDirectoryId;
   private String username;
   private String title;
+  private String phoneNumber;
 
   /**
    * Constructs a new <code>User</code>.
@@ -130,6 +131,16 @@ public class User
   public Date getPasswordExpiry()
   {
     return passwordExpiry;
+  }
+
+  /**
+   * Returns the phone number for the user.
+   *
+   * @return the phone number for the user
+   */
+  public String getPhoneNumber()
+  {
+    return phoneNumber;
   }
 
   /**
@@ -285,6 +296,16 @@ public class User
   public void setPasswordExpiry(Date passwordExpiry)
   {
     this.passwordExpiry = passwordExpiry;
+  }
+
+  /**
+   * Set the the phone number for the user.
+   *
+   * @param phoneNumber the the phone number for the user
+   */
+  public void setPhoneNumber(String phoneNumber)
+  {
+    this.phoneNumber = phoneNumber;
   }
 
   /**

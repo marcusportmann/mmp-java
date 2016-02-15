@@ -100,6 +100,11 @@ public class UpdateUserPage extends TemplateWebPage
       emailField.setRequired(true);
       updateForm.add(emailField);
 
+      // The "phoneNumber" field
+      TextField<String> phoneNumberField = new TextFieldWithFeedback<>("phoneNumber");
+      phoneNumberField.setRequired(false);
+      updateForm.add(phoneNumberField);
+
       // The "mobileNumber" field
       TextField<String> mobileNumberField = new TextFieldWithFeedback<>("mobileNumber");
       mobileNumberField.setRequired(false);

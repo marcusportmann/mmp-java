@@ -105,6 +105,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String userTitleAttribute;
   private String userFirstNamesAttribute;
   private String userLastNameAttribute;
+  private String userPhoneNumberAttribute;
   private String userMobileNumberAttribute;
   private String userObjectClass;
   private String userPasswordAttemptsAttribute;
@@ -299,6 +300,17 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new SecurityException(String.format(
             "No UserLastNameAttribute configuration parameter found for the user directory (%s)",
             userDirectoryId));
+      }
+
+      if (parameters.containsKey("UserPhoneNumberAttribute"))
+      {
+        userPhoneNumberAttribute = parameters.get("UserPhoneNumberAttribute");
+      }
+      else
+      {
+        throw new SecurityException(String.format(
+          "No UserPhoneNumberAttribute configuration parameter found for the user directory (%s)",
+          userDirectoryId));
       }
 
       if (parameters.containsKey("UserMobileNumberAttribute"))
@@ -938,6 +950,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (!StringUtil.isNullOrEmpty(userEmailAttribute))
       {
         attributes.put(new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail())));
+      }
+
+      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+      {
+        attributes.put(new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(
+          user.getPhoneNumber())));
       }
 
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
@@ -2292,6 +2310,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userEmailAttribute, StringUtil.notNull(user.getEmail()))));
       }
 
+      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+      {
+        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
+          userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
+      }
+
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
@@ -2434,6 +2458,16 @@ public class LDAPUserDirectory extends UserDirectoryBase
     else
     {
       user.setLastName("");
+    }
+
+    if ((!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+      && (attributes.get(userPhoneNumberAttribute) != null))
+    {
+      user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
+    }
+    else
+    {
+      user.setPhoneNumber("");
     }
 
     if ((!StringUtil.isNullOrEmpty(userMobileNumberAttribute))

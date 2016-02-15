@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="addForm.username.Required">A username is required.</entry>
+  <entry key="addForm.username.Required">Enter a username.</entry>
   <entry key="addForm.title.Required">Select a title.</entry>
-  <entry key="addForm.firstNames.Required">A first name is required.</entry>
-  <entry key="addForm.lastName.Required">A last name is required.</entry>
-  <entry key="addForm.email.Required">An e-mail address is required.</entry>
-  <entry key="addForm.password.Required">A password is required.</entry>
-  <entry key="addForm.confirmPassword.Required">A confirmed password is required.</entry>
-  <entry key="addForm.groupName.Required">A group is required.</entry>
+  <entry key="addForm.firstNames.Required">Enter a first name.</entry>
+  <entry key="addForm.lastName.Required">Enter a last name.</entry>
+  <entry key="addForm.email.Required">Enter an e-mail address.</entry>
+  <entry key="addForm.password.Required">Enter a password.</entry>
+  <entry key="addForm.confirmPassword.Required">Confirmed the password.</entry>
+  <entry key="addForm.groupName.Required">Select a group.</entry>
 </properties>
 

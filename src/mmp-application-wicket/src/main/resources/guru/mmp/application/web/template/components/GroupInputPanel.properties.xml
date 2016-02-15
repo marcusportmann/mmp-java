@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="groupName.Required">A name is required.</entry>
+  <entry key="groupName.Required">Enter a name.</entry>
 </properties>

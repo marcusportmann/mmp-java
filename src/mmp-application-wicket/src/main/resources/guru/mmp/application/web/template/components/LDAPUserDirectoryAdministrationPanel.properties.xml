@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="host.Required">The LDAP server hostname is required.</entry>
-  <entry key="port.Required">The LDAP server port is required.</entry>
-  <entry key="useSSL.Required">The use SSL value is required.</entry>
-  <entry key="bindDN.Required">The bind DN is required.</entry>
-  <entry key="bindPassword.Required">The bind password is required.</entry>
-  <entry key="baseDN.Required">The base DN is required.</entry>
-  <entry key="userBaseDN.Required">The user base DN is required.</entry>
-  <entry key="groupBaseDN.Required">The group base DN is required.</entry>
-  <entry key="userObjectClass.Required">The user object class is required.</entry>
-  <entry key="userUsernameAttribute.Required">The user username attribute is required.</entry>
-  <entry key="userPasswordExpiryAttribute.Required">The user password expiry attribute is required.</entry>
-  <entry key="userPasswordAttemptsAttribute.Required">The user password attempts attribute is required.</entry>
-  <entry key="userPasswordHistoryAttribute.Required">The user password history attribute is required.</entry>
-  <entry key="userTitleAttribute.Required">The user title attribute is required.</entry>
-  <entry key="userFirstNamesAttribute.Required">The user first names attribute is required.</entry>
-  <entry key="userLastNameAttribute.Required">The user last name attribute is required.</entry>
-  <entry key="userPhoneNumberAttribute.Required">The user phone number attribute is required.</entry>
-  <entry key="userMobileNumberAttribute.Required">The user mobile number attribute is required.</entry>
-  <entry key="userEmailAttribute.Required">The user e-mail attribute is required.</entry>
-  <entry key="userDescriptionAttribute.Required">The user description attribute is required.</entry>
-  <entry key="groupObjectClass.Required">The group object class is required.</entry>
-  <entry key="groupAttribute.Required">The group attribute is required.</entry>
-  <entry key="groupMemberAttribute.Required">The group member attribute is required.</entry>
-  <entry key="groupDescriptionAttribute.Required">The group description attribute is required.</entry>
-  <entry key="maxPasswordAttempts.Required">The maximum password attempts is required.</entry>
-  <entry key="passwordExpiryMonths.Required">The password expiry in months is required.</entry>
-  <entry key="supportPasswordHistory.Required">The support password history value is required.</entry>
-  <entry key="passwordHistoryMonths.Required">The password history in months is required.</entry>
-  <entry key="passwordHistoryMaxLength.Required">The maximum password history length is required.</entry>
-  <entry key="maxFilteredUsers.Required">The maximum number of filtered users is required.</entry>
-  <entry key="maxFilteredGroups.Required">The maximum number of filtered groups is required.</entry>
+  <entry key="host.Required">Enter the LDAP server hostname.</entry>
+  <entry key="port.Required">Enter the LDAP server port.</entry>
+  <entry key="useSSL.Required">Enter the use SSL value.</entry>
+  <entry key="bindDN.Required">Enter the bind DN.</entry>
+  <entry key="bindPassword.Required">Enter the bind password.</entry>
+  <entry key="baseDN.Required">Enter the base DN.</entry>
+  <entry key="userBaseDN.Required">Enter the user base DN.</entry>
+  <entry key="groupBaseDN.Required">Enter the group base DN.</entry>
+  <entry key="userObjectClass.Required">Enter the user object class.</entry>
+  <entry key="userUsernameAttribute.Required">Enter the user username attribute.</entry>
+  <entry key="userPasswordExpiryAttribute.Required">Enter the user password expiry attribute.</entry>
+  <entry key="userPasswordAttemptsAttribute.Required">Enter the user password attempts attribute.</entry>
+  <entry key="userPasswordHistoryAttribute.Required">Enter the user password history attribute.</entry>
+  <entry key="userTitleAttribute.Required">Enter the user title attribute.</entry>
+  <entry key="userFirstNamesAttribute.Required">Enter the user first names attribute.</entry>
+  <entry key="userLastNameAttribute.Required">Enter the user last name attribute.</entry>
+  <entry key="userPhoneNumberAttribute.Required">Enter the user phone number attribute.</entry>
+  <entry key="userMobileNumberAttribute.Required">Enter the user mobile number attribute.</entry>
+  <entry key="userEmailAttribute.Required">Enter the user e-mail attribute.</entry>
+  <entry key="userDescriptionAttribute.Required">Enter the user description attribute.</entry>
+  <entry key="groupObjectClass.Required">Enter the group object class.</entry>
+  <entry key="groupAttribute.Required">Enter the group attribute.</entry>
+  <entry key="groupMemberAttribute.Required">Enter the group member attribute.</entry>
+  <entry key="groupDescriptionAttribute.Required">Enter the group description attribute.</entry>
+  <entry key="maxPasswordAttempts.Required">Enter the maximum password attempts.</entry>
+  <entry key="passwordExpiryMonths.Required">Enter the password expiry in months.</entry>
+  <entry key="supportPasswordHistory.Required">Enter the support password history value.</entry>
+  <entry key="passwordHistoryMonths.Required">Enter the password history in months.</entry>
+  <entry key="passwordHistoryMaxLength.Required">Enter the maximum password history length.</entry>
+  <entry key="maxFilteredUsers.Required">Enter the maximum number of filtered users.</entry>
+  <entry key="maxFilteredGroups.Required">Enter the maximum number of filtered groups.</entry>
 </properties>
 

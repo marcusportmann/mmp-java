@@ -569,23 +569,24 @@ public class InternalUserDirectory extends UserDirectoryBase
       statement.setString(5, StringUtil.notNull(user.getTitle()));
       statement.setString(6, StringUtil.notNull(user.getFirstNames()));
       statement.setString(7, StringUtil.notNull(user.getLastName()));
-      statement.setString(8, StringUtil.notNull(user.getMobileNumber()));
-      statement.setString(9, StringUtil.notNull(user.getEmail()));
+      statement.setString(8, StringUtil.notNull(user.getPhoneNumber()));
+      statement.setString(9, StringUtil.notNull(user.getMobileNumber()));
+      statement.setString(10, StringUtil.notNull(user.getEmail()));
 
       if (userLocked)
       {
-        statement.setInt(10, maxPasswordAttempts);
+        statement.setInt(11, maxPasswordAttempts);
         user.setPasswordAttempts(maxPasswordAttempts);
       }
       else
       {
-        statement.setInt(10, 0);
+        statement.setInt(11, 0);
         user.setPasswordAttempts(0);
       }
 
       if (expiredPassword)
       {
-        statement.setTimestamp(11, new Timestamp(0));
+        statement.setTimestamp(12, new Timestamp(0));
         user.setPasswordExpiry(new Date(0));
       }
       else
@@ -596,7 +597,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
         long expiryTime = calendar.getTimeInMillis();
 
-        statement.setTimestamp(11, new Timestamp(expiryTime));
+        statement.setTimestamp(12, new Timestamp(expiryTime));
         user.setPasswordExpiry(new Date(expiryTime));
       }
 
@@ -1480,8 +1481,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (user.getTitle() != null)
       {
         fieldsBuffer.append((fieldsBuffer.length() == 0)
-          ? "SET TITLE=?"
-          : ", TITLE=?");
+            ? "SET TITLE=?"
+            : ", TITLE=?");
       }
 
       if (user.getFirstNames() != null)
@@ -1503,6 +1504,13 @@ public class InternalUserDirectory extends UserDirectoryBase
         fieldsBuffer.append((fieldsBuffer.length() == 0)
             ? "SET EMAIL=?"
             : ", EMAIL=?");
+      }
+
+      if (user.getPhoneNumber() != null)
+      {
+        fieldsBuffer.append((fieldsBuffer.length() == 0)
+          ? "SET PHONE=?"
+          : ", PHONE=?");
       }
 
       if (user.getMobileNumber() != null)
@@ -1557,6 +1565,12 @@ public class InternalUserDirectory extends UserDirectoryBase
         if (user.getEmail() != null)
         {
           statement.setString(parameterIndex, user.getEmail());
+          parameterIndex++;
+        }
+
+        if (user.getPhoneNumber() != null)
+        {
+          statement.setString(parameterIndex, user.getPhoneNumber());
           parameterIndex++;
         }
 
@@ -1658,66 +1672,67 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP (INTERNAL_USER_ID, INTERNAL_GROUP_ID) VALUES (?, ?)";
 
     // changeInternalUserPasswordSQL
-    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU "
-        + "SET IU.PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=? "
-        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU"
+        + " SET IU.PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=?"
+        + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // createInternalGroupSQL
     createInternalGroupSQL = "INSERT INTO " + schemaPrefix
         + "INTERNAL_GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
     // createInternalUserSQL
-    createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS "
-        + "(ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, MOBILE, "
-        + "EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    createInternalUserSQL = "INSERT INTO " + schemaPrefix + "INTERNAL_USERS"
+        + " (ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, TITLE, FIRST_NAMES, LAST_NAME, PHONE,"
+        + " MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY)"
+        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // deleteInternalGroupSQL
-    deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG "
-        + "WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    deleteInternalGroupSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_GROUPS IG"
+        + " WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
 
     // deleteInternalUserSQL
-    deleteInternalUserSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_USERS IU "
-        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+    deleteInternalUserSQL = "DELETE FROM " + schemaPrefix + "INTERNAL_USERS IU"
+        + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // getFilteredInternalUsersSQL
     getFilteredInternalUsersSQL =
-        "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES, IU.LAST_NAME, IU.MOBILE,"
-        + " IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " + schemaPrefix
+        "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES, IU.LAST_NAME, IU.PHONE,"
+        + " IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM " + schemaPrefix
         + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND"
-        + " ((UPPER(IU.USERNAME) LIKE ?) OR "
-        + "(UPPER(IU.FIRST_NAMES) LIKE ?) OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
+        + " ((UPPER(IU.USERNAME) LIKE ?) OR (UPPER(IU.FIRST_NAMES) LIKE ?)"
+        + " OR (UPPER(IU.LAST_NAME) LIKE ?)) ORDER BY IU.USERNAME";
 
     // getFunctionCodesForUserIdSQL
-    getFunctionCodesForUserIdSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F "
-        + "INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
-        + "INNER JOIN " + schemaPrefix + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID "
-        + "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID " + "INNER JOIN "
-        + schemaPrefix + "INTERNAL_GROUPS IG "
-        + "ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID AND IG.ID = G.ID " + "INNER JOIN "
-        + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTIGM "
-        + "ON IUTIGM.INTERNAL_GROUP_ID = IG.ID " + "WHERE IUTIGM.INTERNAL_USER_ID=?";
+    getFunctionCodesForUserIdSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F"
+        + " INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID"
+        + " INNER JOIN " + schemaPrefix + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID"
+        + " INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID" + " INNER JOIN "
+        + schemaPrefix + "INTERNAL_GROUPS IG"
+        + " ON IG.USER_DIRECTORY_ID = G.USER_DIRECTORY_ID AND IG.ID = G.ID" + " INNER JOIN "
+        + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTIGM"
+        + " ON IUTIGM.INTERNAL_GROUP_ID = IG.ID WHERE IUTIGM.INTERNAL_USER_ID=?";
 
     // getInternalGroupIdSQL
-    getInternalGroupIdSQL = "SELECT IG.ID FROM " + schemaPrefix + "INTERNAL_GROUPS IG" + " WHERE "
-        + "IG.USER_DIRECTORY_ID=? AND UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    getInternalGroupIdSQL = "SELECT IG.ID FROM " + schemaPrefix + "INTERNAL_GROUPS IG"
+        + " WHERE IG.USER_DIRECTORY_ID=? AND UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalGroupNamesForInternalUserSQL
     getInternalGroupNamesForInternalUserSQL = "SELECT IG.GROUPNAME FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG, " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM "
-        + "WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.INTERNAL_USER_ID=? "
-        + "ORDER BY IG.GROUPNAME";
+        + "INTERNAL_GROUPS IG, " + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
+        + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.INTERNAL_USER_ID=?"
+        + " ORDER BY IG.GROUPNAME";
 
     // getInternalGroupSQL
     getInternalGroupSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
-        + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? AND UPPER(IG.GROUPNAME)=UPPER(CAST"
-        + "(? AS VARCHAR(100)))";
+        + "INTERNAL_GROUPS IG WHERE IG.USER_DIRECTORY_ID=? AND"
+        + " UPPER(IG.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalGroupsForInternalUserSQL
     getInternalGroupsForInternalUserSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM "
         + schemaPrefix + "INTERNAL_GROUPS IG, " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM "
-        + "WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.INTERNAL_USER_ID=? "
-        + "ORDER BY IG.GROUPNAME";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
+        + " WHERE IG.ID = IUTGM.INTERNAL_GROUP_ID AND IUTGM.INTERNAL_USER_ID=?"
+        + " ORDER BY IG.GROUPNAME";
 
     // getInternalGroupsSQL
     getInternalGroupsSQL = "SELECT IG.ID, IG.GROUPNAME, IG.DESCRIPTION FROM " + schemaPrefix
@@ -1735,8 +1750,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     // getNumberOfInternalUsersForInternalGroupSQL
     getNumberOfInternalUsersForInternalGroupSQL = "SELECT COUNT (IUTGM.INTERNAL_USER_ID) FROM "
-        + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.INTERNAL_GROUP_ID=?";
+        + schemaPrefix + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
+        + " WHERE IUTGM.INTERNAL_GROUP_ID=?";
 
     // getNumberOfInternalUsersSQL
     getNumberOfInternalUsersSQL = "SELECT COUNT(IU.ID) FROM " + schemaPrefix + "INTERNAL_USERS IU "
@@ -1748,43 +1763,44 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     // getInternalUserSQL
     getInternalUserSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-        + " IU.LAST_NAME, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM "
-        + schemaPrefix + "INTERNAL_USERS IU "
-        + "WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+        + " IU.LAST_NAME, IU.PHONE, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY"
+        + " FROM " + schemaPrefix + "INTERNAL_USERS IU"
+        + " WHERE IU.USER_DIRECTORY_ID=? AND UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getInternalUsersSQL
     getInternalUsersSQL = "SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,"
-        + " IU.LAST_NAME, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY FROM "
-        + schemaPrefix + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? ORDER BY IU.USERNAME";
+        + " IU.LAST_NAME, IU.PHONE, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY"
+        + " FROM " + schemaPrefix + "INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=?"
+        + " ORDER BY IU.USERNAME";
 
     // incrementPasswordAttemptsSQL
-    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU SET "
-        + "IU.PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1 "
-        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU SET"
+        + " IU.PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1"
+        + " WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // isPasswordInInternalUserPasswordHistorySQL
     isPasswordInInternalUserPasswordHistorySQL = "SELECT IUPH.ID FROM " + schemaPrefix
-        + "INTERNAL_USERS_PASSWORD_HISTORY IUPH "
-        + "WHERE IUPH.INTERNAL_USER_ID=? AND IUPH.CHANGED > ? AND IUPH.PASSWORD=?";
+        + "INTERNAL_USERS_PASSWORD_HISTORY IUPH"
+        + " WHERE IUPH.INTERNAL_USER_ID=? AND IUPH.CHANGED > ? AND IUPH.PASSWORD=?";
 
     // isInternalUserInInternalGroupSQL
     isInternalUserInInternalGroupSQL = "SELECT IUTGM.INTERNAL_USER_ID FROM " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.INTERNAL_USER_ID=? AND "
-        + "IUTGM.INTERNAL_GROUP_ID=?";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM WHERE IUTGM.INTERNAL_USER_ID=? AND"
+        + " IUTGM.INTERNAL_GROUP_ID=?";
 
     // removeInternalUserFromInternalGroupSQL
     removeInternalUserFromInternalGroupSQL = "DELETE FROM " + schemaPrefix
-        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM "
-        + "WHERE IUTGM.INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
+        + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM"
+        + " WHERE IUTGM.INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
 
     // saveInternalUserPasswordHistorySQL
     saveInternalUserPasswordHistorySQL = "INSERT INTO " + schemaPrefix
-        + "INTERNAL_USERS_PASSWORD_HISTORY (ID, INTERNAL_USER_ID, CHANGED, PASSWORD) "
-        + "VALUES (?, ?, ?, ?)";
+        + "INTERNAL_USERS_PASSWORD_HISTORY (ID, INTERNAL_USER_ID, CHANGED, PASSWORD)"
+        + " VALUES (?, ?, ?, ?)";
 
     // updateInternalGroupSQL
-    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG SET "
-        + "IG.DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG SET"
+        + " IG.DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
   }
 
   /**
@@ -1809,9 +1825,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     // Build the SQL statement to select the users
     StringBuilder buffer = new StringBuilder();
 
-    buffer.append("SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES, ");
-    buffer.append("IU.LAST_NAME, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS, IU.PASSWORD_EXPIRY");
-    buffer.append(" FROM ");
+    buffer.append("SELECT IU.ID, IU.USERNAME, IU.PASSWORD, IU.TITLE, IU.FIRST_NAMES,");
+    buffer.append(" IU.LAST_NAME, IU.PHONE, IU.MOBILE, IU.EMAIL, IU.PASSWORD_ATTEMPTS,");
+    buffer.append(" IU.PASSWORD_EXPIRY FROM ");
 
     buffer.append(DataAccessObject.MMP_DATABASE_SCHEMA).append(getDatabaseCatalogSeparator());
 
@@ -1841,6 +1857,10 @@ public class InternalUserDirectory extends UserDirectoryBase
         else if (attribute.getName().equalsIgnoreCase("lastName"))
         {
           whereParameters.append("LOWER(IU.LAST_NAME) LIKE LOWER(?)");
+        }
+        else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
+        {
+          whereParameters.append("LOWER(IU.PHONE) LIKE LOWER(?)");
         }
         else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
         {
@@ -1894,6 +1914,11 @@ public class InternalUserDirectory extends UserDirectoryBase
         statement.setString(parameterIndex, attribute.getStringValue());
         parameterIndex++;
       }
+      else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
+      {
+        statement.setString(parameterIndex, attribute.getStringValue());
+        parameterIndex++;
+      }
       else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
       {
         statement.setString(parameterIndex, attribute.getStringValue());
@@ -1932,17 +1957,18 @@ public class InternalUserDirectory extends UserDirectoryBase
     user.setTitle(StringUtil.notNull(rs.getString(4)));
     user.setFirstNames(StringUtil.notNull(rs.getString(5)));
     user.setLastName(StringUtil.notNull(rs.getString(6)));
-    user.setMobileNumber(StringUtil.notNull(rs.getString(7)));
-    user.setEmail(StringUtil.notNull(rs.getString(8)));
+    user.setPhoneNumber(StringUtil.notNull(rs.getString(7)));
+    user.setMobileNumber(StringUtil.notNull(rs.getString(8)));
+    user.setEmail(StringUtil.notNull(rs.getString(9)));
 
-    if (rs.getObject(9) != null)
+    if (rs.getObject(10) != null)
     {
-      user.setPasswordAttempts(rs.getInt(9));
+      user.setPasswordAttempts(rs.getInt(10));
     }
 
-    if (rs.getObject(9) != null)
+    if (rs.getObject(11) != null)
     {
-      user.setPasswordExpiry(new Date(rs.getTimestamp(10).getTime()));
+      user.setPasswordExpiry(new Date(rs.getTimestamp(11).getTime()));
     }
 
     return user;

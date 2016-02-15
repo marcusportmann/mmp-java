@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="testForm.firstNames.Required">A first name is required.</entry>
-  <entry key="testForm.lastName.Required">A last name is required.</entry>
-  <entry key="testForm.title.Required">A title is required.</entry>
-  <entry key="testForm.password.Required">A password is required.</entry>
-  <entry key="testForm.confirmPassword.Required">Please confirm the password.</entry>
-  <entry key="testForm.notes.Required">Notes are required.</entry>
-  <entry key="testForm.favouritePet.Required">A favourite pet is required.</entry>
-  <entry key="testForm.role.Required">A role is required.</entry>
+  <entry key="testForm.firstNames.Required">Enter a first name.</entry>
+  <entry key="testForm.lastName.Required">Enter a last name.</entry>
+  <entry key="testForm.title.Required">Enter a title.</entry>
+  <entry key="testForm.password.Required">Enter a password.</entry>
+  <entry key="testForm.confirmPassword.Required">Confirm the password.</entry>
+  <entry key="testForm.notes.Required">Enter the notes.</entry>
+  <entry key="testForm.favouritePet.Required">Select a favourite pet.</entry>
+  <entry key="testForm.role.Required">Select a role.</entry>
 </properties>
 

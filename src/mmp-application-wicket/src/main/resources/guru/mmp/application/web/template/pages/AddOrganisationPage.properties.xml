@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="code.Required">A code is required.</entry>
-  <entry key="name.Required">A name is required.</entry>
+  <entry key="code.Required">Enter a code.</entry>
+  <entry key="name.Required">Enter a name.</entry>
 </properties>

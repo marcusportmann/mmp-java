@@ -959,6 +959,7 @@ public class SecurityServiceTest
     user.setTitle("Test Updated Title");
     user.setFirstNames("Test Updated FirstName");
     user.setLastName("Test Updated LastName");
+    user.setPhoneNumber("Test Updated Phone Number");
     user.setMobileNumber("Test Updated Mobile Number");
 
     securityService.updateUser(userDirectory.getId(), user, false, false);
@@ -988,6 +989,7 @@ public class SecurityServiceTest
     user.setTitle("Numbered Test Title " + number);
     user.setFirstNames("Numbered Test FirstName " + number);
     user.setLastName("Numbered Test LastName " + number);
+    user.setPhoneNumber("Numbered Test Phone Number " + number);
     user.setMobileNumber("Numbered Test Mobile Number " + number);
 
     return user;
@@ -1041,6 +1043,7 @@ public class SecurityServiceTest
     user.setTitle("Test User Title " + userCount);
     user.setFirstNames("Test User FirstName " + userCount);
     user.setLastName("Test User LastName " + userCount);
+    user.setPhoneNumber("Test User Phone Number " + userCount);
     user.setMobileNumber("Test User Mobile Number " + userCount);
 
     return user;
@@ -1126,6 +1129,8 @@ public class SecurityServiceTest
     assertEquals("The first names values for the two users do not match", user1.getFirstNames(),
         user2.getFirstNames());
     assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());
+    assertEquals("The phone number values for the two users do not match",
+      user1.getPhoneNumber(), user2.getPhoneNumber());
     assertEquals("The mobile number values for the two users do not match",
         user1.getMobileNumber(), user2.getMobileNumber());
     assertEquals("The password attempt values for the two users do not match",
