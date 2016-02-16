@@ -71,6 +71,7 @@ div.side-content ul.list.list-activity li.action i.fa
   height: 30px;
   margin: 0;
   padding-left: 5px;
+  width: 160px;
 }
 
 .table-header > .table-header-right > .table-filter-form > button

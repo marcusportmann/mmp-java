@@ -91,11 +91,11 @@ public class ResetUserPasswordPage extends TemplateWebPage
       usernameField.setEnabled(false);
       resetForm.add(usernameField);
 
-      // The "firstNames" field
-      TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
-      firstNamesField.setRequired(true);
-      firstNamesField.setEnabled(false);
-      resetForm.add(firstNamesField);
+      // The "firstName" field
+      TextField<String> firstNameField = new TextFieldWithFeedback<>("firstName");
+      firstNameField.setRequired(true);
+      firstNameField.setEnabled(false);
+      resetForm.add(firstNameField);
 
       // The "lastName" field
       TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName");

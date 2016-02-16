@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="id.Required">Enter an ID.</entry>
-  <entry key="name.Required">Enter a name.</entry>
-  <entry key="description.Required">Enter a description.</entry>
-  <entry key="categoryType.Required">Select a category type.</entry>
-  <entry key="codeDataContainer.codeData.Required">Enter the code data.</entry>
-  <entry key="endPointContainer.endPoint.Required">Enter an endpoint.</entry>
-  <entry key="endPointContainer.cacheExpiry.Required">Enter the cache expiry.</entry>
+  <entry key="id.Required">An ID is required.</entry>
+  <entry key="name.Required">A name is required.</entry>
+  <entry key="description.Required">A description is required.</entry>
+  <entry key="categoryType.Required">A category type is required.</entry>
+  <entry key="codeDataContainer.codeData.Required">The code data is required.</entry>
+  <entry key="endPointContainer.endPoint.Required">An endpoint is required.</entry>
+  <entry key="endPointContainer.cacheExpiry.Required">The cache expiry is required.</entry>
 </properties>

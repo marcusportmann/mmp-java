@@ -33,7 +33,7 @@ public class User
   private static final long serialVersionUID = 1000000;
   private HashMap<String, String> properties = new HashMap<>();
   private String email;
-  private String firstNames;
+  private String firstName;
   private UUID id;
   private boolean isReadOnly;
   private String lastName;
@@ -43,7 +43,6 @@ public class User
   private Date passwordExpiry;
   private UUID userDirectoryId;
   private String username;
-  private String title;
   private String phoneNumber;
 
   /**
@@ -62,13 +61,13 @@ public class User
   }
 
   /**
-   * Returns the first name(s) for the user
+   * Returns the first name for the user
    *
-   * @return the first name(s) for the user
+   * @return the first name for the user
    */
-  public String getFirstNames()
+  public String getFirstName()
   {
-    return firstNames;
+    return firstName;
   }
 
   /**
@@ -158,16 +157,6 @@ public class User
   }
 
   /**
-   * Returns the title for the user.
-   *
-   * @return the title for the user
-   */
-  public String getTitle()
-  {
-    return title;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * the user is associated with.
    *
@@ -229,13 +218,13 @@ public class User
   }
 
   /**
-   * Set the first name(s) for the user.
+   * Set the first name for the user.
    *
-   * @param firstNames the first name(s) for the user
+   * @param firstName the first name for the user
    */
-  public void setFirstNames(String firstNames)
+  public void setFirstName(String firstName)
   {
-    this.firstNames = firstNames;
+    this.firstName = firstName;
   }
 
   /**
@@ -327,16 +316,6 @@ public class User
   public void setReadOnly(boolean isReadOnly)
   {
     this.isReadOnly = isReadOnly;
-  }
-
-  /**
-   * Set the title for the user.
-   *
-   * @param title the title for the user
-   */
-  public void setTitle(String title)
-  {
-    this.title = title;
   }
 
   /**

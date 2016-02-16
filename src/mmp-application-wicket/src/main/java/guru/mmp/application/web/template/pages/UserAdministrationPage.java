@@ -193,8 +193,8 @@ public class UserAdministrationPage extends TemplateWebPage
           User user = item.getModelObject();
 
           item.add(new Label("username", new PropertyModel<String>(item.getModel(), "username")));
-          item.add(new Label("firstNames", new PropertyModel<String>(item.getModel(),
-              "firstNames")));
+          item.add(new Label("firstName", new PropertyModel<String>(item.getModel(),
+              "firstName")));
           item.add(new Label("lastName", new PropertyModel<String>(item.getModel(), "lastName")));
 
           // The "userGroupsLink" link
@@ -388,7 +388,7 @@ public class UserAdministrationPage extends TemplateWebPage
     {
       this.username = user.getUsername();
 
-      this.nameLabel.setDefaultModelObject(user.getFirstNames() + " " + user.getLastName());
+      this.nameLabel.setDefaultModelObject(user.getFirstName() + " " + user.getLastName());
 
       target.add(nameLabel);
 

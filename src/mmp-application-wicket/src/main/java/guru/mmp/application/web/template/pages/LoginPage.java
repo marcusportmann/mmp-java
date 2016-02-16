@@ -135,7 +135,7 @@ public class LoginPage extends WebPage
 
             session.setUserDirectoryId(user.getUserDirectoryId());
             session.setUsername(user.getUsername());
-            session.setUserFullName(user.getFirstNames() + user.getLastName());
+            session.setUserFullName(user.getFirstName() + user.getLastName());
 
             // Make session permanent after login
             if (session.isTemporary())

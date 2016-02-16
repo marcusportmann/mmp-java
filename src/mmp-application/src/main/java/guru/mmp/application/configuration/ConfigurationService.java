@@ -597,7 +597,7 @@ public class ConfigurationService
         try (PreparedStatement statement = connection.prepareStatement(updateValueSQL))
         {
           statement.setString(1, stringValue);
-          statement.setString(2, description);
+          statement.setString(2, StringUtil.notNull(description));
           statement.setString(3, key.toUpperCase());
 
           if (statement.executeUpdate() <= 0)

@@ -100,17 +100,10 @@ public class AddUserPage extends TemplateWebPage
       usernameField.setRequired(true);
       addForm.add(usernameField);
 
-      // The "title" field
-      DropDownChoiceWithFeedback<String> titleField = new DropDownChoiceWithFeedback<>("title",
-          getTitleOptions());
-      titleField.setRequired(true);
-      titleField.setFeedbackMessageClasses("hidden-xs");
-      addForm.add(titleField);
-
-      // The "firstNames" field
-      TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
-      firstNamesField.setRequired(true);
-      addForm.add(firstNamesField);
+      // The "firstName" field
+      TextField<String> firstNameField = new TextFieldWithFeedback<>("firstName");
+      firstNameField.setRequired(true);
+      addForm.add(firstNameField);
 
       // The "lastName" field
       TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName");
@@ -229,22 +222,6 @@ public class AddUserPage extends TemplateWebPage
     {
       throw new WebApplicationException("Failed to initialise the AddUserPage", e);
     }
-  }
-
-  /**
-   * Returns the title options.
-   *
-   * @return the title options
-   */
-  public static List<String> getTitleOptions()
-  {
-    List<String> titles = new ArrayList<>();
-
-    titles.add("Mr");
-    titles.add("Ms");
-    titles.add("Dr");
-
-    return titles;
   }
 
   private List<String> getGroupOptions(UUID userDirectoryId)

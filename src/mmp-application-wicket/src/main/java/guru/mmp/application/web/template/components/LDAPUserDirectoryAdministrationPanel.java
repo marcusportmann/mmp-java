@@ -142,21 +142,13 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       userPasswordAttemptsAttributeField.setRequired(true);
       add(userPasswordAttemptsAttributeField);
 
-      // The "userTitleAttribute" field
-      TextField<String> userTitleAttributeField = new TextFieldWithFeedback<>(
-        "userTitleAttribute", new PropertyModel<>(userDirectoryModel,
-        "parameters.UserTitleAttribute"));
-      userTitleAttributeField.setType(String.class);
-      userTitleAttributeField.setRequired(true);
-      add(userTitleAttributeField);
-
-      // The "userFirstNamesAttribute" field
-      TextField<String> userFirstNamesAttributeField = new TextFieldWithFeedback<>(
-          "userFirstNamesAttribute", new PropertyModel<>(userDirectoryModel,
-          "parameters.UserFirstNamesAttribute"));
-      userFirstNamesAttributeField.setType(String.class);
-      userFirstNamesAttributeField.setRequired(true);
-      add(userFirstNamesAttributeField);
+      // The "userFirstNameAttribute" field
+      TextField<String> userFirstNameAttributeField = new TextFieldWithFeedback<>(
+          "userFirstNameAttribute", new PropertyModel<>(userDirectoryModel,
+          "parameters.UserFirstNameAttribute"));
+      userFirstNameAttributeField.setType(String.class);
+      userFirstNameAttributeField.setRequired(true);
+      add(userFirstNameAttributeField);
 
       // The "userLastNameAttribute" field
       TextField<String> userLastNameAttributeField = new TextFieldWithFeedback<>(
@@ -365,14 +357,9 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       parameters.put("UserPasswordHistoryAttribute", "passwordhistory");
     }
 
-    if (!parameters.containsKey("UserTitleAttribute"))
+    if (!parameters.containsKey("UserFirstNameAttribute"))
     {
-      parameters.put("UserTitleAttribute", "title");
-    }
-
-    if (!parameters.containsKey("UserFirstNamesAttribute"))
-    {
-      parameters.put("UserFirstNamesAttribute", "givenName");
+      parameters.put("UserFirstNameAttribute", "givenName");
     }
 
     if (!parameters.containsKey("UserLastNameAttribute"))

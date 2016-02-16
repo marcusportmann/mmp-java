@@ -41,9 +41,9 @@ public class TestData
   private String favouritePet;
 
   /**
-   * The first name(s).
+   * The first name.
    */
-  private String firstNames;
+  private String firstName;
 
   /**
    * The last name.
@@ -91,13 +91,13 @@ public class TestData
   }
 
   /**
-   * Returns the first name(s).
+   * Returns the first name.
    *
-   * @return the first name(s)
+   * @return the first name
    */
-  public String getFirstNames()
+  public String getFirstName()
   {
-    return firstNames;
+    return firstName;
   }
 
   /**
@@ -181,13 +181,13 @@ public class TestData
   }
 
   /**
-   * Set the first name(s).
+   * Set the first name.
    *
-   * @param firstNames the name
+   * @param firstName the first name
    */
-  public void setFirstNames(String firstNames)
+  public void setFirstName(String firstName)
   {
-    this.firstNames = firstNames;
+    this.firstName = firstName;
   }
 
   /**

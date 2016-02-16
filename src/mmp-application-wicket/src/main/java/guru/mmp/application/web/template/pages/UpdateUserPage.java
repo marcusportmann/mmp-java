@@ -78,17 +78,10 @@ public class UpdateUserPage extends TemplateWebPage
       usernameField.setEnabled(false);
       updateForm.add(usernameField);
 
-      // The "title" field
-      DropDownChoiceWithFeedback<String> titleField = new DropDownChoiceWithFeedback<>("title",
-        AddUserPage.getTitleOptions());
-      titleField.setRequired(true);
-      titleField.setFeedbackMessageClasses("hidden-sm");
-      updateForm.add(titleField);
-
-      // The "firstNames" field
-      TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
-      firstNamesField.setRequired(true);
-      updateForm.add(firstNamesField);
+      // The "firstName" field
+      TextField<String> firstNameField = new TextFieldWithFeedback<>("firstName");
+      firstNameField.setRequired(true);
+      updateForm.add(firstNameField);
 
       // The "lastName" field
       TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName");

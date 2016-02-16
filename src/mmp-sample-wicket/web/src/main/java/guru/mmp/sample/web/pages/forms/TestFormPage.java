@@ -58,10 +58,10 @@ public class TestFormPage extends TemplateWebPage
       Form<TestData> testForm = new Form<>("testForm", new CompoundPropertyModel<>(new Model<>(
           new TestData())));
 
-      // The "firstNames" field
-      TextField<String> firstNamesField = new TextFieldWithFeedback<>("firstNames");
-      firstNamesField.setRequired(true);
-      testForm.add(firstNamesField);
+      // The "firstName" field
+      TextField<String> firstNameField = new TextFieldWithFeedback<>("firstName");
+      firstNameField.setRequired(true);
+      testForm.add(firstNameField);
 
       // The "lastName" field
       TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName");

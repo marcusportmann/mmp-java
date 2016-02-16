@@ -102,8 +102,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private boolean useSSL;
   private LdapName userBaseDN;
   private String userEmailAttribute;
-  private String userTitleAttribute;
-  private String userFirstNamesAttribute;
+  private String userFirstNameAttribute;
   private String userLastNameAttribute;
   private String userPhoneNumberAttribute;
   private String userMobileNumberAttribute;
@@ -269,25 +268,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
             + "(%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("UserTitleAttribute"))
+      if (parameters.containsKey("UserFirstNameAttribute"))
       {
-        userTitleAttribute = parameters.get("UserTitleAttribute");
+        userFirstNameAttribute = parameters.get("UserFirstNameAttribute");
       }
       else
       {
         throw new SecurityException(String.format(
-            "No UserTitleAttribute configuration parameter found for the user directory (%s)",
-            userDirectoryId));
-      }
-
-      if (parameters.containsKey("UserFirstNamesAttribute"))
-      {
-        userFirstNamesAttribute = parameters.get("UserFirstNamesAttribute");
-      }
-      else
-      {
-        throw new SecurityException(String.format(
-            "No UserFirstNamesAttribute configuration parameter found for the user directory (%s)",
+            "No UserFirstNameAttribute configuration parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -930,15 +918,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
 
-      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
+      if (!StringUtil.isNullOrEmpty(userFirstNameAttribute))
       {
-        attributes.put(new BasicAttribute(userTitleAttribute, StringUtil.notNull(user.getTitle())));
-      }
-
-      if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
-      {
-        attributes.put(new BasicAttribute(userFirstNamesAttribute, StringUtil.notNull(
-            user.getFirstNames())));
+        attributes.put(new BasicAttribute(userFirstNameAttribute, StringUtil.notNull(
+            user.getFirstName())));
       }
 
       if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
@@ -1260,7 +1243,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (!StringUtil.isNullOrEmpty(filter))
       {
         searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-            userObjectClass, userUsernameAttribute, filter, userFirstNamesAttribute, filter,
+            userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
             userLastNameAttribute, filter);
       }
 
@@ -1674,7 +1657,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (!StringUtil.isNullOrEmpty(filter))
       {
         searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-            userObjectClass, userUsernameAttribute, filter, userFirstNamesAttribute, filter,
+            userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
             userLastNameAttribute, filter);
       }
 
@@ -2286,16 +2269,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (!StringUtil.isNullOrEmpty(userTitleAttribute))
+      if (!StringUtil.isNullOrEmpty(userFirstNameAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userTitleAttribute, StringUtil.notNull(user.getTitle()))));
-      }
-
-      if (!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
-      {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userFirstNamesAttribute, StringUtil.notNull(user.getFirstNames()))));
+            userFirstNameAttribute, StringUtil.notNull(user.getFirstName()))));
       }
 
       if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
@@ -2430,24 +2407,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
     user.setReadOnly(isReadOnly);
     user.setPassword("");
 
-    if ((!StringUtil.isNullOrEmpty(userTitleAttribute))
-        && (attributes.get(userTitleAttribute) != null))
+    if ((!StringUtil.isNullOrEmpty(userFirstNameAttribute))
+        && (attributes.get(userFirstNameAttribute) != null))
     {
-      user.setTitle(String.valueOf(attributes.get(userTitleAttribute).get()));
+      user.setFirstName(String.valueOf(attributes.get(userFirstNameAttribute).get()));
     }
     else
     {
-      user.setTitle("");
-    }
-
-    if ((!StringUtil.isNullOrEmpty(userFirstNamesAttribute))
-        && (attributes.get(userFirstNamesAttribute) != null))
-    {
-      user.setFirstNames(String.valueOf(attributes.get(userFirstNamesAttribute).get()));
-    }
-    else
-    {
-      user.setFirstNames("");
+      user.setFirstName("");
     }
 
     if ((!StringUtil.isNullOrEmpty(userLastNameAttribute))
