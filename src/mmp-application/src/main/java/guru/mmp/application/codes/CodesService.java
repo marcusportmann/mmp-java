@@ -753,7 +753,7 @@ public class CodesService
   }
 
   /**
-   * Initialise the Codes Service instance.
+   * Initialise the Codes Service.
    */
   @PostConstruct
   public void init()
@@ -1091,7 +1091,7 @@ public class CodesService
   }
 
   /**
-   * Initialise the configuration for the Codes Service instance.
+   * Initialise the configuration for the Codes Service.
    *
    * @throws CodesServiceException
    */

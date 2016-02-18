@@ -19,17 +19,21 @@ package guru.mmp.application.process;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.util.ServiceUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ProcessService</code> class provides the Process Service implementation.
@@ -272,16 +276,16 @@ public class ProcessService
   }
 
   /**
-   * Initialise the Process Service instance.
+   * Initialise the Process Service.
    */
   @PostConstruct
   public void init()
   {
-    logger.info(String.format("Initialising the Process Service instance (%s)", instanceName));
+    logger.info(String.format("Initialising the Process Service (%s)", instanceName));
 
     try
     {
-      // Initialise the configuration for the Process Service instance
+      // Initialise the configuration for the Process Service
       initConfiguration();
     }
     catch (Throwable e)
@@ -390,20 +394,18 @@ public class ProcessService
   }
 
   /**
-   * Initialise the configuration for the Process Service instance.
+   * Initialise the configuration for the Process Service.
    *
    * @throws ProcessServiceException
    */
   private void initConfiguration()
     throws ProcessServiceException
   {
-//  try
-//  {
-//  }
-//  catch (Throwable e)
-//  {
-//    throw new ProcessServiceException(
-//        "Failed to initialise the configuration for the Process Service", e);
-//  }
+    try {}
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException(
+          "Failed to initialise the configuration for the Process Service", e);
+    }
   }
 }

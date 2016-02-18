@@ -316,16 +316,16 @@ public class BatchService
   }
 
   /**
-   * Initialise the Batch Service instance.
+   * Initialise the Batch Service.
    */
   @PostConstruct
   public void init()
   {
-    logger.info(String.format("Initialising the Batch Service instance (%s)", instanceName));
+    logger.info(String.format("Initialising the Batch Service (%s)", instanceName));
 
     try
     {
-      // Initialise the configuration for the Batch Service instance
+      // Initialise the configuration for the Batch Service
       initConfiguration();
     }
     catch (Throwable e)

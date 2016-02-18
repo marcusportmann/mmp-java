@@ -465,7 +465,7 @@ public class ConfigurationService
   }
 
   /**
-   * Initialise the Config Service instance.
+   * Initialise the Configuration Service.
    */
   @PostConstruct
   public void init()

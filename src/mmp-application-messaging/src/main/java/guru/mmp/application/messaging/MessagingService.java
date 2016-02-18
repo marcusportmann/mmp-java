@@ -81,18 +81,6 @@ public class MessagingService
   private static final byte[] AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV =
       Base64.decode("QSaz5pMnMbar66FsNdI/ZQ==");
 
-///**
-// * The AES encryption IV.
-// */
-//private static final byte[] REGISTRY_ENCRYPTION_IV = Base64.decode("xh2wcoShURa4c6w7HbOngQ==");
-//
-///**
-// * The AES encryption key used to encrypt sensitive configuration information stored in
-// * the registry.
-// */
-//private static final byte[] REGISTRY_ENCRYPTION_KEY = Base64.decode(
-//    "Ev5UOwzqSEoSsqbyCVn6q9LZHhhkbXZndDgyOGQyMjY=");
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
 
@@ -703,18 +691,18 @@ public class MessagingService
   }
 
   /**
-   * Initialise the Messaging Service instance.
+   * Initialise the Messaging Service.
    */
   @PostConstruct
   public void init()
   {
-    logger.info(String.format("Initialising the Messaging Service instance (%s)", instanceName));
+    logger.info(String.format("Initialising the Messaging Service (%s)", instanceName));
 
     messageHandlers = new HashMap<>();
 
     try
     {
-      // Initialise the configuration for the Messaging Service instance
+      // Initialise the configuration for the Messaging Service
       initConfiguration();
 
       // Read the messaging configuration
@@ -1338,7 +1326,7 @@ public class MessagingService
   }
 
   /**
-   * Initialise the configuration for the Messaging Service instance.
+   * Initialise the configuration for the Messaging Service.
    *
    * @throws MessagingException
    */

@@ -244,18 +244,18 @@ public class SMSService
   }
 
   /**
-   * Initialise the SMSService instance.
+   * Initialise the SMS Service.
    */
   @PostConstruct
   public void init()
   {
-    logger.info("Initialising the SMS Service");
+    logger.info(String.format("Initialising the SMS Service (%s)", instanceName));
 
     sendSMSsResult = new AsyncResult<>(false);
 
     try
     {
-      // Initialise the configuration for the SMS Service instance
+      // Initialise the configuration for the SMS Service
       initConfiguration();
     }
     catch (Throwable e)
@@ -590,7 +590,7 @@ public class SMSService
   }
 
   /**
-   * Initialise the configuration for the SMS Service instance.
+   * Initialise the configuration for the SMS Service.
    *
    * @throws SMSServiceException
    */

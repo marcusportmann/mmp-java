@@ -20,24 +20,32 @@ package guru.mmp.application.reporting;
 
 import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.util.StringUtil;
+
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
+
 import java.sql.Connection;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.inject.Inject;
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -51,9 +59,6 @@ public class ReportingService
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
-
-  /* The name of the Reporting Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("Reporting Service");
 
   /* The real path to the folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
@@ -367,16 +372,16 @@ public class ReportingService
   }
 
   /**
-   * Initialise the Reporting Service instance.
+   * Initialise the Reporting Service.
    */
   @PostConstruct
   public void init()
   {
-    logger.info(String.format("Initialising the Reporting Service instance (%s)", instanceName));
+    logger.info("Initialising the Reporting Service");
 
     try
     {
-      // Initialise the configuration for the Reporting Service instance
+      // Initialise the configuration for the Reporting Service
       initConfiguration();
     }
     catch (Throwable e)
@@ -457,20 +462,18 @@ public class ReportingService
   }
 
   /**
-   * Initialise the configuration for the Reporting Service instance.
+   * Initialise the configuration for the Reporting Service.
    *
    * @throws ReportingServiceException
    */
   private void initConfiguration()
     throws ReportingServiceException
   {
-//  try
-//  {
-//  }
-//  catch (Throwable e)
-//  {
-//    throw new ReportingServiceException(
-//        "Failed to initialise the configuration for the Reporting Service", e);
-//  }
+    try {}
+    catch (Throwable e)
+    {
+      throw new ReportingServiceException(
+          "Failed to initialise the configuration for the Reporting Service", e);
+    }
   }
 }

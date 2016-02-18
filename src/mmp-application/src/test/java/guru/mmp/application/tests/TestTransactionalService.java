@@ -152,7 +152,7 @@ public class TestTransactionalService
   }
 
   /**
-   * Initialise the Test Transactional Service instance.
+   * Initialise the Test Transactional Service.
    */
   @PostConstruct
   public void init()
