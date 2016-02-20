@@ -20,8 +20,6 @@ package guru.mmp.application.tests;
 
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
-import guru.mmp.common.persistence.NewTransaction;
-//import guru.mmp.common.persistence.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -89,8 +87,7 @@ public class TestTransactionalService
    *
    * @throws TestTransactionalServiceException
    */
-  @Transactional
-  @NewTransaction
+  @Transactional(Transactional.TxType.REQUIRES_NEW)
   public void createTestDataInNewTransaction(TestData testData)
     throws TestTransactionalServiceException
   {

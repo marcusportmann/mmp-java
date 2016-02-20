@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.persistence;
+package guru.mmp.application.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.annotation.*;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import javax.interceptor.InterceptorBinding;
 
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+
 /**
- * The <code>NewTransaction</code> annotation is used together with the
- * <code>TransactionalInterceptor</code> CDI interceptor to apply a new JPA transaction to a
- * managed bean or managed bean method.
+ * The <code>ContainerManagedTransactions</code> interceptor binding is used to apply the container
+ * managed transaction behaviour to a managed bean.
  *
  * @author Marcus Portmann
  */
-@InterceptorBinding
-@Documented
 @Inherited
+@InterceptorBinding
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
-public @interface NewTransaction {}
+@Target({ METHOD, TYPE })
+public @interface ContainerManagedTransactions {}

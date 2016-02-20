@@ -14,40 +14,37 @@
  * limitations under the License.
  */
 
-package guru.mmp.common.persistence;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.common.persistence.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
 import javax.annotation.Priority;
-
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
 import javax.naming.InitialContext;
-
 import javax.transaction.Status;
 import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
+import java.io.Serializable;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>TransactionalInterceptor</code> CDI interceptor is used together with the
- * <code>Transactional</code> annotation to apply a JTA transaction to a managed  bean or managed
- * bean method.
+ * The <code>ContainerManagedTransactionsInterceptor</code> CDI interceptor is used to apply the
+ * container managed transaction behaviour to managed bean methods that are annotated with the
+ * <code>ContainerManagedTransactions</code> annotation.
  *
  * @author Marcus Portmann
  */
 @Interceptor
-@Transactional
+@ContainerManagedTransactions
 @Priority(Interceptor.Priority.APPLICATION)
-public class TransactionalInterceptor
+public class ContainerManagedTransactionsInterceptor
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
@@ -78,15 +75,22 @@ public class TransactionalInterceptor
   public Object executeInTransaction(InvocationContext context)
     throws Exception
   {
-    NewTransaction newTransactionAnnotation = getNewTransactionAnnotation(context);
+    Transactional transactionalAnnotation = getTransactionalAnnotation(context);
 
-    if (newTransactionAnnotation != null)
+    if (transactionalAnnotation != null)
     {
-      return executeInNewTransaction(context);
+      if (transactionalAnnotation.value() == Transactional.TxType.REQUIRES_NEW)
+      {
+        return executeInNewTransaction(context);
+      }
+      else
+      {
+        return executeInExistingTransaction(context);
+      }
     }
     else
     {
-      return executeInExistingTransaction(context);
+      return context.proceed();
     }
   }
 
@@ -116,7 +120,7 @@ public class TransactionalInterceptor
         if (getLogger().isDebugEnabled())
         {
           getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
-            + "lookup (java:jboss/UserTransaction)");
+              + "lookup (java:jboss/UserTransaction)");
         }
       }
       catch (Throwable ignored)
@@ -137,9 +141,8 @@ public class TransactionalInterceptor
       }
       catch (Throwable e)
       {
-        throw new TransactionalInterceptorException("Failed to determine if an existing JTA "
-            + "transaction is active while invoking the intercepted method (" + getTarget(
-            context) + ")");
+        throw new RuntimeException("Failed to determine if an existing JTA transaction is active"
+           + " while invoking the intercepted method (" + getTarget(context) + ")");
       }
 
       try
@@ -318,7 +321,7 @@ public class TransactionalInterceptor
       if (getLogger().isDebugEnabled())
       {
         getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
-          + "lookup (java:comp/UserTransaction)");
+            + "lookup (java:comp/UserTransaction)");
       }
     }
     catch (Throwable ignored) {}
@@ -332,7 +335,7 @@ public class TransactionalInterceptor
         if (getLogger().isDebugEnabled())
         {
           getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
-            + "lookup (java:jboss/UserTransaction)");
+              + "lookup (java:jboss/UserTransaction)");
         }
       }
       catch (Throwable ignored)
@@ -353,9 +356,8 @@ public class TransactionalInterceptor
       }
       catch (Throwable e)
       {
-        throw new TransactionalInterceptorException("Failed to determine if an existing JTA"
-            + " transaction is active while invoking the" + " intercepted method (" + getTarget(
-            context) + ")");
+        throw new RuntimeException("Failed to determine if an existing JTA transaction is active"
+           + " while invoking the intercepted method (" + getTarget(context) + ")");
       }
 
       TransactionManager transactionManager = TransactionManager.getTransactionManager();
@@ -596,20 +598,7 @@ public class TransactionalInterceptor
   private Logger getLogger()
   {
     // Retrieve the logger at runtime to prevent WebSphere "issues"
-    return LoggerFactory.getLogger(TransactionalInterceptor.class);
-  }
-
-  private NewTransaction getNewTransactionAnnotation(InvocationContext context)
-  {
-    NewTransaction newTransactionAnnotation = context.getMethod().getAnnotation(
-        NewTransaction.class);
-
-    if (newTransactionAnnotation == null)
-    {
-      newTransactionAnnotation = context.getTarget().getClass().getAnnotation(NewTransaction.class);
-    }
-
-    return newTransactionAnnotation;
+    return LoggerFactory.getLogger(ContainerManagedTransactionsInterceptor.class);
   }
 
   private String getTarget(InvocationContext context)
@@ -622,5 +611,17 @@ public class TransactionalInterceptor
     {
       return "Unknown Target";
     }
+  }
+
+  private Transactional getTransactionalAnnotation(InvocationContext context)
+  {
+    Transactional transactionalAnnotation = context.getMethod().getAnnotation(Transactional.class);
+
+    if (transactionalAnnotation == null)
+    {
+      transactionalAnnotation = context.getTarget().getClass().getAnnotation(Transactional.class);
+    }
+
+    return transactionalAnnotation;
   }
 }

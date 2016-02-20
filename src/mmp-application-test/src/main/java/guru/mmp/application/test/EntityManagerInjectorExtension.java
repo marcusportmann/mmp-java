@@ -43,7 +43,7 @@ public class EntityManagerInjectorExtension
    *
    * @param processAnnotatedType the process annotated type event
    *
-   * @param <T>
+   * @param <T> the type
    */
   public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> processAnnotatedType)
   {
@@ -68,7 +68,7 @@ public class EntityManagerInjectorExtension
 
     Annotation annotation = () -> NonTransactionalEntityManagerCleanup.class;
 
-    AnnotatedTypeWrapper<T> wrapper = new AnnotatedTypeWrapper<T>(annotatedType,
+    AnnotatedTypeWrapper<T> wrapper = new AnnotatedTypeWrapper<>(annotatedType,
         annotatedType.getAnnotations());
     wrapper.addAnnotation(annotation);
 
@@ -80,7 +80,7 @@ public class EntityManagerInjectorExtension
    *
    * @param processInjectionTarget the process injection target event
    *
-   * @param <T>
+   * @param <T> the type
    */
   public <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> processInjectionTarget)
   {
