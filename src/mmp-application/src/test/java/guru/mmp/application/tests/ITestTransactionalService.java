@@ -45,6 +45,46 @@ public interface ITestTransactionalService
     throws TestTransactionalServiceException;
 
   /**
+   * Create the test data in a new transaction with a checked exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  void createTestDataInNewTransactionWithCheckedException(TestData testData)
+    throws TestTransactionalServiceException;
+
+  /**
+   * Create the test data in a new transaction with a runtime exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  void createTestDataInNewTransactionWithRuntimeException(TestData testData)
+    throws TestTransactionalServiceException;
+
+  /**
+   * Create the test data with a checked exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  void createTestDataWithCheckedException(TestData testData)
+    throws TestTransactionalServiceException;
+
+  /**
+   * Create the test data with a runtime exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  void createTestDataWithRuntimeException(TestData testData)
+    throws TestTransactionalServiceException;
+
+  /**
    * Retrieve the test data.
    *
    * @param id the ID

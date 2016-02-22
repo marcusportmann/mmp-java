@@ -56,7 +56,7 @@ public final class TransactionManager
     if (transactionManager == null)
     {
       logger.warn("Failed to retrieve the JTA TransactionManager:"
-          + " Transactional database access is " + "not available");
+          + " Transactional database access is not available");
     }
   }
 
@@ -158,6 +158,7 @@ public final class TransactionManager
    * @return the current transaction
    *
    * @throws SystemException
+   *
    * @see javax.transaction.TransactionManager#getTransaction()
    */
   public Transaction getTransaction()
@@ -196,7 +197,7 @@ public final class TransactionManager
     {
       try
       {
-        result = (transactionManager.getStatus() != Status.STATUS_NO_TRANSACTION);
+        result = (transactionManager.getStatus() == Status.STATUS_ACTIVE);
       }
       catch (SystemException e)
       {

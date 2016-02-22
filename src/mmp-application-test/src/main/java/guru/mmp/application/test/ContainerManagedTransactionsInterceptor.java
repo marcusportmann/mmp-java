@@ -19,20 +19,23 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
 import javax.annotation.Priority;
+
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import javax.naming.InitialContext;
-import javax.transaction.Status;
-import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
-import java.io.Serializable;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.naming.InitialContext;
+
+import javax.transaction.*;
 
 /**
  * The <code>ContainerManagedTransactionsInterceptor</code> CDI interceptor is used to apply the
@@ -50,20 +53,7 @@ public class ContainerManagedTransactionsInterceptor
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Invokes the intercepted method under a JTA transaction.
-   * <p/>
-   * If the <code>newTransaction</code> annotation parameter is <code>false</code> then the
-   * intercepted method will be invoked under the existing JTA user transaction if one exists. If
-   * an existing JTA user transaction is not present then a new JTA user transaction will be
-   * started.
-   * <p/>
-   * If the <code>newTransaction</code> annotation parameter is <code>true</code> then any existing
-   * JTA user transaction will be suspended using the JTA <code>TransactionManager</code>. If
-   * an existing JTA user transaction is not present then a new JTA user transaction will be
-   * started.
-   * <p/>
-   * NOTED: If a runtime exception is thrown then the transaction will be rolled back if it is a
-   * new transaction or marked for rollback if it is an existing transaction.
+   * Invokes the intercepted method.
    *
    * @param context the current invocation-context
    *
@@ -79,13 +69,70 @@ public class ContainerManagedTransactionsInterceptor
 
     if (transactionalAnnotation != null)
     {
-      if (transactionalAnnotation.value() == Transactional.TxType.REQUIRES_NEW)
+      TransactionManager transactionManager = TransactionManager.getTransactionManager();
+
+      if (!transactionManager.isEnabled())
       {
-        return executeInNewTransaction(context);
+        throw new ContainerManagedTransactionsInterceptorException(
+            "Failed to initialise the JTA transaction manager");
+      }
+
+      if (transactionalAnnotation.value() == Transactional.TxType.REQUIRED)
+      {
+        return executeInTransaction(context, transactionManager, false);
+      }
+      else if (transactionalAnnotation.value() == Transactional.TxType.REQUIRES_NEW)
+      {
+        return executeInTransaction(context, transactionManager, true);
+      }
+      else if (transactionalAnnotation.value() == Transactional.TxType.MANDATORY)
+      {
+        if (!transactionManager.isTransactionActive())
+        {
+          throw new TransactionRequiredException();
+        }
+        else
+        {
+          return context.proceed();
+        }
+      }
+      else if (transactionalAnnotation.value() == Transactional.TxType.SUPPORTS)
+      {
+        return context.proceed();
+      }
+      else if (transactionalAnnotation.value() == Transactional.TxType.NOT_SUPPORTED)
+      {
+        Transaction existingTransaction = null;
+
+        try
+        {
+          existingTransaction = transactionManager.suspend();
+
+          return context.proceed();
+        }
+        finally
+        {
+          if (existingTransaction != null)
+          {
+            transactionManager.resume(existingTransaction);
+          }
+        }
+      }
+      else if (transactionalAnnotation.value() == Transactional.TxType.NEVER)
+      {
+        if (transactionManager.getStatus() != Status.STATUS_NO_TRANSACTION)
+        {
+          throw new InvalidTransactionException();
+        }
+        else
+        {
+          return context.proceed();
+        }
       }
       else
       {
-        return executeInExistingTransaction(context);
+        return new ContainerManagedTransactionsInterceptorException("Unknown TxType value ("
+            + transactionalAnnotation.value() + ") found for Transactional annotation");
       }
     }
     else
@@ -94,311 +141,79 @@ public class ContainerManagedTransactionsInterceptor
     }
   }
 
-  private Object executeInExistingTransaction(InvocationContext context)
+  private Object executeInTransaction(InvocationContext context,
+      TransactionManager transactionManager, boolean requiresNew)
     throws Exception
   {
-    UserTransaction userTransaction = null;
+    Transaction existingTransaction = null;
+    boolean isNewTransaction = false;
 
     try
     {
-      userTransaction = InitialContext.doLookup("java:comp/UserTransaction");
-
-      if (getLogger().isDebugEnabled())
+      if (requiresNew)
       {
-        getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
-            + "lookup (java:comp/UserTransaction)");
+        existingTransaction = transactionManager.beginNew();
+        isNewTransaction = true;
       }
-    }
-    catch (Throwable ignored) {}
-
-    if ((userTransaction == null) && (System.getProperty("jboss.home.dir") != null))
-    {
-      try
+      else if (transactionManager.getStatus() == Status.STATUS_ACTIVE)
       {
-        userTransaction = InitialContext.doLookup("java:jboss/UserTransaction");
-
-        if (getLogger().isDebugEnabled())
-        {
-          getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
-              + "lookup (java:jboss/UserTransaction)");
-        }
+        // Do nothing we will re-use the existing transaction
       }
-      catch (Throwable ignored)
+      else if (transactionManager.getStatus() == Status.STATUS_NO_TRANSACTION)
       {
-        getLogger().warn("Failed to lookup the bean managed transaction using the JNDI lookups "
-            + "(java:comp/UserTransaction) and (java:jboss/UserTransaction)");
+        transactionManager.begin();
+        isNewTransaction = true;
       }
-    }
-
-    if (userTransaction != null)
-    {
-      // Check for an existing transaction
-      boolean isExistingTransaction;
-
-      try
+      else if ((transactionManager.getStatus() == Status.STATUS_MARKED_ROLLBACK)
+          || (transactionManager.getStatus() == Status.STATUS_ROLLING_BACK)
+          || (transactionManager.getStatus() == Status.STATUS_ROLLEDBACK)
+          || (transactionManager.getStatus() == Status.STATUS_PREPARING)
+          || (transactionManager.getStatus() == Status.STATUS_PREPARED)
+          || (transactionManager.getStatus() == Status.STATUS_COMMITTING)
+          || (transactionManager.getStatus() == Status.STATUS_COMMITTED))
       {
-        isExistingTransaction = (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION);
+        existingTransaction = transactionManager.beginNew();
+        isNewTransaction = true;
       }
-      catch (Throwable e)
+      else
       {
-        throw new RuntimeException("Failed to determine if an existing JTA transaction is active"
-           + " while invoking the intercepted method (" + getTarget(context) + ")");
+        throw new ContainerManagedTransactionsInterceptorException("Invalid transaction status ("
+            + transactionManager.getStatus() + ")");
       }
 
-      try
+      Object object = context.proceed();
+
+      if (isNewTransaction)
       {
-        if (!isExistingTransaction)
-        {
-          userTransaction.begin();
-        }
-
-        Object object = context.proceed();
-
-        if (!isExistingTransaction)
-        {
-          userTransaction.commit();
-        }
-
-        return object;
-      }
-      catch (Exception e)
-      {
-        if (e instanceof RuntimeException)
-        {
-          if (isExistingTransaction)
-          {
-            getLogger().warn(
-                "A runtime exception was encountered while invoking the intercepted method ("
-                + getTarget(context) + "): The current transaction will be rolled back: "
-                + e.getMessage());
-
-            try
-            {
-              userTransaction.setRollbackOnly();
-            }
-            catch (Throwable f)
-            {
-              getLogger().error("An error occurred while invoking the intercepted method ("
-                  + getTarget(context)
-                  + "): The existing transaction could not be marked for rollback", f);
-            }
-          }
-          else
-          {
-            if ((userTransaction.getStatus() != Status.STATUS_ROLLING_BACK)
-                && (userTransaction.getStatus() != Status.STATUS_ROLLEDBACK)
-                && (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION))
-            {
-              getLogger().warn(
-                  "A runtime exception was encountered while invoking the intercepted method ("
-                  + getTarget(context) + "): The new transaction will be rolled back: "
-                  + e.getMessage());
-
-              try
-              {
-                userTransaction.rollback();
-              }
-              catch (Throwable f)
-              {
-                getLogger().error("An error occurred while invoking the intercepted method ("
-                    + getTarget(context) + "): The new transaction could not be rolled back", f);
-              }
-            }
-          }
-
-          throw e;
-        }
-        else
-        {
-          if (!isExistingTransaction)
-          {
-            if (userTransaction.getStatus() == Status.STATUS_MARKED_ROLLBACK)
-            {
-              try
-              {
-                userTransaction.rollback();
-              }
-              catch (Throwable f)
-              {
-                getLogger().error("An error occurred while invoking the intercepted method ("
-                    + getTarget(context) + "): The new transaction could not be rolled back", f);
-              }
-            }
-            else if ((userTransaction.getStatus() != Status.STATUS_ROLLING_BACK)
-                && (userTransaction.getStatus() != Status.STATUS_ROLLEDBACK)
-                && (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION))
-            {
-              getLogger().warn(
-                  "A checked exception was encountered while invoking the intercepted method ("
-                  + getTarget(context) + "): The current transaction will be committed: "
-                  + e.getMessage());
-
-              try
-              {
-                userTransaction.commit();
-              }
-              catch (Throwable f)
-              {
-                getLogger().error("An error occurred while invoking the intercepted method ("
-                    + getTarget(context) + "): The new transaction could not be committed", f);
-              }
-            }
-          }
-        }
-
-        throw e;
-      }
-      catch (Throwable e)
-      {
-        if (isExistingTransaction)
-        {
-          getLogger().warn(
-              "A runtime exception was encountered while invoking the intercepted method ("
-              + getTarget(context) + "): The existing transaction will be rolled back: "
-              + e.getMessage());
-
-          try
-          {
-            userTransaction.setRollbackOnly();
-          }
-          catch (Throwable f)
-          {
-            getLogger().error("An error occurred while invoking the intercepted method ("
-                + getTarget(context)
-                + "): The existing transaction could not be marked for rollback", f);
-          }
-        }
-        else
-        {
-          if ((userTransaction.getStatus() != Status.STATUS_ROLLING_BACK)
-              && (userTransaction.getStatus() != Status.STATUS_ROLLEDBACK)
-              && (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION))
-          {
-            getLogger().warn(
-                "A runtime exception was encountered while invoking the intercepted method ("
-                + getTarget(context) + "): The new transaction will be rolled back: "
-                + e.getMessage());
-
-            try
-            {
-              userTransaction.rollback();
-            }
-            catch (Throwable f)
-            {
-              getLogger().error("An error occurred while invoking the intercepted method ("
-                  + getTarget(context) + "): The new transaction could not be rolled back", f);
-            }
-          }
-        }
-
-        throw new RuntimeException(
-            "A runtime exception was encountered while invoking the intercepted method ("
-            + getTarget(context) + "): The current transaction will be rolled back", e);
-      }
-    }
-
-    /*
-     * If the injected UserTransaction is null we assume we are executing as part of a CMT for
-     * an EJB. We do not do any transaction management so the default transaction management
-     * for an EJB will apply i.e. no rollback for checked exception and rollback for runtime
-     * exception.
-     */
-    else
-    {
-      return context.proceed();
-    }
-  }
-
-  private Object executeInNewTransaction(InvocationContext context)
-    throws Exception
-  {
-    UserTransaction userTransaction = null;
-
-    try
-    {
-      userTransaction = InitialContext.doLookup("java:comp/UserTransaction");
-
-      if (getLogger().isDebugEnabled())
-      {
-        getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
-            + "lookup (java:comp/UserTransaction)");
-      }
-    }
-    catch (Throwable ignored) {}
-
-    if ((userTransaction == null) && (System.getProperty("jboss.home.dir") != null))
-    {
-      try
-      {
-        userTransaction = InitialContext.doLookup("java:jboss/UserTransaction");
-
-        if (getLogger().isDebugEnabled())
-        {
-          getLogger().debug("Successfully retrieved the bean managed transaction using the JNDI "
-              + "lookup (java:jboss/UserTransaction)");
-        }
-      }
-      catch (Throwable ignored)
-      {
-        getLogger().warn("Failed to lookup the bean managed transaction using the JNDI lookups"
-            + " " + "(java:comp/UserTransaction) and (java:jboss/UserTransaction)");
-      }
-    }
-
-    if (userTransaction != null)
-    {
-      // Check for an existing transaction
-      boolean isExistingTransaction;
-
-      try
-      {
-        isExistingTransaction = (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION);
-      }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Failed to determine if an existing JTA transaction is active"
-           + " while invoking the intercepted method (" + getTarget(context) + ")");
-      }
-
-      TransactionManager transactionManager = TransactionManager.getTransactionManager();
-
-      javax.transaction.Transaction existingTransaction = null;
-
-      try
-      {
-        if (isExistingTransaction)
-        {
-          existingTransaction = transactionManager.beginNew();
-        }
-        else
-        {
-          userTransaction.begin();
-        }
-
-        Object object = context.proceed();
-
-        if (isExistingTransaction)
+        if (transactionManager.getStatus() == Status.STATUS_ACTIVE)
         {
           transactionManager.commit();
         }
+        else if (transactionManager.getStatus() == Status.STATUS_MARKED_ROLLBACK)
+        {
+          transactionManager.rollback();
+        }
         else
         {
-          userTransaction.commit();
+          throw new ContainerManagedTransactionsInterceptorException("Invalid status ("
+              + transactionManager.getStatus() + ") for the new transaction");
         }
-
-        return object;
       }
-      catch (Throwable e)
-      {
-        if (e instanceof RuntimeException)
-        {
-          if (isExistingTransaction)
-          {
-            getLogger().warn(
-                "A runtime exception was encountered while invoking the intercepted method ("
-                + getTarget(context) + "): The new transaction will be rolled back: "
-                + e.getMessage());
 
+      return object;
+    }
+    catch (Throwable e)
+    {
+      if (e instanceof RuntimeException)
+      {
+        if (isNewTransaction)
+        {
+          getLogger().warn(
+              "A runtime exception was encountered while invoking the intercepted method ("
+              + getTarget(context) + "): The new transaction will be rolled back", e);
+
+          if (transactionManager.getStatus() == Status.STATUS_ACTIVE)
+          {
             try
             {
               transactionManager.rollback();
@@ -409,160 +224,59 @@ public class ContainerManagedTransactionsInterceptor
                   + getTarget(context) + "): The new transaction could not be rolled back", f);
             }
           }
+          else if ((transactionManager.getStatus() == Status.STATUS_ROLLING_BACK)
+              || (transactionManager.getStatus() == Status.STATUS_ROLLEDBACK))
+          {
+            // Do nothing the transaction is rolling back or has already rolled back
+          }
           else
           {
-            if ((userTransaction.getStatus() != Status.STATUS_ROLLING_BACK)
-                && (userTransaction.getStatus() != Status.STATUS_ROLLEDBACK)
-                && (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION))
-            {
-              getLogger().warn(
-                  "A runtime exception was encountered while invoking the intercepted method ("
-                  + getTarget(context) + "): The new transaction will be rolled back: "
-                  + e.getMessage());
-
-              try
-              {
-                userTransaction.rollback();
-              }
-              catch (Throwable f)
-              {
-                getLogger().error("An error occurred while invoking the intercepted method ("
-                    + getTarget(context) + "): The new transaction could not be rolled back", f);
-              }
-            }
+            getLogger().error("An error occurred while invoking the intercepted method ("
+                + getTarget(context) + "): The new transaction has an invalid status ("
+                + transactionManager.getStatus() + ") and could not be rolled back");
           }
-
-          throw e;
         }
         else
         {
-          if (isExistingTransaction)
-          {
-            getLogger().warn(
-                "A checked exception was encountered while invoking the intercepted method ("
-                + getTarget(context) + "): The new transaction will be committed: "
-                + e.getMessage());
+          getLogger().warn(
+              "A runtime exception was encountered while invoking the intercepted method ("
+              + getTarget(context) + "): The existing transaction will be marked for rollback", e);
 
+          if (transactionManager.getStatus() == Status.STATUS_ACTIVE)
+          {
             try
             {
-              transactionManager.commit();
+              transactionManager.setRollbackOnly();
             }
             catch (Throwable f)
             {
               getLogger().error("An error occurred while invoking the intercepted method ("
-                  + getTarget(context) + "): The new transaction could not be committed", f);
+                  + getTarget(context)
+                  + "): The existing transaction could not be marked for rollback", f);
             }
+          }
+          else if ((transactionManager.getStatus() == Status.STATUS_ROLLING_BACK)
+              || (transactionManager.getStatus() == Status.STATUS_ROLLEDBACK))
+          {
+            // Do nothing the transaction is rolling back or has already rolled back
           }
           else
           {
-            if (userTransaction.getStatus() == Status.STATUS_MARKED_ROLLBACK)
-            {
-              try
-              {
-                userTransaction.rollback();
-              }
-              catch (Throwable f)
-              {
-                getLogger().error("An error occurred while invoking the intercepted method ("
-                    + getTarget(context) + "): The new transaction could not be rolled back", f);
-              }
-            }
-            else if ((userTransaction.getStatus() != Status.STATUS_ROLLING_BACK)
-                && (userTransaction.getStatus() != Status.STATUS_ROLLEDBACK)
-                && (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION))
-            {
-              getLogger().warn(
-                  "A checked exception was encountered while invoking the intercepted method ("
-                  + getTarget(context) + "): The new transaction will be committed: "
-                  + e.getMessage());
-
-              try
-              {
-                userTransaction.commit();
-              }
-              catch (Throwable f)
-              {
-                getLogger().error("An error occurred while invoking the intercepted method ("
-                    + getTarget(context) + "): The new transaction could not be committed", f);
-              }
-            }
+            getLogger().error("An error occurred while invoking the intercepted method ("
+                + getTarget(context) + "): The existing transaction has an invalid status ("
+                + transactionManager.getStatus() + ") and could not be marked for rollback");
           }
         }
 
         throw e;
       }
-      finally
+      else
       {
-        if (isExistingTransaction)
-        {
-          try
-          {
-            if (existingTransaction != null)
-            {
-              transactionManager.resume(existingTransaction);
-            }
-          }
-          catch (Throwable e)
-          {
-            getLogger().error("An error occurred while invoking the intercepted method ("
-                + getTarget(context) + "): Failed to resume the original transaction", e);
-          }
-        }
-      }
-    }
-
-    /*
-     * If the injected UserTransaction is null we assume we are executing as part of a CMT for
-     * an EJB.
-     */
-    else
-    {
-      TransactionManager transactionManager = TransactionManager.getTransactionManager();
-
-      javax.transaction.Transaction existingTransaction = null;
-
-      try
-      {
-        if (transactionManager.isTransactionActive())
-        {
-          existingTransaction = transactionManager.beginNew();
-        }
-        else
-        {
-          transactionManager.begin();
-        }
-
-        Object object = context.proceed();
-
-        transactionManager.commit();
-
-        return object;
-      }
-      catch (Throwable e)
-      {
-        if (e instanceof RuntimeException)
-        {
-          getLogger().warn(
-              "A runtime exception was encountered while invoking the intercepted method ("
-              + getTarget(context) + "): The new transaction will be rolled back", e);
-
-          try
-          {
-            transactionManager.rollback();
-          }
-          catch (Throwable f)
-          {
-            getLogger().error("An error occurred while invoking the intercepted method ("
-                + getTarget(context) + "): The new transaction could not be rolled back", f);
-          }
-
-          throw e;
-        }
-        else
+        if (isNewTransaction)
         {
           getLogger().warn(
               "A checked exception was encountered while invoking the intercepted method ("
-              + getTarget(context) + "): The new transaction will be comitted");
+              + getTarget(context) + "): The new transaction will be committed");
 
           try
           {
@@ -574,17 +288,17 @@ public class ContainerManagedTransactionsInterceptor
                 + getTarget(context) + "): The new transaction could not be committed", f);
           }
         }
-
-        throw e;
       }
-      finally
+
+      throw e;
+    }
+    finally
+    {
+      if (existingTransaction != null)
       {
         try
         {
-          if (existingTransaction != null)
-          {
-            transactionManager.resume(existingTransaction);
-          }
+          transactionManager.resume(existingTransaction);
         }
         catch (Throwable e)
         {

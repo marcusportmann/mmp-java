@@ -21,18 +21,23 @@ package guru.mmp.application.tests;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-import javax.transaction.Transactional;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
+
+import javax.transaction.Transactional;
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -110,6 +115,72 @@ public class TestTransactionalService
       throw new TestTransactionalServiceException(
           "Failed to create the test data in a new transaction", e);
     }
+  }
+
+  /**
+   * Create the test data in a new transaction with a checked exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  public void createTestDataInNewTransactionWithCheckedException(TestData testData)
+    throws TestTransactionalServiceException
+  {
+    createTestData(testData);
+
+    throw new TestTransactionalServiceException(
+        "Failed with a checked exception in a new transaction");
+  }
+
+  /**
+   * Create the test data in a new transaction with a runtime exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  public void createTestDataInNewTransactionWithRuntimeException(TestData testData)
+    throws TestTransactionalServiceException
+  {
+    createTestData(testData);
+
+    throw new RuntimeException("Failed with a runtime exception in a new transaction");
+  }
+
+  /**
+   * Create the test data with a checked exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  @Transactional
+  public void createTestDataWithCheckedException(TestData testData)
+    throws TestTransactionalServiceException
+  {
+    createTestData(testData);
+
+    throw new TestTransactionalServiceException(
+        "Failed with a checked exception in an existing transaction");
+  }
+
+  /**
+   * Create the test data with a runtime exception.
+   *
+   * @param testData the test data
+   *
+   * @throws TestTransactionalServiceException
+   */
+  @Transactional
+  public void createTestDataWithRuntimeException(TestData testData)
+    throws TestTransactionalServiceException
+  {
+    createTestData(testData);
+
+    throw new RuntimeException("Failed with a runtime exception in an existing transaction");
   }
 
   /**
