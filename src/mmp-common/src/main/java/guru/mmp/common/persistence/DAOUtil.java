@@ -288,8 +288,16 @@ public class DAOUtil
 
     try
     {
-      reader = new BufferedReader(new InputStreamReader(Thread.currentThread()
-          .getContextClassLoader().getResourceAsStream(resourcePath)));
+      InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(
+          resourcePath);
+
+      if (inputStream == null)
+      {
+        throw new IOException("Failed to load the SQL statements from the file (" + resourcePath
+            + "): The file could not be found");
+      }
+
+      reader = new BufferedReader(new InputStreamReader(inputStream));
 
       StringBuilder multiLineBuffer = null;
       String line;

@@ -24,21 +24,27 @@ import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.annotation.PostConstruct;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+
+import javax.naming.InitialContext;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>MessagingDAO</code> class implements the persistence operations for the
@@ -1500,35 +1506,35 @@ public class MessagingDAO
   protected void buildStatements(String schemaPrefix)
   {
     // allPartsQueuedForMessageSQL
-    allPartsQueuedForMessageSQL = "SELECT COUNT(MP.ID) FROM " + schemaPrefix + "MESSAGE_PARTS MP"
-        + " WHERE MP.MSG_ID=?";
+    allPartsQueuedForMessageSQL = "SELECT COUNT(MP.ID) FROM " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "WHERE MP.MSG_ID=?";
 
     // archiveMessageSQL
-    archiveMessageSQL = "INSERT INTO " + schemaPrefix + "ARCHIVED_MESSAGES" + " (ID, USERNAME, "
-        + "DEVICE_ID, TYPE_ID, CORRELATION_ID, CREATED, ARCHIVED, DATA)"
-        + " VALUES (?, ?, ?, ?, ?," + " ?, ?, ?)";
+    archiveMessageSQL = "INSERT INTO " + schemaPrefix + "ARCHIVED_MESSAGES "
+        + "(ID, USERNAME, DEVICE_ID, TYPE_ID, CORRELATION_ID, CREATED, ARCHIVED, DATA) "
+        + "VALUES (?, ?, ?, ?, ?," + " ?, ?, ?)";
 
     // createErrorReportSQL
-    createErrorReportSQL = "INSERT INTO " + schemaPrefix + "ERROR_REPORTS" + " (ID, "
-        + "APPLICATION_ID, APPLICATION_VERSION, DESCRIPTION, DETAIL, FEEDBACK, CREATED, WHO," + " "
+    createErrorReportSQL = "INSERT INTO " + schemaPrefix + "ERROR_REPORTS "
+        + "(ID, APPLICATION_ID, APPLICATION_VERSION, DESCRIPTION, DETAIL, FEEDBACK, CREATED, WHO, "
         + "DEVICE_ID, DATA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createMessagePartSQL
     createMessagePartSQL = "INSERT INTO " + schemaPrefix + "MESSAGE_PARTS" + " (ID, PART_NO, "
-        + "TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED," + " MSG_ID, "
-        + "MSG_USERNAME, MSG_DEVICE_ID, MSG_TYPE_ID, MSG_CORRELATION_ID, MSG_PRIORITY," + " "
-        + "MSG_CREATED, MSG_DATA_HASH, MSG_ENCRYPTION_IV, MSG_CHECKSUM, DATA)"
-        + " VALUES (?, ?, ?," + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        + "TOTAL_PARTS, SEND_ATTEMPTS, DOWNLOAD_ATTEMPTS, STATUS, PERSISTED, MSG_ID, MSG_USERNAME, "
+        + "MSG_DEVICE_ID, MSG_TYPE_ID, MSG_CORRELATION_ID, MSG_PRIORITY, MSG_CREATED, "
+        + "MSG_DATA_HASH, MSG_ENCRYPTION_IV, MSG_CHECKSUM, DATA) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // createMessageSQL
-    createMessageSQL = "INSERT INTO " + schemaPrefix + "MESSAGES" + " (ID, USERNAME, DEVICE_ID, "
-        + "TYPE_ID, CORRELATION_ID, PRIORITY, STATUS, CREATED," + " PERSISTED, UPDATED, "
-        + "SEND_ATTEMPTS, PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, DATA)"
-        + " VALUES (?, ?, ?, ?, ?, ?," + " ?, ?, ?, ?, ?, ?, ?, ?)";
+    createMessageSQL = "INSERT INTO " + schemaPrefix + "MESSAGES "
+        + "(ID, USERNAME, DEVICE_ID, TYPE_ID, CORRELATION_ID, PRIORITY, STATUS, CREATED, "
+        + "PERSISTED, UPDATED, SEND_ATTEMPTS, PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS, DATA) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     // deleteMessagePartsForMessageSQL
-    deleteMessagePartsForMessageSQL = "DELETE FROM " + schemaPrefix + "MESSAGE_PARTS MP WHERE MP"
-        + ".MSG_ID=?";
+    deleteMessagePartsForMessageSQL = "DELETE FROM " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "WHERE MP.MSG_ID=?";
 
     // deleteMessagePartSQL
     deleteMessagePartSQL = "DELETE FROM " + schemaPrefix + "MESSAGE_PARTS MP WHERE MP.ID=?";
@@ -1537,129 +1543,127 @@ public class MessagingDAO
     deleteMessageSQL = "DELETE FROM " + schemaPrefix + "MESSAGES M WHERE M.ID=?";
 
     // getErrorReportSQL
-    getErrorReportSQL = "SELECT ER.ID, ER.APPLICATION_ID, ER.APPLICATION_VERSION," + " ER"
-        + ".DESCRIPTION, ER.DETAIL, ER.FEEDBACK, ER.CREATED, ER.WHO, ER.DEVICE_ID, ER.DATA FROM "
-        + schemaPrefix + "ERROR_REPORTS ER WHERE ER.ID=?";
+    getErrorReportSQL = "SELECT ER.ID, ER.APPLICATION_ID, ER.APPLICATION_VERSION, "
+        + " ER.DESCRIPTION, ER.DETAIL, ER.FEEDBACK, ER.CREATED, ER.WHO, ER.DEVICE_ID, ER.DATA "
+        + "FROM " + schemaPrefix + "ERROR_REPORTS ER WHERE ER.ID=?";
 
     // getErrorReportSummarySQL
     getErrorReportSummarySQL = "SELECT ER.ID, ER.APPLICATION_ID, P.NAME, ER.APPLICATION_VERSION, "
-        + "ER.CREATED, ER.WHO," + " ER.DEVICE_ID FROM " + schemaPrefix + "ERROR_REPORTS ER LEFT "
+        + "ER.CREATED, ER.WHO, ER.DEVICE_ID FROM " + schemaPrefix + "ERROR_REPORTS ER LEFT "
         + "OUTER JOIN " + schemaPrefix + "PACKAGES P ON ER.APPLICATION_ID = P.ID AND ER.ID=?";
 
     // getMessagSQL
-    getMessagSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M.CORRELATION_ID," + " M"
-        + ".PRIORITY, M.STATUS, M.CREATED, M.PERSISTED, M.UPDATED, M.SEND_ATTEMPTS," + " M"
-        + ".PROCESS_ATTEMPTS, M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M.LAST_PROCESSED, M.DATA FROM "
+    getMessagSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M.CORRELATION_ID, "
+        + "M.PRIORITY, M.STATUS, M.CREATED, M.PERSISTED, M.UPDATED, M.SEND_ATTEMPTS, "
+        + "M.PROCESS_ATTEMPTS, M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M.LAST_PROCESSED, M.DATA FROM "
         + schemaPrefix + "MESSAGES M WHERE M.ID=?";
 
     // getMessagePartsQueuedForAssemblySQL
-    getMessagePartsQueuedForAssemblySQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP"
-        + ".SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS," + " MP.STATUS, MP.PERSISTED, MP.UPDATED, MP"
-        + ".MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID,"
-        + " MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, " + "MP.MSG_PRIORITY, MP.MSG_CREATED,"
-        + " MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV, MP"
-        + ".MSG_CHECKSUM, MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP" + " "
+    getMessagePartsQueuedForAssemblySQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, "
+        + "MP.SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS, MP.PERSISTED, MP.UPDATED, MP.MSG_ID, "
+        + "MP.MSG_USERNAME, MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, "
+        + "MP.MSG_PRIORITY, MP.MSG_CREATED, MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV, "
+        + "MP.MSG_CHECKSUM, MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP "
         + "WHERE MP.STATUS=? AND MP.MSG_ID=? ORDER BY MP.PART_NO FOR UPDATE";
 
     // getMessagePartsQueuedForDownloadForUserSQL
-    getMessagePartsQueuedForDownloadForUserSQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, MP"
-        + ".SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS," + " MP.PERSISTED, MP.UPDATED, MP"
-        + ".MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID,"
-        + " MP.MSG_CORRELATION_ID, " + "MP.MSG_PRIORITY, MP.MSG_CREATED, MP.MSG_DATA_HASH,"
-        + " MP.MSG_ENCRYPTION_IV, MP" + ".MSG_CHECKSUM," + " MP.LOCK_NAME, MP.DATA FROM "
-        + schemaPrefix + "MESSAGE_PARTS MP" + ""
-        + " WHERE MP.STATUS=? AND MP.MSG_USERNAME=? AND MP.MSG_DEVICE_ID=?"
-        + " ORDER BY MP.PART_NO" + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
-
-    // getMessagesQueuedForDownloadForUserSQL
-    getMessagesQueuedForDownloadForUserSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M"
-        + ".CORRELATION_ID, M.PRIORITY, M.STATUS," + " M.CREATED, M.PERSISTED, M.UPDATED, M"
-        + ".SEND_ATTEMPTS, M.PROCESS_ATTEMPTS," + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M"
-        + ".LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M" + " WHERE M.STATUS=? AND M"
-        + ".USERNAME=? AND M.DEVICE_ID=? ORDER BY M.CREATED"
+    getMessagePartsQueuedForDownloadForUserSQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, "
+        + "MP.SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS, MP.PERSISTED, MP.UPDATED, "
+        + "MP.MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, "
+        + "MP.MSG_PRIORITY, MP.MSG_CREATED, MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV, "
+        + "MP.MSG_CHECKSUM, MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "WHERE MP.STATUS=? AND MP.MSG_USERNAME=? AND MP.MSG_DEVICE_ID=? " + "ORDER BY MP.PART_NO"
         + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
+    // getMessagesQueuedForDownloadForUserSQL
+    getMessagesQueuedForDownloadForUserSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, "
+        + "M.CORRELATION_ID, M.PRIORITY, M.STATUS, M.CREATED, M.PERSISTED, M.UPDATED, "
+        + "M.SEND_ATTEMPTS, M.PROCESS_ATTEMPTS, M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, "
+        + "M.LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M "
+        + "WHERE M.STATUS=? AND M.USERNAME=? AND M.DEVICE_ID=? ORDER BY M.CREATED "
+        + "FETCH FIRST 3 ROWS ONLY FOR UPDATE";
+
     // getMostRecentErrorReportSummariesSQL
-    getMostRecentErrorReportSummariesSQL = "SELECT ER.ID, ER.APPLICATION_ID, P.NAME, ER"
-        + ".APPLICATION_VERSION, ER.CREATED, ER.WHO," + " ER.DEVICE_ID FROM " + schemaPrefix
+    getMostRecentErrorReportSummariesSQL = "SELECT ER.ID, ER.APPLICATION_ID, P.NAME, "
+        + "ER.APPLICATION_VERSION, ER.CREATED, ER.WHO, ER.DEVICE_ID FROM " + schemaPrefix
         + "ERROR_REPORTS ER LEFT OUTER JOIN " + schemaPrefix
-        + "PACKAGES P ON ER.APPLICATION_ID = P" + ".ID";
+        + "PACKAGES P ON ER.APPLICATION_ID = P.ID";
 
     // getNextMessageForProcessingSQL
-    getNextMessageForProcessingSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, M"
-        + ".CORRELATION_ID, M.PRIORITY, M.STATUS," + " M.CREATED, M.PERSISTED, M.UPDATED, M"
-        + ".SEND_ATTEMPTS, M.PROCESS_ATTEMPTS," + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, M"
-        + ".LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M"
-        + " WHERE M.STATUS=? AND (M" + ".LAST_PROCESSED<? OR M.LAST_PROCESSED IS NULL)"
-        + " ORDER BY M.UPDATED FETCH FIRST 1 " + "ROWS ONLY FOR UPDATE";
+    getNextMessageForProcessingSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, "
+        + "M.CORRELATION_ID, M.PRIORITY, M.STATUS, M.CREATED, M.PERSISTED, M.UPDATED, "
+        + "M.SEND_ATTEMPTS, M.PROCESS_ATTEMPTS," + " M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, "
+        + "M.LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M "
+        + "WHERE M.STATUS=? AND (M" + ".LAST_PROCESSED<? OR M.LAST_PROCESSED IS NULL) "
+        + "ORDER BY M.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getNumberOfErrorReportsSQL
-    getNumberOfErrorReportsSQL = "SELECT COUNT(ER.ID)" + " FROM " + schemaPrefix + "ERROR_REPORTS"
-        + " ER";
+    getNumberOfErrorReportsSQL = "SELECT COUNT(ER.ID) FROM " + schemaPrefix + "ERROR_REPORTS ER";
 
     // incrementMessageProcessingAttemptsSQL
-    incrementMessageProcessingAttemptsSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M"
-        + ".PROCESS_ATTEMPTS=M.PROCESS_ATTEMPTS + 1, M.UPDATED=?, M.LAST_PROCESSED=?" + " WHERE M"
-        + ".ID=?";
+    incrementMessageProcessingAttemptsSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+        + "SET M.PROCESS_ATTEMPTS=M.PROCESS_ATTEMPTS + 1, M.UPDATED=?, M.LAST_PROCESSED=? "
+        + "WHERE M.ID=?";
 
     // isMessageArchivedSQL
-    isMessageArchivedSQL = "SELECT AM.ID FROM " + schemaPrefix + "ARCHIVED_MESSAGES AM" + " WHERE"
-        + " AM.ID=?";
+    isMessageArchivedSQL = "SELECT AM.ID FROM " + schemaPrefix + "ARCHIVED_MESSAGES AM "
+        + "WHERE AM.ID=?";
 
     // isMessagePartQueuedForAssemblySQL
-    isMessagePartQueuedForAssemblySQL = "SELECT MP.ID FROM " + schemaPrefix + "MESSAGE_PARTS MP"
-        + " WHERE MP.ID=?";
+    isMessagePartQueuedForAssemblySQL = "SELECT MP.ID FROM " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "WHERE MP.ID=?";
 
     // lockMessageForDownloadSQL
-    lockMessageForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M"
-        + ".LOCK_NAME=?, M.UPDATED=?, M.DOWNLOAD_ATTEMPTS=M.DOWNLOAD_ATTEMPTS+1" + " WHERE M.ID=?";
+    lockMessageForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+        + "SET M.STATUS=?, M.LOCK_NAME=?, M.UPDATED=?, M.DOWNLOAD_ATTEMPTS=M.DOWNLOAD_ATTEMPTS+1 "
+        + "WHERE M.ID=?";
 
     // lockMessagePartForDownloadSQL
-    lockMessagePartForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP"
-        + ".STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=?," + " MP.DOWNLOAD_ATTEMPTS=MP"
-        + ".DOWNLOAD_ATTEMPTS+1 WHERE MP.ID=?";
+    lockMessagePartForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "SET MP.STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=?, "
+        + "MP.DOWNLOAD_ATTEMPTS=MP.DOWNLOAD_ATTEMPTS+1 WHERE MP.ID=?";
 
     // lockMessageSQL
-    lockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.LOCK_NAME=?, M"
-        + ".UPDATED=? WHERE M.ID=?";
+    lockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+        + "SET M.STATUS=?, M.LOCK_NAME=?, M.UPDATED=? WHERE M.ID=?";
 
     // lockMessagePartSQL
-    lockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, MP"
-        + ".LOCK_NAME=?, MP.UPDATED=? WHERE MP.ID=?";
+    lockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "SET MP.STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=? WHERE MP.ID=?";
 
     // resetExpiredMessageLocksSQL
-    resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M"
-        + ".LOCK_NAME=NULL, M.UPDATED=?" + " WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M"
-        + ".UPDATED < ?";
+    resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+        + "SET M.STATUS=?, M.LOCK_NAME=NULL, M.UPDATED=? "
+        + "WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M.UPDATED < ?";
 
     // resetExpiredMessagePartLocksSQL
-    resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP"
-        + ".STATUS=?, MP.LOCK_NAME=NULL, MP.UPDATED=?" + " WHERE MP.LOCK_NAME IS NOT NULL AND MP"
-        + ".STATUS=? AND MP.UPDATED < ?";
+    resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "SET MP.STATUS=?, MP.LOCK_NAME=NULL, MP.UPDATED=? "
+        + "WHERE MP.LOCK_NAME IS NOT NULL AND MP.STATUS=? AND MP.UPDATED < ?";
 
     // resetMessageLocksSQL
-    resetMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M"
-        + ".LOCK_NAME=NULL, M.UPDATED=? WHERE M.LOCK_NAME=? AND M.STATUS=?";
+    resetMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+        + "SET M.STATUS=?, M.LOCK_NAME=NULL, M.UPDATED=? WHERE M.LOCK_NAME=? AND M.STATUS=?";
 
     // resetMessagePartLocksSQL
-    resetMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?,"
-        + " MP.LOCK_NAME=NULL WHERE MP.LOCK_NAME=? AND MP.STATUS=?";
+    resetMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "SET MP.STATUS=?, MP.LOCK_NAME=NULL WHERE MP.LOCK_NAME=? AND MP.STATUS=?";
 
     // setMessagePartStatusSQL
-    setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, "
-        + "MP.UPDATED=? WHERE MP.ID=?";
+    setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "SET MP.STATUS=?, MP.UPDATED=? WHERE MP.ID=?";
 
     // setMessageStatusSQL
-    setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.UPDATED=?"
-        + " WHERE M.ID=?";
+    setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+        + "SET M.STATUS=?, M.UPDATED=? WHERE M.ID=?";
 
     // unlockMessagePartSQL
-    unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP" + " SET MP.STATUS=?, MP"
-        + ".UPDATED=?, MP.LOCK_NAME=NULL WHERE MP.ID=?";
+    unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+        + "SET MP.STATUS=?, MP.UPDATED=?, MP.LOCK_NAME=NULL WHERE MP.ID=?";
 
     // unlockMessageSQL
-    unlockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M" + " SET M.STATUS=?, M.UPDATED=?, M"
-        + ".LOCK_NAME=NULL WHERE M.ID=?";
+    unlockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+        + "SET M.STATUS=?, M.UPDATED=?, M.LOCK_NAME=NULL WHERE M.ID=?";
   }
 
   private ErrorReport buildErrorReportFromResultSet(ResultSet rs)

@@ -445,8 +445,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
 
 //      if (!verifyTimestamp(timestamp, decodeTimeToLive(requestData)))
 //      {
-//        throw new WSSecurityException("Failed to process the SOAP request:"
-//            + " The timestamp could not be validated");
+//        throw new WSSecurityException("Failed to process the SOAP request: "
+//            + "The timestamp could not be validated");
 //      }
       }
     }

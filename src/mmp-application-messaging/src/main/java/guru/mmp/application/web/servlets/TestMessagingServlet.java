@@ -202,8 +202,8 @@
 //          {
 //            logger.info("Retrieved an encrypted response message to the TestRequest message");
 //
-//            pw.println("<li>Retrieved an encrypted response message to the"
-//                + " <i>TestRequest</i> message</li>");
+//            pw.println("<li>Retrieved an encrypted response message to the "
+//                + "<i>TestRequest</i> message</li>");
 //          }
 //
 //          TestResponseData responseData = messageTranslator.fromMessage(responseMessage,
@@ -248,8 +248,8 @@
 //          {
 //            logger.info("Successfully queued the AnotherTestRequest message for processing");
 //
-//            pw.println("<li>Successfully queued the <i>AnotherTestRequest</i> message for"
-//                + " processing</li>");
+//            pw.println("<li>Successfully queued the <i>AnotherTestRequest</i> message for "
+//                + "processing</li>");
 //          }
 //        }
 //
@@ -347,8 +347,8 @@
 //          {
 //            logger.info("Successfully queued the AnotherTestRequest message for processing");
 //
-//            pw.println("<li>Successfully queued the <i>AnotherTestRequest</i> message for"
-//                + " processing</li>");
+//            pw.println("<li>Successfully queued the <i>AnotherTestRequest</i> message for "
+//                + "processing</li>");
 //          }
 //        }
 //
@@ -412,8 +412,8 @@
 //                  logger.info("Successfully received " + responseData.getTestData().length
 //                      + " bytes of data for the AnotherTestResponse message");
 //
-//                  pw.println("<li>Successfully received the <i>AnotherTestResponse</i> message"
-//                      + " with value (" + responseData.getTestValue() + ")</li>");
+//                  pw.println("<li>Successfully received the <i>AnotherTestResponse</i> message "
+//                      + "with value (" + responseData.getTestValue() + ")</li>");
 //
 //                  pw.println("<li>Successfully received " + responseData.getTestData().length
 //                      + " bytes of data for the AnotherTestResponse message</li>");
@@ -463,8 +463,8 @@
 //             * {
 //             * logger.info("Retrieved an encrypted response message to the TestRequest message");
 //             *
-//             * pw.println("<li>Retrieved an encrypted response message to the"
-//             *     + " <i>TestRequest</i> message</li>");
+//             * pw.println("<li>Retrieved an encrypted response message to the "
+//             *     + "<i>TestRequest</i> message</li>");
 //             * }
 //             *
 //             * TestResponseData responseData = messageTranslator.fromMessage(responseMessage,
@@ -706,8 +706,8 @@
 //    pw.println(
 //        "      body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size:
 // 8pt;}");
-//    pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;"
-//        + " thirdparty-weight: bold; thirdparty-size: 9pt;}");
+//    pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green; "
+//        + "thirdparty-weight: bold; thirdparty-size: 9pt;}");
 //    pw.println("      .className {color: 808080;}");
 //    pw.println("    </style>");
 //    pw.println("  </head>");
@@ -787,8 +787,8 @@
 //          }
 //          else
 //          {
-//            throw new RuntimeException("The WBXML response data from the remote server is not a"
-//                + " valid MessageResult document");
+//            throw new RuntimeException("The WBXML response data from the remote server is not a "
+//                + "valid MessageResult document");
 //          }
 //        }
 //
@@ -809,8 +809,8 @@
 //        }
 //        else
 //        {
-//          throw new RuntimeException("The WBXML response data from the remote server is not a"
-//              + " valid MessageResult document");
+//          throw new RuntimeException("The WBXML response data from the remote server is not a "
+//              + "valid MessageResult document");
 //        }
 //      }
 //    }
@@ -840,9 +840,9 @@
 //    }
 //    else
 //    {
-//      throw new RuntimeException("Failed to send the message download request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessageDownloadResponse document");
+//      throw new RuntimeException("Failed to send the message download request: "
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessageDownloadResponse document");
 //    }
 //  }
 //
@@ -865,9 +865,9 @@
 //    }
 //    else
 //    {
-//      throw new RuntimeException("Failed to send the message part download request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessagePartDownloadResponse document");
+//      throw new RuntimeException("Failed to send the message part download request: "
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessagePartDownloadResponse document");
 //    }
 //  }
 //
@@ -890,9 +890,9 @@
 //    }
 //    else
 //    {
-//      throw new RuntimeException("Failed to send the message part received request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessagePartReceivedResponse document");
+//      throw new RuntimeException("Failed to send the message part received request: "
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessagePartReceivedResponse document");
 //    }
 //  }
 //
@@ -914,9 +914,9 @@
 //    }
 //    else
 //    {
-//      throw new RuntimeException("Failed to send the message received request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessageReceivedResponse document");
+//      throw new RuntimeException("Failed to send the message received request: "
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessageReceivedResponse document");
 //    }
 //  }
 //}

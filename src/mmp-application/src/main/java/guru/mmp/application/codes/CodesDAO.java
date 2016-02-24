@@ -987,8 +987,8 @@ public class CodesDAO
         + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
 
     // getCodeCategoriesNoDataSQL
-    getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.ENDPOINT,"
-        + " CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+    getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.ENDPOINT, "
+        + "CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
         + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
 
     // getCodeCategoryCacheExpirySQL
@@ -996,12 +996,12 @@ public class CodesDAO
         + "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // getCodeCategorySQL
-    getCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, CC.ENDPOINT,"
-        + " CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+    getCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, CC.ENDPOINT, "
+        + "CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
         + schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // getCodesForCodeCategorySQL
-    getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM" + " "
+    getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM "
         + schemaPrefix + "CODES C WHERE C.CATEGORY_ID=? ORDER BY C.NAME";
 
     // getCachedCodesForCachedCodeCategorySQL

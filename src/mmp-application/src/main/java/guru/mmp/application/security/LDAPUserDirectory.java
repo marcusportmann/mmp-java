@@ -297,8 +297,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityException(String.format(
-          "No UserPhoneNumberAttribute configuration parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserPhoneNumberAttribute configuration parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (parameters.containsKey("UserMobileNumberAttribute"))
@@ -766,8 +766,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (!user.getPassword().equals(passwordHash))
       {
-        throw new AuthenticationFailedException("Authentication failed while attempting to change"
-            + " the password for the user (" + username + ")");
+        throw new AuthenticationFailedException("Authentication failed while attempting to change "
+            + "the password for the user (" + username + ")");
       }
 
       if (isPasswordInHistory(connection, user.getId(), newPasswordHash))
@@ -938,7 +938,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
       {
         attributes.put(new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(
-          user.getPhoneNumber())));
+            user.getPhoneNumber())));
       }
 
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
@@ -2290,7 +2290,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-          userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
+            userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
       }
 
       if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
@@ -2365,10 +2365,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
     super.buildStatements(schemaPrefix);
 
     // getFunctionCodesForGroupsSQL
-    getFunctionCodesForGroupsSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F"
-        + " INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
+    getFunctionCodesForGroupsSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F "
+        + "INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
         + "INNER JOIN " + schemaPrefix + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID "
-        + "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID ";
+        + "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID";
   }
 
   private Group buildGroupFromSearchResult(SearchResult searchResult)
@@ -2428,7 +2428,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     }
 
     if ((!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
-      && (attributes.get(userPhoneNumberAttribute) != null))
+        && (attributes.get(userPhoneNumberAttribute) != null))
     {
       user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
     }

@@ -2622,33 +2622,33 @@ public class SecurityService
         + "USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES (?, ?)";
 
     // createFunctionSQL
-    createFunctionSQL = "INSERT INTO " + schemaPrefix + "FUNCTIONS" + " (ID, CODE, NAME, "
-        + "DESCRIPTION) VALUES (?, ?, ?, ?)";
+    createFunctionSQL = "INSERT INTO " + schemaPrefix + "FUNCTIONS "
+        + "(ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
 
     // createOrganisationSQL
-    createOrganisationSQL = "INSERT INTO " + schemaPrefix
-        + "ORGANISATIONS (ID, NAME) VALUES (?, ?)";
+    createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS "
+        + "(ID, NAME) VALUES (?, ?)";
 
     // createUserDirectorySQL
-    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES (ID, TYPE_ID,"
-        + " NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
+    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES "
+        + " (ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
 
     // deleteFunctionSQL
     deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
 
     // deleteOrganisationSQL
-    deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O" + " WHERE O.ID=?";
+    deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O WHERE O.ID=?";
 
     // deleteUserDirectorySQL
     deleteUserDirectorySQL = "DELETE FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
 
     // getFilteredUserDirectoriesSQL
     getFilteredUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM "
-        + schemaPrefix + "USER_DIRECTORIES UD" + " WHERE (UPPER(UD.NAME) LIKE ?) ORDER BY UD.NAME ";
+        + schemaPrefix + "USER_DIRECTORIES UD " + "WHERE (UPPER(UD.NAME) LIKE ?) ORDER BY UD.NAME";
 
     // getFilteredOrganisationsSQL
-    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix
-        + "ORGANISATIONS O WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
+    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix + "ORGANISATIONS O "
+        + "WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
 
     // getFunctionIdSQL
     getFunctionIdSQL = "SELECT F.ID FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
@@ -2699,11 +2699,11 @@ public class SecurityService
         + "ORGANISATIONS O ORDER BY O.NAME";
 
     // getUserDirectoriesForOrganisationSQL
-    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME,"
-        + " UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
-        + schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM" + " ON UD.ID = UDTOM"
-        + ".USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O" + " ON UDTOM"
-        + ".ORGANISATION_ID = O.ID WHERE O.ID=?";
+    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, "
+        + "UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
+        + schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM "
+        + "ON UD.ID = UDTOM.USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O "
+        + "ON UDTOM.ORGANISATION_ID = O.ID WHERE O.ID=?";
 
     // getUserDirectoriesSQL
     getUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM "
@@ -2714,20 +2714,20 @@ public class SecurityService
         + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
 
     // getUserDirectoryTypesSQL
-    getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS," + " UDT"
-        + ".ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
+    getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS, "
+        + "UDT.ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
 
     // organisationExistsSQL
-    organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O" + " "
+    organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O "
         + "WHERE O.ID=?";
 
     // organisationWithNameExistsSQL
-    organisationWithNameExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O"
-        + " WHERE (UPPER(O.NAME) LIKE ?)";
+    organisationWithNameExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O "
+        + "WHERE (UPPER(O.NAME) LIKE ?)";
 
     // updateFunctionSQL
-    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F" + " SET F.NAME=?, F"
-        + ".DESCRIPTION=? WHERE F.CODE=?";
+    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F "
+        + "SET F.NAME=?, F.DESCRIPTION=? WHERE F.CODE=?";
 
     // updateOrganisationSQL
     updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O SET O.NAME=? WHERE O.ID=?";

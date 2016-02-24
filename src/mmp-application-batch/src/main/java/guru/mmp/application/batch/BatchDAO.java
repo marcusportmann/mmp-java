@@ -753,64 +753,64 @@ public class BatchDAO
     deleteJobSQL = "DELETE FROM " + schemaPrefix + "JOBS J WHERE J.ID=?";
 
     // getNextJobScheduledForExecutionSQL
-    getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS,"
-        + "" + " J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION,"
-        + " J.UPDATED FROM " + schemaPrefix + "JOBS J" + " WHERE J.STATUS=? AND ((J"
-        + ".EXECUTION_ATTEMPTS=0) OR ((J.EXECUTION_ATTEMPTS>0)"
-        + " AND (J.LAST_EXECUTED<?))) AND J" + ".NEXT_EXECUTION <= ?"
-        + " ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+    getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, "
+        + "J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, "
+        + "J.UPDATED FROM " + schemaPrefix + "JOBS J "
+        + "WHERE J.STATUS=? AND ((J.EXECUTION_ATTEMPTS=0) OR ((J.EXECUTION_ATTEMPTS>0) "
+        + "AND (J.LAST_EXECUTED<?))) AND J" + ".NEXT_EXECUTION <= ? "
+        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getNextUnscheduledJobSQL
-    getNextUnscheduledJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS,"
-        + "" + " J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED"
-        + " FROM " + schemaPrefix + "JOBS J" + " WHERE J.NEXT_EXECUTION IS NULL AND J.STATUS <= 2"
-        + " ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+    getNextUnscheduledJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM " + schemaPrefix + "JOBS J WHERE J.NEXT_EXECUTION IS NULL AND J.STATUS <= 2 "
+        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getNumberOfJobsSQL
     getNumberOfJobsSQL = "SELECT COUNT(J.ID) FROM " + schemaPrefix + "JOBS J";
 
     // getJobSQL
-    getJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," + " J"
-        + ".EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED"
-        + " FROM" + " " + schemaPrefix + "JOBS J" + " WHERE J.ID = ?";
+    getJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM " + schemaPrefix + "JOBS J WHERE J.ID = ?";
 
     // getJobsSQL
-    getJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS," + " J"
-        + ".EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED"
-        + " FROM" + " " + schemaPrefix + "JOBS J";
+    getJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM" + " " + schemaPrefix + "JOBS J";
 
     // getJobParametersSQL
-    getJobParametersSQL = "SELECT JP.ID, JP.JOB_ID, JP.NAME, JP.VALUE" + " FROM " + schemaPrefix
+    getJobParametersSQL = "SELECT JP.ID, JP.JOB_ID, JP.NAME, JP.VALUE FROM " + schemaPrefix
         + "JOB_PARAMETERS JP WHERE JP.JOB_ID = ?";
 
     // getUnscheduledJobsSQL
-    getUnscheduledJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS,"
-        + " J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED" + " "
-        + "FROM " + schemaPrefix + "JOBS J" + " WHERE J.NEXT_EXECUTION IS NULL";
+    getUnscheduledJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM " + schemaPrefix + "JOBS J WHERE J.NEXT_EXECUTION IS NULL";
 
     // lockJobSQL
-    lockJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.LOCK_NAME=?, J"
-        + ".UPDATED=? WHERE J.ID=?";
+    lockJobSQL = "UPDATE " + schemaPrefix + "JOBS J SET J.STATUS=?, J.LOCK_NAME=?, J.UPDATED=? "
+        + "WHERE J.ID=?";
 
     // incrementJobExecutionAttemptsSQL
-    incrementJobExecutionAttemptsSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J"
-        + ".EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, J.UPDATED=?, J.LAST_EXECUTED=?" + " WHERE J"
-        + ".ID=?";
+    incrementJobExecutionAttemptsSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET J.EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, J.UPDATED=?, J.LAST_EXECUTED=? "
+        + "WHERE J.ID=?";
 
     // resetJobLocksSQL
-    resetJobLocksSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.LOCK_NAME=NULL, "
-        + "J.UPDATED=? WHERE J.LOCK_NAME=? AND J.STATUS=?";
+    resetJobLocksSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET J.STATUS=?, J.LOCK_NAME=NULL, J.UPDATED=? WHERE J.LOCK_NAME=? AND J.STATUS=?";
 
     // scheduleJobSQL
-    scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=1, J.EXECUTION_ATTEMPTS"
-        + " = 0, J.NEXT_EXECUTION=?, UJ.PDATED=? WHERE ID=?";
+    scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET J.STATUS=1, J.EXECUTION_ATTEMPTS=0, J.NEXT_EXECUTION=?, UJ.PDATED=? WHERE ID=?";
 
     // setJobStatusSQL
     setJobStatusSQL = "UPDATE " + schemaPrefix + "JOBS J SET J.STATUS=? WHERE J.ID=?";
 
     // unlockJobSQL
-    unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS J" + " SET J.STATUS=?, J.UPDATED=?, J"
-        + ".LOCK_NAME=NULL WHERE J.ID=?";
+    unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET J.STATUS=?, J.UPDATED=?, J.LOCK_NAME=NULL WHERE J.ID=?";
   }
 
   private Job getJob(ResultSet rs)

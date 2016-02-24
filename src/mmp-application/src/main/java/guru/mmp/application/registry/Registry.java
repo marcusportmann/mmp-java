@@ -1567,71 +1567,71 @@ public class Registry
   protected void buildStatements(String schemaPrefix)
   {
     // setStringValueInsertSQL
-    setStringValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY" + " (ID, PARENT_ID, "
-        + "ENTRY_TYPE, NAME, SVALUE) VALUES (?, ?, ?, ?, ?)";
+    setStringValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY "
+        + "(ID, PARENT_ID, ENTRY_TYPE, NAME, SVALUE) VALUES (?, ?, ?, ?, ?)";
 
     // setStringValueUpdateSQL
-    setStringValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY" + " SET SVALUE=? WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    setStringValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY "
+        + "SET SVALUE=? WHERE PARENT_ID=? AND NAME=?";
 
     // setBinaryValueInsertSQL
-    setBinaryValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY" + " (ID, PARENT_ID, "
-        + "ENTRY_TYPE, NAME, BVALUE) VALUES (?, ?, ?, ?, ?)";
+    setBinaryValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY "
+        + "(ID, PARENT_ID, ENTRY_TYPE, NAME, BVALUE) VALUES (?, ?, ?, ?, ?)";
 
     // setBinaryValueUpdateSQL
-    setBinaryValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY" + " SET BVALUE=? WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    setBinaryValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY "
+        + "SET BVALUE=? WHERE PARENT_ID=? AND NAME=?";
 
     // setIntegerValueInsertSQL
-    setIntegerValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY" + " (ID, PARENT_ID, "
-        + "ENTRY_TYPE, NAME, IVALUE) VALUES (?, ?, ?, ?, ?)";
+    setIntegerValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY "
+        + "(ID, PARENT_ID, ENTRY_TYPE, NAME, IVALUE) VALUES (?, ?, ?, ?, ?)";
 
     // setIntegerValueUpdateSQL
-    setIntegerValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY" + " SET IVALUE=? WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    setIntegerValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY "
+        + "SET IVALUE=? WHERE PARENT_ID=? AND NAME=?";
 
     // setDecimalValueInsertSQL
-    setDecimalValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY" + " (ID, PARENT_ID, "
-        + "ENTRY_TYPE, NAME, DVALUE) VALUES (?, ?, ?, ?, ?)";
+    setDecimalValueInsertSQL = "INSERT INTO " + schemaPrefix + "REGISTRY "
+        + "(ID, PARENT_ID, ENTRY_TYPE, NAME, DVALUE) VALUES (?, ?, ?, ?, ?)";
 
     // setDecimalValueUpdateSQL
-    setDecimalValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY" + " SET DVALUE=? WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    setDecimalValueUpdateSQL = "UPDATE " + schemaPrefix + "REGISTRY "
+        + "SET DVALUE=? WHERE PARENT_ID=? AND NAME=?";
 
     // removeValueSQL
-    removeValueSQL = "DELETE FROM " + schemaPrefix + "REGISTRY" + " WHERE PARENT_ID=? AND NAME=?";
+    removeValueSQL = "DELETE FROM " + schemaPrefix + "REGISTRY WHERE PARENT_ID=? AND NAME=?";
 
     // getKeyIdNoParentSQL
-    getKeyIdNoParentSQL = "SELECT ID FROM " + schemaPrefix + "REGISTRY" + " WHERE NAME=? AND "
-        + "PARENT_ID IS NULL AND ENTRY_TYPE=0";
+    getKeyIdNoParentSQL = "SELECT ID FROM " + schemaPrefix + "REGISTRY "
+        + "WHERE NAME=? AND PARENT_ID IS NULL AND ENTRY_TYPE=0";
 
     // getKeyIdWithParentSQL
-    getKeyIdWithParentSQL = "SELECT ID FROM " + schemaPrefix + "REGISTRY" + " WHERE NAME=? AND "
-        + "PARENT_ID=? AND ENTRY_TYPE=0";
+    getKeyIdWithParentSQL = "SELECT ID FROM " + schemaPrefix + "REGISTRY "
+        + "WHERE NAME=? AND PARENT_ID=? AND ENTRY_TYPE=0";
 
     // createKeySQL
-    createKeySQL = "INSERT INTO " + schemaPrefix + "REGISTRY" + " (ID, ENTRY_TYPE, PARENT_ID, "
-        + "NAME) VALUES (?,0,?,?)";
+    createKeySQL = "INSERT INTO " + schemaPrefix + "REGISTRY "
+        + "(ID, ENTRY_TYPE, PARENT_ID, NAME) VALUES (?,0,?,?)";
 
     // getValueTypeSQL
-    getValueTypeSQL = "SELECT ENTRY_TYPE FROM " + schemaPrefix + "REGISTRY" + " WHERE PARENT_ID=?"
-        + " AND NAME=?";
+    getValueTypeSQL = "SELECT ENTRY_TYPE FROM " + schemaPrefix + "REGISTRY "
+        + "WHERE PARENT_ID=? AND NAME=?";
 
     // getStringValueSQL
-    getStringValueSQL = "SELECT ENTRY_TYPE, SVALUE FROM " + schemaPrefix + "REGISTRY" + " WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    getStringValueSQL = "SELECT ENTRY_TYPE, SVALUE FROM " + schemaPrefix + "REGISTRY "
+        + "WHERE PARENT_ID=? AND NAME=?";
 
     // getBinaryValueSQL
-    getBinaryValueSQL = "SELECT ENTRY_TYPE, BVALUE FROM " + schemaPrefix + "REGISTRY" + " WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    getBinaryValueSQL = "SELECT ENTRY_TYPE, BVALUE FROM " + schemaPrefix + "REGISTRY "
+        + " WHERE PARENT_ID=? AND NAME=?";
 
     // getIntegerValueSQL
-    getIntegerValueSQL = "SELECT ENTRY_TYPE, IVALUE FROM " + schemaPrefix + "REGISTRY" + " WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    getIntegerValueSQL = "SELECT ENTRY_TYPE, IVALUE FROM " + schemaPrefix + "REGISTRY "
+        + "WHERE PARENT_ID=? AND NAME=?";
 
     // getDecimalValueSQL
-    getDecimalValueSQL = "SELECT ENTRY_TYPE, DVALUE FROM " + schemaPrefix + "REGISTRY" + " WHERE "
-        + "PARENT_ID=? AND NAME=?";
+    getDecimalValueSQL = "SELECT ENTRY_TYPE, DVALUE FROM " + schemaPrefix + "REGISTRY "
+        + " WHERE PARENT_ID=? AND NAME=?";
   }
 
   /**

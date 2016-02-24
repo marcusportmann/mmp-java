@@ -290,8 +290,8 @@ public class MessagingServiceTest
 //    else
 //    {
 //      throw new RuntimeException("Failed to send the message (" + message.getId()
-//          + "): The WBXML response data from the remote server is not a valid"
-//          + " MessageResult document");
+//          + "): The WBXML response data from the remote server is not a valid "
+//          + "MessageResult document");
 //    }
 //  }
 //
@@ -314,8 +314,8 @@ public class MessagingServiceTest
 //      else
 //      {
 //        throw new RuntimeException("Failed to send the message (" + message.getId()
-//            + "): The WBXML response data from the remote server is not a valid"
-//            + " MessageResult document");
+//            + "): The WBXML response data from the remote server is not a valid "
+//            + "MessageResult document");
 //      }
 //    }
 //    else
@@ -382,8 +382,8 @@ public class MessagingServiceTest
 //    else
 //    {
 //      throw new RuntimeException("Failed to send the message download request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessageDownloadResponse document");
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessageDownloadResponse document");
 //    }
 //  }
 //
@@ -406,8 +406,8 @@ public class MessagingServiceTest
 //    else
 //    {
 //      throw new RuntimeException("Failed to send the message part download request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessagePartDownloadResponse document");
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessagePartDownloadResponse document");
 //    }
 //  }
 //
@@ -431,8 +431,8 @@ public class MessagingServiceTest
 //    else
 //    {
 //      throw new RuntimeException("Failed to send the message part received request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessagePartReceivedResponse document");
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessagePartReceivedResponse document");
 //    }
 //  }
 //
@@ -454,8 +454,8 @@ public class MessagingServiceTest
 //    else
 //    {
 //      throw new RuntimeException("Failed to send the message received request:"
-//          + "The WBXML response data from the remote server is not a valid"
-//          + " MessageReceivedResponse document");
+//          + "The WBXML response data from the remote server is not a valid "
+//          + "MessageReceivedResponse document");
 //    }
 //  }
 //}

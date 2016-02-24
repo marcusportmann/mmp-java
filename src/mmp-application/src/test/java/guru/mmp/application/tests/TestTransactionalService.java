@@ -273,8 +273,8 @@ public class TestTransactionalService
     throws SQLException
   {
     // createTestDataSQL
-    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA" + " (ID, NAME, VALUE) VALUES "
-        + "(?, ?, ?)";
+    createTestDataSQL = "INSERT INTO " + schemaPrefix + "TEST_DATA "
+        + " (ID, NAME, VALUE) VALUES (?, ?, ?)";
 
     // getTestDataSQL
     getTestDataSQL = "SELECT ID, NAME, VALUE FROM " + schemaPrefix + "TEST_DATA WHERE ID=?";

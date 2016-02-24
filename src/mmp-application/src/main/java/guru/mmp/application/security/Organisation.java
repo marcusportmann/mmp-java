@@ -18,6 +18,10 @@ package guru.mmp.application.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
 /**
@@ -25,11 +29,24 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@Entity
+@Table(schema = "MMP", name = "ORGANISATIONS")
 public class Organisation
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation.
+   */
+  @Id
+  @Column(name = "ID", nullable = false)
   private UUID id;
+
+  /**
+   * The name of the organisation.
+   */
+  @Column(name = "NAME", nullable = false, length = 100)
   private String name;
 
   /**
