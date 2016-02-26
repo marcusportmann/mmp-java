@@ -28,8 +28,8 @@ public class TemplateProcessSecurity
   /**
    * The Application.ProcessDefinitionAdministration function code.
    */
-  public static final String FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION = "Application"
-      + ".ProcessDefinitionAdministration";
+  public static final String FUNCTION_CODE_PROCESS_DEFINITION_ADMINISTRATION =
+      "Application.ProcessDefinitionAdministration";
 
   /**
    * The Application.ViewProcess function code.

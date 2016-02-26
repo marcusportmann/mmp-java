@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="updateForm.id.Required">An ID is required.</entry>
+  <entry key="updateForm.name.Required">A name is required.</entry>
+  <entry key="updateForm.schedulingPattern.Required">A scheduling pattern is required.</entry>
+  <entry key="updateForm.jobClass.Required">A job class is required.</entry>
+  <entry key="updateForm.status.Required">Select a status.</entry>
+</properties>

@@ -19,8 +19,8 @@
     <module>mmp-application</module>
     <module>mmp-application-test</module>
     <module>mmp-application-wicket</module>
-    <module>mmp-application-batch</module>
-    <module>mmp-application-batch-wicket</module>
+    <module>mmp-application-scheduler</module>
+    <module>mmp-application-scheduler-wicket</module>
     <module>mmp-application-messaging</module>
     <module>mmp-application-messaging-wicket</module>
     <module>mmp-application-reporting</module>

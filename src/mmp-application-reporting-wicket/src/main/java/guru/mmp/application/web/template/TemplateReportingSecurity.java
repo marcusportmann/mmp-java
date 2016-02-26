@@ -28,8 +28,8 @@ public class TemplateReportingSecurity
   /**
    * The Application.ReportDefinitionAdministration function code.
    */
-  public static final String FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION = "Application"
-      + ".ReportDefinitionAdministration";
+  public static final String FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION =
+      "Application.ReportDefinitionAdministration";
 
   /**
    * The Application.ViewReport function code.
