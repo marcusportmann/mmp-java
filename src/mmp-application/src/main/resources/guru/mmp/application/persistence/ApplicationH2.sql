@@ -146,8 +146,8 @@ COMMENT ON COLUMN MMP.SERVICE_REGISTRY.WSDL_LOCATION
 
 
 CREATE TABLE MMP.ORGANISATIONS (
-  ID           UUID NOT NULL,
-  NAME         VARCHAR(100) NOT NULL,
+  ID    UUID NOT NULL,
+  NAME  VARCHAR(100) NOT NULL,
 
   PRIMARY KEY (ID)
 );
@@ -1023,7 +1023,7 @@ COMMENT ON COLUMN MMP.PACKAGES.NAME
   IS 'The name of the package';
 
 COMMENT ON COLUMN MMP.PACKAGES.IS_CURRENT
-  IS 'Is the package version current i.e. is this the version of the package that should be installed on a device';
+  IS 'Is the package version current i.e. is this the version of the package that should be installed';
 
 COMMENT ON COLUMN MMP.PACKAGES.HASH
   IS 'The SHA-256 hash used to confirm the authenticity of the package version';
@@ -1098,7 +1098,7 @@ COMMENT ON COLUMN MMP.ERROR_REPORTS.DATA
 CREATE TABLE MMP.REPORT_DEFINITIONS (
   ID        UUID NOT NULL,
   NAME      VARCHAR(100) NOT NULL,
-  TEMPLATE  BLOB NULL,
+  TEMPLATE  BLOB NOT NULL,
 
   PRIMARY KEY (ID)
 );
@@ -1157,7 +1157,7 @@ CREATE TABLE MMP.PROCESS_DEFINITIONS (
   ID       UUID NOT NULL,
   VERSION  INTEGER NOT NULL,
   NAME     VARCHAR(100) NOT NULL,
-  DATA     BLOB NULL,
+  DATA     BLOB NOT NULL,
 
   PRIMARY KEY (ID, VERSION)
 );
@@ -1237,6 +1237,85 @@ COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.PROCESS_INSTANCE_ID
 
 COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.DATA
   IS 'The data for the process instance event';
+
+
+
+CREATE TABLE MMP.CUSTOMERS (
+  ID               UUID NOT NULL,
+  ORGANISATION_ID  UUID NOT NULL,
+  NAME             VARCHAR(100) NOT NULL,
+
+  PRIMARY KEY (ID)
+);
+
+CREATE INDEX MMP_CUSTOMERS_ORGANISATION_ID_IX
+  ON MMP.CUSTOMERS
+  (ORGANISATION_ID);
+
+COMMENT ON COLUMN MMP.CUSTOMERS.ID
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer';
+
+COMMENT ON COLUMN MMP.CUSTOMERS.ORGANISATION_ID
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the customer is associated with';
+
+COMMENT ON COLUMN MMP.CUSTOMERS.NAME
+  IS 'The name of the customer';
+
+
+
+CREATE TABLE MMP.CUSTOMER_ADDRESSES (
+  ID           UUID NOT NULL,
+  CUSTOMER_ID  UUID NOT NULL,
+  NAME         VARCHAR(100) NOT NULL,
+  TYPE         INTEGER NOT NULL,
+  LINE_1       VARCHAR(200) NOT NULL,
+  LINE_2       VARCHAR(200) DEFAULT '',
+  LINE_3       VARCHAR(200) DEFAULT '',
+  CITY         VARCHAR(100) NOT NULL,
+  SUBDIVISION  VARCHAR(10) DEFAULT '',
+  CODE         VARCHAR(30) NOT NULL,
+  COUNTRY      VARCHAR(10) NOT NULL,
+
+  PRIMARY KEY (ID),
+  CONSTRAINT MMP_CUSTOMER_ADDRESSES_CUSTOMER_FK FOREIGN KEY (CUSTOMER_ID) REFERENCES MMP.CUSTOMERS(ID)
+);
+
+CREATE INDEX MMP_CUSTOMER_ADDRESSES_CUSTOMER_ID_IX
+  ON MMP.CUSTOMER_ADDRESSES
+  (CUSTOMER_ID);
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.ID
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CUSTOMER_ID
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer the customer address is associated with';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.NAME
+  IS 'The name of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.TYPE
+  IS 'The type of customer address e.g. 0 = Physical Address, 1 = Billing Address, 2 = Postal Address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_1
+  IS 'The first line of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_2
+  IS 'The second line of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_3
+  IS 'The third line of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CITY
+  IS 'The city for the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.SUBDIVISION
+  IS 'The ISO 3166-2 code for the principal subdivision (province or state) for the address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CODE
+  IS 'The ZIP or postal code for the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.COUNTRY
+  IS 'The ISO 3166-1 country code for the customer address';
 
 
 

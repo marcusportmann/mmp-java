@@ -18,11 +18,12 @@ package guru.mmp.application.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.UUID;
 
 /**
  * The <code>Organisation</code> class stores the information for an organisation.
@@ -55,6 +56,37 @@ public class Organisation
   public Organisation() {}
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param obj the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the obj argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (this == obj)
+    {
+      return true;
+    }
+
+    if (obj == null)
+    {
+      return false;
+    }
+
+    if (getClass() != obj.getClass())
+    {
+      return false;
+    }
+
+    Organisation other = (Organisation) obj;
+
+    return (id != null) && id.equals(other.id);
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organisation.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the organisation
@@ -72,6 +104,19 @@ public class Organisation
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**

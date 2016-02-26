@@ -33,6 +33,11 @@ set client_min_messages='warning';
 -- -------------------------------------------------------------------------------------------------
 -- DROP TABLES
 -- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS MMP.CUSTOMER_ADDRESSES CASCADE;
+DROP TABLE IF EXISTS MMP.CUSTOMERS CASCADE;
+DROP TABLE IF EXISTS MMP.PROCESS_INSTANCE_EVENTS CASCADE;
+DROP TABLE IF EXISTS MMP.PROCESS_INSTANCES CASCADE;
+DROP TABLE IF EXISTS MMP.PROCESS_DEFINITIONS CASCADE;
 DROP TABLE IF EXISTS MMP.SMS CASCADE;
 DROP TABLE IF EXISTS MMP.REPORT_DEFINITIONS CASCADE;
 DROP TABLE IF EXISTS MMP.ERROR_REPORTS CASCADE;
@@ -64,6 +69,7 @@ DROP TABLE IF EXISTS MMP.ORGANISATIONS CASCADE;
 DROP TABLE IF EXISTS MMP.SERVICE_REGISTRY CASCADE;
 DROP TABLE IF EXISTS MMP.REGISTRY CASCADE;
 DROP TABLE IF EXISTS MMP.IDGENERATOR CASCADE;
+DROP TABLE IF EXISTS MMP.TEST_DATA CASCADE;
 
 
 
@@ -123,6 +129,25 @@ CREATE SCHEMA MMP;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
+CREATE TABLE MMP.TEST_DATA (
+  ID     VARCHAR(40) NOT NULL,
+  NAME   VARCHAR(100) NOT NULL,
+  VALUE  VARCHAR(1000) NOT NULL,
+
+  PRIMARY KEY (ID)
+);
+
+COMMENT ON COLUMN MMP.TEST_DATA.ID
+IS 'The ID used to uniquely identify the test data';
+
+COMMENT ON COLUMN MMP.TEST_DATA.NAME
+IS 'The name for the test data';
+
+COMMENT ON COLUMN MMP.TEST_DATA.VALUE
+IS 'The value for the test data';
+
+
+
 CREATE TABLE MMP.IDGENERATOR (
   NAME     VARCHAR(100) NOT NULL,
   CURRENT  BIGINT DEFAULT 0,
@@ -140,7 +165,7 @@ COMMENT ON COLUMN MMP.IDGENERATOR.CURRENT
 
 CREATE TABLE MMP.CONFIG (
   KEY          VARCHAR(100) NOT NULL,
-  VALUE        VARCHAR(1000000) NOT NULL,
+  VALUE        TEXT NOT NULL,
   DESCRIPTION  VARCHAR(200) NOT NULL,
 
   PRIMARY KEY (KEY)
@@ -242,8 +267,8 @@ COMMENT ON COLUMN MMP.SERVICE_REGISTRY.WSDL_LOCATION
 
 
 CREATE TABLE MMP.ORGANISATIONS (
-  ID           UUID NOT NULL,
-  NAME         VARCHAR(100) NOT NULL,
+  ID    UUID NOT NULL,
+  NAME  VARCHAR(100) NOT NULL,
 
   PRIMARY KEY (ID)
 );
@@ -1121,7 +1146,7 @@ COMMENT ON COLUMN MMP.PACKAGES.NAME
   IS 'The name of the package';
 
 COMMENT ON COLUMN MMP.PACKAGES.IS_CURRENT
-  IS 'Is the package version current i.e. is this the version of the package that should be installed on a device';
+  IS 'Is the package version current i.e. is this the version of the package that should be installed';
 
 COMMENT ON COLUMN MMP.PACKAGES.HASH
   IS 'The SHA-256 hash used to confirm the authenticity of the package version';
@@ -1138,9 +1163,9 @@ CREATE TABLE MMP.ERROR_REPORTS (
   ID                   UUID NOT NULL,
   APPLICATION_ID       UUID NOT NULL,
   APPLICATION_VERSION  INTEGER NOT NULL,
-  DESCRIPTION          VARCHAR(1000) NOT NULL,
-  DETAIL               VARCHAR(10000) NOT NULL,
-  FEEDBACK             VARCHAR(2000) NOT NULL,
+  DESCRIPTION          TEXT NOT NULL,
+  DETAIL               TEXT NOT NULL,
+  FEEDBACK             TEXT NOT NULL,
   CREATED              TIMESTAMP NOT NULL,
   WHO                  VARCHAR(100) NOT NULL,
   DEVICE_ID            UUID NOT NULL,
@@ -1196,7 +1221,7 @@ COMMENT ON COLUMN MMP.ERROR_REPORTS.DATA
 CREATE TABLE MMP.REPORT_DEFINITIONS (
   ID        UUID NOT NULL,
   NAME      VARCHAR(100) NOT NULL,
-  TEMPLATE  BYTEA NULL,
+  TEMPLATE  BYTEA NOT NULL,
 
   PRIMARY KEY (ID)
 );
@@ -1256,7 +1281,7 @@ CREATE TABLE MMP.PROCESS_DEFINITIONS (
   ID       UUID NOT NULL,
   VERSION  INTEGER NOT NULL,
   NAME     VARCHAR(100) NOT NULL,
-  DATA     BYTEA NULL,
+  DATA     BYTEA NOT NULL,
 
   PRIMARY KEY (ID, VERSION)
 );
@@ -1272,6 +1297,173 @@ COMMENT ON COLUMN MMP.PROCESS_DEFINITIONS.NAME
 
 COMMENT ON COLUMN MMP.PROCESS_DEFINITIONS.DATA
   IS 'The data for the process definition';
+
+
+
+CREATE TABLE MMP.PROCESS_INSTANCES (
+  ID                  UUID NOT NULL,
+  DEFINITION_ID       UUID NOT NULL,
+  DEFINITION_VERSION  INTEGER NOT NULL,
+  DATA                BYTEA NOT NULL,
+  STATUS              INTEGER NOT NULL DEFAULT 1,
+  NEXT_EXECUTION      TIMESTAMP,
+  LOCK_NAME           VARCHAR(100),
+
+  PRIMARY KEY (ID),
+  CONSTRAINT MMP_PROCESS_INSTANCES_PROCESS_DEFINITION_FK FOREIGN KEY (DEFINITION_ID, DEFINITION_VERSION) REFERENCES MMP.PROCESS_DEFINITIONS(ID, VERSION)
+);
+
+CREATE INDEX MMP_PROCESSES_PROCESS_DEFINITION_IX
+  ON MMP.PROCESS_INSTANCES
+  (DEFINITION_ID, DEFINITION_VERSION);
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCES.ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCES.DEFINITION_ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process definition for the process instance';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCES.DEFINITION_VERSION
+IS 'The version of the process definition for the process instance';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCES.DATA
+IS 'The data giving the current execution state for the process instance';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCES.STATUS
+IS 'The status of the process instance';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCES.NEXT_EXECUTION
+IS 'The date and time when the process instance will next be executed';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCES.LOCK_NAME
+IS 'The name of the entity that has locked the process instance for execution';
+
+
+
+CREATE TABLE MMP.PROCESS_INSTANCE_EVENTS (
+  ID                   UUID NOT NULL,
+  PROCESS_INSTANCE_ID  UUID NOT NULL,
+  DATA                 BYTEA NOT NULL,
+
+  PRIMARY KEY (ID),
+  CONSTRAINT MMP_PROCESS_INSTANCE_EVENTS_PROCESS_INSTANCE_FK FOREIGN KEY (PROCESS_INSTANCE_ID) REFERENCES MMP.PROCESS_INSTANCES(ID)
+);
+
+CREATE INDEX MMP_PROCESS_INSTANCE_EVENTS_PROCESS_INSTANCE_IX
+  ON MMP.PROCESS_INSTANCE_EVENTS
+  (PROCESS_INSTANCE_ID);
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance event';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.PROCESS_INSTANCE_ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance the process instance event is associated with';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.DATA
+IS 'The data for the process instance event';
+
+
+
+CREATE TABLE MMP.PROCESS_INSTANCE_EVENTS (
+  ID                   UUID NOT NULL,
+  PROCESS_INSTANCE_ID  UUID NOT NULL,
+  DATA                 BYTEA NOT NULL,
+
+  PRIMARY KEY (ID),
+  CONSTRAINT MMP_PROCESS_INSTANCE_EVENTS_PROCESS_INSTANCE_FK FOREIGN KEY (PROCESS_INSTANCE_ID) REFERENCES MMP.PROCESS_INSTANCES(ID)
+);
+
+CREATE INDEX MMP_PROCESS_INSTANCE_EVENTS_PROCESS_INSTANCE_IX
+  ON MMP.PROCESS_INSTANCE_EVENTS
+  (PROCESS_INSTANCE_ID);
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance event';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.PROCESS_INSTANCE_ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance the process instance event is associated with';
+
+COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.DATA
+IS 'The data for the process instance event';
+
+
+
+CREATE TABLE MMP.CUSTOMERS (
+  ID               UUID NOT NULL,
+  ORGANISATION_ID  UUID NOT NULL,
+  NAME             VARCHAR(100) NOT NULL,
+
+  PRIMARY KEY (ID)
+);
+
+CREATE INDEX MMP_CUSTOMERS_ORGANISATION_ID_IX
+  ON MMP.CUSTOMERS
+  (ORGANISATION_ID);
+
+COMMENT ON COLUMN MMP.CUSTOMERS.ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer';
+
+COMMENT ON COLUMN MMP.CUSTOMERS.ORGANISATION_ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the customer is associated with';
+
+COMMENT ON COLUMN MMP.CUSTOMERS.NAME
+IS 'The name of the customer';
+
+
+
+CREATE TABLE MMP.CUSTOMER_ADDRESSES (
+  ID           UUID NOT NULL,
+  CUSTOMER_ID  UUID NOT NULL,
+  NAME         VARCHAR(100) NOT NULL,
+  TYPE         INTEGER NOT NULL,
+  LINE_1       VARCHAR(200) NOT NULL,
+  LINE_2       VARCHAR(200) DEFAULT '',
+  LINE_3       VARCHAR(200) DEFAULT '',
+  CITY         VARCHAR(100) NOT NULL,
+  SUBDIVISION  VARCHAR(10) DEFAULT '',
+  CODE         VARCHAR(30) NOT NULL,
+  COUNTRY      VARCHAR(10) NOT NULL,
+
+  PRIMARY KEY (ID),
+  CONSTRAINT MMP_CUSTOMER_ADDRESSES_CUSTOMER_FK FOREIGN KEY (CUSTOMER_ID) REFERENCES MMP.CUSTOMERS(ID)
+);
+
+CREATE INDEX MMP_CUSTOMER_ADDRESSES_CUSTOMER_ID_IX
+ON MMP.CUSTOMER_ADDRESSES
+(CUSTOMER_ID);
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CUSTOMER_ID
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer the customer address is associated with';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.NAME
+IS 'The name of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.TYPE
+IS 'The type of customer address e.g. 0 = Physical Address, 1 = Billing Address, 2 = Postal Address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_1
+IS 'The first line of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_2
+IS 'The second line of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_3
+IS 'The third line of the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CITY
+IS 'The city for the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.SUBDIVISION
+IS 'The ISO 3166-2 code for the principal subdivision (province or state) for the address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CODE
+IS 'The ZIP or postal code for the customer address';
+
+COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.COUNTRY
+IS 'The ISO 3166-1 country code for the customer address';
 
 
 
@@ -1347,11 +1539,6 @@ INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
 INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
   ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organisation Administrator', 'Organisation Administrator');
 
-INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
-  ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
-INSERT INTO MMP.ROLES (ID, NAME, DESCRIPTION) VALUES
-  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organisation Administrator', 'Organisation Administrator');
-
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecureHome
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.Dashboard
 INSERT INTO MMP.FUNCTION_TO_ROLE_MAP (FUNCTION_ID, ROLE_ID) VALUES ('2d52b029-920f-4b15-b646-5b9955c188e3', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.OrganisationAdministration
@@ -1405,6 +1592,16 @@ INSERT INTO MMP.MESSAGE_STATUSES (CODE, NAME) VALUES (7, 'QueuedForDownload');
 INSERT INTO MMP.MESSAGE_STATUSES (CODE, NAME) VALUES (8, 'Downloading');
 INSERT INTO MMP.MESSAGE_STATUSES (CODE, NAME) VALUES (10, 'Processed');
 
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (1, 'Sample Name 1', 'Sample Value 1');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (2, 'Sample Name 2', 'Sample Value 2');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (3, 'Sample Name 3', 'Sample Value 3');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (4, 'Sample Name 4', 'Sample Value 4');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (5, 'Sample Name 5', 'Sample Value 5');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (6, 'Sample Name 6', 'Sample Value 6');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (7, 'Sample Name 7', 'Sample Value 7');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (8, 'Sample Name 8', 'Sample Value 8');
+INSERT INTO MMP.TEST_DATA (ID, NAME, VALUE) VALUES (9, 'Sample Name 9', 'Sample Value 9');
+
 
 
 -- -------------------------------------------------------------------------------------------------
@@ -1412,6 +1609,7 @@ INSERT INTO MMP.MESSAGE_STATUSES (CODE, NAME) VALUES (10, 'Processed');
 -- -------------------------------------------------------------------------------------------------
 GRANT ALL ON SCHEMA MMP TO dbuser;
 
+GRANT ALL ON TABLE MMP.TEST_DATA TO dbuser;
 GRANT ALL ON TABLE MMP.IDGENERATOR TO dbuser;
 GRANT ALL ON TABLE MMP.REGISTRY TO dbuser;
 GRANT ALL ON TABLE MMP.SERVICE_REGISTRY TO dbuser;
@@ -1443,5 +1641,8 @@ GRANT ALL ON TABLE MMP.PACKAGES TO dbuser;
 GRANT ALL ON TABLE MMP.ERROR_REPORTS TO dbuser;
 GRANT ALL ON TABLE MMP.REPORT_DEFINITIONS TO dbuser;
 GRANT ALL ON TABLE MMP.SMS TO dbuser;
-
-
+GRANT ALL ON TABLE MMP.PROCESS_DEFINITIONS TO dbuser;
+GRANT ALL ON TABLE MMP.PROCESS_INSTANCES TO dbuser;
+GRANT ALL ON TABLE MMP.PROCESS_INSTANCE_EVENTS TO dbuser;
+GRANT ALL ON TABLE MMP.CUSTOMERS TO dbuser;
+GRANT ALL ON TABLE MMP.CUSTOMER_ADDRESSES TO dbuser;
