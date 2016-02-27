@@ -22,13 +22,15 @@ import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
+
 import org.apache.wicket.model.IModel;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Iterator;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>FilteredJobDataProvider</code> class provides an <code>IDataProvider</code>
@@ -51,14 +53,14 @@ public class FilteredJobDataProvider extends InjectableDataProvider<Job>
   private String filter;
 
   /**
-   * Set the filter used to limit the matching jobs.
-   *
-   * @param filter the filter used to limit the matching jobs
+   * Constructs a new <code>FilteredJobDataProvider</code>.
    */
-  public void setFilter(String filter)
-  {
-    this.filter = filter;
-  }
+  public FilteredJobDataProvider() {}
+
+  /**
+   * @see org.apache.wicket.model.IDetachable#detach()
+   */
+  public void detach() {}
 
   /**
    * Returns the filter used to limit the matching jobs.
@@ -69,16 +71,6 @@ public class FilteredJobDataProvider extends InjectableDataProvider<Job>
   {
     return filter;
   }
-
-  /**
-   * Constructs a new <code>FilteredJobDataProvider</code>.
-   */
-  public FilteredJobDataProvider() {}
-
-  /**
-   * @see org.apache.wicket.model.IDetachable#detach()
-   */
-  public void detach() {}
 
   /**
    * Retrieves the matching report definitions from the database starting with
@@ -96,16 +88,14 @@ public class FilteredJobDataProvider extends InjectableDataProvider<Job>
   {
     try
     {
-      List<Job> allJobs = schedulerService.getJobs();
+      List<Job> allJobs = schedulerService.getFilteredJobs(filter);
 
-      return allJobs.subList((int) first, (int) Math.min(first + count,
-        allJobs.size())).iterator();
+      return allJobs.subList((int) first, (int) Math.min(first + count, allJobs.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-        "Failed to load the jobs from index (%d) to (%d)", first, first + count
-          - 1), e);
+          "Failed to load the filtered jobs from index (%d) to (%d)", first, first + count - 1), e);
     }
   }
 
@@ -124,6 +114,16 @@ public class FilteredJobDataProvider extends InjectableDataProvider<Job>
   }
 
   /**
+   * Set the filter used to limit the matching jobs.
+   *
+   * @param filter the filter used to limit the matching jobs
+   */
+  public void setFilter(String filter)
+  {
+    this.filter = filter;
+  }
+
+  /**
    * Returns the total number of jobs.
    *
    * @return the total number of jobs
@@ -134,11 +134,11 @@ public class FilteredJobDataProvider extends InjectableDataProvider<Job>
   {
     try
     {
-      return schedulerService.getNumberOfJobs();
+      return schedulerService.getNumberOfFilteredJobs(filter);
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to retrieve the number of jobs", e);
+      throw new WebApplicationException("Failed to retrieve the number of filtered jobs", e);
     }
   }
 }

@@ -21,6 +21,7 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import guru.mmp.application.web.WebApplicationException;
+import guru.mmp.application.web.converters.ISO8601Converter;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSchedulerSecurity;
 import guru.mmp.application.web.template.components.Dialog;
@@ -29,6 +30,7 @@ import guru.mmp.application.web.template.data.FilteredJobDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -41,12 +43,14 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+import org.apache.wicket.util.convert.IConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -153,9 +157,10 @@ public class SchedulerPage extends TemplateWebPage
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
           item.add(new Label("jobClass", new PropertyModel<String>(item.getModel(), "jobClass")));
+          item.add(DateLabel.forDatePattern("nextExecution", new PropertyModel<Date>(item.getModel(), "nextExecution"), "YYYY-MM-dd hh:mm a"));
 
-          // The "jobParametersLink" link
-          Link<Void> jobParametersLink = new Link<Void>("jobParametersLink")
+          // The "parametersLink" link
+          Link<Void> parametersLink = new Link<Void>("parametersLink")
           {
             private static final long serialVersionUID = 1000000;
 
@@ -169,7 +174,7 @@ public class SchedulerPage extends TemplateWebPage
 //            setResponsePage(page);
             }
           };
-          item.add(jobParametersLink);
+          item.add(parametersLink);
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")

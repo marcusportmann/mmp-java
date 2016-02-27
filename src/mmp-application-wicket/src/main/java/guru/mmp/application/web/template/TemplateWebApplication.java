@@ -253,12 +253,25 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     try
     {
       Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-          "guru.mmp.application.web.template.pages.ReportDefinitionAdministrationPage");
+          "guru.mmp.application.web.template.pages.SchedulerPage");
+
+      if (Page.class.isAssignableFrom(clazz))
+      {
+        administrationGroup.addItem(new NavigationLink("Scheduler", "fa fa-clock-o",
+            (Class<? extends Page>) clazz));
+      }
+    }
+    catch (ClassNotFoundException ignored) {}
+
+    try
+    {
+      Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
+        "guru.mmp.application.web.template.pages.ReportDefinitionAdministrationPage");
 
       if (Page.class.isAssignableFrom(clazz))
       {
         administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
-            (Class<? extends Page>) clazz));
+          (Class<? extends Page>) clazz));
       }
     }
     catch (ClassNotFoundException ignored) {}

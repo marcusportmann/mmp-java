@@ -101,15 +101,18 @@
                   <tr>
                     <th>Name</th>
                     <th class="hidden-xs">Job Class</th>
-                    <th class="center two-actions">Actions</th>
+                    <th>Next Execution</th>
+                    <th class="center three-actions">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr wicket:id="job">
                     <td><span wicket:id="name">[Name]</span></td>
                     <td class="hidden-xs"><span wicket:id="jobClass">[Job Class]</span></td>
-                    <td class="two-actions">
+                    <td><span wicket:id="nextExecution">[Next Execution]</span></td>
+                    <td class="three-actions">
                       <div class="btn-group">
+                        <a wicket:id="parametersLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Job Parameters"><i class="fa fa-list-ul"></i></a>
                         <a wicket:id="updateLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Update Job"><i class="fa fa-edit"></i></a>
                         <a wicket:id="removeLink" class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove Job"><i class="fa fa-times"></i></a>
                       </div>

@@ -101,6 +101,21 @@
 
                   <div class="form-group">
                     <div class="col-xs-12">
+                      <div class="form-material form-material-primary">
+                        <label for="status">Status</label>
+                        <div class="template-custom-select">
+                          <select wicket:id="groupName" id="groupName" name="groupName" size="1" class="form-control">
+                            <option value="" selected disabled>Select a group</option>
+                            <option>Administrators</option>
+                            <option>Organisation Administrators</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-xs-12">
                       <button wicket:id="addButton" type="submit" class="btn btn-primary pull-right push-10-l">Add</button>
                       <button wicket:id="cancelButton" type="submit" class="btn btn-default pull-right">Cancel</button>
                     </div>
