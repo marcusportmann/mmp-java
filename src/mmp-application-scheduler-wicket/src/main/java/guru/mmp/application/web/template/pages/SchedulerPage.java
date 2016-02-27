@@ -21,16 +21,19 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSchedulerSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
+import guru.mmp.application.web.template.data.FilteredJobDataProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
@@ -43,23 +46,23 @@ import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
 /**
- * The <code>SchedulerPage</code> class implements the "Scheduler" page for the Web Application
- * Template.
+ * The <code>SchedulerPage</code> class implements the
+ * "Scheduler" page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSchedulerSecurity.FUNCTION_CODE_SCHEDULER_ADMINISTRATION)
-public class SchedulerPage
-  extends TemplateWebPage
+public class SchedulerPage extends TemplateWebPage
 {
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(
-    SchedulerPage.class);
+  private static final Logger logger = LoggerFactory.getLogger(SchedulerPage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Scheduler Service */
@@ -75,8 +78,6 @@ public class SchedulerPage
 
     try
     {
-      WebSession session = getWebApplicationSession();
-
       /*
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
@@ -85,11 +86,11 @@ public class SchedulerPage
       tableContainer.setOutputMarkupId(true);
       add(tableContainer);
 
-      // The dialog used to confirm the removal of a group
+      // The dialog used to confirm the removal of a job
       RemoveDialog removeDialog = new RemoveDialog(tableContainer);
       add(removeDialog);
 
-      // The "addLink" link
+      // The "addLink" used to add a new job
       Link<Void> addLink = new Link<Void>("addLink")
       {
         private static final long serialVersionUID = 1000000;
@@ -97,24 +98,78 @@ public class SchedulerPage
         @Override
         public void onClick()
         {
-          AddJobPage page = new AddJobPage(getPageReference());
-
-          setResponsePage(page);
+//        AddJobPage page = new AddJobPage(getPageReference());
+//
+//        setResponsePage(page);
         }
       };
       tableContainer.add(addLink);
 
-      JobDataProvider dataProvider = new JobDataProvider();
+      FilteredJobDataProvider dataProvider = new FilteredJobDataProvider();
 
-      // The job data view
-      DataView<Job> dataView = new DataView<Job>(
-        "job", dataProvider)
+      // The "filterForm" form
+      Form<Void> filterForm = new Form<>("filterForm");
+      filterForm.setMarkupId("filterForm");
+      filterForm.setOutputMarkupId(true);
+
+      // The "filter" field
+      TextField<String> filterField = new TextField<>("filter", new PropertyModel<>(dataProvider,
+          "filter"));
+      filterForm.add(filterField);
+
+      // The "filterButton" button
+      Button filterButton = new Button("filterButton")
       {
         private static final long serialVersionUID = 1000000;
 
+        @Override
+        public void onSubmit() {}
+      };
+      filterButton.setDefaultFormProcessing(true);
+      filterForm.add(filterButton);
+
+      // The "resetButton" button
+      Button resetButton = new Button("resetButton")
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
+        public void onSubmit()
+        {
+          dataProvider.setFilter("");
+        }
+      };
+      filterForm.add(resetButton);
+
+      tableContainer.add(filterForm);
+
+      // The job data view
+      DataView<Job> dataView = new DataView<Job>("job", dataProvider)
+      {
+        private static final long serialVersionUID = 1000000;
+
+        @Override
         protected void populateItem(Item<Job> item)
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
+          item.add(new Label("jobClass", new PropertyModel<String>(item.getModel(), "jobClass")));
+
+          // The "jobParametersLink" link
+          Link<Void> jobParametersLink = new Link<Void>("jobParametersLink")
+          {
+            private static final long serialVersionUID = 1000000;
+
+            @Override
+            public void onClick()
+            {
+              Job job = item.getModelObject();
+
+//            JobParametersPage page = new JobParametersPage(getPageReference(), job.getId());
+//
+//            setResponsePage(page);
+            }
+          };
+          item.add(jobParametersLink);
 
           // The "updateLink" link
           Link<Void> updateLink = new Link<Void>("updateLink")
@@ -126,24 +181,11 @@ public class SchedulerPage
             {
               Job job = item.getModelObject();
 
-              try
-              {
-                UpdateJobPage page = new UpdateJobPage(
-                  getPageReference(), new Model<>(job));
-
-                setResponsePage(page);
-              }
-              catch (Throwable e)
-              {
-                logger.error(String.format("Failed to retrieve the job (%s)",
-                  job.getId()), e);
-
-                error(String.format("Failed to retrieve the job (%s)",
-                  job.getId()));
-              }
+//            UpdateJobPage page = new UpdateJobPage(getPageReference(), item.getModel());
+//
+//            setResponsePage(page);
             }
           };
-
           item.add(updateLink);
 
           // The "removeLink" link
@@ -177,8 +219,7 @@ public class SchedulerPage
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(
-        "Failed to initialise the SchedulerPage", e);
+      throw new WebApplicationException("Failed to initialise the SchedulerPage", e);
     }
   }
 
@@ -189,13 +230,13 @@ public class SchedulerPage
   private class RemoveDialog extends Dialog
   {
     private static final long serialVersionUID = 1000000;
-    private UUID id;
     private Label nameLabel;
+    private UUID id;
 
     /**
      * Constructs a new <code>RemoveDialog</code>.
      *
-     * @param tableContainer the table container, which allows the code table and its
+     * @param tableContainer the table container, which allows the job table and its
      *                       associated navigator to be updated using AJAX
      */
     public RemoveDialog(WebMarkupContainer tableContainer)
@@ -207,62 +248,49 @@ public class SchedulerPage
       nameLabel.setOutputMarkupId(true);
       add(nameLabel);
 
-      // The "removeLink" link
-      AjaxLink<Void> removeLink = new AjaxLink<Void>("removeLink")
-      {
-        private static final long serialVersionUID = 1000000;
-
-        @Override
-        public void onClick(AjaxRequestTarget target)
-        {
-          try
+      add(new AjaxLink<Void>("removeLink")
           {
-            schedulerService.deleteJob(id);
+            private static final long serialVersionUID = 1000000;
 
-            target.add(tableContainer);
+            @Override
+            public void onClick(AjaxRequestTarget target)
+            {
+              try
+              {
+                // schedulerService.deleteJob(id);
 
-            SchedulerPage.this.info(
-              "Successfully removed the job "
-                + nameLabel.getDefaultModelObjectAsString());
-          }
-          catch (Throwable e)
-          {
-            logger.error(String.format("Failed to remove the job (%s): %s", id,
-              e.getMessage()), e);
+                target.add(tableContainer);
 
-            SchedulerPage.this.error("Failed to remove the job "
-              + nameLabel.getDefaultModelObjectAsString());
-          }
+                SchedulerPage.this.info("Successfully removed the job "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
+              catch (Throwable e)
+              {
+                logger.error(String.format("Failed to remove the job (%s): %s", id,
+                    e.getMessage()), e);
 
-          target.add(getAlerts());
+                SchedulerPage.this.error("Failed to remove the job "
+                    + nameLabel.getDefaultModelObjectAsString());
+              }
 
-          hide(target);
-        }
-      };
-      add(removeLink);
-    }
+              target.add(getAlerts());
 
-    /**
-     * @param target the AJAX request target
-     *
-     * @see Dialog#hide(org.apache.wicket.ajax.AjaxRequestTarget)
-     */
-    public void hide(AjaxRequestTarget target)
-    {
-      super.hide(target);
+              hide(target);
+            }
+          });
     }
 
     /**
      * Show the dialog using Ajax.
      *
      * @param target the AJAX request target
-     * @param job    the summary for the job being removed
+     * @param job    the job being removed
      */
     public void show(AjaxRequestTarget target, Job job)
     {
-      id = job.getId();
+      this.id = job.getId();
 
-      nameLabel.setDefaultModelObject(job.getName());
+      this.nameLabel.setDefaultModelObject(job.getName());
 
       target.add(nameLabel);
 

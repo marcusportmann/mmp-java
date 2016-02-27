@@ -29,9 +29,13 @@ import javax.annotation.PostConstruct;
 
 import javax.ejb.*;
 
+import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
+
 import javax.inject.Inject;
+
+import javax.naming.InitialContext;
 
 /**
  * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.
@@ -144,93 +148,31 @@ public class BackgroundJobExecutor
         return;
       }
 
-      // Execute the job
-      try
+      ManagedThreadFactory managedThreadFactory = getManagedThreadFactory();
+
+      // Execute the job in a new thread
+      if (managedThreadFactory != null)
       {
-        if (logger.isDebugEnabled())
-        {
-          logger.debug(String.format("Executing the job (%s)", job.getId()));
-        }
-
-        schedulerService.executeJob(job);
-
-        // Reschedule the job
-        try
-        {
-          schedulerService.rescheduleJob(job.getId(), job.getSchedulingPattern());
-
-          try
-          {
-            schedulerService.unlockJob(job.getId(), Job.Status.SCHEDULED);
-          }
-          catch (Throwable f)
-          {
-            logger.error(String.format(
-                "Failed to unlock and set the status for the job (%s) to \"Scheduled\"",
-                job.getId()), f);
-          }
-        }
-        catch (Throwable e)
-        {
-          logger.warn(String.format(
-              "The job (%s) could not be rescheduled and will be marked as \"Failed\"",
-              job.getId()));
-
-          try
-          {
-            schedulerService.unlockJob(job.getId(), Job.Status.FAILED);
-          }
-          catch (Throwable f)
-          {
-            logger.error(String.format(
-                "Failed to unlock and set the status for the job (%s) to \"Failed\"", job.getId()),
-                f);
-          }
-        }
+        managedThreadFactory.newThread(new JobExecutor(schedulerService, job)).start();
       }
-      catch (Throwable e)
+
+      // Execute the job in the current thread
+      else
       {
-        logger.error(String.format("Failed to execute the job (%s)", job.getId()), e);
-
-        // Increment the execution attempts for the job
-        try
-        {
-          schedulerService.incrementJobExecutionAttempts(job.getId());
-
-          job.setExecutionAttempts(job.getExecutionAttempts() + 1);
-        }
-        catch (Throwable f)
-        {
-          logger.error(String.format("Failed to increment the execution attempts for the job (%s)",
-              job.getId()), f);
-        }
-
-        try
-        {
-          /*
-           * If the job has exceeded the maximum number of execution attempts then
-           * unlock it and set its status to "Failed" otherwise unlock it and set its status to
-           * "Scheduled".
-           */
-          if (job.getExecutionAttempts() >= schedulerService.getMaximumJobExecutionAttempts())
-          {
-            logger.warn(String.format(
-                "The job (%s) has exceeded the maximum  number of execution attempts and will be "
-                + "marked as \"Failed\"", job.getId()));
-
-            schedulerService.unlockJob(job.getId(), Job.Status.FAILED);
-          }
-          else
-          {
-            schedulerService.unlockJob(job.getId(), Job.Status.SCHEDULED);
-          }
-        }
-        catch (Throwable f)
-        {
-          logger.error(String.format("Failed to unlock and set the status for the job (%s)",
-              job.getId()), f);
-        }
+        new JobExecutor(schedulerService, job).run();
       }
+    }
+  }
+
+  private ManagedThreadFactory getManagedThreadFactory()
+  {
+    try
+    {
+      return InitialContext.doLookup("java:comp/DefaultManagedThreadFactory");
+    }
+    catch (Throwable e)
+    {
+      return null;
     }
   }
 }

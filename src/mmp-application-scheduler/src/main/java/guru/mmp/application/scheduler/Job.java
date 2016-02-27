@@ -85,6 +85,11 @@ public class Job
   private Date updated;
 
   /**
+   * Is the job enabled for execution.
+   */
+  private boolean isEnabled;
+
+  /**
    * Constructs a new <code>Job</code>.
    */
   public Job() {}
@@ -97,6 +102,7 @@ public class Job
    * @param name              the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
    * @param jobClass          the fully qualified name of the Java class that implements the job
+   * @param isEnabled         is the job enabled for execution
    * @param status            the status of the job
    * @param executionAttempts the number of times the current execution of the job has
    *                          been attempted
@@ -105,13 +111,15 @@ public class Job
    * @param nextExecution     the date and time when the job will next be executed
    * @param updated           the date and time the job was updated
    */
-  public Job(UUID id, String name, String schedulingPattern, String jobClass, Status status,
-      int executionAttempts, String lockName, Date lastExecuted, Date nextExecution, Date updated)
+  public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean isEnabled,
+      Status status, int executionAttempts, String lockName, Date lastExecuted, Date nextExecution,
+      Date updated)
   {
     this.id = id;
     this.name = name;
     this.schedulingPattern = schedulingPattern;
     this.jobClass = jobClass;
+    this.isEnabled = isEnabled;
     this.status = status;
     this.executionAttempts = executionAttempts;
     this.lockName = lockName;
@@ -127,8 +135,9 @@ public class Job
    */
   public enum Status
   {
-    UNKNOWN(0, "Unknown"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"), EXECUTED(3,
-        "Executed"), ABORTED(4, "Aborted"), FAILED(5, "Failed");
+    UNSCHEDULED(0, "Unscheduled"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"), EXECUTED(
+        3, "Executed"), ABORTED(4, "Aborted"), FAILED(5, "Failed"), ONCE_OFF(6, "Once-Off"),
+        UNKNOWN(-1, "Unknown");
 
     private int code;
     private String name;
@@ -150,6 +159,9 @@ public class Job
     {
       switch (code)
       {
+        case 0:
+          return Status.UNSCHEDULED;
+
         case 1:
           return Status.SCHEDULED;
 
@@ -164,6 +176,9 @@ public class Job
 
         case 5:
           return Status.FAILED;
+
+        case 6:
+          return Status.ONCE_OFF;
 
         default:
           return Status.UNKNOWN;
@@ -230,6 +245,16 @@ public class Job
   public UUID getId()
   {
     return id;
+  }
+
+  /**
+   * Returns whether the job is enabled for execution.
+   *
+   * @return <code>true</code> if the job is enabled for execution or <code>false</code> otherwise
+   */
+  public boolean getIsEnabled()
+  {
+    return isEnabled;
   }
 
   /**
@@ -332,6 +357,17 @@ public class Job
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  /**
+   * Set whether the job is enabled for execution.
+   *
+   * @param isEnabled <code>true</code> if the job is enabled for execution or <code>false</code>
+   *                  otherwise
+   */
+  public void setIsEnabled(boolean isEnabled)
+  {
+    this.isEnabled = isEnabled;
   }
 
   /**

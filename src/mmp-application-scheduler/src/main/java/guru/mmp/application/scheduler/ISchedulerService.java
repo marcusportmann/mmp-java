@@ -51,6 +51,18 @@ public interface ISchedulerService
     throws SchedulerServiceException;
 
   /**
+   * Retrieve the filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the jobs
+   *
+   * @throws SchedulerServiceException
+   */
+  List<Job> getFilteredJobs(String filter)
+    throws SchedulerServiceException;
+
+  /**
    * Retrieve the job.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
@@ -105,6 +117,18 @@ public interface ISchedulerService
     throws SchedulerServiceException;
 
   /**
+   * Retrieve the number of filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the number of filtered jobs
+   *
+   * @throws SchedulerServiceException
+   */
+  int getNumberOfFilteredJobs(String filter)
+    throws SchedulerServiceException;
+
+  /**
    * Retrieve the number of jobs.
    *
    * @return the number of jobs
@@ -112,6 +136,16 @@ public interface ISchedulerService
    * @throws SchedulerServiceException
    */
   int getNumberOfJobs()
+    throws SchedulerServiceException;
+
+  /**
+   * Retrieve the unscheduled jobs.
+   *
+   * @return the unscheduled jobs
+   *
+   * @throws SchedulerServiceException
+   */
+  List<Job> getUnscheduledJobs()
     throws SchedulerServiceException;
 
   /**

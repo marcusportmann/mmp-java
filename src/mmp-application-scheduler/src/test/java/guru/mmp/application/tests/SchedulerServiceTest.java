@@ -30,6 +30,7 @@ import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,6 +92,22 @@ public class SchedulerServiceTest
   public void jobTest()
     throws Exception
   {
+    Job disabledJob = getTestJobDetails();
+    disabledJob.setIsEnabled(false);
+
+    schedulerService.createJob(disabledJob);
+
+    List<Job> unscheduledJobs = schedulerService.getUnscheduledJobs();
+
+    for (Job unscheduledJob : unscheduledJobs)
+    {
+      if (unscheduledJob.getId().equals(disabledJob.getId()))
+      {
+        fail(String.format("The disabled job (%s) was retrieved incorrectly as an unscheduled job",
+          disabledJob.getId()));
+      }
+    }
+
     Job job = getTestJobDetails();
 
     List<Job> beforeRetrievedJobs = schedulerService.getJobs();
@@ -103,13 +120,13 @@ public class SchedulerServiceTest
 
     int numberOfJobs = schedulerService.getNumberOfJobs();
 
-    assertEquals("The correct number of jobs (" + (beforeRetrievedJobs.size() + 1)
-        + ") was not retrieved", beforeRetrievedJobs.size() + 1, numberOfJobs);
+    assertEquals(String.format("The correct number of jobs (%d) was not retrieved",
+      beforeRetrievedJobs.size() + 1), beforeRetrievedJobs.size() + 1, numberOfJobs);
 
     List<Job> afterRetrievedJobs = schedulerService.getJobs();
 
-    assertEquals("The correct number of jobs (" + (beforeRetrievedJobs.size() + 1)
-        + ") was not retrieved", beforeRetrievedJobs.size() + 1, afterRetrievedJobs.size());
+    assertEquals(String.format("The correct number of jobs (%d) was not retrieved",
+      beforeRetrievedJobs.size() + 1), beforeRetrievedJobs.size() + 1, afterRetrievedJobs.size());
 
     boolean foundJob = false;
 
@@ -127,8 +144,53 @@ public class SchedulerServiceTest
 
     if (!foundJob)
     {
-      fail("Failed to find the job (" + job.getId() + ") in the list of jobs");
+      fail(String.format("Failed to find the job (%s) in the list of jobs", job.getId()));
     }
+
+    boolean foundUnscheduledJob = false;
+
+    unscheduledJobs = schedulerService.getUnscheduledJobs();
+
+    for (Job unscheduledJob : unscheduledJobs)
+    {
+      if (unscheduledJob.getId().equals(job.getId()))
+      {
+        foundUnscheduledJob = true;
+
+        break;
+      }
+    }
+
+    if (!foundUnscheduledJob)
+    {
+      fail(
+        String.format("Failed to find the job (%s) in the list of unscheduled jobs", job.getId()));
+    }
+
+    schedulerService.scheduleNextUnscheduledJobForExecution();
+
+    unscheduledJobs = schedulerService.getUnscheduledJobs();
+
+    for (Job unscheduledJob : unscheduledJobs)
+    {
+      if (unscheduledJob.getId().equals(job.getId()))
+      {
+        fail(String.format("The job (%s) was retrieved incorrectly as an unscheduled job",
+          job.getId()));
+
+        break;
+      }
+    }
+
+    retrievedJob = schedulerService.getJob(job.getId());
+
+    assertEquals("The status for the job (" + job.getId() + ") is incorrect", Job.Status.SCHEDULED, job.getStatus());
+
+
+
+    int xxx = 0;
+    xxx++;
+
 
     // ADD UPDATE AND DELETE TEST CALLS
 
@@ -143,7 +205,8 @@ public class SchedulerServiceTest
     job.setName("Test Job Name " + jobCount);
     job.setSchedulingPattern("5 * * * *");
     job.setJobClass("guru.mmp.application.scheduler.TestJob");
-    job.setStatus(Job.Status.SCHEDULED);
+    job.setIsEnabled(true);
+    job.setStatus(Job.Status.UNSCHEDULED);
     job.setExecutionAttempts(0);
     job.setLockName(null);
     job.setLastExecuted(null);
@@ -160,6 +223,8 @@ public class SchedulerServiceTest
         job1.getSchedulingPattern(), job2.getSchedulingPattern());
     assertEquals("The job class values for the two jobs do not match", job1.getJobClass(),
         job2.getJobClass());
+    assertEquals("The is enabled values for the two jobs do not match", job1.getIsEnabled(),
+      job2.getIsEnabled());
     assertEquals("The status values for the two jobs do not match", job1.getStatus(),
         job2.getStatus());
     assertEquals("The execution attempts values for the two jobs do not match",

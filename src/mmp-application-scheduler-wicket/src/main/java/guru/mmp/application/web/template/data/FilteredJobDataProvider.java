@@ -22,24 +22,22 @@ import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>JobDataProvider</code> class provides an <code>IDataProvider</code>
- * implementation that retrieves <code>Job</code> instances from the database.
+ * The <code>FilteredJobDataProvider</code> class provides an <code>IDataProvider</code>
+ * implementation that retrieves filtered <code>Job</code> instances from the database.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class JobDataProvider extends InjectableDataProvider<Job>
+public class FilteredJobDataProvider extends InjectableDataProvider<Job>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -48,9 +46,34 @@ public class JobDataProvider extends InjectableDataProvider<Job>
   private ISchedulerService schedulerService;
 
   /**
-   * Constructs a new <code>JobDataProvider</code>.
+   * The filter used to limit the matching jobs.
    */
-  public JobDataProvider() {}
+  private String filter;
+
+  /**
+   * Set the filter used to limit the matching jobs.
+   *
+   * @param filter the filter used to limit the matching jobs
+   */
+  public void setFilter(String filter)
+  {
+    this.filter = filter;
+  }
+
+  /**
+   * Returns the filter used to limit the matching jobs.
+   *
+   * @return the filter used to limit the matching jobs
+   */
+  public String getFilter()
+  {
+    return filter;
+  }
+
+  /**
+   * Constructs a new <code>FilteredJobDataProvider</code>.
+   */
+  public FilteredJobDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()
@@ -75,12 +98,14 @@ public class JobDataProvider extends InjectableDataProvider<Job>
     {
       List<Job> allJobs = schedulerService.getJobs();
 
-      return allJobs.subList((int) first, (int) Math.min(first + count, allJobs.size())).iterator();
+      return allJobs.subList((int) first, (int) Math.min(first + count,
+        allJobs.size())).iterator();
     }
     catch (Throwable e)
     {
       throw new WebApplicationException(String.format(
-          "Failed to load the jobs from index (%d) to (%d)", first, first + count - 1), e);
+        "Failed to load the jobs from index (%d) to (%d)", first, first + count
+          - 1), e);
     }
   }
 

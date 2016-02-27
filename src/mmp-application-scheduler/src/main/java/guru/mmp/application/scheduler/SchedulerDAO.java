@@ -22,6 +22,7 @@ import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
+import guru.mmp.common.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +79,8 @@ public class SchedulerDAO
   private String scheduleJobSQL;
   private String setJobStatusSQL;
   private String unlockJobSQL;
+  private String getNumberOfFilteredJobsSQL;
+  private String getFilteredJobsSQL;
 
   /**
    * Constructs a new <code>SchedulerDAO</code>.
@@ -101,7 +104,8 @@ public class SchedulerDAO
       statement.setString(2, job.getName());
       statement.setString(3, job.getSchedulingPattern());
       statement.setString(4, job.getJobClass());
-      statement.setInt(5, job.getStatus().getCode());
+      statement.setBoolean(5, job.getIsEnabled());
+      statement.setInt(6, job.getStatus().getCode());
 
       if (statement.executeUpdate() != 1)
       {
@@ -113,6 +117,48 @@ public class SchedulerDAO
     {
       throw new DAOException(String.format("Failed to add the job (%s) to the database",
           job.getName()), e);
+    }
+  }
+
+  /**
+   * Retrieve the filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the jobs
+   *
+   * @throws DAOException
+   */
+  public List<Job> getFilteredJobs(String filter)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+          ? getJobsSQL
+          : getFilteredJobsSQL))
+    {
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        statement.setString(1, "%" + filter.toUpperCase() + "%");
+        statement.setString(2, "%" + filter.toUpperCase() + "%");
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<Job> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(getJob(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException(String.format(
+          "Failed to retrieve the jobs matching the filter (%s) from the database", filter), e);
     }
   }
 
@@ -330,6 +376,49 @@ public class SchedulerDAO
             "Failed to resume the transaction while retrieving the next job that has been "
             + "scheduled for execution from the database", e);
       }
+    }
+  }
+
+  /**
+   * Retrieve the number of filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the number of filtered jobs
+   *
+   * @throws DAOException
+   */
+  public int getNumberOfFilteredJobs(String filter)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+          ? getNumberOfJobsSQL
+          : getNumberOfFilteredJobsSQL))
+    {
+      if (!StringUtil.isNullOrEmpty(filter))
+      {
+        statement.setString(1, "%" + filter.toUpperCase() + "%");
+        statement.setString(2, "%" + filter.toUpperCase() + "%");
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException(String.format(
+          "Failed to retrieve the number of jobs matching the filter (%s) from the databae",
+          filter), e);
     }
   }
 
@@ -747,46 +836,59 @@ public class SchedulerDAO
   {
     // createJobSQL
     createJobSQL = "INSERT INTO " + schemaPrefix + "JOBS" + " (ID, NAME, SCHEDULING_PATTERN, "
-        + "JOB_CLASS, STATUS) VALUES (?, ?, ?, ?, ?)";
+        + "JOB_CLASS, IS_ENABLED, STATUS) VALUES (?, ?, ?, ?, ?, ?)";
 
     // deleteJobSQL
     deleteJobSQL = "DELETE FROM " + schemaPrefix + "JOBS J WHERE J.ID=?";
 
-    // getNextJobScheduledForExecutionSQL
-    getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, "
-        + "J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, "
-        + "J.UPDATED FROM " + schemaPrefix + "JOBS J "
-        + "WHERE J.STATUS=? AND ((J.EXECUTION_ATTEMPTS=0) OR ((J.EXECUTION_ATTEMPTS>0) "
-        + "AND (J.LAST_EXECUTED<?))) AND J" + ".NEXT_EXECUTION <= ? "
-        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    // getNextUnscheduledJobSQL
-    getNextUnscheduledJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
-        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
-        + "FROM " + schemaPrefix + "JOBS J WHERE J.NEXT_EXECUTION IS NULL AND J.STATUS <= 2 "
-        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    // getNumberOfJobsSQL
-    getNumberOfJobsSQL = "SELECT COUNT(J.ID) FROM " + schemaPrefix + "JOBS J";
-
-    // getJobSQL
-    getJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
-        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
-        + "FROM " + schemaPrefix + "JOBS J WHERE J.ID = ?";
-
-    // getJobsSQL
-    getJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
-        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
-        + "FROM" + " " + schemaPrefix + "JOBS J";
+    // getFilteredJobsSQL
+    getFilteredJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, "
+        + "J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM" + " " + schemaPrefix + "JOBS J "
+        + "WHERE (UPPER(J.NAME) LIKE ?) OR (UPPER(J.JOB_CLASS) LIKE ?)";
 
     // getJobParametersSQL
     getJobParametersSQL = "SELECT JP.ID, JP.JOB_ID, JP.NAME, JP.VALUE FROM " + schemaPrefix
         + "JOB_PARAMETERS JP WHERE JP.JOB_ID = ?";
 
-    // getUnscheduledJobsSQL
-    getUnscheduledJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.STATUS, "
+    // getJobSQL
+    getJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
         + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
-        + "FROM " + schemaPrefix + "JOBS J WHERE J.NEXT_EXECUTION IS NULL";
+        + "FROM " + schemaPrefix + "JOBS J WHERE J.ID = ?";
+
+    // getJobsSQL
+    getJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM" + " " + schemaPrefix + "JOBS J";
+
+    // getNextJobScheduledForExecutionSQL
+    getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, "
+        + "J.IS_ENABLED, J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, "
+        + "J.NEXT_EXECUTION, J.UPDATED FROM " + schemaPrefix + "JOBS J "
+        + "WHERE J.STATUS=? AND ((J.EXECUTION_ATTEMPTS=0) OR ((J.EXECUTION_ATTEMPTS>0) "
+        + "AND (J.LAST_EXECUTED<?))) AND J.NEXT_EXECUTION <= ? "
+        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+
+    // getNextUnscheduledJobSQL
+    getNextUnscheduledJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, "
+        + "J.IS_ENABLED, J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, "
+        + "J.NEXT_EXECUTION, J.UPDATED FROM " + schemaPrefix
+        + "JOBS J WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0 "
+        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+
+    // getNumberOfFilteredJobsSQL
+    getNumberOfFilteredJobsSQL = "SELECT COUNT(J.ID) FROM " + schemaPrefix + "JOBS J "
+        + "WHERE (UPPER(J.NAME) LIKE ?) OR (UPPER(J.JOB_CLASS) LIKE ?)";
+
+    // getNumberOfJobsSQL
+    getNumberOfJobsSQL = "SELECT COUNT(J.ID) FROM " + schemaPrefix + "JOBS J";
+
+    // getUnscheduledJobsSQL
+    getUnscheduledJobsSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, "
+        + "J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, "
+        + "J.UPDATED FROM " + schemaPrefix + "JOBS J "
+        + "WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0";
 
     // lockJobSQL
     lockJobSQL = "UPDATE " + schemaPrefix + "JOBS J SET J.STATUS=?, J.LOCK_NAME=?, J.UPDATED=? "
@@ -803,7 +905,7 @@ public class SchedulerDAO
 
     // scheduleJobSQL
     scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
-        + "SET J.STATUS=1, J.EXECUTION_ATTEMPTS=0, J.NEXT_EXECUTION=?, UJ.PDATED=? WHERE ID=?";
+        + "SET J.STATUS=1, J.EXECUTION_ATTEMPTS=0, J.NEXT_EXECUTION=?, J.UPDATED=? WHERE ID=?";
 
     // setJobStatusSQL
     setJobStatusSQL = "UPDATE " + schemaPrefix + "JOBS J SET J.STATUS=? WHERE J.ID=?";
@@ -816,9 +918,9 @@ public class SchedulerDAO
   private Job getJob(ResultSet rs)
     throws SQLException
   {
-    return new Job((UUID) rs.getObject(1), rs.getString(2), rs.getString(3), rs.getString(4), Job
-        .Status.fromCode(rs.getInt(5)), rs.getInt(6), rs.getString(7), rs.getTimestamp(8),
-        rs.getTimestamp(9), rs.getTimestamp(10));
+    return new Job((UUID) rs.getObject(1), rs.getString(2), rs.getString(3), rs.getString(4),
+        rs.getBoolean(5), Job.Status.fromCode(rs.getInt(6)), rs.getInt(7), rs.getString(8),
+        rs.getTimestamp(9), rs.getTimestamp(10), rs.getTimestamp(11));
   }
 
   private JobParameter getJobParameter(ResultSet rs)

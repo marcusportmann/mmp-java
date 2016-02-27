@@ -43,6 +43,18 @@ public interface ISchedulerDAO
     throws DAOException;
 
   /**
+   * Retrieve the filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the jobs
+   *
+   * @throws DAOException
+   */
+  List<Job> getFilteredJobs(String filter)
+    throws DAOException;
+
+  /**
    * Retrieve the job.
    *
    * @param id the ID uniquely identifying the job
@@ -92,6 +104,18 @@ public interface ISchedulerDAO
    * @throws DAOException
    */
   Job getNextJobScheduledForExecution(int executionRetryDelay, String lockName)
+    throws DAOException;
+
+  /**
+   * Retrieve the number of filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the number of filtered jobs
+   *
+   * @throws DAOException
+   */
+  int getNumberOfFilteredJobs(String filter)
     throws DAOException;
 
   /**

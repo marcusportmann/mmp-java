@@ -34,10 +34,13 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import javax.enterprise.concurrent.ManagedThreadFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 
 import javax.inject.Inject;
+
+import javax.naming.InitialContext;
 
 /**
  * The <code>SchedulerService</code> class provides the Scheduler Service implementation.
@@ -176,6 +179,29 @@ public class SchedulerService
   }
 
   /**
+   * Retrieve the filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the jobs
+   *
+   * @throws SchedulerServiceException
+   */
+  public List<Job> getFilteredJobs(String filter)
+    throws SchedulerServiceException
+  {
+    try
+    {
+      return jobDAO.getFilteredJobs(filter);
+    }
+    catch (Throwable e)
+    {
+      throw new SchedulerServiceException(String.format(
+          "Failed to retrieve the jobs matching the filter (%s)", filter), e);
+    }
+  }
+
+  /**
    * Retrieve the job.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
@@ -236,7 +262,7 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException("Failed to retrieve jobs", e);
+      throw new SchedulerServiceException("Failed to retrieve the jobs", e);
     }
   }
 
@@ -275,6 +301,29 @@ public class SchedulerService
   }
 
   /**
+   * Retrieve the number of filtered jobs.
+   *
+   * @param filter the filter to apply to the jobs
+   *
+   * @return the number of filtered jobs
+   *
+   * @throws SchedulerServiceException
+   */
+  public int getNumberOfFilteredJobs(String filter)
+    throws SchedulerServiceException
+  {
+    try
+    {
+      return jobDAO.getNumberOfFilteredJobs(filter);
+    }
+    catch (Throwable e)
+    {
+      throw new SchedulerServiceException(String.format(
+          "Failed to retrieve the number of jobs matching the filter (%s)", filter), e);
+    }
+  }
+
+  /**
    * Retrieve the number of jobs.
    *
    * @return the number of jobs
@@ -291,6 +340,26 @@ public class SchedulerService
     catch (Throwable e)
     {
       throw new SchedulerServiceException("Failed to retrieve the number of jobs", e);
+    }
+  }
+
+  /**
+   * Retrieve the unscheduled jobs.
+   *
+   * @return the unscheduled jobs
+   *
+   * @throws SchedulerServiceException
+   */
+  public List<Job> getUnscheduledJobs()
+    throws SchedulerServiceException
+  {
+    try
+    {
+      return jobDAO.getUnscheduledJobs();
+    }
+    catch (Throwable e)
+    {
+      throw new SchedulerServiceException("Failed to retrieve the unscheduled jobs", e);
     }
   }
 
