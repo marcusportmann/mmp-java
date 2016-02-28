@@ -43,6 +43,16 @@ public interface ISchedulerDAO
     throws DAOException;
 
   /**
+   * Delete the job.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
+   *
+   * @throws DAOException
+   */
+  void deleteJob(UUID id)
+    throws DAOException;
+
+  /**
    * Retrieve the filtered jobs.
    *
    * @param filter the filter to apply to the jobs

@@ -5,4 +5,6 @@
   <entry key="addForm.name.Required">A name is required.</entry>
   <entry key="addForm.schedulingPattern.Required">A scheduling pattern is required.</entry>
   <entry key="addForm.jobClass.Required">A job class is required.</entry>
+  <entry key="addForm.status.Required">Select a status.</entry>
+  <entry key="addForm.status.null"></entry>
 </properties>

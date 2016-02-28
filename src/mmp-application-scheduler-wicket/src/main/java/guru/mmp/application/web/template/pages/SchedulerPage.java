@@ -102,9 +102,9 @@ public class SchedulerPage extends TemplateWebPage
         @Override
         public void onClick()
         {
-//        AddJobPage page = new AddJobPage(getPageReference());
-//
-//        setResponsePage(page);
+          AddJobPage page = new AddJobPage(getPageReference());
+
+          setResponsePage(page);
         }
       };
       tableContainer.add(addLink);
