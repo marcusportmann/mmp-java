@@ -41,6 +41,16 @@ public interface ISchedulerService
     throws SchedulerServiceException;
 
   /**
+   * Delete the job
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
+   *
+   * @throws SchedulerServiceException
+   */
+  void deleteJob(UUID id)
+    throws SchedulerServiceException;
+
+  /**
    * Execute the job.
    *
    * @param job the job

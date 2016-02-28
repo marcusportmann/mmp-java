@@ -102,6 +102,27 @@ public class SchedulerService
   }
 
   /**
+   * Delete the job
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
+   *
+   * @throws SchedulerServiceException
+   */
+  public void deleteJob(UUID id)
+    throws SchedulerServiceException
+  {
+    try
+    {
+      jobDAO.deleteJob(id);
+    }
+    catch (Throwable e)
+    {
+      throw new SchedulerServiceException(String.format("Failed to delete the job (%s)", id), e);
+    }
+
+  }
+
+  /**
    * Execute the job.
    *
    * @param job the job

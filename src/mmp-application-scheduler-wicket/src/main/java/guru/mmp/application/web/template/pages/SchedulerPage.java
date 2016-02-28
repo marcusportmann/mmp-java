@@ -262,7 +262,7 @@ public class SchedulerPage extends TemplateWebPage
             {
               try
               {
-                // schedulerService.deleteJob(id);
+                schedulerService.deleteJob(id);
 
                 target.add(tableContainer);
 

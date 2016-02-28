@@ -64,7 +64,6 @@ public class SchedulerDAO
    * The data source used to provide connections to the database.
    */
   private DataSource dataSource;
-  @SuppressWarnings("unused")
   private String deleteJobSQL;
   private String getJobParametersSQL;
   private String getJobSQL;
@@ -81,39 +80,11 @@ public class SchedulerDAO
   private String unlockJobSQL;
   private String getNumberOfFilteredJobsSQL;
   private String getFilteredJobsSQL;
-  private String deleteJobSQL;
 
   /**
    * Constructs a new <code>SchedulerDAO</code>.
    */
   public SchedulerDAO() {}
-
-  /**
-   * Delete the job.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
-   *
-   * @throws DAOException
-   */
-  public void deleteJob(UUID id)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteJobSQL))
-    {
-      statement.setObject(1, id);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new DAOException(String.format(
-          "No rows were affected as a result of executing the SQL statement (%s)", deleteJobSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format("Failed to delete the job (%s) in the database",
-        id), e);
-    }  }
 
   /**
    * Create the entry for the job in the database.
@@ -145,6 +116,33 @@ public class SchedulerDAO
     {
       throw new DAOException(String.format("Failed to add the job (%s) to the database",
           job.getName()), e);
+    }
+  }
+
+  /**
+   * Delete the job.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
+   *
+   * @throws DAOException
+   */
+  public void deleteJob(UUID id)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(deleteJobSQL))
+    {
+      statement.setObject(1, id);
+
+      if (statement.executeUpdate() != 1)
+      {
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)", deleteJobSQL));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException(String.format("Failed to delete the job (%s) in the database", id), e);
     }
   }
 
