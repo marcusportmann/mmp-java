@@ -21,7 +21,6 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSchedulerSecurity;
 import guru.mmp.application.web.template.components.DropDownChoiceWithFeedback;
@@ -29,23 +28,14 @@ import guru.mmp.application.web.template.components.JobStatusChoiceRenderer;
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 
 import org.apache.wicket.PageReference;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +68,7 @@ public class AddJobPage extends TemplateWebPage
    */
   public AddJobPage(PageReference previousPage)
   {
-    super("Add Process Definition");
+    super("Add Job");
 
     try
     {
@@ -109,9 +99,13 @@ public class AddJobPage extends TemplateWebPage
 
       // The "status" field
       DropDownChoice<Job.Status> statusField = new DropDownChoiceWithFeedback<>("status",
-          getJobStatusOptions(), new JobStatusChoiceRenderer());
+          getStatusOptions(), new JobStatusChoiceRenderer());
       statusField.setRequired(true);
       addForm.add(statusField);
+
+      // The "isEnabled" field
+      CheckBox isEnabledField = new CheckBox("isEnabled");
+      addForm.add(isEnabledField);
 
       // The "addButton" button
       Button addButton = new Button("addButton")
@@ -121,8 +115,6 @@ public class AddJobPage extends TemplateWebPage
         @Override
         public void onSubmit()
         {
-          FileUpload fileUpload = null;
-
           try
           {
             Job job = addForm.getModelObject();
@@ -165,7 +157,7 @@ public class AddJobPage extends TemplateWebPage
     }
   }
 
-  private List<Job.Status> getJobStatusOptions()
+  private List<Job.Status> getStatusOptions()
   {
     List<Job.Status> list = new ArrayList<>();
 

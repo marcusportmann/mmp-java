@@ -253,7 +253,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     try
     {
       Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-          "guru.mmp.application.web.template.pages.SchedulerPage");
+          "guru.mmp.application.web.template.pages.JobAdministrationPage");
 
       if (Page.class.isAssignableFrom(clazz))
       {

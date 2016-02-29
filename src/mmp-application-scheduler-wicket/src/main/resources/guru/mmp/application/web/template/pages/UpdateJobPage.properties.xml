@@ -6,4 +6,5 @@
   <entry key="updateForm.schedulingPattern.Required">A scheduling pattern is required.</entry>
   <entry key="updateForm.jobClass.Required">A job class is required.</entry>
   <entry key="updateForm.status.Required">Select a status.</entry>
+  <entry key="updateForm.status.null"></entry>
 </properties>

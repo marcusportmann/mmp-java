@@ -167,7 +167,8 @@ public class SchedulerServiceTest
         String.format("Failed to find the job (%s) in the list of unscheduled jobs", job.getId()));
     }
 
-    schedulerService.scheduleNextUnscheduledJobForExecution();
+    while (schedulerService.scheduleNextUnscheduledJobForExecution())
+    {}
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();
 
@@ -184,13 +185,7 @@ public class SchedulerServiceTest
 
     retrievedJob = schedulerService.getJob(job.getId());
 
-    assertEquals("The status for the job (" + job.getId() + ") is incorrect", Job.Status.SCHEDULED, job.getStatus());
-
-
-
-    int xxx = 0;
-    xxx++;
-
+    assertEquals("The status for the job (" + job.getId() + ") is incorrect", Job.Status.SCHEDULED, retrievedJob.getStatus());
 
     // ADD UPDATE AND DELETE TEST CALLS
 

@@ -21,7 +21,6 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.converters.ISO8601Converter;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSchedulerSecurity;
 import guru.mmp.application.web.template.components.Dialog;
@@ -43,30 +42,26 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import org.apache.wicket.util.convert.IConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
 /**
- * The <code>SchedulerPage</code> class implements the
- * "Scheduler" page for the Web Application Template.
+ * The <code>JobAdministrationPage</code> class implements the "Job Administration"
+ * page for the Web Application Template.
  *
  * @author Marcus Portmann
  */
 @WebPageSecurity(TemplateSchedulerSecurity.FUNCTION_CODE_SCHEDULER_ADMINISTRATION)
-public class SchedulerPage extends TemplateWebPage
+public class JobAdministrationPage extends TemplateWebPage
 {
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(SchedulerPage.class);
+  private static final Logger logger = LoggerFactory.getLogger(JobAdministrationPage.class);
   private static final long serialVersionUID = 1000000;
 
   /* Scheduler Service */
@@ -74,9 +69,9 @@ public class SchedulerPage extends TemplateWebPage
   private ISchedulerService schedulerService;
 
   /**
-   * Constructs a new <code>SchedulerPage</code>.
+   * Constructs a new <code>JobAdministrationPage</code>.
    */
-  public SchedulerPage()
+  public JobAdministrationPage()
   {
     super("Scheduler");
 
@@ -157,7 +152,8 @@ public class SchedulerPage extends TemplateWebPage
         {
           item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
           item.add(new Label("jobClass", new PropertyModel<String>(item.getModel(), "jobClass")));
-          item.add(DateLabel.forDatePattern("nextExecution", new PropertyModel<Date>(item.getModel(), "nextExecution"), "YYYY-MM-dd hh:mm a"));
+          item.add(DateLabel.forDatePattern("nextExecution", new PropertyModel<>(item.getModel(),
+              "nextExecution"), "YYYY-MM-dd hh:mm a"));
 
           // The "parametersLink" link
           Link<Void> parametersLink = new Link<Void>("parametersLink")
@@ -167,7 +163,7 @@ public class SchedulerPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              Job job = item.getModelObject();
+//            Job job = item.getModelObject();
 
 //            JobParametersPage page = new JobParametersPage(getPageReference(), job.getId());
 //
@@ -184,11 +180,9 @@ public class SchedulerPage extends TemplateWebPage
             @Override
             public void onClick()
             {
-              Job job = item.getModelObject();
+              UpdateJobPage page = new UpdateJobPage(getPageReference(), item.getModel());
 
-//            UpdateJobPage page = new UpdateJobPage(getPageReference(), item.getModel());
-//
-//            setResponsePage(page);
+              setResponsePage(page);
             }
           };
           item.add(updateLink);
@@ -224,7 +218,7 @@ public class SchedulerPage extends TemplateWebPage
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException("Failed to initialise the SchedulerPage", e);
+      throw new WebApplicationException("Failed to initialise the JobAdministrationPage", e);
     }
   }
 
@@ -266,7 +260,7 @@ public class SchedulerPage extends TemplateWebPage
 
                 target.add(tableContainer);
 
-                SchedulerPage.this.info("Successfully removed the job "
+                JobAdministrationPage.this.info("Successfully removed the job "
                     + nameLabel.getDefaultModelObjectAsString());
               }
               catch (Throwable e)
@@ -274,7 +268,7 @@ public class SchedulerPage extends TemplateWebPage
                 logger.error(String.format("Failed to remove the job (%s): %s", id,
                     e.getMessage()), e);
 
-                SchedulerPage.this.error("Failed to remove the job "
+                JobAdministrationPage.this.error("Failed to remove the job "
                     + nameLabel.getDefaultModelObjectAsString());
               }
 
