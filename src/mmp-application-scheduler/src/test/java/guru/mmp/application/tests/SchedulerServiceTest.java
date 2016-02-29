@@ -73,6 +73,7 @@ public class SchedulerServiceTest
     throws Exception
   {
     Job job = getTestJobDetails();
+    job.setIsEnabled(false);
 
     schedulerService.createJob(job);
 
