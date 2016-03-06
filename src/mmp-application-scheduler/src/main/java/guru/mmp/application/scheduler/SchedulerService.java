@@ -518,6 +518,26 @@ public class SchedulerService
   }
 
   /**
+   * Update the job.
+   *
+   * @param job the <code>Job</code> instance containing the updated information for the job
+   *
+   * @throws SchedulerServiceException
+   */
+  public void updateJob(Job job)
+    throws SchedulerServiceException
+  {
+    try
+    {
+      jobDAO.updateJob(job);
+    }
+    catch (Throwable e)
+    {
+      throw new SchedulerServiceException("Failed to update the job", e);
+    }
+  }
+
+  /**
    * Initialise the configuration for the <code>SchedulerService</code> instance.
    *
    * @throws SchedulerServiceException

@@ -215,4 +215,14 @@ public interface ISchedulerService
    */
   void unlockJob(UUID id, Job.Status status)
     throws SchedulerServiceException;
+
+  /**
+   * Update the job.
+   *
+   * @param job the <code>Job</code> instance containing the updated information for the job
+   *
+   * @throws SchedulerServiceException
+   */
+  void updateJob(Job job)
+    throws SchedulerServiceException;
 }

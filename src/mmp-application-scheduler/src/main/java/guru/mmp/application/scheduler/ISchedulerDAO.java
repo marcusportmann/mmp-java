@@ -229,4 +229,14 @@ public interface ISchedulerDAO
    */
   void unlockJob(UUID id, Job.Status status)
     throws DAOException;
+
+  /**
+   * Update the entry for the job in the database.
+   *
+   * @param job the <code>Job</code> instance containing the updated information for the job
+   *
+   * @throws DAOException
+   */
+  void updateJob(Job job)
+    throws DAOException;
 }

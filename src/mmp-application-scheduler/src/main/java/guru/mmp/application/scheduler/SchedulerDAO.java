@@ -87,6 +87,40 @@ public class SchedulerDAO
   public SchedulerDAO() {}
 
   /**
+   * Update the entry for the job in the database.
+   *
+   * @param job the <code>Job</code> instance containing the updated information for the job
+   *
+   * @throws DAOException
+   */
+  public void updateJob(Job job)
+    throws DAOException
+  {
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateJobSQL))
+    {
+      statement.setString(1, job.getName());
+      statement.setString(2, job.getSchedulingPattern());
+      statement.setString(3, job.getJobClass());
+      statement.setBoolean(4, job.getIsEnabled());
+      statement.setInt(5, job.getStatus().getCode());
+      statement.setObject(6, job.getId());
+
+      if (statement.executeUpdate() != 1)
+      {
+        throw new DAOException(String.format(
+          "No rows were affected as a result of executing the SQL statement (%s)", createJobSQL));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException(String.format("Failed to update the job (%s) to the database",
+        job.getId()), e);
+    }
+  }
+
+
+  /**
    * Create the entry for the job in the database.
    *
    * @param job the <code>Job</code> instance containing the information for the job
@@ -939,7 +973,15 @@ public class SchedulerDAO
     // unlockJobSQL
     unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
         + "SET J.STATUS=?, J.UPDATED=?, J.LOCK_NAME=NULL WHERE J.ID=?";
+
+    // updateJobSQL
+    updateJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
+      + "SET J.NAME=?, J.SCHEDULING_PATTERN=?, J.JOB_CLASS=?, J.IS_ENABLED=?, J.STATUS=? "
+      + "WHERE J.ID=?";
   }
+
+
+  private String updateJobSQL;
 
   private Job getJob(ResultSet rs)
     throws SQLException
