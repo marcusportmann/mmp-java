@@ -18,7 +18,7 @@ coreos-$(BOX_ID)-vmware.box: coreos.vmdk
 	@echo "\t == Packing CoreOS release $(VERSION_ID) [$(CHANNEL) channel] for VMware =="
 	@echo
 	
-	curl http://$(CHANNEL).release.core-os.net/amd64-usr/$(VERSION_ID)/coreos_production_iso_image.iso -o coreos.iso
+#	curl http://$(CHANNEL).release.core-os.net/amd64-usr/$(VERSION_ID)/coreos_production_iso_image.iso -o coreos.iso
 	
 	
 	rm -f coreos.vmx
