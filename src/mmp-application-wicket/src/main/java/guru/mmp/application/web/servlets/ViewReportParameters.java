@@ -105,7 +105,7 @@ public class ViewReportParameters
    * or the ID of the report stored in the database.
    *
    * @return the name of the local report file under the WEB-INF/report folder for the web project
-   * or the ID of the report stored in the database
+   *         or the ID of the report stored in the database
    */
   public String getReportFileNameOrId()
   {

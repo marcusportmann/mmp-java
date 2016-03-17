@@ -136,8 +136,8 @@ public class NavigationLink extends NavigationItem
    * with a particular function.
    *
    * @return the function code uniquely identifying the function associated with the page class
-   * for the link e.g. Security.CreateUser or <code>null</code> if the page class is not
-   * associated with a particular function
+   *         for the link e.g. Security.CreateUser or <code>null</code> if the page class is not
+   *         associated with a particular function
    */
   public String getFunctionCode()
   {
@@ -169,7 +169,7 @@ public class NavigationLink extends NavigationItem
    * users (users who have not authenticated) or <code>false</code> otherwise.
    *
    * @return <code>true<code> if the page associated with the link is only accessible to anonymous
-   * users (users who have not authenticated) or <code>false</code> otherwise
+   *         users (users who have not authenticated) or <code>false</code> otherwise
    */
   public boolean isAnonymousOnly()
   {
@@ -183,7 +183,7 @@ public class NavigationLink extends NavigationItem
    * @param page the page
    *
    * @return <code>true</code> if the page is in the navigation item's hierarchy or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean isPageInNavigationHierarchy(Page page)
   {

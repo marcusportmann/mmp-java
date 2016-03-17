@@ -121,8 +121,8 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param messageContext the message context
    *
    * @return The password used to access the key store that contains the private key for the secure
-   * web service. This private key is used to sign the SOAP messages returned by the
-   * service.
+   *         web service. This private key is used to sign the SOAP messages returned by the
+   *         service.
    *
    * @see org.apache.ws.security.handler.WSHandler#getPassword(Object)
    */
@@ -139,7 +139,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param messageContext the message context
    *
    * @return <code>true</code> if handler fault processing should continue for the current message
-   * or <code>false</code> if fault processing should stop
+   *         or <code>false</code> if fault processing should stop
    *
    * @see javax.xml.ws.handler.Handler#handleFault(MessageContext)
    */
@@ -168,7 +168,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param messageContext the message context
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   * or <code>false</code> if processing should stop
+   *         or <code>false</code> if processing should stop
    */
   @Override
   public boolean handleMessage(SOAPMessageContext messageContext)
@@ -251,7 +251,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param requestData    the request data
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   * or <code>false</code> if processing should stop
+   *         or <code>false</code> if processing should stop
    *
    * @throws WSSecurityException
    */
@@ -516,7 +516,7 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    * @param requestData    the request data
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   * or <code>false</code> if processing should stop
+   *         or <code>false</code> if processing should stop
    *
    * @throws WSSecurityException
    */

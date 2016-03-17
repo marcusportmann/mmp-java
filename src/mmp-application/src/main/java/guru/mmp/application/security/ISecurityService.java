@@ -136,7 +136,7 @@ public interface ISecurityService
    * @param createUserDirectory should a new internal user directory be created for the organisation
    *
    * @return the new internal user directory that was created for the organisation or
-   * <code>null</code> if no user directory was created
+   *         <code>null</code> if no user directory was created
    *
    * @throws DuplicateOrganisationException
    * @throws SecurityException

@@ -16,15 +16,6 @@
 
 package guru.mmp.common.service.ws.security;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.ws.handler.Handler;
-import javax.xml.ws.handler.HandlerResolver;
-import javax.xml.ws.handler.PortInfo;
-
 /**
  * The <code>WebServiceClientSecurityHandlerResolver</code> class is responsible for adding the
  * JAX-WS handlers to a web service client proxy for a web service that implements the custom
@@ -32,22 +23,13 @@ import javax.xml.ws.handler.PortInfo;
  *
  * @author Marcus Portmann
  */
-public class WebServiceClientSecurityHandlerResolver
-  implements HandlerResolver
+public class WebServiceClientSecurityHandlerResolver extends WebServiceClientHandlerResolver
 {
   /**
-   * Gets the handler chain for the specified port.
-   *
-   * @param portInfo contains information about the port being accessed
-   *
-   * @return the handler chain for the specified port
+   * Constructs a new <code>WebServiceClientSecurityHandlerResolver</code>.
    */
-  public List<Handler> getHandlerChain(PortInfo portInfo)
+  public WebServiceClientSecurityHandlerResolver()
   {
-    List<Handler> handlers = new ArrayList<>();
-
-    handlers.add(new WebServiceClientSecurityHandler());
-
-    return handlers;
+    addHandler(new WebServiceClientSecurityHandler());
   }
 }

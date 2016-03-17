@@ -82,7 +82,7 @@ public class FilteredConfigurationValueDataProvider
    * @param count the number of the entries to return
    *
    * @return the configuration values retrieved from the Configuration Service starting with index
-   * <code>first</code> and ending with <code>first+count</code>
+   *         <code>first</code> and ending with <code>first+count</code>
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */

@@ -489,7 +489,7 @@ public class Message
    * @param document the WBXML document to validate
    *
    * @return <code>true</code> if the WBXML document contains valid message information or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document)
   {
@@ -602,7 +602,7 @@ public class Message
    * <code>null</code> if the message is not being processed.
    *
    * @return the name of the entity that has locked this message for processing or
-   * <code>null</code> if the message is not being processed
+   *         <code>null</code> if the message is not being processed
    */
   public String getLockName()
   {

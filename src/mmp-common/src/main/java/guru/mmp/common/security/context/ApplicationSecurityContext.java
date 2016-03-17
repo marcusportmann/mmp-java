@@ -788,7 +788,7 @@ public class ApplicationSecurityContext
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the application security context has been initialised or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean isInitialised()
   {

@@ -78,7 +78,7 @@ public class Location
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the obj argument otherwise
-   * <code>false</code>
+   *         <code>false</code>
    */
   @Override
   public boolean equals(Object obj)

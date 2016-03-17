@@ -70,7 +70,7 @@ public abstract class NavigationItem
    * @param page the page
    *
    * @return <code>true</code> if the page is in the navigation item's hierarchy or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public abstract boolean isPageInNavigationHierarchy(Page page);
 }

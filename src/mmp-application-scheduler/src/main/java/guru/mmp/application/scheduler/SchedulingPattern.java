@@ -300,7 +300,7 @@ public class SchedulingPattern
    * @param schedulingPattern the pattern to validate
    *
    * @return <code>true</code> if the given string represents a valid scheduling pattern or
-   * <code>false</code> otherwise
+   *          <code>false</code> otherwise
    */
   @SuppressWarnings("unused")
   public static boolean validate(String schedulingPattern)

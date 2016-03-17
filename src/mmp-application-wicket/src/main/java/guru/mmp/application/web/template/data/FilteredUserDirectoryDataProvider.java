@@ -80,7 +80,7 @@ public class FilteredUserDirectoryDataProvider extends InjectableDataProvider<Us
    * @param count the number of the entries to return
    *
    * @return the user directories retrieved from the database starting with index
-   * <code>first</code> and ending with <code>first+count</code>
+   *         <code>first</code> and ending with <code>first+count</code>
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
