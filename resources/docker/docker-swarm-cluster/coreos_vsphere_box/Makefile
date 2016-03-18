@@ -41,11 +41,12 @@ clean:
 
 	@echo "http://$(CHANNEL).release.core-os.net/amd64-usr/$(VERSION_ID)/coreos_production_vmware_image.vmdk.bz2"
 
+	rm -f coreos.vmx
+	rm -f coreos.vmdk
+	rm -f *.lck
 	rm -f *.vmxf
 	rm -f *.box
-	rm -f *$(BOX_ID)*.box
-	rm -rf tmp/
-	rm -f coreos.vmx
+	rm -rf tmp
 
 .PHONY: clean all
 
