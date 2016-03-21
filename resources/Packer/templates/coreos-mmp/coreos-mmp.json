@@ -5,12 +5,12 @@
     "coreos_version":  "{{ env `COREOS_VERSION` }}",
     "boxes_directory": "shared/boxes",
     "debug_provision": "no",
-    "headless": "true",
+    "headless": "false",
     "iso_url": "http://{{ env `COREOS_CHANNEL` }}.release.core-os.net/amd64-usr/{{ env `COREOS_VERSION` }}/coreos_production_iso_image.iso",
     "iso_checksum_type": "sha512",
     "iso_checksum": "{{ env `COREOS_ISO_SHA512_CHECKSUM` }}",
     "ssh_username": "core",
-    "ssh_password": "vmware",
+    "ssh_password": "packer",
     "ostype_vmware": "other26xlinux-64",
     "output_directory": "templates/coreos-mmp/images"
   },
@@ -79,22 +79,6 @@
           
       "output_directory": "{{ user `output_directory` }}"
     }    
-  ],
-  "provisioners": 
-  [
-    {
-      "type": "shell",
-      "inline": 
-      [
-      	"sudo groupadd -g 600 vagrant",
-      	"sudo useradd -u 600 -g 600 -G docker,sudo -m -d /home/vagrant -p $(openssl passwd -1 $(tr -dc A-Za-z0-9_ < /dev/urandom | head -c24)) vagrant",
-      	"sudo mkdir -p /home/vagrant/.ssh",
-      	"sudo chmod 700 /home/vagrant/.ssh",
-        "sudo wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O /home/vagrant/.ssh/authorized_keys",
-        "sudo chmod 600 /home/vagrant/.ssh/authorized_keys",
-        "sudo chown -R vagrant.vagrant /home/vagrant/.ssh"
-      ]
-    }
   ],
   "post-processors":
   [
