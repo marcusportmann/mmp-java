@@ -1,6 +1,3 @@
-# NOTE: When updating the CoreOS channel or version in this file remember to update the 
-#       channel and/or version in the templates/coreos/Vagrantfile file.
-
 COREOS_CHANNEL             ?= alpha
 COREOS_VERSION             ?= $(shell curl -Ls http://$(COREOS_CHANNEL).release.core-os.net/amd64-usr/current/version.txt | grep COREOS_VERSION_ID= | sed -e 's,.*=,,')
 COREOS_ISO_SHA512_CHECKSUM ?= $(shell curl -Ls http://$(COREOS_CHANNEL).release.core-os.net/amd64-usr/$(COREOS_VERSION)/coreos_production_iso_image.iso.DIGESTS | grep -A1 "SHA512 HASH" | head -2 | awk '{getline; print $1}' | sed 's/ .*//')
