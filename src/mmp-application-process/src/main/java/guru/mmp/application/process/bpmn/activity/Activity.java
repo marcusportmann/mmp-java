@@ -253,8 +253,8 @@ public abstract class Activity extends FlowNode
    * Expression SHALL be ignored.
    *
    * @return the ID of the Sequence Flow that will receive a token when none of the
-   * <code>conditionExpression</code>s on other outgoing Sequence Flows evaluate to
-   * <code>true</code>
+   *         <code>conditionExpression</code>s on other outgoing Sequence Flows evaluate to
+   *         <code>true</code>
    */
   public String getDefaultRef()
   {
@@ -266,7 +266,7 @@ public abstract class Activity extends FlowNode
    * the <code>InputSet</code>s and <code>OutputSet</code>s for the Activity.
    *
    * @return the <code>InputOutputSpecification</code>, which defines the inputs and outputs and
-   * the <code>InputSet</code>s and <code>OutputSet</code>s for the Activity
+   *         the <code>InputSet</code>s and <code>OutputSet</code>s for the Activity
    */
   public InputOutputSpecification getIoSpecification()
   {
@@ -333,7 +333,7 @@ public abstract class Activity extends FlowNode
    * and initiated under Compensation Event visibility scope.
    *
    * @return <code>true</code> if the Activity is intended for the purposes of compensation or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean isForCompensation()
   {

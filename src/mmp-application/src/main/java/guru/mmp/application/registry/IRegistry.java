@@ -176,7 +176,7 @@ public interface IRegistry
    * @param name the name of the value
    *
    * @return <code>true</code> if the value with the specified name was found and removed or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    *
    * @throws RegistryException
    */

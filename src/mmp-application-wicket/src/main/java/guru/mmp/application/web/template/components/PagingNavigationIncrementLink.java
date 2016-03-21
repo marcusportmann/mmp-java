@@ -70,7 +70,7 @@ public class PagingNavigationIncrementLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise.
    *
    * @return <code>true</code> if the link refers to the first page of the underlying
-   * <code>PageableListView</code> or <code>false</code> otherwise
+   *         <code>PageableListView</code> or <code>false</code> otherwise
    */
   public boolean isFirst()
   {
@@ -82,7 +82,7 @@ public class PagingNavigationIncrementLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise
    *
    * @return <code>true</code> if the link refers to the first page of the underlying
-   * <code>PageableListView</code> or <code>false</code> otherwise.
+   *         <code>PageableListView</code> or <code>false</code> otherwise.
    */
   public boolean isLast()
   {

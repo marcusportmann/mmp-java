@@ -154,7 +154,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * the user is associated with or <code>null</code> if this is an 'anonymous' web session.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the user is associated with or <code>null</code> if this is an 'anonymous' web session
+   *         the user is associated with or <code>null</code> if this is an 'anonymous' web session
    */
   public UUID getUserDirectoryId()
   {
@@ -166,7 +166,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * <code>null</code> if this is an 'anonymous' web session.
    *
    * @return the full name for the logged in user associated with the web session or
-   * <code>null</code> if this is an 'anonymous' web session
+   *         <code>null</code> if this is an 'anonymous' web session
    */
   public String getUserFullName()
   {
@@ -180,7 +180,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param name the name of the user property
    *
    * @return the value for the user property with the specified name for the logged in user
-   * associated with the web session or <code>null</code> if the user property does not exist
+   *         associated with the web session or <code>null</code> if the user property does not exist
    */
   public Object getUserProperty(String name)
   {
@@ -202,8 +202,8 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param name the name of the user property
    *
    * @return the <code>String</code> value for the user property with the specified name for the
-   * logged in user associated with the web session or <code>null</code> if the user
-   * property does not exist
+   *         logged in user associated with the web session or <code>null</code> if the user
+   *         property does not exist
    */
   public String getUserPropertyAsString(String name)
   {
@@ -224,7 +224,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * <code>null</code> if this is an 'anonymous' web session.
    *
    * @return the username for the logged in user associated with the web session or
-   * <code>null</code> if this is an 'anonymous' web session
+   *         <code>null</code> if this is an 'anonymous' web session
    */
   public String getUsername()
   {
@@ -240,8 +240,8 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    *           in the user's web session
    *
    * @return the <code>ViewReportParameters</code> instance stored in the
-   * user's web session or <code>null</code> if the <code>ViewReportParameters</code>
-   * instance could not found
+   *         user's web session or <code>null</code> if the <code>ViewReportParameters</code>
+   *         instance could not found
    */
   public ViewReportParameters getViewReportParameters(String id)
   {
@@ -257,7 +257,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param functionCode the function code uniquely identifying the function
    *
    * @return <code>true</code> if the logged in user has access to the function or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean hasAcccessToFunction(String functionCode)
   {
@@ -276,7 +276,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param name the name of the user property
    *
    * @return <code>true</code> if the logged in user associated with the web session has a user
-   * property with the specified name or <code>false</code> otherwise
+   *         property with the specified name or <code>false</code> otherwise
    */
   public boolean hasUserProperty(String name)
   {
@@ -310,7 +310,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @param groupName the name of the group uniquely identifying the group
    *
    * @return <code>true</code> if the user associated with the web session is a member of the group
-   * given by the specified group name or <code>false</code> otherwise
+   *         given by the specified group name or <code>false</code> otherwise
    */
   public boolean isUserInGroup(String groupName)
   {

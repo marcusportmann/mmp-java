@@ -46,9 +46,9 @@ import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 /**
- * The <code>WebServiceSecurityHandlerBase</code> class provides the base class for all web service
- * security handlers. It contains the functionality that is common to both the <i>web service</i>
- * and <i>web service client</i> handlers.
+ * The <code>WebServiceSecurityHandlerBase</code> class provides the base class for all JAX-WS
+ * web service security handlers. It contains the functionality that is common to both the
+ * <i>web service</i> and <i>web service client</i> handlers.
  *
  * @author Marcus Portmann
  */
@@ -146,7 +146,7 @@ public abstract class WebServiceSecurityHandlerBase extends WSHandler
    * Gets the header blocks that can be processed by this Handler instance.
    *
    * @return Set of <code>QNames</code> of header blocks processed by this handler instance.
-   * <code>QName</code> is the qualified name of the outermost element of the Header block.
+   *         <code>QName</code> is the qualified name of the outermost element of the Header block.
    *
    * @see javax.xml.ws.handler.soap.SOAPHandler#getHeaders()
    */

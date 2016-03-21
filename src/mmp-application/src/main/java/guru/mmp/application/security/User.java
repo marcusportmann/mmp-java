@@ -190,7 +190,7 @@ public class User
    * @param name the name of the user property
    *
    * @return <code>true</code> if the user has a property with the specified name or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean hasProperty(String name)
   {

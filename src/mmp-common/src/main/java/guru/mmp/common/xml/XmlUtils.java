@@ -112,7 +112,7 @@ public class XmlUtils
    * @param name    the name of the child element to return
    *
    * @return the child element or <code>null</code> if a child element with the specified name
-   * could not be found
+   *         could not be found
    */
   public static Element getChildElement(Element element, String name)
   {
@@ -144,7 +144,7 @@ public class XmlUtils
    * @param name    the name of the child element to return
    *
    * @return the boolean value of the text content for the child element or <code>null</code> if a
-   * child element with the specified name could not be found
+   *         child element with the specified name could not be found
    */
   public static Boolean getChildElementBoolean(Element element, String name)
   {
@@ -184,7 +184,7 @@ public class XmlUtils
    * @param name    the name of the child element to return
    *
    * @return the text content for the child element or <code>null</code> if a child element with
-   * the specified name could not be found
+   *         the specified name could not be found
    */
   public static String getChildElementText(Element element, String name)
   {
@@ -304,7 +304,7 @@ public class XmlUtils
    * @param name    the name of the child element
    *
    * @return <code>true</code> if the specified element has a child with the specified name or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public static boolean hasChildElement(Element element, String name)
   {

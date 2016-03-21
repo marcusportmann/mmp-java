@@ -117,7 +117,7 @@ public class MessageHandlerConfig
    *                      message type
    *
    * @return <code>true</code> if messages of the specified message type should be archived or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean isArchivable(UUID messageTypeId)
   {
@@ -150,7 +150,7 @@ public class MessageHandlerConfig
    *                      message type
    *
    * @return <code>true</code> if the message handler supports asynchronous processing of the
-   * specified message type or <code>false</code> otherwise
+   *         specified message type or <code>false</code> otherwise
    */
   public boolean supportsAsynchronousProcessing(UUID messageTypeId)
   {
@@ -173,7 +173,7 @@ public class MessageHandlerConfig
    *                      message type
    *
    * @return <code>true</code> if the message handler supports synchronous processing of the
-   * specified message type or <code>false</code> otherwise
+   *         specified message type or <code>false</code> otherwise
    */
   public boolean supportsSynchronousProcessing(UUID messageTypeId)
   {
@@ -249,7 +249,7 @@ public class MessageHandlerConfig
      * <code>false</code> otherwise.
      *
      * @return <code>true</code> if messages of the supported message type should be archived or
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean isArchivable()
     {
@@ -261,7 +261,7 @@ public class MessageHandlerConfig
      * the supported message type or <code>false</code> otherwise.
      *
      * @return <code>true</code> if the handler is capable of asynchronously processing messages of
-     * the supported message type or <code>false</code> otherwise
+     *         the supported message type or <code>false</code> otherwise
      */
     public boolean isAsynchronous()
     {
@@ -273,7 +273,7 @@ public class MessageHandlerConfig
      * the supported message type or <code>false</code> otherwise.
      *
      * @return <code>true</code> if the handler is capable of synchronously processing messages of
-     * the supported message type or <code>false</code> otherwise
+     *         the supported message type or <code>false</code> otherwise
      */
     public boolean isSynchronous()
     {

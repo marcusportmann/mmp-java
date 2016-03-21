@@ -59,7 +59,7 @@ public class StringSelectOption
    * @param obj the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the <code>obj</code> argument;
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   @Override
   public boolean equals(Object obj)

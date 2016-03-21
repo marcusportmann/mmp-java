@@ -54,8 +54,8 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.x500.X500Principal;
 
 /**
- * The <code>WebServiceClientCrypto</code> class implements the WSS4J crypto operations for
- * a web service client.
+ * The <code>WebServiceClientCrypto</code> class implements the WSS4J crypto operations for a web
+ * service client.
  *
  * @author Marcus Portmann
  */

@@ -153,7 +153,7 @@ public class MessagingService
    * @param message the message to process
    *
    * @return <code>true</code> if the Messaging Service is capable of processing the specified
-   * message or <code>false</code> otherwise
+   *         message or <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -170,7 +170,7 @@ public class MessagingService
    * @param messagePart the message part to queue for assembly
    *
    * @return <code>true</code> if the Messaging Service is capable of queueing the specified
-   * message part for assembly or <code>false</code> otherwise
+   *         message part for assembly or <code>false</code> otherwise
    *
    * @throws MessagingException
    */
@@ -208,7 +208,7 @@ public class MessagingService
    * @param message the message to decrypt
    *
    * @return <code>true</code> if the message data was decrypted successfully or <code>false</code>
-   * otherwise
+   *         otherwise
    *
    * @throws MessagingException
    */
@@ -380,7 +380,7 @@ public class MessagingService
    * @param message the message to encrypt
    *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
-   * otherwise
+   *         otherwise
    *
    * @throws MessagingException
    */
@@ -466,7 +466,7 @@ public class MessagingService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   * found
+   *         found
    *
    * @throws MessagingException
    */
@@ -549,7 +549,7 @@ public class MessagingService
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
-   * device
+   *         device
    *
    * @throws MessagingException
    */
@@ -632,7 +632,7 @@ public class MessagingService
    * The message will be locked to prevent duplicate processing.
    *
    * @return the next message that has been queued for processing or <code>null</code> if no
-   * messages are currently queued for processing
+   *         messages are currently queued for processing
    *
    * @throws MessagingException
    */
@@ -723,7 +723,7 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if a message with the specified type information should be archived
-   * or <code>false</code> otherwise
+   *         or <code>false</code> otherwise
    */
   public boolean isArchivableMessage(Message message)
   {
@@ -736,7 +736,7 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message can be processed asynchronously or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean isAsynchronousMessage(Message message)
   {
@@ -749,7 +749,7 @@ public class MessagingService
    * @param message the message to check
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
-   * otherwise
+   *         otherwise
    *
    * @throws MessagingException
    */
@@ -773,7 +773,7 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message should be processed synchronously or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean isSynchronousMessage(Message message)
   {
@@ -1442,7 +1442,7 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type should be archived or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   private boolean isArchivableMessage(UUID typeId)
   {
@@ -1467,7 +1467,7 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed asynchronously
-   * or <code>false</code> otherwise
+   *         or <code>false</code> otherwise
    */
   private boolean isAsynchronousMessage(UUID typeId)
   {
@@ -1492,7 +1492,7 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed synchronously
-   * or <code>false</code> otherwise
+   *         or <code>false</code> otherwise
    */
   private boolean isSynchronousMessage(UUID typeId)
   {

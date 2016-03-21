@@ -110,7 +110,7 @@ public class MessagingDAO
    * @param totalParts the total number of parts for the message
    *
    * @return <code>true</code> if all the parts for the message have been queued for assembly or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    *
    * @throws DAOException
    */
@@ -1210,7 +1210,7 @@ public class MessagingDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    *
    * @return <code>true</code> if the message part has already been queued for assemble or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    *
    * @throws DAOException
    */

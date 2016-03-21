@@ -95,8 +95,8 @@ public final class TransactionManager
    * <code>resume</code> method.
    *
    * @return The transaction that was active before invocation of this method or <code>null</code>
-   * if no transaction was active. The return value from this method <b>MUST </b> be passed
-   * to the <code>resume</code> method or the suspended transaction will be lost.
+   *         if no transaction was active. The return value from this method <b>MUST </b> be passed
+   *         to the <code>resume</code> method or the suspended transaction will be lost.
    *
    * @throws SystemException
    * @throws NotSupportedException

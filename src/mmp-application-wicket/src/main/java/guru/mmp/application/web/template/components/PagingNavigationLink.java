@@ -67,7 +67,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise.
    *
    * @return <code>true</code> if this page is the first page of the containing
-   * <code>PageableListView</code> or <code>false</code> otherwise
+   *         <code>PageableListView</code> or <code>false</code> otherwise
    */
   public boolean isFirst()
   {
@@ -79,7 +79,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * <code>PageableListView</code> or <code>false</code> otherwise.
    *
    * @return <code>true</code> if this page is the first page of the containing
-   * <code>PageableListView</code> or <code>false</code> otherwise
+   *         <code>PageableListView</code> or <code>false</code> otherwise
    */
   public boolean isLast()
   {
@@ -93,7 +93,7 @@ public class PagingNavigationLink<T> extends Link<T>
    * @param page the page
    *
    * @return <code>true</code> if this <code>PageableListView</code> navigation link links to the
-   * specified page or <code>false</code> otherwise
+   *         specified page or <code>false</code> otherwise
    *
    * @see org.apache.wicket.markup.html.link.Link#linksTo(org.apache.wicket.Page)
    */

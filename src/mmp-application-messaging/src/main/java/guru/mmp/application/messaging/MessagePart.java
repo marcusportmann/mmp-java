@@ -407,7 +407,7 @@ public class MessagePart
    * @param document the WBXML document to validate
    *
    * @return <code>true</code> if the WBXML document contains valid message part information or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document)
   {
@@ -637,7 +637,7 @@ public class MessagePart
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the data for the original message is encrypted or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean messageIsEncrypted()
   {

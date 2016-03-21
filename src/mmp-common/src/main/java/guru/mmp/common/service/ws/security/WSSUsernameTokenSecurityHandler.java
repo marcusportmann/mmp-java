@@ -139,7 +139,7 @@ public class WSSUsernameTokenSecurityHandler
    * Gets the header blocks that can be processed by this Handler instance.
    *
    * @return Set of <code>QNames</code> of header blocks processed by this handler instance.
-   * <code>QName</code> is the qualified name of the outermost element of the Header block.
+   *         <code>QName</code> is the qualified name of the outermost element of the Header block.
    *
    * @see javax.xml.ws.handler.soap.SOAPHandler#getHeaders()
    */
@@ -163,7 +163,7 @@ public class WSSUsernameTokenSecurityHandler
    * @param messageContext the message context
    *
    * @return <code>true</code> if handler fault processing should continue for the current message
-   * or <code>false</code> if fault processing should stop
+   *         or <code>false</code> if fault processing should stop
    *
    * @see javax.xml.ws.handler.Handler#handleFault(MessageContext)
    */
@@ -182,7 +182,7 @@ public class WSSUsernameTokenSecurityHandler
    * @param messageContext the message context
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   * or <code>false</code> if processing should stop
+   *         or <code>false</code> if processing should stop
    */
   @Override
   public boolean handleMessage(SOAPMessageContext messageContext)
@@ -331,7 +331,7 @@ public class WSSUsernameTokenSecurityHandler
    * @param messageContext the message context
    *
    * @return <code>true</code> if handler processing should continue for the current message
-   * or <code>false</code> if processing should stop
+   *         or <code>false</code> if processing should stop
    *
    * @throws WSSecurityException
    */

@@ -116,7 +116,7 @@ public class NavigationGroup extends NavigationItem
    * @param page the page
    *
    * @return <code>true</code> if the page is in the navigation item's hierarchy or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   public boolean isPageInNavigationHierarchy(Page page)
   {

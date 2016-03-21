@@ -272,7 +272,7 @@ public abstract class UserDirectoryBase
    * @param groupName  the group name uniquely identifying the group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   * <code>null</code> if a group with the specified group name could not be found
+   *         <code>null</code> if a group with the specified group name could not be found
    *
    * @throws SecurityException
    */
@@ -335,7 +335,7 @@ public abstract class UserDirectoryBase
    * @param groupName  the group name uniquely identifying the group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   * <code>null</code> if a group with the specified group name could not be found
+   *         <code>null</code> if a group with the specified group name could not be found
    *
    * @throws SecurityException
    */

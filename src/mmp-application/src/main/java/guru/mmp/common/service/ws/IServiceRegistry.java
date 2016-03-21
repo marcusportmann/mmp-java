@@ -30,7 +30,7 @@ public interface IServiceRegistry
    * configuration information for different web services in the database.
    *
    * @return the number of <code>ServiceRegistryEntry</code> instances containing the
-   * configuration information for different web services in the database
+   *         configuration information for different web services in the database
    *
    * @throws ServiceRegistryException
    */
@@ -59,8 +59,8 @@ public interface IServiceRegistry
    * @param name the name used to uniquely identify the web service
    *
    * @return the <code>ServiceRegistryEntry</code> instance containing the configuration information
-   * for the web service with the specified name that describes how to connect to the web
-   * service or <code>null</code> if an entry with the specified name could not be found
+   *         for the web service with the specified name that describes how to connect to the web
+   *         service or <code>null</code> if an entry with the specified name could not be found
    *
    * @throws ServiceRegistryException
    */

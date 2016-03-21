@@ -513,7 +513,7 @@ public class SecurityService
    * @param createUserDirectory should a new internal user directory be created for the organisation
    *
    * @return the new internal user directory that was created for the organisation or
-   * <code>null</code> if no user directory was created
+   *         <code>null</code> if no user directory was created
    *
    * @throws DuplicateOrganisationException
    * @throws SecurityException
@@ -2770,7 +2770,7 @@ public class SecurityService
    * @param code       the code uniquely identifying the function
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the function or
-   * <code>null</code> if a function with the specified code cannot be found
+   *         <code>null</code> if a function with the specified code cannot be found
    *
    * @throws SQLException
    */
@@ -2802,8 +2802,8 @@ public class SecurityService
    * @param username the username uniquely identifying the internal user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
-   * directory the internal user with the specified username is associated with or
-   * <code>null</code> if an internal user with the specified username could not be found
+   *         directory the internal user with the specified username is associated with or
+   *         <code>null</code> if an internal user with the specified username could not be found
    *
    * @throws SecurityException
    */
@@ -2945,7 +2945,7 @@ public class SecurityService
    * @param name       the organisation name
    *
    * @return <code>true</code> if an organisation with the specified name exists or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    *
    * @throws SecurityException
    */

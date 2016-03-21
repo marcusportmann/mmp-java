@@ -53,7 +53,7 @@ public class BackgroundProcessInstanceExecutor
    * Execute all the process instances scheduled for execution.
    *
    * @return <code>true</code> if the process instances were executed successfully or
-   * <code>false</code> otherwise
+   *         <code>false</code> otherwise
    */
   @Asynchronous
   public Future<Boolean> execute()
