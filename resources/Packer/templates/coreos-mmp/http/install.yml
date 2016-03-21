@@ -1,0 +1,11 @@
+#cloud-config
+
+users:
+  - name: core
+    passwd: $1$capima2g$X.rXSNd0oYRzdBtYNAw851
+    groups:
+      - sudo
+      - docker
+  - name: root
+    passwd: $1$capima2g$X.rXSNd0oYRzdBtYNAw851
+
