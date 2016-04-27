@@ -17,9 +17,9 @@ ENV JAVA_PACKAGE       jdk
 
 # Download and unarchive Java
 RUN mkdir /opt && curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie"\
-  http://download.oracle.com/otn-pub/java/jdk/8u74-b02/server-jre-8u74-linux-x64.tar.gz \
+  http://download.oracle.com/otn-pub/java/jdk/8u77-b02/server-jre-8u77-linux-x64.tar.gz \
     | tar -xzf - -C /opt &&\
-    ln -s /opt/jdk1.8.0_74 /opt/jdk &&\
+    ln -s /opt/jdk1.8.0_77 /opt/jdk &&\
     rm -rf /opt/jdk/*src.zip \
            /opt/jdk/lib/missioncontrol \
            /opt/jdk/lib/visualvm \
@@ -53,6 +53,8 @@ ENV PATH ${PATH}:/opt/jdk/bin
 RUN curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" \
   -o /tmp/jce_policy-8.zip http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip \
   && unzip -o /tmp/jce_policy-8.zip -d /tmp \
+  && rm -f /opt/jdk/jre/lib/security/local_policy.jar \
+  && rm -f /opt/jdk/jre/lib/security/US_export_policy.jar \
   && cp /tmp/UnlimitedJCEPolicyJDK8/local_policy.jar /opt/jdk/jre/lib/security/ \
   && cp /tmp/UnlimitedJCEPolicyJDK8/US_export_policy.jar /opt/jdk/jre/lib/security/ \
   && rm -rf /tmp/UnlimitedJCEPolicyJDK8 \
