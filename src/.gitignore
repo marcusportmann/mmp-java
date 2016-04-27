@@ -17,6 +17,7 @@
 
 target
 .project
+.gradle/
 .settings/
 /**/.factorypath
 /**/*.epoch

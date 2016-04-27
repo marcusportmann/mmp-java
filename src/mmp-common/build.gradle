@@ -1,0 +1,43 @@
+plugins {
+  // Include the optional plugin that provides the 'provided' dependency configuration attribute
+  id 'nebula.provided-base' version '3.0.3'
+}
+
+group 'mmp.guru'
+version '2.0.0'
+
+println "  - Building ${project.name}-${version}.jar..."
+
+apply plugin: 'java'
+apply plugin: 'nebula.provided-base'
+
+sourceCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'org.slf4j:slf4j-jdk14:1.7.12'
+  compile 'joda-time:joda-time:2.9.1'
+  compile('org.apache.ws.security:wss4j:1.6.18') {
+    exclude group: 'org.opensaml', module: 'openws'   
+  }
+  compile 'org.apache.httpcomponents:httpclient:4.5'
+  provided 'javax:javaee-api:7.0'
+  testCompile 'junit:junit:4.12'
+}
+
+task copyToDist (type: Copy, dependsOn: build) {
+  from './build/libs'
+  into '../../dist'
+  include "${project.name}-${version}.jar"
+}   
+
+build.finalizedBy(copyToDist)
+  
+task cleanDist (type: Delete, dependsOn: clean) {
+  delete "../../dist/${project.name}-${version}.jar"
+}   
+
+clean.finalizedBy(cleanDist)
