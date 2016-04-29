@@ -544,7 +544,7 @@ public class SecurityServiceTest
 // *
 // * @throws Exception
 // */
-//////@Test
+////@Test
 //public void revokeFunctionForGroupTest()
 //  throws Exception
 //

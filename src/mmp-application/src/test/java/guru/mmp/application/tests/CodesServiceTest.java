@@ -45,7 +45,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationClassRunner.class)
+//@RunWith(ApplicationClassRunner.class)
 public class CodesServiceTest
 {
   private static int codeCategoryCount;
@@ -58,7 +58,7 @@ public class CodesServiceTest
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void codeTest()
     throws Exception
   {
@@ -103,7 +103,7 @@ public class CodesServiceTest
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void getCodeCategoriesTest()
     throws Exception
   {
@@ -131,7 +131,7 @@ public class CodesServiceTest
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void localCustomCodeCategoryTest()
     throws Exception
   {
@@ -149,7 +149,7 @@ public class CodesServiceTest
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void localRemoteHttpServiceCategoryTest()
     throws Exception
   {
@@ -167,7 +167,7 @@ public class CodesServiceTest
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void localRemoteWebServiceCategoryTest()
     throws Exception
   {
@@ -185,7 +185,7 @@ public class CodesServiceTest
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void localStandardCodeCategoryTest()
     throws Exception
   {
@@ -228,7 +228,7 @@ public class CodesServiceTest
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void localStandardCodesTest()
     throws Exception
   {

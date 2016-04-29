@@ -1,4 +1,4 @@
 
-include 'mmp-common'
+include 'mmp-common', 'mmp-application-test', 'mmp-application'
 
 
