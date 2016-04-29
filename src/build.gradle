@@ -1,3 +1,49 @@
 
-println "- Building mmp-java..."
+println '- Building mmp-java...'
+
+subprojects
+{
+  repositories {
+    mavenCentral()
+  }
+}
+
+
+  
+allprojects.findAll { it.name in ['mmp-application'] }. each { p ->
+   configure(p) {
+      task wsdl2java(type: WSDL2JavaTask)
+   }
+}
+
+
+class WSDL2JavaTask extends DefaultTask {
+
+  List<String> wsdlFiles = new ArrayList<String>();
+
+  @TaskAction
+  def wsdl2java() {
+      println "- Generating the JAX-WS portable artifacts for ${project.name} using ${wsdlFiles.size} WSDL file(s)..."
+  }
+}  
+
+
+
+/*
+def wsimportTask(taskSuffix, param2) {
+  return tasks.create("wsimport${taskSuffix}", Exec) {
+  
+    commandLine "/bin/echo"
+    
+    args param2
+
+    //... (a lot of other things)
+    //args "-t"
+    //args ext.target  
+  
+  }
+
+}
+*/
+
 
