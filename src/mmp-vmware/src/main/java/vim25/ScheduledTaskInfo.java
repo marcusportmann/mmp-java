@@ -82,6 +82,7 @@ public class ScheduledTaskInfo
     @XmlSchemaType(name = "dateTime")
     protected Calendar prevRunTime;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected TaskInfoState state;
     protected LocalizedMethodFault error;
     protected Object result;

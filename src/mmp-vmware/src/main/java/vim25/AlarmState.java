@@ -64,6 +64,7 @@ public class AlarmState
     @XmlElement(required = true)
     protected ManagedObjectReference alarm;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus overallStatus;
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)

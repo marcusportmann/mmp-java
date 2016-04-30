@@ -71,6 +71,7 @@ public class LicenseDiagnostics
     @XmlElement(required = true)
     protected String licenseFeatureUnknowns;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected LicenseManagerState opState;
     @XmlElement(required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)

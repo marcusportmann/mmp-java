@@ -46,6 +46,7 @@ public class TaskFilterSpecByTime
 
     private final static long serialVersionUID = 1000000L;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected TaskFilterSpecTimeOption timeType;
     @XmlElement(type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -44,6 +45,7 @@ public class ClusterDpmHostConfigInfo
     @XmlElement(required = true)
     protected ManagedObjectReference key;
     protected Boolean enabled;
+    @XmlSchemaType(name = "string")
     protected DpmBehavior behavior;
 
     /**

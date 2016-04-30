@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -63,6 +64,7 @@ public class VirtualMachineRelocateSpec
     protected ManagedObjectReference pool;
     protected ManagedObjectReference host;
     protected List<VirtualMachineRelocateSpecDiskLocator> disk;
+    @XmlSchemaType(name = "string")
     protected VirtualMachineRelocateTransformation transform;
     protected List<VirtualDeviceConfigSpec> deviceChange;
     protected List<VirtualMachineProfileSpec> profile;

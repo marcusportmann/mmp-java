@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -45,6 +46,7 @@ public class SetTaskStateRequestType
     @XmlElement(required = true)
     protected ManagedObjectReference _this;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected TaskInfoState state;
     protected Object result;
     protected LocalizedMethodFault fault;

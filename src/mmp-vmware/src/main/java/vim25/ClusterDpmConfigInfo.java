@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -45,6 +46,7 @@ public class ClusterDpmConfigInfo
 
     private final static long serialVersionUID = 1000000L;
     protected Boolean enabled;
+    @XmlSchemaType(name = "string")
     protected DpmBehavior defaultDpmBehavior;
     protected Integer hostPowerActionRate;
     protected List<OptionValue> option;

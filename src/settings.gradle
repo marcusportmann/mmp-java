@@ -1,4 +1,23 @@
 
-include 'mmp-common', 'mmp-application-test', 'mmp-application'
+include 'mmp-application'
+include 'mmp-application-customer'
+include 'mmp-application-customer-wicket'
+include 'mmp-application-messaging'
+include 'mmp-application-messaging-wicket'
+include 'mmp-application-process'
+include 'mmp-application-process-wicket'
+include 'mmp-application-reporting'
+include 'mmp-application-reporting-wicket'
+include 'mmp-application-scheduler'
+include 'mmp-application-scheduler-wicket'
+include 'mmp-application-sms'
+include 'mmp-application-test'
+include 'mmp-application-wicket'
+include 'mmp-common'
+include 'mmp-corba'
+include 'mmp-sharepoint'
+include 'mmp-tomcat'
+
+
 
 

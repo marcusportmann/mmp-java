@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -52,6 +53,7 @@ public class ValidateMigrationRequestType
     protected ManagedObjectReference _this;
     @XmlElement(required = true)
     protected List<ManagedObjectReference> vm;
+    @XmlSchemaType(name = "string")
     protected VirtualMachinePowerState state;
     protected List<String> testType;
     protected ManagedObjectReference pool;

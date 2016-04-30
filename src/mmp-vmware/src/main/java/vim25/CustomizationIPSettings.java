@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -64,6 +65,7 @@ public class CustomizationIPSettings
     protected String dnsDomain;
     protected String primaryWINS;
     protected String secondaryWINS;
+    @XmlSchemaType(name = "string")
     protected CustomizationNetBIOSMode netBIOS;
 
     /**

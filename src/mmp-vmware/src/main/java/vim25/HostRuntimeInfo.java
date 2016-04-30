@@ -66,8 +66,10 @@ public class HostRuntimeInfo
 
     private final static long serialVersionUID = 1000000L;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected HostSystemConnectionState connectionState;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected HostSystemPowerState powerState;
     protected String standbyMode;
     protected boolean inMaintenanceMode;

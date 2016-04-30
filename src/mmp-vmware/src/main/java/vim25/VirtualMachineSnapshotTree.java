@@ -77,6 +77,7 @@ public class VirtualMachineSnapshotTree
     @XmlSchemaType(name = "dateTime")
     protected Calendar createTime;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected VirtualMachinePowerState state;
     protected boolean quiesced;
     protected String backupManifest;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -48,6 +49,7 @@ public class ClusterDrsConfigInfo
     private final static long serialVersionUID = 1000000L;
     protected Boolean enabled;
     protected Boolean enableVmBehaviorOverrides;
+    @XmlSchemaType(name = "string")
     protected DrsBehavior defaultVmBehavior;
     protected Integer vmotionRate;
     protected List<OptionValue> option;

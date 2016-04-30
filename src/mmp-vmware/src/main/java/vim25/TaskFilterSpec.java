@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -63,6 +64,7 @@ public class TaskFilterSpec
     protected TaskFilterSpecByTime time;
     protected TaskFilterSpecByUsername userName;
     protected List<String> activationId;
+    @XmlSchemaType(name = "string")
     protected List<TaskInfoState> state;
     protected ManagedObjectReference alarm;
     protected ManagedObjectReference scheduledTask;

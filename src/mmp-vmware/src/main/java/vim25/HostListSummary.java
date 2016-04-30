@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -69,6 +70,7 @@ public class HostListSummary
     @XmlElement(required = true)
     protected HostListSummaryQuickStats quickStats;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus overallStatus;
     protected boolean rebootRequired;
     protected List<CustomFieldValue> customValue;

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -80,6 +81,7 @@ public class VirtualMachineQuickStats
     protected Integer guestMemoryUsage;
     protected Integer hostMemoryUsage;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus guestHeartbeatStatus;
     protected Integer distributedCpuEntitlement;
     protected Integer distributedMemoryEntitlement;
@@ -92,6 +94,7 @@ public class VirtualMachineQuickStats
     protected Integer consumedOverheadMemory;
     protected Integer ftLogBandwidth;
     protected Integer ftSecondaryLatency;
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus ftLatencyStatus;
     protected Long compressedMemory;
     protected Integer uptimeSeconds;

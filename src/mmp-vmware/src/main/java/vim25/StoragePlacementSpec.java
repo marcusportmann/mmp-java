@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -63,6 +64,7 @@ public class StoragePlacementSpec
     private final static long serialVersionUID = 1000000L;
     @XmlElement(required = true)
     protected String type;
+    @XmlSchemaType(name = "string")
     protected VirtualMachineMovePriority priority;
     protected ManagedObjectReference vm;
     @XmlElement(required = true)

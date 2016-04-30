@@ -4,6 +4,7 @@ package vim25;
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -45,6 +46,7 @@ public class VirtualAppSummary
 
     private final static long serialVersionUID = 1000000L;
     protected VAppProductInfo product;
+    @XmlSchemaType(name = "string")
     protected VirtualAppVAppState vAppState;
     protected Boolean suspended;
     protected Boolean installBootRequired;

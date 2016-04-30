@@ -4,6 +4,7 @@ package vim25;
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
@@ -58,6 +59,7 @@ public class ClusterRuleInfo
 
     private final static long serialVersionUID = 1000000L;
     protected Integer key;
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus status;
     protected Boolean enabled;
     protected String name;

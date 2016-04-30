@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -42,8 +43,10 @@ public class AlarmTriggeringActionTransitionSpec
 
     private final static long serialVersionUID = 1000000L;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus startState;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus finalState;
     protected boolean repeats;
 

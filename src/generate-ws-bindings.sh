@@ -1,4 +1,5 @@
 #!/bin/sh
-mvn -P generate-ws-bindings compile
+gradle wsdl2java
+
 
 

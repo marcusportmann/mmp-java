@@ -30,7 +30,7 @@ public class BPMNParserTests
   /**
    * Method description
    */
-  @Test
+  //@Test
   public void bpmnParserTest()
   {
     try

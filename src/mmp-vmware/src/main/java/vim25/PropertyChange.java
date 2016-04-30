@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -44,6 +45,7 @@ public class PropertyChange
     @XmlElement(required = true)
     protected String name;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected PropertyChangeOp op;
     protected Object val;
 

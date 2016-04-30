@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -81,6 +82,7 @@ public class GuestInfo
 {
 
     private final static long serialVersionUID = 1000000L;
+    @XmlSchemaType(name = "string")
     protected VirtualMachineToolsStatus toolsStatus;
     protected String toolsVersionStatus;
     protected String toolsVersionStatus2;

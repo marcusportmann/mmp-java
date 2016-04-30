@@ -100,9 +100,12 @@ public class VirtualMachineRuntimeInfo
     protected List<VirtualMachineDeviceRuntimeInfo> device;
     protected ManagedObjectReference host;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected VirtualMachineConnectionState connectionState;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected VirtualMachinePowerState powerState;
+    @XmlSchemaType(name = "string")
     protected VirtualMachineFaultToleranceState faultToleranceState;
     protected VirtualMachineRuntimeInfoDasProtectionState dasVmProtection;
     protected boolean toolsInstallerMounted;
@@ -120,6 +123,7 @@ public class VirtualMachineRuntimeInfo
     protected Integer maxCpuUsage;
     protected Integer maxMemoryUsage;
     protected int numMksConnections;
+    @XmlSchemaType(name = "string")
     protected VirtualMachineRecordReplayState recordReplayState;
     protected Boolean cleanPowerOff;
     protected String needSecondaryReason;

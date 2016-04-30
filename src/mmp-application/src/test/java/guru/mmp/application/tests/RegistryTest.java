@@ -38,7 +38,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Marcus Portmann
  */
-//@RunWith(ApplicationClassRunner.class)
+@RunWith(ApplicationClassRunner.class)
 public class RegistryTest
 {
   private byte[] encryptionIV = CryptoUtils.createRandomEncryptionIV(CryptoUtils.AES_BLOCK_SIZE);
@@ -51,7 +51,7 @@ public class RegistryTest
    *
    * @throws RegistryException
    */
-  //@Test
+  @Test
   public void binaryConfigurationTest()
     throws RegistryException
   {
@@ -112,7 +112,7 @@ public class RegistryTest
    *
    * @throws RegistryException
    */
-  //@Test
+  @Test
   public void decimalConfigurationTest()
     throws RegistryException
   {
@@ -157,7 +157,7 @@ public class RegistryTest
    *
    * @throws RegistryException
    */
-  //@Test
+  @Test
   public void integerConfigurationTest()
     throws RegistryException
   {
@@ -199,7 +199,7 @@ public class RegistryTest
    *
    * @throws RegistryException
    */
-  //@Test
+  @Test
   public void multiLevelStringConfigurationTest()
     throws RegistryException
   {
@@ -216,7 +216,7 @@ public class RegistryTest
    *
    * @throws RegistryException
    */
-  //@Test
+  @Test
   public void stringConfigurationTest()
     throws RegistryException
   {

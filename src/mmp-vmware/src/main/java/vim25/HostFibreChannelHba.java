@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
@@ -50,6 +51,7 @@ public class HostFibreChannelHba
     protected long portWorldWideName;
     protected long nodeWorldWideName;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected FibreChannelPortType portType;
     protected long speed;
 

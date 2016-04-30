@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
@@ -54,6 +55,7 @@ public class ArrayUpdateSpec
 
     private final static long serialVersionUID = 1000000L;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected ArrayUpdateOperation operation;
     protected Object removeKey;
 

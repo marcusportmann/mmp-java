@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -167,6 +168,7 @@ public class HostConfigInfo
     protected HostDateTimeInfo dateTimeInfo;
     protected HostFlagInfo flags;
     protected Boolean adminDisabled;
+    @XmlSchemaType(name = "string")
     protected HostLockdownMode lockdownMode;
     protected HostIpmiInfo ipmi;
     protected HostSslThumbprintInfo sslThumbprintInfo;

@@ -64,6 +64,7 @@ public class LicenseFeatureInfo
     @XmlElement(required = true)
     protected String featureName;
     protected String featureDescription;
+    @XmlSchemaType(name = "string")
     protected LicenseFeatureInfoState state;
     @XmlElement(required = true)
     protected String costUnit;

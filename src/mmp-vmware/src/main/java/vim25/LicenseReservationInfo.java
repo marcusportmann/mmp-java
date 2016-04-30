@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -44,6 +45,7 @@ public class LicenseReservationInfo
     @XmlElement(required = true)
     protected String key;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected LicenseReservationInfoState state;
     protected int required;
 

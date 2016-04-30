@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -45,6 +46,7 @@ public class ClusterDasVmConfigInfo
     private final static long serialVersionUID = 1000000L;
     @XmlElement(required = true)
     protected ManagedObjectReference key;
+    @XmlSchemaType(name = "string")
     protected DasVmPriority restartPriority;
     protected Boolean powerOffOnIsolation;
     protected ClusterDasVmSettings dasSettings;

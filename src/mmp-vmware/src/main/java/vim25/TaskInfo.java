@@ -99,6 +99,7 @@ public class TaskInfo
     protected String entityName;
     protected List<ManagedObjectReference> locked;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected TaskInfoState state;
     protected boolean cancelled;
     protected boolean cancelable;

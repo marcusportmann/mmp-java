@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -52,6 +53,7 @@ public class EventAlarmExpression
     protected String eventType;
     protected String eventTypeId;
     protected String objectType;
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus status;
 
     /**

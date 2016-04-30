@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -46,6 +47,7 @@ public class ResourcePoolRuntimeInfo
     @XmlElement(required = true)
     protected ResourcePoolResourceUsage cpu;
     @XmlElement(required = true)
+    @XmlSchemaType(name = "string")
     protected ManagedEntityStatus overallStatus;
 
     /**
