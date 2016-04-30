@@ -18,6 +18,7 @@ subprojects.findAll { it.name in [
   'mmp-application-wicket',
   'mmp-common',
   'mmp-corba',
+  'mmp-sample-wicket-client',
   'mmp-sharepoint',
   'mmp-tomcat'] 
   }. each { 
