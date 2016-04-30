@@ -20,7 +20,6 @@ package guru.mmp.application.process.test;
 
 import guru.mmp.application.process.bpmn.Parser;
 import guru.mmp.common.util.ResourceUtil;
-import org.junit.Test;
 
 /**
  * The <code>BPMNParserTests</code> implements the unit tests for the BPMN parsing capability.
