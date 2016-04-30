@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------------
-// Configure Java projects
+// Apply configuration common to all the Java projects
 // ---------------------------------------------------------------------------------------
 subprojects.findAll { it.name in [
   'mmp-application',
@@ -20,69 +20,67 @@ subprojects.findAll { it.name in [
   'mmp-corba',
   'mmp-sharepoint',
   'mmp-tomcat'] 
-  }. each { p -> configure(p) {
+  }. each { 
+    p -> configure(p) {
+    
+    apply plugin: 'java'
 
-  apply plugin: 'java'
-
-  group 'mmp.guru'
-
-  version '2.0.0'
-
-  sourceCompatibility = 1.8
-
-  repositories {
-    mavenCentral()
-  }
-  
-  /*
-   * NOTE: We need to copy the META-INF/beans.xml from the "main" resources to the classes 
-   *       output folder for Weld to successfully resolve the classes. This is because Weld 
-   *       only resolves classes in the same classpath location as the beans.xml file.
-   */
-  sourceSets.main.resources {
-    exclude 'META-INF/beans.xml'
-    classes {
-      inputs.dir 'src/main/resources/META-INF/beans.xml'
-      outputs.dir "$buildDir/classes/main/META-INF/beans.xml"
-    } << {
-      copy {
-        from('src/main/resources') { include 'META-INF/beans.xml' }
-        into "$buildDir/classes/main/"
+    /*
+     * NOTE: We need to copy the META-INF/beans.xml from the "main" resources to the 
+     *       classes output folder for Weld to successfully resolve the classes. This
+     *       is because Weld only resolves classes in the same classpath location as
+     *       the beans.xml file.
+     */
+    sourceSets.main.resources {
+      exclude 'META-INF/beans.xml'
+      classes {
+        inputs.dir 'src/main/resources/META-INF/beans.xml'
+        outputs.dir "$buildDir/classes/main/META-INF/beans.xml"
+      } << {
+        copy {
+          from('src/main/resources') { include 'META-INF/beans.xml' }
+          into "$buildDir/classes/main/"
+        }
       }
     }
-  }
 
-  /*
-   * NOTE: We need to copy the META-INF/beans.xml from the "test" resources to the classes 
-   *       output folder for Weld to successfully resolve the classes. This is because Weld 
-   *       only resolves classes in the same classpath location as the beans.xml file.
-   */
-  sourceSets.test.resources {
-    exclude 'META-INF/beans.xml'
-    classes {
-      inputs.dir 'src/test/resources/META-INF/beans.xml'
-      outputs.dir "$buildDir/classes/test/META-INF/beans.xml"
-    } << {
-      copy {
-        from('src/test/resources') { include 'META-INF/beans.xml' }
-        into "$buildDir/classes/test/"
-      }
+    /*
+     * NOTE: We need to copy the META-INF/beans.xml from the "test" resources to the 
+     *       classes output folder for Weld to successfully resolve the classes. This 
+     *       is because Weld only resolves classes in the same classpath location as 
+     *       the beans.xml file.
+     */
+    sourceSets.test.resources {
+      exclude 'META-INF/beans.xml'
+      classes {
+        inputs.dir 'src/test/resources/META-INF/beans.xml'
+        outputs.dir "$buildDir/classes/test/META-INF/beans.xml"
+      } << {
+        copy {
+          from('src/test/resources') { include 'META-INF/beans.xml' }
+          into "$buildDir/classes/test/"
+        }
+      }  
     }  
-  }  
   
-  task wsdl2java(type: WSDL2JavaTask) {
+    task copyToDist (type: Copy, dependsOn: build) {
+      from './build/libs'
+      into '../../dist'
+      include "${project.name}-${version}.jar"
+    }   
+
+    build.finalizedBy(copyToDist)
+  
+    task cleanDist (type: Delete, dependsOn: clean) {
+      delete "../../dist/${project.name}-${version}.jar"
+    }   
+
+    clean.finalizedBy(cleanDist)
+    
+    task wsdl2java(type: WSDL2JavaTask) {
+    }
   }
 }
-}
-
-// ---------------------------------------------------------------------------------------
-// Add the wsdl2java task to all the required subprojects
-// ---------------------------------------------------------------------------------------
-//subprojects.findAll { it.name in ['mmp-application', 'mmp-sharepoint'] }. each { p ->
-// configure(p) {
-//   task wsdl2java(type: WSDL2JavaTask)
-//  }
-//}
 
 // ---------------------------------------------------------------------------------------
 // The WSDL2JavaTask generates the JAX-WS portable artifacts from WSDL files.

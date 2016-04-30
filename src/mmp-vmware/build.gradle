@@ -1,4 +1,5 @@
 group 'mmp.guru'
+
 version '2.0.0'
 
 apply plugin: 'java'

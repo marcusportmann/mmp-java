@@ -1,3 +1,15 @@
+group 'mmp.guru'
+
+version '2.0.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
 dependencies {
   compile project(':mmp-common')
   
@@ -5,18 +17,4 @@ dependencies {
   
   testCompile 'junit:junit:4.12'
 }
-
-task copyToDist (type: Copy, dependsOn: build) {
-  from './build/libs'
-  into '../../dist'
-  include "${project.name}-${version}.jar"
-}   
-
-build.finalizedBy(copyToDist)
-  
-task cleanDist (type: Delete, dependsOn: clean) {
-  delete "../../dist/${project.name}-${version}.jar"
-}   
-
-clean.finalizedBy(cleanDist)
 

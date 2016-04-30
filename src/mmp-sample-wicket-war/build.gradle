@@ -1,5 +1,11 @@
 apply plugin: 'war'
 
+sourceCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
 dependencies {
   compile project(':mmp-application-wicket')
   compile project(':mmp-application-scheduler-wicket')
@@ -8,7 +14,45 @@ dependencies {
   compile project(':mmp-application-reporting-wicket')
   compile project(':mmp-application-sms')
   
-  compileOnly 'javax:javaee-api:7.0'
+  providedCompile 'javax:javaee-api:7.0'
 
   testCompile project(':mmp-application-test')
 }
+
+/*
+ * NOTE: We need to copy the META-INF/beans.xml from the "main" resources to the 
+ *       classes output folder for Weld to successfully resolve the classes. This
+ *       is because Weld only resolves classes in the same classpath location as
+ *       the beans.xml file.
+ */
+sourceSets.main.resources {
+  exclude 'META-INF/beans.xml'
+  classes {
+    inputs.dir 'src/main/resources/META-INF/beans.xml'
+    outputs.dir "$buildDir/classes/main/META-INF/beans.xml"
+  } << {
+    copy {
+      from('src/main/resources') { include 'META-INF/beans.xml' }
+      into "$buildDir/classes/main/"
+    }
+  }
+}
+
+/*
+ * NOTE: We need to copy the META-INF/beans.xml from the "test" resources to the 
+ *       classes output folder for Weld to successfully resolve the classes. This 
+ *       is because Weld only resolves classes in the same classpath location as 
+ *       the beans.xml file.
+ */
+sourceSets.test.resources {
+  exclude 'META-INF/beans.xml'
+  classes {
+    inputs.dir 'src/test/resources/META-INF/beans.xml'
+    outputs.dir "$buildDir/classes/test/META-INF/beans.xml"
+  } << {
+    copy {
+      from('src/test/resources') { include 'META-INF/beans.xml' }
+      into "$buildDir/classes/test/"
+    }
+  }  
+} 
