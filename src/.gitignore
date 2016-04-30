@@ -16,6 +16,7 @@
 /**/*.ipr
 
 target
+.classpath
 .project
 .gradle/
 .settings/
