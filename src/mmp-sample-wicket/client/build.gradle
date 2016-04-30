@@ -1,12 +1,14 @@
+group 'mmp.guru'
+version '2.0.0'
+
+println "    - Building ${project.name}-${version}.jar..."
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
 dependencies {
-  compile 'joda-time:joda-time:2.9.3'
-  compile 'org.apache.httpcomponents:httpclient:4.5.2'
-  compile('org.apache.ws.security:wss4j:1.6.19') {
-    exclude group: 'org.opensaml', module: 'openws'   
-  }
-  compile 'org.slf4j:slf4j-jdk14:1.7.21'
-  
-  compileOnly 'javax:javaee-api:7.0'
+  compile project(':mmp-common')
   
   testCompile 'junit:junit:4.12'
 }
@@ -24,3 +26,4 @@ task cleanDist (type: Delete, dependsOn: clean) {
 }   
 
 clean.finalizedBy(cleanDist)
+

@@ -1,0 +1,29 @@
+dependencies {
+  compile project(':mmp-common')
+  
+  compile 'cglib:cglib:3.2.0'
+  compile 'com.atomikos:transactions-jdbc:4.0.2'
+  compile 'com.atomikos:transactions-jta:4.0.2'
+  compile 'com.h2database:h2:1.4.191'
+  compile 'junit:junit:4.12'
+  compile 'org.apache.tomcat:tomcat-catalina:8.0.33'
+  compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
+  compile 'org.jboss.weld.se:weld-se-core:2.3.4.Final'
+  
+  compile 'javax:javaee-api:7.0'
+}
+
+task copyToDist (type: Copy, dependsOn: build) {
+  from './build/libs'
+  into '../../dist'
+  include "${project.name}-${version}.jar"
+}   
+
+build.finalizedBy(copyToDist)
+  
+task cleanDist (type: Delete, dependsOn: clean) {
+  delete "../../dist/${project.name}-${version}.jar"
+}   
+
+clean.finalizedBy(cleanDist)
+

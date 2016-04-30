@@ -1,61 +1,44 @@
-subprojects
-{
-  apply plugin: 'java'
+group 'mmp.guru'
+version '2.0.0'
 
-  group 'mmp.guru'
+apply plugin: 'java'
 
-  version '2.0.0'
+sourceCompatibility = 1.8
 
-  sourceCompatibility = 1.8
-
-  repositories {
-    mavenCentral()
-  }
-  
-  /*
-   * NOTE: We need to copy the META-INF/beans.xml from the "main" resources to the classes 
-   *       output folder for Weld to successfully resolve the classes. This is because Weld 
-   *       only resolves classes in the same classpath location as the beans.xml file.
-   */
-  sourceSets.main.resources {
-    exclude 'META-INF/beans.xml'
-    classes {
-      inputs.dir 'src/main/resources/META-INF/beans.xml'
-      outputs.dir "$buildDir/classes/main/META-INF/beans.xml"
-    } << {
-      copy {
-        from('src/main/resources') { include 'META-INF/beans.xml' }
-        into "$buildDir/classes/main/"
-      }
-    }
-  }
-
-  /*
-   * NOTE: We need to copy the META-INF/beans.xml from the "test" resources to the classes 
-   *       output folder for Weld to successfully resolve the classes. This is because Weld 
-   *       only resolves classes in the same classpath location as the beans.xml file.
-   */
-  sourceSets.test.resources {
-    exclude 'META-INF/beans.xml'
-    classes {
-      inputs.dir 'src/test/resources/META-INF/beans.xml'
-      outputs.dir "$buildDir/classes/test/META-INF/beans.xml"
-    } << {
-      copy {
-        from('src/test/resources') { include 'META-INF/beans.xml' }
-        into "$buildDir/classes/test/"
-      }
-    }  
-  }  
+repositories {
+  mavenCentral()
 }
 
+dependencies {
+  compile files('../../dist/mmp-common-2.0.0.jar')
+  
+  compile 'org.slf4j:slf4j-jdk14:1.7.21'
+  
+  testCompile 'junit:junit:4.12'
+}
+
+task copyToDist (type: Copy, dependsOn: build) {
+  from './build/libs'
+  into '../../dist'
+  include "${project.name}-${version}.jar"
+}   
+
+build.finalizedBy(copyToDist)
+  
+task cleanDist (type: Delete, dependsOn: clean) {
+  delete "../../dist/${project.name}-${version}.jar"
+}   
+
+clean.finalizedBy(cleanDist)
+
 // ---------------------------------------------------------------------------------------
-// Add the wsdl2java task to all the required subprojects
+// Add the wsdl2java task
 // ---------------------------------------------------------------------------------------
-subprojects.findAll { it.name in ['mmp-application', 'mmp-sharepoint'] }. each { p ->
- configure(p) {
-   task wsdl2java(type: WSDL2JavaTask)
-  }
+task wsdl2java(type: WSDL2JavaTask) {
+  sourceDir = "${projectDir}/src/main/java"
+  bindingFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/mmp-bindings.xjb")
+  wsdlFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/STSService.wsdl")
+  wsdlFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/vimService.wsdl")
 }
 
 // ---------------------------------------------------------------------------------------
@@ -130,6 +113,4 @@ class WSDL2JavaTask extends DefaultTask {
       input.close();    
     }    
   }
-}  
-
-
+} 

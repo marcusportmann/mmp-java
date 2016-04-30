@@ -1,0 +1,29 @@
+dependencies {
+  compile project(':mmp-common')
+  
+  compile 'commons-beanutils:commons-beanutils:1.9.2'
+  
+  compileOnly 'javax:javaee-api:7.0'
+  
+  testCompile project(':mmp-application-test')  
+}
+
+task copyToDist (type: Copy, dependsOn: build) {
+  from './build/libs'
+  into '../../dist'
+  include "${project.name}-${version}.jar"
+}   
+
+build.finalizedBy(copyToDist)
+  
+task cleanDist (type: Delete, dependsOn: clean) {
+  delete "../../dist/${project.name}-${version}.jar"
+}   
+
+clean.finalizedBy(cleanDist)
+
+wsdl2java {
+  sourceDir = "${projectDir}/src/main/java"
+  bindingFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/mmp-bindings.xjb")
+  wsdlFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/CodesService.wsdl")
+}

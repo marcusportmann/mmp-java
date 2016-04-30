@@ -15,6 +15,7 @@ include 'mmp-application-test'
 include 'mmp-application-wicket'
 include 'mmp-common'
 include 'mmp-corba'
+include 'mmp-sample-wicket-web'
 include 'mmp-sharepoint'
 include 'mmp-tomcat'
 

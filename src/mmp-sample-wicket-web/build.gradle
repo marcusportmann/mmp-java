@@ -1,0 +1,14 @@
+apply plugin: 'war'
+
+dependencies {
+  compile project(':mmp-application-wicket')
+  compile project(':mmp-application-scheduler-wicket')
+  compile project(':mmp-application-messaging-wicket')
+  compile project(':mmp-application-process-wicket')
+  compile project(':mmp-application-reporting-wicket')
+  compile project(':mmp-application-sms')
+  
+  compileOnly 'javax:javaee-api:7.0'
+
+  testCompile project(':mmp-application-test')
+}
