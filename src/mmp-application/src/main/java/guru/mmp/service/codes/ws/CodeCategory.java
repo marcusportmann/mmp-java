@@ -63,6 +63,7 @@ public class CodeCategory
     @XmlElement(name = "Name", required = true)
     protected String name;
     @XmlElement(name = "CodeDataType", required = true)
+    @XmlSchemaType(name = "string")
     protected CodeDataType codeDataType;
     @XmlElement(name = "LastUpdated", required = true, type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
