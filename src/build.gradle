@@ -1,5 +1,27 @@
-subprojects
-{
+// ---------------------------------------------------------------------------------------
+// Configure Java projects
+// ---------------------------------------------------------------------------------------
+subprojects.findAll { it.name in [
+  'mmp-application',
+  'mmp-application-customer',
+  'mmp-application-customer-wicket',
+  'mmp-application-messaging',
+  'mmp-application-messaging-wicket',
+  'mmp-application-process',
+  'mmp-application-process-wicket',
+  'mmp-application-reporting',
+  'mmp-application-reporting-wicket',
+  'mmp-application-scheduler',
+  'mmp-application-scheduler-wicket',
+  'mmp-application-sms',
+  'mmp-application-test',
+  'mmp-application-wicket',
+  'mmp-common',
+  'mmp-corba',
+  'mmp-sharepoint',
+  'mmp-tomcat'] 
+  }. each { p -> configure(p) {
+
   apply plugin: 'java'
 
   group 'mmp.guru'
@@ -47,16 +69,20 @@ subprojects
       }
     }  
   }  
+  
+  task wsdl2java(type: WSDL2JavaTask) {
+  }
+}
 }
 
 // ---------------------------------------------------------------------------------------
 // Add the wsdl2java task to all the required subprojects
 // ---------------------------------------------------------------------------------------
-subprojects.findAll { it.name in ['mmp-application', 'mmp-sharepoint'] }. each { p ->
- configure(p) {
-   task wsdl2java(type: WSDL2JavaTask)
-  }
-}
+//subprojects.findAll { it.name in ['mmp-application', 'mmp-sharepoint'] }. each { p ->
+// configure(p) {
+//   task wsdl2java(type: WSDL2JavaTask)
+//  }
+//}
 
 // ---------------------------------------------------------------------------------------
 // The WSDL2JavaTask generates the JAX-WS portable artifacts from WSDL files.

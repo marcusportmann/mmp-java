@@ -1,0 +1,9 @@
+apply plugin: 'ear'
+
+dependencies {
+  deploy project(path: ':mmp-sample-wicket-war', configuration: 'archives')
+}
+
+ear {
+  deploymentDescriptor { webModule(project(":mmp-sample-wicket-war").war.archiveName, "/sample") }
+}
