@@ -96,8 +96,6 @@ public class AddProcessDefinitionPage extends TemplateWebPage
           {
             ProcessDefinition processDefinition = addForm.getModelObject();
 
-            WebSession session = getWebApplicationSession();
-
             fileUpload = processDefinitionInputPanel.getFileUpload();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

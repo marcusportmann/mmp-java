@@ -52,10 +52,6 @@ public class BackendUserMenuSideOverlay extends Component
   private static final long serialVersionUID = 1000000;
   private boolean isMultipleOrganisationSupportEnabled;
 
-  /* Security Service */
-  @Inject
-  private ISecurityService securityService;
-
   /**
    * @param id the non-null id of this component
    *

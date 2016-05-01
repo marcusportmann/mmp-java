@@ -155,6 +155,7 @@ public class EntityManagerWrapper
     return getEntityManager(persistenceUnitName).createNativeQuery(sqlString);
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   public Query createNativeQuery(String sqlString, Class resultClass)
   {
@@ -216,6 +217,7 @@ public class EntityManagerWrapper
     return new StoredProcedureQueryNonTxInvocationDetacher(entityManager, storedProcedureQuery);
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   public StoredProcedureQuery createStoredProcedureQuery(String procedureName,
       Class... resultClasses)

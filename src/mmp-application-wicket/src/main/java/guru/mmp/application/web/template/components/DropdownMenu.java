@@ -114,7 +114,7 @@ public abstract class DropdownMenu<T> extends Panel
 
     add(dropDownMenuIconLabel);
 
-    Label dropDownMenuTextLabel = new Label("dropdownMenuText", new PropertyModel(this,
+    Label dropDownMenuTextLabel = new Label("dropdownMenuText", new PropertyModel<>(this,
         "dropDownMenuText"));
     dropDownMenuTextLabel.setRenderBodyOnly(true);
 

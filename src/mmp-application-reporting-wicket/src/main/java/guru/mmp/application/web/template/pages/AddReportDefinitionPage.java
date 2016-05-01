@@ -95,8 +95,6 @@ public class AddReportDefinitionPage extends TemplateWebPage
           {
             ReportDefinition reportDefinition = addForm.getModelObject();
 
-            WebSession session = getWebApplicationSession();
-
             fileUpload = reportDefinitionInputPanel.getFileUpload();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
