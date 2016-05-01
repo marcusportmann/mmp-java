@@ -1,6 +1,7 @@
 
 package guru.mmp.service.sample.ws;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -32,8 +33,11 @@ import javax.xml.bind.annotation.XmlType;
     "out"
 })
 @XmlRootElement(name = "GetVersionResponse")
-public class GetVersionResponse {
+public class GetVersionResponse
+    implements Serializable
+{
 
+    private final static long serialVersionUID = 1000000L;
     @XmlElement(required = true)
     protected String out;
 

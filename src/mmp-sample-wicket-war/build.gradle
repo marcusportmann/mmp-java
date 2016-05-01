@@ -62,3 +62,9 @@ sourceSets.test.resources {
     }
   }  
 } 
+
+wsdl2java {
+  sourceDir = "${projectDir}/src/main/java"
+  bindingFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/mmp-bindings.xjb")
+  wsdlFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/SampleService.wsdl")
+}

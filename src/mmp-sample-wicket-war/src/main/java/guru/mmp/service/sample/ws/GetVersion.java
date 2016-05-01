@@ -1,6 +1,7 @@
 
 package guru.mmp.service.sample.ws;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,7 +29,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "GetVersion")
-public class GetVersion {
+public class GetVersion
+    implements Serializable
+{
 
+    private final static long serialVersionUID = 1000000L;
 
 }

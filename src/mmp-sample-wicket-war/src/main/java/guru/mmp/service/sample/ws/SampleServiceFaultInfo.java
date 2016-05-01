@@ -1,6 +1,7 @@
 
 package guru.mmp.service.sample.ws;
 
+import java.io.Serializable;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,11 +34,14 @@ import javax.xml.bind.annotation.XmlType;
     "detail",
     "message"
 })
-public class SampleServiceFaultInfo {
+public class SampleServiceFaultInfo
+    implements Serializable
+{
 
-    @XmlElementRef(name = "Detail", namespace = "http://ws.sample.service.mmp.guru", type = JAXBElement.class)
+    private final static long serialVersionUID = 1000000L;
+    @XmlElementRef(name = "Detail", namespace = "http://ws.sample.service.mmp.guru", type = JAXBElement.class, required = false)
     protected JAXBElement<String> detail;
-    @XmlElementRef(name = "Message", namespace = "http://ws.sample.service.mmp.guru", type = JAXBElement.class)
+    @XmlElementRef(name = "Message", namespace = "http://ws.sample.service.mmp.guru", type = JAXBElement.class, required = false)
     protected JAXBElement<String> message;
 
     /**
