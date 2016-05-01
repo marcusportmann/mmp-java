@@ -4,6 +4,7 @@ version '2.0.0'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
 apply plugin: 'maven-publish'
 
 repositories {
