@@ -25,19 +25,22 @@ import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.CodeCategoryInputPanel;
+
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Date;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.inject.Inject;
 
 /**
  * The <code>AddCodeCategoryPage</code> class implements the
@@ -47,7 +50,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION)
-public class AddCodeCategoryPage extends TemplateWebPage
+class AddCodeCategoryPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddCodeCategoryPage.class);
@@ -62,7 +65,7 @@ public class AddCodeCategoryPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddCodeCategoryPage(PageReference previousPage)
+  AddCodeCategoryPage(PageReference previousPage)
   {
     super("Add Code Category");
 

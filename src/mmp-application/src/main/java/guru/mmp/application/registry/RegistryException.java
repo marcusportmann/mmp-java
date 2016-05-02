@@ -24,41 +24,18 @@ package guru.mmp.application.registry;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class RegistryException extends Exception
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * Constructs a new <code>RegistryException</code> with <code>null</code> as its
-   * message.
-   */
-  public RegistryException()
-  {
-    super();
-  }
 
   /**
    * Constructs a new <code>RegistryException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public RegistryException(String message)
+  RegistryException(String message)
   {
     super(message);
-  }
-
-  /**
-   * Constructs a new <code>RegistryException</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
-   *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public RegistryException(Throwable cause)
-  {
-    super(cause);
   }
 
   /**
@@ -68,7 +45,7 @@ public class RegistryException extends Exception
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public RegistryException(String message, Throwable cause)
+  RegistryException(String message, Throwable cause)
   {
     super(message, cause);
   }

@@ -23,7 +23,7 @@ package guru.mmp.application.codes;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class CodeProviderException extends Exception
+class CodeProviderException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

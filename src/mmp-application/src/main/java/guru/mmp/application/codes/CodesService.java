@@ -41,6 +41,7 @@ import javax.xml.ws.BindingProvider;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -58,7 +59,7 @@ public class CodesService
    * The path to the codes configuration files (META-INF/CodesConfig.xml) on the
    * classpath.
    */
-  public static final String CODES_CONFIGURATION_PATH = "META-INF/CodesConfig.xml";
+  private static final String CODES_CONFIGURATION_PATH = "META-INF/CodesConfig.xml";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CodesService.class);
@@ -315,30 +316,6 @@ public class CodesService
     {
       throw new CodesServiceException(String.format(
           "Failed to retrieve the cached code category (%s)", id), e);
-    }
-  }
-
-  /**
-   * Returns all the cached codes for the cached code category.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
-   *           category
-   *
-   * @return all the cached codes for the cached code category
-   *
-   * @throws CodesServiceException
-   */
-  public List<Code> getCachedCodesForCachedCodeCategory(UUID id)
-    throws CodesServiceException
-  {
-    try
-    {
-      return codesDAO.getCachedCodesForCachedCodeCategory(id);
-    }
-    catch (Throwable e)
-    {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the cached codes for the cached code category (%s)", id), e);
     }
   }
 
@@ -805,30 +782,6 @@ public class CodesService
   }
 
   /**
-   * Update the existing cached code category.
-   *
-   * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the updated
-   *                           information for the cached code category
-   *
-   * @return the updated cached code category
-   *
-   * @throws CodesServiceException
-   */
-  public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
-    throws CodesServiceException
-  {
-    try
-    {
-      return codesDAO.updateCachedCodeCategory(cachedCodeCategory);
-    }
-    catch (Throwable e)
-    {
-      throw new CodesServiceException(String.format(
-          "Failed to update the cached code category (%s)", cachedCodeCategory.getId()), e);
-    }
-  }
-
-  /**
    * Update the existing code.
    *
    * @param code the <code>Code</code> instance containing the updated information for the code
@@ -955,13 +908,9 @@ public class CodesService
 
       codeCategory.setUpdated(DateUtil.toDate(remoteCodeCategory.getLastUpdated()));
 
-      List<Code> codes = new ArrayList<>();
-
-      for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
-      {
-        codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
-            remoteCode.getValue()));
-      }
+      List<Code> codes = remoteCodeCategory.getCodes().stream().map(remoteCode -> new Code(
+          remoteCode.getId(), codeCategory.getId(), remoteCode.getName(), remoteCode.getValue()))
+          .collect(Collectors.toList());
 
       codeCategory.setCodes(codes);
       codeCategory.setCodeData(remoteCodeCategory.getCodeData());
@@ -1023,13 +972,9 @@ public class CodesService
 
       codeCategory.setUpdated(DateUtil.toDate(remoteCodeCategory.getLastUpdated()));
 
-      List<Code> codes = new ArrayList<>();
-
-      for (guru.mmp.service.codes.ws.Code remoteCode : remoteCodeCategory.getCodes())
-      {
-        codes.add(new Code(remoteCode.getId(), codeCategory.getId(), remoteCode.getName(),
-            remoteCode.getValue()));
-      }
+      List<Code> codes = remoteCodeCategory.getCodes().stream().map(remoteCode -> new Code(
+          remoteCode.getId(), codeCategory.getId(), remoteCode.getName(), remoteCode.getValue()))
+          .collect(Collectors.toList());
 
       codeCategory.setCodes(codes);
       codeCategory.setCodeData(remoteCodeCategory.getCodeData());

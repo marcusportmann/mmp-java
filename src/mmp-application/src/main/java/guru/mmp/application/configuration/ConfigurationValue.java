@@ -47,8 +47,7 @@ public class ConfigurationValue
   /**
    * Constructs a new <code>ConfigurationValue</code>.
    */
-  public ConfigurationValue()
-  {}
+  public ConfigurationValue() {}
 
   /**
    * Constructs a new <code>ConfigurationValue</code>.
@@ -57,7 +56,7 @@ public class ConfigurationValue
    * @param value       the value for the configuration value
    * @param description the description for the configuration value
    */
-  public ConfigurationValue(String key, String value, String description)
+  ConfigurationValue(String key, String value, String description)
   {
     this.key = key;
     this.value = value;

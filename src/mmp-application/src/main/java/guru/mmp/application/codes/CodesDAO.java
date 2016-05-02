@@ -78,7 +78,6 @@ public class CodesDAO
   private String getCodesForCodeCategorySQL;
   private String getNumberOfCodeCategoriesSQL;
   private String getNumberOfCodesForCodeCategorySQL;
-  private String updateCachedCodeCategorySQL;
   private String updateCodeCategorySQL;
   private String updateCodeSQL;
 
@@ -794,51 +793,6 @@ public class CodesDAO
   }
 
   /**
-   * Update the existing cached code category.
-   *
-   * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the updated
-   *                           information for the cached code category
-   *
-   * @return the updated cached code category
-   *
-   * @throws DAOException
-   */
-  public CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateCachedCodeCategorySQL))
-    {
-      Date cached = new Date();
-
-      statement.setBytes(1,
-          (cachedCodeCategory.getCodeData() != null)
-          ? cachedCodeCategory.getCodeData().getBytes("UTF-8")
-          : null);
-      statement.setTimestamp(2, new Timestamp(cached.getTime()));
-      statement.setTimestamp(3, new Timestamp(cachedCodeCategory.getLastUpdated().getTime()));
-      statement.setObject(4, cachedCodeCategory.getId());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new DAOException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            updateCachedCodeCategorySQL));
-      }
-
-      cachedCodeCategory.setCached(cached);
-
-      return cachedCodeCategory;
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format(
-          "Failed to update the cached code category (%s) in the database",
-          cachedCodeCategory.getId()), e);
-    }
-  }
-
-  /**
    * Update the existing code.
    *
    * @param code the <code>Code</code> instance containing the updated information for the code
@@ -1020,10 +974,6 @@ public class CodesDAO
     // getNumberOfCodeCategoriesSQL
     getNumberOfCodeCategoriesSQL = "SELECT COUNT(CC.ID) FROM " + schemaPrefix
         + "CODE_CATEGORIES CC";
-
-    // updateCachedCodeCategorySQL
-    updateCachedCodeCategorySQL = "UPDATE " + schemaPrefix + "CACHED_CODE_CATEGORIES CCC SET "
-        + "CCC.CODE_DATA=?, CCC.LAST_UPDATED, CCC.CACHED=? WHERE CCC.ID=?";
 
     // updateCodeCategorySQL
     updateCodeCategorySQL = "UPDATE " + schemaPrefix

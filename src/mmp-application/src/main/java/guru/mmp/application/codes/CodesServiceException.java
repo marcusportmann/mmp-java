@@ -24,41 +24,18 @@ package guru.mmp.application.codes;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class CodesServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * Constructs a new <code>CodesServiceException</code> with <code>null</code> as its
-   * message.
-   */
-  public CodesServiceException()
-  {
-    super();
-  }
 
   /**
    * Constructs a new <code>CodesServiceException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public CodesServiceException(String message)
+  CodesServiceException(String message)
   {
     super(message);
-  }
-
-  /**
-   * Constructs a new <code>CodesServiceException</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
-   *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public CodesServiceException(Throwable cause)
-  {
-    super(cause);
   }
 
   /**
@@ -68,7 +45,7 @@ public class CodesServiceException extends Exception
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public CodesServiceException(String message, Throwable cause)
+  CodesServiceException(String message, Throwable cause)
   {
     super(message, cause);
   }

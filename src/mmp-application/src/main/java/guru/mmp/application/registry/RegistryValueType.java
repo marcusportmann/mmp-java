@@ -21,7 +21,7 @@ package guru.mmp.application.registry;
  *
  * @author Marcus Portmann
  */
-public enum RegistryValueType
+enum RegistryValueType
 {
   NONE(-1, "None"), STRING(1, "String"), INTEGER(2, "Integer"), DECIMAL(3, "Decimal"), BINARY(4,
       "Binary");

@@ -335,19 +335,6 @@ public interface ICodesService
     throws CodesServiceException;
 
   /**
-   * Update the existing cached code category.
-   *
-   * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the updated
-   *                           information for the cached code category
-   *
-   * @return the updated cached code category
-   *
-   * @throws CodesServiceException
-   */
-  CachedCodeCategory updateCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
-    throws CodesServiceException;
-
-  /**
    * Update the existing code.
    *
    * @param code the <code>Code</code> instance containing the updated information for the code

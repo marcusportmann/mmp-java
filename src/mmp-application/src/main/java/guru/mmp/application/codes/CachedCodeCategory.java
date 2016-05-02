@@ -28,7 +28,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class CachedCodeCategory
+class CachedCodeCategory
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
@@ -73,7 +73,7 @@ public class CachedCodeCategory
    * @param lastUpdated the date and time the cached code category was last updated
    * @param cached      the date and time the code category was cached
    */
-  public CachedCodeCategory(UUID id, String codeData, Date lastUpdated, Date cached)
+  CachedCodeCategory(UUID id, String codeData, Date lastUpdated, Date cached)
   {
     this.id = id;
     this.codeData = codeData;
@@ -96,7 +96,7 @@ public class CachedCodeCategory
    *
    * @return the custom code data for the cached code category
    */
-  public String getCodeData()
+  String getCodeData()
   {
     return codeData;
   }
@@ -128,7 +128,7 @@ public class CachedCodeCategory
    *
    * @return the date and time the cached code category was last updated
    */
-  public Date getLastUpdated()
+  Date getLastUpdated()
   {
     return lastUpdated;
   }

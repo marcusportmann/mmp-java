@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -65,6 +66,8 @@ public class CodesServiceTest
     CodeCategory codeCategory = getTestLocalCustomCodeCategoryDetails();
 
     codesService.createCodeCategory(codeCategory);
+
+    assertTrue(codesService.codeCategoryExists(codeCategory.getId()));
 
     CodeCategory retrievedCodeCategory = codesService.getCodeCategory(codeCategory.getId(), false);
 

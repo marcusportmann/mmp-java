@@ -18,22 +18,20 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.configuration.ConfigurationException;
+import guru.mmp.application.configuration.ConfigurationNotFoundException;
 import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.test.ApplicationClassRunner;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.List;
 
-import javax.inject.Inject;
+import static org.junit.Assert.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ConfigurationServiceTest</code> class contains the implementation of the JUnit
@@ -63,11 +61,12 @@ public class ConfigurationServiceTest
   /**
    * Test the <code>Binary</code> configuration.
    *
-   * @throws Exception
+   * @throws ConfigurationException
+   * @throws ConfigurationNotFoundException
    */
   @Test
   public void binaryConfigurationTest()
-    throws Exception
+    throws ConfigurationException, ConfigurationNotFoundException
   {
     if (configurationService.keyExists(TEST_BINARY_KEY))
     {
@@ -99,16 +98,24 @@ public class ConfigurationServiceTest
     assertArrayEquals(
         "The required updated Binary value was not retrieved for the configuration key ("
         + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
+
+    value = configurationService.getBinary(TEST_BINARY_KEY, new byte[0]);
+
+    assertArrayEquals(
+        "The required updated Binary value was not retrieved for the configuration key ("
+        + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
+
   }
 
   /**
    * Test the <code>Double</code> configuration.
    *
-   * @throws Exception
+   * @throws ConfigurationException
+   * @throws ConfigurationNotFoundException
    */
   @Test
   public void doubleConfigurationTest()
-    throws Exception
+    throws ConfigurationException, ConfigurationNotFoundException
   {
     if (configurationService.keyExists(TEST_DOUBLE_KEY))
     {
@@ -127,6 +134,11 @@ public class ConfigurationServiceTest
     assertEquals("The required Double value was not retrieved for the configuration key ("
         + TEST_DOUBLE_KEY + ")", TEST_DOUBLE_VALUE, value, 0.0);
 
+    double doubleValue = configurationService.getDouble(TEST_DOUBLE_KEY, 666.666);
+
+    assertEquals("The required double value was not retrieved for the configuration key ("
+        + doubleValue + ")", TEST_DOUBLE_VALUE, doubleValue, 0.0);
+
     configurationService.setValue(TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE + 1.1, TEST_DESCRIPTION
         + " Updated");
 
@@ -144,11 +156,12 @@ public class ConfigurationServiceTest
   /**
    * Test the filtered configuration.
    *
-   * @throws Exception
+   * @throws ConfigurationException
+   * @throws ConfigurationNotFoundException
    */
   @Test
   public void filteredConfigurationTest()
-    throws Exception
+    throws ConfigurationException, ConfigurationNotFoundException
   {
     configurationService.setValue(TEST_FILTERED_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
@@ -170,11 +183,12 @@ public class ConfigurationServiceTest
   /**
    * Test the <code>Integer</code> configuration.
    *
-   * @throws Exception
+   * @throws ConfigurationException
+   * @throws ConfigurationNotFoundException
    */
   @Test
   public void integerConfigurationTest()
-    throws Exception
+    throws ConfigurationException, ConfigurationNotFoundException
   {
     if (configurationService.keyExists(TEST_INTEGER_KEY))
     {
@@ -194,6 +208,11 @@ public class ConfigurationServiceTest
     assertEquals("The required Integer value was not retrieved for the Integer configuration key ("
         + TEST_INTEGER_KEY + ")", TEST_INTEGER_VALUE, value);
 
+    int integerValue = configurationService.getInteger(TEST_INTEGER_KEY, 666);
+
+    assertEquals("The required integer value was not retrieved for the Integer configuration key ("
+        + TEST_INTEGER_KEY + ")", (int) TEST_INTEGER_VALUE, integerValue);
+
     configurationService.setValue(TEST_INTEGER_KEY, TEST_INTEGER_VALUE + 1, TEST_DESCRIPTION
         + " Updated");
 
@@ -212,11 +231,12 @@ public class ConfigurationServiceTest
   /**
    * Test the <code>Long</code> configuration.
    *
-   * @throws Exception
+   * @throws ConfigurationException
+   * @throws ConfigurationNotFoundException
    */
   @Test
   public void longConfigurationTest()
-    throws Exception
+    throws ConfigurationException, ConfigurationNotFoundException
   {
     if (configurationService.keyExists(TEST_LONG_KEY))
     {
@@ -235,6 +255,11 @@ public class ConfigurationServiceTest
     assertEquals("The required Long value was not retrieved for the Long configuration key ("
         + TEST_LONG_KEY + ")", TEST_LONG_VALUE, value);
 
+    Long longValue = configurationService.getLong(TEST_LONG_KEY, 666);
+
+    assertEquals("The required Long value was not retrieved for the Long configuration key ("
+        + TEST_LONG_KEY + ")", TEST_LONG_VALUE, longValue);
+
     configurationService.setValue(TEST_LONG_KEY, TEST_LONG_VALUE + 1, TEST_DESCRIPTION
         + " Updated");
 
@@ -252,11 +277,12 @@ public class ConfigurationServiceTest
   /**
    * Test the <code>String</code> configuration.
    *
-   * @throws Exception
+   * @throws ConfigurationException
+   * @throws ConfigurationNotFoundException
    */
   @Test
   public void stringConfigurationTest()
-    throws Exception
+    throws ConfigurationException, ConfigurationNotFoundException
   {
     if (configurationService.keyExists(TEST_STRING_KEY))
     {

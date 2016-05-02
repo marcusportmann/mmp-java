@@ -1584,9 +1584,21 @@
      <string>java.lambdaBraceStyle</string>
      <void id="HashMap4" property="settingsMap">
       <void method="get">
+       <string>rightBraceNewLine</string>
+       <void property="value">
+        <boolean>true</boolean>
+       </void>
+      </void>
+      <void method="get">
        <string>indentCuddledBraces</string>
        <void property="value">
         <int>1</int>
+       </void>
+      </void>
+      <void method="get">
+       <string>leftBraceNewLine</string>
+       <void property="value">
+        <boolean>true</boolean>
        </void>
       </void>
       <void method="get">
@@ -1596,12 +1608,6 @@
        </void>
        <void property="value">
         <int>2</int>
-       </void>
-      </void>
-      <void method="get">
-       <string>indentLeftBrace</string>
-       <void property="value">
-        <int>1</int>
        </void>
       </void>
       <void method="get">

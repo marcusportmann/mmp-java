@@ -23,7 +23,7 @@ package guru.mmp.application.codes;
  *
  * @author Marcus Portmann
  */
-public class CodeProviderConfig
+class CodeProviderConfig
 {
   /**
    * The fully qualified name of the class that implements the code provider.
@@ -41,7 +41,7 @@ public class CodeProviderConfig
    * @param name      the name of the code provider
    * @param className fully qualified name of the class that implements the code provider
    */
-  public CodeProviderConfig(String name, String className)
+  CodeProviderConfig(String name, String className)
   {
     this.name = name;
     this.className = className;

@@ -24,42 +24,19 @@ package guru.mmp.application.configuration;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class ConfigurationException
   extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ConfigurationException</code> with <code>null</code> as its
-   * message.
-   */
-  public ConfigurationException()
-  {
-    super();
-  }
-
-  /**
    * Constructs a new <code>ConfigurationException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ConfigurationException(String message)
+  ConfigurationException(String message)
   {
     super(message);
-  }
-
-  /**
-   * Constructs a new <code>ConfigurationException</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
-   *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public ConfigurationException(Throwable cause)
-  {
-    super(cause);
   }
 
   /**
@@ -69,7 +46,7 @@ public class ConfigurationException
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ConfigurationException(String message, Throwable cause)
+  ConfigurationException(String message, Throwable cause)
   {
     super(message, cause);
   }

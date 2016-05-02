@@ -60,7 +60,7 @@ public class Registry
   /**
    * The path seperator.
    */
-  public static final String PATH_SEPERATOR = "/";
+  private static final String PATH_SEPERATOR = "/";
 
   /**
    * Prefix used to identify encrypted and base64 encoded values.
