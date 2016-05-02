@@ -1134,14 +1134,14 @@ public class SecurityServiceTest
         user2.getUsername());
   }
 
-  private Function getAnotherTestFunctionDetails()
-  {
-    Function function = new Function();
-    function.setId(UUID.randomUUID());
-    function.setCode("Another Test Function Code");
-    function.setName("Another Test Function Name");
-    function.setDescription("Another Test Function Description");
-
-    return function;
-  }
+//  private Function getAnotherTestFunctionDetails()
+//  {
+//    Function function = new Function();
+//    function.setId(UUID.randomUUID());
+//    function.setCode("Another Test Function Code");
+//    function.setName("Another Test Function Name");
+//    function.setDescription("Another Test Function Description");
+//
+//    return function;
+//  }
 }
