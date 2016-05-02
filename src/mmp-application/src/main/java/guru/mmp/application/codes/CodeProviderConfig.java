@@ -17,13 +17,13 @@
 package guru.mmp.application.codes;
 
 /**
- * The <code>CodeProviderConfig</code> class stores the configuration information for a
- * code provider. This is the configuration read from the META-INF/CodesConfig.xml
- * configuration files on the classpath.
+ * The <code>CodeProviderConfig</code> class stores the configuration information for a code
+ * provider. This is the configuration read from the META-INF/CodesConfig.xml configuration files
+ * on the classpath.
  *
  * @author Marcus Portmann
  */
-class CodeProviderConfig
+public class CodeProviderConfig
 {
   /**
    * The fully qualified name of the class that implements the code provider.

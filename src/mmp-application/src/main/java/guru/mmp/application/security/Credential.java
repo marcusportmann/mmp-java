@@ -23,6 +23,7 @@ package guru.mmp.application.security;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public interface Credential
 {
   /**

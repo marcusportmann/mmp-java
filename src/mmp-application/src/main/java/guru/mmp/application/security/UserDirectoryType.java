@@ -16,26 +16,18 @@
 
 package guru.mmp.application.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryType</code> class stores the information for a user directory type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class UserDirectoryType
   implements java.io.Serializable
 {
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(UserDirectoryType.class);
   private static final long serialVersionUID = 1000000;
   private transient Class administrationClass;
   private String administrationClassName;
@@ -136,7 +128,7 @@ public class UserDirectoryType
    *
    * @throws SecurityException
    */
-  public Class getUserDirectoryClass()
+  Class getUserDirectoryClass()
     throws SecurityException
   {
     if (userDirectoryClass == null)
@@ -168,7 +160,7 @@ public class UserDirectoryType
    *
    * @return the fully qualified name of the Java class that implements the user directory type
    */
-  public String getUserDirectoryClassName()
+  String getUserDirectoryClassName()
   {
     return userDirectoryClassName;
   }

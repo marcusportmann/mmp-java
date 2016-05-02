@@ -18,6 +18,8 @@ package guru.mmp.application.tests;
 
 /**
  * The <code>TestData</code> class.
+ *
+ * @author Marcus Portmann
  */
 public class TestData
 {
@@ -32,7 +34,7 @@ public class TestData
    * @param name  the name
    * @param value the value
    */
-  public TestData(String id, String name, String value)
+  TestData(String id, String name, String value)
   {
     this.id = id;
     this.name = name;
@@ -44,7 +46,7 @@ public class TestData
    *
    * @return the ID
    */
-  public String getId()
+  String getId()
   {
     return id;
   }
@@ -54,7 +56,7 @@ public class TestData
    *
    * @return the name
    */
-  public String getName()
+  String getName()
   {
     return name;
   }
@@ -64,38 +66,8 @@ public class TestData
    *
    * @return the value
    */
-  public String getValue()
+  String getValue()
   {
     return value;
-  }
-
-  /**
-   * Set the ID.
-   *
-   * @param id the ID
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name.
-   *
-   * @param name the name
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the value.
-   *
-   * @param value the value
-   */
-  public void setValue(String value)
-  {
-    this.value = value;
   }
 }

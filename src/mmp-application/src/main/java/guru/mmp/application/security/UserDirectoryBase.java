@@ -22,8 +22,6 @@ import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -40,11 +38,9 @@ import java.util.UUID;
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory
  * classes should be derived.
  */
-public abstract class UserDirectoryBase
+abstract class UserDirectoryBase
   implements IUserDirectory
 {
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(UserDirectoryBase.class);
   private String createGroupSQL;
   private DataSource dataSource;
   private String databaseCatalogSeparator;
@@ -70,7 +66,7 @@ public abstract class UserDirectoryBase
    *
    * @throws SecurityException
    */
-  public UserDirectoryBase(UUID userDirectoryId, Map<String, String> parameters)
+  UserDirectoryBase(UUID userDirectoryId, Map<String, String> parameters)
     throws SecurityException
   {
     this.userDirectoryId = userDirectoryId;
@@ -135,6 +131,87 @@ public abstract class UserDirectoryBase
   public UUID getUserDirectoryId()
   {
     return userDirectoryId;
+  }
+
+  /**
+   * Create a SHA-256 has of the specified password.
+   *
+   * @param password the password to hash
+   *
+   * @return the SHA-256 hash of the password
+   *
+   * @throws SecurityException
+   */
+  String createPasswordHash(String password)
+    throws SecurityException
+  {
+    try
+    {
+      MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+      md.update(password.getBytes("iso-8859-1"), 0, password.length());
+
+      return Base64.encodeBytes(md.digest());
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(String.format(
+          "Failed to generate a SHA-256 hash of the password (%s): %s", password, e.getMessage()),
+          e);
+    }
+  }
+
+  /**
+   * Delete the group.
+   *
+   * @param connection the existing database connection to use
+   * @param groupName  the group name uniquely identifying the group
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
+   *         <code>null</code> if a group with the specified group name could not be found
+   *
+   * @throws SecurityException
+   */
+  UUID deleteGroup(Connection connection, String groupName)
+    throws SecurityException
+  {
+    try (PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
+    {
+      UUID groupId = getGroupId(connection, groupName);
+
+      if (groupId == null)
+      {
+        return groupId;
+      }
+
+      statement.setObject(1, getUserDirectoryId());
+      statement.setString(2, groupName);
+
+      if (statement.executeUpdate() <= 0)
+      {
+        throw new SecurityException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
+            deleteGroupSQL));
+      }
+
+      return groupId;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(String.format(
+          "Failed to delete the group (%s) for the user directory (%s): %s", groupName,
+          getUserDirectoryId(), e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Returns the database catalog separator.
+   *
+   * @return the database catalog separator
+   */
+  String getDatabaseCatalogSeparator()
+  {
+    return databaseCatalogSeparator;
   }
 
   /**
@@ -233,77 +310,6 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Create a SHA-256 has of the specified password.
-   *
-   * @param password the password to hash
-   *
-   * @return the SHA-256 hash of the password
-   *
-   * @throws SecurityException
-   */
-  protected String createPasswordHash(String password)
-    throws SecurityException
-  {
-    try
-    {
-      MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-      md.update(password.getBytes("iso-8859-1"), 0, password.length());
-
-      return Base64.encodeBytes(md.digest());
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException(String.format(
-          "Failed to generate a SHA-256 hash of the password (%s): %s", password, e.getMessage()),
-          e);
-    }
-  }
-
-  /**
-   * Delete the group.
-   *
-   * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the group
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   *         <code>null</code> if a group with the specified group name could not be found
-   *
-   * @throws SecurityException
-   */
-  protected UUID deleteGroup(Connection connection, String groupName)
-    throws SecurityException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
-    {
-      UUID groupId = getGroupId(connection, groupName);
-
-      if (groupId == null)
-      {
-        return groupId;
-      }
-
-      statement.setObject(1, getUserDirectoryId());
-      statement.setString(2, groupName);
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            deleteGroupSQL));
-      }
-
-      return groupId;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException(String.format(
-          "Failed to delete the group (%s) for the user directory (%s): %s", groupName,
-          getUserDirectoryId(), e.getMessage()), e);
-    }
-  }
-
-  /**
    * Returns the data source for the user directory.
    *
    * @return the data source for the user directory
@@ -311,55 +317,6 @@ public abstract class UserDirectoryBase
   protected DataSource getDataSource()
   {
     return dataSource;
-  }
-
-  /**
-   * Returns the database catalog separator.
-   *
-   * @return the database catalog separator
-   */
-  protected String getDatabaseCatalogSeparator()
-  {
-    return databaseCatalogSeparator;
-  }
-
-  /**
-   * Returns the ID for the group with the specified group name.
-   *
-   * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the group
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   *         <code>null</code> if a group with the specified group name could not be found
-   *
-   * @throws SecurityException
-   */
-  protected UUID getGroupId(Connection connection, String groupName)
-    throws SecurityException
-  {
-    try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
-    {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setString(2, groupName);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return (UUID) rs.getObject(1);
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException(String.format(
-          "Failed to retrieve the ID for the group (%s) for the user directory (%s)", groupName,
-          getUserDirectoryId()), e);
-    }
   }
 
   /**
@@ -385,5 +342,44 @@ public abstract class UserDirectoryBase
     }
 
     return false;
+  }
+
+  /**
+   * Returns the ID for the group with the specified group name.
+   *
+   * @param connection the existing database connection to use
+   * @param groupName  the group name uniquely identifying the group
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
+   *         <code>null</code> if a group with the specified group name could not be found
+   *
+   * @throws SecurityException
+   */
+  private UUID getGroupId(Connection connection, String groupName)
+    throws SecurityException
+  {
+    try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
+    {
+      statement.setObject(1, getUserDirectoryId());
+      statement.setString(2, groupName);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return (UUID) rs.getObject(1);
+        }
+        else
+        {
+          return null;
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(String.format(
+          "Failed to retrieve the ID for the group (%s) for the user directory (%s)", groupName,
+          getUserDirectoryId()), e);
+    }
   }
 }

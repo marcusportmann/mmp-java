@@ -576,7 +576,7 @@ public interface ISecurityService
    *
    * @return the user directory
    *
-   * @throws UserNotFoundException
+   * @throws UserDirectoryNotFoundException
    * @throws SecurityException
    */
   UserDirectory getUserDirectory(UUID id)
@@ -663,23 +663,6 @@ public interface ISecurityService
    */
   void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-        SecurityException;
-
-  /**
-   * Rename the existing group.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name of the group that will be renamed
-   * @param newGroupName    the new name of the group
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
-   */
-  void renameGroup(UUID userDirectoryId, String groupName, String newGroupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
         SecurityException;
 
   /**

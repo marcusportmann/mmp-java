@@ -22,19 +22,9 @@ package guru.mmp.application.codes;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class CodeProviderException extends Exception
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * Constructs a new <code>CodeProviderException</code> with <code>null</code> as its
-   * message.
-   */
-  public CodeProviderException()
-  {
-    super();
-  }
 
   /**
    * Constructs a new <code>CodeProviderException</code> with the specified message.
@@ -44,19 +34,6 @@ public class CodeProviderException extends Exception
   public CodeProviderException(String message)
   {
     super(message);
-  }
-
-  /**
-   * Constructs a new <code>CodeProviderException</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
-   *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public CodeProviderException(Throwable cause)
-  {
-    super(cause);
   }
 
   /**

@@ -41,17 +41,17 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * The default number of failed password attempts before the user is locked.
    */
-  public static final int DEFAULT_MAX_PASSWORD_ATTEMPTS = 5;
+  private static final int DEFAULT_MAX_PASSWORD_ATTEMPTS = 5;
 
   /**
    * The default number of months before a user's password expires.
    */
-  public static final int DEFAULT_PASSWORD_EXPIRY_MONTHS = 3;
+  private static final int DEFAULT_PASSWORD_EXPIRY_MONTHS = 3;
 
   /**
    * The default number of months to check password history against.
    */
-  public static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
+  private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
 
   /**
    * The default maximum number of filtered users.
@@ -1358,22 +1358,6 @@ public class InternalUserDirectory extends UserDirectoryBase
           "Failed to remove the user (%s) from the group (%s) for the user directory (%s): %s",
           username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
-  }
-
-  /**
-   * Rename the existing group.
-   *
-   * @param groupName    the name of the group that will be renamed
-   * @param newGroupName the new name of the group
-   *
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
-   */
-  public void renameGroup(String groupName, String newGroupName)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
-  {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
   }
 
   /**

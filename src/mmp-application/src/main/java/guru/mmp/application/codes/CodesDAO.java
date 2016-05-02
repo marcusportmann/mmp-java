@@ -23,8 +23,6 @@ import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -50,9 +48,6 @@ import java.util.UUID;
 public class CodesDAO
   implements ICodesDAO
 {
-  /* Logger */
-  @SuppressWarnings("unused")
-  private static final Logger logger = LoggerFactory.getLogger(CodesDAO.class);
   private String cachedCodeCategoryExistsSQL;
   private String codeCategoryExistsSQL;
   private String createCachedCodeCategorySQL;

@@ -58,12 +58,6 @@ public class SecurityService
   implements ISecurityService
 {
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default organisation.
-   */
-  public static final UUID DEFAULT_ORGANISATION_ID = UUID.fromString(
-      "c1685b92-9fe5-453a-995b-89d8c0f29cb5");
-
-  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
    */
   public static final UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString(
@@ -86,12 +80,12 @@ public class SecurityService
   /**
    * The maximum number of filtered organisations.
    */
-  public static final int MAX_FILTERED_ORGANISATIONS = 100;
+  private static final int MAX_FILTERED_ORGANISATIONS = 100;
 
   /**
    * The maximum number of filtered user directories.
    */
-  public static final int MAX_FILTERED_USER_DIRECTORIES = 100;
+  private static final int MAX_FILTERED_USER_DIRECTORIES = 100;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
@@ -935,7 +929,8 @@ public class SecurityService
 
       if (statement.executeUpdate() <= 0)
       {
-        throw new UserDirectoryNotFoundException();
+        throw new UserDirectoryNotFoundException(String.format(
+          "The user directory ID (%s) is invalid", id));
       }
 
       try
@@ -2173,44 +2168,6 @@ public class SecurityService
   }
 
   /**
-   * Reload the user directory types.
-   *
-   * @throws SecurityException
-   */
-  public void reloadUserDirectoryTypes()
-    throws SecurityException
-  {
-    try
-    {
-      Map<UUID, UserDirectoryType> reloadedUserDirectoryTypes = new ConcurrentHashMap<>();
-
-      for (UserDirectoryType userDirectoryType : getUserDirectoryTypes())
-      {
-        try
-        {
-          userDirectoryType.getUserDirectoryClass();
-        }
-        catch (Throwable e)
-        {
-          logger.error(String.format("Failed to load the user directory type (%s): "
-              + "Failed to retrieve the user directory class for the user directory type",
-              userDirectoryType.getId()), e);
-
-          continue;
-        }
-
-        reloadedUserDirectoryTypes.put(userDirectoryType.getId(), userDirectoryType);
-      }
-
-      this.userDirectoryTypes = reloadedUserDirectoryTypes;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException("Failed to reload the user directory types", e);
-    }
-  }
-
-  /**
    * Remove the user from the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -2247,45 +2204,6 @@ public class SecurityService
     }
 
     userDirectory.removeUserFromGroup(username, groupName);
-  }
-
-  /**
-   * Rename the existing group.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name of the group that will be renamed
-   * @param newGroupName    the new name of the group
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
-   */
-  public void renameGroup(UUID userDirectoryId, String groupName, String newGroupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-        SecurityException
-  {
-    // Validate parameters
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (isNullOrEmpty(newGroupName))
-    {
-      throw new InvalidArgumentException("newGroupName");
-    }
-
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException(String.format(
-          "The user directory ID (%s) is invalid", userDirectoryId));
-    }
-
-    userDirectory.renameGroup(groupName, newGroupName);
   }
 
   /**
@@ -2912,14 +2830,7 @@ public class SecurityService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        if (rs.next())
-        {
-          return (rs.getInt(1) > 0);
-        }
-        else
-        {
-          return false;
-        }
+        return rs.next() && (rs.getInt(1) > 0);
       }
     }
     catch (Throwable e)
@@ -2950,20 +2861,51 @@ public class SecurityService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        if (rs.next())
-        {
-          return (rs.getInt(1) > 0);
-        }
-        else
-        {
-          return false;
-        }
+        return rs.next() && (rs.getInt(1) > 0);
       }
     }
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
           "Failed to check whether an organisation with the name (%s) exists", name), e);
+    }
+  }
+
+  /**
+   * Reload the user directory types.
+   *
+   * @throws SecurityException
+   */
+  private void reloadUserDirectoryTypes()
+    throws SecurityException
+  {
+    try
+    {
+      Map<UUID, UserDirectoryType> reloadedUserDirectoryTypes = new ConcurrentHashMap<>();
+
+      for (UserDirectoryType userDirectoryType : getUserDirectoryTypes())
+      {
+        try
+        {
+          userDirectoryType.getUserDirectoryClass();
+        }
+        catch (Throwable e)
+        {
+          logger.error(String.format("Failed to load the user directory type (%s): "
+              + "Failed to retrieve the user directory class for the user directory type",
+              userDirectoryType.getId()), e);
+
+          continue;
+        }
+
+        reloadedUserDirectoryTypes.put(userDirectoryType.getId(), userDirectoryType);
+      }
+
+      this.userDirectoryTypes = reloadedUserDirectoryTypes;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException("Failed to reload the user directory types", e);
     }
   }
 }

@@ -2145,22 +2145,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Rename the existing group.
-   *
-   * @param groupName    the name of the group that will be renamed
-   * @param newGroupName the new name of the group
-   *
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
-   */
-  public void renameGroup(String groupName, String newGroupName)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
-  {
-    throw new SecurityException("TODO: NOT IMPLEMENTED");
-  }
-
-  /**
    * Does the user directory support administering groups.
    *
    * @return <code>true</code> if the directory supports administering groups or <code>false</code>

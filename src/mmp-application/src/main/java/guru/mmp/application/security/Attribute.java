@@ -32,7 +32,6 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class Attribute
   implements java.io.Serializable
 {

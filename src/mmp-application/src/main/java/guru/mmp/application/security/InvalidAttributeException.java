@@ -24,52 +24,17 @@ package guru.mmp.application.security;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class InvalidAttributeException extends Exception
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * Constructs a new <code>InvalidAttributeException</code> with <code>null</code> as its
-   * message.
-   */
-  public InvalidAttributeException()
-  {
-    super();
-  }
 
   /**
    * Constructs a new <code>InvalidAttributeException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public InvalidAttributeException(String message)
+  InvalidAttributeException(String message)
   {
     super(message);
-  }
-
-  /**
-   * Constructs a new <code>InvalidAttributeException</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
-   *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public InvalidAttributeException(Throwable cause)
-  {
-    super(cause);
-  }
-
-  /**
-   * Constructs a new <code>InvalidAttributeException</code> with the specified message and cause.
-   *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public InvalidAttributeException(String message, Throwable cause)
-  {
-    super(message, cause);
   }
 }

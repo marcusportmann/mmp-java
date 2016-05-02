@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public interface IUserDirectory
+interface IUserDirectory
 {
   /**
    * Add the user to the group.
@@ -320,19 +320,6 @@ public interface IUserDirectory
    */
   void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException;
-
-  /**
-   * Rename the existing group.
-   *
-   * @param groupName    the name of the group that will be renamed
-   * @param newGroupName the new name of the group
-   *
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
-   */
-  void renameGroup(String groupName, String newGroupName)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityException;
 
   /**
    * Does the user directory support administering groups.

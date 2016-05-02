@@ -19,7 +19,7 @@ package guru.mmp.application.tests;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.codes.CodeCategory;
-import guru.mmp.application.codes.CodeProvider;
+import guru.mmp.application.codes.CodeProviderConfig;
 import guru.mmp.application.codes.CodeProviderException;
 import guru.mmp.application.codes.ICodeProvider;
 
@@ -30,11 +30,20 @@ import java.util.Map;
 
 /**
  * The <code>TestCodeProvider</code> class.
+ *
+ * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TestCodeProvider extends CodeProvider
+public class TestCodeProvider
   implements ICodeProvider
 {
+  /**
+   * Constructs a new <code>TestCodeProvider</code>.
+   *
+   * @param codeProviderConfig the configuration for the code provider
+   */
+  public TestCodeProvider(CodeProviderConfig codeProviderConfig) {}
+
   /**
    * Retrieve the code category.
    *
@@ -78,6 +87,13 @@ public class TestCodeProvider extends CodeProvider
       String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
     throws CodeProviderException
   {
-    throw new CodeProviderException("Not Implemented");
+    try
+    {
+      throw new RuntimeException("Testing 1.. 2.. 3..");
+    }
+    catch (Throwable e)
+    {
+      throw new CodeProviderException("Not Implemented", e);
+    }
   }
 }

@@ -21,18 +21,17 @@ package guru.mmp.application.tests;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.security.*;
 import guru.mmp.application.test.ApplicationClassRunner;
-
+import guru.mmp.common.util.BinaryBuffer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.*;
 
-import javax.inject.Inject;
+import static org.junit.Assert.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit
@@ -111,6 +110,131 @@ public class SecurityServiceTest
     securityService.adminChangePassword(userDirectory.getId(), user.getUsername(), "Password2",
         false, false, true, PasswordChangeReason.ADMINISTRATIVE);
     securityService.authenticate(user.getUsername(), "Password2");
+  }
+
+  /**
+   * Test the name-value attribute functionality.
+   *
+   * @throws AttributeException
+   */
+  @Test
+  public void attributeTest()
+    throws AttributeException
+  {
+    byte[] byteArrayValue = "Hello World".getBytes();
+
+    BigDecimal bigDecimalValue = new BigDecimal(12345.12345);
+
+    double doubleValue = 12345.12345;
+
+    long longValue = 12345L;
+
+    String stringValue = "Hello World";
+
+    List<Attribute> attributes = new ArrayList<>();
+
+    Attribute bigDecimalAttribute = new Attribute("BigDecimal", bigDecimalValue);
+    attributes.add(bigDecimalAttribute);
+
+    Attribute binaryBufferAttribute = new Attribute("BinaryBuffer", new BinaryBuffer(
+        byteArrayValue));
+    attributes.add(binaryBufferAttribute);
+
+    Attribute byteArrayAttribute = new Attribute("ByteArray", byteArrayValue);
+    attributes.add(byteArrayAttribute);
+
+    Attribute doubleAttribute = new Attribute("Double", doubleValue);
+    attributes.add(doubleAttribute);
+
+    Attribute longAttribute = new Attribute("Long", longValue);
+    attributes.add(longAttribute);
+
+    Attribute stringAttribute = new Attribute("String", stringValue);
+    attributes.add(stringAttribute);
+
+    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "ByteArray"));
+
+    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "BinaryBuffer"));
+
+    assertEquals(bigDecimalValue, Attribute.getDecimalValue(attributes, "BigDecimal"));
+
+    assertEquals(doubleValue, Attribute.getDoubleValue(attributes, "Double"), 0);
+
+    assertEquals(longValue, Attribute.getLongValue(attributes, "Long"));
+
+    assertEquals(stringValue, Attribute.getStringValue(attributes, "String"));
+
+    Attribute.setBinaryValue(attributes, "BinaryBuffer", new BinaryBuffer(byteArrayValue));
+
+    Attribute.setBinaryValue(attributes, "ByteArray", byteArrayValue);
+
+    Attribute.setDecimalValue(attributes, "BigDecimal", bigDecimalValue);
+
+    Attribute.setDoubleValue(attributes, "Double", doubleValue);
+
+    Attribute.setLongValue(attributes, "Long", longValue);
+
+    Attribute.setStringValue(attributes, "String", stringValue);
+
+    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+
+    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+
+    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+
+    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+
+    assertEquals(longValue, longAttribute.getLongValue());
+
+    assertEquals(stringValue, stringAttribute.getStringValue());
+
+    binaryBufferAttribute.setBinaryValue(new BinaryBuffer(byteArrayValue));
+
+    byteArrayAttribute.setBinaryValue(byteArrayValue);
+
+    bigDecimalAttribute.setDecimalValue(bigDecimalValue);
+
+    doubleAttribute.setDoubleValue(doubleValue);
+
+    longAttribute.setLongValue(longValue);
+
+    stringAttribute.setStringValue(stringValue);
+
+    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+
+    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+
+    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+
+    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+
+    assertEquals(longValue, longAttribute.getLongValue());
+
+    assertEquals(stringValue, stringAttribute.getStringValue());
+
+    assertEquals("BinaryBuffer", binaryBufferAttribute.getName());
+
+    assertEquals("ByteArray", byteArrayAttribute.getName());
+
+    assertEquals("BigDecimal", bigDecimalAttribute.getName());
+
+    assertEquals("Double", doubleAttribute.getName());
+
+    assertEquals("Long", longAttribute.getName());
+
+    assertEquals("String", stringAttribute.getName());
+
+    assertEquals("binary", binaryBufferAttribute.getTypeName());
+
+    assertEquals("binary", byteArrayAttribute.getTypeName());
+
+    assertEquals("decimal", bigDecimalAttribute.getTypeName());
+
+    assertEquals("double", doubleAttribute.getTypeName());
+
+    assertEquals("long", longAttribute.getTypeName());
+
+    assertEquals("string", stringAttribute.getTypeName());
   }
 
   /**
@@ -340,10 +464,18 @@ public class SecurityServiceTest
     attributes.add(new Attribute("mobileNumber", "%Mobile Number 1%"));
     attributes.add(new Attribute("username", "%Username 1%"));
 
-    List<User> retrievedUsers = securityService.findUsers(userDirectory.getId(), attributes);
+    try
+    {
+      List<User> retrievedUsers = securityService.findUsers(userDirectory.getId(), attributes);
 
-    assertEquals("The correct number of users (11) was not retrieved matching the search criteria",
-        11, retrievedUsers.size());
+      assertEquals(
+          "The correct number of users (11) was not retrieved matching the search criteria", 11,
+          retrievedUsers.size());
+    }
+    catch (InvalidAttributeException e)
+    {
+      fail("Invalid attribute while finding users: " + e.getMessage());
+    }
   }
 
   /**
@@ -899,6 +1031,24 @@ public class SecurityServiceTest
   }
 
   /**
+   * Test the user property functionality.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void userPropertyTest()
+    throws Exception
+  {
+    User user = getTestUserDetails();
+
+    user.setProperty("PropertyName", "PropertyValue");
+
+    assertTrue(user.hasProperty("PropertyName"));
+
+    assertEquals("PropertyValue", user.getProperty("PropertyName"));
+  }
+
+  /**
    * Test the user functionality.
    *
    * @throws Exception
@@ -1124,8 +1274,8 @@ public class SecurityServiceTest
     assertEquals("The first name values for the two users do not match", user1.getFirstName(),
         user2.getFirstName());
     assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());
-    assertEquals("The phone number values for the two users do not match",
-      user1.getPhoneNumber(), user2.getPhoneNumber());
+    assertEquals("The phone number values for the two users do not match", user1.getPhoneNumber(),
+        user2.getPhoneNumber());
     assertEquals("The mobile number values for the two users do not match",
         user1.getMobileNumber(), user2.getMobileNumber());
     assertEquals("The password attempt values for the two users do not match",
@@ -1134,14 +1284,14 @@ public class SecurityServiceTest
         user2.getUsername());
   }
 
-//  private Function getAnotherTestFunctionDetails()
-//  {
-//    Function function = new Function();
-//    function.setId(UUID.randomUUID());
-//    function.setCode("Another Test Function Code");
-//    function.setName("Another Test Function Name");
-//    function.setDescription("Another Test Function Description");
+//private Function getAnotherTestFunctionDetails()
+//{
+//  Function function = new Function();
+//  function.setId(UUID.randomUUID());
+//  function.setCode("Another Test Function Code");
+//  function.setName("Another Test Function Name");
+//  function.setDescription("Another Test Function Description");
 //
-//    return function;
-//  }
+//  return function;
+//}
 }

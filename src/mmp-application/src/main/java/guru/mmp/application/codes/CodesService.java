@@ -56,10 +56,10 @@ public class CodesService
   implements ICodesService
 {
   /**
-   * The path to the codes configuration files (META-INF/CodesConfig.xml) on the
+   * The path to the code provider configuration files (META-INF/CodeProviders.xml) on the
    * classpath.
    */
-  private static final String CODES_CONFIGURATION_PATH = "META-INF/CodesConfig.xml";
+  private static final String CODE_PROVIDERS_CONFIGURATION_PATH = "META-INF/CodeProviders.xml";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CodesService.class);
@@ -68,10 +68,10 @@ public class CodesService
   private List<ICodeProvider> codeProviders;
 
   /**
-   * The configuration information for the code providers read from the codes configuration
-   * files (META-INF/CodesConfig.xml) on the classpath.
+   * The configuration information for the code providers read from the code provider configuration
+   * files (META-INF/CodeProviders.xml) on the classpath.
    */
-  private List<CodeProviderConfig> codeProvidersConfig;
+  private List<CodeProviderConfig> codeProviderConfigs;
 
   /* Codes DAO */
   @Inject
@@ -745,7 +745,7 @@ public class CodesService
       initConfiguration();
 
       // Read the codes configuration
-      readCodesConfig();
+      readCodeProviderConfigurations();
 
       // Initialise the code providers
       initCodeProviders();
@@ -998,7 +998,7 @@ public class CodesService
     throws CodesServiceException
   {
     // Initialise each code provider
-    for (CodeProviderConfig codeProviderConfig : codeProvidersConfig)
+    for (CodeProviderConfig codeProviderConfig : codeProviderConfigs)
     {
       try
       {
@@ -1044,31 +1044,32 @@ public class CodesService
     throws CodesServiceException {}
 
   /**
-   * Read the codes configuration from all the <i>META-INF/CodesConfig.xml</i>
+   * Read the code provider configurations from all the <i>META-INF/CodeProviders.xml</i>
    * configuration files that can be found on the classpath.
    *
    * @throws CodesServiceException
    */
-  private void readCodesConfig()
+  private void readCodeProviderConfigurations()
     throws CodesServiceException
   {
     try
     {
-      codeProvidersConfig = new ArrayList<>();
+      codeProviderConfigs = new ArrayList<>();
 
       ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-      // Load the codes configuration files from the classpath
-      Enumeration<URL> configurationFiles = classLoader.getResources(CODES_CONFIGURATION_PATH);
+      // Load the code provider configuration files from the classpath
+      Enumeration<URL> codeProviderConfigurationFiles = classLoader.getResources(
+        CODE_PROVIDERS_CONFIGURATION_PATH);
 
-      while (configurationFiles.hasMoreElements())
+      while (codeProviderConfigurationFiles.hasMoreElements())
       {
-        URL configurationFile = configurationFiles.nextElement();
+        URL codeProviderConfigurationFile = codeProviderConfigurationFiles.nextElement();
 
         if (logger.isDebugEnabled())
         {
-          logger.debug(String.format("Reading the codes configuration file (%s)",
-              configurationFile.toURI().toString()));
+          logger.debug(String.format("Reading the code provider configuration file (%s)",
+              codeProviderConfigurationFile.toURI().toString()));
         }
 
         // Retrieve a document builder instance using the factory
@@ -1079,12 +1080,12 @@ public class CodesService
         // builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
-        builder.setEntityResolver(new DtdJarResolver("CodesConfig.dtd",
-            "META-INF/CodesConfig.dtd"));
+        builder.setEntityResolver(new DtdJarResolver("CodeProviders.dtd",
+            "META-INF/CodeProviders.dtd"));
         builder.setErrorHandler(new XmlParserErrorHandler());
 
-        // Parse the XML messaging configuration file using the document builder
-        InputSource inputSource = new InputSource(configurationFile.openStream());
+        // Parse the code providers configuration file using the document builder
+        InputSource inputSource = new InputSource(codeProviderConfigurationFile.openStream());
         Document document = builder.parse(inputSource);
         Element rootElement = document.getDocumentElement();
 
@@ -1098,13 +1099,13 @@ public class CodesService
 
           CodeProviderConfig codeProviderConfig = new CodeProviderConfig(name, className);
 
-          codeProvidersConfig.add(codeProviderConfig);
+          codeProviderConfigs.add(codeProviderConfig);
         }
       }
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException("Failed to read the codes configuration", e);
+      throw new CodesServiceException("Failed to read the code provider configuration files", e);
     }
   }
 }
