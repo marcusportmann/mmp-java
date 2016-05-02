@@ -22,7 +22,6 @@ package guru.mmp.application.codes;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public abstract class CodeProvider
   implements ICodeProvider
 {
@@ -35,13 +34,6 @@ public abstract class CodeProvider
    * The name of the code provider.
    */
   private String name;
-
-  /**
-   * Constructs a new <code>CodeProvider</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  protected CodeProvider() {}
 
   /**
    * Constructs a new <code>CodeProvider</code>.

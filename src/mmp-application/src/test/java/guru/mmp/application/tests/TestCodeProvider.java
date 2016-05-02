@@ -19,6 +19,7 @@ package guru.mmp.application.tests;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.codes.CodeCategory;
+import guru.mmp.application.codes.CodeProvider;
 import guru.mmp.application.codes.CodeProviderException;
 import guru.mmp.application.codes.ICodeProvider;
 
@@ -31,7 +32,7 @@ import java.util.Map;
  * The <code>TestCodeProvider</code> class.
  */
 @SuppressWarnings("unused")
-public class TestCodeProvider
+public class TestCodeProvider extends CodeProvider
   implements ICodeProvider
 {
   /**
