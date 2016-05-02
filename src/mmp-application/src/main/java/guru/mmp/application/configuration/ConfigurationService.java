@@ -22,28 +22,22 @@ import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ConfigurationService</code> class provides the Configuration Service implementation.

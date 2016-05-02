@@ -22,24 +22,19 @@ import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.Base64;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.security.MessageDigest;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import java.util.Map;
 import java.util.UUID;
 
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory

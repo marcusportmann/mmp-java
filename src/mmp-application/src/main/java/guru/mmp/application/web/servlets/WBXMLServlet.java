@@ -48,7 +48,7 @@ public class WBXMLServlet extends HttpServlet
   /**
    * The HTTP content-type used when receiving and sending WBXML.
    */
-  public static final String WBXML_CONTENT_TYPE = "application/wbxml";
+  private static final String WBXML_CONTENT_TYPE = "application/wbxml";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WBXMLServlet.class);

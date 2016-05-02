@@ -92,16 +92,6 @@ class CachedCodeCategory
   }
 
   /**
-   * Returns the custom code data for the cached code category.
-   *
-   * @return the custom code data for the cached code category
-   */
-  String getCodeData()
-  {
-    return codeData;
-  }
-
-  /**
    * Returns the codes for the cached code category.
    *
    * @return the codes for the cached code category
@@ -121,16 +111,6 @@ class CachedCodeCategory
   public UUID getId()
   {
     return id;
-  }
-
-  /**
-   * Returns the date and time the cached code category was last updated.
-   *
-   * @return the date and time the cached code category was last updated
-   */
-  Date getLastUpdated()
-  {
-    return lastUpdated;
   }
 
   /**
@@ -185,5 +165,25 @@ class CachedCodeCategory
   public void setLastUpdated(Date lastUpdated)
   {
     this.lastUpdated = lastUpdated;
+  }
+
+  /**
+   * Returns the custom code data for the cached code category.
+   *
+   * @return the custom code data for the cached code category
+   */
+  String getCodeData()
+  {
+    return codeData;
+  }
+
+  /**
+   * Returns the date and time the cached code category was last updated.
+   *
+   * @return the date and time the cached code category was last updated
+   */
+  Date getLastUpdated()
+  {
+    return lastUpdated;
   }
 }

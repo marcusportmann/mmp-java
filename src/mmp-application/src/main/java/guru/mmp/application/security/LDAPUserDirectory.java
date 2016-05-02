@@ -20,23 +20,20 @@ package guru.mmp.application.security;
 
 import guru.mmp.common.util.JNDIUtil;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
-import java.util.*;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.naming.ldap.LdapName;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>LDAPUserDirectory</code> class provides the LDAP user directory implementation.

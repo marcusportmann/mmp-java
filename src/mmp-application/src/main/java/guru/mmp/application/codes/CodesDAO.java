@@ -955,8 +955,8 @@ public class CodesDAO
         + schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
 
     // getCodesForCodeCategorySQL
-    getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM "
-        + schemaPrefix + "CODES C WHERE C.CATEGORY_ID=? ORDER BY C.NAME";
+    getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM " + schemaPrefix
+        + "CODES C WHERE C.CATEGORY_ID=? ORDER BY C.NAME";
 
     // getCachedCodesForCachedCodeCategorySQL
     getCachedCodesForCachedCodeCategorySQL =

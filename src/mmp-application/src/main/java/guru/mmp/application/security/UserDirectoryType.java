@@ -56,7 +56,7 @@ public class UserDirectoryType
    *                                Wicket component used to administer the configuration for the
    *                                user directory type
    */
-  public UserDirectoryType(UUID id, String name, String userDirectoryClassName,
+  UserDirectoryType(UUID id, String name, String userDirectoryClassName,
       String administrationClassName)
   {
     this.id = id;

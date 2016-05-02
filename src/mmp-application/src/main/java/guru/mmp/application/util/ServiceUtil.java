@@ -41,7 +41,7 @@ public class ServiceUtil
    *
    * @return the service instance name for the service with the specified name
    */
-  public static final String getServiceInstanceName(String serviceName)
+  public static String getServiceInstanceName(String serviceName)
   {
     String applicationName = null;
 

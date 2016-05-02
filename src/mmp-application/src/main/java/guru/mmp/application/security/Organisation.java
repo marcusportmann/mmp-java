@@ -18,12 +18,11 @@ package guru.mmp.application.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.UUID;
 
 /**
  * The <code>Organisation</code> class stores the information for an organisation.

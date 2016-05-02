@@ -25,35 +25,27 @@ import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.lang.reflect.Constructor;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.inject.Inject;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityService</code> class provides the Security Service implementation.

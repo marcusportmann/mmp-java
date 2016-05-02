@@ -287,41 +287,41 @@ public class DumpNamespaceServlet extends HttpServlet
     pw.println("<body>");
   }
 
-  class TreeDumpStatus
+  private class TreeDumpStatus
   {
     /**
      * foundCell
      */
-    public boolean foundCell;
+    boolean foundCell;
 
     /**
      * foundClusters
      */
-    public boolean foundClusters;
+    boolean foundClusters;
 
     /**
      * foundDomain
      */
-    public boolean foundDomain;
+    boolean foundDomain;
 
     /**
      * foundNode
      */
-    public boolean foundNode;
+    boolean foundNode;
 
     /**
      * foundNodes
      */
-    public boolean foundNodes;
+    boolean foundNodes;
 
     /**
      * foundPersistent
      */
-    public boolean foundPersistent;
+    boolean foundPersistent;
 
     /**
      * foundServers
      */
-    public boolean foundServers;
+    boolean foundServers;
   }
 }

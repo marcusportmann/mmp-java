@@ -22,16 +22,14 @@ import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.sql.*;
-
 import java.util.*;
 import java.util.Date;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
@@ -1501,8 +1499,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       if (user.getPhoneNumber() != null)
       {
         fieldsBuffer.append((fieldsBuffer.length() == 0)
-          ? "SET PHONE=?"
-          : ", PHONE=?");
+            ? "SET PHONE=?"
+            : ", PHONE=?");
       }
 
       if (user.getMobileNumber() != null)

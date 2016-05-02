@@ -24,8 +24,7 @@ package guru.mmp.application.configuration;
  *
  * @author Marcus Portmann
  */
-public class ConfigurationException
-  extends Exception
+public class ConfigurationException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
