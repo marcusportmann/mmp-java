@@ -37,7 +37,7 @@ import java.util.concurrent.Future;
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class BackgroundMessageProcessorTimer
+class BackgroundMessageProcessorTimer
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessorTimer.class);

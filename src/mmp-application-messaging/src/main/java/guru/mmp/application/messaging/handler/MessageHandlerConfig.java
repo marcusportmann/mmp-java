@@ -225,7 +225,7 @@ public class MessageHandlerConfig
      *                       the supported message type
      * @param isArchivable   should messages of the supported message type be archived
      */
-    public MessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+    MessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
         boolean isArchivable)
     {
       this.messageTypeId = messageTypeId;
@@ -251,7 +251,7 @@ public class MessageHandlerConfig
      * @return <code>true</code> if messages of the supported message type should be archived or
      *         <code>false</code> otherwise
      */
-    public boolean isArchivable()
+    boolean isArchivable()
     {
       return isArchivable;
     }

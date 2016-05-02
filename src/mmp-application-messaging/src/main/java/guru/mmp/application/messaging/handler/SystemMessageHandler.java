@@ -48,6 +48,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class SystemMessageHandler extends MessageHandler
 {
   /* Logger */
@@ -68,14 +69,6 @@ public class SystemMessageHandler extends MessageHandler
   /* Security Service */
   @Inject
   private ISecurityService securityService;
-
-  /**
-   * Constructs a new <code>SystemMessageHandler</code>.
-   * <p/>
-   * Hidden default constructor to support CDI.
-   */
-  @SuppressWarnings("unused")
-  protected SystemMessageHandler() {}
 
   /**
    * Constructs a new <code>SystemMessageHandler</code>.

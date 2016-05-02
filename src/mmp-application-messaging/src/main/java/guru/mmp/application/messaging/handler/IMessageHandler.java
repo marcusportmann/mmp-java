@@ -20,26 +20,14 @@ package guru.mmp.application.messaging.handler;
 
 import guru.mmp.application.messaging.Message;
 
-import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>IMessageHandler</code> interface defines the interface that must be implemented by all
  * message handlers.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public interface IMessageHandler
 {
-  /**
-   * Returns the configuration information for this message handler.
-   *
-   * @return the configuration information for this message handler
-   */
-  MessageHandlerConfig getMessageHandlerConfig();
-
   /**
    * Returns the name of the message handler.
    *
@@ -58,50 +46,4 @@ public interface IMessageHandler
    */
   Message processMessage(Message message)
     throws MessageHandlerException;
-
-  /**
-   * Returns <code>true</code> if the message handler is able to process the specified message
-   * asynchronously or <code>false</code> otherwise.
-   *
-   * @param message the message to check for asynchronous processing
-   *
-   * @return <code>true</code> if the message handler is able to process the specified message
-   * asynchronously or <code>false</code> otherwise
-   */
-  boolean supportsAsynchronousProcessing(Message message);
-
-  /**
-   * Returns <code>true</code> if the message handler is able to process a message with the
-   * specified type asynchronously or <code>false</code> otherwise.
-   *
-   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message type
-   *
-   * @return <code>true</code> if the message handler is able to process a message with the
-   * specified type asynchronously or <code>false</code> otherwise
-   */
-  boolean supportsAsynchronousProcessing(UUID messageTypeId);
-
-  /**
-   * Returns <code>true</code> if the message handler is able to process the specified message
-   * synchronously or <code>false</code> otherwise.
-   *
-   * @param message the message to check for asynchronous processing
-   *
-   * @return <code>true</code> if the message handler is able to process the specified message
-   * synchronously or <code>false</code> otherwise
-   */
-  boolean supportsSynchronousProcessing(Message message);
-
-  /**
-   * Returns <code>true</code> if the message handler is able to process a message with the
-   * specified type synchronously or <code>false</code> otherwise.
-   *
-   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message type
-   *
-   * @return <code>true</code> if the message handler is able to process a message with the
-   * specified type synchronously or <code>false</code> otherwise
-   */
-  boolean supportsSynchronousProcessing(UUID messageTypeId);
 }
