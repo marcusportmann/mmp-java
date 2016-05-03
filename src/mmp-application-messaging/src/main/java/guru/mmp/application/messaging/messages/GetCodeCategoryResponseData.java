@@ -38,7 +38,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class GetCodeCategoryResponseData extends WbxmlMessageData
 {
   /**
@@ -188,38 +187,6 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   public String getErrorMessage()
   {
     return errorMessage;
-  }
-
-  /**
-   * Set the code category.
-   *
-   * @param codeCategory the code category
-   */
-  public void setCodeCategory(CodeCategoryData codeCategory)
-  {
-    this.codeCategory = codeCategory;
-  }
-
-  /**
-   * Set the error code indicating the result of retrieving the code category where a code of '0'
-   * indicates success and a non-zero code indicates an error condition.
-   *
-   * @param errorCode the error code indicating the result of retrieving the code category where a
-   *                  code of '0' indicates success and a non-zero code indicates an error condition
-   */
-  public void setErrorCode(int errorCode)
-  {
-    this.errorCode = errorCode;
-  }
-
-  /**
-   * Set the error message describing the result of retrieving the code category.
-   *
-   * @param errorMessage the error message describing the result of retrieving the code category
-   */
-  public void setErrorMessage(String errorMessage)
-  {
-    this.errorMessage = errorMessage;
   }
 
   /**

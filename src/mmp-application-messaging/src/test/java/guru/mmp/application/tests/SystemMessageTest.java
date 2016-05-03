@@ -20,7 +20,6 @@ package guru.mmp.application.tests;
 
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.CodeCategory;
-import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.messaging.Message;
@@ -28,7 +27,6 @@ import guru.mmp.application.messaging.MessageTranslator;
 import guru.mmp.application.messaging.messages.*;
 import guru.mmp.application.test.ApplicationClassRunner;
 import guru.mmp.common.util.ISO8601;
-import guru.mmp.service.codes.ws.GetCodeCategory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -154,6 +152,121 @@ public class SystemMessageTest
   }
 
   /**
+   * Test the "Get Code Category" message.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void getGetCodeCategoryTest()
+    throws Exception
+  {
+    CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
+        "Test Standard Code Category", ISO8601.toDate("2016-05-03T19:14:00+02:00"));
+
+    if (testStandardCodeCategory != null)
+    {
+      codesService.createCodeCategory(testStandardCodeCategory);
+
+      List<Code> testCodes = new ArrayList<>();
+
+      for (int i = 1; i <= 10; i++)
+      {
+        Code testStandardCode = new Code("Test Standard Code ID " + i,
+            testStandardCodeCategory.getId(), "Test Standard Code Name " + i,
+            "Test Standard Code Value " + i);
+
+        codesService.createCode(testStandardCode);
+
+        testCodes.add(testStandardCode);
+      }
+
+      GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(
+          testStandardCodeCategory.getId(), new Date(0), true);
+
+      MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+
+      Message responseMessage = messagingService.processMessage(requestMessage);
+
+      GetCodeCategoryResponseData responseData = messageTranslator.fromMessage(responseMessage,
+          new GetCodeCategoryResponseData());
+
+      assertEquals(0, responseData.getErrorCode());
+      assertNotNull(responseData.getErrorMessage());
+
+      CodeCategoryData codeCategory = responseData.getCodeCategory();
+
+      assertEquals(testStandardCodeCategory.getId(), codeCategory.getId());
+      assertEquals(testStandardCodeCategory.getName(), codeCategory.getName());
+      assertEquals(CodeCategoryData.CodeDataType.STANDARD, codeCategory.getCodeDataType());
+      assertEquals(testStandardCodeCategory.getUpdated(), codeCategory.getLastUpdated());
+      assertEquals(testCodes.size(), codeCategory.getCodes().size());
+
+      boolean foundMatchingCode = false;
+
+      for (Code testCode : testCodes)
+      {
+        for (CodeData code : codeCategory.getCodes())
+        {
+          if (testCode.getId().equals(code.getId()))
+          {
+            assertEquals(testCode.getCategoryId(), code.getCategoryId());
+            assertEquals(testCode.getName(), code.getName());
+            assertEquals(testCode.getValue(), code.getValue());
+
+            foundMatchingCode = true;
+
+            break;
+          }
+        }
+
+        if (!foundMatchingCode)
+        {
+          fail(String.format("Failed to find the matching code (%s)", testCode));
+        }
+
+        foundMatchingCode = false;
+      }
+    }
+
+    CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
+        "Test Custom Code Category", "Test Custom Code Data", ISO8601.toDate(
+        "2016-05-03T19:14:00+02:00"));
+
+    if (testCustomCodeCategory != null)
+    {
+      codesService.createCodeCategory(testCustomCodeCategory);
+
+      GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(
+        testCustomCodeCategory.getId(), new Date(0), true);
+
+      MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+
+      Message responseMessage = messagingService.processMessage(requestMessage);
+
+      GetCodeCategoryResponseData responseData = messageTranslator.fromMessage(responseMessage,
+        new GetCodeCategoryResponseData());
+
+      assertEquals(0, responseData.getErrorCode());
+      assertNotNull(responseData.getErrorMessage());
+
+      CodeCategoryData codeCategory = responseData.getCodeCategory();
+
+      assertEquals(testCustomCodeCategory.getId(), codeCategory.getId());
+      assertEquals(testCustomCodeCategory.getName(), codeCategory.getName());
+      assertEquals(CodeCategoryData.CodeDataType.CUSTOM, codeCategory.getCodeDataType());
+      assertEquals(testCustomCodeCategory.getUpdated(), codeCategory.getLastUpdated());
+      assertEquals(testCustomCodeCategory.getCodeData(), new String(codeCategory.getCodeData()));
+    }
+
+    int xxx = 0;
+    xxx++;
+  }
+
+  /**
    * Test the "Test" request and response message functionality.
    *
    * @throws Exception
@@ -179,82 +292,4 @@ public class SystemMessageTest
 
     assertEquals(testValue, responseData.getTestValue());
   }
-
-  /**
-   * Test the "Get Code Category" message.
-   *
-   * @throws Exception
-   */
-  @Test
-  public void getGetCodeCategoryTest()
-    throws Exception
-  {
-    CodeCategory testCodeCategory = new CodeCategory(UUID.randomUUID(), "Test Code Category",
-      ISO8601.toDate("2016-05-03T19:14:00+02:00"));
-
-    codesService.createCodeCategory(testCodeCategory);
-
-    List<Code> testCodes = new ArrayList<>();
-
-    for (int i = 1; i <= 10; i++)
-    {
-      Code testCode = new Code("Test Code ID " + i, testCodeCategory.getId(), "Test Code Name " + i, "Test Code Value " + i);
-
-      codesService.createCode(testCode);
-
-      testCodes.add(testCode);
-    }
-
-
-    GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(testCodeCategory.getId(), new Date(0), true);
-
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
-
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
-
-    Message responseMessage = messagingService.processMessage(requestMessage);
-
-    GetCodeCategoryResponseData responseData = messageTranslator.fromMessage(responseMessage,
-      new GetCodeCategoryResponseData());
-
-    assertEquals(0, responseData.getErrorCode());
-    assertNotNull(responseData.getErrorMessage());
-
-    CodeCategoryData codeCategory = responseData.getCodeCategory();
-
-    assertEquals(testCodeCategory.getId(), codeCategory.getId());
-    assertEquals(testCodeCategory.getName(), codeCategory.getName());
-    assertEquals(CodeCategoryData.CodeDataType.STANDARD, codeCategory.getCodeDataType());
-    assertEquals(testCodeCategory.getUpdated(), codeCategory.getLastUpdated());
-    assertEquals(testCodes.size(), codeCategory.getCodes().size());
-
-    for (int i = 0; i < testCodes.size(); i++)
-    {
-
-
-    }
-
-
-
-
-
-
-    int xxx = 0;
-    xxx++;
-
-
-
-
-
-
-
-    /*
-
-
-
-    assertEquals(true, responseData.getUserExists());
-    */
-  }
-
-
 }

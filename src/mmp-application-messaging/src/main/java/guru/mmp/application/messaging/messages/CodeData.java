@@ -60,15 +60,10 @@ public class CodeData
 
   /**
    * Constructs a new <code>CodeData</code>.
-   */
-  public CodeData() {}
-
-  /**
-   * Constructs a new <code>CodeData</code>.
    *
    * @param code the <code>Code</code> instance containing the code data
    */
-  public CodeData(Code code)
+  CodeData(Code code)
   {
     this.id = String.valueOf(code.getId());
     this.categoryId = code.getCategoryId();
@@ -81,7 +76,7 @@ public class CodeData
    *
    * @param element the WBXML element containing the code data
    */
-  public CodeData(Element element)
+  CodeData(Element element)
   {
     try
     {
@@ -94,22 +89,6 @@ public class CodeData
     {
       throw new RuntimeException("Failed to extract the code data from the WBXML", e);
     }
-  }
-
-  /**
-   * Constructs a new <code>CodeData</code>.
-   *
-   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                   category the code is associated with
-   * @param code       the <code>guru.mmp.services.codes.ws.Code</code> instance containing the
-   *                   code data
-   */
-  public CodeData(UUID categoryId, guru.mmp.service.codes.ws.Code code)
-  {
-    this.id = code.getId();
-    this.categoryId = categoryId;
-    this.name = code.getName();
-    this.value = code.getValue();
   }
 
   /**
@@ -155,53 +134,11 @@ public class CodeData
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the category the code
-   * is associated with.
-   *
-   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                   category the code is associated with
-   */
-  public void setCategoryId(UUID categoryId)
-  {
-    this.categoryId = categoryId;
-  }
-
-  /**
-   * Set the ID used to uniquely identify the code.
-   *
-   * @param id the ID used to uniquely identify the code
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the code.
-   *
-   * @param name the name of the code
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the value for the code.
-   *
-   * @param value the value for the code
-   */
-  public void setValue(String value)
-  {
-    this.value = value;
-  }
-
-  /**
    * Returns the WBXML element containing the code data.
    *
    * @return the WBXML element containing the code data
    */
-  public Element toElement()
+  Element toElement()
   {
     Element codeElement = new Element("Code");
 

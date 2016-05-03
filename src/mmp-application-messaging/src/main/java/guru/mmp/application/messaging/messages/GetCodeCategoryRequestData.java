@@ -39,7 +39,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class GetCodeCategoryRequestData extends WbxmlMessageData
 {
   /**
@@ -176,39 +175,6 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   public boolean getReturnCodesIfCurrent()
   {
     return returnCodesIfCurrent;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the code category to
-   * retrieve.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the code category to
-   *           retrieve
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the date and time the code category was last retrieved.
-   *
-   * @param lastRetrieved the date and time the code category was last retrieved
-   */
-  public void setLastRetrieved(Date lastRetrieved)
-  {
-    this.lastRetrieved = lastRetrieved;
-  }
-
-  /**
-   * Set whether the codes for the code category should be returned if the code category is current.
-   *
-   * @param returnCodesIfCurrent <code>true</code> if the codes for the code category be returned
-   *                             if the code category is current or <code>false</code> otherwise
-   */
-  public void setReturnCodesIfCurrent(boolean returnCodesIfCurrent)
-  {
-    this.returnCodesIfCurrent = returnCodesIfCurrent;
   }
 
   /**

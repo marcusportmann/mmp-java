@@ -107,6 +107,24 @@ public class CodeCategory
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
+   * @param id       the Universally Unique Identifier (UUID) used to uniquely identify the code
+   *                 category
+   * @param name     the name of the code category
+   * @param codeData the custom code data for the code category
+   * @param updated  the date and time the code category was updated
+   */
+  public CodeCategory(UUID id, String name, String codeData, Date updated)
+  {
+    this.id = id;
+    this.categoryType = CodeCategoryType.LOCAL_CUSTOM;
+    this.name = name;
+    this.codeData = codeData;
+    this.updated = updated;
+  }
+
+  /**
+   * Constructs a new <code>CodeCategory</code>.
+   *
    * @param id               the Universally Unique Identifier (UUID) used to uniquely identify the
    *                         code category
    * @param categoryType     the type of code category e.g. Local, RemoteHTTPService,

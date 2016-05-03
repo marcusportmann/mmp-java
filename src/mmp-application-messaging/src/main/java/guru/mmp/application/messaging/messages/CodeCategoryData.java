@@ -18,8 +18,8 @@ package guru.mmp.application.messaging.messages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.CodeCategory;
+import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.common.util.ISO8601;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.wbxml.Element;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -79,7 +80,23 @@ public class CodeCategoryData
    */
   public CodeCategoryData(CodeCategory codeCategory)
   {
-    this.codeDataType = CodeDataType.STANDARD;
+    if (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD)
+    {
+      this.codeDataType = CodeDataType.STANDARD;
+    }
+    else if (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_CUSTOM)
+    {
+      this.codeDataType = CodeDataType.CUSTOM;
+    }
+    else if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_HTTP_SERVICE)
+    {
+      this.codeDataType = CodeDataType.REMOTE;
+    }
+    else if (codeCategory.getCategoryType() == CodeCategoryType.REMOTE_WEB_SERVICE)
+    {
+      this.codeDataType = CodeDataType.REMOTE;
+    }
+
     this.id = codeCategory.getId();
     this.name = codeCategory.getName();
     this.lastUpdated = codeCategory.getUpdated();
@@ -88,10 +105,8 @@ public class CodeCategoryData
 
     if (codeCategory.getCodes() != null)
     {
-      for (Code code : codeCategory.getCodes())
-      {
-        this.codes.add(new CodeData(code));
-      }
+      this.codes.addAll(codeCategory.getCodes().stream().map(CodeData::new).collect(
+          Collectors.toList()));
     }
 
     if (codeCategory.getCodeData() != null)
@@ -117,7 +132,7 @@ public class CodeCategoryData
    *
    * @param element the WBXML element containing the code category data
    */
-  public CodeCategoryData(Element element)
+  CodeCategoryData(Element element)
   {
     this.codeDataType = CodeDataType.fromCode(Integer.parseInt(element.getChildText(
         "CodeDataType")));
@@ -154,10 +169,7 @@ public class CodeCategoryData
     {
       List<Element> codeElements = element.getChild("Codes").getChildren("Code");
 
-      for (Element codeElement : codeElements)
-      {
-        this.codes.add(new CodeData(codeElement));
-      }
+      this.codes.addAll(codeElements.stream().map(CodeData::new).collect(Collectors.toList()));
 
       this.codeData = element.getChildOpaque("CodeData");
     }
@@ -168,7 +180,7 @@ public class CodeCategoryData
    */
   public enum CodeDataType
   {
-    STANDARD(0, "Standard"), CUSTOM(1, "Custom");
+    STANDARD(0, "Standard"), CUSTOM(1, "Custom"), REMOTE(2, "Remote");
 
     private int code;
     private String name;
@@ -195,6 +207,9 @@ public class CodeCategoryData
 
         case 1:
           return CodeDataType.CUSTOM;
+
+        case 2:
+          return CodeDataType.REMOTE;
 
         default:
           return CodeDataType.STANDARD;
@@ -295,104 +310,6 @@ public class CodeCategoryData
   }
 
   /**
-   * Set the custom code data for the category if the code data type is "Custom".
-   *
-   * @param codeData the custom code data for the category if the code data type is "Custom"
-   */
-  public void setCodeData(byte[] codeData)
-  {
-    this.codeData = codeData;
-  }
-
-  /**
-   * Set the type of code data for the code category e.g. Standard, Custom, etc.
-   *
-   * @param codeDataType the type of code data for the code category e.g. Standard, Custom, etc
-   */
-  public void setCodeDataType(CodeDataType codeDataType)
-  {
-    this.codeDataType = codeDataType;
-  }
-
-  /**
-   * Set the codes for the code category if the code data type is "Standard".
-   *
-   * @param codes the codes for the code category if the code data type is "Standard"
-   */
-  public void setCodes(List<CodeData> codes)
-  {
-    this.codes = codes;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the date and time the code category was last updated.
-   *
-   * @param lastUpdated the date and time the code category was last updated
-   */
-  public void setLastUpdated(Date lastUpdated)
-  {
-    this.lastUpdated = lastUpdated;
-  }
-
-  /**
-   * Set the name of the code category.
-   *
-   * @param name the name of the code category
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Returns the WBXML element containing the code category data.
-   *
-   * @return the WBXML element containing the code category data
-   */
-  public Element toElement()
-  {
-    Element codeCategoryElement = new Element("CodeCategory");
-
-    codeCategoryElement.addContent(new Element("CodeDataType", String.valueOf(
-        codeDataType.getCode())));
-    codeCategoryElement.addContent(new Element("Id", id.toString()));
-    codeCategoryElement.addContent(new Element("Name", StringUtil.notNull(name)));
-    codeCategoryElement.addContent(new Element("LastUpdated",
-        (lastUpdated == null)
-        ? ISO8601.now()
-        : ISO8601.fromDate(lastUpdated)));
-
-    if (codeData != null)
-    {
-      codeCategoryElement.addContent(new Element("CodeData", codeData));
-    }
-
-    Element codesElement = new Element("Codes");
-
-    if (codes != null)
-    {
-      for (CodeData code : codes)
-      {
-        codesElement.addContent(code.toElement());
-      }
-    }
-
-    codeCategoryElement.addContent(codesElement);
-
-    return codeCategoryElement;
-  }
-
-  /**
    * Returns a string representation of the object.
    *
    * @return a string representation of the object
@@ -443,5 +360,43 @@ public class CodeCategoryData
     buffer.append("}");
 
     return buffer.toString();
+  }
+
+  /**
+   * Returns the WBXML element containing the code category data.
+   *
+   * @return the WBXML element containing the code category data
+   */
+  Element toElement()
+  {
+    Element codeCategoryElement = new Element("CodeCategory");
+
+    codeCategoryElement.addContent(new Element("CodeDataType", String.valueOf(
+        codeDataType.getCode())));
+    codeCategoryElement.addContent(new Element("Id", id.toString()));
+    codeCategoryElement.addContent(new Element("Name", StringUtil.notNull(name)));
+    codeCategoryElement.addContent(new Element("LastUpdated",
+        (lastUpdated == null)
+        ? ISO8601.now()
+        : ISO8601.fromDate(lastUpdated)));
+
+    if (codeData != null)
+    {
+      codeCategoryElement.addContent(new Element("CodeData", codeData));
+    }
+
+    Element codesElement = new Element("Codes");
+
+    if (codes != null)
+    {
+      for (CodeData code : codes)
+      {
+        codesElement.addContent(code.toElement());
+      }
+    }
+
+    codeCategoryElement.addContent(codesElement);
+
+    return codeCategoryElement;
   }
 }
