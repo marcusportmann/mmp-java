@@ -38,13 +38,12 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class CheckUserExistsResponseData extends WbxmlMessageData
 {
   /**
    * The error code returned to indicate success.
    */
-  public static final int ERROR_CODE_SUCCESS = 0;
+  private static final int ERROR_CODE_SUCCESS = 0;
 
   /**
    * The error code returned when an unknown error occurred.
@@ -54,7 +53,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
   /**
    * The message returned to indicate success.
    */
-  public static final String ERROR_MESSAGE_SUCCESS = "Success";
+  private static final String ERROR_MESSAGE_SUCCESS = "Success";
 
   /**
    * The UUID for the "Check User Exists Response" message.
@@ -76,6 +75,14 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * <code>true</code> if the user exists or <code>false</code> otherwise.
    */
   private boolean userExists;
+
+  /**
+   * Constructs a new <code>CheckUserExistsResponseData</code>.
+   */
+  public CheckUserExistsResponseData()
+  {
+    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
+  }
 
   /**
    * Constructs a new <code>CheckUserExistsResponseData</code>.
@@ -185,36 +192,6 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
   public boolean getUserExists()
   {
     return userExists;
-  }
-
-  /**
-   * Set the error code.
-   *
-   * @param errorCode the error code
-   */
-  public void setErrorCode(int errorCode)
-  {
-    this.errorCode = errorCode;
-  }
-
-  /**
-   * Set the error message.
-   *
-   * @param errorMessage the error message
-   */
-  public void setErrorMessage(String errorMessage)
-  {
-    this.errorMessage = errorMessage;
-  }
-
-  /**
-   * Set whether the user exists.
-   *
-   * @param userExists <code>true</code> if the user exists or <code>false</code> otherwise
-   */
-  public void setUserExists(boolean userExists)
-  {
-    this.userExists = userExists;
   }
 
   /**

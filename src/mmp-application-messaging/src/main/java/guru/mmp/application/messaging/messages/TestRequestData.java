@@ -38,7 +38,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class TestRequestData extends WbxmlMessageData
 {
   /**
@@ -112,16 +111,6 @@ public class TestRequestData extends WbxmlMessageData
   public String getTestValue()
   {
     return testValue;
-  }
-
-  /**
-   * Set the test value.
-   *
-   * @param testValue the test value
-   */
-  public void setTestValue(String testValue)
-  {
-    this.testValue = testValue;
   }
 
   /**

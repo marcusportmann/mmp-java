@@ -132,26 +132,6 @@ public class AnotherTestResponseData extends WbxmlMessageData
   }
 
   /**
-   * Set the test data.
-   *
-   * @param testData the test data
-   */
-  public void setTestData(byte[] testData)
-  {
-    this.testData = testData;
-  }
-
-  /**
-   * Set the test value.
-   *
-   * @param testValue the test value
-   */
-  public void setTestValue(String testValue)
-  {
-    this.testValue = testValue;
-  }
-
-  /**
    * Returns the WBXML data representation of the message data that will be sent as part of a
    * message.
    *

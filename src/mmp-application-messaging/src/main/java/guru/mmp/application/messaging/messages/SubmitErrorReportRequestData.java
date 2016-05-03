@@ -40,7 +40,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class SubmitErrorReportRequestData extends WbxmlMessageData
 {
   /**

@@ -38,7 +38,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class CheckUserExistsRequestData extends WbxmlMessageData
 {
   /**
@@ -112,16 +111,6 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   public String getUsername()
   {
     return username;
-  }
-
-  /**
-   * Set the username identifying the user.
-   *
-   * @param username the username identifying the user
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 
   /**

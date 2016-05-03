@@ -156,38 +156,6 @@ public class AuthenticateRequestData extends WbxmlMessageData
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * authentication request originated from.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the authentication request originated from
-   */
-  public void setDevice(UUID deviceId)
-  {
-    this.deviceId = deviceId;
-  }
-
-  /**
-   * Set the password used to authenticate the user.
-   *
-   * @param password the password used to authenticate the user
-   */
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  /**
-   * Set the username identifying the user associated with the message.
-   *
-   * @param username the username identifying the user associated with the message
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
-  }
-
-  /**
    * Returns the WBXML data representation of the message data that will be sent as part of a
    * message.
    *

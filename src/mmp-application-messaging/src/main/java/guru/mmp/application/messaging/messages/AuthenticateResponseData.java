@@ -28,6 +28,7 @@ import guru.mmp.common.wbxml.Element;
 import guru.mmp.common.wbxml.Encoder;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -49,7 +50,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * The error code returned when authentication is successful.
    */
-  public static final int ERROR_CODE_SUCCESS = 0;
+  private static final int ERROR_CODE_SUCCESS = 0;
 
   /**
    * The message returned when authentication was successful.
@@ -120,18 +121,6 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * @param organisations     the list of organisations the authenticated user is associated with
    * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
    *                          data passed as part of a message
-   */
-  public AuthenticateResponseData(List<Organisation> organisations, byte[] userEncryptionKey)
-  {
-    this(organisations, userEncryptionKey, new HashMap<>());
-  }
-
-  /**
-   * Constructs a new <code>AuthenticateResponseData</code>.
-   *
-   * @param organisations     the list of organisations the authenticated user is associated with
-   * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
-   *                          data passed as part of a message
    * @param userProperties    the properties returned for the authenticated user
    */
   public AuthenticateResponseData(List<Organisation> organisations, byte[] userEncryptionKey,
@@ -146,10 +135,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     this.organisations = new ArrayList<>();
 
-    for (Organisation organisation : organisations)
-    {
-      this.organisations.add(new OrganisationData(organisation));
-    }
+    this.organisations.addAll(organisations.stream().map(OrganisationData::new).collect(
+        Collectors.toList()));
   }
 
   /**
@@ -200,10 +187,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
       List<Element> organisationElements = organisationsElement.getChildren("Organisation");
 
-      for (Element organisationElement : organisationElements)
-      {
-        this.organisations.add(new OrganisationData(organisationElement));
-      }
+      this.organisations.addAll(
+        organisationElements.stream().map(OrganisationData::new).collect(Collectors.toList()));
     }
 
     this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
@@ -295,61 +280,6 @@ public class AuthenticateResponseData extends WbxmlMessageData
   public Map<String, Object> getUserProperties()
   {
     return userProperties;
-  }
-
-  /**
-   * Set the error code indicating the result of processing the registration where a code of
-   * '0' indicates success and a non-zero code indicates an error condition.
-   *
-   * @param errorCode the error code indicating the result of processing the registration where
-   *                  a code of '0' indicates success and a non-zero code indicates an error
-   *                  condition
-   */
-  public void setErrorCode(int errorCode)
-  {
-    this.errorCode = errorCode;
-  }
-
-  /**
-   * Set the error message describing the result of processing the registration.
-   *
-   * @param errorMessage the error message describing the result of processing the registration
-   */
-  public void setErrorMessage(String errorMessage)
-  {
-    this.errorMessage = errorMessage;
-  }
-
-  /**
-   * Set the list of organisations the authenticated user is associated with.
-   *
-   * @param organisations the list of organisations the authenticated user is associated with
-   */
-  public void setOrganisations(List<OrganisationData> organisations)
-  {
-    this.organisations = organisations;
-  }
-
-  /**
-   * Set the encryption key used to encrypt data on the user's device and any data passed as
-   * part of a message.
-   *
-   * @param userEncryptionKey the encryption key used to encrypt data on the user's device
-   *                          and any data passed as part of a message
-   */
-  public void setUserEncryptionKey(byte[] userEncryptionKey)
-  {
-    this.userEncryptionKey = userEncryptionKey;
-  }
-
-  /**
-   * Set the properties returned for the authenticated user.
-   *
-   * @param userProperties the properties returned for the authenticated user
-   */
-  public void setUserProperties(Map<String, Object> userProperties)
-  {
-    this.userProperties = userProperties;
   }
 
   /**

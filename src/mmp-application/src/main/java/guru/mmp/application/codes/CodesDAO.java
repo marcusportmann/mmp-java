@@ -295,9 +295,18 @@ public class CodesDAO
         statement.setInt(8, codeCategory.getCacheExpiry());
       }
 
-      Timestamp updated = new Timestamp(System.currentTimeMillis());
+      if (codeCategory.getUpdated() == null)
+      {
+        Timestamp updated = new Timestamp(System.currentTimeMillis());
 
-      statement.setTimestamp(9, updated);
+        statement.setTimestamp(9, updated);
+
+        codeCategory.setUpdated(updated);
+      }
+      else
+      {
+        statement.setTimestamp(9, new Timestamp(codeCategory.getUpdated().getTime()));
+      }
 
       if (statement.executeUpdate() != 1)
       {
@@ -306,7 +315,7 @@ public class CodesDAO
             createCodeCategorySQL));
       }
 
-      codeCategory.setUpdated(updated);
+
     }
     catch (Throwable e)
     {

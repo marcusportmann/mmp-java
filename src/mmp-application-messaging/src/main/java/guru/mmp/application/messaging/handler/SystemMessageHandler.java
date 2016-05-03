@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -274,7 +275,8 @@ public class SystemMessageHandler extends MessageHandler
               requestData.getUsername(), requestData.getDeviceId()));
         }
 
-        responseData = new AuthenticateResponseData(organisations, userEncryptionKey);
+        responseData = new AuthenticateResponseData(organisations, userEncryptionKey,
+            new HashMap<>());
       }
       catch (AuthenticationFailedException | UserNotFoundException e)
       {
@@ -309,41 +311,46 @@ public class SystemMessageHandler extends MessageHandler
   private Message processCheckUserExistsMessage(Message requestMessage)
     throws MessageHandlerException
   {
-    MessageTranslator messageTranslator;
-
     try
     {
-      messageTranslator = new MessageTranslator(requestMessage.getUsername(),
+      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
           requestMessage.getDeviceId());
 
       CheckUserExistsRequestData requestData = messageTranslator.fromMessage(requestMessage,
           new CheckUserExistsRequestData());
 
-      if (logger.isDebugEnabled())
+      CheckUserExistsResponseData responseData;
+
+      try
       {
-        logger.debug(String.format("Checking if the user (%s) exists", requestData.getUsername()));
+        if (logger.isDebugEnabled())
+        {
+          logger.debug(String.format("Checking if the user (%s) exists",
+              requestData.getUsername()));
+        }
+
+        if (securityService.getUserDirectoryIdForUser(requestData.getUsername()) != null)
+        {
+          responseData = new CheckUserExistsResponseData(true);
+        }
+        else
+        {
+          responseData = new CheckUserExistsResponseData(false);
+        }
+      }
+      catch (Throwable e)
+      {
+        responseData = new CheckUserExistsResponseData(CheckUserExistsResponseData
+            .ERROR_CODE_UNKNOWN_ERROR, String.format("Failed to check if the user (%s) exists: %s",
+            requestData.getUsername(), e.getMessage()));
+
       }
 
-      if (securityService.getUserDirectoryIdForUser(requestData.getUsername()) != null)
-      {
-        CheckUserExistsResponseData responseData = new CheckUserExistsResponseData(true);
+      Message responseMessage = messageTranslator.toMessage(responseData);
 
-        Message responseMessage = messageTranslator.toMessage(responseData);
+      responseMessage.setIsEncryptionDisabled(true);
 
-        responseMessage.setIsEncryptionDisabled(true);
-
-        return responseMessage;
-      }
-      else
-      {
-        CheckUserExistsResponseData responseData = new CheckUserExistsResponseData(false);
-
-        Message responseMessage = messageTranslator.toMessage(responseData);
-
-        responseMessage.setIsEncryptionDisabled(false);
-
-        return responseMessage;
-      }
+      return responseMessage;
     }
     catch (Throwable e)
     {
