@@ -18,20 +18,8 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.messaging.IMessagingService;
-import guru.mmp.application.messaging.Message;
-import guru.mmp.application.messaging.MessageTranslator;
-import guru.mmp.application.messaging.MessagingException;
-import guru.mmp.application.messaging.messages.AuthenticateRequestData;
-import guru.mmp.application.messaging.messages.AuthenticateResponseData;
 import guru.mmp.application.test.ApplicationClassRunner;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.inject.Inject;
-import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -42,54 +30,7 @@ import static org.junit.Assert.assertEquals;
  * @author Marcus Portmann
  */
 @RunWith(ApplicationClassRunner.class)
-public class MessagingServiceTest
-{
-  private static final UUID DEVICE_ID = UUID.randomUUID();
-  private static final String USERNAME = "Administrator";
-  private static final String PASSWORD = "Password1";
-  @Inject
-  private IMessagingService messagingService;
-
-  /**
-   * Test the authentication message.
-   *
-   * @throws Exception
-   */
-  @Test
-  public void authenticationTest()
-    throws Exception
-  {
-    Message authenticateRequestMessage = getAuthenticateRequestMessage();
-
-    Message authenticateResponseMessage = messagingService.processMessage(
-        authenticateRequestMessage);
-
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
-
-    AuthenticateResponseData authenticateResponseData = messageTranslator.fromMessage(
-        authenticateResponseMessage, new AuthenticateResponseData());
-
-    assertEquals(
-        "Failed to confirm that the Authenticate Request message was processed successfully", 0,
-        authenticateResponseData.getErrorCode());
-
-    assertEquals("Failed to confirm that the correlation IDs are the same for the "
-        + "Authenticate Request and Authenticate Response messages",
-        authenticateRequestMessage.getCorrelationId(),
-        authenticateResponseMessage.getCorrelationId());
-  }
-
-  private static synchronized Message getAuthenticateRequestMessage()
-    throws MessagingException
-  {
-    AuthenticateRequestData authenticateRequestData = new AuthenticateRequestData(USERNAME,
-        PASSWORD, DEVICE_ID);
-
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
-
-    return messageTranslator.toMessage(authenticateRequestData, UUID.randomUUID());
-  }
-}
+public class MessagingServiceTest {}
 
 //INSERT INTO MMP.MESSAGE_TYPES (ID, NAME) VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', '');
 //INSERT INTO MMP.MESSAGE_TYPES (ID, NAME) VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');

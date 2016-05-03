@@ -47,9 +47,14 @@ public class AuthenticateResponseData extends WbxmlMessageData
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
 
   /**
+   * The error code returned when authentication is successful.
+   */
+  public static final int ERROR_CODE_SUCCESS = 0;
+
+  /**
    * The message returned when authentication was successful.
    */
-  public static final String ERROR_MESSAGE_SUCCESS = "Success";
+  private static final String ERROR_MESSAGE_SUCCESS = "Success";
 
   /**
    * The UUID for the "Authenticate Response" message.
@@ -134,7 +139,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
-    this.errorCode = 0;
+    this.errorCode = ERROR_CODE_SUCCESS;
     this.errorMessage = ERROR_MESSAGE_SUCCESS;
     this.userEncryptionKey = userEncryptionKey;
     this.userProperties = userProperties;

@@ -219,7 +219,7 @@ public class SystemMessageHandler extends MessageHandler
           new AnotherTestRequestData());
 
       AnotherTestResponseData responseData = new AnotherTestResponseData(
-          requestData.getTestValue());
+          requestData.getTestValue(), requestData.getTestData());
 
       Message responseMessage = messageTranslator.toMessage(responseData,
           requestMessage.getCorrelationId());

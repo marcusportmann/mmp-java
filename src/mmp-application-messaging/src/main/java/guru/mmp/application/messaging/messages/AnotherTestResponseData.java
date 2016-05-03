@@ -68,19 +68,6 @@ public class AnotherTestResponseData extends WbxmlMessageData
    * Constructs a new <code>AnotherTestResponseData</code>.
    *
    * @param testValue the test value
-   */
-  public AnotherTestResponseData(String testValue)
-  {
-    super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
-
-    this.testValue = testValue;
-    this.testData = new byte[0];
-  }
-
-  /**
-   * Constructs a new <code>AnotherTestResponseData</code>.
-   *
-   * @param testValue the test value
    * @param testData  the test data
    */
   public AnotherTestResponseData(String testValue, byte[] testData)
