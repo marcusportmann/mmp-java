@@ -41,14 +41,9 @@ import java.util.UUID;
 public class GetCodeCategoryResponseData extends WbxmlMessageData
 {
   /**
-   * The error code returned when access is denied.
-   */
-  public static final int ERROR_CODE_ACCESS_DENIED = 1;
-
-  /**
    * The error code returned to indicate success.
    */
-  public static final int ERROR_CODE_SUCCESS = 0;
+  private static final int ERROR_CODE_SUCCESS = 0;
 
   /**
    * The error code returned when an unknown error occurred.
@@ -58,7 +53,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   /**
    * The message returned to indicate success.
    */
-  public static final String ERROR_MESSAGE_SUCCESS = "Success";
+  private static final String ERROR_MESSAGE_SUCCESS = "Success";
 
   /**
    * The UUID for the "Get Code Category Response" message.
@@ -99,6 +94,8 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
+    this.errorCode = ERROR_CODE_SUCCESS;
+    this.errorMessage = ERROR_MESSAGE_SUCCESS;
     this.codeCategory = codeCategory;
   }
 

@@ -49,15 +49,10 @@ public class OrganisationData
 
   /**
    * Constructs a new <code>OrganisationData</code>.
-   */
-  public OrganisationData() {}
-
-  /**
-   * Constructs a new <code>OrganisationData</code>.
    *
    * @param element the WBXML element containing the organisation data
    */
-  public OrganisationData(Element element)
+  OrganisationData(Element element)
   {
     try
     {
@@ -75,7 +70,7 @@ public class OrganisationData
    *
    * @param organisation the <code>Organisation</code> instance containing the organisation data
    */
-  public OrganisationData(Organisation organisation)
+  OrganisationData(Organisation organisation)
   {
     this.id = organisation.getId();
     this.name = organisation.getName();
@@ -126,7 +121,7 @@ public class OrganisationData
    *
    * @return the WBXML element containing the organisation data
    */
-  public Element toElement()
+  Element toElement()
   {
     Element organisationElement = new Element("Organisation");
 

@@ -197,7 +197,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
       catch (Throwable e)
       {
         throw new RuntimeException("Failed to parse the When ISO8601 timestamp (" + whenValue
-            + ") for the \"Submit " + "Error Report Request\" message", e);
+            + ") for the \"Submit Error Report Request\" message", e);
       }
     }
     else
@@ -314,110 +314,6 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   public String getWho()
   {
     return who;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the application that
-   * generated the error report.
-   *
-   * @param applicationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      application that generated the error report
-   */
-  public void setApplicationId(UUID applicationId)
-  {
-    this.applicationId = applicationId;
-  }
-
-  /**
-   * Set the version of the application that generated the error report.
-   *
-   * @param applicationVersion the version of the application that generated the error report
-   */
-  public void setApplicationVersion(int applicationVersion)
-  {
-    this.applicationVersion = applicationVersion;
-  }
-
-  /**
-   * Set the data associated with the error report e.g. the application XML.
-   *
-   * @param data the data associated with the error report e.g. the application XML
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
-  }
-
-  /**
-   * Set the description of the error.
-   *
-   * @param description the description of the error
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
-   * Set the error detail e.g. a stack trace.
-   *
-   * @param detail the error detail e.g. a stack trace
-   */
-  public void setDetail(String detail)
-  {
-    this.detail = detail;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the error
-   * report originated from.
-   *
-   * @param device the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *               error report originated from
-   */
-  public void setDeviceId(UUID device)
-  {
-    this.deviceId = deviceId;
-  }
-
-  /**
-   * Set the feedback provided by the user for the error.
-   *
-   * @param feedback the feedback provided by the user for the error
-   */
-  public void setFeedback(String feedback)
-  {
-    this.feedback = feedback;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the error report.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the date and time the error report was created.
-   *
-   * @param when the date and time the error report was created
-   */
-  public void setWhen(Date when)
-  {
-    this.when = when;
-  }
-
-  /**
-   * Set the username identifying the user associated with the error report.
-   *
-   * @param who the username identifying the user associated with the error report
-   */
-  public void setWho(String who)
-  {
-    this.who = who;
   }
 
   /**

@@ -38,7 +38,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class SubmitErrorReportResponseData extends WbxmlMessageData
 {
   /**
@@ -56,18 +55,18 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * The error code indicating the result of processing the submitted error report where a code
    * of '0' indicates success and a non-zero code indicates an error condition.
    */
-  public int errorCode;
+  private int errorCode;
 
   /**
    * The error message describing the result of processing the submitted error report.
    */
-  public String errorMessage;
+  private String errorMessage;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the error report that was
    * submitted for processing.
    */
-  public UUID errorReportId;
+  private UUID errorReportId;
 
   /**
    * Constructs a new <code>SubmitErrorReportResponseData</code>.
@@ -164,42 +163,6 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   public UUID getErrorReportId()
   {
     return errorReportId;
-  }
-
-  /**
-   * Set the error code indicating the result of processing the submitted error report where a code
-   * of '0' indicates success and a non-zero code indicates an error condition.
-   *
-   * @param errorCode the error code indicating the result of processing the submitted error report
-   *                  where a code of '0' indicates success and a non-zero code indicates an error
-   *                  condition
-   */
-  public void setErrorCode(int errorCode)
-  {
-    this.errorCode = errorCode;
-  }
-
-  /**
-   * Set the error message describing the result of processing the submitted error report.
-   *
-   * @param errorMessage the error message describing the result of processing the submitted error
-   *                     report
-   */
-  public void setErrorMessage(String errorMessage)
-  {
-    this.errorMessage = errorMessage;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the error report that
-   * was submitted for processing.
-   *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report that was submitted for processing
-   */
-  public void setErrorReportId(UUID errorReportId)
-  {
-    this.errorReportId = errorReportId;
   }
 
   /**

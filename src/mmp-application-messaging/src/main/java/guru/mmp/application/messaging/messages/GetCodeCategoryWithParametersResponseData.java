@@ -38,18 +38,12 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
 {
   /**
-   * The error code returned when access is denied.
-   */
-  public static final int ERROR_CODE_ACCESS_DENIED = 1;
-
-  /**
    * The error code returned to indicate success.
    */
-  public static final int ERROR_CODE_SUCCESS = 0;
+  private static final int ERROR_CODE_SUCCESS = 0;
 
   /**
    * The error code returned when an unknown error occurred.
@@ -59,7 +53,7 @@ public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
   /**
    * The message returned to indicate success.
    */
-  public static final String ERROR_MESSAGE_SUCCESS = "Success";
+  private static final String ERROR_MESSAGE_SUCCESS = "Success";
 
   /**
    * The UUID for the "Get Code Category With Parameters Response" message.
@@ -100,6 +94,8 @@ public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
   {
     super(MESSAGE_TYPE_ID, Message.Priority.HIGH);
 
+    this.errorCode = ERROR_CODE_SUCCESS;
+    this.errorMessage = ERROR_MESSAGE_SUCCESS;
     this.codeCategory = codeCategory;
   }
 
@@ -188,38 +184,6 @@ public class GetCodeCategoryWithParametersResponseData extends WbxmlMessageData
   public String getErrorMessage()
   {
     return errorMessage;
-  }
-
-  /**
-   * Set the code category.
-   *
-   * @param codeCategory the code category
-   */
-  public void setCodeCategory(CodeCategoryData codeCategory)
-  {
-    this.codeCategory = codeCategory;
-  }
-
-  /**
-   * Set the error code indicating the result of retrieving the code category where a code of '0'
-   * indicates success and a non-zero code indicates an error condition.
-   *
-   * @param errorCode the error code indicating the result of retrieving the code category where a
-   *                  code of '0' indicates success and a non-zero code indicates an error condition
-   */
-  public void setErrorCode(int errorCode)
-  {
-    this.errorCode = errorCode;
-  }
-
-  /**
-   * Set the error message describing the result of retrieving the code category.
-   *
-   * @param errorMessage the error message describing the result of retrieving the code category
-   */
-  public void setErrorMessage(String errorMessage)
-  {
-    this.errorMessage = errorMessage;
   }
 
   /**

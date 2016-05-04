@@ -239,7 +239,7 @@ public class SystemMessageTest
       codesService.createCodeCategory(testCustomCodeCategory);
 
       GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(
-        testCustomCodeCategory.getId(), new Date(0), true);
+          testCustomCodeCategory.getId(), new Date(0), true);
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
@@ -248,7 +248,7 @@ public class SystemMessageTest
       Message responseMessage = messagingService.processMessage(requestMessage);
 
       GetCodeCategoryResponseData responseData = messageTranslator.fromMessage(responseMessage,
-        new GetCodeCategoryResponseData());
+          new GetCodeCategoryResponseData());
 
       assertEquals(0, responseData.getErrorCode());
       assertNotNull(responseData.getErrorMessage());
@@ -261,9 +261,152 @@ public class SystemMessageTest
       assertEquals(testCustomCodeCategory.getUpdated(), codeCategory.getLastUpdated());
       assertEquals(testCustomCodeCategory.getCodeData(), new String(codeCategory.getCodeData()));
     }
+  }
 
-    int xxx = 0;
-    xxx++;
+  /**
+   * Test the "Get Code Category With Parameters" message.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void getGetCodeCategoryWithParametersTest()
+    throws Exception
+  {
+    Map<String, String> parameters = new HashMap<>();
+
+    parameters.put("Parameter Name 1", "Parameter Value 1");
+    parameters.put("Parameter Name 2", "Parameter Value 2");
+
+    CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
+        "Test Standard Code Category", ISO8601.toDate("2016-05-03T19:14:00+02:00"));
+
+    if (testStandardCodeCategory != null)
+    {
+      codesService.createCodeCategory(testStandardCodeCategory);
+
+      List<Code> testCodes = new ArrayList<>();
+
+      for (int i = 1; i <= 10; i++)
+      {
+        Code testStandardCode = new Code("Test Standard Code ID " + i,
+            testStandardCodeCategory.getId(), "Test Standard Code Name " + i,
+            "Test Standard Code Value " + i);
+
+        codesService.createCode(testStandardCode);
+
+        testCodes.add(testStandardCode);
+      }
+
+      GetCodeCategoryWithParametersRequestData requestData =
+          new GetCodeCategoryWithParametersRequestData(testStandardCodeCategory.getId(), new Date(
+          0), parameters, true);
+
+      MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+
+      Message responseMessage = messagingService.processMessage(requestMessage);
+
+      GetCodeCategoryWithParametersResponseData responseData = messageTranslator.fromMessage(
+          responseMessage, new GetCodeCategoryWithParametersResponseData());
+
+      assertEquals(0, responseData.getErrorCode());
+      assertNotNull(responseData.getErrorMessage());
+
+      CodeCategoryData codeCategory = responseData.getCodeCategory();
+
+      assertEquals(testStandardCodeCategory.getId(), codeCategory.getId());
+      assertEquals(testStandardCodeCategory.getName(), codeCategory.getName());
+      assertEquals(CodeCategoryData.CodeDataType.STANDARD, codeCategory.getCodeDataType());
+      assertEquals(testStandardCodeCategory.getUpdated(), codeCategory.getLastUpdated());
+      assertEquals(testCodes.size(), codeCategory.getCodes().size());
+
+      boolean foundMatchingCode = false;
+
+      for (Code testCode : testCodes)
+      {
+        for (CodeData code : codeCategory.getCodes())
+        {
+          if (testCode.getId().equals(code.getId()))
+          {
+            assertEquals(testCode.getCategoryId(), code.getCategoryId());
+            assertEquals(testCode.getName(), code.getName());
+            assertEquals(testCode.getValue(), code.getValue());
+
+            foundMatchingCode = true;
+
+            break;
+          }
+        }
+
+        if (!foundMatchingCode)
+        {
+          fail(String.format("Failed to find the matching code (%s)", testCode));
+        }
+
+        foundMatchingCode = false;
+      }
+    }
+
+    CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
+        "Test Custom Code Category", "Test Custom Code Data", ISO8601.toDate(
+        "2016-05-03T19:14:00+02:00"));
+
+    if (testCustomCodeCategory != null)
+    {
+      codesService.createCodeCategory(testCustomCodeCategory);
+
+      GetCodeCategoryWithParametersRequestData requestData =
+          new GetCodeCategoryWithParametersRequestData(testCustomCodeCategory.getId(), new Date(0),
+          parameters, true);
+
+      MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+
+      Message responseMessage = messagingService.processMessage(requestMessage);
+
+      GetCodeCategoryWithParametersResponseData responseData = messageTranslator.fromMessage(
+          responseMessage, new GetCodeCategoryWithParametersResponseData());
+
+      assertEquals(0, responseData.getErrorCode());
+      assertNotNull(responseData.getErrorMessage());
+
+      CodeCategoryData codeCategory = responseData.getCodeCategory();
+
+      assertEquals(testCustomCodeCategory.getId(), codeCategory.getId());
+      assertEquals(testCustomCodeCategory.getName(), codeCategory.getName());
+      assertEquals(CodeCategoryData.CodeDataType.CUSTOM, codeCategory.getCodeDataType());
+      assertEquals(testCustomCodeCategory.getUpdated(), codeCategory.getLastUpdated());
+      assertEquals(testCustomCodeCategory.getCodeData(), new String(codeCategory.getCodeData()));
+    }
+  }
+
+  /**
+   * Test the "Submit Error Report" message.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void submitErrorReportTest()
+    throws Exception
+  {
+    SubmitErrorReportRequestData requestData = new SubmitErrorReportRequestData(UUID.randomUUID(),
+        UUID.randomUUID(), 1, "Test Description", "Test Detail", "Test Feedback", new Date(),
+        "Administrator", UUID.randomUUID(), "Test Data".getBytes());
+
+    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+
+    Message responseMessage = messagingService.processMessage(requestMessage);
+
+    SubmitErrorReportResponseData responseData = messageTranslator.fromMessage(responseMessage,
+        new SubmitErrorReportResponseData());
+
+    assertEquals(0, responseData.getErrorCode());
+    assertNotNull(responseData.getErrorMessage());
+    assertEquals(requestData.getId(), responseData.getErrorReportId());
   }
 
   /**

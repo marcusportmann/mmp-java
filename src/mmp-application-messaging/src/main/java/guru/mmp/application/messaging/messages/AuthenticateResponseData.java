@@ -187,8 +187,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
       List<Element> organisationElements = organisationsElement.getChildren("Organisation");
 
-      this.organisations.addAll(
-        organisationElements.stream().map(OrganisationData::new).collect(Collectors.toList()));
+      this.organisations.addAll(organisationElements.stream().map(OrganisationData::new).collect(
+          Collectors.toList()));
     }
 
     this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");

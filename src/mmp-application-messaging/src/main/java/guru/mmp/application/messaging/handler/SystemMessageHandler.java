@@ -118,12 +118,6 @@ public class SystemMessageHandler extends MessageHandler
       return processAnotherTestMessage(message);
     }
 
-    // Process a "Message Part Download Test Request" message
-    else if (message.getTypeId().equals(MessagePartDownloadTestRequestData.MESSAGE_TYPE_ID))
-    {
-      return processMessagePartDownloadTestMessage(message);
-    }
-
     // Process a "Submit Error Report Request" message
     else if (message.getTypeId().equals(SubmitErrorReportRequestData.MESSAGE_TYPE_ID))
     {
@@ -541,33 +535,6 @@ public class SystemMessageHandler extends MessageHandler
       }
 
       return messageTranslator.toMessage(responseData);
-    }
-    catch (Throwable e)
-    {
-      throw new MessageHandlerException(String.format("Failed to process the message (%s)",
-          requestMessage.getTypeId()), e);
-    }
-  }
-
-  private Message processMessagePartDownloadTestMessage(Message requestMessage)
-    throws MessageHandlerException
-  {
-    try
-    {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
-
-      // MessagePartDownloadTestRequestData requestData =
-      // messageTranslator.fromMessage(requestMessage, new MessagePartDownloadTestRequestData());
-
-      MessagePartDownloadTestResponseData responseData = new MessagePartDownloadTestResponseData(
-          new byte[128 * 1024]);
-
-      Message responseMessage = messageTranslator.toMessage(responseData);
-
-      logger.debug(responseMessage.toString());
-
-      return responseMessage;
     }
     catch (Throwable e)
     {
