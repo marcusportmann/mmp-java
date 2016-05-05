@@ -73,7 +73,7 @@ public class MessagingService
    * The path to the messaging configuration files (META-INF/MessagingConfig.xml) on the
    * classpath.
    */
-  public static final String MESSAGING_CONFIGURATION_PATH = "META-INF/MessagingConfig.xml";
+  private static final String MESSAGING_CONFIGURATION_PATH = "META-INF/MessagingConfig.xml";
 
   /**
    * The AES encryption IV used when generating user-device AES encryption keys.
@@ -243,7 +243,7 @@ public class MessagingService
           : Base64.decode(message.getEncryptionIV()), message.getData());
 
       // Verify the data hash for the unencrypted data
-      MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
       messageDigest.update(decryptedData);
 
@@ -415,7 +415,7 @@ public class MessagingService
           message.getData());
 
       // Generate the hash for the unencrypted data
-      MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
       messageDigest.update(message.getData());
 
@@ -846,14 +846,18 @@ public class MessagingService
          */
         if (!message.isEncrypted())
         {
-          throw new MessagingException(String.format(
-              "The message (%s) with type (%s) exceeds the maximum asynchronous message size (%d) "
-              + "and must be encrypted prior to being queued for download", message.getId(),
-              message.getTypeId(), Message.MAX_ASYNC_MESSAGE_SIZE));
+          if (!encryptMessage(message))
+          {
+            throw new MessagingException(String.format(
+                "Failed to process the asynchronous message (%s) with type (%s) that exceeds the"
+                + " maximum asynchronous message size (%d) and must be encrypted prior to being"
+                + " queued for download", message.getId(), message.getTypeId(), Message
+                .MAX_ASYNC_MESSAGE_SIZE));
+          }
         }
 
         // Calculate the hash for the message data to use as the message checksum
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
         messageDigest.update(message.getData());
 
@@ -958,8 +962,8 @@ public class MessagingService
     catch (Throwable e)
     {
       logger.error(String.format(
-          "Failed to invoke the Background Message Processor to process the message (%s) that was "
-          + "queued for processing", message.getId()), e);
+          "Failed to invoke the Background Message Processor to process the message (%s) that was"
+          + " queued for processing", message.getId()), e);
     }
   }
 
@@ -982,8 +986,8 @@ public class MessagingService
       if (messagingDAO.isMessageArchived(messagePart.getId()))
       {
         logger.debug(String.format(
-            "The message (%s) has already been queued for processing so the message part (%s) will "
-            + "be ignored", messagePart.getMessageId(), messagePart.getId()));
+            "The message (%s) has already been queued for processing so the message part (%s) will"
+            + " be ignored", messagePart.getMessageId(), messagePart.getId()));
 
         return;
       }
@@ -1027,7 +1031,7 @@ public class MessagingService
         byte[] reconstructedData = baos.toByteArray();
 
         // Check that the reconstructed message data is valid
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
         messageDigest.update(reconstructedData);
 
@@ -1040,8 +1044,8 @@ public class MessagingService
 
           logger.error(String.format(
               "Failed to verify the checksum for the reconstructed message (%s) with type (%s) from"
-              + " the user (%s) and device (%s). Found %d bytes of message data with the hash (%s) "
-              + "that was reconstructed from %d message parts. The message will NOT be processed",
+              + " the user (%s) and device (%s). Found %d bytes of message data with the hash (%s)"
+              + " that was reconstructed from %d message parts. The message will NOT be processed",
               messagePart.getMessageId(), messagePart.getMessageTypeId(),
               messagePart.getMessageUsername(), messagePart.getMessageDeviceId(), reconstructedData
               .length, messageChecksum, messageParts.size()));
@@ -1273,31 +1277,6 @@ public class MessagingService
       throw new MessagingException(String.format(
           "Failed to reset the locks for the  message parts with the status (%s) that have been "
           + "locked using the lock name (%s)", status, instanceName), e);
-    }
-  }
-
-  /**
-   * Set the status for the message.
-   *
-   * @param message the message to set the status for
-   * @param status  the new status
-   *
-   * @throws MessagingException
-   */
-  public void setMessageStatus(Message message, Message.Status status)
-    throws MessagingException
-  {
-    try
-    {
-      messagingDAO.setMessageStatus(message.getId(), status);
-
-      message.setStatus(status);
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingException(String.format(
-          "Failed to set the status for the message (%s) to (%s)", message.getId(),
-          status.toString()), e);
     }
   }
 

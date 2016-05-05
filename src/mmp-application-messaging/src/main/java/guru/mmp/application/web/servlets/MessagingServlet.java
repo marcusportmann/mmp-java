@@ -50,7 +50,7 @@ public class MessagingServlet extends HttpServlet
   /**
    * The HTTP content-type used when receiving and sending WBXML.
    */
-  public static final String WBXML_CONTENT_TYPE = "application/wbxml";
+  private static final String WBXML_CONTENT_TYPE = "application/wbxml";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingServlet.class);
@@ -59,6 +59,12 @@ public class MessagingServlet extends HttpServlet
   /* Messaging Service */
   @Inject
   private IMessagingService messagingService;
+  private boolean isInitialized;
+
+  /**
+   * Constructs a new <code>MessagingServlet</code>.
+   */
+  public MessagingServlet() {}
 
   /**
    * Initialise the servlet.
@@ -73,38 +79,7 @@ public class MessagingServlet extends HttpServlet
   {
     super.init(config);
 
-    /*
-     * Reset the locks for any messages that were locked for downloading by a remote user-device
-     * combination but which were not successfully downloaded.
-     */
-    try
-    {
-      logger.info("Resetting the message locks for the messages being downloaded");
-
-      messagingService.resetMessageLocks(Message.Status.DOWNLOADING, Message.Status
-          .QUEUED_FOR_DOWNLOAD);
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to reset the message locks for the messages being downloaded", e);
-    }
-
-    /*
-     * Reset the locks for the message parts that were locked for assembly but which were not
-     * successfully assembled.
-     */
-    try
-    {
-      logger.info("Resetting the message part locks for the message parts being assembled");
-
-      messagingService.resetMessagePartLocks(MessagePart.Status.ASSEMBLING, MessagePart.Status
-          .QUEUED_FOR_ASSEMBLY);
-    }
-    catch (Exception e)
-    {
-      logger.error("Failed to reset the message part locks for the message parts being assembled",
-          e);
-    }
+    initializeMessagingServlet();
   }
 
   @Override
@@ -118,6 +93,11 @@ public class MessagingServlet extends HttpServlet
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
+    if (!isInitialized)
+    {
+      initializeMessagingServlet();
+    }
+
     // Check the format of the request data
     if ((request.getContentType() == null)
         || (!request.getContentType().equals(WBXML_CONTENT_TYPE)))
@@ -142,7 +122,7 @@ public class MessagingServlet extends HttpServlet
       {
         // We are processing a Message...
         case "Message":
-          processMessage(document, request, response);
+          processMessage(document, response);
 
           break;
 
@@ -190,8 +170,57 @@ public class MessagingServlet extends HttpServlet
     }
   }
 
-  private boolean processMessage(Document document, HttpServletRequest request,
-      HttpServletResponse response)
+  private synchronized void initializeMessagingServlet()
+  {
+    if (!isInitialized)
+    {
+      /*
+       * If the Messaging Service has not been injected e.g. because we are invoking the Messaging
+       * Servlet as part of a unit test then stop here.
+       */
+      if (messagingService == null)
+      {
+        return;
+      }
+
+      /*
+       * Reset the locks for any messages that were locked for downloading by a remote user-device
+       * combination but which were not successfully downloaded.
+       */
+      try
+      {
+        logger.info("Resetting the message locks for the messages being downloaded");
+
+        messagingService.resetMessageLocks(Message.Status.DOWNLOADING, Message.Status
+            .QUEUED_FOR_DOWNLOAD);
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to reset the message locks for the messages being downloaded", e);
+      }
+
+      /*
+       * Reset the locks for the message parts that were locked for assembly but which were not
+       * successfully assembled.
+       */
+      try
+      {
+        logger.info("Resetting the message part locks for the message parts being assembled");
+
+        messagingService.resetMessagePartLocks(MessagePart.Status.ASSEMBLING, MessagePart.Status
+            .QUEUED_FOR_ASSEMBLY);
+      }
+      catch (Exception e)
+      {
+        logger.error(
+            "Failed to reset the message part locks for the message parts being assembled", e);
+      }
+
+      isInitialized = true;
+    }
+  }
+
+  private boolean processMessage(Document document, HttpServletResponse response)
     throws MessagingException
   {
     // Is the WBXML document valid
@@ -562,8 +591,8 @@ public class MessagingServlet extends HttpServlet
       logger.warn("Failed to process the invalid message part received request WBXML document: "
           + document.toString());
 
-      MessageReceivedResponse result = new MessageReceivedResponse(MessageReceivedResponse
-          .ERROR_INVALID_REQUEST,
+      MessagePartReceivedResponse result = new MessagePartReceivedResponse(
+          MessagePartReceivedResponse.ERROR_INVALID_REQUEST,
           "Failed to process the invalid WBXML document containing the message part received "
           + "request information");
 
@@ -578,8 +607,9 @@ public class MessagingServlet extends HttpServlet
     {
       messagingService.deleteMessagePart(receivedRequest.getMessagePartId());
 
-      MessagePartReceivedResponse result = new MessagePartReceivedResponse(MessageReceivedResponse
-          .SUCCESS, String.format("Successfully acknowledged receipt of the message part (%s)",
+      MessagePartReceivedResponse result = new MessagePartReceivedResponse(
+          MessagePartReceivedResponse.SUCCESS, String.format(
+          "Successfully acknowledged receipt of the message part (%s)",
           receivedRequest.getMessagePartId()));
 
       writeResponseDocument(result.toWBXML(), response);
@@ -592,8 +622,8 @@ public class MessagingServlet extends HttpServlet
           "Failed to process the message part received request for the message part (%s) from the "
           + "device (%s)", receivedRequest.getMessagePartId(), receivedRequest.getDeviceId()), e);
 
-      MessagePartReceivedResponse result = new MessagePartReceivedResponse(MessageReceivedResponse
-          .ERROR_UNKNOWN, String.format(
+      MessagePartReceivedResponse result = new MessagePartReceivedResponse(
+          MessagePartReceivedResponse.ERROR_UNKNOWN, String.format(
           "Failed to process the message part received request for the message part (%s) from the "
           + "device (%s)", receivedRequest.getMessagePartId(), receivedRequest.getDeviceId()), e);
 

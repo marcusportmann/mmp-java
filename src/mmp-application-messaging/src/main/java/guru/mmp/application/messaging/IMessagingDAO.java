@@ -282,35 +282,6 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Reset the expired message locks.
-   *
-   * @param lockTimeout the lock timeout in seconds
-   * @param status      the current status of the messages that have been locked
-   * @param newStatus   the new status for the messages that have been unlocked
-   *
-   * @return the number of message locks reset
-   *
-   * @throws DAOException
-   */
-  int resetExpiredMessageLocks(int lockTimeout, Message.Status status, Message.Status newStatus)
-    throws DAOException;
-
-  /**
-   * Reset the expired message part locks.
-   *
-   * @param lockTimeout the lock timeout in seconds
-   * @param status      the current status of the message parts that have been locked
-   * @param newStatus   the new status for the message parts that have been unlocked
-   *
-   * @return the number of message part locks reset
-   *
-   * @throws DAOException
-   */
-  int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status, MessagePart
-      .Status newStatus)
-    throws DAOException;
-
-  /**
    * Reset the message locks.
    *
    * @param lockName  the name of the lock applied by the entity that has locked the messages
@@ -340,29 +311,6 @@ public interface IMessagingDAO
     throws DAOException;
 
   /**
-   * Set the status for a message part.
-   *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *               part
-   * @param status the new status
-   *
-   * @throws DAOException
-   */
-  void setMessagePartStatus(UUID id, MessagePart.Status status)
-    throws DAOException;
-
-  /**
-   * Set the status for a message.
-   *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
-   * @param status the new status
-   *
-   * @throws DAOException
-   */
-  void setMessageStatus(UUID id, Message.Status status)
-    throws DAOException;
-
-  /**
    * Unlock a locked message.
    *
    * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
@@ -371,17 +319,5 @@ public interface IMessagingDAO
    * @throws DAOException
    */
   void unlockMessage(UUID id, Message.Status status)
-    throws DAOException;
-
-  /**
-   * Unlock a locked message part.
-   *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *               part
-   * @param status the new status for the unlocked message part
-   *
-   * @throws DAOException
-   */
-  void unlockMessagePart(UUID id, MessagePart.Status status)
     throws DAOException;
 }

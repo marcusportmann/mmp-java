@@ -245,18 +245,6 @@ public class MessageHandlerConfig
     }
 
     /**
-     * Returns <code>true</code> if messages of the supported message type should be archived or
-     * <code>false</code> otherwise.
-     *
-     * @return <code>true</code> if messages of the supported message type should be archived or
-     *         <code>false</code> otherwise
-     */
-    boolean isArchivable()
-    {
-      return isArchivable;
-    }
-
-    /**
      * Returns <code>true</code> if the handler is capable of asynchronously processing messages of
      * the supported message type or <code>false</code> otherwise.
      *
@@ -278,6 +266,18 @@ public class MessageHandlerConfig
     public boolean isSynchronous()
     {
       return isSynchronous;
+    }
+
+    /**
+     * Returns <code>true</code> if messages of the supported message type should be archived or
+     * <code>false</code> otherwise.
+     *
+     * @return <code>true</code> if messages of the supported message type should be archived or
+     *         <code>false</code> otherwise
+     */
+    boolean isArchivable()
+    {
+      return isArchivable;
     }
   }
 }

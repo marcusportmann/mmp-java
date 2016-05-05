@@ -7,8 +7,6 @@ apply plugin: 'eclipse'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'maven-publish'
 
-sourceCompatibility = 1.8
-
 repositories {
   mavenCentral()
 }

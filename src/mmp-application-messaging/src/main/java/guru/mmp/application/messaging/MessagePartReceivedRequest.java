@@ -90,7 +90,8 @@ public class MessagePartReceivedRequest
 
     return rootElement.getName().equals("MessagePartReceivedRequest")
         && (rootElement.getAttributes().size() == 2)
-        && !((!rootElement.hasAttribute("device")) || (!rootElement.hasAttribute("messagePartId")));
+        && !((!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute(
+            "messagePartId")));
   }
 
   /**

@@ -722,7 +722,7 @@
 //      if (message.getData().length > Message.MAX_ASYNC_MESSAGE_SIZE)
 //      {
 //        // Calculate the hash for the message data to use as the message checksum
-//        MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+//        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 //
 //        messageDigest.update(message.getData());
 //
@@ -920,4 +920,4 @@
 //    }
 //  }
 //}
-
+//

@@ -381,17 +381,6 @@ public interface IMessagingService
     throws MessagingException;
 
   /**
-   * Set the status for the message.
-   *
-   * @param message the message to set the status for
-   * @param status  the new status
-   *
-   * @throws MessagingException
-   */
-  void setMessageStatus(Message message, Message.Status status)
-    throws MessagingException;
-
-  /**
    * Unlock the message.
    *
    * @param message the message to unlock

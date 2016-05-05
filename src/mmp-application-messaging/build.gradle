@@ -7,8 +7,6 @@ apply plugin: 'eclipse'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'maven-publish'
 
-sourceCompatibility = 1.8
-
 repositories {
   mavenCentral()
 }
@@ -19,6 +17,7 @@ dependencies {
   compileOnly 'javax:javaee-api:7.0'
   
   testCompile project(':mmp-application-test')
+  testCompile 'org.httpunit:httpunit:1.7.2'
 }
 
 publishing {

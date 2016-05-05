@@ -24,27 +24,21 @@ import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagingDAO</code> class implements the persistence operations for the

@@ -262,12 +262,6 @@ public class SystemMessageHandler extends MessageHandler
               Base64.encodeBytes(userEncryptionKey, false), requestData.getUsername(),
               requestData.getDeviceId()));
         }
-        else
-        {
-          logger.info(String.format(
-              "Generated the encryption key for the user (%s) and the device (%s)",
-              requestData.getUsername(), requestData.getDeviceId()));
-        }
 
         responseData = new AuthenticateResponseData(organisations, userEncryptionKey,
             new HashMap<>());

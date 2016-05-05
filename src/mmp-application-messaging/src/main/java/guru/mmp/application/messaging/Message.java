@@ -36,7 +36,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class Message
 {
   /**
@@ -501,8 +500,7 @@ public class Message
             || (!rootElement.hasAttribute("typeId")) || (!rootElement.hasAttribute(
             "correlationId")) || (!rootElement.hasAttribute("created"))
             || (!rootElement.hasAttribute("sendAttempts")) || (!rootElement.hasAttribute(
-            "dataHash")) || (!rootElement.hasAttribute("encryptionScheme"))
-            || (!rootElement.hasAttribute("encryptionIV")));
+            "dataHash")) || (!rootElement.hasAttribute("encryptionIV")));
   }
 
   /**

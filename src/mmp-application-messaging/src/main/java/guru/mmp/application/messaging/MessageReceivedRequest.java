@@ -57,7 +57,7 @@ public class MessageReceivedRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = UUID.fromString(rootElement.getAttributeValue("device"));
+    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
     this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
   }
 
@@ -90,7 +90,7 @@ public class MessageReceivedRequest
 
     return rootElement.getName().equals("MessageReceivedRequest")
         && (rootElement.getAttributes().size() == 2)
-        && rootElement.hasAttribute("device")
+        && rootElement.hasAttribute("deviceId")
         && rootElement.hasAttribute("messageId");
   }
 
@@ -116,30 +116,6 @@ public class MessageReceivedRequest
   public UUID getMessageId()
   {
     return messageId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * received request originated from.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message received request originated from
-   */
-  public void setDevice(UUID deviceId)
-  {
-    this.deviceId = deviceId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message that was
-   * successfully downloaded.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *                  that was successfully downloaded
-   */
-  public void setMessageId(UUID messageId)
-  {
-    this.messageId = messageId;
   }
 
   /**

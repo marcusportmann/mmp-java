@@ -7,8 +7,6 @@ apply plugin: 'eclipse'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'maven-publish'
 
-sourceCompatibility = 1.8
-
 repositories {
   mavenCentral()
 }
@@ -24,6 +22,7 @@ dependencies {
   compile 'org.apache.tomcat:tomcat-catalina:8.0.33'
   compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
   compile 'org.jboss.weld.se:weld-se-core:2.3.4.Final'
+  compile 'org.mockito:mockito-all:1.9.5'
   
   compile 'javax:javaee-api:7.0'
 }
