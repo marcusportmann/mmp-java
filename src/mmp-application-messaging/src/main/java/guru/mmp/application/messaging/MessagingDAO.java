@@ -24,6 +24,7 @@ import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
+import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,8 +71,8 @@ public class MessagingDAO
   private String getErrorReportSummarySQL;
   private String getMessagSQL;
   private String getMessagePartsQueuedForAssemblySQL;
-  private String getMessagePartsQueuedForDownloadForUserSQL;
-  private String getMessagesQueuedForDownloadForUserSQL;
+  private String getMessagePartsQueuedForDownloadSQL;
+  private String getMessagesQueuedForDownloadSQL;
   private String getMostRecentErrorReportSummariesSQL;
   private String getNextMessageForProcessingSQL;
   private String getNumberOfErrorReportsSQL;
@@ -82,13 +83,15 @@ public class MessagingDAO
   private String lockMessagePartForDownloadSQL;
   private String lockMessagePartSQL;
   private String lockMessageSQL;
-  private String resetExpiredMessageLocksSQL;
-  private String resetExpiredMessagePartLocksSQL;
+
+  // private String resetExpiredMessageLocksSQL;
+  // private String resetExpiredMessagePartLocksSQL;
   private String resetMessageLocksSQL;
   private String resetMessagePartLocksSQL;
-  private String setMessagePartStatusSQL;
-  private String setMessageStatusSQL;
-  private String unlockMessagePartSQL;
+
+  // private String setMessagePartStatusSQL;
+  // private String setMessageStatusSQL;
+  // private String unlockMessagePartSQL;
   private String unlockMessageSQL;
 
   /**
@@ -629,7 +632,7 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId,
+  public List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId,
       String lockName)
     throws DAOException
   {
@@ -652,7 +655,7 @@ public class MessagingDAO
 
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
-            getMessagePartsQueuedForDownloadForUserSQL))
+            getMessagePartsQueuedForDownloadSQL))
       {
         /*
          * First check if we already have message parts locked for downloading for this device, if
@@ -773,8 +776,7 @@ public class MessagingDAO
    * @throws DAOException
    */
   @SuppressWarnings("resource")
-  public List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId,
-      String lockName)
+  public List<Message> getMessagesQueuedForDownload(String username, UUID deviceId, String lockName)
     throws DAOException
   {
     // Retrieve the Transaction Manager
@@ -795,8 +797,7 @@ public class MessagingDAO
       List<Message> messages = new ArrayList<>();
 
       try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(
-            getMessagesQueuedForDownloadForUserSQL))
+        PreparedStatement statement = connection.prepareStatement(getMessagesQueuedForDownloadSQL))
       {
         /*
          * First check if we already have messages locked for downloading for the user-device
@@ -813,7 +814,23 @@ public class MessagingDAO
         {
           while (rs.next())
           {
-            messages.add(buildMessageFromResultSet(rs));
+            Message message = buildMessageFromResultSet(rs);
+
+            if (!StringUtil.isNullOrEmpty(message.getLockName()))
+            {
+              if (!message.getLockName().equals(lockName))
+              {
+                if (logger.isDebugEnabled())
+                {
+                  logger.debug(String.format(
+                      "The message (%s) that was originally locked for download using the lock name"
+                      + " (%s) will now be locked for download using the lock name (%s)",
+                      message.getId(), message.getLockName(), lockName));
+                }
+              }
+            }
+
+            messages.add(message);
           }
         }
 
@@ -1229,70 +1246,70 @@ public class MessagingDAO
     }
   }
 
-  /**
-   * Reset the expired message locks.
-   *
-   * @param lockTimeout the lock timeout in seconds
-   * @param status      the current status of the messages that have been locked
-   * @param newStatus   the new status for the messages that have been unlocked
-   *
-   * @return the number of message locks reset
-   *
-   * @throws DAOException
-   */
-  public int resetExpiredMessageLocks(int lockTimeout, Message.Status status, Message
-      .Status newStatus)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetExpiredMessageLocksSQL))
-    {
-      statement.setInt(1, newStatus.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setInt(3, status.getCode());
-      statement.setTimestamp(4, new Timestamp(System.currentTimeMillis() - (lockTimeout * 1000L)));
+///**
+// * Reset the expired message locks.
+// *
+// * @param lockTimeout the lock timeout in seconds
+// * @param status      the current status of the messages that have been locked
+// * @param newStatus   the new status for the messages that have been unlocked
+// *
+// * @return the number of message locks reset
+// *
+// * @throws DAOException
+// */
+//public int resetExpiredMessageLocks(int lockTimeout, Message.Status status, Message
+//    .Status newStatus)
+//  throws DAOException
+//{
+//  try (Connection connection = dataSource.getConnection();
+//    PreparedStatement statement = connection.prepareStatement(resetExpiredMessageLocksSQL))
+//  {
+//    statement.setInt(1, newStatus.getCode());
+//    statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+//    statement.setInt(3, status.getCode());
+//    statement.setTimestamp(4, new Timestamp(System.currentTimeMillis() - (lockTimeout * 1000L)));
+//
+//    return statement.executeUpdate();
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new DAOException(String.format(
+//        "Failed to reset the expired locks for the messages with the status (%s)", status), e);
+//  }
+//}
 
-      return statement.executeUpdate();
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format(
-          "Failed to reset the expired locks for the messages with the status (%s)", status), e);
-    }
-  }
-
-  /**
-   * Reset the expired message part locks.
-   *
-   * @param lockTimeout the lock timeout in seconds
-   * @param status      the current status of the message parts that have been locked
-   * @param newStatus   the new status for the message parts that have been unlocked
-   *
-   * @return the number of message part locks reset
-   *
-   * @throws DAOException
-   */
-  public int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status, MessagePart
-      .Status newStatus)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetExpiredMessagePartLocksSQL))
-    {
-      statement.setInt(1, newStatus.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setInt(3, status.getCode());
-      statement.setTimestamp(4, new Timestamp(System.currentTimeMillis() - (lockTimeout * 1000L)));
-
-      return statement.executeUpdate();
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format(
-          "Failed to reset the expired locks for the message parts with the status (%s)", status),
-          e);
-    }
-  }
+///**
+// * Reset the expired message part locks.
+// *
+// * @param lockTimeout the lock timeout in seconds
+// * @param status      the current status of the message parts that have been locked
+// * @param newStatus   the new status for the message parts that have been unlocked
+// *
+// * @return the number of message part locks reset
+// *
+// * @throws DAOException
+// */
+//public int resetExpiredMessagePartLocks(int lockTimeout, MessagePart.Status status, MessagePart
+//    .Status newStatus)
+//  throws DAOException
+//{
+//  try (Connection connection = dataSource.getConnection();
+//    PreparedStatement statement = connection.prepareStatement(resetExpiredMessagePartLocksSQL))
+//  {
+//    statement.setInt(1, newStatus.getCode());
+//    statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+//    statement.setInt(3, status.getCode());
+//    statement.setTimestamp(4, new Timestamp(System.currentTimeMillis() - (lockTimeout * 1000L)));
+//
+//    return statement.executeUpdate();
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new DAOException(String.format(
+//        "Failed to reset the expired locks for the message parts with the status (%s)", status),
+//        e);
+//  }
+//}
 
   /**
    * Reset the message locks.
@@ -1358,72 +1375,72 @@ public class MessagingDAO
     }
   }
 
-  /**
-   * Set the status for a message part.
-   *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *               part
-   * @param status the new status
-   *
-   * @throws DAOException
-   */
-  public void setMessagePartStatus(UUID id, MessagePart.Status status)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(setMessagePartStatusSQL))
-    {
-      statement.setInt(1, status.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, id);
+///**
+// * Set the status for a message part.
+// *
+// * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
+// *               part
+// * @param status the new status
+// *
+// * @throws DAOException
+// */
+//public void setMessagePartStatus(UUID id, MessagePart.Status status)
+//  throws DAOException
+//{
+//  try (Connection connection = dataSource.getConnection();
+//    PreparedStatement statement = connection.prepareStatement(setMessagePartStatusSQL))
+//  {
+//    statement.setInt(1, status.getCode());
+//    statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+//    statement.setObject(3, id);
+//
+//    if (statement.executeUpdate() != 1)
+//    {
+//      throw new DAOException(String.format(
+//          "No rows were affected as a result of executing the SQL statement (%s)",
+//          setMessagePartStatusSQL));
+//    }
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new DAOException(String.format(
+//        "Failed to set the status for the message part (%s) to (%s) in the database", id,
+//        status.toString()), e);
+//  }
+//}
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new DAOException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            setMessagePartStatusSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format(
-          "Failed to set the status for the message part (%s) to (%s) in the database", id,
-          status.toString()), e);
-    }
-  }
-
-  /**
-   * Set the status for a message.
-   *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
-   * @param status the new status
-   *
-   * @throws DAOException
-   */
-  public void setMessageStatus(UUID id, Message.Status status)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(setMessageStatusSQL))
-    {
-      statement.setInt(1, status.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, id);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new DAOException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            setMessageStatusSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format(
-          "Failed to set the status for the message (%s) to (%s) in the database", id,
-          status.toString()), e);
-    }
-  }
+///**
+// * Set the status for a message.
+// *
+// * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
+// * @param status the new status
+// *
+// * @throws DAOException
+// */
+//public void setMessageStatus(UUID id, Message.Status status)
+//  throws DAOException
+//{
+//  try (Connection connection = dataSource.getConnection();
+//    PreparedStatement statement = connection.prepareStatement(setMessageStatusSQL))
+//  {
+//    statement.setInt(1, status.getCode());
+//    statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+//    statement.setObject(3, id);
+//
+//    if (statement.executeUpdate() != 1)
+//    {
+//      throw new DAOException(String.format(
+//          "No rows were affected as a result of executing the SQL statement (%s)",
+//          setMessageStatusSQL));
+//    }
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new DAOException(String.format(
+//        "Failed to set the status for the message (%s) to (%s) in the database", id,
+//        status.toString()), e);
+//  }
+//}
 
   /**
    * Unlock a locked message.
@@ -1458,46 +1475,94 @@ public class MessagingDAO
     }
   }
 
-  /**
-   * Unlock a locked message part.
-   *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *               part
-   * @param status the new status for the unlocked message part
-   *
-   * @throws DAOException
-   */
-  public void unlockMessagePart(UUID id, MessagePart.Status status)
-    throws DAOException
+  private ErrorReport buildErrorReportFromResultSet(ResultSet rs)
+    throws SQLException
   {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(unlockMessagePartSQL))
-    {
-      statement.setInt(1, status.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, id);
+    byte[] data = rs.getBytes(10);
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new DAOException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            unlockMessagePartSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format(
-          "Failed to unlock and set the status for the message part (%s) to (%s) in the database",
-          id, status.toString()), e);
-    }
+    return new ErrorReport((UUID) rs.getObject(1), (UUID) rs.getObject(2), rs.getInt(3),
+        rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7), rs.getString(8),
+        (UUID) rs.getObject(9),
+        (data == null)
+        ? new byte[0]
+        : data);
   }
+
+  private ErrorReportSummary buildErrorReportSummaryFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    String applicationName = rs.getString(3);
+
+    if (applicationName == null)
+    {
+      applicationName = "Unknown";
+    }
+
+    return new ErrorReportSummary((UUID) rs.getObject(1), (UUID) rs.getObject(2), applicationName,
+        rs.getInt(4), rs.getTimestamp(5), rs.getString(6), (UUID) rs.getObject(7));
+  }
+
+  private Message buildMessageFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    return new Message((UUID) rs.getObject(1), rs.getString(2), (UUID) rs.getObject(3),
+        (UUID) rs.getObject(4), (UUID) rs.getObject(5), Priority.fromCode(rs.getInt(6)),
+        Status.fromCode(rs.getInt(7)), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),
+        rs.getInt(11), rs.getInt(12), rs.getInt(13), rs.getString(14), rs.getTimestamp(15),
+        rs.getBytes(16), "", "");
+  }
+
+  private MessagePart buildMessagePartFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    return new MessagePart((UUID) rs.getObject(1), rs.getInt(2), rs.getInt(3), rs.getInt(4),
+        rs.getInt(5), MessagePart.Status.fromCode(rs.getInt(6)), rs.getTimestamp(7),
+        rs.getTimestamp(8), (UUID) rs.getObject(9), rs.getString(10), (UUID) rs.getObject(11),
+        (UUID) rs.getObject(12), (UUID) rs.getObject(13), Priority.fromCode(rs.getInt(14)),
+        rs.getTimestamp(15), rs.getString(16), rs.getString(17), rs.getString(18), rs.getString(
+        19), rs.getBytes(20));
+  }
+
+///**
+// * Unlock a locked message part.
+// *
+// * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the message
+// *               part
+// * @param status the new status for the unlocked message part
+// *
+// * @throws DAOException
+// */
+//public void unlockMessagePart(UUID id, MessagePart.Status status)
+//  throws DAOException
+//{
+//  try (Connection connection = dataSource.getConnection();
+//    PreparedStatement statement = connection.prepareStatement(unlockMessagePartSQL))
+//  {
+//    statement.setInt(1, status.getCode());
+//    statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+//    statement.setObject(3, id);
+//
+//    if (statement.executeUpdate() != 1)
+//    {
+//      throw new DAOException(String.format(
+//          "No rows were affected as a result of executing the SQL statement (%s)",
+//          unlockMessagePartSQL));
+//    }
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new DAOException(String.format(
+//        "Failed to unlock and set the status for the message part (%s) to (%s) in the database",
+//        id, status.toString()), e);
+//  }
+//}
 
   /**
    * Build the SQL statements for the DAO.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
    */
-  protected void buildStatements(String schemaPrefix)
+  private void buildStatements(String schemaPrefix)
   {
     // allPartsQueuedForMessageSQL
     allPartsQueuedForMessageSQL = "SELECT COUNT(MP.ID) FROM " + schemaPrefix + "MESSAGE_PARTS MP "
@@ -1560,8 +1625,8 @@ public class MessagingDAO
         + "MP.MSG_CHECKSUM, MP.LOCK_NAME, MP.DATA FROM " + schemaPrefix + "MESSAGE_PARTS MP "
         + "WHERE MP.STATUS=? AND MP.MSG_ID=? ORDER BY MP.PART_NO FOR UPDATE";
 
-    // getMessagePartsQueuedForDownloadForUserSQL
-    getMessagePartsQueuedForDownloadForUserSQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, "
+    // getMessagePartsQueuedForDownloadSQL
+    getMessagePartsQueuedForDownloadSQL = "SELECT MP.ID, MP.PART_NO, MP.TOTAL_PARTS, "
         + "MP.SEND_ATTEMPTS, MP.DOWNLOAD_ATTEMPTS, MP.STATUS, MP.PERSISTED, MP.UPDATED, "
         + "MP.MSG_ID, MP.MSG_USERNAME, MP.MSG_DEVICE_ID, MP.MSG_TYPE_ID, MP.MSG_CORRELATION_ID, "
         + "MP.MSG_PRIORITY, MP.MSG_CREATED, MP.MSG_DATA_HASH, MP.MSG_ENCRYPTION_IV, "
@@ -1569,8 +1634,8 @@ public class MessagingDAO
         + "WHERE MP.STATUS=? AND MP.MSG_USERNAME=? AND MP.MSG_DEVICE_ID=? " + "ORDER BY MP.PART_NO"
         + " FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
-    // getMessagesQueuedForDownloadForUserSQL
-    getMessagesQueuedForDownloadForUserSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, "
+    // getMessagesQueuedForDownloadSQL
+    getMessagesQueuedForDownloadSQL = "SELECT M.ID, M.USERNAME, M.DEVICE_ID, M.TYPE_ID, "
         + "M.CORRELATION_ID, M.PRIORITY, M.STATUS, M.CREATED, M.PERSISTED, M.UPDATED, "
         + "M.SEND_ATTEMPTS, M.PROCESS_ATTEMPTS, M.DOWNLOAD_ATTEMPTS, M.LOCK_NAME, "
         + "M.LAST_PROCESSED, M.DATA FROM " + schemaPrefix + "MESSAGES M "
@@ -1626,14 +1691,14 @@ public class MessagingDAO
         + "SET MP.STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=? WHERE MP.ID=?";
 
     // resetExpiredMessageLocksSQL
-    resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
-        + "SET M.STATUS=?, M.LOCK_NAME=NULL, M.UPDATED=? "
-        + "WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M.UPDATED < ?";
+    // resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    // + "SET M.STATUS=?, M.LOCK_NAME=NULL, M.UPDATED=? "
+    // + "WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M.UPDATED < ?";
 
     // resetExpiredMessagePartLocksSQL
-    resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
-        + "SET MP.STATUS=?, MP.LOCK_NAME=NULL, MP.UPDATED=? "
-        + "WHERE MP.LOCK_NAME IS NOT NULL AND MP.STATUS=? AND MP.UPDATED < ?";
+    // resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    // + "SET MP.STATUS=?, MP.LOCK_NAME=NULL, MP.UPDATED=? "
+    // + "WHERE MP.LOCK_NAME IS NOT NULL AND MP.STATUS=? AND MP.UPDATED < ?";
 
     // resetMessageLocksSQL
     resetMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
@@ -1644,67 +1709,19 @@ public class MessagingDAO
         + "SET MP.STATUS=?, MP.LOCK_NAME=NULL WHERE MP.LOCK_NAME=? AND MP.STATUS=?";
 
     // setMessagePartStatusSQL
-    setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
-        + "SET MP.STATUS=?, MP.UPDATED=? WHERE MP.ID=?";
+    // setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    // + "SET MP.STATUS=?, MP.UPDATED=? WHERE MP.ID=?";
 
     // setMessageStatusSQL
-    setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
-        + "SET M.STATUS=?, M.UPDATED=? WHERE M.ID=?";
+    // setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    // + "SET M.STATUS=?, M.UPDATED=? WHERE M.ID=?";
 
     // unlockMessagePartSQL
-    unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
-        + "SET MP.STATUS=?, MP.UPDATED=?, MP.LOCK_NAME=NULL WHERE MP.ID=?";
+    // unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    // + "SET MP.STATUS=?, MP.UPDATED=?, MP.LOCK_NAME=NULL WHERE MP.ID=?";
 
     // unlockMessageSQL
     unlockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
         + "SET M.STATUS=?, M.UPDATED=?, M.LOCK_NAME=NULL WHERE M.ID=?";
-  }
-
-  private ErrorReport buildErrorReportFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    byte[] data = rs.getBytes(10);
-
-    return new ErrorReport((UUID) rs.getObject(1), (UUID) rs.getObject(2), rs.getInt(3),
-        rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7), rs.getString(8),
-        (UUID) rs.getObject(9),
-        (data == null)
-        ? new byte[0]
-        : data);
-  }
-
-  private ErrorReportSummary buildErrorReportSummaryFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    String applicationName = rs.getString(3);
-
-    if (applicationName == null)
-    {
-      applicationName = "Unknown";
-    }
-
-    return new ErrorReportSummary((UUID) rs.getObject(1), (UUID) rs.getObject(2), applicationName,
-        rs.getInt(4), rs.getTimestamp(5), rs.getString(6), (UUID) rs.getObject(7));
-  }
-
-  private Message buildMessageFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    return new Message((UUID) rs.getObject(1), rs.getString(2), (UUID) rs.getObject(3),
-        (UUID) rs.getObject(4), (UUID) rs.getObject(5), Priority.fromCode(rs.getInt(6)),
-        Status.fromCode(rs.getInt(7)), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),
-        rs.getInt(11), rs.getInt(12), rs.getInt(13), rs.getString(14), rs.getTimestamp(15),
-        rs.getBytes(16), "", "");
-  }
-
-  private MessagePart buildMessagePartFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    return new MessagePart((UUID) rs.getObject(1), rs.getInt(2), rs.getInt(3), rs.getInt(4),
-        rs.getInt(5), MessagePart.Status.fromCode(rs.getInt(6)), rs.getTimestamp(7),
-        rs.getTimestamp(8), (UUID) rs.getObject(9), rs.getString(10), (UUID) rs.getObject(11),
-        (UUID) rs.getObject(12), (UUID) rs.getObject(13), Priority.fromCode(rs.getInt(14)),
-        rs.getTimestamp(15), rs.getString(16), rs.getString(17), rs.getString(18), rs.getString(
-        19), rs.getBytes(20));
   }
 }

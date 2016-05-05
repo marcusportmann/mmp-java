@@ -307,7 +307,7 @@ public class MessageTranslator
    *
    * @throws MessagingException
    */
-  protected String getMessageDataHash(byte[] data)
+  private String getMessageDataHash(byte[] data)
     throws MessagingException
   {
     try

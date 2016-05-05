@@ -77,8 +77,6 @@ public class SystemMessageTest
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
-    assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseMessage.getTypeId());
-
     AnotherTestResponseData responseData = messageTranslator.fromMessage(responseMessage,
         new AnotherTestResponseData());
 

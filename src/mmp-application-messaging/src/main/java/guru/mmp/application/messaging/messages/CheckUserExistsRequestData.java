@@ -93,7 +93,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
       return false;
     }
 
-    if (!rootElement.hasChild("User"))
+    if (!rootElement.hasChild("Username"))
     {
       return false;
     }

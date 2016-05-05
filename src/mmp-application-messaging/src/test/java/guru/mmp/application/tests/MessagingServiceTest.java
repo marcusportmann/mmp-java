@@ -18,8 +18,12 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.test.ApplicationClassRunner;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -30,7 +34,25 @@ import org.junit.runner.RunWith;
  * @author Marcus Portmann
  */
 @RunWith(ApplicationClassRunner.class)
-public class MessagingServiceTest {}
+public class MessagingServiceTest
+{
+  @Inject
+  private IMessagingService messagingService;
+
+  /**
+   * Test.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void test()
+    throws Exception
+  {
+    messagingService.getMaximumProcessingAttempts();
+  }
+}
+
+
 
 //INSERT INTO MMP.MESSAGE_TYPES (ID, NAME) VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', '');
 //INSERT INTO MMP.MESSAGE_TYPES (ID, NAME) VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
@@ -46,4 +68,3 @@ public class MessagingServiceTest {}
 //INSERT INTO MMP.MESSAGE_TYPES (ID, NAME) VALUES ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
 //INSERT INTO MMP.MESSAGE_TYPES (ID, NAME) VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
 //INSERT INTO MMP.MESSAGE_TYPES (ID, NAME) VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
-

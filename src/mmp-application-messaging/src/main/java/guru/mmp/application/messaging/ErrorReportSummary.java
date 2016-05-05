@@ -85,8 +85,8 @@ public class ErrorReportSummary
    * @param deviceId           the Universally Unique Identifier (UUID) used to uniquely identify
    *                           the device the error report originated from
    */
-  ErrorReportSummary(UUID id, UUID applicationId, String applicationName,
-      int applicationVersion, Date created, String who, UUID deviceId)
+  ErrorReportSummary(UUID id, UUID applicationId, String applicationName, int applicationVersion,
+      Date created, String who, UUID deviceId)
   {
     this.id = id;
     this.applicationId = applicationId;

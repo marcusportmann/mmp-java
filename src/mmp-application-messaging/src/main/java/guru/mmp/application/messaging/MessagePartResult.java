@@ -60,7 +60,7 @@ public class MessagePartResult
   /**
    * The flattened information for the exception that resulted from uploading the message part.
    */
-  String exception;
+  private String exception;
 
   /**
    * The result code.

@@ -203,7 +203,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId)
+  List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
     throws MessagingException;
 
   /**
@@ -217,7 +217,7 @@ public interface IMessagingService
    *
    * @throws MessagingException
    */
-  List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId)
+  List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
     throws MessagingException;
 
   /**

@@ -245,50 +245,6 @@ public class MessagePartDownloadResponse
   }
 
   /**
-   * Set the result code.
-   *
-   * @param code the result code
-   */
-  public void setCode(long code)
-  {
-    this.code = code;
-  }
-
-  /**
-   * Set the user-friendly text description of the result of processing the message part download
-   * request.
-   *
-   * @param detail the user-friendly text description of the result of processing the message part
-   *               download request
-   */
-  public void setDetail(String detail)
-  {
-    this.detail = detail;
-  }
-
-  /**
-   * Set the flattened information for the exception that resulted from processing the message part
-   * download request.
-   *
-   * @param exception the flattened information for the exception that resulted from processing
-   *                  the message part download request
-   */
-  public void setException(String exception)
-  {
-    this.exception = exception;
-  }
-
-  /**
-   * Set the message parts being downloaded.
-   *
-   * @param messageParts the message parts being downloaded
-   */
-  public void setMessageParts(List<MessagePart> messageParts)
-  {
-    this.messageParts = messageParts;
-  }
-
-  /**
    * Returns the String representation of the message part download response.
    *
    * @return the String representation of the message part download response.

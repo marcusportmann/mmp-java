@@ -34,7 +34,6 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessageResult
 {
   /**
@@ -42,12 +41,6 @@ public class MessageResult
    * message.
    */
   public static final int ERROR_DECRYPTION_FAILED = -3;
-
-  /**
-   * The message result code returned to indicate an error while downloading messages queued
-   * for a user-device combination.
-   */
-  public static final int ERROR_DOWNLOAD_FAILED = -6;
 
   /**
    * The message result code returned to indicate an invalid request.

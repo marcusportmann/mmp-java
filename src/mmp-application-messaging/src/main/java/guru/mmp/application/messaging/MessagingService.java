@@ -527,12 +527,12 @@ public class MessagingService
    *
    * @throws MessagingException
    */
-  public List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId)
+  public List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
     throws MessagingException
   {
     try
     {
-      return messagingDAO.getMessagePartsQueuedForDownloadForUser(username, deviceId, instanceName);
+      return messagingDAO.getMessagePartsQueuedForDownload(username, deviceId, instanceName);
     }
     catch (Throwable e)
     {
@@ -553,18 +553,18 @@ public class MessagingService
    *
    * @throws MessagingException
    */
-  public List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId)
+  public List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
     throws MessagingException
   {
     try
     {
-      return messagingDAO.getMessagesQueuedForDownloadForUser(username, deviceId, instanceName);
+      return messagingDAO.getMessagesQueuedForDownload(username, deviceId, instanceName);
     }
     catch (Throwable e)
     {
       throw new MessagingException(String.format(
-          "Failed to retrieve the messages for the user (%s) that have been queued for download by "
-          + "the device (%s)", username, deviceId), e);
+          "Failed to retrieve the messages for the user (%s) that have been queued for download by"
+          + " the device (%s)", username, deviceId), e);
     }
   }
 

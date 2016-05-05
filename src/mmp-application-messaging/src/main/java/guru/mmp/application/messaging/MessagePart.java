@@ -34,7 +34,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class MessagePart
 {
   /**
@@ -99,12 +98,6 @@ public class MessagePart
   private UUID messageId;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organisation the
-   * original message was associated with.
-   */
-  private UUID messageOrganisationId;
-
-  /**
    * The priority for the original message.
    */
   private Message.Priority messagePriority;
@@ -164,6 +157,7 @@ public class MessagePart
     this.partNo = Integer.parseInt(rootElement.getAttributeValue("partNo"));
     this.totalParts = Integer.parseInt(rootElement.getAttributeValue("totalParts"));
     this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
+    this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
     this.status = Status.INITIALISED;
 
     this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
@@ -279,7 +273,7 @@ public class MessagePart
    *                             processing
    * @param data                 the binary data for the message part
    */
-  public MessagePart(UUID id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
+  MessagePart(UUID id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
       Status status, Date persisted, Date updated, UUID messageId, String messageUsername,
       UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId, Message
       .Priority messagePriority, Date messageCreated, String messageDataHash,
@@ -455,22 +449,22 @@ public class MessagePart
     return id;
   }
 
-  /**
-   * Returns the name of the entity that has locked the message part for processing.
-   *
-   * @return the name of the entity that has locked the message part for processing
-   */
-  public String getLockName()
-  {
-    return lockName;
-  }
+//  /**
+//   * Returns the name of the entity that has locked the message part for processing.
+//   *
+//   * @return the name of the entity that has locked the message part for processing
+//   */
+//  public String getLockName()
+//  {
+//    return lockName;
+//  }
 
   /**
    * Returns the checksum for the original message.
    *
    * @return the checksum for the original message
    */
-  public String getMessageChecksum()
+  String getMessageChecksum()
   {
     return messageChecksum;
   }
@@ -622,15 +616,15 @@ public class MessagePart
     return totalParts;
   }
 
-  /**
-   * Returns the date and time the message part was last updated.
-   *
-   * @return the date and time the message part was last updated
-   */
-  public Date getUpdated()
-  {
-    return updated;
-  }
+//  /**
+//   * Returns the date and time the message part was last updated.
+//   *
+//   * @return the date and time the message part was last updated
+//   */
+//  public Date getUpdated()
+//  {
+//    return updated;
+//  }
 
   /**
    * Returns <code>true</code> if the data for the original message is encrypted or
@@ -685,113 +679,6 @@ public class MessagePart
   }
 
   /**
-   * Set the checksum for the original message.
-   *
-   * @param messageChecksum the checksum for the original message
-   */
-  public void setMessageChecksum(String messageChecksum)
-  {
-    this.messageChecksum = messageChecksum;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the original message.
-   *
-   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
-   *                             original message
-   */
-  public void setMessageCorrelationId(UUID messageCorrelationId)
-  {
-    this.messageCorrelationId = messageCorrelationId;
-  }
-
-  /**
-   * Set the date and time the original message was created.
-   *
-   * @param messageCreated the date and time the original message was created
-   */
-  public void setMessageCreated(Date messageCreated)
-  {
-    this.messageCreated = messageCreated;
-  }
-
-  /**
-   * Set the hash of the unencrypted data for the original message.
-   *
-   * @param messageDataHash the hash of the unencrypted data for the original message
-   */
-  public void setMessageDataHash(String messageDataHash)
-  {
-    this.messageDataHash = messageDataHash;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the original
-   * message originated from.
-   *
-   * @param messageDeviceId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        device the original message originated from
-   */
-  public void setMessageDeviceId(UUID messageDeviceId)
-  {
-    this.messageDeviceId = messageDeviceId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the original message.
-   *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                  original message
-   */
-  public void setMessageId(UUID messageId)
-  {
-    this.messageId = messageId;
-  }
-
-  /**
-   * Set the priority for the original message.
-   *
-   * @param messagePriority the priority for the original message
-   */
-  public void setMessagePriority(Message.Priority messagePriority)
-  {
-    this.messagePriority = messagePriority;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the type of the original
-   * message.
-   *
-   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      type of the original message
-   */
-  public void setMessageTypeId(UUID messageTypeId)
-  {
-    this.messageTypeId = messageTypeId;
-  }
-
-  /**
-   * Set the username identifying the user associated with the original message.
-   *
-   * @param messageUsername the username identifying the user associated with the original message
-   */
-  public void setMessageUsername(String messageUsername)
-  {
-    this.messageUsername = messageUsername;
-  }
-
-  /**
-   * Set the number of the message part in the set of message parts for the original message.
-   *
-   * @param partNo the number of the message part in the set of message parts for the original
-   *               message
-   */
-  public void setPartNo(int partNo)
-  {
-    this.partNo = partNo;
-  }
-
-  /**
    * Set the date and time the message part was persisted.
    *
    * @param persisted the date and time the message part was persisted
@@ -799,16 +686,6 @@ public class MessagePart
   public void setPersisted(Date persisted)
   {
     this.persisted = persisted;
-  }
-
-  /**
-   * Set the number of times that the sending of the message part was attempted.
-   *
-   * @param sendAttempts the number of times that the sending of the message part was attempted
-   */
-  public void setSendAttempts(int sendAttempts)
-  {
-    this.sendAttempts = sendAttempts;
   }
 
   /**
@@ -822,17 +699,6 @@ public class MessagePart
   }
 
   /**
-   * Set the total number of parts in the set of message parts for the original message.
-   *
-   * @param totalParts the total number of parts in the set of message parts for the original
-   *                   message
-   */
-  public void setTotalParts(int totalParts)
-  {
-    this.totalParts = totalParts;
-  }
-
-  /**
    * Set the date and time the message part was last updated.
    *
    * @param updated the date and time the message part was last updated
@@ -842,17 +708,6 @@ public class MessagePart
     this.updated = updated;
   }
 
-  /**
-   * Set the base-64 encoded initialisation vector for the encryption scheme for the original
-   * message.
-   *
-   * @param messageEncryptionIV the base-64 encoded initialisation vector for the encryption scheme
-   *                            for the original message
-   */
-  public void setmessageEncryptionIV(String messageEncryptionIV)
-  {
-    this.messageEncryptionIV = messageEncryptionIV;
-  }
 
   /**
    * Returns the String representation of the message part.
@@ -868,6 +723,7 @@ public class MessagePart
     buffer.append(" partNo=\"").append(partNo).append("\"");
     buffer.append(" totalParts=\"").append(totalParts).append("\"");
     buffer.append(" sendAttempts=\"").append(sendAttempts).append("\"");
+    buffer.append(" downloadAttempts=\"").append(downloadAttempts).append("\"");
     buffer.append(" status=\"").append(status).append("\"");
 
     if (persisted != null)
@@ -908,6 +764,7 @@ public class MessagePart
     rootElement.setAttribute("partNo", Integer.toString(partNo));
     rootElement.setAttribute("totalParts", Integer.toString(totalParts));
     rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
+    rootElement.setAttribute("downloadAttempts", Integer.toString(downloadAttempts));
     rootElement.setAttribute("messageId", messageId.toString());
     rootElement.setAttribute("messageUsername", messageUsername);
     rootElement.setAttribute("messageDeviceId", messageDeviceId.toString());

@@ -184,7 +184,7 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<MessagePart> getMessagePartsQueuedForDownloadForUser(String username, UUID deviceId,
+  List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId,
       String lockName)
     throws DAOException;
 
@@ -201,7 +201,7 @@ public interface IMessagingDAO
    *
    * @throws DAOException
    */
-  List<Message> getMessagesQueuedForDownloadForUser(String username, UUID deviceId, String lockName)
+  List<Message> getMessagesQueuedForDownload(String username, UUID deviceId, String lockName)
     throws DAOException;
 
   /**

@@ -79,7 +79,7 @@ public class MessagingServlet extends HttpServlet
   {
     super.init(config);
 
-    initializeMessagingServlet();
+    initMessagingServlet();
   }
 
   @Override
@@ -95,7 +95,7 @@ public class MessagingServlet extends HttpServlet
   {
     if (!isInitialized)
     {
-      initializeMessagingServlet();
+      initMessagingServlet();
     }
 
     // Check the format of the request data
@@ -170,7 +170,7 @@ public class MessagingServlet extends HttpServlet
     }
   }
 
-  private synchronized void initializeMessagingServlet()
+  private synchronized void initMessagingServlet()
   {
     if (!isInitialized)
     {
@@ -372,9 +372,10 @@ public class MessagingServlet extends HttpServlet
       logger.warn("Failed to process the invalid message download request WBXML document: "
           + document.toString());
 
-      MessageResult result = new MessageResult(MessageResult.ERROR_INVALID_REQUEST,
-          "Failed to process the invalid WBXML document containing the message download request "
-          + "information");
+      MessageDownloadResponse result = new MessageDownloadResponse(MessageDownloadResponse
+          .ERROR_INVALID_REQUEST,
+          "Failed to process the invalid WBXML document containing the message download request"
+          + " information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -385,7 +386,7 @@ public class MessagingServlet extends HttpServlet
 
     try
     {
-      List<Message> messages = messagingService.getMessagesQueuedForDownloadForUser(
+      List<Message> messages = messagingService.getMessagesQueuedForDownload(
           downloadRequest.getUsername(), downloadRequest.getDeviceId());
 
       if (logger.isDebugEnabled())
@@ -425,7 +426,8 @@ public class MessagingServlet extends HttpServlet
           "Failed to retrieve the messages that have been queued for download for the user (%s) and"
           + " the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()), e);
 
-      MessageDownloadResponse downloadResponse = new MessageDownloadResponse(-1, String.format(
+      MessageDownloadResponse downloadResponse = new MessageDownloadResponse(MessageDownloadResponse
+          .ERROR_UNKNOWN, String.format(
           "Failed to retrieve the messages that have been queued for download for the user (%s) and"
           + " the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()), e);
 
@@ -521,9 +523,10 @@ public class MessagingServlet extends HttpServlet
       logger.warn("Failed to process the invalid message part download request WBXML document: "
           + document.toString());
 
-      MessageResult result = new MessageResult(MessageResult.ERROR_INVALID_REQUEST,
-          "Failed to process the invalid WBXML document containing the message part download "
-          + "request information");
+      MessagePartDownloadResponse result = new MessagePartDownloadResponse(
+          MessagePartDownloadResponse.ERROR_INVALID_REQUEST,
+          "Failed to process the invalid WBXML document containing the message part download"
+          + " request information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -534,7 +537,7 @@ public class MessagingServlet extends HttpServlet
 
     try
     {
-      List<MessagePart> messageParts = messagingService.getMessagePartsQueuedForDownloadForUser(
+      List<MessagePart> messageParts = messagingService.getMessagePartsQueuedForDownload(
           downloadRequest.getUsername(), downloadRequest.getDeviceId());
 
       if (logger.isDebugEnabled())
@@ -569,13 +572,14 @@ public class MessagingServlet extends HttpServlet
     catch (Throwable e)
     {
       logger.error(String.format(
-          "Failed to retrieve the message parts that have been queued for download for the user "
-          + "(%s) and the device (%s)", downloadRequest.getUsername(),
+          "Failed to retrieve the message parts that have been queued for download for the user"
+          + " (%s) and the device (%s)", downloadRequest.getUsername(),
           downloadRequest.getDeviceId()), e);
 
-      MessageDownloadResponse downloadResponse = new MessageDownloadResponse(-1, String.format(
-          "Failed to retrieve the message parts that have been queued for download for the user "
-          + "(%s) and the device (%s)", downloadRequest.getUsername(),
+      MessagePartDownloadResponse downloadResponse = new MessagePartDownloadResponse(
+          MessagePartDownloadResponse.ERROR_UNKNOWN, String.format(
+          "Failed to retrieve the message parts that have been queued for download for the user"
+          + " (%s) and the device (%s)", downloadRequest.getUsername(),
           downloadRequest.getDeviceId()), e);
 
       writeResponseDocument(downloadResponse.toWBXML(), response);
@@ -642,8 +646,8 @@ public class MessagingServlet extends HttpServlet
 
       MessageReceivedResponse result = new MessageReceivedResponse(MessageReceivedResponse
           .ERROR_INVALID_REQUEST,
-          "Failed to process the invalid WBXML document containing the message received request "
-          + "information");
+          "Failed to process the invalid WBXML document containing the message received request"
+          + " information");
 
       writeResponseDocument(result.toWBXML(), response);
 
