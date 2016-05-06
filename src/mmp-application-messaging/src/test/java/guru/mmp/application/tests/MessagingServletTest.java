@@ -102,46 +102,39 @@ public class MessagingServletTest
     catch (Throwable ignored) {}
 
     // Retrieve the messages queued for download
-    boolean hasFinishedDownloadingMessages = false;
+    MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
+        USERNAME);
 
-    while (!hasFinishedDownloadingMessages)
+    assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
+    assertEquals(messageDownloadResponse.getNumberOfMessages(),
+        messageDownloadResponse.getMessages().size());
+
+    List<Message> messages = messageDownloadResponse.getMessages();
+
+    assertEquals(1, messages.size());
+
+    logger.info("Downloaded " + messages.size() + " messages");
+
+    for (Message message : messages)
     {
-      MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
-          USERNAME);
+      assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
+      assertEquals(1, message.getDownloadAttempts());
 
-      assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
-      assertEquals(messageDownloadResponse.getNumberOfMessages(),
-          messageDownloadResponse.getMessages().size());
+      logger.info("Downloaded message (" + message.getId() + ") with type (" + message.getTypeId()
+          + ")");
 
-      List<Message> messages = messageDownloadResponse.getMessages();
+      MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
+          message.getId());
 
-      assertEquals(1, messages.size());
+      assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
 
-      hasFinishedDownloadingMessages = messages.size() == 0;
+      AnotherTestResponseData responseData = messageTranslator.fromMessage(message,
+          new AnotherTestResponseData());
 
-      logger.info("Downloaded " + messages.size() + " messages");
-
-      for (Message message : messages)
-      {
-        assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
-        assertEquals(1, message.getDownloadAttempts());
-
-        logger.info("Downloaded message (" + message.getId() + ") with type ("
-            + message.getTypeId() + ")");
-
-        MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
-            message.getId());
-
-        assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
-
-        AnotherTestResponseData responseData = messageTranslator.fromMessage(message,
-            new AnotherTestResponseData());
-
-        assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
-        assertEquals(Message.Priority.HIGH, responseData.getMessageTypePriority());
-        assertEquals("Test Value", responseData.getTestValue());
-        assertArrayEquals("Test Data".getBytes(), requestData.getTestData());
-      }
+      assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+      assertEquals(Message.Priority.HIGH, responseData.getMessageTypePriority());
+      assertEquals("Test Value", responseData.getTestValue());
+      assertArrayEquals("Test Data".getBytes(), requestData.getTestData());
     }
   }
 
@@ -180,69 +173,79 @@ public class MessagingServletTest
     catch (Throwable ignored) {}
 
     // Retrieve the messages queued for download
-    boolean hasFinishedDownloadingMessages = false;
+    MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
+        USERNAME);
 
-    while (!hasFinishedDownloadingMessages)
+    assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
+
+    List<Message> messages = messageDownloadResponse.getMessages();
+
+    logger.info("Downloaded " + messages.size() + " messages");
+
+    for (Message message : messages)
     {
-      MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
-          USERNAME);
+      logger.info("Downloaded message (" + message.getId() + ") with type (" + message.getTypeId()
+          + ")");
 
-      assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
+      MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
+          message.getId());
 
-      List<Message> messages = messageDownloadResponse.getMessages();
+      assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
 
-      hasFinishedDownloadingMessages = messages.size() == 0;
+      AnotherTestResponseData responseData = messageTranslator.fromMessage(
+          messageResult.getMessage(), new AnotherTestResponseData());
 
-      logger.info("Downloaded " + messages.size() + " messages");
-
-      for (Message message : messages)
-      {
-        logger.info("Downloaded message (" + message.getId() + ") with type ("
-            + message.getTypeId() + ")");
-
-        MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
-            message.getId());
-
-        assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
-
-        AnotherTestResponseData responseData = messageTranslator.fromMessage(
-            messageResult.getMessage(), new AnotherTestResponseData());
-
-        assertEquals("Test Value", responseData.getTestValue());
-        assertArrayEquals(testData, requestData.getTestData());
-      }
+      assertEquals("Test Value", responseData.getTestValue());
+      assertArrayEquals(testData, requestData.getTestData());
     }
 
-    boolean hasFinishedDownloadingMessageParts = false;
+    // Retrieve the message parts queued for download
+    MessagePartDownloadResponse messagePartDownloadResponse = sendMessagePartDownloadRequest(
+        DEVICE_ID, USERNAME);
 
-    while (!hasFinishedDownloadingMessageParts)
+    assertEquals(MessagePartDownloadResponse.SUCCESS, messagePartDownloadResponse.getCode());
+
+    List<MessagePart> messageParts = messagePartDownloadResponse.getMessageParts();
+
+    assertEquals(2, messageParts.size());
+
+    logger.info("Downloaded " + messageParts.size() + " message parts");
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    for (MessagePart messagePart : messageParts)
     {
-      MessagePartDownloadResponse messagePartDownloadResponse = sendMessagePartDownloadRequest(
-          DEVICE_ID, USERNAME);
+      assertEquals(1, messagePart.getDownloadAttempts());
+      assertEquals(requestMessage.getCorrelationId(), messagePart.getMessageCorrelationId());
 
-      assertEquals(MessagePartDownloadResponse.SUCCESS, messagePartDownloadResponse.getCode());
+      logger.info("Downloaded message part (" + messagePart.getPartNo() + "/"
+          + messagePart.getTotalParts() + ") with ID (" + messagePart.getId() + ") and type ("
+          + messagePart.getMessageTypeId() + ")");
 
-      List<MessagePart> messageParts = messagePartDownloadResponse.getMessageParts();
+      MessagePartReceivedResponse messagePartReceivedResponse = sendMessagePartReceivedRequest(
+          DEVICE_ID, messagePart.getId());
 
-      hasFinishedDownloadingMessageParts = messageParts.size() == 0;
+      assertEquals(0, messagePartReceivedResponse.getCode());
 
-      logger.info("Downloaded " + messageParts.size() + " message parts");
-
-      for (MessagePart messagePart : messageParts)
-      {
-        assertEquals(1, messagePart.getDownloadAttempts());
-        assertEquals(requestMessage.getCorrelationId(), messagePart.getMessageCorrelationId());
-
-        logger.info("Downloaded message part (" + messagePart.getPartNo() + "/"
-            + messagePart.getTotalParts() + ") with ID (" + messagePart.getId() + ") and type ("
-            + messagePart.getMessageTypeId() + ")");
-
-        MessagePartReceivedResponse messagePartReceivedResponse = sendMessagePartReceivedRequest(
-            DEVICE_ID, messagePart.getId());
-
-        assertEquals(0, messagePartReceivedResponse.getCode());
-      }
+      baos.write(messagePart.getData());
     }
+
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+    String messageChecksum = Base64.encodeBytes(md.digest(baos.toByteArray()));
+
+    assertEquals(messageParts.get(0).getMessageChecksum(), messageChecksum);
+
+    Message reconstructedMessage = new Message(messageParts.get(0).getMessageUsername(),
+        messageParts.get(0).getMessageDeviceId(), messageParts.get(0).getMessageTypeId(),
+        messageParts.get(0).getMessageCorrelationId(), messageParts.get(0).getMessagePriority(),
+        baos.toByteArray(), messageParts.get(0).getMessageDataHash(), messageParts.get(0)
+        .getMessageEncryptionIV());
+
+    AnotherTestResponseData anotherTestResponseData = messageTranslator.fromMessage(
+        reconstructedMessage, new AnotherTestResponseData());
+
+    assertArrayEquals(testData, anotherTestResponseData.getTestData());
   }
 
   /**
