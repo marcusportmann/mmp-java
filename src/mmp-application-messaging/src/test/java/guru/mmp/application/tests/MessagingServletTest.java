@@ -87,7 +87,7 @@ public class MessagingServletTest
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
         "Test Data".getBytes());
 
-    Message requestMessage = messageTranslator.toMessage(requestData);
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -115,12 +115,15 @@ public class MessagingServletTest
 
       List<Message> messages = messageDownloadResponse.getMessages();
 
+      assertEquals(1, messages.size());
+
       hasFinishedDownloadingMessages = messages.size() == 0;
 
       logger.info("Downloaded " + messages.size() + " messages");
 
       for (Message message : messages)
       {
+        assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
         assertEquals(1, message.getDownloadAttempts());
 
         logger.info("Downloaded message (" + message.getId() + ") with type ("
@@ -162,7 +165,7 @@ public class MessagingServletTest
 
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value", testData);
 
-    Message requestMessage = messageTranslator.toMessage(requestData);
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -228,6 +231,7 @@ public class MessagingServletTest
       for (MessagePart messagePart : messageParts)
       {
         assertEquals(1, messagePart.getDownloadAttempts());
+        assertEquals(requestMessage.getCorrelationId(), messagePart.getMessageCorrelationId());
 
         logger.info("Downloaded message part (" + messagePart.getPartNo() + "/"
             + messagePart.getTotalParts() + ") with ID (" + messagePart.getId() + ") and type ("
