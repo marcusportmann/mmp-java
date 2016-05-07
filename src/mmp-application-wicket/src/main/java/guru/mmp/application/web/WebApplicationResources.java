@@ -32,6 +32,5 @@ import javax.enterprise.inject.Default;
 public class WebApplicationResources
 {
   /* Logger */
-
   // private static final Logger logger = LoggerFactory.getLogger(WebApplicationResources.class);
 }

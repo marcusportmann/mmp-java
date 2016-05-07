@@ -91,7 +91,7 @@
     <url-pattern>/servlet/ViewReportServlet</url-pattern>
   </servlet-mapping>
 
-  <display-name>mmp-sample-wicket-web</display-name>
+  <display-name>mmp-sample-wicket-war</display-name>
 
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
