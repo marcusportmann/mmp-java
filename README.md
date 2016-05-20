@@ -8,16 +8,18 @@ The mmp-java project provides the following Open Source Java libraries:
 - **mmp-common** - contains the Java utility classes and resources that can be used in the development of any type of Java application.
 - **mmp-corba** - contains the Java classes and resources used to develop CORBA applications.
 - **mmp-application** - contains the Java classes and resources used to develop JEE applications.
-- **mmp-application-wicket** - contains the JEE and Wicket components that can be used to develop JEE applications.
+- **mmp-application-wicket** - contains the JEE and Wicket components that can be used to develop Wicket-based JEE applications.
 - **mmp-application-messaging** - contains the Java classes and resources that provide mobile messaging capabilities for JEE applications.
 - **mmp-application-messaging-wicket** - contains the JEE and Wicket components that add UI capabilities to the mobile messaging capabilities provided by the mmp-application-messaging project.
 - **mmp-application-reporting** - contains the Java classes and resources that provide reporting capabilities for JEE applications.
 - **mmp-application-reporting-wicket** - contains the JEE and Wicket components that add UI capabilities to the reporting capabilities provided by the mmp-application-reporting project.
+- **mmp-application-scheduler** - contains the Java classes and resources that provide job scheduling capabilities for JEE applications.
+- **mmp-application-scheduler-wicket** - contains the JEE and Wicket components that add UI capabilities to the job scheduling capabilities provided by the mmp-application-scheduler project.
 - **mmp-application-sms** - contains the Java classes and resources that provide SMS capabilities for JEE applications.
+- **mmp-application-test** - contains the Java classes and resources that provide JUnit-based testing capabilities for JEE applications.
 - **mmp-tomcat** - contains the the Java classes and resources used to develop JEE web applications that are deployed on the Tomcat application server.
 - **mmp-sharepoint** - contains the Java classes and resources used to integrate with SharePoint.
-- **mmp-sample** - provides the JEE sample application.
-
+- **mmp-sample-wicket-war** - provides the Wicket-based JEE sample application.
 
 Licensed under the Apache License, Version 2.0 (the "License")
 
