@@ -60,7 +60,7 @@ public class TestSecureHttpClientBuilder
     HttpClient httpClient = null;
 
     // Configure the connection
-    SecureHttpClientBuilder secureHttpClientBuilder = new SecureHttpClientBuilder();
+    SecureHttpClientBuilder secureHttpClientBuilder = new SecureHttpClientBuilder(false);
 
     RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(30000)
         .setConnectTimeout(30000).setSocketTimeout(30000).build();

@@ -46,11 +46,17 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
   private static final Logger logger = LoggerFactory.getLogger(SecureHttpClientBuilder.class);
   private SSLConnectionSocketFactory sslSocketFactory;
 
+  private boolean serverValidationEnabled = true;
+
   /**
-   * Constructs a new <code>SecureHttpClient</code>.
+   * Constructs a new <code>SecureHttpClientBuilder</code>.
+   *
+   * @param serverValidationEnabled should the connection to the remote server be validated
    */
-  public SecureHttpClientBuilder()
+  public SecureHttpClientBuilder(boolean serverValidationEnabled)
   {
+    this.serverValidationEnabled = serverValidationEnabled;
+
     SSLConnectionSocketFactory sslConnectionSocketFactory = getSSLConnectionSocketFactory();
 
     Registry<ConnectionSocketFactory> socketFactoryRegistry =
@@ -83,7 +89,10 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
           public void checkServerTrusted(X509Certificate[] chain, String authType)
             throws CertificateException
           {
-            // Skip server verification step
+            if (serverValidationEnabled)
+            {
+              // TODO: Implement server certificate validation
+            }
           }
 
           public X509Certificate[] getAcceptedIssuers()
@@ -100,7 +109,10 @@ public class SecureHttpClientBuilder extends HttpClientBuilder
               @Override
               public boolean verify(String hostname, SSLSession sslSession)
               {
-                // TODO: Implement proper verification of the server identity -- MARCUS
+                if (serverValidationEnabled)
+                {
+                  // TODO: Implement proper verification of the server identity -- MARCUS
+                }
 
                 return true;
 

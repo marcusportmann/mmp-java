@@ -172,6 +172,6 @@ class WSDL2JavaTask extends DefaultTask {
       input.close();
     }
   }
-}  
+}
 
 

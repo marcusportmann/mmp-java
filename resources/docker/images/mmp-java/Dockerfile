@@ -17,7 +17,7 @@ ENV JAVA_PACKAGE       jdk
 
 # Download and unarchive Java
 RUN mkdir /opt && curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie"\
-  http://download.oracle.com/otn-pub/java/jdk/8u77-b02/server-jre-8u77-linux-x64.tar.gz \
+  http://download.oracle.com/otn-pub/java/jdk/8u92-b14/server-jre-8u92-linux-x64.tar.gz \
     | tar -xzf - -C /opt &&\
     ln -s /opt/jdk1.8.0_77 /opt/jdk &&\
     rm -rf /opt/jdk/*src.zip \

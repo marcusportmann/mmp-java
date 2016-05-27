@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * The <code>NavigationGroup</code> class stores the information for a navigation group which
- * groups a number of navigation items under an application's navigation hierarchy.
+ * groups a number of navigation items under a web application's navigation hierarchy.
  *
  * @author Marcus Portmann
  */

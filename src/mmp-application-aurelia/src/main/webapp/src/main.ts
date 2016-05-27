@@ -1,9 +1,9 @@
 import {Aurelia} from "aurelia-framework";
 import {bootstrap} from "aurelia-bootstrapper-webpack";
 
-//import "../node_modules/bootstrap/dist/css/bootstrap.css";
-//import "../node_modules/font-awesome/css/font-awesome.css";
-//import "../template/css/template.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.css";
+import "../node_modules/font-awesome/css/font-awesome.css";
+import "../template/css/template.css";
 
 bootstrap((aurelia:Aurelia):void => {
   aurelia.use
@@ -13,10 +13,4 @@ bootstrap((aurelia:Aurelia):void => {
   const rootElement = document.body;
   aurelia.start().then(() => aurelia.setRoot('application', rootElement));
   rootElement.setAttribute('aurelia-app', '');
-
-
-  alert(rootElement.getAttribute('aurelia-app'));
-
-
-
 });
