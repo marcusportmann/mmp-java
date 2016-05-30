@@ -1358,37 +1358,13 @@ CREATE INDEX MMP_PROCESS_INSTANCE_EVENTS_PROCESS_INSTANCE_IX
   (PROCESS_INSTANCE_ID);
 
 COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance event';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance event';
 
 COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.PROCESS_INSTANCE_ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance the process instance event is associated with';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance the process instance event is associated with';
 
 COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.DATA
-IS 'The data for the process instance event';
-
-
-
-CREATE TABLE MMP.PROCESS_INSTANCE_EVENTS (
-  ID                   UUID NOT NULL,
-  PROCESS_INSTANCE_ID  UUID NOT NULL,
-  DATA                 BYTEA NOT NULL,
-
-  PRIMARY KEY (ID),
-  CONSTRAINT MMP_PROCESS_INSTANCE_EVENTS_PROCESS_INSTANCE_FK FOREIGN KEY (PROCESS_INSTANCE_ID) REFERENCES MMP.PROCESS_INSTANCES(ID)
-);
-
-CREATE INDEX MMP_PROCESS_INSTANCE_EVENTS_PROCESS_INSTANCE_IX
-  ON MMP.PROCESS_INSTANCE_EVENTS
-  (PROCESS_INSTANCE_ID);
-
-COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance event';
-
-COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.PROCESS_INSTANCE_ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the process instance the process instance event is associated with';
-
-COMMENT ON COLUMN MMP.PROCESS_INSTANCE_EVENTS.DATA
-IS 'The data for the process instance event';
+  IS 'The data for the process instance event';
 
 
 
