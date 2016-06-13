@@ -88,8 +88,8 @@ subprojects.findAll {
 subprojects.findAll {
   it.name in [
       'mmp-application',
+      'mmp-sample-wicket',
       'mmp-sample-wicket-client',
-      'mmp-sample-wicket-war',
       'mmp-sharepoint'
   ]
 }.each {

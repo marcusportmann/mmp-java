@@ -1,3 +1,8 @@
+.nav-main ul
+{
+  padding-left: 32px;
+}
+
 .nav-header-logged-in-user
 {
   display: inline-block;

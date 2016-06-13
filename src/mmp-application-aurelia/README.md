@@ -5,6 +5,83 @@
 
 Before you start, make sure you have a working [NodeJS](http://nodejs.org/) environment, preferably with NPM 3.
 
+Ensure that the  **typings** and **jspm** utilities are installed globally by executing the following commands (this will require *root* or *Administrator* privileges):
+
+```shell
+npm install typings -g
+npm install jspm -g
+```
+
+Create a new Gradle-based JEE web project.
+
+Create the  **src/main/webapp/.gitignore** file with the following contents
+
+```text
+/jspm_packages
+/node_modules
+/typings
+npm-debug.log
+```
+ 
+From the **src/main/webapp** folder, execute the following command:
+
+```shell
+jspm init -y
+```
+
+
+
+
+Execute the following command to install the Aurelia framework:
+
+jspm install aurelia-framework 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Getting started
+
+Before you start, make sure you have a working [NodeJS](http://nodejs.org/) environment, preferably with NPM 3.
+
 Ensure that the  **typings** utility is installed globally by executing the following command (this will require *root* or *Administrator* privileges):
 
 ```shell
