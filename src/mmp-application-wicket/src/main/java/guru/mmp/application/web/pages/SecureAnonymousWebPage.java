@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation type that is used to identify web pages that can be accessed by authenticated users
- * regardless of their roles.
+ * but does not require specific permissions.
  *
  * @author Marcus Portmann
  */

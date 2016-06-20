@@ -26,12 +26,12 @@ import java.lang.annotation.Target;
 /**
  * Annotation type that is used to identify secure web pages. The value specified for the
  * annotation is the function code that uniquely identifies the function associated with the
- * web page e.g. Application.Security.CreateUser, etc.
+ * web page e.g. Application.UserAdministration, etc.
  * <p/>
- * Function codes can refer to a specific "function" e.g. Application.Security.CreateUser or a
- * "functionality grouping" e.g. Application.Security.UserManagement. The decision
- * on whether to use a "function" or "functionality grouping" is dependent on the granularity
- * of the application's access control.
+ * Function codes can refer to a specific "function" e.g. Application.Dashboard or a
+ * "functionality grouping" e.g. Application.UserAdministration. The decision on whether to use
+ * a "function" or "functionality grouping" is dependent on the granularity of the application's
+ * access control.
  *
  * @author Marcus Portmann
  */
