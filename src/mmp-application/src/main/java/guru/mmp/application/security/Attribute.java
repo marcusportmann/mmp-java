@@ -128,7 +128,7 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the binary value for the <code>Attribute</code> instance with the specified name in the
-   * specified list
+   *         specified list
    *
    * @throws AttributeException
    */
@@ -164,7 +164,7 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list
+   *         specified name in the specified list
    *
    * @throws AttributeException
    */
@@ -216,7 +216,7 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>double</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list
+   *         specified name in the specified list
    *
    * @throws AttributeException
    */
@@ -268,7 +268,7 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
-   * name in the specified list
+   *         name in the specified list
    *
    * @throws AttributeException
    */
@@ -320,7 +320,7 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>String</code> value for the <code>Attribute</code> instance with the
-   * specified name in the specified list
+   *         specified name in the specified list
    *
    * @throws AttributeException
    */

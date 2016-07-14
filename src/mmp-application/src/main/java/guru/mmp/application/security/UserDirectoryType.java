@@ -62,7 +62,7 @@ public class UserDirectoryType
    * configuration for the user directory type.
    *
    * @return the Java class that implements the Wicket component used to administer the
-   * configuration for the user directory type
+   *         configuration for the user directory type
    *
    * @throws SecurityException
    */
@@ -92,7 +92,7 @@ public class UserDirectoryType
    * to administer the configuration for the user directory type.
    *
    * @return the fully qualified name of the Java class that implements the Wicket component used
-   * to administer the configuration for the user directory type
+   *         to administer the configuration for the user directory type
    */
   public String getAdministrationClassName()
   {
@@ -104,7 +104,7 @@ public class UserDirectoryType
    * type.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * type
+   *         type
    */
   public UUID getId()
   {

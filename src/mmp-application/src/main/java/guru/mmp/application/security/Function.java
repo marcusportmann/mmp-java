@@ -22,7 +22,7 @@ import java.util.UUID;
 
 /**
  * The <code>Function</code> class stores the information for an authorised function that can be
- * assigned to <code>Account</code>s and <code>Role</code>s.
+ * assigned to <code>Role</code>s.
  *
  * @author Marcus Portmann
  */

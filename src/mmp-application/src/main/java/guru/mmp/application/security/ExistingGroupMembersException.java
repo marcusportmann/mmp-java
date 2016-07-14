@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>ExistingGroupMembersException</code> is thrown to indicate that a security operation
- * failed as a result of existing group members.
+ * failed as a result of existing security group members.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *

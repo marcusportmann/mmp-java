@@ -128,7 +128,7 @@ public class UserDirectory
    * type.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * type
+   *         type
    */
   public UUID getTypeId()
   {

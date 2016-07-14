@@ -162,13 +162,14 @@ abstract class UserDirectoryBase
   }
 
   /**
-   * Delete the group.
+   * Delete the security group.
    *
    * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the group
+   * @param groupName  the group name uniquely identifying the security group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   *         <code>null</code> if a group with the specified group name could not be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
+   *         or <code>null</code> if a security group with the specified group name could not be
+   *         found
    *
    * @throws SecurityException
    */
@@ -199,7 +200,7 @@ abstract class UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to delete the group (%s) for the user directory (%s): %s", groupName,
+          "Failed to delete the security group (%s) for the user directory (%s): %s", groupName,
           getUserDirectoryId(), e.getMessage()), e);
     }
   }
@@ -235,15 +236,15 @@ abstract class UserDirectoryBase
   }
 
   /**
-   * Create a new group.
+   * Create a new security group.
    * <p/>
-   * If a group with the specified group name already exists the ID for this existing group will be
-   * returned.
+   * If a security group with the specified group name already exists the ID for this existing
+   * security group will be returned.
    *
    * @param connection the existing database connection
-   * @param groupName  the group name uniquely identifying the group
+   * @param groupName  the group name uniquely identifying the security group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
    *
    * @throws SecurityException
    */
@@ -257,22 +258,23 @@ abstract class UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to create the group (%s) for the user directory (%s): %s", groupName,
+          "Failed to create the security group (%s) for the user directory (%s): %s", groupName,
           getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
   /**
-   * Create a new group.
+   * Create a new security group.
    * <p/>
-   * If a group with the specified group name already exists the ID for this existing group will be
-   * returned.
+   * If a security group with the specified group name already exists the ID for this existing
+   * security group will be returned.
    *
    * @param connection the existing database connection
-   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the group
-   * @param groupName  the group name uniquely identifying the group
+   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   security group
+   * @param groupName  the group name uniquely identifying the security group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
    *
    * @throws SecurityException
    */
@@ -304,7 +306,7 @@ abstract class UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to create the group (%s) with the ID (%s) for the user directory (%s): %s",
+          "Failed to create the security group (%s) with the ID (%s) for the user directory (%s): %s",
           groupName, groupId, getUserDirectoryId(), e.getMessage()), e);
     }
   }
@@ -345,13 +347,14 @@ abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the ID for the group with the specified group name.
+   * Returns the ID for the security group with the specified group name.
    *
    * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the group
+   * @param groupName  the group name uniquely identifying the security group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group or
-   *         <code>null</code> if a group with the specified group name could not be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
+   *         or <code>null</code> if a security group with the specified group name could not be
+   *         found
    *
    * @throws SecurityException
    */
@@ -378,8 +381,8 @@ abstract class UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to retrieve the ID for the group (%s) for the user directory (%s)", groupName,
-          getUserDirectoryId()), e);
+          "Failed to retrieve the ID for the security group (%s) for the user directory (%s)",
+          groupName, getUserDirectoryId()), e);
     }
   }
 }

@@ -22,17 +22,17 @@ import java.util.List;
 
 /**
  * The <code>IUserDirectoryProvider</code> interface defines the functionality provided by a user
- * directory, which manages users and groups.
+ * directory, which manages users and security groups.
  *
  * @author Marcus Portmann
  */
 interface IUserDirectory
 {
   /**
-   * Add the user to the group.
+   * Add the user to the security group.
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -92,9 +92,9 @@ interface IUserDirectory
         ExistingPasswordException, SecurityException;
 
   /**
-   * Create a new group.
+   * Create a new security group.
    *
-   * @param group the group
+   * @param group the security group
    *
    * @throws DuplicateGroupException
    * @throws SecurityException
@@ -116,9 +116,9 @@ interface IUserDirectory
     throws DuplicateUserException, SecurityException;
 
   /**
-   * Delete the group.
+   * Delete the security group.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
@@ -177,11 +177,11 @@ interface IUserDirectory
     throws UserNotFoundException, SecurityException;
 
   /**
-   * Retrieve the group.
+   * Retrieve the security group.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
-   * @return the group
+   * @return the security group
    *
    * @throws GroupNotFoundException
    * @throws SecurityException
@@ -190,11 +190,11 @@ interface IUserDirectory
     throws GroupNotFoundException, SecurityException;
 
   /**
-   * Retrieve the group names for the user.
+   * Retrieve the security group names for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the group names for the user
+   * @return the security group names for the user
    *
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -203,9 +203,9 @@ interface IUserDirectory
     throws UserNotFoundException, SecurityException;
 
   /**
-   * Retrieve all the groups.
+   * Retrieve all the security groups.
    *
-   * @return the list of groups
+   * @return the list of security groups
    *
    * @throws SecurityException
    */
@@ -213,11 +213,11 @@ interface IUserDirectory
     throws SecurityException;
 
   /**
-   * Retrieve the groups for the user.
+   * Retrieve the security groups for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the groups for the user
+   * @return the security groups for the user
    *
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -238,9 +238,9 @@ interface IUserDirectory
     throws SecurityException;
 
   /**
-   * Retrieve the number of groups
+   * Retrieve the number of security groups
    *
-   * @return the number of groups
+   * @return the number of security groups
    *
    * @throws SecurityException
    */
@@ -286,7 +286,7 @@ interface IUserDirectory
    * @param username the username identifying the user
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   * otherwise
+   *         otherwise
    *
    * @throws SecurityException
    */
@@ -294,12 +294,13 @@ interface IUserDirectory
     throws SecurityException;
 
   /**
-   * Is the user in the group for the specified organisation?
+   * Is the user in the security group?
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   *         otherwise
    *
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -309,10 +310,10 @@ interface IUserDirectory
     throws UserNotFoundException, GroupNotFoundException, SecurityException;
 
   /**
-   * Remove the user from the group.
+   * Remove the user from the security group.
    *
    * @param username  the username identifying the user
-   * @param groupName the group name
+   * @param groupName the security group name
    *
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -322,25 +323,25 @@ interface IUserDirectory
     throws UserNotFoundException, GroupNotFoundException, SecurityException;
 
   /**
-   * Does the user directory support administering groups.
+   * Does the user directory support administering security groups.
    *
-   * @return <code>true</code> if the directory supports administering groups or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the user directory supports administering security groups or
+   *         <code>false</code> otherwise
    */
   boolean supportsGroupAdministration();
 
   /**
    * Does the user directory support administering users.
    *
-   * @return <code>true</code> if the directory supports administering users or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the user directory supports administering users or
+   *         <code>false</code> otherwise
    */
   boolean supportsUserAdministration();
 
   /**
-   * Update the group.
+   * Update the security group.
    *
-   * @param group the group
+   * @param group the security group
    *
    * @throws GroupNotFoundException
    * @throws SecurityException

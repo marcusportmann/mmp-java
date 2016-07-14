@@ -18,7 +18,7 @@ package guru.mmp.application.security;
 
 /**
  * A <code>GroupNotFoundException</code> is thrown to indicate that a security operation failed as
- * a result of a group that could not be found.
+ * a result of a security group that could not be found.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *

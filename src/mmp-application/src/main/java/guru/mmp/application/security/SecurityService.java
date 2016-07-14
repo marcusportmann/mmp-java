@@ -131,12 +131,12 @@ public class SecurityService
   public SecurityService() {}
 
   /**
-   * Add the user to the group.
+   * Add the user to the security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param username        the username identifying the user
-   * @param groupName       the name of the group uniquely identifying the group
+   * @param groupName       the name of the security group uniquely identifying the security group
    *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
@@ -462,11 +462,11 @@ public class SecurityService
   }
 
   /**
-   * Create a new group.
+   * Create a new security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param group           the group
+   * @param group           the security group
    *
    * @throws UserDirectoryNotFoundException
    * @throws DuplicateGroupException
@@ -802,11 +802,11 @@ public class SecurityService
   }
 
   /**
-   * Delete the group.
+   * Delete the security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param groupName       the name of the group uniquely identifying the group
+   * @param groupName       the name of the security group uniquely identifying the security group
    *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
@@ -930,7 +930,7 @@ public class SecurityService
       if (statement.executeUpdate() <= 0)
       {
         throw new UserDirectoryNotFoundException(String.format(
-          "The user directory ID (%s) is invalid", id));
+            "The user directory ID (%s) is invalid", id));
       }
 
       try
@@ -1219,13 +1219,13 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the group.
+   * Retrieve the security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param groupName       the name of the group uniquely identifying the group
+   * @param groupName       the name of the security group uniquely identifying the security group
    *
-   * @return the group
+   * @return the security group
    *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException
@@ -1252,13 +1252,13 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the group names for the user.
+   * Retrieve the security group names for the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param username        the username identifying the user
    *
-   * @return the group names for the user
+   * @return the security group names for the user
    *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
@@ -1285,12 +1285,12 @@ public class SecurityService
   }
 
   /**
-   * Retrieve all the groups.
+   * Retrieve all the security groups.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the list of groups
+   * @return the list of security groups
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
@@ -1310,13 +1310,13 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the groups for the user.
+   * Retrieve the security groups for the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param username        the username identifying the user
    *
-   * @return the groups for the user
+   * @return the security groups for the user
    *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
@@ -1463,12 +1463,12 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the number of groups
+   * Retrieve the number of security groups
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the number of groups
+   * @return the number of security groups
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
@@ -1632,7 +1632,7 @@ public class SecurityService
    *                        user directory
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
-   * associated with the user directory
+   *         associated with the user directory
    *
    * @throws UserDirectoryNotFoundException
    * @throws SecurityException
@@ -1892,8 +1892,8 @@ public class SecurityService
    * @param username the username identifying the user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * that the user with the specified username is associated with or <code>null</code> if
-   * the user cannot be found
+   *         that the user with the specified username is associated with or <code>null</code> if
+   *         the user cannot be found
    *
    * @throws SecurityException
    */
@@ -2059,14 +2059,15 @@ public class SecurityService
   }
 
   /**
-   * Is the user in the group for the specified organisation?
+   * Is the user in the security group?
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param username        the username identifying the user
-   * @param groupName       the name of the group uniquely identifying the group
+   * @param groupName       the name of the security group uniquely identifying the security group
    *
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   *         otherwise
    *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
@@ -2168,12 +2169,12 @@ public class SecurityService
   }
 
   /**
-   * Remove the user from the group.
+   * Remove the user from the security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param username        the username identifying the user
-   * @param groupName       the group name
+   * @param groupName       the security group name
    *
    * @throws UserDirectoryNotFoundException
    * @throws UserNotFoundException
@@ -2207,13 +2208,13 @@ public class SecurityService
   }
 
   /**
-   * Does the user directory support administering groups.
+   * Does the user directory support administering security groups.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return <code>true</code> if the directory supports administering groups or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the user directory supports administering security groups or
+   *         <code>false</code> otherwise
    *
    * @throws UserDirectoryNotFoundException
    */
@@ -2237,8 +2238,8 @@ public class SecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return <code>true</code> if the directory supports administering users or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the user directory supports administering users or
+   *         <code>false</code> otherwise
    *
    * @throws UserDirectoryNotFoundException
    */
@@ -2315,11 +2316,11 @@ public class SecurityService
   }
 
   /**
-   * Update the group.
+   * Update the security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param group           the group
+   * @param group           the security group
    *
    * @throws UserDirectoryNotFoundException
    * @throws GroupNotFoundException

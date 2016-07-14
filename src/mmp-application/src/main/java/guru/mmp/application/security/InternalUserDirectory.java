@@ -152,10 +152,10 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Add the user to the group.
+   * Add the user to the security group.
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -176,7 +176,7 @@ public class InternalUserDirectory extends UserDirectoryBase
             username));
       }
 
-      // Get the ID of the internal group with the specified group name
+      // Get the ID of the internal security group with the specified group name
       UUID internalGroupId;
 
       if ((internalGroupId = getInternalGroupId(connection, groupName)) == null)
@@ -185,14 +185,14 @@ public class InternalUserDirectory extends UserDirectoryBase
             groupName));
       }
 
-      // Check if the user has already been added to the group for the user directory
+      // Check if the user has already been added to the security group for the user directory
       if (isInternalUserInInternalGroup(connection, internalUserId, internalGroupId))
       {
-        // The user is already a member of the specified group do nothing
+        // The user is already a member of the specified security group do nothing
         return;
       }
 
-      // Add the user to the group
+      // Add the user to the security group
       statement.setObject(1, internalUserId);
       statement.setObject(2, internalGroupId);
 
@@ -210,7 +210,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to add the user (%s) to the group (%s) for the user directory (%s): %s",
+          "Failed to add the user (%s) to the security group (%s) for the user directory (%s): %s",
           username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
   }
@@ -474,9 +474,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Create a new group.
+   * Create a new security group.
    *
-   * @param group the group
+   * @param group the security group
    *
    * @throws DuplicateGroupException
    * @throws SecurityException
@@ -489,7 +489,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       if (getInternalGroupId(connection, group.getGroupName()) != null)
       {
-        throw new DuplicateGroupException(String.format("The group (%s) already exists",
+        throw new DuplicateGroupException(String.format("The security group (%s) already exists",
             group.getGroupName()));
       }
 
@@ -519,8 +519,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to create the group (%s) for the user directory (%s): %s", group.getGroupName(),
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to create the security group (%s) for the user directory (%s): %s",
+          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -627,9 +627,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Delete the group.
+   * Delete the security group.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
    * @throws GroupNotFoundException
    * @throws ExistingGroupMembersException
@@ -645,14 +645,14 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalGroupId == null)
       {
-        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
-            groupName));
+        throw new GroupNotFoundException(String.format(
+            "The security group (%s) could not be found", groupName));
       }
 
       if (getNumberOfInternalUsersForInternalGroup(connection, internalGroupId) > 0)
       {
         throw new ExistingGroupMembersException(String.format(
-            "The group (%s) could not be deleted since it is still associated with 1 or more user(s)",
+            "The security group (%s) could not be deleted since it is still associated with 1 or more user(s)",
             groupName));
       }
 
@@ -675,7 +675,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to delete the group (%s) for the user directory (%s): %s", groupName,
+          "Failed to delete the security group (%s) for the user directory (%s): %s", groupName,
           getUserDirectoryId(), e.getMessage()), e);
     }
   }
@@ -865,9 +865,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the group.
+   * Retrieve the security group.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
    * @return the group
    *
@@ -897,8 +897,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
         else
         {
-          throw new GroupNotFoundException(String.format("The group (%s) could not be found",
-              groupName));
+          throw new GroupNotFoundException(String.format(
+              "The security group (%s) could not be found", groupName));
         }
       }
     }
@@ -909,17 +909,17 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to retrieve the group (%s) for the user directory (%s): %s", groupName,
+          "Failed to retrieve the security group (%s) for the user directory (%s): %s", groupName,
           getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the group names for the user.
+   * Retrieve the security group names for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the group names for the user
+   * @return the security group names for the user
    *
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -947,15 +947,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to retrieve the group names for the user (%s) for the user directory (%s): %s",
+          "Failed to retrieve the security group names for the user (%s) for the user directory (%s): %s",
           username, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve all the groups.
+   * Retrieve all the security groups.
    *
-   * @return the list of groups
+   * @return the list of security groups
    *
    * @throws SecurityException
    */
@@ -987,17 +987,17 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to retrieve the groups for the user directory (%s): %s", getUserDirectoryId(),
-          e.getMessage()), e);
+          "Failed to retrieve the security groups for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the groups for the user.
+   * Retrieve the security groups for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the groups for the user
+   * @return the security groups for the user
    *
    * @throws UserNotFoundException
    * @throws SecurityException
@@ -1026,7 +1026,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to retrieve the groups for the user (%s) for the user directory (%s): %s",
+          "Failed to retrieve the security groups for the user (%s) for the user directory (%s): %s",
           username, getUserDirectoryId(), e.getMessage()), e);
     }
   }
@@ -1090,9 +1090,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the number of groups
+   * Retrieve the number of security groups
    *
-   * @return the number of groups
+   * @return the number of security groups
    *
    * @throws SecurityException
    */
@@ -1119,7 +1119,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to retrieve the number of groups for the user directory (%s): %s",
+          "Failed to retrieve the number of security groups for the user directory (%s): %s",
           getUserDirectoryId(), e.getMessage()), e);
     }
   }
@@ -1241,7 +1241,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   * otherwise
+   *         otherwise
    *
    * @throws SecurityException
    */
@@ -1261,12 +1261,13 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Is the user in the group for the specified organisation?
+   * Is the user in the security group?
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    *
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   *         otherwise
    *
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -1286,16 +1287,16 @@ public class InternalUserDirectory extends UserDirectoryBase
             username));
       }
 
-      // Get the ID of the internal group with the specified group name
+      // Get the ID of the internal security group with the specified group name
       UUID internalGroupId = getInternalGroupId(connection, groupName);
 
       if (internalGroupId == null)
       {
-        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
-            groupName));
+        throw new GroupNotFoundException(String.format(
+            "The security group (%s) could not be found", groupName));
       }
 
-      // Get the current list of internal groups for the internal user
+      // Get the current list of internal security groups for the internal user
       return isInternalUserInInternalGroup(connection, internalUserId, internalGroupId);
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -1305,16 +1306,16 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to check if the user (%s) is in the group (%s) for the user directory (%s): %s",
+          "Failed to check if the user (%s) is in the security group (%s) for the user directory (%s): %s",
           username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
   /**
-   * Remove the user from the group.
+   * Remove the user from the security group.
    *
    * @param username  the username identifying the user
-   * @param groupName the group name
+   * @param groupName the security group name
    *
    * @throws UserNotFoundException
    * @throws GroupNotFoundException
@@ -1340,7 +1341,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalGroupId == null)
       {
-        throw new GroupNotFoundException("The group (" + groupName + ") could not be found");
+        throw new GroupNotFoundException("The security group (" + groupName
+            + ") could not be found");
       }
 
       // Remove the user from the group
@@ -1355,16 +1357,16 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to remove the user (%s) from the group (%s) for the user directory (%s): %s",
+          "Failed to remove the user (%s) from the security group (%s) for the user directory (%s): %s",
           username, groupName, getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
   /**
-   * Does the user directory support administering groups.
+   * Does the user directory support administering security groups.
    *
-   * @return <code>true</code> if the directory supports administering groups or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the user directory supports administering security groups or
+   *         <code>false</code> otherwise
    */
   public boolean supportsGroupAdministration()
   {
@@ -1374,8 +1376,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Does the user directory support administering users.
    *
-   * @return <code>true</code> if the directory supports administering users or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the user directory supports administering users or
+   *         <code>false</code> otherwise
    */
   public boolean supportsUserAdministration()
   {
@@ -1383,9 +1385,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Update the group.
+   * Update the security group.
    *
-   * @param group the group
+   * @param group the security group
    *
    * @throws GroupNotFoundException
    * @throws SecurityException
@@ -1400,8 +1402,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (internalGroupId == null)
       {
-        throw new GroupNotFoundException(String.format("The group (%s) could not be found",
-            group.getGroupName()));
+        throw new GroupNotFoundException(String.format(
+            "The security group (%s) could not be found", group.getGroupName()));
       }
 
       statement.setString(1, StringUtil.notNull(group.getDescription()));
@@ -1422,8 +1424,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to update the group (%s) for the user directory (%s): %s", group.getGroupName(),
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to update the security group (%s) for the user directory (%s): %s",
+          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1780,8 +1782,8 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param attributes the attributes to be used as the selection criteria
    *
    * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-   * INTERNAL_USERS table using the values of the specified attributes as the selection
-   * criteria
+   *         INTERNAL_USERS table using the values of the specified attributes as the selection
+   *         criteria
    *
    * @throws InvalidAttributeException
    * @throws SQLException
@@ -1965,14 +1967,14 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the names for all the groups that the internal user with the specific numeric ID is
-   * associated with.
+   * Retrieve the names for all the security groups that the internal user with the specific numeric
+   * ID is associated with.
    *
    * @param connection     the existing database connection
    * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       internal user
    *
-   * @return the list of groups
+   * @return the list of security groups
    *
    * @throws SQLException
    */
@@ -1999,14 +2001,14 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal group
-   * with the specified group name.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal
+   * security group with the specified group name.
    *
    * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the internal group
+   * @param groupName  the group name uniquely identifying the internal security group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal group
-   * with the specified group name
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal
+   *         security group with the specified group name
    *
    * @throws SecurityException
    */
@@ -2033,20 +2035,20 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityException(String.format(
-          "Failed to retrieve the ID for the group (%s) for the user directory (%s)", groupName,
-          getUserDirectoryId()), e);
+          "Failed to retrieve the ID for the security group (%s) for the user directory (%s)",
+          groupName, getUserDirectoryId()), e);
     }
   }
 
   /**
-   * Retrieve all the internal groups that the internal user with the specific numeric ID is
-   * associated with.
+   * Retrieve all the internal security groups that the internal user with the specific numeric ID
+   * is associated with.
    *
    * @param connection     the existing database connection
    * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       internal user
    *
-   * @return the list of internal groups
+   * @return the list of internal security groups
    *
    * @throws SQLException
    */
@@ -2085,7 +2087,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param username   the username uniquely identifying the internal user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
-   * with the specified username
+   *         with the specified username
    *
    * @throws SecurityException
    */
@@ -2118,14 +2120,14 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the number of internal users for the internal group.
+   * Retrieve the number of internal users for the internal security group.
    *
    * @param connection      the existing database connection
    * @param internalGroupId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        internal group
+   *                        internal security group
    *
-   * @return the IDs for all the internal users that are associated with the group the specific
-   * numeric ID
+   * @return the IDs for all the internal users that are associated with the internal security group
+   *         with the specified ID
    *
    * @throws SQLException
    */
@@ -2253,15 +2255,16 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Is the user in the group?
+   * Is the user in the security group?
    *
    * @param connection      the existing database connection
    * @param internalUserId  the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        internal user
    * @param internalGroupId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        internal group
+   *                        internal security group
    *
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   *         otherwise
    *
    * @throws SQLException
    */
@@ -2292,7 +2295,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param passwordHash   the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
-   * period of time or <code>false</code> otherwise
+   *         period of time or <code>false</code> otherwise
    *
    * @throws SQLException
    */

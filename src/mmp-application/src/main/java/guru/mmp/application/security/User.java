@@ -115,7 +115,7 @@ public class User
    * the user
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
-   * the user
+   *         the user
    */
   public Integer getPasswordAttempts()
   {
@@ -149,7 +149,7 @@ public class User
    * @param name the name of the user property
    *
    * @return the value of the user property with the specified name or <code>null</code> if the
-   * user property does not exist
+   *         user property does not exist
    */
   public String getProperty(String name)
   {
@@ -161,7 +161,7 @@ public class User
    * the user is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the user is associated with
+   *         the user is associated with
    */
   public UUID getUserDirectoryId()
   {

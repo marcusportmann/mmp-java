@@ -21,7 +21,7 @@ package guru.mmp.application.security;
 import java.util.UUID;
 
 /**
- * The <code>Group</code> class stores the information for a group.
+ * The <code>Group</code> class stores the information for a security group.
  *
  * @author Marcus Portmann
  */
@@ -42,7 +42,7 @@ public class Group
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    */
   public Group(String groupName)
   {
@@ -50,9 +50,9 @@ public class Group
   }
 
   /**
-   * Returns the description for the group.
+   * Returns the description for the security group.
    *
-   * @return the description for the group
+   * @return the description for the security group
    */
   public String getDescription()
   {
@@ -60,9 +60,9 @@ public class Group
   }
 
   /**
-   * Returns the name of the group uniquely identifying the group.
+   * Returns the name of the security group uniquely identifying the security group.
    *
-   * @return the name of the group uniquely identifying the group
+   * @return the name of the security group uniquely identifying the security group
    */
   public String getGroupName()
   {
@@ -70,9 +70,9 @@ public class Group
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the group.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the security group.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
    */
   public UUID getId()
   {
@@ -81,10 +81,10 @@ public class Group
 
   /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with.
+   * the security group is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with
+   *         the security group is associated with
    */
   public UUID getUserDirectoryId()
   {
@@ -92,9 +92,9 @@ public class Group
   }
 
   /**
-   * Set the description for the group.
+   * Set the description for the security group.
    *
-   * @param description the description for the group
+   * @param description the description for the security group
    */
   public void setDescription(String description)
   {
@@ -102,9 +102,9 @@ public class Group
   }
 
   /**
-   * Set the name of the group uniquely identifying the group.
+   * Set the name of the security group uniquely identifying the security group.
    *
-   * @param groupName the name of the group uniquely identifying the group
+   * @param groupName the name of the security group uniquely identifying the security group
    */
   public void setGroupName(String groupName)
   {
@@ -112,9 +112,9 @@ public class Group
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the security group.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the security group
    */
   public void setId(UUID id)
   {
@@ -123,10 +123,10 @@ public class Group
 
   /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * group is associated with.
+   * security group is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the group is associated with
+   *                        user directory the security group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId)
   {
