@@ -224,6 +224,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    *
    * @param root the root of the navigation hierarchy
    */
+  @SuppressWarnings("unchecked")
   protected void initNavigation(NavigationGroup root)
   {
     NavigationGroup administrationGroup = new NavigationGroup("Administration", "fa fa-gear");
