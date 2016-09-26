@@ -4,27 +4,27 @@
 --
 --  Execute the following command to start the database server if it is not running:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/pg_ctl -D /opt/local/var/db/postgresql94/defaultdb -l /opt/local/var/db/postgresql94/postgres.log start'
---    CentOS (as root): service postgresql-9.4 start 
+--    OS X: pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/postgres.log start
+--    CentOS (as root): service postgresql-9.5 start 
 --
 --  Execute the following command to create the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/createdb  --template=template1 --encoding=UTF8 dbname'
+--    OS X: createdb  --template=template0 --encoding=UTF8 dbname
 --    CentOS (as root): sudo su postgres -c 'createdb --template=template1 --encoding=UTF8 dbname'
 --
 --  Execute the following command to initialise the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/psql -d dbname -f ApplicationPostgres.sql'
+--    OS X: psql -d dbname -f ApplicationPostgres.sql 
 --    CentOS (as root): su postgres -c 'psql -d dbname -f ApplicationPostgres.sql'
 --
 --  Execute the following command to delete the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/dropdb dbname'
+--    OS X: dropdb dbname
 --    CentOS (as root): su postgres -c 'dropdb dbname'
 --
 --  Execute the following command to clean-up unreferenced large objects on the database:
 --
---    OS X: sudo su postgres -c '/opt/local/lib/postgresql94/bin/vacuumlo dbname'
+--    OS X: vacuumlo dbname
 --    CentOS (as root): su postgres -c 'vacuumlo dbname'
 --
 -- -------------------------------------------------------------------------------------------------
