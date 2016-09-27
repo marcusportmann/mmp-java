@@ -20,6 +20,9 @@ target
 .classpath
 .project
 .gradle/
+gradle/
+gradlew
+gradlew.bat
 .settings/
 /**/.factorypath
 /**/*.epoch
