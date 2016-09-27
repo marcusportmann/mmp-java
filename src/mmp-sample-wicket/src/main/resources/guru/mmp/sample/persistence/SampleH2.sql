@@ -10,8 +10,8 @@ CREATE SCHEMA SAMPLE;
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE SAMPLE.DATA (
   ID     BIGINT NOT NULL,
-  NAME   VARCHAR(100) NOT NULL,
-  VALUE  VARCHAR(100) NOT NULL,
+  NAME   VARCHAR(4000) NOT NULL,
+  VALUE  VARCHAR(4000) NOT NULL,
 
   PRIMARY KEY (ID)
 );
