@@ -14,11 +14,11 @@ repositories {
 dependencies {
   compile project(':mmp-application')
   
-  compileOnly 'javax:javaee-api:7.0'
+  compileOnly('javax:javaee-api:7.0')
   
   testCompile project(':mmp-application-test')
 
-  testCompile 'org.hamcrest:hamcrest-all:1.3'  
+  testCompile('org.hamcrest:hamcrest-all:1.3')
 }
 
 publishing {

@@ -14,9 +14,9 @@ repositories {
 dependencies {
   compile files('../../dist/mmp-common-2.0.0.jar')
   
-  compile 'org.slf4j:slf4j-jdk14:1.7.21'
+  compile('org.slf4j:slf4j-jdk14:1.7.21')
   
-  testCompile 'junit:junit:4.12'
+  testCompile('junit:junit:4.12')
 }
 
 publishing {

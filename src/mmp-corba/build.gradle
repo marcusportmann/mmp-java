@@ -14,9 +14,9 @@ repositories {
 dependencies {
   compile project(':mmp-common')
   
-  compile 'org.jacorb:jacorb:3.7'
+  compile('org.jacorb:jacorb:3.7')
   
-  testCompile 'junit:junit:4.12'
+  testCompile('junit:junit:4.12')
 }
 
 publishing {

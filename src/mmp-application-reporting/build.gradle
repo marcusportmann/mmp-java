@@ -16,7 +16,7 @@ dependencies {
   
   compile files('lib/itext-2.1.7.js5.jar')
   
-  compile('net.sf.jasperreports:jasperreports:6.2.1') {
+  compile('net.sf.jasperreports:jasperreports:6.2.2') {
     exclude group: 'com.adobe.xmp', module: 'xmpcore'   
     exclude group: 'com.keypoint', module: 'png-encoder'
     exclude group: 'commons-javaflow', module: 'commons-javaflow'
@@ -78,10 +78,10 @@ dependencies {
     //exclude group: 'xmlpull', module: 'xmlpull'
   }
   // NOTE: Upgraded dependencies
-  compile 'br.com.digilabs.jqplot:jqplot4java:1.3.1'
-  compile 'org.codehaus.groovy:groovy:2.4.6'
+  compile('br.com.digilabs.jqplot:jqplot4java:1.3.1')
+  compile('org.codehaus.groovy:groovy:2.4.7')
 
-  compileOnly 'javax:javaee-api:7.0'
+  compileOnly('javax:javaee-api:7.0')
   
   testCompile project(':mmp-application-test')
 }

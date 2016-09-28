@@ -12,7 +12,7 @@ repositories {
 dependencies {
   compile project(':mmp-common')
   
-  testCompile 'junit:junit:4.12'
+  testCompile('junit:junit:4.12')
 }
 
 wsdl2java {

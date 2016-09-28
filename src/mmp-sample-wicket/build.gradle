@@ -18,7 +18,7 @@ dependencies {
   compile project(':mmp-application-reporting-wicket')
   compile project(':mmp-application-sms')
   
-  providedCompile 'javax:javaee-api:7.0'
+  providedCompile('javax:javaee-api:7.0')
 
   testCompile project(':mmp-application-test')
 }

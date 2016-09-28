@@ -14,13 +14,13 @@ repositories {
 dependencies {
   compile project(':mmp-common')
   
-  compile 'javax.transaction:jta:1.1'
-  compile 'com.atomikos:transactions-jta:4.0.2'
-  compile 'com.atomikos:transactions-jdbc:4.0.2'
+  compile('javax.transaction:jta:1.1')
+  compile('com.atomikos:transactions-jta:4.0.4')
+  compile('com.atomikos:transactions-jdbc:4.0.4')
 
-  compileOnly 'org.apache.tomcat:tomcat-catalina:8.0.33'  
+  compileOnly('org.apache.tomcat:tomcat-catalina:8.0.37')
 
-  testCompile 'junit:junit:4.12'
+  testCompile('junit:junit:4.12')
 }
 
 publishing {

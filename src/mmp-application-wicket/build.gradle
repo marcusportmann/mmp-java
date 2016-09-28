@@ -14,13 +14,13 @@ repositories {
 dependencies {
   compile project(':mmp-application')
   
-  compile 'org.apache.wicket:wicket-datetime:7.4.0'
-  compile 'org.apache.wicket:wicket-devutils:7.4.0'
+  compile('org.apache.wicket:wicket-datetime:7.4.0')
+  compile('org.apache.wicket:wicket-devutils:7.4.0')
   compile('org.apache.wicket:wicket-ioc:7.4.0') {
     exclude group: 'javax.inject', module: 'javax.inject'   
   }
     
-  compileOnly 'javax:javaee-api:7.0'
+  compileOnly('javax:javaee-api:7.0')
   
   testCompile project(':mmp-application-test')
 }
