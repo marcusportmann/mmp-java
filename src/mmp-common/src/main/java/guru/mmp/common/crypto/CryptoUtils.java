@@ -19,10 +19,8 @@ package guru.mmp.common.crypto;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.math.BigInteger;
-
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-
 import java.util.UUID;
 
 /**
@@ -30,11 +28,10 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public class CryptoUtils
 {
   /**
-   * The AES key size.
+   * The AES block size.
    */
   public static final int AES_BLOCK_SIZE = 16;
 
@@ -89,8 +86,6 @@ public class CryptoUtils
    * @param password the password to convert to a 3DES key
    *
    * @return the 3DES key
-   *
-   * @throws CryptoException
    */
   public static byte[] passwordTo3DESKey(String password)
     throws CryptoException
@@ -107,8 +102,6 @@ public class CryptoUtils
    * @param password the password to convert to an AES key
    *
    * @return the AES key
-   *
-   * @throws CryptoException
    */
   public static byte[] passwordToAESKey(String password)
     throws CryptoException
@@ -126,8 +119,6 @@ public class CryptoUtils
    * @param salt     the salt to use when generating the AES key
    *
    * @return the AES key
-   *
-   * @throws CryptoException
    */
   public static byte[] passwordToAESKey(String password, byte[] salt)
     throws CryptoException
@@ -143,8 +134,6 @@ public class CryptoUtils
    * @param salt     the salt to use when generating the AES key
    *
    * @return the AES key
-   *
-   * @throws CryptoException
    */
   public static byte[] passwordToAESKey(String password, String salt)
     throws CryptoException
@@ -152,8 +141,7 @@ public class CryptoUtils
     return passwordToAESKey(password.getBytes(), salt.getBytes(), 4, AES_KEY_SIZE);
   }
 
-  private static byte[] passwordTo3DESKey(byte[] password, byte[] salt, int iteration, int keysize)
-    throws CryptoException
+  private static byte[] hashPasswordAndSalt(byte[] password, byte[] salt, int iteration)
   {
     try
     {
@@ -164,7 +152,7 @@ public class CryptoUtils
       System.arraycopy(salt, 0, pwAndSalt, password.length, salt.length);
 
       // Create the key as sha1(sha1(sha1(sha1(...(pw+salt))...)
-      MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
       for (int i = 0; i < iteration; i++)
       {
@@ -172,9 +160,22 @@ public class CryptoUtils
         messageDigest.digest(pwAndSalt, 0, messageDigest.getDigestLength());
       }
 
+      return pwAndSalt;
+    }
+    catch (Throwable e)
+    {
+      throw new CryptoException("Failed to hash the password and key", e);
+    }
+  }
+
+  private static byte[] passwordTo3DESKey(byte[] password, byte[] salt, int iteration, int keysize)
+    throws CryptoException
+  {
+    try
+    {
       byte[] key = new byte[keysize];
 
-      System.arraycopy(pwAndSalt, 0, key, 0, keysize);
+      System.arraycopy(hashPasswordAndSalt(password, salt, iteration), 0, key, 0, keysize);
 
       return key;
     }
@@ -189,24 +190,9 @@ public class CryptoUtils
   {
     try
     {
-      // Concatenate password and salt.
-      byte[] pwAndSalt = new byte[password.length + salt.length];
-
-      System.arraycopy(password, 0, pwAndSalt, 0, password.length);
-      System.arraycopy(salt, 0, pwAndSalt, password.length, salt.length);
-
-      // Create the key as sha1(sha1(sha1(sha1(...(pw+salt))...)
-      MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-
-      for (int i = 0; i < iteration; i++)
-      {
-        messageDigest.update(pwAndSalt, 0, pwAndSalt.length);
-        messageDigest.digest(pwAndSalt, 0, messageDigest.getDigestLength());
-      }
-
       byte[] key = new byte[keysize];
 
-      System.arraycopy(pwAndSalt, 0, key, 0, keysize);
+      System.arraycopy(hashPasswordAndSalt(password, salt, iteration), 0, key, 0, keysize);
 
       return key;
     }

@@ -60,6 +60,7 @@ import java.util.logging.Logger;
  * <p/>
  * This runner provides support for:
  * <ul>
+ *   <li>Initialising the Java utility logging</li>
  *   <li>JNDI using Apache Tomcat</li>
  *   <li>An in-memory application database using H2</li>
  *   <li>Contexts and Dependency Injection (CDI) using Weld</li>

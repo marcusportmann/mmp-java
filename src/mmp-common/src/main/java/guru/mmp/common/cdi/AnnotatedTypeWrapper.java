@@ -45,8 +45,8 @@ public class AnnotatedTypeWrapper<T>
   /**
    * Constructs a new <code>AnnotatedTypeWrapper</code>.
    *
-   * @param wrapped
-   * @param annotations
+   * @param wrapped     the wrapped type
+   * @param annotations the annotations
    */
   public AnnotatedTypeWrapper(AnnotatedType<T> wrapped, Set<Annotation> annotations)
   {

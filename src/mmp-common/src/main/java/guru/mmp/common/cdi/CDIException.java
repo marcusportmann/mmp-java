@@ -22,41 +22,18 @@ package guru.mmp.common.cdi;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
-public class CDIException extends RuntimeException
+class CDIException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * Constructs a new <code>CDIException</code> with <code>null</code> as its
-   * message.
-   */
-  public CDIException()
-  {
-    super();
-  }
 
   /**
    * Constructs a new <code>CDIException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public CDIException(String message)
+  CDIException(String message)
   {
     super(message);
-  }
-
-  /**
-   * Constructs a new <code>CDIException</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
-   *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public CDIException(Throwable cause)
-  {
-    super(cause);
   }
 
   /**
@@ -66,7 +43,7 @@ public class CDIException extends RuntimeException
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public CDIException(String message, Throwable cause)
+  CDIException(String message, Throwable cause)
   {
     super(message, cause);
   }

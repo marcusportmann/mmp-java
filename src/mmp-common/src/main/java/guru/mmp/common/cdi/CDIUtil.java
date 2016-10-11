@@ -64,8 +64,6 @@ public class CDIUtil
    * Perform container-based dependency injection on the target.
    *
    * @param target the object to inject
-   *
-   * @throws CDIException
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public static void inject(Object target)

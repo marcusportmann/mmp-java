@@ -24,6 +24,7 @@ dependencies {
   compile('org.hibernate:hibernate-entitymanager:5.2.2.Final')
   compile('org.jboss.weld.se:weld-se-core:2.4.0.Final')
   compile('org.mockito:mockito-all:1.10.19')
+  compile('org.slf4j:slf4j-jdk14:1.7.21')
 }
 
 publishing {

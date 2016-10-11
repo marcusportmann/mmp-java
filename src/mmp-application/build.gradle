@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
   compile project(':mmp-common')
-  
+
   compile('commons-beanutils:commons-beanutils:1.9.2')
   
   compileOnly('javax:javaee-api:7.0')
