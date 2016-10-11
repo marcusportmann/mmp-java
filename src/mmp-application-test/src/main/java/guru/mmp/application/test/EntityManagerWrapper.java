@@ -571,7 +571,7 @@ public class EntityManagerWrapper
         Map<String, String> properties = new HashMap<>();
 
         properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-        properties.put("hibernate.transaction.auto_close_session", "true");
+        //properties.put("hibernate.transaction.auto_close_session", "true");
         properties.put("hibernate.current_session_context_class", "jta");
         properties.put("hibernate.transaction.jta.platform",
             "guru.mmp.application.test.ApplicationClassRunnerJtaPlatform");

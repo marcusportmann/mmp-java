@@ -16,16 +16,45 @@
 
 package guru.mmp.application.tests;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * The <code>TestData</code> class.
  *
  * @author Marcus Portmann
  */
+@Entity
+@Table(schema = "MMP", name = "TEST_DATA")
 public class TestData
 {
+  /**
+   * The ID.
+   */
+  @Id
+  @Column(name = "ID", nullable = false)
   private String id;
+
+  /**
+   * The name.
+   */
+  @Column(name = "NAME", nullable = false)
   private String name;
+
+  /**
+   * The value.
+   */
+  @Column(name = "VALUE", nullable = false)
   private String value;
+
+  /**
+   * Constructs a new <code>TestData</code>.
+   */
+  TestData() {}
 
   /**
    * Constructs a new <code>TestData</code>.

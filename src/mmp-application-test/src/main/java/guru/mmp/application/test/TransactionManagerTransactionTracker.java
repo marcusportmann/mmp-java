@@ -179,7 +179,7 @@ public class TransactionManagerTransactionTracker
     catch (Throwable e)
     {
       Logger.getAnonymousLogger().log(Level.SEVERE,
-          "Failed to invoke the TransactionManager method", e);
+          "Failed to invoke the TransactionManager method (" + method.getName() + ")", e);
 
       throw e;
     }

@@ -19,23 +19,17 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.TransactionManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
 import javax.annotation.Priority;
-
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
-import javax.naming.InitialContext;
-
 import javax.transaction.*;
+import java.io.Serializable;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ContainerManagedTransactionsInterceptor</code> CDI interceptor is used to apply the
@@ -52,14 +46,16 @@ public class ContainerManagedTransactionsInterceptor
 {
   private static final long serialVersionUID = 1000000;
 
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(
+      ContainerManagedTransactionsInterceptor.class);
+
   /**
    * Invokes the intercepted method.
    *
    * @param context the current invocation-context
    *
    * @return the result of the intercepted method
-   *
-   * @throws Exception
    */
   @AroundInvoke
   public Object executeInTransaction(InvocationContext context)
@@ -79,14 +75,24 @@ public class ContainerManagedTransactionsInterceptor
 
       if (transactionalAnnotation.value() == Transactional.TxType.REQUIRED)
       {
+        logger.info(String.format("A transaction is required when invoking the method (%s)",
+            context.getMethod().getName()));
+
         return executeInTransaction(context, transactionManager, false);
       }
       else if (transactionalAnnotation.value() == Transactional.TxType.REQUIRES_NEW)
       {
+        logger.info(String.format("A new transaction is required when invoking the method (%s)",
+            context.getMethod().getName()));
+
         return executeInTransaction(context, transactionManager, true);
       }
       else if (transactionalAnnotation.value() == Transactional.TxType.MANDATORY)
       {
+        logger.info(String.format(
+            "An existing transaction is required when invoking the method (%s)", context.getMethod()
+            .getName()));
+
         if (!transactionManager.isTransactionActive())
         {
           throw new TransactionRequiredException();
@@ -98,10 +104,16 @@ public class ContainerManagedTransactionsInterceptor
       }
       else if (transactionalAnnotation.value() == Transactional.TxType.SUPPORTS)
       {
+        logger.info(String.format("A transaction is supported when invoking the method (%s)",
+            context.getMethod().getName()));
+
         return context.proceed();
       }
       else if (transactionalAnnotation.value() == Transactional.TxType.NOT_SUPPORTED)
       {
+        logger.info(String.format("A transaction is not supported when invoking the method (%s)",
+            context.getMethod().getName()));
+
         Transaction existingTransaction = null;
 
         try
@@ -120,6 +132,10 @@ public class ContainerManagedTransactionsInterceptor
       }
       else if (transactionalAnnotation.value() == Transactional.TxType.NEVER)
       {
+        logger.info(String.format(
+            "An existing transaction should not exist when invoking the method (%s)",
+            context.getMethod().getName()));
+
         if (transactionManager.getStatus() != Status.STATUS_NO_TRANSACTION)
         {
           throw new InvalidTransactionException();
@@ -152,15 +168,24 @@ public class ContainerManagedTransactionsInterceptor
     {
       if (requiresNew)
       {
+        logger.info(String.format("Beginning new transaction when invoking the method (%s)",
+            getTarget(context)));
+
         existingTransaction = transactionManager.beginNew();
         isNewTransaction = true;
       }
       else if (transactionManager.getStatus() == Status.STATUS_ACTIVE)
       {
+        logger.info(String.format("Using existing transaction when invoking the method (%s)",
+            getTarget(context)));
+
         // Do nothing we will re-use the existing transaction
       }
       else if (transactionManager.getStatus() == Status.STATUS_NO_TRANSACTION)
       {
+        logger.info(String.format("Beginning new transaction when invoking the method (%s)",
+            getTarget(context)));
+
         transactionManager.begin();
         isNewTransaction = true;
       }
@@ -172,6 +197,9 @@ public class ContainerManagedTransactionsInterceptor
           || (transactionManager.getStatus() == Status.STATUS_COMMITTING)
           || (transactionManager.getStatus() == Status.STATUS_COMMITTED))
       {
+        logger.info(String.format("Beginning new transaction when invoking the method (%s)",
+            getTarget(context)));
+
         existingTransaction = transactionManager.beginNew();
         isNewTransaction = true;
       }
@@ -274,18 +302,51 @@ public class ContainerManagedTransactionsInterceptor
       {
         if (isNewTransaction)
         {
-          getLogger().warn(
-              "A checked exception was encountered while invoking the intercepted method ("
-              + getTarget(context) + "): The new transaction will be committed");
+          if (transactionManager.getStatus() == Status.STATUS_ACTIVE)
+          {
+            getLogger().warn(
+                "A checked exception was encountered while invoking the intercepted method ("
+                + getTarget(context) + "): The new transaction will be committed");
 
-          try
-          {
-            transactionManager.commit();
+            try
+            {
+              transactionManager.commit();
+            }
+            catch (Throwable f)
+            {
+              getLogger().error("An error occurred while invoking the intercepted method ("
+                  + getTarget(context) + "): The new transaction could not be committed", f);
+            }
           }
-          catch (Throwable f)
+          else if (transactionManager.getStatus() == Status.STATUS_MARKED_ROLLBACK)
           {
-            getLogger().error("An error occurred while invoking the intercepted method ("
-                + getTarget(context) + "): The new transaction could not be committed", f);
+            getLogger().warn(
+                "A checked exception was encountered while invoking the intercepted method ("
+                + getTarget(context) + "): The new transaction is marked for rollback");
+
+            try
+            {
+              transactionManager.rollback();
+
+              getLogger().info("An error occurred while invoking the intercepted method ("
+                + getTarget(context)
+                + "): The new transaction marked for rollback was rolled back");
+
+
+            }
+            catch (Throwable f)
+            {
+              getLogger().error("An error occurred while invoking the intercepted method ("
+                  + getTarget(context)
+                  + "): The new transaction marked for rollback could not be rolled back", f);
+            }
+          }
+          else if (transactionManager.getStatus() == Status.STATUS_ROLLEDBACK)
+          {
+            getLogger().warn(
+                "A checked exception was encountered while invoking the intercepted method ("
+                + getTarget(context) + "): The new transaction was already rolled back");
+
           }
         }
       }

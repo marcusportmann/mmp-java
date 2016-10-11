@@ -46,8 +46,6 @@ public class TransactionalInterceptorTest
 
   /**
    * testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback
-   *
-   * @throws Exception
    */
   @Test
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
@@ -110,8 +108,6 @@ public class TransactionalInterceptorTest
 
   /**
    * testFailedExecutionWithCheckedExceptionInNewTransaction
-   *
-   * @throws Exception
    */
   @Test
   public void testFailedExecutionWithCheckedExceptionInNewTransaction()
@@ -154,8 +150,6 @@ public class TransactionalInterceptorTest
 
   /**
    * testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback
-   *
-   * @throws Exception
    */
   @Test
   public void testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback()
@@ -198,8 +192,6 @@ public class TransactionalInterceptorTest
 
   /**
    * testFailedExecutionWithRuntimeExceptionInNewTransaction
-   *
-   * @throws Exception
    */
   @Test
   public void testFailedExecutionWithRuntimeExceptionInNewTransaction()
@@ -241,9 +233,39 @@ public class TransactionalInterceptorTest
   }
 
   /**
+   * testFailedExecutionWithoutTransaction
+   */
+  @Test
+  public void testFailedExecutionWithoutTransaction()
+    throws Exception
+  {
+    UserTransaction userTransaction = getUserTransaction();
+
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service without an existing transaction: "
+          + "Found an existing transaction");
+    }
+
+    TestData testData = getTestData();
+
+    try
+    {
+      testTransactionalService.createTestDataWithCheckedException(testData);
+    }
+    catch (TestTransactionalServiceException ignored) {}
+
+    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service without an existing transaction: "
+          + "Failed to retrieve the test data after a checked exception was caught");
+    }
+  }
+
+  /**
    * testSuccessfulExecutionInExistingTransaction
-   *
-   * @throws Exception
    */
   @Test
   public void testSuccessfulExecutionInExistingTransaction()
@@ -302,8 +324,6 @@ public class TransactionalInterceptorTest
 
   /**
    * testSuccessfulExecutionInExistingTransactionWithRollback
-   *
-   * @throws Exception
    */
   @Test
   public void testSuccessfulExecutionInExistingTransactionWithRollback()
@@ -362,8 +382,6 @@ public class TransactionalInterceptorTest
 
   /**
    * testSuccessfulExecutionInExistingTransaction
-   *
-   * @throws Exception
    */
   @Test
   public void testSuccessfulExecutionInNewTransaction()
@@ -422,8 +440,6 @@ public class TransactionalInterceptorTest
 
   /**
    * testSuccessfulExecutionInNewTransactionWithRollback
-   *
-   * @throws Exception
    */
   @Test
   public void testSuccessfulExecutionInNewTransactionWithRollback()
@@ -477,6 +493,34 @@ public class TransactionalInterceptorTest
     {
       fail("Failed to invoked the Test Transactional Service in a new transaction: "
           + "Failed to retrieve the test data after the transaction was rolled back");
+    }
+  }
+
+  /**
+   * testSuccessfulExecutionWithoutTransaction
+   */
+  @Test
+  public void testSuccessfulExecutionWithoutTransaction()
+    throws Exception
+  {
+    UserTransaction userTransaction = getUserTransaction();
+
+    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+    {
+      fail("Failed to invoked the Test Transactional Service without an existing transaction: "
+          + "Found an existing transaction");
+    }
+
+    TestData testData = getTestData();
+
+    testTransactionalService.createTestData(testData);
+
+    TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test Transactional Service without an existing transaction: "
+          + "Failed to retrieve the test data");
     }
   }
 
