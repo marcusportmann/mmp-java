@@ -500,7 +500,7 @@ public class TransactionalInterceptorJPATest
   /**
    * testSuccessfulExecutionWithoutTransaction
    */
-  @Test
+  @Test(expected =javax.persistence.TransactionRequiredException.class)
   public void testSuccessfulExecutionWithoutTransaction()
     throws Exception
   {
@@ -514,15 +514,7 @@ public class TransactionalInterceptorJPATest
 
     TestData testData = getTestData();
 
-    testJPAService.createTestData(testData);
-
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
-
-    if (retrievedTestData == null)
-    {
-      fail("Failed to invoked the Test JPA Service without an existing transaction: "
-        + "Failed to retrieve the test data");
-    }
+    testJPAService.createTestDataWithoutTransaction(testData);
   }
 
   private static synchronized TestData getTestData()
