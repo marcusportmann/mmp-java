@@ -63,8 +63,6 @@ public class UserDirectoryType
    *
    * @return the Java class that implements the Wicket component used to administer the
    *         configuration for the user directory type
-   *
-   * @throws SecurityException
    */
   public Class<?> getAdministrationClass()
     throws SecurityException
@@ -125,8 +123,6 @@ public class UserDirectoryType
    * Returns the Java class that implements the user directory type.
    *
    * @return the Java class that implements the user directory type
-   *
-   * @throws SecurityException
    */
   Class getUserDirectoryClass()
     throws SecurityException

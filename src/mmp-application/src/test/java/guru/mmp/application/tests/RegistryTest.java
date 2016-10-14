@@ -48,8 +48,6 @@ public class RegistryTest
 
   /**
    * Test the management of binary configuration values by the <code>Registry</code>.
-   *
-   * @throws RegistryException
    */
   @Test
   public void binaryConfigurationTest()
@@ -109,8 +107,6 @@ public class RegistryTest
 
   /**
    * Test the management of decimal configuration values by the <code>Registry</code>.
-   *
-   * @throws RegistryException
    */
   @Test
   public void decimalConfigurationTest()
@@ -154,8 +150,6 @@ public class RegistryTest
 
   /**
    * Test the management of integer configuration values by the <code>Registry</code>.
-   *
-   * @throws RegistryException
    */
   @Test
   public void integerConfigurationTest()
@@ -196,8 +190,6 @@ public class RegistryTest
   /**
    * Test the management of string configuration values at different levels of the configuration
    * hierarchy by the <code>Registry</code>.
-   *
-   * @throws RegistryException
    */
   @Test
   public void multiLevelStringConfigurationTest()
@@ -213,8 +205,6 @@ public class RegistryTest
 
   /**
    * Test the management of string configuration values by the <code>Registry</code>.
-   *
-   * @throws RegistryException
    */
   @Test
   public void stringConfigurationTest()

@@ -54,6 +54,7 @@ public class TestData
   /**
    * Constructs a new <code>TestData</code>.
    */
+  @SuppressWarnings("unused")
   TestData() {}
 
   /**

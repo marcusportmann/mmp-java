@@ -129,8 +129,6 @@ public class Attribute
    *
    * @return the binary value for the <code>Attribute</code> instance with the specified name in the
    *         specified list
-   *
-   * @throws AttributeException
    */
   public static byte[] getBinaryValue(List<Attribute> list, String name)
     throws AttributeException
@@ -165,8 +163,6 @@ public class Attribute
    *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
    *         specified name in the specified list
-   *
-   * @throws AttributeException
    */
   public static BigDecimal getDecimalValue(List<Attribute> list, String name)
     throws AttributeException
@@ -217,8 +213,6 @@ public class Attribute
    *
    * @return the <code>double</code> value for the <code>Attribute</code> instance with the
    *         specified name in the specified list
-   *
-   * @throws AttributeException
    */
   public static double getDoubleValue(List<Attribute> list, String name)
     throws AttributeException
@@ -269,8 +263,6 @@ public class Attribute
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
    *         name in the specified list
-   *
-   * @throws AttributeException
    */
   public static long getLongValue(List<Attribute> list, String name)
     throws AttributeException
@@ -321,8 +313,6 @@ public class Attribute
    *
    * @return the <code>String</code> value for the <code>Attribute</code> instance with the
    *         specified name in the specified list
-   *
-   * @throws AttributeException
    */
   public static String getStringValue(List<Attribute> list, String name)
     throws AttributeException
@@ -367,8 +357,6 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
-   *
-   * @throws AttributeException
    */
   public static void setBinaryValue(List<Attribute> list, String name, BinaryBuffer value)
     throws AttributeException
@@ -384,8 +372,6 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
-   *
-   * @throws AttributeException
    */
   public static void setBinaryValue(List<Attribute> list, String name, byte[] value)
     throws AttributeException
@@ -413,8 +399,6 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
-   *
-   * @throws AttributeException
    */
   public static void setDecimalValue(List<Attribute> list, String name, BigDecimal value)
     throws AttributeException
@@ -442,8 +426,6 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>double</code> value for the attribute
-   *
-   * @throws AttributeException
    */
   public static void setDoubleValue(List<Attribute> list, String name, double value)
     throws AttributeException
@@ -471,8 +453,6 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>long</code> value for the attribute
-   *
-   * @throws AttributeException
    */
   public static void setLongValue(List<Attribute> list, String name, long value)
     throws AttributeException
@@ -500,8 +480,6 @@ public class Attribute
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>String</code> value for the attribute
-   *
-   * @throws AttributeException
    */
   public static void setStringValue(List<Attribute> list, String name, String value)
     throws AttributeException
@@ -525,8 +503,6 @@ public class Attribute
    * Returns the binary value for the <code>Attribute</code> instance.
    *
    * @return the binary value for the <code>Attribute</code> instance
-   *
-   * @throws AttributeException
    */
   public byte[] getBinaryValue()
     throws AttributeException
@@ -545,8 +521,6 @@ public class Attribute
    * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
-   *
-   * @throws AttributeException
    */
   public BigDecimal getDecimalValue()
     throws AttributeException
@@ -581,8 +555,6 @@ public class Attribute
    * Returns the <code>double</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>double</code> value for the <code>Attribute</code> instance
-   *
-   * @throws AttributeException
    */
   public double getDoubleValue()
     throws AttributeException
@@ -617,8 +589,6 @@ public class Attribute
    * Returns the <code>long</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance
-   *
-   * @throws AttributeException
    */
   public long getLongValue()
     throws AttributeException
@@ -663,8 +633,6 @@ public class Attribute
    * Returns the <code>String</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>String</code> value for the <code>Attribute</code> instance
-   *
-   * @throws AttributeException
    */
   public String getStringValue()
     throws AttributeException

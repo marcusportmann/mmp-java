@@ -96,8 +96,6 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
    * <code>false</code> otherwise
-   *
-   * @throws MessagingException
    */
   public boolean fromMessageData(byte[] messageData)
     throws MessagingException
@@ -183,8 +181,6 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
    * message
-   *
-   * @throws MessagingException
    */
   public byte[] toMessageData()
     throws MessagingException

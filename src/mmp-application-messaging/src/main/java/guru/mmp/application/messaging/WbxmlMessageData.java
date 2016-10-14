@@ -64,8 +64,6 @@ public abstract class WbxmlMessageData
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
    * <code>false</code> otherwise
-   *
-   * @throws MessagingException
    */
   public abstract boolean fromMessageData(byte[] messageData)
     throws MessagingException;
@@ -96,8 +94,6 @@ public abstract class WbxmlMessageData
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
    * message
-   *
-   * @throws MessagingException
    */
   public abstract byte[] toMessageData()
     throws MessagingException;
@@ -108,8 +104,6 @@ public abstract class WbxmlMessageData
    * @param data the WBXML data representation of the message data
    *
    * @return the WBXML document representing the message data
-   *
-   * @throws MessagingException
    */
   protected Document parseWBXML(byte[] data)
     throws MessagingException

@@ -33,10 +33,6 @@ interface IUserDirectory
    *
    * @param username  the username identifying the user
    * @param groupName the name of the security group uniquely identifying the security group
-   *
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   void addUserToGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException;
@@ -50,9 +46,6 @@ interface IUserDirectory
    * @param lockUser             lock the user
    * @param resetPasswordHistory reset the user's password history
    * @param reason               the reason for changing the password
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   void adminChangePassword(String username, String newPassword, boolean expirePassword,
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
@@ -63,12 +56,6 @@ interface IUserDirectory
    *
    * @param username the username identifying the user
    * @param password the password being used to authenticate
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws ExpiredPasswordException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
@@ -80,12 +67,6 @@ interface IUserDirectory
    * @param username    the username identifying the user
    * @param password    the password for the user that is used to authorise the operation
    * @param newPassword the new password
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws UserNotFoundException
-   * @throws ExistingPasswordException
-   * @throws SecurityException
    */
   void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
@@ -95,9 +76,6 @@ interface IUserDirectory
    * Create a new security group.
    *
    * @param group the security group
-   *
-   * @throws DuplicateGroupException
-   * @throws SecurityException
    */
   void createGroup(Group group)
     throws DuplicateGroupException, SecurityException;
@@ -108,9 +86,6 @@ interface IUserDirectory
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
-   *
-   * @throws DuplicateUserException
-   * @throws SecurityException
    */
   void createUser(User user, boolean expiredPassword, boolean userLocked)
     throws DuplicateUserException, SecurityException;
@@ -119,10 +94,6 @@ interface IUserDirectory
    * Delete the security group.
    *
    * @param groupName the name of the security group uniquely identifying the security group
-   *
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
    */
   void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException;
@@ -131,9 +102,6 @@ interface IUserDirectory
    * Delete the user.
    *
    * @param username the username identifying the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   void deleteUser(String username)
     throws UserNotFoundException, SecurityException;
@@ -144,9 +112,6 @@ interface IUserDirectory
    * @param attributes the attribute criteria used to select the users
    *
    * @return the list of users whose attributes match the attribute criteria
-   *
-   * @throws InvalidAttributeException
-   * @throws SecurityException
    */
   List<User> findUsers(List<Attribute> attributes)
     throws InvalidAttributeException, SecurityException;
@@ -157,8 +122,6 @@ interface IUserDirectory
    * @param filter the filter to apply to the users
    *
    * @return the filtered list of users
-   *
-   * @throws SecurityException
    */
   List<User> getFilteredUsers(String filter)
     throws SecurityException;
@@ -169,9 +132,6 @@ interface IUserDirectory
    * @param username the username identifying the user
    *
    * @return the list of authorised function codes for the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   List<String> getFunctionCodesForUser(String username)
     throws UserNotFoundException, SecurityException;
@@ -182,9 +142,6 @@ interface IUserDirectory
    * @param groupName the name of the security group uniquely identifying the security group
    *
    * @return the security group
-   *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   Group getGroup(String groupName)
     throws GroupNotFoundException, SecurityException;
@@ -195,9 +152,6 @@ interface IUserDirectory
    * @param username the username identifying the user
    *
    * @return the security group names for the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   List<String> getGroupNamesForUser(String username)
     throws UserNotFoundException, SecurityException;
@@ -206,8 +160,6 @@ interface IUserDirectory
    * Retrieve all the security groups.
    *
    * @return the list of security groups
-   *
-   * @throws SecurityException
    */
   List<Group> getGroups()
     throws SecurityException;
@@ -218,9 +170,6 @@ interface IUserDirectory
    * @param username the username identifying the user
    *
    * @return the security groups for the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityException;
@@ -231,8 +180,6 @@ interface IUserDirectory
    * @param filter the filter to apply to the users
    *
    * @return the number of filtered users
-   *
-   * @throws SecurityException
    */
   int getNumberOfFilteredUsers(String filter)
     throws SecurityException;
@@ -241,8 +188,6 @@ interface IUserDirectory
    * Retrieve the number of security groups
    *
    * @return the number of security groups
-   *
-   * @throws SecurityException
    */
   int getNumberOfGroups()
     throws SecurityException;
@@ -251,8 +196,6 @@ interface IUserDirectory
    * Retrieve the number of users.
    *
    * @return the number of users
-   *
-   * @throws SecurityException
    */
   int getNumberOfUsers()
     throws SecurityException;
@@ -263,9 +206,6 @@ interface IUserDirectory
    * @param username the username identifying the user
    *
    * @return the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   User getUser(String username)
     throws UserNotFoundException, SecurityException;
@@ -274,8 +214,6 @@ interface IUserDirectory
    * Retrieve all the users.
    *
    * @return the list of users
-   *
-   * @throws SecurityException
    */
   List<User> getUsers()
     throws SecurityException;
@@ -287,8 +225,6 @@ interface IUserDirectory
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
    *         otherwise
-   *
-   * @throws SecurityException
    */
   boolean isExistingUser(String username)
     throws SecurityException;
@@ -301,10 +237,6 @@ interface IUserDirectory
    *
    * @return <code>true</code> if the user is a member of the security group or <code>false</code>
    *         otherwise
-   *
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   boolean isUserInGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException;
@@ -314,10 +246,6 @@ interface IUserDirectory
    *
    * @param username  the username identifying the user
    * @param groupName the security group name
-   *
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException;
@@ -342,9 +270,6 @@ interface IUserDirectory
    * Update the security group.
    *
    * @param group the security group
-   *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   void updateGroup(Group group)
     throws GroupNotFoundException, SecurityException;
@@ -355,9 +280,6 @@ interface IUserDirectory
    * @param user           the user
    * @param expirePassword expire the user's password as part of the update
    * @param lockUser       lock the user as part of the update
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   void updateUser(User user, boolean expirePassword, boolean lockUser)
     throws UserNotFoundException, SecurityException;

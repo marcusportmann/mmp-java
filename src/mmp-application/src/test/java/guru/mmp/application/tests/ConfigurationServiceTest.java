@@ -60,9 +60,6 @@ public class ConfigurationServiceTest
 
   /**
    * Test the <code>Binary</code> configuration.
-   *
-   * @throws ConfigurationException
-   * @throws ConfigurationNotFoundException
    */
   @Test
   public void binaryConfigurationTest()
@@ -109,9 +106,6 @@ public class ConfigurationServiceTest
 
   /**
    * Test the <code>Double</code> configuration.
-   *
-   * @throws ConfigurationException
-   * @throws ConfigurationNotFoundException
    */
   @Test
   public void doubleConfigurationTest()
@@ -155,9 +149,6 @@ public class ConfigurationServiceTest
 
   /**
    * Test the filtered configuration.
-   *
-   * @throws ConfigurationException
-   * @throws ConfigurationNotFoundException
    */
   @Test
   public void filteredConfigurationTest()
@@ -182,9 +173,6 @@ public class ConfigurationServiceTest
 
   /**
    * Test the <code>Integer</code> configuration.
-   *
-   * @throws ConfigurationException
-   * @throws ConfigurationNotFoundException
    */
   @Test
   public void integerConfigurationTest()
@@ -230,9 +218,6 @@ public class ConfigurationServiceTest
 
   /**
    * Test the <code>Long</code> configuration.
-   *
-   * @throws ConfigurationException
-   * @throws ConfigurationNotFoundException
    */
   @Test
   public void longConfigurationTest()
@@ -276,9 +261,6 @@ public class ConfigurationServiceTest
 
   /**
    * Test the <code>String</code> configuration.
-   *
-   * @throws ConfigurationException
-   * @throws ConfigurationNotFoundException
    */
   @Test
   public void stringConfigurationTest()

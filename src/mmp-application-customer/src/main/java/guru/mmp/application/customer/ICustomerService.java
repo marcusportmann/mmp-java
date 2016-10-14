@@ -20,11 +20,9 @@ package guru.mmp.application.customer;
 
 import guru.mmp.application.security.Organisation;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.UUID;
 
-import javax.transaction.Transactional;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ICustomerService</code> interface defines the functionality that must be
@@ -39,8 +37,6 @@ public interface ICustomerService
    *
    * @param customer the <code>Customer</code> instance containing the information for the new
    *                 customer
-   *
-   * @throws CustomerServiceException
    */
   void createCustomer(Customer customer)
     throws CustomerServiceException;
@@ -50,8 +46,6 @@ public interface ICustomerService
    *
    * @param organisation the <code>Organisation</code> instance containing the information for the
    *                     new organisation
-   *
-   * @throws CustomerServiceException
    */
   void createOrganisation(Organisation organisation)
     throws CustomerServiceException;
@@ -62,8 +56,6 @@ public interface ICustomerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the customer
    *
    * @return the customer or <code>null</code> if the customer could not be found
-   *
-   * @throws CustomerServiceException
    */
   Customer getCustomer(UUID id)
     throws CustomerServiceException;
@@ -74,8 +66,6 @@ public interface ICustomerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
    * @return the organisation or <code>null</code> if the organisation could not be found
-   *
-   * @throws CustomerServiceException
    */
   Organisation getOrganisation(UUID id)
     throws CustomerServiceException;
@@ -86,8 +76,6 @@ public interface ICustomerService
    * @param customer the <code>Customer</code> instance containing the customer information
    *
    * @return the updated customer
-   *
-   * @throws CustomerServiceException
    */
   Customer updateCustomer(Customer customer)
     throws CustomerServiceException;
@@ -99,8 +87,6 @@ public interface ICustomerService
    *                     information
    *
    * @return the updated organisation
-   *
-   * @throws CustomerServiceException
    */
   Organisation updateOrganisation(Organisation organisation)
     throws CustomerServiceException;

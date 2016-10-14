@@ -79,8 +79,6 @@ public class ServiceRegistry
    *
    * @return the number of <code>ServiceRegistryEntry</code> instances containing the
    *         configuration information for different web services in the database
-   *
-   * @throws ServiceRegistryException
    */
   public int getNumberOfServiceRegistryEntries()
     throws ServiceRegistryException
@@ -116,8 +114,6 @@ public class ServiceRegistry
    * @param <T>              the Java type for the web service interface
    *
    * @return the web service proxy for the web service with the specified name
-   *
-   * @throws ServiceRegistryException
    */
   public <T> T getServiceProxy(String name, Class<T> serviceInterface)
     throws ServiceRegistryException
@@ -201,8 +197,6 @@ public class ServiceRegistry
    * @return the <code>ServiceRegistryEntry</code> instance containing the configuration information
    *         for the web service with the specified name that describes how to connect to the web
    *         service or <code>null</code> if an entry with the specified name could not be found
-   *
-   * @throws ServiceRegistryException
    */
   public ServiceRegistryEntry getServiceRegistryEntry(String name)
     throws ServiceRegistryException
@@ -323,8 +317,6 @@ public class ServiceRegistry
    * Returns a connection from the data source associated with the Service Registry.
    *
    * @return a connection from the data source associated with the Service Registry
-   *
-   * @throws ServiceRegistryException
    */
   private Connection getConnection()
     throws ServiceRegistryException

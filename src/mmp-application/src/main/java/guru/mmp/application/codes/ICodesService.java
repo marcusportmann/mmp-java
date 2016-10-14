@@ -38,8 +38,6 @@ public interface ICodesService
    *           category
    *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
-   *
-   * @throws CodesServiceException
    */
   boolean cachedCodeCategoryExists(UUID id)
     throws CodesServiceException;
@@ -50,8 +48,6 @@ public interface ICodesService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
-   *
-   * @throws CodesServiceException
    */
   boolean codeCategoryExists(UUID id)
     throws CodesServiceException;
@@ -60,8 +56,6 @@ public interface ICodesService
    * Create the new cached code.
    *
    * @param code the <code>Code</code> instance containing the information for the new cached code
-   *
-   * @throws CodesServiceException
    */
   void createCachedCode(Code code)
     throws CodesServiceException;
@@ -71,8 +65,6 @@ public interface ICodesService
    *
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the
    *                           information for the new cached code category
-   *
-   * @throws CodesServiceException
    */
   void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws CodesServiceException;
@@ -81,8 +73,6 @@ public interface ICodesService
    * Create the new code.
    *
    * @param code the <code>Code</code> instance containing the information for the new code
-   *
-   * @throws CodesServiceException
    */
   void createCode(Code code)
     throws CodesServiceException;
@@ -92,8 +82,6 @@ public interface ICodesService
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
    *                     new code category
-   *
-   * @throws CodesServiceException
    */
   void createCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException;
@@ -103,8 +91,6 @@ public interface ICodesService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
    *           category
-   *
-   * @throws CodesServiceException
    */
   void deleteCachedCodeCategory(UUID id)
     throws CodesServiceException;
@@ -115,8 +101,6 @@ public interface ICodesService
    * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       code category
    * @param id             the ID uniquely identifying the code
-   *
-   * @throws CodesServiceException
    */
   void deleteCode(UUID codeCategoryId, String id)
     throws CodesServiceException;
@@ -125,8 +109,6 @@ public interface ICodesService
    * Delete the code category.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   *
-   * @throws CodesServiceException
    */
   void deleteCodeCategory(UUID id)
     throws CodesServiceException;
@@ -140,8 +122,6 @@ public interface ICodesService
    *
    * @return the cached code category or <code>null</code> if the cached code category could not be
    * found
-   *
-   * @throws CodesServiceException
    */
   CachedCodeCategory getCachedCodeCategory(UUID id, boolean retrieveCodes)
     throws CodesServiceException;
@@ -154,8 +134,6 @@ public interface ICodesService
    * @param id             the ID uniquely identifying the code
    *
    * @return the code or <code>null</code> if the code could not be found
-   *
-   * @throws CodesServiceException
    */
   Code getCode(UUID codeCategoryId, String id)
     throws CodesServiceException;
@@ -166,8 +144,6 @@ public interface ICodesService
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return all the code categories
-   *
-   * @throws CodesServiceException
    */
   List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws CodesServiceException;
@@ -180,8 +156,6 @@ public interface ICodesService
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return the code category or <code>null</code> if the code category could not be found
-   *
-   * @throws CodesServiceException
    */
   CodeCategory getCodeCategory(UUID id, boolean retrieveCodes)
     throws CodesServiceException;
@@ -195,9 +169,7 @@ public interface ICodesService
    * @param retrieveCodes retrieve the codes and/or code data for the code category
    *
    * @return the code category or <code>null</code> if the code category
-   * could not be found
-   *
-   * @throws CodesServiceException
+   *         could not be found
    */
   CodeCategory getCodeCategoryWithParameters(UUID id, Map<String, String> parameters,
       boolean retrieveCodes)
@@ -215,9 +187,7 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodesServiceException
+   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
   CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
@@ -237,9 +207,7 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
-   * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodesServiceException
+   *         <b>Custom</b> code data or <code>null</code> if the code category could not be found
    */
   CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
       String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
@@ -251,8 +219,6 @@ public interface ICodesService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return all the codes for the code category
-   *
-   * @throws CodesServiceException
    */
   List<Code> getCodesForCodeCategory(UUID id)
     throws CodesServiceException;
@@ -261,8 +227,6 @@ public interface ICodesService
    * Returns the number of code categories.
    *
    * @return the number of code categories
-   *
-   * @throws CodesServiceException
    */
   int getNumberOfCodeCategories()
     throws CodesServiceException;
@@ -273,8 +237,6 @@ public interface ICodesService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return the number of codes for the code category
-   *
-   * @throws CodesServiceException
    */
   int getNumberOfCodesForCodeCategory(UUID id)
     throws CodesServiceException;
@@ -291,9 +253,7 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
-   * code data
-   *
-   * @throws CodesServiceException
+   *         code data
    */
   CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
@@ -312,9 +272,7 @@ public interface ICodesService
    *                             <code>lastRetrieved</code> parameter
    *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
-   * code data
-   *
-   * @throws CodesServiceException
+   *         code data
    */
   CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
       String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
@@ -327,9 +285,7 @@ public interface ICodesService
    *           category
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
-   * otherwise
-   *
-   * @throws CodesServiceException
+   *         otherwise
    */
   boolean isCachedCodeCategoryCurrent(UUID id)
     throws CodesServiceException;
@@ -340,8 +296,6 @@ public interface ICodesService
    * @param code the <code>Code</code> instance containing the updated information for the code
    *
    * @return the updated code
-   *
-   * @throws CodesServiceException
    */
   Code updateCode(Code code)
     throws CodesServiceException;
@@ -353,8 +307,6 @@ public interface ICodesService
    *                     for the code category
    *
    * @return the updated code category
-   *
-   * @throws CodesServiceException
    */
   CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException;

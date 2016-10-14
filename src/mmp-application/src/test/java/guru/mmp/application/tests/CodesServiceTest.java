@@ -56,8 +56,6 @@ public class CodesServiceTest
 
   /**
    * Test the code functionality.
-   *
-   * @throws Exception
    */
   @Test
   public void codeTest()
@@ -103,8 +101,6 @@ public class CodesServiceTest
 
   /**
    * Test the retrieve code categories for organisation functionality.
-   *
-   * @throws Exception
    */
   @Test
   public void getCodeCategoriesTest()
@@ -131,8 +127,6 @@ public class CodesServiceTest
 
   /**
    * Test the local custom code category functionality.
-   *
-   * @throws Exception
    */
   @Test
   public void localCustomCodeCategoryTest()
@@ -149,8 +143,6 @@ public class CodesServiceTest
 
   /**
    * Test the remote HTTP service code category functionality.
-   *
-   * @throws Exception
    */
   @Test
   public void localRemoteHttpServiceCategoryTest()
@@ -167,8 +159,6 @@ public class CodesServiceTest
 
   /**
    * Test the remote web service code category functionality.
-   *
-   * @throws Exception
    */
   @Test
   public void localRemoteWebServiceCategoryTest()
@@ -185,8 +175,6 @@ public class CodesServiceTest
 
   /**
    * Test the local standard code category functionality.
-   *
-   * @throws Exception
    */
   @Test
   public void localStandardCodeCategoryTest()
@@ -228,8 +216,6 @@ public class CodesServiceTest
 
   /**
    * Test the local standard codes functionality.
-   *
-   * @throws Exception
    */
   @Test
   public void localStandardCodesTest()

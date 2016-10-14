@@ -155,8 +155,6 @@ public class Message
    * in the specified WBXML document.
    *
    * @param document the WBXML document containing the message information
-   *
-   * @throws MessagingException
    */
   public Message(Document document)
     throws MessagingException

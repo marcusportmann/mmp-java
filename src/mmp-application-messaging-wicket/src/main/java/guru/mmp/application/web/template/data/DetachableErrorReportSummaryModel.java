@@ -34,7 +34,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class DetachableErrorReportSummaryModel
+class DetachableErrorReportSummaryModel
     extends InjectableLoadableDetachableModel<ErrorReportSummary>
 {
   private static final long serialVersionUID = 1000000;
@@ -61,7 +61,7 @@ public class DetachableErrorReportSummaryModel
    *
    * @param errorReportSummary the <code>ErrorReportSummary</code> instance
    */
-  public DetachableErrorReportSummaryModel(ErrorReportSummary errorReportSummary)
+  DetachableErrorReportSummaryModel(ErrorReportSummary errorReportSummary)
   {
     this(errorReportSummary.getId());
 
@@ -74,7 +74,7 @@ public class DetachableErrorReportSummaryModel
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           error report
    */
-  public DetachableErrorReportSummaryModel(UUID id)
+  private DetachableErrorReportSummaryModel(UUID id)
   {
     this.id = id;
   }

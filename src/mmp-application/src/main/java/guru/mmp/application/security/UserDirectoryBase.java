@@ -63,8 +63,6 @@ abstract class UserDirectoryBase
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param parameters      the key-value configuration parameters for the user directory
-   *
-   * @throws SecurityException
    */
   UserDirectoryBase(UUID userDirectoryId, Map<String, String> parameters)
     throws SecurityException
@@ -139,8 +137,6 @@ abstract class UserDirectoryBase
    * @param password the password to hash
    *
    * @return the SHA-256 hash of the password
-   *
-   * @throws SecurityException
    */
   String createPasswordHash(String password)
     throws SecurityException
@@ -170,8 +166,6 @@ abstract class UserDirectoryBase
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
    *         or <code>null</code> if a security group with the specified group name could not be
    *         found
-   *
-   * @throws SecurityException
    */
   UUID deleteGroup(Connection connection, String groupName)
     throws SecurityException
@@ -245,8 +239,6 @@ abstract class UserDirectoryBase
    * @param groupName  the group name uniquely identifying the security group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
-   *
-   * @throws SecurityException
    */
   protected UUID createGroup(Connection connection, String groupName)
     throws SecurityException
@@ -275,8 +267,6 @@ abstract class UserDirectoryBase
    * @param groupName  the group name uniquely identifying the security group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
-   *
-   * @throws SecurityException
    */
   protected UUID createGroup(Connection connection, UUID groupId, String groupName)
     throws SecurityException
@@ -355,8 +345,6 @@ abstract class UserDirectoryBase
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
    *         or <code>null</code> if a security group with the specified group name could not be
    *         found
-   *
-   * @throws SecurityException
    */
   private UUID getGroupId(Connection connection, String groupName)
     throws SecurityException

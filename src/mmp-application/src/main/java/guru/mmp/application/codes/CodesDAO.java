@@ -88,8 +88,6 @@ public class CodesDAO
    *           category
    *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   public boolean cachedCodeCategoryExists(UUID id)
     throws DAOException
@@ -118,8 +116,6 @@ public class CodesDAO
    *           category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   public boolean codeCategoryExists(UUID id)
     throws DAOException
@@ -146,8 +142,6 @@ public class CodesDAO
    *
    * @param code the <code>Code</code> instance containing the information for the new cached
    *             code
-   *
-   * @throws DAOException
    */
   public void createCachedCode(Code code)
     throws DAOException
@@ -188,8 +182,6 @@ public class CodesDAO
    *
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the
    *                           information for the new code category
-   *
-   * @throws DAOException
    */
   public void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws DAOException
@@ -224,8 +216,6 @@ public class CodesDAO
    * Create the new code.
    *
    * @param code the <code>Code</code> instance containing the information for the new code
-   *
-   * @throws DAOException
    */
   public void createCode(Code code)
     throws DAOException
@@ -266,8 +256,6 @@ public class CodesDAO
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
    *                     new code category
-   *
-   * @throws DAOException
    */
   public void createCodeCategory(CodeCategory codeCategory)
     throws DAOException
@@ -329,8 +317,6 @@ public class CodesDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
    *           category
-   *
-   * @throws DAOException
    */
   public void deleteCachedCodeCategory(UUID id)
     throws DAOException
@@ -360,8 +346,6 @@ public class CodesDAO
    * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       code category
    * @param id             the ID uniquely identifying the code
-   *
-   * @throws DAOException
    */
   public void deleteCode(UUID codeCategoryId, String id)
     throws DAOException
@@ -392,8 +376,6 @@ public class CodesDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code
    *           category
-   *
-   * @throws DAOException
    */
   public void deleteCodeCategory(UUID id)
     throws DAOException
@@ -425,8 +407,6 @@ public class CodesDAO
    *
    * @return the cached code category or <code>null</code> if the cached code category could not
    * be found
-   *
-   * @throws DAOException
    */
   public CachedCodeCategory getCachedCodeCategory(UUID id)
     throws DAOException
@@ -462,8 +442,6 @@ public class CodesDAO
    *           category
    *
    * @return all the cached codes for the cached code category
-   *
-   * @throws DAOException
    */
   public List<Code> getCachedCodesForCachedCodeCategory(UUID id)
     throws DAOException
@@ -502,8 +480,6 @@ public class CodesDAO
    * @param id             the ID uniquely identifying the code
    *
    * @return the code or <code>null</code> if the code could not be found
-   *
-   * @throws DAOException
    */
   public Code getCode(UUID codeCategoryId, String id)
     throws DAOException
@@ -539,8 +515,6 @@ public class CodesDAO
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return all the code categories
-   *
-   * @throws DAOException
    */
   public List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws DAOException
@@ -589,8 +563,6 @@ public class CodesDAO
    *           category
    *
    * @return the code category or <code>null</code> if the code category could not be found
-   *
-   * @throws DAOException
    */
   public CodeCategory getCodeCategory(UUID id)
     throws DAOException
@@ -626,8 +598,6 @@ public class CodesDAO
    *           category
    *
    * @return all the codes for the code category
-   *
-   * @throws DAOException
    */
   public List<Code> getCodesForCodeCategory(UUID id)
     throws DAOException
@@ -647,8 +617,6 @@ public class CodesDAO
    * Returns the number of code categories.
    *
    * @return the number of code categories
-   *
-   * @throws DAOException
    */
   public int getNumberOfCodeCategories()
     throws DAOException
@@ -683,8 +651,6 @@ public class CodesDAO
    *           category
    *
    * @return the number of codes for the code category
-   *
-   * @throws DAOException
    */
   public int getNumberOfCodesForCodeCategory(UUID id)
     throws DAOException
@@ -768,8 +734,6 @@ public class CodesDAO
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
    * otherwise
-   *
-   * @throws DAOException
    */
   public boolean isCachedCodeCategoryCurrent(UUID id)
     throws DAOException
@@ -802,8 +766,6 @@ public class CodesDAO
    * @param code the <code>Code</code> instance containing the updated information for the code
    *
    * @return the updated code
-   *
-   * @throws DAOException
    */
   public Code updateCode(Code code)
     throws DAOException
@@ -838,8 +800,6 @@ public class CodesDAO
    *                     for the code category
    *
    * @return the updated code category
-   *
-   * @throws DAOException
    */
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws DAOException

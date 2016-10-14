@@ -41,8 +41,6 @@ public interface IMessageHandler
    * @param message the message to process
    *
    * @return the response message or <code>null</code> if no response message exists
-   *
-   * @throws MessageHandlerException
    */
   Message processMessage(Message message)
     throws MessageHandlerException;

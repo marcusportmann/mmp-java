@@ -56,8 +56,6 @@ public class TestCodeProvider
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodeProviderException
    */
   @Override
   public CodeCategory getCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
@@ -80,8 +78,6 @@ public class TestCodeProvider
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodeProviderException
    */
   public CodeCategory getCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
       String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)

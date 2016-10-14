@@ -41,8 +41,6 @@ public interface ICodeProvider
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodeProviderException
    */
   CodeCategory getCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
@@ -61,8 +59,6 @@ public interface ICodeProvider
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodeProviderException
    */
   CodeCategory getCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
       String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)

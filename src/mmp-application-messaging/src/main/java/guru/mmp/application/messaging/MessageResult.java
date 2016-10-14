@@ -94,8 +94,6 @@ public class MessageResult
    * Constructs a new <code>MessageResult</code>.
    *
    * @param document the WBXML document containing the message result information
-   *
-   * @throws MessagingException
    */
   public MessageResult(Document document)
     throws MessagingException

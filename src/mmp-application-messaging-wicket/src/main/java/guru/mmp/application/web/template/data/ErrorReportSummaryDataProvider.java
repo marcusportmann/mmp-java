@@ -45,7 +45,7 @@ public class ErrorReportSummaryDataProvider extends InjectableDataProvider<Error
   /**
    * The maximum number of summaries for the most recent error reports to retrieve.
    */
-  int maximumNumberOfEntries;
+  private int maximumNumberOfEntries;
 
   /* Messaging Service */
   @Inject

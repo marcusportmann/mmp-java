@@ -84,8 +84,6 @@ public class MessageDownloadResponse
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message download response information
-   *
-   * @throws MessagingException
    */
   public MessageDownloadResponse(Document document)
     throws MessagingException

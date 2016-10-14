@@ -89,8 +89,6 @@ public class CodesService
    *           category
    *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
-   *
-   * @throws CodesServiceException
    */
   public boolean cachedCodeCategoryExists(UUID id)
     throws CodesServiceException
@@ -112,8 +110,6 @@ public class CodesService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
-   *
-   * @throws CodesServiceException
    */
   public boolean codeCategoryExists(UUID id)
     throws CodesServiceException
@@ -133,8 +129,6 @@ public class CodesService
    * Create the new cached code.
    *
    * @param code the <code>Code</code> instance containing the information for the new cached code
-   *
-   * @throws CodesServiceException
    */
   public void createCachedCode(Code code)
     throws CodesServiceException
@@ -156,8 +150,6 @@ public class CodesService
    *
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the
    *                           information for the new cached code category
-   *
-   * @throws CodesServiceException
    */
   public void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws CodesServiceException
@@ -177,8 +169,6 @@ public class CodesService
    * Create the new code.
    *
    * @param code the <code>Code</code> instance containing the information for the new code
-   *
-   * @throws CodesServiceException
    */
   public void createCode(Code code)
     throws CodesServiceException
@@ -200,8 +190,6 @@ public class CodesService
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
    *                     new code category
-   *
-   * @throws CodesServiceException
    */
   public void createCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException
@@ -222,8 +210,6 @@ public class CodesService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
    *           category
-   *
-   * @throws CodesServiceException
    */
   public void deleteCachedCodeCategory(UUID id)
     throws CodesServiceException
@@ -245,8 +231,6 @@ public class CodesService
    * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       code category
    * @param id             the ID uniquely identifying the code
-   *
-   * @throws CodesServiceException
    */
   public void deleteCode(UUID codeCategoryId, String id)
     throws CodesServiceException
@@ -266,8 +250,6 @@ public class CodesService
    * Delete the code category.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   *
-   * @throws CodesServiceException
    */
   public void deleteCodeCategory(UUID id)
     throws CodesServiceException
@@ -292,10 +274,7 @@ public class CodesService
    *
    * @return the cached code category or <code>null</code> if the cached code category could not be
    * found
-   *
-   * @throws CodesServiceException
    */
-
   public CachedCodeCategory getCachedCodeCategory(UUID id, boolean retrieveCodes)
     throws CodesServiceException
   {
@@ -327,8 +306,6 @@ public class CodesService
    * @param id             the ID uniquely identifying the code
    *
    * @return the code or <code>null</code> if the code could not be found
-   *
-   * @throws CodesServiceException
    */
   public Code getCode(UUID codeCategoryId, String id)
     throws CodesServiceException
@@ -350,8 +327,6 @@ public class CodesService
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return all the code categories
-   *
-   * @throws CodesServiceException
    */
   public List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws CodesServiceException
@@ -374,8 +349,6 @@ public class CodesService
    * @param retrieveCodes retrieve the codes and/or code data for the code categories
    *
    * @return the code category or <code>null</code> if the code category could not be found
-   *
-   * @throws CodesServiceException
    */
   public CodeCategory getCodeCategory(UUID id, boolean retrieveCodes)
     throws CodesServiceException
@@ -414,8 +387,6 @@ public class CodesService
    *
    * @return the code category or <code>null</code> if the code category
    * could not be found
-   *
-   * @throws CodesServiceException
    */
   public CodeCategory getCodeCategoryWithParameters(UUID id, Map<String, String> parameters,
       boolean retrieveCodes)
@@ -458,8 +429,6 @@ public class CodesService
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodesServiceException
    */
   public CodeCategory getCodeProviderCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
@@ -502,8 +471,6 @@ public class CodesService
    *
    * @return the code provider code category including the <b>Standard</b> codes and/or
    * <b>Custom</b> code data or <code>null</code> if the code category could not be found
-   *
-   * @throws CodesServiceException
    */
   public CodeCategory getCodeProviderCodeCategoryWithParameters(CodeCategory codeCategory,
       Map<String, String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
@@ -538,8 +505,6 @@ public class CodesService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return all the codes for the code category
-   *
-   * @throws CodesServiceException
    */
   public List<Code> getCodesForCodeCategory(UUID id)
     throws CodesServiceException
@@ -559,8 +524,6 @@ public class CodesService
    * Returns the number of code categories.
    *
    * @return the number of code categories
-   *
-   * @throws CodesServiceException
    */
   public int getNumberOfCodeCategories()
     throws CodesServiceException
@@ -581,8 +544,6 @@ public class CodesService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
    *
    * @return the number of codes for the code category
-   *
-   * @throws CodesServiceException
    */
   public int getNumberOfCodesForCodeCategory(UUID id)
     throws CodesServiceException
@@ -611,8 +572,6 @@ public class CodesService
    *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
    * code data
-   *
-   * @throws CodesServiceException
    */
   public CodeCategory getRemoteCodeCategory(CodeCategory codeCategory, Date lastRetrieved,
       boolean returnCodesIfCurrent)
@@ -692,8 +651,6 @@ public class CodesService
    *
    * @return the remote code category including the <b>Standard</b> codes and/or <b>Custom</b>
    * code data
-   *
-   * @throws CodesServiceException
    */
   public CodeCategory getRemoteCodeCategoryWithParameters(CodeCategory codeCategory, Map<String,
       String> parameters, Date lastRetrieved, boolean returnCodesIfCurrent)
@@ -764,8 +721,6 @@ public class CodesService
    *
    * @return <code>true</code> if the cached code category is current or <code>false</code>
    * otherwise
-   *
-   * @throws CodesServiceException
    */
   public boolean isCachedCodeCategoryCurrent(UUID id)
     throws CodesServiceException
@@ -787,8 +742,6 @@ public class CodesService
    * @param code the <code>Code</code> instance containing the updated information for the code
    *
    * @return the updated code
-   *
-   * @throws CodesServiceException
    */
   public Code updateCode(Code code)
     throws CodesServiceException
@@ -811,8 +764,6 @@ public class CodesService
    *                     for the code category
    *
    * @return the updated code category
-   *
-   * @throws CodesServiceException
    */
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException
@@ -839,8 +790,6 @@ public class CodesService
    * code data.
    *
    * @param codeCategory the remote code category
-   *
-   * @throws CodesServiceException
    */
   private synchronized void cacheRemoteCodeCategory(CodeCategory codeCategory)
     throws CodesServiceException
@@ -991,8 +940,6 @@ public class CodesService
 
   /**
    * Initialise the code providers.
-   *
-   * @throws CodesServiceException
    */
   private void initCodeProviders()
     throws CodesServiceException
@@ -1046,8 +993,6 @@ public class CodesService
   /**
    * Read the code provider configurations from all the <i>META-INF/CodeProviders.xml</i>
    * configuration files that can be found on the classpath.
-   *
-   * @throws CodesServiceException
    */
   private void readCodeProviderConfigurations()
     throws CodesServiceException

@@ -68,8 +68,6 @@ public class CustomerService
    *
    * @param customer the <code>Customer</code> instance containing the information for the new
    *                 customer
-   *
-   * @throws CustomerServiceException
    */
   @Transactional
   public void createCustomer(Customer customer)
@@ -93,8 +91,6 @@ public class CustomerService
    *
    * @param organisation the <code>Organisation</code> instance containing the information for the
    *                     new organisation
-   *
-   * @throws CustomerServiceException
    */
   @Transactional
   public void createOrganisation(Organisation organisation)
@@ -119,8 +115,6 @@ public class CustomerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the customer
    *
    * @return the customer or <code>null</code> if the customer could not be found
-   *
-   * @throws CustomerServiceException
    */
   public Customer getCustomer(UUID id)
     throws CustomerServiceException
@@ -141,8 +135,6 @@ public class CustomerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
    * @return the organisation or <code>null</code> if the organisation could not be found
-   *
-   * @throws CustomerServiceException
    */
   public Organisation getOrganisation(UUID id)
     throws CustomerServiceException
@@ -182,8 +174,6 @@ public class CustomerService
    * @param customer the <code>Customer</code> instance containing the customer information
    *
    * @return the updated customer
-   *
-   * @throws CustomerServiceException
    */
   public Customer updateCustomer(Customer customer)
     throws CustomerServiceException
@@ -209,8 +199,6 @@ public class CustomerService
    *                     information
    *
    * @return the updated organisation
-   *
-   * @throws CustomerServiceException
    */
   public Organisation updateOrganisation(Organisation organisation)
     throws CustomerServiceException
@@ -231,8 +219,6 @@ public class CustomerService
 
   /**
    * Initialise the configuration for the Customer Service instance.
-   *
-   * @throws CustomerServiceException
    */
   private void initConfiguration()
     throws CustomerServiceException

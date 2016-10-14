@@ -88,8 +88,6 @@ public class SystemMessageHandler extends MessageHandler
    * @param message the message to process
    *
    * @return the response message or <code>null</code> if no response message exists
-   *
-   * @throws MessageHandlerException
    */
   public Message processMessage(Message message)
     throws MessageHandlerException

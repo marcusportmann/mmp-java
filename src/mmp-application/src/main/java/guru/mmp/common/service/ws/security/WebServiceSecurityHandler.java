@@ -252,8 +252,6 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    *
    * @return <code>true</code> if handler processing should continue for the current message
    *         or <code>false</code> if processing should stop
-   *
-   * @throws WSSecurityException
    */
   @SuppressWarnings({ "unchecked" })
   private boolean doRequest(SOAPVersion soapVersion, SOAPMessageContext messageContext,
@@ -517,8 +515,6 @@ public class WebServiceSecurityHandler extends WebServiceSecurityHandlerBase
    *
    * @return <code>true</code> if handler processing should continue for the current message
    *         or <code>false</code> if processing should stop
-   *
-   * @throws WSSecurityException
    */
   private boolean doResponse(SOAPVersion soapVersion, SOAPMessageContext messageContext,
       RequestData requestData)

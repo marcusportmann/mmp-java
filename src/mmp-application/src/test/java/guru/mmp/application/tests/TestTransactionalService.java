@@ -58,8 +58,6 @@ public class TestTransactionalService
    * Create the test data.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   @Transactional
   public void createTestData(TestData testData)
@@ -89,8 +87,6 @@ public class TestTransactionalService
    * Create the test data in a new transaction.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   @Transactional(Transactional.TxType.REQUIRES_NEW)
   public void createTestDataInNewTransaction(TestData testData)
@@ -121,8 +117,6 @@ public class TestTransactionalService
    * Create the test data in a new transaction with a checked exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   @Transactional(Transactional.TxType.REQUIRES_NEW)
   public void createTestDataInNewTransactionWithCheckedException(TestData testData)
@@ -138,8 +132,6 @@ public class TestTransactionalService
    * Create the test data in a new transaction with a runtime exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   @Transactional(Transactional.TxType.REQUIRES_NEW)
   public void createTestDataInNewTransactionWithRuntimeException(TestData testData)
@@ -154,8 +146,6 @@ public class TestTransactionalService
    * Create the test data with a checked exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   @Transactional
   public void createTestDataWithCheckedException(TestData testData)
@@ -171,8 +161,6 @@ public class TestTransactionalService
    * Create the test data with a runtime exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   @Transactional
   public void createTestDataWithRuntimeException(TestData testData)
@@ -189,8 +177,6 @@ public class TestTransactionalService
    * @param id the ID
    *
    * @return the test data or <code>null</code> if the test data cannot be found
-   *
-   * @throws TestTransactionalServiceException
    */
   public TestData getTestData(String id)
     throws TestTransactionalServiceException
@@ -266,8 +252,6 @@ public class TestTransactionalService
    * Generate the SQL statements.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects
-   *
-   * @throws SQLException
    */
   private void buildStatements(String schemaPrefix)
     throws SQLException

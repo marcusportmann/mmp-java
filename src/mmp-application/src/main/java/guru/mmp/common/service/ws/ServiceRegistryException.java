@@ -41,7 +41,7 @@ public class ServiceRegistryException extends RuntimeException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ServiceRegistryException(String message)
+  ServiceRegistryException(String message)
   {
     super(message);
   }

@@ -116,8 +116,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param parameters      the key-value configuration parameters for the user directory
-   *
-   * @throws SecurityException
    */
   public LDAPUserDirectory(UUID userDirectoryId, Map<String, String> parameters)
     throws SecurityException
@@ -430,10 +428,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @param username  the username identifying the user
    * @param groupName the name of the security group uniquely identifying the security group
-   *
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public void addUserToGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException
@@ -515,9 +509,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param lockUser             lock the user
    * @param resetPasswordHistory reset the user's password history
    * @param reason               the reason for changing the password
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public void adminChangePassword(String username, String newPassword, boolean expirePassword,
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
@@ -625,12 +616,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @param username the username identifying the user
    * @param password the password being used to authenticate
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws ExpiredPasswordException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
@@ -726,12 +711,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param username    the username identifying the user
    * @param password    the password for the user that is used to authorise the operation
    * @param newPassword the new password
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws UserNotFoundException
-   * @throws ExistingPasswordException
-   * @throws SecurityException
    */
   public void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
@@ -829,9 +808,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Create a new security group.
    *
    * @param group the security group
-   *
-   * @throws DuplicateGroupException
-   * @throws SecurityException
    */
   public void createGroup(Group group)
     throws DuplicateGroupException, SecurityException
@@ -888,9 +864,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
-   *
-   * @throws DuplicateUserException
-   * @throws SecurityException
    */
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
     throws DuplicateUserException, SecurityException
@@ -1016,10 +989,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Delete the security group.
    *
    * @param groupName the name of the security group uniquely identifying the security group
-   *
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
    */
   public void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
@@ -1070,9 +1039,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Delete the user.
    *
    * @param username the username identifying the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public void deleteUser(String username)
     throws UserNotFoundException, SecurityException
@@ -1114,9 +1080,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param attributes the attribute criteria used to select the users
    *
    * @return the list of users whose attributes match the attribute criteria
-   *
-   * @throws InvalidAttributeException
-   * @throws SecurityException
    */
   public List<User> findUsers(List<Attribute> attributes)
     throws InvalidAttributeException, SecurityException
@@ -1221,8 +1184,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param filter the filter to apply to the users
    *
    * @return the filtered list of users
-   *
-   * @throws SecurityException
    */
   public List<User> getFilteredUsers(String filter)
     throws SecurityException
@@ -1290,9 +1251,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    *
    * @return the list of authorised function codes for the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public List<String> getFunctionCodesForUser(String username)
     throws UserNotFoundException, SecurityException
@@ -1399,9 +1357,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param groupName the name of the security group uniquely identifying the security group
    *
    * @return the security group
-   *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public Group getGroup(String groupName)
     throws GroupNotFoundException, SecurityException
@@ -1455,9 +1410,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    *
    * @return the security group names for the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public List<String> getGroupNamesForUser(String username)
     throws UserNotFoundException, SecurityException
@@ -1522,8 +1474,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Retrieve all the security groups.
    *
    * @return the list of security groups
-   *
-   * @throws SecurityException
    */
   public List<Group> getGroups()
     throws SecurityException
@@ -1572,9 +1522,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    *
    * @return the security groups for the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityException
@@ -1635,8 +1582,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param filter the filter to apply to the users
    *
    * @return the number of filtered users
-   *
-   * @throws SecurityException
    */
   public int getNumberOfFilteredUsers(String filter)
     throws SecurityException
@@ -1707,8 +1652,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Retrieve the number of security groups
    *
    * @return the number of security groups
-   *
-   * @throws SecurityException
    */
   public int getNumberOfGroups()
     throws SecurityException
@@ -1758,8 +1701,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Retrieve the number of users.
    *
    * @return the number of users
-   *
-   * @throws SecurityException
    */
   public int getNumberOfUsers()
     throws SecurityException
@@ -1825,9 +1766,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    *
    * @return the user
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public User getUser(String username)
     throws UserNotFoundException, SecurityException
@@ -1868,8 +1806,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Retrieve all the users.
    *
    * @return the list of users
-   *
-   * @throws SecurityException
    */
   public List<User> getUsers()
     throws SecurityException
@@ -1931,8 +1867,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
    *         otherwise
-   *
-   * @throws SecurityException
    */
   public boolean isExistingUser(String username)
     throws SecurityException
@@ -1995,10 +1929,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @return <code>true</code> if the user is a member of the security group or <code>false</code>
    *         otherwise
-   *
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public boolean isUserInGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException
@@ -2067,10 +1997,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @param username  the username identifying the user
    * @param groupName the security group name
-   *
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityException
@@ -2171,9 +2097,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Update the security group.
    *
    * @param group the security group
-   *
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public void updateGroup(Group group)
     throws GroupNotFoundException, SecurityException
@@ -2228,9 +2151,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * @param user           the user
    * @param expirePassword expire the user's password as part of the update
    * @param lockUser       lock the user as part of the update
-   *
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
     throws UserNotFoundException, SecurityException

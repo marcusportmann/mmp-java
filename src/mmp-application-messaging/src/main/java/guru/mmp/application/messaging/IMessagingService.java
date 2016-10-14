@@ -33,8 +33,6 @@ public interface IMessagingService
    * Archive the message.
    *
    * @param message the message to archive
-   *
-   * @throws MessagingException
    */
   void archiveMessage(Message message)
     throws MessagingException;
@@ -47,8 +45,6 @@ public interface IMessagingService
    *
    * @return <code>true</code> if the message processor is capable of processing the specified
    *         message or <code>false</code> otherwise
-   *
-   * @throws MessagingException
    */
   boolean canProcessMessage(Message message)
     throws MessagingException;
@@ -61,8 +57,6 @@ public interface IMessagingService
    *
    * @return <code>true</code> if the message processor is capable of queueing the specified
    *         message part for assembly or <code>false</code> otherwise
-   *
-   * @throws MessagingException
    */
   boolean canQueueMessagePartForAssembly(MessagePart messagePart)
     throws MessagingException;
@@ -72,8 +66,6 @@ public interface IMessagingService
    *
    * @param errorReport the <code>ErrorReport</code> instance containing the information for the
    *                    error report
-   *
-   * @throws MessagingException
    */
   void createErrorReport(ErrorReport errorReport)
     throws MessagingException;
@@ -85,8 +77,6 @@ public interface IMessagingService
    *
    * @return <code>true</code> if the message data was decrypted successfully or <code>false</code>
    *         otherwise
-   *
-   * @throws MessagingException
    */
   boolean decryptMessage(Message message)
     throws MessagingException;
@@ -95,8 +85,6 @@ public interface IMessagingService
    * Delete the message.
    *
    * @param message the message to delete
-   *
-   * @throws MessagingException
    */
   void deleteMessage(Message message)
     throws MessagingException;
@@ -105,8 +93,6 @@ public interface IMessagingService
    * Delete the message.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *
-   * @throws MessagingException
    */
   void deleteMessage(UUID id)
     throws MessagingException;
@@ -115,8 +101,6 @@ public interface IMessagingService
    * Delete the message part.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
-   *
-   * @throws MessagingException
    */
   void deleteMessagePart(UUID id)
     throws MessagingException;
@@ -128,8 +112,6 @@ public interface IMessagingService
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the user-device encryption key
-   *
-   * @throws MessagingException
    */
   byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
     throws MessagingException;
@@ -141,8 +123,6 @@ public interface IMessagingService
    *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
    *         otherwise
-   *
-   * @throws MessagingException
    */
   boolean encryptMessage(Message message)
     throws MessagingException;
@@ -153,8 +133,6 @@ public interface IMessagingService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    *
    * @return the error report or <code>null</code> if the error report could not be found
-   *
-   * @throws MessagingException
    */
   ErrorReport getErrorReport(UUID id)
     throws MessagingException;
@@ -166,8 +144,6 @@ public interface IMessagingService
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
    *         found
-   *
-   * @throws MessagingException
    */
   ErrorReportSummary getErrorReportSummary(UUID id)
     throws MessagingException;
@@ -186,8 +162,6 @@ public interface IMessagingService
    *
    * @return the message or <code>null</code> if the message could not
    *         be found
-   *
-   * @throws MessagingException
    */
   Message getMessage(UUID id)
     throws MessagingException;
@@ -200,8 +174,6 @@ public interface IMessagingService
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the message parts that have been queued for download by a particular remote device
-   *
-   * @throws MessagingException
    */
   List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
     throws MessagingException;
@@ -214,8 +186,6 @@ public interface IMessagingService
    *
    * @return the messages for a user that have been queued for download by a particular remote
    *         device
-   *
-   * @throws MessagingException
    */
   List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
     throws MessagingException;
@@ -234,8 +204,6 @@ public interface IMessagingService
    *                               reports to retrieve
    *
    * @return the summaries for the most recent error reports
-   *
-   * @throws MessagingException
    */
   List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
     throws MessagingException;
@@ -247,8 +215,6 @@ public interface IMessagingService
    *
    * @return the next message that has been queued for processing or <code>null</code> if no
    *         messages are currently queued for processing
-   *
-   * @throws MessagingException
    */
   Message getNextMessageQueuedForProcessing()
     throws MessagingException;
@@ -257,8 +223,6 @@ public interface IMessagingService
    * Returns the total number of error reports.
    *
    * @return the total number of error reports
-   *
-   * @throws MessagingException
    */
   int getNumberOfErrorReports()
     throws MessagingException;
@@ -267,8 +231,6 @@ public interface IMessagingService
    * Increment the processing attempts for the message.
    *
    * @param message the message whose processing attempts should be incremented
-   *
-   * @throws MessagingException
    */
   void incrementMessageProcessingAttempts(Message message)
     throws MessagingException;
@@ -300,8 +262,6 @@ public interface IMessagingService
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
    *         otherwise
-   *
-   * @throws MessagingException
    */
   boolean isMessageArchived(Message message)
     throws MessagingException;
@@ -322,8 +282,6 @@ public interface IMessagingService
    * @param message the message to process
    *
    * @return the response message or <code>null</code> if no response message exists
-   *
-   * @throws MessagingException
    */
   Message processMessage(Message message)
     throws MessagingException;
@@ -332,8 +290,6 @@ public interface IMessagingService
    * Queue the specified message for download by a remote device.
    *
    * @param message the message to queue
-   *
-   * @throws MessagingException
    */
   void queueMessageForDownload(Message message)
     throws MessagingException;
@@ -342,8 +298,6 @@ public interface IMessagingService
    * Queue the specified message for processing.
    *
    * @param message the message to queue
-   *
-   * @throws MessagingException
    */
   void queueMessageForProcessing(Message message)
     throws MessagingException;
@@ -352,8 +306,6 @@ public interface IMessagingService
    * Queue the specified message part for assembly.
    *
    * @param messagePart the message part to queue
-   *
-   * @throws MessagingException
    */
   void queueMessagePartForAssembly(MessagePart messagePart)
     throws MessagingException;
@@ -363,8 +315,6 @@ public interface IMessagingService
    *
    * @param status    the current status of the messages that have been locked
    * @param newStatus the new status for the messages that have been unlocked
-   *
-   * @throws MessagingException
    */
   void resetMessageLocks(Message.Status status, Message.Status newStatus)
     throws MessagingException;
@@ -374,8 +324,6 @@ public interface IMessagingService
    *
    * @param status    the current status of the message parts that have been locked
    * @param newStatus the new status for the message parts that have been unlocked
-   *
-   * @throws MessagingException
    */
   void resetMessagePartLocks(MessagePart.Status status, MessagePart.Status newStatus)
     throws MessagingException;
@@ -385,8 +333,6 @@ public interface IMessagingService
    *
    * @param message the message to unlock
    * @param status  the new status for the unlocked message
-   *
-   * @throws MessagingException
    */
   void unlockMessage(Message message, Message.Status status)
     throws MessagingException;

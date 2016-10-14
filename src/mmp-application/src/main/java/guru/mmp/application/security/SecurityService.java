@@ -137,11 +137,6 @@ public class SecurityService
    *                        user directory
    * @param username        the username identifying the user
    * @param groupName       the name of the security group uniquely identifying the security group
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public void addUserToGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
@@ -180,10 +175,6 @@ public class SecurityService
    * @param lockUser             lock the user
    * @param resetPasswordHistory reset the user's password history
    * @param reason               the reason for changing the password
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
@@ -220,12 +211,6 @@ public class SecurityService
    * @param password the password being used to authenticate
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws ExpiredPasswordException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
@@ -312,12 +297,6 @@ public class SecurityService
    * @param newPassword the new password
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *
-   * @throws AuthenticationFailedException
-   * @throws UserLockedException
-   * @throws UserNotFoundException
-   * @throws ExistingPasswordException
-   * @throws SecurityException
    */
   public UUID changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
@@ -405,9 +384,6 @@ public class SecurityService
    * Create a new authorised function.
    *
    * @param function the function
-   *
-   * @throws DuplicateFunctionException
-   * @throws SecurityException
    */
   public void createFunction(Function function)
     throws DuplicateFunctionException, SecurityException
@@ -467,10 +443,6 @@ public class SecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param group           the security group
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws DuplicateGroupException
-   * @throws SecurityException
    */
   public void createGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityException
@@ -500,9 +472,6 @@ public class SecurityService
    *
    * @return the new internal user directory that was created for the organisation or
    *         <code>null</code> if no user directory was created
-   *
-   * @throws DuplicateOrganisationException
-   * @throws SecurityException
    */
   public UserDirectory createOrganisation(Organisation organisation, boolean createUserDirectory)
     throws DuplicateOrganisationException, SecurityException
@@ -673,10 +642,6 @@ public class SecurityService
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws DuplicateUserException
-   * @throws SecurityException
    */
   public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
       boolean userLocked)
@@ -703,8 +668,6 @@ public class SecurityService
    * Create a new user directory.
    *
    * @param userDirectory the user directory
-   *
-   * @throws SecurityException
    */
   public void createUserDirectory(UserDirectory userDirectory)
     throws SecurityException
@@ -759,9 +722,6 @@ public class SecurityService
    * Delete the authorised function.
    *
    * @param code the code identifying the authorised function
-   *
-   * @throws FunctionNotFoundException
-   * @throws SecurityException
    */
   public void deleteFunction(String code)
     throws FunctionNotFoundException, SecurityException
@@ -807,11 +767,6 @@ public class SecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param groupName       the name of the security group uniquely identifying the security group
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws GroupNotFoundException
-   * @throws ExistingGroupMembersException
-   * @throws SecurityException
    */
   public void deleteGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
@@ -838,9 +793,6 @@ public class SecurityService
    * Delete the organisation.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
-   *
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
    */
   public void deleteOrganisation(UUID id)
     throws OrganisationNotFoundException, SecurityException
@@ -886,10 +838,6 @@ public class SecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param username        the username identifying the user
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public void deleteUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
@@ -915,9 +863,6 @@ public class SecurityService
    * Delete the user directory.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public void deleteUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException
@@ -961,10 +906,6 @@ public class SecurityService
    * @param attributes      the attribute criteria used to select the users
    *
    * @return the list of users whose attributes match the attribute criteria
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws InvalidAttributeException
-   * @throws SecurityException
    */
   public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityException
@@ -992,8 +933,6 @@ public class SecurityService
    * @param filter the filter to apply to the organisations
    *
    * @return the filtered list of organisations
-   *
-   * @throws SecurityException
    */
   public List<Organisation> getFilteredOrganisations(String filter)
     throws SecurityException
@@ -1037,8 +976,6 @@ public class SecurityService
    * @param filter the filter to apply to the user directories
    *
    * @return the filtered list of user directories
-   *
-   * @throws SecurityException
    */
   public List<UserDirectory> getFilteredUserDirectories(String filter)
     throws SecurityException
@@ -1084,9 +1021,6 @@ public class SecurityService
    * @param filter          the filter to apply to the users
    *
    * @return the filtered list of users
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public List<User> getFilteredUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1108,9 +1042,6 @@ public class SecurityService
    * @param code the code identifying the function
    *
    * @return the authorised function
-   *
-   * @throws FunctionNotFoundException
-   * @throws SecurityException
    */
   public Function getFunction(String code)
     throws FunctionNotFoundException, SecurityException
@@ -1161,10 +1092,6 @@ public class SecurityService
    * @param username        the username identifying the user
    *
    * @return the list of authorised function codes for the user
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
@@ -1190,8 +1117,6 @@ public class SecurityService
    * Retrieve all the authorised functions.
    *
    * @return the list of authorised functions
-   *
-   * @throws SecurityException
    */
   public List<Function> getFunctions()
     throws SecurityException
@@ -1226,10 +1151,6 @@ public class SecurityService
    * @param groupName       the name of the security group uniquely identifying the security group
    *
    * @return the security group
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public Group getGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException
@@ -1259,10 +1180,6 @@ public class SecurityService
    * @param username        the username identifying the user
    *
    * @return the security group names for the user
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
@@ -1291,9 +1208,6 @@ public class SecurityService
    *                        user directory
    *
    * @return the list of security groups
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public List<Group> getGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1317,10 +1231,6 @@ public class SecurityService
    * @param username        the username identifying the user
    *
    * @return the security groups for the user
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
@@ -1348,8 +1258,6 @@ public class SecurityService
    * @param filter the filter to apply to the organisations
    *
    * @return the number of filtered organisations
-   *
-   * @throws SecurityException
    */
   public int getNumberOfFilteredOrganisations(String filter)
     throws SecurityException
@@ -1395,8 +1303,6 @@ public class SecurityService
    * @param filter the filter to apply to the user directories
    *
    * @return the number of filtered user directories
-   *
-   * @throws SecurityException
    */
   public int getNumberOfFilteredUserDirectories(String filter)
     throws SecurityException
@@ -1444,9 +1350,6 @@ public class SecurityService
    * @param filter          the filter to apply to the users
    *
    * @return the number of filtered users
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public int getNumberOfFilteredUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1469,9 +1372,6 @@ public class SecurityService
    *                        user directory
    *
    * @return the number of security groups
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public int getNumberOfGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1491,8 +1391,6 @@ public class SecurityService
    * Retrieve the number of organisations
    *
    * @return the number of organisations
-   *
-   * @throws SecurityException
    */
   public int getNumberOfOrganisations()
     throws SecurityException
@@ -1523,8 +1421,6 @@ public class SecurityService
    * Retrieve the number of user directories
    *
    * @return the number of user directories
-   *
-   * @throws SecurityException
    */
   public int getNumberOfUserDirectories()
     throws SecurityException
@@ -1558,9 +1454,6 @@ public class SecurityService
    *                        user directory
    *
    * @return the number of users
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public int getNumberOfUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1582,9 +1475,6 @@ public class SecurityService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organisation
    *
    * @return the organisation
-   *
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
    */
   public Organisation getOrganisation(UUID id)
     throws OrganisationNotFoundException, SecurityException
@@ -1633,9 +1523,6 @@ public class SecurityService
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
    *         associated with the user directory
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public List<UUID> getOrganisationIdsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1670,8 +1557,6 @@ public class SecurityService
    * Retrieve the organisations.
    *
    * @return the list of organisations
-   *
-   * @throws SecurityException
    */
   public List<Organisation> getOrganisations()
     throws SecurityException
@@ -1705,9 +1590,6 @@ public class SecurityService
    *                        user directory
    *
    * @return the organisations associated with the user directory
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public List<Organisation> getOrganisationsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1746,10 +1628,6 @@ public class SecurityService
    * @param username        the username identifying the user
    *
    * @return the user
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public User getUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
@@ -1775,8 +1653,6 @@ public class SecurityService
    * Retrieve the user directories.
    *
    * @return the list of user directories
-   *
-   * @throws SecurityException
    */
   public List<UserDirectory> getUserDirectories()
     throws SecurityException
@@ -1810,9 +1686,6 @@ public class SecurityService
    *                       organisation
    *
    * @return the user directories the organisation is associated with
-   *
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
    */
   public List<UserDirectory> getUserDirectoriesForOrganisation(UUID organisationId)
     throws OrganisationNotFoundException, SecurityException
@@ -1849,9 +1722,6 @@ public class SecurityService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the user directory
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public UserDirectory getUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException
@@ -1894,8 +1764,6 @@ public class SecurityService
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *         that the user with the specified username is associated with or <code>null</code> if
    *         the user cannot be found
-   *
-   * @throws SecurityException
    */
   public UUID getUserDirectoryIdForUser(String username)
     throws SecurityException
@@ -1952,8 +1820,6 @@ public class SecurityService
    * Retrieve the user directory types.
    *
    * @return the user directory types
-   *
-   * @throws SecurityException
    */
   public List<UserDirectoryType> getUserDirectoryTypes()
     throws SecurityException
@@ -1988,9 +1854,6 @@ public class SecurityService
    *                        user directory
    *
    * @return the list of users
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public List<User> getUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
@@ -2068,11 +1931,6 @@ public class SecurityService
    *
    * @return <code>true</code> if the user is a member of the security group or <code>false</code>
    *         otherwise
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public boolean isUserInGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
@@ -2102,8 +1960,6 @@ public class SecurityService
 
   /**
    * Reload the user directories.
-   *
-   * @throws SecurityException
    */
   public void reloadUserDirectories()
     throws SecurityException
@@ -2175,11 +2031,6 @@ public class SecurityService
    *                        user directory
    * @param username        the username identifying the user
    * @param groupName       the security group name
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
@@ -2215,8 +2066,6 @@ public class SecurityService
    *
    * @return <code>true</code> if the user directory supports administering security groups or
    *         <code>false</code> otherwise
-   *
-   * @throws UserDirectoryNotFoundException
    */
   public boolean supportsGroupAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException
@@ -2240,8 +2089,6 @@ public class SecurityService
    *
    * @return <code>true</code> if the user directory supports administering users or
    *         <code>false</code> otherwise
-   *
-   * @throws UserDirectoryNotFoundException
    */
   public boolean supportsUserAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException
@@ -2261,9 +2108,6 @@ public class SecurityService
    * Update the authorised function.
    *
    * @param function the function
-   *
-   * @throws FunctionNotFoundException
-   * @throws SecurityException
    */
   public void updateFunction(Function function)
     throws FunctionNotFoundException, SecurityException
@@ -2321,10 +2165,6 @@ public class SecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param group           the security group
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws GroupNotFoundException
-   * @throws SecurityException
    */
   public void updateGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityException
@@ -2350,9 +2190,6 @@ public class SecurityService
    * Update the organisation.
    *
    * @param organisation the organisation
-   *
-   * @throws OrganisationNotFoundException
-   * @throws SecurityException
    */
   public void updateOrganisation(Organisation organisation)
     throws OrganisationNotFoundException, SecurityException
@@ -2405,10 +2242,6 @@ public class SecurityService
    * @param user            the user
    * @param expirePassword  expire the user's password as part of the update
    * @param lockUser        lock the user as part of the update
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws UserNotFoundException
-   * @throws SecurityException
    */
   public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityException
@@ -2434,9 +2267,6 @@ public class SecurityService
    * Update the user directory.
    *
    * @param userDirectory the user directory
-   *
-   * @throws UserDirectoryNotFoundException
-   * @throws SecurityException
    */
   public void updateUserDirectory(UserDirectory userDirectory)
     throws UserDirectoryNotFoundException, SecurityException
@@ -2481,8 +2311,6 @@ public class SecurityService
    *           <code>Function</code> instance
    *
    * @return the populated <code>Function</code> instance
-   *
-   * @throws SQLException
    */
   private Function buildFunctionFromResultSet(ResultSet rs)
     throws SQLException
@@ -2505,8 +2333,6 @@ public class SecurityService
    *           <code>Organisation</code> instance
    *
    * @return the populated <code>Organisation</code> instance
-   *
-   * @throws SQLException
    */
   private Organisation buildOrganisationFromResultSet(ResultSet rs)
     throws SQLException
@@ -2522,8 +2348,6 @@ public class SecurityService
    * Generate the SQL statements.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects
-   *
-   * @throws SQLException
    */
   private void buildStatements(String schemaPrefix)
     throws SQLException
@@ -2656,9 +2480,6 @@ public class SecurityService
    *           <code>UserDirectory</code> instance
    *
    * @return the populated <code>UserDirectory</code> instance
-   *
-   * @throws SQLException
-   * @throws SecurityException
    */
   private UserDirectory buildUserDirectoryFromResultSet(ResultSet rs)
     throws SQLException, SecurityException
@@ -2682,8 +2503,6 @@ public class SecurityService
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the function or
    *         <code>null</code> if a function with the specified code cannot be found
-   *
-   * @throws SQLException
    */
   private UUID getFunctionId(Connection connection, String code)
     throws SQLException
@@ -2715,8 +2534,6 @@ public class SecurityService
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
    *         directory the internal user with the specified username is associated with or
    *         <code>null</code> if an internal user with the specified username could not be found
-   *
-   * @throws SecurityException
    */
   private UUID getInternalUserDirectoryIdForUser(String username)
     throws SecurityException
@@ -2749,8 +2566,6 @@ public class SecurityService
 
   /**
    * Initialise the configuration for the <code>SecurityService</code> instance.
-   *
-   * @throws SecurityException
    */
   private void initConfiguration()
     throws SecurityException
@@ -2819,8 +2634,6 @@ public class SecurityService
    *                   organisation
    *
    * @return <code>true</code> if the organisation exists or <code>false</code> otherwise
-   *
-   * @throws SecurityException
    */
   private boolean organisationExists(Connection connection, UUID id)
     throws SecurityException
@@ -2850,8 +2663,6 @@ public class SecurityService
    *
    * @return <code>true</code> if an organisation with the specified name exists or
    *         <code>false</code> otherwise
-   *
-   * @throws SecurityException
    */
   private boolean organisationWithNameExists(Connection connection, String name)
     throws SecurityException
@@ -2874,8 +2685,6 @@ public class SecurityService
 
   /**
    * Reload the user directory types.
-   *
-   * @throws SecurityException
    */
   private void reloadUserDirectoryTypes()
     throws SecurityException

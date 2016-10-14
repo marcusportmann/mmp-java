@@ -83,7 +83,7 @@ public class WebServiceSecurityContext
    * @param clientCertificate the X509 certificate identifying the remote application that executed
    *                          the secure web service operation
    */
-  public void setClientCertificate(X509Certificate clientCertificate)
+  void setClientCertificate(X509Certificate clientCertificate)
   {
     this.clientCertificate = clientCertificate;
   }

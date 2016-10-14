@@ -69,7 +69,7 @@ public class CustomerServiceException
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public CustomerServiceException(String message, Throwable cause)
+  CustomerServiceException(String message, Throwable cause)
   {
     super(message, cause);
   }

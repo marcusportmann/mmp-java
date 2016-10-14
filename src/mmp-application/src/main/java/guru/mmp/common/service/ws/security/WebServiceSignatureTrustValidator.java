@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  *
  * @author Marcus Portmann
  */
-public class WebServiceSignatureTrustValidator extends org.apache.ws.security.validate
+class WebServiceSignatureTrustValidator extends org.apache.ws.security.validate
     .SignatureTrustValidator
 {
   /* Logger */

@@ -28,8 +28,6 @@ public interface ITestTransactionalService
    * Create the test data.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   void createTestData(TestData testData)
     throws TestTransactionalServiceException;
@@ -38,8 +36,6 @@ public interface ITestTransactionalService
    * Create the test data in a new transaction.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   void createTestDataInNewTransaction(TestData testData)
     throws TestTransactionalServiceException;
@@ -48,8 +44,6 @@ public interface ITestTransactionalService
    * Create the test data in a new transaction with a checked exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   void createTestDataInNewTransactionWithCheckedException(TestData testData)
     throws TestTransactionalServiceException;
@@ -58,8 +52,6 @@ public interface ITestTransactionalService
    * Create the test data in a new transaction with a runtime exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   void createTestDataInNewTransactionWithRuntimeException(TestData testData)
     throws TestTransactionalServiceException;
@@ -68,8 +60,6 @@ public interface ITestTransactionalService
    * Create the test data with a checked exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   void createTestDataWithCheckedException(TestData testData)
     throws TestTransactionalServiceException;
@@ -78,8 +68,6 @@ public interface ITestTransactionalService
    * Create the test data with a runtime exception.
    *
    * @param testData the test data
-   *
-   * @throws TestTransactionalServiceException
    */
   void createTestDataWithRuntimeException(TestData testData)
     throws TestTransactionalServiceException;
@@ -90,8 +78,6 @@ public interface ITestTransactionalService
    * @param id the ID
    *
    * @return the test data or <code>null</code> if the test data cannot be found
-   *
-   * @throws TestTransactionalServiceException
    */
   TestData getTestData(String id)
     throws TestTransactionalServiceException;
