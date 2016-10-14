@@ -21,7 +21,9 @@ dependencies {
   compile('javax:javaee-api:7.0')
   compile('junit:junit:4.12')
   compile('org.apache.tomcat:tomcat-catalina:8.0.37')
-  compile('org.hibernate:hibernate-entitymanager:5.2.2.Final')
+  compile('org.hibernate:hibernate-core:5.2.3.Final') {
+    exclude group: 'org.jboss', module: 'jandex'
+  }
   compile('org.jboss.weld.se:weld-se-core:2.4.0.Final')
   compile('org.mockito:mockito-all:1.10.19')
   compile('org.slf4j:slf4j-jdk14:1.7.21')
