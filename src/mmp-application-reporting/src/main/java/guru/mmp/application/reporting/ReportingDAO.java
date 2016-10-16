@@ -73,8 +73,6 @@ public class ReportingDAO
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
    *                         for the new report definition
-   *
-   * @throws DAOException
    */
   public void createReportDefinition(ReportDefinition reportDefinition)
     throws DAOException
@@ -106,8 +104,6 @@ public class ReportingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition
-   *
-   * @throws DAOException
    */
   public void deleteReportDefinition(UUID id)
     throws DAOException
@@ -145,8 +141,6 @@ public class ReportingDAO
    * Returns the number of report definitions.
    *
    * @return the number of report definitions
-   *
-   * @throws DAOException
    */
   public int getNumberOfReportDefinitions()
     throws DAOException
@@ -183,8 +177,6 @@ public class ReportingDAO
    *
    * @return the report definition or <code>null</code> if the report
    * definition could not be found
-   *
-   * @throws DAOException
    */
   public ReportDefinition getReportDefinition(UUID id)
     throws DAOException
@@ -217,8 +209,6 @@ public class ReportingDAO
    * Returns the summaries for all the report definitions.
    *
    * @return the summaries for all the report definitions
-   *
-   * @throws DAOException
    */
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws DAOException
@@ -253,8 +243,6 @@ public class ReportingDAO
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
    * could not be found
-   *
-   * @throws DAOException
    */
   public ReportDefinitionSummary getReportDefinitionSummary(UUID id)
     throws DAOException
@@ -288,8 +276,6 @@ public class ReportingDAO
    * Returns all the report definitions.
    *
    * @return all the report definitions
-   *
-   * @throws DAOException
    */
   public List<ReportDefinition> getReportDefinitions()
     throws DAOException
@@ -365,8 +351,6 @@ public class ReportingDAO
    *           definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   public boolean reportDefinitionExists(UUID id)
     throws DAOException
@@ -404,8 +388,6 @@ public class ReportingDAO
    *                         information for the report definition
    *
    * @return the updated report definition
-   *
-   * @throws DAOException
    */
   public ReportDefinition updateReportDefinition(ReportDefinition reportDefinition)
     throws DAOException
@@ -439,7 +421,7 @@ public class ReportingDAO
    *
    * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
    */
-  protected void buildStatements(String schemaPrefix)
+  private void buildStatements(String schemaPrefix)
   {
     // createReportDefinitionSQL
     createReportDefinitionSQL = "INSERT INTO " + schemaPrefix + "REPORT_DEFINITIONS (ID, NAME, "

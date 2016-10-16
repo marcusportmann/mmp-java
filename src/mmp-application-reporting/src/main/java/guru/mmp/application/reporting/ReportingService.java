@@ -18,34 +18,25 @@ package guru.mmp.application.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.util.StringUtil;
-
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-
-import java.sql.Connection;
-
-import java.util.*;
-
 import javax.annotation.PostConstruct;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.sql.Connection;
+import java.util.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -80,8 +71,6 @@ public class ReportingService
    * @param parameters   the parameters for the report
    *
    * @return the PDF data for the report
-   *
-   * @throws ReportingServiceException
    */
   public byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters)
     throws ReportingServiceException
@@ -130,8 +119,6 @@ public class ReportingService
    * @param connection   the database connection used to retrieve the report data
    *
    * @return the PDF data for the report
-   *
-   * @throws ReportingServiceException
    */
   public byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters,
       Connection connection)
@@ -181,8 +168,6 @@ public class ReportingService
    * @param document     the XML document containing the report data
    *
    * @return the PDF data for the report
-   *
-   * @throws ReportingServiceException
    */
   public byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters,
       Document document)
@@ -234,8 +219,6 @@ public class ReportingService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition
-   *
-   * @throws ReportingServiceException
    */
   public void deleteReportDefinition(UUID id)
     throws ReportingServiceException
@@ -265,8 +248,6 @@ public class ReportingService
    * Returns the number of report definitions.
    *
    * @return the number of report definitions
-   *
-   * @throws ReportingServiceException
    */
   public int getNumberOfReportDefinitions()
     throws ReportingServiceException
@@ -288,8 +269,6 @@ public class ReportingService
    *           definition
    *
    * @return the report definition or <code>null</code> if the report definition could not be found
-   *
-   * @throws ReportingServiceException
    */
   public ReportDefinition getReportDefinition(UUID id)
     throws ReportingServiceException
@@ -309,8 +288,6 @@ public class ReportingService
    * Returns the summaries for all the report definitions.
    *
    * @return the summaries for all the report definitions
-   *
-   * @throws ReportingServiceException
    */
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException
@@ -334,8 +311,6 @@ public class ReportingService
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
    * could not be found
-   *
-   * @throws ReportingServiceException
    */
   public ReportDefinitionSummary getReportDefinitionSummary(UUID id)
     throws ReportingServiceException
@@ -355,8 +330,6 @@ public class ReportingService
    * Returns all the report definitions.
    *
    * @return all the report definitions
-   *
-   * @throws ReportingServiceException
    */
   public List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException
@@ -397,8 +370,6 @@ public class ReportingService
    *           definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
-   *
-   * @throws ReportingServiceException
    */
   public boolean reportDefinitionExists(UUID id)
     throws ReportingServiceException
@@ -424,8 +395,6 @@ public class ReportingService
    *                         for the report definition
    *
    * @return the saved report definition
-   *
-   * @throws ReportingServiceException
    */
   public ReportDefinition saveReportDefinition(ReportDefinition reportDefinition)
     throws ReportingServiceException
@@ -463,17 +432,7 @@ public class ReportingService
 
   /**
    * Initialise the configuration for the Reporting Service.
-   *
-   * @throws ReportingServiceException
    */
   private void initConfiguration()
-    throws ReportingServiceException
-  {
-    try {}
-    catch (Throwable e)
-    {
-      throw new ReportingServiceException(
-          "Failed to initialise the configuration for the Reporting Service", e);
-    }
-  }
+    throws ReportingServiceException {}
 }

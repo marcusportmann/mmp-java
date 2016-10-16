@@ -34,7 +34,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class DetachableReportDefinitionSummaryModel
+class DetachableReportDefinitionSummaryModel
     extends InjectableLoadableDetachableModel<ReportDefinitionSummary>
 {
   private static final long serialVersionUID = 1000000;
@@ -61,7 +61,7 @@ public class DetachableReportDefinitionSummaryModel
    *
    * @param reportDefinitionSummary the <code>ReportDefinitionSummary</code> instance
    */
-  public DetachableReportDefinitionSummaryModel(ReportDefinitionSummary reportDefinitionSummary)
+  DetachableReportDefinitionSummaryModel(ReportDefinitionSummary reportDefinitionSummary)
   {
     this(reportDefinitionSummary.getId());
 
@@ -74,7 +74,7 @@ public class DetachableReportDefinitionSummaryModel
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition
    */
-  public DetachableReportDefinitionSummaryModel(UUID id)
+  private DetachableReportDefinitionSummaryModel(UUID id)
   {
     this.id = id;
   }

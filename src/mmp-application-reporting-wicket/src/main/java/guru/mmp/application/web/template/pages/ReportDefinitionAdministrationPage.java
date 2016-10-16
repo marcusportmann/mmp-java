@@ -22,7 +22,6 @@ import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.reporting.ReportDefinitionSummary;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.components.Dialog;
@@ -55,6 +54,7 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
 public class ReportDefinitionAdministrationPage extends TemplateWebPage
 {
@@ -70,14 +70,13 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
   /**
    * Constructs a new <code>ReportDefinitionAdministrationPage</code>.
    */
+  @SuppressWarnings("unused")
   public ReportDefinitionAdministrationPage()
   {
     super("Report Definitions");
 
     try
     {
-      WebSession session = getWebApplicationSession();
-
       /*
        * The table container, which allows the table and its associated navigator to be updated
        * using AJAX.
@@ -202,7 +201,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the code table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(WebMarkupContainer tableContainer)
+    RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

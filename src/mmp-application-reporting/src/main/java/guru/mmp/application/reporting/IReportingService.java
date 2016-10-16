@@ -49,8 +49,6 @@ public interface IReportingService
    * @param parameters   the parameters for the report
    *
    * @return the PDF data for the report
-   *
-   * @throws ReportingServiceException
    */
   byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters)
     throws ReportingServiceException;
@@ -64,8 +62,6 @@ public interface IReportingService
    * @param connection   the database connection used to retrieve the report data
    *
    * @return the PDF data for the report
-   *
-   * @throws ReportingServiceException
    */
   byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters, Connection connection)
     throws ReportingServiceException;
@@ -79,8 +75,6 @@ public interface IReportingService
    * @param document     the XML document containing the report data
    *
    * @return the PDF data for the report
-   *
-   * @throws ReportingServiceException
    */
   byte[] createReportPDF(UUID definitionId, Map<String, Object> parameters, Document document)
     throws ReportingServiceException;
@@ -90,8 +84,6 @@ public interface IReportingService
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the
    *           report definition
-   *
-   * @throws ReportingServiceException
    */
   void deleteReportDefinition(UUID id)
     throws ReportingServiceException;
@@ -107,8 +99,6 @@ public interface IReportingService
    * Returns the number of report definitions.
    *
    * @return the number of report definitions
-   *
-   * @throws ReportingServiceException
    */
   int getNumberOfReportDefinitions()
     throws ReportingServiceException;
@@ -120,8 +110,6 @@ public interface IReportingService
    *           definition
    *
    * @return the report definition or <code>null</code> if the report definition could not be found
-   *
-   * @throws ReportingServiceException
    */
   ReportDefinition getReportDefinition(UUID id)
     throws ReportingServiceException;
@@ -130,8 +118,6 @@ public interface IReportingService
    * Returns the summaries for all the report definitions.
    *
    * @return the summaries for all the report definitions
-   *
-   * @throws ReportingServiceException
    */
   List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException;
@@ -144,8 +130,6 @@ public interface IReportingService
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
    * could not be found
-   *
-   * @throws ReportingServiceException
    */
   ReportDefinitionSummary getReportDefinitionSummary(UUID id)
     throws ReportingServiceException;
@@ -154,8 +138,6 @@ public interface IReportingService
    * Returns all the report definitions.
    *
    * @return all the report definitions
-   *
-   * @throws ReportingServiceException
    */
   List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException;
@@ -167,8 +149,6 @@ public interface IReportingService
    *           definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
-   *
-   * @throws ReportingServiceException
    */
   boolean reportDefinitionExists(UUID id)
     throws ReportingServiceException;
@@ -183,8 +163,6 @@ public interface IReportingService
    *                         for the report definition
    *
    * @return the saved report definition
-   *
-   * @throws ReportingServiceException
    */
   ReportDefinition saveReportDefinition(ReportDefinition reportDefinition)
     throws ReportingServiceException;

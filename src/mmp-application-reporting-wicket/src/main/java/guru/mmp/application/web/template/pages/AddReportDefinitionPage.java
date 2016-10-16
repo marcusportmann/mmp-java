@@ -21,7 +21,6 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.components.ReportDefinitionInputPanel;
@@ -50,7 +49,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
-public class AddReportDefinitionPage extends TemplateWebPage
+class AddReportDefinitionPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddReportDefinitionPage.class);
@@ -65,7 +64,7 @@ public class AddReportDefinitionPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddReportDefinitionPage(PageReference previousPage)
+  AddReportDefinitionPage(PageReference previousPage)
   {
     super("Add Report Definition");
 

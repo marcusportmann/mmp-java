@@ -43,7 +43,7 @@ public class ReportingServiceException extends Exception
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ReportingServiceException(String message)
+  ReportingServiceException(String message)
   {
     super(message);
   }
@@ -68,7 +68,7 @@ public class ReportingServiceException extends Exception
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ReportingServiceException(String message, Throwable cause)
+  ReportingServiceException(String message, Throwable cause)
   {
     super(message, cause);
   }

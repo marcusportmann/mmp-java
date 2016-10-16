@@ -39,8 +39,6 @@ public interface IReportingDAO
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
    *                         for the new report definition
-   *
-   * @throws DAOException
    */
   void createReportDefinition(ReportDefinition reportDefinition)
     throws DAOException;
@@ -50,8 +48,6 @@ public interface IReportingDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
    *           definition
-   *
-   * @throws DAOException
    */
   void deleteReportDefinition(UUID id)
     throws DAOException;
@@ -67,8 +63,6 @@ public interface IReportingDAO
    * Returns the number of report definitions.
    *
    * @return the number of report definitions
-   *
-   * @throws DAOException
    */
   int getNumberOfReportDefinitions()
     throws DAOException;
@@ -80,8 +74,6 @@ public interface IReportingDAO
    *           definition
    *
    * @return the report definition or <code>null</code> if the report definition could not be found
-   *
-   * @throws DAOException
    */
   ReportDefinition getReportDefinition(UUID id)
     throws DAOException;
@@ -90,8 +82,6 @@ public interface IReportingDAO
    * Returns the summaries for all the report definitions.
    *
    * @return the summaries for all the report definitions
-   *
-   * @throws DAOException
    */
   List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws DAOException;
@@ -104,8 +94,6 @@ public interface IReportingDAO
    *
    * @return the summary for the report definition or <code>null</code> if the report definition
    * could not be found
-   *
-   * @throws DAOException
    */
   ReportDefinitionSummary getReportDefinitionSummary(UUID id)
     throws DAOException;
@@ -114,8 +102,6 @@ public interface IReportingDAO
    * Returns all the report definitions.
    *
    * @return all the report definitions
-   *
-   * @throws DAOException
    */
   List<ReportDefinition> getReportDefinitions()
     throws DAOException;
@@ -127,8 +113,6 @@ public interface IReportingDAO
    *           definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   boolean reportDefinitionExists(UUID id)
     throws DAOException;
@@ -140,8 +124,6 @@ public interface IReportingDAO
    *                         information for the report definition
    *
    * @return the updated report definition
-   *
-   * @throws DAOException
    */
   ReportDefinition updateReportDefinition(ReportDefinition reportDefinition)
     throws DAOException;

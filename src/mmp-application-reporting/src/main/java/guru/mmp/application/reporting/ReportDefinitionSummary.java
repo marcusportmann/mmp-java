@@ -55,7 +55,7 @@ public class ReportDefinitionSummary
    *             definition
    * @param name the name of the report definition
    */
-  public ReportDefinitionSummary(UUID id, String name)
+  ReportDefinitionSummary(UUID id, String name)
   {
     this.id = id;
     this.name = name;
