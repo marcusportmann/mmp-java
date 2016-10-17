@@ -54,7 +54,6 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
 public class ReportDefinitionAdministrationPage extends TemplateWebPage
 {
