@@ -179,7 +179,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
       administrationGroup.sortItems();
     }
 
-    navigationRoot.sortItems();
+    //navigationRoot.sortItems();
 
 /*
     // Initialise the template-web-application.css resource bundle for the Web Application Template
