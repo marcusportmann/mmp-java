@@ -43,7 +43,7 @@ public class ReportDefinitionInputPanel extends InputPanel
    * Constructs a new <code>ReportDefinitionInputPanel</code>.
    *
    * @param id           the non-null id of this component
-   * @param isIdReadOnly <code>true</code> if the ID for the <code>Code</code>
+   * @param isIdReadOnly <code>true</code> if the ID for the <code>ReportDefinition</code>
    *                     is readonly or <code>false</code> otherwise
    */
   public ReportDefinitionInputPanel(String id, boolean isIdReadOnly)

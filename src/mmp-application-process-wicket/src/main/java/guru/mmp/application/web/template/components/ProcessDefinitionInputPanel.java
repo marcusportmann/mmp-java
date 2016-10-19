@@ -43,7 +43,7 @@ public class ProcessDefinitionInputPanel extends InputPanel
    * Constructs a new <code>ProcessDefinitionInputPanel</code>.
    *
    * @param id           the non-null id of this component
-   * @param isIdReadOnly <code>true</code> if the ID for the <code>Code</code>
+   * @param isIdReadOnly <code>true</code> if the ID for the <code>ProcessDefinition</code>
    *                     is readonly or <code>false</code> otherwise
    */
   public ProcessDefinitionInputPanel(String id, boolean isIdReadOnly)
