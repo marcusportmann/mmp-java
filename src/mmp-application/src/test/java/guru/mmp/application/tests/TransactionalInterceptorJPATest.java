@@ -440,6 +440,20 @@ public class TransactionalInterceptorJPATest
   }
 
   /**
+   * testGetTestDataWithoutTransaction
+   */
+  @Test
+  public void testGetTestDataWithoutTransaction()
+    throws Exception
+  {
+    TestData testData = getTestData();
+
+    testJPAService.createTestData(testData);
+
+    testJPAService.getTestDataWithoutTransaction(testData.getId());
+  }
+
+  /**
    * testSuccessfulExecutionInNewTransactionWithRollback
    */
   @Test

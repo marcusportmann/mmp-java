@@ -437,32 +437,6 @@ public class EntityManagerWrapper
   }
 
   /**
-   * Create the the non-transactional entity manager for the persistence unit with the specified
-   * name and track it.
-   * <p>
-   * If a non-transactional entity manager already exists for the persistence unit for the current
-   * thread then it will be returned.
-   *
-   * @param persistenceUnitName the name of the persistence unit
-   *
-   * @return the non-transactional entity manager
-   */
-  private static EntityManager createAndTrackNonTransactionalEntityManager(
-      String persistenceUnitName)
-  {
-    EntityManager entityManager = nonTransactionalEntityManagers.get().get(persistenceUnitName);
-
-    if (entityManager == null)
-    {
-      entityManager = createEntityManager(persistenceUnitName);
-
-      nonTransactionalEntityManagers.get().put(persistenceUnitName, entityManager);
-    }
-
-    return entityManager;
-  }
-
-  /**
    * Create an entity manager for the persistence unit with the specified name.
    *
    * @param persistenceUnitName the name of the persistence unit
@@ -543,7 +517,16 @@ public class EntityManagerWrapper
        */
       else
       {
-        return createAndTrackNonTransactionalEntityManager(persistenceUnitName);
+        EntityManager entityManager = nonTransactionalEntityManagers.get().get(persistenceUnitName);
+
+        if (entityManager == null)
+        {
+          entityManager = createEntityManager(persistenceUnitName);
+
+          nonTransactionalEntityManagers.get().put(persistenceUnitName, entityManager);
+        }
+
+        return entityManager;
       }
     }
     catch (Throwable e)
@@ -1038,7 +1021,7 @@ public class EntityManagerWrapper
     {
       List<X> result = underlyingQuery.getResultList();
 
-      /**
+      /*
        * The purpose of this wrapper class is so that we can detach the returned entities from this
        * method. Call EntityManager.clear will accomplish that.
        */
@@ -1052,7 +1035,7 @@ public class EntityManagerWrapper
     {
       X result = underlyingQuery.getSingleResult();
 
-      /**
+      /*
        * The purpose of this wrapper class is so that we can detach the returned entities from this
        * method. Call EntityManager.clear will accomplish that.
        */

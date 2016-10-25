@@ -164,7 +164,21 @@ public class TransactionManagerTransactionTracker
 
         case "setRollbackOnly":
         {
-          return proxy.invokeSuper(obj, args);
+          /*
+           * This check to confirm that we have a valid transaction was added to handle the issue
+           * where the Hibernate JPA implementation would try to rollback a transaction even if one
+           * didn't exist when a non-hibernate exception was thrown.
+           */
+          Transaction transaction = (Transaction) getTransactionMethod.invoke(obj);
+
+          if (transaction != null)
+          {
+            return proxy.invokeSuper(obj, args);
+          }
+          else
+          {
+            return null;
+          }
         }
 
         case "suspend":
