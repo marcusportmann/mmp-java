@@ -123,6 +123,16 @@ public class SelectOrganisationPage extends WebPage
             List<String> functionCodes = securityService.getFunctionCodesForUser(
                 session.getUserDirectoryId(), session.getUsername());
 
+            logger.info("The user (" + session.getUsername()
+                + ") is a member of the following groups: " + ((groupNames.size() == 0)
+                ? "None"
+                : StringUtil.delimit(groupNames, ",")));
+
+            logger.info("The user (" + session.getUsername()
+                + ") has access to the following functions: " + ((functionCodes.size() == 0)
+                ? "None"
+                : StringUtil.delimit(functionCodes, ",")));
+
             session.setOrganisation(securityService.getOrganisation(UUID.fromString(
                 organisation.getValue())));
             session.setGroupNames(groupNames);

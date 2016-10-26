@@ -160,7 +160,7 @@ public class TemplateWebSession extends WebSession
         // Filter navigation based on the user's security privileges
         if (link.isSecure())
         {
-          if (hasAcccessToFunction(link.getFunctionCode()))
+          if (hasAcccessToFunction(link.getFunctionCodes()))
           {
             filteredGroup.addItem(link);
           }

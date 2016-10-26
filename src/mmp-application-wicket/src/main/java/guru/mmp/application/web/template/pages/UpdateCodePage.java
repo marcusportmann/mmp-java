@@ -81,8 +81,6 @@ public class UpdateCodePage extends TemplateWebPage
         {
           try
           {
-            WebSession session = getWebApplicationSession();
-
             Code code = updateForm.getModelObject();
 
             codesService.updateCode(code);

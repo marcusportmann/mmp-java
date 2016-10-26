@@ -170,6 +170,16 @@ public class LoginPage extends WebPage
               List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
                   username);
 
+              logger.info("The user (" + username + ") is a member of the following groups: "
+                  + ((groupNames.size() == 0)
+                  ? "None"
+                  : StringUtil.delimit(groupNames, ",")));
+
+              logger.info("The user (" + username + ") has access to the following functions: "
+                  + ((functionCodes.size() == 0)
+                  ? "None"
+                  : StringUtil.delimit(functionCodes, ",")));
+
               session.setOrganisation(organisations.get(0));
               session.setGroupNames(groupNames);
               session.setFunctionCodes(functionCodes);

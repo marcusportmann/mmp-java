@@ -41,7 +41,7 @@ public class NavigationLink extends NavigationItem
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-  private String functionCode;
+  private String[] functionCodes;
   private boolean isAnonymousOnly;
   private boolean isSecure;
   private Class<? extends Page> pageClass;
@@ -65,7 +65,7 @@ public class NavigationLink extends NavigationItem
    * @param pageClass      the class for the Wicket <code>Page</code> associated with the link
    * @param pageParameters the parameters for the page associated with the link
    */
-  public NavigationLink(String name, Class<? extends Page> pageClass, PageParameters pageParameters)
+  NavigationLink(String name, Class<? extends Page> pageClass, PageParameters pageParameters)
   {
     this(name, null, pageClass, pageParameters);
   }
@@ -90,7 +90,7 @@ public class NavigationLink extends NavigationItem
    * @param pageClass      the class for the Wicket <code>Page</code> associated with the link
    * @param pageParameters the parameters for the page associated with the link
    */
-  public NavigationLink(String name, String iconClass, Class<? extends Page> pageClass,
+  NavigationLink(String name, String iconClass, Class<? extends Page> pageClass,
       PageParameters pageParameters)
   {
     super(name, iconClass);
@@ -101,7 +101,7 @@ public class NavigationLink extends NavigationItem
 
     if (webPageSecurity != null)
     {
-      this.functionCode = webPageSecurity.value();
+      this.functionCodes = webPageSecurity.value();
       this.isSecure = true;
     }
     else
@@ -111,12 +111,12 @@ public class NavigationLink extends NavigationItem
 
       if (secureAnonymousWebPage != null)
       {
-        this.functionCode = WebPage.FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS;
+        this.functionCodes = new String[] { WebPage.FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS };
         this.isSecure = true;
       }
       else
       {
-        this.functionCode = WebPage.FUNCTION_CODE_ANONYMOUS_ACCESS;
+        this.functionCodes = new String[] { WebPage.FUNCTION_CODE_ANONYMOUS_ACCESS };
         this.isSecure = false;
 
         AnonymousOnlyWebPage anonymousOnlyWebPage = pageClass.getAnnotation(
@@ -131,17 +131,15 @@ public class NavigationLink extends NavigationItem
   }
 
   /**
-   * Returns the function code uniquely identifying the function associated with the page class
-   * for the link e.g. Security.CreateUser or <code>null</code> if the page class is not associated
-   * with a particular function.
+   * Returns the function codes uniquely identifying the functions associated with the page class
+   * for the link e.g. Security.CreateUser.
    *
    * @return the function code uniquely identifying the function associated with the page class
-   *         for the link e.g. Security.CreateUser or <code>null</code> if the page class is not
-   *         associated with a particular function
+   *         for the link e.g. Security.CreateUser.
    */
-  public String getFunctionCode()
+  public String[] getFunctionCodes()
   {
-    return functionCode;
+    return functionCodes;
   }
 
   /**

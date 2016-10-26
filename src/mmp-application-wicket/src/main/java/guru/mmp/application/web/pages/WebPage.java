@@ -57,7 +57,7 @@ public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
   public static final String FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS =
       "Application.SecureAnonymousAccess";
   private static final long serialVersionUID = 1000000;
-  private String functionCode;
+  private String[] functionCodes;
   private boolean isSecure;
 
   /**
@@ -70,7 +70,7 @@ public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
 
     if (webPageSecurity != null)
     {
-      this.functionCode = webPageSecurity.value();
+      this.functionCodes = webPageSecurity.value();
       this.isSecure = true;
     }
     else
@@ -80,26 +80,26 @@ public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
 
       if (secureAnonymousWebPage != null)
       {
-        this.functionCode = WebPage.FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS;
+        this.functionCodes = new String[]{WebPage.FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS};
         this.isSecure = true;
       }
       else
       {
-        this.functionCode = WebPage.FUNCTION_CODE_ANONYMOUS_ACCESS;
+        this.functionCodes = new String[]{WebPage.FUNCTION_CODE_ANONYMOUS_ACCESS};
         this.isSecure = false;
       }
     }
   }
 
   /**
-   * Returns the function code uniquely identifying the function associated with the page
+   * Returns the function codes uniquely identifying the functions associated with the page
    * e.g. Security.CreateUser.
    *
-   * @return the function code uniquely identifying the function associated with the page
+   * @return the function code uniquely identifying the functions associated with the page
    */
-  public String getFunctionCode()
+  public String[] getFunctionCodes()
   {
-    return functionCode;
+    return functionCodes;
   }
 
   /**

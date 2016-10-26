@@ -34,6 +34,8 @@ import org.apache.wicket.request.resource.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>WebAuthorizationStrategy</code> class provides an implementation of an authorization
  * strategy as defined by the <code>IAuthorizationStrategy</code> interface for Wicket web
@@ -41,7 +43,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-public class WebAuthorizationStrategy
+class WebAuthorizationStrategy
   implements IAuthorizationStrategy
 {
   /* Logger */
@@ -100,35 +102,44 @@ public class WebAuthorizationStrategy
     {
       WebPageSecurity webPageSecurity = componentClass.getAnnotation(WebPageSecurity.class);
 
-      if (webPageSecurity != null)
+      String[] webPageSecurityFunctions = webPageSecurity.value();
+
+      if (webPageSecurityFunctions.length > 0)
       {
         WebSession session = (WebSession) WebSession.get();
 
-        if (session != null)
+        if ((session == null) || (!session.isUserLoggedIn()))
         {
-          if ((!session.isUserLoggedIn())
-              || (!session.hasAcccessToFunction(webPageSecurity.value())))
+          logger.warn("The anonymous user does not have access to the function(s): "
+              + StringUtil.delimit(webPageSecurityFunctions, ","));
+
+          if (session != null)
           {
-            logger.warn("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
-                ? "Unknown"
-                : session.getUsername()) + ") does not have " + "access to the function ("
-                    + webPageSecurity.value() + ")");
-
-            if (Debug.inDebugMode())
-            {
-              logger.info("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
-                  ? "Unknown"
-                  : session.getUsername()) + ") has access to " + "the following functions: "
-                      + ((session.getFunctionCodes().size() == 0)
-                  ? "None"
-                  : StringUtil.delimit(session.getFunctionCodes(), ",")));
-            }
-
             session.invalidate();
-
-            throw new RestartResponseAtInterceptPageException(
-                ((WebApplication) session.getApplication()).getLogoutPage());
           }
+
+          throw new RestartResponseAtInterceptPageException(
+              ((WebApplication) session.getApplication()).getLogoutPage());
+        }
+
+        if (session.hasAcccessToFunction(webPageSecurityFunctions))
+        {
+          return true;
+        }
+
+        logger.warn("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
+            ? "Unknown"
+            : session.getUsername()) + ") does not have access to the function(s): "
+                + StringUtil.delimit(webPageSecurityFunctions, ","));
+
+        if (Debug.inDebugMode())
+        {
+          logger.info("The user (" + (StringUtil.isNullOrEmpty(session.getUsername())
+              ? "Unknown"
+              : session.getUsername()) + ") has access to the following functions: "
+                  + ((session.getFunctionCodes().size() == 0)
+              ? "None"
+              : StringUtil.delimit(session.getFunctionCodes(), ",")));
         }
       }
       else
@@ -140,9 +151,12 @@ public class WebAuthorizationStrategy
         {
           WebSession session = (WebSession) WebSession.get();
 
-          if (!session.isUserLoggedIn())
+          if ((session == null) || (!session.isUserLoggedIn()))
           {
-            session.invalidate();
+            if (session != null)
+            {
+              session.invalidate();
+            }
 
             throw new RestartResponseAtInterceptPageException(
                 ((WebApplication) session.getApplication()).getLogoutPage());

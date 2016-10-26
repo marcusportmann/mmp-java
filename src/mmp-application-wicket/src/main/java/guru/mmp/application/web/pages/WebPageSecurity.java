@@ -18,10 +18,7 @@ package guru.mmp.application.web.pages;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Annotation type that is used to identify secure web pages. The value specified for the
@@ -39,5 +36,5 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 public @interface WebPageSecurity
 {
-  String value();
+  String[] value();
 }

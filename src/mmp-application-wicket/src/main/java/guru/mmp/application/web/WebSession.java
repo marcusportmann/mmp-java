@@ -41,12 +41,12 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
   /**
    * The empty list of function codes for anonymous users.
    */
-  public static final List<String> NO_FUNCTION_CODES = new ArrayList<>();
+  private static final List<String> NO_FUNCTION_CODES = new ArrayList<>();
 
   /**
    * The empty list of group names for anonymous users.
    */
-  public static final List<String> NO_GROUP_NAMES = new ArrayList<>();
+  private static final List<String> NO_GROUP_NAMES = new ArrayList<>();
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -267,6 +267,37 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
     }
 
     return (functionCodes != null) && functionCodes.containsKey(functionCode);
+  }
+
+  /**
+   * Check whether the logged in user associated with the web session as access to any of the
+   * functions with the specified codes.
+   * <p/>
+   * This method always returns false for anonymous users.
+   *
+   * @param functionCodes the function codes uniquely identifying the functions
+   *
+   * @return <code>true</code> if the logged in user has access to any of the functions or
+   *         <code>false</code> otherwise
+   */
+  public boolean hasAcccessToFunctions(String[] functionCodes)
+  {
+    for (String functionCode : functionCodes)
+    {
+      if (functionCode.equals(WebPage.FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS))
+      {
+        return isUserLoggedIn();
+      }
+      else
+      {
+        if ((this.functionCodes != null) && this.functionCodes.containsKey(functionCode))
+        {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
