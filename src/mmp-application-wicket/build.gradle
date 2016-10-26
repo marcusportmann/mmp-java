@@ -14,9 +14,9 @@ repositories {
 dependencies {
   compile project(':mmp-application')
   
-  compile('org.apache.wicket:wicket-datetime:7.4.0')
-  compile('org.apache.wicket:wicket-devutils:7.4.0')
-  compile('org.apache.wicket:wicket-ioc:7.4.0') {
+  compile('org.apache.wicket:wicket-datetime:7.5.0')
+  compile('org.apache.wicket:wicket-devutils:7.5.0')
+  compile('org.apache.wicket:wicket-ioc:7.5.0') {
     exclude group: 'javax.inject', module: 'javax.inject'   
   }
     
