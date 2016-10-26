@@ -50,6 +50,14 @@ public class NavigationLink extends NavigationItem
   /**
    * Constructs a new <code>NavigationLink</code>.
    *
+   * NOTE: This constructor is required to support Java serialization.
+   */
+  @SuppressWarnings("unused")
+  NavigationLink() {}
+
+  /**
+   * Constructs a new <code>NavigationLink</code>.
+   *
    * @param name      the name of the navigation link
    * @param pageClass the class for the Wicket <code>Page</code> associated with the link
    */

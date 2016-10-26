@@ -20,6 +20,10 @@ package guru.mmp.application.web.template.navigation;
 
 import org.apache.wicket.Page;
 
+import java.io.Serializable;
+
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>NavigationItem</code> class implements the base functionality common to
  * all navigation items that form part of a web application's navigation hierarchy.
@@ -27,9 +31,19 @@ import org.apache.wicket.Page;
  * @author Marcus Portmann
  */
 public abstract class NavigationItem
+  implements Serializable
 {
+  private static final long serialVersionUID = 1000000;
   private String iconClass;
   private String name;
+
+  /**
+   * Constructs a new <code>NavigationItem</code>.
+   *
+   * NOTE: This constructor is required to support Java serialization.
+   */
+  @SuppressWarnings("unused")
+  NavigationItem() {}
 
   /**
    * Constructs a new <code>NavigationItem</code>.
@@ -37,7 +51,7 @@ public abstract class NavigationItem
    * @param name      the name of the navigation item
    * @param iconClass the CSS class for the icon for the navigation item
    */
-  public NavigationItem(String name, String iconClass)
+  NavigationItem(String name, String iconClass)
   {
     this.name = name;
     this.iconClass = iconClass;

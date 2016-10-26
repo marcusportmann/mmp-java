@@ -41,11 +41,12 @@ public class NavigationGroup extends NavigationItem
 
   /**
    * Constructs a new <code>NavigationGroup</code>.
+   *
+   * NOTE: This constructor is required to support Java serialization.
    */
+  @SuppressWarnings("unused")
   NavigationGroup()
-  {
-    this(null, null);
-  }
+  {}
 
   /**
    * Constructs a new <code>NavigationGroup</code>.
