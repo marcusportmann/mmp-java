@@ -101,11 +101,6 @@ class WebAuthorizationStrategy
 
   private boolean checkAccess(Class<?> componentClass)
   {
-    if (Debug.inDebugMode())
-    {
-      logger.info("Checking access to component (" + componentClass.getName() + ")");
-    }
-
     if (guru.mmp.application.web.pages.WebPage.class.isAssignableFrom(componentClass))
     {
       WebPageSecurity webPageSecurity = componentClass.getAnnotation(WebPageSecurity.class);
@@ -174,8 +169,10 @@ class WebAuthorizationStrategy
           }
         }
       }
+
+      return false;
     }
 
-    return false;
+    return true;
   }
 }
