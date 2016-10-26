@@ -57,21 +57,6 @@ class WebAuthorizationStrategy
    */
   public boolean isActionAuthorized(Component component, Action action)
   {
-//  if (component instanceof WebPage)
-//  {
-//    WebPage page = (WebPage) component;
-//
-//    if (page.isSecure())
-//    {
-//      WebSession session = (WebSession) component.getSession();
-//
-//      if (!session.hasAcccessToFunction(page.getFunctionCode()))
-//      {
-//        return false;
-//      }
-//    }
-//  }
-
     return true;
   }
 
@@ -96,6 +81,31 @@ class WebAuthorizationStrategy
   public <T extends IRequestableComponent> boolean isInstantiationAuthorized(
       Class<T> componentClass)
   {
+    return checkAccess(componentClass);
+  }
+
+  /**
+   * Checks whether a request with some parameters is allowed to a resource.
+   *
+   * @param resource   the resource being requested
+   * @param parameters the request parameters
+   *
+   * @return <code>true</code>  if the request to this resource is allowed or <code>false</code>
+   * otherwise
+   */
+  public boolean isResourceAuthorized(IResource resource, PageParameters parameters)
+  {
+    // TODO: Implement resource security -- MARCUS
+    return true;
+  }
+
+  private boolean checkAccess(Class<?> componentClass)
+  {
+    if (Debug.inDebugMode())
+    {
+      logger.info("Checking access to component (" + componentClass.getName() + ")");
+    }
+
     if (guru.mmp.application.web.pages.WebPage.class.isAssignableFrom(componentClass))
     {
       WebPageSecurity webPageSecurity = componentClass.getAnnotation(WebPageSecurity.class);
@@ -166,21 +176,6 @@ class WebAuthorizationStrategy
       }
     }
 
-    return true;
-  }
-
-  /**
-   * Checks whether a request with some parameters is allowed to a resource.
-   *
-   * @param resource   the resource being requested
-   * @param parameters the request parameters
-   *
-   * @return <code>true</code>  if the request to this resource is allowed or <code>false</code>
-   * otherwise
-   */
-  public boolean isResourceAuthorized(IResource resource, PageParameters parameters)
-  {
-    // TODO: Implement resource security -- MARCUS
-    return true;
+    return false;
   }
 }
