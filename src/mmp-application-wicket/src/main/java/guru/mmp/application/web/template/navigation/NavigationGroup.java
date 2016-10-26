@@ -41,6 +41,14 @@ public class NavigationGroup extends NavigationItem
 
   /**
    * Constructs a new <code>NavigationGroup</code>.
+   */
+  NavigationGroup()
+  {
+    this(null, null);
+  }
+
+  /**
+   * Constructs a new <code>NavigationGroup</code>.
    *
    * @param name the name of the navigation group
    */
@@ -140,7 +148,8 @@ public class NavigationGroup extends NavigationItem
   public void sortItems()
   {
     Collections.sort(items,
-        (navigationItem1, navigationItem2) -> {
+        (navigationItem1, navigationItem2) ->
+        {
           if ((navigationItem1 instanceof NavigationLink)
               && ((navigationItem2 instanceof NavigationLink)))
           {
@@ -165,6 +174,7 @@ public class NavigationGroup extends NavigationItem
           {
             return navigationItem1.getName().compareTo(navigationItem2.getName());
           }
-        });
+        }
+        );
   }
 }
