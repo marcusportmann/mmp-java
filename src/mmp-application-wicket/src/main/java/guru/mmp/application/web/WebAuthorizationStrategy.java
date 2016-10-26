@@ -146,6 +146,8 @@ class WebAuthorizationStrategy
                 ? "None"
                 : StringUtil.delimit(session.getFunctionCodes(), ",")));
           }
+
+          return false;
         }
       }
       else
@@ -169,8 +171,6 @@ class WebAuthorizationStrategy
           }
         }
       }
-
-      return false;
     }
 
     return true;
