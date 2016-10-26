@@ -204,6 +204,31 @@ table.table-actions > tbody > tr > td > div > a > i
   width: 100%;
 }
 
+th.fixed-width-100, td.fixed-width-100
+{
+  width: 100px;
+}
+
+th.fixed-width-125, td.fixed-width-125
+{
+  width: 125px;
+}
+
+th.fixed-width-150, td.fixed-width-150
+{
+  width: 150px;
+}
+
+th.fixed-width-175, td.fixed-width-175
+{
+  width: 175px;
+}
+
+th.fixed-width-200, td.fixed-width-200
+{
+  width: 200px;
+}
+
 .table-actions thead > tr > th
 {
   white-space: nowrap;

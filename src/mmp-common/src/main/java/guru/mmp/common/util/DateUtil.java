@@ -18,6 +18,7 @@ package guru.mmp.common.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,6 +30,25 @@ import java.util.Date;
  */
 public final class DateUtil
 {
+  private static ThreadLocal<SimpleDateFormat> yyyymmddFormat = new ThreadLocal<SimpleDateFormat>()
+  {
+    @Override
+    protected SimpleDateFormat initialValue()
+    {
+      return new SimpleDateFormat("yyyy-MM-dd");
+    }
+  };
+
+  /**
+   * Returns the yyyy-MM-dd thread-local <code>SimpleDateFormat</code>.
+   *
+   * @return the yyyy-MM-dd thread-local <code>SimpleDateFormat</code>
+   */
+  public static SimpleDateFormat getYYYYMMDDFormat()
+  {
+    return yyyymmddFormat.get();
+  }
+
   /**
    * Converts a <code>java.util.Date</code> to a <code>java.util.Calendar</code>.
    *
