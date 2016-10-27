@@ -159,7 +159,6 @@ public class LoginPage extends WebPage
 
             if (organisations.size() == 0)
             {
-              error("Authentication Failed.");
               error(String.format("The user (%s) is not associated with any organisations.",
                   username));
             }
@@ -169,9 +168,7 @@ public class LoginPage extends WebPage
 
               if (organisation.getStatus() != OrganisationStatus.ACTIVE)
               {
-                error("Authentication Failed.");
                 error("The organisation (" + organisation.getName() + ") is not active.");
-
                 return;
               }
 
