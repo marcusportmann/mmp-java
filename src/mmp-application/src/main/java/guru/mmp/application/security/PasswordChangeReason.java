@@ -19,18 +19,30 @@ package guru.mmp.application.security;
 /**
  * The <code>PasswordChangeReason</code> enumeration defines the possible reasons for why a user's
  * password was changed.
+ *
+ * @author Marcus Portmann
  */
 public enum PasswordChangeReason
 {
   USER(0, "User"), ADMINISTRATIVE(1, "Administrative"), FORGOTTEN(2, "Forgotten");
 
   private String description;
-  private int id;
+  private int code;
 
-  PasswordChangeReason(int id, String description)
+  PasswordChangeReason(int code, String description)
   {
-    this.id = id;
+    this.code = code;
     this.description = description;
+  }
+
+  /**
+   * Returns the numeric codeentifier for the password change reason.
+   *
+   * @return the numeric codeentifier for the password change reason
+   */
+  public int code()
+  {
+    return code;
   }
 
   /**
@@ -41,15 +53,5 @@ public enum PasswordChangeReason
   public String description()
   {
     return description;
-  }
-
-  /**
-   * Returns the numeric identifier for the password change reason.
-   *
-   * @return the numeric identifier for the password change reason
-   */
-  public int id()
-  {
-    return id;
   }
 }

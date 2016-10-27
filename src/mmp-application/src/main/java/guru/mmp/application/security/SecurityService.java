@@ -513,6 +513,7 @@ public class SecurityService
 
           statement.setObject(1, organisationId);
           statement.setString(2, organisation.getName());
+          statement.setInt(3, organisation.getStatus().code());
 
           if (statement.executeUpdate() != 1)
           {
@@ -2214,7 +2215,8 @@ public class SecurityService
       }
 
       statement.setString(1, organisation.getName());
-      statement.setObject(2, organisation.getId());
+      statement.setInt(2, organisation.getStatus().code());
+      statement.setObject(3, organisation.getId());
 
       if (statement.executeUpdate() <= 0)
       {
@@ -2340,6 +2342,7 @@ public class SecurityService
     Organisation organisation = new Organisation();
     organisation.setId((UUID) rs.getObject(1));
     organisation.setName(rs.getString(2));
+    organisation.setStatus(OrganisationStatus.fromCode(rs.getInt(3)));
 
     return organisation;
   }
@@ -2362,7 +2365,7 @@ public class SecurityService
 
     // createOrganisationSQL
     createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS "
-        + "(ID, NAME) VALUES (?, ?)";
+        + "(ID, NAME, STATUS) VALUES (?, ?, ?)";
 
     // createUserDirectorySQL
     createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES "
@@ -2382,8 +2385,8 @@ public class SecurityService
         + schemaPrefix + "USER_DIRECTORIES UD " + "WHERE (UPPER(UD.NAME) LIKE ?) ORDER BY UD.NAME";
 
     // getFilteredOrganisationsSQL
-    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix + "ORGANISATIONS O "
-        + "WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
+    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
+        + "ORGANISATIONS O " + "WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
 
     // getFunctionIdSQL
     getFunctionIdSQL = "SELECT F.ID FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
@@ -2420,17 +2423,17 @@ public class SecurityService
         + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM WHERE UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationsForUserDirectorySQL
-    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix
+    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
         + "ORGANISATIONS O INNER JOIN " + schemaPrefix
         + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID WHERE "
         + "UDTOM.USER_DIRECTORY_ID=?";
 
     // getOrganisationSQL
-    getOrganisationSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix
+    getOrganisationSQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
         + "ORGANISATIONS O WHERE O.ID=?";
 
     // getOrganisationsSQL
-    getOrganisationsSQL = "SELECT O.ID, O.NAME FROM " + schemaPrefix
+    getOrganisationsSQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
         + "ORGANISATIONS O ORDER BY O.NAME";
 
     // getUserDirectoriesForOrganisationSQL
@@ -2465,7 +2468,8 @@ public class SecurityService
         + "SET F.NAME=?, F.DESCRIPTION=? WHERE F.CODE=?";
 
     // updateOrganisationSQL
-    updateOrganisationSQL = "UPDATE " + schemaPrefix + "ORGANISATIONS O SET O.NAME=? WHERE O.ID=?";
+    updateOrganisationSQL = "UPDATE " + schemaPrefix
+        + "ORGANISATIONS O SET O.NAME=?, O.STATUS=? WHERE O.ID=?";
 
     // updateUserDirectorySQL
     updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD SET UD.NAME=?, "

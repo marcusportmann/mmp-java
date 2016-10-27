@@ -268,8 +268,9 @@ COMMENT ON COLUMN MMP.SERVICE_REGISTRY.WSDL_LOCATION
 
 
 CREATE TABLE MMP.ORGANISATIONS (
-  ID    UUID NOT NULL,
-  NAME  TEXT NOT NULL,
+  ID      UUID NOT NULL,
+  NAME    TEXT NOT NULL,
+  STATUS  INTEGER NOT NULL,
 
   PRIMARY KEY (ID)
 );
@@ -279,10 +280,13 @@ CREATE INDEX MMP_ORGANISATIONS_NAME_IX
   (NAME);
 
 COMMENT ON COLUMN MMP.ORGANISATIONS.ID
-  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation';
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation';
 
 COMMENT ON COLUMN MMP.ORGANISATIONS.NAME
-  IS 'The name of the organisation';
+IS 'The name of the organisation';
+
+COMMENT ON COLUMN MMP.ORGANISATIONS.STATUS
+IS 'The status for the organisation';
 
 
 
@@ -1449,8 +1453,8 @@ IS 'The ISO 3166-1 country code for the customer address';
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO MMP.ORGANISATIONS (ID, NAME) VALUES
-  ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP');
+INSERT INTO MMP.ORGANISATIONS (ID, NAME, STATUS) VALUES
+  ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 1);
 
 INSERT INTO MMP.USER_DIRECTORY_TYPES (ID, NAME, USER_DIRECTORY_CLASS, ADMINISTRATION_CLASS) VALUES
   ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'guru.mmp.application.security.InternalUserDirectory', 'guru.mmp.application.web.template.components.InternalUserDirectoryAdministrationPanel');

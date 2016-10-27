@@ -37,6 +37,8 @@ import java.util.UUID;
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory
  * classes should be derived.
+ *
+ * @author Marcus Portmann
  */
 abstract class UserDirectoryBase
   implements IUserDirectory

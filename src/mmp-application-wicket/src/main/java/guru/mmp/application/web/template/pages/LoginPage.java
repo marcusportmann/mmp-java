@@ -165,6 +165,16 @@ public class LoginPage extends WebPage
             }
             else if (organisations.size() == 1)
             {
+              Organisation organisation = organisations.get(0);
+
+              if (organisation.getStatus() != OrganisationStatus.ACTIVE)
+              {
+                error("Authentication Failed.");
+                error("The organisation (" + organisation.getName() + ") is not active.");
+
+                return;
+              }
+
               List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
                   username);
               List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
@@ -180,7 +190,7 @@ public class LoginPage extends WebPage
                   ? "None"
                   : StringUtil.delimit(functionCodes, ",")));
 
-              session.setOrganisation(organisations.get(0));
+              session.setOrganisation(organisation);
               session.setGroupNames(groupNames);
               session.setFunctionCodes(functionCodes);
 

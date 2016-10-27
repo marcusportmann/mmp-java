@@ -18,10 +18,7 @@ package guru.mmp.application.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 /**
@@ -48,6 +45,13 @@ public class Organisation
    */
   @Column(name = "NAME", nullable = false, length = 100)
   private String name;
+
+  /**
+   * The status for the organisation.
+   */
+  @Column(name = "STATUS", nullable = false)
+  @Convert(converter = OrganisationStatusConverter.class)
+  private OrganisationStatus status;
 
   /**
    * Constructs a new <code>Organisation</code>.
@@ -106,6 +110,16 @@ public class Organisation
   }
 
   /**
+   * Returns the status for the organisation.
+   *
+   * @return the status for the organisation
+   */
+  public OrganisationStatus getStatus()
+  {
+    return status;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -136,5 +150,15 @@ public class Organisation
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Set the status for the organisation.
+   *
+   * @param status the status for the organisation
+   */
+  public void setStatus(OrganisationStatus status)
+  {
+    this.status = status;
   }
 }

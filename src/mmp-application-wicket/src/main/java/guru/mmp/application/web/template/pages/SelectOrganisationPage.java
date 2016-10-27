@@ -18,10 +18,8 @@ package guru.mmp.application.web.template.pages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.security.ISecurityService;
-import guru.mmp.application.security.Organisation;
+import guru.mmp.application.security.*;
 import guru.mmp.application.security.SecurityException;
-import guru.mmp.application.security.UserDirectoryNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.components.StringSelectOption;
@@ -118,6 +116,15 @@ public class SelectOrganisationPage extends WebPage
 
           try
           {
+            Organisation selectedOrganisation = securityService.getOrganisation(UUID.fromString(
+              organisation.getValue()));
+
+            if (selectedOrganisation.getStatus() != OrganisationStatus.ACTIVE)
+            {
+              error("The organisation (" + selectedOrganisation.getName() + ") is not active.");
+              return;
+            }
+
             List<String> groupNames = securityService.getGroupNamesForUser(
                 session.getUserDirectoryId(), session.getUsername());
             List<String> functionCodes = securityService.getFunctionCodesForUser(
@@ -133,8 +140,7 @@ public class SelectOrganisationPage extends WebPage
                 ? "None"
                 : StringUtil.delimit(functionCodes, ",")));
 
-            session.setOrganisation(securityService.getOrganisation(UUID.fromString(
-                organisation.getValue())));
+            session.setOrganisation(selectedOrganisation);
             session.setGroupNames(groupNames);
             session.setFunctionCodes(functionCodes);
 
