@@ -178,16 +178,16 @@ CREATE TABLE MMP.USER_DIRECTORY_TYPES (
 );
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.NAME
-IS 'The name of the user directory type';
+  IS 'The name of the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.USER_DIRECTORY_CLASS
-IS 'The fully qualified name of the Java class that implements the user directory type';
+  IS 'The fully qualified name of the Java class that implements the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.ADMINISTRATION_CLASS
-IS 'The fully qualified name of the Java class that implements the Wicket component used to administer the configuration for the user directory type';
+  IS 'The fully qualified name of the Java class that implements the Wicket component used to administer the configuration for the user directory type';
 
 
 
@@ -206,16 +206,16 @@ CREATE INDEX MMP_USER_DIRECTORIES_NAME_IX
   (NAME);
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.TYPE_ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.NAME
-IS 'The name of the user directory';
+  IS 'The name of the user directory';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.CONFIGURATION
-IS 'The XML configuration data for the user directory';
+  IS 'The XML configuration data for the user directory';
 
 
 
@@ -580,10 +580,10 @@ CREATE TABLE MMP.JOB_PARAMETERS (
 CREATE INDEX MMP_JOB_PARAMETERS_JOB_ID_IX
   ON MMP.JOB_PARAMETERS
   (JOB_ID);
-  
+
 CREATE INDEX MMP_JOB_PARAMETERS_NAME_IX
   ON MMP.JOB_PARAMETERS
-  (NAME);  
+  (NAME);
 
 COMMENT ON COLUMN MMP.JOB_PARAMETERS.ID
   IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job parameter';
@@ -882,7 +882,7 @@ CREATE INDEX MMP_MESSAGE_PARTS_STATUS_IX
 CREATE INDEX MMP_MESSAGE_PARTS_MSG_ID_IX
   ON MMP.MESSAGE_PARTS
   (MSG_ID);
-  
+
 CREATE INDEX MMP_MESSAGE_PARTS_MSG_DEVICE_ID_IX
   ON MMP.MESSAGE_PARTS
   (MSG_DEVICE_ID);

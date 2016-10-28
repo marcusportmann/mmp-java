@@ -139,13 +139,13 @@ CREATE TABLE MMP.TEST_DATA (
 );
 
 COMMENT ON COLUMN MMP.TEST_DATA.ID
-IS 'The ID used to uniquely identify the test data';
+  IS 'The ID used to uniquely identify the test data';
 
 COMMENT ON COLUMN MMP.TEST_DATA.NAME
-IS 'The name for the test data';
+  IS 'The name for the test data';
 
 COMMENT ON COLUMN MMP.TEST_DATA.VALUE
-IS 'The value for the test data';
+  IS 'The value for the test data';
 
 
 
@@ -280,13 +280,13 @@ CREATE INDEX MMP_ORGANISATIONS_NAME_IX
   (NAME);
 
 COMMENT ON COLUMN MMP.ORGANISATIONS.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation';
 
 COMMENT ON COLUMN MMP.ORGANISATIONS.NAME
-IS 'The name of the organisation';
+  IS 'The name of the organisation';
 
 COMMENT ON COLUMN MMP.ORGANISATIONS.STATUS
-IS 'The status for the organisation';
+  IS 'The status for the organisation';
 
 
 
@@ -300,16 +300,16 @@ CREATE TABLE MMP.USER_DIRECTORY_TYPES (
 );
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.NAME
-IS 'The name of the user directory type';
+  IS 'The name of the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.USER_DIRECTORY_CLASS
-IS 'The fully qualified name of the Java class that implements the user directory type';
+  IS 'The fully qualified name of the Java class that implements the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORY_TYPES.ADMINISTRATION_CLASS
-IS 'The fully qualified name of the Java class that implements the Wicket component used to administer the configuration for the user directory type';
+  IS 'The fully qualified name of the Java class that implements the Wicket component used to administer the configuration for the user directory type';
 
 
 
@@ -328,16 +328,16 @@ CREATE INDEX MMP_USER_DIRECTORIES_NAME_IX
   (NAME);
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.TYPE_ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.NAME
-IS 'The name of the user directory';
+  IS 'The name of the user directory';
 
 COMMENT ON COLUMN MMP.USER_DIRECTORIES.CONFIGURATION
-IS 'The XML configuration data for the user directory';
+  IS 'The XML configuration data for the user directory';
 
 
 
@@ -1384,13 +1384,13 @@ CREATE INDEX MMP_CUSTOMERS_ORGANISATION_ID_IX
   (ORGANISATION_ID);
 
 COMMENT ON COLUMN MMP.CUSTOMERS.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer';
 
 COMMENT ON COLUMN MMP.CUSTOMERS.ORGANISATION_ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the customer is associated with';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation the customer is associated with';
 
 COMMENT ON COLUMN MMP.CUSTOMERS.NAME
-IS 'The name of the customer';
+  IS 'The name of the customer';
 
 
 
@@ -1416,37 +1416,37 @@ ON MMP.CUSTOMER_ADDRESSES
 (CUSTOMER_ID);
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer address';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CUSTOMER_ID
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer the customer address is associated with';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the customer the customer address is associated with';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.NAME
-IS 'The name of the customer address';
+  IS 'The name of the customer address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.TYPE
-IS 'The type of customer address e.g. 0 = Physical Address, 1 = Billing Address, 2 = Postal Address';
+  IS 'The type of customer address e.g. 0 = Physical Address, 1 = Billing Address, 2 = Postal Address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_1
-IS 'The first line of the customer address';
+  IS 'The first line of the customer address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_2
-IS 'The second line of the customer address';
+  IS 'The second line of the customer address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.LINE_3
-IS 'The third line of the customer address';
+  IS 'The third line of the customer address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CITY
-IS 'The city for the customer address';
+  IS 'The city for the customer address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.SUBDIVISION
-IS 'The ISO 3166-2 code for the principal subdivision (province or state) for the address';
+  IS 'The ISO 3166-2 code for the principal subdivision (province or state) for the address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.CODE
-IS 'The ZIP or postal code for the customer address';
+  IS 'The ZIP or postal code for the customer address';
 
 COMMENT ON COLUMN MMP.CUSTOMER_ADDRESSES.COUNTRY
-IS 'The ISO 3166-1 country code for the customer address';
+  IS 'The ISO 3166-1 country code for the customer address';
 
 
 
