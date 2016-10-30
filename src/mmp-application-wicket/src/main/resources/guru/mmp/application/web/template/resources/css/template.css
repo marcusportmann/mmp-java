@@ -199,6 +199,13 @@ table.table-actions > tbody > tr > td > div > a > i
   white-space: nowrap;
 }
 
+.table-actions thead > tr > th.five-actions, .table-actions tbody > tr > td.five-actions
+{
+  text-align: center;
+  width: 150px;
+  white-space: nowrap;
+}
+
 .table-actions thead > tr > th.stretch-column, .table-actions tbody > tr > td.stretch-column
 {
   width: 100%;
