@@ -38,15 +38,34 @@ public final class DateUtil
       return new SimpleDateFormat("yyyy-MM-dd");
     }
   };
+  private static ThreadLocal<SimpleDateFormat> yyyymmddWithTimeFormat =
+      new ThreadLocal<SimpleDateFormat>()
+  {
+    @Override
+    protected SimpleDateFormat initialValue()
+    {
+      return new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+    }
+  };
 
   /**
-   * Returns the yyyy-MM-dd thread-local <code>SimpleDateFormat</code>.
+   * Returns the <b>yyyy-MM-dd</b> thread-local <code>SimpleDateFormat</code>.
    *
-   * @return the yyyy-MM-dd thread-local <code>SimpleDateFormat</code>
+   * @return the <b>yyyy-MM-dd</b> thread-local <code>SimpleDateFormat</code>
    */
   public static SimpleDateFormat getYYYYMMDDFormat()
   {
     return yyyymmddFormat.get();
+  }
+
+  /**
+   * Returns the <b>yyyy-MM-dd hh:mm a</b> thread-local <code>SimpleDateFormat</code>.
+   *
+   * @return the <b>yyyy-MM-dd hh:mm a</b> thread-local <code>SimpleDateFormat</code>
+   */
+  public static SimpleDateFormat getYYYYMMDDWithTimeFormat()
+  {
+    return yyyymmddWithTimeFormat.get();
   }
 
   /**
