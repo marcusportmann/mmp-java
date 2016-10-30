@@ -59,6 +59,21 @@ public class Organisation
   public Organisation() {}
 
   /**
+   * Constructs a new <code>Organisation</code>.
+   *
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the
+   *               organisation
+   * @param name   the name of the organisation
+   * @param status the status for the organisation
+   */
+  public Organisation(UUID id, String name, OrganisationStatus status)
+  {
+    this.id = id;
+    this.name = name;
+    this.status = status;
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param obj the reference object with which to compare

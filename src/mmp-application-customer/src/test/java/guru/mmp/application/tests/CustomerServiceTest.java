@@ -1,23 +1,22 @@
 package guru.mmp.application.tests;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.customer.Customer;
 import guru.mmp.application.customer.ICustomerService;
 import guru.mmp.application.security.Organisation;
+import guru.mmp.application.security.OrganisationStatus;
 import guru.mmp.application.test.ApplicationClassRunner;
-import guru.mmp.application.test.ApplicationDataSourceResourceReference;
-import guru.mmp.application.test.ApplicationDataSourceSQLResource;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
-import javax.inject.Inject;
 
 /**
  * The <code>CustomerServiceTest</code> class contains the implementation of the JUnit
@@ -62,7 +61,6 @@ public class CustomerServiceTest
     assertNotNull(retrievedCustomer);
 
     compareCustomers(customer, retrievedCustomer);
-
 
   }
 
@@ -110,9 +108,8 @@ public class CustomerServiceTest
   {
     organisationCount++;
 
-    Organisation organisation = new Organisation();
-    organisation.setId(UUID.randomUUID());
-    organisation.setName("Test Organisation Name " + organisationCount);
+    Organisation organisation = new Organisation(UUID.randomUUID(), "Test Organisation Name "
+        + organisationCount, OrganisationStatus.ACTIVE);
 
     return organisation;
   }
@@ -120,19 +117,18 @@ public class CustomerServiceTest
   private void compareCustomers(Customer customer1, Customer customer2)
   {
     assertEquals("The ID values for the two customers do not match", customer1.getId(),
-      customer2.getId());
+        customer2.getId());
     assertEquals("The organisation ID values for the two customers do not match",
-      customer1.getOrganisation().getId(), customer2.getOrganisation().getId());
+        customer1.getOrganisation().getId(), customer2.getOrganisation().getId());
     assertEquals("The name values for the two customers do not match", customer1.getName(),
-      customer2.getName());
+        customer2.getName());
   }
 
   private void compareOrganisations(Organisation organisation1, Organisation organisation2)
   {
     assertEquals("The ID values for the two organisations do not match", organisation1.getId(),
-      organisation2.getId());
+        organisation2.getId());
     assertEquals("The name values for the two organisations do not match", organisation1.getName(),
-      organisation2.getName());
+        organisation2.getName());
   }
 }
-

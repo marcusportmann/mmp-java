@@ -54,6 +54,8 @@ public class SecurityServiceTest
 
   /**
    * Test the functionality to add a user to a group.
+   *
+   * @throws Exception
    */
   @Test
   public void addUserToGroupTest()
@@ -91,6 +93,8 @@ public class SecurityServiceTest
 
   /**
    * Test the administrative change user password functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void adminChangePasswordTest()
@@ -110,6 +114,8 @@ public class SecurityServiceTest
 
   /**
    * Test the name-value attribute functionality.
+   *
+   * @throws AttributeException
    */
   @Test
   public void attributeTest()
@@ -233,6 +239,8 @@ public class SecurityServiceTest
 
   /**
    * Test the change user password functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void changePasswordTest()
@@ -251,6 +259,8 @@ public class SecurityServiceTest
 
   /**
    * Test the functionality to delete a group with existing members.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.ExistingGroupMembersException.class)
   public void deleteGroupWithExistingMembers()
@@ -281,6 +291,8 @@ public class SecurityServiceTest
 
   /**
    * Test the delete invalid function functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.FunctionNotFoundException.class)
   public void deleteInvalidFunctionTest()
@@ -294,6 +306,8 @@ public class SecurityServiceTest
 
   /**
    * Test the delete invalid group functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.GroupNotFoundException.class)
   public void deleteInvalidGroupTest()
@@ -311,6 +325,8 @@ public class SecurityServiceTest
 
   /**
    * Test the delete invalid user functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.UserNotFoundException.class)
   public void deleteInvalidUserTest()
@@ -328,6 +344,8 @@ public class SecurityServiceTest
 
   /**
    * Test the duplicate function functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.DuplicateFunctionException.class)
   public void duplicateFunctionTest()
@@ -341,6 +359,8 @@ public class SecurityServiceTest
 
   /**
    * Test the duplicate group functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.DuplicateGroupException.class)
   public void duplicateGroupTest()
@@ -358,6 +378,8 @@ public class SecurityServiceTest
 
   /**
    * Test the duplicate organisation functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.DuplicateOrganisationException.class)
   public void duplicateOrganisationTest()
@@ -371,6 +393,8 @@ public class SecurityServiceTest
 
   /**
    * Test the duplicate user functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.DuplicateUserException.class)
   public void duplicateUserTest()
@@ -388,6 +412,8 @@ public class SecurityServiceTest
 
   /**
    * Test the expired user password functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.ExpiredPasswordException.class)
   public void expiredUserPasswordTest()
@@ -407,6 +433,8 @@ public class SecurityServiceTest
 
   /**
    * Test the find users functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void findUsersTest()
@@ -452,6 +480,8 @@ public class SecurityServiceTest
 
   /**
    * Test the create function functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void functionTest()
@@ -513,6 +543,8 @@ public class SecurityServiceTest
 
   /**
    * Test the functionality to retrieve the authorised function codes for the user.
+   *
+   * @throws Exception
    */
   @Test
   public void getFunctionCodesForUserTest()
@@ -543,6 +575,8 @@ public class SecurityServiceTest
 
   /**
    * Test the group functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void groupTest()
@@ -591,6 +625,8 @@ public class SecurityServiceTest
 
   /**
    * Test the functionality to check whether a user is a member of a group.
+   *
+   * @throws Exception
    */
   @Test
   public void isUserInGroupTest()
@@ -616,6 +652,8 @@ public class SecurityServiceTest
 
   /**
    * Test the locked user functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.UserLockedException.class)
   public void lockedUserTest()
@@ -665,6 +703,8 @@ public class SecurityServiceTest
 
   /**
    * Test the organisation functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void organisationTest()
@@ -748,6 +788,8 @@ public class SecurityServiceTest
 
   /**
    * Test the reload user directories functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void reloadUserDirectoriesTest()
@@ -758,6 +800,8 @@ public class SecurityServiceTest
 
   /**
    * Test the functionality to remove a user from a group.
+   *
+   * @throws Exception
    */
   @Test
   public void removeUserFromGroupTest()
@@ -794,6 +838,8 @@ public class SecurityServiceTest
 
   /**
    * Test the retrieve user directory types functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void retrieveUserDirectoryTypesTest()
@@ -843,6 +889,8 @@ public class SecurityServiceTest
 
   /**
    * Test the user directory organisation mapping functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void userDirectoryOrganisationMappingTest()
@@ -876,6 +924,8 @@ public class SecurityServiceTest
 
   /**
    * Test the user directory functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void userDirectoryTest()
@@ -959,6 +1009,8 @@ public class SecurityServiceTest
 
   /**
    * Test the user password history functionality.
+   *
+   * @throws Exception
    */
   @Test(expected = guru.mmp.application.security.ExistingPasswordException.class)
   public void userPasswordHistoryTest()
@@ -978,6 +1030,8 @@ public class SecurityServiceTest
 
   /**
    * Test the user property functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void userPropertyTest()
@@ -994,6 +1048,8 @@ public class SecurityServiceTest
 
   /**
    * Test the user functionality.
+   *
+   * @throws Exception
    */
   @Test
   public void userTest()
@@ -1114,9 +1170,8 @@ public class SecurityServiceTest
   {
     organisationCount++;
 
-    Organisation organisation = new Organisation();
-    organisation.setId(UUID.randomUUID());
-    organisation.setName("Test Organisation Name " + organisationCount);
+    Organisation organisation = new Organisation(UUID.randomUUID(), "Test Organisation Name "
+        + organisationCount, OrganisationStatus.ACTIVE);
 
     return organisation;
   }
