@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_40-release" class="java.beans.XMLDecoder">
+<java version="1.8.0_112-release" class="java.beans.XMLDecoder">
  <object class="jindent.JindentSettings">
   <object class="java.util.HashMap">
    <void method="put">
@@ -1616,7 +1616,7 @@
         <boolean>true</boolean>
        </void>
        <void property="value">
-        <int>2</int>
+        <int>1</int>
        </void>
       </void>
       <void method="get">
@@ -4358,9 +4358,6 @@
     <string>java.insertMissingJavaDocTags</string>
     <object class="jindent.settings.BooleanSetting">
      <string>java.insertMissingJavaDocTags</string>
-     <void property="value">
-      <boolean>true</boolean>
-     </void>
     </object>
    </void>
    <void method="put">
@@ -7254,7 +7251,7 @@
     <object class="jindent.settings.NZNumberSetting">
      <string>java.tabulatorSize</string>
      <void property="value">
-      <int>4</int>
+      <int>2</int>
      </void>
     </object>
    </void>
