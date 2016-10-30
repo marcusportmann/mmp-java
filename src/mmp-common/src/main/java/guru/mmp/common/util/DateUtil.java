@@ -44,7 +44,7 @@ public final class DateUtil
     @Override
     protected SimpleDateFormat initialValue()
     {
-      return new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+      return new SimpleDateFormat("yyyy-MM-dd HH:mm");
     }
   };
 
@@ -59,9 +59,9 @@ public final class DateUtil
   }
 
   /**
-   * Returns the <b>yyyy-MM-dd hh:mm a</b> thread-local <code>SimpleDateFormat</code>.
+   * Returns the <b>yyyy-MM-dd HH:mm</b> thread-local <code>SimpleDateFormat</code>.
    *
-   * @return the <b>yyyy-MM-dd hh:mm a</b> thread-local <code>SimpleDateFormat</code>
+   * @return the <b>yyyy-MM-dd HH:mm</b> thread-local <code>SimpleDateFormat</code>
    */
   public static SimpleDateFormat getYYYYMMDDWithTimeFormat()
   {
