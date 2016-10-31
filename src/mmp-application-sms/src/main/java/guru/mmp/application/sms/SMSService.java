@@ -20,46 +20,34 @@ package guru.mmp.application.sms;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
-
 import guru.mmp.application.Debug;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.util.ServiceUtil;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.StringReader;
-
-import java.net.URL;
-
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
-import java.util.concurrent.Future;
-
 import javax.annotation.PostConstruct;
-
 import javax.ejb.AsyncResult;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-
 import javax.inject.Inject;
-
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
+import java.io.StringReader;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.Future;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
@@ -117,8 +105,6 @@ public class SMSService
    * @param id the ID uniquely identifying the SMS
    *
    * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
-   *
-   * @throws SMSServiceException
    */
   public boolean deleteSMS(long id)
     throws SMSServiceException
@@ -149,9 +135,7 @@ public class SMSService
    * The SMS will be locked to prevent duplicate sending.
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   * currently queued for sending
-   *
-   * @throws SMSServiceException
+   *         currently queued for sending
    */
   public SMS getNextSMSQueuedForSending()
     throws SMSServiceException
@@ -170,8 +154,6 @@ public class SMSService
    * Returns the number of SMS credits remaining.
    *
    * @return the number of SMS credits remaining
-   *
-   * @throws SMSServiceException
    */
   public int getNumberOfSMSCreditsRemaining()
     throws SMSServiceException
@@ -205,8 +187,6 @@ public class SMSService
    * @param id the ID uniquely identifying the SMS
    *
    * @return the SMS or <code>null</code> if the SMS could not be found
-   *
-   * @throws SMSServiceException
    */
   public SMS getSMS(long id)
     throws SMSServiceException
@@ -226,8 +206,6 @@ public class SMSService
    * Increment the send attempts for the SMS.
    *
    * @param sms the SMS whose send attempts should be incremented
-   *
-   * @throws SMSServiceException
    */
   public void incrementSMSSendAttempts(SMS sms)
     throws SMSServiceException
@@ -269,8 +247,6 @@ public class SMSService
    *
    * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
-   *
-   * @throws SMSServiceException
    */
   public void resetSMSLocks(SMS.Status status, SMS.Status newStatus)
     throws SMSServiceException
@@ -294,8 +270,6 @@ public class SMSService
    *
    * @param mobileNumber the mobile number
    * @param message      the message
-   *
-   * @throws SMSServiceException
    */
   public void sendSMS(String mobileNumber, String message)
     throws SMSServiceException
@@ -323,8 +297,6 @@ public class SMSService
    * @param message      the message
    *
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
-   *
-   * @throws SMSServiceException
    */
   public boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
     throws SMSServiceException
@@ -485,8 +457,6 @@ public class SMSService
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the SMS
-   *
-   * @throws SMSServiceException
    */
   public void setSMSStatus(long id, SMS.Status status)
     throws SMSServiceException
@@ -507,8 +477,6 @@ public class SMSService
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
-   *
-   * @throws SMSServiceException
    */
   public void unlockSMS(long id, SMS.Status status)
     throws SMSServiceException
@@ -591,9 +559,8 @@ public class SMSService
 
   /**
    * Initialise the configuration for the SMS Service.
-   *
-   * @throws SMSServiceException
    */
+
   private void initConfiguration()
     throws SMSServiceException
   {

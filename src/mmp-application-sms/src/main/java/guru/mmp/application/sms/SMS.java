@@ -91,7 +91,7 @@ public class SMS
    * @param message      the message to send
    * @param status       the status of the SMS
    */
-  public SMS(String mobileNumber, String message, Status status)
+  SMS(String mobileNumber, String message, Status status)
   {
     this.mobileNumber = mobileNumber;
     this.message = message;
@@ -109,7 +109,7 @@ public class SMS
    * @param lockName      the name of the entity that has locked the SMS for sending
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
-  public SMS(long id, String mobileNumber, String message, Status status, int sendAttempts,
+  SMS(long id, String mobileNumber, String message, Status status, int sendAttempts,
       String lockName, Date lastProcessed)
   {
     this.id = id;

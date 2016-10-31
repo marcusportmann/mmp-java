@@ -90,8 +90,6 @@ public class SchedulerDAO
    * Update the entry for the job in the database.
    *
    * @param job the <code>Job</code> instance containing the updated information for the job
-   *
-   * @throws DAOException
    */
   public void updateJob(Job job)
     throws DAOException
@@ -124,8 +122,6 @@ public class SchedulerDAO
    * Create the entry for the job in the database.
    *
    * @param job the <code>Job</code> instance containing the information for the job
-   *
-   * @throws DAOException
    */
   public void createJob(Job job)
     throws DAOException
@@ -157,8 +153,6 @@ public class SchedulerDAO
    * Delete the job.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
-   *
-   * @throws DAOException
    */
   public void deleteJob(UUID id)
     throws DAOException
@@ -186,8 +180,6 @@ public class SchedulerDAO
    * @param filter the filter to apply to the jobs
    *
    * @return the jobs
-   *
-   * @throws DAOException
    */
   public List<Job> getFilteredJobs(String filter)
     throws DAOException
@@ -228,8 +220,6 @@ public class SchedulerDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the job or <code>null</code> if the job could not be found
-   *
-   * @throws DAOException
    */
   public Job getJob(UUID id)
     throws DAOException
@@ -264,8 +254,6 @@ public class SchedulerDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the parameters for the job
-   *
-   * @throws DAOException
    */
   public List<JobParameter> getJobParameters(UUID id)
     throws DAOException
@@ -298,8 +286,6 @@ public class SchedulerDAO
    * Retrieve the jobs.
    *
    * @return the jobs
-   *
-   * @throws DAOException
    */
   public List<Job> getJobs()
     throws DAOException
@@ -337,8 +323,6 @@ public class SchedulerDAO
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
    *         currently scheduled for execution
-   *
-   * @throws DAOException
    */
   public Job getNextJobScheduledForExecution(int executionRetryDelay, String lockName)
     throws DAOException
@@ -445,8 +429,6 @@ public class SchedulerDAO
    * @param filter the filter to apply to the jobs
    *
    * @return the number of filtered jobs
-   *
-   * @throws DAOException
    */
   public int getNumberOfFilteredJobs(String filter)
     throws DAOException
@@ -486,8 +468,6 @@ public class SchedulerDAO
    * Retrieve the number of jobs.
    *
    * @return the number of jobs
-   *
-   * @throws DAOException
    */
   public int getNumberOfJobs()
     throws DAOException
@@ -517,8 +497,6 @@ public class SchedulerDAO
    * Retrieve the unscheduled jobs.
    *
    * @return the unscheduled jobs
-   *
-   * @throws DAOException
    */
   public List<Job> getUnscheduledJobs()
     throws DAOException
@@ -548,8 +526,6 @@ public class SchedulerDAO
    * Increment the execution attempts for the job.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
-   *
-   * @throws DAOException
    */
   public void incrementJobExecutionAttempts(UUID id)
     throws DAOException
@@ -626,8 +602,6 @@ public class SchedulerDAO
    * @param id       the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status   the new status for the locked job
    * @param lockName the name of the lock that should be applied to the job
-   *
-   * @throws DAOException
    */
   public void lockJob(UUID id, Job.Status status, String lockName)
     throws DAOException
@@ -661,8 +635,6 @@ public class SchedulerDAO
    *                          the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
-   *
-   * @throws DAOException
    */
   public void rescheduleJob(UUID id, String schedulingPattern)
     throws DAOException
@@ -690,8 +662,6 @@ public class SchedulerDAO
    * @param newStatus the new status for the jobs that have been unlocked
    *
    * @return the number of job locks reset
-   *
-   * @throws DAOException
    */
   public int resetJobLocks(String lockName, Job.Status status, Job.Status newStatus)
     throws DAOException
@@ -719,8 +689,6 @@ public class SchedulerDAO
    *
    * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
    *         if there are no more unscheduled jobs to schedule
-   *
-   * @throws DAOException
    */
   public boolean scheduleNextUnscheduledJobForExecution()
     throws DAOException
@@ -837,8 +805,6 @@ public class SchedulerDAO
    *
    * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the job
-   *
-   * @throws DAOException
    */
   public void setJobStatus(UUID id, Job.Status status)
     throws DAOException
@@ -859,8 +825,6 @@ public class SchedulerDAO
    *
    * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the unlocked job
-   *
-   * @throws DAOException
    */
   public void unlockJob(UUID id, Job.Status status)
     throws DAOException

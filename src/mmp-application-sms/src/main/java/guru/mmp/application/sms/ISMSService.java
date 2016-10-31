@@ -31,8 +31,6 @@ public interface ISMSService
    * @param id the ID uniquely identifying the SMS
    *
    * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
-   *
-   * @throws SMSServiceException
    */
   boolean deleteSMS(long id)
     throws SMSServiceException;
@@ -50,9 +48,7 @@ public interface ISMSService
    * The SMS will be locked to prevent duplicate sending.
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   * currently queued for sending
-   *
-   * @throws SMSServiceException
+   *         currently queued for sending
    */
   SMS getNextSMSQueuedForSending()
     throws SMSServiceException;
@@ -61,8 +57,6 @@ public interface ISMSService
    * Returns the number of SMS credits remaining.
    *
    * @return the number of SMS credits remaining
-   *
-   * @throws SMSServiceException
    */
   int getNumberOfSMSCreditsRemaining()
     throws SMSServiceException;
@@ -73,8 +67,6 @@ public interface ISMSService
    * @param id the ID uniquely identifying the SMS
    *
    * @return the SMS or <code>null</code> if the SMS could not be found
-   *
-   * @throws SMSServiceException
    */
   SMS getSMS(long id)
     throws SMSServiceException;
@@ -83,8 +75,6 @@ public interface ISMSService
    * Increment the send attempts for the SMS.
    *
    * @param sms the SMS whose send attempts should be incremented
-   *
-   * @throws SMSServiceException
    */
   void incrementSMSSendAttempts(SMS sms)
     throws SMSServiceException;
@@ -94,8 +84,6 @@ public interface ISMSService
    *
    * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
-   *
-   * @throws SMSServiceException
    */
   void resetSMSLocks(SMS.Status status, SMS.Status newStatus)
     throws SMSServiceException;
@@ -107,8 +95,6 @@ public interface ISMSService
    *
    * @param mobileNumber the mobile number
    * @param message      the message
-   *
-   * @throws SMSServiceException
    */
   void sendSMS(String mobileNumber, String message)
     throws SMSServiceException;
@@ -123,8 +109,6 @@ public interface ISMSService
    * @param message      the message
    *
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
-   *
-   * @throws SMSServiceException
    */
   boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
     throws SMSServiceException;
@@ -139,8 +123,6 @@ public interface ISMSService
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the SMS
-   *
-   * @throws SMSServiceException
    */
   void setSMSStatus(long id, SMS.Status status)
     throws SMSServiceException;
@@ -150,8 +132,6 @@ public interface ISMSService
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
-   *
-   * @throws SMSServiceException
    */
   void unlockSMS(long id, SMS.Status status)
     throws SMSServiceException;

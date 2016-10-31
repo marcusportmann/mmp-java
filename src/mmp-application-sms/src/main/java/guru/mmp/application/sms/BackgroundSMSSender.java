@@ -86,7 +86,7 @@ public class BackgroundSMSSender
    * @return <code>true</code> if the SMSs were sent successfully or <code>false</code> otherwise
    */
   @Asynchronous
-  public Future<Boolean> send()
+  Future<Boolean> send()
   {
     // If CDI injection was not completed successfully for the bean then stop here
     if (smsService == null)

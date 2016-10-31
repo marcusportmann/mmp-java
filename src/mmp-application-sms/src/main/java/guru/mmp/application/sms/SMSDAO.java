@@ -51,7 +51,7 @@ public class SMSDAO
    */
   private DataSource dataSource;
   private String deleteSMSSQL;
-  private String getNextSMSForProcessingSQL;
+  private String getNextSMSQueuedForSendingSQL;
   private String getSMSByIdSQL;
 
   /**
@@ -74,8 +74,6 @@ public class SMSDAO
    * Create the entry for the SMS in the database.
    *
    * @param sms the <code>SMS</code> instance containing the information for the SMS
-   *
-   * @throws DAOException
    */
   public void createSMS(SMS sms)
     throws DAOException
@@ -110,8 +108,6 @@ public class SMSDAO
    * @param id the ID uniquely identifying the SMS
    *
    * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   public boolean deleteSMS(long id)
     throws DAOException
@@ -135,13 +131,11 @@ public class SMSDAO
    * The SMS will be locked to prevent duplicate sending.
    *
    * @param sendRetryDelay the delay in milliseconds to wait before re-attempting to send a SMS
-   * @param lockName       the name of the lock that should be applied to the message queued for
-   *                       processing when it is retrieved
+   * @param lockName       the name of the lock that should be applied to the SMS queued for
+   *                       sending when it is retrieved
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   * currently queued for sending
-   *
-   * @throws DAOException
+   *         currently queued for sending
    */
   public SMS getNextSMSQueuedForSending(int sendRetryDelay, String lockName)
     throws DAOException
@@ -164,7 +158,7 @@ public class SMSDAO
       SMS sms = null;
 
       try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getNextSMSForProcessingSQL))
+        PreparedStatement statement = connection.prepareStatement(getNextSMSQueuedForSendingSQL))
       {
         Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - sendRetryDelay);
 
@@ -241,8 +235,6 @@ public class SMSDAO
    * @param id the ID uniquely identifying the SMS
    *
    * @return the SMS or <code>null</code> if the SMS could not be found
-   *
-   * @throws DAOException
    */
   public SMS getSMS(long id)
     throws DAOException
@@ -275,8 +267,6 @@ public class SMSDAO
    * Increment the send attempts for the SMS.
    *
    * @param sms the SMS whose send attempts should be incremented
-   *
-   * @throws DAOException
    */
   public void incrementSMSSendAttempts(SMS sms)
     throws DAOException
@@ -357,8 +347,6 @@ public class SMSDAO
    * @param lockName  the name of the lock applied by the entity that has locked the SMSs
    * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
-   *
-   * @throws DAOException
    */
   public void resetSMSLocks(String lockName, SMS.Status status, SMS.Status newStatus)
     throws DAOException
@@ -385,8 +373,6 @@ public class SMSDAO
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the SMS
-   *
-   * @throws DAOException
    */
   public void setSMSStatus(long id, SMS.Status status)
     throws DAOException
@@ -417,8 +403,6 @@ public class SMSDAO
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
-   *
-   * @throws DAOException
    */
   public void unlockSMS(long id, SMS.Status status)
     throws DAOException
@@ -448,7 +432,7 @@ public class SMSDAO
    *
    * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
    */
-  protected void buildStatements(String schemaPrefix)
+  private void buildStatements(String schemaPrefix)
   {
     // createSMSSQL
     createSMSSQL = "INSERT INTO " + schemaPrefix + "SMS" + " (ID, MOBILE_NUMBER, MESSAGE, STATUS,"
@@ -457,10 +441,10 @@ public class SMSDAO
     // deleteSMSSQL
     deleteSMSSQL = "DELETE FROM " + schemaPrefix + "SMS WHERE ID=?";
 
-    // getNextSMSForProcessingSQL
-    getNextSMSForProcessingSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS," + " "
-        + "LOCK_NAME, LAST_PROCESSED FROM " + schemaPrefix + "SMS" + " WHERE STATUS=? AND "
-        + "(LAST_PROCESSED<? OR LAST_PROCESSED IS NULL)" + " FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+    // getNextSMSQueuedForSendingSQL
+    getNextSMSQueuedForSendingSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS,"
+        + " LOCK_NAME, LAST_PROCESSED FROM " + schemaPrefix + "SMS" + " WHERE STATUS=? AND "
+        + "(LAST_PROCESSED<? OR LAST_PROCESSED IS NULL) FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     // getSMSByIdSQL
     getSMSByIdSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS, LOCK_NAME," + " "

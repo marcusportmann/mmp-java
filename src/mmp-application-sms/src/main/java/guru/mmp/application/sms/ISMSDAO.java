@@ -31,8 +31,6 @@ public interface ISMSDAO
    * Create the entry for the SMS in the database.
    *
    * @param sms the <code>SMS</code> instance containing the information for the SMS
-   *
-   * @throws DAOException
    */
   void createSMS(SMS sms)
     throws DAOException;
@@ -43,8 +41,6 @@ public interface ISMSDAO
    * @param id the ID uniquely identifying the SMS
    *
    * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   boolean deleteSMS(long id)
     throws DAOException;
@@ -55,13 +51,11 @@ public interface ISMSDAO
    * The SMS will be locked to prevent duplicate sending.
    *
    * @param sendRetryDelay the delay in milliseconds to wait before re-attempting to send a SMS
-   * @param lockName       the name of the lock that should be applied to the message queued for
-   *                       processing when it is retrieved
+   * @param lockName       the name of the lock that should be applied to the SMS queued for
+   *                       sending when it is retrieved
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   * currently queued for sending
-   *
-   * @throws DAOException
+   *         currently queued for sending
    */
   SMS getNextSMSQueuedForSending(int sendRetryDelay, String lockName)
     throws DAOException;
@@ -72,8 +66,6 @@ public interface ISMSDAO
    * @param id the ID uniquely identifying the SMS
    *
    * @return the SMS or <code>null</code> if the SMS could not be found
-   *
-   * @throws DAOException
    */
   SMS getSMS(long id)
     throws DAOException;
@@ -82,8 +74,6 @@ public interface ISMSDAO
    * Increment the send attempts for the SMS.
    *
    * @param sms the SMS whose send attempts should be incremented
-   *
-   * @throws DAOException
    */
   void incrementSMSSendAttempts(SMS sms)
     throws DAOException;
@@ -94,8 +84,6 @@ public interface ISMSDAO
    * @param lockName  the name of the lock applied by the entity that has locked the SMSs
    * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
-   *
-   * @throws DAOException
    */
   void resetSMSLocks(String lockName, SMS.Status status, SMS.Status newStatus)
     throws DAOException;
@@ -105,8 +93,6 @@ public interface ISMSDAO
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the SMS
-   *
-   * @throws DAOException
    */
   void setSMSStatus(long id, SMS.Status status)
     throws DAOException;
@@ -116,8 +102,6 @@ public interface ISMSDAO
    *
    * @param id     the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
-   *
-   * @throws DAOException
    */
   void unlockSMS(long id, SMS.Status status)
     throws DAOException;

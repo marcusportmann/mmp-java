@@ -37,8 +37,6 @@ public interface IProcessDAO
    *
    * @param processDefinition the <code>ProcessDefinition</code> instance containing the information
    *                          for the new process definition
-   *
-   * @throws DAOException
    */
   void createProcessDefinition(ProcessDefinition processDefinition)
     throws DAOException;
@@ -48,8 +46,6 @@ public interface IProcessDAO
    *
    * @param processInstance the <code>ProcessInstance</code> instance containing the information
    *                        for the new process instance
-   *
-   * @throws DAOException
    */
   void createProcessInstance(ProcessInstance processInstance)
     throws DAOException;
@@ -59,8 +55,6 @@ public interface IProcessDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
    *           definition
-   *
-   * @throws DAOException
    */
   void deleteProcessDefinition(UUID id)
     throws DAOException;
@@ -70,8 +64,6 @@ public interface IProcessDAO
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the process
    *           instance
-   *
-   * @throws DAOException
    */
   void deleteProcessInstance(UUID id)
     throws DAOException;
@@ -80,8 +72,6 @@ public interface IProcessDAO
    * Returns the summaries for the current versions of all the process definitions.
    *
    * @return the summaries for the current versions of all the process definitions
-   *
-   * @throws DAOException
    */
   List<ProcessDefinitionSummary> getCurrentProcessDefinitionSummaries()
     throws DAOException;
@@ -90,8 +80,6 @@ public interface IProcessDAO
    * Returns the current versions of all the process definitions.
    *
    * @return the current versions of all the process definitions
-   *
-   * @throws DAOException
    */
   List<ProcessDefinition> getCurrentProcessDefinitions()
     throws DAOException;
@@ -106,8 +94,6 @@ public interface IProcessDAO
    *
    * @return the next process instance that is scheduled for execution or <code>null</code> if no
    * process instances are currently scheduled for execution
-   *
-   * @throws DAOException
    */
   ProcessInstance getNextProcessInstanceScheduledForExecution(String lockName)
     throws DAOException;
@@ -116,8 +102,6 @@ public interface IProcessDAO
    * Returns the number of process definitions.
    *
    * @return the number of process definitions
-   *
-   * @throws DAOException
    */
   int getNumberOfProcessDefinitions()
     throws DAOException;
@@ -126,8 +110,6 @@ public interface IProcessDAO
    * Returns the number of process instances.
    *
    * @return the number of process instances
-   *
-   * @throws DAOException
    */
   int getNumberOfProcessInstances()
     throws DAOException;
@@ -141,8 +123,6 @@ public interface IProcessDAO
    *
    * @return the process definition and version or <code>null</code> if the process definition
    * could not be found
-   *
-   * @throws DAOException
    */
   ProcessDefinition getProcessDefinition(UUID id, int version)
     throws DAOException;
@@ -156,8 +136,6 @@ public interface IProcessDAO
    *
    * @return the summary for the process definition and version or <code>null</code> if the process
    * definition could not be found
-   *
-   * @throws DAOException
    */
   ProcessDefinitionSummary getProcessDefinitionSummary(UUID id, int version)
     throws DAOException;
@@ -169,8 +147,6 @@ public interface IProcessDAO
    *           instance
    *
    * @return the process instance or <code>null</code> if the process instance could not be found
-   *
-   * @throws DAOException
    */
   ProcessInstance getProcessInstance(UUID id)
     throws DAOException;
@@ -179,8 +155,6 @@ public interface IProcessDAO
    * Returns the summaries for the all the process instances.
    *
    * @return the summaries for the all the process instances
-   *
-   * @throws DAOException
    */
   List<ProcessInstanceSummary> getProcessInstanceSummaries()
     throws DAOException;
@@ -193,8 +167,6 @@ public interface IProcessDAO
    *
    * @return the summary for the process instance or <code>null</code> if the process definition
    * could not be found
-   *
-   * @throws DAOException
    */
   ProcessInstanceSummary getProcessInstanceSummary(UUID id)
     throws DAOException;
@@ -207,8 +179,6 @@ public interface IProcessDAO
    * @param version the version of the process definition
    *
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   boolean processDefinitionExists(UUID id, int version)
     throws DAOException;
@@ -220,8 +190,6 @@ public interface IProcessDAO
    *           instance
    *
    * @return <code>true</code> if the process instance exists or <code>false</code> otherwise
-   *
-   * @throws DAOException
    */
   boolean processInstanceExists(UUID id)
     throws DAOException;
@@ -235,8 +203,6 @@ public interface IProcessDAO
    * @param newStatus the new status for the process instances that have been unlocked
    *
    * @return the number of process instance locks reset
-   *
-   * @throws DAOException
    */
   int resetProcessInstanceLocks(String lockName, ProcessInstance.Status status, ProcessInstance
       .Status newStatus)
@@ -248,8 +214,6 @@ public interface IProcessDAO
    * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the process
    *               instance
    * @param status the new status for the unlocked process instance
-   *
-   * @throws DAOException
    */
   void unlockProcessInstance(UUID id, ProcessInstance.Status status)
     throws DAOException;
@@ -260,8 +224,6 @@ public interface IProcessDAO
    * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the process
    *             instance
    * @param data the data giving the current execution state for the process instance
-   *
-   * @throws DAOException
    */
   void updateProcessInstanceData(UUID id, byte[] data)
     throws DAOException;

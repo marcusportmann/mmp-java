@@ -105,7 +105,6 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
    *
    * @see org.apache.wicket.markup.repeater.data.IDataProvider#iterator(long, long)
    */
-
   public Iterator<User> iterator(long first, long count)
   {
     try
