@@ -21,6 +21,7 @@ package guru.mmp.application.web.template.components;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -73,7 +74,9 @@ public abstract class FormDialog<T> extends Dialog
     form = new Form<>("form");
     add(form);
 
-    AjaxSubmitLink submitLink = new AjaxSubmitLink("submitLink", getForm())
+
+
+    AjaxButton submitButton = new AjaxButton("submitButton", getForm())
     {
       @Override
       protected void onError(AjaxRequestTarget target, Form<?> form)
@@ -113,12 +116,12 @@ public abstract class FormDialog<T> extends Dialog
         FormDialog.this.onSubmit(target, FormDialog.this.getForm());
       }
     };
-    submitLink.setDefaultFormProcessing(true);
-    add(submitLink);
+    submitButton.setDefaultFormProcessing(true);
+    add(submitButton);
 
     Label submitTextLabel = new Label("submitText", submitText);
     submitTextLabel.setRenderBodyOnly(true);
-    submitLink.add(submitTextLabel);
+    submitButton.add(submitTextLabel);
 
     AjaxLink cancelLink = new AjaxLink("cancelLink")
     {
