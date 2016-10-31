@@ -82,25 +82,32 @@ public abstract class FormDialog<T> extends Dialog
 
         if (target != null)
         {
-          // Visit each form component and if it has an error re-render it
+          // Visit each form component and if it is visible re-render it
           form.visitFormComponents(new IVisitor<FormComponent<?>, Object>()
               {
                 @Override
                 public void component(FormComponent<?> formComponent, IVisit<Object> iVisit)
                 {
-                  if (formComponent.hasErrorMessage())
+                  if ((formComponent.getParent() != null)
+                      && formComponent.getParent().isVisible()
+                      && formComponent.isVisible())
                   {
                     target.add(formComponent);
                   }
                 }
               });
         }
+
+        FormDialog.this.onError(target, FormDialog.this.getForm());
       }
 
       @Override
       protected void onSubmit(AjaxRequestTarget target, Form<?> form)
       {
-        resetFeedbackMessages(target);
+        if (target != null)
+        {
+          resetFeedbackMessages(target);
+        }
 
         FormDialog.this.onSubmit(target, FormDialog.this.getForm());
       }
@@ -238,6 +245,14 @@ public abstract class FormDialog<T> extends Dialog
    * @param form   the form
    */
   protected abstract void onCancel(AjaxRequestTarget target, Form<T> form);
+
+  /**
+   * Process the errors for the form associated with the dialog.
+   *
+   * @param target the AJAX request target
+   * @param form   the form
+   */
+  protected void onError(AjaxRequestTarget target, Form<T> form) {}
 
   /**
    * Process the submission of the form associated with the dialog.
