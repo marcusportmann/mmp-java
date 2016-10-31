@@ -55,6 +55,8 @@ public class ConfigurationServiceTest
   private static final Double TEST_DOUBLE_VALUE = 1234.4321;
   private static final byte[] TEST_BINARY_VALUE = "TestBinaryValue".getBytes();
   private static final byte[] TEST_BINARY_UPDATED_VALUE = "TestBinaryUpdatedValue".getBytes();
+  private static final String TEST_BOOLEAN_KEY = "TestBooleanKey";
+  private static final boolean TEST_BOOLEAN_VALUE = true;
   @Inject
   private IConfigurationService configurationService;
 
@@ -102,6 +104,50 @@ public class ConfigurationServiceTest
         "The required updated Binary value was not retrieved for the configuration key ("
         + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
 
+  }
+
+  /**
+   * Test the <code>Boolean</code> configuration.
+   */
+  @Test
+  public void booleanConfigurationTest()
+    throws ConfigurationException, ConfigurationNotFoundException
+  {
+    if (configurationService.keyExists(TEST_BOOLEAN_KEY))
+    {
+      fail("Found the Boolean configuration key (" + TEST_BOOLEAN_KEY + ") that should not exist");
+    }
+
+    configurationService.setValue(TEST_BOOLEAN_KEY, TEST_BOOLEAN_VALUE, TEST_DESCRIPTION);
+
+    if (!configurationService.keyExists(TEST_BOOLEAN_KEY))
+    {
+      fail("Failed to confirm that the Boolean configuration key (" + TEST_BOOLEAN_KEY
+          + ") exists");
+    }
+
+    boolean value = configurationService.getBoolean(TEST_BOOLEAN_KEY);
+
+    assertEquals("The required Boolean value was not retrieved for the configuration key ("
+        + TEST_BOOLEAN_KEY + ")", TEST_BOOLEAN_VALUE, value);
+
+    boolean booleanValue = configurationService.getBoolean(TEST_BOOLEAN_KEY, false);
+
+    assertEquals("The required double value was not retrieved for the configuration key ("
+        + booleanValue + ")", TEST_BOOLEAN_VALUE, booleanValue);
+
+    configurationService.setValue(TEST_BOOLEAN_KEY, false, TEST_DESCRIPTION + " Updated");
+
+    if (!configurationService.keyExists(TEST_BOOLEAN_KEY))
+    {
+      fail("Failed to confirm that the Boolean configuration key (" + TEST_BOOLEAN_KEY
+          + ") exists");
+    }
+
+    value = configurationService.getBoolean(TEST_BOOLEAN_KEY);
+
+    assertEquals("The required updated Boolean value was not retrieved for the configuration key ("
+        + TEST_BOOLEAN_KEY + ")", false, value);
   }
 
   /**

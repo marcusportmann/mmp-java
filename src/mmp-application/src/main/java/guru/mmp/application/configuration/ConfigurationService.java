@@ -116,6 +116,57 @@ public class ConfigurationService
   }
 
   /**
+   * Retrieve the <code>Boolean</code> configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return the <code>Boolean</code> configuration value
+   */
+  public boolean getBoolean(String key)
+    throws ConfigurationNotFoundException, ConfigurationException
+  {
+    try
+    {
+      return Boolean.valueOf(getString(key));
+    }
+    catch (ConfigurationNotFoundException e)
+    {
+      throw new ConfigurationNotFoundException(String.format(
+          "The Boolean configuration value with the key (%s) could not be found", key));
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationException(String.format(
+          "Failed to retrieve the Boolean configuration value with the key (%s): %s", key,
+          e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Retrieve the <code>Boolean</code> configuration value.
+   *
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
+   *
+   * @return the <code>Boolean</code> configuration value or the default value if the configuration
+   *         value does not exist
+   */
+  public boolean getBoolean(String key, boolean defaultValue)
+    throws ConfigurationNotFoundException, ConfigurationException
+  {
+    try
+    {
+      return Boolean.valueOf(getString(key, String.valueOf(defaultValue)));
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationException(String.format(
+          "Failed to retrieve the Boolean configuration value with the key (%s): %s", key,
+          e.getMessage()), e);
+    }
+  }
+
+  /**
    * Retrieve the <code>Double</code> configuration value.
    *
    * @param key the key used to uniquely identify the configuration value

@@ -52,6 +52,28 @@ public interface IConfigurationService
     throws ConfigurationException;
 
   /**
+   * Retrieve the <code>Boolean</code> configuration value.
+   *
+   * @param key the key used to uniquely identify the configuration value
+   *
+   * @return the <code>Boolean</code> configuration value
+   */
+  boolean getBoolean(String key)
+    throws ConfigurationNotFoundException, ConfigurationException;
+
+  /**
+   * Retrieve the <code>Boolean</code> configuration value.
+   *
+   * @param key          the key used to uniquely identify the configuration value
+   * @param defaultValue the default value to return if the configuration value does not exist
+   *
+   * @return the <code>Boolean</code> configuration value or the default value if the configuration
+   *         value does not exist
+   */
+  boolean getBoolean(String key, boolean defaultValue)
+    throws ConfigurationNotFoundException, ConfigurationException;
+
+  /**
    * Retrieve the <code>Double</code> configuration value.
    *
    * @param key the key used to uniquely identify the configuration value
