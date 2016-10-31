@@ -182,7 +182,7 @@ public class BackgroundSMSSender
           if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts())
           {
             logger.warn(String.format(
-                "The queued SMS (%d) has exceeded the maximum  number of send attempts and will be "
+                "The queued SMS (%d) has exceeded the maximum number of send attempts and will be "
                 + "marked as \"Failed\"", sms.getId()));
 
             smsService.unlockSMS(sms.getId(), SMS.Status.FAILED);
