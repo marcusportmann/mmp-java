@@ -8,6 +8,7 @@
   <entry key="addForm.phoneNumber.Required">A phone number is required.</entry>
   <entry key="addForm.mobileNumber.Required">A mobile number is required.</entry>
   <entry key="addForm.email.Required">An e-mail address is required.</entry>
+  <entry key="addForm.email.EmailAddressValidator">The e-mail address is invalid.</entry>
   <entry key="addForm.password.Required">A password is required.</entry>
   <entry key="addForm.confirmPassword.Required">A confirmed password is required.</entry>
   <entry key="addForm.groupName.Required">A group is required.</entry>

@@ -33,6 +33,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,6 +91,7 @@ public class UpdateUserPage extends TemplateWebPage
 
       // The "email" field
       TextField<String> emailField = new TextFieldWithFeedback<>("email");
+      emailField.add(EmailAddressValidator.getInstance());
       emailField.setRequired(true);
       updateForm.add(emailField);
 

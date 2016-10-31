@@ -36,6 +36,7 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import org.slf4j.Logger;
@@ -112,6 +113,7 @@ public class AddUserPage extends TemplateWebPage
 
       // The "email" field
       TextField<String> emailField = new TextFieldWithFeedback<>("email");
+      emailField.add(EmailAddressValidator.getInstance());
       emailField.setRequired(true);
       addForm.add(emailField);
 
