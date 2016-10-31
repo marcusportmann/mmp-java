@@ -82,7 +82,8 @@ public abstract class FormDialog<T> extends Dialog
 
         if (target != null)
         {
-          // Visit each form component and if it is visible re-render it
+          // Visit each form component and if it is visible re-render it.
+          // NOTE: We have to re-render every component to remove stale validation error messages.
           form.visitFormComponents(new IVisitor<FormComponent<?>, Object>()
               {
                 @Override
