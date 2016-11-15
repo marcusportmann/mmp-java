@@ -141,6 +141,7 @@ public class ApplicationClassRunner extends BlockJUnit4ClassRunner
               CDI11Bootstrap bootstrap)
           {
             Deployment deployment = super.createDeployment(resourceLoader, bootstrap);
+
             deployment.getServices().add(TransactionServices.class,
                 new TransactionServices()
                 {
@@ -234,7 +235,7 @@ public class ApplicationClassRunner extends BlockJUnit4ClassRunner
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the ApplicationJUnit4ClassRunner", e);
+      throw new RuntimeException("Failed to initialise the ApplicationClassRunner", e);
     }
   }
 
