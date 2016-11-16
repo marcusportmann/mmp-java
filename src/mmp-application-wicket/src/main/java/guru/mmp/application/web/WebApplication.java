@@ -18,11 +18,9 @@ package guru.mmp.application.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.Debug;
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.Session;
+import org.apache.wicket.*;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.util.convert.ConversionException;
@@ -58,6 +56,24 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    * Constructs a new <code>WebApplication</code>.
    */
   public WebApplication() {}
+
+  /**
+   * Returns the runtime configuration type for the Wicket web application.
+   *
+   * @return the runtime configuration type for the Wicket web application
+   */
+  @Override
+  public RuntimeConfigurationType getConfigurationType()
+  {
+    if (Debug.inDebugMode())
+    {
+      return RuntimeConfigurationType.DEVELOPMENT;
+    }
+    else
+    {
+      return RuntimeConfigurationType.DEPLOYMENT;
+    }
+  }
 
   /**
    * Returns the page that users will be redirected to in order to login to the application.

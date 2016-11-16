@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+  compile('cglib:cglib:3.2.4')
   compile('joda-time:joda-time:2.9.4')
   compile('org.apache.httpcomponents:httpclient:4.5.2')
   compile('org.apache.ws.security:wss4j:1.6.19') {

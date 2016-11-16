@@ -14,7 +14,6 @@ repositories {
 dependencies {
   compile project(':mmp-common')
   
-  compile('cglib:cglib:3.2.4')
   compile('com.atomikos:transactions-jdbc:4.0.4')
   compile('com.atomikos:transactions-jta:4.0.4')
   compile('com.h2database:h2:1.4.192')
