@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>guru.mmp</groupId>
+  <artifactId>mmp-java</artifactId>
+  <version>2.0.0-SNAPSHOT</version>
+  <name>mmp-java</name>
+
+  <packaging>pom</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <modules>
+    <module>mmp-common</module>
+    <module>mmp-application</module>
+    <module>mmp-application-test</module>
+    <module>mmp-application-wicket</module>
+    <module>mmp-application-scheduler</module>
+    <module>mmp-application-scheduler-wicket</module>
+    <module>mmp-application-messaging</module>
+    <module>mmp-application-messaging-wicket</module>
+    <module>mmp-application-reporting</module>
+    <module>mmp-application-reporting-wicket</module>
+    <module>mmp-application-process</module>
+    <module>mmp-application-process-wicket</module>
+    <module>mmp-application-customer</module>
+    <module>mmp-application-customer-wicket</module>
+    <module>mmp-application-sms</module>
+    <module>mmp-tomcat</module>
+    <module>mmp-sharepoint</module>
+    <module>mmp-corba</module>
+    <module>mmp-vmware</module>
+
+    <!--
+    <module>mmp-sample-wicket</module>
+    -->
+  </modules>
+
+</project>
+
+
