@@ -4,6 +4,7 @@ version '2.0.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'wildfly-swarm'
 
 repositories {
   mavenCentral()
@@ -13,6 +14,8 @@ dependencies {
   compile project(':mmp-common')
   
   testCompile('junit:junit:4.12')
+
+  classpath "org.wildfly.swarm:wildfly-swarm-plugin:LATEST"
 }
 
 wsdl2java {
