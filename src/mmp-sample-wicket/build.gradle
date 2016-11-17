@@ -24,6 +24,9 @@ dependencies {
   compileOnly('org.eclipse.persistence:javax.persistence:2.1.0')
 
   testCompile project(':mmp-application-test')
+
+
+
 }
 
 /*
@@ -69,3 +72,18 @@ wsdl2java {
   bindingFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/mmp-bindings.xjb")
   wsdlFiles.add("${projectDir}/src/main/resources/META-INF/wsdl/SampleService.wsdl")
 }
+
+buildscript {
+
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE"
+    classpath('org.wildfly.swarm:wildfly-swarm-plugin:2016.11.0')
+  }
+}
+
+apply plugin: 'wildfly-swarm'
+
