@@ -13,10 +13,10 @@ repositories {
 
 dependencies {
   compile project(':mmp-common')
-  
-  compile('javax.transaction:jta:1.1')
+
   compile('com.atomikos:transactions-jta:4.0.4')
   compile('com.atomikos:transactions-jdbc:4.0.4')
+  compile('javax.transaction:javax.transaction-api:1.2')
 
   compileOnly('org.apache.tomcat:tomcat-catalina:8.0.37')
 

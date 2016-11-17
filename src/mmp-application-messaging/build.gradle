@@ -13,9 +13,11 @@ repositories {
 
 dependencies {
   compile project(':mmp-application')
-  
-  compileOnly('javax:javaee-api:7.0')
-  
+
+  compileOnly('javax.ejb:javax.ejb-api:3.2')
+  compileOnly('javax.enterprise:cdi-api:1.1')
+  compileOnly('javax.servlet:javax.servlet-api:3.1.0')
+
   testCompile project(':mmp-application-test')
 
   testCompile('org.httpunit:httpunit:1.7.2')

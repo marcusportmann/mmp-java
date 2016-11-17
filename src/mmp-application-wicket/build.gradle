@@ -13,15 +13,19 @@ repositories {
 
 dependencies {
   compile project(':mmp-application')
-  
+
+  compile('cglib:cglib-nodep:3.2.4')
+
   compile('org.apache.wicket:wicket-datetime:7.5.0')
   compile('org.apache.wicket:wicket-devutils:7.5.0')
   compile('org.apache.wicket:wicket-ioc:7.5.0') {
     exclude group: 'javax.inject', module: 'javax.inject'   
   }
-    
-  compileOnly('javax:javaee-api:7.0')
-  
+
+  compileOnly('javax.enterprise:cdi-api:1.1')
+  compileOnly('javax.transaction:javax.transaction-api:1.2')
+  compileOnly('javax.servlet:javax.servlet-api:3.1.0')
+
   testCompile project(':mmp-application-test')
 }
 

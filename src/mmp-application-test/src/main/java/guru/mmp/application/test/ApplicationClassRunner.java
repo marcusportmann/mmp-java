@@ -35,16 +35,19 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
+import javax.enterprise.inject.spi.Extension;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import javax.transaction.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -116,8 +119,7 @@ public class ApplicationClassRunner extends BlockJUnit4ClassRunner
         transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
         transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
 
-        TransactionManager transactionManager =
-            (TransactionManager) transactionManagerEnhancer.create();
+        TransactionManager transactionManager = (TransactionManager) transactionManagerEnhancer.create();
 
         ic.bind("comp/TransactionManager", transactionManager);
         ic.bind("jboss/TransactionManager", transactionManager);
@@ -136,6 +138,12 @@ public class ApplicationClassRunner extends BlockJUnit4ClassRunner
         // Initialise the Weld bean manager with JTA transaction support
         Weld weld = new Weld()
         {
+          @Override
+          public Weld extensions(Extension... extensions)
+          {
+            return super.extensions(extensions);
+          }
+
           @Override
           protected Deployment createDeployment(ResourceLoader resourceLoader,
               CDI11Bootstrap bootstrap)

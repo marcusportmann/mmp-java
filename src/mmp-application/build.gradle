@@ -15,9 +15,12 @@ dependencies {
   compile project(':mmp-common')
 
   compile('commons-beanutils:commons-beanutils:1.9.2')
-  
-  compileOnly('javax:javaee-api:7.0')
-  
+
+  compileOnly('javax.enterprise:cdi-api:1.1')
+  compileOnly('javax.servlet:javax.servlet-api:3.1.0')
+  compileOnly('javax.transaction:javax.transaction-api:1.2')
+  compileOnly('org.eclipse.persistence:javax.persistence:2.1.0')
+
   testCompile project(':mmp-application-test')  
 }
 

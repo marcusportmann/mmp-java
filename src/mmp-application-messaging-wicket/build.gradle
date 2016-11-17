@@ -14,9 +14,9 @@ repositories {
 dependencies {
   compile project(':mmp-application-wicket')
   compile project(':mmp-application-messaging')
-  
-  compileOnly('javax:javaee-api:7.0')
-  
+
+  compileOnly('javax.enterprise:cdi-api:1.1')
+
   testCompile project(':mmp-application-test')
 }
 
