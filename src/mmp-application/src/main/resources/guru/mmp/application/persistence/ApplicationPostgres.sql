@@ -5,7 +5,7 @@
 --  Execute the following command to start the database server if it is not running:
 --
 --    OS X: pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/postgres.log start
---    CentOS (as root): service postgresql-9.5 start 
+--    CentOS (as root): service postgresql-9.6 start
 --
 --  Execute the following command to create the database:
 --

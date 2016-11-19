@@ -50,7 +50,7 @@ public class Sample
         {
           ds.driverName("h2");
           ds.connectionUrl(
-            "jdbc:h2:mem:sampledb;MVCC=true;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+            "jdbc:h2:mem:sample;MVCC=true;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
           ds.userName("sa");
           ds.password("sa");
           ds.jndiName("java:jboss/datasources/SampleDS");

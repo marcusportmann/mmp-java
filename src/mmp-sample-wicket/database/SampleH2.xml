@@ -1,0 +1,8 @@
+                <xa-datasource jndi-name="java:jboss/datasources/SampleDS" pool-name="SampleDS"  enabled="true" use-java-context="true">
+                    <xa-datasource-property name="URL">jdbc:h2:mem:sample;MVCC=true;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</xa-datasource-property>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password>sa</password>
+                    </security>
+                    <driver>h2</driver>
+                </xa-datasource>
