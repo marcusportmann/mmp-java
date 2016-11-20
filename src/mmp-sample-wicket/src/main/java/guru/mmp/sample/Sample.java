@@ -21,7 +21,9 @@ package guru.mmp.sample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wildfly.swarm.Swarm;
+import org.wildfly.swarm.config.undertow.FilterConfiguration;
 import org.wildfly.swarm.datasources.DatasourcesFraction;
+import org.wildfly.swarm.undertow.UndertowFraction;
 
 /**
  * The <code>Sample</code> class initialises the WildFly Swarm container.
@@ -32,6 +34,7 @@ public class Sample
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(Sample.class);
+  private static final String GZIP_FILTER_KEY = "gzip";
 
   /**
    * Main.
@@ -45,20 +48,31 @@ public class Sample
       // Instantiate the container
       Swarm swarm = new Swarm();
 
+      // Initialise the application data source
       swarm.fraction(new DatasourcesFraction().dataSource("SampleDS",
-        (ds) ->
-        {
-          ds.driverName("h2");
-          ds.connectionUrl(
-            "jdbc:h2:mem:sample;MVCC=true;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-          ds.userName("sa");
-          ds.password("sa");
-          ds.jndiName("java:jboss/datasources/SampleDS");
-          ds.useJavaContext(true);
-          ds.trackStatements("true");
-          ds.tracking(true);
-        }
-      ));
+          (ds) ->
+          {
+            ds.driverName("h2");
+            ds.connectionUrl(
+                "jdbc:h2:mem:sample;MVCC=true;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+            ds.userName("sa");
+            ds.password("sa");
+            ds.jndiName("java:jboss/datasources/SampleDS");
+            ds.useJavaContext(true);
+            ds.trackStatements("true");
+            ds.tracking(true);
+          }
+          ));
+
+      // Enable gzip compression
+      UndertowFraction undertowFraction = UndertowFraction.createDefaultFraction();
+
+      undertowFraction.filterConfiguration(new FilterConfiguration().gzip(GZIP_FILTER_KEY))
+          .subresources().server("default-server").subresources().host("default-host").filterRef(
+          GZIP_FILTER_KEY, f -> f.predicate(
+          "exists('%{o,Content-Type}') and regex(pattern='(?:application/javascript|text/css|text/html|text/xml|application/json)(;.*)?', value=%{o,Content-Type}, full-match=true)"));
+
+      swarm.fraction(undertowFraction);
 
       // Start the container
       swarm.start();
