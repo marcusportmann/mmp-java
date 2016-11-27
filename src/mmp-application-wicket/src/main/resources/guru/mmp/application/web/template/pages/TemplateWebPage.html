@@ -1,64 +1,69 @@
 <!DOCTYPE html>
-<html class="no-focus">
+<html class="no-focus" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
   <head>
     <meta charset="utf-8">
     <title wicket:id="pageTitle">Template</title>
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
-  <body>
-    <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
-      <div wicket:id="backendUserMenuSideOverlay"></div>
-      <nav id="sidebar">
-        <div id="sidebar-scroll">
-          <div class="sidebar-content">
-            <div class="side-header side-content bg-white-op">
-              <button class="btn btn-link text-gray pull-right hidden-md hidden-lg" type="button" data-toggle="layout" data-action="sidebar_close">
-                <i class="fa fa-times"></i>
-              </button>
-              <div class="application-logo-container">
-                <div class="application-logo-icon"></div>
-                <div class="application-logo-name sidebar-mini-hide"></div>
-              </div>
-            </div>
-            <div class="side-content">
-              <div wicket:id="backendMainNavigation"></div>
-            </div>
+  <body class="hold-transition skin-black sidebar-mini">
+    <div class="wrapper">
+
+      <header class="main-header">
+        <a href="#" class="logo">
+          <span class="logo-mini"></span>
+          <span class="logo-lg"></span>
+        </a>
+        <nav class="navbar navbar-static-top">
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <div wicket:id="backendUserMenu"></div>
+            </ul>
           </div>
-        </div>
-      </nav>
-      <div wicket:id="backendHeader"></div>
-      <main id="main-container">
-        <div class="content bg-gray-lighter">
-          <div class="row items-push">
-            <div class="col-sm-7">
-              <h1 class="page-heading">
-                <span wicket:id="pageHeading"></span> <small><span wicket:id="pageSubHeading"></span></small>
-              </h1>
-            </div>
-            <div class="col-sm-5 text-right hidden-xs">
-              <div wicket:id="breadcrumbs"></div>
-            </div>
-          </div>
-        </div>
-        <div class="content">
+        </nav>
+      </header>
+      <aside class="main-sidebar">
+        <section class="sidebar">
+          <div wicket:id="backendUserPanel"></div>
+          <div wicket:id="backendMainNavigation"></div>
+        </section>
+      </aside>
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>
+            <span wicket:id="pageHeading"></span>
+            <small><span wicket:id="pageSubHeading"></span></small>
+          </h1>
+          <div wicket:id="breadcrumbs"></div>
+        </section>
+        <section class="content">
           <div wicket:id="alerts" id="alerts"></div>
           <wicket:child />
+        </section>
+      </div>
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+          <div wicket:id="debug"></div>
         </div>
-      </main>
-      <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
-        <div class="pull-right"><div wicket:id="debug"></div></div>
-        <div class="pull-left">
-          Copyright &copy; <span class="js-year-copy"></span> <a class="font-w600" href="#" target="_blank"><span class="copyright-name"></span></a>
-        </div>
+        Copyright &copy; 2016 <span class="copyright-name"></span>
       </footer>
     </div>
-    <script>
-      jQuery(function() {
-        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
-      });
-    </script>
   </body>
 </html>
+
+
+
+
 

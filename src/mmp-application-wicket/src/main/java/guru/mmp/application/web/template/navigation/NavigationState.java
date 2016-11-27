@@ -38,21 +38,20 @@ public class NavigationState
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The cached backend header HTML.
+   * The cached backend user menu HTML.
    */
-  private String cachedBackendHeaderHTML;
+  private String cachedBackendUserMenuHTML;
+
+  /**
+   * The cached backend user panel HTML.
+   */
+  private String cachedBackendUserPanelHTML;
 
   /**
    * The cached backend main navigation HTML for the last page that was accessed that was part of
-   * the
-   * navigation hierarchy.
+   * the navigation hierarchy.
    */
   private String cachedBackendMainNavigationHTML;
-
-  /**
-   * The cached backend user menu side overlay HTML.
-   */
-  private String cachedBackendUserMenuSideOverlayHTML;
 
   /**
    * The cached breadcrumbs HTML for the last page that was accessed that was part of the
@@ -71,16 +70,6 @@ public class NavigationState
   private PageParameters lastPageAccessedInNavigationHierarchyParameters;
 
   /**
-   * Returns the cached backend header HTML.
-   *
-   * @return the cached backend header HTML
-   */
-  public String getCachedBackendHeaderHTML()
-  {
-    return cachedBackendHeaderHTML;
-  }
-
-  /**
    * Returns the cached backend main navigation HTML for the last page that was accessed that was
    * part of the navigation hierarchy.
    *
@@ -94,13 +83,23 @@ public class NavigationState
   }
 
   /**
-   * Returns the cached backend user menu side overlay HTML.
+   * Returns the cached backend user menu HTML.
    *
-   * @return the cached backend user menu side overlay HTML
+   * @return the cached backend user menu HTML
    */
-  public String getCachedBackendUserMenuSideOverlayHTML()
+  public String getCachedBackendUserMenuHTML()
   {
-    return cachedBackendUserMenuSideOverlayHTML;
+    return cachedBackendUserMenuHTML;
+  }
+
+  /**
+   * Returns the cached backend user panel HTML.
+   *
+   * @return the cached backend user panel HTML
+   */
+  public String getCachedBackendUserPanelHTML()
+  {
+    return cachedBackendUserPanelHTML;
   }
 
   /**
@@ -120,12 +119,12 @@ public class NavigationState
    */
   public void invalidate()
   {
-    cachedBackendUserMenuSideOverlayHTML = null;
     cachedBreadcrumbsHTML = null;
     lastPageAccessedInNavigationHierarchyClass = null;
     cachedBackendMainNavigationHTML = null;
+    cachedBackendUserPanelHTML = null;
+    cachedBackendUserMenuHTML = null;
     lastPageAccessedInNavigationHierarchyParameters = null;
-    cachedBackendHeaderHTML = null;
   }
 
   /**
@@ -195,16 +194,6 @@ public class NavigationState
   }
 
   /**
-   * Set the cached backend header HTML.
-   *
-   * @param cachedBackendHeaderHTML the cached backend header HTML
-   */
-  public void setCachedBackendHeaderHTML(String cachedBackendHeaderHTML)
-  {
-    this.cachedBackendHeaderHTML = cachedBackendHeaderHTML;
-  }
-
-  /**
    * Set the cached backend main navigation HTML for the last page that was accessed that was part
    * of the navigation hierarchy.
    *
@@ -217,13 +206,23 @@ public class NavigationState
   }
 
   /**
-   * Set the cached backend user menu side overlay HTML.
+   * Set the cached backend user menu HTML.
    *
-   * @param cachedBackendUserMenuSideOverlayHTML the cached backend user menu side overlay HTML
+   * @param cachedBackendUserMenuHTML the cached backend user menu HTML
    */
-  public void setCachedBackendUserMenuSideOverlayHTML(String cachedBackendUserMenuSideOverlayHTML)
+  public void setCachedBackendUserMenuHTML(String cachedBackendUserMenuHTML)
   {
-    this.cachedBackendUserMenuSideOverlayHTML = cachedBackendUserMenuSideOverlayHTML;
+    this.cachedBackendUserMenuHTML = cachedBackendUserMenuHTML;
+  }
+
+  /**
+   * Set the cached backend user panel HTML.
+   *
+   * @param cachedBackendUserPanelHTML the cached backend user panel HTML
+   */
+  public void setCachedBackendUserPanelHTML(String cachedBackendUserPanelHTML)
+  {
+    this.cachedBackendUserPanelHTML = cachedBackendUserPanelHTML;
   }
 
   /**

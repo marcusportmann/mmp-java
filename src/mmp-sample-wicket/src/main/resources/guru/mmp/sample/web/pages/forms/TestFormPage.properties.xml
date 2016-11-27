@@ -4,10 +4,12 @@
   <entry key="testForm.firstName.Required">A first name is required.</entry>
   <entry key="testForm.lastName.Required">A last name is required.</entry>
   <entry key="testForm.title.Required">A title is required.</entry>
+  <entry key="testForm.dateOfBirth.Required">A date of birth is required.</entry>
   <entry key="testForm.password.Required">A password is required.</entry>
   <entry key="testForm.confirmPassword.Required">Please confirm the password.</entry>
   <entry key="testForm.notes.Required">Notes are required.</entry>
   <entry key="testForm.favouritePet.Required">A favourite pet is required.</entry>
+  <entry key="testForm.favouriteTime.Required">A favourite time is required.</entry>
   <entry key="testForm.role.Required">A role is required.</entry>
 </properties>
 

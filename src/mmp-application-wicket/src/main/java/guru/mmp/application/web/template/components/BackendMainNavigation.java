@@ -124,11 +124,11 @@ public class BackendMainNavigation extends Component
   {
     if (depth == 0)
     {
-      buffer.append("<ul class=\"nav-main\">");
+      buffer.append("<ul class=\"sidebar-menu\">");
     }
     else
     {
-      buffer.append("<ul>");
+      buffer.append("<ul class=\"treeview-menu\">");
     }
 
     List<NavigationItem> navigationItems = navigationGroup.getItems();
@@ -156,29 +156,24 @@ public class BackendMainNavigation extends Component
 
         if (navigationItem == selectedNavigationItemForCurrentPage)
         {
-          buffer.append("<li class=\"open\">");
+          buffer.append("<li class=\"treeview active\">");
         }
         else
         {
-          buffer.append("<li>");
+          buffer.append("<li class=\"treeview\">");
         }
 
-        buffer.append("<a class=\"nav-submenu\" data-toggle=\"nav-submenu\" href=\"#\">");
+        buffer.append("<a href=\"#\">");
 
         if (subNavigationGroup.getIconClass() != null)
         {
           buffer.append("<i class=\"").append(subNavigationGroup.getIconClass()).append("\"></i>");
         }
 
-        if (depth == 0)
-        {
-          buffer.append("<span class=\"sidebar-mini-hide\">").append(subNavigationGroup.getName())
-              .append("</span></a>");
-        }
-        else
-        {
-          buffer.append("<span>").append(subNavigationGroup.getName()).append("</span></a>");
-        }
+        buffer.append("<span>").append(subNavigationGroup.getName()).append("</span>");
+
+        buffer.append("<span class=\"pull-right-container\">");
+        buffer.append("<i class=\"fa fa-angle-left pull-right\"></i></span></a>");
 
         renderNavigationGroup(requestURI, subNavigationGroup, depth + 1, buffer);
 
@@ -195,12 +190,14 @@ public class BackendMainNavigation extends Component
 
         if (navigationItem == selectedNavigationItemForCurrentPage)
         {
-          buffer.append("<li><a class=\"active\" href=\"");
+          buffer.append("<li class=\"active\">");
         }
         else
         {
-          buffer.append("<li><a href=\"");
+          buffer.append("<li>");
         }
+
+        buffer.append("<a href=\"");
 
         if (url.startsWith("/"))
         {
@@ -216,18 +213,7 @@ public class BackendMainNavigation extends Component
           buffer.append("<i class=\"").append(navigationItem.getIconClass()).append("\"></i>");
         }
 
-        if (depth == 0)
-        {
-          buffer.append("<span class=\"sidebar-mini-hide\">");
-          buffer.append(navigationItem.getName());
-          buffer.append("</span>");
-        }
-        else
-        {
-          buffer.append(navigationItem.getName());
-        }
-
-        buffer.append("</a></li>");
+        buffer.append("<span>").append(navigationItem.getName()).append("</span></a></li>");
       }
     }
 

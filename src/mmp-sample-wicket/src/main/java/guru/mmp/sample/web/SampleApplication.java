@@ -18,16 +18,12 @@ package guru.mmp.sample.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.pages.WebPage;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.sample.web.pages.DashboardPage;
 import guru.mmp.sample.web.pages.HomePage;
 import guru.mmp.sample.web.pages.forms.TestFormPage;
-import guru.mmp.sample.web.pages.ui.BlocksPage;
-import guru.mmp.sample.web.pages.ui.GridPage;
-import guru.mmp.sample.web.pages.ui.TypographyPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -86,18 +82,8 @@ public class SampleApplication extends TemplateWebApplication
   @Override
   protected void initNavigation(NavigationGroup root)
   {
-    super.initNavigation(root);
-
     root.addItem(new NavigationLink("Home", "fa fa-home", HomePage.class));
     root.addItem(new NavigationLink("Dashboard", "fa fa-home", DashboardPage.class));
-
-    NavigationGroup uiElementsGroup = new NavigationGroup("UI Elements", "fa fa-sliders");
-
-    uiElementsGroup.addItem(new NavigationLink("Blocks", BlocksPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Grid", GridPage.class));
-    uiElementsGroup.addItem(new NavigationLink("Typography", TypographyPage.class));
-
-    root.addItem(uiElementsGroup);
 
     NavigationGroup formsGroup = new NavigationGroup("Forms", "fa fa-pencil-square-o");
 
@@ -105,10 +91,6 @@ public class SampleApplication extends TemplateWebApplication
 
     root.addItem(formsGroup);
 
-    NavigationGroup tablesGroup = new NavigationGroup("Tables", "fa fa-table");
-
-//  tablesGroup.addItem(new NavigationLink("Basic Tables", BasicTablesPage.class));
-
-    root.addItem(tablesGroup);
+    super.initNavigation(root);
   }
 }

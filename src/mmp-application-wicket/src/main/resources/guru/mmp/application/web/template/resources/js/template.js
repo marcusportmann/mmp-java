@@ -35,3 +35,17 @@ function clear_form_component_feedback(form_component_id)
 
 
 
+$(document).ready(function() {
+
+  // Initialise Select2 elements
+  $(".select2").select2();
+
+  // Initialise the datepicker elements
+  $(".datepicker").datepicker({ autoclose: true });
+
+  // Initialise the bootstrap-timepicker elements
+  $(".timepicker").timepicker({ showInputs: false });
+
+  // TODO: Initialise other "standard" elements here
+});
+

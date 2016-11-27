@@ -87,14 +87,14 @@ public abstract class TemplateWebPage extends WebPage
       titleLabel.setRenderBodyOnly(false);
       add(titleLabel);
 
-      // Setup the backend header
-      add(new BackendHeader("backendHeader"));
-
-      // Setup the backend user menu side overlay
-      add(new BackendUserMenuSideOverlay("backendUserMenuSideOverlay"));
+      // Setup the backend user panel
+      add(new BackendUserPanel("backendUserPanel"));
 
       // Setup the backend main navigation
       add(new BackendMainNavigation("backendMainNavigation"));
+
+      // Setup the backend user menu
+      add(new BackendUserMenu("backendUserMenu"));
 
       // Setup the breadcrumbs
       add(new Breadcrumbs("breadcrumbs"));

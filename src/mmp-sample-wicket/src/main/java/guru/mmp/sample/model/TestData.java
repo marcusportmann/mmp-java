@@ -28,7 +28,17 @@ public class TestData
   /**
    * Is active?
    */
-  public boolean isActive;
+  private boolean isActive;
+
+  /**
+   * The date of birth.
+   */
+  private String dateOfBirth;
+
+  /**
+   * The favourite time.
+   */
+  private String favouriteTime;
 
   /**
    * The password confirmation.
@@ -81,6 +91,16 @@ public class TestData
   }
 
   /**
+   * Returns the date of birth.
+   *
+   * @return the date of birth
+   */
+  public String getDateOfBirth()
+  {
+    return dateOfBirth;
+  }
+
+  /**
    * Returns the favourite pet.
    *
    * @return the favourite pet
@@ -88,6 +108,16 @@ public class TestData
   public String getFavouritePet()
   {
     return favouritePet;
+  }
+
+  /**
+   * Returns the favourite time.
+   *
+   * @return the favourite time
+   */
+  public String getFavouriteTime()
+  {
+    return favouriteTime;
   }
 
   /**
@@ -171,6 +201,16 @@ public class TestData
   }
 
   /**
+   * Set the date of birth.
+   *
+   * @param dateOfBirth the date of birth
+   */
+  public void setDateOfBirth(String dateOfBirth)
+  {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  /**
    * Set the favourite pet.
    *
    * @param favouritePet the favourite pet
@@ -178,6 +218,16 @@ public class TestData
   public void setFavouritePet(String favouritePet)
   {
     this.favouritePet = favouritePet;
+  }
+
+  /**
+   * Set the favourite time.
+   *
+   * @param favouriteTime the favourite time
+   */
+  public void setFavouriteTime(String favouriteTime)
+  {
+    this.favouriteTime = favouriteTime;
   }
 
   /**

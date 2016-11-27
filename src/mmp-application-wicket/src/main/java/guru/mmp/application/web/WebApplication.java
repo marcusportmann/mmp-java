@@ -23,6 +23,7 @@ import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceRef
 import org.apache.wicket.*;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
@@ -144,9 +145,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     super.init();
 
     getSecuritySettings().setAuthorizationStrategy(new WebAuthorizationStrategy());
-
-    // Override the version of the jQuery library that ships with Wicket
-    getJavaScriptLibrarySettings().setJQueryReference(TemplateJavaScriptResourceReference.get());
 
     if ((System.getProperty("was.install.root") != null)
         || (System.getProperty("wlp.user.dir") != null))

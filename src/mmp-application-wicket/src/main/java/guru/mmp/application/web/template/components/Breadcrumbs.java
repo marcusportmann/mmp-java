@@ -102,7 +102,7 @@ public class Breadcrumbs extends Component
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("<ol class=\"breadcrumb push-10-t\">");
+        buffer.append("<ol class=\"breadcrumb\">");
 
         Class<? extends Page> clazz;
 

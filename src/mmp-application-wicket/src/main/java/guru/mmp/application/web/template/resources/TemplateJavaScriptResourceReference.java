@@ -19,6 +19,7 @@ package guru.mmp.application.web.template.resources;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -82,20 +83,22 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
   {
     List<HeaderItem> dependencies = new ArrayList<>();
 
+    dependencies.add(JavaScriptHeaderItem.forReference(Application.get()
+      .getJavaScriptLibrarySettings().getJQueryReference()));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-        TemplateJavaScriptResourceReference.class, "js/template-core.min.js")));
-
+      TemplateJavaScriptResourceReference.class, "js/bootstrap.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-        TemplateJavaScriptResourceReference.class,
-        "js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")));
+      TemplateJavaScriptResourceReference.class, "plugins/select2/select2.full.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-        TemplateJavaScriptResourceReference.class,
-        "js/plugins/bootstrap-datetimepicker/moment.min.js")));
+      TemplateJavaScriptResourceReference.class, "plugins/datepicker/bootstrap-datepicker.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-        TemplateJavaScriptResourceReference.class,
-        "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js")));
+      TemplateJavaScriptResourceReference.class, "plugins/timepicker/bootstrap-timepicker.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-        TemplateJavaScriptResourceReference.class, "js/plugins/select2/select2.full.min.js")));
+      TemplateJavaScriptResourceReference.class, "plugins/slimScroll/jquery.slimscroll.min.js")));
+    dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
+      TemplateJavaScriptResourceReference.class, "plugins/fastclick/fastclick.min.js")));
+    dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
+      TemplateJavaScriptResourceReference.class, "js/app.min.js")));
 
     return dependencies;
   }

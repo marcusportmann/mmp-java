@@ -74,11 +74,21 @@ public class TestFormPage extends TemplateWebPage
       titleField.setRequired(true);
       testForm.add(titleField);
 
+      // The "dateOfBirth" field
+      TextField<String> dateOfBirthField = new TextFieldWithFeedback<>("dateOfBirth");
+      dateOfBirthField.setRequired(true);
+      testForm.add(dateOfBirthField);
+
       // The "favouritePet" field
       DropDownChoice<String> favouritePetField = new DropDownChoiceWithFeedback<>("favouritePet",
           getFavouritePetOptions());
       favouritePetField.setRequired(true);
       testForm.add(favouritePetField);
+
+      // The "favouriteTime" field
+      TextField<String> favouriteTime = new TextFieldWithFeedback<>("favouriteTime");
+      favouriteTime.setRequired(true);
+      testForm.add(favouriteTime);
 
       // The "password" field
       TextField<String> passwordField = new PasswordTextFieldWithFeedback("password");

@@ -85,29 +85,36 @@ public class TemplateCssResourceReference extends CssResourceReference
 
     dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
         TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "js/plugins/bootstrap-datepicker/bootstrap-datepicker3.css"
-        : "js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css")));
-    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
-        TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"
-        : "js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css")));
-    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
-        TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "js/plugins/select2/select2.min.css"
-        : "js/plugins/select2/select2.min.css")));
-    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
-        TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "js/plugins/select2/select2-bootstrap.css"
-        : "js/plugins/select2/select2-bootstrap.min.css")));
-
-    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
-        TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "css/bootstrap.min.css"
+        ? "css/bootstrap.css"
         : "css/bootstrap.min.css")));
     dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
         TemplateCssResourceReference.class, Debug.inDebugMode()
-        ? "css/template-core.min.css"
-        : "css/template-core.min.css")));
+        ? "plugins/font-awesome/css/font-awesome.css"
+        : "plugins/font-awesome/css/font-awesome.min.css")));
+    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
+        TemplateCssResourceReference.class, Debug.inDebugMode()
+        ? "plugins/ionicons/css/ionicons.css"
+        : "plugins/ionicons/css/ionicons.min.css")));
+    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
+        TemplateCssResourceReference.class, Debug.inDebugMode()
+        ? "plugins/datepicker/datepicker3.css"
+        : "plugins/datepicker/datepicker3.css")));
+    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
+        TemplateCssResourceReference.class, Debug.inDebugMode()
+        ? "plugins/timepicker/bootstrap-timepicker.css"
+        : "plugins/timepicker/bootstrap-timepicker.min.css")));
+    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
+        TemplateCssResourceReference.class, Debug.inDebugMode()
+        ? "plugins/select2/select2.css"
+        : "plugins/select2/select2.min.css")));
+    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
+        TemplateCssResourceReference.class, Debug.inDebugMode()
+        ? "css/AdminLTE.css"
+        : "css/AdminLTE.min.css")));
+    dependencies.add(CssHeaderItem.forReference(new CssResourceReference(
+        TemplateCssResourceReference.class, Debug.inDebugMode()
+        ? "css/skins/skin-black.css"
+        : "css/skins/skin-black.min.css")));
 
     return dependencies;
   }

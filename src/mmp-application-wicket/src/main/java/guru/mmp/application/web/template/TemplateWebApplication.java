@@ -22,14 +22,16 @@ import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationItem;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.application.web.template.pages.*;
+import guru.mmp.application.web.template.resources.TemplateCssResourceReference;
+import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.CssResourceReference;
-
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -164,6 +166,10 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   {
     super.init();
 
+    // Override the version of the jQuery library that ships with Wicket
+    getJavaScriptLibrarySettings().setJQueryReference(new JavaScriptResourceReference(
+        TemplateJavaScriptResourceReference.class, "plugins/jQuery/jquery-2.2.3.min.js"));
+
     // Initialise the navigation hierarchy for the application
     navigationRoot = new NavigationGroup("");
     initNavigation(navigationRoot);
@@ -179,7 +185,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
       administrationGroup.sortItems();
     }
 
-    //navigationRoot.sortItems();
+    // navigationRoot.sortItems();
 
 /*
     // Initialise the template-web-application.css resource bundle for the Web Application Template
@@ -217,6 +223,12 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     mountPage("/login", getLoginPage());
     mountPage("/logout", getLogoutPage());
     mountNavigationPages(getNavigation(), "");
+
+    // Mount the shared resources
+    mountResource("/images/user-grey.png", new PackageResourceReference(
+        TemplateCssResourceReference.class, "images/user-grey.png"));
+    mountResource("/images/user-white.png", new PackageResourceReference(
+        TemplateCssResourceReference.class, "images/user-white.png"));
   }
 
   /**
@@ -267,12 +279,12 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
     try
     {
       Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-        "guru.mmp.application.web.template.pages.ReportDefinitionAdministrationPage");
+          "guru.mmp.application.web.template.pages.ReportDefinitionAdministrationPage");
 
       if (Page.class.isAssignableFrom(clazz))
       {
         administrationGroup.addItem(new NavigationLink("Report Definitions", "fa fa-file-image-o",
-          (Class<? extends Page>) clazz));
+            (Class<? extends Page>) clazz));
       }
     }
     catch (ClassNotFoundException ignored) {}
