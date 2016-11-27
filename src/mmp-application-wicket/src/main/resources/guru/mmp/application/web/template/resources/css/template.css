@@ -194,7 +194,7 @@ span.copyright-name:before
 .box-form
 {
   border: 1px solid #e9e9e9;
-  padding-top: 15px;
+  padding-top: 5px;
   padding-right: 15px;
   padding-left: 15px;
   padding-bottom: 0px;
@@ -204,7 +204,7 @@ span.copyright-name:before
 
 .box-form > .box-body
 {
-  padding-top: 5px !important;
+  padding-top: 10px !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
   padding-bottom: 0 !important;
