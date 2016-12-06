@@ -1685,3 +1685,34 @@ div.bootstrap-timepicker-widget.dropdown-menu.open
   padding: 3px 20px 0 5px;
   float: right;
 }
+
+
+
+@media (max-width: 767px)
+{
+  .main-header .logo
+  {
+    height: 40px;
+    background-position: center;
+  }
+
+  .main-header .logo .logo-lg
+  {
+    display: inline-block;
+    width: 160px;
+    height: 40px;
+    background-size: 160px 40px;
+  }
+
+
+  .skin-black .main-header > .logo
+  {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+  }
+
+  .skin-black .main-header > .logo:hover
+  {
+    background-color: #fff;
+  }
+}
