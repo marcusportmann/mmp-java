@@ -19,9 +19,10 @@ package guru.mmp.application.web.pages;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.web.WebSession;
-
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * The <code>WebPage</code> class is the base class that all Wicket web page classes must
@@ -63,32 +64,35 @@ public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
   /**
    * Constructs a new <code>WebPage</code>.
    */
-  public WebPage()
+  protected WebPage()
   {
-    // Retrieve the web page security information from WebPageSecurity annotation
-    WebPageSecurity webPageSecurity = getClass().getAnnotation(WebPageSecurity.class);
+    super();
 
-    if (webPageSecurity != null)
-    {
-      this.functionCodes = webPageSecurity.value();
-      this.isSecure = true;
-    }
-    else
-    {
-      SecureAnonymousWebPage secureAnonymousWebPage = getClass().getAnnotation(
-          SecureAnonymousWebPage.class);
+    commonInit();
+  }
 
-      if (secureAnonymousWebPage != null)
-      {
-        this.functionCodes = new String[]{WebPage.FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS};
-        this.isSecure = true;
-      }
-      else
-      {
-        this.functionCodes = new String[]{WebPage.FUNCTION_CODE_ANONYMOUS_ACCESS};
-        this.isSecure = false;
-      }
-    }
+  /**
+   * Constructs a new <code>WebPage</code>.
+   *
+   * @param model the model for the page
+   */
+  protected WebPage(IModel<?> model)
+  {
+    super(model);
+
+    commonInit();
+  }
+
+  /**
+   * Constructs a new <code>WebPage</code>.
+   *
+   * @param pageParameters the parameters for the page
+   */
+  protected WebPage(PageParameters pageParameters)
+  {
+    super(pageParameters);
+
+    commonInit();
   }
 
   /**
@@ -133,5 +137,33 @@ public abstract class WebPage extends org.apache.wicket.markup.html.WebPage
   public boolean isSecure()
   {
     return isSecure;
+  }
+
+  private void commonInit()
+  {
+    // Retrieve the web page security information from WebPageSecurity annotation
+    WebPageSecurity webPageSecurity = getClass().getAnnotation(WebPageSecurity.class);
+
+    if (webPageSecurity != null)
+    {
+      this.functionCodes = webPageSecurity.value();
+      this.isSecure = true;
+    }
+    else
+    {
+      SecureAnonymousWebPage secureAnonymousWebPage = getClass().getAnnotation(
+          SecureAnonymousWebPage.class);
+
+      if (secureAnonymousWebPage != null)
+      {
+        this.functionCodes = new String[] { WebPage.FUNCTION_CODE_SECURE_ANONYMOUS_ACCESS };
+        this.isSecure = true;
+      }
+      else
+      {
+        this.functionCodes = new String[] { WebPage.FUNCTION_CODE_ANONYMOUS_ACCESS };
+        this.isSecure = false;
+      }
+    }
   }
 }

@@ -21,7 +21,6 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.CodeInputPanel;
@@ -45,7 +44,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
-public class UpdateCodePage extends TemplateWebPage
+class UpdateCodePage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateCodePage.class);
@@ -61,7 +60,7 @@ public class UpdateCodePage extends TemplateWebPage
    * @param previousPage the previous page
    * @param codeModel    the model for the code
    */
-  public UpdateCodePage(PageReference previousPage, IModel<Code> codeModel)
+  UpdateCodePage(PageReference previousPage, IModel<Code> codeModel)
   {
     super("Update Code");
 

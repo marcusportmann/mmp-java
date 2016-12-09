@@ -23,16 +23,13 @@ import guru.mmp.application.security.User;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
-import guru.mmp.application.web.template.components.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +46,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
-public class UpdateUserPage extends TemplateWebPage
+class UpdateUserPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateUserPage.class);
@@ -65,7 +62,7 @@ public class UpdateUserPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param userModel    the model for the user
    */
-  public UpdateUserPage(PageReference previousPage, IModel<User> userModel)
+  UpdateUserPage(PageReference previousPage, IModel<User> userModel)
   {
     super("Update User");
 

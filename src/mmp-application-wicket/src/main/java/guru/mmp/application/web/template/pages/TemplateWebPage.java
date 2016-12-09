@@ -29,7 +29,9 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * The <code>TemplateWebPage</code> class is the base class that all Wicket web page classes must
@@ -42,23 +44,43 @@ public abstract class TemplateWebPage extends WebPage
   private static final long serialVersionUID = 1000000;
   private transient static CssReferenceHeaderItem applicationCssHeaderItem;
   private Alerts alerts;
-  private String heading;
-  private String subHeading;
-  private String title;
-
-  /**
-   * Hidden constructor for the the <code>TemplateWebPage</code> class.
-   */
-  protected TemplateWebPage() {}
 
   /**
    * Constructs a new <code>TemplateWebPage</code>.
    *
    * @param heading the page heading
    */
-  public TemplateWebPage(String heading)
+  protected TemplateWebPage(String heading)
   {
-    this(heading, null);
+    super();
+
+    commonInit(Model.of(heading), Model.of(""));
+  }
+
+  /**
+   * Constructs a new <code>TemplateWebPage</code>.
+   *
+   * @param headingModel    the model for the page heading
+   * @param subHeadingModel the model for the sub-heading for the page
+   */
+  public TemplateWebPage(IModel<String> headingModel, IModel<String> subHeadingModel)
+  {
+    super();
+
+    commonInit(headingModel, subHeadingModel);
+  }
+
+  /**
+   * Constructs a new <code>TemplateWebPage</code>.
+   *
+   * @param heading        the page heading
+   * @param pageParameters the parameters for the page
+   */
+  protected TemplateWebPage(String heading, PageParameters pageParameters)
+  {
+    super(pageParameters);
+
+    commonInit(Model.of(heading), Model.of(""));
   }
 
   /**
@@ -69,55 +91,65 @@ public abstract class TemplateWebPage extends WebPage
    */
   public TemplateWebPage(String heading, String subHeading)
   {
-    try
-    {
-      if (getApplication().usesDevelopmentConfig())
-      {
-        add(new DebugBar("debug"));
-      }
-      else
-      {
-        add(new Label("debug", ""));
-      }
+    this(Model.of(heading), Model.of(subHeading));
+  }
 
-      // Setup the page title
-      this.title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | " + heading;
+  /**
+   * Constructs a new <code>TemplateWebPage</code>.
+   *
+   * @param headingModel    the model for the page heading
+   * @param subHeadingModel the model for the sub-heading for the page
+   * @param model           the model for the page
+   */
+  public TemplateWebPage(IModel<String> headingModel, IModel<String> subHeadingModel,
+      IModel<?> model)
+  {
+    super(model);
 
-      Label titleLabel = new Label("pageTitle", new PropertyModel<String>(this, "title"));
-      titleLabel.setRenderBodyOnly(false);
-      add(titleLabel);
+    commonInit(headingModel, subHeadingModel);
+  }
 
-      // Setup the backend user panel
-      add(new BackendUserPanel("backendUserPanel"));
+  /**
+   * Constructs a new <code>TemplateWebPage</code>.
+   *
+   * @param headingModel    the model for the page heading
+   * @param subHeadingModel the model for the sub-heading for the page
+   * @param pageParameters  the model for the page
+   */
+  public TemplateWebPage(IModel<String> headingModel, IModel<String> subHeadingModel,
+      PageParameters pageParameters)
+  {
+    super(pageParameters);
 
-      // Setup the backend main navigation
-      add(new BackendMainNavigation("backendMainNavigation"));
+    commonInit(headingModel, subHeadingModel);
+  }
 
-      // Setup the backend user menu
-      add(new BackendUserMenu("backendUserMenu"));
+  /**
+   * Constructs a new <code>TemplateWebPage</code>.
+   *
+   * @param heading    the page heading
+   * @param subHeading the sub-heading for the page
+   * @param model      the model for the page
+   */
+  public TemplateWebPage(String heading, String subHeading, IModel<?> model)
+  {
+    super(model);
 
-      // Setup the breadcrumbs
-      add(new Breadcrumbs("breadcrumbs"));
+    commonInit(Model.of(heading), Model.of(subHeading));
+  }
 
-      // Setup the page heading
-      this.heading = heading;
+  /**
+   * Constructs a new <code>TemplateWebPage</code>.
+   *
+   * @param heading        the page heading
+   * @param subHeading     the sub-heading for the page
+   * @param pageParameters the parameters for the page
+   */
+  protected TemplateWebPage(String heading, String subHeading, PageParameters pageParameters)
+  {
+    super(pageParameters);
 
-      add(new Label("pageHeading", new PropertyModel<String>(this, "heading")));
-
-      // Setup the page sub-heading
-      this.subHeading = subHeading;
-
-      add(new Label("pageSubHeading", new PropertyModel<String>(this, "subHeading")));
-
-      // Setup the alerts
-      this.alerts = new Alerts("alerts");
-
-      add(alerts);
-    }
-    catch (Throwable e)
-    {
-      throw new WebApplicationException("Failed to initialise the TemplateWebPage", e);
-    }
+    commonInit(Model.of(heading), Model.of(subHeading));
   }
 
   /**
@@ -128,47 +160,6 @@ public abstract class TemplateWebPage extends WebPage
   public Alerts getAlerts()
   {
     return alerts;
-  }
-
-  /**
-   * Returns the page heading.
-   *
-   * @return the page heading
-   */
-  public String getHeading()
-  {
-    return heading;
-  }
-
-  /**
-   * Returns the page sub-heading.
-   *
-   * @return the page sub-heading
-   */
-  @SuppressWarnings("unused")
-  public String getSubHeading()
-  {
-    return subHeading;
-  }
-
-  /**
-   * Returns the page title.
-   *
-   * @return the page title
-   */
-  public String getTitle()
-  {
-    return title;
-  }
-
-  /**
-   * Returns the template web application.
-   *
-   * @return the template web application
-   */
-  public TemplateWebApplication getWebApplication()
-  {
-    return (TemplateWebApplication) getApplication();
   }
 
   /**
@@ -192,34 +183,63 @@ public abstract class TemplateWebPage extends WebPage
   }
 
   /**
-   * Set the page heading.
+   * Returns the template web application.
    *
-   * @param heading the heading to set
+   * @return the template web application
    */
-  public void setHeading(String heading)
+  protected TemplateWebApplication getWebApplication()
   {
-    this.heading = heading;
+    return (TemplateWebApplication) getApplication();
   }
 
-  /**
-   * Set the page sub-heading.
-   *
-   * @param subHeading the sub-heading to set
-   */
-  @SuppressWarnings("unused")
-  public void setSubHeading(String subHeading)
+  private void commonInit(IModel<String> headingModel, IModel<String> subHeadingModel)
   {
-    this.subHeading = subHeading;
-  }
+    try
+    {
+      if (getApplication().usesDevelopmentConfig())
+      {
+        add(new DebugBar("debug"));
+      }
+      else
+      {
+        add(new Label("debug", ""));
+      }
 
-  /**
-   * Set the page title.
-   *
-   * @param title the new page title
-   */
-  public void setTitle(String title)
-  {
-    this.title = title;
+      // Setup the page title
+      Label applicationNameLabel = new Label("applicationName", Model.of(
+          getWebApplication().getDisplayName()));
+      add(applicationNameLabel);
+
+      Label pageTitleLabel = new Label("pageTitle", headingModel);
+      add(pageTitleLabel);
+
+      // Setup the backend user panel
+      add(new BackendUserPanel("backendUserPanel"));
+
+      // Setup the backend main navigation
+      add(new BackendMainNavigation("backendMainNavigation"));
+
+      // Setup the backend user menu
+      add(new BackendUserMenu("backendUserMenu"));
+
+      // Setup the breadcrumbs
+      add(new Breadcrumbs("breadcrumbs"));
+
+      // Setup the page heading
+      add(new Label("pageHeading", headingModel));
+
+      // Setup the page sub-heading
+      add(new Label("pageSubHeading", subHeadingModel));
+
+      // Setup the alerts
+      this.alerts = new Alerts("alerts");
+
+      add(alerts);
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the TemplateWebPage", e);
+    }
   }
 
   private CssReferenceHeaderItem getApplicationCssHeaderItem()

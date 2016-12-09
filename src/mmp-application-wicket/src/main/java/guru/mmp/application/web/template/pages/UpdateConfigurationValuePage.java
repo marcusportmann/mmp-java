@@ -44,7 +44,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CONFIGURATION_ADMINISTRATION)
-public class UpdateConfigurationValuePage
+class UpdateConfigurationValuePage
   extends TemplateWebPage
 {
   /* Logger */
@@ -61,7 +61,7 @@ public class UpdateConfigurationValuePage
    * @param previousPage            the previous page
    * @param configurationValueModel the model for the configuration value
    */
-  public UpdateConfigurationValuePage(PageReference previousPage,
+  UpdateConfigurationValuePage(PageReference previousPage,
       IModel<ConfigurationValue> configurationValueModel)
   {
     super("Update Configuration Value");

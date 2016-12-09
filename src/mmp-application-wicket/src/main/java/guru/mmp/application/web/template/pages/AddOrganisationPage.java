@@ -21,6 +21,7 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.security.DuplicateOrganisationException;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
+import guru.mmp.application.security.OrganisationStatus;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
@@ -49,7 +50,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
-public class AddOrganisationPage extends TemplateWebPage
+class AddOrganisationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddOrganisationPage.class);
@@ -66,16 +67,14 @@ public class AddOrganisationPage extends TemplateWebPage
    *
    * @param previousPage the previous page
    */
-  public AddOrganisationPage(PageReference previousPage)
+  AddOrganisationPage(PageReference previousPage)
   {
     super("Add Organisation");
 
     try
     {
       Form<Organisation> addForm = new Form<>("addForm", new CompoundPropertyModel<>(new Model<>(
-          new Organisation())));
-
-      addForm.getModelObject().setId(UUID.randomUUID());
+          new Organisation(UUID.randomUUID(), "", OrganisationStatus.ACTIVE))));
 
       // The "id" field
       TextField<UUID> idField = new TextFieldWithFeedback<>("id");

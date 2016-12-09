@@ -220,7 +220,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
     /**
      * Constructs a new <code>AddDialog</code>.
      */
-    public AddDialog()
+    AddDialog()
     {
       super("addDialog", "Add User Directory", "OK", "Cancel");
 

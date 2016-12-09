@@ -45,7 +45,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
-public class UpdateOrganisationPage extends TemplateWebPage
+class UpdateOrganisationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateOrganisationPage.class);
@@ -61,7 +61,7 @@ public class UpdateOrganisationPage extends TemplateWebPage
    * @param previousPage      the previous page
    * @param organisationModel the model for the organisation
    */
-  public UpdateOrganisationPage(PageReference previousPage, IModel<Organisation> organisationModel)
+  UpdateOrganisationPage(PageReference previousPage, IModel<Organisation> organisationModel)
   {
     super("Update Organisation");
 

@@ -21,7 +21,6 @@ package guru.mmp.application.web.template.pages;
 import guru.mmp.application.security.*;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.WebSession;
-import guru.mmp.application.web.components.StringSelectOption;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.DropDownChoiceWithFeedback;
@@ -29,7 +28,6 @@ import guru.mmp.application.web.template.components.PasswordTextFieldWithFeedbac
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 import guru.mmp.application.web.validators.PasswordPolicyValidator;
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -38,17 +36,15 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AddUserPage</code> class implements the
@@ -58,7 +54,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_ADMINISTRATION)
-public class AddUserPage extends TemplateWebPage
+class AddUserPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddUserPage.class);
@@ -87,7 +83,7 @@ public class AddUserPage extends TemplateWebPage
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    */
-  public AddUserPage(PageReference previousPage, UUID userDirectoryId)
+  AddUserPage(PageReference previousPage, UUID userDirectoryId)
   {
     super("Add User");
 

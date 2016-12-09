@@ -56,7 +56,7 @@ public class Organisation
   /**
    * Constructs a new <code>Organisation</code>.
    */
-  public Organisation() {}
+  protected Organisation() {}
 
   /**
    * Constructs a new <code>Organisation</code>.

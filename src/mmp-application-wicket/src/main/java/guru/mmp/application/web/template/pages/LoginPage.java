@@ -169,6 +169,7 @@ public class LoginPage extends WebPage
               if (organisation.getStatus() != OrganisationStatus.ACTIVE)
               {
                 error("The organisation (" + organisation.getName() + ") is not active.");
+
                 return;
               }
 
@@ -247,16 +248,6 @@ public class LoginPage extends WebPage
   }
 
   /**
-   * Returns the template web application.
-   *
-   * @return the template web application
-   */
-  public TemplateWebApplication getWebApplication()
-  {
-    return (TemplateWebApplication) getApplication();
-  }
-
-  /**
    * Render to the web response whatever the page wants to contribute to the head section.
    *
    * @param response the header response
@@ -285,5 +276,15 @@ public class LoginPage extends WebPage
     }
 
     return applicationCssHeaderItem;
+  }
+
+  /**
+   * Returns the template web application.
+   *
+   * @return the template web application
+   */
+  private TemplateWebApplication getWebApplication()
+  {
+    return (TemplateWebApplication) getApplication();
   }
 }

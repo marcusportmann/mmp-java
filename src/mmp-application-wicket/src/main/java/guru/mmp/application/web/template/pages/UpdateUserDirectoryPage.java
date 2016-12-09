@@ -50,7 +50,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
-public class UpdateUserDirectoryPage extends TemplateWebPage
+class UpdateUserDirectoryPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateUserDirectoryPage.class);
@@ -66,7 +66,7 @@ public class UpdateUserDirectoryPage extends TemplateWebPage
    * @param previousPage       the previous page
    * @param userDirectoryModel the model for the user directory
    */
-  public UpdateUserDirectoryPage(PageReference previousPage,
+  UpdateUserDirectoryPage(PageReference previousPage,
       IModel<UserDirectory> userDirectoryModel)
   {
     super("Update User Directory");

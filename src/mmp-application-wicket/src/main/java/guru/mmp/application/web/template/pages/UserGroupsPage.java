@@ -55,7 +55,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_USER_GROUPS)
-public class UserGroupsPage extends TemplateWebPage
+class UserGroupsPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserGroupsPage.class);
@@ -75,7 +75,7 @@ public class UserGroupsPage extends TemplateWebPage
    *                        user directory
    * @param username        the username identifying the user
    */
-  public UserGroupsPage(PageReference previousPage, UUID userDirectoryId, String username)
+  UserGroupsPage(PageReference previousPage, UUID userDirectoryId, String username)
   {
     super("User Groups", username);
 

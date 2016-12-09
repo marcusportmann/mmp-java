@@ -22,7 +22,6 @@ import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
-import guru.mmp.application.web.WebSession;
 import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.CodeCategoryInputPanel;
@@ -46,7 +45,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_CATEGORY_ADMINISTRATION)
-public class UpdateCodeCategoryPage extends TemplateWebPage
+class UpdateCodeCategoryPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateCodeCategoryPage.class);
@@ -62,7 +61,7 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
    * @param previousPage      the previous page
    * @param codeCategoryModel the model for the code category
    */
-  public UpdateCodeCategoryPage(PageReference previousPage, IModel<CodeCategory> codeCategoryModel)
+  UpdateCodeCategoryPage(PageReference previousPage, IModel<CodeCategory> codeCategoryModel)
   {
     super("Update Code Category");
 
@@ -83,8 +82,6 @@ public class UpdateCodeCategoryPage extends TemplateWebPage
         {
           try
           {
-            WebSession session = getWebApplicationSession();
-
             CodeCategory codeCategory = updateForm.getModelObject();
 
             if (codeCategory.getCategoryType() != CodeCategoryType.LOCAL_CUSTOM)

@@ -73,8 +73,6 @@ public class SelectOrganisationPage extends WebPage
 
   /**
    * Constructs a new <code>SelectOrganisationPage</code>.
-   *
-   * @throws SecurityException
    */
   public SelectOrganisationPage()
     throws SecurityException
@@ -117,11 +115,12 @@ public class SelectOrganisationPage extends WebPage
           try
           {
             Organisation selectedOrganisation = securityService.getOrganisation(UUID.fromString(
-              organisation.getValue()));
+                organisation.getValue()));
 
             if (selectedOrganisation.getStatus() != OrganisationStatus.ACTIVE)
             {
               error("The organisation (" + selectedOrganisation.getName() + ") is not active.");
+
               return;
             }
 
@@ -183,16 +182,6 @@ public class SelectOrganisationPage extends WebPage
   }
 
   /**
-   * Returns the template web application.
-   *
-   * @return the template web application
-   */
-  public TemplateWebApplication getWebApplication()
-  {
-    return (TemplateWebApplication) getApplication();
-  }
-
-  /**
    * Render to the web response whatever the page wants to contribute to the head section.
    *
    * @param response the header response
@@ -240,5 +229,15 @@ public class SelectOrganisationPage extends WebPage
     }
 
     return organisationOptions;
+  }
+
+  /**
+   * Returns the template web application.
+   *
+   * @return the template web application
+   */
+  private TemplateWebApplication getWebApplication()
+  {
+    return (TemplateWebApplication) getApplication();
   }
 }

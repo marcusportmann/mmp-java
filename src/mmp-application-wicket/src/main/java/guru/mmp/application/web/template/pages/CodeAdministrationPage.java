@@ -54,7 +54,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
-public class CodeAdministrationPage extends TemplateWebPage
+class CodeAdministrationPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CodeAdministrationPage.class);
@@ -72,8 +72,7 @@ public class CodeAdministrationPage extends TemplateWebPage
    *                         code category the codes are associated with
    * @param codeCategoryName the name of the code category
    */
-  public CodeAdministrationPage(PageReference previousPage, UUID codeCategoryId,
-      String codeCategoryName)
+  CodeAdministrationPage(PageReference previousPage, UUID codeCategoryId, String codeCategoryName)
   {
     super("Codes", codeCategoryName);
 

@@ -44,7 +44,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_GROUP_ADMINISTRATION)
-public class UpdateGroupPage extends TemplateWebPage
+class UpdateGroupPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UpdateGroupPage.class);
@@ -60,7 +60,7 @@ public class UpdateGroupPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param groupModel   the model for the group
    */
-  public UpdateGroupPage(PageReference previousPage, IModel<Group> groupModel)
+  UpdateGroupPage(PageReference previousPage, IModel<Group> groupModel)
   {
     super("Update Group");
 

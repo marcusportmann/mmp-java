@@ -46,7 +46,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_GROUP_ADMINISTRATION)
-public class AddGroupPage extends TemplateWebPage
+class AddGroupPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(AddGroupPage.class);
@@ -63,7 +63,7 @@ public class AddGroupPage extends TemplateWebPage
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    */
-  public AddGroupPage(PageReference previousPage, UUID userDirectoryId)
+  AddGroupPage(PageReference previousPage, UUID userDirectoryId)
   {
     super("Add Group");
 

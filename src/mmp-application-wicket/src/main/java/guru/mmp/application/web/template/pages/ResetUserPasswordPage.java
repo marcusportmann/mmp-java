@@ -53,7 +53,7 @@ import javax.inject.Inject;
  */
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_RESET_USER_PASSWORD)
-public class ResetUserPasswordPage extends TemplateWebPage
+class ResetUserPasswordPage extends TemplateWebPage
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ResetUserPasswordPage.class);
@@ -77,7 +77,7 @@ public class ResetUserPasswordPage extends TemplateWebPage
    * @param previousPage the previous page
    * @param userModel    the model for the user
    */
-  public ResetUserPasswordPage(PageReference previousPage, IModel<User> userModel)
+  ResetUserPasswordPage(PageReference previousPage, IModel<User> userModel)
   {
     super("Reset User Password");
 

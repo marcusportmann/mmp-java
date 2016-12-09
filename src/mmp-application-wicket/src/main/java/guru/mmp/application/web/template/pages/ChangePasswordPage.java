@@ -81,7 +81,7 @@ public class ChangePasswordPage extends WebPage
    *
    * @param username the username
    */
-  public ChangePasswordPage(String username)
+  ChangePasswordPage(String username)
   {
     try
     {
@@ -245,16 +245,6 @@ public class ChangePasswordPage extends WebPage
   }
 
   /**
-   * Returns the template web application.
-   *
-   * @return the template web application
-   */
-  public TemplateWebApplication getWebApplication()
-  {
-    return (TemplateWebApplication) getApplication();
-  }
-
-  /**
    * Render to the web response whatever the page wants to contribute to the head section.
    *
    * @param response the header response
@@ -283,5 +273,15 @@ public class ChangePasswordPage extends WebPage
     }
 
     return applicationCssHeaderItem;
+  }
+
+  /**
+   * Returns the template web application.
+   *
+   * @return the template web application
+   */
+  private TemplateWebApplication getWebApplication()
+  {
+    return (TemplateWebApplication) getApplication();
   }
 }

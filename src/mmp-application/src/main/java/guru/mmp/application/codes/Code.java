@@ -60,6 +60,16 @@ public class Code
   /**
    * Constructs a new <code>Code</code>.
    *
+   * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the code
+   */
+  public Code(UUID categoryId)
+  {
+    this.categoryId = categoryId;
+  }
+
+  /**
+   * Constructs a new <code>Code</code>.
+   *
    * @param id         the ID used to uniquely identify the code
    * @param categoryId the Universally Unique Identifier (UUID) used to uniquely identify the code
    *                   category the code is associated with
