@@ -208,9 +208,11 @@ public abstract class TemplateWebPage extends WebPage
       // Setup the page title
       Label applicationNameLabel = new Label("applicationName", Model.of(
           getWebApplication().getDisplayName()));
+      applicationNameLabel.setRenderBodyOnly(true);
       add(applicationNameLabel);
 
       Label pageTitleLabel = new Label("pageTitle", headingModel);
+      pageTitleLabel.setRenderBodyOnly(true);
       add(pageTitleLabel);
 
       // Setup the backend user panel
