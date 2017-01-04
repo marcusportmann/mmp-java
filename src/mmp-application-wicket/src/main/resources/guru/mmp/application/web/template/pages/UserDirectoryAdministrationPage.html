@@ -94,17 +94,14 @@
                   </div>
                   <div class="modal-body">
                     <div wicket:id="alerts"></div>
-                    <form wicket:id="form" id="form" class="form-horizontal">
+                    <form wicket:id="form" id="form" class="form-horizontal form-material">
                       <div class="form-group">
                         <div class="col-xs-12">
-                          <div class="form-material form-material-primary">
-                            <label for="userDirectoryType">User Directory Type</label>
-                            <div class="template-custom-select">
-                              <select wicket:id="userDirectoryType" id="userDirectoryType" name="userDirectoryType" size="1" class="form-control">
-                                <option value="" selected disabled>Select a user directory</option>
-                              </select>
-                            </div>
-                          </div>
+                          <label class="select-wrapper">User Directory Type
+                            <select wicket:id="userDirectoryType" name="userDirectoryType" size="1">
+                              <option value="" selected disabled>Select a user directory</option>
+                            </select>
+                          </label>
                         </div>
                       </div>
                     </form>

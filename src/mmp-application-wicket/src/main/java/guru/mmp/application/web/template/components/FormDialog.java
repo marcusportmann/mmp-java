@@ -22,7 +22,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -73,8 +72,6 @@ public abstract class FormDialog<T> extends Dialog
 
     form = new Form<>("form");
     add(form);
-
-
 
     AjaxButton submitButton = new AjaxButton("submitButton", getForm())
     {
@@ -179,6 +176,16 @@ public abstract class FormDialog<T> extends Dialog
     fatal(message);
 
     target.add(alerts);
+  }
+
+  /**
+   * Returns the alerts.
+   *
+   * @return the alerts
+   */
+  public Alerts getAlerts()
+  {
+    return alerts;
   }
 
   /**

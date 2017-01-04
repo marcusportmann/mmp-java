@@ -5,63 +5,54 @@
 
       <div class="form-group">
         <div class="col-xs-12">
-          <div class="form-material form-material-primary">
-            <label for="id">ID</label>
-            <input wicket:id="id" id="id" name="id" type="text" class="form-control" placeholder="Enter an ID">
-          </div>
+          <label>ID
+            <input wicket:id="id" name="id" type="text" placeholder="Enter an ID"/>
+          </label>
         </div>
       </div>
 
       <div class="form-group">
         <div class="col-xs-12">
-          <div class="form-material form-material-primary">
-            <label for="name">Name</label>
-            <input wicket:id="name" id="name" name="name" type="text" class="form-control" placeholder="Enter a name">
-          </div>
+          <label>Name
+            <input wicket:id="name" name="name" type="text" placeholder="Enter a name"/>
+          </label>
         </div>
       </div>
 
       <div class="form-group">
         <div class="col-xs-12">
-          <div class="form-material form-material-primary">
-            <label for="categoryType">Category Type</label>
-            <div class="template-custom-select">
-              <select wicket:id="categoryType" id="categoryType" name="categoryType" size="1" class="form-control">
-                <option value="" selected disabled>Select a code category</option>
-              </select>
-            </div>
-          </div>
+          <label class="select-wrapper">Category Type
+            <select wicket:id="categoryType" name="categoryType" size="1">
+              <option value="" selected disabled>Select a code category</option>
+            </select>
+          </label>
         </div>
       </div>
 
       <div wicket:id="codeDataContainer">
-
         <div class="form-group">
           <div class="col-xs-12">
-            <div class="form-material form-material-primary">
-              <label for="codeData">Code Data</label>
-              <textarea wicket:id="codeData" id="codeData" name="codeData" rows="4" cols="5" class="form-control" placeholder="Enter the code data"></textarea>
-            </div>
+            <label>Code Data
+              <textarea wicket:id="codeData" name="codeData" rows="4" cols="5" placeholder="Enter the code data"></textarea>
+            </label>
           </div>
         </div>
-
       </div>
 
       <div wicket:id="endPointContainer">
 
         <div class="form-group">
           <div class="col-xs-12">
-            <div class="form-material form-material-primary">
-              <label for="endPoint">End Point</label>
-              <input wicket:id="endPoint" id="endPoint" name="endPoint" type="text" class="form-control" placeholder="Enter an end point">
-            </div>
+            <label>End Point
+              <input wicket:id="endPoint" name="endPoint" type="text" placeholder="Enter an end point"/>
+            </label>
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-xs-12">
-            <label class="css-input css-checkbox css-checkbox-default" for="isEndPointSecure">
-              <input wicket:id="isEndPointSecure" id="isEndPointSecure" name="isEndPointSecure" type="checkbox">
+            <label class="css-input css-checkbox css-checkbox-default">
+              <input wicket:id="isEndPointSecure" name="isEndPointSecure" type="checkbox"/>
               <span></span>
               Is Secure?
             </label>
@@ -70,8 +61,8 @@
 
         <div class="form-group">
           <div class="col-xs-12">
-            <label class="css-input css-checkbox css-checkbox-default" for="isCacheable">
-              <input wicket:id="isCacheable" id="isCacheable" name="isCacheable" type="checkbox">
+            <label class="css-input css-checkbox css-checkbox-default">
+              <input wicket:id="isCacheable" name="isCacheable" type="checkbox"/>
               <span></span>
               Is Cacheable?
             </label>
@@ -80,10 +71,9 @@
 
         <div class="form-group">
           <div class="col-xs-12">
-            <div class="form-material form-material-primary">
-              <label for="cacheExpiry">Cache Expiry</label>
-              <input wicket:id="cacheExpiry" id="cacheExpiry" name="cacheExpiry" type="text" class="form-control" placeholder="Enter a cache expiry">
-            </div>
+            <label>Cache Expiry
+              <input wicket:id="cacheExpiry" name="cacheExpiry" type="text" placeholder="Enter a cache expiry"/>
+            </label>
           </div>
         </div>
 

@@ -30,8 +30,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public class ConfigurationValueInputPanel
-  extends InputPanel
+public class ConfigurationValueInputPanel extends InputPanel
 {
   private static final long serialVersionUID = 1000000;
 

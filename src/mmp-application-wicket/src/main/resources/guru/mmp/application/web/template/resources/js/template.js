@@ -3,20 +3,20 @@ function show_form_component_feedback(form_component_id, feedback_class, feedbac
 {
   var formField = $("#" + form_component_id)
 
-  var formFieldHolder = formField.parents(".form-group > div");
+  var formFieldLabel = formField.parents("label");
 
-  formFieldHolder.removeClass("has-error has-warning has-info has-success")
+  formFieldLabel.removeClass("has-error has-warning has-info has-success")
 
   // Remove the feedback div for the form field if it exists
   $("#" + form_component_id + "-feedback").remove()
 
   // Add the feedback class to the parent form group for the form field
-  formFieldHolder.addClass(feedback_class)
+  formFieldLabel.addClass(feedback_class)
 
   // Create the new feedback div for the form field
   if (feedback_message.length > 0)
   {
-    formFieldHolder.append($("<div id=\"" + form_component_id + "-feedback\"class=\"" + feedback_message_classes + " help-block help-block-left animated fadeInDown\">" + feedback_message + "</div>"));
+    formFieldLabel.parent().append($("<div id=\"" + form_component_id + "-feedback\" class=\"" + feedback_class + " " + feedback_message_classes + " help-block help-block-left animated fadeInDown\">" + feedback_message + "</div>"));
   }
 }
 
@@ -25,9 +25,9 @@ function clear_form_component_feedback(form_component_id)
 {
   var formField = $("#" + form_component_id)
 
-  var formFieldHolder = formField.parents(".form-group > div");
+  var formFieldLabel = formField.parents("label");
 
-  formFieldHolder.removeClass("has-error has-warning has-info has-success")
+  formFieldLabel.removeClass("has-error has-warning has-info has-success")
 
   // Remove the feedback div for the form field if it exists
   $("#" + form_component_id + "-feedback").remove()

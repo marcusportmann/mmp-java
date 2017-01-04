@@ -20,7 +20,6 @@ package guru.mmp.application.web.template.components;
 
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
-
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -29,9 +28,9 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DropDownChoiceWithFeedback</code> class extends the Wicket <code>DropDownChoice</code>
@@ -129,7 +128,7 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
 
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false,
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getMarkupId(), this, false,
         feedbackMessageClasses);
 
     if (feedbackJavaScript != null)
@@ -173,8 +172,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true,
-          feedbackMessageClasses);
+      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getMarkupId(), this,
+          true, feedbackMessageClasses);
 
       if (feedbackJavaScript != null)
       {

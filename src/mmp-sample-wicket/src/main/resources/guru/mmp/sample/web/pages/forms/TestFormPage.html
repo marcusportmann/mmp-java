@@ -81,91 +81,79 @@
             <div class="box box-form">
               <div class="box-body">
 
-                <form wicket:id="testForm" id="testForm" class="form-horizontal">
+                <form wicket:id="testForm" id="testForm" class="form-horizontal form-material">
 
                   <div class="form-group">
                     <div class="col-xs-6">
-                      <div class="form-material form-material-primary">
-                        <label for="firstName">First Name</label>
-                        <input wicket:id="firstName" id="firstName" name="firstName" type="text" class="form-control" placeholder="Enter a first name">
-                      </div>
+                      <label>First Name
+                        <input wicket:id="firstName" name="firstName" type="text" placeholder="Enter a first name">
+                      </label>
                     </div>
                     <div class="col-xs-6">
-                      <div class="form-material form-material-primary">
-                        <label for="lastName">Last Name</label>
-                        <input wicket:id="lastName" id="lastName" name="lastName" type="text" class="form-control" placeholder="Enter a last name">
-                      </div>
+                      <label>Last Name
+                        <input wicket:id="lastName" name="lastName" type="text" placeholder="Enter a last name">
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-6">
-                      <div class="form-material form-material-primary">
-                        <label for="title">Title</label>
-                        <select wicket:id="title" id="title" name="title" class="form-control select2 select2-hidden-accessible" data-placeholder="Select a title">
+                      <label>Title
+                        <select wicket:id="title" name="title" class="select2 select2-hidden-accessible" data-placeholder="Select a title">
                           <option></option>
                           <option>Mr</option>
                           <option>Mrs</option>
                           <option>Ms</option>
                         </select>
-                      </div>
+                      </label>
                     </div>
                     <div class="col-xs-6">
-                      <div class="form-material form-material-primary input-group">
-                        <label for="dateOfBirth">Date of Birth</label>
-                        <input wicket:id="dateOfBirth" id="dateOfBirth" name="dateOfBirth" type="text" class="form-control datepicker" placeholder="Enter a date of birth">
+                      <label>Date of Birth
+                        <input wicket:id="dateOfBirth" id="dateOfBirth" name="dateOfBirth" type="text" class="datepicker" placeholder="Enter a date of birth"/>
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                      </div>
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-6">
-                      <div class="form-material form-material-primary">
-                        <label for="password">Password</label>
-                        <input wicket:id="password" id="password" name="password" type="password" class="form-control" placeholder="Enter a password"/>
-                      </div>
+                      <label>Password
+                        <input wicket:id="password" id="password" name="password" type="password" placeholder="Enter a password"/>
+                      </label>
                     </div>
                     <div class="col-xs-6">
-                      <div class="form-material form-material-primary">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input wicket:id="confirmPassword" id="confirmPassword" name="confirmPassword" type="password" class="form-control" placeholder="Confirm the password"/>
-                      </div>
+                      <label>Confirm Password
+                        <input wicket:id="confirmPassword" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm the password"/>
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-6">
-                      <div class="form-material form-material-primary">
-                        <label for="favouritePet">Favourite Pet</label>
-                        <div class="template-custom-select">
-                          <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1" class="form-control">
-                            <option value="" selected disabled>Select a pet</option>
-                            <option value="1">Dog</option>
-                            <option value="2">Cat</option>
-                            <option value="3">Hamster</option>
-                          </select>
-                        </div>
-                      </div>
+                      <label class="select-wrapper">Favourite Pet
+                        <select wicket:id="favouritePet" id="favouritePet" name="favouritePet" size="1">
+                          <option value="" selected disabled>Select a pet</option>
+                          <option value="1">Dog</option>
+                          <option value="2">Cat</option>
+                          <option value="3">Hamster</option>
+                        </select>
+                      </label>
                     </div>
                     <div class="col-xs-6">
-                      <div class="bootstrap-timepicker">
-                        <div class="form-material form-material-primary input-group">
-                          <label for="favouriteTime">Favourite Time</label>
-                          <input wicket:id="favouriteTime" id="favouriteTime" name="favouriteTime" type="text" class="form-control timepicker" placeholder="Enter a favourite time">
+                      <label>Favourite Time
+                        <div class="bootstrap-timepicker">
+                          <input wicket:id="favouriteTime" id="favouriteTime" name="favouriteTime" type="text" class="timepicker" placeholder="Enter a favourite time">
                           <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                         </div>
-                      </div>
+                      </label>
                     </div>
-
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-12">
-                      <div class="form-material form-material-primary">
-                        <label for="notes">Notes</label>
-                        <textarea wicket:id="notes" id="notes" name="notes" rows="4" cols="5" class="form-control" placeholder="Enter the notes"></textarea>
-                      </div>
+                      <label>Notes
+                        <textarea wicket:id="notes" id="notes" name="notes" rows="4" cols="5" placeholder="Enter the notes"></textarea>
+                      </label>
                     </div>
                   </div>
 
@@ -174,7 +162,7 @@
                     <div class="col-xs-12">
                       <div wicket:id="role">
                         <label class="css-input css-radio css-radio-default push-10-r">
-                          <input wicket:id="roleManager" name="radio-group1" type="radio">
+                          <input wicket:id="roleManager" name="role" type="radio">
                           <span></span>
                           Manager
                         </label>
@@ -194,8 +182,8 @@
 
                   <div class="form-group">
                     <div class="col-xs-6">
-                      <label class="css-input css-checkbox css-checkbox-default" for="isActive">
-                        <input wicket:id="isActive" id="isActive" name="isActive" type="checkbox">
+                      <label class="css-input css-checkbox css-checkbox-default">
+                        <input wicket:id="isActive" name="isActive" type="checkbox">
                         <span></span>
                         Is Active?
                       </label>

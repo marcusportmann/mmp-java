@@ -21,7 +21,6 @@ package guru.mmp.application.web.template.components;
 import guru.mmp.application.web.template.TemplateWebSession;
 import guru.mmp.application.web.template.navigation.NavigationState;
 import guru.mmp.application.web.template.pages.LoginPage;
-import guru.mmp.application.web.template.pages.LogoutPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.ComponentTag;

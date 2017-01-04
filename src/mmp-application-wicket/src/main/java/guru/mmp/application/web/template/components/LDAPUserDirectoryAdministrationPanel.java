@@ -160,8 +160,8 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
 
       // The "userPhoneNumberAttribute" field
       TextField<String> userPhoneNumberAttributeField = new TextFieldWithFeedback<>(
-        "userPhoneNumberAttribute", new PropertyModel<>(userDirectoryModel,
-        "parameters.UserPhoneNumberAttribute"));
+          "userPhoneNumberAttribute", new PropertyModel<>(userDirectoryModel,
+          "parameters.UserPhoneNumberAttribute"));
       userPhoneNumberAttributeField.setType(String.class);
       userPhoneNumberAttributeField.setRequired(true);
       add(userPhoneNumberAttributeField);

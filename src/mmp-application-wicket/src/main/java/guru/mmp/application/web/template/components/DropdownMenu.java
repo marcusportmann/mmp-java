@@ -128,7 +128,7 @@ public abstract class DropdownMenu<T> extends Panel
             int loopItemIndex = loopItem.getIndex();
 
             @SuppressWarnings("rawtypes")
-			AjaxFallbackLink dropdownMenuItemLink = new AjaxFallbackLink("dropdownMenuItemLink")
+            AjaxFallbackLink dropdownMenuItemLink = new AjaxFallbackLink("dropdownMenuItemLink")
             {
               @Override
               public void onClick(AjaxRequestTarget target)

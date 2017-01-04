@@ -20,7 +20,6 @@ package guru.mmp.application.web.template.components;
 
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.application.web.template.util.FeedbackUtil;
-
 import org.apache.wicket.ajax.AjaxRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -83,7 +82,7 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
 
     response.render(TemplateJavaScriptResourceReference.getJavaScriptHeaderItem());
 
-    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, false,
+    String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getMarkupId(), this, false,
         feedbackMessageClasses);
 
     if (feedbackJavaScript != null)
@@ -127,8 +126,8 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
     {
       AjaxRequestHandler ajaxRequestHandler = (AjaxRequestHandler) requestHandler;
 
-      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getId(), this, true,
-          feedbackMessageClasses);
+      String feedbackJavaScript = FeedbackUtil.generateFeedbackJavaScript(getMarkupId(), this,
+          true, feedbackMessageClasses);
 
       if (feedbackJavaScript != null)
       {

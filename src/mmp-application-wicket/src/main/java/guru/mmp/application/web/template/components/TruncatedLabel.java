@@ -22,11 +22,10 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TruncatedLabel</code> class extends the Wicket <code>Label</code> component to provide

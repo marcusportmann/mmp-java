@@ -74,63 +74,56 @@
             <div class="box box-form">
               <div class="box-body">
 
-                <form wicket:id="addForm" id="addForm" class="form-horizontal">
+                <form wicket:id="addForm" id="addForm" class="form-horizontal form-material">
 
                   <div class="form-group">
                     <div class="col-xs-12">
-                      <div class="form-material form-material-primary">
-                        <label for="id">ID</label>
-                        <input wicket:id="id" id="id" name="id" type="text" class="form-control" placeholder="Enter an ID">
-                      </div>
+                      <label>ID
+                        <input wicket:id="id" name="id" type="text" placeholder="Enter an ID"/>
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-12">
-                      <div class="form-material form-material-primary">
-                        <label for="name">Name</label>
-                        <input wicket:id="name" id="name" name="name" type="text" class="form-control" placeholder="Enter a name">
-                      </div>
+                      <label>Name
+                        <input wicket:id="name" name="name" type="text" placeholder="Enter a name"/>
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-12">
-                      <div class="form-material form-material-primary">
-                        <label for="schedulingPattern">Scheduling Pattern</label>
-                        <input wicket:id="schedulingPattern" id="schedulingPattern" name="schedulingPattern" type="text" class="form-control" placeholder="Enter a scheduling pattern">
-                      </div>
+                      <label>Scheduling Pattern
+                        <input wicket:id="schedulingPattern" name="schedulingPattern" type="text" placeholder="Enter a scheduling pattern"/>
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-12">
-                      <div class="form-material form-material-primary">
-                        <label for="jobClass">Job Class</label>
-                        <input wicket:id="jobClass" id="jobClass" name="jobClass" type="text" class="form-control" placeholder="Enter a job class">
-                      </div>
+                      <label>Job Class
+                        <input wicket:id="jobClass" name="jobClass" type="text" placeholder="Enter a job class"/>
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-12">
-                      <div class="form-material form-material-primary">
-                        <label for="status">Status</label>
-                        <div class="template-custom-select">
-                          <select wicket:id="status" id="status" name="status" size="1" class="form-control">
-                            <option value="" selected disabled>Select a status</option>
-                            <option>Unscheduled</option>
-                            <option>Once-off</option>
-                          </select>
-                        </div>
-                      </div>
+                      <label class="select-wrapper">Status
+                        <select wicket:id="status" name="status" size="1">
+                          <option value="" selected disabled>Select a status</option>
+                          <option>Unscheduled</option>
+                          <option>Once-off</option>
+                        </select>
+                      </label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-xs-6">
                       <label class="css-input css-checkbox css-checkbox-default" for="isEnabled">
-                        <input wicket:id="isEnabled" id="isEnabled" name="isEnabled" type="checkbox">
+                        <input wicket:id="isEnabled" id="isEnabled" name="isEnabled" type="checkbox"/>
                         <span></span>
                         Is Enabled?
                       </label>
