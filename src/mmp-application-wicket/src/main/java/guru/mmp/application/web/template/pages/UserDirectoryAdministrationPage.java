@@ -244,16 +244,6 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
     }
 
     /**
-     * Show the dialog using Ajax.
-     *
-     * @param target the AJAX request target
-     */
-    public void show(AjaxRequestTarget target)
-    {
-      super.show(target);
-    }
-
-    /**
      * Process the cancellation of the form associated with the dialog.
      *
      * @param target the AJAX request target
@@ -263,13 +253,25 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
     protected void onCancel(AjaxRequestTarget target, Form form) {}
 
     /**
-     * Process the submission of the form associated with the dialog.
+     * Process the errors for the form associated with the dialog.
      *
      * @param target the AJAX request target
      * @param form   the form
      */
     @Override
-    protected void onSubmit(AjaxRequestTarget target, Form form)
+    protected void onError(AjaxRequestTarget target, Form form) {}
+
+    /**
+     * Process the submission of the form associated with the dialog.
+     *
+     * @param target the AJAX request target
+     * @param form   the form
+     *
+     * @return <code>true</code> if the form was submitted successfully without errors or
+     *         <code>false</code> otherwise
+     */
+    @Override
+    protected boolean onSubmit(AjaxRequestTarget target, Form form)
     {
       try
       {
@@ -284,7 +286,7 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
 
         setResponsePage(new AddUserDirectoryPage(getPageReference(), userDirectoryType));
 
-        resetDialog(target);
+        return true;
       }
       catch (Throwable e)
       {
@@ -293,13 +295,16 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
             userDirectoryType.getAdministrationClassName(), userDirectoryType.getName()), e);
 
         error(target, "Failed to retrieve the administration class for the user directory type");
+
+        return false;
       }
     }
 
     /**
      * Reset the model for the dialog.
      */
-    protected void resetDialogModel()
+    @Override
+    protected void resetModel()
     {
       userDirectoryType = null;
     }
