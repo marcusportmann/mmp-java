@@ -352,7 +352,7 @@ span.copyright-name:before
   display: inline-block;
   position: relative;
   width: 100%;
-  background-color: rgb(245, 245, 245);
+  background-color: transparent;
   border: none;
   padding: 0;
   margin: 0;
