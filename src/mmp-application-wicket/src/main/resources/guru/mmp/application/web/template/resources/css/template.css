@@ -1114,6 +1114,18 @@ form.form-material .help-block.has-error
   color: #a94442;
 }
 
+form.form-material .form-field-value
+{
+  font-size: 14px;
+  font-weight: normal;
+  padding: 6px 0;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 0 1px 0 #e6e6e6;
+  box-shadow: 0 1px 0 #e6e6e6;
+  height: 34px;
+  color: #646464;
+}
+
 
 
 
