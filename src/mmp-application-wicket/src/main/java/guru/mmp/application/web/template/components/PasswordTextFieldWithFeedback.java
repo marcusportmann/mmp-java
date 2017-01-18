@@ -47,6 +47,8 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
   public PasswordTextFieldWithFeedback(String id)
   {
     super(id);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -58,6 +60,8 @@ public class PasswordTextFieldWithFeedback extends PasswordTextField
   public PasswordTextFieldWithFeedback(String id, IModel<String> model)
   {
     super(id, model);
+
+    setOutputMarkupId(true);
   }
 
   /**

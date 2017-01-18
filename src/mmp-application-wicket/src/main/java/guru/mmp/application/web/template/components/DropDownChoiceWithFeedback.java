@@ -54,6 +54,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
   public DropDownChoiceWithFeedback(String id)
   {
     super(id);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -65,6 +67,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
   public DropDownChoiceWithFeedback(String id, List<? extends T> choices)
   {
     super(id, choices);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -77,6 +81,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
   public DropDownChoiceWithFeedback(String id, IModel<T> model, List<? extends T> choices)
   {
     super(id, model, choices);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -90,6 +96,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
       IChoiceRenderer<? super T> renderer)
   {
     super(id, choices, renderer);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -104,6 +112,8 @@ public class DropDownChoiceWithFeedback<T> extends DropDownChoice<T>
       IChoiceRenderer<? super T> renderer)
   {
     super(id, model, choices, renderer);
+
+    setOutputMarkupId(true);
   }
 
   /**

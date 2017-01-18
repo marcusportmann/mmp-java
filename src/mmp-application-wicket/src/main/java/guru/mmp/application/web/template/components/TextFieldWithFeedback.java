@@ -48,6 +48,8 @@ public class TextFieldWithFeedback<T> extends TextField<T>
   public TextFieldWithFeedback(String id)
   {
     super(id);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -59,6 +61,8 @@ public class TextFieldWithFeedback<T> extends TextField<T>
   public TextFieldWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
+
+    setOutputMarkupId(true);
   }
 
   /**

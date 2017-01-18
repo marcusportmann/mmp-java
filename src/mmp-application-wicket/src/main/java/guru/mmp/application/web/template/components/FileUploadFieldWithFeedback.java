@@ -52,6 +52,8 @@ public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
   public FileUploadFieldWithFeedback(String id)
   {
     super(id);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -63,6 +65,8 @@ public class FileUploadFieldWithFeedback<T extends java.util.List<FileUpload>>
   public FileUploadFieldWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
+
+    setOutputMarkupId(true);
   }
 
   /**

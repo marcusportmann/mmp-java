@@ -259,7 +259,6 @@ public class CodeCategoryInputPanel extends InputPanel
       }
     };
 
-    cacheExpiryField.setOutputMarkupId(true);
     endPointContainer.add(cacheExpiryField);
   }
 }

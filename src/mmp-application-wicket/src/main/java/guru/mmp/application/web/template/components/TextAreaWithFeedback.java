@@ -48,6 +48,8 @@ public class TextAreaWithFeedback<T> extends TextArea<T>
   public TextAreaWithFeedback(String id)
   {
     super(id);
+
+    setOutputMarkupId(true);
   }
 
   /**
@@ -60,6 +62,8 @@ public class TextAreaWithFeedback<T> extends TextArea<T>
   public TextAreaWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
+
+    setOutputMarkupId(true);
   }
 
   /**

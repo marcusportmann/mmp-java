@@ -64,6 +64,10 @@ public class RadioGroupWithFeedback<T> extends RadioGroup<T>
   public RadioGroupWithFeedback(String id, IModel<T> model)
   {
     super(id, model);
+
+    setRenderBodyOnly(false);
+    setOutputMarkupId(true);
+    setMarkupId(id);
   }
 
   /**
