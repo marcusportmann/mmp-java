@@ -23,6 +23,8 @@ import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationLink;
 import guru.mmp.sample.web.pages.DashboardPage;
 import guru.mmp.sample.web.pages.HomePage;
+import guru.mmp.sample.web.pages.dialogs.TestExtensibleDialogImplementationPage;
+import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationPage;
 import guru.mmp.sample.web.pages.forms.TestFormPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -84,6 +86,15 @@ public class SampleApplication extends TemplateWebApplication
   {
     root.addItem(new NavigationLink("Home", "fa fa-home", HomePage.class));
     root.addItem(new NavigationLink("Dashboard", "fa fa-home", DashboardPage.class));
+
+    NavigationGroup dialogsGroup = new NavigationGroup("Dialogs", "fa fa-window-restore");
+
+    dialogsGroup.addItem(new NavigationLink("Test Extensible Dialog",
+        TestExtensibleDialogImplementationPage.class));
+    dialogsGroup.addItem(new NavigationLink("Test Extensible Form Dialog",
+        TestExtensibleFormDialogImplementationPage.class));
+
+    root.addItem(dialogsGroup);
 
     NavigationGroup formsGroup = new NavigationGroup("Forms", "fa fa-pencil-square-o");
 

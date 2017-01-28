@@ -72,73 +72,9 @@
         <section class="content">
           <wicket:extend>
 
-            <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
-              <div class="modal-dialog">
-                <div class="modal-content">
+            <div wicket:id="dialog" class="modal fade" tabindex="-1" role="dialog"></div>
 
-                  <div class="modal-header">
-                    <h4 class="modal-title">Remove User</h4>
-                  </div>
-
-                  <div class="modal-body">
-                    <p>
-                      Are you sure you wish to remove the user
-                      <b><span wicket:id="name">[Name]</span></b>?
-                    </p>
-                  </div>
-
-                  <div class="modal-footer">
-                    <button wicket:id="removeLink" class="btn btn-primary">Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div wicket:id="tableContainer" class="table-container">
-              <div class="table-header">
-                <div class="table-header-left">
-                  <a wicket:id="addLink" class="btn btn-primary btn-sm" href="#"><i class="fa fa-plus"></i> Add User</a>
-                  <div wicket:id="userDirectoryDropdownMenu"></div>
-                </div>
-                <div class="table-header-right">
-                  <form wicket:id="filterForm" class="table-filter-form">
-                    <input wicket:id="filter" type="text" name="filter"/>
-                    <div class="btn-group">
-                      <button wicket:id="filterButton" type="submit" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Filter</button>
-                      <button wicket:id="resetButton" type="submit" class="btn btn-default btn-sm"><i class="fa fa-times"></i></button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-
-              <table class="table table-bordered table-striped table-condensed table-actions">
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th class="hidden-xs">First Name</th>
-                    <th class="hidden-xs">Last Name</th>
-                    <th class="center four-actions">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr wicket:id="user">
-                    <td><span wicket:id="username">[Username]</span></td>
-                    <td class="hidden-xs"><span wicket:id="firstName">[First Name]</span></td>
-                    <td class="hidden-xs"><span wicket:id="lastName">[Surname]</span></td>
-                    <td class="four-actions">
-                      <div class="btn-group">
-                        <a wicket:id="userGroupsLink" class="btn btn-xs btn-default" data-toggle="tooltip" title="" data-original-title="User Groups"><i class="fa fa-group"></i></a>
-                        <a wicket:id="updateLink" class="btn btn-xs btn-default" data-toggle="tooltip" title="" data-original-title="Update User"><i class="fa fa-edit"></i></a>
-                        <a wicket:id="resetPasswordLink" class="btn btn-xs btn-default" data-toggle="tooltip" title="" data-original-title="Reset Password"><i class="fa fa-lock"></i></a>
-                        <a wicket:id="removeLink" class="btn btn-xs btn-default" data-toggle="tooltip" title="" data-original-title="Remove User"><i class="fa fa-times"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div wicket:id="navigator" class="paging-navigator"></div>
-            </div>
+            <wicket:child />
 
           </wicket:extend>
         </section>

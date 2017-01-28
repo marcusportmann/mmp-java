@@ -18,8 +18,8 @@ package guru.mmp.application.web.template.pages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.web.template.components.ExtensibleFormDialog;
-import guru.mmp.application.web.template.components.ExtensibleFormDialogImplementation;
+import guru.mmp.application.web.template.components.ExtensibleDialog;
+import guru.mmp.application.web.template.components.ExtensibleDialogImplementation;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -32,17 +32,17 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class TemplateDialogWebPage extends TemplateWebPage
+public abstract class TemplateExtensibleDialogWebPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;
-  private ExtensibleFormDialog dialog;
+  private ExtensibleDialog dialog;
 
   /**
    * Constructs a new <code>TemplateDialogWebPage</code>.
    *
    * @param heading the page heading
    */
-  protected TemplateDialogWebPage(String heading)
+  protected TemplateExtensibleDialogWebPage(String heading)
   {
     super(heading);
 
@@ -55,7 +55,8 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    * @param headingModel    the model for the page heading
    * @param subHeadingModel the model for the sub-heading for the page
    */
-  public TemplateDialogWebPage(IModel<String> headingModel, IModel<String> subHeadingModel)
+  public TemplateExtensibleDialogWebPage(IModel<String> headingModel,
+      IModel<String> subHeadingModel)
   {
     super(headingModel, subHeadingModel);
 
@@ -68,7 +69,7 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    * @param heading        the page heading
    * @param pageParameters the parameters for the page
    */
-  protected TemplateDialogWebPage(String heading, PageParameters pageParameters)
+  protected TemplateExtensibleDialogWebPage(String heading, PageParameters pageParameters)
   {
     super(heading, pageParameters);
 
@@ -81,7 +82,7 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    * @param heading    the page heading
    * @param subHeading the sub-heading for the page
    */
-  public TemplateDialogWebPage(String heading, String subHeading)
+  public TemplateExtensibleDialogWebPage(String heading, String subHeading)
   {
     super(heading, subHeading);
 
@@ -95,8 +96,8 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    * @param subHeadingModel the model for the sub-heading for the page
    * @param model           the model for the page
    */
-  public TemplateDialogWebPage(IModel<String> headingModel, IModel<String> subHeadingModel,
-      IModel<?> model)
+  public TemplateExtensibleDialogWebPage(IModel<String> headingModel,
+      IModel<String> subHeadingModel, IModel<?> model)
   {
     super(headingModel, subHeadingModel, model);
 
@@ -110,8 +111,8 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    * @param subHeadingModel the model for the sub-heading for the page
    * @param pageParameters  the model for the page
    */
-  public TemplateDialogWebPage(IModel<String> headingModel, IModel<String> subHeadingModel,
-      PageParameters pageParameters)
+  public TemplateExtensibleDialogWebPage(IModel<String> headingModel,
+      IModel<String> subHeadingModel, PageParameters pageParameters)
   {
     super(headingModel, subHeadingModel, pageParameters);
 
@@ -125,7 +126,7 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    * @param subHeading the sub-heading for the page
    * @param model      the model for the page
    */
-  public TemplateDialogWebPage(String heading, String subHeading, IModel<?> model)
+  public TemplateExtensibleDialogWebPage(String heading, String subHeading, IModel<?> model)
   {
     super(heading, subHeading, model);
 
@@ -139,7 +140,8 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    * @param subHeading     the sub-heading for the page
    * @param pageParameters the parameters for the page
    */
-  protected TemplateDialogWebPage(String heading, String subHeading, PageParameters pageParameters)
+  protected TemplateExtensibleDialogWebPage(String heading, String subHeading,
+      PageParameters pageParameters)
   {
     super(heading, subHeading, pageParameters);
 
@@ -151,26 +153,26 @@ public abstract class TemplateDialogWebPage extends TemplateWebPage
    *
    * @return the extensible and reusable modal dialog associated with the page
    */
-  public ExtensibleFormDialog getDialog()
+  public ExtensibleDialog getDialog()
   {
     return dialog;
   }
 
   /**
-   * Show the extensible form dialog associated with the page using the specified implementation.
+   * Show the extensible and reusable dialog associated with the page using the specified
+   * implementation.
    *
    * @param target         the AJAX request target
-   * @param implementation the implementation for the extensible for dialog
+   * @param implementation the implementation for the extensible and reusable dialog
    */
-  public void showDialog(AjaxRequestTarget target,
-      ExtensibleFormDialogImplementation implementation)
+  public void showDialog(AjaxRequestTarget target, ExtensibleDialogImplementation implementation)
   {
     dialog.show(target, implementation);
   }
 
   private void commonInit()
   {
-    dialog = new ExtensibleFormDialog("dialog");
+    dialog = new ExtensibleDialog("dialog");
 
     add(dialog);
   }
