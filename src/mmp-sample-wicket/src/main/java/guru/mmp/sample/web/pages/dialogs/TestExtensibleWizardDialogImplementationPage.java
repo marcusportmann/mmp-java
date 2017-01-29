@@ -32,21 +32,21 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>TestExtensibleDialogImplementationPage</code> class implements the
- * "Test Extensible Dialog Implementation" page for the web application.
+ * The <code>TestExtensibleWizardDialogImplementationPage</code> class implements the
+ * "Test Extensible Wizard Dialog Implementation" page for the web application.
  *
  * @author Marcus Portmann
  */
-public class TestExtensibleDialogImplementationPage extends TemplateExtensibleDialogWebPage
+public class TestExtensibleWizardDialogImplementationPage extends TemplateExtensibleDialogWebPage
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TestExtensibleDialogImplementationPage</code>.
+   * Constructs a new <code>TestExtensibleWizardDialogImplementationPage</code>.
    */
-  public TestExtensibleDialogImplementationPage()
+  public TestExtensibleWizardDialogImplementationPage()
   {
-    super("Test Extensible Dialog Implementation", "The test extensible dialog implementation");
+    super("Test Extensible Wizard Dialog Implementation", "The test extensible wizard dialog implementation");
 
     try
     {
@@ -64,43 +64,20 @@ public class TestExtensibleDialogImplementationPage extends TemplateExtensibleDi
     catch (Throwable e)
     {
       throw new WebApplicationException(
-          "Failed to initialise the TestExtensibleDialogImplementationPage", e);
+        "Failed to initialise the TestExtensibleWizardDialogImplementationPage", e);
     }
   }
 
-  private class TestExtensibleDialogImplementation extends ExtensibleDialogImplementation
+  private class TestExtensibleWizardDialogImplementation extends ExtensibleWizardDialogImplementation
   {
     /**
-     * Constructs a new <code>TestExtensibleDialogImplementation</code>.
+     * Constructs a new <code>TestExtensibleWizardDialogImplementation</code>.
      */
-    public TestExtensibleDialogImplementation()
+    public TestExtensibleWizardDialogImplementation()
     {
-      super("Test Extensible Dialog");
+      super("Test Extensible Wizard Dialog");
     }
 
-    /**
-     * Returns the AJAX buttons associated with the extensible dialog.
-     *
-     * @return the AJAX buttons associated with the extensible dialog
-     */
-    @Override
-    protected List<ExtensibleDialogButton> getButtons()
-    {
-      ExtensibleDialogButton clickMeButton = new ExtensibleDialogButton("Click Me", true);
 
-      clickMeButton.add(new AjaxEventBehavior("click")
-          {
-            @Override
-            protected void onEvent(AjaxRequestTarget target)
-            {
-              getDialog().hide(target);
-            }
-          });
-
-      List<ExtensibleDialogButton> buttons = new ArrayList<>();
-      buttons.add(clickMeButton);
-
-      return buttons;
-    }
   }
 }
