@@ -21,6 +21,7 @@ package guru.mmp.sample.web.pages.dialogs;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.template.components.ExtensibleDialogButton;
 import guru.mmp.application.web.template.components.ExtensibleDialogImplementation;
+import guru.mmp.application.web.template.components.ExtensibleWizardDialogImplementation;
 import guru.mmp.application.web.template.pages.TemplateExtensibleDialogWebPage;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -55,7 +56,7 @@ public class TestExtensibleWizardDialogImplementationPage extends TemplateExtens
         @Override
         public void onClick(AjaxRequestTarget target)
         {
-          getDialog().show(target, new TestExtensibleDialogImplementation());
+          getDialog().show(target, new TestExtensibleWizardDialogImplementation());
         }
       };
 

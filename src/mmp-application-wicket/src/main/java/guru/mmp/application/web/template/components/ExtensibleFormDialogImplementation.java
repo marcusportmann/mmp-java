@@ -135,7 +135,7 @@ public abstract class ExtensibleFormDialogImplementation<T> extends ExtensibleDi
 
             ExtensibleFormDialogImplementation.this.onCancel(target, form);
 
-            resetExtensibleFormDialogImplementation(target);
+            //resetExtensibleFormDialogImplementation(target);
 
             getDialog().hide(target);
           }
@@ -248,11 +248,6 @@ public abstract class ExtensibleFormDialogImplementation<T> extends ExtensibleDi
   protected abstract boolean onSubmit(AjaxRequestTarget target, Form form);
 
   /**
-   * Reset the model for the extensible form dialog implementation.
-   */
-  protected abstract void resetModel();
-
-  /**
    * Registers a warning feedback message for this component.
    *
    * @param target  the AJAX request target
@@ -273,9 +268,6 @@ public abstract class ExtensibleFormDialogImplementation<T> extends ExtensibleDi
    */
   private void resetExtensibleFormDialogImplementation(AjaxRequestTarget target)
   {
-    // Reset the dialog model
-    resetModel();
-
     // Reset the alerts
     alerts.getFeedbackMessages().clear();
 

@@ -18,11 +18,7 @@ package guru.mmp.application.web.template.components;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.form.Form;
 
 import java.io.Serializable;
@@ -39,11 +35,11 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class ExtensibleWizardDialogImplementation<T> extends ExtensibleDialogImplementation
+public abstract class ExtensibleWizardDialogImplementation extends ExtensibleDialogImplementation
 {
   private static final long serialVersionUID = 1000000;
   private Alerts alerts;
-  private Form<T> form;
+  private Form form;
 
   /**
    * Constructs a new <code>ExtensibleWizardDialogImplementation</code>.
@@ -66,7 +62,7 @@ public abstract class ExtensibleWizardDialogImplementation<T> extends Extensible
    *
    * @return the form associated with the extensible dialog
    */
-  public Form<T> getForm()
+  public Form getForm()
   {
     return form;
   }
@@ -118,133 +114,102 @@ public abstract class ExtensibleWizardDialogImplementation<T> extends Extensible
   @Override
   protected List<ExtensibleDialogButton> getButtons()
   {
-    ExtensibleDialogButton cancelButton = new ExtensibleDialogButton(cancelText);
-
-    cancelButton.add(new AjaxEventBehavior("click")
-    {
-      @Override
-      protected void onEvent(AjaxRequestTarget target)
-      {
-        System.out.println("[DEBUG][cancelButton][onSubmit] HERE!!!!");
-
-        ExtensibleWizardDialogImplementation.this.onCancel(target, form);
-
-        resetExtensibleWizardDialogImplementation(target);
-
-        getDialog().hide(target);
-      }
-    });
-
-    ExtensibleDialogButton submitButton = new ExtensibleDialogButton(submitText, true);
-
-    submitButton.add(new AjaxFormSubmitBehavior(form, "click")
-    {
-      @Override
-      protected void onSubmit(AjaxRequestTarget target)
-      {
-        if (target != null)
-        {
-          resetFeedbackMessages(target);
-        }
-
-        if (ExtensibleWizardDialogImplementation.this.onSubmit(target,
-          ExtensibleWizardDialogImplementation.this.form))
-        {
-          getDialog().hide(target);
-        }
-        else
-        {
-          target.add(ExtensibleWizardDialogImplementation.this.alerts);
-        }
-      }
-
-      @Override
-      protected void onAfterSubmit(AjaxRequestTarget target) {}
-
-      @Override
-      protected void onError(AjaxRequestTarget target)
-      {
-        if (target != null)
-        {
-          // Visit each form component and if it is visible re-render it.
-          // NOTE: We have to re-render every component to remove stale validation error messages.
-          form.visitFormComponents(
-            (formComponent, iVisit) ->
-            {
-              if ((formComponent.getParent() != null)
-                && formComponent.getParent().isVisible()
-                && formComponent.isVisible())
-              {
-                target.add(formComponent);
-              }
-            }
-          );
-        }
-
-        ExtensibleWizardDialogImplementation.this.onError(target, form);
-      }
-
-      @Override
-      protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
-      {
-        super.updateAjaxAttributes(attributes);
-
-        // Do not allow normal form submit to happen
-        attributes.setPreventDefault(true);
-      }
-
-      @Override
-      public boolean getDefaultProcessing()
-      {
-        return submitButton.getDefaultFormProcessing();
-      }
-
-      @Override
-      public boolean getStatelessHint(Component component)
-      {
-        return false;
-      }
-    });
-    submitButton.setDefaultFormProcessing(true);
+//  ExtensibleDialogButton cancelButton = new ExtensibleDialogButton(cancelText);
+//
+//  cancelButton.add(new AjaxEventBehavior("click")
+//  {
+//    @Override
+//    protected void onEvent(AjaxRequestTarget target)
+//    {
+//      System.out.println("[DEBUG][cancelButton][onSubmit] HERE!!!!");
+//
+//      ExtensibleWizardDialogImplementation.this.onCancel(target, form);
+//
+//      resetExtensibleWizardDialogImplementation(target);
+//
+//      getDialog().hide(target);
+//    }
+//  });
+//
+//  ExtensibleDialogButton submitButton = new ExtensibleDialogButton(submitText, true);
+//
+//  submitButton.add(new AjaxFormSubmitBehavior(form, "click")
+//  {
+//    @Override
+//    protected void onSubmit(AjaxRequestTarget target)
+//    {
+//      if (target != null)
+//      {
+//        resetFeedbackMessages(target);
+//      }
+//
+//      if (ExtensibleWizardDialogImplementation.this.onSubmit(target,
+//        ExtensibleWizardDialogImplementation.this.form))
+//      {
+//        getDialog().hide(target);
+//      }
+//      else
+//      {
+//        target.add(ExtensibleWizardDialogImplementation.this.alerts);
+//      }
+//    }
+//
+//    @Override
+//    protected void onAfterSubmit(AjaxRequestTarget target) {}
+//
+//    @Override
+//    protected void onError(AjaxRequestTarget target)
+//    {
+//      if (target != null)
+//      {
+//        // Visit each form component and if it is visible re-render it.
+//        // NOTE: We have to re-render every component to remove stale validation error messages.
+//        form.visitFormComponents(
+//          (formComponent, iVisit) ->
+//          {
+//            if ((formComponent.getParent() != null)
+//              && formComponent.getParent().isVisible()
+//              && formComponent.isVisible())
+//            {
+//              target.add(formComponent);
+//            }
+//          }
+//        );
+//      }
+//
+//      ExtensibleWizardDialogImplementation.this.onError(target, form);
+//    }
+//
+//    @Override
+//    protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+//    {
+//      super.updateAjaxAttributes(attributes);
+//
+//      // Do not allow normal form submit to happen
+//      attributes.setPreventDefault(true);
+//    }
+//
+//    @Override
+//    public boolean getDefaultProcessing()
+//    {
+//      return submitButton.getDefaultFormProcessing();
+//    }
+//
+//    @Override
+//    public boolean getStatelessHint(Component component)
+//    {
+//      return false;
+//    }
+//  });
+//  submitButton.setDefaultFormProcessing(true);
 
     List<ExtensibleDialogButton> buttons = new ArrayList<>();
-    buttons.add(submitButton);
-    buttons.add(cancelButton);
+
+    // buttons.add(submitButton);
+    // buttons.add(cancelButton);
 
     return buttons;
   }
-
-  /**
-   * Process the cancellation of the form associated with the extensible form dialog implementation.
-   *
-   * @param target the AJAX request target
-   * @param form   the form
-   */
-  protected abstract void onCancel(AjaxRequestTarget target, Form form);
-
-  /**
-   * Process the errors for the form associated with the extensible form dialog implementation.
-   *
-   * @param target the AJAX request target
-   * @param form   the form
-   */
-  protected abstract void onError(AjaxRequestTarget target, Form form);
-
-  /**
-   * Process the submission of the form associated with the extensible form dialog implementation.
-   *
-   * @param target the AJAX request target
-   * @param form   the form
-   *
-   * @return <code>true</code> if the form was submitted successfully without errors or
-   *         <code>false</code> otherwise
-   */
-  protected abstract boolean onSubmit(AjaxRequestTarget target, Form form);
-
-  /**
-   * Reset the model for the extensible form dialog implementation.
-   */
-  protected abstract void resetModel();
 
   /**
    * Registers a warning feedback message for this component.
@@ -260,16 +225,13 @@ public abstract class ExtensibleWizardDialogImplementation<T> extends Extensible
   }
 
   /**
-   * Reset the extensible form dialog implementation including all forms associated with the
+   * Reset the extensible wizard dialog implementation including all forms associated with the
    * implementation, and their associated form components.
    *
    * @param target the AJAX request target
    */
-  private void resetExtensibleWizardDialogImplementation(AjaxRequestTarget target)
+  private void reset(AjaxRequestTarget target)
   {
-    // Reset the dialog model
-    resetModel();
-
     // Reset the alerts
     alerts.getFeedbackMessages().clear();
 
@@ -280,26 +242,26 @@ public abstract class ExtensibleWizardDialogImplementation<T> extends Extensible
 
     // Reset the forms and form components
     visitChildren(
-      (component, componentVisitor) ->
-      {
-        if (Form.class.isAssignableFrom(component.getClass()))
+        (component, componentVisitor) ->
         {
-          if (target != null)
+          if (Form.class.isAssignableFrom(component.getClass()))
           {
-            target.add(component);
-          }
+            if (target != null)
+            {
+              target.add(component);
+            }
 
-          // Visit each form component and clear its input and feedback messages
-          ((Form<?>) component).visitFormComponents(
-            (formComponent, formComponentVisitor) ->
+            // Visit each form component and clear its input and feedback messages
+            ((Form<?>) component).visitFormComponents(
+                (formComponent, formComponentVisitor) ->
             {
               formComponent.getFeedbackMessages().clear();
               formComponent.clearInput();
             }
-          );
+            );
+          }
         }
-      }
-    );
+        );
   }
 
   /**
@@ -311,20 +273,20 @@ public abstract class ExtensibleWizardDialogImplementation<T> extends Extensible
   private void resetFeedbackMessages(AjaxRequestTarget target)
   {
     visitChildren(
-      (component, componentVisitor) ->
-      {
-        if (Form.class.isAssignableFrom(component.getClass()))
+        (component, componentVisitor) ->
         {
-          if (target != null)
+          if (Form.class.isAssignableFrom(component.getClass()))
           {
-            target.add(component);
-          }
+            if (target != null)
+            {
+              target.add(component);
+            }
 
-          // Visit each form component and clear its input and feedback messages
-          ((Form<?>) component).visitFormComponents((formComponent,
-            formComponentVisitor) -> formComponent.getFeedbackMessages().clear());
+            // Visit each form component and clear its input and feedback messages
+            ((Form<?>) component).visitFormComponents((formComponent,
+                formComponentVisitor) -> formComponent.getFeedbackMessages().clear());
+          }
         }
-      }
-    );
+        );
   }
 }

@@ -12,7 +12,6 @@
 
     <properties>
       <property name="hibernate.show_sql" value="no" />
-      <property name="hibernate.dialect" value = "org.hibernate.dialect.H2Dialect"/>
     </properties>
   </persistence-unit>
 </persistence>

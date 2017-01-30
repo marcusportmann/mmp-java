@@ -13,8 +13,6 @@
 
     <properties>
       <property name="hibernate.show_sql" value="no" />
-      <property name="openjpa.jdbc.SynchronizeMappings" value="validate"/>
-      <property name="hibernate.dialect" value = "org.hibernate.dialect.H2Dialect"/>
     </properties>
   </persistence-unit>
 </persistence>
