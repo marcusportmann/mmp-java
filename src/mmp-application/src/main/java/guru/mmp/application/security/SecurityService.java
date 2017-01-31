@@ -2464,15 +2464,15 @@ public class SecurityService
         + "WHERE (UPPER(O.NAME) LIKE ?)";
 
     // updateFunctionSQL
-    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F "
+    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS AS F "
         + "SET F.NAME=?, F.DESCRIPTION=? WHERE F.CODE=?";
 
     // updateOrganisationSQL
     updateOrganisationSQL = "UPDATE " + schemaPrefix
-        + "ORGANISATIONS O SET O.NAME=?, O.STATUS=? WHERE O.ID=?";
+        + "ORGANISATIONS AS O SET O.NAME=?, O.STATUS=? WHERE O.ID=?";
 
     // updateUserDirectorySQL
-    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD SET UD.NAME=?, "
+    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES AS UD SET UD.NAME=?, "
         + "UD.CONFIGURATION=? WHERE UD.ID=?";
   }
 

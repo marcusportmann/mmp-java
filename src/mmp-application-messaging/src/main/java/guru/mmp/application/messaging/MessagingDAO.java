@@ -1604,7 +1604,7 @@ public class MessagingDAO
     getNumberOfErrorReportsSQL = "SELECT COUNT(ER.ID) FROM " + schemaPrefix + "ERROR_REPORTS ER";
 
     // incrementMessageProcessingAttemptsSQL
-    incrementMessageProcessingAttemptsSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    incrementMessageProcessingAttemptsSQL = "UPDATE " + schemaPrefix + "MESSAGES AS M "
         + "SET M.PROCESS_ATTEMPTS=M.PROCESS_ATTEMPTS + 1, M.UPDATED=?, M.LAST_PROCESSED=? "
         + "WHERE M.ID=?";
 
@@ -1617,55 +1617,55 @@ public class MessagingDAO
         + "WHERE MP.ID=?";
 
     // lockMessageForDownloadSQL
-    lockMessageForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    lockMessageForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGES AS M "
         + "SET M.STATUS=?, M.LOCK_NAME=?, M.UPDATED=?, M.DOWNLOAD_ATTEMPTS=M.DOWNLOAD_ATTEMPTS+1 "
         + "WHERE M.ID=?";
 
     // lockMessagePartForDownloadSQL
-    lockMessagePartForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    lockMessagePartForDownloadSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS AS MP "
         + "SET MP.STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=?, "
         + "MP.DOWNLOAD_ATTEMPTS=MP.DOWNLOAD_ATTEMPTS+1 WHERE MP.ID=?";
 
     // lockMessageSQL
-    lockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    lockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES AS M "
         + "SET M.STATUS=?, M.LOCK_NAME=?, M.UPDATED=? WHERE M.ID=?";
 
     // lockMessagePartSQL
-    lockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    lockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS AS MP "
         + "SET MP.STATUS=?, MP.LOCK_NAME=?, MP.UPDATED=? WHERE MP.ID=?";
 
     // resetExpiredMessageLocksSQL
-    // resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    // resetExpiredMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES AS M "
     // + "SET M.STATUS=?, M.LOCK_NAME=NULL, M.UPDATED=? "
     // + "WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M.UPDATED < ?";
 
     // resetExpiredMessagePartLocksSQL
-    // resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    // resetExpiredMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS AS MP "
     // + "SET MP.STATUS=?, MP.LOCK_NAME=NULL, MP.UPDATED=? "
     // + "WHERE MP.LOCK_NAME IS NOT NULL AND MP.STATUS=? AND MP.UPDATED < ?";
 
     // resetMessageLocksSQL
-    resetMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    resetMessageLocksSQL = "UPDATE " + schemaPrefix + "MESSAGES AS M "
         + "SET M.STATUS=?, M.LOCK_NAME=NULL, M.UPDATED=? WHERE M.LOCK_NAME=? AND M.STATUS=?";
 
     // resetMessagePartLocksSQL
-    resetMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    resetMessagePartLocksSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS AS MP "
         + "SET MP.STATUS=?, MP.LOCK_NAME=NULL WHERE MP.LOCK_NAME=? AND MP.STATUS=?";
 
     // setMessagePartStatusSQL
-    // setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    // setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS AS MP "
     // + "SET MP.STATUS=?, MP.UPDATED=? WHERE MP.ID=?";
 
     // setMessageStatusSQL
-    // setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    // setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES AS M "
     // + "SET M.STATUS=?, M.UPDATED=? WHERE M.ID=?";
 
     // unlockMessagePartSQL
-    // unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
+    // unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS AS MP "
     // + "SET MP.STATUS=?, MP.UPDATED=?, MP.LOCK_NAME=NULL WHERE MP.ID=?";
 
     // unlockMessageSQL
-    unlockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
+    unlockMessageSQL = "UPDATE " + schemaPrefix + "MESSAGES AS M "
         + "SET M.STATUS=?, M.UPDATED=?, M.LOCK_NAME=NULL WHERE M.ID=?";
   }
 }

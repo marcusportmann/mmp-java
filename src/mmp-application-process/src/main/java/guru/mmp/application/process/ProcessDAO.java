@@ -912,7 +912,7 @@ public class ProcessDAO
         + " AND PI.DEFINITION_VERSION = PD.VERSION AND PI.ID " + "= ?";
 
     // lockProcesInstanceSQL
-    lockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
+    lockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES AS PI" + " SET PI"
         + ".STATUS=?, PI.LOCK_NAME=? WHERE PI.ID=?";
 
     // processDefinitionExistsSQL
@@ -928,11 +928,11 @@ public class ProcessDAO
         + ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.LOCK_NAME=? AND PI.STATUS=?";
 
     // unlockProcessInstanceSQL
-    unlockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
+    unlockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES AS PI" + " SET PI"
         + ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.ID=?";
 
     // updateProcessInstanceDataSQL
-    updateProcessInstanceDataSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
+    updateProcessInstanceDataSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES AS PI" + " SET PI"
         + ".DATA=? WHERE PI.ID=?";
   }
 

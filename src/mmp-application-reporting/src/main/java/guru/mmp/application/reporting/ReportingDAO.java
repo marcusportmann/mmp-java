@@ -456,7 +456,7 @@ public class ReportingDAO
         + "RD WHERE RD.ID=?";
 
     // updateReportDefinitionSQL
-    updateReportDefinitionSQL = "UPDATE " + schemaPrefix + "REPORT_DEFINITIONS RD SET RD.NAME=?, "
+    updateReportDefinitionSQL = "UPDATE " + schemaPrefix + "REPORT_DEFINITIONS AS RD SET RD.NAME=?, "
         + "RD.TEMPLATE=? WHERE RD.ID=?";
   }
 

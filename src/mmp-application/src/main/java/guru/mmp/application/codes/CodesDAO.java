@@ -941,12 +941,12 @@ public class CodesDAO
 
     // updateCodeCategorySQL
     updateCodeCategorySQL = "UPDATE " + schemaPrefix
-        + "CODE_CATEGORIES CC SET CC.CATEGORY_TYPE=?, "
+        + "CODE_CATEGORIES AS CC SET CC.CATEGORY_TYPE=?, "
         + "CC.NAME=?, CC.CODE_DATA=?, CC.ENDPOINT=?, CC.IS_ENDPOINT_SECURE=?, "
         + "CC.IS_CACHEABLE=?, CC.CACHE_EXPIRY=?, CC.UPDATED=? WHERE CC.ID=?";
 
     // updateCodeSQL
-    updateCodeSQL = "UPDATE " + schemaPrefix + "CODES C SET C.NAME=?, C.VALUE=? WHERE C.ID=?";
+    updateCodeSQL = "UPDATE " + schemaPrefix + "CODES AS C SET C.NAME=?, C.VALUE=? WHERE C.ID=?";
   }
 
   private CachedCodeCategory getCachedCodeCategory(ResultSet rs)
