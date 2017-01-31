@@ -1562,8 +1562,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "INTERNAL_USER_TO_INTERNAL_GROUP_MAP (INTERNAL_USER_ID, INTERNAL_GROUP_ID) VALUES (?, ?)";
 
     // changeInternalUserPasswordSQL
-    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS AS IU "
-        + "SET IU.PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=? "
+    changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU "
+        + "SET PASSWORD=?, PASSWORD_ATTEMPTS=?, PASSWORD_EXPIRY=? "
         + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // createInternalGroupSQL
@@ -1664,8 +1664,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "ORDER BY IU.USERNAME";
 
     // incrementPasswordAttemptsSQL
-    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS AS IU SET "
-        + "IU.PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1 "
+    incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU SET "
+        + "PASSWORD_ATTEMPTS = PASSWORD_ATTEMPTS + 1 "
         + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // isPasswordInInternalUserPasswordHistorySQL
@@ -1689,8 +1689,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "VALUES (?, ?, ?, ?)";
 
     // updateInternalGroupSQL
-    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS AS IG SET "
-        + "IG.DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG SET "
+        + "DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
   }
 
   /**

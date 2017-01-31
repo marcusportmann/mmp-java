@@ -912,8 +912,8 @@ public class ProcessDAO
         + " AND PI.DEFINITION_VERSION = PD.VERSION AND PI.ID " + "= ?";
 
     // lockProcesInstanceSQL
-    lockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES AS PI" + " SET PI"
-        + ".STATUS=?, PI.LOCK_NAME=? WHERE PI.ID=?";
+    lockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI SET "
+        + "STATUS=?, LOCK_NAME=? WHERE PI.ID=?";
 
     // processDefinitionExistsSQL
     processDefinitionExistsSQL = "SELECT COUNT(PD.ID) FROM " + schemaPrefix
@@ -924,16 +924,16 @@ public class ProcessDAO
         + " WHERE PI.ID=?";
 
     // resetProcessInstanceLocksSQL
-    resetProcessInstanceLocksSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI" + " SET PI"
-        + ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.LOCK_NAME=? AND PI.STATUS=?";
+    resetProcessInstanceLocksSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI SET "
+        + "STATUS=?, LOCK_NAME=NULL WHERE PI.LOCK_NAME=? AND PI.STATUS=?";
 
     // unlockProcessInstanceSQL
-    unlockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES AS PI" + " SET PI"
-        + ".STATUS=?, PI.LOCK_NAME=NULL WHERE PI.ID=?";
+    unlockProcessInstanceSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI SET "
+        + "STATUS=?, LOCK_NAME=NULL WHERE PI.ID=?";
 
     // updateProcessInstanceDataSQL
-    updateProcessInstanceDataSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES AS PI" + " SET PI"
-        + ".DATA=? WHERE PI.ID=?";
+    updateProcessInstanceDataSQL = "UPDATE " + schemaPrefix + "PROCESS_INSTANCES PI SET "
+        + "DATA=? WHERE PI.ID=?";
   }
 
   private ProcessDefinition getProcessDefinition(ResultSet rs)

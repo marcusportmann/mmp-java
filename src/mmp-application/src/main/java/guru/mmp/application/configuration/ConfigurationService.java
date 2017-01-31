@@ -668,7 +668,7 @@ public class ConfigurationService
     removeValueSQL = "DELETE FROM " + schemaPrefix + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
 
     // updateValueSQL
-    updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG AS C SET C.VALUE = ?, C.DESCRIPTION = ? "
+    updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG C SET VALUE = ?, DESCRIPTION = ? "
         + "WHERE (UPPER(C.KEY) = ?)";
   }
 

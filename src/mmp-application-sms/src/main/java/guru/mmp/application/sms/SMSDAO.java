@@ -451,21 +451,21 @@ public class SMSDAO
         + "LAST_PROCESSED FROM " + schemaPrefix + "SMS WHERE ID=?";
 
     // incrementSMSSendAttemptsSQL
-    incrementSMSSendAttemptsSQL = "UPDATE " + schemaPrefix + "SMS" + " SET "
+    incrementSMSSendAttemptsSQL = "UPDATE " + schemaPrefix + "SMS SET "
         + "SEND_ATTEMPTS=SEND_ATTEMPTS + 1, LAST_PROCESSED=? WHERE ID=?";
 
     // lockSMSSQL
-    lockSMSSQL = "UPDATE " + schemaPrefix + "SMS" + " SET STATUS=?, LOCK_NAME=? WHERE ID=?";
+    lockSMSSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=?, LOCK_NAME=? WHERE ID=?";
 
     // resetSMSLocksSQL
-    resetSMSLocksSQL = "UPDATE " + schemaPrefix + "SMS" + " SET STATUS=?, LOCK_NAME=NULL WHERE "
+    resetSMSLocksSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=?, LOCK_NAME=NULL WHERE "
         + "LOCK_NAME=? AND STATUS=?";
 
     // setSMSStatusSQL
-    setSMSStatusSQL = "UPDATE " + schemaPrefix + "SMS" + " SET STATUS=? WHERE ID=?";
+    setSMSStatusSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=? WHERE ID=?";
 
     // unlockSMSSQL
-    unlockSMSSQL = "UPDATE " + schemaPrefix + "SMS" + " SET STATUS=?, LOCK_NAME=NULL WHERE ID=?";
+    unlockSMSSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=?, LOCK_NAME=NULL WHERE ID=?";
   }
 
   private SMS getSMS(ResultSet rs)

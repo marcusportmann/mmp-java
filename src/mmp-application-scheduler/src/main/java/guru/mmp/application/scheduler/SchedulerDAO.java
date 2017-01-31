@@ -915,32 +915,32 @@ public class SchedulerDAO
         + "WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0";
 
     // lockJobSQL
-    lockJobSQL = "UPDATE " + schemaPrefix + "JOBS AS J SET J.STATUS=?, J.LOCK_NAME=?, J.UPDATED=? "
+    lockJobSQL = "UPDATE " + schemaPrefix + "JOBS J SET STATUS=?, LOCK_NAME=?, UPDATED=? "
         + "WHERE J.ID=?";
 
     // incrementJobExecutionAttemptsSQL
-    incrementJobExecutionAttemptsSQL = "UPDATE " + schemaPrefix + "JOBS AS J "
-        + "SET J.EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, J.UPDATED=?, J.LAST_EXECUTED=? "
+    incrementJobExecutionAttemptsSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, UPDATED=?, LAST_EXECUTED=? "
         + "WHERE J.ID=?";
 
     // resetJobLocksSQL
-    resetJobLocksSQL = "UPDATE " + schemaPrefix + "JOBS AS J "
-        + "SET J.STATUS=?, J.LOCK_NAME=NULL, J.UPDATED=? WHERE J.LOCK_NAME=? AND J.STATUS=?";
+    resetJobLocksSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET STATUS=?, LOCK_NAME=NULL, UPDATED=? WHERE J.LOCK_NAME=? AND J.STATUS=?";
 
     // scheduleJobSQL
-    scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS AS J "
-        + "SET J.STATUS=1, J.EXECUTION_ATTEMPTS=0, J.NEXT_EXECUTION=?, J.UPDATED=? WHERE ID=?";
+    scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET STATUS=1, EXECUTION_ATTEMPTS=0, NEXT_EXECUTION=?, UPDATED=? WHERE J.ID=?";
 
     // setJobStatusSQL
-    setJobStatusSQL = "UPDATE " + schemaPrefix + "JOBS AS J SET J.STATUS=? WHERE J.ID=?";
+    setJobStatusSQL = "UPDATE " + schemaPrefix + "JOBS J SET STATUS=? WHERE J.ID=?";
 
     // unlockJobSQL
-    unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS AS J "
-        + "SET J.STATUS=?, J.UPDATED=?, J.LOCK_NAME=NULL WHERE J.ID=?";
+    unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
+        + "SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE J.ID=?";
 
     // updateJobSQL
-    updateJobSQL = "UPDATE " + schemaPrefix + "JOBS AS J "
-      + "SET J.NAME=?, J.SCHEDULING_PATTERN=?, J.JOB_CLASS=?, J.IS_ENABLED=?, J.STATUS=? "
+    updateJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
+      + "SET NAME=?, SCHEDULING_PATTERN=?, JOB_CLASS=?, IS_ENABLED=?, STATUS=? "
       + "WHERE J.ID=?";
   }
 
