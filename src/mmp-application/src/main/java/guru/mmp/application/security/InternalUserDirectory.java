@@ -1563,7 +1563,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     // changeInternalUserPasswordSQL
     changeInternalUserPasswordSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU "
-        + "SET IU.PASSWORD=?, IU.PASSWORD_ATTEMPTS=?, IU.PASSWORD_EXPIRY=? "
+        + "SET PASSWORD=?, PASSWORD_ATTEMPTS=?, PASSWORD_EXPIRY=? "
         + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // createInternalGroupSQL
@@ -1665,7 +1665,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     // incrementPasswordAttemptsSQL
     incrementPasswordAttemptsSQL = "UPDATE " + schemaPrefix + "INTERNAL_USERS IU SET "
-        + "IU.PASSWORD_ATTEMPTS = IU.PASSWORD_ATTEMPTS + 1 "
+        + "PASSWORD_ATTEMPTS = PASSWORD_ATTEMPTS + 1 "
         + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
     // isPasswordInInternalUserPasswordHistorySQL
@@ -1690,7 +1690,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     // updateInternalGroupSQL
     updateInternalGroupSQL = "UPDATE " + schemaPrefix + "INTERNAL_GROUPS IG SET "
-        + "IG.DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+        + "DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
   }
 
   /**

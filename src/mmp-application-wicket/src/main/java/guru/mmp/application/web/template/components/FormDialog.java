@@ -146,8 +146,6 @@ public abstract class FormDialog<T> extends Dialog
       {
         FormDialog.this.onCancel(target, getForm());
 
-        resetDialog(target);
-
         hide(target);
       }
     };
@@ -166,7 +164,7 @@ public abstract class FormDialog<T> extends Dialog
   @Override
   public void show(AjaxRequestTarget target)
   {
-    resetDialog(target);
+    reset(target);
 
     super.show(target);
   }
@@ -296,34 +294,13 @@ public abstract class FormDialog<T> extends Dialog
   protected abstract boolean onSubmit(AjaxRequestTarget target, Form<T> form);
 
   /**
-   * Reset the model for the dialog.
-   */
-  protected abstract void resetModel();
-
-  /**
-   * Registers a warning feedback message for this component.
-   *
-   * @param target  the AJAX request target
-   * @param message the feedback message
-   */
-  protected final void warn(AjaxRequestTarget target, Serializable message)
-  {
-    warn(message);
-
-    target.add(alerts);
-  }
-
-  /**
    * Reset the dialog including all forms associated with the dialog, and their associated form
    * components.
    *
    * @param target the AJAX request target
    */
-  private void resetDialog(AjaxRequestTarget target)
+  protected void reset(AjaxRequestTarget target)
   {
-    // Reset the dialog model
-    resetModel();
-
     // Reset the alerts
     alerts.getFeedbackMessages().clear();
 
@@ -354,6 +331,19 @@ public abstract class FormDialog<T> extends Dialog
           }
         }
         );
+  }
+
+  /**
+   * Registers a warning feedback message for this component.
+   *
+   * @param target  the AJAX request target
+   * @param message the feedback message
+   */
+  protected final void warn(AjaxRequestTarget target, Serializable message)
+  {
+    warn(message);
+
+    target.add(alerts);
   }
 
   /**

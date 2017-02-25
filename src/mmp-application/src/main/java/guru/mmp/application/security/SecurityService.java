@@ -2465,15 +2465,15 @@ public class SecurityService
 
     // updateFunctionSQL
     updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F "
-        + "SET F.NAME=?, F.DESCRIPTION=? WHERE F.CODE=?";
+        + "SET NAME=?, DESCRIPTION=? WHERE F.CODE=?";
 
     // updateOrganisationSQL
     updateOrganisationSQL = "UPDATE " + schemaPrefix
-        + "ORGANISATIONS O SET O.NAME=?, O.STATUS=? WHERE O.ID=?";
+        + "ORGANISATIONS AS O SET NAME=?, STATUS=? WHERE O.ID=?";
 
     // updateUserDirectorySQL
-    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES UD SET UD.NAME=?, "
-        + "UD.CONFIGURATION=? WHERE UD.ID=?";
+    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES AS UD SET NAME=?, "
+        + "CONFIGURATION=? WHERE UD.ID=?";
   }
 
   /**

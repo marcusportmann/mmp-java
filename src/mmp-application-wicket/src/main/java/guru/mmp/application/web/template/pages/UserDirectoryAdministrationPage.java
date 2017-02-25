@@ -244,6 +244,19 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
     }
 
     /**
+     * Show the dialog using Ajax.
+     *
+     * @param target the AJAX request target
+     */
+    @Override
+    public void show(AjaxRequestTarget target)
+    {
+      userDirectoryType = null;
+
+      super.show(target);
+    }
+
+    /**
      * Process the cancellation of the form associated with the dialog.
      *
      * @param target the AJAX request target
@@ -298,15 +311,6 @@ public class UserDirectoryAdministrationPage extends TemplateWebPage
 
         return false;
       }
-    }
-
-    /**
-     * Reset the model for the dialog.
-     */
-    @Override
-    protected void resetModel()
-    {
-      userDirectoryType = null;
     }
 
     private List<UserDirectoryType> getUserDirectoryTypeOptions()

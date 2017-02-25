@@ -1505,6 +1505,19 @@ form.form-material .form-field-value
 }
 
 
+.modal-dialog .modal-header
+{
+  border: none;
+  color: #fff;
+  background-color: #367fa9 !important;
+}
+
+.modal-dialog .modal-header button span
+{
+  color: #fff;
+}
+
+
 .modal-dialog .modal-footer button
 {
   float: right;

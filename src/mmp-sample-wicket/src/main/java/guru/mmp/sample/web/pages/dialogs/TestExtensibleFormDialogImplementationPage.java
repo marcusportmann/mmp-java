@@ -116,8 +116,5 @@ public class TestExtensibleFormDialogImplementationPage extends TemplateExtensib
 
       return true;
     }
-
-    @Override
-    protected void resetModel() {}
   }
 }
