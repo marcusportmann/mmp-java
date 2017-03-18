@@ -25,15 +25,7 @@
     <module>mmp-application-messaging-wicket</module>
     <module>mmp-application-reporting</module>
     <module>mmp-application-reporting-wicket</module>
-    <module>mmp-application-process</module>
-    <module>mmp-application-process-wicket</module>
-    <module>mmp-application-customer</module>
-    <module>mmp-application-customer-wicket</module>
     <module>mmp-application-sms</module>
-    <module>mmp-tomcat</module>
-    <module>mmp-sharepoint</module>
-    <module>mmp-corba</module>
-    <module>mmp-vmware</module>
     <module>mmp-sample-wicket</module>
     <module>mmp-sample-wicket-client</module>
   </modules>
