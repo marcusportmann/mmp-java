@@ -12,7 +12,7 @@
 
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-sample-wicket</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0-SNAPSHOT</version>
   <name>mmp-sample-wicket</name>
   <packaging>war</packaging>
 
@@ -29,37 +29,27 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-wicket</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-customer-wicket</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-messaging-wicket</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-process-wicket</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-reporting-wicket</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-scheduler-wicket</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-sms</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Provided Dependencies -->
@@ -111,7 +101,7 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-test</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
