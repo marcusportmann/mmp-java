@@ -5,7 +5,7 @@
 
   <groupId>guru.mmp</groupId>
   <artifactId>mmp-application-sms</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>2.0.0</version>
   <name>mmp-application-sms</name>
 
   <packaging>jar</packaging>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>2.0.0</version>
     </dependency>
 
     <!-- Provided Dependencies -->
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>guru.mmp</groupId>
       <artifactId>mmp-application-test</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>2.0.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
