@@ -21,13 +21,13 @@ package guru.mmp.application.security;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.common.exceptions.InvalidArgumentException;
-import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -458,6 +458,7 @@ public class SecurityService
    * @return the new internal user directory that was created for the organisation or
    *         <code>null</code> if no user directory was created
    */
+  @Transactional(rollbackFor = Exception.class)
   public UserDirectory createOrganisation(Organisation organisation, boolean createUserDirectory)
     throws DuplicateOrganisationException, SecurityException
   {
@@ -467,27 +468,17 @@ public class SecurityService
       throw new InvalidArgumentException("organisation.name");
     }
 
-    // Retrieve the Transaction Manager
-    TransactionManager transactionManager = TransactionManager.getTransactionManager();
-    javax.transaction.Transaction existingTransaction = null;
-
     try
     {
-      UUID organisationId = IDGenerator.nextUUID(dataSource);
-
-      if (transactionManager.isTransactionActive())
-      {
-        existingTransaction = transactionManager.beginNew();
-      }
-      else
-      {
-        transactionManager.begin();
-      }
+      UUID organisationId = idGenerator.nextUUID();
 
       UserDirectory userDirectory = null;
 
       try (Connection connection = dataSource.getConnection())
       {
+        String createOrganisationSQL =
+            "INSERT INTO SECURITY.ORGANISATIONS (ID, NAME, STATUS) VALUES (?, ?, ?)";
+
         try (PreparedStatement statement = connection.prepareStatement(createOrganisationSQL))
         {
           if (organisationWithNameExists(connection, organisation.getName()))
@@ -508,9 +499,16 @@ public class SecurityService
           }
         }
 
+        String addUserDirectoryToOrganisationSQL =
+            "INSERT INTO SECURITY.USER_DIRECTORY_TO_ORGANISATION_MAP "
+            + "(USER_DIRECTORY_ID, ORGANISATION_ID) VALUES (?, ?)";
+
         if (createUserDirectory)
         {
           userDirectory = newInternalUserDirectoryForOrganisation(organisation);
+
+          String createUserDirectorySQL = "INSERT INTO SECURITY.USER_DIRECTORIES "
+              + " (ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
 
           try (PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
           {
@@ -559,8 +557,6 @@ public class SecurityService
         }
       }
 
-      transactionManager.commit();
-
       organisation.setId(organisationId);
 
       try
@@ -576,47 +572,12 @@ public class SecurityService
     }
     catch (DuplicateOrganisationException e)
     {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error(String.format(
-            "Failed to rollback the transaction while creating the organisation (%s)",
-            organisation.getId()), f);
-      }
-
       throw e;
     }
     catch (Throwable e)
     {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error(String.format(
-            "Failed to rollback the transaction while creating the organisation (%s)",
-            organisation.getId()), f);
-      }
-
       throw new SecurityException(String.format("Failed to create the organisation (%s): %s",
           organisation.getId(), e.getMessage()), e);
-    }
-    finally
-    {
-      try
-      {
-        transactionManager.resume(existingTransaction);
-      }
-      catch (Throwable e)
-      {
-        logger.error(String.format(
-            "Failed to resume the transaction while creating the organisation (%s)",
-            organisation.getId()), e);
-      }
     }
   }
 
@@ -1815,6 +1776,9 @@ public class SecurityService
   public List<UserDirectoryType> getUserDirectoryTypes()
     throws SecurityException
   {
+    String getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS, "
+        + "UDT.ADMINISTRATION_CLASS FROM SECURITY.USER_DIRECTORY_TYPES UDT";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUserDirectoryTypesSQL))
     {
@@ -2325,14 +2289,6 @@ public class SecurityService
   private void buildStatements(String schemaPrefix)
     throws SQLException
   {
-    // addUserDirectoryToOrganisationSQL
-    addUserDirectoryToOrganisationSQL = "INSERT INTO " + schemaPrefix
-        + "USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES (?, ?)";
-
-    // createOrganisationSQL
-    createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS "
-        + "(ID, NAME, STATUS) VALUES (?, ?, ?)";
-
     // deleteOrganisationSQL
     deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O WHERE O.ID=?";
 
@@ -2402,10 +2358,6 @@ public class SecurityService
     // getUserDirectorySQL
     getUserDirectorySQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM "
         + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
-
-    // getUserDirectoryTypesSQL
-    getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS, "
-        + "UDT.ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
   }
 
   /**
@@ -2550,7 +2502,7 @@ public class SecurityService
   {
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId(IDGenerator.nextUUID(dataSource));
+    userDirectory.setId(idGenerator.nextUUID());
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
     userDirectory.setName(organisation.getName() + " User Directory");
 
