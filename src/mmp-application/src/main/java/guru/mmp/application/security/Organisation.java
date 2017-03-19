@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Entity
-@Table(schema = "MMP", name = "ORGANISATIONS")
+@Table(schema = "SECURITY", name = "ORGANISATIONS")
 public class Organisation
   implements java.io.Serializable
 {

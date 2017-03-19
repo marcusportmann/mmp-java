@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package guru.mmp.application.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHandlerResolver;
 import guru.mmp.common.util.DateUtil;
 import guru.mmp.common.xml.DtdJarResolver;
@@ -26,14 +25,14 @@ import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -50,8 +49,7 @@ import java.util.stream.Collectors;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
 public class CodesService
   implements ICodesService
 {
@@ -64,6 +62,12 @@ public class CodesService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CodesService.class);
 
+  /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
+
   /* The code providers. */
   private List<ICodeProvider> codeProviders;
 
@@ -74,7 +78,7 @@ public class CodesService
   private List<CodeProviderConfig> codeProviderConfigs;
 
   /* Codes DAO */
-  @Inject
+  @Autowired
   private ICodesDAO codesDAO;
 
   /**
@@ -392,28 +396,7 @@ public class CodesService
       boolean retrieveCodes)
     throws CodesServiceException
   {
-    try
-    {
-      CodeCategory codeCategory = codesDAO.getCodeCategory(id);
-
-      if (codeCategory != null)
-      {
-        if (codeCategory.getCategoryType() == CodeCategoryType.LOCAL_STANDARD)
-        {
-          if (retrieveCodes)
-          {
-            codeCategory.setCodes(getCodesForCodeCategory(id));
-          }
-        }
-      }
-
-      return codeCategory;
-    }
-    catch (Throwable e)
-    {
-      throw new CodesServiceException(String.format("Failed to retrieve the code category (%s)",
-          id), e);
-    }
+    return getCodeCategory(id, retrieveCodes);
   }
 
   /**
@@ -698,9 +681,6 @@ public class CodesService
 
     try
     {
-      // Initialise the configuration for the Codes Service
-      initConfiguration();
-
       // Read the codes configuration
       readCodeProviderConfigurations();
 
@@ -962,8 +942,8 @@ public class CodesService
           // Create an instance of the code provider
           ICodeProvider codeProvider = (ICodeProvider) constructor.newInstance(codeProviderConfig);
 
-          // Perform container-based dependency injection on the code provider
-          CDIUtil.inject(codeProvider);
+          // Perform dependency injection on the code provider
+          applicationContext.getAutowireCapableBeanFactory().autowireBean(codeProvider);
 
           codeProviders.add(codeProvider);
         }
@@ -983,14 +963,6 @@ public class CodesService
   }
 
   /**
-   * Initialise the configuration for the Codes Service.
-   *
-   * @throws CodesServiceException
-   */
-  private void initConfiguration()
-    throws CodesServiceException {}
-
-  /**
    * Read the code provider configurations from all the <i>META-INF/CodeProviders.xml</i>
    * configuration files that can be found on the classpath.
    */
@@ -1005,7 +977,7 @@ public class CodesService
 
       // Load the code provider configuration files from the classpath
       Enumeration<URL> codeProviderConfigurationFiles = classLoader.getResources(
-        CODE_PROVIDERS_CONFIGURATION_PATH);
+          CODE_PROVIDERS_CONFIGURATION_PATH);
 
       while (codeProviderConfigurationFiles.hasMoreElements())
       {

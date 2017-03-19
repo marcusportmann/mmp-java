@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,24 @@ import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.test.ApplicationClassRunner;
-
+import guru.mmp.application.test.ApplicationConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import static org.junit.Assert.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesServiceTest</code> class contains the implementation of the JUnit
@@ -47,11 +49,18 @@ import javax.inject.Inject;
  * @author Marcus Portmann
  */
 @RunWith(ApplicationClassRunner.class)
+@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class CodesServiceTest
 {
   private static int codeCategoryCount;
   private static int codeCount;
-  @Inject
+
+  /**
+   * The Codes Service.
+   */
+  @Autowired
   private ICodesService codesService;
 
   /**
@@ -70,6 +79,10 @@ public class CodesServiceTest
     CodeCategory retrievedCodeCategory = codesService.getCodeCategory(codeCategory.getId(), false);
 
     compareCodeCategories(codeCategory, retrievedCodeCategory, true);
+
+    Code codeWithoutId = getTestCodeWithoutIdDetails(codeCategory.getId());
+
+    codesService.createCode(codeWithoutId);
 
     Code code = getTestCodeDetails(codeCategory.getId());
 
@@ -257,6 +270,18 @@ public class CodesServiceTest
 
     Code code = new Code();
     code.setId("Test Code Id " + codeCount);
+    code.setCategoryId(codeCategoryId);
+    code.setName("Test Code Name " + codeCount);
+    code.setValue("Test Code Value " + codeCount);
+
+    return code;
+  }
+
+  private static synchronized Code getTestCodeWithoutIdDetails(UUID codeCategoryId)
+  {
+    codeCount++;
+
+    Code code = new Code();
     code.setCategoryId(codeCategoryId);
     code.setName("Test Code Name " + codeCount);
     code.setValue("Test Code Value " + codeCount);

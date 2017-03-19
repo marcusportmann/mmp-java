@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,15 @@ import guru.mmp.common.util.JNDIUtil;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.naming.ldap.LdapName;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -75,11 +78,17 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LDAPUserDirectory.class);
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
   @SuppressWarnings("unused")
   private LdapName baseDN;
   private String bindDN;
   private String bindPassword;
-  private String getFunctionCodesForGroupsSQL;
   private LdapName groupBaseDN;
   private String groupDescriptionAttribute;
   private String groupMemberAttribute;
@@ -1301,6 +1310,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
        *       would to be to use the ANY operator in the WHERE clause but this is not
        *       supported by H2.
        */
+      String getFunctionCodesForGroupsSQL = "SELECT DISTINCT F.CODE FROM SECURITY.FUNCTIONS F "
+          + "INNER JOIN SECURITY.FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
+          + "INNER JOIN SECURITY.ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID "
+          + "INNER JOIN SECURITY.GROUPS G ON G.ID = RTGM.GROUP_ID";
 
       StringBuilder buffer = new StringBuilder(getFunctionCodesForGroupsSQL);
       buffer.append(" WHERE G.USER_DIRECTORY_ID='").append(getUserDirectoryId());
@@ -1320,7 +1333,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<String> functionCodes = new ArrayList<>();
 
-      try (Connection connection = getDataSource().getConnection();
+      try (Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement())
       {
         try (ResultSet rs = statement.executeQuery(buffer.toString()))
@@ -2254,23 +2267,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       JNDIUtil.close(dirContext);
     }
-  }
-
-  /**
-   * Build the SQL statements for the user directory.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects for the user directory
-   */
-  @Override
-  protected void buildStatements(String schemaPrefix)
-  {
-    super.buildStatements(schemaPrefix);
-
-    // getFunctionCodesForGroupsSQL
-    getFunctionCodesForGroupsSQL = "SELECT DISTINCT F.CODE FROM " + schemaPrefix + "FUNCTIONS F "
-        + "INNER JOIN " + schemaPrefix + "FUNCTION_TO_ROLE_MAP FTRM ON FTRM.FUNCTION_ID = F.ID "
-        + "INNER JOIN " + schemaPrefix + "ROLE_TO_GROUP_MAP RTGM ON RTGM.ROLE_ID = FTRM.ROLE_ID "
-        + "INNER JOIN " + schemaPrefix + "GROUPS G ON G.ID = RTGM.GROUP_ID";
   }
 
   private Group buildGroupFromSearchResult(SearchResult searchResult)

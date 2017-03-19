@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.TransactionManager;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -44,14 +43,7 @@ public class UserTransactionTracker
 {
   private static final long serialVersionUID = 1000000;
   private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
-      new ThreadLocal<Map<Transaction, StackTraceElement[]>>()
-  {
-    @Override
-    protected Map<Transaction, StackTraceElement[]> initialValue()
-    {
-      return new ConcurrentHashMap<>();
-    }
-  };
+      ThreadLocal.withInitial(ConcurrentHashMap::new);
 
   /**
    * Returns the active transaction stack traces for the current thread.
@@ -72,8 +64,6 @@ public class UserTransactionTracker
    * @param proxy  the proxy
    *
    * @return the results of invoking the method
-   *
-   * @throws Throwable
    */
   @Override
   public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy)
@@ -107,27 +97,6 @@ public class UserTransactionTracker
         }
 
         case "commit":
-        {
-          Transaction beforeTransaction = getCurrentTransaction();
-
-          try
-          {
-            return proxy.invokeSuper(obj, args);
-          }
-          finally
-          {
-            Transaction afterTransaction = getCurrentTransaction();
-
-            if ((beforeTransaction != null) && (afterTransaction == null))
-            {
-              if (getActiveTransactionStackTraces().containsKey(beforeTransaction))
-              {
-                getActiveTransactionStackTraces().remove(beforeTransaction);
-              }
-            }
-          }
-        }
-
         case "rollback":
         {
           Transaction beforeTransaction = getCurrentTransaction();
@@ -172,7 +141,7 @@ public class UserTransactionTracker
   {
     try
     {
-      return TransactionManager.getTransactionManager().getTransaction();
+      return DatabaseTest.getTransactionManager().getTransaction();
     }
     catch (Throwable e)
     {

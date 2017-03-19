@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import java.io.Serializable;
 public class ServiceRegistryEntry
   implements Serializable
 {
+  private static final long serialVersionUID = 1000000;
+
   /**
    * The constant indicating that the web service implements the Client SSL security model.
    */
@@ -61,7 +63,6 @@ public class ServiceRegistryEntry
    * security model.
    */
   public static final int SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE = 1;
-  private static final long serialVersionUID = 1000000;
 
   /**
    * The endpoint for the web service.

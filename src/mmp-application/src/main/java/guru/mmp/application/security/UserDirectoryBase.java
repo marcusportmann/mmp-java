@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@ package guru.mmp.application.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.persistence.DataAccessObject;
-import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.Base64;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,12 +38,6 @@ import java.util.UUID;
 abstract class UserDirectoryBase
   implements IUserDirectory
 {
-  private String createGroupSQL;
-  private DataSource dataSource;
-  private String databaseCatalogSeparator;
-  private String deleteGroupSQL;
-  private String getGroupIdSQL;
-
   /**
    * The key-value configuration parameters for the user directory.
    */
@@ -71,46 +60,6 @@ abstract class UserDirectoryBase
   {
     this.userDirectoryId = userDirectoryId;
     this.parameters = parameters;
-
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new SecurityException(String.format(
-          "Failed to initialise the user directory (%s): Failed to retrieve the application data "
-          + "source using the JNDI names (java:app/jdbc/ApplicationDataSource) and "
-          + "(java:comp/env/jdbc/ApplicationDataSource)", userDirectoryId));
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      databaseCatalogSeparator = DAOUtil.getSchemaSeparator(dataSource);
-
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + databaseCatalogSeparator;
-
-      // Build the SQL statements
-      buildStatements(schemaPrefix);
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException(String.format(
-          "Failed to initialise the the user directory (%s): %s", userDirectoryId, e.getMessage()),
-          e);
-    }
   }
 
   /**
@@ -172,6 +121,9 @@ abstract class UserDirectoryBase
   UUID deleteGroup(Connection connection, String groupName)
     throws SecurityException
   {
+    String deleteGroupSQL = "DELETE FROM SECURITY.GROUPS G WHERE G.USER_DIRECTORY_ID=? "
+        + "AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+
     try (PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
     {
       UUID groupId = getGroupId(connection, groupName);
@@ -202,62 +154,6 @@ abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the database catalog separator.
-   *
-   * @return the database catalog separator
-   */
-  String getDatabaseCatalogSeparator()
-  {
-    return databaseCatalogSeparator;
-  }
-
-  /**
-   * Build the SQL statements for the user directory.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects for the user directory
-   */
-  protected void buildStatements(String schemaPrefix)
-  {
-    // createGroupSQL
-    createGroupSQL = "INSERT INTO " + schemaPrefix
-        + "GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES (?, ?, ?)";
-
-    // deleteGroupSQL
-    deleteGroupSQL = "DELETE FROM " + schemaPrefix + "GROUPS G WHERE G.USER_DIRECTORY_ID=? "
-        + "AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    // getGroupIdSQL
-    getGroupIdSQL = "SELECT G.ID FROM " + schemaPrefix + "GROUPS G WHERE G"
-        + ".USER_DIRECTORY_ID=? AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
-  }
-
-  /**
-   * Create a new security group.
-   * <p/>
-   * If a security group with the specified group name already exists the ID for this existing
-   * security group will be returned.
-   *
-   * @param connection the existing database connection
-   * @param groupName  the group name uniquely identifying the security group
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
-   */
-  protected UUID createGroup(Connection connection, String groupName)
-    throws SecurityException
-  {
-    try
-    {
-      return createGroup(connection, IDGenerator.nextUUID(dataSource), groupName);
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityException(String.format(
-          "Failed to create the security group (%s) for the user directory (%s): %s", groupName,
-          getUserDirectoryId(), e.getMessage()), e);
-    }
-  }
-
-  /**
    * Create a new security group.
    * <p/>
    * If a security group with the specified group name already exists the ID for this existing
@@ -273,6 +169,9 @@ abstract class UserDirectoryBase
   protected UUID createGroup(Connection connection, UUID groupId, String groupName)
     throws SecurityException
   {
+    String createGroupSQL =
+        "INSERT INTO SECURITY.GROUPS (ID, USER_DIRECTORY_ID, GROUPNAME) VALUES (?, ?, ?)";
+
     try (PreparedStatement statement = connection.prepareStatement(createGroupSQL))
     {
       UUID existingGroupId = getGroupId(connection, groupName);
@@ -301,16 +200,6 @@ abstract class UserDirectoryBase
           "Failed to create the security group (%s) with the ID (%s) for the user directory (%s): %s",
           groupName, groupId, getUserDirectoryId(), e.getMessage()), e);
     }
-  }
-
-  /**
-   * Returns the data source for the user directory.
-   *
-   * @return the data source for the user directory
-   */
-  protected DataSource getDataSource()
-  {
-    return dataSource;
   }
 
   /**
@@ -351,6 +240,9 @@ abstract class UserDirectoryBase
   private UUID getGroupId(Connection connection, String groupName)
     throws SecurityException
   {
+    String getGroupIdSQL = "SELECT G.ID FROM SECURITY.GROUPS G WHERE G.USER_DIRECTORY_ID=? AND "
+        + "UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+
     try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
     {
       statement.setObject(1, getUserDirectoryId());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,21 @@ package guru.mmp.common.service.ws;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.xml.ws.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 //~--- JDK imports ------------------------------------------------------------
+
+//import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
 
 /**
  * The <code>ServiceRegistry</code> class provides an implementation of a "Service Registry" which
@@ -45,33 +40,23 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@org.springframework.stereotype.Service
 public class ServiceRegistry
   implements IServiceRegistry
 {
-  /* Logger */
-  @SuppressWarnings("unused")
-  private static final Logger logger = LoggerFactory.getLogger(ServiceRegistry.class);
   private ConcurrentMap<String, Class<?>> cachedWebServiceClientClasses = new ConcurrentHashMap<>();
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
   private DataSource dataSource;
-  private String getNumberOfServiceRegistryEntriesSQL;
-  private String getServiceRegistryEntrySQL;
 
   /**
    * Constructs a new <code>Service Registry</code>.
    */
   public ServiceRegistry() {}
-
-  /**
-   * Returns the <code>DataSource</code> for the <code>Service Registry</code>.
-   *
-   * @return the <code>DataSource</code> for the <code>Service Registry</code>
-   */
-  public DataSource getDataSource()
-  {
-    return dataSource;
-  }
 
   /**
    * Returns the number of <code>ServiceRegistryEntry</code> instances containing the
@@ -83,6 +68,9 @@ public class ServiceRegistry
   public int getNumberOfServiceRegistryEntries()
     throws ServiceRegistryException
   {
+    String getNumberOfServiceRegistryEntriesSQL =
+        "SELECT COUNT(NAME) FROM SERVICE_REGISTRY.SERVICE_REGISTRY";
+
     try (Connection connection = getConnection();
       PreparedStatement statement = connection.prepareStatement(
           getNumberOfServiceRegistryEntriesSQL))
@@ -207,6 +195,10 @@ public class ServiceRegistry
           + "): The specified name is invalid");
     }
 
+    String getServiceRegistryEntrySQL = "SELECT NAME, SECURITY_TYPE, REQUIRES_USER_TOKEN, "
+        + "SUPPORTS_COMPRESSION, ENDPOINT, SERVICE_CLASS, WSDL_LOCATION, USERNAME, PASSWORD FROM "
+        + "SERVICE_REGISTRY.SERVICE_REGISTRY WHERE NAME=?";
+
     // Store the value in the database
     try (Connection connection = getConnection();
       PreparedStatement statement = connection.prepareStatement(getServiceRegistryEntrySQL))
@@ -235,55 +227,6 @@ public class ServiceRegistry
   }
 
   /**
-   * Initialise the Service Registry.
-   */
-  @PostConstruct
-  public void init()
-  {
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new ServiceRegistryException(
-          "Failed to retrieve the application data source using the JNDI names "
-          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
-          dataSource);
-
-      // Build the SQL statements for the DAO
-      buildStatements(schemaPrefix);
-    }
-    catch (Exception e)
-    {
-      throw new ServiceRegistryException("Failed to initialise the Service Registry: "
-          + e.getMessage(), e);
-    }
-    catch (Throwable e)
-    {
-      throw new ServiceRegistryException("Failed to initialise the Service Registry: "
-          + e.getMessage());
-    }
-  }
-
-  /**
    * Set the <code>DataSource</code> for the <code>Service Registry</code>.
    *
    * @param dataSource the <code>DataSource</code> for the <code>Service Registry</code>
@@ -291,26 +234,6 @@ public class ServiceRegistry
   public void setDataSource(DataSource dataSource)
   {
     this.dataSource = dataSource;
-  }
-
-  /**
-   * Generate the SQL statements.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects
-   *
-   * @throws SQLException if a database error occurs
-   */
-  protected void buildStatements(String schemaPrefix)
-    throws SQLException
-  {
-    // getNumberOfServiceRegistryEntriesSQL
-    getNumberOfServiceRegistryEntriesSQL = "SELECT COUNT(NAME) FROM " + schemaPrefix
-        + "SERVICE_REGISTRY";
-
-    // getServiceRegistryEntrySQL
-    getServiceRegistryEntrySQL = "SELECT NAME, SECURITY_TYPE, REQUIRES_USER_TOKEN," + " "
-        + "SUPPORTS_COMPRESSION, ENDPOINT, SERVICE_CLASS, WSDL_LOCATION, USERNAME, PASSWORD FROM "
-        + schemaPrefix + "SERVICE_REGISTRY WHERE NAME=?";
   }
 
   /**

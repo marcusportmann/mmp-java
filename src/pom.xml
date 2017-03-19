@@ -18,6 +18,8 @@
     <module>mmp-common</module>
     <module>mmp-application</module>
     <module>mmp-application-test</module>
+
+    <!--
     <module>mmp-application-wicket</module>
     <module>mmp-application-scheduler</module>
     <module>mmp-application-scheduler-wicket</module>
@@ -28,6 +30,7 @@
     <module>mmp-application-sms</module>
     <module>mmp-sample-wicket</module>
     <module>mmp-sample-wicket-client</module>
+    -->
   </modules>
 
 </project>

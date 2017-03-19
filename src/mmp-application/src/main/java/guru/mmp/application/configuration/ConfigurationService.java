@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,12 @@ package guru.mmp.application.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,23 +39,16 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
 public class ConfigurationService
   implements IConfigurationService
 {
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
-  private String createValueSQL;
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
   private DataSource dataSource;
-  private String getValueSQL;
-  private String keyExistsSQL;
-  private String updateValueSQL;
-  private String getFilteredConfigurationValuesSQL;
-  private String getNumberOfFilteredConfigurationEntriesSQL;
-  private String getConfigurationValuesSQL;
-  private String getNumberOfConfigurationEntriesSQL;
-  private String removeValueSQL;
 
   /**
    * Retrieve the binary configuration value.
@@ -229,6 +217,12 @@ public class ConfigurationService
   public List<ConfigurationValue> getFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
+    String getConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM "
+        + "CONFIGURATION.CONFIGURATION C ORDER BY C.KEY";
+
+    String getFilteredConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM "
+        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?) ORDER BY C.KEY";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getConfigurationValuesSQL
@@ -375,6 +369,12 @@ public class ConfigurationService
   public int getNumberOfFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
+    String getNumberOfConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM "
+        + "CONFIGURATION.CONFIGURATION C";
+
+    String getNumberOfFilteredConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM "
+        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getNumberOfConfigurationEntriesSQL
@@ -417,6 +417,9 @@ public class ConfigurationService
   public String getString(String key)
     throws ConfigurationNotFoundException, ConfigurationException
   {
+    String getValueSQL =
+        "SELECT C.VALUE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) = ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getValueSQL))
     {
@@ -455,6 +458,9 @@ public class ConfigurationService
   public String getString(String key, String defaultValue)
     throws ConfigurationException
   {
+    String getValueSQL =
+        "SELECT C.VALUE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) = ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getValueSQL))
     {
@@ -477,51 +483,6 @@ public class ConfigurationService
       throw new ConfigurationException(String.format(
           "Failed to retrieve the String configuration value with the key (%s): %s", key,
           e.getMessage()), e);
-    }
-  }
-
-  /**
-   * Initialise the Configuration Service.
-   */
-  @PostConstruct
-  public void init()
-  {
-    logger.info("Initialising the Configuration Service");
-
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new RuntimeException(
-          "Failed to retrieve the application data source using the JNDI names "
-          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
-          dataSource);
-
-      // Build the SQL statements
-      buildStatements(schemaPrefix);
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialise the Configuration Service", e);
     }
   }
 
@@ -555,6 +516,8 @@ public class ConfigurationService
   public void removeValue(String key)
     throws ConfigurationException
   {
+    String removeValueSQL = "DELETE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(removeValueSQL))
     {
@@ -585,6 +548,9 @@ public class ConfigurationService
   public void setValue(String key, Object value, String description)
     throws ConfigurationException
   {
+    String updateValueSQL = "UPDATE CONFIGURATION.CONFIGURATION C SET VALUE = ?, DESCRIPTION = ? "
+        + "WHERE (UPPER(C.KEY) = ?)";
+
     try (Connection connection = dataSource.getConnection())
     {
       String stringValue;
@@ -630,51 +596,12 @@ public class ConfigurationService
     }
   }
 
-  /**
-   * Generate the SQL statements.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects
-   */
-  private void buildStatements(String schemaPrefix)
-    throws SQLException
-  {
-    // createValueSQL
-    createValueSQL = "INSERT INTO " + schemaPrefix + "CONFIG (KEY, VALUE, DESCRIPTION) "
-        + "VALUES (?, ?, ?)";
-
-    // getConfigurationValuesSQL
-    getConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM " + schemaPrefix
-        + "CONFIG C ORDER BY C.KEY";
-
-    // getFilteredConfigurationValuesSQL
-    getFilteredConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM " + schemaPrefix
-        + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?) ORDER BY C.KEY";
-
-    // getNumberOfConfigurationEntriesSQL
-    getNumberOfConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix + "CONFIG C";
-
-    // getNumberOfFilteredConfigurationEntriesSQL
-    getNumberOfFilteredConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix
-        + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
-
-    // getValueSQL
-    getValueSQL = "SELECT C.VALUE FROM " + schemaPrefix + "CONFIG C WHERE (UPPER(C.KEY) = ?)";
-
-    // keyExistsSQL
-    keyExistsSQL = "SELECT COUNT(C.KEY) FROM " + schemaPrefix
-        + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
-
-    // removeValueSQL
-    removeValueSQL = "DELETE FROM " + schemaPrefix + "CONFIG C WHERE (UPPER(C.KEY) LIKE ?)";
-
-    // updateValueSQL
-    updateValueSQL = "UPDATE " + schemaPrefix + "CONFIG C SET VALUE = ?, DESCRIPTION = ? "
-        + "WHERE (UPPER(C.KEY) = ?)";
-  }
-
   private void createValue(Connection connection, String key, Object value, String description)
     throws SQLException, ConfigurationException
   {
+    String createValueSQL = "INSERT INTO CONFIGURATION.CONFIGURATION (KEY, VALUE, DESCRIPTION) "
+        + "VALUES (?, ?, ?)";
+
     String stringValue;
 
     if (value instanceof String)
@@ -704,6 +631,9 @@ public class ConfigurationService
   private boolean keyExists(Connection connection, String key)
     throws SQLException
   {
+    String keyExistsSQL =
+        "SELECT COUNT(C.KEY) FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
+
     try (PreparedStatement statement = connection.prepareStatement(keyExistsSQL))
     {
       statement.setString(1, key.toUpperCase());

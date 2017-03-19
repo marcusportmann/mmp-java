@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package guru.mmp.application.test;
 
 import guru.mmp.common.crypto.CryptoException;
 import guru.mmp.common.crypto.CryptoUtils;
-import org.apache.ws.security.util.UUIDGenerator;
 import org.junit.Test;
 
 import javax.crypto.*;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import org.junit.BeforeClass;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import javax.sql.XADataSource;
 import javax.transaction.TransactionManager;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -48,6 +47,18 @@ import java.util.logging.Logger;
  */
 public abstract class DatabaseTest extends JNDITest
 {
+  private static TransactionManager transactionManager;
+
+  /**
+   * This class retrieves the TransactionManager implementation from JNDI.
+   *
+   * @return the TransactionManger
+   */
+  public static javax.transaction.TransactionManager getTransactionManager()
+  {
+    return transactionManager;
+  }
+
   /**
    * Initialise the in-memory database and return a data source that can be used to interact with
    * the database.
@@ -77,26 +88,23 @@ public abstract class DatabaseTest extends JNDITest
       jdbcDataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
           + ";MODE=DB2;DB_CLOSE_DELAY=-1;" + "DB_CLOSE_ON_EXIT=FALSE");
 
-      Runtime.getRuntime().addShutdownHook(new Thread()
+      Runtime.getRuntime().addShutdownHook(new Thread(() ->
           {
-            @Override
-            public void run()
+            try
             {
-              try
+              try (Connection connection = jdbcDataSource.getConnection();
+                Statement statement = connection.createStatement())
               {
-                try (Connection connection = jdbcDataSource.getConnection();
-                  Statement statement = connection.createStatement())
-                {
-                  statement.executeUpdate("SHUTDOWN");
-                }
-              }
-              catch (Throwable e)
-              {
-                throw new RuntimeException("Failed to shutdown the in-memory application database",
-                    e);
+                statement.executeUpdate("SHUTDOWN");
               }
             }
-          });
+            catch (Throwable e)
+            {
+              throw new RuntimeException("Failed to shutdown the in-memory application database",
+                  e);
+            }
+          }
+          ));
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the
@@ -148,7 +156,7 @@ public abstract class DatabaseTest extends JNDITest
       atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
           + "-DataSource");
 
-      atomikosDataSourceBean.setXaDataSource((XADataSource) jdbcDataSource);
+      atomikosDataSourceBean.setXaDataSource(jdbcDataSource);
 
       atomikosDataSourceBean.setMinPoolSize(5);
 
@@ -207,8 +215,7 @@ public abstract class DatabaseTest extends JNDITest
       transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
       transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
 
-      TransactionManager transactionManager =
-          (TransactionManager) transactionManagerEnhancer.create();
+      transactionManager = (TransactionManager) transactionManagerEnhancer.create();
 
       ic.bind("comp/TransactionManager", transactionManager);
       ic.bind("jboss/TransactionManager", transactionManager);

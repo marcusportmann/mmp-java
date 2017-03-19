@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,13 @@ package guru.mmp.application.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.common.persistence.DAOException;
-import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.persistence.DataAccessObject;
-import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
@@ -43,38 +40,22 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Repository
 public class CodesDAO
   implements ICodesDAO
 {
-  private String cachedCodeCategoryExistsSQL;
-  private String codeCategoryExistsSQL;
-  private String createCachedCodeCategorySQL;
-  private String createCachedCodeSQL;
-  private String createCodeCategorySQL;
-  private String createCodeSQL;
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
 
   /**
-   * The data source used to provide connections to the database.
+   * The ID Generator.
    */
-  private DataSource dataSource;
-  private String deleteCachedCodeCategorySQL;
-  private String deleteCodeCategorySQL;
-  private String deleteCodeSQL;
-  private String getCachedCodeCategoryCachedSQL;
-  private String getCachedCodeCategorySQL;
-  private String getCachedCodesForCachedCodeCategorySQL;
-  private String getCodeCategoriesNoDataSQL;
-  private String getCodeCategoriesSQL;
-  private String getCodeCategoryCacheExpirySQL;
-  private String getCodeCategorySQL;
-  private String getCodeSQL;
-  private String getCodesForCodeCategorySQL;
-  private String getNumberOfCodeCategoriesSQL;
-  private String getNumberOfCodesForCodeCategorySQL;
-  private String updateCodeCategorySQL;
-  private String updateCodeSQL;
+  @Autowired
+  private IDGenerator idGenerator;
 
   /**
    * Constructs a new <code>CodesDAO</code>.
@@ -92,6 +73,9 @@ public class CodesDAO
   public boolean cachedCodeCategoryExists(UUID id)
     throws DAOException
   {
+    String cachedCodeCategoryExistsSQL = "SELECT CCC.ID FROM CODES.CACHED_CODE_CATEGORIES CCC "
+        + "WHERE CCC.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(cachedCodeCategoryExistsSQL))
     {
@@ -120,6 +104,8 @@ public class CodesDAO
   public boolean codeCategoryExists(UUID id)
     throws DAOException
   {
+    String codeCategoryExistsSQL = "SELECT CC.ID FROM CODES.CODE_CATEGORIES CC WHERE CC.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(codeCategoryExistsSQL))
     {
@@ -146,12 +132,15 @@ public class CodesDAO
   public void createCachedCode(Code code)
     throws DAOException
   {
+    String createCachedCodeSQL = "INSERT INTO CODES.CACHED_CODES (ID, CATEGORY_ID, NAME, VALUE) "
+        + "VALUES (?, ?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCachedCodeSQL))
     {
       if (StringUtil.isNullOrEmpty(code.getId()))
       {
-        statement.setString(1, String.valueOf(IDGenerator.nextUUID(dataSource)));
+        statement.setString(1, String.valueOf(idGenerator.nextUUID()));
       }
       else
       {
@@ -186,6 +175,10 @@ public class CodesDAO
   public void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws DAOException
   {
+    String createCachedCodeCategorySQL =
+        "INSERT INTO CODES.CACHED_CODE_CATEGORIES (ID, CODE_DATA, "
+        + "LAST_UPDATED, CACHED) VALUES (?, ?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCachedCodeCategorySQL))
     {
@@ -220,12 +213,15 @@ public class CodesDAO
   public void createCode(Code code)
     throws DAOException
   {
+    String createCodeSQL =
+        "INSERT INTO CODES.CODES (ID, CATEGORY_ID, NAME, VALUE) VALUES (?, ?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCodeSQL))
     {
       if (StringUtil.isNullOrEmpty(code.getId()))
       {
-        statement.setString(1, String.valueOf(IDGenerator.nextUUID(dataSource)));
+        statement.setString(1, String.valueOf(idGenerator.nextUUID()));
       }
       else
       {
@@ -260,6 +256,10 @@ public class CodesDAO
   public void createCodeCategory(CodeCategory codeCategory)
     throws DAOException
   {
+    String createCodeCategorySQL = "INSERT INTO CODES.CODE_CATEGORIES (ID, CATEGORY_TYPE, NAME, "
+        + "CODE_DATA, ENDPOINT, IS_ENDPOINT_SECURE, IS_CACHEABLE, CACHE_EXPIRY, UPDATED) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCodeCategorySQL))
     {
@@ -303,7 +303,6 @@ public class CodesDAO
             createCodeCategorySQL));
       }
 
-
     }
     catch (Throwable e)
     {
@@ -321,6 +320,9 @@ public class CodesDAO
   public void deleteCachedCodeCategory(UUID id)
     throws DAOException
   {
+    String deleteCachedCodeCategorySQL =
+        "DELETE FROM CODES.CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCachedCodeCategorySQL))
     {
@@ -350,6 +352,8 @@ public class CodesDAO
   public void deleteCode(UUID codeCategoryId, String id)
     throws DAOException
   {
+    String deleteCodeSQL = "DELETE FROM CODES.CODES C WHERE C.CATEGORY_ID=? AND C.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCodeSQL))
     {
@@ -380,6 +384,8 @@ public class CodesDAO
   public void deleteCodeCategory(UUID id)
     throws DAOException
   {
+    String deleteCodeCategorySQL = "DELETE FROM CODES.CODE_CATEGORIES CC WHERE CC.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCodeCategorySQL))
     {
@@ -411,6 +417,9 @@ public class CodesDAO
   public CachedCodeCategory getCachedCodeCategory(UUID id)
     throws DAOException
   {
+    String getCachedCodeCategorySQL = "SELECT CCC.ID, CCC.CODE_DATA, CCC.LAST_UPDATED, CCC.CACHED "
+        + "FROM CODES.CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCachedCodeCategorySQL))
     {
@@ -446,6 +455,10 @@ public class CodesDAO
   public List<Code> getCachedCodesForCachedCodeCategory(UUID id)
     throws DAOException
   {
+    String getCachedCodesForCachedCodeCategorySQL =
+        "SELECT CC.ID, CC.CATEGORY_ID, CC.NAME, CC.VALUE FROM CODES.CACHED_CODES CC "
+        + "WHERE CC.CATEGORY_ID=? ORDER BY CC.NAME";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
           getCachedCodesForCachedCodeCategorySQL))
@@ -484,6 +497,9 @@ public class CodesDAO
   public Code getCode(UUID codeCategoryId, String id)
     throws DAOException
   {
+    String getCodeSQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM CODES.CODES C "
+        + "WHERE C.CATEGORY_ID=? AND C.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeSQL))
     {
@@ -519,6 +535,14 @@ public class CodesDAO
   public List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws DAOException
   {
+    String getCodeCategoriesSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, "
+        + "CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+        + "CODES.CODE_CATEGORIES CC ORDER BY CC.NAME";
+
+    String getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.ENDPOINT, "
+        + "CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+        + "CODES.CODE_CATEGORIES CC ORDER BY CC.NAME";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(retrieveCodes
           ? getCodeCategoriesSQL
@@ -567,6 +591,10 @@ public class CodesDAO
   public CodeCategory getCodeCategory(UUID id)
     throws DAOException
   {
+    String getCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, "
+        + "CC.ENDPOINT, CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
+        + "CODES.CODE_CATEGORIES CC WHERE CC.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
     {
@@ -621,6 +649,8 @@ public class CodesDAO
   public int getNumberOfCodeCategories()
     throws DAOException
   {
+    String getNumberOfCodeCategoriesSQL = "SELECT COUNT(CC.ID) FROM CODES.CODE_CATEGORIES CC";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfCodeCategoriesSQL))
     {
@@ -655,6 +685,9 @@ public class CodesDAO
   public int getNumberOfCodesForCodeCategory(UUID id)
     throws DAOException
   {
+    String getNumberOfCodesForCodeCategorySQL =
+        "SELECT COUNT(C.ID) FROM CODES.CODES C WHERE C.CATEGORY_ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfCodesForCodeCategorySQL))
     {
@@ -679,50 +712,6 @@ public class CodesDAO
       throw new DAOException(String.format(
           "Failed to retrieve the number of codes for the code category (%s) in the database", id),
           e);
-    }
-  }
-
-  /**
-   * Initialise the <code>CodesDAO</code> instance.
-   */
-  @PostConstruct
-  public void init()
-  {
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source using the JNDI names "
-          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
-          dataSource);
-
-      // Build the SQL statements for the DAO
-      buildStatements(schemaPrefix);
-
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format("Failed to initialise the %s data access object: %s",
-          getClass().getName(), e.getMessage()), e);
     }
   }
 
@@ -770,6 +759,8 @@ public class CodesDAO
   public Code updateCode(Code code)
     throws DAOException
   {
+    String updateCodeSQL = "UPDATE CODES.CODES C SET NAME=?, VALUE=? WHERE C.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeSQL))
     {
@@ -804,6 +795,10 @@ public class CodesDAO
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws DAOException
   {
+    String updateCodeCategorySQL = "UPDATE CODES.CODE_CATEGORIES CC SET CATEGORY_TYPE=?, NAME=?, "
+        + "CODE_DATA=?, ENDPOINT=?, IS_ENDPOINT_SECURE=?, IS_CACHEABLE=?, CACHE_EXPIRY=?, UPDATED=? "
+        + "WHERE CC.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeCategorySQL))
     {
@@ -849,105 +844,6 @@ public class CodesDAO
     }
   }
 
-  /**
-   * Build the SQL statements for the DAO.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
-   */
-  protected void buildStatements(String schemaPrefix)
-  {
-    // cachedCodeCategoryExistsSQL
-    cachedCodeCategoryExistsSQL = "SELECT CCC.ID FROM " + schemaPrefix + "CACHED_CODE_CATEGORIES "
-        + "CCC WHERE CCC.ID=?";
-
-    // codeCategoryExistsSQL
-    codeCategoryExistsSQL = "SELECT CC.ID FROM " + schemaPrefix + "CODE_CATEGORIES CC WHERE CC"
-        + ".ID=?";
-
-    // createCachedCodeCategorySQL
-    createCachedCodeCategorySQL = "INSERT INTO " + schemaPrefix + "CACHED_CODE_CATEGORIES (ID, "
-        + "CODE_DATA, LAST_UPDATED, CACHED) VALUES (?, ?, ?, ?)";
-
-    // createCachedCodeSQL
-    createCachedCodeSQL = "INSERT INTO " + schemaPrefix + "CACHED_CODES (ID, CATEGORY_ID, NAME, "
-        + "VALUE) VALUES (?, ?, ?, ?)";
-
-    // createCodeCategorySQL
-    createCodeCategorySQL = "INSERT INTO " + schemaPrefix + "CODE_CATEGORIES (ID, CATEGORY_TYPE, "
-        + "NAME, CODE_DATA, ENDPOINT, IS_ENDPOINT_SECURE, IS_CACHEABLE, CACHE_EXPIRY, UPDATED) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    // createCodeSQL
-    createCodeSQL = "INSERT INTO " + schemaPrefix + "CODES (ID, CATEGORY_ID, NAME, VALUE) "
-        + "VALUES (?, ?, ?, ?)";
-
-    // deleteCachedCodeCategorySQL
-    deleteCachedCodeCategorySQL = "DELETE FROM " + schemaPrefix + "CACHED_CODE_CATEGORIES CCC "
-        + "WHERE CCC.ID=?";
-
-    // deleteCodeCategorySQL
-    deleteCodeCategorySQL = "DELETE FROM " + schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
-
-    // deleteCodeSQL
-    deleteCodeSQL = "DELETE FROM " + schemaPrefix + "CODES C WHERE C.CATEGORY_ID=? AND C.ID=?";
-
-    // getCachedCodeCategoryCachedSQL
-    getCachedCodeCategoryCachedSQL = "SELECT CCC.CACHED FROM " + schemaPrefix
-        + "CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
-
-    // getCachedCodeCategorySQL
-    getCachedCodeCategorySQL = "SELECT CCC.ID, CCC.CODE_DATA, CCC.LAST_UPDATED, CCC.CACHED FROM "
-        + schemaPrefix + "CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
-
-    // getCodeCategoriesSQL
-    getCodeCategoriesSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, CC.ENDPOINT, "
-        + "CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, " + "CC.UPDATED FROM "
-        + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
-
-    // getCodeCategoriesNoDataSQL
-    getCodeCategoriesNoDataSQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.ENDPOINT, "
-        + "CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
-        + schemaPrefix + "CODE_CATEGORIES CC ORDER BY CC.NAME";
-
-    // getCodeCategoryCacheExpirySQL
-    getCodeCategoryCacheExpirySQL = "SELECT CC.CACHE_EXPIRY FROM " + schemaPrefix
-        + "CODE_CATEGORIES CC WHERE CC.ID=?";
-
-    // getCodeCategorySQL
-    getCodeCategorySQL = "SELECT CC.ID, CC.CATEGORY_TYPE, CC.NAME, CC.CODE_DATA, CC.ENDPOINT, "
-        + "CC.IS_ENDPOINT_SECURE, CC.IS_CACHEABLE, CC.CACHE_EXPIRY, CC.UPDATED FROM "
-        + schemaPrefix + "CODE_CATEGORIES CC WHERE CC.ID=?";
-
-    // getCodesForCodeCategorySQL
-    getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM " + schemaPrefix
-        + "CODES C WHERE C.CATEGORY_ID=? ORDER BY C.NAME";
-
-    // getCachedCodesForCachedCodeCategorySQL
-    getCachedCodesForCachedCodeCategorySQL =
-        "SELECT CC.ID, CC.CATEGORY_ID, CC.NAME, CC.VALUE FROM " + schemaPrefix
-        + "CACHED_CODES CC WHERE CC.CATEGORY_ID=? ORDER BY CC.NAME";
-
-    // getCodeSQL
-    getCodeSQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM " + schemaPrefix
-        + "CODES C WHERE C.CATEGORY_ID=? AND C.ID=?";
-
-    // getNumberOfCodesForCodeCategorySQL
-    getNumberOfCodesForCodeCategorySQL = "SELECT COUNT(C.ID) FROM " + schemaPrefix + "CODES C "
-        + "WHERE C.CATEGORY_ID=?";
-
-    // getNumberOfCodeCategoriesSQL
-    getNumberOfCodeCategoriesSQL = "SELECT COUNT(CC.ID) FROM " + schemaPrefix
-        + "CODE_CATEGORIES CC";
-
-    // updateCodeCategorySQL
-    updateCodeCategorySQL = "UPDATE " + schemaPrefix
-        + "CODE_CATEGORIES CC SET CATEGORY_TYPE=?, NAME=?, CODE_DATA=?, ENDPOINT=?, "
-        + "IS_ENDPOINT_SECURE=?, IS_CACHEABLE=?, CACHE_EXPIRY=?, UPDATED=? WHERE CC.ID=?";
-
-    // updateCodeSQL
-    updateCodeSQL = "UPDATE " + schemaPrefix + "CODES C SET NAME=?, VALUE=? WHERE C.ID=?";
-  }
-
   private CachedCodeCategory getCachedCodeCategory(ResultSet rs)
     throws SQLException, UnsupportedEncodingException
   {
@@ -960,6 +856,9 @@ public class CodesDAO
   private Date getCachedCodeCategoryCached(Connection connection, UUID id)
     throws SQLException
   {
+    String getCachedCodeCategoryCachedSQL =
+        "SELECT CCC.CACHED FROM CODES.CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
+
     try (PreparedStatement statement = connection.prepareStatement(getCachedCodeCategoryCachedSQL))
     {
       statement.setObject(1, id);
@@ -1010,6 +909,9 @@ public class CodesDAO
   private Integer getCodeCategoryCacheExpiry(Connection connection, UUID id)
     throws SQLException
   {
+    String getCodeCategoryCacheExpirySQL =
+        "SELECT CC.CACHE_EXPIRY FROM CODES.CODE_CATEGORIES CC WHERE CC.ID=?";
+
     try (PreparedStatement statement = connection.prepareStatement(getCodeCategoryCacheExpirySQL))
     {
       statement.setObject(1, id);
@@ -1062,6 +964,9 @@ public class CodesDAO
   private List<Code> getCodesForCodeCategory(Connection connection, UUID id)
     throws SQLException
   {
+    String getCodesForCodeCategorySQL = "SELECT C.ID, C.CATEGORY_ID, C.NAME, C.VALUE FROM "
+        + "CODES.CODES C WHERE C.CATEGORY_ID=? ORDER BY C.NAME";
+
     try (PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
     {
       statement.setObject(1, id);

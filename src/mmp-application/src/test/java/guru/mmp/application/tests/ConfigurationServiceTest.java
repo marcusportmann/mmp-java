@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,16 @@ import guru.mmp.application.configuration.ConfigurationNotFoundException;
 import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.test.ApplicationClassRunner;
+import guru.mmp.application.test.ApplicationConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -40,6 +46,9 @@ import static org.junit.Assert.*;
  * @author Marcus Portmann
  */
 @RunWith(ApplicationClassRunner.class)
+@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class ConfigurationServiceTest
 {
   private static final String TEST_FILTERED_KEY = "TestFilteredKey";
@@ -57,7 +66,11 @@ public class ConfigurationServiceTest
   private static final byte[] TEST_BINARY_UPDATED_VALUE = "TestBinaryUpdatedValue".getBytes();
   private static final String TEST_BOOLEAN_KEY = "TestBooleanKey";
   private static final boolean TEST_BOOLEAN_VALUE = true;
-  @Inject
+
+  /**
+   * The Codes Service.
+   */
+  @Autowired
   private IConfigurationService configurationService;
 
   /**

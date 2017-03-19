@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,17 @@ package guru.mmp.application.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.configuration.IConfigurationService;
+import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.common.exceptions.InvalidArgumentException;
-import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.persistence.DataAccessObject;
-import guru.mmp.common.persistence.IDGenerator;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.lang.reflect.Constructor;
 import java.sql.Connection;
@@ -52,8 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
 public class SecurityService
   implements ISecurityService
 {
@@ -91,39 +87,25 @@ public class SecurityService
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
   private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
   private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
-  private String addUserDirectoryToOrganisationSQL;
-  private String createFunctionSQL;
-  private String createOrganisationSQL;
-  private String createUserDirectorySQL;
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
   private DataSource dataSource;
-  private String deleteFunctionSQL;
-  private String deleteOrganisationSQL;
-  private String deleteUserDirectorySQL;
-  private String getFilteredOrganisationsSQL;
-  private String getFilteredUserDirectoriesSQL;
-  private String getFunctionIdSQL;
-  private String getFunctionSQL;
-  private String getFunctionsSQL;
-  private String getInternalUserDirectoryIdForUserSQL;
-  private String getNumberOfFilteredOrganisationsSQL;
-  private String getNumberOfFilteredUserDirectoriesSQL;
-  private String getNumberOfOrganisationsSQL;
-  private String getNumberOfUserDirectoriesSQL;
-  private String getOrganisationIdsForUserDirectorySQL;
-  private String getOrganisationSQL;
-  private String getOrganisationsForUserDirectorySQL;
-  private String getOrganisationsSQL;
-  private String getUserDirectoriesForOrganisationSQL;
-  private String getUserDirectoriesSQL;
-  private String getUserDirectorySQL;
-  private String getUserDirectoryTypesSQL;
-  private String organisationExistsSQL;
-  private String organisationWithNameExistsSQL;
-  @Inject
+
+  /**
+   * The Configuration Service.
+   */
+  @Autowired
   private IConfigurationService configurationService;
-  private String updateFunctionSQL;
-  private String updateOrganisationSQL;
-  private String updateUserDirectorySQL;
+
+  /**
+   * The ID Generator.
+   */
+  @Autowired
+  private IDGenerator idGenerator;
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -405,6 +387,9 @@ public class SecurityService
       throw new InvalidArgumentException("function.name");
     }
 
+    String createFunctionSQL =
+        "INSERT INTO SECURITY.FUNCTIONS (ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createFunctionSQL))
     {
@@ -684,10 +669,13 @@ public class SecurityService
       throw new InvalidArgumentException("userDirectory.typeId");
     }
 
+    String createUserDirectorySQL = "INSERT INTO SECURITY.USER_DIRECTORIES "
+        + " (ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
     {
-      UUID userDirectoryId = IDGenerator.nextUUID(dataSource);
+      UUID userDirectoryId = idGenerator.nextUUID();
 
       statement.setObject(1, userDirectoryId);
       statement.setObject(2, userDirectory.getTypeId());
@@ -732,6 +720,8 @@ public class SecurityService
     {
       throw new InvalidArgumentException("code");
     }
+
+    String deleteFunctionSQL = "DELETE FROM SECURITY.FUNCTIONS F WHERE F.CODE=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteFunctionSQL))
@@ -1878,35 +1868,6 @@ public class SecurityService
   {
     try
     {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new RuntimeException(
-          "Failed to retrieve the application data source using the JNDI names "
-          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
-          dataSource);
-
-      // Build the SQL statements
-      buildStatements(schemaPrefix);
-
       // Initialise the configuration
       initConfiguration();
 
@@ -2129,6 +2090,9 @@ public class SecurityService
       throw new InvalidArgumentException("function.name");
     }
 
+    String updateFunctionSQL =
+        "UPDATE SECURITY.FUNCTIONS F SET NAME=?, DESCRIPTION=? WHERE F.CODE=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateFunctionSQL))
     {
@@ -2204,6 +2168,9 @@ public class SecurityService
     {
       throw new InvalidArgumentException("organisation.name");
     }
+
+    String updateOrganisationSQL =
+        "UPDATE SECURITY.ORGANISATIONS AS O SET NAME=?, STATUS=? WHERE O.ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateOrganisationSQL))
@@ -2284,6 +2251,9 @@ public class SecurityService
       throw new InvalidArgumentException("userDirectory.typeId");
     }
 
+    String updateUserDirectorySQL = "UPDATE SECURITY.USER_DIRECTORIES AS UD "
+        + "SET NAME=?, CONFIGURATION=? WHERE UD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateUserDirectorySQL))
     {
@@ -2359,20 +2329,9 @@ public class SecurityService
     addUserDirectoryToOrganisationSQL = "INSERT INTO " + schemaPrefix
         + "USER_DIRECTORY_TO_ORGANISATION_MAP (USER_DIRECTORY_ID, ORGANISATION_ID) VALUES (?, ?)";
 
-    // createFunctionSQL
-    createFunctionSQL = "INSERT INTO " + schemaPrefix + "FUNCTIONS "
-        + "(ID, CODE, NAME, DESCRIPTION) VALUES (?, ?, ?, ?)";
-
     // createOrganisationSQL
     createOrganisationSQL = "INSERT INTO " + schemaPrefix + "ORGANISATIONS "
         + "(ID, NAME, STATUS) VALUES (?, ?, ?)";
-
-    // createUserDirectorySQL
-    createUserDirectorySQL = "INSERT INTO " + schemaPrefix + "USER_DIRECTORIES "
-        + " (ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
-
-    // deleteFunctionSQL
-    deleteFunctionSQL = "DELETE FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
 
     // deleteOrganisationSQL
     deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O WHERE O.ID=?";
@@ -2388,9 +2347,6 @@ public class SecurityService
     getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
         + "ORGANISATIONS O " + "WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
 
-    // getFunctionIdSQL
-    getFunctionIdSQL = "SELECT F.ID FROM " + schemaPrefix + "FUNCTIONS F WHERE F.CODE=?";
-
     // getFunctionSQL
     getFunctionSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
         + "FUNCTIONS F WHERE F.CODE=?";
@@ -2398,10 +2354,6 @@ public class SecurityService
     // getFunctionsSQL
     getFunctionsSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
         + "FUNCTIONS F";
-
-    // getInternalUserDirectoryIdForUserSQL
-    getInternalUserDirectoryIdForUserSQL = "SELECT IU.USER_DIRECTORY_ID FROM " + schemaPrefix
-        + "INTERNAL_USERS IU WHERE UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     // getNumberOfFilteredOrganisationsSQL
     getNumberOfFilteredOrganisationsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix
@@ -2454,26 +2406,6 @@ public class SecurityService
     // getUserDirectoryTypesSQL
     getUserDirectoryTypesSQL = "SELECT UDT.ID, UDT.NAME, UDT.USER_DIRECTORY_CLASS, "
         + "UDT.ADMINISTRATION_CLASS FROM " + schemaPrefix + "USER_DIRECTORY_TYPES UDT";
-
-    // organisationExistsSQL
-    organisationExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O "
-        + "WHERE O.ID=?";
-
-    // organisationWithNameExistsSQL
-    organisationWithNameExistsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O "
-        + "WHERE (UPPER(O.NAME) LIKE ?)";
-
-    // updateFunctionSQL
-    updateFunctionSQL = "UPDATE " + schemaPrefix + "FUNCTIONS F "
-        + "SET NAME=?, DESCRIPTION=? WHERE F.CODE=?";
-
-    // updateOrganisationSQL
-    updateOrganisationSQL = "UPDATE " + schemaPrefix
-        + "ORGANISATIONS AS O SET NAME=?, STATUS=? WHERE O.ID=?";
-
-    // updateUserDirectorySQL
-    updateUserDirectorySQL = "UPDATE " + schemaPrefix + "USER_DIRECTORIES AS UD SET NAME=?, "
-        + "CONFIGURATION=? WHERE UD.ID=?";
   }
 
   /**
@@ -2511,6 +2443,8 @@ public class SecurityService
   private UUID getFunctionId(Connection connection, String code)
     throws SQLException
   {
+    String getFunctionIdSQL = "SELECT F.ID FROM SECURITY.FUNCTIONS F WHERE F.CODE=?";
+
     try (PreparedStatement statement = connection.prepareStatement(getFunctionIdSQL))
     {
       statement.setString(1, code);
@@ -2542,6 +2476,9 @@ public class SecurityService
   private UUID getInternalUserDirectoryIdForUser(String username)
     throws SecurityException
   {
+    String getInternalUserDirectoryIdForUserSQL = "SELECT IU.USER_DIRECTORY_ID FROM "
+        + "SECURITY.INTERNAL_USERS IU WHERE UPPER(IU.USERNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
           getInternalUserDirectoryIdForUserSQL))
@@ -2642,6 +2579,8 @@ public class SecurityService
   private boolean organisationExists(Connection connection, UUID id)
     throws SecurityException
   {
+    String organisationExistsSQL = "SELECT COUNT(O.ID) FROM SECURITY.ORGANISATIONS O WHERE O.ID=?";
+
     try (PreparedStatement statement = connection.prepareStatement(organisationExistsSQL))
     {
       statement.setObject(1, id);
@@ -2671,6 +2610,9 @@ public class SecurityService
   private boolean organisationWithNameExists(Connection connection, String name)
     throws SecurityException
   {
+    String organisationWithNameExistsSQL =
+        "SELECT COUNT(O.ID) FROM SECURITY.ORGANISATIONS O WHERE (UPPER(O.NAME) LIKE ?)";
+
     try (PreparedStatement statement = connection.prepareStatement(organisationWithNameExistsSQL))
     {
       statement.setString(1, name.toUpperCase());

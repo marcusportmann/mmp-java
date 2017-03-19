@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+//import javax.persistence.EntityManager;
+//import javax.persistence.EntityTransaction;
 
 import javax.sql.DataSource;
 
@@ -43,6 +43,11 @@ import javax.sql.DataSource;
 @SuppressWarnings("unused")
 public class DAOUtil
 {
+  /**
+   * The mmp-java Java and JEE development framework database schema.
+   */
+  public static final String MMP_DATABASE_SCHEMA = "MMP";
+
   /**
    * Private default constructor to enforce utility pattern.
    */
@@ -68,25 +73,26 @@ public class DAOUtil
     }
   }
 
-  /**
-   * Close the entity manager.
-   *
-   * @param entityManager the entity manager to close
-   */
-  public static void close(EntityManager entityManager)
-  {
-    if (entityManager != null)
-    {
-      try
-      {
-        entityManager.close();
-      }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Failed to close the entity manager", e);
-      }
-    }
-  }
+// TODO: DELETE THIS METHOD -- MARCUS
+//  /**
+//   * Close the entity manager.
+//   *
+//   * @param entityManager the entity manager to close
+//   */
+//  public static void close(EntityManager entityManager)
+//  {
+//    if (entityManager != null)
+//    {
+//      try
+//      {
+//        entityManager.close();
+//      }
+//      catch (Throwable e)
+//      {
+//        throw new RuntimeException("Failed to close the entity manager", e);
+//      }
+//    }
+//  }
 
   /**
    * Close the result set.
@@ -128,52 +134,53 @@ public class DAOUtil
     }
   }
 
-  /**
-   * Close the entity manager and commit or rollback the associated transaction if one is active.
-   *
-   * @param entityManager the entity manager to close
-   */
-  public static void closeAndCommitOrRollback(EntityManager entityManager)
-  {
-    EntityTransaction entityTransaction = entityManager.getTransaction();
-
-    if (entityTransaction.isActive())
-    {
-      if (entityTransaction.getRollbackOnly())
-      {
-        try
-        {
-          entityTransaction.rollback();
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException(
-              "Failed to rollback the entity manager transaction and close the entity manager", e);
-        }
-      }
-      else
-      {
-        try
-        {
-          entityTransaction.commit();
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException(
-              "Failed to commit the entity manager transaction and close the entity manager", e);
-        }
-      }
-    }
-
-    try
-    {
-      entityManager.close();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to close the entity manager", e);
-    }
-  }
+// TODO: DELETE THIS METHOD -- MARCUS
+//  /**
+//   * Close the entity manager and commit or rollback the associated transaction if one is active.
+//   *
+//   * @param entityManager the entity manager to close
+//   */
+//  public static void closeAndCommitOrRollback(EntityManager entityManager)
+//  {
+//    EntityTransaction entityTransaction = entityManager.getTransaction();
+//
+//    if (entityTransaction.isActive())
+//    {
+//      if (entityTransaction.getRollbackOnly())
+//      {
+//        try
+//        {
+//          entityTransaction.rollback();
+//        }
+//        catch (Throwable e)
+//        {
+//          throw new RuntimeException(
+//              "Failed to rollback the entity manager transaction and close the entity manager", e);
+//        }
+//      }
+//      else
+//      {
+//        try
+//        {
+//          entityTransaction.commit();
+//        }
+//        catch (Throwable e)
+//        {
+//          throw new RuntimeException(
+//              "Failed to commit the entity manager transaction and close the entity manager", e);
+//        }
+//      }
+//    }
+//
+//    try
+//    {
+//      entityManager.close();
+//    }
+//    catch (Throwable e)
+//    {
+//      throw new RuntimeException("Failed to close the entity manager", e);
+//    }
+//  }
 
   /**
    * Execute the SQL statement using the database connection.
