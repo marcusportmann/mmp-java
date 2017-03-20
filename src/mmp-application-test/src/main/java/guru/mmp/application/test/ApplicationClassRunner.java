@@ -18,21 +18,10 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
 import org.junit.runners.model.InitializationError;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.logging.LogManager;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -66,9 +55,17 @@ public class ApplicationClassRunner extends SpringJUnit4ClassRunner
     throws InitializationError
   {
     super(testClass);
+
+    try
+    {
+      LogManager.getLogManager().readConfiguration(Thread.currentThread().getContextClassLoader()
+          .getResourceAsStream("logging.properties"));
+    }
+    catch (Throwable e)
+    {
+      throw new InitializationError("Failed to initialize the JDK logging: " + e.getMessage());
+    }
   }
-
-
 }
 
 ///*

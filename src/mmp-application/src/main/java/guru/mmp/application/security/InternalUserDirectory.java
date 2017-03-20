@@ -22,11 +22,7 @@ import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.context.ApplicationContext;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -70,20 +66,36 @@ public class InternalUserDirectory extends UserDirectoryBase
   private DataSource dataSource;
 
   /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
+
+  /**
    * The ID Generator.
    */
   @Autowired
   private IDGenerator idGenerator;
-  private int maxFilteredUsers;
-  private int maxPasswordAttempts;
-  private int passwordExpiryMonths;
-  private int passwordHistoryMonths;
 
   /**
-   * The Transaction Manager.
+   * The maximum number of filtered users to return.
    */
-  @Autowired
-  private PlatformTransactionManager transactionManager;
+  private int maxFilteredUsers;
+
+  /**
+   * The maximum number of password attempts.
+   */
+  private int maxPasswordAttempts;
+
+  /**
+   * The password expiry period in months.
+   */
+  private int passwordExpiryMonths;
+
+  /**
+   * The password history period in months.
+   */
+  private int passwordHistoryMonths;
 
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
@@ -2028,40 +2040,37 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
+  /**
+   * Increment the password attempts for the user.
+   *
+   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       internal user
+   */
   private void incrementPasswordAttempts(UUID internalUserId)
     throws SecurityException
   {
     String incrementPasswordAttemptsSQL = "UPDATE SECURITY.INTERNAL_USERS IU "
         + "SET PASSWORD_ATTEMPTS = PASSWORD_ATTEMPTS + 1 WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
 
-    TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-    transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-    transactionTemplate.execute(new TransactionCallbackWithoutResult()
-        {
-          public void doInTransactionWithoutResult(TransactionStatus status)
-          {
-            try (Connection connection = dataSource.getConnection();
-              PreparedStatement statement = connection.prepareStatement(
-                  incrementPasswordAttemptsSQL))
-            {
-              statement.setObject(1, getUserDirectoryId());
-              statement.setObject(2, internalUserId);
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(incrementPasswordAttemptsSQL))
+    {
+      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(2, internalUserId);
 
-              if (statement.executeUpdate() != 1)
-              {
-                throw new SecurityException(String.format(
-                    "No rows were affected as a result of executing the SQL statement (%s)",
-                    incrementPasswordAttemptsSQL));
-              }
-            }
-            catch (Throwable e)
-            {
-              throw new RuntimeException(String.format("Failed to increment the password attempts "
-                  + "for the user (%s) for the user directory (%s): %s", internalUserId,
-                  getUserDirectoryId(), e.getMessage()), e);
-            }
-          }
-        });
+      if (statement.executeUpdate() != 1)
+      {
+        throw new SecurityException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
+            incrementPasswordAttemptsSQL));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityException(String.format("Failed to increment the password attempts "
+          + "for the user (%s) for the user directory (%s): %s", internalUserId,
+          getUserDirectoryId(), e.getMessage()), e);
+    }
   }
 
   /**

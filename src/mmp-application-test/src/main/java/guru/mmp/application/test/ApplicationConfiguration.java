@@ -70,7 +70,7 @@ public class ApplicationConfiguration
 
       Enhancer userTransactionEnhancer = new Enhancer();
       userTransactionEnhancer.setSuperclass(UserTransactionImp.class);
-      userTransactionEnhancer.setCallback(new UserTransactionTracker());
+      userTransactionEnhancer.setCallback(new UserTransactionTracker(transactionManager));
 
       UserTransactionImp userTransaction = (UserTransactionImp) userTransactionEnhancer.create();
 
@@ -114,26 +114,22 @@ public class ApplicationConfiguration
       setURLMethod.invoke(jdbcDataSource, "jdbc:h2:mem:" + Thread.currentThread().getName()
           + ";MODE=DB2;DB_CLOSE_DELAY=-1;" + "DB_CLOSE_ON_EXIT=FALSE");
 
-      Runtime.getRuntime().addShutdownHook(new Thread()
+      Runtime.getRuntime().addShutdownHook(new Thread(() ->
+      {
+        try
+        {
+          try (Connection connection = jdbcDataSource.getConnection();
+            Statement statement = connection.createStatement())
           {
-            @Override
-            public void run()
-            {
-              try
-              {
-                try (Connection connection = jdbcDataSource.getConnection();
-                  Statement statement = connection.createStatement())
-                {
-                  statement.executeUpdate("SHUTDOWN");
-                }
-              }
-              catch (Throwable e)
-              {
-                throw new RuntimeException("Failed to shutdown the in-memory application database",
-                    e);
-              }
-            }
-          });
+            statement.executeUpdate("SHUTDOWN");
+          }
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to shutdown the in-memory application database",
+              e);
+        }
+      }));
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the

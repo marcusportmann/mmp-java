@@ -222,7 +222,7 @@ public abstract class DatabaseTest extends JNDITest
 
       Enhancer userTransactionEnhancer = new Enhancer();
       userTransactionEnhancer.setSuperclass(UserTransactionImp.class);
-      userTransactionEnhancer.setCallback(new UserTransactionTracker());
+      userTransactionEnhancer.setCallback(new UserTransactionTracker(transactionManager));
 
       UserTransactionImp userTransaction = (UserTransactionImp) userTransactionEnhancer.create();
 

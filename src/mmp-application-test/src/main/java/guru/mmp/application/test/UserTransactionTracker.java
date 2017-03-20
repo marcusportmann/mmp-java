@@ -22,6 +22,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -44,6 +45,17 @@ public class UserTransactionTracker
   private static final long serialVersionUID = 1000000;
   private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
+  private TransactionManager transactionManager;
+
+  /**
+   * Constructs a new <code>UserTransactionTracker</code>.
+   *
+   * @param transactionManager the transaction manager
+   */
+  public UserTransactionTracker(TransactionManager transactionManager)
+  {
+    this.transactionManager = transactionManager;
+  }
 
   /**
    * Returns the active transaction stack traces for the current thread.
@@ -141,7 +153,7 @@ public class UserTransactionTracker
   {
     try
     {
-      return DatabaseTest.getTransactionManager().getTransaction();
+      return transactionManager.getTransaction();
     }
     catch (Throwable e)
     {

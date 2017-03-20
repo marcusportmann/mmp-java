@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,9 +109,10 @@ public class SecurityService
   private IDGenerator idGenerator;
 
   /**
-   * Constructs a new <code>SecurityService</code>.
+   * The Spring application context.
    */
-  public SecurityService() {}
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /**
    * Add the user to the security group.
@@ -631,7 +633,7 @@ public class SecurityService
     }
 
     String createUserDirectorySQL = "INSERT INTO SECURITY.USER_DIRECTORIES "
-        + " (ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
+        + "(ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
@@ -755,6 +757,8 @@ public class SecurityService
       throw new InvalidArgumentException("id");
     }
 
+    String deleteOrganisationSQL = "DELETE FROM SECURITY.ORGANISATIONS O WHERE O.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteOrganisationSQL))
     {
@@ -819,6 +823,8 @@ public class SecurityService
   public void deleteUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    String deleteUserDirectorySQL = "DELETE FROM SECURITY.USER_DIRECTORIES UD WHERE UD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteUserDirectorySQL))
     {
@@ -889,6 +895,13 @@ public class SecurityService
   public List<Organisation> getFilteredOrganisations(String filter)
     throws SecurityException
   {
+    String getOrganisationsSQL =
+        "SELECT O.ID, O.NAME, O.STATUS FROM SECURITY.ORGANISATIONS O ORDER BY O.NAME";
+
+    String getFilteredOrganisationsSQL =
+        "SELECT O.ID, O.NAME, O.STATUS FROM SECURITY.ORGANISATIONS O "
+        + "WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getOrganisationsSQL
@@ -932,6 +945,13 @@ public class SecurityService
   public List<UserDirectory> getFilteredUserDirectories(String filter)
     throws SecurityException
   {
+    String getUserDirectoriesSQL =
+        "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM SECURITY.USER_DIRECTORIES UD";
+
+    String getFilteredUserDirectoriesSQL =
+        "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM SECURITY.USER_DIRECTORIES UD "
+        + "WHERE (UPPER(UD.NAME) LIKE ?) ORDER BY UD.NAME";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getUserDirectoriesSQL
@@ -1004,6 +1024,9 @@ public class SecurityService
       throw new InvalidArgumentException("code");
     }
 
+    String getFunctionSQL =
+        "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM SECURITY.FUNCTIONS F WHERE F.CODE=?";
+
     try
     {
       try (Connection connection = dataSource.getConnection();
@@ -1073,6 +1096,8 @@ public class SecurityService
   public List<Function> getFunctions()
     throws SecurityException
   {
+    String getFunctionsSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM SECURITY.FUNCTIONS F";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getFunctionsSQL))
     {
@@ -1214,6 +1239,11 @@ public class SecurityService
   public int getNumberOfFilteredOrganisations(String filter)
     throws SecurityException
   {
+    String getNumberOfOrganisationsSQL = "SELECT COUNT(O.ID) FROM SECURITY.ORGANISATIONS O";
+
+    String getNumberOfFilteredOrganisationsSQL =
+        "SELECT COUNT(O.ID) FROM SECURITY.ORGANISATIONS O WHERE (UPPER(O.NAME) LIKE ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getNumberOfOrganisationsSQL
@@ -1259,6 +1289,11 @@ public class SecurityService
   public int getNumberOfFilteredUserDirectories(String filter)
     throws SecurityException
   {
+    String getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM SECURITY.USER_DIRECTORIES UD";
+
+    String getNumberOfFilteredUserDirectoriesSQL =
+        "SELECT COUNT(UD.ID) FROM SECURITY.USER_DIRECTORIES UD WHERE (UPPER(UD.NAME) LIKE ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getNumberOfUserDirectoriesSQL
@@ -1347,6 +1382,8 @@ public class SecurityService
   public int getNumberOfOrganisations()
     throws SecurityException
   {
+    String getNumberOfOrganisationsSQL = "SELECT COUNT(O.ID) FROM SECURITY.ORGANISATIONS O";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfOrganisationsSQL))
     {
@@ -1377,6 +1414,8 @@ public class SecurityService
   public int getNumberOfUserDirectories()
     throws SecurityException
   {
+    String getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM SECURITY.USER_DIRECTORIES UD";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfUserDirectoriesSQL))
     {
@@ -1437,6 +1476,9 @@ public class SecurityService
       throw new InvalidArgumentException("id");
     }
 
+    String getOrganisationSQL =
+        "SELECT O.ID, O.NAME, O.STATUS FROM SECURITY.ORGANISATIONS O WHERE O.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getOrganisationSQL))
     {
@@ -1479,6 +1521,10 @@ public class SecurityService
   public List<UUID> getOrganisationIdsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    String getOrganisationIdsForUserDirectorySQL =
+        "SELECT UDTOM.ORGANISATION_ID FROM SECURITY.USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM "
+        + "WHERE UDTOM.USER_DIRECTORY_ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
           getOrganisationIdsForUserDirectorySQL))
@@ -1513,6 +1559,9 @@ public class SecurityService
   public List<Organisation> getOrganisations()
     throws SecurityException
   {
+    String getOrganisationsSQL =
+        "SELECT O.ID, O.NAME, O.STATUS FROM SECURITY.ORGANISATIONS O ORDER BY O.NAME";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getOrganisationsSQL))
     {
@@ -1546,6 +1595,11 @@ public class SecurityService
   public List<Organisation> getOrganisationsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    String getOrganisationsForUserDirectorySQL =
+        "SELECT O.ID, O.NAME, O.STATUS FROM SECURITY.ORGANISATIONS O INNER JOIN "
+        + "SECURITY.USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID WHERE "
+        + "UDTOM.USER_DIRECTORY_ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
           getOrganisationsForUserDirectorySQL))
@@ -1609,6 +1663,9 @@ public class SecurityService
   public List<UserDirectory> getUserDirectories()
     throws SecurityException
   {
+    String getUserDirectoriesSQL =
+        "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM SECURITY.USER_DIRECTORIES UD";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
     {
@@ -1642,6 +1699,12 @@ public class SecurityService
   public List<UserDirectory> getUserDirectoriesForOrganisation(UUID organisationId)
     throws OrganisationNotFoundException, SecurityException
   {
+    String getUserDirectoriesForOrganisationSQL =
+        "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM SECURITY.USER_DIRECTORIES UD "
+        + "INNER JOIN SECURITY.USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM "
+        + "ON UD.ID = UDTOM.USER_DIRECTORY_ID INNER JOIN SECURITY.ORGANISATIONS O "
+        + "ON UDTOM.ORGANISATION_ID = O.ID WHERE O.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
           getUserDirectoriesForOrganisationSQL))
@@ -1678,6 +1741,9 @@ public class SecurityService
   public UserDirectory getUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException
   {
+    String getUserDirectorySQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION "
+        + "FROM SECURITY.USER_DIRECTORIES UD WHERE UD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUserDirectorySQL))
     {
@@ -1931,6 +1997,8 @@ public class SecurityService
 
           IUserDirectory userDirectoryInstance = userDirectoryClassConstructor.newInstance(
               userDirectory.getId(), userDirectory.getParameters());
+
+          applicationContext.getAutowireCapableBeanFactory().autowireBean(userDirectoryInstance);
 
           reloadedUserDirectories.put(userDirectory.getId(), userDirectoryInstance);
         }
@@ -2279,85 +2347,6 @@ public class SecurityService
     organisation.setStatus(OrganisationStatus.fromCode(rs.getInt(3)));
 
     return organisation;
-  }
-
-  /**
-   * Generate the SQL statements.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects
-   */
-  private void buildStatements(String schemaPrefix)
-    throws SQLException
-  {
-    // deleteOrganisationSQL
-    deleteOrganisationSQL = "DELETE FROM " + schemaPrefix + "ORGANISATIONS O WHERE O.ID=?";
-
-    // deleteUserDirectorySQL
-    deleteUserDirectorySQL = "DELETE FROM " + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
-
-    // getFilteredUserDirectoriesSQL
-    getFilteredUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM "
-        + schemaPrefix + "USER_DIRECTORIES UD " + "WHERE (UPPER(UD.NAME) LIKE ?) ORDER BY UD.NAME";
-
-    // getFilteredOrganisationsSQL
-    getFilteredOrganisationsSQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
-        + "ORGANISATIONS O " + "WHERE (UPPER(O.NAME) LIKE ?) ORDER BY O.NAME";
-
-    // getFunctionSQL
-    getFunctionSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS F WHERE F.CODE=?";
-
-    // getFunctionsSQL
-    getFunctionsSQL = "SELECT F.ID, F.CODE, F.NAME, F.DESCRIPTION FROM " + schemaPrefix
-        + "FUNCTIONS F";
-
-    // getNumberOfFilteredOrganisationsSQL
-    getNumberOfFilteredOrganisationsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix
-        + "ORGANISATIONS O WHERE (UPPER(O.NAME) LIKE ?)";
-
-    // getNumberOfFilteredUserDirectoriesSQL
-    getNumberOfFilteredUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix
-        + "USER_DIRECTORIES UD WHERE (UPPER(UD.NAME) LIKE ?)";
-
-    // getNumberOfOrganisationsSQL
-    getNumberOfOrganisationsSQL = "SELECT COUNT(O.ID) FROM " + schemaPrefix + "ORGANISATIONS O";
-
-    // getNumberOfUserDirectoriesSQL
-    getNumberOfUserDirectoriesSQL = "SELECT COUNT(UD.ID) FROM " + schemaPrefix
-        + "USER_DIRECTORIES UD";
-
-    // getOrganisationIdsForUserDirectorySQL
-    getOrganisationIdsForUserDirectorySQL = "SELECT UDTOM.ORGANISATION_ID FROM " + schemaPrefix
-        + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM WHERE UDTOM.USER_DIRECTORY_ID=?";
-
-    // getOrganisationsForUserDirectorySQL
-    getOrganisationsForUserDirectorySQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
-        + "ORGANISATIONS O INNER JOIN " + schemaPrefix
-        + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM ON O.ID = UDTOM.ORGANISATION_ID WHERE "
-        + "UDTOM.USER_DIRECTORY_ID=?";
-
-    // getOrganisationSQL
-    getOrganisationSQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
-        + "ORGANISATIONS O WHERE O.ID=?";
-
-    // getOrganisationsSQL
-    getOrganisationsSQL = "SELECT O.ID, O.NAME, O.STATUS FROM " + schemaPrefix
-        + "ORGANISATIONS O ORDER BY O.NAME";
-
-    // getUserDirectoriesForOrganisationSQL
-    getUserDirectoriesForOrganisationSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, "
-        + "UD.CONFIGURATION FROM " + schemaPrefix + "USER_DIRECTORIES UD INNER JOIN "
-        + schemaPrefix + "USER_DIRECTORY_TO_ORGANISATION_MAP UDTOM "
-        + "ON UD.ID = UDTOM.USER_DIRECTORY_ID INNER JOIN " + schemaPrefix + "ORGANISATIONS O "
-        + "ON UDTOM.ORGANISATION_ID = O.ID WHERE O.ID=?";
-
-    // getUserDirectoriesSQL
-    getUserDirectoriesSQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM "
-        + schemaPrefix + "USER_DIRECTORIES UD";
-
-    // getUserDirectorySQL
-    getUserDirectorySQL = "SELECT UD.ID, UD.TYPE_ID, UD.NAME, UD.CONFIGURATION FROM "
-        + schemaPrefix + "USER_DIRECTORIES UD WHERE UD.ID=?";
   }
 
   /**
