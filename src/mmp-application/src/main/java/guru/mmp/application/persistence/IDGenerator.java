@@ -23,10 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -65,6 +68,9 @@ public class IDGenerator
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
+  @Autowired
+  private PlatformTransactionManager transactionManager;
+
   /**
    * Get the next unique <code>long</code> ID for the entity with the specified type.
    *
@@ -76,12 +82,16 @@ public class IDGenerator
   public long next(String schema, String type)
   {
     Connection connection = null;
+    TransactionStatus transactionStatus = null;
 
     try
     {
       long id;
 
-      connection = DataSourceUtils.doGetConnection(dataSource);
+       transactionStatus = transactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
+
+       connection = dataSource.getConnection();
 
       id = getCurrentId(connection, schema, type);
 
@@ -107,10 +117,27 @@ public class IDGenerator
         updateId(connection, schema, type, id);
       }
 
+      transactionManager.commit(transactionStatus);
+
       return id;
     }
     catch (Exception e)
     {
+      try
+      {
+        if (transactionStatus != null)
+        {
+          transactionManager.rollback(transactionStatus);
+        }
+      }
+      catch (Throwable f)
+      {
+        logger.error(String.format("Failed to rollback the transaction when retrieving the new ID "
+          + "for the entity of type (%s) from the IDGENERATOR table: %s", type,
+          e.getMessage()), e);
+
+      }
+
       throw new IDGeneratorException(String.format(
           "Failed to retrieve the new ID for the entity of type (%s) from the IDGENERATOR table: %s",
           type, e.getMessage()), e);
@@ -119,12 +146,15 @@ public class IDGenerator
     {
       try
       {
-        DataSourceUtils.doReleaseConnection(connection, dataSource);
+        if (connection != null)
+        {
+          connection.close();
+        }
       }
-      catch (SQLException e)
+      catch (Throwable e)
       {
-        logger.error(String.format("Failed to release the database connection when retrieving the"
-            + " new ID for the entity of type (%s) from the IDGENERATOR table: %s", type,
+        logger.error(String.format("Failed to release the database connection when retrieving the "
+            + "new ID for the entity of type (%s) from the IDGENERATOR table: %s", type,
             e.getMessage()), e);
 
       }

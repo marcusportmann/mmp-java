@@ -28,7 +28,7 @@
     </dependency>
     <dependency>
       <groupId>com.atomikos</groupId>
-      <artifactId>transactions-jdbc</artifactId>
+      <artifactId>transactions-jta</artifactId>
       <version>4.0.4</version>
     </dependency>
     <!--
@@ -113,6 +113,11 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
       <version>4.3.7.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>1.11.1.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>

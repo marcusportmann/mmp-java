@@ -24,7 +24,7 @@ package guru.mmp.application.tests;
  *
  * @author Marcus Portmann
  */
-class TestJPAServiceException extends Exception
+public class TestJPAServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
@@ -33,7 +33,7 @@ class TestJPAServiceException extends Exception
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  TestJPAServiceException(String message)
+  public TestJPAServiceException(String message)
   {
     super(message);
   }
@@ -46,7 +46,7 @@ class TestJPAServiceException extends Exception
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  TestJPAServiceException(String message, Throwable cause)
+  public TestJPAServiceException(String message, Throwable cause)
   {
     super(message, cause);
   }

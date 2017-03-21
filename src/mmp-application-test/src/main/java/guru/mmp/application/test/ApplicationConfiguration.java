@@ -26,6 +26,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
@@ -50,6 +53,7 @@ import java.util.logging.Logger;
  * @author Marcus Portmann
  */
 @EnableTransactionManagement
+//@EnableJpaRepositories
 @Configuration
 @ComponentScan(basePackages = { "guru.mmp.application" })
 public class ApplicationConfiguration
@@ -62,6 +66,23 @@ public class ApplicationConfiguration
   {
     return getTransactionManager();
   }
+
+//  @Bean
+//  @Qualifier("Application")
+//  public EntityManager getApplicationEntityManager() {
+//    LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+//
+//
+//
+//    em.setPersistenceUnitName("Application");
+//    em.setDataSource(getDataSource());
+//    em.setPackagesToScan("guru.mmp.application");
+//    em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+//    em.afterPropertiesSet();
+//
+//    return em.getObject().createEntityManager();
+//  }
+
 
   /**
    * Returns a Spring transaction manager that leverages the Atomikos JTA transaction manager and
