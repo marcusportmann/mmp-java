@@ -24,7 +24,7 @@ package guru.mmp.application.tests;
  *
  * @author Marcus Portmann
  */
-class TestTransactionalServiceException extends Exception
+public class TestTransactionalServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
@@ -33,7 +33,7 @@ class TestTransactionalServiceException extends Exception
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  TestTransactionalServiceException(String message)
+  public TestTransactionalServiceException(String message)
   {
     super(message);
   }
@@ -46,7 +46,7 @@ class TestTransactionalServiceException extends Exception
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  TestTransactionalServiceException(String message, Throwable cause)
+  public TestTransactionalServiceException(String message, Throwable cause)
   {
     super(message, cause);
   }

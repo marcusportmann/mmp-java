@@ -55,34 +55,54 @@ import java.util.logging.Logger;
 public class ApplicationConfiguration
   implements TransactionManagementConfigurer
 {
+  private PlatformTransactionManager transactionManager;
+
   @Override
   public PlatformTransactionManager annotationDrivenTransactionManager()
   {
-    try
+    return getTransactionManager();
+  }
+
+  /**
+   * Returns a Spring transaction manager that leverages the Atomikos JTA transaction manager and
+   * user transaction.
+   *
+   * @return a Spring transaction manager that leverages the Atomikos JTA transaction manager and
+   *         user transaction
+   */
+  @Bean
+  public PlatformTransactionManager getTransactionManager()
+  {
+    if (transactionManager == null)
     {
-      // Initialise the Atomikos JTA user transaction and transaction manager
-      Enhancer transactionManagerEnhancer = new Enhancer();
-      transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
-      transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
+      try
+      {
+        // Initialise the Atomikos JTA user transaction and transaction manager
+        Enhancer transactionManagerEnhancer = new Enhancer();
+        transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
+        transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
 
-      TransactionManager transactionManager =
-          (TransactionManager) transactionManagerEnhancer.create();
+        TransactionManager transactionManager =
+            (TransactionManager) transactionManagerEnhancer.create();
 
-      Enhancer userTransactionEnhancer = new Enhancer();
-      userTransactionEnhancer.setSuperclass(UserTransactionImp.class);
-      userTransactionEnhancer.setCallback(new UserTransactionTracker(transactionManager));
+        Enhancer userTransactionEnhancer = new Enhancer();
+        userTransactionEnhancer.setSuperclass(UserTransactionImp.class);
+        userTransactionEnhancer.setCallback(new UserTransactionTracker(transactionManager));
 
-      UserTransactionImp userTransaction = (UserTransactionImp) userTransactionEnhancer.create();
+        UserTransactionImp userTransaction = (UserTransactionImp) userTransactionEnhancer.create();
 
-      userTransaction.setTransactionTimeout(300);
+        userTransaction.setTransactionTimeout(300);
 
-      return new JtaTransactionManager(userTransaction, transactionManager);
+        return new JtaTransactionManager(userTransaction, transactionManager);
+      }
+      catch (Throwable e)
+      {
+        throw new RuntimeException(
+            "Failed to initialise the Atomikos JTA user transaction and transaction manager", e);
+      }
     }
-    catch (Throwable e)
-    {
-      throw new RuntimeException(
-          "Failed to initialise the Atomikos JTA user transaction and transaction manager", e);
-    }
+
+    return transactionManager;
   }
 
   /**
@@ -115,21 +135,22 @@ public class ApplicationConfiguration
           + ";MODE=DB2;DB_CLOSE_DELAY=-1;" + "DB_CLOSE_ON_EXIT=FALSE");
 
       Runtime.getRuntime().addShutdownHook(new Thread(() ->
-      {
-        try
-        {
-          try (Connection connection = jdbcDataSource.getConnection();
-            Statement statement = connection.createStatement())
           {
-            statement.executeUpdate("SHUTDOWN");
+            try
+            {
+              try (Connection connection = jdbcDataSource.getConnection();
+                Statement statement = connection.createStatement())
+              {
+                statement.executeUpdate("SHUTDOWN");
+              }
+            }
+            catch (Throwable e)
+            {
+              throw new RuntimeException("Failed to shutdown the in-memory application database",
+                  e);
+            }
           }
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to shutdown the in-memory application database",
-              e);
-        }
-      }));
+          ));
 
       /*
        * Initialise the in-memory database using the SQL statements contained in the file with the

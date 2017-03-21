@@ -44,35 +44,12 @@ import javax.transaction.UserTransaction;
 public abstract class ApplicationConfiguration
   implements TransactionManagementConfigurer
 {
+  private PlatformTransactionManager transactionManager;
+
   @Override
   public PlatformTransactionManager annotationDrivenTransactionManager()
   {
-    try
-    {
-      try
-      {
-        Class<?> userTransactionManagerClass = Thread.currentThread().getContextClassLoader()
-            .loadClass("com.atomikos.icatch.jta.UserTransactionManager");
-        TransactionManager transactionManager =
-            (TransactionManager) userTransactionManagerClass.newInstance();
-
-        Class<?> userTransactionImpClass = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.atomikos.icatch.jta.UserTransactionImp");
-        UserTransaction userTransaction = (UserTransaction) userTransactionImpClass.newInstance();
-
-        userTransaction.setTransactionTimeout(300);
-
-        return new JtaTransactionManager(userTransaction, transactionManager);
-      }
-      catch (ClassNotFoundException ignore) {}
-
-      return new JtaTransactionManager();
-    }
-    catch (Throwable e)
-    {
-      throw new ApplicationConfigurationException(
-          "Failed to initialise the JTA user transaction and transaction manager", e);
-    }
+    return getTransactionManager();
   }
 
   /**
@@ -85,6 +62,51 @@ public abstract class ApplicationConfiguration
   public DataSource getDataSource()
   {
     return getApplicationDataSource();
+  }
+
+  /**
+   * Returns a Spring transaction manager that leverages either the Atomikos JTA transaction manager
+   * and user transaction, if they are available, or the standard Spring JTA-based transaction
+   * manager.
+   *
+   * @return a Spring transaction manager that leverages either the Atomikos JTA transaction manager
+   *         and user transaction, if they are available, or the standard Spring JTA-based
+   *         transaction manager
+   */
+  @Bean
+  public PlatformTransactionManager getTransactionManager()
+  {
+    if (transactionManager == null)
+    {
+      try
+      {
+        try
+        {
+          Class<?> userTransactionManagerClass = Thread.currentThread().getContextClassLoader()
+              .loadClass("com.atomikos.icatch.jta.UserTransactionManager");
+          TransactionManager transactionManager =
+              (TransactionManager) userTransactionManagerClass.newInstance();
+
+          Class<?> userTransactionImpClass = Thread.currentThread().getContextClassLoader()
+              .loadClass("com.atomikos.icatch.jta.UserTransactionImp");
+          UserTransaction userTransaction = (UserTransaction) userTransactionImpClass.newInstance();
+
+          userTransaction.setTransactionTimeout(300);
+
+          this.transactionManager = new JtaTransactionManager(userTransaction, transactionManager);
+        }
+        catch (ClassNotFoundException ignore) {}
+
+        this.transactionManager = new JtaTransactionManager();
+      }
+      catch (Throwable e)
+      {
+        throw new ApplicationConfigurationException(
+            "Failed to initialise the JTA user transaction and transaction manager", e);
+      }
+    }
+
+    return this.transactionManager;
   }
 
   /**
