@@ -18,6 +18,7 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.persistence.IDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ import java.sql.SQLException;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 @Service
 public class TestTransactionalService
   implements ITestTransactionalService
@@ -48,6 +50,12 @@ public class TestTransactionalService
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
+
+  /**
+   * The ID Generator.
+   */
+  @Autowired
+  private IDGenerator idGenerator;
 
   /**
    * Create the test data.
@@ -168,6 +176,32 @@ public class TestTransactionalService
     createTestData(testData);
 
     throw new RuntimeException("Failed with a runtime exception in an existing transaction");
+  }
+
+  /**
+   * Retrieve the next ID and throw an exception.
+   *
+   * @return the next ID
+   */
+  @Transactional
+  public long getNextIDWithException()
+    throws TestTransactionalServiceException
+  {
+    idGenerator.next("Application.TestId");
+
+    throw new TestTransactionalServiceException("Testing 1.. 2.. 3..");
+  }
+
+  /**
+   * Retrieve the next ID without throwing an exception.
+   *
+   * @return the next ID
+   */
+  @Transactional
+  public long getNextIDWithoutException()
+    throws TestTransactionalServiceException
+  {
+    return idGenerator.next("Application.TestId");
   }
 
   /**

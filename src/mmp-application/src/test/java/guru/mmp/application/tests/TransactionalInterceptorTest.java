@@ -35,8 +35,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import static org.junit.Assert.fail;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TransactionalInterceptorTest</code> class contains the implementation of the JUnit
  * tests for the <code>TransactionalInterceptor</code> class.
@@ -251,6 +249,44 @@ public class TransactionalInterceptorTest
     {
       fail("Failed to invoked the Test Transactional Service without an existing transaction: "
           + "Failed to retrieve the test data after a checked exception was caught");
+    }
+  }
+
+  /**
+   * testIDGenerator
+   */
+  @Test
+  public void testIDGenerator()
+    throws Exception
+  {
+    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
+        .PROPAGATION_NEVER));
+
+    TransactionStatus transactionStatus = transactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+
+    testTransactionalService.getNextIDWithoutException();
+
+    try
+    {
+      testTransactionalService.getNextIDWithException();
+    }
+    catch (TestTransactionalServiceException ignored) {}
+
+    long id = testTransactionalService.getNextIDWithoutException();
+
+    if (id != 3)
+    {
+      fail("The generated ID is incorrect");
+    }
+
+    transactionManager.rollback(transactionStatus);
+
+    id = testTransactionalService.getNextIDWithoutException();
+
+    if (id != 4)
+    {
+      fail("The generated ID is incorrect");
     }
   }
 

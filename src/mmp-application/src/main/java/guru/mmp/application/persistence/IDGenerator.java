@@ -19,15 +19,13 @@ package guru.mmp.application.persistence;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.DAOUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
@@ -38,34 +36,26 @@ import java.util.UUID;
 
 /**
  * The <code>IDGenerator</code> class provides unique IDs for the entity types in the database.
- * It requires the IDGENERATOR table which must be created under the IDGENERATOR schema
- * within the database. The unique ID will be retrieved using a new transaction while
- * suspending the existing database transaction. This is done to reduce deadlocks and
- * improve performance.
- * <p/>
- * <code>
- * CREATE TABLE "IDGENERATOR"
- * (
- * "TYPE" VARCHAR(100) NOT NULL,
- * "CURRENT" BIGINT DEFAULT 0,
- * PRIMARY KEY ("TYPE")
- * )
- * </code>
+ * <p>
+ * It requires the IDGENERATOR table which must be created under the IDGENERATOR schema within the
+ * database. The unique ID will be retrieved using a new transaction while suspending the existing
+ * database transaction. This is done to reduce deadlocks and improve performance.
  *
  * @author Marcus Portmann
  */
 @Repository
 public class IDGenerator
 {
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(IDGenerator.class);
-
   /**
    * The data source used to provide connections to the application database.
    */
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
+
+  /**
+   * The Transaction Manager.
+   */
   @Autowired
   private PlatformTransactionManager transactionManager;
 
@@ -76,61 +66,59 @@ public class IDGenerator
    *
    * @return the next unique <code>long</code> ID for the entity with the specified type
    */
-  public long next(String schema, String type)
+  public long next(String type)
   {
-    TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+    TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager,
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
 
     try
     {
-      return transactionTemplate.execute(status ->
-      {
-        /*
-        try (Connection connection = dataSource.getConnection())
-        {
-          Long id = getCurrentId(connection, schema, type);
-
-          if (id == null)
+      return transactionTemplate.execute(
+          status ->
           {
-            id = 1L;
-            insertId(connection, schema, type, id);
+            try (Connection connection = dataSource.getConnection())
+            {
+              Long id = getCurrentId(connection, type);
 
-            // TODO: Handle a duplicate row exception caused by the INSERT/UPDATE race condition.
-            // This race condition occurs when there is no row for a particular type of entity
-            // in the IDGENERATOR table. Assuming we have two different threads that are both
-            // attempting to retrieve the next ID for this entity type. When the first thread
-            // executes the SELECT FOR UPDATE call, it will not able to lock a row and will then
-            // attempt to execute the INSERT. If another thread manages to execute the SELECT FOR
-            // UPDATE call before the first thread completes the INSERT then one of the threads
-            // will experience a duplicate row exception as they will both attempt to INSERT.
-            // The easiest way to prevent this from happening is to pre-populate the IDGENERATOR
-            // table with initial IDs.
+              if (id == null)
+              {
+                id = 1L;
+                insertId(connection, type, id);
+
+                /*
+                 * TODO: Handle a duplicate row exception caused by the INSERT/UPDATE race
+                 *       condition. This race condition occurs when there is no row for a particular
+                 *       type of entity in the IDGENERATOR table. Assuming we have two different
+                 *       threads that are both attempting to retrieve the next ID for this entity
+                 *       type. When the first thread executes the SELECT FOR UPDATE call, it will
+                 *       not able to lock a row and will then attempt to execute the INSERT. If
+                 *       another thread manages to execute the SELECT FOR UPDATE call before the
+                 *       first thread completes the INSERT then one of the threads will experience a
+                 *       duplicate row exception as they will both attempt to INSERT. The easiest
+                 *       way to prevent this from happening is to pre-populate the IDGENERATOR
+                 *       table with initial IDs.
+                 */
+              }
+              else
+              {
+                id = id + 1L;
+                updateId(connection, type, id);
+              }
+
+              return id;
+            }
+            catch (Throwable e)
+            {
+              throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the "
+                  + "entity of type (%s) from the IDGENERATOR table: %s", type, e.getMessage()), e);
+            }
           }
-          else
-          {
-            id = id + 1;
-            updateId(connection, schema, type, id);
-          }
-
-          return id;
-        }
-        catch (Throwable e)
-        {
-          throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the "
-              + "entity of type (%s) from the IDGENERATOR table: %s", type, e.getMessage()), e);
-        }
-        */
-
-        return null;
-      });
-    }
-    catch (Throwable e)
-    {
-      throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the entity "
-        + "of type (%s) from the IDGENERATOR table: %s", type, e.getMessage()), e);
+          );
     }
     catch (TransactionException e)
     {
-      e.printStackTrace();
+      throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the entity "
+          + "of type (%s) from the IDGENERATOR table: %s", type, e.getMessage()), e);
     }
   }
 
@@ -164,11 +152,11 @@ public class IDGenerator
     return UUID.randomUUID();
   }
 
-  private Long getCurrentId(Connection connection, String schema, String type)
+  private Long getCurrentId(Connection connection, String type)
     throws SQLException
   {
-    try (PreparedStatement statement = connection.prepareStatement("SELECT CURRENT FROM " + schema
-        + ".IDGENERATOR WHERE NAME=? FOR UPDATE"))
+    try (PreparedStatement statement = connection.prepareStatement(
+        "SELECT CURRENT FROM IDGENERATOR.IDGENERATOR WHERE NAME=? FOR UPDATE"))
     {
       statement.setString(1, type);
 
@@ -186,11 +174,11 @@ public class IDGenerator
     }
   }
 
-  private void insertId(Connection connection, String schema, String type, long id)
+  private void insertId(Connection connection, String type, long id)
     throws SQLException
   {
-    try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + schema
-        + ".IDGENERATOR (CURRENT, NAME) VALUES (?, ?)"))
+    try (PreparedStatement statement = connection.prepareStatement(
+        "INSERT INTO IDGENERATOR.IDGENERATOR (CURRENT, NAME) VALUES (?, ?)"))
     {
       statement.setLong(1, id);
       statement.setString(2, type);
@@ -203,11 +191,11 @@ public class IDGenerator
     }
   }
 
-  private void updateId(Connection connection, String schema, String type, long id)
+  private void updateId(Connection connection, String type, long id)
     throws SQLException
   {
-    try (PreparedStatement statement = connection.prepareStatement("UPDATE " + schema
-        + ".IDGENERATOR SET CURRENT=? WHERE NAME=?"))
+    try (PreparedStatement statement = connection.prepareStatement(
+        "UPDATE IDGENERATOR.IDGENERATOR SET CURRENT=? WHERE NAME=?"))
     {
       statement.setLong(1, id);
       statement.setString(2, type);

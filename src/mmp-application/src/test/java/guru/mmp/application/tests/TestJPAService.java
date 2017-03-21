@@ -18,13 +18,13 @@ package guru.mmp.application.tests;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -49,7 +49,7 @@ public class TestJPAService
    *
    * @param testData the test data
    */
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRED)
   public void createTestData(TestData testData)
     throws TestJPAServiceException
   {
@@ -72,7 +72,7 @@ public class TestJPAService
    *
    * @param testData the test data
    */
-  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createTestDataInNewTransaction(TestData testData)
     throws TestJPAServiceException
   {
@@ -95,7 +95,7 @@ public class TestJPAService
    *
    * @param testData the test data
    */
-  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createTestDataInNewTransactionWithCheckedException(TestData testData)
     throws TestJPAServiceException
   {
@@ -109,7 +109,7 @@ public class TestJPAService
    *
    * @param testData the test data
    */
-  @Transactional(Transactional.TxType.REQUIRES_NEW)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createTestDataInNewTransactionWithRuntimeException(TestData testData)
     throws TestJPAServiceException
   {
@@ -180,7 +180,7 @@ public class TestJPAService
    *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRED)
   public TestData getTestData(String id)
     throws TestJPAServiceException
   {

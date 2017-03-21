@@ -30,6 +30,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import static org.junit.Assert.fail;
@@ -356,58 +357,59 @@ public class TransactionalInterceptorJPATest
 //    }
 //  }
 //
-//  /**
-//   * testSuccessfulExecutionInExistingTransaction
-//   */
-//  @Test
-//  public void testSuccessfulExecutionInNewTransaction()
-//    throws Exception
-//  {
-//    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-//      .PROPAGATION_NEVER));
-//
-//    userTransaction.begin();
-//
-//    TestData testData = getTestData();
-//
-//    testJPAService.createTestDataInNewTransaction(testData);
-//
-//    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
-//    {
-//      fail("Failed to invoked the Test JPA Service in a new transaction: "
-//        + "Failed to find an active transaction after creating the test data");
-//    }
-//
-//    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
-//
-//    if (retrievedTestData == null)
-//    {
-//      fail("Failed to invoked the Test JPA Service in a new transaction: "
-//        + "Failed to retrieve the test data within the transaction");
-//    }
-//
-//    if (userTransaction.getStatus() != Status.STATUS_ACTIVE)
-//    {
-//      fail("Failed to invoked the Test JPA Service in a new transaction: "
-//        + "Failed to find an active transaction after retrieving the test data");
-//    }
-//
-//    userTransaction.commit();
-//
-//    if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
-//    {
-//      fail("Failed to invoked the Test JPA Service in a new transaction: "
-//        + "The transaction was not committed successfully");
-//    }
-//
-//    retrievedTestData = testJPAService.getTestData(testData.getId());
-//
-//    if (retrievedTestData == null)
-//    {
-//      fail("Failed to invoked the Test JPA Service in a new transaction: "
-//        + "Failed to retrieve the test data after the transaction was committed");
-//    }
-//  }
+  /**
+   * testSuccessfulExecutionInExistingTransaction
+   */
+  @Test
+  public void testSuccessfulExecutionInNewTransaction()
+    throws Exception
+  {
+    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
+      .PROPAGATION_NEVER));
+
+    TestData testData = getTestData();
+
+    TransactionStatus transactionStatus = transactionManager.getTransaction(
+      new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+
+    testJPAService.createTestDataInNewTransaction(testData);
+
+    if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly())
+    {
+      fail("Failed to invoked the Test JPA Service in a new transaction: "
+        + "Failed to find an active transaction after creating the test data");
+    }
+
+    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test JPA Service in a new transaction: "
+        + "Failed to retrieve the test data within the transaction");
+    }
+
+    if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly())
+    {
+      fail("Failed to invoked the Test JPA Service in a new transaction: "
+        + "Failed to find an active transaction after retrieving the test data");
+    }
+
+    transactionManager.commit(transactionStatus);
+
+    if (!transactionStatus.isCompleted())
+    {
+      fail("Failed to invoked the Test JPA Service in a new transaction: "
+        + "The transaction was not committed successfully");
+    }
+
+    retrievedTestData = testJPAService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test JPA Service in a new transaction: "
+        + "Failed to retrieve the test data after the transaction was committed");
+    }
+  }
 //
 //  /**
 //   * testGetTestDataWithoutTransaction
@@ -483,9 +485,6 @@ public class TransactionalInterceptorJPATest
   public void testSuccessfulExecutionWithoutTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-      .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     testJPAService.createTestDataWithoutTransaction(testData);

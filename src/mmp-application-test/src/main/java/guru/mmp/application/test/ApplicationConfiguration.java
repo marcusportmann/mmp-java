@@ -34,6 +34,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import javax.transaction.TransactionManager;
@@ -67,21 +70,19 @@ public class ApplicationConfiguration
     return getTransactionManager();
   }
 
-//  @Bean
-//  @Qualifier("Application")
-//  public EntityManager getApplicationEntityManager() {
-//    LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-//
-//
-//
-//    em.setPersistenceUnitName("Application");
-//    em.setDataSource(getDataSource());
-//    em.setPackagesToScan("guru.mmp.application");
-//    em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-//    em.afterPropertiesSet();
-//
-//    return em.getObject().createEntityManager();
-//  }
+  @Bean(name = "Application")
+  public EntityManagerFactory getApplicationEntityManager() {
+    LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+
+
+    em.setPersistenceUnitName("Application");
+    em.setJtaDataSource(getDataSource());
+    em.setPackagesToScan("guru.mmp.application");
+    em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+    em.afterPropertiesSet();
+
+    return em.getObject();
+  }
 
 
   /**
@@ -218,31 +219,31 @@ public class ApplicationConfiguration
         }
       }
 
-      Class<?> atomikosDataSourceBeanClass = Thread.currentThread().getContextClassLoader()
-          .loadClass("com.atomikos.jdbc.AtomikosDataSourceBean");
+//      Class<?> atomikosDataSourceBeanClass = Thread.currentThread().getContextClassLoader()
+//          .loadClass("com.atomikos.jdbc.AtomikosDataSourceBean");
+//
+//      Object atomikosDataSourceBean = atomikosDataSourceBeanClass.newInstance();
+//
+//      Method setUniqueResourceNameMethod = atomikosDataSourceBeanClass.getMethod(
+//          "setUniqueResourceName", String.class);
+//
+//      setUniqueResourceNameMethod.invoke(atomikosDataSourceBean, Thread.currentThread().getName()
+//          + "-ApplicationDataSource");
+//
+//      Method setXaDataSourceMethod = atomikosDataSourceBeanClass.getMethod("setXaDataSource",
+//          XADataSource.class);
+//
+//      setXaDataSourceMethod.invoke(atomikosDataSourceBean, (XADataSource) jdbcDataSource);
+//
+//      Method setMinPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMinPoolSize", Integer
+//          .TYPE);
+//      setMinPoolSizeMethod.invoke(atomikosDataSourceBean, 5);
+//
+//      Method setMaxPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMaxPoolSize", Integer
+//          .TYPE);
+//      setMaxPoolSizeMethod.invoke(atomikosDataSourceBean, 10);
 
-      Object atomikosDataSourceBean = atomikosDataSourceBeanClass.newInstance();
-
-      Method setUniqueResourceNameMethod = atomikosDataSourceBeanClass.getMethod(
-          "setUniqueResourceName", String.class);
-
-      setUniqueResourceNameMethod.invoke(atomikosDataSourceBean, Thread.currentThread().getName()
-          + "-ApplicationDataSource");
-
-      Method setXaDataSourceMethod = atomikosDataSourceBeanClass.getMethod("setXaDataSource",
-          XADataSource.class);
-
-      setXaDataSourceMethod.invoke(atomikosDataSourceBean, (XADataSource) jdbcDataSource);
-
-      Method setMinPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMinPoolSize", Integer
-          .TYPE);
-      setMinPoolSizeMethod.invoke(atomikosDataSourceBean, 5);
-
-      Method setMaxPoolSizeMethod = atomikosDataSourceBeanClass.getMethod("setMaxPoolSize", Integer
-          .TYPE);
-      setMaxPoolSizeMethod.invoke(atomikosDataSourceBean, 10);
-
-      return ((DataSource) atomikosDataSourceBean);
+      return (jdbcDataSource);
     }
     catch (Throwable e)
     {
