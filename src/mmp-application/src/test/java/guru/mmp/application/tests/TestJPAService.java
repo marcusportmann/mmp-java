@@ -37,6 +37,7 @@ import java.util.List;
  */
 @SuppressWarnings("JpaQlInspection")
 @Service
+@Transactional
 public class TestJPAService
   implements ITestJPAService
 {
