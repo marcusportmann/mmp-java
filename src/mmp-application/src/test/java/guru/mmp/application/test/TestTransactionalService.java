@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.tests;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -211,6 +211,7 @@ public class TestTransactionalService
    *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
+  @Transactional
   public TestData getTestData(String id)
     throws TestTransactionalServiceException
   {

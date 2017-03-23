@@ -14,38 +14,39 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.tests;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.test.ApplicationClassRunner;
-import guru.mmp.application.test.ApplicationConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import static org.junit.Assert.fail;
 
 /**
- * The <code>TransactionalInterceptorTest</code> class contains the implementation of the JUnit
- * tests for the <code>TransactionalInterceptor</code> class.
+ * The <code>TestTransactionalServiceTest</code> class contains the implementation of the JUnit
+ * tests for the <code>TestTransactionalService</code> class.
  *
  * @author Marcus Portmann
  */
 @RunWith(ApplicationClassRunner.class)
-@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { ApplicationConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-public class TransactionalInterceptorTest
+public class TestTransactionalServiceTest
 {
   private static int testDataCount;
   @Autowired
@@ -74,7 +75,7 @@ public class TransactionalInterceptorTest
     }
     catch (TestTransactionalServiceException ignored) {}
 
-    if (transactionStatus.isCompleted())
+    if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly())
     {
       fail("Failed to invoked the Test Transactional Service in an existing transaction: "
           + "Failed to find an active transaction after creating the test data");
@@ -88,7 +89,7 @@ public class TransactionalInterceptorTest
           + "Failed to retrieve the test data within the transaction");
     }
 
-    if (transactionStatus.isCompleted())
+    if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly())
     {
       fail("Failed to invoked the Test Transactional Service in an existing transaction: "
           + "Failed to find an active transaction after retrieving the test data");

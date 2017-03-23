@@ -52,19 +52,9 @@ public class UserTransactionTracker
    *
    * @param transactionManager the transaction manager
    */
-  public UserTransactionTracker(TransactionManager transactionManager)
+  UserTransactionTracker(TransactionManager transactionManager)
   {
     this.transactionManager = transactionManager;
-  }
-
-  /**
-   * Returns the active transaction stack traces for the current thread.
-   *
-   * @return the active transaction stack traces for the current thread
-   */
-  public static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces()
-  {
-    return activeTransactionStackTraces.get();
   }
 
   /**
@@ -142,6 +132,16 @@ public class UserTransactionTracker
 
       throw e;
     }
+  }
+
+  /**
+   * Returns the active transaction stack traces for the current thread.
+   *
+   * @return the active transaction stack traces for the current thread
+   */
+  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces()
+  {
+    return activeTransactionStackTraces.get();
   }
 
   /**

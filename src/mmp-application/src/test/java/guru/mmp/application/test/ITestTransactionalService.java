@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.tests;
+package guru.mmp.application.test;
 
 /**
- * The <code>ITestJPAService</code> interface defines the functionality provided by a
- * Test JPA Service implementation.
+ * The <code>ITestTransactionalService</code> interface defines the functionality provided by a
+ * Test Transactional Service implementation.
  *
  * @author Marcus Portmann
  */
-public interface ITestJPAService
+public interface ITestTransactionalService
 {
   /**
    * Create the test data.
@@ -30,7 +30,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestData(TestData testData)
-    throws TestJPAServiceException;
+    throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction.
@@ -38,7 +38,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataInNewTransaction(TestData testData)
-    throws TestJPAServiceException;
+    throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction with a checked exception.
@@ -46,7 +46,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataInNewTransactionWithCheckedException(TestData testData)
-    throws TestJPAServiceException;
+    throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction with a runtime exception.
@@ -54,7 +54,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataInNewTransactionWithRuntimeException(TestData testData)
-    throws TestJPAServiceException;
+    throws TestTransactionalServiceException;
 
   /**
    * Create the test data with a checked exception.
@@ -62,7 +62,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataWithCheckedException(TestData testData)
-    throws TestJPAServiceException;
+    throws TestTransactionalServiceException;
 
   /**
    * Create the test data with a runtime exception.
@@ -70,15 +70,23 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataWithRuntimeException(TestData testData)
-    throws TestJPAServiceException;
+    throws TestTransactionalServiceException;
 
   /**
-   * Create the test data.
+   * Retrieve the next ID and throw an exception.
    *
-   * @param testData the test data
+   * @return the next ID
    */
-  void createTestDataWithoutTransaction(TestData testData)
-    throws TestJPAServiceException;
+  long getNextIDWithException()
+    throws TestTransactionalServiceException;
+
+  /**
+   * Retrieve the next ID without throwing an exception.
+   *
+   * @return the next ID
+   */
+  long getNextIDWithoutException()
+    throws TestTransactionalServiceException;
 
   /**
    * Retrieve the test data.
@@ -88,15 +96,5 @@ public interface ITestJPAService
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   TestData getTestData(String id)
-    throws TestJPAServiceException;
-
-  /**
-   * Retrieve the test data.
-   *
-   * @param id the ID
-   *
-   * @return the test data or <code>null</code> if the test data cannot be found
-   */
-  TestData getTestDataWithoutTransaction(String id)
-    throws TestJPAServiceException;
+    throws TestTransactionalServiceException;
 }

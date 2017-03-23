@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.tests;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 

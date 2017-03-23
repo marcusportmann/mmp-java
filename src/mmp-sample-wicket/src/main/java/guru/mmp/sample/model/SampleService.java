@@ -48,7 +48,7 @@ public class SampleService
   implements ISampleService
 {
   /* Entity Manager */
-  @PersistenceContext(unitName = "Sample")
+  @PersistenceContext(unitName = "samplePersistenceContext")
   private EntityManager entityManager;
 
   /**

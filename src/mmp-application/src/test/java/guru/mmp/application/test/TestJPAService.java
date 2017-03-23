@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.tests;
+package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,20 +39,21 @@ import java.util.List;
  */
 @SuppressWarnings("JpaQlInspection")
 @Service
-@Transactional
 public class TestJPAService
   implements ITestJPAService
 {
   /* Entity Manager */
-  @PersistenceContext(unitName = "Application")
+  @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
+  @Autowired
+  private PlatformTransactionManager transactionManager;
 
   /**
    * Create the test data.
    *
    * @param testData the test data
    */
-  @Transactional(propagation = Propagation.REQUIRED)
+  @Transactional
   public void createTestData(TestData testData)
     throws TestJPAServiceException
   {

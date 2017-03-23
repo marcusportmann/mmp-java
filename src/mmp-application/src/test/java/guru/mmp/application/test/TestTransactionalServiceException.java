@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-package guru.mmp.application.tests;
+package guru.mmp.application.test;
 
 /**
- * The <code>TestJPAServiceException</code> exception is thrown to indicate an error
- * condition when working with the Test JPA Service.
+ * The <code>TestTransactionalServiceException</code> exception is thrown to indicate an error
+ * condition when working with the Test Transactional Service.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
-public class TestJPAServiceException extends Exception
+public class TestTransactionalServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TestJPAServiceException</code> with the specified message.
+   * Constructs a new <code>TestTransactionalServiceException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public TestJPAServiceException(String message)
+  public TestTransactionalServiceException(String message)
   {
     super(message);
   }
 
   /**
-   * Constructs a new <code>TestJPAServiceException</code> with the specified message and
+   * Constructs a new <code>TestTransactionalServiceException</code> with the specified message and
    * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public TestJPAServiceException(String message, Throwable cause)
+  public TestTransactionalServiceException(String message, Throwable cause)
   {
     super(message, cause);
   }
