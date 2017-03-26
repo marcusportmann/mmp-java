@@ -43,7 +43,7 @@ import static org.junit.Assert.fail;
  * @author Marcus Portmann
  */
 @RunWith(ApplicationClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { ApplicationConfiguration.class })
+@ContextConfiguration(classes = { ApplicationConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class TestTransactionalServiceTest

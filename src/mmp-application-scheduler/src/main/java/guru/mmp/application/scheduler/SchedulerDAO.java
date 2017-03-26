@@ -23,100 +23,46 @@ import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.common.persistence.DataAccessObject;
 import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.naming.InitialContext;
-
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SchedulerDAO</code> class implements the job-related persistence operations.
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Repository
 public class SchedulerDAO
   implements ISchedulerDAO
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerDAO.class);
-  @SuppressWarnings("unused")
-  private String createJobSQL;
 
   /**
-   * The data source used to provide connections to the database.
+   * The data source used to provide connections to the application database.
    */
+  @Autowired
+  @Qualifier("applicationDataSource")
   private DataSource dataSource;
-  private String deleteJobSQL;
-  private String getJobParametersSQL;
-  private String getJobSQL;
-  private String getJobsSQL;
-  private String getNextJobScheduledForExecutionSQL;
-  private String getNextUnscheduledJobSQL;
-  private String getNumberOfJobsSQL;
-  private String getUnscheduledJobsSQL;
-  private String incrementJobExecutionAttemptsSQL;
-  private String lockJobSQL;
-  private String resetJobLocksSQL;
-  private String scheduleJobSQL;
-  private String setJobStatusSQL;
-  private String unlockJobSQL;
-  private String getNumberOfFilteredJobsSQL;
-  private String getFilteredJobsSQL;
 
   /**
    * Constructs a new <code>SchedulerDAO</code>.
    */
   public SchedulerDAO() {}
-
-  /**
-   * Update the entry for the job in the database.
-   *
-   * @param job the <code>Job</code> instance containing the updated information for the job
-   */
-  public void updateJob(Job job)
-    throws DAOException
-  {
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateJobSQL))
-    {
-      statement.setString(1, job.getName());
-      statement.setString(2, job.getSchedulingPattern());
-      statement.setString(3, job.getJobClass());
-      statement.setBoolean(4, job.getIsEnabled());
-      statement.setInt(5, job.getStatus().getCode());
-      statement.setObject(6, job.getId());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new DAOException(String.format(
-          "No rows were affected as a result of executing the SQL statement (%s)", createJobSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format("Failed to update the job (%s) to the database",
-        job.getId()), e);
-    }
-  }
-
 
   /**
    * Create the entry for the job in the database.
@@ -126,6 +72,10 @@ public class SchedulerDAO
   public void createJob(Job job)
     throws DAOException
   {
+    String createJobSQL =
+        "INSERT INTO SCHEDULER.JOBS (ID, NAME, SCHEDULING_PATTERN, JOB_CLASS, IS_ENABLED, STATUS) "
+        + "VALUES (?, ?, ?, ?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createJobSQL))
     {
@@ -157,6 +107,8 @@ public class SchedulerDAO
   public void deleteJob(UUID id)
     throws DAOException
   {
+    String deleteJobSQL = "DELETE FROM SCHEDULER.JOBS J WHERE J.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteJobSQL))
     {
@@ -184,6 +136,16 @@ public class SchedulerDAO
   public List<Job> getFilteredJobs(String filter)
     throws DAOException
   {
+    String getJobsSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM SCHEDULER.JOBS J";
+
+    String getFilteredJobsSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM SCHEDULER.JOBS J WHERE (UPPER(J.NAME) LIKE ?) OR (UPPER(J.JOB_CLASS) LIKE ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getJobsSQL
@@ -224,6 +186,11 @@ public class SchedulerDAO
   public Job getJob(UUID id)
     throws DAOException
   {
+    String getJobSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM SCHEDULER.JOBS J WHERE J.ID = ?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getJobSQL))
     {
@@ -258,6 +225,10 @@ public class SchedulerDAO
   public List<JobParameter> getJobParameters(UUID id)
     throws DAOException
   {
+    String getJobParametersSQL =
+        "SELECT JP.ID, JP.JOB_ID, JP.NAME, JP.VALUE FROM SCHEDULER.JOB_PARAMETERS JP "
+        + "WHERE JP.JOB_ID = ?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getJobParametersSQL))
     {
@@ -290,6 +261,11 @@ public class SchedulerDAO
   public List<Job> getJobs()
     throws DAOException
   {
+    String getJobsSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM SCHEDULER.JOBS J";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getJobsSQL))
     {
@@ -433,6 +409,11 @@ public class SchedulerDAO
   public int getNumberOfFilteredJobs(String filter)
     throws DAOException
   {
+    String getNumberOfJobsSQL = "SELECT COUNT(J.ID) FROM SCHEDULER.JOBS J";
+
+    String getNumberOfFilteredJobsSQL = "SELECT COUNT(J.ID) FROM SCHEDULER.JOBS J "
+        + "WHERE (UPPER(J.NAME) LIKE ?) OR (UPPER(J.JOB_CLASS) LIKE ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
           ? getNumberOfJobsSQL
@@ -472,6 +453,8 @@ public class SchedulerDAO
   public int getNumberOfJobs()
     throws DAOException
   {
+    String getNumberOfJobsSQL = "SELECT COUNT(J.ID) FROM SCHEDULER.JOBS J";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfJobsSQL))
     {
@@ -501,6 +484,11 @@ public class SchedulerDAO
   public List<Job> getUnscheduledJobs()
     throws DAOException
   {
+    String getUnscheduledJobsSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
+        + "FROM SCHEDULER.JOBS J WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUnscheduledJobsSQL))
     {
@@ -530,6 +518,9 @@ public class SchedulerDAO
   public void incrementJobExecutionAttempts(UUID id)
     throws DAOException
   {
+    String incrementJobExecutionAttemptsSQL = "UPDATE SCHEDULER.JOBS J "
+        + "SET EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, UPDATED=?, LAST_EXECUTED=? WHERE J.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(incrementJobExecutionAttemptsSQL))
     {
@@ -606,6 +597,8 @@ public class SchedulerDAO
   public void lockJob(UUID id, Job.Status status, String lockName)
     throws DAOException
   {
+    String lockJobSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE J.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(lockJobSQL))
     {
@@ -666,6 +659,9 @@ public class SchedulerDAO
   public int resetJobLocks(String lockName, Job.Status status, Job.Status newStatus)
     throws DAOException
   {
+    String resetJobLocksSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=?, LOCK_NAME=NULL, UPDATED=? "
+        + "WHERE J.LOCK_NAME=? AND J.STATUS=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(resetJobLocksSQL))
     {
@@ -829,6 +825,9 @@ public class SchedulerDAO
   public void unlockJob(UUID id, Job.Status status)
     throws DAOException
   {
+    String unlockJobSQL =
+        "UPDATE SCHEDULER.JOBS J SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE J.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(unlockJobSQL))
     {
@@ -852,39 +851,47 @@ public class SchedulerDAO
   }
 
   /**
+   * Update the entry for the job in the database.
+   *
+   * @param job the <code>Job</code> instance containing the updated information for the job
+   */
+  public void updateJob(Job job)
+    throws DAOException
+  {
+    String updateJobSQL =
+        "UPDATE SCHEDULER.JOBS J SET NAME=?, SCHEDULING_PATTERN=?, JOB_CLASS=?, IS_ENABLED=?, "
+        + "STATUS=? WHERE J.ID=?";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(updateJobSQL))
+    {
+      statement.setString(1, job.getName());
+      statement.setString(2, job.getSchedulingPattern());
+      statement.setString(3, job.getJobClass());
+      statement.setBoolean(4, job.getIsEnabled());
+      statement.setInt(5, job.getStatus().getCode());
+      statement.setObject(6, job.getId());
+
+      if (statement.executeUpdate() != 1)
+      {
+        throw new DAOException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)", updateJobSQL));
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new DAOException(String.format("Failed to update the job (%s) to the database",
+          job.getId()), e);
+    }
+  }
+
+  /**
    * Build the SQL statements for the DAO.
    *
    * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
    */
   protected void buildStatements(String schemaPrefix)
   {
-    // createJobSQL
-    createJobSQL = "INSERT INTO " + schemaPrefix + "JOBS" + " (ID, NAME, SCHEDULING_PATTERN, "
-        + "JOB_CLASS, IS_ENABLED, STATUS) VALUES (?, ?, ?, ?, ?, ?)";
-
-    // deleteJobSQL
-    deleteJobSQL = "DELETE FROM " + schemaPrefix + "JOBS J WHERE J.ID=?";
-
-    // getFilteredJobsSQL
-    getFilteredJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, "
-        + "J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
-        + "FROM" + " " + schemaPrefix + "JOBS J "
-        + "WHERE (UPPER(J.NAME) LIKE ?) OR (UPPER(J.JOB_CLASS) LIKE ?)";
-
-    // getJobParametersSQL
-    getJobParametersSQL = "SELECT JP.ID, JP.JOB_ID, JP.NAME, JP.VALUE FROM " + schemaPrefix
-        + "JOB_PARAMETERS JP WHERE JP.JOB_ID = ?";
-
-    // getJobSQL
-    getJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
-        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
-        + "FROM " + schemaPrefix + "JOBS J WHERE J.ID = ?";
-
-    // getJobsSQL
-    getJobsSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
-        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED "
-        + "FROM" + " " + schemaPrefix + "JOBS J";
-
     // getNextJobScheduledForExecutionSQL
     getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, "
         + "J.IS_ENABLED, J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, "
@@ -899,53 +906,7 @@ public class SchedulerDAO
         + "J.NEXT_EXECUTION, J.UPDATED FROM " + schemaPrefix
         + "JOBS J WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0 "
         + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    // getNumberOfFilteredJobsSQL
-    getNumberOfFilteredJobsSQL = "SELECT COUNT(J.ID) FROM " + schemaPrefix + "JOBS J "
-        + "WHERE (UPPER(J.NAME) LIKE ?) OR (UPPER(J.JOB_CLASS) LIKE ?)";
-
-    // getNumberOfJobsSQL
-    getNumberOfJobsSQL = "SELECT COUNT(J.ID) FROM " + schemaPrefix + "JOBS J";
-
-    // getUnscheduledJobsSQL
-    getUnscheduledJobsSQL =
-        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, "
-        + "J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, "
-        + "J.UPDATED FROM " + schemaPrefix + "JOBS J "
-        + "WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0";
-
-    // lockJobSQL
-    lockJobSQL = "UPDATE " + schemaPrefix + "JOBS J SET STATUS=?, LOCK_NAME=?, UPDATED=? "
-        + "WHERE J.ID=?";
-
-    // incrementJobExecutionAttemptsSQL
-    incrementJobExecutionAttemptsSQL = "UPDATE " + schemaPrefix + "JOBS J "
-        + "SET EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, UPDATED=?, LAST_EXECUTED=? "
-        + "WHERE J.ID=?";
-
-    // resetJobLocksSQL
-    resetJobLocksSQL = "UPDATE " + schemaPrefix + "JOBS J "
-        + "SET STATUS=?, LOCK_NAME=NULL, UPDATED=? WHERE J.LOCK_NAME=? AND J.STATUS=?";
-
-    // scheduleJobSQL
-    scheduleJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
-        + "SET STATUS=1, EXECUTION_ATTEMPTS=0, NEXT_EXECUTION=?, UPDATED=? WHERE J.ID=?";
-
-    // setJobStatusSQL
-    setJobStatusSQL = "UPDATE " + schemaPrefix + "JOBS J SET STATUS=? WHERE J.ID=?";
-
-    // unlockJobSQL
-    unlockJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
-        + "SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE J.ID=?";
-
-    // updateJobSQL
-    updateJobSQL = "UPDATE " + schemaPrefix + "JOBS J "
-      + "SET NAME=?, SCHEDULING_PATTERN=?, JOB_CLASS=?, IS_ENABLED=?, STATUS=? "
-      + "WHERE J.ID=?";
   }
-
-
-  private String updateJobSQL;
 
   private Job getJob(ResultSet rs)
     throws SQLException
@@ -963,6 +924,10 @@ public class SchedulerDAO
 
   private void scheduleJob(Connection connection, UUID id, Date nextExecution)
   {
+    String scheduleJobSQL =
+        "UPDATE SCHEDULER.JOBS J SET STATUS=1, EXECUTION_ATTEMPTS=0, NEXT_EXECUTION=?, UPDATED=? "
+        + "WHERE J.ID=?";
+
     try (PreparedStatement statement = connection.prepareStatement(scheduleJobSQL))
     {
       statement.setTimestamp(1, new Timestamp(nextExecution.getTime()));
@@ -984,6 +949,8 @@ public class SchedulerDAO
 
   private void setJobStatus(Connection connection, UUID id, Job.Status status)
   {
+    String setJobStatusSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=? WHERE J.ID=?";
+
     try (PreparedStatement statement = connection.prepareStatement(setJobStatusSQL))
     {
       statement.setInt(1, status.getCode());

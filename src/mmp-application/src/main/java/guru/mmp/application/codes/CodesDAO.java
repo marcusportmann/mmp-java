@@ -24,6 +24,7 @@ import guru.mmp.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.io.UnsupportedEncodingException;
@@ -70,6 +71,7 @@ public class CodesDAO
    *
    * @return <code>true</code> if the cached code category exists or <code>false</code> otherwise
    */
+  @Transactional
   public boolean cachedCodeCategoryExists(UUID id)
     throws DAOException
   {
@@ -101,6 +103,7 @@ public class CodesDAO
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    */
+  @Transactional
   public boolean codeCategoryExists(UUID id)
     throws DAOException
   {
@@ -129,6 +132,7 @@ public class CodesDAO
    * @param code the <code>Code</code> instance containing the information for the new cached
    *             code
    */
+  @Transactional
   public void createCachedCode(Code code)
     throws DAOException
   {
@@ -172,6 +176,7 @@ public class CodesDAO
    * @param cachedCodeCategory the <code>CachedCodeCategory</code> instance containing the
    *                           information for the new code category
    */
+  @Transactional
   public void createCachedCodeCategory(CachedCodeCategory cachedCodeCategory)
     throws DAOException
   {
@@ -210,6 +215,7 @@ public class CodesDAO
    *
    * @param code the <code>Code</code> instance containing the information for the new code
    */
+  @Transactional
   public void createCode(Code code)
     throws DAOException
   {
@@ -253,6 +259,7 @@ public class CodesDAO
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
    *                     new code category
    */
+  @Transactional
   public void createCodeCategory(CodeCategory codeCategory)
     throws DAOException
   {
@@ -317,6 +324,7 @@ public class CodesDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the cached code
    *           category
    */
+  @Transactional
   public void deleteCachedCodeCategory(UUID id)
     throws DAOException
   {
@@ -349,6 +357,7 @@ public class CodesDAO
    *                       code category
    * @param id             the ID uniquely identifying the code
    */
+  @Transactional
   public void deleteCode(UUID codeCategoryId, String id)
     throws DAOException
   {
@@ -381,6 +390,7 @@ public class CodesDAO
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code
    *           category
    */
+  @Transactional
   public void deleteCodeCategory(UUID id)
     throws DAOException
   {
@@ -414,6 +424,7 @@ public class CodesDAO
    * @return the cached code category or <code>null</code> if the cached code category could not
    * be found
    */
+  @Transactional
   public CachedCodeCategory getCachedCodeCategory(UUID id)
     throws DAOException
   {
@@ -452,6 +463,7 @@ public class CodesDAO
    *
    * @return all the cached codes for the cached code category
    */
+  @Transactional
   public List<Code> getCachedCodesForCachedCodeCategory(UUID id)
     throws DAOException
   {
@@ -494,6 +506,7 @@ public class CodesDAO
    *
    * @return the code or <code>null</code> if the code could not be found
    */
+  @Transactional
   public Code getCode(UUID codeCategoryId, String id)
     throws DAOException
   {
@@ -532,6 +545,7 @@ public class CodesDAO
    *
    * @return all the code categories
    */
+  @Transactional
   public List<CodeCategory> getCodeCategories(boolean retrieveCodes)
     throws DAOException
   {
@@ -588,6 +602,7 @@ public class CodesDAO
    *
    * @return the code category or <code>null</code> if the code category could not be found
    */
+  @Transactional
   public CodeCategory getCodeCategory(UUID id)
     throws DAOException
   {
@@ -627,6 +642,7 @@ public class CodesDAO
    *
    * @return all the codes for the code category
    */
+  @Transactional
   public List<Code> getCodesForCodeCategory(UUID id)
     throws DAOException
   {
@@ -646,6 +662,7 @@ public class CodesDAO
    *
    * @return the number of code categories
    */
+  @Transactional
   public int getNumberOfCodeCategories()
     throws DAOException
   {
@@ -682,6 +699,7 @@ public class CodesDAO
    *
    * @return the number of codes for the code category
    */
+  @Transactional
   public int getNumberOfCodesForCodeCategory(UUID id)
     throws DAOException
   {
@@ -724,6 +742,7 @@ public class CodesDAO
    * @return <code>true</code> if the cached code category is current or <code>false</code>
    * otherwise
    */
+  @Transactional
   public boolean isCachedCodeCategoryCurrent(UUID id)
     throws DAOException
   {
@@ -756,6 +775,7 @@ public class CodesDAO
    *
    * @return the updated code
    */
+  @Transactional
   public Code updateCode(Code code)
     throws DAOException
   {
@@ -792,6 +812,7 @@ public class CodesDAO
    *
    * @return the updated code category
    */
+  @Transactional
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws DAOException
   {

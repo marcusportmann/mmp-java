@@ -147,7 +147,7 @@ public class ApplicationConfiguration
    *
    * @return the data source that can be used to interact with the in-memory database
    */
-  @Bean(name = "applicationDataSource", destroyMethod = "close")
+  @Bean(name = "applicationDataSource")
   @DependsOn({ "transactionManager" })
   protected DataSource dataSource()
   {

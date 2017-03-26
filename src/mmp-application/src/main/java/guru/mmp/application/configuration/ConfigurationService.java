@@ -18,6 +18,7 @@ package guru.mmp.application.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.codes.ICodesDAO;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +44,9 @@ import java.util.List;
 public class ConfigurationService
   implements IConfigurationService
 {
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /* Configuration DAO */
   @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  private IConfigurationDAO configurationDAO;
 
   /**
    * Retrieve the binary configuration value.
@@ -62,18 +60,27 @@ public class ConfigurationService
   {
     try
     {
-      return Base64.decode(getString(key));
+      byte[] binaryValue = configurationDAO.getBinary(key);
+
+      if (binaryValue == null)
+      {
+        throw new ConfigurationNotFoundException(String.format(
+          "The binary configuration value with the key (%s) could not be found", key));
+      }
+      else
+      {
+        return binaryValue;
+      }
     }
     catch (ConfigurationNotFoundException e)
     {
-      throw new ConfigurationNotFoundException(String.format(
-          "The binary configuration value with the key (%s) could not be found", key));
+      throw e;
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the binary configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+          "Failed to retrieve the binary configuration value with the key (%s)", key
+          ), e);
     }
   }
 
@@ -91,15 +98,22 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key, String.valueOf(Base64.encodeBytes(defaultValue)));
+      byte[] binaryValue = configurationDAO.getBinary(key);
 
-      return Base64.decode(stringValue);
+      if (binaryValue == null)
+      {
+        throw new ConfigurationNotFoundException(String.format(
+          "The binary configuration value with the key (%s) could not be found", key));
+      }
+      else
+      {
+        return binaryValue;
+      }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the binary configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+          "Failed to retrieve the binary configuration value with the key (%s)", key), e);
     }
   }
 
@@ -115,18 +129,26 @@ public class ConfigurationService
   {
     try
     {
-      return Boolean.valueOf(getString(key));
+      Boolean booleanValue = configurationDAO.getBoolean(key);
+
+      if (booleanValue == null)
+      {
+        throw new ConfigurationNotFoundException(String.format(
+          "The Boolean configuration value with the key (%s) could not be found", key));
+      }
+      else
+      {
+        return booleanValue;
+      }
     }
     catch (ConfigurationNotFoundException e)
     {
-      throw new ConfigurationNotFoundException(String.format(
-          "The Boolean configuration value with the key (%s) could not be found", key));
+      throw e;
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Boolean configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the Boolean configuration value with the key (%s)", key), e);
     }
   }
 
@@ -144,13 +166,21 @@ public class ConfigurationService
   {
     try
     {
-      return Boolean.valueOf(getString(key, String.valueOf(defaultValue)));
+      Boolean booleanValue = configurationDAO.getBoolean(key);
+
+      if (booleanValue == null)
+      {
+        return defaultValue;
+      }
+      else
+      {
+        return booleanValue;
+      }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Boolean configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the Boolean configuration value with the key (%s)", key), e);
     }
   }
 
@@ -166,18 +196,26 @@ public class ConfigurationService
   {
     try
     {
-      return Double.valueOf(getString(key));
+      Double doubleValue = configurationDAO.getDouble(key);
+
+      if (doubleValue == null)
+      {
+        throw new ConfigurationNotFoundException(String.format(
+          "The Double configuration value with the key (%s) could not be found", key));
+      }
+      else
+      {
+        return doubleValue;
+      }
     }
     catch (ConfigurationNotFoundException e)
     {
-      throw new ConfigurationNotFoundException(String.format(
-          "The Double configuration value with the key (%s) could not be found", key));
+      throw e;
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Double configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the Double configuration value with the key (%s)", key), e);
     }
   }
 
@@ -195,15 +233,21 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key, String.valueOf(defaultValue));
+      Double doubleValue = configurationDAO.getDouble(key);
 
-      return Double.valueOf(stringValue);
+      if (doubleValue == null)
+      {
+        return defaultValue;
+      }
+      else
+      {
+        return doubleValue;
+      }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Double configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the Double configuration value with the key (%s)", key), e);
     }
   }
 
@@ -217,39 +261,14 @@ public class ConfigurationService
   public List<ConfigurationValue> getFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
-    String getConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM "
-        + "CONFIGURATION.CONFIGURATION C ORDER BY C.KEY";
-
-    String getFilteredConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM "
-        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?) ORDER BY C.KEY";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-          ? getConfigurationValuesSQL
-          : getFilteredConfigurationValuesSQL))
+    try
     {
-      if (!StringUtil.isNullOrEmpty(filter))
-      {
-        statement.setString(1, "%" + filter.toUpperCase() + "%");
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<ConfigurationValue> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(new ConfigurationValue(rs.getString(1), rs.getString(2), rs.getString(3)));
-        }
-
-        return list;
-      }
+      return configurationDAO.getFilteredConfigurationValues(filter);
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the configuration values matching the filter (%s): %s", filter,
-          e.getMessage()), e);
+          "Failed to retrieve the configuration values matching the filter (%s)", filter), e);
     }
   }
 
@@ -265,18 +284,26 @@ public class ConfigurationService
   {
     try
     {
-      return Integer.valueOf(getString(key));
+      Integer integerValue = configurationDAO.getInteger(key);
+
+      if (integerValue == null)
+      {
+        throw new ConfigurationNotFoundException(String.format(
+          "The Integer configuration value with the key (%s) could not be found", key));
+      }
+      else
+      {
+        return integerValue;
+      }
     }
     catch (ConfigurationNotFoundException e)
     {
-      throw new ConfigurationNotFoundException(String.format(
-          "The Integer configuration value with the key (%s) could not be found", key));
+      throw e;
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Integer configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the Integer configuration value with the key (%s)", key), e);
     }
   }
 
@@ -294,17 +321,22 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key, String.valueOf(defaultValue));
+      Integer integerValue = configurationDAO.getInteger(key);
 
-      return Integer.valueOf(stringValue);
+      if (integerValue == null)
+      {
+        return defaultValue;
+      }
+      else
+      {
+        return integerValue;
+      }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Integer configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
-    }
-  }
+        "Failed to retrieve the Integer configuration value with the key (%s)", key), e);
+    }  }
 
   /**
    * Retrieve the <code>Long</code> configuration value.
@@ -318,18 +350,26 @@ public class ConfigurationService
   {
     try
     {
-      return Long.valueOf(getString(key));
+      Long longValue = configurationDAO.getLong(key);
+
+      if (longValue == null)
+      {
+        throw new ConfigurationNotFoundException(String.format(
+          "The Long configuration value with the key (%s) could not be found", key));
+      }
+      else
+      {
+        return longValue;
+      }
     }
     catch (ConfigurationNotFoundException e)
     {
-      throw new ConfigurationNotFoundException(String.format(
-          "The Long configuration value with the key (%s) could not be found", key));
+      throw e;
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Long configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the Long configuration value with the key (%s)", key), e);
     }
   }
 
@@ -347,15 +387,21 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key, String.valueOf(defaultValue));
+      Long longValue = configurationDAO.getLong(key);
 
-      return Long.valueOf(stringValue);
+      if (longValue == null)
+      {
+        return defaultValue;
+      }
+      else
+      {
+        return longValue;
+      }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the Long configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the Long configuration value with the key (%s)", key), e);
     }
   }
 
@@ -369,41 +415,15 @@ public class ConfigurationService
   public int getNumberOfFilteredConfigurationValues(String filter)
     throws ConfigurationException
   {
-    String getNumberOfConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM "
-        + "CONFIGURATION.CONFIGURATION C";
-
-    String getNumberOfFilteredConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM "
-        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-          ? getNumberOfConfigurationEntriesSQL
-          : getNumberOfFilteredConfigurationEntriesSQL))
+    try
     {
-      if (!StringUtil.isNullOrEmpty(filter))
-      {
-        statement.setString(1, "%" + filter.toUpperCase() + "%");
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          throw new ConfigurationException(String.format(
-              "No rows were returned as a result of executing the SQL statement (%s)",
-              getNumberOfFilteredConfigurationEntriesSQL));
-        }
-      }
+      return configurationDAO.getNumberOfFilteredConfigurationValues(filter);
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the number of configuration values matching the filter (%s): %s",
-          filter, e.getMessage()), e);
+          "Failed to retrieve the number of configuration values matching the filter (%s)",
+          filter), e);
     }
   }
 
@@ -417,32 +437,28 @@ public class ConfigurationService
   public String getString(String key)
     throws ConfigurationNotFoundException, ConfigurationException
   {
-    String getValueSQL =
-        "SELECT C.VALUE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) = ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    try
     {
-      statement.setString(1, key.toUpperCase());
+      String stringValue = configurationDAO.getString(key);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (stringValue == null)
       {
-        if (rs.next())
-        {
-          return rs.getString(1);
-        }
-        else
-        {
-          throw new ConfigurationNotFoundException(String.format(
-              "The String configuration value with the key (%s) could not be found", key));
-        }
+        throw new ConfigurationNotFoundException(String.format(
+          "The String configuration value with the key (%s) could not be found", key));
       }
+      else
+      {
+        return stringValue;
+      }
+    }
+    catch (ConfigurationNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the String configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the String configuration value with the key (%s)", key), e);
     }
   }
 
@@ -458,31 +474,23 @@ public class ConfigurationService
   public String getString(String key, String defaultValue)
     throws ConfigurationException
   {
-    String getValueSQL =
-        "SELECT C.VALUE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) = ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    try
     {
-      statement.setString(1, key.toUpperCase());
+      String stringValue = configurationDAO.getString(key);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (stringValue == null)
       {
-        if (rs.next())
-        {
-          return rs.getString(1);
-        }
-        else
-        {
-          return defaultValue;
-        }
+        return defaultValue;
+      }
+      else
+      {
+        return stringValue;
       }
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the String configuration value with the key (%s): %s", key,
-          e.getMessage()), e);
+        "Failed to retrieve the String configuration value with the key (%s)", key), e);
     }
   }
 
@@ -497,9 +505,9 @@ public class ConfigurationService
   public boolean keyExists(String key)
     throws ConfigurationException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return keyExists(connection, key);
+      return configurationDAO.keyExists(key);
     }
     catch (Throwable e)
     {
@@ -516,24 +524,14 @@ public class ConfigurationService
   public void removeValue(String key)
     throws ConfigurationException
   {
-    String removeValueSQL = "DELETE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(removeValueSQL))
+    try
     {
-      statement.setString(1, key.toUpperCase());
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new ConfigurationException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            removeValueSQL));
-      }
+      configurationDAO.removeValue(key);
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to remove the configuration value with the key (%s): %s", key, e.getMessage()),
+          "Failed to remove the configuration value with the key (%s)", key),
           e);
     }
   }
@@ -548,110 +546,14 @@ public class ConfigurationService
   public void setValue(String key, Object value, String description)
     throws ConfigurationException
   {
-    String updateValueSQL = "UPDATE CONFIGURATION.CONFIGURATION C SET VALUE = ?, DESCRIPTION = ? "
-        + "WHERE (UPPER(C.KEY) = ?)";
-
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      String stringValue;
-
-      if (value instanceof String)
-      {
-        stringValue = (String) value;
-      }
-      else if (value instanceof byte[])
-      {
-        stringValue = Base64.encodeBytes((byte[]) value);
-      }
-      else
-      {
-        stringValue = value.toString();
-      }
-
-      if (keyExists(connection, key))
-      {
-        try (PreparedStatement statement = connection.prepareStatement(updateValueSQL))
-        {
-          statement.setString(1, stringValue);
-          statement.setString(2, StringUtil.notNull(description));
-          statement.setString(3, key.toUpperCase());
-
-          if (statement.executeUpdate() <= 0)
-          {
-            throw new ConfigurationException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                updateValueSQL));
-          }
-        }
-      }
-      else
-      {
-        createValue(connection, key, stringValue, description);
-      }
+      configurationDAO.setValue(key, value, description);
     }
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to set the configuration value with the key (%s): %s", key, e.getMessage()), e);
-    }
-  }
-
-  private void createValue(Connection connection, String key, Object value, String description)
-    throws SQLException, ConfigurationException
-  {
-    String createValueSQL = "INSERT INTO CONFIGURATION.CONFIGURATION (KEY, VALUE, DESCRIPTION) "
-        + "VALUES (?, ?, ?)";
-
-    String stringValue;
-
-    if (value instanceof String)
-    {
-      stringValue = (String) value;
-    }
-    else
-    {
-      stringValue = value.toString();
-    }
-
-    try (PreparedStatement statement = connection.prepareStatement(createValueSQL))
-    {
-      statement.setString(1, key);
-      statement.setString(2, stringValue);
-      statement.setString(3, StringUtil.notNull(description));
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new ConfigurationException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createValueSQL));
-      }
-    }
-  }
-
-  private boolean keyExists(Connection connection, String key)
-    throws SQLException
-  {
-    String keyExistsSQL =
-        "SELECT COUNT(C.KEY) FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
-
-    try (PreparedStatement statement = connection.prepareStatement(keyExistsSQL))
-    {
-      statement.setString(1, key.toUpperCase());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return (rs.getInt(1) > 0);
-        }
-        else
-        {
-          throw new SQLException(String.format(
-              "Failed to check whether the configuration value with the key (%s) exists: "
-              + "No results were returned as a result of executing the SQL statement (%s)", key,
-              keyExistsSQL));
-        }
-      }
+          "Failed to set the configuration value with the key (%s)]", key), e);
     }
   }
 }
