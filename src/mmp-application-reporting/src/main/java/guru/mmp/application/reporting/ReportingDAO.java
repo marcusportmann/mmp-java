@@ -19,13 +19,10 @@ package guru.mmp.application.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.DAOException;
-import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.persistence.DataAccessObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,25 +40,17 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@SuppressWarnings("unused")
+@Repository
 public class ReportingDAO
   implements IReportingDAO
 {
-  private String createReportDefinitionSQL;
-
   /**
    * The data source used to provide connections to the application database.
    */
+  @Autowired
+  @Qualifier("applicationDataSource")
   private DataSource dataSource;
-  private String deleteReportDefinitionSQL;
-  private String getNumberOfReportDefinitionsSQL;
-  private String getReportDefinitionByIdSQL;
-  private String getReportDefinitionSummariesSQL;
-  private String getReportDefinitionSummaryByIdSQL;
-  private String getReportDefinitionsSQL;
-  private String reportDefinitionExistsSQL;
-  private String updateReportDefinitionSQL;
 
   /**
    * Constructs a new <code>ReportingDAO</code>.
@@ -77,6 +66,9 @@ public class ReportingDAO
   public void createReportDefinition(ReportDefinition reportDefinition)
     throws DAOException
   {
+    String createReportDefinitionSQL =
+        "INSERT INTO REPORTING.REPORT_DEFINITIONS (ID, NAME, TEMPLATE) VALUES (?, ?, ?)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createReportDefinitionSQL))
     {
@@ -108,6 +100,8 @@ public class ReportingDAO
   public void deleteReportDefinition(UUID id)
     throws DAOException
   {
+    String deleteReportDefinitionSQL = "DELETE FROM REPORTING.REPORT_DEFINITIONS RD WHERE RD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteReportDefinitionSQL))
     {
@@ -145,6 +139,9 @@ public class ReportingDAO
   public int getNumberOfReportDefinitions()
     throws DAOException
   {
+    String getNumberOfReportDefinitionsSQL =
+        "SELECT COUNT(RD.ID) FROM REPORTING.REPORT_DEFINITIONS RD";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfReportDefinitionsSQL))
     {
@@ -181,6 +178,9 @@ public class ReportingDAO
   public ReportDefinition getReportDefinition(UUID id)
     throws DAOException
   {
+    String getReportDefinitionByIdSQL =
+        "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM REPORTING.REPORT_DEFINITIONS RD WHERE RD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getReportDefinitionByIdSQL))
     {
@@ -213,6 +213,9 @@ public class ReportingDAO
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws DAOException
   {
+    String getReportDefinitionSummariesSQL =
+        "SELECT RD.ID, RD.NAME FROM REPORTING.REPORT_DEFINITIONS RD";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getReportDefinitionSummariesSQL))
     {
@@ -247,6 +250,9 @@ public class ReportingDAO
   public ReportDefinitionSummary getReportDefinitionSummary(UUID id)
     throws DAOException
   {
+    String getReportDefinitionSummaryByIdSQL =
+        "SELECT RD.ID, RD.NAME FROM REPORTING.REPORT_DEFINITIONS RD WHERE RD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getReportDefinitionSummaryByIdSQL))
     {
@@ -280,6 +286,9 @@ public class ReportingDAO
   public List<ReportDefinition> getReportDefinitions()
     throws DAOException
   {
+    String getReportDefinitionsSQL =
+        "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM REPORTING.REPORT_DEFINITIONS RD";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getReportDefinitionsSQL))
     {
@@ -302,49 +311,6 @@ public class ReportingDAO
   }
 
   /**
-   * Initialise the <code>ReportingDAO</code> instance.
-   */
-  @PostConstruct
-  public void init()
-  {
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source using the JNDI names "
-          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
-          dataSource);
-
-      // Build the SQL statements for the DAO
-      buildStatements(schemaPrefix);
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format("Failed to initialise the %s data access object: %s",
-          getClass().getName(), e.getMessage()), e);
-    }
-  }
-
-  /**
    * Check whether the report definition exists in the database.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
@@ -355,6 +321,9 @@ public class ReportingDAO
   public boolean reportDefinitionExists(UUID id)
     throws DAOException
   {
+    String reportDefinitionExistsSQL =
+        "SELECT COUNT(RD.ID) FROM REPORTING.REPORT_DEFINITIONS RD WHERE RD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(reportDefinitionExistsSQL))
     {
@@ -392,6 +361,9 @@ public class ReportingDAO
   public ReportDefinition updateReportDefinition(ReportDefinition reportDefinition)
     throws DAOException
   {
+    String updateReportDefinitionSQL =
+        "UPDATE REPORTING.REPORT_DEFINITIONS RD SET NAME=?, TEMPLATE=? WHERE RD.ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateReportDefinitionSQL))
     {
@@ -414,50 +386,6 @@ public class ReportingDAO
           "Failed to update the report definition (%s) in the database", reportDefinition.getId()),
           e);
     }
-  }
-
-  /**
-   * Build the SQL statements for the DAO.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
-   */
-  private void buildStatements(String schemaPrefix)
-  {
-    // createReportDefinitionSQL
-    createReportDefinitionSQL = "INSERT INTO " + schemaPrefix + "REPORT_DEFINITIONS (ID, NAME, "
-        + "TEMPLATE) VALUES (?, ?, ?)";
-
-    // deleteReportDefinitionSQL
-    deleteReportDefinitionSQL = "DELETE FROM " + schemaPrefix + "REPORT_DEFINITIONS RD WHERE RD"
-        + ".ID=?";
-
-    // getNumberOfReportDefinitionsSQL
-    getNumberOfReportDefinitionsSQL = "SELECT COUNT(RD.ID)" + " FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD";
-
-    // getReportDefinitionByIdSQL
-    getReportDefinitionByIdSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
-
-    // getReportDefinitionSummariesSQL
-    getReportDefinitionSummariesSQL = "SELECT RD.ID, RD.NAME" + " FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD";
-
-    // getReportDefinitionSummaryByIdSQL
-    getReportDefinitionSummaryByIdSQL = "SELECT RD.ID, RD.NAME FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD WHERE RD.ID=?";
-
-    // getReportDefinitionsSQL
-    getReportDefinitionsSQL = "SELECT RD.ID, RD.NAME, RD.TEMPLATE FROM " + schemaPrefix
-        + "REPORT_DEFINITIONS RD";
-
-    // reportDefinitionExistsSQL
-    reportDefinitionExistsSQL = "SELECT COUNT(RD.ID) FROM " + schemaPrefix + "REPORT_DEFINITIONS "
-        + "RD WHERE RD.ID=?";
-
-    // updateReportDefinitionSQL
-    updateReportDefinitionSQL = "UPDATE " + schemaPrefix + "REPORT_DEFINITIONS RD SET NAME=?, "
-        + "TEMPLATE=? WHERE RD.ID=?";
   }
 
   private ReportDefinition getReportDefinition(ResultSet rs)

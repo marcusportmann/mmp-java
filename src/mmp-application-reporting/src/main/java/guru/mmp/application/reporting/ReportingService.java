@@ -26,12 +26,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.util.*;
@@ -43,8 +42,7 @@ import java.util.*;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
 public class ReportingService
   implements IReportingService
 {
@@ -54,8 +52,8 @@ public class ReportingService
   /* The real path to the folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
 
-  /* The DAO providing persistence capabilities for the reporting infrastructure. */
-  @Inject
+  /* Reporting DAO */
+  @Autowired
   private IReportingDAO reportingDAO;
 
   /**
