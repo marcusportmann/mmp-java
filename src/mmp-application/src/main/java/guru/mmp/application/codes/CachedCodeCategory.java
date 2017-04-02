@@ -82,16 +82,6 @@ class CachedCodeCategory
   }
 
   /**
-   * Returns the date and time the code category was cached.
-   *
-   * @return the date and time the code category was cached
-   */
-  public Date getCached()
-  {
-    return cached;
-  }
-
-  /**
    * Returns the codes for the cached code category.
    *
    * @return the codes for the cached code category
@@ -111,16 +101,6 @@ class CachedCodeCategory
   public UUID getId()
   {
     return id;
-  }
-
-  /**
-   * Set the date and time the code category was cached.
-   *
-   * @param cached the date and time the code category was cached
-   */
-  public void setCached(Date cached)
-  {
-    this.cached = cached;
   }
 
   /**
@@ -165,6 +145,16 @@ class CachedCodeCategory
   public void setLastUpdated(Date lastUpdated)
   {
     this.lastUpdated = lastUpdated;
+  }
+
+  /**
+   * Returns the date and time the code category was cached.
+   *
+   * @return the date and time the code category was cached
+   */
+  Date getCached()
+  {
+    return cached;
   }
 
   /**

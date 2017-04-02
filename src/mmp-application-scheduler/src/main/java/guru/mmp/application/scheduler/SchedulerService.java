@@ -20,10 +20,12 @@ package guru.mmp.application.scheduler;
 
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.util.ServiceUtil;
-import guru.mmp.common.cdi.CDIUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -34,21 +36,12 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
-import javax.enterprise.concurrent.ManagedThreadFactory;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.inject.Inject;
-
-import javax.naming.InitialContext;
-
 /**
  * The <code>SchedulerService</code> class provides the Scheduler Service implementation.
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
 public class SchedulerService
   implements ISchedulerService
 {
@@ -59,8 +52,14 @@ public class SchedulerService
   private String instanceName = ServiceUtil.getServiceInstanceName("Scheduler Service");
 
   /* Job DAO */
-  @Inject
+  @Autowired
   private ISchedulerDAO jobDAO;
+
+  /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.
@@ -73,20 +72,13 @@ public class SchedulerService
   private int maximumJobExecutionAttempts;
 
   /* Configuration Service */
-  @Inject
+  @Autowired
   private IConfigurationService configurationService;
-
-  /**
-   * Constructs a new <code>SchedulerService</code>.
-   */
-  public SchedulerService() {}
 
   /**
    * Create the job.
    *
    * @param job the <code>Job</code> instance containing the information for the job
-   *
-   * @throws SchedulerServiceException
    */
   public void createJob(Job job)
     throws SchedulerServiceException
@@ -105,8 +97,6 @@ public class SchedulerService
    * Delete the job
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
-   *
-   * @throws SchedulerServiceException
    */
   public void deleteJob(UUID id)
     throws SchedulerServiceException
@@ -126,8 +116,6 @@ public class SchedulerService
    * Execute the job.
    *
    * @param job the job
-   *
-   * @throws SchedulerServiceException
    */
   public void executeJob(Job job)
     throws SchedulerServiceException
@@ -205,8 +193,6 @@ public class SchedulerService
    * @param filter the filter to apply to the jobs
    *
    * @return the jobs
-   *
-   * @throws SchedulerServiceException
    */
   public List<Job> getFilteredJobs(String filter)
     throws SchedulerServiceException
@@ -228,8 +214,6 @@ public class SchedulerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the job or <code>null</code> if the job could not be found
-   *
-   * @throws SchedulerServiceException
    */
   public Job getJob(UUID id)
     throws SchedulerServiceException
@@ -250,8 +234,6 @@ public class SchedulerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the parameters for the job
-   *
-   * @throws SchedulerServiceException
    */
   public List<JobParameter> getJobParameters(UUID id)
     throws SchedulerServiceException
@@ -271,8 +253,6 @@ public class SchedulerService
    * Retrieve the jobs.
    *
    * @return the jobs
-   *
-   * @throws SchedulerServiceException
    */
   public List<Job> getJobs()
     throws SchedulerServiceException
@@ -304,8 +284,6 @@ public class SchedulerService
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
    *         currently scheduled for execution
-   *
-   * @throws SchedulerServiceException
    */
   public Job getNextJobScheduledForExecution()
     throws SchedulerServiceException
@@ -327,8 +305,6 @@ public class SchedulerService
    * @param filter the filter to apply to the jobs
    *
    * @return the number of filtered jobs
-   *
-   * @throws SchedulerServiceException
    */
   public int getNumberOfFilteredJobs(String filter)
     throws SchedulerServiceException
@@ -348,8 +324,6 @@ public class SchedulerService
    * Retrieve the number of jobs.
    *
    * @return the number of jobs
-   *
-   * @throws SchedulerServiceException
    */
   public int getNumberOfJobs()
     throws SchedulerServiceException
@@ -368,8 +342,6 @@ public class SchedulerService
    * Retrieve the unscheduled jobs.
    *
    * @return the unscheduled jobs
-   *
-   * @throws SchedulerServiceException
    */
   public List<Job> getUnscheduledJobs()
     throws SchedulerServiceException
@@ -388,8 +360,6 @@ public class SchedulerService
    * Increment the execution attempts for the job.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
-   *
-   * @throws SchedulerServiceException
    */
   public void incrementJobExecutionAttempts(UUID id)
     throws SchedulerServiceException
@@ -431,8 +401,6 @@ public class SchedulerService
    *                          the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
-   *
-   * @throws SchedulerServiceException
    */
   public void rescheduleJob(UUID id, String schedulingPattern)
     throws SchedulerServiceException
@@ -455,8 +423,6 @@ public class SchedulerService
    * @param newStatus the new status for the jobs that have been unlocked
    *
    * @return the number of job locks reset
-   *
-   * @throws SchedulerServiceException
    */
   public int resetJobLocks(Job.Status status, Job.Status newStatus)
     throws SchedulerServiceException
@@ -478,8 +444,6 @@ public class SchedulerService
    *
    * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
    *         if there are no more unscheduled jobs to schedule
-   *
-   * @throws SchedulerServiceException
    */
   public boolean scheduleNextUnscheduledJobForExecution()
     throws SchedulerServiceException
@@ -500,8 +464,6 @@ public class SchedulerService
    *
    * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the unlocked job
-   *
-   * @throws SchedulerServiceException
    */
   public void unlockJob(UUID id, Job.Status status)
     throws SchedulerServiceException
@@ -521,8 +483,6 @@ public class SchedulerService
    * Update the job.
    *
    * @param job the <code>Job</code> instance containing the updated information for the job
-   *
-   * @throws SchedulerServiceException
    */
   public void updateJob(Job job)
     throws SchedulerServiceException
@@ -539,8 +499,6 @@ public class SchedulerService
 
   /**
    * Initialise the configuration for the <code>SchedulerService</code> instance.
-   *
-   * @throws SchedulerServiceException
    */
   private void initConfiguration()
     throws SchedulerServiceException
@@ -577,7 +535,7 @@ public class SchedulerService
   {
     try
     {
-      CDIUtil.inject(jobImplementation);
+      applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);
     }
     catch (Throwable e)
     {

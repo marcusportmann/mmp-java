@@ -19,18 +19,15 @@ package guru.mmp.application.scheduler;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.DAOException;
-import guru.mmp.common.persistence.DAOUtil;
-import guru.mmp.common.persistence.DataAccessObject;
-import guru.mmp.common.persistence.TransactionManager;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -45,6 +42,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 @Repository
 public class SchedulerDAO
   implements ISchedulerDAO
@@ -58,11 +56,6 @@ public class SchedulerDAO
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
-
-  /**
-   * Constructs a new <code>SchedulerDAO</code>.
-   */
-  public SchedulerDAO() {}
 
   /**
    * Create the entry for the job in the database.
@@ -300,24 +293,21 @@ public class SchedulerDAO
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
    *         currently scheduled for execution
    */
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Job getNextJobScheduledForExecution(int executionRetryDelay, String lockName)
     throws DAOException
   {
-    // Retrieve the Transaction Manager
-    TransactionManager transactionManager = TransactionManager.getTransactionManager();
-    javax.transaction.Transaction existingTransaction = null;
+    String getNextJobScheduledForExecutionSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED FROM "
+        + "SCHEDULER.JOBS J WHERE J.STATUS=? AND ((J.EXECUTION_ATTEMPTS=0) OR "
+        + "((J.EXECUTION_ATTEMPTS>0) AND (J.LAST_EXECUTED<?))) AND J.NEXT_EXECUTION <= ? "
+        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+
+    String lockJobSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE J.ID=?";
 
     try
     {
-      if (transactionManager.isTransactionActive())
-      {
-        existingTransaction = transactionManager.beginNew();
-      }
-      else
-      {
-        transactionManager.begin();
-      }
-
       Job job = null;
 
       try (Connection connection = dataSource.getConnection();
@@ -360,42 +350,13 @@ public class SchedulerDAO
         }
       }
 
-      transactionManager.commit();
-
       return job;
     }
     catch (Throwable e)
     {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error(
-            "Failed to rollback the transaction while retrieving the next job that has been "
-            + "scheduled for execution from the database", f);
-      }
-
       throw new DAOException(
           "Failed to retrieve the next job that has been scheduled for execution from the database",
           e);
-    }
-    finally
-    {
-      try
-      {
-        if (existingTransaction != null)
-        {
-          transactionManager.resume(existingTransaction);
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error(
-            "Failed to resume the transaction while retrieving the next job that has been "
-            + "scheduled for execution from the database", e);
-      }
     }
   }
 
@@ -545,49 +506,6 @@ public class SchedulerDAO
   }
 
   /**
-   * Initialise the <code>SchedulerDAO</code> instance.
-   */
-  @PostConstruct
-  public void init()
-  {
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source using the JNDI names "
-          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
-          dataSource);
-
-      // Build the SQL statements for the DAO
-      buildStatements(schemaPrefix);
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format("Failed to initialise the %s data access object: %s",
-          getClass().getName(), e.getMessage()), e);
-    }
-  }
-
-  /**
    * Lock a job.
    *
    * @param id       the Universally Unique Identifier (UUID) used to uniquely identify the job
@@ -686,24 +604,18 @@ public class SchedulerDAO
    * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
    *         if there are no more unscheduled jobs to schedule
    */
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public boolean scheduleNextUnscheduledJobForExecution()
     throws DAOException
   {
-    // Retrieve the Transaction Manager
-    TransactionManager transactionManager = TransactionManager.getTransactionManager();
-    javax.transaction.Transaction existingTransaction = null;
+    String getNextUnscheduledJobSQL =
+        "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, J.IS_ENABLED, J.STATUS, "
+        + "J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, J.NEXT_EXECUTION, J.UPDATED FROM "
+        + "SCHEDULER.JOBS J WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0 "
+        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     try
     {
-      if (transactionManager.isTransactionActive())
-      {
-        existingTransaction = transactionManager.beginNew();
-      }
-      else
-      {
-        transactionManager.begin();
-      }
-
       boolean hasMoreUnscheduledJobs;
 
       try (Connection connection = dataSource.getConnection();
@@ -754,45 +666,11 @@ public class SchedulerDAO
         }
       }
 
-      transactionManager.commit();
-
       return hasMoreUnscheduledJobs;
     }
     catch (Throwable e)
     {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error(
-            "Failed to rollback the transaction while scheduling the next unscheduled job", e);
-      }
-
-      if (e instanceof DAOException)
-      {
-        throw((DAOException) e);
-      }
-      else
-      {
-        throw new DAOException("Failed to schedule the next unscheduled job", e);
-      }
-    }
-    finally
-    {
-      try
-      {
-        if (existingTransaction != null)
-        {
-          transactionManager.resume(existingTransaction);
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to resume the transaction while scheduling the next unscheduled job",
-            e);
-      }
+      throw new DAOException("Failed to schedule the next unscheduled job", e);
     }
   }
 
@@ -883,29 +761,6 @@ public class SchedulerDAO
       throw new DAOException(String.format("Failed to update the job (%s) to the database",
           job.getId()), e);
     }
-  }
-
-  /**
-   * Build the SQL statements for the DAO.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
-   */
-  protected void buildStatements(String schemaPrefix)
-  {
-    // getNextJobScheduledForExecutionSQL
-    getNextJobScheduledForExecutionSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, "
-        + "J.IS_ENABLED, J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, "
-        + "J.NEXT_EXECUTION, J.UPDATED FROM " + schemaPrefix + "JOBS J "
-        + "WHERE J.STATUS=? AND ((J.EXECUTION_ATTEMPTS=0) OR ((J.EXECUTION_ATTEMPTS>0) "
-        + "AND (J.LAST_EXECUTED<?))) AND J.NEXT_EXECUTION <= ? "
-        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    // getNextUnscheduledJobSQL
-    getNextUnscheduledJobSQL = "SELECT J.ID, J.NAME, J.SCHEDULING_PATTERN, J.JOB_CLASS, "
-        + "J.IS_ENABLED, J.STATUS, J.EXECUTION_ATTEMPTS, J.LOCK_NAME, J.LAST_EXECUTED, "
-        + "J.NEXT_EXECUTION, J.UPDATED FROM " + schemaPrefix
-        + "JOBS J WHERE J.IS_ENABLED = TRUE AND J.STATUS = 0 "
-        + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
   }
 
   private Job getJob(ResultSet rs)

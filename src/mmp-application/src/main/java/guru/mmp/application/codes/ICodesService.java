@@ -121,7 +121,7 @@ public interface ICodesService
    * @param retrieveCodes retrieve the codes and/or code data for the cached code category
    *
    * @return the cached code category or <code>null</code> if the cached code category could not be
-   * found
+   *         found
    */
   CachedCodeCategory getCachedCodeCategory(UUID id, boolean retrieveCodes)
     throws CodesServiceException;

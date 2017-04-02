@@ -78,16 +78,6 @@ public enum CodeCategoryType
   }
 
   /**
-   * Returns the <code>String</code> code value identifying the code category type.
-   *
-   * @return the <code>String</code> code value identifying the code category type
-   */
-  public String getCodeAsString()
-  {
-    return String.valueOf(code);
-  }
-
-  /**
    * Returns the name of the code category type.
    *
    * @return the name of the code category type

@@ -43,7 +43,7 @@ class IntArrayValueMatcher
    * @param integers A list of Integer elements, one for every value accepted by the matcher. The
    *                 match() method will return true only if its parameter will be one of this list.
    */
-  public IntArrayValueMatcher(List<Integer> integers)
+  IntArrayValueMatcher(List<Integer> integers)
   {
     int size = integers.size();
 

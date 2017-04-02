@@ -34,8 +34,6 @@ public interface ISchedulerService
    * Create the job.
    *
    * @param job the <code>Job</code> instance containing the information for the job
-   *
-   * @throws SchedulerServiceException
    */
   void createJob(Job job)
     throws SchedulerServiceException;
@@ -44,8 +42,6 @@ public interface ISchedulerService
    * Delete the job
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
-   *
-   * @throws SchedulerServiceException
    */
   void deleteJob(UUID id)
     throws SchedulerServiceException;
@@ -54,8 +50,6 @@ public interface ISchedulerService
    * Execute the job.
    *
    * @param job the job
-   *
-   * @throws SchedulerServiceException
    */
   void executeJob(Job job)
     throws SchedulerServiceException;
@@ -66,8 +60,6 @@ public interface ISchedulerService
    * @param filter the filter to apply to the jobs
    *
    * @return the jobs
-   *
-   * @throws SchedulerServiceException
    */
   List<Job> getFilteredJobs(String filter)
     throws SchedulerServiceException;
@@ -78,8 +70,6 @@ public interface ISchedulerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the job or <code>null</code> if the job could not be found
-   *
-   * @throws SchedulerServiceException
    */
   Job getJob(UUID id)
     throws SchedulerServiceException;
@@ -90,8 +80,6 @@ public interface ISchedulerService
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the parameters for the job
-   *
-   * @throws SchedulerServiceException
    */
   List<JobParameter> getJobParameters(UUID id)
     throws SchedulerServiceException;
@@ -100,8 +88,6 @@ public interface ISchedulerService
    * Retrieve the jobs.
    *
    * @return the jobs
-   *
-   * @throws SchedulerServiceException
    */
   List<Job> getJobs()
     throws SchedulerServiceException;
@@ -120,8 +106,6 @@ public interface ISchedulerService
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
    *         currently scheduled for execution
-   *
-   * @throws SchedulerServiceException
    */
   Job getNextJobScheduledForExecution()
     throws SchedulerServiceException;
@@ -132,8 +116,6 @@ public interface ISchedulerService
    * @param filter the filter to apply to the jobs
    *
    * @return the number of filtered jobs
-   *
-   * @throws SchedulerServiceException
    */
   int getNumberOfFilteredJobs(String filter)
     throws SchedulerServiceException;
@@ -142,8 +124,6 @@ public interface ISchedulerService
    * Retrieve the number of jobs.
    *
    * @return the number of jobs
-   *
-   * @throws SchedulerServiceException
    */
   int getNumberOfJobs()
     throws SchedulerServiceException;
@@ -152,8 +132,6 @@ public interface ISchedulerService
    * Retrieve the unscheduled jobs.
    *
    * @return the unscheduled jobs
-   *
-   * @throws SchedulerServiceException
    */
   List<Job> getUnscheduledJobs()
     throws SchedulerServiceException;
@@ -162,8 +140,6 @@ public interface ISchedulerService
    * Increment the execution attempts for the job.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the job
-   *
-   * @throws SchedulerServiceException
    */
   void incrementJobExecutionAttempts(UUID id)
     throws SchedulerServiceException;
@@ -175,8 +151,6 @@ public interface ISchedulerService
    *                          the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
-   *
-   * @throws SchedulerServiceException
    */
   void rescheduleJob(UUID id, String schedulingPattern)
     throws SchedulerServiceException;
@@ -188,8 +162,6 @@ public interface ISchedulerService
    * @param newStatus the new status for the jobs that have been unlocked
    *
    * @return the number of job locks reset
-   *
-   * @throws SchedulerServiceException
    */
   int resetJobLocks(Job.Status status, Job.Status newStatus)
     throws SchedulerServiceException;
@@ -199,8 +171,6 @@ public interface ISchedulerService
    *
    * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
    *         if there are no more unscheduled jobs to schedule
-   *
-   * @throws SchedulerServiceException
    */
   boolean scheduleNextUnscheduledJobForExecution()
     throws SchedulerServiceException;
@@ -210,8 +180,6 @@ public interface ISchedulerService
    *
    * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the unlocked job
-   *
-   * @throws SchedulerServiceException
    */
   void unlockJob(UUID id, Job.Status status)
     throws SchedulerServiceException;
@@ -220,8 +188,6 @@ public interface ISchedulerService
    * Update the job.
    *
    * @param job the <code>Job</code> instance containing the updated information for the job
-   *
-   * @throws SchedulerServiceException
    */
   void updateJob(Job job)
     throws SchedulerServiceException;

@@ -20,10 +20,7 @@ package guru.mmp.application.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * The <code>TestJob</code> class implements the test job.
@@ -38,7 +35,7 @@ public class TestJob
   private static final Logger logger = LoggerFactory.getLogger(TestJob.class);
 
   /* Scheduler Service */
-  @Inject
+  @Autowired
   private ISchedulerService schedulerService;
 
   /**

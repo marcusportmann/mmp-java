@@ -18,7 +18,6 @@ package guru.mmp.application.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.common.exceptions.InvalidArgumentException;
 import guru.mmp.common.util.StringUtil;
@@ -95,12 +94,6 @@ public class SecurityService
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
-
-  /**
-   * The Configuration Service.
-   */
-  @Autowired
-  private IConfigurationService configurationService;
 
   /**
    * The ID Generator.

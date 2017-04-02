@@ -20,106 +20,72 @@ package guru.mmp.application.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.concurrent.Future;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import javax.ejb.*;
-
-import javax.enterprise.concurrent.ManagedThreadFactory;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-import javax.inject.Inject;
-
-import javax.naming.InitialContext;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-@TransactionManagement(TransactionManagementType.BEAN)
+@Service
+@SuppressWarnings("unused")
 public class BackgroundJobExecutor
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
+  /**
+   * The default number of threads to start initially to process jobs.
+   */
+  private static final int DEFAULT_INITIAL_PROCESSING_THREADS = 1;
+
+  /**
+   * The default maximum number of threads to create to process jobs.
+   */
+  private static final int DEFAULT_MAXIMUM_PROCESSING_THREADS = 10;
+
+  /**
+   * The default number of minutes an idle processing thread should be kept alive.
+   */
+  private static final int DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME = 5;
+
+  /**
+   * The default maximum number of jobs to queue for processing if no processing threads are
+   * available.
+   */
+  private static final int DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH = 100;
+
   /* Scheduler Service */
-  @Inject
+  @Autowired
   private ISchedulerService schedulerService;
 
   /**
-   * Execute all the jobs scheduled for execution.
-   *
-   * @return <code>true</code> if the jobs were executed successfully or <code>false</code>
-   * otherwise
+   * The executor responsible for processing jobs.
    */
-  @Asynchronous
-  public Future<Boolean> execute()
-  {
-    // If CDI injection was not completed successfully for the bean then stop here
-    if (schedulerService == null)
-    {
-      logger.error("Failed to execute the jobs: The Scheduler Service was NOT injected");
-
-      return new AsyncResult<>(false);
-    }
-
-    try
-    {
-      executeJobs();
-
-      return new AsyncResult<>(true);
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to execute the jobs", e);
-
-      return new AsyncResult<>(false);
-    }
-  }
+  private Executor jobProcessor;
 
   /**
-   * Initialise the Background Job Executor.
+   * Execute the jobs.
    */
-  @PostConstruct
-  public void init()
-  {
-    logger.info("Initialising the Background Job Executor");
-
-    if (schedulerService != null)
-    {
-      /*
-       * Reset any locks for jobs that were previously being executed.
-       */
-      try
-      {
-        logger.info("Resetting the locks for the jobs being executed");
-
-        schedulerService.resetJobLocks(Job.Status.EXECUTING, Job.Status.SCHEDULED);
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to reset the locks for the jobs being executed", e);
-      }
-    }
-    else
-    {
-      logger.error("Failed to initialise the Background Job Executor: "
-          + "The Scheduler Service was NOT injected");
-    }
-  }
-
-  private void executeJobs()
+  @Scheduled(cron = "* * * * *")
+  public void executeJobs()
   {
     Job job;
+
+    if (schedulerService == null)
+    {
+      return;
+    }
 
     while (true)
     {
@@ -148,31 +114,43 @@ public class BackgroundJobExecutor
         return;
       }
 
-      ManagedThreadFactory managedThreadFactory = getManagedThreadFactory();
-
-      // Execute the job in a new thread
-      if (managedThreadFactory != null)
-      {
-        managedThreadFactory.newThread(new JobExecutor(schedulerService, job)).start();
-      }
-
-      // Execute the job in the current thread
-      else
-      {
-        new JobExecutor(schedulerService, job).run();
-      }
+      jobProcessor.execute(new JobExecutor(schedulerService, job));
     }
   }
 
-  private ManagedThreadFactory getManagedThreadFactory()
+  /**
+   * Initialise the Background Job Executor.
+   */
+  @PostConstruct
+  public void init()
   {
-    try
+    logger.info("Initialising the Background Job Executor");
+
+    if (schedulerService != null)
     {
-      return InitialContext.doLookup("java:comp/DefaultManagedThreadFactory");
+      // Initialise the job processor
+      this.jobProcessor = new ThreadPoolExecutor(DEFAULT_INITIAL_PROCESSING_THREADS,
+          DEFAULT_MAXIMUM_PROCESSING_THREADS, DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME,
+          TimeUnit.MINUTES, new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH));
+
+      /*
+       * Reset any locks for jobs that were previously being executed.
+       */
+      try
+      {
+        logger.info("Resetting the locks for the jobs being executed");
+
+        schedulerService.resetJobLocks(Job.Status.EXECUTING, Job.Status.SCHEDULED);
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to reset the locks for the jobs being executed", e);
+      }
     }
-    catch (Throwable e)
+    else
     {
-      return null;
+      logger.error("Failed to initialise the Background Job Executor: "
+          + "The Scheduler Service was NOT injected");
     }
   }
 }
