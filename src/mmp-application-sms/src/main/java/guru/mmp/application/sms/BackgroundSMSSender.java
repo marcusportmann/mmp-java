@@ -20,6 +20,8 @@ package guru.mmp.application.sms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -35,17 +37,15 @@ import java.util.concurrent.Future;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-@TransactionManagement(TransactionManagementType.BEAN)
+@Service
+@SuppressWarnings("unused")
 public class BackgroundSMSSender
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
   /* SMS Service */
-  @Inject
+  @Autowired
   private ISMSService smsService;
 
   /**

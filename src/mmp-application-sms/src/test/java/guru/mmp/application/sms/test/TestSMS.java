@@ -46,6 +46,10 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
+@RunWith(ApplicationClassRunner.class)
+@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
+  DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class TestSMS
 {
   /* Logger */
