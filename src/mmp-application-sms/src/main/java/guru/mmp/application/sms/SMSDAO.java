@@ -18,15 +18,17 @@ package guru.mmp.application.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.application.sms.SMS.Status;
-import guru.mmp.common.persistence.*;
+import guru.mmp.common.persistence.DAOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -37,32 +39,26 @@ import java.sql.*;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@SuppressWarnings("unused")
+@Repository
 public class SMSDAO
   implements ISMSDAO
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSDAO.class);
-  private String createSMSSQL;
 
   /**
-   * The data source used to provide connections to the database.
+   * The data source used to provide connections to the application database.
    */
+  @Autowired
+  @Qualifier("applicationDataSource")
   private DataSource dataSource;
-  private String deleteSMSSQL;
-  private String getNextSMSQueuedForSendingSQL;
-  private String getSMSByIdSQL;
 
   /**
-   * The ID generator used to generate unique numeric IDs for the DAO.
+   * The ID Generator.
    */
+  @Autowired
   private IDGenerator idGenerator;
-  private String incrementSMSSendAttemptsSQL;
-  private String lockSMSSQL;
-  private String resetSMSLocksSQL;
-  private String setSMSStatusSQL;
-  private String unlockSMSSQL;
 
   /**
    * Constructs a new <code>SMSDAO</code>.
@@ -78,6 +74,10 @@ public class SMSDAO
   public void createSMS(SMS sms)
     throws DAOException
   {
+    String createSMSSQL =
+        "INSERT INTO SMS.SMS (ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS) "
+        + "VALUES (?, ?, ?, ?, 0)";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createSMSSQL))
     {
@@ -106,18 +106,18 @@ public class SMSDAO
    * Delete the existing SMS.
    *
    * @param id the ID uniquely identifying the SMS
-   *
-   * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
    */
-  public boolean deleteSMS(long id)
+  public void deleteSMS(long id)
     throws DAOException
   {
+    String deleteSMSSQL = "DELETE FROM SMS.SMS WHERE ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteSMSSQL))
     {
       statement.setLong(1, id);
 
-      return (statement.executeUpdate() > 0);
+      statement.executeUpdate();
     }
     catch (Throwable e)
     {
@@ -137,24 +137,19 @@ public class SMSDAO
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
    *         currently queued for sending
    */
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public SMS getNextSMSQueuedForSending(int sendRetryDelay, String lockName)
     throws DAOException
   {
-    // Retrieve the Transaction Manager
-    TransactionManager transactionManager = TransactionManager.getTransactionManager();
-    javax.transaction.Transaction existingTransaction = null;
+    String getNextSMSQueuedForSendingSQL =
+        "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS, LOCK_NAME, LAST_PROCESSED FROM "
+        + "SMS.SMS WHERE STATUS=? AND (LAST_PROCESSED<? OR LAST_PROCESSED IS NULL) "
+        + "FETCH FIRST 1 ROWS ONLY FOR UPDATE";
+
+    String lockSMSSQL = "UPDATE SMS.SMS SET STATUS=?, LOCK_NAME=? WHERE ID=?";
 
     try
     {
-      if (transactionManager.isTransactionActive())
-      {
-        existingTransaction = transactionManager.beginNew();
-      }
-      else
-      {
-        transactionManager.begin();
-      }
-
       SMS sms = null;
 
       try (Connection connection = dataSource.getConnection();
@@ -191,41 +186,12 @@ public class SMSDAO
         }
       }
 
-      transactionManager.commit();
-
       return sms;
     }
     catch (Throwable e)
     {
-      try
-      {
-        transactionManager.rollback();
-      }
-      catch (Throwable f)
-      {
-        logger.error(
-            "Failed to rollback the transaction while retrieving the next SMS that has been queued "
-            + "for sending from the database", f);
-      }
-
       throw new DAOException(
           "Failed to retrieve the next SMS that has been queued for sending from the database", e);
-    }
-    finally
-    {
-      try
-      {
-        if (existingTransaction != null)
-        {
-          transactionManager.resume(existingTransaction);
-        }
-      }
-      catch (Throwable e)
-      {
-        logger.error(
-            "Failed to resume the original transaction while retrieving the next SMS that has been "
-            + "queued for sending from the database", e);
-      }
     }
   }
 
@@ -239,6 +205,10 @@ public class SMSDAO
   public SMS getSMS(long id)
     throws DAOException
   {
+    String getSMSByIdSQL =
+        "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS, LOCK_NAME, LAST_PROCESSED FROM "
+        + "SMS.SMS WHERE ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getSMSByIdSQL))
     {
@@ -271,6 +241,9 @@ public class SMSDAO
   public void incrementSMSSendAttempts(SMS sms)
     throws DAOException
   {
+    String incrementSMSSendAttemptsSQL =
+        "UPDATE SMS.SMS SET SEND_ATTEMPTS=SEND_ATTEMPTS + 1, LAST_PROCESSED=? WHERE ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(incrementSMSSendAttemptsSQL))
     {
@@ -297,51 +270,6 @@ public class SMSDAO
   }
 
   /**
-   * Initialise the <code>SMSDAO</code> instance.
-   */
-  @PostConstruct
-  public void init()
-  {
-    try
-    {
-      dataSource = InitialContext.doLookup("java:app/jdbc/ApplicationDataSource");
-    }
-    catch (Throwable ignored) {}
-
-    if (dataSource == null)
-    {
-      try
-      {
-        dataSource = InitialContext.doLookup("java:comp/env/jdbc/ApplicationDataSource");
-      }
-      catch (Throwable ignored) {}
-    }
-
-    if (dataSource == null)
-    {
-      throw new DAOException("Failed to retrieve the application data source using the JNDI names "
-          + "(java:app/jdbc/ApplicationDataSource) and (java:comp/env/jdbc/ApplicationDataSource)");
-    }
-
-    try
-    {
-      // Determine the schema prefix
-      String schemaPrefix = DataAccessObject.MMP_DATABASE_SCHEMA + DAOUtil.getSchemaSeparator(
-          dataSource);
-
-      // Build the SQL statements for the DAO
-      buildStatements(schemaPrefix);
-    }
-    catch (Throwable e)
-    {
-      throw new DAOException(String.format("Failed to initialise the %s data access object: %s",
-          getClass().getName(), e.getMessage()), e);
-    }
-
-    idGenerator = new IDGenerator(dataSource, DataAccessObject.MMP_DATABASE_SCHEMA);
-  }
-
-  /**
    * Reset the SMS locks.
    *
    * @param lockName  the name of the lock applied by the entity that has locked the SMSs
@@ -351,6 +279,9 @@ public class SMSDAO
   public void resetSMSLocks(String lockName, SMS.Status status, SMS.Status newStatus)
     throws DAOException
   {
+    String resetSMSLocksSQL =
+        "UPDATE SMS.SMS SET STATUS=?, LOCK_NAME=NULL WHERE LOCK_NAME=? AND STATUS=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(resetSMSLocksSQL))
     {
@@ -377,6 +308,8 @@ public class SMSDAO
   public void setSMSStatus(long id, SMS.Status status)
     throws DAOException
   {
+    String setSMSStatusSQL = "UPDATE SMS.SMS SET STATUS=? WHERE ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(setSMSStatusSQL))
     {
@@ -407,6 +340,8 @@ public class SMSDAO
   public void unlockSMS(long id, SMS.Status status)
     throws DAOException
   {
+    String unlockSMSSQL = "UPDATE SMS.SMS SET STATUS=?, LOCK_NAME=NULL WHERE ID=?";
+
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(unlockSMSSQL))
     {
@@ -425,47 +360,6 @@ public class SMSDAO
           "Failed to unlock and set the status for the SMS (%d) to (%s) in the database", id,
           status.toString()), e);
     }
-  }
-
-  /**
-   * Build the SQL statements for the DAO.
-   *
-   * @param schemaPrefix the schema prefix to prepend to database objects referenced by the DAO
-   */
-  private void buildStatements(String schemaPrefix)
-  {
-    // createSMSSQL
-    createSMSSQL = "INSERT INTO " + schemaPrefix + "SMS" + " (ID, MOBILE_NUMBER, MESSAGE, STATUS,"
-        + " SEND_ATTEMPTS)" + " VALUES (?, ?, ?, ?, 0)";
-
-    // deleteSMSSQL
-    deleteSMSSQL = "DELETE FROM " + schemaPrefix + "SMS WHERE ID=?";
-
-    // getNextSMSQueuedForSendingSQL
-    getNextSMSQueuedForSendingSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS,"
-        + " LOCK_NAME, LAST_PROCESSED FROM " + schemaPrefix + "SMS" + " WHERE STATUS=? AND "
-        + "(LAST_PROCESSED<? OR LAST_PROCESSED IS NULL) FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    // getSMSByIdSQL
-    getSMSByIdSQL = "SELECT ID, MOBILE_NUMBER, MESSAGE, STATUS, SEND_ATTEMPTS, LOCK_NAME," + " "
-        + "LAST_PROCESSED FROM " + schemaPrefix + "SMS WHERE ID=?";
-
-    // incrementSMSSendAttemptsSQL
-    incrementSMSSendAttemptsSQL = "UPDATE " + schemaPrefix + "SMS SET "
-        + "SEND_ATTEMPTS=SEND_ATTEMPTS + 1, LAST_PROCESSED=? WHERE ID=?";
-
-    // lockSMSSQL
-    lockSMSSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=?, LOCK_NAME=? WHERE ID=?";
-
-    // resetSMSLocksSQL
-    resetSMSLocksSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=?, LOCK_NAME=NULL WHERE "
-        + "LOCK_NAME=? AND STATUS=?";
-
-    // setSMSStatusSQL
-    setSMSStatusSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=? WHERE ID=?";
-
-    // unlockSMSSQL
-    unlockSMSSQL = "UPDATE " + schemaPrefix + "SMS SET STATUS=?, LOCK_NAME=NULL WHERE ID=?";
   }
 
   private SMS getSMS(ResultSet rs)

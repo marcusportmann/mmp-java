@@ -28,15 +28,14 @@ import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.AsyncResult;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,7 +44,6 @@ import java.io.StringReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.Future;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -54,8 +52,8 @@ import java.util.concurrent.Future;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
+@SuppressWarnings("unused")
 public class SMSService
   implements ISMSService
 {
@@ -70,9 +68,11 @@ public class SMSService
   /* The name of the SMS Service instance. */
   private String instanceName = ServiceUtil.getServiceInstanceName("SMS Service");
 
-  /* Background SMS Sender */
-  @Inject
-  BackgroundSMSSender backgroundSMSSender;
+  /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /* The maximum number of times sending will be attempted for a SMS. */
   private int maximumSendAttempts;
@@ -81,37 +81,27 @@ public class SMSService
   private String myMobileAPIUsername;
 
   /* Configuration Service */
-  @Inject
+  @Autowired
   private IConfigurationService configurationService;
 
   /* The delay in milliseconds to wait before re-attempting to send a SMS. */
   private int sendRetryDelay;
 
-  /* The result of sending the SMSs. */
-  private Future<Boolean> sendSMSsResult;
-
-  /* The DAO providing persistence capabilities for the SMS infrastructure. */
-  @Inject
+  /* SMS DAO */
+  @Autowired
   private ISMSDAO smsDAO;
-
-  /**
-   * Constructs a new <code>SMSService</code>.
-   */
-  public SMSService() {}
 
   /**
    * Delete the existing SMS.
    *
    * @param id the ID uniquely identifying the SMS
-   *
-   * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
    */
-  public boolean deleteSMS(long id)
+  public void deleteSMS(long id)
     throws SMSServiceException
   {
     try
     {
-      return smsDAO.deleteSMS(id);
+      smsDAO.deleteSMS(id);
     }
     catch (Throwable e)
     {
@@ -229,8 +219,6 @@ public class SMSService
   {
     logger.info(String.format("Initialising the SMS Service (%s)", instanceName));
 
-    sendSMSsResult = new AsyncResult<>(false);
-
     try
     {
       // Initialise the configuration for the SMS Service
@@ -279,6 +267,8 @@ public class SMSService
       SMS sms = new SMS(mobileNumber, message, SMS.Status.QUEUED_FOR_SENDING);
 
       smsDAO.createSMS(sms);
+
+      applicationContext.getBean(BackgroundSMSSender.class).sendSMSs();
     }
     catch (Throwable e)
     {
@@ -426,29 +416,6 @@ public class SMSService
     {
       throw new SMSServiceException(String.format(
           "Failed to send the SMS to the mobile number (%s)", mobileNumber), e);
-    }
-  }
-
-  /**
-   * Send all the SMSs queued for sending asynchronously.
-   */
-  public synchronized void sendSMSs()
-  {
-    if (sendSMSsResult.isDone())
-    {
-      /*
-       * Asynchronously inform the Background SMS Sender that all pending SMSs should be
-       * sent.
-       */
-      try
-      {
-        sendSMSsResult = backgroundSMSSender.send();
-      }
-      catch (Throwable e)
-      {
-        logger.error(
-            "Failed to invoke the Background SMS Sender to asynchronously send all queued SMSs", e);
-      }
     }
   }
 

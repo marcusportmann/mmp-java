@@ -29,10 +29,8 @@ public interface ISMSService
    * Delete the existing SMS.
    *
    * @param id the ID uniquely identifying the SMS
-   *
-   * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
    */
-  boolean deleteSMS(long id)
+  void deleteSMS(long id)
     throws SMSServiceException;
 
   /**
@@ -112,11 +110,6 @@ public interface ISMSService
    */
   boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
     throws SMSServiceException;
-
-  /**
-   * Send all the SMSs queued for sending asynchronously.
-   */
-  void sendSMSs();
 
   /**
    * Set the status for the SMS.

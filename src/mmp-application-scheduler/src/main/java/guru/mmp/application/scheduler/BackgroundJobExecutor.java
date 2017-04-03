@@ -77,7 +77,7 @@ public class BackgroundJobExecutor
   /**
    * Execute the jobs.
    */
-  @Scheduled(cron = "* * * * *")
+  @Scheduled(cron = "0 * * * * *")
   public void executeJobs()
   {
     Job job;

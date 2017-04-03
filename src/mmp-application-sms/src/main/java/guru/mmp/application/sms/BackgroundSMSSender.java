@@ -21,14 +21,11 @@ package guru.mmp.application.sms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import java.util.concurrent.Future;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -81,36 +78,11 @@ public class BackgroundSMSSender
   }
 
   /**
-   * Send all queued SMSs.
-   *
-   * @return <code>true</code> if the SMSs were sent successfully or <code>false</code> otherwise
+   * Send the SMSs.
    */
-  @Asynchronous
-  Future<Boolean> send()
-  {
-    // If CDI injection was not completed successfully for the bean then stop here
-    if (smsService == null)
-    {
-      logger.error("Failed to send the SMSs queued for sending: The SMSService was NOT injected");
-
-      return new AsyncResult<>(false);
-    }
-
-    try
-    {
-      sendSMSs();
-
-      return new AsyncResult<>(true);
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to send the SMSs queued for sending", e);
-
-      return new AsyncResult<>(false);
-    }
-  }
-
-  private void sendSMSs()
+  @Scheduled(cron = "0 * * * * *")
+  @Async
+  void sendSMSs()
   {
     SMS sms;
 

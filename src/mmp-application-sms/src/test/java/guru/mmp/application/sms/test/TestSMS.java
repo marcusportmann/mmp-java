@@ -20,11 +20,23 @@ package guru.mmp.application.sms.test;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
+import guru.mmp.application.configuration.IConfigurationService;
+import guru.mmp.application.sms.ISMSService;
+import guru.mmp.application.test.ApplicationClassRunner;
+import guru.mmp.application.test.ApplicationConfiguration;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -49,22 +61,34 @@ import java.util.Date;
 @RunWith(ApplicationClassRunner.class)
 @ContextConfiguration(classes = { ApplicationConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-  DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class TestSMS
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TestSMS.class);
 
+  /* SMS Service */
+  @Autowired
+  private ISMSService smsService;
+
+  /* Configuration Service */
+  @Autowired
+  private IConfigurationService configurationService;
+
   /**
-   * Test the send SMS functionality.
+   * Test the send SMS API functionality.
    *
    * @throws Exception
    */
-
-  // @Test
-  public void sendSMSTest()
+  @Test
+  public void sendSMSAPITest()
     throws Exception
   {
+    if (true)
+    {
+      return;
+    }
+
     String myMobileAPIUsername = "USERNAME";
     String myMobileAPIPassword = "PASSWORD";
     long smsId = System.currentTimeMillis();
@@ -159,6 +183,32 @@ public class TestSMS
     {
       logger.error("Failed to send the SMS", e);
     }
+  }
+
+  /**
+   * Test the send SMS functionality.
+   */
+  @Test
+  public void sendSMSTest()
+    throws Exception
+  {
+    if (true)
+    {
+      return;
+    }
+    
+    configurationService.setValue("SMSService.MyMobileAPIUsername", "MyMobileAPIUsername",
+        "The My Mobile API username");
+    configurationService.setValue("SMSService.MyMobileAPIPassword", "MyMobileAPIPassword",
+        "The My Mobile API password");
+
+    smsService.sendSMS("0832763107", "Hello World!");
+
+    try
+    {
+      Thread.sleep(1000L * 10);
+    }
+    catch (Throwable e) {}
   }
 
   private String buildSendDataXml(long smsId, String mobileNumber, String message)

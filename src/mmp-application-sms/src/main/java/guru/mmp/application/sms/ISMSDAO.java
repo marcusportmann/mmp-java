@@ -39,10 +39,8 @@ public interface ISMSDAO
    * Delete the existing SMS.
    *
    * @param id the ID uniquely identifying the SMS
-   *
-   * @return <code>true</code> if the SMS was deleted or <code>false</code> otherwise
    */
-  boolean deleteSMS(long id)
+  void deleteSMS(long id)
     throws DAOException;
 
   /**
