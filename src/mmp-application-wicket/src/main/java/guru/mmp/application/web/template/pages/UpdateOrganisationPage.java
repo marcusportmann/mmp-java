@@ -32,8 +32,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -43,7 +42,6 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_ORGANISATION_ADMINISTRATION)
 class UpdateOrganisationPage extends TemplateWebPage
 {
@@ -52,7 +50,7 @@ class UpdateOrganisationPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**

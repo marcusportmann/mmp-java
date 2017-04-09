@@ -23,8 +23,8 @@ import guru.mmp.application.security.User;
 import guru.mmp.application.security.UserNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -40,7 +40,7 @@ public class DetachableUserModel extends InjectableLoadableDetachableModel<User>
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**

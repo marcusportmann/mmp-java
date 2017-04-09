@@ -24,8 +24,7 @@ import guru.mmp.application.web.pages.WebPageSecurity;
 import guru.mmp.application.web.template.TemplateSecurity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -43,7 +42,7 @@ public class SecurityAdministrationPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**

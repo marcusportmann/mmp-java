@@ -22,15 +22,14 @@ import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Iterator;
+import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.*;
-
-import javax.inject.Inject;
 
 /**
  * The <code>FilteredConfigurationDataProvider</code> class provides an
@@ -51,7 +50,7 @@ public class FilteredConfigurationValueDataProvider
   private String filter;
 
   /* Configuration Service */
-  @Inject
+  @Autowired
   private IConfigurationService configurationService;
 
   /**

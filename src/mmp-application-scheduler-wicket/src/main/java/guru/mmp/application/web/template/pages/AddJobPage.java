@@ -26,22 +26,19 @@ import guru.mmp.application.web.template.TemplateSchedulerSecurity;
 import guru.mmp.application.web.template.components.DropDownChoiceWithFeedback;
 import guru.mmp.application.web.template.components.JobStatusChoiceRenderer;
 import guru.mmp.application.web.template.components.TextFieldWithFeedback;
-
 import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AddJobPage</code> class implements the "Add Job"
@@ -49,7 +46,6 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSchedulerSecurity.FUNCTION_CODE_SCHEDULER_ADMINISTRATION)
 public class AddJobPage extends TemplateWebPage
 {
@@ -58,7 +54,7 @@ public class AddJobPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Scheduler Service */
-  @Inject
+  @Autowired
   private ISchedulerService schedulerService;
 
   /**

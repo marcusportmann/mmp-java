@@ -19,12 +19,12 @@ package guru.mmp.application.web.data;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 /**
  * The <code>InjectableLoadableDetachableModel</code> class provides the
- * <code>LoadableDetachableModel</code> base class that provides support for container-based
- * dependency injection (CDI).
+ * <code>LoadableDetachableModel</code> base class that provides support for Spring Dependency
+ * Injection.
  *
  * @param <T>
  *
@@ -39,9 +39,6 @@ public abstract class InjectableLoadableDetachableModel<T> extends LoadableDetac
    */
   public InjectableLoadableDetachableModel()
   {
-    guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
-        .WebApplication.class.cast(WebApplication.get());
-
-    webApplication.getWebApplicationInjector().inject(this);
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 }

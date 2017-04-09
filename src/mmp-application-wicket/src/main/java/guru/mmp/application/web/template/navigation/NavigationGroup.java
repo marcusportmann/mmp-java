@@ -22,7 +22,6 @@ import org.apache.wicket.Page;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -45,8 +44,7 @@ public class NavigationGroup extends NavigationItem
    * NOTE: This constructor is required to support Java serialization.
    */
   @SuppressWarnings("unused")
-  NavigationGroup()
-  {}
+  NavigationGroup() {}
 
   /**
    * Constructs a new <code>NavigationGroup</code>.
@@ -148,7 +146,7 @@ public class NavigationGroup extends NavigationItem
    */
   public void sortItems()
   {
-    Collections.sort(items,
+    items.sort(
         (navigationItem1, navigationItem2) ->
         {
           if ((navigationItem1 instanceof NavigationLink)

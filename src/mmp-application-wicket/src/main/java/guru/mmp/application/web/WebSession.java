@@ -280,7 +280,7 @@ public class WebSession extends org.apache.wicket.protocol.http.WebSession
    * @return <code>true</code> if the logged in user has access to any of the functions or
    *         <code>false</code> otherwise
    */
-  public boolean hasAcccessToFunctions(String[] functionCodes)
+  public boolean hasAccessToFunctions(String[] functionCodes)
   {
     for (String functionCode : functionCodes)
     {

@@ -22,8 +22,8 @@ import guru.mmp.application.reporting.IReportingService;
 import guru.mmp.application.reporting.ReportDefinition;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -34,8 +34,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-class DetachableReportDefinitionModel
-    extends InjectableLoadableDetachableModel<ReportDefinition>
+class DetachableReportDefinitionModel extends InjectableLoadableDetachableModel<ReportDefinition>
 {
   private static final long serialVersionUID = 1000000;
 
@@ -45,7 +44,7 @@ class DetachableReportDefinitionModel
   private UUID id;
 
   /* Reporting Service */
-  @Inject
+  @Autowired
   private IReportingService reportingService;
 
   /**

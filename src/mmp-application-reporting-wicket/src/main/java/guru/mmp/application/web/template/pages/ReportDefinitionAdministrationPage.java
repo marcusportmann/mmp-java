@@ -27,7 +27,6 @@ import guru.mmp.application.web.template.TemplateReportingSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.ReportDefinitionSummaryDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,15 +37,13 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionAdministrationPage</code> class implements the
@@ -63,7 +60,7 @@ public class ReportDefinitionAdministrationPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
-  @Inject
+  @Autowired
   private IReportingService reportingService;
 
   /**

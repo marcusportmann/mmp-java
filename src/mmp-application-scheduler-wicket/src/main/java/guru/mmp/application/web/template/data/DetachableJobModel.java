@@ -22,12 +22,11 @@ import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DetachableJobModel</code> class provides a detachable model
@@ -45,7 +44,7 @@ public class DetachableJobModel extends InjectableLoadableDetachableModel<Job>
   private UUID id;
 
   /* Scheduler Service */
-  @Inject
+  @Autowired
   private ISchedulerService schedulerService;
 
   /**

@@ -35,8 +35,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.util.UUID;
 
@@ -48,7 +48,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
 class AddUserDirectoryPage extends TemplateWebPage
 {
@@ -57,7 +56,7 @@ class AddUserDirectoryPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**

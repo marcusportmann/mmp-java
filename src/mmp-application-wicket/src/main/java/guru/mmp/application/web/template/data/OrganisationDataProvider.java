@@ -22,15 +22,13 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.Organisation;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>OrganisationDataProvider</code> class provides an <code>IDataProvider</code>
@@ -38,18 +36,14 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class OrganisationDataProvider extends InjectableDataProvider<Organisation>
 {
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
-
-  /**
-   * Constructs a new <code>OrganisationDataProvider</code>.
-   */
-  public OrganisationDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()

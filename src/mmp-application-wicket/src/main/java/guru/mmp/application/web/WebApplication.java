@@ -19,11 +19,9 @@ package guru.mmp.application.web;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import org.apache.wicket.*;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
@@ -49,14 +47,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   /* Logger */
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
-
-  /* The web application injector. */
-  private WebApplicationInjector webApplicationInjector;
-
-  /**
-   * Constructs a new <code>WebApplication</code>.
-   */
-  public WebApplication() {}
 
   /**
    * Returns the runtime configuration type for the Wicket web application.
@@ -102,16 +92,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   public abstract Class<? extends Page> getSecureHomePage();
 
   /**
-   * Sets the web application injector.
-   *
-   * @return the web application injector
-   */
-  public WebApplicationInjector getWebApplicationInjector()
-  {
-    return webApplicationInjector;
-  }
-
-  /**
    * Creates a new session.
    *
    * @param request  the request that will create this session
@@ -127,16 +107,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     session.bind();
 
     return session;
-  }
-
-  /**
-   * Set the web application injector.
-   *
-   * @param webApplicationInjector the web application injector
-   */
-  public void setWebApplicationInjector(WebApplicationInjector webApplicationInjector)
-  {
-    this.webApplicationInjector = webApplicationInjector;
   }
 
   @Override

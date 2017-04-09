@@ -22,16 +22,14 @@ import guru.mmp.application.security.Group;
 import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GroupsForUserDataProvider</code> class provides an <code>IDataProvider</code>
@@ -45,7 +43,7 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**

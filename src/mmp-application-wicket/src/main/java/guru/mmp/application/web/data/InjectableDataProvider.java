@@ -20,10 +20,11 @@ package guru.mmp.application.web.data;
 
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 /**
  * The <code>InjectableDataProvider</code> class provides the <code>DataProvider</code> base class
- * that provides support for container-based dependency injection (CDI).
+ * that provides support for Spring Dependency Injection.
  *
  * @param <T>
  *
@@ -37,9 +38,6 @@ public abstract class InjectableDataProvider<T>
    */
   public InjectableDataProvider()
   {
-    guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
-        .WebApplication.class.cast(WebApplication.get());
-
-    webApplication.getWebApplicationInjector().inject(this);
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 }

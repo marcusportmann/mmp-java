@@ -31,8 +31,9 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -62,11 +63,11 @@ public class ViewReportServlet extends HttpServlet
   private String localReportFolderPath;
 
   /* Reporting DAO */
-  @Inject
+  @Autowired
   private IReportingDAO reportingDAO;
 
   /* Reporting Service */
-  @Inject
+  @Autowired
   private IReportingService reportingService;
 
   /**
@@ -77,6 +78,8 @@ public class ViewReportServlet extends HttpServlet
     super();
 
     System.setProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel");
+
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
   /**

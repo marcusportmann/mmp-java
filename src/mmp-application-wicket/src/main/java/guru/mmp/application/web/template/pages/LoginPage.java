@@ -45,8 +45,8 @@ import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,7 +67,7 @@ public class LoginPage extends WebPage
   private String password;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
   private String username;
 

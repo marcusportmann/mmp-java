@@ -37,6 +37,8 @@
       <artifactId>wicket-devutils</artifactId>
       <version>7.6.0</version>
     </dependency>
+
+    <!--
     <dependency>
       <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-ioc</artifactId>
@@ -48,8 +50,44 @@
         </exclusion>
       </exclusions>
     </dependency>
+    -->
+
+    <dependency>
+      <groupId>org.apache.wicket</groupId>
+      <artifactId>wicket-spring</artifactId>
+      <version>7.6.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+
+    <!--
+    -->
+
+
+    <!--
+
+    -->
 
     <!-- Provided Dependencies -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+
+
+
+
+
+    <!-- Provided Dependencies -->
+    <!--
     <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
@@ -71,6 +109,7 @@
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
+    -->
 
     <!-- Test Dependencies -->
     <dependency>

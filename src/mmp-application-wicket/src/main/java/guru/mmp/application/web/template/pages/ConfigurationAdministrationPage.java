@@ -26,7 +26,6 @@ import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.components.Dialog;
 import guru.mmp.application.web.template.components.PagingNavigator;
 import guru.mmp.application.web.template.data.FilteredConfigurationValueDataProvider;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,13 +39,11 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.inject.Inject;
 
 /**
  * The <code>ConfigurationAdministrationPage</code> class implements the
@@ -63,7 +60,7 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Configuration Service */
-  @Inject
+  @Autowired
   private IConfigurationService configurationService;
 
   /**
@@ -219,7 +216,7 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the configuration value table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(WebMarkupContainer tableContainer)
+    RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

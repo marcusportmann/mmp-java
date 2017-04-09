@@ -40,8 +40,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -51,7 +50,6 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_RESET_USER_PASSWORD)
 class ResetUserPasswordPage extends TemplateWebPage
 {
@@ -64,7 +62,7 @@ class ResetUserPasswordPage extends TemplateWebPage
   private boolean expiredPassword;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /* Should the user's password be locked */

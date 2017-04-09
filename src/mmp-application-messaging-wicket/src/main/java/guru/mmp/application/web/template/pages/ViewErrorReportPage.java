@@ -29,8 +29,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
@@ -52,7 +52,7 @@ public class ViewErrorReportPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Messaging Service */
-  @Inject
+  @Autowired
   private IMessagingService messagingService;
 
   /**

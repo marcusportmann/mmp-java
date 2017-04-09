@@ -48,7 +48,7 @@ public class TemplateWebSession extends WebSession
    *
    * @param request the Wicket request
    */
-  public TemplateWebSession(Request request)
+  TemplateWebSession(Request request)
   {
     super(request);
   }
@@ -160,7 +160,7 @@ public class TemplateWebSession extends WebSession
         // Filter navigation based on the user's security privileges
         if (link.isSecure())
         {
-          if (hasAcccessToFunctions(link.getFunctionCodes()))
+          if (hasAccessToFunctions(link.getFunctionCodes()))
           {
             filteredGroup.addItem(link);
           }

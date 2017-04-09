@@ -22,8 +22,8 @@ import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.ICodesService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -39,7 +39,7 @@ public class DetachableCodeCategoryModel extends InjectableLoadableDetachableMod
   private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
-  @Inject
+  @Autowired
   private ICodesService codesService;
 
   /**

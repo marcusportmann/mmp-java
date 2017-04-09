@@ -40,8 +40,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class GroupAdministrationPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**
@@ -244,7 +244,7 @@ public class GroupAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the group table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(WebMarkupContainer tableContainer)
+    RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

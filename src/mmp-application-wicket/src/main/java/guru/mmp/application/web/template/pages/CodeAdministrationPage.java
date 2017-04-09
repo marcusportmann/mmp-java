@@ -40,8 +40,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -52,7 +52,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_CODE_ADMINISTRATION)
 class CodeAdministrationPage extends TemplateWebPage
 {
@@ -61,7 +60,7 @@ class CodeAdministrationPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Codes Service */
-  @Inject
+  @Autowired
   private ICodesService codesService;
 
   /**
@@ -194,7 +193,7 @@ class CodeAdministrationPage extends TemplateWebPage
      * @param tableContainer the table container, which allows the code table and its
      *                       associated navigator to be updated using AJAX
      */
-    public RemoveDialog(WebMarkupContainer tableContainer)
+    RemoveDialog(WebMarkupContainer tableContainer)
     {
       super("removeDialog");
 

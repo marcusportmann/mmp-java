@@ -20,11 +20,12 @@ package guru.mmp.application.web.data;
 
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 /**
  * The <code>InjectableSortableDataProvider</code> class provides the
- * <code>SortableDataProvider</code> base class that provides support for container-based
- * dependency injection (CDI).
+ * <code>SortableDataProvider</code> base class that provides support for Spring Dependency
+ * Injection.
  *
  * @param <T>
  * @param <S>
@@ -41,9 +42,6 @@ public abstract class InjectableSortableDataProvider<T, S> extends SortableDataP
    */
   public InjectableSortableDataProvider()
   {
-    guru.mmp.application.web.WebApplication webApplication = guru.mmp.application.web
-        .WebApplication.class.cast(WebApplication.get());
-
-    webApplication.getWebApplicationInjector().inject(this);
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 }

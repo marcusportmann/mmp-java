@@ -127,7 +127,7 @@ class WebAuthorizationStrategy
                 ((WebApplication) session.getApplication()).getLogoutPage());
           }
 
-          if (session.hasAcccessToFunctions(webPageSecurityFunctions))
+          if (session.hasAccessToFunctions(webPageSecurityFunctions))
           {
             return true;
           }

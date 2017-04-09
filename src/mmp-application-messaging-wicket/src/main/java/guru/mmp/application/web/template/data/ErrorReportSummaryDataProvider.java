@@ -23,8 +23,8 @@ import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
 import org.apache.wicket.model.IModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class ErrorReportSummaryDataProvider extends InjectableDataProvider<Error
   private int maximumNumberOfEntries;
 
   /* Messaging Service */
-  @Inject
+  @Autowired
   private IMessagingService messagingService;
 
   /**

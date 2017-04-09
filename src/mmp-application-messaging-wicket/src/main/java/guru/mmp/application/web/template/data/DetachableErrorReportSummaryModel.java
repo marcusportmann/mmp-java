@@ -22,8 +22,8 @@ import guru.mmp.application.messaging.ErrorReportSummary;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -45,7 +45,7 @@ class DetachableErrorReportSummaryModel
   private UUID id;
 
   /* Messaging Service */
-  @Inject
+  @Autowired
   private IMessagingService messagingService;
 
   /**

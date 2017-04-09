@@ -23,8 +23,8 @@ import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.security.UserDirectoryNotFoundException;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableLoadableDetachableModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -45,7 +45,7 @@ public class DetachableUserDirectoryModel extends InjectableLoadableDetachableMo
   private UUID id;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**

@@ -22,15 +22,13 @@ import guru.mmp.application.security.ISecurityService;
 import guru.mmp.application.security.UserDirectory;
 import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.data.InjectableDataProvider;
-
 import org.apache.wicket.model.IModel;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryDataProvider</code> class provides an <code>IDataProvider</code>
@@ -38,18 +36,14 @@ import javax.inject.Inject;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class UserDirectoryDataProvider extends InjectableDataProvider<UserDirectory>
 {
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
-
-  /**
-   * Constructs a new <code>UserDirectoryDataProvider</code>.
-   */
-  public UserDirectoryDataProvider() {}
 
   /**
    * @see org.apache.wicket.model.IDetachable#detach()

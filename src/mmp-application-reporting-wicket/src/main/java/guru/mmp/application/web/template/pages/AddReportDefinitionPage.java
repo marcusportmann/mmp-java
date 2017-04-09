@@ -32,8 +32,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -47,7 +47,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateReportingSecurity.FUNCTION_CODE_REPORT_DEFINITION_ADMINISTRATION)
 class AddReportDefinitionPage extends TemplateWebPage
 {
@@ -56,7 +55,7 @@ class AddReportDefinitionPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Reporting Service */
-  @Inject
+  @Autowired
   private IReportingService reportingService;
 
   /**

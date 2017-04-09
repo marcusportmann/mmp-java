@@ -98,7 +98,7 @@ public class NavigationLink extends NavigationItem
    * @param pageClass      the class for the Wicket <code>Page</code> associated with the link
    * @param pageParameters the parameters for the page associated with the link
    */
-  NavigationLink(String name, String iconClass, Class<? extends Page> pageClass,
+  public NavigationLink(String name, String iconClass, Class<? extends Page> pageClass,
       PageParameters pageParameters)
   {
     super(name, iconClass);

@@ -35,8 +35,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.util.UUID;
 
@@ -48,7 +48,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @WebPageSecurity(TemplateSecurity.FUNCTION_CODE_SECURITY_ADMINISTRATION)
 class UpdateUserDirectoryPage extends TemplateWebPage
 {
@@ -57,7 +56,7 @@ class UpdateUserDirectoryPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**
@@ -66,8 +65,7 @@ class UpdateUserDirectoryPage extends TemplateWebPage
    * @param previousPage       the previous page
    * @param userDirectoryModel the model for the user directory
    */
-  UpdateUserDirectoryPage(PageReference previousPage,
-      IModel<UserDirectory> userDirectoryModel)
+  UpdateUserDirectoryPage(PageReference previousPage, IModel<UserDirectory> userDirectoryModel)
   {
     super("Update User Directory");
 
