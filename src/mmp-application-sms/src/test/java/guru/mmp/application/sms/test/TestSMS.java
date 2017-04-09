@@ -196,7 +196,7 @@ public class TestSMS
     {
       return;
     }
-    
+
     configurationService.setValue("SMSService.MyMobileAPIUsername", "MyMobileAPIUsername",
         "The My Mobile API username");
     configurationService.setValue("SMSService.MyMobileAPIPassword", "MyMobileAPIPassword",

@@ -24,7 +24,6 @@ import guru.mmp.application.messaging.MessagePart.Status;
 import guru.mmp.application.messaging.handler.IMessageHandler;
 import guru.mmp.application.messaging.handler.MessageHandlerConfig;
 import guru.mmp.application.util.ServiceUtil;
-import guru.mmp.common.cdi.CDIUtil;
 import guru.mmp.common.crypto.CryptoUtils;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.StringUtil;
@@ -33,6 +32,9 @@ import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -42,9 +44,6 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayOutputStream;
@@ -64,8 +63,7 @@ import java.util.*;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
 public class MessagingService
   implements IMessagingService
 {
@@ -90,10 +88,6 @@ public class MessagingService
   /* The AES encryption master key used to derive the device/user specific encryption keys. */
   private byte[] aesEncryptionMasterKey;
 
-  /* Background Message Processor */
-  @Inject
-  private BackgroundMessageProcessor backgroundMessageProcessor;
-
   /* The maximum number of times processing will be attempted for a message. */
   private int maximumProcessingAttempts;
 
@@ -107,20 +101,21 @@ public class MessagingService
   private List<MessageHandlerConfig> messageHandlersConfig;
 
   /* The DAO providing persistence capabilities for the messaging infrastructure. */
-  @Inject
+  @Autowired
   private IMessagingDAO messagingDAO;
 
   /* The delay in milliseconds to wait before re-attempting to process a message. */
   private int processingRetryDelay;
 
   /* Configuration Service */
-  @Inject
+  @Autowired
   private IConfigurationService configurationService;
 
   /**
-   * Constructs a new <code>MessagingService</code>.
+   * The Spring application context.
    */
-  public MessagingService() {}
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /**
    * Archive the message.
@@ -911,13 +906,12 @@ public class MessagingService
     // Inform the Background Message Processor that a new message has been queued for processing
     try
     {
-      backgroundMessageProcessor.process();
+      applicationContext.getBean(BackgroundMessageProcessor.class).processMessages();
     }
     catch (Throwable e)
     {
-      logger.error(String.format(
-          "Failed to invoke the Background Message Processor to process the message (%s) that was"
-          + " queued for processing", message.getId()), e);
+      logger.error(String.format("Failed to invoke the Background Message Processor to process "
+        +"the message (%s) that was queued for processing", message.getId()), e);
     }
   }
 
@@ -1317,8 +1311,8 @@ public class MessagingService
           IMessageHandler messageHandler = (IMessageHandler) constructor.newInstance(
               messageHandlerConfig);
 
-          // Perform container-based dependency injection on the message handler
-          CDIUtil.inject(messageHandler);
+          // Perform dependency injection on the message handler
+          applicationContext.getAutowireCapableBeanFactory().autowireBean(messageHandler);
 
           List<MessageHandlerConfig.MessageConfig> messagesConfig =
               messageHandlerConfig.getMessagesConfig();

@@ -21,7 +21,6 @@ package guru.mmp.application.messaging.handler;
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
-import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.messaging.ErrorReport;
 import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.messaging.Message;
@@ -35,8 +34,8 @@ import guru.mmp.common.util.Base64;
 import guru.mmp.common.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -56,19 +55,15 @@ public class SystemMessageHandler extends MessageHandler
   private static final Logger logger = LoggerFactory.getLogger(SystemMessageHandler.class);
 
   /* Codes Service */
-  @Inject
+  @Autowired
   private ICodesService codesService;
 
   /* Messaging Service */
-  @Inject
+  @Autowired
   private IMessagingService messagingService;
 
-  /* Configuration Service */
-  @Inject
-  private IConfigurationService configurationService;
-
   /* Security Service */
-  @Inject
+  @Autowired
   private ISecurityService securityService;
 
   /**

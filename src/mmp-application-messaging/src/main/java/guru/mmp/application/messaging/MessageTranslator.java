@@ -40,22 +40,19 @@ import java.util.UUID;
  */
 public class MessageTranslator
 {
-  private static ThreadLocal<MessageDigest> threadLocalMessageDigest =
-      new ThreadLocal<MessageDigest>()
-  {
-    @Override
-    protected MessageDigest initialValue()
-    {
-      try
+  private static ThreadLocal<MessageDigest> threadLocalMessageDigest = ThreadLocal.withInitial(
+      () ->
       {
-        return MessageDigest.getInstance("SHA-256");
+        try
+        {
+          return MessageDigest.getInstance("SHA-256");
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to initialise the SHA-256 message digest", e);
+        }
       }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Failed to initialise the SHA-256 message digest", e);
-      }
-    }
-  };
+      );
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the message

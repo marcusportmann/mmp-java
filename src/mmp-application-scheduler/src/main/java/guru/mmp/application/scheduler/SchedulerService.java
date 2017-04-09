@@ -20,21 +20,19 @@ package guru.mmp.application.scheduler;
 
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.util.ServiceUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SchedulerService</code> class provides the Scheduler Service implementation.
@@ -152,8 +150,8 @@ public class SchedulerService
 
       jobImplementation = (IJob) jobObject;
 
-      // Inject the job implementation
-      injectJob(job, jobImplementation);
+      // Perform dependency injection for the job implementation
+      applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);
     }
     catch (Throwable e)
     {
@@ -527,21 +525,6 @@ public class SchedulerService
     {
       throw new SchedulerServiceException(
           "Failed to initialise the configuration for the Scheduler Service", e);
-    }
-  }
-
-  private void injectJob(Job job, IJob jobImplementation)
-    throws SchedulerServiceException
-  {
-    try
-    {
-      applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format(
-          "Failed in inject the job class (%s) for the job (%s) with ID (%s)", job.getJobClass(),
-          job.getName(), job.getId()), e);
     }
   }
 }

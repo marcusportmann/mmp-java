@@ -20,13 +20,12 @@ package guru.mmp.application.messaging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import java.util.concurrent.Future;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -35,17 +34,15 @@ import java.util.concurrent.Future;
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-@TransactionManagement(TransactionManagementType.BEAN)
+@Service
+@SuppressWarnings("unused")
 public class BackgroundMessageProcessor
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessor.class);
 
   /* Messaging Service */
-  @Inject
+  @Autowired
   private IMessagingService messagingService;
 
   /**
@@ -82,37 +79,11 @@ public class BackgroundMessageProcessor
   }
 
   /**
-   * Process.
-   *
-   * @return <code>true</code> if the processing was successful or <code>false</code> otherwise
+   * Process the messages.
    */
-  @Asynchronous
-  public Future<Boolean> process()
-  {
-    // If CDI injection was not completed successfully for the bean then stop here
-    if (messagingService == null)
-    {
-      logger.error("Failed to process the messages queued for processing: "
-          + " The Messaging Service was NOT injected");
-
-      return new AsyncResult<>(false);
-    }
-
-    try
-    {
-      processMessages();
-
-      return new AsyncResult<>(true);
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to process the messages queued for processing", e);
-
-      return new AsyncResult<>(false);
-    }
-  }
-
-  private void processMessages()
+  @Scheduled(cron = "0 * * * * *")
+  @Async
+  public void processMessages()
   {
     Message message;
 

@@ -23,8 +23,8 @@ import guru.mmp.common.wbxml.Document;
 import guru.mmp.common.wbxml.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -57,8 +57,12 @@ public class MessagingServlet extends HttpServlet
   private static final long serialVersionUID = 1000000;
 
   /* Messaging Service */
-  @Inject
+  @Autowired
   private IMessagingService messagingService;
+
+  /**
+   * Is the messaging servlet initialized?
+   */
   private boolean isInitialized;
 
   /**
