@@ -14,13 +14,14 @@
   <artifactId>mmp-sample-wicket</artifactId>
   <version>3.0.0-SNAPSHOT</version>
   <name>mmp-sample-wicket</name>
-  <packaging>war</packaging>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jpa</artifactId>
+    <version>1.5.2.RELEASE</version>
+  </parent>
 
   <properties>
-    <wildfly.swarm.version>2016.11.0</wildfly.swarm.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <failOnMissingWebXml>false</failOnMissingWebXml>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -52,7 +53,27 @@
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.atomikos</groupId>
+      <artifactId>transactions-jdbc</artifactId>
+      <version>4.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.atomikos</groupId>
+      <artifactId>transactions-hibernate4</artifactId>
+      <version>4.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.194</version>
+    </dependency>
+
+
+
+
     <!-- Provided Dependencies -->
+    <!--
     <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
@@ -96,6 +117,7 @@
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
+    -->
 
     <!-- Test Dependencies -->
     <dependency>
@@ -106,6 +128,7 @@
     </dependency>
   </dependencies>
 
+  <!--
   <build>
     <finalName>sample</finalName>
     <plugins>
@@ -127,6 +150,7 @@
       </plugin>
     </plugins>
   </build>
+  -->
 
 </project>
 
