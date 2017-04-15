@@ -18,74 +18,26 @@ package guru.mmp.sample;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.wildfly.swarm.Swarm;
-import org.wildfly.swarm.config.undertow.FilterConfiguration;
-import org.wildfly.swarm.datasources.DatasourcesFraction;
-import org.wildfly.swarm.undertow.UndertowFraction;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * The <code>Sample</code> class initialises the WildFly Swarm container.
+ * The <code>Sample</code> class implements the main Spring Boot application class for the Sample
+ * application.
  *
  * @author Marcus Portmann
  */
+@SpringBootApplication
 public class Sample
 {
-  /* Logger */
-  private static Logger logger = LoggerFactory.getLogger(Sample.class);
-  private static final String GZIP_FILTER_KEY = "gzip";
-
   /**
-   * Main.
+   * The main method.
    *
-   * @param args the commandline arguments
+   * @param args the command-line arguments
    */
-  public static void main(String... args)
+  public static void main(String[] args)
+    throws Exception
   {
-    try
-    {
-      // Instantiate the container
-      Swarm swarm = new Swarm();
-
-      // Initialise the application data source
-      swarm.fraction(new DatasourcesFraction().dataSource("SampleDS",
-          (ds) ->
-          {
-            ds.driverName("h2");
-            ds.connectionUrl(
-                "jdbc:h2:mem:sample;MVCC=true;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-            ds.userName("sa");
-            ds.password("sa");
-            ds.jndiName("java:jboss/datasources/SampleDS");
-            ds.useJavaContext(true);
-            ds.trackStatements("true");
-            ds.tracking(true);
-          }
-          ));
-
-      // Enable gzip compression
-      UndertowFraction undertowFraction = UndertowFraction.createDefaultFraction();
-
-      undertowFraction.filterConfiguration(new FilterConfiguration().gzip(GZIP_FILTER_KEY))
-          .subresources().server("default-server").subresources().host("default-host").filterRef(
-          GZIP_FILTER_KEY, f -> f.predicate(
-          "exists('%{o,Content-Type}') and regex(pattern='(?:application/javascript|text/css|text/html|text/xml|application/json)(;.*)?', value=%{o,Content-Type}, full-match=true)"));
-
-      swarm.fraction(undertowFraction);
-
-      // Start the container
-      swarm.start();
-
-      // Create the default deployment
-      swarm.createDefaultDeployment();
-
-      // Deploy the application
-      swarm.deploy();
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to initialise the Sample application", e);
-    }
+    SpringApplication.run(Sample.class, args);
   }
 }

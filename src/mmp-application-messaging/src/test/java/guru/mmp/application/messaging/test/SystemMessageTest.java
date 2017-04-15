@@ -25,8 +25,8 @@ import guru.mmp.application.messaging.IMessagingService;
 import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessageTranslator;
 import guru.mmp.application.messaging.messages.*;
-import guru.mmp.application.test.ApplicationClassRunner;
-import guru.mmp.application.test.ApplicationConfiguration;
+import guru.mmp.application.test.TestClassRunner;
+import guru.mmp.application.test.TestConfiguration;
 import guru.mmp.common.util.ISO8601;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,8 +50,8 @@ import static org.junit.Assert.*;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-@RunWith(ApplicationClassRunner.class)
-@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@RunWith(TestClassRunner.class)
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SystemMessageTest

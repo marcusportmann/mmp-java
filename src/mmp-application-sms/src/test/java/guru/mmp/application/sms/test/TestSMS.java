@@ -22,8 +22,8 @@ import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.sms.ISMSService;
-import guru.mmp.application.test.ApplicationClassRunner;
-import guru.mmp.application.test.ApplicationConfiguration;
+import guru.mmp.application.test.TestClassRunner;
+import guru.mmp.application.test.TestConfiguration;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
@@ -58,8 +58,8 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-@RunWith(ApplicationClassRunner.class)
-@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@RunWith(TestClassRunner.class)
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class TestSMS

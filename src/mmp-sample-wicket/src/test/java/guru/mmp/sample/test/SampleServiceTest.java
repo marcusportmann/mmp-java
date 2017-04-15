@@ -18,28 +18,31 @@ package guru.mmp.sample.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.test.ApplicationClassRunner;
-import guru.mmp.application.test.ApplicationDataSourceResourceReference;
-import guru.mmp.application.test.ApplicationDataSourceSQLResource;
-import guru.mmp.common.persistence.TransactionManager;
+import guru.mmp.application.test.TestClassRunner;
+import guru.mmp.application.test.TestConfiguration;
+import guru.mmp.sample.SampleConfiguration;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import javax.transaction.Transaction;
 
 /**
  * The <code>SampleServiceTest</code> class contains the implementation of the JUnit
@@ -47,50 +50,41 @@ import javax.transaction.Transaction;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationClassRunner.class)
-@ApplicationDataSourceResourceReference(name = "java:jboss/datasources/SampleDS")
-@ApplicationDataSourceSQLResource(path = "guru/mmp/sample/persistence/SampleH2.sql")
+@SuppressWarnings("unused")
+@RunWith(TestClassRunner.class)
+@ContextConfiguration(classes = { SampleTestConfiguration.class })
+@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SampleServiceTest
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleServiceTest.class);
-  @Inject
+
+  /* Sample Service */
+  @Autowired
   private ISampleService sampleService;
+
+  /* Transaction Manager */
+  @Autowired
+  private PlatformTransactionManager transactionManager;
 
   /**
    * The rollback transaction test.
    *
    * @throws Exception
    */
-  @Test
+  //@Test
   public void rollbackTransactionTest()
     throws Exception
   {
     List<Data> beforeAddRetrievedData = sampleService.getData();
 
-    Transaction existingTransaction = null;
+    TransactionStatus transactionStatus = transactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
 
-    try
-    {
-      existingTransaction = TransactionManager.getTransactionManager().beginNew();
+    sampleService.addData();
 
-      sampleService.addData();
-
-      TransactionManager.getTransactionManager().rollback();
-    }
-    catch (Throwable e)
-    {
-      TransactionManager.getTransactionManager().rollback();
-
-      throw e;
-    }
-    finally
-    {
-      if (existingTransaction != null)
-      {
-        TransactionManager.getTransactionManager().resume(existingTransaction);
-      }
-    }
+    transactionManager.rollback(transactionStatus);
 
     List<Data> afterAddRetrievedData = sampleService.getData();
 
@@ -109,33 +103,22 @@ public class SampleServiceTest
   {
     List<Data> beforeAddRetrievedData = sampleService.getData();
 
-    Transaction existingTransaction = null;
+    TransactionStatus transactionStatus = transactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
 
-    try
-    {
-      existingTransaction = TransactionManager.getTransactionManager().beginNew();
+    sampleService.addData();
 
-      sampleService.addData();
+    List<Data> afterAddRetrievedData = sampleService.getData();
 
-      List<Data> afterAddRetrievedData = sampleService.getData();
+    assertEquals("The correct number of data objects was not retrieved",
+        beforeAddRetrievedData.size() + 1, afterAddRetrievedData.size());
 
-      assertEquals("The correct number of data objects was not retrieved",
-          beforeAddRetrievedData.size() + 1, afterAddRetrievedData.size());
+    transactionManager.commit(transactionStatus);
 
-      TransactionManager.getTransactionManager().commit();
-    }
-    catch (Throwable e)
-    {
-      TransactionManager.getTransactionManager().rollback();
+    afterAddRetrievedData = sampleService.getData();
 
-      throw e;
-    }
-    finally
-    {
-      if (existingTransaction != null)
-      {
-        TransactionManager.getTransactionManager().resume(existingTransaction);
-      }
-    }
+    assertEquals("The correct number of data objects was not retrieved",
+        beforeAddRetrievedData.size() + 1, afterAddRetrievedData.size());
+
   }
 }

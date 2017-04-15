@@ -45,6 +45,8 @@ public class TestJPAService
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
+
+  /* Transaction Manager */
   @Autowired
   private PlatformTransactionManager transactionManager;
 

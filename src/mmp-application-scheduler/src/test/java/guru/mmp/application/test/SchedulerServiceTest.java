@@ -43,13 +43,15 @@ import static org.junit.Assert.fail;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationClassRunner.class)
-@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@RunWith(TestClassRunner.class)
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SchedulerServiceTest
 {
   private static int jobCount;
+
+  /* Scheduler Service */
   @Autowired
   private ISchedulerService schedulerService;
 

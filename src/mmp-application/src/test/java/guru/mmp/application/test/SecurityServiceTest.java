@@ -42,8 +42,8 @@ import static org.junit.Assert.*;
  *
  * @author Marcus Portmann
  */
-@RunWith(ApplicationClassRunner.class)
-@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@RunWith(TestClassRunner.class)
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SecurityServiceTest

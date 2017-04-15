@@ -18,37 +18,27 @@ package guru.mmp.sample.model;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.TransactionManager;
-
-import net.sf.jasperreports.engine.util.JRStyledText;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
-import javax.transaction.Transaction;
-import javax.transaction.Transactional;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleService</code> class provides the Sample Service implementation.
  *
  * @author Marcus Portmann
  */
-@ApplicationScoped
-@Default
+@Service
 public class SampleService
   implements ISampleService
 {
   /* Entity Manager */
-  @PersistenceContext(unitName = "samplePersistenceContext")
+  @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
 
   /**
@@ -104,25 +94,5 @@ public class SampleService
   public void testMethod()
   {
     System.out.println("[DEBUG] Hello world from the test method!!!");
-  }
-
-  private void validateTransaction(Transaction transaction)
-    throws SampleServiceException
-  {
-    try
-    {
-      Transaction currentTransaction = TransactionManager.getTransactionManager().getTransaction();
-
-      if (currentTransaction != transaction)
-      {
-        throw new RuntimeException(
-            "The current transaction does not match the transaction to validate");
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SampleServiceException("Failed to validate the transaction (" + transaction + ")",
-          e);
-    }
   }
 }

@@ -25,8 +25,8 @@ import com.meterware.servletunit.ServletRunner;
 import com.meterware.servletunit.ServletUnitClient;
 import guru.mmp.application.messaging.*;
 import guru.mmp.application.messaging.messages.*;
-import guru.mmp.application.test.ApplicationClassRunner;
-import guru.mmp.application.test.ApplicationConfiguration;
+import guru.mmp.application.test.TestClassRunner;
+import guru.mmp.application.test.TestConfiguration;
 import guru.mmp.application.web.servlets.MessagingServlet;
 import guru.mmp.common.util.Base64;
 import guru.mmp.common.wbxml.Document;
@@ -63,8 +63,8 @@ import static org.junit.Assert.*;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-@RunWith(ApplicationClassRunner.class)
-@ContextConfiguration(classes = { ApplicationConfiguration.class })
+@RunWith(TestClassRunner.class)
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
   DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class MessagingServletTest

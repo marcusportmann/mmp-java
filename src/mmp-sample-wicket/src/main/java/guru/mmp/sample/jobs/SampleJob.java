@@ -22,15 +22,14 @@ import guru.mmp.application.scheduler.IJob;
 import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.JobExecutionContext;
 import guru.mmp.application.scheduler.JobExecutionFailedException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestJob</code> class implements the test job.
@@ -45,7 +44,7 @@ public class SampleJob
   private static final Logger logger = LoggerFactory.getLogger(SampleJob.class);
 
   /* Scheduler Service */
-  @Inject
+  @Autowired
   private ISchedulerService schedulerService;
 
   /**
@@ -66,8 +65,7 @@ public class SampleJob
 
       logger.info("Successfully retrieved the data source from JNDI (" + dataSource + ")");
     }
-    catch (Throwable ignored)
-    {}
+    catch (Throwable ignored) {}
 
   }
 }
