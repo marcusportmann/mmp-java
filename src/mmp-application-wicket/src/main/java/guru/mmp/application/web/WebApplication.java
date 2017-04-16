@@ -25,8 +25,6 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,10 +42,6 @@ import java.util.UUID;
  */
 public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
-  /* Logger */
-  @SuppressWarnings("unused")
-  private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
-
   /**
    * Returns the runtime configuration type for the Wicket web application.
    *

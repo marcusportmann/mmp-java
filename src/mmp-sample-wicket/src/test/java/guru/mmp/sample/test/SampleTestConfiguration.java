@@ -64,9 +64,8 @@ public class SampleTestConfiguration extends TestConfiguration
   @Override
   protected List<String> getDatabaseInitResources()
   {
-    List<String> resources = new ArrayList<>();
+    List<String> resources = super.getDatabaseInitResources();
 
-    resources.add("guru/mmp/application/persistence/ApplicationH2.sql");
     resources.add("guru/mmp/sample/persistence/SampleH2.sql");
 
     return resources;

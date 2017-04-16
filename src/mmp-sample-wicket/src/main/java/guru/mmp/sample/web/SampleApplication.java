@@ -28,6 +28,7 @@ import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationP
 import guru.mmp.sample.web.pages.forms.TestFormPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * The <code>SampleApplication</code> provides the implementation of the Wicket Web

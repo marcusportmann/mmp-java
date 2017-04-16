@@ -60,17 +60,7 @@ public class ServiceUtil
       catch (Throwable ignored) {}
     }
 
-    if (applicationName == null)
-    {
-      logger.error(String.format(
-          "Failed to retrieve the application name from JNDI using the (java:app/AppName) and "
-          + "(java:comp/env/ApplicationName) names while constructing the %s instance name",
-          serviceName));
-
-      applicationName = "Unknown";
-    }
-
-    String instanceName = applicationName + "::";
+    String instanceName = (applicationName == null) ? "" : applicationName + "::";
 
     try
     {

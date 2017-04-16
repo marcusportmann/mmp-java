@@ -35,6 +35,8 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
  * application-specific <code>WebApplication</code> classes for applications that make use

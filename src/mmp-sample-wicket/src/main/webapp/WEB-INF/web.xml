@@ -7,16 +7,6 @@
   <!-- ========================================================================================= -->
   <!--                                 Application Configuration                                 -->
   <!-- ========================================================================================= -->
-  <context-param>
-    <description>Wicket Deployment</description>
-    <param-name>configuration</param-name>
-    <param-value>development</param-value>
-  </context-param>
-  <context-param>
-    <description>Is Multiple Organisation Support Enabled</description>
-    <param-name>multipleOrganisationSupportEnabled</param-name>
-    <param-value>true</param-value>
-  </context-param>
   <resource-ref>
     <description>Application Data Source Reference</description>
     <res-ref-name>java:app/jdbc/ApplicationDataSource</res-ref-name>
