@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.transaction.Transaction;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -38,8 +37,7 @@ import java.util.logging.Logger;
  *
  * @author Marcus Portmann
  */
-public class TestClassRunner
-  extends SpringJUnit4ClassRunner
+public class TestClassRunner extends SpringJUnit4ClassRunner
 {
   /**
    * Constructs a new <code>TestClassRunner</code>.
@@ -50,16 +48,6 @@ public class TestClassRunner
     throws InitializationError
   {
     super(testClass);
-
-    try
-    {
-      LogManager.getLogManager().readConfiguration(Thread.currentThread().getContextClassLoader()
-          .getResourceAsStream("logging.properties"));
-    }
-    catch (Throwable e)
-    {
-      throw new InitializationError("Failed to initialize the JDK logging: " + e.getMessage());
-    }
   }
 
   /**

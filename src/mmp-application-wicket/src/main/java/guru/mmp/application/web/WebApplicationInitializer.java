@@ -19,29 +19,16 @@ package guru.mmp.application.web;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
+import guru.mmp.application.configuration.ApplicationInitializer;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import java.util.Properties;
-import java.util.concurrent.Executor;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -53,12 +40,7 @@ import java.util.concurrent.Executor;
  * @author Marcus Portmann
  */
 @SpringBootApplication
-@EnableAsync
-@EnableScheduling
-@EnableTransactionManagement
-@EnableJpaRepositories
-@ComponentScan(basePackages = { "guru.mmp.application" })
-public abstract class WebApplicationInitializer
+public abstract class WebApplicationInitializer extends ApplicationInitializer
   implements ServletContextInitializer
 {
   private static final String WICKET_FILTER_NAME = "wicket-filter";
@@ -109,62 +91,6 @@ public abstract class WebApplicationInitializer
 //
 //  WicketEndpointRepository
 
-  }
-
-  /**
-   * Returns the application entity manager factory associated with the application data source.
-   *
-   * @return the application entity manager factory associated with the application data source
-   */
-  @Bean(name = "applicationPersistenceUnit")
-  @DependsOn("applicationDataSource")
-  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
-  {
-    LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
-      new LocalContainerEntityManagerFactoryBean();
-
-    HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-    jpaVendorAdapter.setGenerateDdl(false);
-    jpaVendorAdapter.setShowSql(true);
-    jpaVendorAdapter.setDatabase(Database.H2);
-
-    localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
-    localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application");
-    localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-    Properties properties = new Properties();
-
-    properties.setProperty("hibernate.transaction.jta.platform",
-      AtomikosJtaPlatform.class.getName());
-
-    localContainerEntityManagerFactoryBean.setJpaProperties(properties);
-
-    localContainerEntityManagerFactoryBean.afterPropertiesSet();
-
-    return localContainerEntityManagerFactoryBean;
-  }
-
-  /**
-   * Returns the Spring task executor to use for @Async method invocations.
-   *
-   * @return the Spring task executor to use for @Async method invocations
-   */
-  @Bean
-  public Executor taskExecutor()
-  {
-    return new SimpleAsyncTaskExecutor();
-  }
-
-  /**
-   * Returns the Spring task scheduler.
-   *
-   * @return the Spring task scheduler
-   */
-  @Bean
-  public TaskScheduler taskScheduler()
-  {
-    return new ConcurrentTaskScheduler();
   }
 
   /**

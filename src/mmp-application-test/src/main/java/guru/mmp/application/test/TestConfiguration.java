@@ -18,12 +18,10 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.atomikos.icatch.jta.UserTransactionImp;
-import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.common.persistence.DAOUtil;
-import net.sf.cglib.proxy.Enhancer;
 import org.h2.jdbcx.JdbcDataSource;
+import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -36,10 +34,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
-import org.springframework.transaction.jta.JtaTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -66,16 +61,9 @@ import java.util.logging.Logger;
 @EnableTransactionManagement
 @ComponentScan(basePackages = { "guru.mmp.application" })
 public class TestConfiguration
-  implements TransactionManagementConfigurer
 {
-  private static Object dataSourceLock = new Object();
+  private static final Object dataSourceLock = new Object();
   private static DataSource dataSource;
-
-  @Override
-  public PlatformTransactionManager annotationDrivenTransactionManager()
-  {
-    return transactionManager();
-  }
 
   /**
    * Returns the application entity manager factory associated with the application data source.
@@ -99,12 +87,11 @@ public class TestConfiguration
     localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application");
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-    Properties properties = new Properties();
-
-    properties.setProperty("hibernate.transaction.jta.platform",
-        AtomikosJtaPlatform.class.getName());
-
-    localContainerEntityManagerFactoryBean.setJpaProperties(properties);
+//    Properties properties = new Properties();
+//
+//    properties.setProperty("hibernate.transaction.jta.platform", SpringJtaPlatform.class.getName());
+//
+//    localContainerEntityManagerFactoryBean.setJpaProperties(properties);
 
     localContainerEntityManagerFactoryBean.afterPropertiesSet();
 
@@ -131,43 +118,6 @@ public class TestConfiguration
   public TaskScheduler taskScheduler()
   {
     return new ConcurrentTaskScheduler();
-  }
-
-  /**
-   * Returns the transaction manager.
-   *
-   * @return the transaction manager
-   */
-  @Bean(name = "transactionManager")
-  public PlatformTransactionManager transactionManager()
-  {
-    try
-    {
-      Enhancer transactionManagerEnhancer = new Enhancer();
-      transactionManagerEnhancer.setSuperclass(UserTransactionManager.class);
-      transactionManagerEnhancer.setCallback(new TransactionManagerTransactionTracker());
-
-      AtomikosJtaPlatform.atomikosTransactionManager =
-          (UserTransactionManager) transactionManagerEnhancer.create();
-
-      Enhancer userTransactionEnhancer = new Enhancer();
-      userTransactionEnhancer.setSuperclass(UserTransactionImp.class);
-      userTransactionEnhancer.setCallback(new UserTransactionTracker(AtomikosJtaPlatform
-          .atomikosTransactionManager));
-
-      AtomikosJtaPlatform.atomikosUserTransaction =
-          (UserTransactionImp) userTransactionEnhancer.create();
-
-      AtomikosJtaPlatform.atomikosUserTransaction.setTransactionTimeout(300);
-
-      return new JtaTransactionManager(AtomikosJtaPlatform.atomikosUserTransaction,
-          AtomikosJtaPlatform.atomikosTransactionManager);
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException(
-          "Failed to initialise the Atomikos JTA user transaction and transaction manager", e);
-    }
   }
 
   /**
