@@ -25,11 +25,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -67,9 +65,9 @@ public class AtomikosJtaConfiguration
   }
 
   /**
-   * Returns the Atomikos User Transaction.
+   * Returns the Atomikos JTA User Transaction.
    *
-   * @return the Atomikos User Transaction
+   * @return the Atomikos JTA User Transaction
    */
   @Bean
   @DependsOn({ "userTransactionManager" })
@@ -100,12 +98,12 @@ public class AtomikosJtaConfiguration
   }
 
   /**
-   * Returns the Atomikos JTA Transaction Manager.
+   * Returns the Atomikos JTA User Transaction Manager.
    *
-   * @return the Atomikos JTA Transaction Manager
+   * @return the Atomikos JTA User Transaction Manager
    */
   @Bean(initMethod = "init", destroyMethod = "close")
-  public TransactionManager userTransactionManager()
+  public UserTransactionManager userTransactionManager()
   {
     synchronized (lock)
     {

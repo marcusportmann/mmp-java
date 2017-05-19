@@ -18,7 +18,8 @@ package guru.mmp.application.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.JtaPlatform;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +33,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import org.springframework.transaction.jta.JtaTransactionManager;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -50,17 +53,60 @@ import java.util.concurrent.Executor;
  */
 @Configuration
 @EnableAsync
+@EnableAutoConfiguration
 @EnableScheduling
-@EnableTransactionManagement
 @ComponentScan(basePackages = { "guru.mmp.application" })
 @SuppressWarnings("unused")
 public abstract class ApplicationInitializer
-  implements TransactionManagementConfigurer
 {
-  @Override
-  public PlatformTransactionManager annotationDrivenTransactionManager()
+  private final PlatformTransactionManager transactionManager;
+
+  /**
+   * Constructs a new <code>ApplicationInitializer</code>.
+   *
+   * @param transactionManager the transaction manager
+   */
+  public ApplicationInitializer(PlatformTransactionManager transactionManager)
   {
-    return transactionManager();
+    Assert.notNull(transactionManager, "TransactionManager must not be null");
+    this.transactionManager = transactionManager;
+  }
+
+  /**
+   * Returns the application entity manager factory associated with the application data source.
+   *
+   * @return the application entity manager factory associated with the application data source
+   */
+  @Bean(name = "applicationPersistenceUnit")
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
+  {
+    LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
+        new LocalContainerEntityManagerFactoryBean();
+
+    HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+    jpaVendorAdapter.setGenerateDdl(false);
+    jpaVendorAdapter.setShowSql(true);
+    jpaVendorAdapter.setDatabase(Database.H2);
+
+    localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
+    localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
+    localContainerEntityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
+        getJpaPackagesToScan()));
+    localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+    if (transactionManager instanceof JtaTransactionManager)
+    {
+      Map<String, Object> jpaPropertyMap =
+          localContainerEntityManagerFactoryBean.getJpaPropertyMap();
+
+      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
+          ((JtaTransactionManager) transactionManager)));
+
+      localContainerEntityManagerFactoryBean.afterPropertiesSet();
+    }
+
+    return localContainerEntityManagerFactoryBean;
   }
 
   /**
@@ -86,28 +132,6 @@ public abstract class ApplicationInitializer
   }
 
   /**
-   * Returns the transaction manager.
-   *
-   * @return the transaction manager
-   */
-  @Bean(name = "transactionManager")
-  public PlatformTransactionManager transactionManager()
-  {
-    try
-    {
-      JtaPlatform jtaPlatform = new JtaPlatform();
-
-      return new JtaTransactionManager(jtaPlatform.retrieveUserTransaction(),
-          jtaPlatform.retrieveTransactionManager());
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException(
-          "Failed to initialise the JTA user transaction and transaction manager", e);
-    }
-  }
-
-  /**
    * Returns the data source that can be used to interact with the application database.
    *
    * @return the data source that can be used to interact with the in-memory database
@@ -117,37 +141,16 @@ public abstract class ApplicationInitializer
   protected abstract DataSource dataSource();
 
   /**
-   * Returns the application entity manager factory associated with the application data source.
+   * Returns the names of the packages to scan for JPA classes.
    *
-   * @return the application entity manager factory associated with the application data source
+   * @return the names of the packages to scan for JPA classes
    */
-  @Bean(name = "applicationPersistenceUnit")
-  @DependsOn("applicationDataSource")
-  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
+  protected List<String> getJpaPackagesToScan()
   {
-    LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
-      new LocalContainerEntityManagerFactoryBean();
+    List<String> packagesToScan = new ArrayList<>();
 
-    HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-    jpaVendorAdapter.setGenerateDdl(false);
-    jpaVendorAdapter.setShowSql(true);
-    jpaVendorAdapter.setDatabase(Database.H2);
+    packagesToScan.add("guru.mmp.application");
 
-    localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
-    localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application");
-    localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-//    Properties properties = new Properties();
-//
-//    properties.setProperty("hibernate.transaction.jta.platform",
-//      AtomikosJtaPlatform.class.getName());
-//
-//    localContainerEntityManagerFactoryBean.setJpaProperties(properties);
-//
-//    localContainerEntityManagerFactoryBean.afterPropertiesSet();
-
-    return localContainerEntityManagerFactoryBean;
+    return packagesToScan;
   }
-
 }

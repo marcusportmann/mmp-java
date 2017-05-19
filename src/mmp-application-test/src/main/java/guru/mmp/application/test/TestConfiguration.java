@@ -21,6 +21,7 @@ package guru.mmp.application.test;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.common.persistence.DAOUtil;
 import org.h2.jdbcx.JdbcDataSource;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,7 +35,9 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.jta.JtaTransactionManager;
+import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -42,7 +45,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
@@ -57,13 +60,25 @@ import java.util.logging.Logger;
  */
 @Configuration
 @EnableAsync
+@EnableAutoConfiguration
 @EnableScheduling
-@EnableTransactionManagement
 @ComponentScan(basePackages = { "guru.mmp.application" })
 public class TestConfiguration
 {
   private static final Object dataSourceLock = new Object();
   private static DataSource dataSource;
+  private final PlatformTransactionManager transactionManager;
+
+  /**
+   * Constructs a new <code>TestConfiguration</code>.
+   *
+   * @param transactionManager the transaction manager
+   */
+  public TestConfiguration(PlatformTransactionManager transactionManager)
+  {
+    Assert.notNull(transactionManager, "TransactionManager must not be null");
+    this.transactionManager = transactionManager;
+  }
 
   /**
    * Returns the application entity manager factory associated with the application data source.
@@ -87,15 +102,24 @@ public class TestConfiguration
     localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application");
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
+<<<<<<< HEAD
 
 
     Properties properties = new Properties();
 
     properties.setProperty("hibernate.transaction.jta.platform", SpringJtaPlatform.class.getName());
+=======
+    if (transactionManager instanceof JtaTransactionManager)
+    {
+      Map<String, Object> jpaPropertyMap =
+          localContainerEntityManagerFactoryBean.getJpaPropertyMap();
+>>>>>>> 598229bcf7cae95144727594b5f729b50eaa23bc
 
-    localContainerEntityManagerFactoryBean.setJpaProperties(properties);
+      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
+          ((JtaTransactionManager) transactionManager)));
 
-    localContainerEntityManagerFactoryBean.afterPropertiesSet();
+      localContainerEntityManagerFactoryBean.afterPropertiesSet();
+    }
 
     return localContainerEntityManagerFactoryBean;
   }
