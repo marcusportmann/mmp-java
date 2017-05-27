@@ -20,7 +20,9 @@ package guru.mmp.application.test;
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.common.persistence.DAOUtil;
+import net.sf.cglib.proxy.Enhancer;
 import org.h2.jdbcx.JdbcDataSource;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
@@ -46,8 +48,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Executor;
-import java.util.logging.Logger;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -102,18 +104,14 @@ public class TestConfiguration
     localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application");
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-<<<<<<< HEAD
-
-
     Properties properties = new Properties();
 
     properties.setProperty("hibernate.transaction.jta.platform", SpringJtaPlatform.class.getName());
-=======
+
     if (transactionManager instanceof JtaTransactionManager)
     {
       Map<String, Object> jpaPropertyMap =
           localContainerEntityManagerFactoryBean.getJpaPropertyMap();
->>>>>>> 598229bcf7cae95144727594b5f729b50eaa23bc
 
       jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
           ((JtaTransactionManager) transactionManager)));
@@ -209,7 +207,8 @@ public class TestConfiguration
                 {
                   if (logSQL)
                   {
-                    Logger.getAnonymousLogger().info("Executing SQL statement: " + sqlStatement);
+                    LoggerFactory.getLogger(TestConfiguration.class).info(
+                        "Executing SQL statement: " + sqlStatement);
                   }
 
                   try (Statement statement = connection.createStatement())
@@ -228,7 +227,7 @@ public class TestConfiguration
               }
               catch (Throwable f)
               {
-                Logger.getAnonymousLogger().severe(
+                LoggerFactory.getLogger(TestConfiguration.class).error(
                     "Failed to shutdown the in-memory application database: " + e.getMessage());
               }
 
@@ -236,7 +235,12 @@ public class TestConfiguration
             }
           }
 
-          AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
+          Enhancer enhancer = new Enhancer();
+          enhancer.setSuperclass(AtomikosDataSourceBean.class);
+          enhancer.setCallback(new DataSourceTracker());
+
+          AtomikosDataSourceBean atomikosDataSourceBean =
+              (AtomikosDataSourceBean) enhancer.create();
 
           atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
               + "-ApplicationDataSource");

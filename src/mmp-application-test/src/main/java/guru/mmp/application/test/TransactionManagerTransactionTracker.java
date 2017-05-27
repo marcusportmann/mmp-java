@@ -20,6 +20,7 @@ package guru.mmp.application.test;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
@@ -27,8 +28,6 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -47,7 +46,7 @@ public class TransactionManagerTransactionTracker
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
   /**
-   * Constructs a new <code>TransactionManagerMethodInterceptor</code>.
+   * Constructs a new <code>TransactionManagerTransactionTracker</code>.
    */
   TransactionManagerTransactionTracker() {}
 
@@ -152,7 +151,7 @@ public class TransactionManagerTransactionTracker
     }
     catch (Throwable e)
     {
-      Logger.getAnonymousLogger().log(Level.SEVERE,
+      LoggerFactory.getLogger(TransactionManagerTransactionTracker.class).error(
           "Failed to invoke the TransactionManager method (" + method.getName() + ")", e);
 
       throw e;

@@ -21,12 +21,12 @@ package guru.mmp.application.test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.transaction.Transaction;
+import java.sql.Connection;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -84,7 +84,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
       {
         if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
         {
-          Logger.getAnonymousLogger().log(Level.WARNING,
+          LoggerFactory.getLogger(TestClassRunner.class).warn(
               "Failed to successfully execute the test (" + method.getName() + "): Found an "
               + "unexpected active transaction (" + transaction.toString() + ") that was "
               + "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
@@ -111,7 +111,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
       {
         if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
         {
-          Logger.getAnonymousLogger().log(Level.WARNING,
+          LoggerFactory.getLogger(TestClassRunner.class).warn(
               "Failed to successfully execute the test (" + method.getName() + "): Found an "
               + "unexpected active transaction (" + transaction.toString() + ") that was "
               + "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
@@ -121,6 +121,31 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
           throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
               + "): Found an unexpected active transaction (" + transaction.toString()
               + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
+        }
+      }
+    }
+
+    // Check for unexpected open database connections
+    for (Connection connection : DataSourceTracker.getActiveConnections().keySet())
+    {
+      StackTraceElement[] stackTrace = DataSourceTracker.getActiveConnections().get(connection);
+
+      for (int i = 0; i < stackTrace.length; i++)
+      {
+        if (stackTrace[i].getMethodName().equals("getConnection"))
+        {
+          LoggerFactory.getLogger(TestClassRunner.class).warn(
+              "Failed to successfully execute the test (" + method.getName() + "): Found an "
+              + "unexpected open database connection (" + connection.toString() + ") that was "
+              + "retrieved by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
+              + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
+
+          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
+              + "): Found an unexpected open database connection (" + connection.toString()
+              + ") that was retrieved by the method (" + stackTrace[i + 1].getMethodName()
               + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
               + stackTrace[i + 1].getLineNumber() + ")");
         }

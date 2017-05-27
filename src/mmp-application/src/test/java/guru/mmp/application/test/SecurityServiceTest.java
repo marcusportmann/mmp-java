@@ -18,6 +18,7 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.persistence.AtomikosJtaConfiguration;
 import guru.mmp.application.security.*;
 import guru.mmp.common.util.BinaryBuffer;
 import org.junit.Test;

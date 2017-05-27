@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 import javax.transaction.UserTransaction;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -44,6 +46,44 @@ public class AtomikosJtaConfiguration
   private static final Object lock = new Object();
   private static UserTransactionManager userTransactionManager;
   private static UserTransactionImp userTransaction;
+  private static Class<?> enhancerClass;
+  private static Class<?> userTransactionTrackerClass;
+  private static Class<?> transactionManagerTransactionTrackerClass;
+  private static Method enhancerClassSetSuperclassMethod;
+  private static Method enhancerClassSetCallbackMethod;
+  private static Method enhancerClassCreateMethod;
+
+  static
+  {
+    try
+    {
+      // Attempt to load the CGLib net.sf.cglib.proxy.Enhancer class
+      enhancerClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "net.sf.cglib.proxy.Enhancer");
+
+      // Attempt to load the CGLib net.sf.cglib.proxy.Callback class
+      Class<?> callbackClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "net.sf.cglib.proxy.Callback");
+
+      // Retrieve the setSuperClass method for the net.sf.cglib.proxy.Enhancer class
+      enhancerClassSetSuperclassMethod = enhancerClass.getMethod("setSuperclass", Class.class);
+
+      // Retrieve the setCallback method for the net.sf.cglib.proxy.Enhancer class
+      enhancerClassSetCallbackMethod = enhancerClass.getMethod("setCallback", callbackClass);
+
+      // Retrieve the create method for the net.sf.cglib.proxy.Enhancer class
+      enhancerClassCreateMethod = enhancerClass.getMethod("create");
+
+      // Attempt to load the guru.mmp.application.test.UserTransactionTracker class
+      userTransactionTrackerClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "guru.mmp.application.test.UserTransactionTracker");
+
+      // Attempt to load the guru.mmp.application.test.TransactionManagerTransactionTracker class
+      transactionManagerTransactionTrackerClass = Thread.currentThread().getContextClassLoader()
+          .loadClass("guru.mmp.application.test.TransactionManagerTransactionTracker");
+    }
+    catch (ClassNotFoundException | NoSuchMethodException ignored) {}
+  }
 
   @Override
   public PlatformTransactionManager annotationDrivenTransactionManager()
@@ -78,8 +118,33 @@ public class AtomikosJtaConfiguration
       {
         try
         {
-          userTransaction = new UserTransactionImp();
-          userTransaction.setTransactionTimeout(300);
+          if ((enhancerClass != null) && (userTransactionTrackerClass != null))
+          {
+            Object userTransactionEnhancer = enhancerClass.newInstance();
+
+            enhancerClassSetSuperclassMethod.invoke(userTransactionEnhancer,
+                UserTransactionImp.class);
+
+            Constructor<?> userTransactionTrackerConstructor =
+                userTransactionTrackerClass.getDeclaredConstructor(javax.transaction
+                .TransactionManager.class);
+
+            userTransactionTrackerConstructor.setAccessible(true);
+
+            enhancerClassSetCallbackMethod.invoke(userTransactionEnhancer,
+                userTransactionTrackerConstructor.newInstance(userTransactionManager()));
+
+            userTransaction = (UserTransactionImp) enhancerClassCreateMethod.invoke(
+                userTransactionEnhancer);
+
+            userTransaction.setTransactionTimeout(300);
+          }
+          else
+          {
+            userTransaction = new UserTransactionImp();
+
+            userTransaction.setTransactionTimeout(300);
+          }
         }
         catch (Throwable e)
         {
@@ -105,13 +170,36 @@ public class AtomikosJtaConfiguration
       {
         try
         {
-          userTransactionManager = new UserTransactionManager();
-          userTransactionManager.setForceShutdown(false);
+          if ((enhancerClass != null) && (transactionManagerTransactionTrackerClass != null))
+          {
+            Object transactionManagerEnhancer = enhancerClass.newInstance();
+
+            enhancerClassSetSuperclassMethod.invoke(transactionManagerEnhancer,
+                UserTransactionManager.class);
+
+            Constructor<?> transactionManagerTransactionTrackerConstructor =
+                transactionManagerTransactionTrackerClass.getDeclaredConstructor();
+
+            transactionManagerTransactionTrackerConstructor.setAccessible(true);
+
+            enhancerClassSetCallbackMethod.invoke(transactionManagerEnhancer,
+                transactionManagerTransactionTrackerConstructor.newInstance());
+
+            userTransactionManager = (UserTransactionManager) enhancerClassCreateMethod.invoke(
+                transactionManagerEnhancer);
+
+            userTransactionManager.setForceShutdown(false);
+          }
+          else
+          {
+            userTransactionManager = new UserTransactionManager();
+
+            userTransactionManager.setForceShutdown(false);
+          }
         }
         catch (Throwable e)
         {
-          throw new RuntimeException("Failed to initialise the Atomikos User Transaction Manager",
-              e);
+          throw new RuntimeException("Failed to initialise the Atomikos Transaction Manager", e);
         }
       }
 

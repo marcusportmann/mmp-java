@@ -20,6 +20,7 @@ package guru.mmp.application.test;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
@@ -27,8 +28,6 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -127,8 +126,8 @@ public class UserTransactionTracker
     }
     catch (Throwable e)
     {
-      Logger.getAnonymousLogger().log(Level.SEVERE, "Failed to invoke the UserTransaction method",
-          e);
+      LoggerFactory.getLogger(UserTransactionTracker.class).error(
+          "Failed to invoke the UserTransaction method", e);
 
       throw e;
     }
@@ -157,8 +156,8 @@ public class UserTransactionTracker
     }
     catch (Throwable e)
     {
-      Logger.getAnonymousLogger().log(Level.SEVERE, "Failed to retrieve the current transaction",
-          e);
+      LoggerFactory.getLogger(UserTransactionTracker.class).error(
+          "Failed to retrieve the current transaction", e);
 
       return null;
     }

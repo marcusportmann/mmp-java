@@ -22,6 +22,7 @@ import guru.mmp.application.configuration.ConfigurationException;
 import guru.mmp.application.configuration.ConfigurationNotFoundException;
 import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
+import guru.mmp.application.persistence.AtomikosJtaConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

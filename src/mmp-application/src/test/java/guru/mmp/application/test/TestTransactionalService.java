@@ -30,6 +30,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.Set;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -74,6 +76,10 @@ public class TestTransactionalService
       statement.setString(1, testData.getId());
       statement.setString(2, testData.getName());
       statement.setString(3, testData.getValue());
+
+      Set<Connection> connections = DataSourceTracker.getActiveConnections().keySet();
+
+      Map<Connection, StackTraceElement[]> connectionMap = DataSourceTracker.getActiveConnections();
 
       if (statement.executeUpdate() != 1)
       {

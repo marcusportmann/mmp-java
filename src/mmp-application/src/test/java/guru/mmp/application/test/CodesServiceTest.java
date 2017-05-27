@@ -22,6 +22,7 @@ import guru.mmp.application.codes.Code;
 import guru.mmp.application.codes.CodeCategory;
 import guru.mmp.application.codes.CodeCategoryType;
 import guru.mmp.application.codes.ICodesService;
+import guru.mmp.application.persistence.AtomikosJtaConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

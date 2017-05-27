@@ -17,8 +17,9 @@
   <modules>
     <module>mmp-common</module>
     <module>mmp-application</module>
-    <!--
     <module>mmp-application-messaging</module>
+
+    <!--
     <module>mmp-application-messaging-wicket</module>
     <module>mmp-application-reporting</module>
     <module>mmp-application-reporting-wicket</module>

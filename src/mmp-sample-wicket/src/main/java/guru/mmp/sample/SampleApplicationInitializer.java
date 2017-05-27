@@ -25,7 +25,6 @@ import guru.mmp.common.persistence.DAOUtil;
 import guru.mmp.sample.web.SampleApplication;
 import org.h2.jdbcx.JdbcDataSource;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
@@ -36,7 +35,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleApplicationInitializer</code> class implements the web application initializer
@@ -93,26 +93,26 @@ public class SampleApplicationInitializer extends WebApplicationInitializer
           JdbcDataSource jdbcDataSource = new JdbcDataSource();
 
           jdbcDataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
-            + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+              + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
           Runtime.getRuntime().addShutdownHook(new Thread(() ->
-          {
-            try
-            {
-              try (Connection connection = jdbcDataSource.getConnection();
-                Statement statement = connection.createStatement())
-
               {
-                statement.executeUpdate("SHUTDOWN");
+                try
+                {
+                  try (Connection connection = jdbcDataSource.getConnection();
+                    Statement statement = connection.createStatement())
+
+                  {
+                    statement.executeUpdate("SHUTDOWN");
+                  }
+                }
+                catch (Throwable e)
+                {
+                  throw new RuntimeException(
+                      "Failed to shutdown the in-memory application database", e);
+                }
               }
-            }
-            catch (Throwable e)
-            {
-              throw new RuntimeException(
-                "Failed to shutdown the in-memory application database", e);
-            }
-          }
-          ));
+              ));
 
           /*
            * Initialise the in-memory database using the SQL statements contained in the file with
@@ -152,7 +152,7 @@ public class SampleApplicationInitializer extends WebApplicationInitializer
               catch (Throwable f)
               {
                 Logger.getAnonymousLogger().severe(
-                  "Failed to shutdown the in-memory application database: " + e.getMessage());
+                    "Failed to shutdown the in-memory application database: " + e.getMessage());
               }
 
               throw e;
@@ -162,7 +162,7 @@ public class SampleApplicationInitializer extends WebApplicationInitializer
           AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
 
           atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
-            + "-ApplicationDataSource");
+              + "-ApplicationDataSource");
 
           atomikosDataSourceBean.setXaDataSource(jdbcDataSource);
           atomikosDataSourceBean.setMinPoolSize(5);
