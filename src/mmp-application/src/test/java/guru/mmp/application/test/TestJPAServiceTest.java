@@ -55,7 +55,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback
    */
-  //@Test
+  @Test
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
     throws Exception
   {
@@ -113,7 +113,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithCheckedExceptionInNewTransaction
    */
-  //@Test
+  @Test
   public void testFailedExecutionWithCheckedExceptionInNewTransaction()
     throws Exception
   {
@@ -189,7 +189,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithRuntimeExceptionInNewTransaction
    */
-  @Test
+  //@Test
   public void testFailedExecutionWithRuntimeExceptionInNewTransaction()
     throws Exception
   {
@@ -322,7 +322,7 @@ public class TestJPAServiceTest
   /**
    * testSuccessfulExecutionInExistingTransactionWithRollback
    */
-  //@Test
+  @Test
   public void testSuccessfulExecutionInExistingTransactionWithRollback()
     throws Exception
   {
@@ -376,7 +376,7 @@ public class TestJPAServiceTest
   /**
    * testSuccessfulExecutionInNewTransaction
    */
-  //@Test
+  @Test
   public void testSuccessfulExecutionInNewTransaction()
     throws Exception
   {
@@ -430,7 +430,7 @@ public class TestJPAServiceTest
   /**
    * testSuccessfulExecutionInNewTransactionWithRollback
    */
-  //@Test
+  @Test
   public void testSuccessfulExecutionInNewTransactionWithRollback()
     throws Exception
   {
