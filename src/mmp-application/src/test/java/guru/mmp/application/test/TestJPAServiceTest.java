@@ -151,7 +151,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback
    */
-  //@Test
+  @Test
   public void testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback()
     throws Exception
   {
@@ -189,7 +189,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithRuntimeExceptionInNewTransaction
    */
-  //@Test
+  @Test
   public void testFailedExecutionWithRuntimeExceptionInNewTransaction()
     throws Exception
   {
@@ -227,7 +227,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithoutTransaction
    */
-  //@Test
+  @Test
   public void testFailedExecutionWithoutTransaction()
     throws Exception
   {
@@ -252,23 +252,9 @@ public class TestJPAServiceTest
   }
 
   /**
-   * testGetTestDataWithoutTransaction
-   */
-  @Test
-  public void testGetTestDataWithoutTransaction()
-    throws Exception
-  {
-    TestData testData = getTestData();
-
-    testJPAService.createTestData(testData);
-
-    testJPAService.getTestDataWithoutTransaction(testData.getId());
-  }
-
-  /**
    * testSuccessfulExecutionInExistingTransaction
    */
-  //@Test
+  @Test
   public void testSuccessfulExecutionInExistingTransaction()
     throws Exception
   {
@@ -478,6 +464,33 @@ public class TestJPAServiceTest
     {
       fail("Failed to invoked the Test JPA Service in a new transaction: "
           + "Failed to retrieve the test data after the transaction was rolled back");
+    }
+  }
+
+  /**
+   * testSuccessfulExecutionWithoutTransaction
+   */
+  @Test
+  public void testSuccessfulExecutionWithoutTransaction()
+    throws Exception
+  {
+    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
+        .PROPAGATION_NEVER));
+
+    TestData testData = getTestData();
+
+    try
+    {
+      testJPAService.createTestData(testData);
+    }
+    catch (TestJPAServiceException ignored) {}
+
+    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+
+    if (retrievedTestData == null)
+    {
+      fail("Failed to invoked the Test JPA Service without an existing transaction: "
+          + "Failed to retrieve the test data after a checked exception was caught");
     }
   }
 

@@ -39,6 +39,7 @@ import java.util.List;
  */
 @SuppressWarnings("JpaQlInspection")
 @Service
+@Transactional
 public class TestJPAService
   implements ITestJPAService
 {
@@ -55,7 +56,6 @@ public class TestJPAService
    *
    * @param testData the test data
    */
-  @Transactional
   public void createTestData(TestData testData)
     throws TestJPAServiceException
   {
@@ -129,7 +129,6 @@ public class TestJPAService
    *
    * @param testData the test data
    */
-  @Transactional
   public void createTestDataWithCheckedException(TestData testData)
     throws TestJPAServiceException
   {
@@ -143,7 +142,6 @@ public class TestJPAService
    *
    * @param testData the test data
    */
-  @Transactional
   public void createTestDataWithRuntimeException(TestData testData)
     throws TestJPAServiceException
   {
@@ -153,76 +151,13 @@ public class TestJPAService
   }
 
   /**
-   * Create the test data.
-   *
-   * @param testData the test data
-   */
-  public void createTestDataWithoutTransaction(TestData testData)
-    throws TestJPAServiceException
-  {
-    try
-    {
-      if (!entityManager.contains(testData))
-      {
-        testData = entityManager.merge(testData);
-        entityManager.flush();
-      }
-    }
-    catch (javax.persistence.TransactionRequiredException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new TestJPAServiceException("Failed to create the test data with ID ("
-          + testData.getId() + ")", e);
-    }
-  }
-
-  /**
    * Retrieve the test data.
    *
    * @param id the ID
    *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
-  @Transactional(propagation = Propagation.REQUIRED)
   public TestData getTestData(String id)
-    throws TestJPAServiceException
-  {
-    try
-    {
-      String getTestDataSQL = "SELECT td FROM TestData td WHERE td.id = :id";
-
-      TypedQuery<TestData> query = entityManager.createQuery(getTestDataSQL, TestData.class);
-
-      query.setParameter("id", id);
-
-      List<TestData> testData = query.getResultList();
-
-      if (testData.size() == 0)
-      {
-        return null;
-      }
-      else
-      {
-        return testData.get(0);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new TestJPAServiceException("Failed to retrieve the test data (" + id + ")", e);
-    }
-  }
-
-  /**
-   * Retrieve the test data.
-   *
-   * @param id the ID
-   *
-   * @return the test data or <code>null</code> if the test data cannot be found
-   */
-  public TestData getTestDataWithoutTransaction(String id)
     throws TestJPAServiceException
   {
     try

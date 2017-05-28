@@ -73,14 +73,6 @@ public interface ITestJPAService
     throws TestJPAServiceException;
 
   /**
-   * Create the test data.
-   *
-   * @param testData the test data
-   */
-  void createTestDataWithoutTransaction(TestData testData)
-    throws TestJPAServiceException;
-
-  /**
    * Retrieve the test data.
    *
    * @param id the ID
@@ -88,15 +80,5 @@ public interface ITestJPAService
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   TestData getTestData(String id)
-    throws TestJPAServiceException;
-
-  /**
-   * Retrieve the test data.
-   *
-   * @param id the ID
-   *
-   * @return the test data or <code>null</code> if the test data cannot be found
-   */
-  TestData getTestDataWithoutTransaction(String id)
     throws TestJPAServiceException;
 }

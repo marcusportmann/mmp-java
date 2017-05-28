@@ -71,28 +71,7 @@ public class DataSourceTracker
           Connection connection = new ConnectionProxy((Connection) proxy.invokeSuper(obj, args));
 
           getActiveDatabaseConnections().put(connection, Thread.currentThread().getStackTrace());
-
-          StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-          for (int i = 0; i < stackTrace.length; i++)
-          {
-            if (stackTrace[i].getClassName().contains("NonContextualJdbcConnectionAccess"))
-            {
-              int xxx = 0;
-              xxx++;
-            }
-
-            if (stackTrace[i].getClassName().equals(obj.getClass().getName())
-                && stackTrace[i].getMethodName().equals("getConnection"))
-            {
-              LoggerFactory.getLogger(DataSourceTracker.class).info("The database connection ("
-                  + connection.toString() + ") was retrieved by the method ("
-                  + stackTrace[i + 1].getMethodName() + ") on the class" + " ("
-                  + stackTrace[i + 1].getClassName() + ") on line ("
-                  + stackTrace[i + 1].getLineNumber() + ")");
-            }
-          }
-
+          
           return connection;
         }
 

@@ -58,18 +58,6 @@ public class ConnectionProxy
   public void close()
     throws SQLException
   {
-    StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-    for (int i = 0; i < stackTrace.length; i++)
-    {
-      if (stackTrace[i].getClassName().equals(ConnectionProxy.class.getName()) &&  stackTrace[i].getMethodName().equals("close"))
-      {
-        LoggerFactory.getLogger(DataSourceTracker.class).info(
-          "The database connection (" + connection.toString() + ") was closed by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
-            + " (" + stackTrace[i + 1].getClassName() + ") on line ("
-            + stackTrace[i + 1].getLineNumber() + ")");
-      }
-    }
     DataSourceTracker.getActiveDatabaseConnections().remove(this);
 
     connection.close();

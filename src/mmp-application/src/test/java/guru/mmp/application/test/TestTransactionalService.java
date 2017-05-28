@@ -43,6 +43,7 @@ import java.util.Set;
  */
 @SuppressWarnings("unused")
 @Service
+@Transactional
 public class TestTransactionalService
   implements ITestTransactionalService
 {
@@ -64,7 +65,6 @@ public class TestTransactionalService
    *
    * @param testData the test data
    */
-  @Transactional
   public void createTestData(TestData testData)
     throws TestTransactionalServiceException
   {
@@ -160,7 +160,6 @@ public class TestTransactionalService
    *
    * @param testData the test data
    */
-  @Transactional
   public void createTestDataWithCheckedException(TestData testData)
     throws TestTransactionalServiceException
   {
@@ -175,7 +174,6 @@ public class TestTransactionalService
    *
    * @param testData the test data
    */
-  @Transactional
   public void createTestDataWithRuntimeException(TestData testData)
     throws TestTransactionalServiceException
   {
@@ -189,7 +187,6 @@ public class TestTransactionalService
    *
    * @return the next ID
    */
-  @Transactional
   public long getNextIDWithException()
     throws TestTransactionalServiceException
   {
@@ -203,7 +200,6 @@ public class TestTransactionalService
    *
    * @return the next ID
    */
-  @Transactional
   public long getNextIDWithoutException()
     throws TestTransactionalServiceException
   {
@@ -217,7 +213,6 @@ public class TestTransactionalService
    *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
-  @Transactional
   public TestData getTestData(String id)
     throws TestTransactionalServiceException
   {
