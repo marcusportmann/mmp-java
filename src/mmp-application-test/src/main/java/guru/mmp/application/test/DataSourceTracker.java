@@ -40,7 +40,7 @@ public class DataSourceTracker
   implements MethodInterceptor, Serializable
 {
   private static final long serialVersionUID = 1000000;
-  private static ThreadLocal<Map<Connection, StackTraceElement[]>> activeConnections =
+  private static ThreadLocal<Map<Connection, StackTraceElement[]>> activeDatabaseConnections =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
   /**
@@ -70,7 +70,28 @@ public class DataSourceTracker
         {
           Connection connection = new ConnectionProxy((Connection) proxy.invokeSuper(obj, args));
 
-          getActiveConnections().put(connection, Thread.currentThread().getStackTrace());
+          getActiveDatabaseConnections().put(connection, Thread.currentThread().getStackTrace());
+
+          StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+          for (int i = 0; i < stackTrace.length; i++)
+          {
+            if (stackTrace[i].getClassName().contains("NonContextualJdbcConnectionAccess"))
+            {
+              int xxx = 0;
+              xxx++;
+            }
+
+            if (stackTrace[i].getClassName().equals(obj.getClass().getName())
+                && stackTrace[i].getMethodName().equals("getConnection"))
+            {
+              LoggerFactory.getLogger(DataSourceTracker.class).info("The database connection ("
+                  + connection.toString() + ") was retrieved by the method ("
+                  + stackTrace[i + 1].getMethodName() + ") on the class" + " ("
+                  + stackTrace[i + 1].getClassName() + ") on line ("
+                  + stackTrace[i + 1].getLineNumber() + ")");
+            }
+          }
 
           return connection;
         }
@@ -93,8 +114,8 @@ public class DataSourceTracker
    *
    * @return the active database connections for all Data Sources associated with the tracker
    */
-  static Map<Connection, StackTraceElement[]> getActiveConnections()
+  static Map<Connection, StackTraceElement[]> getActiveDatabaseConnections()
   {
-    return activeConnections.get();
+    return activeDatabaseConnections.get();
   }
 }

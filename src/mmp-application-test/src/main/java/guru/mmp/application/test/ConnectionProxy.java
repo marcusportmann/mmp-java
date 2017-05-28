@@ -18,6 +18,8 @@ package guru.mmp.application.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -56,7 +58,19 @@ public class ConnectionProxy
   public void close()
     throws SQLException
   {
-    DataSourceTracker.getActiveConnections().remove(this);
+    StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+    for (int i = 0; i < stackTrace.length; i++)
+    {
+      if (stackTrace[i].getClassName().equals(ConnectionProxy.class.getName()) &&  stackTrace[i].getMethodName().equals("close"))
+      {
+        LoggerFactory.getLogger(DataSourceTracker.class).info(
+          "The database connection (" + connection.toString() + ") was closed by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
+            + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+            + stackTrace[i + 1].getLineNumber() + ")");
+      }
+    }
+    DataSourceTracker.getActiveDatabaseConnections().remove(this);
 
     connection.close();
   }
@@ -270,7 +284,7 @@ public class ConnectionProxy
   public PreparedStatement prepareStatement(String sql)
     throws SQLException
   {
-    return connection.prepareCall(sql);
+    return connection.prepareStatement(sql);
   }
 
   @Override
@@ -420,5 +434,11 @@ public class ConnectionProxy
     throws SQLException
   {
     return connection.unwrap(iface);
+  }
+
+  @Override
+  public String toString()
+  {
+    return connection.toString();
   }
 }

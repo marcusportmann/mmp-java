@@ -18,6 +18,7 @@ package guru.mmp.application.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.hibernate.ConnectionReleaseMode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +42,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Executor;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -98,13 +100,15 @@ public abstract class ApplicationInitializer
     if (transactionManager instanceof JtaTransactionManager)
     {
       Map<String, Object> jpaPropertyMap =
-          localContainerEntityManagerFactoryBean.getJpaPropertyMap();
+        localContainerEntityManagerFactoryBean.getJpaPropertyMap();
 
       jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-          ((JtaTransactionManager) transactionManager)));
+        ((JtaTransactionManager) transactionManager)));
 
       localContainerEntityManagerFactoryBean.afterPropertiesSet();
     }
+
+    //jpaPropertyMap.put("hibernate.connection.release_mode", ConnectionReleaseMode.AFTER_TRANSACTION);
 
     return localContainerEntityManagerFactoryBean;
   }

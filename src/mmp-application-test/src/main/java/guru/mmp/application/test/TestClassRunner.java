@@ -72,10 +72,17 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
   {
     super.runChild(method, notifier);
 
-    Map<Transaction, StackTraceElement[]> activeTransactionStackTraces =
-        TransactionManagerTransactionTracker.getActiveTransactionStackTraces();
+    checkForActiveTransactions(method,
+        TransactionManagerTransactionTracker.getActiveTransactionStackTraces());
 
-    // Check for unexpected active transactions managed by the Transaction Manager implementation
+    checkForActiveTransactions(method, UserTransactionTracker.getActiveTransactionStackTraces());
+
+    checkForOpenDatabaseConnections(method, DataSourceTracker.getActiveDatabaseConnections());
+  }
+
+  private void checkForActiveTransactions(FrameworkMethod method, Map<Transaction,
+      StackTraceElement[]> activeTransactionStackTraces)
+  {
     for (Transaction transaction : activeTransactionStackTraces.keySet())
     {
       StackTraceElement[] stackTrace = activeTransactionStackTraces.get(transaction);
@@ -99,38 +106,15 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
         }
       }
     }
+  }
 
-    activeTransactionStackTraces = UserTransactionTracker.getActiveTransactionStackTraces();
-
-    // Check for unexpected active transactions managed by the User Transaction implementation
-    for (Transaction transaction : activeTransactionStackTraces.keySet())
+  private void checkForOpenDatabaseConnections(FrameworkMethod method, Map<Connection,
+      StackTraceElement[]> activeDatabaseConnections)
+  {
+    for (Connection connection : activeDatabaseConnections.keySet())
     {
-      StackTraceElement[] stackTrace = activeTransactionStackTraces.get(transaction);
-
-      for (int i = 0; i < stackTrace.length; i++)
-      {
-        if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
-        {
-          LoggerFactory.getLogger(TestClassRunner.class).warn(
-              "Failed to successfully execute the test (" + method.getName() + "): Found an "
-              + "unexpected active transaction (" + transaction.toString() + ") that was "
-              + "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class"
-              + " (" + stackTrace[i + 1].getClassName() + ") on line ("
-              + stackTrace[i + 1].getLineNumber() + ")");
-
-          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
-              + "): Found an unexpected active transaction (" + transaction.toString()
-              + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
-              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
-              + stackTrace[i + 1].getLineNumber() + ")");
-        }
-      }
-    }
-
-    // Check for unexpected open database connections
-    for (Connection connection : DataSourceTracker.getActiveConnections().keySet())
-    {
-      StackTraceElement[] stackTrace = DataSourceTracker.getActiveConnections().get(connection);
+      StackTraceElement[] stackTrace = DataSourceTracker.getActiveDatabaseConnections().get(
+          connection);
 
       for (int i = 0; i < stackTrace.length; i++)
       {
@@ -151,5 +135,6 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
         }
       }
     }
+
   }
 }

@@ -77,9 +77,9 @@ public class TestTransactionalService
       statement.setString(2, testData.getName());
       statement.setString(3, testData.getValue());
 
-      Set<Connection> connections = DataSourceTracker.getActiveConnections().keySet();
+      Set<Connection> connections = DataSourceTracker.getActiveDatabaseConnections().keySet();
 
-      Map<Connection, StackTraceElement[]> connectionMap = DataSourceTracker.getActiveConnections();
+      Map<Connection, StackTraceElement[]> connectionMap = DataSourceTracker.getActiveDatabaseConnections();
 
       if (statement.executeUpdate() != 1)
       {

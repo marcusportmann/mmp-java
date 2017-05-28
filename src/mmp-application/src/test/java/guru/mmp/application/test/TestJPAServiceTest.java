@@ -55,7 +55,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback
    */
-  @Test
+  //@Test
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
     throws Exception
   {
@@ -73,11 +73,11 @@ public class TestJPAServiceTest
     }
     catch (TestJPAServiceException ignored) {}
 
-//    if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly())
-//    {
-//      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-//          + "Failed to find an active transaction after creating the test data");
-//    }
+    if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly())
+    {
+      fail("Failed to invoked the Test JPA Service in an existing transaction: "
+          + "Failed to find an active transaction after creating the test data");
+    }
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
@@ -113,7 +113,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithCheckedExceptionInNewTransaction
    */
-  @Test
+  //@Test
   public void testFailedExecutionWithCheckedExceptionInNewTransaction()
     throws Exception
   {
@@ -151,7 +151,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback
    */
-  @Test
+  //@Test
   public void testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback()
     throws Exception
   {
@@ -227,7 +227,7 @@ public class TestJPAServiceTest
   /**
    * testFailedExecutionWithoutTransaction
    */
-  @Test
+  //@Test
   public void testFailedExecutionWithoutTransaction()
     throws Exception
   {
@@ -268,7 +268,7 @@ public class TestJPAServiceTest
   /**
    * testSuccessfulExecutionInExistingTransaction
    */
-  @Test
+  //@Test
   public void testSuccessfulExecutionInExistingTransaction()
     throws Exception
   {
@@ -322,7 +322,7 @@ public class TestJPAServiceTest
   /**
    * testSuccessfulExecutionInExistingTransactionWithRollback
    */
-  @Test
+  //@Test
   public void testSuccessfulExecutionInExistingTransactionWithRollback()
     throws Exception
   {
@@ -376,7 +376,7 @@ public class TestJPAServiceTest
   /**
    * testSuccessfulExecutionInNewTransaction
    */
-  @Test
+  //@Test
   public void testSuccessfulExecutionInNewTransaction()
     throws Exception
   {
@@ -430,7 +430,7 @@ public class TestJPAServiceTest
   /**
    * testSuccessfulExecutionInNewTransactionWithRollback
    */
-  @Test
+  //@Test
   public void testSuccessfulExecutionInNewTransactionWithRollback()
     throws Exception
   {

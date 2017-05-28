@@ -104,10 +104,6 @@ public class TestConfiguration
     localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application");
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-    Properties properties = new Properties();
-
-    properties.setProperty("hibernate.transaction.jta.platform", SpringJtaPlatform.class.getName());
-
     if (transactionManager instanceof JtaTransactionManager)
     {
       Map<String, Object> jpaPropertyMap =
