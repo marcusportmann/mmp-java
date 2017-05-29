@@ -73,14 +73,6 @@ public interface ITestJPAService
     throws TestJPAServiceException;
 
   /**
-   * Create the test data without a transaction.
-   *
-   * @param testData the test data
-   */
-  void createTestDataWithoutTransaction(TestData testData)
-    throws TestJPAServiceException;
-
-  /**
    * Retrieve the test data.
    *
    * @param id the ID

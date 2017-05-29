@@ -153,28 +153,6 @@ public class TestJPAService
   }
 
   /**
-   * Create the test data without a transaction.
-   *
-   * @param testData the test data
-   */
-  public void createTestDataWithoutTransaction(TestData testData)
-    throws TestJPAServiceException
-  {
-    try
-    {
-      if (!entityManager.contains(testData))
-      {
-        testData = entityManager.merge(testData);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new TestJPAServiceException("Failed to create the test data with ID ("
-          + testData.getId() + ")", e);
-    }
-  }
-
-  /**
    * Retrieve the test data.
    *
    * @param id the ID

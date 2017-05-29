@@ -59,9 +59,6 @@ public class TestJPAServiceTest
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -98,7 +95,7 @@ public class TestJPAServiceTest
     if (!transactionStatus.isCompleted())
     {
       fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "The transaction was not committed successfully");
+          + "The transaction was not rolled back successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
@@ -117,9 +114,6 @@ public class TestJPAServiceTest
   public void testFailedExecutionWithCheckedExceptionInNewTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -155,9 +149,6 @@ public class TestJPAServiceTest
   public void testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -193,9 +184,6 @@ public class TestJPAServiceTest
   public void testFailedExecutionWithRuntimeExceptionInNewTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -231,9 +219,6 @@ public class TestJPAServiceTest
   public void testFailedExecutionWithoutTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     try
@@ -258,9 +243,6 @@ public class TestJPAServiceTest
   public void testSuccessfulExecutionInExistingTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -312,9 +294,6 @@ public class TestJPAServiceTest
   public void testSuccessfulExecutionInExistingTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -347,7 +326,7 @@ public class TestJPAServiceTest
     if (!transactionStatus.isCompleted())
     {
       fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "The transaction was not committed successfully");
+          + "The transaction was not rolled back successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
@@ -366,9 +345,6 @@ public class TestJPAServiceTest
   public void testSuccessfulExecutionInNewTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -420,9 +396,6 @@ public class TestJPAServiceTest
   public void testSuccessfulExecutionInNewTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -455,7 +428,7 @@ public class TestJPAServiceTest
     if (!transactionStatus.isCompleted())
     {
       fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "The transaction was not committed successfully");
+          + "The transaction was not rolled back successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
@@ -474,23 +447,17 @@ public class TestJPAServiceTest
   public void testSuccessfulExecutionWithoutTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
-    try
-    {
-      testJPAService.createTestData(testData);
-    }
-    catch (TestJPAServiceException ignored) {}
+    // NOTE: The transactional createTestData method is called as merging requires a transaction
+    testJPAService.createTestData(testData);
 
-    TestData retrievedTestData = testJPAService.getTestData(testData.getId());
+    TestData retrievedTestData = testJPAService.getTestDataWithoutTransaction(testData.getId());
 
     if (retrievedTestData == null)
     {
       fail("Failed to invoked the Test JPA Service without an existing transaction: "
-          + "Failed to retrieve the test data after a checked exception was caught");
+          + "Failed to retrieve the test data");
     }
   }
 

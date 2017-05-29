@@ -59,9 +59,6 @@ public class TestTransactionalServiceTest
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -117,9 +114,6 @@ public class TestTransactionalServiceTest
   public void testFailedExecutionWithCheckedExceptionInNewTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -155,9 +149,6 @@ public class TestTransactionalServiceTest
   public void testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -193,9 +184,6 @@ public class TestTransactionalServiceTest
   public void testFailedExecutionWithRuntimeExceptionInNewTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -231,9 +219,6 @@ public class TestTransactionalServiceTest
   public void testFailedExecutionWithoutTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     try
@@ -258,9 +243,6 @@ public class TestTransactionalServiceTest
   public void testIDGenerator()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TransactionStatus transactionStatus = transactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
@@ -296,9 +278,6 @@ public class TestTransactionalServiceTest
   public void testSuccessfulExecutionInExistingTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -350,9 +329,6 @@ public class TestTransactionalServiceTest
   public void testSuccessfulExecutionInExistingTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -404,9 +380,6 @@ public class TestTransactionalServiceTest
   public void testSuccessfulExecutionInNewTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -458,9 +431,6 @@ public class TestTransactionalServiceTest
   public void testSuccessfulExecutionInNewTransactionWithRollback()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     TransactionStatus transactionStatus = transactionManager.getTransaction(
@@ -512,9 +482,6 @@ public class TestTransactionalServiceTest
   public void testSuccessfulExecutionWithoutTransaction()
     throws Exception
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
-
     TestData testData = getTestData();
 
     testTransactionalService.createTestData(testData);

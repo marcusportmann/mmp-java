@@ -71,7 +71,7 @@ public class DataSourceTracker
           Connection connection = new ConnectionProxy((Connection) proxy.invokeSuper(obj, args));
 
           getActiveDatabaseConnections().put(connection, Thread.currentThread().getStackTrace());
-          
+
           return connection;
         }
 
