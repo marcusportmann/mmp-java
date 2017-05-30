@@ -74,7 +74,7 @@ public class WebApplicationInitializer
     filter.setInitParameter(WicketFilter.APP_FACT_PARAM,
         SpringWebApplicationFactory.class.getName());
 
-    filter.setInitParameter(WICKET_APPLICATION_BEAN_PARAMETER, "wicketApplication");
+    filter.setInitParameter(WICKET_APPLICATION_BEAN_PARAMETER, "webApplication");
     filter.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
     filter.addMappingForUrlPatterns(null, false, "/*");
   }

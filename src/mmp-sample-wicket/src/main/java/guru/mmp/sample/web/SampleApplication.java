@@ -30,9 +30,14 @@ import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -46,6 +51,11 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@Component("webApplication")
+@EnableAsync
+@EnableScheduling
+@ComponentScan(basePackages = { "guru.mmp.application", "guru.mmp.sample" })
+@SpringBootApplication
 public class SampleApplication extends TemplateWebApplication
 {
   /**

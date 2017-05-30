@@ -33,7 +33,7 @@
   </listener>
   <listener>
     <description>Sample Application Listener</description>
-    <listener-class>guru.mmp.sample.web.SampleApplicationListener</listener-class>
+    <listener-class>guru.mmp.sample.web.OLDSampleApplicationListener</listener-class>
   </listener>
   <filter>
     <description>Application Filter</description>

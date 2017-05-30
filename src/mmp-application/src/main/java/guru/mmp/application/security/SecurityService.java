@@ -54,6 +54,11 @@ public class SecurityService
   implements ISecurityService
 {
   /**
+   * Constructs a new <code>SecurityService</code>.
+   */
+  public SecurityService() {}
+
+  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
    */
   public static final UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString(

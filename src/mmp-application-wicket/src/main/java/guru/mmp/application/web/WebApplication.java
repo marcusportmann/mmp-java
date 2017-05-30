@@ -31,21 +31,16 @@ import org.apache.wicket.util.convert.converter.DateConverter;
 import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
@@ -67,11 +62,6 @@ import java.util.concurrent.Executor;
  *
  * @author Marcus Portmann
  */
-@Component
-@EnableAsync
-@EnableScheduling
-@ComponentScan(basePackages = { "guru.mmp.application" })
-@SpringBootApplication
 public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
   private static final Object inMemoryDataSourceLock = new Object();
