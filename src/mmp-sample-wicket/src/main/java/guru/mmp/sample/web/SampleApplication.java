@@ -28,7 +28,17 @@ import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationP
 import guru.mmp.sample.web.pages.forms.TestFormPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.sql.DataSource;
+import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleApplication</code> provides the implementation of the Wicket Web
@@ -39,11 +49,26 @@ import org.springframework.context.annotation.ComponentScan;
 public class SampleApplication extends TemplateWebApplication
 {
   /**
-   * Constructs a new <code>SampleApplication</code>.
+   * Constructs a new <code>TemplateWebApplication</code>.
+   *
+   * @param transactionManager the Spring transaction manager
+   * @param applicationContext the Spring application context
    */
-  public SampleApplication()
+  @Autowired
+  public SampleApplication(PlatformTransactionManager transactionManager,
+      ApplicationContext applicationContext)
   {
-    super("Sample");
+    super(transactionManager, applicationContext);
+  }
+
+  /**
+   * The main method.
+   *
+   * @param args the command-line arguments
+   */
+  public static void main(String[] args)
+  {
+    SpringApplication.run(SampleApplication.class, args);
   }
 
   /**
@@ -55,6 +80,16 @@ public class SampleApplication extends TemplateWebApplication
   public CssResourceReference getApplicationCssResourceReference()
   {
     return new CssResourceReference(SampleApplication.class, "resources/css/application.css");
+  }
+
+  /**
+   * Returns the user-friendly name that should be displayed for the application.
+   *
+   * @return the user-friendly name that should be displayed for the application
+   */
+  public String getDisplayName()
+  {
+    return "Sample";
   }
 
   /**
@@ -75,6 +110,33 @@ public class SampleApplication extends TemplateWebApplication
   public Class<? extends Page> getSecureHomePage()
   {
     return DashboardPage.class;
+  }
+
+  /**
+   * Returns the data source that can be used to interact with the application database.
+   *
+   * @return the data source that can be used to interact with the in-memory database
+   */
+  @Override
+  @Bean(name = "applicationDataSource")
+  @DependsOn({ "transactionManager" })
+  protected DataSource dataSource()
+  {
+    return inMemoryDataSource();
+  }
+
+  /**
+   * Returns the paths to the resources on the classpath that contain the SQL statements used to
+   * initialise the in-memory application database.
+   */
+  @Override
+  protected List<String> getInMemoryDatabaseInitResources()
+  {
+    List<String> resources = super.getInMemoryDatabaseInitResources();
+
+    resources.add("guru/mmp/sample/persistence/SampleH2.sql");
+
+    return resources;
   }
 
   /**

@@ -141,7 +141,7 @@ public class PropertyChoiceRenderer<T>
     {
       return BeanUtils.getProperty(object, property);
     }
-    catch (Exception err)
+    catch (Throwable e)
     {
       // In case of exception, fall back to simple toString...
       return object.toString();

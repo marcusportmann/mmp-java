@@ -18,8 +18,8 @@ package guru.mmp.application.web.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 /**
  * The <code>InjectableLoadableDetachableModel</code> class provides the
@@ -39,6 +39,6 @@ public abstract class InjectableLoadableDetachableModel<T> extends LoadableDetac
    */
   public InjectableLoadableDetachableModel()
   {
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    Injector.get().inject(this);
   }
 }

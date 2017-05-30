@@ -34,8 +34,9 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
@@ -61,11 +62,14 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   /**
    * Constructs a new <code>TemplateWebApplication</code>.
    *
-   * @param displayName the user-friendly name that should be displayed for the application
+   * @param transactionManager the Spring transaction manager
+   * @param applicationContext the Spring application context
    */
-  public TemplateWebApplication(String displayName)
+  @Autowired
+  public TemplateWebApplication(PlatformTransactionManager transactionManager,
+      ApplicationContext applicationContext)
   {
-    this.displayName = displayName;
+    super(transactionManager, applicationContext);
   }
 
   /**
@@ -90,10 +94,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    *
    * @return the user-friendly name that should be displayed for the application
    */
-  public String getDisplayName()
-  {
-    return displayName;
-  }
+  public abstract String getDisplayName();
 
   /**
    * Returns the default page that users will be redirected to in order to login to the application.

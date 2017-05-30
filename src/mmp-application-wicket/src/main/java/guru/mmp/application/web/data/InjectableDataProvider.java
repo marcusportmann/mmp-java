@@ -18,9 +18,8 @@ package guru.mmp.application.web.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 /**
  * The <code>InjectableDataProvider</code> class provides the <code>DataProvider</code> base class
@@ -38,6 +37,6 @@ public abstract class InjectableDataProvider<T>
    */
   public InjectableDataProvider()
   {
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    Injector.get().inject(this);
   }
 }

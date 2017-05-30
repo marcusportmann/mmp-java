@@ -19,8 +19,7 @@ package guru.mmp.application.web.data;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.apache.wicket.injection.Injector;
 
 /**
  * The <code>InjectableSortableDataProvider</code> class provides the
@@ -42,6 +41,6 @@ public abstract class InjectableSortableDataProvider<T, S> extends SortableDataP
    */
   public InjectableSortableDataProvider()
   {
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    Injector.get().inject(this);
   }
 }

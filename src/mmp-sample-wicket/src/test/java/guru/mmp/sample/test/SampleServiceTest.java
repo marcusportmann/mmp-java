@@ -19,8 +19,6 @@ package guru.mmp.sample.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.test.TestClassRunner;
-import guru.mmp.application.test.TestConfiguration;
-import guru.mmp.sample.SampleConfiguration;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
 import org.junit.Test;
@@ -73,7 +71,7 @@ public class SampleServiceTest
    *
    * @throws Exception
    */
-  //@Test
+  @Test
   public void rollbackTransactionTest()
     throws Exception
   {

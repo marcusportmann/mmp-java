@@ -23,6 +23,7 @@ import guru.mmp.common.persistence.DAOUtil;
 import net.sf.cglib.proxy.Enhancer;
 import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +49,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.Executor;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -76,6 +76,7 @@ public class TestConfiguration
    *
    * @param transactionManager the transaction manager
    */
+  @Autowired
   public TestConfiguration(PlatformTransactionManager transactionManager)
   {
     Assert.notNull(transactionManager, "TransactionManager must not be null");

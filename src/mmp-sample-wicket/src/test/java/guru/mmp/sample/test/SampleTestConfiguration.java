@@ -19,12 +19,13 @@ package guru.mmp.sample.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.test.TestConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -38,6 +39,17 @@ import java.util.List;
 @ComponentScan(basePackages = { "guru.mmp.sample" })
 public class SampleTestConfiguration extends TestConfiguration
 {
+  /**
+   * Constructs a new <code>SampleTestConfiguration</code>.
+   *
+   * @param transactionManager the transaction manager
+   */
+  @Autowired
+  public SampleTestConfiguration(PlatformTransactionManager transactionManager)
+  {
+    super(transactionManager);
+  }
+
   /**
    * Returns the application entity manager factory associated with the application data source.
    *

@@ -19,12 +19,11 @@ package guru.mmp.application.web;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.Debug;
-import guru.mmp.application.configuration.ApplicationInitializer;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
@@ -39,11 +38,13 @@ import javax.servlet.ServletException;
  *
  * @author Marcus Portmann
  */
-@SpringBootApplication
-public abstract class WebApplicationInitializer extends ApplicationInitializer
+@SuppressWarnings("unused")
+@Configuration
+public class WebApplicationInitializer
   implements ServletContextInitializer
 {
   private static final String WICKET_FILTER_NAME = "wicket-filter";
+  private static final String WICKET_APPLICATION_BEAN_PARAMETER = "applicationBean";
 
   /**
    * Configure the given {@link ServletContext} with any servlets, filters, listeners,
@@ -73,31 +74,8 @@ public abstract class WebApplicationInitializer extends ApplicationInitializer
     filter.setInitParameter(WicketFilter.APP_FACT_PARAM,
         SpringWebApplicationFactory.class.getName());
 
-    // filter.setInitParameter("applicationBean", beanNamesForType[0]);
-
-//  filter.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, props.getFilterMappingParam());
-//  filter.addMappingForUrlPatterns(null, false, props.getFilterMappingParam());
-
-//  Map<String, String> initParameters = props.getInitParameters();
-//  for (Entry<String, String> initParam : initParameters.entrySet()) {
-//    filter.setInitParameter(initParam.getKey(), initParam.getValue());
-//  }
-
-//  wicketEndpointRepository.add(new WicketAutoConfig.Builder(this.getClass())
-//    .withDetail("wicketFilterName", WICKET_FILTERNAME)
-//    .withDetail("wicketFilterClass", wicketWebInitializerConfig.filterClass())
-//    .withDetail("properties", props)
-//    .build());
-//
-//  WicketEndpointRepository
-
+    filter.setInitParameter(WICKET_APPLICATION_BEAN_PARAMETER, "wicketApplication");
+    filter.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
+    filter.addMappingForUrlPatterns(null, false, "/*");
   }
-
-  /**
-   * Returns the Wicket web application.
-   *
-   * @return the Wicket web application
-   */
-  @Bean
-  public abstract WebApplication webApplication();
 }
