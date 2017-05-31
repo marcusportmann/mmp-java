@@ -18,9 +18,13 @@ package guru.mmp.sample.web;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.reporting.IReportingService;
+import guru.mmp.application.reporting.ReportDefinition;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.application.web.template.TemplateWebApplication;
 import guru.mmp.application.web.template.navigation.NavigationGroup;
 import guru.mmp.application.web.template.navigation.NavigationLink;
+import guru.mmp.common.util.ResourceUtil;
 import guru.mmp.sample.web.pages.DashboardPage;
 import guru.mmp.sample.web.pages.HomePage;
 import guru.mmp.sample.web.pages.dialogs.TestExtensibleDialogImplementationPage;
@@ -28,14 +32,21 @@ import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationP
 import guru.mmp.sample.web.pages.forms.TestFormPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -47,13 +58,18 @@ import java.util.List;
  */
 @Component("webApplication")
 @ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
-@SpringBootApplication
 public class SampleApplication extends TemplateWebApplication
 {
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(SampleApplication.class);
+
+  /* Spring Application Context */
+  @Inject
+  private ApplicationContext applicationContext;
+
   /**
    * Constructs a new <code>TemplateWebApplication</code>.
    */
-  @Inject
   public SampleApplication() {}
 
   /**
@@ -176,5 +192,33 @@ public class SampleApplication extends TemplateWebApplication
     root.addItem(formsGroup);
 
     super.initNavigation(root);
+  }
+
+  @EventListener
+  private void handleContextRefresh(ContextRefreshedEvent event)
+  {
+    try
+    {
+      IReportingService reportingService = applicationContext.getBean(IReportingService.class);
+
+      if (reportingService != null)
+      {
+        byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
+            "guru/mmp/sample/report/SampleReport.jasper");
+
+        ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
+            "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
+
+        if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
+        {
+          reportingService.saveReportDefinition(sampleReportDefinition);
+          logger.info("Saved the \"Sample Report\" report definition");
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to initialise the Sample application data", e);
+    }
   }
 }

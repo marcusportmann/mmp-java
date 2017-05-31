@@ -115,7 +115,7 @@ public class ViewExcelReportServlet extends HttpServlet
 //            if (!viewReportParameters.getReportParameters().containsKey("reportLogo"))
 //            {
 //              byte[] defaultReportLogo = getClasspathResource(
-//                  "guru/mmp/application/web/template/resource/theme/mmp/reportLogo.png");
+//                  "guru/mmp/application/web/template/resources/theme/mmp/reportLogo.png");
 //
 //              viewReportParameters.getReportParameters().put("reportLogo",
 //                  new ByteArrayInputStream(defaultReportLogo));
@@ -286,7 +286,7 @@ public class ViewExcelReportServlet extends HttpServlet
       response.setContentType("image/png");
 
       byte[] data = ResourceUtil.getClasspathResource(
-          "guru/mmp/application/web/template/resource/image/reportError.png");
+          "guru/mmp/application/web/template/resources/image/reportError.png");
 
       OutputStream out = response.getOutputStream();
 

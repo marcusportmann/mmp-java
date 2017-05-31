@@ -23,11 +23,10 @@ import guru.mmp.common.persistence.DAOUtil;
 import net.sf.cglib.proxy.Enhancer;
 import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.*;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -60,10 +59,13 @@ import java.util.concurrent.Executor;
  *
  * @author Marcus Portmann
  */
+@Configuration
 @EnableAsync
 @EnableScheduling
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true)
+@ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true,
+    excludeFilters = @ComponentScan.Filter(value = SpringBootApplication.class,
+        type = FilterType.ANNOTATION))
 public class TestConfiguration
 {
   private static final Object dataSourceLock = new Object();

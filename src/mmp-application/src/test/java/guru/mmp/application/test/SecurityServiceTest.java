@@ -18,7 +18,6 @@ package guru.mmp.application.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.persistence.AtomikosJtaConfiguration;
 import guru.mmp.application.security.*;
 import guru.mmp.common.util.BinaryBuffer;
 import org.junit.Test;
@@ -44,8 +43,7 @@ import static org.junit.Assert.*;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { ApplicationTestConfiguration.class,
-    AtomikosJtaConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SecurityServiceTest

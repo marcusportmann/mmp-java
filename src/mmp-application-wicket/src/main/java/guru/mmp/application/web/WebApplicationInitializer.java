@@ -22,12 +22,9 @@ import guru.mmp.application.Debug;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -68,14 +65,25 @@ public class WebApplicationInitializer
     // Is Multiple Organisation Support Enabled
     servletContext.setInitParameter("multipleOrganisationSupportEnabled", "true");
 
-    FilterRegistration filter = servletContext.addFilter(WICKET_FILTER_NAME, org.apache.wicket
+    FilterRegistration wicketFilter = servletContext.addFilter(WICKET_FILTER_NAME, org.apache.wicket
         .protocol.http.WicketFilter.class);
 
-    filter.setInitParameter(WicketFilter.APP_FACT_PARAM,
+    wicketFilter.setInitParameter(WicketFilter.APP_FACT_PARAM,
         SpringWebApplicationFactory.class.getName());
 
-    filter.setInitParameter(WICKET_APPLICATION_BEAN_PARAMETER, "webApplication");
-    filter.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
-    filter.addMappingForUrlPatterns(null, false, "/*");
+    wicketFilter.setInitParameter(WICKET_APPLICATION_BEAN_PARAMETER, "webApplication");
+    wicketFilter.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
+    wicketFilter.addMappingForUrlPatterns(null, false, "/*");
+
+    try
+    {
+      Class<?> viewReportServletClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "guru.mmp.application.web.servlets.ViewReportServlet");
+
+      ServletRegistration viewReportServlet = servletContext.addServlet("DumpNamespaceServlet",
+          ((Class<? extends Servlet>) viewReportServletClass));
+      viewReportServlet.addMapping("/servlet/ViewReportServlet");
+    }
+    catch (ClassNotFoundException ignored) {}
   }
 }

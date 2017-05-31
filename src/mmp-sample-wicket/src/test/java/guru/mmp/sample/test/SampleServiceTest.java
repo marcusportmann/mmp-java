@@ -18,13 +18,12 @@ package guru.mmp.sample.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.application.persistence.AtomikosJtaConfiguration;
 import guru.mmp.application.test.TestClassRunner;
 import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -54,9 +53,6 @@ import static org.junit.Assert.assertEquals;
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SampleServiceTest
 {
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(SampleServiceTest.class);
-
   /* Sample Service */
   @Inject
   private ISampleService sampleService;

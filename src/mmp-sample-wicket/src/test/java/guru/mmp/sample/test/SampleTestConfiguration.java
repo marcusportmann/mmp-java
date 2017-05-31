@@ -19,8 +19,10 @@ package guru.mmp.sample.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.test.TestConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 
 import java.util.List;
 
@@ -33,7 +35,9 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @Configuration
-@ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
+@ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true,
+    excludeFilters = @ComponentScan.Filter(value = SpringBootApplication.class,
+        type = FilterType.ANNOTATION))
 public class SampleTestConfiguration extends TestConfiguration
 {
   /**

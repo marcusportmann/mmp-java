@@ -30,9 +30,12 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -68,6 +71,7 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 @EnableTransactionManagement
 @ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true)
+@SpringBootApplication
 public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
   private static final Object inMemoryDataSourceLock = new Object();

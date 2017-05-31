@@ -29,10 +29,9 @@ import guru.mmp.common.util.StringUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.wicket.injection.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -80,7 +79,7 @@ public class ViewReportServlet extends HttpServlet
 
     System.setProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel");
 
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    Injector.get().inject(this);
   }
 
   /**
@@ -112,7 +111,7 @@ public class ViewReportServlet extends HttpServlet
 //            if (!viewReportParameters.getReportParameters().containsKey("reportLogo"))
 //            {
 //              byte[] defaultReportLogo = getClasspathResource(
-//                  "guru/mmp/application/web/template/resource/theme/mmp/reportLogo.png");
+//                  "guru/mmp/application/web/template/resources/theme/mmp/reportLogo.png");
 //
 //              viewReportParameters.getReportParameters().put("reportLogo",
 //                  new ByteArrayInputStream(defaultReportLogo));
@@ -238,7 +237,7 @@ public class ViewReportServlet extends HttpServlet
       response.setContentType("image/png");
 
       byte[] data = ResourceUtil.getClasspathResource(
-          "guru/mmp/application/web/template/resource/image/reportError.png");
+          "guru/mmp/application/web/template/resources/images/reportError.png");
 
       OutputStream out = response.getOutputStream();
 

@@ -22,7 +22,6 @@ import guru.mmp.application.configuration.ConfigurationException;
 import guru.mmp.application.configuration.ConfigurationNotFoundException;
 import guru.mmp.application.configuration.ConfigurationValue;
 import guru.mmp.application.configuration.IConfigurationService;
-import guru.mmp.application.persistence.AtomikosJtaConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -45,8 +44,7 @@ import static org.junit.Assert.*;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { ApplicationTestConfiguration.class,
-    AtomikosJtaConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class ConfigurationServiceTest
