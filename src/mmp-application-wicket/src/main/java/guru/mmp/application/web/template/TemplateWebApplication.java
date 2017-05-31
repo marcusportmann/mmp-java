@@ -34,11 +34,10 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.inject.Inject;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
@@ -67,7 +66,6 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    * @param transactionManager the Spring transaction manager
    * @param applicationContext the Spring application context
    */
-  @Inject
   public TemplateWebApplication(PlatformTransactionManager transactionManager,
       ApplicationContext applicationContext)
   {

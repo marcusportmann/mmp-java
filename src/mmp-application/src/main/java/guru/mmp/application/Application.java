@@ -24,10 +24,7 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.*;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -38,9 +35,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -67,28 +64,25 @@ import java.util.concurrent.Executor;
 public abstract class Application
 {
   private static final Object inMemoryDataSourceLock = new Object();
+  @Lazy
+  @Inject
   private static DataSource inMemoryDataSource;
-  private final PlatformTransactionManager transactionManager;
+  @Lazy
+  @Inject
+  private final PlatformTransactionManager transactionManager = null;
 
   /**
    * Constructs a new <code>Application</code>.
-   *
-   * @param transactionManager the transaction manager
    */
-  public Application(PlatformTransactionManager transactionManager)
-  {
-    Assert.notNull(transactionManager, "TransactionManager must not be null");
-    this.transactionManager = transactionManager;
-  }
+  public Application() {}
 
   /**
    * Returns the application entity manager factory associated with the application data source.
    *
    * @return the application entity manager factory associated with the application data source
    */
-
-//@Bean(name = "applicationPersistenceUnit")
-//@DependsOn("applicationDataSource")
+  @Bean(name = "applicationPersistenceUnit")
+  @DependsOn("applicationDataSource")
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
   {
     LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
