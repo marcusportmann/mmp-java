@@ -68,7 +68,7 @@ public class DashboardPage extends TemplateWebPage
         session.addViewReportParameters(viewReportParameters);
 
         getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(
-            "/servlet/ViewReportServlet?viewReportParametersId=" + viewReportParameters.getId()));
+            "/viewReport?viewReportParametersId=" + viewReportParameters.getId()));
       }
     };
 

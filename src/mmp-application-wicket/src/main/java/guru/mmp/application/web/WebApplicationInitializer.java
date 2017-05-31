@@ -82,7 +82,7 @@ public class WebApplicationInitializer
 
       ServletRegistration viewReportServlet = servletContext.addServlet("DumpNamespaceServlet",
           ((Class<? extends Servlet>) viewReportServletClass));
-      viewReportServlet.addMapping("/servlet/ViewReportServlet");
+      viewReportServlet.addMapping("/viewReport");
     }
     catch (ClassNotFoundException ignored) {}
   }
