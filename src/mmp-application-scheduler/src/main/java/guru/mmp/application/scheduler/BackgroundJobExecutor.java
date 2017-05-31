@@ -25,6 +25,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -66,7 +67,7 @@ public class BackgroundJobExecutor
   private static final int DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH = 100;
 
   /* Scheduler Service */
-  @Autowired
+  @Inject
   private ISchedulerService schedulerService;
 
   /**

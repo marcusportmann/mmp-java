@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -58,7 +59,7 @@ class AddOrganisationPage extends TemplateWebPage
   private boolean createUserDirectory;
 
   /* Security Service */
-  @Autowired
+  @Inject
   private ISecurityService securityService;
 
   /**

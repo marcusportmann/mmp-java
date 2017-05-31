@@ -28,18 +28,19 @@ import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationP
 import guru.mmp.sample.web.pages.forms.TestFormPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class SampleApplication extends TemplateWebApplication
    * @param transactionManager the Spring transaction manager
    * @param applicationContext the Spring application context
    */
-  @Autowired
+  @Inject
   public SampleApplication(PlatformTransactionManager transactionManager,
       ApplicationContext applicationContext)
   {
@@ -147,6 +148,21 @@ public class SampleApplication extends TemplateWebApplication
     resources.add("guru/mmp/sample/persistence/SampleH2.sql");
 
     return resources;
+  }
+
+  /**
+   * Returns the names of the packages to scan for JPA classes.
+   *
+   * @return the names of the packages to scan for JPA classes
+   */
+  @Override
+  protected List<String> getJpaPackagesToScan()
+  {
+    List<String> packagesToScan = super.getJpaPackagesToScan();
+
+    packagesToScan.add("guru.mmp.sample");
+
+    return packagesToScan;
   }
 
   /**

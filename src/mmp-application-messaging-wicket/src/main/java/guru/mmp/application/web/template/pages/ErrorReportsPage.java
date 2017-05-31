@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
@@ -51,7 +52,7 @@ public class ErrorReportsPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Messaging Service */
-  @Autowired
+  @Inject
   private IMessagingService messagingService;
 
   /**

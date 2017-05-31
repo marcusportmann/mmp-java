@@ -32,6 +32,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.*;
@@ -53,13 +54,13 @@ import static org.junit.Assert.assertEquals;
 public class ReportingServiceTest
 {
   private static int reportDefinitionCount;
-  @Autowired
+  @Inject
   private IReportingService reportingService;
 
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 

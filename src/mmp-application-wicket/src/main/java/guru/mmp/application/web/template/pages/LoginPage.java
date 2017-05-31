@@ -79,8 +79,6 @@ public class LoginPage extends WebPage
   {
     try
     {
-      Injector.get().inject(this);
-
       // Setup the page title
       String title = ((TemplateWebApplication) getApplication()).getDisplayName() + " | Login";
 

@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -68,7 +69,7 @@ class AddUserPage extends TemplateWebPage
   private String groupName;
 
   /* Security Service */
-  @Autowired
+  @Inject
   private ISecurityService securityService;
 
   /* Should the user be created with a locked password */

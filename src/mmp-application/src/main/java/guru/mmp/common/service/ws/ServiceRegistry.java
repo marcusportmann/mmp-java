@@ -19,9 +19,9 @@ package guru.mmp.common.service.ws;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import javax.xml.ws.Service;
 import java.sql.Connection;
@@ -49,7 +49,7 @@ public class ServiceRegistry
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 

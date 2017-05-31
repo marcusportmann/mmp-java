@@ -41,6 +41,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,11 +69,11 @@ public class TestSMS
   private static final Logger logger = LoggerFactory.getLogger(TestSMS.class);
 
   /* SMS Service */
-  @Autowired
+  @Inject
   private ISMSService smsService;
 
   /* Configuration Service */
-  @Autowired
+  @Inject
   private IConfigurationService configurationService;
 
   /**

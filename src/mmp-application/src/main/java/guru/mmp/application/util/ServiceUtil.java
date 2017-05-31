@@ -60,7 +60,9 @@ public class ServiceUtil
       catch (Throwable ignored) {}
     }
 
-    String instanceName = (applicationName == null) ? "" : applicationName + "::";
+    String instanceName = (applicationName == null)
+        ? ""
+        : applicationName + "::";
 
     try
     {

@@ -86,8 +86,9 @@ public abstract class Application
    *
    * @return the application entity manager factory associated with the application data source
    */
-  @Bean(name = "applicationPersistenceUnit")
-  @DependsOn("applicationDataSource")
+
+//@Bean(name = "applicationPersistenceUnit")
+//@DependsOn("applicationDataSource")
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
   {
     LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
@@ -111,8 +112,6 @@ public abstract class Application
 
       jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
           ((JtaTransactionManager) transactionManager)));
-
-      localContainerEntityManagerFactoryBean.afterPropertiesSet();
     }
 
     return localContainerEntityManagerFactoryBean;

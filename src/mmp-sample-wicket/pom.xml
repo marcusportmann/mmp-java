@@ -79,6 +79,7 @@
   </dependencies>
 
   <build>
+    <!--
     <resources>
       <resource>
         <filtering>false</filtering>
@@ -111,6 +112,7 @@
         </excludes>
       </testResource>
     </testResources>
+    -->
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

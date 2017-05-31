@@ -37,7 +37,11 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
+    </dependency>
 
     <!-- Spring Boot Dependencies -->
     <dependency>

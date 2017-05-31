@@ -30,6 +30,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.inject.Inject;
+
 /**
  * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit
  * tests for the <code>MessagingService</code> class.
@@ -44,7 +46,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public class MessagingServiceTest
 {
   /* Messaging Service */
-  @Autowired
+  @Inject
   private IMessagingService messagingService;
 
   /**

@@ -36,6 +36,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -71,7 +72,7 @@ public class SMSService
   /**
    * The Spring application context.
    */
-  @Autowired
+  @Inject
   private ApplicationContext applicationContext;
 
   /* The maximum number of times sending will be attempted for a SMS. */
@@ -81,14 +82,14 @@ public class SMSService
   private String myMobileAPIUsername;
 
   /* Configuration Service */
-  @Autowired
+  @Inject
   private IConfigurationService configurationService;
 
   /* The delay in milliseconds to wait before re-attempting to send a SMS. */
   private int sendRetryDelay;
 
   /* SMS DAO */
-  @Autowired
+  @Inject
   private ISMSDAO smsDAO;
 
   /**

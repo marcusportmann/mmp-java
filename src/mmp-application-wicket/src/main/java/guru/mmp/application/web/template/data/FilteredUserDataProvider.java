@@ -25,6 +25,7 @@ import guru.mmp.application.web.data.InjectableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +50,7 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
   private String filter;
 
   /* Security Service */
-  @Autowired
+  @Inject
   private ISecurityService securityService;
 
   /**

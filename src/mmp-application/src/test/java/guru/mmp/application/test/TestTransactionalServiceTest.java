@@ -32,6 +32,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.inject.Inject;
+
 import static org.junit.Assert.fail;
 
 /**
@@ -47,9 +49,9 @@ import static org.junit.Assert.fail;
 public class TestTransactionalServiceTest
 {
   private static int testDataCount;
-  @Autowired
+  @Inject
   private ITestTransactionalService testTransactionalService;
-  @Autowired
+  @Inject
   private PlatformTransactionManager transactionManager;
 
   /**

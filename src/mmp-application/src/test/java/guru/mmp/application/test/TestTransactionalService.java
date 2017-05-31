@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,14 +51,14 @@ public class TestTransactionalService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
    * The ID Generator.
    */
-  @Autowired
+  @Inject
   private IDGenerator idGenerator;
 
   /**

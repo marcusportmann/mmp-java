@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class FilteredConfigurationValueDataProvider
   private String filter;
 
   /* Configuration Service */
-  @Autowired
+  @Inject
   private IConfigurationService configurationService;
 
   /**

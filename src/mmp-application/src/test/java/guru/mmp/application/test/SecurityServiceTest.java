@@ -30,6 +30,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -58,7 +59,7 @@ public class SecurityServiceTest
   /**
    * The Security Service.
    */
-  @Autowired
+  @Inject
   private ISecurityService securityService;
 
   /**

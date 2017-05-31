@@ -26,6 +26,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.inject.Inject;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -44,7 +45,7 @@ public class SampleTestConfiguration extends TestConfiguration
    *
    * @param transactionManager the transaction manager
    */
-  @Autowired
+  @Inject
   public SampleTestConfiguration(PlatformTransactionManager transactionManager)
   {
     super(transactionManager);

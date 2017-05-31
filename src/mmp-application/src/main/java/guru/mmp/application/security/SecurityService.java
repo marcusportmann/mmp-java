@@ -23,13 +23,13 @@ import guru.mmp.common.exceptions.InvalidArgumentException;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.lang.reflect.Constructor;
 import java.sql.Connection;
@@ -53,11 +53,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SecurityService
   implements ISecurityService
 {
-  /**
-   * Constructs a new <code>SecurityService</code>.
-   */
-  public SecurityService() {}
-
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
    */
@@ -96,21 +91,26 @@ public class SecurityService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
    * The ID Generator.
    */
-  @Autowired
+  @Inject
   private IDGenerator idGenerator;
 
   /**
    * The Spring application context.
    */
-  @Autowired
+  @Inject
   private ApplicationContext applicationContext;
+
+  /**
+   * Constructs a new <code>SecurityService</code>.
+   */
+  public SecurityService() {}
 
   /**
    * Add the user to the security group.

@@ -43,6 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
+
 //~--- JDK imports ------------------------------------------------------------
 
 /**
@@ -60,7 +62,7 @@ public class ConfigurationAdministrationPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Configuration Service */
-  @Autowired
+  @Inject
   private IConfigurationService configurationService;
 
   /**

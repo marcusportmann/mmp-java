@@ -44,6 +44,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayOutputStream;
@@ -101,20 +102,20 @@ public class MessagingService
   private List<MessageHandlerConfig> messageHandlersConfig;
 
   /* The DAO providing persistence capabilities for the messaging infrastructure. */
-  @Autowired
+  @Inject
   private IMessagingDAO messagingDAO;
 
   /* The delay in milliseconds to wait before re-attempting to process a message. */
   private int processingRetryDelay;
 
   /* Configuration Service */
-  @Autowired
+  @Inject
   private IConfigurationService configurationService;
 
   /**
    * The Spring application context.
    */
-  @Autowired
+  @Inject
   private ApplicationContext applicationContext;
 
   /**

@@ -38,6 +38,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.inject.Inject;
+
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
  * application-specific <code>WebApplication</code> classes for applications that make use
@@ -65,7 +67,7 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
    * @param transactionManager the Spring transaction manager
    * @param applicationContext the Spring application context
    */
-  @Autowired
+  @Inject
   public TemplateWebApplication(PlatformTransactionManager transactionManager,
       ApplicationContext applicationContext)
   {

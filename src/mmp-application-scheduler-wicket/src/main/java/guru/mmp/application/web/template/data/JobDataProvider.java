@@ -25,6 +25,7 @@ import guru.mmp.application.web.data.InjectableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class JobDataProvider extends InjectableDataProvider<Job>
   private static final long serialVersionUID = 1000000;
 
   /* Scheduler Service */
-  @Autowired
+  @Inject
   private ISchedulerService schedulerService;
 
   /**

@@ -25,6 +25,7 @@ import guru.mmp.application.web.data.InjectableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +48,7 @@ public class CodeDataProvider extends InjectableDataProvider<Code>
   private UUID codeCategoryId;
 
   /* Codes Service */
-  @Autowired
+  @Inject
   private ICodesService codesService;
 
   /**

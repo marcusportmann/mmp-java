@@ -23,8 +23,7 @@ package guru.mmp.application.configuration;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ApplicationConfigurationException
-  extends RuntimeException
+public class ApplicationConfigurationException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
 

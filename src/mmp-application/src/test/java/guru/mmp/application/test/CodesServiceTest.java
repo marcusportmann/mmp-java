@@ -32,6 +32,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +60,7 @@ public class CodesServiceTest
   /**
    * The Codes Service.
    */
-  @Autowired
+  @Inject
   private ICodesService codesService;
 
   /**

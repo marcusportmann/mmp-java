@@ -37,6 +37,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.inject.Inject;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -61,11 +62,11 @@ public class SystemMessageTest
   private static final String PASSWORD = "Password1";
 
   /* Messaging Service */
-  @Autowired
+  @Inject
   private IMessagingService messagingService;
 
   /* Codes Service */
-  @Autowired
+  @Inject
   private ICodesService codesService;
 
   /**

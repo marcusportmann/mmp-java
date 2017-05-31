@@ -18,19 +18,9 @@ package guru.mmp.application.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.application.codes.ICodesDAO;
-import guru.mmp.common.util.Base64;
-import guru.mmp.common.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.inject.Inject;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -45,7 +35,7 @@ public class ConfigurationService
   implements IConfigurationService
 {
   /* Configuration DAO */
-  @Autowired
+  @Inject
   private IConfigurationDAO configurationDAO;
 
   /**
@@ -65,7 +55,7 @@ public class ConfigurationService
       if (binaryValue == null)
       {
         throw new ConfigurationNotFoundException(String.format(
-          "The binary configuration value with the key (%s) could not be found", key));
+            "The binary configuration value with the key (%s) could not be found", key));
       }
       else
       {
@@ -79,8 +69,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to retrieve the binary configuration value with the key (%s)", key
-          ), e);
+          "Failed to retrieve the binary configuration value with the key (%s)", key), e);
     }
   }
 
@@ -103,7 +92,7 @@ public class ConfigurationService
       if (binaryValue == null)
       {
         throw new ConfigurationNotFoundException(String.format(
-          "The binary configuration value with the key (%s) could not be found", key));
+            "The binary configuration value with the key (%s) could not be found", key));
       }
       else
       {
@@ -134,7 +123,7 @@ public class ConfigurationService
       if (booleanValue == null)
       {
         throw new ConfigurationNotFoundException(String.format(
-          "The Boolean configuration value with the key (%s) could not be found", key));
+            "The Boolean configuration value with the key (%s) could not be found", key));
       }
       else
       {
@@ -148,7 +137,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Boolean configuration value with the key (%s)", key), e);
+          "Failed to retrieve the Boolean configuration value with the key (%s)", key), e);
     }
   }
 
@@ -180,7 +169,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Boolean configuration value with the key (%s)", key), e);
+          "Failed to retrieve the Boolean configuration value with the key (%s)", key), e);
     }
   }
 
@@ -201,7 +190,7 @@ public class ConfigurationService
       if (doubleValue == null)
       {
         throw new ConfigurationNotFoundException(String.format(
-          "The Double configuration value with the key (%s) could not be found", key));
+            "The Double configuration value with the key (%s) could not be found", key));
       }
       else
       {
@@ -215,7 +204,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Double configuration value with the key (%s)", key), e);
+          "Failed to retrieve the Double configuration value with the key (%s)", key), e);
     }
   }
 
@@ -247,7 +236,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Double configuration value with the key (%s)", key), e);
+          "Failed to retrieve the Double configuration value with the key (%s)", key), e);
     }
   }
 
@@ -289,7 +278,7 @@ public class ConfigurationService
       if (integerValue == null)
       {
         throw new ConfigurationNotFoundException(String.format(
-          "The Integer configuration value with the key (%s) could not be found", key));
+            "The Integer configuration value with the key (%s) could not be found", key));
       }
       else
       {
@@ -303,7 +292,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Integer configuration value with the key (%s)", key), e);
+          "Failed to retrieve the Integer configuration value with the key (%s)", key), e);
     }
   }
 
@@ -335,8 +324,9 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Integer configuration value with the key (%s)", key), e);
-    }  }
+          "Failed to retrieve the Integer configuration value with the key (%s)", key), e);
+    }
+  }
 
   /**
    * Retrieve the <code>Long</code> configuration value.
@@ -355,7 +345,7 @@ public class ConfigurationService
       if (longValue == null)
       {
         throw new ConfigurationNotFoundException(String.format(
-          "The Long configuration value with the key (%s) could not be found", key));
+            "The Long configuration value with the key (%s) could not be found", key));
       }
       else
       {
@@ -369,7 +359,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Long configuration value with the key (%s)", key), e);
+          "Failed to retrieve the Long configuration value with the key (%s)", key), e);
     }
   }
 
@@ -401,7 +391,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the Long configuration value with the key (%s)", key), e);
+          "Failed to retrieve the Long configuration value with the key (%s)", key), e);
     }
   }
 
@@ -444,7 +434,7 @@ public class ConfigurationService
       if (stringValue == null)
       {
         throw new ConfigurationNotFoundException(String.format(
-          "The String configuration value with the key (%s) could not be found", key));
+            "The String configuration value with the key (%s) could not be found", key));
       }
       else
       {
@@ -458,7 +448,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the String configuration value with the key (%s)", key), e);
+          "Failed to retrieve the String configuration value with the key (%s)", key), e);
     }
   }
 
@@ -490,7 +480,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-        "Failed to retrieve the String configuration value with the key (%s)", key), e);
+          "Failed to retrieve the String configuration value with the key (%s)", key), e);
     }
   }
 
@@ -531,8 +521,7 @@ public class ConfigurationService
     catch (Throwable e)
     {
       throw new ConfigurationException(String.format(
-          "Failed to remove the configuration value with the key (%s)", key),
-          e);
+          "Failed to remove the configuration value with the key (%s)", key), e);
     }
   }
 

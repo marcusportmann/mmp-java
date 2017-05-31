@@ -20,10 +20,10 @@ package guru.mmp.application.security;
 
 import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.common.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
@@ -61,20 +61,20 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
    * The Spring application context.
    */
-  @Autowired
+  @Inject
   private ApplicationContext applicationContext;
 
   /**
    * The ID Generator.
    */
-  @Autowired
+  @Inject
   private IDGenerator idGenerator;
 
   /**

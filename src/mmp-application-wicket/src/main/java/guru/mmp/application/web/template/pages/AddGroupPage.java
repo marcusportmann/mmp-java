@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -52,7 +53,7 @@ class AddGroupPage extends TemplateWebPage
   private static final long serialVersionUID = 1000000;
 
   /* Security Service */
-  @Autowired
+  @Inject
   private ISecurityService securityService;
 
   /**

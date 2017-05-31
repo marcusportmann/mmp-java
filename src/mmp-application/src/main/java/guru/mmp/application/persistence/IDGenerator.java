@@ -19,7 +19,6 @@ package guru.mmp.application.persistence;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.persistence.DAOUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,6 +27,7 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.UUID;
@@ -49,14 +49,14 @@ public class IDGenerator
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
    * The Transaction Manager.
    */
-  @Autowired
+  @Inject
   private PlatformTransactionManager transactionManager;
 
   /**

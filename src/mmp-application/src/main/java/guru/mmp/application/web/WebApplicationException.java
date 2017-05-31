@@ -120,8 +120,8 @@ public class WebApplicationException extends RuntimeException
   public String getCode()
   {
     return (code == null)
-      ? NO_ERROR_CODE
-      : code;
+        ? NO_ERROR_CODE
+        : code;
   }
 
   /**

@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.util.*;
@@ -53,7 +54,7 @@ public class ReportingService
   private String localReportFolderPath;
 
   /* Reporting DAO */
-  @Autowired
+  @Inject
   private IReportingDAO reportingDAO;
 
   /**

@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -55,15 +56,15 @@ public class SystemMessageHandler extends MessageHandler
   private static final Logger logger = LoggerFactory.getLogger(SystemMessageHandler.class);
 
   /* Codes Service */
-  @Autowired
+  @Inject
   private ICodesService codesService;
 
   /* Messaging Service */
-  @Autowired
+  @Inject
   private IMessagingService messagingService;
 
   /* Security Service */
-  @Autowired
+  @Inject
   private ISecurityService securityService;
 
   /**

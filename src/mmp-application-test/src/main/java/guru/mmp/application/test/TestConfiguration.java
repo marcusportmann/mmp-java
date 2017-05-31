@@ -22,6 +22,7 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.common.persistence.DAOUtil;
 import net.sf.cglib.proxy.Enhancer;
 import org.h2.jdbcx.JdbcDataSource;
+import org.hibernate.service.spi.InjectService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -42,6 +43,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.Assert;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -76,7 +78,7 @@ public class TestConfiguration
    *
    * @param transactionManager the transaction manager
    */
-  @Autowired
+  @Inject
   public TestConfiguration(PlatformTransactionManager transactionManager)
   {
     Assert.notNull(transactionManager, "TransactionManager must not be null");
@@ -112,8 +114,6 @@ public class TestConfiguration
 
       jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
           ((JtaTransactionManager) transactionManager)));
-
-      localContainerEntityManagerFactoryBean.afterPropertiesSet();
     }
 
     return localContainerEntityManagerFactoryBean;

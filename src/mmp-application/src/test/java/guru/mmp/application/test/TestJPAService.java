@@ -24,6 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -47,7 +48,7 @@ public class TestJPAService
   private EntityManager entityManager;
 
   /* Transaction Manager */
-  @Autowired
+  @Inject
   private PlatformTransactionManager transactionManager;
 
   /**

@@ -46,7 +46,7 @@ public class DetachableCodeModel extends InjectableLoadableDetachableModel<Code>
   private UUID categoryId;
 
   /* Codes Service */
-  @Autowired
+  @Inject
   private ICodesService codesService;
 
   /**

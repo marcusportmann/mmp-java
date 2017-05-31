@@ -25,7 +25,6 @@ import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -33,6 +32,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -65,7 +65,7 @@ public class CodesService
   /**
    * The Spring application context.
    */
-  @Autowired
+  @Inject
   private ApplicationContext applicationContext;
 
   /* The code providers. */
@@ -78,7 +78,7 @@ public class CodesService
   private List<CodeProviderConfig> codeProviderConfigs;
 
   /* Codes DAO */
-  @Autowired
+  @Inject
   private ICodesDAO codesDAO;
 
   /**

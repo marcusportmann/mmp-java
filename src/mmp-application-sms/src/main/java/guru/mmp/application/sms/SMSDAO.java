@@ -29,6 +29,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -50,14 +51,14 @@ public class SMSDAO
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
    * The ID Generator.
    */
-  @Autowired
+  @Inject
   private IDGenerator idGenerator;
 
   /**

@@ -29,6 +29,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +53,7 @@ public class SchedulerServiceTest
   private static int jobCount;
 
   /* Scheduler Service */
-  @Autowired
+  @Inject
   private ISchedulerService schedulerService;
 
   /**

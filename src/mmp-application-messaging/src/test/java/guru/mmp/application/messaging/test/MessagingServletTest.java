@@ -43,6 +43,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.inject.Inject;
 import javax.servlet.Servlet;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -84,7 +85,7 @@ public class MessagingServletTest
   /**
    * The Spring application context.
    */
-  @Autowired
+  @Inject
   private ApplicationContext applicationContext;
 
   /**

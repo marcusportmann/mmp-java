@@ -26,6 +26,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -42,7 +43,7 @@ public class BackgroundSMSSender
   private static Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
   /* SMS Service */
-  @Autowired
+  @Inject
   private ISMSService smsService;
 
   /**

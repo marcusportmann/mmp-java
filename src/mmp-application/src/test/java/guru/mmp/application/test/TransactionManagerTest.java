@@ -32,6 +32,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.inject.Inject;
+
 /**
  * The <code>TransactionManagerTest</code> class.
  */
@@ -42,7 +44,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 public class TransactionManagerTest
 {
-  @Autowired
+  @Inject
   private PlatformTransactionManager transactionManager;
 
   /**

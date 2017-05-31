@@ -30,6 +30,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class MessagingDAO
   /**
    * The data source used to provide connections to the database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 

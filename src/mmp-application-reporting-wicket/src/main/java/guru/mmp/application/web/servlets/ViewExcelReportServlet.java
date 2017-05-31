@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -66,11 +67,11 @@ public class ViewExcelReportServlet extends HttpServlet
   private String localReportFolderPath;
 
   /* Reporting DAO */
-  @Autowired
+  @Inject
   private IReportingDAO reportingDAO;
 
   /* Reporting Service */
-  @Autowired
+  @Inject
   private IReportingService reportingService;
 
   /**

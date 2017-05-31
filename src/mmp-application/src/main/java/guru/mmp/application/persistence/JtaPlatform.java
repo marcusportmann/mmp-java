@@ -33,40 +33,38 @@ import java.lang.reflect.Method;
  */
 public class JtaPlatform extends AbstractJtaPlatform
 {
+  private static Object lock = new Object();
   private static TransactionManager transactionManager;
   private static UserTransaction userTransaction;
-  private static Object lock = new Object();
 
   /**
    * Constructs a new <code>JtaPlatform</code>.
    */
   public JtaPlatform()
   {
-
     // TODO: Check for other sources for the Transaction Manager and User Transaction -- MARCUS
 
-    synchronized(lock)
+    synchronized (lock)
     {
       try
       {
-        Class<?> atomikosUserTransactionManagerClass = Thread.currentThread().getContextClassLoader().loadClass(
-
-          "com.atomikos.icatch.jta.UserTransactionManager");
-        Class<?> atomikosUserTransactionClass = Thread.currentThread().getContextClassLoader().loadClass(
-          "com.atomikos.icatch.jta.UserTransactionImp");
+        Class<?> atomikosUserTransactionManagerClass = Thread.currentThread()
+            .getContextClassLoader().loadClass("com.atomikos.icatch.jta.UserTransactionManager");
+        Class<?> atomikosUserTransactionClass = Thread.currentThread().getContextClassLoader()
+            .loadClass("com.atomikos.icatch.jta.UserTransactionImp");
 
         transactionManager = (TransactionManager) atomikosUserTransactionManagerClass.newInstance();
         userTransaction = (UserTransaction) atomikosUserTransactionClass.newInstance();
 
         Method setTransactionTimeoutMethod = userTransaction.getClass().getMethod(
-          "setTransactionTimeout", Integer.class);
+            "setTransactionTimeout", Integer.class);
 
         setTransactionTimeoutMethod.invoke(userTransaction, new Integer(300));
       }
       catch (Throwable e)
       {
         throw new RuntimeException(
-          "Failed to initialise the JTA user transaction and transaction manager", e);
+            "Failed to initialise the JTA user transaction and transaction manager", e);
       }
     }
   }
@@ -82,7 +80,4 @@ public class JtaPlatform extends AbstractJtaPlatform
   {
     return userTransaction;
   }
-
-
-
 }

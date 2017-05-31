@@ -36,6 +36,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.inject.Inject;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -59,11 +60,11 @@ public class SampleServiceTest
   private static final Logger logger = LoggerFactory.getLogger(SampleServiceTest.class);
 
   /* Sample Service */
-  @Autowired
+  @Inject
   private ISampleService sampleService;
 
   /* Transaction Manager */
-  @Autowired
+  @Inject
   private PlatformTransactionManager transactionManager;
 
   /**

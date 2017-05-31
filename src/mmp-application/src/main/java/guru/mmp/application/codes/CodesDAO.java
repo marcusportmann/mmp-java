@@ -21,11 +21,11 @@ package guru.mmp.application.codes;
 import guru.mmp.application.persistence.IDGenerator;
 import guru.mmp.common.persistence.DAOException;
 import guru.mmp.common.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
@@ -48,14 +48,14 @@ public class CodesDAO
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
    * The ID Generator.
    */
-  @Autowired
+  @Inject
   private IDGenerator idGenerator;
 
   /**

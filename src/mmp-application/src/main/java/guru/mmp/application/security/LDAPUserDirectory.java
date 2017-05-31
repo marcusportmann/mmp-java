@@ -22,9 +22,9 @@ import guru.mmp.common.util.JNDIUtil;
 import guru.mmp.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import javax.inject.Inject;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -82,7 +82,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
+  @Inject
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
   @SuppressWarnings("unused")

@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,13 +51,13 @@ public class SchedulerService
   private String instanceName = ServiceUtil.getServiceInstanceName("Scheduler Service");
 
   /* Job DAO */
-  @Autowired
+  @Inject
   private ISchedulerDAO jobDAO;
 
   /**
    * The Spring application context.
    */
-  @Autowired
+  @Inject
   private ApplicationContext applicationContext;
 
   /*
@@ -70,7 +71,7 @@ public class SchedulerService
   private int maximumJobExecutionAttempts;
 
   /* Configuration Service */
-  @Autowired
+  @Inject
   private IConfigurationService configurationService;
 
   /**
