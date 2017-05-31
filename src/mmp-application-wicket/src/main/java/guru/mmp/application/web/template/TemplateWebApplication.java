@@ -34,10 +34,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.transaction.PlatformTransactionManager;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TemplateWebApplication</code> class provides a base class for all
@@ -51,9 +47,6 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TemplateWebApplication.class);
 
-  /* The user-friendly name that should be displayed for the application. */
-  private String displayName;
-
   /* Is multiple organisation support enabled for the application? */
   private boolean isMultipleOrganisationSupportEnabled;
 
@@ -62,15 +55,8 @@ public abstract class TemplateWebApplication extends guru.mmp.application.web.We
 
   /**
    * Constructs a new <code>TemplateWebApplication</code>.
-   *
-   * @param transactionManager the Spring transaction manager
-   * @param applicationContext the Spring application context
    */
-  public TemplateWebApplication(PlatformTransactionManager transactionManager,
-      ApplicationContext applicationContext)
-  {
-    super(transactionManager, applicationContext);
-  }
+  public TemplateWebApplication() {}
 
   /**
    * Returns the <code>TemplateWebApplication</code> instance.

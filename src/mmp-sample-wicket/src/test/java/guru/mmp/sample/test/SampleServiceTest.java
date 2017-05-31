@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -49,7 +48,6 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = { SampleTestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,

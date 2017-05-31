@@ -30,15 +30,8 @@ import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -53,24 +46,15 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @Component("webApplication")
-@EnableAsync
-@EnableScheduling
-@ComponentScan(basePackages = { "guru.mmp.application", "guru.mmp.sample" })
+@ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
 @SpringBootApplication
 public class SampleApplication extends TemplateWebApplication
 {
   /**
    * Constructs a new <code>TemplateWebApplication</code>.
-   *
-   * @param transactionManager the Spring transaction manager
-   * @param applicationContext the Spring application context
    */
   @Inject
-  public SampleApplication(PlatformTransactionManager transactionManager,
-      ApplicationContext applicationContext)
-  {
-    super(transactionManager, applicationContext);
-  }
+  public SampleApplication() {}
 
   /**
    * The main method.

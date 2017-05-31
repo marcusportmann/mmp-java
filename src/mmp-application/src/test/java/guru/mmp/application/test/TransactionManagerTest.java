@@ -21,7 +21,6 @@ package guru.mmp.application.test;
 import guru.mmp.application.persistence.AtomikosJtaConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -33,6 +32,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.inject.Inject;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionManagerTest</code> class.

@@ -26,11 +26,9 @@ import guru.mmp.application.messaging.Message;
 import guru.mmp.application.messaging.MessageTranslator;
 import guru.mmp.application.messaging.messages.*;
 import guru.mmp.application.test.TestClassRunner;
-import guru.mmp.application.test.TestConfiguration;
 import guru.mmp.common.util.ISO8601;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -52,7 +50,7 @@ import static org.junit.Assert.*;
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
+@ContextConfiguration(classes = { MessagingTestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SystemMessageTest

@@ -22,9 +22,12 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.common.persistence.DAOUtil;
 import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
-import org.springframework.context.annotation.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -34,6 +37,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
@@ -55,21 +59,17 @@ import java.util.concurrent.Executor;
  *
  * @author Marcus Portmann
  */
-@Configuration
 @EnableAsync
-@EnableAutoConfiguration
 @EnableScheduling
-@ComponentScan(basePackages = { "guru.mmp.application" })
+@EnableTransactionManagement
+@ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true)
 @SuppressWarnings("unused")
 public abstract class Application
 {
   private static final Object inMemoryDataSourceLock = new Object();
-  @Lazy
-  @Inject
   private static DataSource inMemoryDataSource;
-  @Lazy
   @Inject
-  private final PlatformTransactionManager transactionManager = null;
+  private ApplicationContext applicationContext;
 
   /**
    * Constructs a new <code>Application</code>.
@@ -99,13 +99,17 @@ public abstract class Application
         getJpaPackagesToScan()));
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-    if (transactionManager instanceof JtaTransactionManager)
+    PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
+        PlatformTransactionManager.class);
+
+    if ((platformTransactionManager != null)
+        && (platformTransactionManager instanceof JtaTransactionManager))
     {
       Map<String, Object> jpaPropertyMap =
           localContainerEntityManagerFactoryBean.getJpaPropertyMap();
 
       jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-          ((JtaTransactionManager) transactionManager)));
+          ((JtaTransactionManager) platformTransactionManager)));
     }
 
     return localContainerEntityManagerFactoryBean;

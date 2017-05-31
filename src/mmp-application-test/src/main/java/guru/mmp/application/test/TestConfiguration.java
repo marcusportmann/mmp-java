@@ -22,14 +22,11 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.common.persistence.DAOUtil;
 import net.sf.cglib.proxy.Enhancer;
 import org.h2.jdbcx.JdbcDataSource;
-import org.hibernate.service.spi.InjectService;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -40,8 +37,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
-import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -56,34 +54,22 @@ import java.util.concurrent.Executor;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>TestConfiguration</code> class provides the Spring configuration for JUnit test classes
- * that test the capabilities provided by the the <b>mmp-java (Open Source Java and JEE Development
- * Framework)</b>.
+ * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
+ * test classes that test the capabilities provided by the
+ * <b>mmp-java (Open Source Java and JEE Development Framework)</b>.
  *
  * @author Marcus Portmann
  */
-@Configuration
 @EnableAsync
-@EnableAutoConfiguration
 @EnableScheduling
-@ComponentScan(basePackages = { "guru.mmp.application" })
+@EnableTransactionManagement
+@ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true)
 public class TestConfiguration
 {
   private static final Object dataSourceLock = new Object();
   private static DataSource dataSource;
-  private final PlatformTransactionManager transactionManager;
-
-  /**
-   * Constructs a new <code>TestConfiguration</code>.
-   *
-   * @param transactionManager the transaction manager
-   */
   @Inject
-  public TestConfiguration(PlatformTransactionManager transactionManager)
-  {
-    Assert.notNull(transactionManager, "TransactionManager must not be null");
-    this.transactionManager = transactionManager;
-  }
+  private ApplicationContext applicationContext;
 
   /**
    * Returns the application entity manager factory associated with the application data source.
@@ -104,16 +90,21 @@ public class TestConfiguration
 
     localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
     localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application");
+    localContainerEntityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
+        getJpaPackagesToScan()));
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-    if (transactionManager instanceof JtaTransactionManager)
+    PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
+        PlatformTransactionManager.class);
+
+    if ((platformTransactionManager != null)
+        && (platformTransactionManager instanceof JtaTransactionManager))
     {
       Map<String, Object> jpaPropertyMap =
           localContainerEntityManagerFactoryBean.getJpaPropertyMap();
 
       jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-          ((JtaTransactionManager) transactionManager)));
+          ((JtaTransactionManager) platformTransactionManager)));
     }
 
     return localContainerEntityManagerFactoryBean;
@@ -269,5 +260,19 @@ public class TestConfiguration
     resources.add("guru/mmp/application/persistence/ApplicationH2.sql");
 
     return resources;
+  }
+
+  /**
+   * Returns the names of the packages to scan for JPA classes.
+   *
+   * @return the names of the packages to scan for JPA classes
+   */
+  protected List<String> getJpaPackagesToScan()
+  {
+    List<String> packagesToScan = new ArrayList<>();
+
+    packagesToScan.add("guru.mmp.application");
+
+    return packagesToScan;
   }
 }

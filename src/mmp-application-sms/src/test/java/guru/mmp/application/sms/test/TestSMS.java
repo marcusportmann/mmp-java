@@ -23,7 +23,6 @@ import com.mymobileapi.api5.APISoap;
 import guru.mmp.application.configuration.IConfigurationService;
 import guru.mmp.application.sms.ISMSService;
 import guru.mmp.application.test.TestClassRunner;
-import guru.mmp.application.test.TestConfiguration;
 import guru.mmp.common.util.StringUtil;
 import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
@@ -31,7 +30,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -60,7 +58,7 @@ import java.util.Date;
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
+@ContextConfiguration(classes = { SMSTestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class TestSMS

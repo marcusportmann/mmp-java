@@ -23,7 +23,6 @@ import guru.mmp.application.security.*;
 import guru.mmp.common.util.BinaryBuffer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -45,7 +44,8 @@ import static org.junit.Assert.*;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class, AtomikosJtaConfiguration.class })
+@ContextConfiguration(classes = { ApplicationTestConfiguration.class,
+    AtomikosJtaConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SecurityServiceTest

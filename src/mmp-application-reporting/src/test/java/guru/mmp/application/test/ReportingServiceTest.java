@@ -24,7 +24,6 @@ import guru.mmp.application.reporting.ReportDefinitionSummary;
 import guru.mmp.common.util.ResourceUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -48,7 +47,7 @@ import static org.junit.Assert.assertEquals;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
+@ContextConfiguration(classes = { ReportingTestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class ReportingServiceTest

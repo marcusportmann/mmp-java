@@ -32,15 +32,17 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.*;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
@@ -62,28 +64,23 @@ import java.util.concurrent.Executor;
  *
  * @author Marcus Portmann
  */
+@EnableAsync
+@EnableScheduling
+@EnableTransactionManagement
+@ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true)
 public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
   private static final Object inMemoryDataSourceLock = new Object();
   private static final Object entityManagerFactoryBeanLock = new Object();
   private static DataSource inMemoryDataSource;
-  private final PlatformTransactionManager transactionManager;
-  private final ApplicationContext applicationContext;
+  @Inject
+  private ApplicationContext applicationContext;
   private LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
 
   /**
    * Constructs a new <code>WebApplication</code>.
-   *
-   * @param transactionManager the Spring transaction manager
-   * @param applicationContext the Spring application context
    */
-  @Inject
-  public WebApplication(PlatformTransactionManager transactionManager,
-      ApplicationContext applicationContext)
-  {
-    this.transactionManager = transactionManager;
-    this.applicationContext = applicationContext;
-  }
+  public WebApplication() {}
 
   /**
    * Returns the application entity manager factory associated with the application data source.
@@ -111,12 +108,16 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
             getJpaPackagesToScan()));
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-        if (transactionManager instanceof JtaTransactionManager)
+        PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
+            PlatformTransactionManager.class);
+
+        if ((platformTransactionManager != null)
+            && (platformTransactionManager instanceof JtaTransactionManager))
         {
           Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
 
           jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-              ((JtaTransactionManager) transactionManager)));
+              ((JtaTransactionManager) platformTransactionManager)));
         }
       }
     }

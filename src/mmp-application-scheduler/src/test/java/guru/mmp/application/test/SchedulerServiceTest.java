@@ -22,7 +22,6 @@ import guru.mmp.application.scheduler.ISchedulerService;
 import guru.mmp.application.scheduler.Job;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -45,7 +44,7 @@ import static org.junit.Assert.fail;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
+@ContextConfiguration(classes = { SchedulerTestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SchedulerServiceTest
@@ -58,16 +57,16 @@ public class SchedulerServiceTest
 
   /**
    * Test the execute job functionality.
-  @Test
-  public void executeJobTest()
-    throws Exception
-  {
-    Job job = getTestJobDetails();
-
-    schedulerService.executeJob(job);
-  }
-
-  /**
+   * @Test
+   * public void executeJobTest()
+   * throws Exception
+   * {
+   * Job job = getTestJobDetails();
+   *
+   * schedulerService.executeJob(job);
+   * }
+   *
+   *
    * Test the job parameters functionality.
    */
   @Test

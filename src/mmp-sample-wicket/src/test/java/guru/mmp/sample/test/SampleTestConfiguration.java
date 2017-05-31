@@ -19,14 +19,9 @@ package guru.mmp.sample.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.test.TestConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.context.annotation.Configuration;
 
-import javax.inject.Inject;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -37,39 +32,10 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@ComponentScan(basePackages = { "guru.mmp.sample" })
+@Configuration
+@ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
 public class SampleTestConfiguration extends TestConfiguration
 {
-  /**
-   * Constructs a new <code>SampleTestConfiguration</code>.
-   *
-   * @param transactionManager the transaction manager
-   */
-  @Inject
-  public SampleTestConfiguration(PlatformTransactionManager transactionManager)
-  {
-    super(transactionManager);
-  }
-
-  /**
-   * Returns the application entity manager factory associated with the application data source.
-   *
-   * @return the application entity manager factory associated with the application data source
-   */
-  @Bean(name = "applicationPersistenceUnit")
-  @DependsOn("applicationDataSource")
-  @Override
-  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
-  {
-    LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
-        super.applicationEntityManagerFactory();
-
-    localContainerEntityManagerFactoryBean.setPackagesToScan("guru.mmp.application",
-        "guru.mmp.sample");
-
-    return localContainerEntityManagerFactoryBean;
-  }
-
   /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
    * initialise the in-memory application database.
@@ -82,5 +48,20 @@ public class SampleTestConfiguration extends TestConfiguration
     resources.add("guru/mmp/sample/persistence/SampleH2.sql");
 
     return resources;
+  }
+
+  /**
+   * Returns the names of the packages to scan for JPA classes.
+   *
+   * @return the names of the packages to scan for JPA classes
+   */
+  @Override
+  protected List<String> getJpaPackagesToScan()
+  {
+    List<String> packagesToScan = super.getJpaPackagesToScan();
+
+    packagesToScan.add("guru.mmp.sample");
+
+    return packagesToScan;
   }
 }

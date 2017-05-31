@@ -19,7 +19,6 @@ package guru.mmp.application.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.application.persistence.IDGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -80,7 +79,8 @@ public class TestTransactionalService
 
       Set<Connection> connections = DataSourceTracker.getActiveDatabaseConnections().keySet();
 
-      Map<Connection, StackTraceElement[]> connectionMap = DataSourceTracker.getActiveDatabaseConnections();
+      Map<Connection, StackTraceElement[]> connectionMap =
+          DataSourceTracker.getActiveDatabaseConnections();
 
       if (statement.executeUpdate() != 1)
       {
