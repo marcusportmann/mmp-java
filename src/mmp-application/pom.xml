@@ -9,18 +9,10 @@
   <name>mmp-application</name>
 
   <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.2.RELEASE</version>
+    <groupId>guru.mmp</groupId>
+    <artifactId>mmp-java</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <atomikos.version>4.0.4</atomikos.version>
-    <h2.version>1.4.195</h2.version>
-    <hibernate.version>5.2.10.Final</hibernate.version>
-    <slf4j.version>1.7.25</slf4j.version>
-  </properties>
 
   <dependencies>
     <!-- Dependencies -->
@@ -56,14 +48,12 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>javax.transaction</groupId>
       <artifactId>javax.transaction-api</artifactId>
-      <version>1.2</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
@@ -71,7 +61,7 @@
     <!-- Test Dependencies -->
     <dependency>
       <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-test</artifactId>
+      <artifactId>mmp-test</artifactId>
       <version>3.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>

@@ -1,15 +1,14 @@
 
 package guru.mmp.service.codes.ws;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+
 /**
  * <p>Java class for CodeDataType.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -20,51 +19,33 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- *
+ * 
  */
 @XmlType(name = "CodeDataType")
 @XmlEnum
-public enum CodeDataType
-{
-  @XmlEnumValue("Standard")
-  STANDARD("Standard"),
-  @XmlEnumValue("Custom")
-  CUSTOM("Custom");
+public enum CodeDataType {
 
-  private final String value;
+    @XmlEnumValue("Standard")
+    STANDARD("Standard"),
+    @XmlEnumValue("Custom")
+    CUSTOM("Custom");
+    private final String value;
 
-  CodeDataType(String v)
-  {
-    value = v;
-  }
-
-  /**
-   * Method description
-   *
-   * @param v
-   *
-   * @return
-   */
-  public static CodeDataType fromValue(String v)
-  {
-    for (CodeDataType c : CodeDataType.values())
-    {
-      if (c.value.equals(v))
-      {
-        return c;
-      }
+    CodeDataType(String v) {
+        value = v;
     }
 
-    throw new IllegalArgumentException(v);
-  }
+    public String value() {
+        return value;
+    }
 
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public String value()
-  {
-    return value;
-  }
+    public static CodeDataType fromValue(String v) {
+        for (CodeDataType c: CodeDataType.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException(v);
+    }
+
 }

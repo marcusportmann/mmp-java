@@ -18,7 +18,6 @@ package guru.mmp.application.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.persistence.DAOUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -185,8 +184,8 @@ public class IDGenerator
 
       if (statement.executeUpdate() == 0)
       {
-        throw new SQLException("No rows were affected while inserting the " + DAOUtil
-            .MMP_DATABASE_SCHEMA + ".IDGENERATOR table row for the type (" + type + ")");
+        throw new SQLException("No rows were affected while inserting the IDGENERATOR.IDGENERATOR "
+            + "table row for the type (" + type + ")");
       }
     }
   }
@@ -202,8 +201,8 @@ public class IDGenerator
 
       if (statement.executeUpdate() == 0)
       {
-        throw new SQLException("No rows were affected while updating the " + DAOUtil
-            .MMP_DATABASE_SCHEMA + ".IDGENERATOR table row for the type (" + type + ")");
+        throw new SQLException("No rows were affected while updating the IDGENERATOR.IDGENERATOR "
+            + "table row for the type (" + type + ")");
       }
     }
   }

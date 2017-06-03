@@ -10,9 +10,47 @@
 
   <packaging>pom</packaging>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.3.RELEASE</version>
+  </parent>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <atomikos.version>4.0.4</atomikos.version>
+    <h2.version>1.4.195</h2.version>
+    <hibernate.version>5.2.10.Final</hibernate.version>
+    <junit.version>4.12</junit.version>
+    <slf4j.version>1.7.25</slf4j.version>
+    <wicket.version>7.7.0</wicket.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.wicket</groupId>
+        <artifactId>wicket-datetime</artifactId>
+        <version>${wicket.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.wicket</groupId>
+        <artifactId>wicket-devutils</artifactId>
+        <version>${wicket.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.wicket</groupId>
+        <artifactId>wicket-spring</artifactId>
+        <version>${wicket.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <modules>
     <module>mmp-common</module>
@@ -21,7 +59,7 @@
     <module>mmp-application-reporting</module>
     <module>mmp-application-scheduler</module>
     <module>mmp-application-sms</module>
-    <module>mmp-application-test</module>
+    <module>mmp-test</module>
 
     <module>mmp-application-wicket</module>
     <module>mmp-application-messaging-wicket</module>

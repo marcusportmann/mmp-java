@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "API", targetNamespace = "http://www.mymobileapi.com/api5", wsdlLocation = "file:/Volumes/Data/Develop/Projects/mmp-java/src/mmp-application-sms/src/main/resources/META-INF/wsdl/MyMobileAPI.wsdl")
+@WebServiceClient(name = "API", targetNamespace = "http://www.mymobileapi.com/api5", wsdlLocation = "file:/Users/marcus/Develop/MMP/mmp-java/src/mmp-application-sms/src/main/resources/META-INF/wsdl/MyMobileAPI.wsdl")
 public class API
     extends Service
 {
@@ -30,7 +30,7 @@ public class API
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/Volumes/Data/Develop/Projects/mmp-java/src/mmp-application-sms/src/main/resources/META-INF/wsdl/MyMobileAPI.wsdl");
+            url = new URL("file:/Users/marcus/Develop/MMP/mmp-java/src/mmp-application-sms/src/main/resources/META-INF/wsdl/MyMobileAPI.wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

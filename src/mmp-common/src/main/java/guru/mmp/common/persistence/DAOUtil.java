@@ -44,11 +44,6 @@ import javax.sql.DataSource;
 public class DAOUtil
 {
   /**
-   * The mmp-java Java and JEE development framework database schema.
-   */
-  public static final String MMP_DATABASE_SCHEMA = "MMP";
-
-  /**
    * Private default constructor to enforce utility pattern.
    */
   private DAOUtil() {}

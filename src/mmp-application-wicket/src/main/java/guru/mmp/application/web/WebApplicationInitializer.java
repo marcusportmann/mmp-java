@@ -80,7 +80,7 @@ public class WebApplicationInitializer
       Class<?> viewReportServletClass = Thread.currentThread().getContextClassLoader().loadClass(
           "guru.mmp.application.web.servlets.ViewReportServlet");
 
-      ServletRegistration viewReportServlet = servletContext.addServlet("DumpNamespaceServlet",
+      ServletRegistration viewReportServlet = servletContext.addServlet("ViewReportServlet",
           ((Class<? extends Servlet>) viewReportServletClass));
       viewReportServlet.addMapping("/viewReport");
     }
