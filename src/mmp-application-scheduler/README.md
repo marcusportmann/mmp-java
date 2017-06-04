@@ -1,7 +1,7 @@
-mmp-application-job
-===================
+mmp-application-scheduler
+=========================
 
-The mmp-application-job library.
+The mmp-application-scheduler library.
 
 Licensed under the Apache License, Version 2.0 (the "License")
 

@@ -135,7 +135,7 @@ public abstract class ExtensibleFormDialogImplementation<T> extends ExtensibleDi
 
             ExtensibleFormDialogImplementation.this.onCancel(target, form);
 
-            //resetExtensibleFormDialogImplementation(target);
+            // resetExtensibleFormDialogImplementation(target);
 
             getDialog().hide(target);
           }
@@ -226,7 +226,7 @@ public abstract class ExtensibleFormDialogImplementation<T> extends ExtensibleDi
    * @param target the AJAX request target
    * @param form   the form
    */
-  protected abstract void onCancel(AjaxRequestTarget target, Form form);
+  protected abstract void onCancel(AjaxRequestTarget target, Form<T> form);
 
   /**
    * Process the errors for the form associated with the extensible form dialog implementation.
@@ -234,7 +234,7 @@ public abstract class ExtensibleFormDialogImplementation<T> extends ExtensibleDi
    * @param target the AJAX request target
    * @param form   the form
    */
-  protected abstract void onError(AjaxRequestTarget target, Form form);
+  protected abstract void onError(AjaxRequestTarget target, Form<T> form);
 
   /**
    * Process the submission of the form associated with the extensible form dialog implementation.
@@ -245,7 +245,7 @@ public abstract class ExtensibleFormDialogImplementation<T> extends ExtensibleDi
    * @return <code>true</code> if the form was submitted successfully without errors or
    *         <code>false</code> otherwise
    */
-  protected abstract boolean onSubmit(AjaxRequestTarget target, Form form);
+  protected abstract boolean onSubmit(AjaxRequestTarget target, Form<T> form);
 
   /**
    * Registers a warning feedback message for this component.

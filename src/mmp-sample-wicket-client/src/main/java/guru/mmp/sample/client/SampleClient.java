@@ -58,11 +58,6 @@ public class SampleClient
           WebServiceClientSecurityHelper.getWSSecurityX509CertificateServiceProxy(
           SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL, SAMPLE_SERVICE_ENDPOINT);
 
-//    ISampleService sampleService =
-//      WebServiceClientSecurityHelper.getServiceProxy(
-//        SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL,
-// SAMPLE_SERVICE_ENDPOINT);
-
       System.out.println("sampleService.getVersion() = " + sampleService.getVersion());
     }
     catch (Throwable e)

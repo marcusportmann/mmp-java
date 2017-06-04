@@ -1,7 +1,7 @@
-mmp-application-job-wicket
-==========================
+mmp-application-scheduler-wicket
+================================
 
-The mmp-job-task-wicket library.
+The mmp-application-scheduler-wicket library.
 
 Licensed under the Apache License, Version 2.0 (the "License")
 

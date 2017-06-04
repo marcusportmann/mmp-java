@@ -26,7 +26,12 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+
+import java.io.Serializable;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestExtensibleFormDialogImplementationPage</code> class implements the
@@ -54,7 +59,6 @@ public class TestExtensibleFormDialogImplementationPage extends TemplateExtensib
         public void onClick(AjaxRequestTarget target)
         {
           getDialog().show(target, new TestExtensibleFormDialogImplementation());
-
         }
       };
 
@@ -67,52 +71,102 @@ public class TestExtensibleFormDialogImplementationPage extends TemplateExtensib
     }
   }
 
-  private class TestExtensibleFormDialogImplementation extends ExtensibleFormDialogImplementation
+  @SuppressWarnings("unused")
+  private class TestExtensibleFormDialogData
+    implements Serializable
   {
+    private static final long serialVersionUID = 1000000;
     private String firstName;
     private String lastName;
 
     /**
+     * Returns the first name.
+     *
+     * @return the first name
+     */
+    String getFirstName()
+    {
+      return firstName;
+    }
+
+    /**
+     * Returns the last name.
+     *
+     * @return the last name
+     */
+    String getLastName()
+    {
+      return lastName;
+    }
+
+    /**
+     * Set the first name.
+     *
+     * @param firstName the first name
+     */
+    void setFirstName(String firstName)
+    {
+      this.firstName = firstName;
+    }
+
+    /**
+     * Set the last name.
+     *
+     * @param lastName the last name
+     */
+    void setLastName(String lastName)
+    {
+      this.lastName = lastName;
+    }
+  }
+
+
+  private class TestExtensibleFormDialogImplementation
+      extends ExtensibleFormDialogImplementation<TestExtensibleFormDialogData>
+  {
+    /**
      * Constructs a new <code>TestExtensibleFormDialogImplementation</code>.
      */
-    public TestExtensibleFormDialogImplementation()
+    TestExtensibleFormDialogImplementation()
     {
       super("Test Extensible Form Dialog", "OK", "Cancel");
 
+      Model<TestExtensibleFormDialogData> model = new Model<>(new TestExtensibleFormDialogData());
+
+      getForm().setModel(new CompoundPropertyModel<>(model));
+
       // The "firstName" field
-      TextField<String> firstNameField = new TextFieldWithFeedback<>("firstName",
-          new PropertyModel<>(this, "firstName"));
+      TextField<String> firstNameField = new TextFieldWithFeedback<>("firstName");
       firstNameField.setRequired(true);
       getForm().add(firstNameField);
 
       // The "lastName" field
-      TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName", new PropertyModel<>(
-          this, "lastName"));
+      TextField<String> lastNameField = new TextFieldWithFeedback<>("lastName");
       lastNameField.setRequired(true);
       getForm().add(lastNameField);
     }
 
     @Override
-    protected void onCancel(AjaxRequestTarget target, Form form)
+    protected void onCancel(AjaxRequestTarget target, Form<TestExtensibleFormDialogData> form)
     {
       System.out.println("[DEBUG][TestExtensibleFormDialogImplementation][onCancel] "
           + "The form submission was cancelled");
     }
 
     @Override
-    protected void onError(AjaxRequestTarget target, Form form)
+    protected void onError(AjaxRequestTarget target, Form<TestExtensibleFormDialogData> form)
     {
       System.out.println("[DEBUG][TestExtensibleFormDialogImplementation][onError] "
           + "An error occurred while submitting the form");
     }
 
     @Override
-    protected boolean onSubmit(AjaxRequestTarget target, Form form)
+    protected boolean onSubmit(AjaxRequestTarget target, Form<TestExtensibleFormDialogData> form)
     {
       System.out.println("[DEBUG][TestExtensibleFormDialogImplementation][onSubmit] "
-          + "firstName = " + firstName);
+          + "firstName = " + form.getModel().getObject().getFirstName());
       System.out.println("[DEBUG][TestExtensibleFormDialogImplementation][onSubmit] "
-          + "lastName = " + lastName);
+          + "lastName = " + form.getModel().getObject().getLastName());
 
       return true;
     }

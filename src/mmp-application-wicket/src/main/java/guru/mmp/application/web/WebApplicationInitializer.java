@@ -77,11 +77,12 @@ public class WebApplicationInitializer
 
     try
     {
-      Class<?> viewReportServletClass = Thread.currentThread().getContextClassLoader().loadClass(
-          "guru.mmp.application.web.servlets.ViewReportServlet");
+      Class<? extends Servlet> viewReportServletClass = Thread.currentThread()
+          .getContextClassLoader().loadClass("guru.mmp.application.web.servlets.ViewReportServlet")
+          .asSubclass(Servlet.class);
 
       ServletRegistration viewReportServlet = servletContext.addServlet("ViewReportServlet",
-          ((Class<? extends Servlet>) viewReportServletClass));
+          (viewReportServletClass));
       viewReportServlet.addMapping("/viewReport");
     }
     catch (ClassNotFoundException ignored) {}

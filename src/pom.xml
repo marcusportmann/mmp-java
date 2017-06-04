@@ -19,6 +19,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <atomikos.version>4.0.4</atomikos.version>
+    <cglib.version>3.2.5</cglib.version>
     <groovy.version>2.4.11</groovy.version>
     <h2.version>1.4.195</h2.version>
     <hibernate.version>5.2.10.Final</hibernate.version>
@@ -31,6 +32,11 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib-nodep</artifactId>
+        <version>${cglib.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.apache.wicket</groupId>
         <artifactId>wicket-datetime</artifactId>
@@ -75,11 +81,8 @@
     <module>mmp-application-scheduler-wicket</module>
 
     <module>mmp-sample-wicket</module>
-
-    <!--
-
     <module>mmp-sample-wicket-client</module>
-    -->
+
   </modules>
 
 </project>
