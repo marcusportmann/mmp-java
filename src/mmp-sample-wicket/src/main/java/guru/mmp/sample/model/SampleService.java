@@ -89,6 +89,16 @@ public class SampleService
   }
 
   /**
+   * Returns the version of the service.
+   *
+   * @return the version of the service
+   */
+  public String getVersion()
+  {
+    return "1.0.0";
+  }
+
+  /**
    * The test method.
    */
   public void testMethod()

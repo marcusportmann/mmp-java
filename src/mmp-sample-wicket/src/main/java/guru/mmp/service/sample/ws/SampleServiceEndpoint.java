@@ -16,6 +16,8 @@
 
 package guru.mmp.service.sample.ws;
 
+import javax.inject.Inject;
+
 /**
  * The <code>SampleServiceEndpoint</code> class implements the Sample Service.
  *
@@ -24,10 +26,13 @@ package guru.mmp.service.sample.ws;
 public class SampleServiceEndpoint
   implements ISampleService
 {
+  @Inject
+  private guru.mmp.sample.model.ISampleService sampleService;
+
   @Override
   public String getVersion()
     throws SampleServiceFault
   {
-    return "1.0.0";
+    return sampleService.getVersion();
   }
 }

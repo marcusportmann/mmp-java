@@ -331,6 +331,8 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
         setHandlersMethod.invoke(endpoint, handlers);
       }
 
+      applicationContext.getAutowireCapableBeanFactory().autowireBean(implementation);
+
       return endpoint;
     }
     catch (ClassNotFoundException e)
@@ -554,6 +556,10 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
 
 
 
+
+
+
+
   /**
    * Method description
    *
@@ -652,4 +658,10 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
 
     return factory;
   }
+
+
+
+
+
+
 }
