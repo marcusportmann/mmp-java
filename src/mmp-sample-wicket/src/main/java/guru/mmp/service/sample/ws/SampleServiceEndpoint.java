@@ -18,6 +18,8 @@ package guru.mmp.service.sample.ws;
 
 /**
  * The <code>SampleServiceEndpoint</code> class implements the Sample Service.
+ *
+ * @author Marcus Portmann
  */
 public class SampleServiceEndpoint
   implements ISampleService

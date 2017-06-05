@@ -31,20 +31,11 @@ import guru.mmp.sample.web.pages.dialogs.TestExtensibleDialogImplementationPage;
 import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationPage;
 import guru.mmp.sample.web.pages.forms.TestFormPage;
 import guru.mmp.service.sample.ws.SampleServiceEndpoint;
-import io.undertow.Undertow.Builder;
-import io.undertow.server.HandlerWrapper;
-import io.undertow.server.HttpHandler;
-import io.undertow.server.HttpServerExchange;
-import io.undertow.server.SSLSessionInfo;
-import io.undertow.servlet.api.DeploymentInfo;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.context.embedded.undertow.UndertowBuilderCustomizer;
-import org.springframework.boot.context.embedded.undertow.UndertowDeploymentInfoCustomizer;
-import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
@@ -90,105 +81,6 @@ public class SampleApplication extends TemplateWebApplication
   public static void main(String[] args)
   {
     SpringApplication.run(SampleApplication.class, args);
-  }
-
-  /**
-   * Method description
-   *
-   * @return
-   */
-  @Bean
-  public UndertowEmbeddedServletContainerFactory embeddedServletContainerFactory()
-  {
-    UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
-
-    factory.addDeploymentInfoCustomizers(new UndertowDeploymentInfoCustomizer()
-        {
-          @Override
-          public void customize(DeploymentInfo deploymentInfo)
-          {
-            // try
-            // {
-            // Class<? extends Servlet> cxfServlet = Thread.currentThread()
-            // .getContextClassLoader().loadClass("org.apache.cxf.transport.servlet.CXFServlet")
-            // .asSubclass(Servlet.class);
-            //
-            // ServletInfo servletInfo = new ServletInfo("CXFServlet", cxfServlet);
-            //
-            // servletInfo.addMapping("/services/*");
-            //
-            // deploymentInfo.addServlet(servletInfo);
-            //
-            // logger.info("Initialising the Apache CXF framework");
-            // }
-            // catch (ClassNotFoundException ignored)
-            // {}
-
-            deploymentInfo.addInitialHandlerChainWrapper(new HandlerWrapper()
-            {
-              @Override
-              public HttpHandler wrap(HttpHandler wrappedHttpHandler)
-              {
-                return new HttpHandler()
-                {
-                  @Override
-                  public void handleRequest(HttpServerExchange httpServerExchange)
-                      throws Exception
-                  {
-                    SSLSessionInfo sslSessionInfo = httpServerExchange.getConnection()
-                        .getSslSessionInfo();
-
-                    wrappedHttpHandler.handleRequest(httpServerExchange);
-                  }
-                };
-              }
-            });
-
-          }
-        });
-
-    factory.addBuilderCustomizers(new UndertowBuilderCustomizer()
-        {
-          @Override
-          public void customize(Builder builder)
-          {
-            builder.addHttpListener(8081, "0.0.0.0");
-
-            // .setHandler(Handlers.path().addPrefixPath("", new HttpHandler()
-            // {
-            // @Override
-            // public void handleRequest(HttpServerExchange httpServerExchange)
-            // throws Exception
-            // {
-            //
-            //
-            // }
-            // }));
-
-            // HttpHandler httpHandler = Handlers.
-
-            // builder.addHttpListener(8081, "0.0.0.0").setHandler(Handlers.path().addPrefixPath("", new HttpHandler()
-            // {
-            // @Override
-            // public void handleRequest(HttpServerExchange httpServerExchange)
-            // throws Exception
-            // {
-            //
-            //
-            // }
-            // }));
-
-            // InternalWebInterfaceHandler xxx =  null;
-
-            // builder.addHttpsListener();
-
-          }
-
-        });
-
-    factory.addInitializers();
-
-    return factory;
   }
 
   /**
