@@ -32,7 +32,7 @@ public class SampleClient
    * The Sample Service endpoint.
    */
   public static final String SAMPLE_SERVICE_ENDPOINT =
-      "http://localhost:51000/sample/SampleService";
+      "https://localhost:8081/services/SampleService";
 
   /**
    * The path to the classpath resource containing the WSDL for the Sample Service.
@@ -55,7 +55,7 @@ public class SampleClient
       applicationSecurityContext.init("Sample");
 
       ISampleService sampleService =
-          WebServiceClientSecurityHelper.getWSSecurityX509CertificateServiceProxy(
+          WebServiceClientSecurityHelper.getMutualSSLServiceProxy(
           SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL, SAMPLE_SERVICE_ENDPOINT);
 
       System.out.println("sampleService.getVersion() = " + sampleService.getVersion());

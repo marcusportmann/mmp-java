@@ -32,8 +32,6 @@ import java.util.concurrent.ConcurrentMap;
 
 //~--- JDK imports ------------------------------------------------------------
 
-//import guru.mmp.common.service.ws.security.WebServiceClientSecurityHelper;
-
 /**
  * The <code>ServiceRegistry</code> class provides an implementation of a "Service Registry" which
  * creates JAX-WS web service proxies.
@@ -126,9 +124,9 @@ public class ServiceRegistry
             serviceRegistryEntry.getWsdlLocation(), serviceRegistryEntry.getEndpoint());
       }
       else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry
-          .SECURITY_TYPE_CLIENT_SSL)
+          .SECURITY_TYPE_MUTUAL_SSL)
       {
-        return WebServiceClientSecurityHelper.getClientSSLServiceProxy(serviceClass,
+        return WebServiceClientSecurityHelper.getMutualSSLServiceProxy(serviceClass,
             serviceInterface, serviceRegistryEntry.getWsdlLocation(),
             serviceRegistryEntry.getEndpoint());
       }
@@ -146,21 +144,6 @@ public class ServiceRegistry
             serviceInterface, serviceRegistryEntry.getWsdlLocation(),
             serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
             serviceRegistryEntry.getPassword());
-      }
-      else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry
-          .SECURITY_TYPE_WS_SECURITY_USERNAME_TOKEN)
-      {
-        return WebServiceClientSecurityHelper.getWSSecurityUsernameTokenServiceProxy(serviceClass,
-            serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-            serviceRegistryEntry.getEndpoint(), serviceRegistryEntry.getUsername(),
-            serviceRegistryEntry.getPassword());
-      }
-      else if (serviceRegistryEntry.getSecurityType() == ServiceRegistryEntry
-          .SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE)
-      {
-        return WebServiceClientSecurityHelper.getWSSecurityX509CertificateServiceProxy(
-            serviceClass, serviceInterface, serviceRegistryEntry.getWsdlLocation(),
-            serviceRegistryEntry.getEndpoint());
       }
       else
       {
@@ -195,8 +178,8 @@ public class ServiceRegistry
           + "): The specified name is invalid");
     }
 
-    String getServiceRegistryEntrySQL = "SELECT NAME, SECURITY_TYPE, REQUIRES_USER_TOKEN, "
-        + "SUPPORTS_COMPRESSION, ENDPOINT, SERVICE_CLASS, WSDL_LOCATION, USERNAME, PASSWORD FROM "
+    String getServiceRegistryEntrySQL = "SELECT NAME, SECURITY_TYPE, SUPPORTS_COMPRESSION, "
+        + "ENDPOINT, SERVICE_CLASS, WSDL_LOCATION, USERNAME, PASSWORD FROM "
         + "SERVICE_REGISTRY.SERVICE_REGISTRY WHERE NAME=?";
 
     // Store the value in the database
@@ -210,8 +193,8 @@ public class ServiceRegistry
         if (rs.next())
         {
           return new ServiceRegistryEntry(rs.getString(1), rs.getInt(2), rs.getString(3)
-              .equalsIgnoreCase("Y"), rs.getString(4).equalsIgnoreCase("Y"), rs.getString(5),
-              rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
+              .equalsIgnoreCase("Y"), rs.getString(4), rs.getString(5), rs.getString(6),
+              rs.getString(7), rs.getString(8));
         }
         else
         {

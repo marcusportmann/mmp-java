@@ -111,7 +111,7 @@ public class ViewReportServlet extends HttpServlet
 //            if (!viewReportParameters.getReportParameters().containsKey("reportLogo"))
 //            {
 //              byte[] defaultReportLogo = getClasspathResource(
-//                  "guru/mmp/application/web/template/resources/theme/mmp/reportLogo.png");
+//                  "guru/mmp/application/web/template/resources/images/reportLogo.png");
 //
 //              viewReportParameters.getReportParameters().put("reportLogo",
 //                  new ByteArrayInputStream(defaultReportLogo));

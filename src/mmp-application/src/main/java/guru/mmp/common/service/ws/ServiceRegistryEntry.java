@@ -33,36 +33,24 @@ public class ServiceRegistryEntry
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The constant indicating that the web service implements the Client SSL security model.
+   * The constant indicating that the web service implements the Mutual SSL security model.
    */
-  public static final int SECURITY_TYPE_CLIENT_SSL = 3;
+  public static final int SECURITY_TYPE_MUTUAL_SSL = 1;
 
   /**
    * The constant indicating that the web service implements the HTTP authentication security model.
    */
-  public static final int SECURITY_TYPE_DIGEST = 5;
+  public static final int SECURITY_TYPE_DIGEST = 3;
 
   /**
    * The constant indicating that the web service implements the HTTP authentication security model.
    */
-  public static final int SECURITY_TYPE_HTTP_AUTHENTICATION = 4;
+  public static final int SECURITY_TYPE_HTTP_AUTHENTICATION = 2;
 
   /**
    * The constant indicating that the web service does not implement a security model.
    */
   public static final int SECURITY_TYPE_NONE = 0;
-
-  /**
-   * The constant indicating that the web service implements the WS-Security Username Token
-   * security model.
-   */
-  public static final int SECURITY_TYPE_WS_SECURITY_USERNAME_TOKEN = 2;
-
-  /**
-   * The constant indicating that the web service implements the WS-Security X509 certificates
-   * security model.
-   */
-  public static final int SECURITY_TYPE_WS_SECURITY_X509_CERTIFICATE = 1;
 
   /**
    * The endpoint for the web service.
@@ -80,13 +68,7 @@ public class ServiceRegistryEntry
   private String password;
 
   /**
-   * Does the web service require a user security token?
-   */
-  private boolean requiresUserToken;
-
-  /**
-   * The type of security model implemented by the web service i.e. 0 = None, 1 = WS-Security,
-   * 2 = Client SSL, 3 = Username-Password.
+   * The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc.
    */
   private int securityType;
 
@@ -120,21 +102,18 @@ public class ServiceRegistryEntry
    *
    * @param name                the name used to uniquely identify the web service
    * @param securityType        the type of security model implemented by the web service i.e.
-   *                            0 = None, 1 = WS-Security, 2 = Client SSL, 3 = Username-Passord
-   * @param requiresUserToken   <code>true</code> if the web service requires a user security token
-   *                            or <code>false</code> otherwise
+   *                            0 = None, 1 = Mutual SSL, etc
    * @param supportsCompression <code>true</code> if the web service supports compression or
    *                            <code>false</code> otherwise
    * @param endpoint            the endpoint for the web service
    * @param serviceClass        the fully qualified name of the Java web service client class
    * @param wsdlLocation        the location of the WSDL defining the web service on the classpath
    */
-  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
-      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation)
+  public ServiceRegistryEntry(String name, int securityType, boolean supportsCompression,
+      String endpoint, String serviceClass, String wsdlLocation)
   {
     this.name = name;
     this.securityType = securityType;
-    this.requiresUserToken = requiresUserToken;
     this.supportsCompression = supportsCompression;
     this.endpoint = endpoint;
     this.serviceClass = serviceClass;
@@ -146,9 +125,7 @@ public class ServiceRegistryEntry
    *
    * @param name                the name used to uniquely identify the web service
    * @param securityType        the type of security model implemented by the web service i.e.
-   *                            0 = None, 1 = WS-Security, 2 = Client SSL, 3 = Username-Passord
-   * @param requiresUserToken   <code>true</code> if the web service requires a user security token
-   *                            or <code>false</code> otherwise
+   *                            0 = None, 1 = Mutual SSL, etc
    * @param supportsCompression <code>true</code> if the web service supports compression or
    *                            <code>false</code> otherwise
    * @param endpoint            the endpoint for the web service
@@ -159,13 +136,11 @@ public class ServiceRegistryEntry
    * @param password            the password to use when accessing a web service with
    *                            username-password security enabled
    */
-  public ServiceRegistryEntry(String name, int securityType, boolean requiresUserToken,
-      boolean supportsCompression, String endpoint, String serviceClass, String wsdlLocation,
-      String username, String password)
+  public ServiceRegistryEntry(String name, int securityType, boolean supportsCompression,
+      String endpoint, String serviceClass, String wsdlLocation, String username, String password)
   {
     this.name = name;
     this.securityType = securityType;
-    this.requiresUserToken = requiresUserToken;
     this.supportsCompression = supportsCompression;
     this.endpoint = endpoint;
     this.serviceClass = serviceClass;
@@ -207,23 +182,11 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * Returns <code>true</code> if the web service requires a user security token or
-   * <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if the web service requires a user security token or
-   *         <code>false</code> otherwise
-   */
-  public boolean getRequiresSecurityToken()
-  {
-    return requiresUserToken;
-  }
-
-  /**
    * Returns the type of security model implemented by the web service i.e. 0 = None,
-   * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password.
+   * 1 = Mutual SSL, etc.
    *
    * @return the type of security model implemented by the web service i.e. 0 = None,
-   * 1 = WS-Security, 2 = Client SSL, 3 = Username-Password
+   *         1 = Mutual SSL, etc
    */
   public int getSecurityType()
   {
@@ -306,22 +269,11 @@ public class ServiceRegistryEntry
   }
 
   /**
-   * See whether the web service requires a user security token.
-   *
-   * @param requiresSecurityToken <code>true</code> if the web service requires a user security
-   *                              token or <code>false</code> otherwise
-   */
-  public void setRequiresSecurityToken(boolean requiresSecurityToken)
-  {
-    this.requiresUserToken = requiresSecurityToken;
-  }
-
-  /**
-   * Set the type of security model implemented by the web service i.e. 0 = None, 1 = WS-Security,
-   * 2 = Client SSL, 3 = Username-Password.
+   * Set the type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL,
+   * etc.
    *
    * @param securityType the type of security model implemented by the web service i.e. 0 = None,
-   *                     1 = WS-Security, 2 = Client SSL, 3 = Username-Password
+   *                     1 = Mutual SSL, etc
    */
   public void setSecurityType(int securityType)
   {

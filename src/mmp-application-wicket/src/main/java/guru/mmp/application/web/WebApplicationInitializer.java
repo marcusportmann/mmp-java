@@ -21,6 +21,8 @@ package guru.mmp.application.web;
 import guru.mmp.application.Debug;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,6 +42,8 @@ import javax.servlet.*;
 public class WebApplicationInitializer
   implements ServletContextInitializer
 {
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(WebApplicationInitializer.class);
   private static final String WICKET_FILTER_NAME = "wicket-filter";
   private static final String WICKET_APPLICATION_BEAN_PARAMETER = "applicationBean";
 
@@ -86,5 +90,18 @@ public class WebApplicationInitializer
       viewReportServlet.addMapping("/viewReport");
     }
     catch (ClassNotFoundException ignored) {}
+
+    try
+    {
+      Class<? extends Servlet> cxfServletClass = Thread.currentThread().getContextClassLoader()
+          .loadClass("org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
+
+      ServletRegistration cxfServlet = servletContext.addServlet("CXFServlet", (cxfServletClass));
+      cxfServlet.addMapping("/services/*");
+
+      logger.info("Initialising the Apache CXF framework");
+    }
+    catch (ClassNotFoundException ignored) {}
+
   }
 }

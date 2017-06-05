@@ -1019,7 +1019,6 @@ COMMENT ON COLUMN SECURITY.ROLE_TO_GROUP_MAP.GROUP_ID
 CREATE TABLE SERVICE_REGISTRY.SERVICE_REGISTRY (
   NAME                  VARCHAR(4000) NOT NULL,
   SECURITY_TYPE         INTEGER NOT NULL,
-  REQUIRES_USER_TOKEN   CHAR(1) NOT NULL,
 	SUPPORTS_COMPRESSION  CHAR(1) NOT NULL,
 	ENDPOINT              VARCHAR(4000) NOT NULL,
   SERVICE_CLASS         VARCHAR(4000) NOT NULL,
@@ -1034,10 +1033,7 @@ COMMENT ON COLUMN SERVICE_REGISTRY.SERVICE_REGISTRY.NAME
   IS 'The name used to uniquely identify the web service';
 
 COMMENT ON COLUMN SERVICE_REGISTRY.SERVICE_REGISTRY.SECURITY_TYPE
-  IS 'The type of security model implemented by the web service i.e. 0 = None, 1 = WS-Security X509 Certificates, 2 = WS-Security Username Token, 3 = Client SSL, 4 = HTTP Authentication';
-
-COMMENT ON COLUMN SERVICE_REGISTRY.SERVICE_REGISTRY.REQUIRES_USER_TOKEN
-  IS 'Does the web service require a user security token';
+  IS 'The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc';
 
 COMMENT ON COLUMN SERVICE_REGISTRY.SERVICE_REGISTRY.SUPPORTS_COMPRESSION
   IS 'Does the web service support compression';

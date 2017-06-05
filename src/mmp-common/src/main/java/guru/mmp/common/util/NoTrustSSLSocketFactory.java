@@ -81,7 +81,7 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory
           });
 
       /*
-       * Retrieve the socket factory from the SSL context that will be used to create the ClientSSL
+       * Retrieve the socket factory from the SSL context that will be used to create the MutualSSL
        * connections.
        */
       socketFactory = sslContext.getSocketFactory();

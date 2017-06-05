@@ -121,7 +121,7 @@ public class ErrorImageResourceStream extends ResourceStream
     if (errorImageData == null)
     {
       errorImageData = getClasspathResource(
-          "guru/mmp/application/web/template/resources/theme/mmp/error.png");
+          "guru/mmp/application/web/template/resources/images/error.png");
     }
 
     return errorImageData;

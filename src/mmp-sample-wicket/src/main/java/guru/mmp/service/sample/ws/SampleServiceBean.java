@@ -18,7 +18,6 @@
 //
 ////~--- non-JDK imports --------------------------------------------------------
 //
-//import guru.mmp.common.service.ws.security.WebServiceSecurityContext;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //
@@ -36,7 +35,7 @@
 // */
 //@HandlerChain(file = "/META-INF/SampleServiceSecurity.xml")
 //@WebService(name = "ISampleService", portName = "SampleService", serviceName = "SampleService",
-//    targetNamespace = "http://ws.sample.services.mmp.guru")
+//    targetNamespace = "http://ws.sample.services.discovery.bank")
 //@SuppressWarnings("unused")
 //public class SampleServiceBean
 //{
@@ -49,12 +48,12 @@
 //   * @return the version for the web service
 //   */
 //  @WebMethod(operationName = "GetVersion",
-//      action = "http://ws.sample.service.mmp.guru/ISampleService/GetVersion")
-//  @WebResult(name = "out", targetNamespace = "http://ws.sample.service.mmp.guru")
-//  @RequestWrapper(localName = "GetVersion", targetNamespace = "http://ws.sample.service.mmp.guru",
+//      action = "http://ws.sample.service.discovery.bank/ISampleService/GetVersion")
+//  @WebResult(name = "out", targetNamespace = "http://ws.sample.service.discovery.bank")
+//  @RequestWrapper(localName = "GetVersion", targetNamespace = "http://ws.sample.service.discovery.bank",
 //      className = "guru.mmp.service.sample.ws.GetVersion")
 //  @ResponseWrapper(localName = "GetVersionResponse",
-//      targetNamespace = "http://ws.sample.service.mmp.guru",
+//      targetNamespace = "http://ws.sample.service.discovery.bank",
 //      className = "guru.mmp.service.sample.ws.GetVersionResponse")
 //  public String getVersion()
 //  {

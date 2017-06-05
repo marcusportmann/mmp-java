@@ -18,7 +18,6 @@ package guru.mmp.application.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import guru.mmp.common.service.ws.security.WebServiceClientSecurityHandlerResolver;
 import guru.mmp.common.util.DateUtil;
 import guru.mmp.common.xml.DtdJarResolver;
 import guru.mmp.common.xml.XmlParserErrorHandler;
@@ -816,12 +815,6 @@ public class CodesService
       guru.mmp.service.codes.ws.CodesService service = new guru.mmp.service.codes.ws.CodesService(
           wsdlLocation, new QName("http://ws.codes.service.mmp.guru", "CodesService"));
 
-      // Setup the JAX-WS handlers that implement the MMP Web Service Security model
-      if (codeCategory.getIsEndPointSecure())
-      {
-        service.setHandlerResolver(new WebServiceClientSecurityHandlerResolver());
-      }
-
       // Retrieve the web service proxy
       guru.mmp.service.codes.ws.ICodesService codesService = service.getCodesService();
 
@@ -865,12 +858,6 @@ public class CodesService
 
       guru.mmp.service.codes.ws.CodesService service = new guru.mmp.service.codes.ws.CodesService(
           wsdlLocation, new QName("http://ws.codes.service.mmp.guru", "CodesService"));
-
-      // Setup the JAX-WS handlers that implement the MMP Web Service Security model
-      if (codeCategory.getIsEndPointSecure())
-      {
-        service.setHandlerResolver(new WebServiceClientSecurityHandlerResolver());
-      }
 
       // Retrieve the web service proxy
       guru.mmp.service.codes.ws.ICodesService codesService = service.getCodesService();

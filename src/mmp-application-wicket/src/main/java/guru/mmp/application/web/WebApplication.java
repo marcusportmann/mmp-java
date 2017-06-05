@@ -30,6 +30,10 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
@@ -51,6 +55,10 @@ import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
+import javax.xml.ws.Endpoint;
+import javax.xml.ws.handler.Handler;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -210,6 +218,122 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   public TaskScheduler taskScheduler()
   {
     return new ConcurrentTaskScheduler();
+  }
+
+  /**
+   * Returns the web service bean factory post processor.
+   *
+   * @return web service bean factory post processor
+   */
+  @Bean
+  protected static BeanFactoryPostProcessor webServiceBeanFactoryPostProcessor()
+  {
+    return new BeanFactoryPostProcessor()
+    {
+      @Override
+      public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+        throws BeansException
+      {
+        try
+        {
+          Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
+              "org.apache.cxf.bus.spring.SpringBus");
+
+          Object springBus = springBusClass.newInstance();
+
+          beanFactory.registerSingleton("cxf", springBus);
+        }
+        catch (ClassNotFoundException ignored) {}
+        catch (Throwable e)
+        {
+          throw new FatalBeanException(
+              "Failed to initialise the org.apache.cxf.bus.spring.SpringBus bean", e);
+        }
+
+      }
+    };
+  }
+
+  /**
+   * Create the web service endpoint.
+   * <p/>
+   * Requires the Apache CXF framework to have been initialised by adding the
+   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b> and <b>org.apache.cxf:cxf-rt-transports-http</b>
+   * Maven dependencies to the project.
+   *
+   * @param name           the web service name
+   * @param implementation the web service implementation
+   * @param pathToWsdl     the path to the web service WSDL
+   *
+   * @return the web service endpoint
+   */
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation, String pathToWsdl)
+  {
+    return createWebServiceEndpoint(name, implementation, pathToWsdl, null);
+  }
+
+  /**
+   * Create the web service endpoint.
+   * <p/>
+   * Requires the Apache CXF framework to have been initialised by adding the
+   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b> and <b>org.apache.cxf:cxf-rt-transports-http</b>
+   * Maven dependencies to the project.
+   *
+   * @param name           the web service name
+   * @param implementation the web service implementation
+   * @param pathToWsdl     the path to the web service WSDL
+   * @param handlers       the JAX-WS web service handlers for the web service
+   *
+   * @return the web service endpoint
+   */
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation,
+      String pathToWsdl, List<Handler> handlers)
+  {
+    try
+    {
+      Class<? extends Endpoint> endpointImplClass = Thread.currentThread().getContextClassLoader()
+          .loadClass("org.apache.cxf.jaxws.EndpointImpl").asSubclass(Endpoint.class);
+
+      Class<?> busClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.apache.cxf.Bus");
+
+      Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.apache.cxf.bus.spring.SpringBus");
+
+      Object springBus = applicationContext.getBean(springBusClass);
+
+      Constructor<? extends Endpoint> constructor = endpointImplClass.getConstructor(busClass,
+          Object.class);
+
+      Endpoint endpoint = constructor.newInstance(springBus, implementation);
+
+      Method publishMethod = endpointImplClass.getMethod("publish", String.class);
+
+      publishMethod.invoke(endpoint, "/" + name);
+
+      Method setWsdlLocationMethod = endpointImplClass.getMethod("setWsdlLocation", String.class);
+
+      setWsdlLocationMethod.invoke(endpoint, pathToWsdl);
+
+      if (handlers != null)
+      {
+        Method setHandlersMethod = endpointImplClass.getMethod("setHandlers", List.class);
+
+        setHandlersMethod.invoke(endpoint, handlers);
+      }
+
+      return endpoint;
+    }
+    catch (ClassNotFoundException e)
+    {
+      throw new WebApplicationException("Failed to create the endpoint for the service (" + name
+          + "): The Apache CXF framework has not been initialised", e);
+    }
+    catch (Throwable e)
+    {
+      throw new WebApplicationException("Failed to create the endpoint for the service (" + name
+          + ")", e);
+    }
   }
 
   /**

@@ -20,6 +20,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <atomikos.version>4.0.4</atomikos.version>
     <cglib.version>3.2.5</cglib.version>
+    <cxf.version>3.1.11</cxf.version>
     <groovy.version>2.4.11</groovy.version>
     <h2.version>1.4.195</h2.version>
     <hibernate.version>5.2.10.Final</hibernate.version>
@@ -36,6 +37,16 @@
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
         <version>${cglib.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-frontend-jaxws</artifactId>
+        <version>${cxf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-transports-http</artifactId>
+        <version>${cxf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.wicket</groupId>

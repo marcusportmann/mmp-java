@@ -27,31 +27,20 @@ public enum WebServiceSecurityType
   NONE(0, "None"),
 
   /**
-   * The value indicating that the web service implements the WS-Security X509 certificates
-   * security model.
+   * The value indicating that the web service implements the Mutual SSL security model.
    */
-  WS_SECURITY_X509_CERTIFICATE(1, "WS-Security X509 Certificate"),
-
-  /**
-   * The value indicating that the web service implements the Client SSL security model.
-   */
-  WS_SECURITY_USERNAME_TOKEN(2, "WS-Security Username Token"),
-
-  /**
-   * The value indicating that the web service implements the Client SSL security model.
-   */
-  CLIENT_SSL(3, "Client SSL"),
+  MUTUAL_SSL(1, "Mutual SSL"),
 
   /**
    * The value indicating that the web service implements the HTTP authentication security model.
    */
-  HTTP_AUTHENTICATION(4, "HTTP Authentication"),
+  HTTP_AUTHENTICATION(2, "HTTP Authentication"),
 
   /**
    * The value indicating that the web service implements the digest authentication security
    * model.
    */
-  DIGEST_AUTHENTICATION(5, "Digest Authentication");
+  DIGEST_AUTHENTICATION(3, "Digest Authentication");
 
   private int code;
   private String name;
@@ -77,15 +66,9 @@ public enum WebServiceSecurityType
         return WebServiceSecurityType.NONE;
 
       case 1:
-        return WebServiceSecurityType.WS_SECURITY_X509_CERTIFICATE;
+        return WebServiceSecurityType.MUTUAL_SSL;
 
       case 2:
-        return WebServiceSecurityType.WS_SECURITY_USERNAME_TOKEN;
-
-      case 3:
-        return WebServiceSecurityType.CLIENT_SSL;
-
-      case 4:
         return WebServiceSecurityType.HTTP_AUTHENTICATION;
 
       default:
