@@ -102,6 +102,5 @@ public class WebApplicationInitializer
       logger.info("Initialising the Apache CXF framework");
     }
     catch (ClassNotFoundException ignored) {}
-
   }
 }

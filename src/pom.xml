@@ -27,6 +27,7 @@
     <jasperreports.version>6.4.0</jasperreports.version>
     <junit.version>4.12</junit.version>
     <slf4j.version>1.7.25</slf4j.version>
+    <sqlserver.version>4.0</sqlserver.version>
     <spring-web.version>4.3.8.RELEASE</spring-web.version>
     <wicket.version>7.7.0</wicket.version>
   </properties>
@@ -37,6 +38,11 @@
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
         <version>${cglib.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>sqljdbc4</artifactId>
+        <version>${sqlserver.version}}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>

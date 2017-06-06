@@ -24,6 +24,7 @@ import guru.mmp.common.persistence.DAOUtil;
 import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
@@ -58,10 +59,11 @@ import java.util.concurrent.Executor;
  *
  * @author Marcus Portmann
  */
+@ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true)
 @EnableAsync
+@EnableConfigurationProperties(ApplicationConfiguration.class)
 @EnableScheduling
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "guru.mmp.application" }, lazyInit = true)
 @SpringBootApplication
 @SuppressWarnings("unused")
 public abstract class Application

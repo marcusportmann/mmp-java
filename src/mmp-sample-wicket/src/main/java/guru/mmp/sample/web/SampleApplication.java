@@ -35,16 +35,15 @@ import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 import java.util.List;
 import java.util.UUID;
@@ -67,6 +66,8 @@ public class SampleApplication extends TemplateWebApplication
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
+  @Autowired
+  private SampleConfiguration sampleConfiguration;
 
   /**
    * Constructs a new <code>TemplateWebApplication</code>.
@@ -102,6 +103,8 @@ public class SampleApplication extends TemplateWebApplication
   public String getDisplayName()
   {
     return "Sample";
+
+
   }
 
   /**
@@ -122,19 +125,6 @@ public class SampleApplication extends TemplateWebApplication
   public Class<? extends Page> getSecureHomePage()
   {
     return DashboardPage.class;
-  }
-
-  /**
-   * Returns the data source that can be used to interact with the application database.
-   *
-   * @return the data source that can be used to interact with the in-memory database
-   */
-  @Override
-  @Bean(name = "applicationDataSource")
-  @DependsOn({ "transactionManager" })
-  protected DataSource dataSource()
-  {
-    return inMemoryDataSource();
   }
 
   /**
