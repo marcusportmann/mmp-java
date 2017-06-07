@@ -18,6 +18,8 @@ package guru.mmp.sample.web;
 
 import guru.mmp.application.ApplicationConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Component;
  * @author Marcus Portmann
  */
 @Component
+@Primary
 public class SampleConfiguration extends ApplicationConfiguration
 {
   private String key;

@@ -767,7 +767,7 @@ public class SchedulerDAO
   private Job getJob(ResultSet rs)
     throws SQLException
   {
-    return new Job((UUID) rs.getObject(1), rs.getString(2), rs.getString(3), rs.getString(4),
+    return new Job(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getString(3), rs.getString(4),
         rs.getBoolean(5), Job.Status.fromCode(rs.getInt(6)), rs.getInt(7), rs.getString(8),
         rs.getTimestamp(9), rs.getTimestamp(10), rs.getTimestamp(11));
   }

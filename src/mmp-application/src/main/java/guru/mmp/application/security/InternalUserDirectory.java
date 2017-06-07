@@ -233,9 +233,9 @@ public class InternalUserDirectory extends UserDirectoryBase
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityException
   {
-    String changeInternalUserPasswordSQL = "UPDATE SECURITY.INTERNAL_USERS IU "
+    String changeInternalUserPasswordSQL = "UPDATE SECURITY.INTERNAL_USERS "
         + "SET PASSWORD=?, PASSWORD_ATTEMPTS=?, PASSWORD_EXPIRY=? "
-        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+        + "WHERE USER_DIRECTORY_ID=? AND ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
@@ -381,9 +381,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityException
   {
-    String changeInternalUserPasswordSQL = "UPDATE SECURITY.INTERNAL_USERS IU "
+    String changeInternalUserPasswordSQL = "UPDATE SECURITY.INTERNAL_USERS "
         + "SET PASSWORD=?, PASSWORD_ATTEMPTS=?, PASSWORD_EXPIRY=? "
-        + "WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+        + "WHERE USER_DIRECTORY_ID=? AND ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
@@ -633,8 +633,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityException
   {
-    String deleteInternalGroupSQL = "DELETE FROM SECURITY.INTERNAL_GROUPS IG "
-        + "WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    String deleteInternalGroupSQL = "DELETE FROM SECURITY.INTERNAL_GROUPS "
+        + "WHERE USER_DIRECTORY_ID=? AND ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteInternalGroupSQL))
@@ -687,7 +687,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws UserNotFoundException, SecurityException
   {
     String deleteInternalUserSQL =
-        "DELETE FROM SECURITY.INTERNAL_USERS IU WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+        "DELETE FROM SECURITY.INTERNAL_USERS WHERE USER_DIRECTORY_ID=? AND ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteInternalUserSQL))
@@ -890,7 +890,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           Group group = new Group(rs.getString(2));
 
-          group.setId((UUID) rs.getObject(1));
+          group.setId(UUID.fromString(rs.getString(1)));
           group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(StringUtil.notNull(rs.getString(3)));
 
@@ -974,7 +974,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           Group group = new Group(rs.getString(2));
 
-          group.setId((UUID) rs.getObject(1));
+          group.setId(UUID.fromString(rs.getString(1)));
           group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(StringUtil.notNull(rs.getString(3)));
           list.add(group);
@@ -1318,8 +1318,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws UserNotFoundException, GroupNotFoundException, SecurityException
   {
     String removeInternalUserFromInternalGroupSQL =
-        "DELETE FROM SECURITY.INTERNAL_USER_TO_INTERNAL_GROUP_MAP IUTGM "
-        + "WHERE IUTGM.INTERNAL_USER_ID=? AND IUTGM.INTERNAL_GROUP_ID=?";
+        "DELETE FROM SECURITY.INTERNAL_USER_TO_INTERNAL_GROUP_MAP "
+        + "WHERE INTERNAL_USER_ID=? AND INTERNAL_GROUP_ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
@@ -1389,8 +1389,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void updateGroup(Group group)
     throws GroupNotFoundException, SecurityException
   {
-    String updateInternalGroupSQL = "UPDATE SECURITY.INTERNAL_GROUPS IG "
-        + "SET DESCRIPTION=? WHERE IG.USER_DIRECTORY_ID=? AND IG.ID=?";
+    String updateInternalGroupSQL = "UPDATE SECURITY.INTERNAL_GROUPS "
+        + "SET DESCRIPTION=? WHERE USER_DIRECTORY_ID=? AND ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateInternalGroupSQL))
@@ -1747,7 +1747,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     User user = new User();
 
-    user.setId((UUID) rs.getObject(1));
+    user.setId(UUID.fromString(rs.getString(1)));
     user.setUsername(rs.getString(2));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setPassword(StringUtil.notNull(rs.getString(3)));
@@ -1870,7 +1870,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         if (rs.next())
         {
-          return (UUID) rs.getObject(1);
+          return UUID.fromString(rs.getString(1));
         }
         else
         {
@@ -1917,7 +1917,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           Group group = new Group(rs.getString(2));
 
-          group.setId((UUID) rs.getObject(1));
+          group.setId(UUID.fromString(rs.getString(1)));
           group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(rs.getString(3));
           list.add(group);
@@ -1953,7 +1953,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         if (rs.next())
         {
-          return (UUID) rs.getObject(1);
+          return UUID.fromString(rs.getString(1));
         }
         else
         {

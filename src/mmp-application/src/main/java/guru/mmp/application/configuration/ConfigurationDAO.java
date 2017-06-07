@@ -159,11 +159,11 @@ public class ConfigurationDAO
   public List<ConfigurationValue> getFilteredConfigurationValues(String filter)
     throws DAOException
   {
-    String getConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM "
-        + "CONFIGURATION.CONFIGURATION C ORDER BY C.KEY";
+    String getConfigurationValuesSQL = "SELECT C.\"KEY\", C.VALUE, C.DESCRIPTION FROM "
+        + "CONFIGURATION.CONFIGURATION C ORDER BY C.\"KEY\"";
 
-    String getFilteredConfigurationValuesSQL = "SELECT C.KEY, C.VALUE, C.DESCRIPTION FROM "
-        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?) ORDER BY C.KEY";
+    String getFilteredConfigurationValuesSQL = "SELECT C.\"KEY\", C.VALUE, C.DESCRIPTION FROM "
+        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.\"KEY\") LIKE ?) ORDER BY C.\"KEY\"";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
@@ -269,11 +269,11 @@ public class ConfigurationDAO
   public int getNumberOfFilteredConfigurationValues(String filter)
     throws DAOException
   {
-    String getNumberOfConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM "
+    String getNumberOfConfigurationEntriesSQL = "SELECT COUNT(C.\"KEY\") FROM "
         + "CONFIGURATION.CONFIGURATION C";
 
-    String getNumberOfFilteredConfigurationEntriesSQL = "SELECT COUNT(C.KEY) FROM "
-        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
+    String getNumberOfFilteredConfigurationEntriesSQL = "SELECT COUNT(C.\"KEY\") FROM "
+        + "CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.\"KEY\") LIKE ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
@@ -319,7 +319,7 @@ public class ConfigurationDAO
     throws DAOException
   {
     String getValueSQL =
-        "SELECT C.VALUE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) = ?)";
+        "SELECT C.VALUE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.\"KEY\") = ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getValueSQL))
@@ -376,7 +376,7 @@ public class ConfigurationDAO
   public void removeValue(String key)
     throws DAOException
   {
-    String removeValueSQL = "DELETE FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
+    String removeValueSQL = "DELETE FROM CONFIGURATION.CONFIGURATION WHERE (UPPER(\"KEY\") LIKE ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(removeValueSQL))
@@ -407,8 +407,8 @@ public class ConfigurationDAO
   public void setValue(String key, Object value, String description)
     throws DAOException
   {
-    String updateValueSQL = "UPDATE CONFIGURATION.CONFIGURATION C SET VALUE = ?, DESCRIPTION = ? "
-        + "WHERE (UPPER(C.KEY) = ?)";
+    String updateValueSQL = "UPDATE CONFIGURATION.CONFIGURATION SET VALUE = ?, DESCRIPTION = ? "
+        + "WHERE (UPPER(\"KEY\") = ?)";
 
     try (Connection connection = dataSource.getConnection())
     {
@@ -458,7 +458,7 @@ public class ConfigurationDAO
   private void createValue(Connection connection, String key, Object value, String description)
     throws SQLException, DAOException
   {
-    String createValueSQL = "INSERT INTO CONFIGURATION.CONFIGURATION (KEY, VALUE, DESCRIPTION) "
+    String createValueSQL = "INSERT INTO CONFIGURATION.CONFIGURATION (\"KEY\", VALUE, DESCRIPTION) "
         + "VALUES (?, ?, ?)";
 
     String stringValue;
@@ -491,7 +491,7 @@ public class ConfigurationDAO
     throws SQLException
   {
     String keyExistsSQL =
-        "SELECT COUNT(C.KEY) FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.KEY) LIKE ?)";
+        "SELECT COUNT(C.\"KEY\") FROM CONFIGURATION.CONFIGURATION C WHERE (UPPER(C.\"KEY\") LIKE ?)";
 
     try (PreparedStatement statement = connection.prepareStatement(keyExistsSQL))
     {

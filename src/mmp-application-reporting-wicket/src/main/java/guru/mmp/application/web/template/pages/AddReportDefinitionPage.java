@@ -32,7 +32,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Inject;
 import java.io.BufferedInputStream;
@@ -115,8 +114,8 @@ class AddReportDefinitionPage extends TemplateWebPage
           catch (Throwable e)
           {
             logger.error("Failed to add the report definition: " + e.getMessage(), e);
-            error("Your request could not be processed at this time.");
-            error("Please contact your administrator.");
+
+            AddReportDefinitionPage.this.error("Failed to add the report definition");
           }
           finally
           {

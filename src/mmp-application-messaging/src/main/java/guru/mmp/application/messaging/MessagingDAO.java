@@ -1307,9 +1307,9 @@ public class MessagingDAO
   {
     byte[] data = rs.getBytes(10);
 
-    return new ErrorReport((UUID) rs.getObject(1), (UUID) rs.getObject(2), rs.getInt(3),
+    return new ErrorReport(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(2)), rs.getInt(3),
         rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7), rs.getString(8),
-        (UUID) rs.getObject(9),
+        UUID.fromString(rs.getString(9)),
         (data == null)
         ? new byte[0]
         : data);
@@ -1325,15 +1325,15 @@ public class MessagingDAO
       applicationName = "Unknown";
     }
 
-    return new ErrorReportSummary((UUID) rs.getObject(1), (UUID) rs.getObject(2), applicationName,
-        rs.getInt(4), rs.getTimestamp(5), rs.getString(6), (UUID) rs.getObject(7));
+    return new ErrorReportSummary(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(2)), applicationName,
+        rs.getInt(4), rs.getTimestamp(5), rs.getString(6), UUID.fromString(rs.getString(7)));
   }
 
   private Message buildMessageFromResultSet(ResultSet rs)
     throws SQLException
   {
-    return new Message((UUID) rs.getObject(1), rs.getString(2), (UUID) rs.getObject(3),
-        (UUID) rs.getObject(4), (UUID) rs.getObject(5), Priority.fromCode(rs.getInt(6)),
+    return new Message(UUID.fromString(rs.getString(1)), rs.getString(2), UUID.fromString(rs.getString(3)),
+        UUID.fromString(rs.getString(4)), UUID.fromString(rs.getString(5)), Priority.fromCode(rs.getInt(6)),
         Status.fromCode(rs.getInt(7)), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),
         rs.getInt(11), rs.getInt(12), rs.getInt(13), rs.getString(14), rs.getTimestamp(15),
         rs.getBytes(16), "", "");
@@ -1342,10 +1342,10 @@ public class MessagingDAO
   private MessagePart buildMessagePartFromResultSet(ResultSet rs)
     throws SQLException
   {
-    return new MessagePart((UUID) rs.getObject(1), rs.getInt(2), rs.getInt(3), rs.getInt(4),
+    return new MessagePart(UUID.fromString(rs.getString(1)), rs.getInt(2), rs.getInt(3), rs.getInt(4),
         rs.getInt(5), MessagePart.Status.fromCode(rs.getInt(6)), rs.getTimestamp(7),
-        rs.getTimestamp(8), (UUID) rs.getObject(9), rs.getString(10), (UUID) rs.getObject(11),
-        (UUID) rs.getObject(12), (UUID) rs.getObject(13), Priority.fromCode(rs.getInt(14)),
+        rs.getTimestamp(8), UUID.fromString(rs.getString(9)), rs.getString(10), UUID.fromString(rs.getString(11)),
+        UUID.fromString(rs.getString(12)), UUID.fromString(rs.getString(13)), Priority.fromCode(rs.getInt(14)),
         rs.getTimestamp(15), rs.getString(16), rs.getString(17), rs.getString(18), rs.getString(
         19), rs.getBytes(20));
   }

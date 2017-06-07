@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
-@Component
 @ConfigurationProperties("application")
 @PropertySource("classpath:application.yml")
 public class ApplicationConfiguration

@@ -755,7 +755,7 @@ public class SecurityService
       throw new InvalidArgumentException("id");
     }
 
-    String deleteOrganisationSQL = "DELETE FROM SECURITY.ORGANISATIONS O WHERE O.ID=?";
+    String deleteOrganisationSQL = "DELETE FROM SECURITY.ORGANISATIONS WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteOrganisationSQL))
@@ -1535,7 +1535,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          list.add((UUID) rs.getObject(1));
+          list.add(UUID.fromString(rs.getString(1)));
         }
 
         return list;
@@ -1852,7 +1852,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          list.add(new UserDirectoryType((UUID) rs.getObject(1), rs.getString(2), rs.getString(3),
+          list.add(new UserDirectoryType(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getString(3),
               rs.getString(4)));
         }
 
@@ -2200,7 +2200,7 @@ public class SecurityService
     }
 
     String updateOrganisationSQL =
-        "UPDATE SECURITY.ORGANISATIONS AS O SET NAME=?, STATUS=? WHERE O.ID=?";
+        "UPDATE SECURITY.ORGANISATIONS SET NAME=?, STATUS=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateOrganisationSQL))
@@ -2319,7 +2319,7 @@ public class SecurityService
   {
     Function function = new Function();
 
-    function.setId((UUID) rs.getObject(1));
+    function.setId(UUID.fromString(rs.getString(1)));
     function.setCode(rs.getString(2));
     function.setName(rs.getString(3));
     function.setDescription(StringUtil.notNull(rs.getString(4)));
@@ -2340,7 +2340,7 @@ public class SecurityService
     throws SQLException
   {
     Organisation organisation = new Organisation();
-    organisation.setId((UUID) rs.getObject(1));
+    organisation.setId(UUID.fromString(rs.getString(1)));
     organisation.setName(rs.getString(2));
     organisation.setStatus(OrganisationStatus.fromCode(rs.getInt(3)));
 
@@ -2360,9 +2360,9 @@ public class SecurityService
     throws SQLException, SecurityException
   {
     UserDirectory userDirectory = new UserDirectory();
-    userDirectory.setId((UUID) rs.getObject(1));
-    userDirectory.setTypeId((UUID) rs.getObject(2));
-    userDirectory.setType(userDirectoryTypes.get(rs.getObject(2)));
+    userDirectory.setId(UUID.fromString(rs.getString(1)));
+    userDirectory.setTypeId(UUID.fromString(rs.getString(2)));
+    userDirectory.setType(userDirectoryTypes.get(UUID.fromString(rs.getString(2))));
     userDirectory.setName(rs.getString(3));
     userDirectory.setConfiguration(rs.getString(4));
 
@@ -2392,7 +2392,7 @@ public class SecurityService
       {
         if (rs.next())
         {
-          return (UUID) rs.getObject(1);
+          return UUID.fromString(rs.getString(1));
         }
         else
         {
@@ -2428,7 +2428,7 @@ public class SecurityService
       {
         if (rs.next())
         {
-          return (UUID) rs.getObject(1);
+          return UUID.fromString(rs.getString(1));
         }
         else
         {

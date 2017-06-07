@@ -33,7 +33,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Inject;
 import java.io.BufferedInputStream;
@@ -117,8 +116,8 @@ public class UpdateReportDefinitionPage extends TemplateWebPage
           catch (Throwable e)
           {
             logger.error("Failed to update the report definition: " + e.getMessage(), e);
-            error("Your request could not be processed at this time.");
-            error("Please contact your administrator.");
+
+            UpdateReportDefinitionPage.this.error("Failed to update the report definition");
           }
           finally
           {

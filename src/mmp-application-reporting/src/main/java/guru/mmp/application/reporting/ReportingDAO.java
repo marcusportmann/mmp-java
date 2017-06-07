@@ -101,7 +101,7 @@ public class ReportingDAO
   public void deleteReportDefinition(UUID id)
     throws DAOException
   {
-    String deleteReportDefinitionSQL = "DELETE FROM REPORTING.REPORT_DEFINITIONS RD WHERE RD.ID=?";
+    String deleteReportDefinitionSQL = "DELETE FROM REPORTING.REPORT_DEFINITIONS WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteReportDefinitionSQL))
@@ -363,7 +363,7 @@ public class ReportingDAO
     throws DAOException
   {
     String updateReportDefinitionSQL =
-        "UPDATE REPORTING.REPORT_DEFINITIONS RD SET NAME=?, TEMPLATE=? WHERE RD.ID=?";
+        "UPDATE REPORTING.REPORT_DEFINITIONS SET NAME=?, TEMPLATE=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateReportDefinitionSQL))
@@ -392,12 +392,12 @@ public class ReportingDAO
   private ReportDefinition getReportDefinition(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinition((UUID) rs.getObject(1), rs.getString(2), rs.getBytes(3));
+    return new ReportDefinition(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getBytes(3));
   }
 
   private ReportDefinitionSummary getReportDefinitionSummary(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinitionSummary((UUID) rs.getObject(1), rs.getString(2));
+    return new ReportDefinitionSummary(UUID.fromString(rs.getString(1)), rs.getString(2));
   }
 }

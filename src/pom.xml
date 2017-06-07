@@ -26,8 +26,8 @@
     <hibernate.version>5.2.10.Final</hibernate.version>
     <jasperreports.version>6.4.0</jasperreports.version>
     <junit.version>4.12</junit.version>
+    <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
     <slf4j.version>1.7.25</slf4j.version>
-    <sqlserver.version>4.0</sqlserver.version>
     <spring-web.version>4.3.8.RELEASE</spring-web.version>
     <wicket.version>7.7.0</wicket.version>
   </properties>
@@ -41,8 +41,8 @@
       </dependency>
       <dependency>
         <groupId>com.microsoft.sqlserver</groupId>
-        <artifactId>sqljdbc4</artifactId>
-        <version>${sqlserver.version}}</version>
+        <artifactId>mssql-jdbc</artifactId>
+        <version>${mssql-jdbc.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>

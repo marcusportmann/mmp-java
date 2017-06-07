@@ -566,6 +566,10 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
 
                 break;
 
+              case "Microsoft SQL Server":
+
+                applicationDatabaseVendor = Database.SQL_SERVER;
+
               default:
 
                 logger.info("The default database tables will not be populated for the database type ("

@@ -121,8 +121,8 @@ abstract class UserDirectoryBase
   UUID deleteGroup(Connection connection, String groupName)
     throws SecurityException
   {
-    String deleteGroupSQL = "DELETE FROM SECURITY.GROUPS G WHERE G.USER_DIRECTORY_ID=? "
-        + "AND UPPER(G.GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
+    String deleteGroupSQL = "DELETE FROM SECURITY.GROUPS WHERE USER_DIRECTORY_ID=? "
+        + "AND UPPER(GROUPNAME)=UPPER(CAST(? AS VARCHAR(100)))";
 
     try (PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
     {
@@ -252,7 +252,7 @@ abstract class UserDirectoryBase
       {
         if (rs.next())
         {
-          return (UUID) rs.getObject(1);
+          return UUID.fromString(rs.getString(1));
         }
         else
         {

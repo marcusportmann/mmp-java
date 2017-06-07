@@ -361,7 +361,7 @@ public class CodesDAO
   public void deleteCode(UUID codeCategoryId, String id)
     throws DAOException
   {
-    String deleteCodeSQL = "DELETE FROM CODES.CODES C WHERE C.CATEGORY_ID=? AND C.ID=?";
+    String deleteCodeSQL = "DELETE FROM CODES.CODES WHERE CATEGORY_ID=? AND ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCodeSQL))
@@ -394,7 +394,7 @@ public class CodesDAO
   public void deleteCodeCategory(UUID id)
     throws DAOException
   {
-    String deleteCodeCategorySQL = "DELETE FROM CODES.CODE_CATEGORIES CC WHERE CC.ID=?";
+    String deleteCodeCategorySQL = "DELETE FROM CODES.CODE_CATEGORIES WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCodeCategorySQL))
@@ -779,7 +779,7 @@ public class CodesDAO
   public Code updateCode(Code code)
     throws DAOException
   {
-    String updateCodeSQL = "UPDATE CODES.CODES C SET NAME=?, VALUE=? WHERE C.ID=?";
+    String updateCodeSQL = "UPDATE CODES.CODES SET NAME=?, VALUE=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeSQL))
@@ -816,9 +816,9 @@ public class CodesDAO
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws DAOException
   {
-    String updateCodeCategorySQL = "UPDATE CODES.CODE_CATEGORIES CC SET CATEGORY_TYPE=?, NAME=?, "
+    String updateCodeCategorySQL = "UPDATE CODES.CODE_CATEGORIES SET CATEGORY_TYPE=?, NAME=?, "
         + "CODE_DATA=?, ENDPOINT=?, IS_ENDPOINT_SECURE=?, IS_CACHEABLE=?, CACHE_EXPIRY=?, UPDATED=? "
-        + "WHERE CC.ID=?";
+        + "WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeCategorySQL))
@@ -868,7 +868,7 @@ public class CodesDAO
   private CachedCodeCategory getCachedCodeCategory(ResultSet rs)
     throws SQLException, UnsupportedEncodingException
   {
-    return new CachedCodeCategory((UUID) rs.getObject(1),
+    return new CachedCodeCategory(UUID.fromString(rs.getString(1)),
         (rs.getBytes(2) != null)
         ? new String(rs.getBytes(2), "UTF-8")
         : null, rs.getTimestamp(3), rs.getTimestamp(4));
@@ -907,7 +907,7 @@ public class CodesDAO
   private Code getCode(ResultSet rs)
     throws SQLException
   {
-    return new Code(rs.getString(1), (UUID) rs.getObject(2), rs.getString(3), rs.getString(4));
+    return new Code(rs.getString(1), UUID.fromString(rs.getString(2)), rs.getString(3), rs.getString(4));
   }
 
   private CodeCategory getCodeCategory(ResultSet rs)
@@ -917,7 +917,7 @@ public class CodesDAO
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
-    return new CodeCategory((UUID) rs.getObject(1), CodeCategoryType.fromCode(rs.getInt(2)),
+    return new CodeCategory(UUID.fromString(rs.getString(1)), CodeCategoryType.fromCode(rs.getInt(2)),
         rs.getString(3),
         (rs.getBytes(4) != null)
         ? new String(rs.getBytes(4), "UTF-8")
@@ -975,7 +975,7 @@ public class CodesDAO
 
     boolean cacheExpiryIsNull = rs.wasNull();
 
-    return new CodeCategory((UUID) rs.getObject(1), CodeCategoryType.fromCode(rs.getInt(2)),
+    return new CodeCategory(UUID.fromString(rs.getString(1)), CodeCategoryType.fromCode(rs.getInt(2)),
         rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getBoolean(6),
         cacheExpiryIsNull
         ? null

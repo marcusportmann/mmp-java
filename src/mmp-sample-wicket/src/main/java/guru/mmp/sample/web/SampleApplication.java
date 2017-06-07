@@ -103,8 +103,6 @@ public class SampleApplication extends TemplateWebApplication
   public String getDisplayName()
   {
     return "Sample";
-
-
   }
 
   /**
