@@ -20,9 +20,8 @@ package guru.mmp.sample.web.pages;
 
 import guru.mmp.application.reporting.ReportType;
 import guru.mmp.application.web.WebSession;
-import guru.mmp.application.web.pages.WebPageSecurity;
+import guru.mmp.application.web.pages.SecureAnonymousWebPage;
 import guru.mmp.application.web.servlets.ViewReportParameters;
-import guru.mmp.application.web.template.TemplateSecurity;
 import guru.mmp.application.web.template.pages.TemplateWebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
@@ -38,7 +37,7 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
-@WebPageSecurity(TemplateSecurity.FUNCTION_CODE_DASHBOARD)
+@SecureAnonymousWebPage
 public class DashboardPage extends TemplateWebPage
 {
   private static final long serialVersionUID = 1000000;

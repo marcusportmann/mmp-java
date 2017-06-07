@@ -682,7 +682,7 @@ public class SecurityService
       throw new InvalidArgumentException("code");
     }
 
-    String deleteFunctionSQL = "DELETE FROM SECURITY.FUNCTIONS F WHERE F.CODE=?";
+    String deleteFunctionSQL = "DELETE FROM SECURITY.FUNCTIONS WHERE CODE=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteFunctionSQL))
@@ -821,7 +821,7 @@ public class SecurityService
   public void deleteUserDirectory(UUID id)
     throws UserDirectoryNotFoundException, SecurityException
   {
-    String deleteUserDirectorySQL = "DELETE FROM SECURITY.USER_DIRECTORIES UD WHERE UD.ID=?";
+    String deleteUserDirectorySQL = "DELETE FROM SECURITY.USER_DIRECTORIES WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteUserDirectorySQL))
@@ -2121,7 +2121,7 @@ public class SecurityService
     }
 
     String updateFunctionSQL =
-        "UPDATE SECURITY.FUNCTIONS F SET NAME=?, DESCRIPTION=? WHERE F.CODE=?";
+        "UPDATE SECURITY.FUNCTIONS SET NAME=?, DESCRIPTION=? WHERE CODE=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateFunctionSQL))
@@ -2281,8 +2281,8 @@ public class SecurityService
       throw new InvalidArgumentException("userDirectory.typeId");
     }
 
-    String updateUserDirectorySQL = "UPDATE SECURITY.USER_DIRECTORIES AS UD "
-        + "SET NAME=?, CONFIGURATION=? WHERE UD.ID=?";
+    String updateUserDirectorySQL = "UPDATE SECURITY.USER_DIRECTORIES "
+        + "SET NAME=?, CONFIGURATION=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateUserDirectorySQL))

@@ -337,9 +337,9 @@ public class LDAPUserDirectoryAdministrationPanel extends UserDirectoryAdministr
       parameters.put("UserObjectClass", "inetOrgPerson");
     }
 
-    if (!parameters.containsKey("UsernameAttribute"))
+    if (!parameters.containsKey("UserUsernameAttribute"))
     {
-      parameters.put("UsernameAttribute", "uid");
+      parameters.put("UserUsernameAttribute", "uid");
     }
 
     if (!parameters.containsKey("UserPasswordExpiryAttribute"))

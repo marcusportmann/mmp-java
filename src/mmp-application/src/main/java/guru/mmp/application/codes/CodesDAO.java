@@ -181,8 +181,8 @@ public class CodesDAO
     throws DAOException
   {
     String createCachedCodeCategorySQL =
-        "INSERT INTO CODES.CACHED_CODE_CATEGORIES (ID, CODE_DATA, "
-        + "LAST_UPDATED, CACHED) VALUES (?, ?, ?, ?)";
+        "INSERT INTO CODES.CACHED_CODE_CATEGORIES (ID, CODE_DATA, LAST_UPDATED, CACHED) "
+     + "VALUES (?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCachedCodeCategorySQL))
@@ -329,7 +329,7 @@ public class CodesDAO
     throws DAOException
   {
     String deleteCachedCodeCategorySQL =
-        "DELETE FROM CODES.CACHED_CODE_CATEGORIES CCC WHERE CCC.ID=?";
+        "DELETE FROM CODES.CACHED_CODE_CATEGORIES WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCachedCodeCategorySQL))

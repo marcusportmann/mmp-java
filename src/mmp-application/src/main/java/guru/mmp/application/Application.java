@@ -19,15 +19,19 @@ package guru.mmp.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
-import guru.mmp.application.persistence.AtomikosJtaConfiguration;
+import guru.mmp.application.web.WebApplicationException;
 import guru.mmp.common.persistence.DAOUtil;
-import org.h2.jdbcx.JdbcDataSource;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -43,7 +47,9 @@ import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
+import javax.sql.XADataSource;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -68,10 +74,45 @@ import java.util.concurrent.Executor;
 @SuppressWarnings("unused")
 public abstract class Application
 {
-  private static final Object inMemoryDataSourceLock = new Object();
-  private static DataSource inMemoryDataSource;
+  /**
+   * The application data source lock.
+   */
+  private static final Object dataSourceLock = new Object();
+
+  /**
+   * The entity manager factory bean lock.
+   */
+  private static final Object entityManagerFactoryBeanLock = new Object();
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
+  /**
+   * The application data source.
+   */
+  private static DataSource applicationDataSource;
+
+  /**
+   * The Spring application context.
+   */
   @Inject
   private ApplicationContext applicationContext;
+
+  /**
+   * The entity manager factory bean.
+   */
+  private LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
+
+  /**
+   * The Spring application configuration retrieved from the <b>classpath:application.yml</b> file.
+   */
+  @Autowired
+  private ApplicationConfiguration applicationConfiguration;
+
+  /**
+   * The database vendor for the application data source.
+   */
+  private Database applicationDatabaseVendor;
 
   /**
    * Constructs a new <code>Application</code>.
@@ -87,34 +128,48 @@ public abstract class Application
   @DependsOn("applicationDataSource")
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
   {
-    LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
-        new LocalContainerEntityManagerFactoryBean();
-
-    HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-    jpaVendorAdapter.setGenerateDdl(false);
-    jpaVendorAdapter.setShowSql(true);
-    jpaVendorAdapter.setDatabase(Database.H2);
-
-    localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
-    localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
-        getJpaPackagesToScan()));
-    localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-    PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
-        PlatformTransactionManager.class);
-
-    if ((platformTransactionManager != null)
-        && (platformTransactionManager instanceof JtaTransactionManager))
+    synchronized (entityManagerFactoryBeanLock)
     {
-      Map<String, Object> jpaPropertyMap =
-          localContainerEntityManagerFactoryBean.getJpaPropertyMap();
+      if (entityManagerFactoryBean == null)
+      {
+        DataSource dataSource = dataSource();
 
-      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-          ((JtaTransactionManager) platformTransactionManager)));
+        entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+
+        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+        jpaVendorAdapter.setGenerateDdl(false);
+        jpaVendorAdapter.setShowSql(true);
+
+        if (applicationDatabaseVendor == Database.H2)
+        {
+          jpaVendorAdapter.setDatabase(Database.H2);
+        }
+        else
+        {
+          jpaVendorAdapter.setDatabase(Database.DEFAULT);
+        }
+
+        entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
+        entityManagerFactoryBean.setJtaDataSource(dataSource);
+        entityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
+            getJpaPackagesToScan()));
+        entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+        PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
+            PlatformTransactionManager.class);
+
+        if ((platformTransactionManager != null)
+            && (platformTransactionManager instanceof JtaTransactionManager))
+        {
+          Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+
+          jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
+              ((JtaTransactionManager) platformTransactionManager)));
+        }
+      }
     }
 
-    return localContainerEntityManagerFactoryBean;
+    return entityManagerFactoryBean;
   }
 
   /**
@@ -146,7 +201,173 @@ public abstract class Application
    */
   @Bean(name = "applicationDataSource")
   @DependsOn({ "transactionManager" })
-  protected abstract DataSource dataSource();
+  protected DataSource dataSource()
+  {
+    synchronized (dataSourceLock)
+    {
+      if (applicationDataSource == null)
+      {
+        boolean logSQL = false;
+
+        try
+        {
+          if ((applicationConfiguration.getDatabase() == null)
+              || (applicationConfiguration.getDatabase().getDataSource() == null)
+              || (applicationConfiguration.getDatabase().getUrl() == null))
+          {
+            throw new WebApplicationException(
+                "Failed to retrieve the application database configuration");
+          }
+
+          Class<? extends DataSource> dataSourceClass = Thread.currentThread()
+              .getContextClassLoader().loadClass(applicationConfiguration.getDatabase()
+              .getDataSource()).asSubclass(DataSource.class);
+
+          DataSource dataSource = DataSourceBuilder.create().type(dataSourceClass).url(
+              applicationConfiguration.getDatabase().getUrl()).build();
+
+          try (Connection connection = dataSource.getConnection())
+          {
+            DatabaseMetaData metaData = connection.getMetaData();
+
+            logger.info("Connected to the " + metaData.getDatabaseProductName()
+                + " application database with " + "version "
+                + metaData.getDatabaseProductVersion());
+
+            switch (metaData.getDatabaseProductName())
+            {
+              case "H2":
+
+                applicationDatabaseVendor = Database.H2;
+
+                break;
+
+              case "Microsoft SQL Server":
+
+                applicationDatabaseVendor = Database.SQL_SERVER;
+
+              default:
+
+                logger.info(
+                    "The default database tables will not be populated for the database type ("
+                    + metaData.getDatabaseProductName() + ")");
+
+                break;
+            }
+          }
+
+          if (applicationDatabaseVendor == Database.H2)
+          {
+            Runtime.getRuntime().addShutdownHook(new Thread(() ->
+                {
+                  try
+                  {
+                    try (Connection connection = dataSource.getConnection();
+                      Statement statement = connection.createStatement())
+
+                    {
+                      statement.executeUpdate("SHUTDOWN");
+                    }
+                  }
+                  catch (Throwable e)
+                  {
+                    throw new RuntimeException(
+                        "Failed to shutdown the in-memory application database", e);
+                  }
+                }
+                ));
+
+            /*
+             * Initialise the in-memory database using the SQL statements contained in the file with
+             * the specified resource path.
+             */
+            for (String resourcePath : getInMemoryDatabaseInitResources())
+            {
+              try
+              {
+                // Load the SQL statements used to initialise the database tables
+                List<String> sqlStatements = DAOUtil.loadSQL(resourcePath);
+
+                // Get a connection to the in-memory database
+                try (Connection connection = dataSource.getConnection())
+                {
+                  for (String sqlStatement : sqlStatements)
+                  {
+                    if (logSQL)
+                    {
+                      LoggerFactory.getLogger(Application.class).info("Executing SQL statement: "
+                          + sqlStatement);
+                    }
+
+                    try (Statement statement = connection.createStatement())
+                    {
+                      statement.execute(sqlStatement);
+                    }
+                  }
+                }
+              }
+              catch (SQLException e)
+              {
+                try (Connection connection = dataSource.getConnection();
+                  Statement shutdownStatement = connection.createStatement())
+                {
+                  shutdownStatement.executeUpdate("SHUTDOWN");
+                }
+                catch (Throwable f)
+                {
+                  LoggerFactory.getLogger(Application.class).error(
+                      "Failed to shutdown the in-memory application database: " + e.getMessage());
+                }
+
+                throw e;
+              }
+            }
+          }
+
+          if (dataSource instanceof XADataSource)
+          {
+            AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
+
+            atomikosDataSourceBean.setUniqueResourceName("ApplicationDataSource");
+            atomikosDataSourceBean.setXaDataSource((XADataSource) dataSource);
+
+            if (applicationConfiguration.getDatabase().getMinPoolSize() > 0)
+            {
+              atomikosDataSourceBean.setMinPoolSize(applicationConfiguration.getDatabase()
+                  .getMinPoolSize());
+
+            }
+            else
+            {
+              atomikosDataSourceBean.setMinPoolSize(5);
+            }
+
+            if (applicationConfiguration.getDatabase().getMaxPoolSize() > 0)
+            {
+              atomikosDataSourceBean.setMaxPoolSize(applicationConfiguration.getDatabase()
+                  .getMaxPoolSize());
+            }
+            else
+            {
+              atomikosDataSourceBean.setMinPoolSize(5);
+            }
+
+            applicationDataSource = atomikosDataSourceBean;
+          }
+          else if (dataSource instanceof DataSource)
+          {
+            applicationDataSource = dataSource;
+          }
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException("Failed to initialise the application database", e);
+        }
+      }
+
+      return applicationDataSource;
+    }
+  }
 
   /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
@@ -173,114 +394,5 @@ public abstract class Application
     packagesToScan.add("guru.mmp.application");
 
     return packagesToScan;
-  }
-
-  /**
-   * Initialise the in-memory application database and return a data source that can be used to
-   * interact with the database.
-   * <p/>
-   * NOTE: This data source returned by this method must be closed after use with the
-   * <code>close()</code> method.
-   *
-   * @return the data source that can be used to interact with the in-memory database
-   */
-  protected DataSource inMemoryDataSource()
-  {
-    synchronized (inMemoryDataSourceLock)
-    {
-      if (inMemoryDataSource == null)
-      {
-        boolean logSQL = false;
-
-        try
-        {
-          JdbcDataSource jdbcDataSource = new JdbcDataSource();
-
-          jdbcDataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
-              + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-
-          Runtime.getRuntime().addShutdownHook(new Thread(() ->
-              {
-                try
-                {
-                  try (Connection connection = jdbcDataSource.getConnection();
-                    Statement statement = connection.createStatement())
-                  {
-                    statement.executeUpdate("SHUTDOWN");
-                  }
-                }
-                catch (Throwable e)
-                {
-                  throw new RuntimeException(
-                      "Failed to shutdown the in-memory application database", e);
-                }
-              }
-              ));
-
-          /*
-           * Initialise the in-memory database using the SQL statements contained in the file with
-           * the specified resource path.
-           */
-          for (String resourcePath : getInMemoryDatabaseInitResources())
-          {
-            try
-            {
-              // Load the SQL statements used to initialise the database tables
-              List<String> sqlStatements = DAOUtil.loadSQL(resourcePath);
-
-              // Get a connection to the in-memory database
-              try (Connection connection = jdbcDataSource.getConnection())
-              {
-                for (String sqlStatement : sqlStatements)
-                {
-                  if (logSQL)
-                  {
-                    LoggerFactory.getLogger(Application.class).info("Executing SQL statement: "
-                        + sqlStatement);
-                  }
-
-                  try (Statement statement = connection.createStatement())
-                  {
-                    statement.execute(sqlStatement);
-                  }
-                }
-              }
-            }
-            catch (SQLException e)
-            {
-              try (Connection connection = jdbcDataSource.getConnection();
-                Statement shutdownStatement = connection.createStatement())
-              {
-                shutdownStatement.executeUpdate("SHUTDOWN");
-              }
-              catch (Throwable f)
-              {
-                LoggerFactory.getLogger(Application.class).error(
-                    "Failed to shutdown the in-memory application database: " + e.getMessage());
-              }
-
-              throw e;
-            }
-          }
-
-          AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
-
-          atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
-              + "-ApplicationDataSource");
-
-          atomikosDataSourceBean.setXaDataSource(jdbcDataSource);
-          atomikosDataSourceBean.setMinPoolSize(5);
-          atomikosDataSourceBean.setMaxPoolSize(10);
-
-          inMemoryDataSource = atomikosDataSourceBean;
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to initialise the in-memory application database", e);
-        }
-      }
-
-      return inMemoryDataSource;
-    }
   }
 }

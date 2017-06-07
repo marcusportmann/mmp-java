@@ -101,7 +101,7 @@ public class SchedulerDAO
   public void deleteJob(UUID id)
     throws DAOException
   {
-    String deleteJobSQL = "DELETE FROM SCHEDULER.JOBS J WHERE J.ID=?";
+    String deleteJobSQL = "DELETE FROM SCHEDULER.JOBS WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteJobSQL))
@@ -305,7 +305,7 @@ public class SchedulerDAO
         + "((J.EXECUTION_ATTEMPTS>0) AND (J.LAST_EXECUTED<?))) AND J.NEXT_EXECUTION <= ? "
         + "ORDER BY J.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
-    String lockJobSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE J.ID=?";
+    String lockJobSQL = "UPDATE SCHEDULER.JOBS SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE ID=?";
 
     try
     {
@@ -480,8 +480,8 @@ public class SchedulerDAO
   public void incrementJobExecutionAttempts(UUID id)
     throws DAOException
   {
-    String incrementJobExecutionAttemptsSQL = "UPDATE SCHEDULER.JOBS J "
-        + "SET EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, UPDATED=?, LAST_EXECUTED=? WHERE J.ID=?";
+    String incrementJobExecutionAttemptsSQL = "UPDATE SCHEDULER.JOBS "
+        + "SET EXECUTION_ATTEMPTS=EXECUTION_ATTEMPTS + 1, UPDATED=?, LAST_EXECUTED=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(incrementJobExecutionAttemptsSQL))
@@ -516,7 +516,7 @@ public class SchedulerDAO
   public void lockJob(UUID id, Job.Status status, String lockName)
     throws DAOException
   {
-    String lockJobSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE J.ID=?";
+    String lockJobSQL = "UPDATE SCHEDULER.JOBS SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(lockJobSQL))
@@ -578,8 +578,8 @@ public class SchedulerDAO
   public int resetJobLocks(String lockName, Job.Status status, Job.Status newStatus)
     throws DAOException
   {
-    String resetJobLocksSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=?, LOCK_NAME=NULL, UPDATED=? "
-        + "WHERE J.LOCK_NAME=? AND J.STATUS=?";
+    String resetJobLocksSQL = "UPDATE SCHEDULER.JOBS SET STATUS=?, LOCK_NAME=NULL, UPDATED=? "
+        + "WHERE LOCK_NAME=? AND STATUS=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(resetJobLocksSQL))
@@ -705,7 +705,7 @@ public class SchedulerDAO
     throws DAOException
   {
     String unlockJobSQL =
-        "UPDATE SCHEDULER.JOBS J SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE J.ID=?";
+        "UPDATE SCHEDULER.JOBS SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(unlockJobSQL))
@@ -738,8 +738,8 @@ public class SchedulerDAO
     throws DAOException
   {
     String updateJobSQL =
-        "UPDATE SCHEDULER.JOBS J SET NAME=?, SCHEDULING_PATTERN=?, JOB_CLASS=?, IS_ENABLED=?, "
-        + "STATUS=? WHERE J.ID=?";
+        "UPDATE SCHEDULER.JOBS SET NAME=?, SCHEDULING_PATTERN=?, JOB_CLASS=?, IS_ENABLED=?, "
+        + "STATUS=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateJobSQL))
@@ -781,8 +781,8 @@ public class SchedulerDAO
   private void scheduleJob(Connection connection, UUID id, Date nextExecution)
   {
     String scheduleJobSQL =
-        "UPDATE SCHEDULER.JOBS J SET STATUS=1, EXECUTION_ATTEMPTS=0, NEXT_EXECUTION=?, UPDATED=? "
-        + "WHERE J.ID=?";
+        "UPDATE SCHEDULER.JOBS SET STATUS=1, EXECUTION_ATTEMPTS=0, NEXT_EXECUTION=?, UPDATED=? "
+        + "WHERE ID=?";
 
     try (PreparedStatement statement = connection.prepareStatement(scheduleJobSQL))
     {
@@ -805,7 +805,7 @@ public class SchedulerDAO
 
   private void setJobStatus(Connection connection, UUID id, Job.Status status)
   {
-    String setJobStatusSQL = "UPDATE SCHEDULER.JOBS J SET STATUS=? WHERE J.ID=?";
+    String setJobStatusSQL = "UPDATE SCHEDULER.JOBS SET STATUS=? WHERE ID=?";
 
     try (PreparedStatement statement = connection.prepareStatement(setJobStatusSQL))
     {

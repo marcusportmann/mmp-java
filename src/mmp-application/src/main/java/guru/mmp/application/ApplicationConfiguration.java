@@ -20,7 +20,6 @@ package guru.mmp.application;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
 
 /**
  * The <code>ApplicationConfiguration</code> class provides access to the Spring application

@@ -2049,8 +2049,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   private void incrementPasswordAttempts(UUID internalUserId)
     throws SecurityException
   {
-    String incrementPasswordAttemptsSQL = "UPDATE SECURITY.INTERNAL_USERS IU "
-        + "SET PASSWORD_ATTEMPTS = PASSWORD_ATTEMPTS + 1 WHERE IU.USER_DIRECTORY_ID=? AND IU.ID=?";
+    String incrementPasswordAttemptsSQL = "UPDATE SECURITY.INTERNAL_USERS "
+        + "SET PASSWORD_ATTEMPTS = PASSWORD_ATTEMPTS + 1 WHERE USER_DIRECTORY_ID=? AND ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(incrementPasswordAttemptsSQL))

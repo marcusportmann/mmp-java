@@ -312,7 +312,7 @@ public class MessagingDAO
   public void deleteMessage(UUID id)
     throws DAOException
   {
-    String deleteMessageSQL = "DELETE FROM MESSAGING.MESSAGES M WHERE M.ID=?";
+    String deleteMessageSQL = "DELETE FROM MESSAGING.MESSAGES WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteMessageSQL))
@@ -336,7 +336,7 @@ public class MessagingDAO
   public void deleteMessagePart(UUID id)
     throws DAOException
   {
-    String deleteMessagePartSQL = "DELETE FROM MESSAGING.MESSAGE_PARTS MP WHERE MP.ID=?";
+    String deleteMessagePartSQL = "DELETE FROM MESSAGING.MESSAGE_PARTS WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteMessagePartSQL))
@@ -361,7 +361,7 @@ public class MessagingDAO
     throws DAOException
   {
     String deleteMessagePartsForMessageSQL =
-        "DELETE FROM MESSAGING.MESSAGE_PARTS MP WHERE MP.MSG_ID=?";
+        "DELETE FROM MESSAGING.MESSAGE_PARTS WHERE MSG_ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteMessagePartsForMessageSQL))
@@ -516,7 +516,7 @@ public class MessagingDAO
         + "WHERE MP.STATUS=? AND MP.MSG_ID=? ORDER BY MP.PART_NO FOR UPDATE";
 
     String lockMessagePartSQL =
-        "UPDATE MESSAGING.MESSAGE_PARTS MP SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE MP.ID=?";
+        "UPDATE MESSAGING.MESSAGE_PARTS SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE ID=?";
 
     try
     {
@@ -597,8 +597,8 @@ public class MessagingDAO
         + "WHERE MP.STATUS=? AND MP.MSG_USERNAME=? AND MP.MSG_DEVICE_ID=? ORDER BY MP.PART_NO "
         + "FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
-    String lockMessagePartForDownloadSQL = "UPDATE MESSAGING.MESSAGE_PARTS MP "
-        + "SET STATUS=?, LOCK_NAME=?, UPDATED=?, DOWNLOAD_ATTEMPTS=DOWNLOAD_ATTEMPTS+1 WHERE MP.ID=?";
+    String lockMessagePartForDownloadSQL = "UPDATE MESSAGING.MESSAGE_PARTS "
+        + "SET STATUS=?, LOCK_NAME=?, UPDATED=?, DOWNLOAD_ATTEMPTS=DOWNLOAD_ATTEMPTS+1 WHERE ID=?";
 
     try
     {
@@ -705,8 +705,8 @@ public class MessagingDAO
         + "WHERE M.STATUS=? AND M.USERNAME=? AND M.DEVICE_ID=? ORDER BY M.CREATED "
         + "FETCH FIRST 3 ROWS ONLY FOR UPDATE";
 
-    String lockMessageForDownloadSQL = "UPDATE MESSAGING.MESSAGES M "
-        + "SET STATUS=?, LOCK_NAME=?, UPDATED=?, DOWNLOAD_ATTEMPTS=DOWNLOAD_ATTEMPTS+1 WHERE M.ID=?";
+    String lockMessageForDownloadSQL = "UPDATE MESSAGING.MESSAGES "
+        + "SET STATUS=?, LOCK_NAME=?, UPDATED=?, DOWNLOAD_ATTEMPTS=DOWNLOAD_ATTEMPTS+1 WHERE ID=?";
 
     try
     {
@@ -872,7 +872,7 @@ public class MessagingDAO
         + "ORDER BY M.UPDATED FETCH FIRST 1 ROWS ONLY FOR UPDATE";
 
     String lockMessageSQL =
-        "UPDATE MESSAGING.MESSAGES M SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE M.ID=?";
+        "UPDATE MESSAGING.MESSAGES SET STATUS=?, LOCK_NAME=?, UPDATED=? WHERE ID=?";
 
     try
     {
@@ -967,8 +967,8 @@ public class MessagingDAO
   public void incrementMessageProcessingAttempts(Message message)
     throws DAOException
   {
-    String incrementMessageProcessingAttemptsSQL = "UPDATE MESSAGING.MESSAGES M "
-        + "SET PROCESS_ATTEMPTS=PROCESS_ATTEMPTS + 1, UPDATED=?, LAST_PROCESSED=? WHERE M.ID=?";
+    String incrementMessageProcessingAttemptsSQL = "UPDATE MESSAGING.MESSAGES "
+        + "SET PROCESS_ATTEMPTS=PROCESS_ATTEMPTS + 1, UPDATED=?, LAST_PROCESSED=? WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
@@ -1143,8 +1143,8 @@ public class MessagingDAO
   public int resetMessageLocks(String lockName, Message.Status status, Message.Status newStatus)
     throws DAOException
   {
-    String resetMessageLocksSQL = "UPDATE MESSAGING.MESSAGES M "
-        + "SET STATUS=?, LOCK_NAME=NULL, UPDATED=? WHERE M.LOCK_NAME=? AND M.STATUS=?";
+    String resetMessageLocksSQL = "UPDATE MESSAGING.MESSAGES "
+        + "SET STATUS=?, LOCK_NAME=NULL, UPDATED=? WHERE LOCK_NAME=? AND STATUS=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(resetMessageLocksSQL))
@@ -1177,8 +1177,8 @@ public class MessagingDAO
       .Status newStatus)
     throws DAOException
   {
-    String resetMessagePartLocksSQL = "UPDATE MESSAGING.MESSAGE_PARTS MP "
-        + "SET STATUS=?, LOCK_NAME=NULL WHERE MP.LOCK_NAME=? AND MP.STATUS=?";
+    String resetMessagePartLocksSQL = "UPDATE MESSAGING.MESSAGE_PARTS "
+        + "SET STATUS=?, LOCK_NAME=NULL WHERE LOCK_NAME=? AND STATUS=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(resetMessagePartLocksSQL))
@@ -1278,7 +1278,7 @@ public class MessagingDAO
     throws DAOException
   {
     String unlockMessageSQL =
-        "UPDATE MESSAGING.MESSAGES M SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE M.ID=?";
+        "UPDATE MESSAGING.MESSAGES SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(unlockMessageSQL))
