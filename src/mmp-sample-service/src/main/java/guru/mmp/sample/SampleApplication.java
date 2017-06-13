@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
@@ -38,6 +39,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@Component
 @ComponentScan(basePackages = { "guru.mmp.sample" }, lazyInit = true)
 public class SampleApplication extends Application
 {

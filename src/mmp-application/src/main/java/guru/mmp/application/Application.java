@@ -35,6 +35,7 @@ import org.springframework.boot.context.embedded.undertow.UndertowBuilderCustomi
 import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -60,6 +61,10 @@ import javax.inject.Inject;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import javax.xml.ws.Endpoint;
@@ -98,6 +103,7 @@ import java.util.concurrent.Executor;
 @SpringBootApplication
 @SuppressWarnings("unused")
 public abstract class Application
+  implements ServletContextInitializer
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -371,6 +377,29 @@ public abstract class Application
   public Key getPrivateKey()
   {
     return privateKey;
+  }
+
+  /**
+   * Configure the given {@link ServletContext} with any servlets, filters, listeners,
+   * context-params and attributes necessary for initialization.
+   *
+   * @param servletContext the {@code ServletContext} to initialize
+   */
+  @Override
+  public void onStartup(ServletContext servletContext)
+    throws ServletException
+  {
+    try
+    {
+      Class<? extends Servlet> cxfServletClass = Thread.currentThread().getContextClassLoader()
+          .loadClass("org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
+
+      ServletRegistration cxfServlet = servletContext.addServlet("CXFServlet", (cxfServletClass));
+      cxfServlet.addMapping("/service/*");
+
+      logger.info("Initialising the Apache CXF framework");
+    }
+    catch (ClassNotFoundException ignored) {}
   }
 
   /**
