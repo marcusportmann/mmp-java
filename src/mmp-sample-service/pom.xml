@@ -3,17 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <repositories>
-    <repository>
-      <id>jaspersoft-third-party</id>
-      <url>http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
-    </repository>
-  </repositories>
-
   <groupId>guru.mmp</groupId>
-  <artifactId>mmp-sample-wicket</artifactId>
+  <artifactId>mmp-sample-service</artifactId>
   <version>3.0.0-SNAPSHOT</version>
-  <name>mmp-sample-wicket</name>
+  <name>mmp-sample-service</name>
 
   <parent>
     <groupId>guru.mmp</groupId>
@@ -25,27 +18,7 @@
     <!-- Dependencies -->
     <dependency>
       <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-messaging-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-reporting-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-scheduler-wicket</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>guru.mmp</groupId>
-      <artifactId>mmp-application-sms</artifactId>
+      <artifactId>mmp-application</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>

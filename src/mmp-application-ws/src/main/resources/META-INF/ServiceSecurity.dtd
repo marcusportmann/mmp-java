@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!ELEMENT serviceSecurity (keyStoreName, keyStoreAlias, keyStorePassword)>
+
+	<!ELEMENT keyStoreName ( #PCDATA )>
+
+	<!ELEMENT keyStoreAlias ( #PCDATA )>
+
+	<!ELEMENT keyStorePassword ( #PCDATA )>
+
+
+
+
+				

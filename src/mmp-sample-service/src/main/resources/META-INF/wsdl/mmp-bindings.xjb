@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings version="1.0" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              jxb:extensionBindingPrefixes="xjc">
+  <jxb:bindings>
+    <jxb:globalBindings>
+      <xjc:serializable uid="1000000"/>
+      <!-- All xs:dataTime fields are implemented as java.util.Calendar instances -->
+      <jxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
+                    parseMethod="guru.mmp.common.ws.JaxbDateTimeAdapter.unmarshal"
+                    printMethod="guru.mmp.common.ws.JaxbDateTimeAdapter.marshal"/>
+    </jxb:globalBindings>
+  </jxb:bindings>
+</jxb:bindings>
