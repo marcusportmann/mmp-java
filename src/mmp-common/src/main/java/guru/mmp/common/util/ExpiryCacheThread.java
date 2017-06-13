@@ -130,8 +130,8 @@ public class ExpiryCacheThread extends Thread
         }
         catch (Exception e)
         {
-          logger.error("Failed to expire the entries in the expiry cache. This operation will be"
-              + " " + "retried: " + e.getMessage(), e);
+          logger.error("Failed to expire the entries in the expiry cache. This operation will be "
+              + "retried: " + e.getMessage(), e);
         }
       }
 

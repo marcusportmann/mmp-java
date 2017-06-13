@@ -370,8 +370,8 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
+            throw new ApplicationSecurityContextException("Failed to load the security "
+                + "configuration for the application (" + applicationName + ") from the file ("
                 + configurationFilePath + ")", e);
           }
         }
@@ -405,8 +405,8 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
+            throw new ApplicationSecurityContextException("Failed to load the security "
+                + "configuration for the application (" + applicationName + ") from the file ("
                 + configurationFilePath + ")", e);
           }
         }
@@ -440,8 +440,8 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
+            throw new ApplicationSecurityContextException("Failed to load the security "
+                + "configuration for the application (" + applicationName + ") from the file ("
                 + configurationFilePath + ")", e);
           }
         }
@@ -475,8 +475,8 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
+            throw new ApplicationSecurityContextException("Failed to load the security "
+                + "configuration for the application (" + applicationName + ") from the file ("
                 + configurationFilePath + ")", e);
           }
         }
@@ -510,8 +510,8 @@ public class ApplicationSecurityContext
           }
           catch (MalformedURLException e)
           {
-            throw new ApplicationSecurityContextException("Failed to load the security"
-                + " configuration for the application (" + applicationName + ") from the file ("
+            throw new ApplicationSecurityContextException("Failed to load the security "
+                + "configuration for the application (" + applicationName + ") from the file ("
                 + configurationFilePath + ")", e);
           }
         }
@@ -586,9 +586,9 @@ public class ApplicationSecurityContext
     }
     else
     {
-      throw new ApplicationSecurityContextException("Failed to initialise the application"
-          + " security context: Unable to determine the " + "key store type for the application"
-          + " key store (" + keyStoreName + ")");
+      throw new ApplicationSecurityContextException("Failed to initialise the application "
+          + "security context: Unable to determine the key store type for the application "
+          + "key store (" + keyStoreName + ")");
     }
 
     /*
@@ -615,8 +615,8 @@ public class ApplicationSecurityContext
           }
           catch (Throwable e)
           {
-            throw new ApplicationSecurityContextException("Failed to initialise the application"
-                + " security context: " + e.getMessage(), e);
+            throw new ApplicationSecurityContextException("Failed to initialise the application "
+                + "security context: " + e.getMessage(), e);
           }
         }
         else
@@ -653,8 +653,8 @@ public class ApplicationSecurityContext
           }
           catch (Throwable e)
           {
-            throw new ApplicationSecurityContextException("Failed to initialise the application"
-                + " security context: " + e.getMessage(), e);
+            throw new ApplicationSecurityContextException("Failed to initialise the application "
+                + "security context: " + e.getMessage(), e);
           }
         }
         else
@@ -691,8 +691,8 @@ public class ApplicationSecurityContext
           }
           catch (Throwable e)
           {
-            throw new ApplicationSecurityContextException("Failed to initialise the application"
-                + " security context: " + e.getMessage(), e);
+            throw new ApplicationSecurityContextException("Failed to initialise the application "
+                + "security context: " + e.getMessage(), e);
           }
         }
         else
@@ -726,17 +726,17 @@ public class ApplicationSecurityContext
         }
         catch (Throwable e)
         {
-          throw new ApplicationSecurityContextException("Failed to initialise the application"
-              + " security context", e);
+          throw new ApplicationSecurityContextException("Failed to initialise the application "
+              + "security context", e);
         }
       }
     }
 
-    // If we could not retrieve the keystore for the application using any of the methods above
+    // If we could not retrieve the key store for the application using any of the methods above
     if (!keyStoreLoaded)
     {
-      throw new ApplicationSecurityContextException("Failed to initialise the application"
-          + " security context: Unable to find the " + "application key store (" + keyStoreName
+      throw new ApplicationSecurityContextException("Failed to initialise the application "
+          + "security context: Unable to find the application key store (" + keyStoreName
           + ")");
     }
     else
@@ -798,7 +798,7 @@ public class ApplicationSecurityContext
   /**
    * Loads the key store from the file given by the specified <code>URL</code>.
    *
-   * @param keyStoreUrl      the <code>URL</code> giving the location of the keystore to load
+   * @param keyStoreUrl      the <code>URL</code> giving the location of the key store to load
    * @param keyStoreName     the name of the key store
    * @param keyStorePassword the key store password
    * @param keyStorePath     the path to the key store
@@ -817,7 +817,7 @@ public class ApplicationSecurityContext
 
     if (logger.isDebugEnabled())
     {
-      logger.debug("Loading the application key (" + keyStoreAlias + ") from the keystore ("
+      logger.debug("Loading the application key (" + keyStoreAlias + ") from the key store ("
           + keyStorePath + ")");
     }
 
@@ -922,8 +922,8 @@ public class ApplicationSecurityContext
   {
     if (logger.isDebugEnabled())
     {
-      logger.debug("Reading the application security configuration information for the"
-          + " application (" + applicationName + ") from the file (" + url.toString() + ")");
+      logger.debug("Reading the application security configuration information for the "
+          + "application (" + applicationName + ") from the file (" + url.toString() + ")");
     }
 
     try
@@ -951,8 +951,8 @@ public class ApplicationSecurityContext
     }
     catch (Throwable e)
     {
-      throw new ApplicationSecurityContextException("Failed to load the application security"
-          + " configuration for the application (" + applicationName + ") from the file ("
+      throw new ApplicationSecurityContextException("Failed to load the application security "
+          + "configuration for the application (" + applicationName + ") from the file ("
           + url.toString() + ")", e);
     }
   }

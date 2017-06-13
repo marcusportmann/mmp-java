@@ -116,8 +116,8 @@ public class MessagePartDownloadResponse
       }
       catch (Throwable e)
       {
-        throw new MessagingException("Failed to parse the WBXML for a message part associated with"
-            + " the message part " + "download response", e);
+        throw new MessagingException("Failed to parse the WBXML for a message part associated with "
+            + "the message part download response", e);
       }
     }
   }

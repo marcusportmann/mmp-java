@@ -23,6 +23,7 @@
     <cxf.version>3.1.11</cxf.version>
     <groovy.version>2.4.11</groovy.version>
     <h2.version>1.4.195</h2.version>
+    <httpclient.version>4.5.2</httpclient.version>
     <hibernate.version>5.2.10.Final</hibernate.version>
     <jasperreports.version>6.4.0</jasperreports.version>
     <junit.version>4.12</junit.version>
@@ -30,10 +31,33 @@
     <slf4j.version>1.7.25</slf4j.version>
     <spring-web.version>4.3.8.RELEASE</spring-web.version>
     <wicket.version>7.7.0</wicket.version>
+    <wss4j.version>1.6.19</wss4j.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${httpclient.version}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>commons-logging</artifactId>
+            <groupId>commons-logging</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.ws.security</groupId>
+        <artifactId>wss4j</artifactId>
+        <version>${wss4j.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.opensaml</groupId>
+            <artifactId>openws</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
       <dependency>
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
@@ -85,23 +109,26 @@
 
   <modules>
     <module>mmp-common</module>
+    <module>mmp-common-ws</module>
+
     <module>mmp-application</module>
     <module>mmp-application-messaging</module>
     <module>mmp-application-reporting</module>
     <module>mmp-application-scheduler</module>
     <module>mmp-application-sms</module>
-    <module>mmp-test</module>
+    <module>mmp-application-ws</module>
 
     <module>mmp-application-wicket</module>
     <module>mmp-application-messaging-wicket</module>
     <module>mmp-application-reporting-wicket</module>
     <module>mmp-application-scheduler-wicket</module>
 
-    <module>mmp-sample-wicket</module>
-    <module>mmp-sample-wicket-client</module>
+    <module>mmp-test</module>
 
+    <module>mmp-sample-client</module>
+    <module>mmp-sample-service</module>
+    <module>mmp-sample-wicket</module>
   </modules>
 
 </project>
-
 

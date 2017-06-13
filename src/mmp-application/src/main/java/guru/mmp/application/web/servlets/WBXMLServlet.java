@@ -163,8 +163,8 @@ public class WBXMLServlet extends HttpServlet
     }
     catch (Throwable e)
     {
-      throw new ServletException("Failed to parse the WBXML request document from the HTTP"
-          + " servlet request", e);
+      throw new ServletException("Failed to parse the WBXML request document from the HTTP "
+          + "servlet request", e);
     }
   }
 

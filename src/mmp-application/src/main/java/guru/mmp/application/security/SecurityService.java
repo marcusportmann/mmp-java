@@ -508,7 +508,7 @@ public class SecurityService
           userDirectory = newInternalUserDirectoryForOrganisation(organisation);
 
           String createUserDirectorySQL = "INSERT INTO SECURITY.USER_DIRECTORIES "
-              + " (ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
+              + "(ID, TYPE_ID, NAME, CONFIGURATION) VALUES (?, ?, ?, ?)";
 
           try (PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
           {

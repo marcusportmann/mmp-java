@@ -97,7 +97,7 @@ public class WebApplicationInitializer
           .loadClass("org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
 
       ServletRegistration cxfServlet = servletContext.addServlet("CXFServlet", (cxfServletClass));
-      cxfServlet.addMapping("/services/*");
+      cxfServlet.addMapping("/service/*");
 
       logger.info("Initialising the Apache CXF framework");
     }

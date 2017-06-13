@@ -358,8 +358,8 @@ public class MessagingServlet extends HttpServlet
     else
     {
       MessageResult result = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED, String.format(
-          "Synchronous and asynchronous processing are not supported for the message (%s) with type"
-          + " (%s)", message.getId(), message.getTypeId()));
+          "Synchronous and asynchronous processing are not supported for the message (%s) with "
+          + "type (%s)", message.getId(), message.getTypeId()));
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -377,8 +377,8 @@ public class MessagingServlet extends HttpServlet
 
       MessageDownloadResponse result = new MessageDownloadResponse(MessageDownloadResponse
           .ERROR_INVALID_REQUEST,
-          "Failed to process the invalid WBXML document containing the message download request"
-          + " information");
+          "Failed to process the invalid WBXML document containing the message download request "
+          + "information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -426,13 +426,13 @@ public class MessagingServlet extends HttpServlet
     catch (Throwable e)
     {
       logger.error(String.format(
-          "Failed to retrieve the messages that have been queued for download for the user (%s) and"
-          + " the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()), e);
+          "Failed to retrieve the messages that have been queued for download for the user (%s) "
+          + "and the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()), e);
 
       MessageDownloadResponse downloadResponse = new MessageDownloadResponse(MessageDownloadResponse
           .ERROR_UNKNOWN, String.format(
-          "Failed to retrieve the messages that have been queued for download for the user (%s) and"
-          + " the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()), e);
+          "Failed to retrieve the messages that have been queued for download for the user (%s) "
+          + "and the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()), e);
 
       writeResponseDocument(downloadResponse.toWBXML(), response);
 
@@ -528,8 +528,8 @@ public class MessagingServlet extends HttpServlet
 
       MessagePartDownloadResponse result = new MessagePartDownloadResponse(
           MessagePartDownloadResponse.ERROR_INVALID_REQUEST,
-          "Failed to process the invalid WBXML document containing the message part download"
-          + " request information");
+          "Failed to process the invalid WBXML document containing the message part download "
+          + "request information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -575,14 +575,14 @@ public class MessagingServlet extends HttpServlet
     catch (Throwable e)
     {
       logger.error(String.format(
-          "Failed to retrieve the message parts that have been queued for download for the user"
-          + " (%s) and the device (%s)", downloadRequest.getUsername(),
+          "Failed to retrieve the message parts that have been queued for download for the user "
+          + "(%s) and the device (%s)", downloadRequest.getUsername(),
           downloadRequest.getDeviceId()), e);
 
       MessagePartDownloadResponse downloadResponse = new MessagePartDownloadResponse(
           MessagePartDownloadResponse.ERROR_UNKNOWN, String.format(
-          "Failed to retrieve the message parts that have been queued for download for the user"
-          + " (%s) and the device (%s)", downloadRequest.getUsername(),
+          "Failed to retrieve the message parts that have been queued for download for the user "
+          + "(%s) and the device (%s)", downloadRequest.getUsername(),
           downloadRequest.getDeviceId()), e);
 
       writeResponseDocument(downloadResponse.toWBXML(), response);
@@ -649,8 +649,8 @@ public class MessagingServlet extends HttpServlet
 
       MessageReceivedResponse result = new MessageReceivedResponse(MessageReceivedResponse
           .ERROR_INVALID_REQUEST,
-          "Failed to process the invalid WBXML document containing the message received request"
-          + " information");
+          "Failed to process the invalid WBXML document containing the message received request "
+          + "information");
 
       writeResponseDocument(result.toWBXML(), response);
 

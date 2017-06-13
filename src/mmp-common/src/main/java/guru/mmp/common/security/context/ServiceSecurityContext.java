@@ -152,8 +152,8 @@ public class ServiceSecurityContext
             }
             catch (MalformedURLException e)
             {
-              throw new ServiceSecurityContextException("Failed to load the security"
-                  + " configuration for the service (" + serviceName + ") from the file ("
+              throw new ServiceSecurityContextException("Failed to load the security "
+                  + "configuration for the service (" + serviceName + ") from the file ("
                   + configurationFilePath + ")", e);
             }
           }
@@ -187,8 +187,8 @@ public class ServiceSecurityContext
             }
             catch (MalformedURLException e)
             {
-              throw new ServiceSecurityContextException("Failed to load the security"
-                  + " configuration for the service (" + serviceName + ") from the file ("
+              throw new ServiceSecurityContextException("Failed to load the security "
+                  + "configuration for the service (" + serviceName + ") from the file ("
                   + configurationFilePath + ")", e);
             }
           }
@@ -222,8 +222,8 @@ public class ServiceSecurityContext
             }
             catch (MalformedURLException e)
             {
-              throw new ServiceSecurityContextException("Failed to load the security"
-                  + " configuration for the service (" + serviceName + ") from the file ("
+              throw new ServiceSecurityContextException("Failed to load the security "
+                  + "configuration for the service (" + serviceName + ") from the file ("
                   + configurationFilePath + ")", e);
             }
           }
@@ -504,9 +504,9 @@ public class ServiceSecurityContext
     }
     else
     {
-      throw new ServiceSecurityContextException("Failed to initialise the service"
-          + " security context: Unable to determine the key " + "store type for the service"
-          + " key store (" + keyStoreName + ")");
+      throw new ServiceSecurityContextException("Failed to initialise the service "
+          + "security context: Unable to determine the key store type for the service "
+          + "key store (" + keyStoreName + ")");
     }
 
     /*
@@ -533,8 +533,8 @@ public class ServiceSecurityContext
           }
           catch (Throwable e)
           {
-            throw new ServiceSecurityContextException("Failed to initialise the service"
-                + " security context: " + e.getMessage(), e);
+            throw new ServiceSecurityContextException("Failed to initialise the service "
+                + "security context: " + e.getMessage(), e);
           }
         }
         else
@@ -571,8 +571,8 @@ public class ServiceSecurityContext
           }
           catch (Throwable e)
           {
-            throw new ServiceSecurityContextException("Failed to initialise the service"
-                + " security context: " + e.getMessage(), e);
+            throw new ServiceSecurityContextException("Failed to initialise the service "
+                + "security context: " + e.getMessage(), e);
           }
         }
         else
@@ -609,8 +609,8 @@ public class ServiceSecurityContext
           }
           catch (Throwable e)
           {
-            throw new ServiceSecurityContextException("Failed to initialise the service"
-                + " security context: " + e.getMessage(), e);
+            throw new ServiceSecurityContextException("Failed to initialise the service "
+                + "security context: " + e.getMessage(), e);
           }
         }
         else
@@ -644,17 +644,17 @@ public class ServiceSecurityContext
         }
         catch (Throwable e)
         {
-          throw new ServiceSecurityContextException("Failed to initialise the service"
-              + " security context", e);
+          throw new ServiceSecurityContextException("Failed to initialise the service "
+              + "security context", e);
         }
       }
     }
 
-    // If we could not retrieve the keystore for the service using any of the methods above
+    // If we could not retrieve the key store for the service using any of the methods above
     if (!keyStoreLoaded)
     {
-      throw new ServiceSecurityContextException("Failed to initialise the service"
-          + " security context: Unable to find the service key" + " store (" + keyStoreName + ")");
+      throw new ServiceSecurityContextException("Failed to initialise the service "
+          + "security context: Unable to find the service key" + " store (" + keyStoreName + ")");
     }
     else
     {
@@ -666,7 +666,7 @@ public class ServiceSecurityContext
   /**
    * Loads the key store from the file given by the specified <code>URL</code>.
    *
-   * @param keyStoreUrl      the <code>URL</code> giving the location of the keystore to load
+   * @param keyStoreUrl      the <code>URL</code> giving the location of the key store to load
    * @param keyStoreName     the name of the key store
    * @param keyStorePassword the key store password
    * @param keyStorePath     the path to the key store
@@ -685,7 +685,7 @@ public class ServiceSecurityContext
 
     if (logger.isDebugEnabled())
     {
-      logger.debug("Loading the service key (" + keyStoreAlias + ") from the keystore ("
+      logger.debug("Loading the service key (" + keyStoreAlias + ") from the key store ("
           + keyStorePath + ")");
     }
 
@@ -819,8 +819,8 @@ public class ServiceSecurityContext
     }
     catch (Throwable e)
     {
-      throw new ServiceSecurityContextException("Failed to load the service security"
-          + " configuration for the service (" + serviceName + ") from the file (" + url.toString()
+      throw new ServiceSecurityContextException("Failed to load the service security "
+          + "configuration for the service (" + serviceName + ") from the file (" + url.toString()
           + ")", e);
     }
   }

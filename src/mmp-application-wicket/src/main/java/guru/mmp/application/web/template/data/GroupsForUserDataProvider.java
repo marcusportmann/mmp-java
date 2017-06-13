@@ -106,8 +106,8 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to load the groups from index (%d)"
-          + " to (%d) for the user (%s) for the user directory (%s)", first, first + count - 1,
+      throw new WebApplicationException(String.format("Failed to load the groups from index (%d) "
+          + "to (%d) for the user (%s) for the user directory (%s)", first, first + count - 1,
           username, userDirectoryId), e);
     }
   }
@@ -143,8 +143,8 @@ public class GroupsForUserDataProvider extends InjectableDataProvider<Group>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to retrieve the number of groups"
-          + " for the user (%s) for the user directory (%s)", username, userDirectoryId), e);
+      throw new WebApplicationException(String.format("Failed to retrieve the number of groups "
+          + "for the user (%s) for the user directory (%s)", username, userDirectoryId), e);
     }
   }
 }

@@ -739,8 +739,8 @@ public class MessagingDAO
                 if (logger.isDebugEnabled())
                 {
                   logger.debug(String.format(
-                      "The message (%s) that was originally locked for download using the lock name"
-                      + " (%s) will now be locked for download using the lock name (%s)",
+                      "The message (%s) that was originally locked for download using the lock "
+                      + "name (%s) will now be locked for download using the lock name (%s)",
                       message.getId(), message.getLockName(), lockName));
                 }
               }
@@ -1078,7 +1078,7 @@ public class MessagingDAO
 // + "SET STATUS=?, LOCK_NAME=NULL, UPDATED=?
 // + "WHERE M.LOCK_NAME IS NOT NULL AND M.STATUS=? AND M.UPDATED < ?";
 //
-//  try (Connection connection = dataSource.getConnection();
+//  try (Connection connection = applicationDataSource.getConnection();
 //    PreparedStatement statement = connection.prepareStatement(resetExpiredMessageLocksSQL))
 //  {
 //    statement.setInt(1, newStatus.getCode());
@@ -1113,7 +1113,7 @@ public class MessagingDAO
 // + "SET STATUS=?, LOCK_NAME=NULL, UPDATED=? "
 // + "WHERE MP.LOCK_NAME IS NOT NULL AND MP.STATUS=? AND MP.UPDATED < ?";
 //
-//  try (Connection connection = dataSource.getConnection();
+//  try (Connection connection = applicationDataSource.getConnection();
 //    PreparedStatement statement = connection.prepareStatement(resetExpiredMessagePartLocksSQL))
 //  {
 //    statement.setInt(1, newStatus.getCode());
@@ -1211,7 +1211,7 @@ public class MessagingDAO
 // setMessagePartStatusSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
 // + "SET STATUS=?, UPDATED=? WHERE MP.ID=?";
 //
-//  try (Connection connection = dataSource.getConnection();
+//  try (Connection connection = applicationDataSource.getConnection();
 //    PreparedStatement statement = connection.prepareStatement(setMessagePartStatusSQL))
 //  {
 //    statement.setInt(1, status.getCode());
@@ -1246,7 +1246,7 @@ public class MessagingDAO
 // setMessageStatusSQL = "UPDATE " + schemaPrefix + "MESSAGES M "
 // + "SET STATUS=?, UPDATED=? WHERE M.ID=?";
 //
-//  try (Connection connection = dataSource.getConnection();
+//  try (Connection connection = applicationDataSource.getConnection();
 //    PreparedStatement statement = connection.prepareStatement(setMessageStatusSQL))
 //  {
 //    statement.setInt(1, status.getCode());
@@ -1364,7 +1364,7 @@ public class MessagingDAO
 // unlockMessagePartSQL = "UPDATE " + schemaPrefix + "MESSAGE_PARTS MP "
 // + "SET STATUS=?, UPDATED=?, LOCK_NAME=NULL WHERE MP.ID=?";
 //
-//  try (Connection connection = dataSource.getConnection();
+//  try (Connection connection = applicationDataSource.getConnection();
 //    PreparedStatement statement = connection.prepareStatement(unlockMessagePartSQL))
 //  {
 //    statement.setInt(1, status.getCode());

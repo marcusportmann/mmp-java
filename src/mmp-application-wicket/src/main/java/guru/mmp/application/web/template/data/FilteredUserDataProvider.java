@@ -128,8 +128,8 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to load the users from index (%d)"
-          + " to (%d) for the user directory (%s) matching the filter (%s)", first, first + count
+      throw new WebApplicationException(String.format("Failed to load the users from index (%d) "
+          + "to (%d) for the user directory (%s) matching the filter (%s)", first, first + count
           - 1, userDirectoryId, filter), e);
     }
   }
@@ -184,8 +184,8 @@ public class FilteredUserDataProvider extends InjectableDataProvider<User>
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to retrieve the number of users for"
-          + " the user directory (%s) matching the filter (%s)", userDirectoryId, filter), e);
+      throw new WebApplicationException(String.format("Failed to retrieve the number of users for "
+          + "the user directory (%s) matching the filter (%s)", userDirectoryId, filter), e);
     }
   }
 }

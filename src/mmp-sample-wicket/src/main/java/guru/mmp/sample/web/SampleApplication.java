@@ -35,14 +35,12 @@ import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
 import java.util.List;
@@ -66,11 +64,13 @@ public class SampleApplication extends TemplateWebApplication
   /* Reporting Service */
   @Inject
   private IReportingService reportingService;
-  @Autowired
+
+  /* Sample Configuration */
+  @Inject
   private SampleConfiguration sampleConfiguration;
 
   /**
-   * Constructs a new <code>TemplateWebApplication</code>.
+   * Constructs a new <code>SampleApplication</code>.
    */
   public SampleApplication() {}
 
@@ -100,6 +100,7 @@ public class SampleApplication extends TemplateWebApplication
    *
    * @return the user-friendly name that should be displayed for the application
    */
+  @Override
   public String getDisplayName()
   {
     return "Sample";
@@ -195,8 +196,11 @@ public class SampleApplication extends TemplateWebApplication
         "SampleService.wsdl");
   }
 
-  @EventListener
-  private void handleContextRefresh(ContextRefreshedEvent event)
+  /**
+   * Initialise the Sample application.
+   */
+  @PostConstruct
+  private void initSampleApplication()
   {
     try
     {

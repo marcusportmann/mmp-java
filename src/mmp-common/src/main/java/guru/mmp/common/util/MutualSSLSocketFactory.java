@@ -75,13 +75,13 @@ public class MutualSSLSocketFactory
         }
       } };
 
-      // Setup the key manager for the client SSL socket factory
+      // Setup the key manager for the mutual SSL socket factory
       KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
           KeyManagerFactory.getDefaultAlgorithm());
 
       keyManagerFactory.init(keyStore, keyStorePassword.toCharArray());
 
-      // Setup the trust manager for the client SSL socket factory
+      // Setup the trust manager for the mutual SSL socket factory
       TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
           TrustManagerFactory.getDefaultAlgorithm());
 

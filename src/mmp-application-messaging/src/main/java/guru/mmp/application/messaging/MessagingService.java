@@ -32,7 +32,6 @@ import guru.mmp.common.xml.XmlParserErrorHandler;
 import guru.mmp.common.xml.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -238,9 +237,9 @@ public class MessagingService
       if (!messageChecksum.equals(message.getDataHash()))
       {
         logger.warn(String.format(
-            "Data hash verification failed for the message (%s) from the user (%s) and device (%s)."
-            + " %d (%d) bytes of message data was encrypted using the encryption IV (%s). Expected "
-            + "data hash (%s) but got (%s)", message.getId(), message.getUsername(),
+            "Data hash verification failed for the message (%s) from the user (%s) and device "
+            + "(%s). %d (%d) bytes of message data was encrypted using the encryption IV (%s). "
+            + "Expected data hash (%s) but got (%s)", message.getId(), message.getUsername(),
             message.getDeviceId(), message.getData().length, decryptedData.length,
             message.getEncryptionIV(), message.getDataHash(), messageChecksum));
 
@@ -529,8 +528,8 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingException(String.format(
-          "Failed to retrieve the messages for the user (%s) that have been queued for download by"
-          + " the device (%s)", username, deviceId), e);
+          "Failed to retrieve the messages for the user (%s) that have been queued for download by "
+          + "the device (%s)", username, deviceId), e);
     }
   }
 
@@ -801,9 +800,9 @@ public class MessagingService
           if (!encryptMessage(message))
           {
             throw new MessagingException(String.format(
-                "Failed to process the asynchronous message (%s) with type (%s) that exceeds the"
-                + " maximum asynchronous message size (%d) and must be encrypted prior to being"
-                + " queued for download", message.getId(), message.getTypeId(), Message
+                "Failed to process the asynchronous message (%s) with type (%s) that exceeds the "
+                + "maximum asynchronous message size (%d) and must be encrypted prior to being "
+                + "queued for download", message.getId(), message.getTypeId(), Message
                 .MAX_ASYNC_MESSAGE_SIZE));
           }
         }
@@ -912,7 +911,7 @@ public class MessagingService
     catch (Throwable e)
     {
       logger.error(String.format("Failed to invoke the Background Message Processor to process "
-        +"the message (%s) that was queued for processing", message.getId()), e);
+          + "the message (%s) that was queued for processing", message.getId()), e);
     }
   }
 
@@ -933,8 +932,8 @@ public class MessagingService
       if (messagingDAO.isMessageArchived(messagePart.getId()))
       {
         logger.debug(String.format(
-            "The message (%s) has already been queued for processing so the message part (%s) will"
-            + " be ignored", messagePart.getMessageId(), messagePart.getId()));
+            "The message (%s) has already been queued for processing so the message part (%s) will "
+            + "be ignored", messagePart.getMessageId(), messagePart.getId()));
 
         return;
       }
@@ -990,9 +989,9 @@ public class MessagingService
           messagingDAO.deleteMessagePartsForMessage(messagePart.getMessageId());
 
           logger.error(String.format(
-              "Failed to verify the checksum for the reconstructed message (%s) with type (%s) from"
-              + " the user (%s) and device (%s). Found %d bytes of message data with the hash (%s)"
-              + " that was reconstructed from %d message parts. The message will NOT be processed",
+              "Failed to verify the checksum for the reconstructed message (%s) with type (%s) "
+              + "from the user (%s) and device (%s). Found %d bytes of message data with the hash "
+              + "(%s) that was reconstructed from %d message parts. The message will NOT be processed",
               messagePart.getMessageId(), messagePart.getMessageTypeId(),
               messagePart.getMessageUsername(), messagePart.getMessageDeviceId(), reconstructedData
               .length, messageChecksum, messageParts.size()));
@@ -1211,8 +1210,8 @@ public class MessagingService
       if (logger.isDebugEnabled())
       {
         logger.debug(String.format(
-            "Successfully reset the locks for the message parts with the status (%s) that have been"
-            + " locked using the lock name (%s)", status, instanceName));
+            "Successfully reset the locks for the message parts with the status (%s) that have "
+            + "been locked using the lock name (%s)", status, instanceName));
       }
     }
     catch (Throwable e)
@@ -1340,8 +1339,8 @@ public class MessagingService
         else
         {
           logger.error(String.format(
-              "Failed to register the message handler (%s) since the message handler class does not"
-              + " provide a constructor with the required signature",
+              "Failed to register the message handler (%s) since the message handler class does "
+              + "not provide a constructor with the required signature",
               messageHandlerConfig.getClassName()));
         }
       }

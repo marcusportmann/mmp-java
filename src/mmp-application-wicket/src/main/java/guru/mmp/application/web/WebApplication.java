@@ -22,12 +22,13 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 import guru.mmp.application.ApplicationConfiguration;
 import guru.mmp.application.Debug;
 import guru.mmp.common.persistence.DAOUtil;
+import guru.mmp.common.util.StringUtil;
 import io.undertow.Undertow;
 import io.undertow.server.HandlerWrapper;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.SSLSessionInfo;
-import io.undertow.servlet.api.DeploymentInfo;
+import io.undertow.util.Headers;
 import org.apache.wicket.*;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -39,7 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -53,6 +53,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -65,14 +67,26 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
+import org.xnio.Options;
+import org.xnio.SslClientAuthMode;
 
 import javax.inject.Inject;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.handler.Handler;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -98,23 +112,13 @@ import java.util.concurrent.Executor;
 @SpringBootApplication
 public abstract class WebApplication extends org.apache.wicket.protocol.http.WebApplication
 {
-  /**
-   * The application data source lock.
-   */
-  private static final Object dataSourceLock = new Object();
-
-  /**
-   * The entity manager factory bean lock.
-   */
-  private static final Object entityManagerFactoryBeanLock = new Object();
-
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
 
   /**
-   * The application data source.
+   * The mutual SSL HTTP listener port.
    */
-  private static DataSource applicationDataSource;
+  private static int MUTUAL_SSL_HTTP_LISTENER_PORT = 8443;
 
   /**
    * The Spring application context.
@@ -123,20 +127,20 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   private ApplicationContext applicationContext;
 
   /**
-   * The entity manager factory bean.
-   */
-  private LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
-
-  /**
    * The Spring application configuration retrieved from the <b>classpath:application.yml</b> file.
    */
-  @Autowired
-  private ApplicationConfiguration applicationConfiguration;
+  @Inject
+  private ApplicationConfiguration configuration;
 
   /**
-   * The database vendor for the application data source.
+   * The private key for the application retrieved from the application's key store.
    */
-  private Database applicationDatabaseVendor;
+  private Key privateKey;
+
+  /**
+   * The certificate for the application retrieved from the application's key store.
+   */
+  private X509Certificate certificate;
 
   /**
    * Constructs a new <code>WebApplication</code>.
@@ -144,155 +148,311 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   public WebApplication() {}
 
   /**
-   * Returns the application entity manager factory associated with the application data source.
+   * Returns the embedded servlet container factory used to configure the embedded Undertow servlet
+   * container.
    *
-   * @return the application entity manager factory associated with the application data source
-   */
-  @Bean(name = "applicationPersistenceUnit")
-  @DependsOn("applicationDataSource")
-  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
-  {
-    synchronized (entityManagerFactoryBeanLock)
-    {
-      if (entityManagerFactoryBean == null)
-      {
-        DataSource dataSource = dataSource();
-
-        entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-
-        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        jpaVendorAdapter.setGenerateDdl(false);
-        jpaVendorAdapter.setShowSql(true);
-
-        if (applicationDatabaseVendor == Database.H2)
-        {
-          jpaVendorAdapter.setDatabase(Database.H2);
-        }
-        else
-        {
-          jpaVendorAdapter.setDatabase(Database.DEFAULT);
-        }
-
-        entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
-        entityManagerFactoryBean.setJtaDataSource(dataSource);
-        entityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
-            getJpaPackagesToScan()));
-        entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-        PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
-            PlatformTransactionManager.class);
-
-        if ((platformTransactionManager != null)
-            && (platformTransactionManager instanceof JtaTransactionManager))
-        {
-          Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
-
-          jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-              ((JtaTransactionManager) platformTransactionManager)));
-        }
-      }
-    }
-
-    return entityManagerFactoryBean;
-  }
-
-  /**
-   * Method description
-   *
-   * @return
+   * @return the embedded servlet container factory used to configure the embedded Undertow servlet
+   *         container
    */
   @Bean
   public UndertowEmbeddedServletContainerFactory embeddedServletContainerFactory()
   {
     UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
 
-    factory.addDeploymentInfoCustomizers(new UndertowDeploymentInfoCustomizer()
+    factory.addDeploymentInfoCustomizers(
+        (UndertowDeploymentInfoCustomizer) deploymentInfo -> deploymentInfo.addInitialHandlerChainWrapper(
+        new HandlerWrapper()
         {
           @Override
-          public void customize(DeploymentInfo deploymentInfo)
+          public HttpHandler wrap(HttpHandler wrappedHttpHandler)
           {
-            // try
-            // {
-            // Class<? extends Servlet> cxfServlet = Thread.currentThread()
-            // .getContextClassLoader().loadClass("org.apache.cxf.transport.servlet.CXFServlet")
-            // .asSubclass(Servlet.class);
-            //
-            // ServletInfo servletInfo = new ServletInfo("CXFServlet", cxfServlet);
-            //
-            // servletInfo.addMapping("/services/*");
-            //
-            // deploymentInfo.addServlet(servletInfo);
-            //
-            // logger.info("Initialising the Apache CXF framework");
-            // }
-            // catch (ClassNotFoundException ignored)
-            // {}
-
-            deploymentInfo.addInitialHandlerChainWrapper(new HandlerWrapper()
+            return new HttpHandler()
             {
               @Override
-              public HttpHandler wrap(HttpHandler wrappedHttpHandler)
+              public void handleRequest(HttpServerExchange httpServerExchange)
+                  throws Exception
               {
-                return new HttpHandler()
+                if (configuration.isMutualSSLEnabled())
                 {
-                  @Override
-                  public void handleRequest(HttpServerExchange httpServerExchange)
-                      throws Exception
+                  String requestPath = httpServerExchange.getRequestPath().toLowerCase();
+
+                  if (requestPath.startsWith("/api/") || requestPath.startsWith("/service/"))
                   {
                     SSLSessionInfo sslSessionInfo = httpServerExchange.getConnection()
                         .getSslSessionInfo();
 
-                    wrappedHttpHandler.handleRequest(httpServerExchange);
+                    if (sslSessionInfo == null)
+                    {
+                      if (requestPath.startsWith("/api/"))
+                      {
+                        logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
+                            + ") is attempting to access the secure API ("
+                            + httpServerExchange.getRequestPath() + ") insecurely");
+                      }
+                      else if (requestPath.startsWith("/service/"))
+                      {
+                        logger.warn("The remote client (" + httpServerExchange.getSourceAddress()
+                            + ") is attempting to access the secure web service ("
+                            + httpServerExchange.getRequestPath() + ") insecurely");
+                      }
+
+                      httpServerExchange.setStatusCode(403);
+                      httpServerExchange.getResponseHeaders().put(Headers.CONTENT_TYPE,
+                          "text/plain");
+                      httpServerExchange.getResponseSender().send("Access Denied");
+                    }
+                    else
+                    {
+                      if (logger.isDebugEnabled())
+                      {
+                        javax.security.cert.X509Certificate[] certificates =
+                            sslSessionInfo.getPeerCertificateChain();
+
+                        if ((certificates != null) && (certificates.length > 0))
+                        {
+                          if (requestPath.startsWith("/api/"))
+                          {
+                            logger.debug("The remote client ("
+                                + httpServerExchange.getSourceAddress() + ") with certificate ("
+                                + certificates[0].getSubjectDN()
+                                + ") is attempting to access the secure API ("
+                                + httpServerExchange.getRequestPath() + ")");
+                          }
+                          else if (requestPath.startsWith("/service/"))
+                          {
+                            logger.debug("The remote client ("
+                                + httpServerExchange.getSourceAddress() + ") with certificate ("
+                                + certificates[0].getSubjectDN()
+                                + ") is attempting to access the secure web service ("
+                                + httpServerExchange.getRequestPath() + ")");
+                          }
+                        }
+                      }
+                    }
                   }
-                };
+                }
+
+                wrappedHttpHandler.handleRequest(httpServerExchange);
+              }
+            };
+          }
+        }));
+
+    if ((configuration.getMutualSSL() != null) && (configuration.getMutualSSL().getEnabled()))
+    {
+      ApplicationConfiguration.KeyStoreConfiguration keyStoreConfiguration =
+          configuration.getMutualSSL().getKeyStore();
+
+      ApplicationConfiguration.TrustStoreConfiguration trustStoreConfiguration =
+          configuration.getMutualSSL().getTrustStore();
+
+      if (keyStoreConfiguration == null)
+      {
+        logger.error("Failed to initialise the mutual SSL HTTP listener on port "
+            + MUTUAL_SSL_HTTP_LISTENER_PORT + ": No key store configuration specified");
+      }
+      else if (trustStoreConfiguration == null)
+      {
+        logger.error("Failed to initialise the mutual SSL HTTP listener on port "
+            + MUTUAL_SSL_HTTP_LISTENER_PORT + ": No trust store configuration specified");
+      }
+      else
+      {
+        factory.addBuilderCustomizers(new UndertowBuilderCustomizer()
+            {
+              @Override
+              public void customize(Undertow.Builder builder)
+              {
+                try
+                {
+                  if (StringUtil.isNullOrEmpty(keyStoreConfiguration.getType()))
+                  {
+                    throw new FatalBeanException(
+                        "The type was not specified for the mutual SSL key store");
+                  }
+
+                  if (StringUtil.isNullOrEmpty(keyStoreConfiguration.getPath()))
+                  {
+                    throw new FatalBeanException(
+                        "The path was not specified for the mutual SSL key store");
+                  }
+
+                  if (StringUtil.isNullOrEmpty(keyStoreConfiguration.getAlias()))
+                  {
+                    throw new FatalBeanException(
+                        "The alias was not specified for the mutual SSL key store");
+                  }
+
+                  if (StringUtil.isNullOrEmpty(keyStoreConfiguration.getPassword()))
+                  {
+                    throw new FatalBeanException(
+                        "The password was not specified for the mutual SSL key store");
+                  }
+
+                  KeyStore keyStore;
+
+                  try
+                  {
+                    keyStore = loadKeyStore(keyStoreConfiguration.getPath(),
+                        keyStoreConfiguration.getAlias(), keyStoreConfiguration.getPassword(),
+                        keyStoreConfiguration.getType());
+                  }
+                  catch (Throwable e)
+                  {
+                    throw new GeneralSecurityException(
+                        "Failed to initialise the mutual SSL key store", e);
+                  }
+
+                  KeyStore trustStore = keyStore;
+
+                  if (trustStoreConfiguration != null)
+                  {
+                    if (StringUtil.isNullOrEmpty(trustStoreConfiguration.getType()))
+                    {
+                      throw new FatalBeanException(
+                          "The type was not specified for the mutual SSL trust store");
+                    }
+
+                    if (StringUtil.isNullOrEmpty(trustStoreConfiguration.getPath()))
+                    {
+                      throw new FatalBeanException(
+                          "The path was not specified for the mutual SSL trust store");
+                    }
+
+                    if (StringUtil.isNullOrEmpty(trustStoreConfiguration.getPassword()))
+                    {
+                      throw new FatalBeanException(
+                          "The password was not specified for the mutual SSL trust store");
+                    }
+
+                    try
+                    {
+                      trustStore = loadTrustStore(trustStoreConfiguration.getPath(),
+                          trustStoreConfiguration.getPassword(), trustStoreConfiguration.getType());
+                    }
+                    catch (Throwable e)
+                    {
+                      throw new GeneralSecurityException(
+                          "Failed to initialise the mutual SSL key store", e);
+                    }
+                  }
+
+                  // Setup the key manager factory
+                  KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
+                      KeyManagerFactory.getDefaultAlgorithm());
+
+                  keyManagerFactory.init(keyStore, keyStoreConfiguration.getPassword()
+                      .toCharArray());
+
+                  // Setup the trust manager factory
+                  TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                      TrustManagerFactory.getDefaultAlgorithm());
+
+                  trustManagerFactory.init(trustStore);
+
+                  SSLContext sslContext = SSLContext.getInstance("TLS");
+                  sslContext.init(keyManagerFactory.getKeyManagers(),
+                      trustManagerFactory.getTrustManagers(), new SecureRandom());
+
+                  builder.addHttpsListener(8443, "0.0.0.0", sslContext);
+                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode.REQUIRED);
+                }
+                catch (Throwable e)
+                {
+                  logger.error("Failed to initialise the mutual SSL HTTP listener on port "
+                      + MUTUAL_SSL_HTTP_LISTENER_PORT, e);
+                }
               }
             });
-
-          }
-        });
-
-    factory.addBuilderCustomizers(new UndertowBuilderCustomizer()
-        {
-          @Override
-          public void customize(Undertow.Builder builder)
-          {
-            builder.addHttpListener(8081, "0.0.0.0");
-
-            // .setHandler(Handlers.path().addPrefixPath("", new HttpHandler()
-            // {
-            // @Override
-            // public void handleRequest(HttpServerExchange httpServerExchange)
-            // throws Exception
-            // {
-            //
-            //
-            // }
-            // }));
-
-            // HttpHandler httpHandler = Handlers.
-
-            // builder.addHttpListener(8081, "0.0.0.0").setHandler(Handlers.path().addPrefixPath("", new HttpHandler()
-            // {
-            // @Override
-            // public void handleRequest(HttpServerExchange httpServerExchange)
-            // throws Exception
-            // {
-            //
-            //
-            // }
-            // }));
-
-            // InternalWebInterfaceHandler xxx =  null;
-
-            // builder.addHttpsListener();
-
-          }
-
-        });
+      }
+    }
 
     factory.addInitializers();
 
     return factory;
+  }
+
+  /**
+   * Returns the application entity manager factory bean associated with the application data
+   * source.
+   *
+   * @return the application entity manager factory bean associated with the application data source
+   */
+  @Bean(name = "applicationPersistenceUnit")
+  @DependsOn("applicationDataSource")
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean()
+  {
+    try
+    {
+      DataSource dataSource = dataSource();
+
+      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
+          new LocalContainerEntityManagerFactoryBean();
+
+      HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+      jpaVendorAdapter.setGenerateDdl(false);
+      jpaVendorAdapter.setShowSql(true);
+
+      try (Connection connection = dataSource.getConnection())
+      {
+        DatabaseMetaData metaData = connection.getMetaData();
+
+        switch (metaData.getDatabaseProductName())
+        {
+          case "H2":
+
+            jpaVendorAdapter.setDatabase(Database.H2);
+
+            break;
+
+          case "Microsoft SQL Server":
+
+            jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
+
+            break;
+
+          default:
+
+            jpaVendorAdapter.setDatabase(Database.DEFAULT);
+
+            break;
+        }
+      }
+
+      entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
+      entityManagerFactoryBean.setJtaDataSource(dataSource);
+      entityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(getJpaPackagesToScan()));
+      entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+      PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
+          PlatformTransactionManager.class);
+
+      if ((platformTransactionManager != null)
+          && (platformTransactionManager instanceof JtaTransactionManager))
+      {
+        Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+
+        jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
+            ((JtaTransactionManager) platformTransactionManager)));
+      }
+
+      return entityManagerFactoryBean;
+    }
+    catch (Throwable e)
+    {
+      throw new FatalBeanException(
+          "Failed to initialise the application entity manager factory bean", e);
+    }
+  }
+
+  /**
+   * Returns the certificate for the application retrieved from the application's key store.
+   *
+   * @return the certificate for the application retrieved from the application's key store
+   */
+  public X509Certificate getCertificate()
+  {
+    return certificate;
   }
 
   /**
@@ -329,6 +489,16 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    * @return the page that will log a user out of the application
    */
   public abstract Class<? extends Page> getLogoutPage();
+
+  /**
+   * Returns the private key for the application retrieved from the application's key store.
+   *
+   * @return the private key for the application retrieved from the application's key store
+   */
+  public Key getPrivateKey()
+  {
+    return privateKey;
+  }
 
   /**
    * Returns the page that users will be redirected to once they have logged into the application.
@@ -497,6 +667,170 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
   }
 
   /**
+   * Returns the data source that can be used to interact with the application database.
+   *
+   * @return the data source that can be used to interact with the in-memory database
+   */
+  @Bean(name = "applicationDataSource")
+  @DependsOn({ "transactionManager" })
+  protected DataSource dataSource()
+  {
+    boolean logSQL = false;
+
+    try
+    {
+      if ((configuration.getDatabase() == null)
+          || (configuration.getDatabase().getDataSource() == null)
+          || (configuration.getDatabase().getUrl() == null))
+      {
+        throw new WebApplicationException(
+            "Failed to retrieve the application database configuration");
+      }
+
+      Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
+          .loadClass(configuration.getDatabase().getDataSource()).asSubclass(DataSource.class);
+
+      DataSource dataSource = DataSourceBuilder.create().type(dataSourceClass).url(
+          configuration.getDatabase().getUrl()).build();
+
+      Database databaseVendor = Database.DEFAULT;
+
+      try (Connection connection = dataSource.getConnection())
+      {
+        DatabaseMetaData metaData = connection.getMetaData();
+
+        logger.info("Connected to the " + metaData.getDatabaseProductName()
+            + " application database with version " + metaData.getDatabaseProductVersion());
+
+        switch (metaData.getDatabaseProductName())
+        {
+          case "H2":
+
+            databaseVendor = Database.H2;
+
+            break;
+
+          case "Microsoft SQL Server":
+
+            databaseVendor = Database.SQL_SERVER;
+
+          default:
+
+            logger.info("The default database tables will not be populated for the database type ("
+                + metaData.getDatabaseProductName() + ")");
+
+            break;
+        }
+      }
+
+      if (databaseVendor == Database.H2)
+      {
+        Runtime.getRuntime().addShutdownHook(new Thread(() ->
+            {
+              try
+              {
+                try (Connection connection = dataSource.getConnection();
+                  Statement statement = connection.createStatement())
+
+                {
+                  statement.executeUpdate("SHUTDOWN");
+                }
+              }
+              catch (Throwable e)
+              {
+                throw new RuntimeException("Failed to shutdown the in-memory application database",
+                    e);
+              }
+            }
+            ));
+
+        /*
+         * Initialise the in-memory database using the SQL statements contained in the file with
+         * the specified resource path.
+         */
+        for (String resourcePath : getInMemoryDatabaseInitResources())
+        {
+          try
+          {
+            // Load the SQL statements used to initialise the database tables
+            List<String> sqlStatements = DAOUtil.loadSQL(resourcePath);
+
+            // Get a connection to the in-memory database
+            try (Connection connection = dataSource.getConnection())
+            {
+              for (String sqlStatement : sqlStatements)
+              {
+                if (logSQL)
+                {
+                  LoggerFactory.getLogger(WebApplication.class).info("Executing SQL statement: "
+                      + sqlStatement);
+                }
+
+                try (Statement statement = connection.createStatement())
+                {
+                  statement.execute(sqlStatement);
+                }
+              }
+            }
+          }
+          catch (SQLException e)
+          {
+            try (Connection connection = dataSource.getConnection();
+              Statement shutdownStatement = connection.createStatement())
+            {
+              shutdownStatement.executeUpdate("SHUTDOWN");
+            }
+            catch (Throwable f)
+            {
+              LoggerFactory.getLogger(WebApplication.class).error(
+                  "Failed to shutdown the in-memory application database: " + e.getMessage());
+            }
+
+            throw e;
+          }
+        }
+      }
+
+      if (dataSource instanceof XADataSource)
+      {
+        AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
+
+        atomikosDataSourceBean.setUniqueResourceName("ApplicationDataSource");
+        atomikosDataSourceBean.setXaDataSource((XADataSource) dataSource);
+
+        if (configuration.getDatabase().getMinPoolSize() > 0)
+        {
+          atomikosDataSourceBean.setMinPoolSize(configuration.getDatabase().getMinPoolSize());
+
+        }
+        else
+        {
+          atomikosDataSourceBean.setMinPoolSize(5);
+        }
+
+        if (configuration.getDatabase().getMaxPoolSize() > 0)
+        {
+          atomikosDataSourceBean.setMaxPoolSize(configuration.getDatabase().getMaxPoolSize());
+        }
+        else
+        {
+          atomikosDataSourceBean.setMinPoolSize(5);
+        }
+
+        return atomikosDataSourceBean;
+      }
+      else
+      {
+        return dataSource;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new FatalBeanException("Failed to initialise the application data source", e);
+    }
+  }
+
+  /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
    * initialise the in-memory application database.
    */
@@ -521,173 +855,6 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
     packagesToScan.add("guru.mmp.application");
 
     return packagesToScan;
-  }
-
-
-
-  /**
-   * Returns the data source that can be used to interact with the application database.
-   *
-   * @return the data source that can be used to interact with the in-memory database
-   */
-  @Bean(name = "applicationDataSource")
-  @DependsOn({ "transactionManager" })
-  protected DataSource dataSource()
-  {
-    synchronized (dataSourceLock)
-    {
-      if (applicationDataSource == null)
-      {
-        boolean logSQL = false;
-
-        try
-        {
-          if ((applicationConfiguration.getDatabase() == null) || (applicationConfiguration.getDatabase().getDataSource() == null) || (applicationConfiguration.getDatabase().getUrl() == null))
-          {
-            throw new WebApplicationException("Failed to retrieve the application database configuration");
-          }
-
-          Class<? extends  DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader().loadClass(applicationConfiguration.getDatabase().getDataSource()).asSubclass(DataSource.class);
-
-          DataSource dataSource = DataSourceBuilder.create().type(dataSourceClass).url(applicationConfiguration.getDatabase().getUrl()).build();
-
-          try (Connection connection = dataSource.getConnection())
-          {
-            DatabaseMetaData metaData = connection.getMetaData();
-
-            logger.info("Connected to the " + metaData.getDatabaseProductName()
-              + " application database with " + "version " + metaData.getDatabaseProductVersion());
-
-            switch (metaData.getDatabaseProductName())
-            {
-              case "H2":
-
-                applicationDatabaseVendor = Database.H2;
-
-                break;
-
-              case "Microsoft SQL Server":
-
-                applicationDatabaseVendor = Database.SQL_SERVER;
-
-              default:
-
-                logger.info("The default database tables will not be populated for the database type ("
-                  + metaData.getDatabaseProductName() + ")");
-
-                break;
-            }
-          }
-
-          if (applicationDatabaseVendor == Database.H2)
-          {
-            Runtime.getRuntime().addShutdownHook(new Thread(() ->
-            {
-              try
-              {
-                try (Connection connection = dataSource.getConnection();
-                  Statement statement = connection.createStatement())
-
-                {
-                  statement.executeUpdate("SHUTDOWN");
-                }
-              }
-              catch (Throwable e)
-              {
-                throw new RuntimeException(
-                  "Failed to shutdown the in-memory application database", e);
-              }
-            }
-            ));
-
-/*
-           * Initialise the in-memory database using the SQL statements contained in the file with
-           * the specified resource path.
-           */
-            for (String resourcePath : getInMemoryDatabaseInitResources())
-            {
-              try
-              {
-                // Load the SQL statements used to initialise the database tables
-                List<String> sqlStatements = DAOUtil.loadSQL(resourcePath);
-
-                // Get a connection to the in-memory database
-                try (Connection connection = dataSource.getConnection())
-                {
-                  for (String sqlStatement : sqlStatements)
-                  {
-                    if (logSQL)
-                    {
-                      LoggerFactory.getLogger(WebApplication.class).info("Executing SQL statement: "
-                        + sqlStatement);
-                    }
-
-                    try (Statement statement = connection.createStatement())
-                    {
-                      statement.execute(sqlStatement);
-                    }
-                  }
-                }
-              }
-              catch (SQLException e)
-              {
-                try (Connection connection = dataSource.getConnection();
-                  Statement shutdownStatement = connection.createStatement())
-                {
-                  shutdownStatement.executeUpdate("SHUTDOWN");
-                }
-                catch (Throwable f)
-                {
-                  LoggerFactory.getLogger(WebApplication.class).error(
-                    "Failed to shutdown the in-memory application database: " + e.getMessage());
-                }
-
-                throw e;
-              }
-            }
-          }
-
-          if (dataSource instanceof XADataSource)
-          {
-            AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
-
-            atomikosDataSourceBean.setUniqueResourceName("ApplicationDataSource");
-            atomikosDataSourceBean.setXaDataSource((XADataSource)dataSource);
-
-            if (applicationConfiguration.getDatabase().getMinPoolSize() > 0)
-              {
-                atomikosDataSourceBean.setMinPoolSize(applicationConfiguration.getDatabase().getMinPoolSize());
-
-          }
-          else
-            {
-              atomikosDataSourceBean.setMinPoolSize(5);
-            }
-
-            if (applicationConfiguration.getDatabase().getMaxPoolSize() > 0)
-            {
-              atomikosDataSourceBean.setMaxPoolSize(applicationConfiguration.getDatabase().getMaxPoolSize());
-            }
-            else
-            {
-              atomikosDataSourceBean.setMinPoolSize(5);
-            }
-
-            applicationDataSource = atomikosDataSourceBean;
-          }
-          else if (dataSource instanceof DataSource)
-          {
-            applicationDataSource = dataSource;
-          }
-        }
-        catch (Throwable e)
-        {
-          throw new RuntimeException("Failed to initialise the application database", e);
-        }
-      }
-
-      return applicationDataSource;
-    }
   }
 
   @Override
@@ -748,5 +915,156 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
         });
 
     return converterLocator;
+  }
+
+  /**
+   * Loads a key store.
+   *
+   * @param path     the path to the key store
+   * @param alias    the alias for the key pair in the key store
+   * @param password the key store password
+   * @param type     the type of key store e.g. JKS, PKCS12, etc
+   *
+   * @return the key store that was loaded
+   *
+   * @throws GeneralSecurityException
+   */
+  private KeyStore loadKeyStore(String path, String alias, String password, String type)
+    throws GeneralSecurityException
+  {
+    KeyStore ks;
+
+    logger.info("Loading the application key (" + alias + ") from the key store (" + path + ")");
+
+    InputStream input = null;
+
+    try
+    {
+      PathMatchingResourcePatternResolver resourceLoader =
+          new PathMatchingResourcePatternResolver();
+
+      Resource keyStoreResource = resourceLoader.getResource(path);
+
+      if (!keyStoreResource.exists())
+      {
+        throw new GeneralSecurityException("The application key store (" + path
+            + ") could not be found");
+      }
+
+      ks = KeyStore.getInstance(type);
+
+      input = keyStoreResource.getInputStream();
+
+      ks.load(input,
+          ((password == null) || (password.length() == 0))
+          ? new char[0]
+          : password.toCharArray());
+
+      // Attempt to retrieve the private key for the application from the key store
+      privateKey = ks.getKey(alias, password.toCharArray());
+
+      if (privateKey == null)
+      {
+        throw new GeneralSecurityException("A private key for the application with alias (" + alias
+            + ") could not be found in the key store (" + path + ")");
+      }
+
+      // Attempt to retrieve the certificate for the application from the key store
+      Certificate tmpCertificate = ks.getCertificate(alias);
+
+      if (tmpCertificate == null)
+      {
+        throw new GeneralSecurityException("A certificate for the application with alias (" + alias
+            + ") could not be found in the key store (" + path + ")");
+      }
+
+      if (!(tmpCertificate instanceof X509Certificate))
+      {
+        throw new GeneralSecurityException("The certificate for the application with alias ("
+            + alias + ") is not an X509 certificate");
+      }
+
+      certificate = (X509Certificate) tmpCertificate;
+
+      return ks;
+    }
+    catch (Throwable e)
+    {
+      throw new GeneralSecurityException("Failed to load and query the application key store ("
+          + path + ")", e);
+    }
+    finally
+    {
+      try
+      {
+        if (input != null)
+        {
+          input.close();
+        }
+      }
+      catch (Throwable ignored) {}
+    }
+  }
+
+  /**
+   * Loads the trust store.
+   *
+   * @param path     the path to the trust store
+   * @param password the trust store password
+   * @param type     the type of trust store e.g. JKS, PKCS12, etc
+   *
+   * @return the trust store that was loaded
+   *
+   * @throws GeneralSecurityException
+   */
+  private KeyStore loadTrustStore(String path, String password, String type)
+    throws GeneralSecurityException
+  {
+    KeyStore ks;
+
+    logger.info("Loading the trust store (" + path + ")");
+
+    InputStream input = null;
+
+    try
+    {
+      PathMatchingResourcePatternResolver resourceLoader =
+          new PathMatchingResourcePatternResolver();
+
+      Resource trustStoreResource = resourceLoader.getResource(path);
+
+      if (!trustStoreResource.exists())
+      {
+        throw new GeneralSecurityException("The application trust store (" + path
+            + ") could not be found");
+      }
+
+      ks = KeyStore.getInstance(type);
+
+      input = trustStoreResource.getInputStream();
+
+      ks.load(input,
+          ((password == null) || (password.length() == 0))
+          ? new char[0]
+          : password.toCharArray());
+
+      return ks;
+    }
+    catch (Throwable e)
+    {
+      throw new GeneralSecurityException("Failed to load and query the application trust store ("
+          + path + ")", e);
+    }
+    finally
+    {
+      try
+      {
+        if (input != null)
+        {
+          input.close();
+        }
+      }
+      catch (Throwable ignored) {}
+    }
   }
 }

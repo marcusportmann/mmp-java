@@ -94,8 +94,8 @@ public class FilteredUserDirectoryDataProvider extends InjectableDataProvider<Us
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to load the user directories from"
-          + " index (%d) to (%d) matching the filter (%s)", first, first + count - 1, filter), e);
+      throw new WebApplicationException(String.format("Failed to load the user directories from "
+          + "index (%d) to (%d) matching the filter (%s)", first, first + count - 1, filter), e);
     }
   }
 

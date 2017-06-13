@@ -232,9 +232,9 @@ public class DumpNamespaceServlet extends HttpServlet
           if (processChildren)
           {
             pw.println(
-                "<div style=\"thirdparty-weight: bold; padding-top: 2px; padding-bottom: 2px;"
-                + " padding-left: " + ((depth * 20)) + "px;\">" + nameClassPair.getName() + " "
-                + "<span class=\"className\">[" + nameClassPair.getClassName()
+                "<div style=\"thirdparty-weight: bold; padding-top: 2px; padding-bottom: 2px; "
+                + "padding-left: " + ((depth * 20)) + "px;\">" + nameClassPair.getName()
+                + " <span class=\"className\">[" + nameClassPair.getClassName()
                 + "]</span></div><br>");
 
             if (path.length() > 0)

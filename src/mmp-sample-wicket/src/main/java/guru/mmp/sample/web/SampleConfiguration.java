@@ -16,10 +16,10 @@
 
 package guru.mmp.sample.web;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import guru.mmp.application.ApplicationConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,18 +30,4 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Primary
-public class SampleConfiguration extends ApplicationConfiguration
-{
-  private String key;
-
-  public String getKey()
-  {
-    return key;
-  }
-
-  public void setKey(String key)
-  {
-    this.key = key;
-  }
-
-}
+public class SampleConfiguration extends ApplicationConfiguration {}

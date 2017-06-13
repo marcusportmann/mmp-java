@@ -114,8 +114,8 @@ public class MemoryClassLoader extends ClassLoader
     }
     catch (IOException e)
     {
-      throw new ClassNotFoundException("An IOException occurred while attempting to retrieve the"
-          + " binary representation of" + " the class (" + name + ") from the JAR: "
+      throw new ClassNotFoundException("An IOException occurred while attempting to retrieve the "
+          + "binary representation of" + " the class (" + name + ") from the JAR: "
           + e.getMessage());
     }
   }

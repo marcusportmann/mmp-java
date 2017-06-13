@@ -160,8 +160,8 @@ public class BackgroundMessageProcessor
           if (message.getProcessAttempts() >= messagingService.getMaximumProcessingAttempts())
           {
             logger.warn(String.format(
-                "The queued message (%s) has exceeded the maximum number of processing attempts and"
-                + " will be marked as \"Failed\"", message.getId()));
+                "The queued message (%s) has exceeded the maximum number of processing attempts "
+                + "and will be marked as \"Failed\"", message.getId()));
 
             messagingService.unlockMessage(message, Message.Status.FAILED);
           }

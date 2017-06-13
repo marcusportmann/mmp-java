@@ -98,8 +98,8 @@ public class FilteredConfigurationValueDataProvider
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to load the configuration values"
-          + " from index (%d) to (%d) matching the filter (%s)", first, first + count - 1, filter),
+      throw new WebApplicationException(String.format("Failed to load the configuration values "
+          + "from index (%d) to (%d) matching the filter (%s)", first, first + count - 1, filter),
           e);
     }
   }
@@ -143,8 +143,8 @@ public class FilteredConfigurationValueDataProvider
     }
     catch (Throwable e)
     {
-      throw new WebApplicationException(String.format("Failed to retrieve the number of"
-          + " configuration values matching the filter (%s)", filter), e);
+      throw new WebApplicationException(String.format("Failed to retrieve the number of "
+          + "configuration values matching the filter (%s)", filter), e);
     }
   }
 }

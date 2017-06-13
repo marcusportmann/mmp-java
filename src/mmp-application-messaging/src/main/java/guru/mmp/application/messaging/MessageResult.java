@@ -124,8 +124,8 @@ public class MessageResult
       }
       catch (Throwable e)
       {
-        throw new MessagingException("Failed to parse the WBXML for the message associated with"
-            + " the message result", e);
+        throw new MessagingException("Failed to parse the WBXML for the message associated with "
+            + "the message result", e);
       }
     }
   }

@@ -198,7 +198,7 @@ public class InstallCert
       System.out.println();
     }
 
-    System.out.println("Enter certificate to add to trusted keystore or 'q' to quit: [1]");
+    System.out.println("Enter certificate to add to trusted key store or 'q' to quit: [1]");
 
     String line = reader.readLine().trim();
     int k;
@@ -229,7 +229,7 @@ public class InstallCert
     System.out.println();
     System.out.println(cert);
     System.out.println();
-    System.out.println("Added certificate to keystore 'jssecacerts' using alias '" + alias + "'");
+    System.out.println("Added certificate to key store 'jssecacerts' using alias '" + alias + "'");
   }
 
   private static String toHexString(byte[] bytes)
