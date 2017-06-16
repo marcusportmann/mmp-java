@@ -19,14 +19,13 @@ package guru.mmp.application.web.converters;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.util.ISO8601;
-
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.Date;
 import java.util.Locale;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ISO8601Converter</code> class implements the Wicket ISO8601 converter.

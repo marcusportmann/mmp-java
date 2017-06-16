@@ -84,21 +84,22 @@ public class TemplateJavaScriptResourceReference extends JavaScriptResourceRefer
     List<HeaderItem> dependencies = new ArrayList<>();
 
     dependencies.add(JavaScriptHeaderItem.forReference(Application.get()
-      .getJavaScriptLibrarySettings().getJQueryReference()));
+        .getJavaScriptLibrarySettings().getJQueryReference()));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-      TemplateJavaScriptResourceReference.class, "js/bootstrap.min.js")));
+        TemplateJavaScriptResourceReference.class, "js/bootstrap.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-      TemplateJavaScriptResourceReference.class, "plugins/select2/select2.full.min.js")));
+        TemplateJavaScriptResourceReference.class, "plugins/select2/select2.full.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-      TemplateJavaScriptResourceReference.class, "plugins/datepicker/bootstrap-datepicker.js")));
+        TemplateJavaScriptResourceReference.class, "plugins/datepicker/bootstrap-datepicker.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-      TemplateJavaScriptResourceReference.class, "plugins/timepicker/bootstrap-timepicker.min.js")));
+        TemplateJavaScriptResourceReference.class,
+        "plugins/timepicker/bootstrap-timepicker.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-      TemplateJavaScriptResourceReference.class, "plugins/slimScroll/jquery.slimscroll.min.js")));
+        TemplateJavaScriptResourceReference.class, "plugins/slimScroll/jquery.slimscroll.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-      TemplateJavaScriptResourceReference.class, "plugins/fastclick/fastclick.min.js")));
+        TemplateJavaScriptResourceReference.class, "plugins/fastclick/fastclick.min.js")));
     dependencies.add(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(
-      TemplateJavaScriptResourceReference.class, "js/app.min.js")));
+        TemplateJavaScriptResourceReference.class, "js/app.min.js")));
 
     return dependencies;
   }

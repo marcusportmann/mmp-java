@@ -32,7 +32,6 @@ import guru.mmp.application.web.template.components.TextFieldWithFeedback;
 import guru.mmp.application.web.template.resources.TemplateCssResourceReference;
 import guru.mmp.application.web.template.resources.TemplateJavaScriptResourceReference;
 import guru.mmp.common.util.StringUtil;
-import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;

@@ -19,7 +19,6 @@ package guru.mmp.application.web.template.util;
 //~--- non-JDK imports --------------------------------------------------------
 
 import guru.mmp.common.util.StringUtil;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -27,9 +26,9 @@ import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>FeedbackUtil</code> class is a utility class that provides methods for working with
