@@ -126,7 +126,6 @@
     <module>mmp-test</module>
 
     <module>mmp-sample-client</module>
-    <module>mmp-sample-service</module>
     <module>mmp-sample-wicket</module>
   </modules>
 
