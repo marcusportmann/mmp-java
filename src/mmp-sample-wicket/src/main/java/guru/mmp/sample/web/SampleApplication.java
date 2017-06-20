@@ -30,7 +30,7 @@ import guru.mmp.sample.web.pages.HomePage;
 import guru.mmp.sample.web.pages.dialogs.TestExtensibleDialogImplementationPage;
 import guru.mmp.sample.web.pages.dialogs.TestExtensibleFormDialogImplementationPage;
 import guru.mmp.sample.web.pages.forms.TestFormPage;
-import guru.mmp.service.sample.ws.SampleServiceEndpoint;
+import guru.mmp.sample.ws.SampleServiceEndpoint;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.slf4j.Logger;

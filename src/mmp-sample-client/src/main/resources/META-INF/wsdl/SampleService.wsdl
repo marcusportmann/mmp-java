@@ -1,34 +1,34 @@
-<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?>
 
-<wsdl:definitions name="SampleService" targetNamespace="http://ws.sample.service.mmp.guru"
-    xmlns:interface="http://ws.sample.service.mmp.guru"
-    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
-    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions name="SampleService" targetNamespace="http://ws.sample.mmp.guru"
+                  xmlns:interface="http://ws.sample.mmp.guru"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
 
   <!-- ========================================================================================= -->
   <!-- Service(s) Types                                                                          -->
   <!-- ========================================================================================= -->
   <wsdl:types>
-  
+
     <xs:schema elementFormDefault="qualified"
-        targetNamespace="http://ws.sample.service.mmp.guru" 
-        xmlns:interface="http://ws.sample.service.mmp.guru"
-        xmlns:xs="http://www.w3.org/2001/XMLSchema">
+               targetNamespace="http://ws.sample.mmp.guru"
+               xmlns:interface="http://ws.sample.mmp.guru"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
       <!-- ===================================================================================== -->
       <!-- Service(s) Faults                                                                     -->
       <!-- ===================================================================================== -->
       <xs:complexType name="SampleServiceFaultInfo">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Detail" nillable="true" type="xs:string" /> 
-          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" /> 
+          <xs:element minOccurs="0" name="Detail" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:complexType>
-      <xs:element name="SampleServiceFaultInfo" nillable="true" 
-          type="interface:SampleServiceFaultInfo"/>
+      <xs:element name="SampleServiceFaultInfo" nillable="true"
+                  type="interface:SampleServiceFaultInfo"/>
 
       <!-- ===================================================================================== -->
       <!-- Service(s) Enumerations                                                               -->
@@ -36,10 +36,10 @@
       <!--
       <xs:simpleType name="SampleType">
           <xs:restriction base="xs:string">
-          <xs:enumeration value="Value1" /> 
-          <xs:enumeration value="Value2" /> 
-          <xs:enumeration value="Value3" /> 
-          <xs:enumeration value="Value4" /> 
+          <xs:enumeration value="Value1" />
+          <xs:enumeration value="Value2" />
+          <xs:enumeration value="Value3" />
+          <xs:enumeration value="Value4" />
         </xs:restriction>
       </xs:simpleType>
       -->
@@ -47,13 +47,13 @@
       <!-- ===================================================================================== -->
       <!-- Service(s) Custom Types                                                               -->
       <!-- ===================================================================================== -->
-      <!-- 
+      <!--
       <xs:complexType name="SampleData">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Name" type="xs:string" /> 
+          <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Name" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" nillable="false" name="Value" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" nillable="true" name="OptionalValue" 
-              type="xs:string" /> 
+          <xs:element minOccurs="1" maxOccurs="1" nillable="true" name="OptionalValue"
+              type="xs:string" />
         </xs:sequence>
       </xs:complexType>
       -->
@@ -61,7 +61,7 @@
       <!-- ===================================================================================== -->
       <!-- Service(s) Operation Types                                                            -->
       <!-- ===================================================================================== -->
-      <!-- 
+      <!--
       <xs:element name="GetSampleData">
         <xs:complexType>
           <xs:sequence>
@@ -79,7 +79,7 @@
         </xs:complexType>
       </xs:element>
       -->
-              
+
       <xs:element name="GetVersion">
         <xs:complexType>
           <xs:sequence/>
@@ -88,13 +88,13 @@
       <xs:element name="GetVersionResponse">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="out" type="xs:string" /> 
+            <xs:element name="out" type="xs:string" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-  
+
     </xs:schema>
-    
+
   </wsdl:types>
 
   <!-- ========================================================================================= -->
@@ -103,58 +103,58 @@
   <wsdl:message name="SampleServiceFault">
     <wsdl:part element="interface:SampleServiceFaultInfo" name="fault"/>
   </wsdl:message>
-  
+
   <!-- ========================================================================================= -->
   <!-- Service(s) Operation Messages                                                             -->
   <!-- ========================================================================================= -->
-  <!-- 
+  <!--
   <wsdl:message name="GetSampleDataInputMessage">
-    <wsdl:part name="parameters" element="interface:GetSampleData" /> 
+    <wsdl:part name="parameters" element="interface:GetSampleData" />
   </wsdl:message>
   <wsdl:message name="GetSampleDataOutputMessage">
-    <wsdl:part name="parameters" element="interface:GetSampleDataResponse" /> 
+    <wsdl:part name="parameters" element="interface:GetSampleDataResponse" />
   </wsdl:message>
   -->
 
   <wsdl:message name="GetVersionInputMessage">
-    <wsdl:part name="parameters" element="interface:GetVersion" /> 
+    <wsdl:part name="parameters" element="interface:GetVersion" />
   </wsdl:message>
   <wsdl:message name="GetVersionOutputMessage">
-    <wsdl:part name="parameters" element="interface:GetVersionResponse" /> 
+    <wsdl:part name="parameters" element="interface:GetVersionResponse" />
   </wsdl:message>
-  
+
   <!-- ========================================================================================= -->
   <!-- Service(s) Port(s)                                                                        -->
   <!-- ========================================================================================= -->
   <wsdl:portType name="ISampleService">
-    
-    <wsdl:documentation>The Sample service.</wsdl:documentation>    
-    
-    <!-- 
+
+    <wsdl:documentation>The Sample Service.</wsdl:documentation>
+
+    <!--
     <wsdl:operation name="GetSampleData">
-      <wsdl:input message="interface:GetSampleDataInputMessage" /> 
-      <wsdl:output message="interface:GetSampleDataOutputMessage" /> 
+      <wsdl:input message="interface:GetSampleDataInputMessage" />
+      <wsdl:output message="interface:GetSampleDataOutputMessage" />
       <wsdl:fault name="SampleServiceFault" message="interface:SampleServiceFault" />
     </wsdl:operation>
     -->
 
     <wsdl:operation name="GetVersion">
-      <wsdl:input message="interface:GetVersionInputMessage" /> 
-      <wsdl:output message="interface:GetVersionOutputMessage" /> 
+      <wsdl:input message="interface:GetVersionInputMessage" />
+      <wsdl:output message="interface:GetVersionOutputMessage" />
       <wsdl:fault name="SampleServiceFault" message="interface:SampleServiceFault" />
     </wsdl:operation>
 
   </wsdl:portType>
-  
+
   <!-- ========================================================================================= -->
   <!-- Service(s) Binding(s)                                                                     -->
   <!-- ========================================================================================= -->
   <wsdl:binding name="SampleService" type="interface:ISampleService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
-    <!-- 
+    <!--
     <wsdl:operation name="GetSampleData">
-      <soap:operation soapAction="http://ws.sample.service.mmp.guru/ISampleService/GetSampleData"/>
+      <soap:operation soapAction="http://ws.sample.mmp.guru/ISampleService/GetSampleData"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -168,7 +168,7 @@
     -->
 
     <wsdl:operation name="GetVersion">
-      <soap:operation soapAction="http://ws.sample.service.mmp.guru/ISampleService/GetVersion"/>
+      <soap:operation soapAction="http://ws.sample.mmp.guru/ISampleService/GetVersion"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -181,14 +181,14 @@
     </wsdl:operation>
 
   </wsdl:binding>
-  
+
   <!-- ========================================================================================= -->
   <!-- Service(s)                                                                                -->
   <!-- ========================================================================================= -->
   <wsdl:service name="SampleService">
     <wsdl:port name="SampleService" binding="interface:SampleService">
-      <soap:address location="http://localhost:8080/sample/SampleService"/>
+      <soap:address location="http://localhost:8080/service/SampleService"/>
     </wsdl:port>
   </wsdl:service>
-  
+
 </wsdl:definitions>

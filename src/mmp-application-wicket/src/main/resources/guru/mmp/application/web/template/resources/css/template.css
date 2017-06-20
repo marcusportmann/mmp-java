@@ -1524,3 +1524,15 @@ form.form-material .form-field-value
   margin-left: 10px;
 }
 
+/*
+ * NOTE: This is required to prevent broken animations in Chrome.
+ */
+.content-wrapper,
+.right-side,
+.main-footer {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+

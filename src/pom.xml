@@ -25,17 +25,23 @@
     <h2.version>1.4.195</h2.version>
     <httpclient.version>4.5.2</httpclient.version>
     <hibernate.version>5.2.10.Final</hibernate.version>
+    <jackson-databind.version>2.8.9</jackson-databind.version>
     <jasperreports.version>6.4.0</jasperreports.version>
     <junit.version>4.12</junit.version>
     <mssql-jdbc.version>6.1.7.jre8-preview</mssql-jdbc.version>
     <slf4j.version>1.7.25</slf4j.version>
-    <spring-web.version>4.3.8.RELEASE</spring-web.version>
+    <spring-web.version>4.3.9.RELEASE</spring-web.version>
     <wicket.version>7.7.0</wicket.version>
     <wss4j.version>1.6.19</wss4j.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson-databind.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
@@ -101,7 +107,7 @@
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
+        <artifactId>spring-webmvc</artifactId>
         <version>${spring-web.version}</version>
       </dependency>
     </dependencies>

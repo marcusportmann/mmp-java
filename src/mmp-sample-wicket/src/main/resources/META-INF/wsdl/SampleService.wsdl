@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 
-<wsdl:definitions name="SampleService" targetNamespace="http://ws.sample.service.mmp.guru"
-    xmlns:interface="http://ws.sample.service.mmp.guru"
+<wsdl:definitions name="SampleService" targetNamespace="http://ws.sample.mmp.guru"
+    xmlns:interface="http://ws.sample.mmp.guru"
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
     xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
@@ -14,8 +14,8 @@
   <wsdl:types>
   
     <xs:schema elementFormDefault="qualified"
-        targetNamespace="http://ws.sample.service.mmp.guru" 
-        xmlns:interface="http://ws.sample.service.mmp.guru"
+        targetNamespace="http://ws.sample.mmp.guru" 
+        xmlns:interface="http://ws.sample.mmp.guru"
         xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
       <!-- ===================================================================================== -->
@@ -128,7 +128,7 @@
   <!-- ========================================================================================= -->
   <wsdl:portType name="ISampleService">
     
-    <wsdl:documentation>The Sample service.</wsdl:documentation>    
+    <wsdl:documentation>The Sample Service.</wsdl:documentation>
     
     <!-- 
     <wsdl:operation name="GetSampleData">
@@ -154,7 +154,7 @@
 
     <!-- 
     <wsdl:operation name="GetSampleData">
-      <soap:operation soapAction="http://ws.sample.service.mmp.guru/ISampleService/GetSampleData"/>
+      <soap:operation soapAction="http://ws.sample.mmp.guru/ISampleService/GetSampleData"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -168,7 +168,7 @@
     -->
 
     <wsdl:operation name="GetVersion">
-      <soap:operation soapAction="http://ws.sample.service.mmp.guru/ISampleService/GetVersion"/>
+      <soap:operation soapAction="http://ws.sample.mmp.guru/ISampleService/GetVersion"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -187,7 +187,7 @@
   <!-- ========================================================================================= -->
   <wsdl:service name="SampleService">
     <wsdl:port name="SampleService" binding="interface:SampleService">
-      <soap:address location="http://localhost:8080/sample/SampleService"/>
+      <soap:address location="http://localhost:8080/service/SampleService"/>
     </wsdl:port>
   </wsdl:service>
   

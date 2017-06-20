@@ -20,8 +20,8 @@ package guru.mmp.sample.client;
 
 import guru.mmp.common.security.context.ApplicationSecurityContext;
 import guru.mmp.common.ws.security.WebServiceClientSecurityHelper;
-import guru.mmp.service.sample.ws.ISampleService;
-import guru.mmp.service.sample.ws.SampleService;
+import guru.mmp.sample.ws.ISampleService;
+import guru.mmp.sample.ws.SampleService;
 
 /**
  * The <code>SampleClient</code> class implements the Sample Web Service client.
@@ -54,8 +54,7 @@ public class SampleClient
 
       applicationSecurityContext.init("Sample");
 
-      ISampleService sampleService =
-          WebServiceClientSecurityHelper.getMutualSSLServiceProxy(
+      ISampleService sampleService = WebServiceClientSecurityHelper.getMutualSSLServiceProxy(
           SampleService.class, ISampleService.class, SAMPLE_SERVICE_WSDL, SAMPLE_SERVICE_ENDPOINT);
 
       System.out.println("sampleService.getVersion() = " + sampleService.getVersion());

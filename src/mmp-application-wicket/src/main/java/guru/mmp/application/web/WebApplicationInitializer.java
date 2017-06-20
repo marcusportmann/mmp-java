@@ -57,6 +57,23 @@ public class WebApplicationInitializer
   public void onStartup(ServletContext servletContext)
     throws ServletException
   {
+    try
+    {
+      Class<? extends Servlet> dispatcherServletClass = Thread.currentThread()
+          .getContextClassLoader().loadClass("org.springframework.web.servlet.DispatcherServlet")
+          .asSubclass(Servlet.class);
+
+      ServletRegistration dispatcherServlet = servletContext.addServlet("DispatcherServlet",
+          (dispatcherServletClass));
+      dispatcherServlet.addMapping("/*");
+
+      dispatcherServlet.setInitParameter("contextClass",
+          "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+
+      logger.info("Initialising the Spring Dispatcher servlet");
+    }
+    catch (ClassNotFoundException ignored) {}
+
     if (Debug.inDebugMode())
     {
       servletContext.setInitParameter("configuration", "development");

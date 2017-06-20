@@ -391,6 +391,23 @@ public abstract class Application
   {
     try
     {
+      Class<? extends Servlet> dispatcherServletClass = Thread.currentThread()
+          .getContextClassLoader().loadClass("org.springframework.web.servlet.DispatcherServlet")
+          .asSubclass(Servlet.class);
+
+      ServletRegistration dispatcherServlet = servletContext.addServlet("DispatcherServlet",
+          (dispatcherServletClass));
+      dispatcherServlet.addMapping("/*");
+
+      dispatcherServlet.setInitParameter("contextClass",
+          "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+
+      logger.info("Initialising the Spring Dispatcher servlet");
+    }
+    catch (ClassNotFoundException ignored) {}
+
+    try
+    {
       Class<? extends Servlet> cxfServletClass = Thread.currentThread().getContextClassLoader()
           .loadClass("org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
 
