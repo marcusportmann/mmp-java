@@ -9,9 +9,12 @@ CREATE SCHEMA SAMPLE;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE SAMPLE.DATA (
-  ID     BIGINT NOT NULL,
-  NAME   VARCHAR(4000) NOT NULL,
-  VALUE  VARCHAR(4000) NOT NULL,
+  ID               BIGINT NOT NULL,
+  NAME             VARCHAR(4000) NOT NULL,
+  INTEGER_VALUE    INTEGER,
+  STRING_VALUE     VARCHAR(4000),
+  DATE_VALUE       DATE,
+  TIMESTAMP_VALUE  TIMESTAMP,
 
   PRIMARY KEY (ID)
 );
@@ -22,8 +25,17 @@ COMMENT ON COLUMN SAMPLE.DATA.ID
 COMMENT ON COLUMN SAMPLE.DATA.NAME
   IS 'The name for the data';
 
-COMMENT ON COLUMN SAMPLE.DATA.VALUE
-  IS 'The value for the data';
+COMMENT ON COLUMN SAMPLE.DATA.INTEGER_VALUE
+IS 'The integer value for the data';
+
+COMMENT ON COLUMN SAMPLE.DATA.STRING_VALUE
+  IS 'The string value for the data';
+
+COMMENT ON COLUMN SAMPLE.DATA.DATE_VALUE
+IS 'The date value for the data';
+
+COMMENT ON COLUMN SAMPLE.DATA.TIMESTAMP_VALUE
+IS 'The timestamp value for the data';
 
 
 

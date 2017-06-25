@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -55,7 +57,9 @@ public class SampleService
       Data newData = new Data();
       newData.setId(666);
       newData.setName("New Name");
-      newData.setValue("New Value");
+      newData.setStringValue("New String Value");
+      newData.setDateValue(LocalDate.now());
+      newData.setTimestampValue(LocalDateTime.now());
 
       entityManager.persist(newData);
     }

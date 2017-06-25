@@ -18,11 +18,15 @@ package guru.mmp.sample.api;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import guru.mmp.sample.model.Data;
 import guru.mmp.sample.model.ISampleService;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -39,11 +43,24 @@ public class HomeController
   private ISampleService sampleService;
 
   /**
+   * The data RESTful web service.
+   *
+   * @return the data
+   */
+  @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
+  public Data data()
+  {
+    Data data = new Data(666, "Test Name", 777, "Test Value", LocalDate.now(), LocalDateTime.now());
+
+    return data;
+  }
+
+  /**
    * The version RESTful web service.
    *
    * @return the version
    */
-  @RequestMapping("/version")
+  @RequestMapping(value = "/version", method = RequestMethod.GET, produces = "application/json")
   public String version()
   {
     return sampleService.getVersion();

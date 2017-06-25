@@ -18,12 +18,13 @@ package guru.mmp.sample.model;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * The <code>Data</code> class.
@@ -45,36 +46,71 @@ public class Data
   private long id;
 
   /**
-   * The .
+   * The name for the data.
    */
   @Column(name = "NAME", nullable = false)
   private String name;
 
   /**
-   * The value for the data.
+   * The string string value for the data.
    */
-  @Column(name = "VALUE", nullable = false)
-  private String value;
+  @Column(name = "STRING_VALUE")
+  private String stringValue;
 
   /**
-   * Constructs a new <code>Evaluation</code>.
+   * The integer value for the data.
+   */
+  @Column(name = "INTEGER_VALUE")
+  private Integer integerValue;
+
+  /**
+   * The date value for the data.
+   */
+  @Column(name = "DATE_VALUE")
+  private LocalDate dateValue;
+
+  /**
+   * The timestamp value for the data.
+   */
+  @Column(name = "TIMESTAMP_VALUE")
+  public LocalDateTime timestampValue;
+
+  /**
+   * Constructs a new <code>Data</code>.
    * </p>
    * Protected default constructor for JPA.
    */
   protected Data() {}
 
   /**
-   * Constructs a new <code>Evaluation</code>.
+   * Constructs a new <code>Data</code>.
    *
-   * @param id    the ID used to uniquely identify the data
-   * @param name  the name for the data
-   * @param value the value for the data
+   * @param id             the ID used to uniquely identify the data
+   * @param name           the name for the data
+   * @param integerValue   the integer value
+   * @param stringValue    the string value for the data
+   * @param dateValue      the date value for the data
+   * @param timestampValue the timestamp value for the data
    */
-  public Data(long id, String name, String value)
+  public Data(long id, String name, Integer integerValue, String stringValue, LocalDate dateValue,
+      LocalDateTime timestampValue)
   {
     this.id = id;
     this.name = name;
-    this.value = value;
+    this.integerValue = integerValue;
+    this.stringValue = stringValue;
+    this.dateValue = dateValue;
+    this.timestampValue = timestampValue;
+  }
+
+  /**
+   * Returns the date value for the data.
+   *
+   * @return the date value for the data
+   */
+  public LocalDate getDateValue()
+  {
+    return dateValue;
   }
 
   /**
@@ -88,6 +124,16 @@ public class Data
   }
 
   /**
+   * Returns the integer value for the data.
+   *
+   * @return the integer value for the data
+   */
+  public Integer getIntegerValue()
+  {
+    return integerValue;
+  }
+
+  /**
    * Returns the name for the data.
    *
    * @return the name for the data
@@ -98,13 +144,33 @@ public class Data
   }
 
   /**
-   * Returns the value for the data.
+   * Returns the string value for the data.
    *
-   * @return the value for the data
+   * @return the string value for the data
    */
-  public String getValue()
+  public String getStringValue()
   {
-    return value;
+    return stringValue;
+  }
+
+  /**
+   * Returns the timestamp value for the data.
+   *
+   * @return the timestamp value for the data
+   */
+  public LocalDateTime getTimestampValue()
+  {
+    return timestampValue;
+  }
+
+  /**
+   * Set the date value for the data.
+   *
+   * @param dateValue the date value for the data
+   */
+  public void setDateValue(LocalDate dateValue)
+  {
+    this.dateValue = dateValue;
   }
 
   /**
@@ -118,6 +184,16 @@ public class Data
   }
 
   /**
+   * Set the integer value for the data.
+   *
+   * @param integerValue the integer value for the data
+   */
+  public void setIntegerValue(Integer integerValue)
+  {
+    this.integerValue = integerValue;
+  }
+
+  /**
    * Set the name for the data.
    *
    * @param name the name for the data
@@ -128,13 +204,23 @@ public class Data
   }
 
   /**
-   * Set the value for the data.
+   * Set the string value for the data.
    *
-   * @param value the value for the data
+   * @param stringValue the string value for the data
    */
-  public void setValue(String value)
+  public void setStringValue(String stringValue)
   {
-    this.value = value;
+    this.stringValue = stringValue;
+  }
+
+  /**
+   * Set the timestamp value for the data.
+   *
+   * @param timestampValue the timestamp value for the data
+   */
+  public void setTimestampValue(LocalDateTime timestampValue)
+  {
+    this.timestampValue = timestampValue;
   }
 
   /**
@@ -145,7 +231,8 @@ public class Data
   @Override
   public String toString()
   {
-    return String.format("Data {id=\"%d\", name=\"%s\", value=\"%s\"}", getId(), getName(),
-        getValue());
+    return "Data {id=\"" + id + "\", name=\"" + name + "\", integerValue=\"" + integerValue
+        + "\", stringValue=\"" + stringValue + "\", dateValue=\"" + dateValue
+        + "\", timestampValue=\"" + timestampValue + "\"}";
   }
 }

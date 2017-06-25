@@ -56,6 +56,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -507,6 +508,22 @@ public abstract class WebApplication extends org.apache.wicket.protocol.http.Web
    * @return the page that users will be redirected to once they have logged into the application
    */
   public abstract Class<? extends Page> getSecureHomePage();
+
+  /**
+   * Returns the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   * processor package.
+   *
+   * @return the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   *         processor package
+   */
+  @Bean
+  public Jackson2ObjectMapperBuilder jacksonBuilder()
+  {
+    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
+    jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+
+    return jackson2ObjectMapperBuilder;
+  }
 
   /**
    * Creates a new session.

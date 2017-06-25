@@ -43,6 +43,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -82,6 +83,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -377,6 +379,22 @@ public abstract class Application
   public Key getPrivateKey()
   {
     return privateKey;
+  }
+
+  /**
+   * Returns the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   * processor package.
+   *
+   * @return the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   *         processor package
+   */
+  @Bean
+  public Jackson2ObjectMapperBuilder jacksonBuilder()
+  {
+    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
+    jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+
+    return jackson2ObjectMapperBuilder;
   }
 
   /**
