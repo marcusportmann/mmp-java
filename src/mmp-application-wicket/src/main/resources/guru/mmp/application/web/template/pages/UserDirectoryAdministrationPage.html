@@ -5,60 +5,71 @@
       xsi:schemaLocation="http://wicket.apache.org/ http://mmp.guru/resources/wicket.xsd">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2-bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/ionicons/css/ionicons.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/datepicker/datepicker3.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/timepicker/bootstrap-timepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/select2/select2.min.css"/>
+
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/AdminLTE.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/skins/skin-black.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/css/template.css"/>
 
-    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/template-core.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/plugins/select2/select2.full.min.js"></script>
-    <script type="text/javascript">
-      jQuery(function() {
-        App.initHelpers(['datepicker', 'datetimepicker', 'select2']);
-      });
-    </script>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
-  <body>
-    <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
-      <nav id="sidebar">
-        <div id="sidebar-scroll">
-          <div class="sidebar-content">
-            <div class="side-header side-content bg-white-op">
-              <button class="btn btn-link text-gray pull-right hidden-md hidden-lg" type="button" data-toggle="layout" data-action="sidebar_close"><i class="fa fa-times"></i></button>
-            </div>
-            <div class="application-logo-container">
-              <div class="application-logo-icon"></div>
-              <div class="application-logo-name sidebar-mini-hide"></div>
-            </div>
-            <div class="side-content">
-              <ul class="nav-main"><li><a href="#"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">Dashboard</span></a></li></ul>
-            </div>
+  <body class="hold-transition skin-black sidebar-mini">
+    <div class="wrapper">
+
+      <header class="main-header">
+        <a href="#" class="logo">
+          <span class="logo-mini"></span>
+          <span class="logo-lg"></span>
+        </a>
+        <nav class="navbar navbar-static-top">
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <li class="user user-menu">
+                <a href="#" class="dropdown-toggle">
+                  <i class="fa fa-sign-in"></i>
+                  <span class="hidden-xs">Login</span>
+                </a>
+              </li>
+            </ul>
           </div>
-        </div>
-      </nav>
-      <header id="header-navbar" class="content-mini content-mini-full">
-        <ul class="nav-header pull-left">
-          <li class="hidden-md hidden-lg"><button class="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button"><i class="fa fa-navicon"></i></button></li>
-          <li class="hidden-xs hidden-sm"><button class="btn btn-default" data-toggle="layout" data-action="sidebar_mini_toggle" type="button"><i class="fa fa-ellipsis-v"></i></button></li>
-        </ul>
+        </nav>
       </header>
-      <main id="main-container">
-        <div class="content bg-gray-lighter">
-          <div class="row items-push">
-            <div class="col-sm-7"><h1 class="page-heading">Title <small>Subtitle</small></h1></div>
-            <div class="col-sm-5 text-right hidden-xs"><ol class="breadcrumb push-10-t"><li>Category</li><li class="active">Page</li></ol></div>
-          </div>
-        </div>
-        <div class="content">
+      <aside class="main-sidebar">
+        <section class="sidebar">
+          <ul class="sidebar-menu">
+            <li class="treeview active">
+              <a href="#"><i class="fa fa-home"></i> <span>Home</span></a>
+            </li>
+          </ul>
+        </section>
+      </aside>
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>
+            Title
+            <small>Subtitle</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i> Category</a></li>
+            <li class="active">Page</li>
+          </ol>
+        </section>
+        <section class="content">
           <wicket:extend>
 
             <div id="removeDialog" wicket:id="removeDialog" class="modal fade" tabindex="-1" role="dialog">
@@ -155,13 +166,20 @@
             </div>
 
           </wicket:extend>
-        </div>
-      </main>
-      <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
-        <div class="pull-left">
-          Copyright &copy; <span class="js-year-copy"></span> <a class="font-w600" href="#" target="_blank"><span class="copyright-name"></span></a>
-        </div>
-      </footer>
+        </section>
+      </div>
     </div>
+
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/bootstrap.min.js"></script>
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/select2/select2.full.min.js"></script>
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/plugins/fastclick/fastclick.min.js"></script>
+
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/app.min.js"></script>
+    <script src="../../../../../../../../../../mmp-application-wicket/src/main/resources/guru/mmp/application/web/template/resources/js/template.js"></script>
+
   </body>
 </html>

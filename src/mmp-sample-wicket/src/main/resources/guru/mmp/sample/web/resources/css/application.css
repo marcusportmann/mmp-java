@@ -1,31 +1,51 @@
-.application-logo-container .application-logo-icon
+.logo .logo-mini
 {
-  background: url('../images/application-logo-icon.png') no-repeat;
-  background-size: 60px 60px;
+  display: inline-block;
+  padding: 0;
+  margin:0;
+  width: 50px;
+  height: 50px;
+  background: url('../images/logo-mini.png') no-repeat;
+  background-size: 50px 50px;
 }
 
-.application-logo-container .application-logo-name
+.logo .logo-lg
 {
-  background: url('../images/application-logo-name.png') no-repeat;
-  background-size: 170px 60px;
+  display: inline-block;
+  padding: 0;
+  margin:0;
+  width: 200px;
+  height: 50px;
+  background: url('../images/logo-lg.png') no-repeat;
+  background-size: 200px 50px;
 }
 
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx)
 {
-  .application-logo-container .application-logo-icon
+  .logo .logo-mini
   {
-    background: url('../images/application-logo-icon@2x.png') no-repeat;
-    background-size: 60px 60px;
+    display: inline-block;
+    padding: 0;
+    margin:0;
+    width: 50px;
+    height: 50px;
+    background: url('../images/logo-mini@2x.png') no-repeat;
+    background-size: 50px 50px;
   }
 
-  .application-logo-container .application-logo-name
+  .logo .logo-lg
   {
-    background: url('../images/application-logo-name@2x.png') no-repeat;
-    background-size: 170px 60px;
+    display: inline-block;
+    padding: 0;
+    margin:0;
+    width: 200px;
+    height: 50px;
+    background: url('../images/logo-lg@2x.png') no-repeat;
+    background-size: 200px 50px;
   }
 }
 
 span.copyright-name:before
 {
-    content: "Marcus Portmann";
+  content: "Marcus Portmann";
 }

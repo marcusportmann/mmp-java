@@ -1,17 +1,17 @@
 /*
- * Copyright 2017 Marcus Portmann
+ * Copyright 2017 Discovery Bank
+ * All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 package guru.mmp.sample.api;
@@ -50,9 +50,23 @@ public class HomeController
   @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
   public Data data()
   {
-    Data data = new Data(666, "Test Name", 777, "Test Value", LocalDate.now(), LocalDateTime.now());
+    try
+    {
+      long id = System.currentTimeMillis();
 
-    return data;
+      Data data = new Data(id, "Test Name " + id, 777, "Test Value " + id, LocalDate.now(),
+          LocalDateTime.now());
+
+      sampleService.addData(data);
+
+      data = sampleService.getData(data.getId());
+
+      return data;
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to retrieve the data", e);
+    }
   }
 
   /**

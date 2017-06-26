@@ -37,6 +37,16 @@ public interface ISampleService
     throws SampleServiceException;
 
   /**
+   * Add the data.
+   *
+   * @param data the data
+   *
+   * @throws SampleServiceException
+   */
+  void addData(Data data)
+    throws SampleServiceException;
+
+  /**
    * Returns the data.
    *
    * @return the data
@@ -44,6 +54,18 @@ public interface ISampleService
    * @throws SampleServiceException
    */
   List<Data> getData()
+    throws SampleServiceException;
+
+  /**
+   * Returns the data.
+   *
+   * @param id the ID used to uniquely identify the data
+   *
+   * @return the data
+   *
+   * @throws SampleServiceException
+   */
+  Data getData(long id)
     throws SampleServiceException;
 
   /**

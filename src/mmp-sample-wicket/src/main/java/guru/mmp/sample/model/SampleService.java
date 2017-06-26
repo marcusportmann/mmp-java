@@ -39,6 +39,8 @@ import java.util.List;
 public class SampleService
   implements ISampleService
 {
+  private static final String VERSION = "1.0.0";
+
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
@@ -65,7 +67,28 @@ public class SampleService
     }
     catch (Throwable e)
     {
-      throw new SampleServiceException("Failed to retrieve the data", e);
+      throw new SampleServiceException("Failed to add the data", e);
+    }
+  }
+
+  /**
+   * Add the data.
+   *
+   * @param data the data
+   *
+   * @throws SampleServiceException
+   */
+  @Transactional
+  public void addData(Data data)
+    throws SampleServiceException
+  {
+    try
+    {
+      entityManager.persist(data);
+    }
+    catch (Throwable e)
+    {
+      throw new SampleServiceException("Failed to add the data", e);
     }
   }
 
@@ -93,13 +116,50 @@ public class SampleService
   }
 
   /**
+   * Returns the data.
+   *
+   * @param id the ID used to uniquely identify the data
+   *
+   * @return the data
+   *
+   * @throws SampleServiceException
+   */
+  @Transactional
+  public Data getData(long id)
+    throws SampleServiceException
+  {
+    try
+    {
+      TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d WHERE ID=:id",
+          Data.class);
+
+      query.setParameter("id", id);
+
+      List<Data> list = query.getResultList();
+
+      if (list.size() > 0)
+      {
+        return list.get(0);
+      }
+      else
+      {
+        return null;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SampleServiceException("Failed to retrieve the data (" + id + ")", e);
+    }
+  }
+
+  /**
    * Returns the version of the service.
    *
    * @return the version of the service
    */
   public String getVersion()
   {
-    return "1.0.0";
+    return VERSION;
   }
 
   /**
