@@ -23,7 +23,6 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Locale;
 
 //~--- JDK imports ------------------------------------------------------------

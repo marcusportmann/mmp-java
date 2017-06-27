@@ -30,7 +30,6 @@ import guru.mmp.common.wbxml.Encoder;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
